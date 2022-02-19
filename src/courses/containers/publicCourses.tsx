@@ -1,4 +1,4 @@
-import CourseCard from '../components/Card';
+import CourseCard from '../components/CourseCard';
 import CourseContainer from '../components/CourseContainer';
 
 const PublicCourses = ({ courses }: { courses: Course[] }): JSX.Element => {
