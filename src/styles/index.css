@@ -1,0 +1,60 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.hero-blur-red {
+    width: 344px;
+    height: 344px;
+    background: #b73e32;
+    filter: blur(200px);
+}
+
+.hero-blur-blue {
+    width: 344px;
+    height: 344px;
+    background: #5f2bce;
+    filter: blur(200px);
+}
+
+.sticky-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem;
+}
+
+.sticky-1 {
+    background: linear-gradient(
+        223.86deg,
+        #7264eb 2.16%,
+        #5925c8 34.38%,
+        #c83325 64.12%,
+        #f3887e 97.34%
+    );
+}
+
+.sticky-2 {
+    background: linear-gradient(
+        43.82deg,
+        #cbc6f9 0%,
+        #733fe1 33.85%,
+        #df5446 65.09%,
+        #ffada5 100%
+    );
+}
+
+.sticky-3 {
+    background: linear-gradient(
+        43.82deg,
+        #cac7e4 0%,
+        #ab8eec 28.4%,
+        #dd837a 65.1%,
+        #ecd0cd 100%
+    );
+}
