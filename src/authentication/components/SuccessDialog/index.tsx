@@ -1,6 +1,4 @@
 import Image from 'next/image';
-import SuccessPic from '../../../../public/assets/auth.success.png';
-
 import Button from 'src/commons/components/elements/Button';
 import Modal from 'src/commons/components/modules/Modal';
 
@@ -9,7 +7,11 @@ const DialogSuccess = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
         <Modal isOpen={isOpen ? 1 : 0} setOpen={() => setOpen(0)} dialog>
             <div className="w-full flex flex-col items-center">
                 <div className="w-[170px] h-[153px] mb-2">
-                    <Image src={SuccessPic} width={170} height={153} />
+                    <Image
+                        src="https://d2uqn6ndx4ow3t.cloudfront.net/assets/auth_success.png"
+                        width={170}
+                        height={153}
+                    />
                 </div>
                 <h1 className="text-2xl text-center font-bold mb-2">
                     Berhasil buat akun
