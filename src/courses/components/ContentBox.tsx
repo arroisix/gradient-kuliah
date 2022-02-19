@@ -36,7 +36,7 @@ const BenefitItems = ({
         <div className="flex items-center my-4">
             <div className="text-xl mr-2">{icons}</div>
             <div>
-                <h1 className="text-xl font-thin">{title}</h1>
+                <h1 className="text-xl">{title}</h1>
             </div>
         </div>
     );
@@ -107,7 +107,7 @@ const VideoSection = ({
                 <BsPlayCircle className="mr-4 text-xl" />
                 <div className="flex flex-col">
                     <span>Trailer Kelas</span>
-                    <span className="font-thin text-neutral-400">1:30</span>
+                    <span className="text-neutral-400">1:30</span>
                 </div>
             </div>
             {chapters.map((chapter) => {
@@ -140,7 +140,7 @@ const VideoSection = ({
                                     )}
                                     <div className="flex flex-col">
                                         <span>{subchapter.subchapterName}</span>
-                                        <span className="font-thin text-neutral-400">
+                                        <span className="text-neutral-400">
                                             1:30
                                         </span>
                                     </div>
@@ -193,7 +193,7 @@ const ContentBox = ({
                                     Gabung kelas untuk mengakses materi ini,
                                     yuk!{' '}
                                 </h1>
-                                <span className="text-neutral-400 font-thin">
+                                <span className="text-neutral-400">
                                     Selain bisa akses materi ini, kamu juga bisa
                                     dapat:
                                 </span>
@@ -255,7 +255,7 @@ const ContentBox = ({
                                 className={`text-[1rem] w-full text-center px-1 pt-1 pb-3 cursor-pointer ${
                                     tab === 0
                                         ? 'border-b-2 border-accent-blue font-bold text-accent-blue'
-                                        : 'font-thin'
+                                        : ''
                                 }`}
                                 onClick={() => setTab(0)}>
                                 <span>VIDEO</span>
@@ -265,7 +265,7 @@ const ContentBox = ({
                                 className={`text-[1rem] w-full text-center px-1 pt-1 pb-3 cursor-pointer ${
                                     tab === 1
                                         ? 'border-b-2 border-accent-blue font-bold text-accent-blue'
-                                        : 'font-thin'
+                                        : ''
                                 }`}
                                 onClick={() => setTab(1)}>
                                 <span>NOTEBOOK</span>

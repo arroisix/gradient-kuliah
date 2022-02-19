@@ -1,0 +1,239 @@
+{
+    "VA_BNI": {
+        "method": ["ATM BNI", "M Banking"],
+        "step": [
+            [
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                }
+            ],
+            [
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                }
+            ]
+        ]
+    },
+    "VA_BCA": {
+        "method": ["ATM BCA", "Klik BCA", "M Banking"],
+        "step": [
+            [
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                }
+            ],
+            [
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                }
+            ],
+            [
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                }
+            ]
+        ]
+    },
+    "VA_BRI": {
+        "method": ["ATM BRI"],
+        "step": [
+            [
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                }
+            ]
+        ]
+    },
+    "VA_MANDIRI": {
+        "method": ["ATM Mandiri", "Livin"],
+        "step": [
+            [
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                }
+            ],
+            [
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                }
+            ]
+        ]
+    },
+    "QRIS": {
+        "method": ["ATM Mandiri", "Livin"],
+        "step": [
+            [
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                }
+            ],
+            [
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                }
+            ]
+        ]
+    }
+}

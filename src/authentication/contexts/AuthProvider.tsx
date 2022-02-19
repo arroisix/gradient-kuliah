@@ -55,8 +55,6 @@ export function AuthProvider({
             window.localStorage.setItem('user', JSON.stringify(data?.payload));
             setUser(data?.payload);
 
-            // router.push('/kelas');
-
             toast.success(
                 `Selamat datang, ${renderName(
                     data?.payload?.email,
