@@ -10,13 +10,13 @@ const Subscribe = (): JSX.Element => {
 
     return (
         <Layout paymentPage>
-            <PaymentProvider>
-                {courseId ? (
-                    <SubscriptionContainer courseId={courseId as string} />
-                ) : (
-                    <div></div>
-                )}
-            </PaymentProvider>
+            {courseId ? (
+                <PaymentProvider courseId={courseId as string}>
+                    <SubscriptionContainer />
+                </PaymentProvider>
+            ) : (
+                <div></div>
+            )}
         </Layout>
     );
 };

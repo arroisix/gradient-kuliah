@@ -14,7 +14,7 @@ const DialogSuccess = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
                 <h1 className="text-2xl text-center font-bold mb-2">
                     Berhasil buat akun
                 </h1>
-                <p className="text-center font-thin text-neutral-400">
+                <p className="text-center text-neutral-400">
                     Yuk lihat kelas - kelas yang ada!
                 </p>
                 <Button

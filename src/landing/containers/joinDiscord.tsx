@@ -14,7 +14,7 @@ const JoinDiscord = (): JSX.Element => {
                 Gabung Discord Gradient
             </h1>
             <h1 className="text-6xl font-bold"> buat belajar bareng</h1>
-            <span className="text-neutral-400 font-thin my-8">
+            <span className="text-neutral-400 my-8">
                 <span className="text-white">Gabung</span> bareng orang - orang
                 yang bisa motivasi kamu belajar dan nugas.
             </span>

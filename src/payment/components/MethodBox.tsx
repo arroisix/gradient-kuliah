@@ -1,12 +1,28 @@
+import Image from 'next/image';
 import { usePayment } from '../contexts/PaymentProvider';
 
-const MethodBox = (): JSX.Element => {
-    const { setModalCheckoutOpen } = usePayment();
+const MethodBox = ({
+    logoUrl,
+    paymentMethod
+}: {
+    logoUrl: string;
+    paymentMethod: PaymentMethod;
+}): JSX.Element => {
+    const { setModalCheckoutOpen, setPaymentMethod } = usePayment();
+
+    const onClick = (): void => {
+        setPaymentMethod(paymentMethod);
+        setModalCheckoutOpen(1);
+    };
     return (
         <div
             aria-hidden
-            className="rounded-lg bg-white p-2 h-[150px] cursor-pointer"
-            onClick={() => setModalCheckoutOpen(1)}></div>
+            className="rounded-lg bg-white p-8 h-[150px] cursor-pointer flex items-center justify-center"
+            onClick={onClick}>
+            <div className="w-[170px] h-[50px] relative">
+                <Image src={logoUrl} layout="fill" />
+            </div>
+        </div>
     );
 };
 

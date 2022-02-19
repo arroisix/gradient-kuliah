@@ -4,7 +4,7 @@ import Link from 'next/link';
 const BUTTON_THEME: { [key: string]: string } = {
     primary: 'bg-accent-purple rounded-full text-white',
     secondary: 'bg-accent-blue rounded-full text-primary-blue',
-    tertiary: 'font-thin text-primary-blue',
+    tertiary: 'text-primary-blue',
     custom: 'rounded-full'
 };
 

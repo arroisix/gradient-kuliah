@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import CourseCard from '../components/CourseCard';
 import CourseContainer from '../components/CourseContainer';
-import useCourses from '../hooks/courses';
+import useCourses from '../hooks/useCourses';
 
 const PrivateCourses = (): JSX.Element => {
     const { data, loading } = useCourses();

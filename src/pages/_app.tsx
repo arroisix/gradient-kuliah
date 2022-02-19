@@ -7,6 +7,7 @@ import { AuthProvider } from 'src/authentication/contexts/AuthProvider';
 import { ToastContainer } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
+import 'moment/locale/id';
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     return (

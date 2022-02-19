@@ -1,5 +1,5 @@
 import { useAuth } from 'src/authentication/contexts/AuthProvider';
-import useCourseDetail from 'src/courses/hooks/courseDetail';
+import useCourseDetail from 'src/courses/hooks/useCourseDetail';
 import About from './about';
 import Benefit from './benefit';
 import Faq from './faq';
