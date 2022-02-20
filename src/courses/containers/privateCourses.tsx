@@ -3,7 +3,7 @@ import CourseCard from '../components/CourseCard';
 import CourseContainer from '../components/CourseContainer';
 import useCourses from '../hooks/useCourses';
 
-const PrivateCourses = (): JSX.Element => {
+const PrivateCourses = ({ myClass }: { myClass: boolean }): JSX.Element => {
     const { data, loading } = useCourses();
     const [courses, setCourses] = useState<Course[]>([]);
 
@@ -16,6 +16,20 @@ const PrivateCourses = (): JSX.Element => {
             );
         }
     }, [data]);
+
+    useEffect(() => {
+        if (courses.length > 0 && myClass) {
+            setCourses(courses.filter((course) => course.isSubscribed));
+        } else {
+            if (data) {
+                setCourses(
+                    data.authAllCourses.edges.map(
+                        (course: CourseNode) => course.node as Course
+                    )
+                );
+            }
+        }
+    }, [courses, myClass]);
 
     return (
         <CourseContainer>

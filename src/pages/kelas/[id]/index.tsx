@@ -7,9 +7,15 @@ import {
 } from 'src/courses/schema';
 import DetailCourse from 'src/courses/containers/detail';
 
-const DetailKelas = ({ course }: { course: Course }): JSX.Element => {
+const DetailKelas = ({
+    course,
+    courses
+}: {
+    course: Course;
+    courses: [Course];
+}): JSX.Element => {
     return (
-        <Layout shouldTransparent>
+        <Layout courses={courses} shouldTransparent>
             <DetailCourse course={course} />
         </Layout>
     );
@@ -37,16 +43,26 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-    const { data } = await publicClient.query({
+    const resDetail = await publicClient.query({
         query: GET_PUBLIC_DETAIL_COURSE,
         variables: {
             ...params
         }
     });
+    const course = resDetail.data.course;
+
+    const resAll = await publicClient.query({
+        query: GET_PUBLIC_COURSE
+    });
+
+    const courses = resAll.data.allCourses.edges.map(
+        (course: CourseNode) => course.node as Course
+    );
 
     return {
         props: {
-            course: data.course
+            course,
+            courses
         }
     };
 };

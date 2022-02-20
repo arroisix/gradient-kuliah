@@ -8,12 +8,14 @@ interface LayoutProps {
     children: JSX.Element;
     paymentPage?: boolean;
     shouldTransparent?: boolean;
+    courses?: [Course];
 }
 
 const Layout = ({
     children,
     paymentPage,
-    shouldTransparent
+    shouldTransparent,
+    courses
 }: LayoutProps): JSX.Element => {
     const {
         isModalAuthOpen,
@@ -27,6 +29,7 @@ const Layout = ({
             <Navbar
                 paymentPage={paymentPage ?? false}
                 shouldTransparent={shouldTransparent ?? false}
+                courses={courses}
             />
             <ModalAuth isOpen={isModalAuthOpen} setOpen={setModalAuthOpen} />
             <ModalOnboarding
