@@ -17,7 +17,7 @@ const Select: React.FC<SelectProps> = ({
 }) => {
     return (
         <div className="flex flex-col my-2 w-full">
-            <span className="mb-1 font-thin text-xs">{label}</span>
+            <span className="mb-1 text-xs">{label}</span>
             <select
                 className="rounded-lg border border-neutral-400  h-[48px]"
                 onChange={onChange}

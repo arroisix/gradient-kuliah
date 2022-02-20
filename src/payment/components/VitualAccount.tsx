@@ -11,13 +11,22 @@ const VirtualAccountBox = (): JSX.Element => {
                 </h3>
             </div>
             <div className="grid grid-cols-4 gap-4">
-                <MethodBox />
-                <MethodBox />
-                <MethodBox />
-                <MethodBox />
-                <MethodBox />
-                <MethodBox />
-                <MethodBox />
+                <MethodBox
+                    logoUrl="https://d2uqn6ndx4ow3t.cloudfront.net/assets/payments/bni.png"
+                    paymentMethod="VA_BNI"
+                />
+                <MethodBox
+                    logoUrl="https://d2uqn6ndx4ow3t.cloudfront.net/assets/payments/mandiri.png"
+                    paymentMethod="VA_MANDIRI"
+                />
+                <MethodBox
+                    logoUrl="https://d2uqn6ndx4ow3t.cloudfront.net/assets/payments/bri.png"
+                    paymentMethod="VA_BRI"
+                />
+                <MethodBox
+                    logoUrl="https://d2uqn6ndx4ow3t.cloudfront.net/assets/payments/bca.png"
+                    paymentMethod="VA_BCA"
+                />
             </div>
         </div>
     );

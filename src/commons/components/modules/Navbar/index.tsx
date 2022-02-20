@@ -43,7 +43,7 @@ const Navbar = ({
             return 'bg-[#171717]';
         }
 
-        return 'bg-transparent';
+        return 'bg-[#171717]';
     };
 
     return (
@@ -51,9 +51,7 @@ const Navbar = ({
             className={`fixed top-0 left-0 w-full z-20 ${computeBgColor()}`}>
             <div className="w-full px-8 py-4 flex items-center justify-between">
                 <Link href={'/'}>
-                    <span className="text-2xl font-thin cursor-pointer">
-                        Gradient
-                    </span>
+                    <span className="text-2xl cursor-pointer">Gradient</span>
                 </Link>
                 {paymentPage ? (
                     <div>

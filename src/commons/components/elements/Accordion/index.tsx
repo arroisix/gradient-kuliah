@@ -33,7 +33,7 @@ const AccordionItem = ({
             </div>
             {open && (
                 <div
-                    className="p-4 pt-1 bg-neutral-900 text-neutral-400 font-thin rounded-b-lg"
+                    className="p-4 pt-1 bg-neutral-900 text-neutral-400 rounded-b-lg"
                     dangerouslySetInnerHTML={{ __html: content }}
                 />
             )}

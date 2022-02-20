@@ -3,7 +3,8 @@ import { GET_PRIVATE_COURSE } from '../schema';
 
 const useCourses = () => {
     const { loading, error, data } = useQuery(GET_PRIVATE_COURSE, {
-        errorPolicy: 'all'
+        errorPolicy: 'all',
+        fetchPolicy: 'no-cache'
     });
 
     return { loading, error, data };

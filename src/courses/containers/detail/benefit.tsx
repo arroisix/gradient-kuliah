@@ -19,9 +19,7 @@ const BenefitItems = ({
             <div className="text-2xl mr-2">{icons}</div>
             <div>
                 <h1 className="text-2xl font-bold">{title}</h1>
-                <span className="text-neutral-400 font-thin text-xs">
-                    {subtitle}
-                </span>
+                <span className="text-neutral-400 text-xs">{subtitle}</span>
             </div>
         </div>
     );

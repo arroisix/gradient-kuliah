@@ -6,7 +6,8 @@ const useCourseDetail = (id: string) => {
         variables: {
             id
         },
-        errorPolicy: 'all'
+        errorPolicy: 'all',
+        fetchPolicy: 'no-cache'
     });
 
     return { loading, error, data };

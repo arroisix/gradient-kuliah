@@ -50,3 +50,11 @@ type Video = {
     duration: string;
     thumbnail: string;
 };
+
+type Packet = {
+    id: string;
+    activeDuration: number;
+    isLifetime: boolean;
+    price: string;
+    courses: [Course];
+};

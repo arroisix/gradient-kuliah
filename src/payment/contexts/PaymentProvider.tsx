@@ -2,13 +2,19 @@ import React, {
     createContext,
     ReactNode,
     useContext,
+    useEffect,
     useMemo,
     useState
 } from 'react';
+import usePacket from '../hooks/usePacket';
 
 interface PaymentContextType {
     isModalCheckoutOpen: 1 | 0;
     setModalCheckoutOpen: (status: 1 | 0) => void;
+    packet: Packet;
+    setPacket: (packet: Packet) => void;
+    paymentMethod: PaymentMethod;
+    setPaymentMethod: (method: PaymentMethod) => void;
 }
 
 const PaymentContext = createContext<PaymentContextType>(
@@ -16,18 +22,33 @@ const PaymentContext = createContext<PaymentContextType>(
 );
 
 export function PaymentProvider({
-    children
+    children,
+    courseId
 }: {
     children: ReactNode;
+    courseId: string;
 }): JSX.Element {
     const [isModalCheckoutOpen, setModalCheckoutOpen] = useState<1 | 0>(0);
+    const [packet, setPacket] = useState<Packet>({} as Packet);
+    const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('VA_BNI');
+    const { data } = usePacket(courseId);
+
+    useEffect(() => {
+        if (data) {
+            setPacket(data.onePacketOneCourse);
+        }
+    }, [data]);
 
     const memoedValue = useMemo(
         () => ({
             isModalCheckoutOpen,
-            setModalCheckoutOpen
+            setModalCheckoutOpen,
+            packet,
+            setPacket,
+            paymentMethod,
+            setPaymentMethod
         }),
-        [isModalCheckoutOpen]
+        [isModalCheckoutOpen, packet, paymentMethod]
     );
 
     return (

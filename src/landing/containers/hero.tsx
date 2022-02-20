@@ -11,7 +11,7 @@ const Hero = (): JSX.Element => {
                 Belajar dengan pengajar terbaik di seluruh Indonesia
             </h1>
             <div className="w-1/2 text-center z-10">
-                <span className="font-thin text-neutral-300">
+                <span className="text-neutral-300">
                     Menyediakan materi belajar yang lengkap untukmu dan video
                     belajar yang gak ngebosenin.
                 </span>

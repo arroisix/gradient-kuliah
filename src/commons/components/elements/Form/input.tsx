@@ -29,7 +29,7 @@ const Input: React.FC<InputProps> = ({
     error
 }) => (
     <div className="flex flex-col my-4 w-full">
-        <span className="mb-1 font-thin text-xs">{label}</span>
+        <span className="mb-1 text-xs">{label}</span>
         <div
             className={`flex w-full items-center rounded-lg px-2 h-[48px] border ${
                 error ? 'border-red-500' : 'border-neutral-400'
@@ -49,9 +49,7 @@ const Input: React.FC<InputProps> = ({
             />
             <div>{endAddorment}</div>
         </div>
-        {error && (
-            <span className="font-thin text-red-500 text-sm mt-2">{error}</span>
-        )}
+        {error && <span className="text-red-500 text-sm mt-2">{error}</span>}
     </div>
 );
 
