@@ -1,16 +1,12 @@
-import { useRouter } from 'next/router';
-import { useAuth } from 'src/authentication/contexts/AuthProvider';
-import EffectButton from 'src/commons/components/elements/Button/effect';
+import Button from 'src/commons/components/elements/Button';
 
 const Hero = (): JSX.Element => {
-    const { setModalAuthOpen, isAuthenticated } = useAuth();
-    const router = useRouter();
     return (
-        <section className="h-screen w-full px-[7.5rem] py-4 flex flex-col justify-center items-center relative">
-            <h1 className="text-[3rem] font-bold text-center w-[30rem] z-10">
+        <section className="h-screen w-full px-4 md:px-[7.5rem] py-4 flex flex-col justify-center items-center relative">
+            <h1 className="text-2xl md:text-5xl font-bold text-center w-full md:w-[30rem] z-10">
                 Belajar dengan pengajar terbaik di seluruh Indonesia
             </h1>
-            <div className="w-1/2 text-center z-10">
+            <div className="w-full md:w-1/2 text-center z-10 mb-4">
                 <span className="text-neutral-300">
                     Menyediakan materi belajar yang lengkap untukmu dan video
                     belajar yang gak ngebosenin.
@@ -20,19 +16,7 @@ const Hero = (): JSX.Element => {
                 <div className="hero-blur-red mr-[15vw]" />
                 <div className="hero-blur-blue" />
             </div>
-            {isAuthenticated() ? (
-                <EffectButton
-                    className="bg-accent-purple my-4 z-10"
-                    onClick={() => router.push('/kelas')}>
-                    Belajar Sekarang
-                </EffectButton>
-            ) : (
-                <EffectButton
-                    className="bg-accent-purple my-4 z-10"
-                    onClick={() => setModalAuthOpen(1)}>
-                    Gabung Sekarang
-                </EffectButton>
-            )}
+            <Button variant="primary">Segera :)</Button>
         </section>
     );
 };
