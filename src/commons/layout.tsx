@@ -2,7 +2,7 @@ import ModalAuth from 'src/authentication/components/ModalAuth';
 import ModalOnboarding from 'src/authentication/components/OnboardingModal';
 import { useAuth } from 'src/authentication/contexts/AuthProvider';
 // import Footer from './components/modules/Footer';
-// import Navbar from './components/modules/Navbar';
+import Navbar from './components/modules/Navbar';
 
 interface LayoutProps {
     children: JSX.Element;
@@ -11,10 +11,10 @@ interface LayoutProps {
 }
 
 const Layout = ({
-    children
-}: // paymentPage,
-// shouldTransparent
-LayoutProps): JSX.Element => {
+    children,
+    paymentPage,
+    shouldTransparent
+}: LayoutProps): JSX.Element => {
     const {
         isModalAuthOpen,
         setModalAuthOpen,
@@ -24,10 +24,10 @@ LayoutProps): JSX.Element => {
 
     return (
         <div className="min-h-screen overflow-x-hidden bg-neutral-1000 relative text-white">
-            {/* <Navbar
+            <Navbar
                 paymentPage={paymentPage ?? false}
                 shouldTransparent={shouldTransparent ?? false}
-            /> */}
+            />
             <ModalAuth isOpen={isModalAuthOpen} setOpen={setModalAuthOpen} />
             <ModalOnboarding
                 isOpen={isOnboardingOpen}

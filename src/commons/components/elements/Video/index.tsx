@@ -14,15 +14,15 @@ const VideoPlayer = ({
     const {
         playerState,
         togglePlay,
-        handleOnTimeUpdate
-        // handleVideoProgress,
+        handleOnTimeUpdate,
+        handleVideoProgress
         // handleVideoSpeed,
         // toggleMute
     } = useVideoPlayer(element);
     const [showPause, setShowPuase] = useState(false);
 
     return (
-        <div className="relative flex items-center justify-center min-h-[435px]">
+        <div className="relative flex flex-col items-center justify-center min-h-[435px]">
             <video
                 className=""
                 src={video}
@@ -30,11 +30,11 @@ const VideoPlayer = ({
                 onTimeUpdate={handleOnTimeUpdate}
                 poster={thumbnail}
             />
-            {!playerState.isPlaying && (
+            {/* {!playerState.isPlaying && (
                 <div className="w-full h-full bg-black absolute top-0 flex justify-center items-center opacity-40" />
-            )}
+            )} */}
             <div
-                className="w-full h-full absolute top-0 flex justify-center items-center cursor-pointer"
+                className="w-full absolute top-0 flex justify-center items-center cursor-pointer"
                 onClick={togglePlay}
                 onMouseEnter={() => setShowPuase(true)}
                 onMouseLeave={() => setShowPuase(false)}
@@ -52,13 +52,13 @@ const VideoPlayer = ({
             </div>
 
             <div className="controls bg-red-50">
-                {/* <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={playerState.progress}
-                        onChange={(e) => handleVideoProgress(e)}
-                    /> */}
+                <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={playerState.progress}
+                    onChange={(e) => handleVideoProgress(e)}
+                />
                 {/* <select
                         className="velocity"
                         value={playerState.speed}

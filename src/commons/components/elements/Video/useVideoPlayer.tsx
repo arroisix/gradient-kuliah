@@ -29,6 +29,7 @@ const useVideoPlayer = (videoElement) => {
         const progress =
             (videoElement.current.currentTime / videoElement.current.duration) *
             100;
+        console.log(videoElement.current);
         setPlayerState({
             ...playerState,
             progress

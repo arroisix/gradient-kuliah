@@ -51,11 +51,13 @@ const Navbar = ({
             className={`fixed top-0 left-0 w-full z-20 ${computeBgColor()}`}>
             <div className="w-full px-8 py-4 flex items-center justify-between">
                 <Link href={'/'}>
-                    <span className="text-2xl cursor-pointer">Gradient</span>
+                    <span className="text-2xl cursor-pointer font-bold">
+                        Gradient
+                    </span>
                 </Link>
                 {paymentPage ? (
                     <div>
-                        <div className="rounded-full px-4 py-2 bg-[#0F460F]">
+                        <div className="hidden rounded-full px-4 py-2 bg-[#0F460F]">
                             <span className="text-base font-bold flex items-center">
                                 <FaWhatsapp className="mr-2 text-xl" />
                                 Hubungi kami
@@ -63,7 +65,7 @@ const Navbar = ({
                         </div>
                     </div>
                 ) : (
-                    <div className="flex font-bold">
+                    <div className="hidden font-bold">
                         <Link href={'/kelas'}>
                             <nav
                                 className={`ml-12 cursor-pointer hover:text-accent-blue ${
