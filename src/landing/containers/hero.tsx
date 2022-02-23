@@ -17,7 +17,7 @@ const Hero = (): JSX.Element => {
             </div>
             <div className="z-50 my-8 w-[250px] md:w-[500px]">
                 <ReactPlayer
-                    url="https://d2uqn6ndx4ow3t.cloudfront.net/courses/intro-sipil/videos/ftsl-trailer.mp4"
+                    url="https://d2uqn6ndx4ow3t.cloudfront.net/courses/intro-sipil/videos/ftsl-trailer-compress.mp4"
                     controls
                     width={width > 768 ? '500px' : '250px'}
                     height={width > 768 ? '280px' : '150px'}
