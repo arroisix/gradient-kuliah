@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export default function useOnScreen(ref: { current: Element }) {
+export default function useOnScreen(ref: { current: Element }): boolean {
     if (typeof window !== 'undefined') {
         const [isIntersecting, setIntersecting] = useState(false);
 
@@ -9,10 +9,10 @@ export default function useOnScreen(ref: { current: Element }) {
         );
 
         useEffect(() => {
-            observer.observe(ref.current);
+            observer?.observe(ref?.current);
             // Remove the observer as soon as the component is unmounted
             return () => {
-                observer.disconnect();
+                observer?.disconnect();
             };
         }, []);
 

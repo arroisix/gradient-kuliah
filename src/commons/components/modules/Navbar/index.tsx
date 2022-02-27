@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { AiOutlineArrowRight } from 'react-icons/ai';
+// import { AiOutlineArrowRight } from 'react-icons/ai';
 import { FaWhatsapp } from 'react-icons/fa';
 import {
     MdArrowDropDown,
@@ -12,13 +12,13 @@ import {
 import { useAuth } from 'src/authentication/contexts/AuthProvider';
 import useWindowSize from 'src/commons/hooks/useWindowSize';
 import { renderName } from 'src/commons/utils';
-import CourseCard from 'src/courses/components/CourseCard';
+// import CourseCard from 'src/courses/components/CourseCard';
 
 const Navbar = ({
     paymentPage,
-    shouldTransparent,
-    courses
-}: {
+    shouldTransparent
+}: // courses
+{
     paymentPage: boolean;
     shouldTransparent: boolean;
     courses?: [Course];
@@ -134,7 +134,7 @@ const Navbar = ({
                                 onMouseLeave={onMouseLeaveKelas}>
                                 <span className="flex items-center">
                                     Kelas
-                                    {courses && <MdArrowDropDown />}
+                                    {/* {courses && <MdArrowDropDown />} */}
                                 </span>
                             </nav>
                         </Link>
@@ -212,7 +212,7 @@ const Navbar = ({
                 )}
             </div>
 
-            {courses && (
+            {/* {courses && (
                 <div
                     className={`w-full px-8 py-4 bg-[#171717] flex justify-between ${
                         isHovered ? 'block' : 'hidden'
@@ -221,22 +221,22 @@ const Navbar = ({
                         <h1 className="font-bold text-[4rem]">Kelas</h1>
                     </div>
                     <div className="w-3/4">
-                        <div className="w-full grid grid-cols-3 gap-4">
+                        <div className="w-full grid grid-cols-3 gap-4 justify-end">
                             {courses?.map((course: Course) => (
                                 <CourseCard course={course} key={course.uuid} />
                             ))}
                         </div>
                         <Link href={'/kelas'}>
                             <div className="mt-4 flex items-center cursor-pointer">
-                                <span className="flex items-center font-bold bg-gradient-to-r from-accent-purple to-[#B73E32] text-transparent bg-clip-text">
+                                <span className="flex items-center font-bold text-white">
                                     Lihat semua kelas
                                 </span>
-                                <AiOutlineArrowRight className="text-[#B73E32] ml-2" />
+                                <AiOutlineArrowRight className="text-white ml-2" />
                             </div>
                         </Link>
                     </div>
                 </div>
-            )}
+            )} */}
         </header>
     );
 };
