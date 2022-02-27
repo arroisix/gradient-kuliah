@@ -1,4 +1,4 @@
-export const getAllVideoChapter = (chapters: [Chapter]): [Chapter] => {
+export const getAllVideoChapter = (chapters: Chapter[]): [Chapter] => {
     const videoChapter = chapters.map((chapter) => {
         const res = chapter.subchapters
             .filter((subchapter) => subchapter.video !== null)
@@ -21,7 +21,7 @@ export const getAllVideoChapter = (chapters: [Chapter]): [Chapter] => {
     );
 };
 
-export const getAllNotebookChapter = (chapters: [Chapter]): [Chapter] => {
+export const getAllNotebookChapter = (chapters: Chapter[]): [Chapter] => {
     const notebookChapter = chapters.map((chapter) => {
         const res = chapter.subchapters
             .filter((subchapter) => subchapter.notebook !== null)

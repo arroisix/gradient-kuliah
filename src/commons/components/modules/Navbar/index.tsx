@@ -115,7 +115,7 @@ const Navbar = ({
                 </Link>
                 {paymentPage ? (
                     <div>
-                        <div className="rounded-full px-4 py-2 bg-[#0F460F]">
+                        <div className="flex rounded-full px-4 py-2 bg-[#0F460F]">
                             <span className="text-base font-bold flex items-center">
                                 <FaWhatsapp className="mr-2 text-xl" />
                                 Hubungi kami

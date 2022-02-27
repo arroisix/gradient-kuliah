@@ -1,0 +1,33 @@
+import { useState } from 'react';
+import LearnContentBox from 'src/courses/components/LearnContentBox';
+import { useLearning } from 'src/courses/contexts/LearningProvider';
+import LearnVideo from './learnVideo';
+
+const VideoLearnContainer = ({ course }: { course: Course }): JSX.Element => {
+    const { videoPicked, subchapterName } = useLearning();
+
+    const [hide, setHide] = useState(false);
+
+    return (
+        <section className="min-h-screen pt-[65px] flex justify-between relative">
+            <div className="w-full flex h-screen px-[7.5rem] pt-8">
+                <div className={`${hide ? 'w-full' : 'w-3/4'} h-full`}>
+                    <LearnVideo
+                        isListHidden={hide}
+                        video={videoPicked}
+                        subchapterName={subchapterName}
+                    />
+                </div>
+            </div>
+            <div className="absolute right-0 w-[300px]">
+                <LearnContentBox
+                    chapters={course.chapters}
+                    hide={hide}
+                    setHide={setHide}
+                />
+            </div>
+        </section>
+    );
+};
+
+export default VideoLearnContainer;

@@ -41,6 +41,10 @@ type Notebook = {
     id: string;
     isFree: boolean;
     title: string;
+    content: string;
+    authors: Lecturer[];
+    createdAt: string | Date;
+    references: string;
 };
 
 type Video = {
@@ -49,6 +53,8 @@ type Video = {
     isFree: boolean;
     duration: string;
     thumbnail: string;
+    description: string;
+    lecturers?: Lecturer[];
 };
 
 type Packet = {

@@ -62,11 +62,24 @@ export const GET_PUBLIC_DETAIL_COURSE = gql`
                         thumbnail
                         videoUrl
                         description
+                        lecturers {
+                            name
+                            photo
+                            role
+                        }
                     }
                     notebook {
                         id
                         title
                         isFree
+                        createdAt
+                        authors {
+                            name
+                            photo
+                            role
+                        }
+                        content
+                        references
                     }
                 }
             }
@@ -108,11 +121,23 @@ export const GET_PRIVATE_DETAIL_COURSE = gql`
                         thumbnail
                         videoUrl
                         description
+                        lecturers {
+                            name
+                            photo
+                            role
+                        }
                     }
                     notebook {
                         id
                         title
                         isFree
+                        authors {
+                            name
+                            photo
+                            role
+                        }
+                        content
+                        references
                     }
                 }
             }
