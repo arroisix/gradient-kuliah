@@ -2,7 +2,7 @@ import ContentHighlight from './contentHightlight';
 import Hero from './hero';
 import JoinDiscord from './joinDiscord';
 
-// import Testimoni from './testimoni';
+import Testimoni from './testimoni';
 import ValueProposition from './valueProposition';
 
 export default function LandingContainer(): JSX.Element {
@@ -12,7 +12,7 @@ export default function LandingContainer(): JSX.Element {
             <ContentHighlight />
             <ValueProposition />
             <JoinDiscord />
-            {/* <Testimoni /> */}
+            <Testimoni />
         </div>
     );
 }

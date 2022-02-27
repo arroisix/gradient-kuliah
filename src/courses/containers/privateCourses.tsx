@@ -7,6 +7,8 @@ const PrivateCourses = ({ myClass }: { myClass: boolean }): JSX.Element => {
     const { data, loading } = useCourses();
     const [courses, setCourses] = useState<Course[]>([]);
 
+    console.log(courses);
+
     useEffect(() => {
         if (data) {
             setCourses(
@@ -29,7 +31,7 @@ const PrivateCourses = ({ myClass }: { myClass: boolean }): JSX.Element => {
                 );
             }
         }
-    }, [courses, myClass]);
+    }, [myClass, data]);
 
     return (
         <CourseContainer>

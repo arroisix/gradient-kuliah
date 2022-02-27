@@ -61,6 +61,7 @@ export const GET_PUBLIC_DETAIL_COURSE = gql`
                         isFree
                         thumbnail
                         videoUrl
+                        description
                     }
                     notebook {
                         id
@@ -106,6 +107,7 @@ export const GET_PRIVATE_DETAIL_COURSE = gql`
                         isFree
                         thumbnail
                         videoUrl
+                        description
                     }
                     notebook {
                         id

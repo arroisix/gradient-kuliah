@@ -37,7 +37,6 @@ const Navbar = ({
     };
 
     useEffect(() => {
-        console.log(courses);
         window.addEventListener('scroll', handleScroll, { passive: true });
 
         return () => {

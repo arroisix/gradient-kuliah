@@ -24,7 +24,6 @@ const DetailKelas = ({
 export default DetailKelas;
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    // Call an external API endpoint to get posts
     const { data } = await publicClient.query({
         query: GET_PUBLIC_COURSE
     });
@@ -32,13 +31,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
         (course: CourseNode) => course.node as Course
     );
 
-    // Get the paths we want to pre-render based on posts
     const paths = courses.map((course: Course) => ({
         params: { id: course.uuid }
     }));
 
-    // We'll pre-render only these paths at build time.
-    // { fallback: false } means other routes should 404.
     return { paths, fallback: false };
 };
 
