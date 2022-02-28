@@ -3,7 +3,7 @@ import * as components from 'idyll-components';
 
 const LearnNotebook = ({ notebook }: { notebook: Notebook }): JSX.Element => {
     return (
-        <div className="w-full h-full pb-48">
+        <div className="w-full h-full pb-48 overflow-x-hidden">
             <div className="mb-4 border-b border-neutral-600">
                 <h3 className="text-2xl md:text-4xl font-bold mb-4">
                     {notebook.title}

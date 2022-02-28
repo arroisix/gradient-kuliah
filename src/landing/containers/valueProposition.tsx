@@ -91,59 +91,68 @@ const ValueProposition = (): JSX.Element => {
     }, [isThirdSeen]);
 
     return (
-        <div className="flex w-full" style={{ height: 'calc(300vh - 12rem)' }}>
-            <div className="w-[50vw] h-full">
-                <div className="h-1/3 relative">
-                    <div className="absolute top-32 left-0" ref={firstAnchor} />
-                    <div className="w-full h-full flex items-center justify-center">
-                        <h3 className="text-4xl text-neutral-600 font-bold p-[7.25rem]">
-                            <span className="text-white">
-                                Belajar Tidak Harus Membosankan.
-                            </span>{' '}
-                            Terkurasi agar mudah dipahami dan menarik.
-                        </h3>
+        <>
+            <div
+                className="hidden md:flex w-full"
+                style={{ height: 'calc(300vh - 12rem)' }}>
+                <div className="w-[50vw] h-full">
+                    <div className="h-1/3 relative">
+                        <div
+                            className="absolute top-32 left-0"
+                            ref={firstAnchor}
+                        />
+                        <div className="w-full h-full flex items-center justify-center">
+                            <h3 className="text-4xl text-neutral-600 font-bold p-[7.25rem]">
+                                <span className="text-white">
+                                    Belajar Tidak Harus Membosankan.
+                                </span>{' '}
+                                Terkurasi agar mudah dipahami dan menarik.
+                            </h3>
+                        </div>
+                    </div>
+                    <div className="h-1/3 relative">
+                        <div
+                            className="absolute top-32 left-0"
+                            ref={secondAnchor}
+                        />
+                        <div className="w-full h-full flex items-center justify-center p-[7.25rem]">
+                            <h3 className="text-4xl text-neutral-600 font-bold">
+                                <span className="text-white">
+                                    Harga Terjangkau.
+                                </span>{' '}
+                                Supaya semua orang punya kesempatan.
+                            </h3>
+                        </div>
+                    </div>
+                    <div className="h-1/3 relative">
+                        <div className="w-full h-full flex items-center justify-center p-[7.25rem]">
+                            <h3 className="text-4xl text-neutral-600 font-bold">
+                                <span className="text-white">
+                                    Artikel, Materi, dan Latihan.
+                                </span>{' '}
+                                Lengkap dalam 1 platform.
+                            </h3>
+                        </div>
+                        <div
+                            className="absolute top-32 left-0"
+                            ref={thirdAnchor}
+                        />
                     </div>
                 </div>
-                <div className="h-1/3 relative">
-                    <div
-                        className="absolute top-32 left-0"
-                        ref={secondAnchor}
-                    />
-                    <div className="w-full h-full flex items-center justify-center p-[7.25rem]">
-                        <h3 className="text-4xl text-neutral-600 font-bold">
-                            <span className="text-white">
-                                Harga Terjangkau.
-                            </span>{' '}
-                            Supaya semua orang punya kesempatan.
-                        </h3>
-                    </div>
-                </div>
-                <div className="h-1/3 relative">
-                    <div className="w-full h-full flex items-center justify-center p-[7.25rem]">
-                        <h3 className="text-4xl text-neutral-600 font-bold">
-                            <span className="text-white">
-                                Artikel, Materi, dan Latihan.
-                            </span>{' '}
-                            Lengkap dalam 1 platform.
-                        </h3>
-                    </div>
-                    <div className="absolute top-32 left-0" ref={thirdAnchor} />
-                </div>
+                <motion.div
+                    className={`w-[50vw] sticky top-16 ${renderedClass} p-16`}
+                    transition={{ type: 'tween' }}
+                    variants={StickyVariants}
+                    initial="sticky1"
+                    animate={renderedClass}
+                    style={{
+                        height: 'calc(100vh - 64px)'
+                    }}>
+                    <div className="w-full h-full bg-neutral-400"></div>
+                </motion.div>
             </div>
-            <motion.div
-                className={`w-[50vw] sticky top-16 ${renderedClass} p-16`}
-                transition={{ type: 'tween' }}
-                variants={StickyVariants}
-                initial="sticky1"
-                animate={renderedClass}
-                style={{
-                    height: 'calc(100vh - 64px)'
-                }}>
-                <div className="w-full h-full bg-neutral-400"></div>
-            </motion.div>
-
             <MobileValueProposition />
-        </div>
+        </>
     );
 };
 
