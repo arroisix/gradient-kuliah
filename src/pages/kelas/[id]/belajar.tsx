@@ -27,9 +27,9 @@ const Belajar = ({ course }: { course: Course }): JSX.Element => {
     };
 
     return (
-        <Layout>
-            <LearningProvider course={course}>{renderPage()}</LearningProvider>
-        </Layout>
+        <LearningProvider course={course}>
+            <Layout>{renderPage()}</Layout>
+        </LearningProvider>
     );
 };
 

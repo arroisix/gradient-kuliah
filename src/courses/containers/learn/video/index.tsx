@@ -10,8 +10,9 @@ const VideoLearnContainer = ({ course }: { course: Course }): JSX.Element => {
 
     return (
         <section className="min-h-screen pt-[65px] flex justify-between relative">
-            <div className="w-full flex h-screen px-[7.5rem] pt-8">
-                <div className={`${hide ? 'w-full' : 'w-3/4'} h-full`}>
+            <div className="w-full flex md:px-[7.5rem] md:pt-8">
+                <div
+                    className={`${hide ? 'w-full' : 'w-full md:w-3/4'} h-full`}>
                     <LearnVideo
                         isListHidden={hide}
                         video={videoPicked}
@@ -19,7 +20,7 @@ const VideoLearnContainer = ({ course }: { course: Course }): JSX.Element => {
                     />
                 </div>
             </div>
-            <div className="absolute right-0 w-[300px]">
+            <div className="fixed right-0 w-[300px]">
                 <LearnContentBox
                     chapters={course.chapters}
                     hide={hide}

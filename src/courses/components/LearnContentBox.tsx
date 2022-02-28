@@ -1,4 +1,4 @@
-import { BsChevronBarLeft } from 'react-icons/bs';
+import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import { useLearning } from '../contexts/LearningProvider';
 import ListOfContent from './Content/ListOfContent';
 
@@ -30,7 +30,11 @@ const LearnContentBox = ({
                 } bg-neutral-800 h-12 w-12 flex justify-center items-center`}
                 onClick={() => setHide(!hide)}
                 aria-hidden>
-                <BsChevronBarLeft className="text-neutral-100" />
+                {hide ? (
+                    <MdChevronLeft className="text-neutral-100 text-3xl" />
+                ) : (
+                    <MdChevronRight className="text-neutral-100 text-3xl" />
+                )}
             </div>
             {!hide && (
                 <ListOfContent

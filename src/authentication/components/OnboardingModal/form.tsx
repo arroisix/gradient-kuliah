@@ -137,13 +137,12 @@ const FormSection = ({
                         disabled={isSubmitting}>
                         {loading ? 'Menyimpan...' : 'Simpan'}
                     </Button>
-
-                    <Button
+                    {/* <Button
                         variant="tertiary"
                         className="mt-2 w-full"
                         onClick={() => console.log('wkw')}>
                         <div>Lewati</div>
-                    </Button>
+                    </Button> */}
                 </form>
             )}
         </Formik>
