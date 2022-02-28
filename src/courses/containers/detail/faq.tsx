@@ -3,29 +3,14 @@ import Accordion from 'src/commons/components/elements/Accordion';
 
 const FAQ_CONTENT = [
     {
-        title: 'Apa beda Trooops dengan Google Classroom?',
+        title: 'Apa itu Gradient?',
         content:
-            'Google Classroom biasa digunakan untuk mengumpulkan tugas. Fitur utama Trooops yang sekarang adalah Chatting dan Q&A. Namun ke depannya, akan ada fitur pengumpulan tugas seperti Google Classroom supaya siswa tidak perlu lagi pindah-pindah platform.'
+            'Gradient adalah alternatif kuliah online dengan harga terjangkau yang menggabungkan guru-guru terbaik, konten sinematik, pedagogi berdasarkan sains, dan teknologi.'
     },
     {
-        title: 'Apa beda Trooops dengan Line/Whatsapp?',
+        title: 'Aku masih SMA, aku memenuhi syarat untuk ikut kelas ini ga?',
         content:
-            'Line/Whatsapp biasa digunakan untuk chatting dengan personal dan group. Namun sering kali chatnya terlalu banyak dan menumpuk sehingga sulit untuk mengaturnya. Trooops di design agar chatting dapat dilakukan berdasarkan kategori. Sehingga, siswa dan guru dapat mengirim, menerima, dan mengelola informasi dengan terstruktur.'
-    },
-    {
-        title: 'Apakah saya harus membayar untuk menggunakan Trooops?',
-        content:
-            '<b>Tidak.</b> Anda bisa langsung menggunakan Trooops secara gratis.'
-    },
-    {
-        title: 'Fitur apa saja yang ada di Trooops?',
-        content:
-            'Trooops akan terus berinovasi sesuai dengan kebutuhan siswa dan guru. Fitur terdekat yang akan kami keluarkan adalah pengumpulan tugas seperti Google Classroom.'
-    },
-    {
-        title: 'Siapa saja yang bisa menggunakan Trooops?',
-        content:
-            'Trooops ditujukan untuk aktivitas belajar mengajar. Kelas sekolah, kuliah, maupun bimbel dapat menggunakan Trooops secara maksimal.'
+            'Iya! Kelas ini didesain agar teman-teman SMA juga bisa mencoba kelas kuliah dan mendapatkan wawasan tentang jurusan teknik sipil & lingkungan. Tujuannya untuk membantu teman-teman ga salah ambil jurusan kuliah.'
     }
 ];
 

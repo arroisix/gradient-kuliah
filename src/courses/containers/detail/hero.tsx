@@ -19,12 +19,11 @@ const Hero = ({ course }: { course: Course }): JSX.Element => {
                     : {}
             }>
             <div
-                className="absolute md:hidden top-0 left-0 w-full h-3/4 text-center"
+                className="absolute md:hidden top-0 left-0 w-full h-3/4 flex justify-end"
                 style={{
-                    background: `url(${course.banner})`,
+                    backgroundImage: `url(${course.banner})`,
                     backgroundSize: 'cover',
                     backgroundPositionX: '90%',
-                    backgroundPositionY: '90%',
                     backgroundColor:
                         'linear-gradient(90deg, #000000 0%, rgba(0, 0, 0, 0) 25%)'
                 }}>

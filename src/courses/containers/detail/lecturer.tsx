@@ -4,7 +4,7 @@ const Lecturer = ({ course }: { course: Course }): JSX.Element => {
     return (
         <div className="px-4 md:px-[7.5rem] mb-32">
             <h1 className="md:text-center text-2xl md:text-4xl font-bold">
-                Pengajar kelas ini
+                Guru spektakuler kelas ini
             </h1>
             <div className="grid grid-cols-2 mt-4">
                 {course.lecturers.map((lecturer) => {

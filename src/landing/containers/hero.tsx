@@ -9,12 +9,11 @@ const Hero = (): JSX.Element => {
     return (
         <section className="h-screen w-full px-4 md:px-[7.5rem] py-4 flex flex-col justify-center items-center relative">
             <h1 className="text-3xl lg:text-5xl font-bold text-center w-[90vw] md:w-[30rem] z-10">
-                Belajar dengan pengajar terbaik di seluruh Indonesia 🇮🇩
+                Masa Depan Kuliah Online di Indonesia 🇮🇩
             </h1>
             <div className="md:w-1/2 text-center z-10">
                 <span className="text-neutral-300">
-                    Menyediakan materi belajar yang lengkap untukmu dan video
-                    belajar yang gak ngebosenin.
+                    Belajar dari guru-guru terbaik, video sinematik, dan menarik
                 </span>
             </div>
             <div className="w-screen h-screen absolute flex justify-center items-center">

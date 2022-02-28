@@ -7,7 +7,7 @@ import useWindowSize from 'src/commons/hooks/useWindowSize';
 interface ContentBoxProps {
     chapters: Chapter[];
     description?: string;
-    trailer?: string;
+    trailer?: Video;
     thumbnail?: string;
 }
 
@@ -16,15 +16,7 @@ const ContentBox = ({
     trailer,
     thumbnail
 }: ContentBoxProps): JSX.Element => {
-    const [videoPicked, setVideoPicked] = useState<Video>({
-        id: 'trailer',
-        isFree: true,
-        videoUrl: trailer as string,
-        thumbnail: thumbnail as string,
-        description:
-            'Amet minim mollit non deserunt ullamco est sit aliqu dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet. Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.',
-        duration: ''
-    });
+    const [videoPicked, setVideoPicked] = useState<Video>(trailer as Video);
     const { width } = useWindowSize();
     return (
         <div className="flex h-full flex-col lg:flex-row">
@@ -52,15 +44,7 @@ const ContentBox = ({
                     setVideoPicked={setVideoPicked}
                     rounded
                     asThrowPage
-                    trailerVideo={{
-                        id: 'trailer',
-                        isFree: true,
-                        videoUrl: trailer as string,
-                        thumbnail: thumbnail as string,
-                        description:
-                            'Amet minim mollit non deserunt ullamco est sit aliqu dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet. Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.',
-                        duration: ''
-                    }}
+                    trailerVideo={trailer}
                 />
             </div>
         </div>
