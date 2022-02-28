@@ -33,7 +33,7 @@ const Gallery = ({
     });
 
     return (
-        <div className="relative">
+        <div className="relative overflow-hidden">
             <div
                 className={`w-screen pl-4 md:pl-[7.25rem] transition ease-in relative`}
                 style={{ transform: `translate(-${translate}rem)` }}

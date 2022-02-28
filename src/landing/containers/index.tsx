@@ -1,4 +1,3 @@
-import { ParallaxProvider } from 'react-scroll-parallax';
 import ContentHighlight from './contentHightlight';
 import Hero from './hero';
 import JoinGradient from './joinGradient';
@@ -9,9 +8,7 @@ export default function LandingContainer(): JSX.Element {
         <div>
             <Hero />
             <ContentHighlight />
-            <ParallaxProvider>
-                <ValueProposition />
-            </ParallaxProvider>
+            <ValueProposition />
             <JoinGradient />
         </div>
     );
