@@ -17,7 +17,7 @@ const ContentHighlight = (): JSX.Element => {
     const { width } = useWindowSize();
 
     return (
-        <section className="py-4 relative md:mb-48">
+        <section className="py-4 relative md:mb-16">
             <div className="px-4 md:px-[7.25rem]">
                 <h1 className="font-bold text-2xl">Materi Belajar Lengkap</h1>
                 <span className="text-neutral-200">
