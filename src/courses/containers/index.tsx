@@ -1,9 +1,10 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { FaSearch } from 'react-icons/fa';
+// import { FaSearch } from 'react-icons/fa';
 import { useAuth } from 'src/authentication/contexts/AuthProvider';
-import Input from 'src/commons/components/elements/Form/input';
+// import Input from 'src/commons/components/elements/Form/input';
 import Switch from 'src/commons/components/elements/Form/switch';
+import useWindowSize from 'src/commons/hooks/useWindowSize';
 import PrivateCourses from './privateCourses';
 import PublicCourses from './publicCourses';
 
@@ -12,6 +13,7 @@ const ClassContainer = ({ courses }: { courses: Course[] }): JSX.Element => {
     const { flag } = router.query;
     const [myClass, setMyClass] = useState(false);
     const { isAuthenticated } = useAuth();
+    const { width } = useWindowSize();
 
     useEffect(() => {
         if (flag && flag === 'kelasku') {
@@ -20,10 +22,10 @@ const ClassContainer = ({ courses }: { courses: Course[] }): JSX.Element => {
     }, [flag]);
 
     return (
-        <section className="min-h-screen pt-24 px-[7.5rem]">
-            <h1 className="text-5xl font-bold">Kelas</h1>
-            <div className="w-full flex mt-6 justify-between">
-                <div className="w-1/3">
+        <section className="min-h-screen pt-24 px-4 md:px-[7.5rem]">
+            <h1 className="text-4xl md:text-5xl font-bold">Kelas</h1>
+            <div className="w-full flex flex-col md:flex-row mt-6 justify-end">
+                {/* <div className="md:w-1/3 w-full">
                     <Input
                         type="text"
                         placeholder="cari kelas"
@@ -33,20 +35,27 @@ const ClassContainer = ({ courses }: { courses: Course[] }): JSX.Element => {
                             <FaSearch className="text-gray-500 cursor-pointer" />
                         }
                     />
-                </div>
+                </div> */}
                 {isAuthenticated() && (
-                    <Switch
-                        label="Tampilkan kelasku saja"
-                        checked={myClass}
-                        setChecked={() => setMyClass(!myClass)}
-                    />
+                    <div className="flex items-center justify-between">
+                        <span className="block md:hidden">
+                            Tampilkan kelasku saja
+                        </span>
+                        <Switch
+                            label={width > 768 ? 'Tampilkan kelasku saja' : ''}
+                            checked={myClass}
+                            setChecked={() => setMyClass(!myClass)}
+                        />
+                    </div>
                 )}
             </div>
-            {isAuthenticated() ? (
-                <PrivateCourses myClass={myClass} />
-            ) : (
-                <PublicCourses courses={courses} />
-            )}
+            <div className="my-4">
+                {isAuthenticated() ? (
+                    <PrivateCourses myClass={myClass} />
+                ) : (
+                    <PublicCourses courses={courses} />
+                )}
+            </div>
         </section>
     );
 };

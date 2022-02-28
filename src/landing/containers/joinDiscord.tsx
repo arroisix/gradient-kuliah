@@ -10,7 +10,7 @@ const JoinDiscord = (): JSX.Element => {
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'top'
             }}>
-            <h1 className="text-6xl font-bold bg-gradient-to-r from-accent-purple to-[#B73E32] text-transparent bg-clip-text p-1">
+            <h1 className="text-6xl font-bold bg-gradient-to-r from-accent-purple to-[#B73E32] text-transparent bg-clip-text p-1 text-center">
                 Gabung Discord Gradient
             </h1>
             <h1 className="text-6xl font-bold"> buat belajar bareng</h1>

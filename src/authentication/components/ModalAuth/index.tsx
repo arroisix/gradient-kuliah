@@ -8,6 +8,7 @@ import Button from 'src/commons/components/elements/Button';
 import Modal from 'src/commons/components/modules/Modal';
 import LoginSection from './loginSection';
 import RegisterSection from './registerSection';
+import { toast } from 'react-toastify';
 
 export interface AuthInputBaseType {
     fullName?: string;
@@ -31,12 +32,12 @@ const ModalAuth = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
         }
     }, [success]);
 
-    const onGoogleSuccess = async (res: any) => {
+    const onGoogleSuccess = async (res: any): Promise<void> => {
         await googleLogin(res.tokenId);
     };
 
-    const onGoogleFailure = (res: any) => {
-        console.log(res);
+    const onGoogleFailure = (): void => {
+        toast.error('Gagal login, coba beberapa saat lagi');
     };
 
     return (

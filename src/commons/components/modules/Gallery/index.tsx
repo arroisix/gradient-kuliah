@@ -1,12 +1,15 @@
 import { useState, useRef } from 'react';
 import { MdChevronRight, MdChevronLeft } from 'react-icons/md';
+import { useSwipeable } from 'react-swipeable';
 import useOnScreen from 'src/commons/hooks/useOnScreen';
+import useWindowSize from 'src/commons/hooks/useWindowSize';
 
 const Gallery = ({
     itemWidth = 24,
     itemCount = 5,
     items
-}: {
+}: // row = 2
+{
     itemWidth: number;
     itemCount: number;
     items: JSX.Element[];
@@ -17,13 +20,26 @@ const Gallery = ({
     const lastRef = useRef({} as HTMLDivElement);
     const isFirstOnViewPort = useOnScreen(firstRef);
     const isLastOnViewPort = useOnScreen(lastRef);
+    const { width } = useWindowSize();
+    const handlers = useSwipeable({
+        onSwipedRight:
+            translate > 0
+                ? () => setTranslate(translate - itemWidth)
+                : undefined,
+        onSwipedLeft:
+            translate < itemCount * itemWidth * 0.8
+                ? () => setTranslate(translate + itemWidth)
+                : undefined
+    });
+
     return (
         <div className="relative">
             <div
-                className={`w-screen pl-[7.25rem] transition ease-in-out relative`}
-                style={{ transform: `translate(-${translate}rem)` }}>
+                className={`w-screen pl-4 md:pl-[7.25rem] transition ease-in relative`}
+                style={{ transform: `translate(-${translate}rem)` }}
+                {...handlers}>
                 <div
-                    className={`my-16 grid grid-rows-2 grid-flow-col gap-4 overflow-overflow-scroll`}>
+                    className={`my-16 grid grid-rows-1 grid-flow-col gap-4 overflow-overflow-scroll`}>
                     <div ref={firstRef} />
                     <div />
                     {items}
@@ -32,7 +48,7 @@ const Gallery = ({
             </div>
             <button
                 className={`${
-                    isLastOnViewPort && 'hidden'
+                    (isLastOnViewPort || width <= 768) && 'hidden'
                 } absolute right-16 bg-neutral-100 top-[40%] w-16 h-16 rounded-full flex justify-center items-center`}
                 onClick={
                     translate < itemCount * itemWidth * 0.8
@@ -44,7 +60,8 @@ const Gallery = ({
             </button>
             <button
                 className={`${
-                    isFirstOnViewPort && 'hidden'
+                    (isFirstOnViewPort || translate <= 0 || width <= 768) &&
+                    'hidden'
                 } absolute left-16 bg-neutral-100 top-[40%] w-16 h-16 rounded-full flex justify-center items-center`}
                 onClick={
                     translate > 0
