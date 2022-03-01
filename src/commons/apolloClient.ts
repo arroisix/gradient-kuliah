@@ -9,7 +9,9 @@ import { setContext } from '@apollo/client/link/context';
 import { toast } from 'react-toastify';
 
 const httpLink = createHttpLink({
-    uri: `${process.env.API_ENDPOINT}/graphql`
+    uri: `${
+        process.env.API_ENDPOINT || process.env.NEXT_PUBLIC_API_ENDPOINT
+    }/graphql`
 });
 
 const authLink = setContext((_, { headers }) => {
