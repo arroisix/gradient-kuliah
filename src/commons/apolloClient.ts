@@ -9,8 +9,7 @@ import { setContext } from '@apollo/client/link/context';
 import { toast } from 'react-toastify';
 
 const httpLink = createHttpLink({
-    uri: 'https://api-gradient.herokuapp.com/graphql'
-    // uri: 'http://localhost:8000/graphql'
+    uri: `${process.env.API_ENDPOINT}/graphql`
 });
 
 const authLink = setContext((_, { headers }) => {
