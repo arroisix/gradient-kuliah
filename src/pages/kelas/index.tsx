@@ -4,9 +4,9 @@ import { GetStaticProps } from 'next';
 import { publicClient } from 'src/commons/apolloClient';
 import { GET_PUBLIC_COURSE } from 'src/courses/schema';
 
-const Kelas = ({ courses }: { courses: Course[] }): JSX.Element => {
+const Kelas = ({ courses }: { courses: [Course] }): JSX.Element => {
     return (
-        <Layout>
+        <Layout courses={courses}>
             <ClassContainer courses={courses} />
         </Layout>
     );

@@ -66,7 +66,7 @@ const GuideStep = ({ step, index }: GuideStepProps): JSX.Element => {
         <div className="w-full flex mb-4">
             <div className="w-[250px] h-[150px] bg-neutral-400 rounded mr-2"></div>
             <div>
-                <p className="text-2xl">
+                <p className="md:text-2xl">
                     {index + 1}. {step.description}
                 </p>
             </div>

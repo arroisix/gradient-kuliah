@@ -8,7 +8,7 @@ const SubscriptionContainer = (): JSX.Element => {
     const { isModalCheckoutOpen, setModalCheckoutOpen } = usePayment();
 
     return (
-        <section className="min-h-screen pt-24 px-[7.5rem]">
+        <section className="min-h-screen pt-24 px-4 md:px-[7.5rem]">
             <h1 className="text-5xl font-bold">Pilih metode pembayaran</h1>
             {/* <EwalletBox /> */}
             <VirtualAccountBox />

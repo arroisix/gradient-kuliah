@@ -1,0 +1,75 @@
+import { useRouter } from 'next/router';
+import { MdOutlineArticle, MdLock, MdChevronRight } from 'react-icons/md';
+
+const NotebookSection = ({
+    chapters,
+    asThrowPage,
+    setNotebookPicked,
+    notebookPicked
+}: {
+    chapters: Chapter[];
+    asThrowPage?: boolean;
+    setNotebookPicked: (notebook: Notebook) => void;
+    notebookPicked: Notebook;
+}): JSX.Element => {
+    const router = useRouter();
+    const { id } = router.query;
+    return (
+        <div className="h-[500px] overflow-y-auto">
+            {chapters.map((chapter) => {
+                return (
+                    <div key={chapter.id}>
+                        <div className="p-4">
+                            <span className="font-bold">
+                                {chapter.chapterName}
+                            </span>
+                        </div>
+                        {chapter.subchapters.map((subchapter) => {
+                            return (
+                                <div
+                                    key={subchapter.id}
+                                    onClick={() => {
+                                        if (asThrowPage) {
+                                            router.push(
+                                                `/kelas/${id}/belajar?type=notebook&sub=${subchapter.id}`
+                                            );
+                                        } else {
+                                            setNotebookPicked(
+                                                subchapter.notebook as Notebook
+                                            );
+
+                                            router.push(
+                                                `/kelas/${id}/belajar?type=notebook&sub=${subchapter.id}`,
+                                                undefined,
+                                                { shallow: true }
+                                            );
+                                        }
+                                    }}
+                                    aria-hidden
+                                    className={`w-full flex p-4 items-center hover:bg-neutral-600 cursor-pointer ${
+                                        notebookPicked?.id ===
+                                            subchapter.notebook?.id &&
+                                        'bg-neutral-600'
+                                    }`}>
+                                    <div className="flex items-center">
+                                        {subchapter.notebook?.isFree ? (
+                                            <MdOutlineArticle className="mr-4 text-xl" />
+                                        ) : (
+                                            <MdLock className="mr-4 text-xl text-amber-400" />
+                                        )}
+                                        <span>
+                                            {subchapter.notebook?.title}
+                                        </span>
+                                    </div>
+                                    <MdChevronRight />
+                                </div>
+                            );
+                        })}
+                    </div>
+                );
+            })}
+        </div>
+    );
+};
+
+export default NotebookSection;

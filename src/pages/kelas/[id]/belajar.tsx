@@ -5,23 +5,35 @@ import {
     GET_PUBLIC_COURSE,
     GET_PUBLIC_DETAIL_COURSE
 } from 'src/courses/schema';
-import DetailCourse from 'src/courses/containers/detail';
+import VideoLearnContainer from 'src/courses/containers/learn/video';
+import NotebookLearnContainer from 'src/courses/containers/learn/notebook';
+import { useRouter } from 'next/router';
+import { LearningProvider } from 'src/courses/contexts/LearningProvider';
 
-const DetailKelas = ({
-    course,
-    courses
-}: {
-    course: Course;
-    courses: [Course];
-}): JSX.Element => {
+const Belajar = ({ course }: { course: Course }): JSX.Element => {
+    const router = useRouter();
+    const { type } = router.query;
+
+    const renderPage = (): JSX.Element => {
+        if (type === 'video') {
+            return <VideoLearnContainer course={course} />;
+        }
+
+        if (type === 'notebook') {
+            return <NotebookLearnContainer course={course} />;
+        }
+
+        return <></>;
+    };
+
     return (
-        <Layout courses={courses} shouldTransparent>
-            <DetailCourse course={course} />
-        </Layout>
+        <LearningProvider course={course}>
+            <Layout>{renderPage()}</Layout>
+        </LearningProvider>
     );
 };
 
-export default DetailKelas;
+export default Belajar;
 
 export const getStaticPaths: GetStaticPaths = async () => {
     const { data } = await publicClient.query({
@@ -42,23 +54,14 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     const resDetail = await publicClient.query({
         query: GET_PUBLIC_DETAIL_COURSE,
         variables: {
-            ...params
+            id: params?.id
         }
     });
     const course = resDetail.data.course;
 
-    const resAll = await publicClient.query({
-        query: GET_PUBLIC_COURSE
-    });
-
-    const courses = resAll.data.allCourses.edges.map(
-        (course: CourseNode) => course.node as Course
-    );
-
     return {
         props: {
-            course,
-            courses
+            course
         }
     };
 };

@@ -1,5 +1,31 @@
 import { gql } from '@apollo/client';
 
+export const GET_ALL_TRANSACTION = gql`
+    query Transaction {
+        transactions {
+            id
+            createdAt
+            status
+            amount
+            vaNumber
+            deadline
+            paymentMethod
+            subscriber {
+                subscribedPacket {
+                    id
+                    price
+                    activeDuration
+                    isLifetime
+                    courses {
+                        id
+                        courseName
+                    }
+                }
+            }
+        }
+    }
+`;
+
 export const GET_TRANSACTION = gql`
     query Transaction($id: String) {
         transaction(id: $id) {
