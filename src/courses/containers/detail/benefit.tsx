@@ -15,11 +15,15 @@ const BenefitItems = ({
     subtitle: string;
 }): JSX.Element => {
     return (
-        <div className="flex items-center my-4">
-            <div className="text-2xl mr-2">{icons}</div>
+        <div className="flex flex-col md:flex-row items-center my-4">
+            <div className="text-4xl md:text-2xl mr-2">{icons}</div>
             <div>
-                <h1 className="text-2xl font-bold">{title}</h1>
-                <span className="text-neutral-400 text-base">{subtitle}</span>
+                <h1 className="text-center md:text-left text-xl md:text-2xl font-bold">
+                    {title}
+                </h1>
+                <p className="text-center md:text-left text-neutral-400 text-base">
+                    {subtitle}
+                </p>
             </div>
         </div>
     );

@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
+import { MdOutlinePlayCircleFilled } from 'react-icons/md';
+import ReactPlayer from 'react-player';
 import useOnScreen from 'src/commons/hooks/useOnScreen';
 
 const MobileValueProposition = (): JSX.Element => {
@@ -14,8 +16,32 @@ const MobileValueProposition = (): JSX.Element => {
                         Terkurasi agar mudah dipahami dan menarik.
                     </h3>
                 </div>
-                <div className="w-full h-[70vh] sticky-card sticky-1 p-4">
-                    <div className="h-full w-full bg-neutral-400"></div>
+                <div className="w-full h-[50vh] sticky-card sticky-1 p-4">
+                    <div className="w-full h-full flex justify-center items-center">
+                        <div className="w-full h-full overflow-hidden">
+                            <ReactPlayer
+                                url={
+                                    'https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-page.mp4'
+                                }
+                                controls
+                                config={{
+                                    file: {
+                                        attributes: {
+                                            controlsList: 'nodownload'
+                                        }
+                                    }
+                                }}
+                                width="100%"
+                                height="100%"
+                                playIcon={
+                                    <MdOutlinePlayCircleFilled className="text-7xl" />
+                                }
+                                light={
+                                    'https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-page-thumb.png'
+                                }
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
             <div className="flex flex-col-reverse md:hidden w-full mb-8">
@@ -25,8 +51,14 @@ const MobileValueProposition = (): JSX.Element => {
                         Supaya semua orang punya kesempatan.
                     </h3>
                 </div>
-                <div className="w-full h-[70vh] sticky-card sticky-2">
-                    <div className="h-full w-full bg-neutral-400"></div>
+                <div className="w-full h-[50vh] sticky-card sticky-2">
+                    <div className="w-full h-full flex justify-center items-center">
+                        <img
+                            src="https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-page.gif"
+                            alt="gif"
+                            height="100%"
+                        />
+                    </div>
                 </div>
             </div>
             <div className="flex flex-col-reverse md:hidden w-full mb-8">
@@ -38,8 +70,14 @@ const MobileValueProposition = (): JSX.Element => {
                         Lengkap dalam 1 platform.
                     </h3>
                 </div>
-                <div className="w-full h-[70vh] sticky-card sticky-3">
-                    <div className="h-full w-full bg-neutral-400"></div>
+                <div className="w-full h-[50vh] sticky-card sticky-3">
+                    <div className="w-full h-full flex justify-center items-center">
+                        <img
+                            src="https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-page-new.png"
+                            alt="png"
+                            height="100%"
+                        />
+                    </div>
                 </div>
             </div>
         </>
@@ -59,6 +97,54 @@ const StickyVariants = {
         background:
             'linear-gradient(43.82deg,#cac7e4 0%,#ab8eec 28.4%,#dd837a 65.1%,#ecd0cd 100%)'
     }
+};
+
+const StickyContent: { [key: string]: JSX.Element } = {
+    sticky1: (
+        <div className="w-full h-full flex justify-center items-center">
+            <div className="w-[40vw] h-[65vh] overflow-hidden">
+                <ReactPlayer
+                    url={
+                        'https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-page.mp4'
+                    }
+                    controls
+                    config={{
+                        file: {
+                            attributes: {
+                                controlsList: 'nodownload'
+                            }
+                        }
+                    }}
+                    width="100%"
+                    height="100%"
+                    playIcon={
+                        <MdOutlinePlayCircleFilled className="text-7xl" />
+                    }
+                    light={
+                        'https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-page-thumb.png'
+                    }
+                />
+            </div>
+        </div>
+    ),
+    sticky2: (
+        <div className="w-full h-full flex justify-center items-center">
+            <img
+                src="https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-page.gif"
+                alt="gif"
+                height="100%"
+            />
+        </div>
+    ),
+    sticky3: (
+        <div className="w-full h-full flex justify-center items-center">
+            <img
+                src="https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-page-new.png"
+                alt="png"
+                height="100%"
+            />
+        </div>
+    )
 };
 
 const ValueProposition = (): JSX.Element => {
@@ -148,7 +234,7 @@ const ValueProposition = (): JSX.Element => {
                     style={{
                         height: 'calc(100vh - 64px)'
                     }}>
-                    <div className="w-full h-full bg-neutral-400"></div>
+                    {StickyContent[renderedClass]}
                 </motion.div>
             </div>
             <MobileValueProposition />

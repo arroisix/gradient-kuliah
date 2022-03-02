@@ -1,17 +1,41 @@
 import Gallery from 'src/commons/components/modules/Gallery';
 import useWindowSize from 'src/commons/hooks/useWindowSize';
 
-const Item = (): JSX.Element => {
+const Item = ({
+    thumbnail,
+    title
+}: {
+    thumbnail: string;
+    title: string;
+}): JSX.Element => {
     return (
         <div
-            className="p-4 h-32 w-48 md:h-52 md:w-[24rem] bg-neutral-800 mr-2 rounded-lg cursor-pointer flex items-end"
+            className="p-4 h-40 w-[18rem] md:h-52 md:w-[24rem] bg-neutral-800 mr-2 rounded-lg cursor-pointer flex items-end"
             style={{
                 backgroundColor: '#333333',
-                backgroundSize: 'cover'
+                backgroundSize: 'cover',
+                backgroundImage: `url(https://d2uqn6ndx4ow3t.cloudfront.net/assets/${thumbnail})`
             }}
-            aria-hidden={true}></div>
+            aria-hidden={true}>
+            {title}
+        </div>
     );
 };
+
+const CONTENT = [
+    {
+        thumbnail: 'thumb-2.jpg',
+        title: 'Introduksi: Awakening Moment'
+    },
+    {
+        thumbnail: 'thumb-1.jpg',
+        title: 'Pedang Bermata Dua: Teknologi'
+    },
+    {
+        thumbnail: 'thumb-3.jpg',
+        title: 'Belajar dari Sejarah'
+    }
+];
 
 const ContentHighlight = (): JSX.Element => {
     const { width } = useWindowSize();
@@ -26,11 +50,15 @@ const ContentHighlight = (): JSX.Element => {
                 </span>
             </div>
             <Gallery
-                itemCount={4}
-                itemWidth={width > 768 ? 24 : 12}
+                itemCount={3}
+                itemWidth={width > 768 ? 24 : 18}
                 row={1}
-                items={[1, 2, 3, 4].map((i) => (
-                    <Item key={i} />
+                items={CONTENT.map((content) => (
+                    <Item
+                        title={content.title}
+                        thumbnail={content.thumbnail}
+                        key={content.thumbnail}
+                    />
                 ))}
             />
         </section>

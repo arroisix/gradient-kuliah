@@ -25,7 +25,7 @@ const Layout = ({
     } = useAuth();
 
     return (
-        <div className="min-h-screen w-screen bg-neutral-1000 relative text-white">
+        <div className="min-h-screen w-screen max-w-screen-[100vw] bg-neutral-1000 relative text-white">
             <Navbar
                 paymentPage={paymentPage ?? false}
                 shouldTransparent={shouldTransparent ?? false}
