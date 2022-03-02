@@ -31,13 +31,13 @@ export function LearningProvider({
     const notebookCourse = getAllNotebookChapter(course?.chapters);
 
     const [subchapterName, setSubchapterName] = useState(
-        videoCourse[0].subchapters[0].subchapterName
+        videoCourse[0]?.subchapters[0]?.subchapterName
     );
     const [videoPicked, setVideoPicked] = useState<Video>(
-        videoCourse[0].subchapters[0].video as Video
+        videoCourse[0]?.subchapters[0]?.video as Video
     );
     const [notebookPicked, setNotebookPicked] = useState(
-        notebookCourse[0].subchapters[0].notebook as Notebook
+        notebookCourse[0]?.subchapters[0]?.notebook as Notebook
     );
 
     const memoedValue = useMemo(

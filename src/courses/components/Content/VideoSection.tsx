@@ -36,7 +36,7 @@ const VideoSection = ({
                             thumbnail: trailerVideo.thumbnail as string,
                             isFree: true,
                             description: trailerVideo.description,
-                            duration: ''
+                            duration: '01:30'
                         })
                     }
                     className={`w-full flex p-4 items-center hover:bg-neutral-600 cursor-pointer ${
@@ -45,7 +45,9 @@ const VideoSection = ({
                     <BsPlayCircle className="mr-4 text-xl" />
                     <div className="flex flex-col">
                         <span>Trailer Kelas</span>
-                        <span className="text-neutral-400">1:30</span>
+                        <span className="text-neutral-400">
+                            {trailerVideo.duration}
+                        </span>
                     </div>
                 </div>
             )}
@@ -99,7 +101,7 @@ const VideoSection = ({
                                     <div className="flex flex-col">
                                         <span>{subchapter.subchapterName}</span>
                                         <span className="text-neutral-400">
-                                            1:30
+                                            {subchapter.video?.duration}
                                         </span>
                                     </div>
                                 </div>

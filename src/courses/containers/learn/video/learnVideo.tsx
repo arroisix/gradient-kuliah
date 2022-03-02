@@ -25,7 +25,7 @@ const LearnVideo = ({
                 <h3 className="text-2xl md:text-4xl font-bold">
                     {subchapterName}
                 </h3>
-                <p>{video?.description}</p>
+                {/* <p>{video?.description}</p> */}
                 <div>
                     <p className="text-neutral-600 my-4">PENGAJAR</p>
                     {video.lecturers?.map((lecturer) => (
