@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { BsPlayCircle } from 'react-icons/bs';
 import { MdLock } from 'react-icons/md';
+import { useAuth } from 'src/authentication/contexts/AuthProvider';
 
 interface VideoSectionProps {
     setVideoPicked: (video: Video) => void;
@@ -21,6 +22,7 @@ const VideoSection = ({
 }: VideoSectionProps): JSX.Element => {
     const router = useRouter();
     const { id } = router.query;
+    const { isAuthenticated, setModalAuthOpen } = useAuth();
 
     return (
         <div className="h-[500px] overflow-y-auto">
@@ -36,7 +38,7 @@ const VideoSection = ({
                             thumbnail: trailerVideo.thumbnail as string,
                             isFree: true,
                             description: trailerVideo.description,
-                            duration: ''
+                            duration: '01:30'
                         })
                     }
                     className={`w-full flex p-4 items-center hover:bg-neutral-600 cursor-pointer ${
@@ -45,7 +47,9 @@ const VideoSection = ({
                     <BsPlayCircle className="mr-4 text-xl" />
                     <div className="flex flex-col">
                         <span>Trailer Kelas</span>
-                        <span className="text-neutral-400">1:30</span>
+                        <span className="text-neutral-400">
+                            {trailerVideo.duration}
+                        </span>
                     </div>
                 </div>
             )}
@@ -62,27 +66,31 @@ const VideoSection = ({
                                 <div
                                     aria-hidden={true}
                                     onClick={() => {
-                                        if (asThrowPage) {
-                                            router.push(
-                                                `/kelas/${id}/belajar?type=video`
-                                            );
-                                        } else {
-                                            setVideoPicked(
-                                                subchapter.video ??
-                                                    ({} as Video)
-                                            );
+                                        if (isAuthenticated()) {
+                                            if (asThrowPage) {
+                                                router.push(
+                                                    `/kelas/${id}/belajar?type=video`
+                                                );
+                                            } else {
+                                                setVideoPicked(
+                                                    subchapter.video ??
+                                                        ({} as Video)
+                                                );
 
-                                            if (setSubchapterName) {
-                                                setSubchapterName(
-                                                    subchapter.subchapterName
+                                                if (setSubchapterName) {
+                                                    setSubchapterName(
+                                                        subchapter.subchapterName
+                                                    );
+                                                }
+
+                                                router.push(
+                                                    `/kelas/${id}/belajar?type=video&sub=${subchapter.id}`,
+                                                    undefined,
+                                                    { shallow: true }
                                                 );
                                             }
-
-                                            router.push(
-                                                `/kelas/${id}/belajar?type=video&sub=${subchapter.id}`,
-                                                undefined,
-                                                { shallow: true }
-                                            );
+                                        } else {
+                                            setModalAuthOpen(1);
                                         }
                                     }}
                                     key={subchapter.id}
@@ -99,7 +107,7 @@ const VideoSection = ({
                                     <div className="flex flex-col">
                                         <span>{subchapter.subchapterName}</span>
                                         <span className="text-neutral-400">
-                                            1:30
+                                            {subchapter.video?.duration}
                                         </span>
                                     </div>
                                 </div>

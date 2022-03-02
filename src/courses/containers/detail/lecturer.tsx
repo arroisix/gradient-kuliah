@@ -6,17 +6,17 @@ const Lecturer = ({ course }: { course: Course }): JSX.Element => {
             <h1 className="md:text-center text-2xl md:text-4xl font-bold">
                 Guru spektakuler kelas ini
             </h1>
-            <div className="grid grid-cols-2 mt-4">
+            <div className="grid grid-cols-2 md:flex md:justify-center md:items-center md:flex-wrap mt-4">
                 {course.lecturers.map((lecturer) => {
                     return (
                         <div
                             key={lecturer.name}
-                            className="flex flex-col justify-center">
+                            className="flex flex-col justify-center md:mx-4">
                             <div className="flex flex-col justify-center items-center">
                                 <div className="w-[140px] md:w-[270px] bg-neutral-900 rounded mb-2 overflow-hidden">
                                     <Image
                                         src={lecturer.photo}
-                                        height={440}
+                                        height={400}
                                         width={270}
                                         layout="responsive"
                                     />

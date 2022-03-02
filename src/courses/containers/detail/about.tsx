@@ -13,7 +13,7 @@ const About = ({ course }: { course: Course }): JSX.Element => {
                         id: 'trailer',
                         videoUrl: course.trailer,
                         description: course.description,
-                        duration: '',
+                        duration: '01:30',
                         isFree: true,
                         thumbnail: course.thumbnail
                     }}
