@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { BsPlayCircle } from 'react-icons/bs';
 import { MdLock } from 'react-icons/md';
+import { useAuth } from 'src/authentication/contexts/AuthProvider';
 
 interface VideoSectionProps {
     setVideoPicked: (video: Video) => void;
@@ -21,6 +22,7 @@ const VideoSection = ({
 }: VideoSectionProps): JSX.Element => {
     const router = useRouter();
     const { id } = router.query;
+    const { isAuthenticated, setModalAuthOpen } = useAuth();
 
     return (
         <div className="h-[500px] overflow-y-auto">
@@ -64,27 +66,31 @@ const VideoSection = ({
                                 <div
                                     aria-hidden={true}
                                     onClick={() => {
-                                        if (asThrowPage) {
-                                            router.push(
-                                                `/kelas/${id}/belajar?type=video`
-                                            );
-                                        } else {
-                                            setVideoPicked(
-                                                subchapter.video ??
-                                                    ({} as Video)
-                                            );
+                                        if (isAuthenticated()) {
+                                            if (asThrowPage) {
+                                                router.push(
+                                                    `/kelas/${id}/belajar?type=video`
+                                                );
+                                            } else {
+                                                setVideoPicked(
+                                                    subchapter.video ??
+                                                        ({} as Video)
+                                                );
 
-                                            if (setSubchapterName) {
-                                                setSubchapterName(
-                                                    subchapter.subchapterName
+                                                if (setSubchapterName) {
+                                                    setSubchapterName(
+                                                        subchapter.subchapterName
+                                                    );
+                                                }
+
+                                                router.push(
+                                                    `/kelas/${id}/belajar?type=video&sub=${subchapter.id}`,
+                                                    undefined,
+                                                    { shallow: true }
                                                 );
                                             }
-
-                                            router.push(
-                                                `/kelas/${id}/belajar?type=video&sub=${subchapter.id}`,
-                                                undefined,
-                                                { shallow: true }
-                                            );
+                                        } else {
+                                            setModalAuthOpen(1);
                                         }
                                     }}
                                     key={subchapter.id}

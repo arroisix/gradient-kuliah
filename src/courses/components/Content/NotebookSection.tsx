@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { MdOutlineArticle, MdLock, MdChevronRight } from 'react-icons/md';
+import { useAuth } from 'src/authentication/contexts/AuthProvider';
 
 const NotebookSection = ({
     chapters,
@@ -14,6 +15,7 @@ const NotebookSection = ({
 }): JSX.Element => {
     const router = useRouter();
     const { id } = router.query;
+    const { isAuthenticated, setModalAuthOpen } = useAuth();
     return (
         <div className="h-[500px] overflow-y-auto">
             {chapters.map((chapter) => {
@@ -29,20 +31,24 @@ const NotebookSection = ({
                                 <div
                                     key={subchapter.id}
                                     onClick={() => {
-                                        if (asThrowPage) {
-                                            router.push(
-                                                `/kelas/${id}/belajar?type=notebook&sub=${subchapter.id}`
-                                            );
-                                        } else {
-                                            setNotebookPicked(
-                                                subchapter.notebook as Notebook
-                                            );
+                                        if (isAuthenticated()) {
+                                            if (asThrowPage) {
+                                                router.push(
+                                                    `/kelas/${id}/belajar?type=notebook&sub=${subchapter.id}`
+                                                );
+                                            } else {
+                                                setNotebookPicked(
+                                                    subchapter.notebook as Notebook
+                                                );
 
-                                            router.push(
-                                                `/kelas/${id}/belajar?type=notebook&sub=${subchapter.id}`,
-                                                undefined,
-                                                { shallow: true }
-                                            );
+                                                router.push(
+                                                    `/kelas/${id}/belajar?type=notebook&sub=${subchapter.id}`,
+                                                    undefined,
+                                                    { shallow: true }
+                                                );
+                                            }
+                                        } else {
+                                            setModalAuthOpen(1);
                                         }
                                     }}
                                     aria-hidden
