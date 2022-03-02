@@ -226,7 +226,7 @@ const ValueProposition = (): JSX.Element => {
                     </div>
                 </div>
                 <motion.div
-                    className={`w-[50vw] sticky top-16 ${renderedClass} p-16`}
+                    className={`w-1/2 sticky top-16 ${renderedClass} p-16`}
                     transition={{ type: 'tween' }}
                     variants={StickyVariants}
                     initial="sticky1"
