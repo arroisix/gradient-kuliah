@@ -13,7 +13,7 @@ const JoinGradient = (): JSX.Element => {
                 <span className="bg-gradient-to-r from-accent-purple to-[#B73E32] text-transparent bg-clip-text">
                     Gradient
                 </span>{' '}
-                sekarang
+                Sekarang
             </h1>
             <div className="md:w-1/2 text-center z-10 mt-4">
                 <span className="text-neutral-300">

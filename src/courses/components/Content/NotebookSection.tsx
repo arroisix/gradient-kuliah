@@ -57,17 +57,21 @@ const NotebookSection = ({
                                             subchapter.notebook?.id &&
                                         'bg-neutral-600'
                                     }`}>
-                                    <div className="flex items-center">
-                                        {subchapter.notebook?.isFree ? (
-                                            <MdOutlineArticle className="mr-4 text-xl" />
-                                        ) : (
-                                            <MdLock className="mr-4 text-xl text-amber-400" />
-                                        )}
-                                        <span>
-                                            {subchapter.notebook?.title}
-                                        </span>
+                                    <div className="flex w-full items-center">
+                                        <div className="w-1/5 flex justify-center">
+                                            {subchapter.notebook?.isFree ? (
+                                                <MdOutlineArticle className="mr-4 text-xl" />
+                                            ) : (
+                                                <MdLock className="mr-4 text-xl text-amber-400" />
+                                            )}
+                                        </div>
+                                        <div className="w-4/5 flex justify-between">
+                                            <span className="w-full">
+                                                {subchapter.notebook?.title}
+                                            </span>
+                                            <MdChevronRight />
+                                        </div>
                                     </div>
-                                    <MdChevronRight />
                                 </div>
                             );
                         })}
