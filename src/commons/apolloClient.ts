@@ -7,9 +7,10 @@ import {
 import { onError } from '@apollo/client/link/error';
 import { setContext } from '@apollo/client/link/context';
 import { toast } from 'react-toastify';
+import api from './api';
 
 const httpLink = createHttpLink({
-    uri: 'https://api.gradient.academy/graphql'
+    uri: api
 });
 
 const authLink = setContext((_, { headers }) => {

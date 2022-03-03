@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import Gallery from 'src/commons/components/modules/Gallery';
 import useWindowSize from 'src/commons/hooks/useWindowSize';
 
@@ -9,16 +10,18 @@ const Item = ({
     title: string;
 }): JSX.Element => {
     return (
-        <div
-            className="p-4 h-40 w-[18rem] md:h-52 md:w-[24rem] bg-neutral-800 mr-2 rounded-lg cursor-pointer flex items-end"
-            style={{
-                backgroundColor: '#333333',
-                backgroundSize: 'cover',
-                backgroundImage: `url(https://d2uqn6ndx4ow3t.cloudfront.net/assets/${thumbnail})`
-            }}
-            aria-hidden={true}>
-            {title}
-        </div>
+        <Link href={'/kelas'}>
+            <div
+                className="p-4 h-40 w-[18rem] md:h-52 md:w-[24rem] bg-neutral-800 mr-2 rounded-lg cursor-pointer flex items-end"
+                style={{
+                    backgroundColor: '#333333',
+                    backgroundSize: 'cover',
+                    backgroundImage: `url(https://d2uqn6ndx4ow3t.cloudfront.net/assets/${thumbnail})`
+                }}
+                aria-hidden={true}>
+                {title}
+            </div>
+        </Link>
     );
 };
 

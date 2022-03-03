@@ -102,7 +102,7 @@ const StickyVariants = {
 const StickyContent: { [key: string]: JSX.Element } = {
     sticky1: (
         <div className="w-full h-full flex justify-center items-center">
-            <div className="w-[40vw] h-[65vh] overflow-hidden">
+            <div className="w-full h-full overflow-hidden">
                 <ReactPlayer
                     url={
                         'https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-page.mp4'
@@ -128,7 +128,7 @@ const StickyContent: { [key: string]: JSX.Element } = {
         </div>
     ),
     sticky2: (
-        <div className="w-full h-full flex justify-center items-center">
+        <div className="w-full h-full flex justify-center items-center bg-neutral-600">
             <img
                 src="https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-page.gif"
                 alt="gif"
@@ -137,7 +137,7 @@ const StickyContent: { [key: string]: JSX.Element } = {
         </div>
     ),
     sticky3: (
-        <div className="w-full h-full flex justify-center items-center">
+        <div className="w-full h-full flex justify-center items-center bg-neutral-100 overflow-hidden">
             <img
                 src="https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-page-new.png"
                 alt="png"

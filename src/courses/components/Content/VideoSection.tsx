@@ -44,8 +44,10 @@ const VideoSection = ({
                     className={`w-full flex p-4 items-center hover:bg-neutral-600 cursor-pointer ${
                         videoPicked.id === 'trailer' && 'bg-neutral-600'
                     }`}>
-                    <BsPlayCircle className="mr-4 text-xl" />
-                    <div className="flex flex-col">
+                    <div className="w-1/5 flex items-center justify-center">
+                        <BsPlayCircle className="mr-4 text-xl" />
+                    </div>
+                    <div className="flex flex-col w-4/5">
                         <span>Trailer Kelas</span>
                         <span className="text-neutral-400">
                             {trailerVideo.duration}
@@ -99,12 +101,14 @@ const VideoSection = ({
                                             subchapter.video?.id &&
                                         'bg-neutral-600'
                                     }`}>
-                                    {subchapter.video?.isFree ? (
-                                        <BsPlayCircle className="mr-4 text-xl" />
-                                    ) : (
-                                        <MdLock className="mr-4 text-xl text-amber-400" />
-                                    )}
-                                    <div className="flex flex-col">
+                                    <div className="w-1/5 flex items-center justify-center">
+                                        {subchapter.video?.isFree ? (
+                                            <BsPlayCircle className="mr-4 text-xl" />
+                                        ) : (
+                                            <MdLock className="mr-4 text-xl text-amber-400" />
+                                        )}
+                                    </div>
+                                    <div className="flex flex-col w-4/5">
                                         <span>{subchapter.subchapterName}</span>
                                         <span className="text-neutral-400">
                                             {subchapter.video?.duration}

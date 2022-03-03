@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { FaSearch } from 'react-icons/fa';
-import Input from 'src/commons/components/elements/Form/input';
+// import { FaSearch } from 'react-icons/fa';
+// import Input from 'src/commons/components/elements/Form/input';
 import { getAllVideoChapter, getAllNotebookChapter } from 'src/courses/utils';
 import NotebookSection from './NotebookSection';
 import VideoSection from './VideoSection';
@@ -35,7 +35,7 @@ const ListOfContent = ({
                 rounded && 'rounded'
             } overflow-hidden`}>
             <div className="pt-1 bg-neutral-800" id="search-box">
-                <div className="px-4">
+                {/* <div className="px-4">
                     <Input
                         type="text"
                         placeholder="Cari materi"
@@ -45,7 +45,7 @@ const ListOfContent = ({
                             <FaSearch className="text-gray-500 cursor-pointer" />
                         }
                     />
-                </div>
+                </div> */}
                 <div className="w-full flex">
                     <div
                         aria-hidden={true}
