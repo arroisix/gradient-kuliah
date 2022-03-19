@@ -19,6 +19,7 @@ const Lecturer = ({ course }: { course: Course }): JSX.Element => {
                                         height={400}
                                         width={270}
                                         layout="responsive"
+                                        className="object-cover"
                                     />
                                 </div>
                                 <p className="text-center text-neutral-400">
