@@ -71,7 +71,7 @@ const VideoSection = ({
                                         if (isAuthenticated()) {
                                             if (asThrowPage) {
                                                 router.push(
-                                                    `/kelas/${id}/belajar?type=video`
+                                                    `/kelas/${id}/belajar?type=video&sub=${subchapter.id}&chapter=${chapter.id}`
                                                 );
                                             } else {
                                                 setVideoPicked(
@@ -86,7 +86,7 @@ const VideoSection = ({
                                                 }
 
                                                 router.push(
-                                                    `/kelas/${id}/belajar?type=video&sub=${subchapter.id}`,
+                                                    `/kelas/${id}/belajar?type=video&sub=${subchapter.id}&chapter=${chapter.id}`,
                                                     undefined,
                                                     { shallow: true }
                                                 );

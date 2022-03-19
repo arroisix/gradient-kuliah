@@ -31,13 +31,14 @@ const MobileValueProposition = (): JSX.Element => {
                                         }
                                     }
                                 }}
+                                className="video-fit"
                                 width="100%"
                                 height="100%"
                                 playIcon={
                                     <MdOutlinePlayCircleFilled className="text-7xl" />
                                 }
                                 light={
-                                    'https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-page-thumb.png'
+                                    'https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-thumb-new.png'
                                 }
                             />
                         </div>
@@ -56,7 +57,11 @@ const MobileValueProposition = (): JSX.Element => {
                         <img
                             src="https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-page.gif"
                             alt="gif"
-                            height="100%"
+                            style={{
+                                height: '100%',
+                                width: '100%',
+                                objectFit: 'cover'
+                            }}
                         />
                     </div>
                 </div>
@@ -75,7 +80,11 @@ const MobileValueProposition = (): JSX.Element => {
                         <img
                             src="https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-page-new.png"
                             alt="png"
-                            height="100%"
+                            style={{
+                                height: '100%',
+                                width: '100%',
+                                objectFit: 'cover'
+                            }}
                         />
                     </div>
                 </div>
@@ -115,13 +124,14 @@ const StickyContent: { [key: string]: JSX.Element } = {
                             }
                         }
                     }}
+                    className="video-fit"
                     width="100%"
                     height="100%"
                     playIcon={
                         <MdOutlinePlayCircleFilled className="text-7xl" />
                     }
                     light={
-                        'https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-page-thumb.png'
+                        'https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-thumb-new.png'
                     }
                 />
             </div>
@@ -132,7 +142,11 @@ const StickyContent: { [key: string]: JSX.Element } = {
             <img
                 src="https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-page.gif"
                 alt="gif"
-                height="100%"
+                style={{
+                    height: '100%',
+                    width: '100%',
+                    objectFit: 'cover'
+                }}
             />
         </div>
     ),
@@ -141,7 +155,11 @@ const StickyContent: { [key: string]: JSX.Element } = {
             <img
                 src="https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-page-new.png"
                 alt="png"
-                height="100%"
+                style={{
+                    height: '100%',
+                    width: '100%',
+                    objectFit: 'cover'
+                }}
             />
         </div>
     )

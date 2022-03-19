@@ -6,6 +6,10 @@ html {
     overflow-x: hidden;
 }
 
+video {
+    max-width: none;
+}
+
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -15,6 +19,10 @@ input[type='number']::-webkit-outer-spin-button {
 .fadeinDown {
     -webkit-animation: fadeInDown 500ms ease-in-out; /* Chrome, Safari, Opera */
     animation: fadeInDown 500ms ease-in-out;
+}
+
+.video-fit > video {
+    object-fit: cover;
 }
 
 /* Chrome, Safari, Opera */

@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React, {
     createContext,
     ReactNode,
@@ -27,6 +28,8 @@ export function LearningProvider({
     children: ReactNode;
     course: Course;
 }): JSX.Element {
+    const router = useRouter();
+    const { type, sub, chapter } = router.query;
     const videoCourse = getAllVideoChapter(course?.chapters);
     const notebookCourse = getAllNotebookChapter(course?.chapters);
 
@@ -34,10 +37,19 @@ export function LearningProvider({
         videoCourse[0]?.subchapters[0]?.subchapterName
     );
     const [videoPicked, setVideoPicked] = useState<Video>(
-        videoCourse[0]?.subchapters[0]?.video as Video
+        type === 'video'
+            ? (videoCourse
+                  .filter((c) => c.id === chapter)[0]
+                  ?.subchapters.filter((s) => s.id === sub)[0]?.video as Video)
+            : (videoCourse[0]?.subchapters[0]?.video as Video)
     );
     const [notebookPicked, setNotebookPicked] = useState(
-        notebookCourse[0]?.subchapters[0]?.notebook as Notebook
+        type === 'notebook'
+            ? (notebookCourse
+                  .filter((c) => c.id === chapter)[0]
+                  ?.subchapters.filter((s) => s.id === sub)[0]
+                  ?.notebook as Notebook)
+            : (notebookCourse[0]?.subchapters[0]?.notebook as Notebook)
     );
 
     const memoedValue = useMemo(
