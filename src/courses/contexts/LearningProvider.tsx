@@ -34,7 +34,9 @@ export function LearningProvider({
     const notebookCourse = getAllNotebookChapter(course?.chapters);
 
     const [subchapterName, setSubchapterName] = useState(
-        videoCourse[0]?.subchapters[0]?.subchapterName
+        videoCourse
+            .filter((c) => c.id === chapter)[0]
+            ?.subchapters.filter((s) => s.id === sub)[0]?.subchapterName
     );
     const [videoPicked, setVideoPicked] = useState<Video>(
         type === 'video'
