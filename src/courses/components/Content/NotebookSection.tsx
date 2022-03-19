@@ -34,7 +34,7 @@ const NotebookSection = ({
                                         if (isAuthenticated()) {
                                             if (asThrowPage) {
                                                 router.push(
-                                                    `/kelas/${id}/belajar?type=notebook&sub=${subchapter.id}`
+                                                    `/kelas/${id}/belajar?type=notebook&sub=${subchapter.id}&chapter=${chapter.id}`
                                                 );
                                             } else {
                                                 setNotebookPicked(
@@ -42,7 +42,7 @@ const NotebookSection = ({
                                                 );
 
                                                 router.push(
-                                                    `/kelas/${id}/belajar?type=notebook&sub=${subchapter.id}`,
+                                                    `/kelas/${id}/belajar?type=notebook&sub=${subchapter.id}&chapter=${chapter.id}`,
                                                     undefined,
                                                     { shallow: true }
                                                 );
