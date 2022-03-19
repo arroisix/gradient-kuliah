@@ -70,6 +70,11 @@ const VideoSection = ({
                                     onClick={() => {
                                         if (isAuthenticated()) {
                                             if (asThrowPage) {
+                                                if (setSubchapterName) {
+                                                    setSubchapterName(
+                                                        subchapter.subchapterName
+                                                    );
+                                                }
                                                 router.push(
                                                     `/kelas/${id}/belajar?type=video&sub=${subchapter.id}&chapter=${chapter.id}`
                                                 );
