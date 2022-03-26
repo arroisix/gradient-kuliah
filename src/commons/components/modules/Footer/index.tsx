@@ -23,8 +23,8 @@ const Footer = (): JSX.Element => {
                     <h1 className="font-bold text-xl mb-2 mt-2 lg:mb-4 lg:mt-0 text-neutral-400 text-center lg:text-left">
                         Punya pertanyaan
                     </h1>
-                    <Link href="https://api.whatsapp.com/send?phone=081310028280">
-                        <div className="flex items-center justify-center lg:items-start lg:justify-start text-neutral-400 cursor-pointer">
+                    <Link href="https://api.whatsapp.com/send?phone=+6281310028280">
+                        <div className="flex items-center justify-center  lg:justify-start text-neutral-400 cursor-pointer">
                             <FaWhatsapp className="mr-2" />
                             <span>081310028280</span>
                         </div>

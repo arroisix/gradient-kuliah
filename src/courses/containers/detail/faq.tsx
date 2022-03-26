@@ -29,7 +29,7 @@ const Faq = (): JSX.Element => {
             <div className="w-full flex flex-col md:flex-row justify-center items-center mt-16">
                 <p className="md:mr-4">Ada yang mau kamu tanya?</p>
                 <div className="mt-4 md:mt-0">
-                    <Link href="https://api.whatsapp.com/send?phone=081310028280">
+                    <Link href="https://api.whatsapp.com/send?phone=+6281310028280">
                         <div className="flex rounded-full px-4 py-2 bg-[#0F460F]">
                             <span className="text-base font-bold flex items-center">
                                 <FaWhatsapp className="mr-2 text-xl" />
