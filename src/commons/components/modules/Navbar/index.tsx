@@ -122,14 +122,14 @@ const Navbar = ({
                     </span>
                 </Link>
                 {paymentPage ? (
-                    <div>
+                    <Link href="https://api.whatsapp.com/send?phone=081310028280">
                         <div className="flex rounded-full px-4 py-2 bg-[#0F460F]">
                             <span className="text-base font-bold flex items-center">
                                 <FaWhatsapp className="mr-2 text-xl" />
                                 Hubungi kami
                             </span>
                         </div>
-                    </div>
+                    </Link>
                 ) : (
                     <>
                         <div className="hidden md:flex font-bold">

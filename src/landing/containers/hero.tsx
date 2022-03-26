@@ -8,11 +8,15 @@ const Hero = (): JSX.Element => {
     const router = useRouter();
     return (
         <section className="h-screen w-full px-4 md:px-[7.5rem] py-4 flex flex-col justify-center items-center relative">
-            <h1 className="text-3xl lg:text-5xl font-bold text-center w-[90vw] md:w-[30rem] z-10">
+            <h1
+                className="text-3xl lg:text-5xl font-bold text-center w-[90vw] md:w-[30rem] z-10"
+                style={{ lineHeight: '1.35' }}>
                 Masa Depan Kuliah Online di{' '}
-                <span className="text-center flex justify-center items-center">
+                <span
+                    className="text-center flex justify-center items-center -mt-2 lg:-mt-1"
+                    style={{ lineHeight: '0' }}>
                     Indonesia
-                    <div className="w-12 h-12">
+                    <div className="w-12 h-12 ml-1">
                         <img
                             src="https://d2uqn6ndx4ow3t.cloudfront.net/assets/indonesia.png"
                             alt="indonesia"
