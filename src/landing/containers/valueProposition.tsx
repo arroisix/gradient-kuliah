@@ -60,7 +60,8 @@ const MobileValueProposition = (): JSX.Element => {
                             style={{
                                 height: '100%',
                                 width: '100%',
-                                objectFit: 'cover'
+                                objectFit: 'cover',
+                                objectPosition: 'top'
                             }}
                         />
                     </div>
@@ -83,7 +84,8 @@ const MobileValueProposition = (): JSX.Element => {
                             style={{
                                 height: '100%',
                                 width: '100%',
-                                objectFit: 'cover'
+                                objectFit: 'cover',
+                                objectPosition: 'top'
                             }}
                         />
                     </div>
@@ -145,7 +147,8 @@ const StickyContent: { [key: string]: JSX.Element } = {
                 style={{
                     height: '100%',
                     width: '100%',
-                    objectFit: 'cover'
+                    objectFit: 'cover',
+                    objectPosition: 'top'
                 }}
             />
         </div>
@@ -158,7 +161,8 @@ const StickyContent: { [key: string]: JSX.Element } = {
                 style={{
                     height: '100%',
                     width: '100%',
-                    objectFit: 'cover'
+                    objectFit: 'cover',
+                    objectPosition: 'top'
                 }}
             />
         </div>
