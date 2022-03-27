@@ -29,7 +29,7 @@ const Hero = ({ course }: { course: Course }): JSX.Element => {
                 }}>
                 <div className="h-full w-full relative">
                     <div
-                        className="absolute -bottom-5 -left-5 w-full h-10 bg-red-500"
+                        className="absolute -bottom-5 -left-5 w-full h-10 bg-black"
                         style={{ filter: 'blur(4px)' }}></div>
                 </div>
             </div>
