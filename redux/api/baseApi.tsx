@@ -5,6 +5,9 @@
  * https://github.com/phryneas/ssr-experiments/blob/main/nextjs-blog/pages/_app.js
  * https://github.com/reduxjs/redux-toolkit/issues/1271
  */
+import AbortController from 'abort-controller';
+
+global.AbortController = AbortController;
 
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import config from './config';
