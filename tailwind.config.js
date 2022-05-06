@@ -1,5 +1,13 @@
 module.exports = {
-    content: ['./src/**/*.{ts,tsx,js,jsx}'],
+    content: [
+        './authentication/**/**/*.{ts,js,jsx,tsx}',
+        './landing/**/*.{ts,js,jsx,tsx}',
+        './dashboard/**/*.{ts,js,jsx,tsx}',
+        './courses/**/*.{ts,js,jsx,tsx}',
+        './commons/**/*.{ts,js,jsx,tsx}',
+        './pages/**/*.{ts,js,jsx,tsx}',
+        './payment/**/*.{ts,js,jsx,tsx}'
+    ],
     theme: {
         fontFamily: {
             sans: ['Urbanist', 'sans-serif']
