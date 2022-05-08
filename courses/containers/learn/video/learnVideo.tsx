@@ -12,8 +12,6 @@ const LearnVideo = ({
 }): JSX.Element => {
     const { width } = useWindowSize();
 
-    console.log(video);
-
     return (
         <div className="w-full h-full">
             <VideoPlayer

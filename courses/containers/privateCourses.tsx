@@ -23,8 +23,6 @@ const PrivateCourses = ({ myClass }: { myClass: boolean }): JSX.Element => {
         }
     }, [myClass, data]);
 
-    console.log(courses);
-
     return (
         <CourseContainer>
             {loading && <h1>Tunggu Sebentar...</h1>}

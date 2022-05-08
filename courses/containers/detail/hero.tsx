@@ -9,8 +9,6 @@ const Hero = ({ course }: { course: Course }): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { width } = useWindowSize();
 
-    console.log(course);
-
     return (
         <section
             className="h-screen w-full px-4 md:px-[7.5rem] py-4 flex flex-col justify-end md:justify-center mb-16 md:mb-32 relative"

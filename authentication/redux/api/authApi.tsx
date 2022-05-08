@@ -27,7 +27,7 @@ export const authApi = baseApi.injectEndpoints({
         }),
         updateUser: builder.mutation<User, UpdateUserInputData>({
             query: (data: UpdateUserInputData) => ({
-                url: `${AUTH_BASE_URL}/user-update/`,
+                url: `${AUTH_BASE_URL}user-update/`,
                 method: 'PUT',
                 body: data
             })
