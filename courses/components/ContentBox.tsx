@@ -9,20 +9,25 @@ interface ContentBoxProps {
     description?: string;
     trailer?: Video;
     thumbnail?: string;
+    isSubscribed?: boolean;
 }
 
 const ContentBox = ({
     chapters,
     trailer,
-    thumbnail
+    thumbnail,
+    isSubscribed
 }: ContentBoxProps): JSX.Element => {
     const [videoPicked, setVideoPicked] = useState<Video>(trailer as Video);
+    const [notebookPicked, setNotebookPicked] = useState<Notebook>(
+        {} as Notebook
+    );
     const { width } = useWindowSize();
     return (
         <div className="flex h-full flex-col lg:flex-row">
             <div className="w-full lg:w-2/3 h-full" id="video-section">
                 <div className="w-full bg-neutral-900 rounded" id="video">
-                    {videoPicked.is_free ? (
+                    {videoPicked.is_free || isSubscribed ? (
                         <VideoPlayer
                             height={width <= 768 ? '28vh' : undefined}
                             video={videoPicked.video_url as string}
@@ -42,9 +47,11 @@ const ContentBox = ({
                     chapters={chapters}
                     videoPicked={videoPicked}
                     setVideoPicked={setVideoPicked}
+                    notebookPicked={notebookPicked}
+                    setNotebookPicked={setNotebookPicked}
                     rounded
-                    asThrowPage
                     trailerVideo={trailer}
+                    isSubscribed={isSubscribed}
                 />
             </div>
         </div>

@@ -12,6 +12,7 @@ interface VideoSectionProps {
     chapters: Chapter[];
     asThrowPage?: boolean;
     setSubchapterName?: (name: string) => void;
+    isSubscribed: boolean;
 }
 
 const VideoSection = ({
@@ -20,7 +21,8 @@ const VideoSection = ({
     setSubchapterName,
     trailerVideo,
     videoPicked,
-    asThrowPage
+    asThrowPage,
+    isSubscribed
 }: VideoSectionProps): JSX.Element => {
     const router = useRouter();
     const { id } = router.query;
@@ -72,12 +74,12 @@ const VideoSection = ({
                                     aria-hidden={true}
                                     onClick={() => {
                                         if (isAuthenticated) {
+                                            if (setSubchapterName) {
+                                                setSubchapterName(
+                                                    subchapter.subchapter_name
+                                                );
+                                            }
                                             if (asThrowPage) {
-                                                if (setSubchapterName) {
-                                                    setSubchapterName(
-                                                        subchapter.subchapter_name
-                                                    );
-                                                }
                                                 router.push(
                                                     `/kelas/${id}/belajar?type=video&sub=${subchapter.id}&chapter=${chapter.id}`
                                                 );
@@ -87,17 +89,11 @@ const VideoSection = ({
                                                         ({} as Video)
                                                 );
 
-                                                if (setSubchapterName) {
-                                                    setSubchapterName(
-                                                        subchapter.subchapter_name
-                                                    );
-                                                }
-
-                                                router.push(
-                                                    `/kelas/${id}/belajar?type=video&sub=${subchapter.id}&chapter=${chapter.id}`,
-                                                    undefined,
-                                                    { shallow: true }
-                                                );
+                                                // router.push(
+                                                //     `/kelas/${id}/belajar?type=video&sub=${subchapter.id}&chapter=${chapter.id}`,
+                                                //     undefined,
+                                                //     { shallow: true }
+                                                // );
                                             }
                                         } else {
                                             setModalAuthOpen(1);
@@ -110,7 +106,8 @@ const VideoSection = ({
                                         'bg-neutral-600'
                                     }`}>
                                     <div className="w-1/5 flex items-center justify-center">
-                                        {subchapter?.video?.is_free ? (
+                                        {subchapter?.video?.is_free ||
+                                        isSubscribed ? (
                                             <BsPlayCircle className="mr-4 text-xl" />
                                         ) : (
                                             <MdLock className="mr-4 text-xl text-amber-400" />

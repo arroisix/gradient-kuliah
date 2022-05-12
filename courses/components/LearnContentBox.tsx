@@ -7,13 +7,15 @@ interface LearnContentBoxProps {
     setHide: (status: boolean) => void;
     hide: boolean;
     firstTab?: number;
+    isSubscribed?: boolean;
 }
 
 const LearnContentBox = ({
     chapters,
     setHide,
     hide,
-    firstTab
+    firstTab,
+    isSubscribed
 }: LearnContentBoxProps): JSX.Element => {
     const {
         setSubchapterName,
@@ -45,6 +47,7 @@ const LearnContentBox = ({
                     chapters={chapters}
                     setVideoPicked={setVideoPicked}
                     videoPicked={videoPicked}
+                    isSubscribed={isSubscribed}
                 />
             )}
         </div>

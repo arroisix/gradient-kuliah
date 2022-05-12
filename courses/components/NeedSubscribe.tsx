@@ -5,6 +5,7 @@ import {
     MdOutlineGroup
 } from 'react-icons/md';
 import Button from 'commons/components/elements/Button';
+import { useRouter } from 'next/router';
 
 const BenefitItems = ({
     icons,
@@ -24,6 +25,8 @@ const BenefitItems = ({
 };
 
 const NeedSubscribe = ({ thumbnail }: { thumbnail?: string }): JSX.Element => {
+    const router = useRouter();
+    const { id } = router.query;
     return (
         <div className="relative">
             <div className="w-full h-full bg-black absolute top-0 flex justify-center items-center opacity-40" />
@@ -57,7 +60,11 @@ const NeedSubscribe = ({ thumbnail }: { thumbnail?: string }): JSX.Element => {
                     title="Komunitas buat belajar dan nugas bareng"
                 />
                 <div className="flex">
-                    <Button variant="primary">Gabung Kelas</Button>
+                    <Button
+                        variant="primary"
+                        href={`/langganan?courseId=${id}`}>
+                        Gabung Kelas
+                    </Button>
                 </div>
             </div>
         </div>

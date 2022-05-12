@@ -11,40 +11,51 @@ import {
     useGetPublicCourseQuery
 } from 'courses/redux/api/publicCourseApi';
 import { getRunningOperationPromises } from 'redux/api/baseApi';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { useSelector } from 'react-redux';
+import { useGetPrivateCourseQuery } from 'courses/redux/api/privateCourseApi';
+import withAuth from 'commons/withAuth';
 
 const Belajar = ({ id }: { id: string }): JSX.Element => {
     const router = useRouter();
     const { type } = router.query;
-    const { data: course } = useGetPublicCourseQuery(id);
+    const isAuthenticated = useSelector(getIsAuthenticated);
+    const { data: publicCourse } = useGetPublicCourseQuery(id, {
+        skip: isAuthenticated
+    });
+    const { data: privateCourse } = useGetPrivateCourseQuery(id, {
+        skip: !isAuthenticated
+    });
+
+    const getCourse = (): Course => {
+        if (isAuthenticated) {
+            return privateCourse ?? ({} as Course);
+        }
+        return publicCourse ?? ({} as Course);
+    };
 
     const renderPage = (): JSX.Element => {
         if (type === 'video') {
-            return (
-                <VideoLearnContainer
-                    course={course ? course : ({} as Course)}
-                />
-            );
+            return <VideoLearnContainer course={getCourse()} />;
         }
 
         if (type === 'notebook') {
-            return (
-                <NotebookLearnContainer
-                    course={course ? course : ({} as Course)}
-                />
-            );
+            return <NotebookLearnContainer course={getCourse()} />;
         }
 
         return <></>;
     };
 
     return (
-        <LearningProvider course={course ? course : ({} as Course)}>
+        <LearningProvider course={getCourse()}>
             <Layout>{renderPage()}</Layout>
         </LearningProvider>
     );
 };
 
-export default Belajar;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+export default withAuth(Belajar);
 
 export const getStaticPaths: GetStaticPaths = async () => {
     const result = await fetch(`${config.API_BASE_URL}courses/public`);
