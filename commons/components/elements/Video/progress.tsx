@@ -262,9 +262,9 @@ export const VideoSeekSlider: React.FC<Props> = ({
                             aria-hidden>
                             {isPlay ? <FaPause /> : <FaPlay />}
                         </div>
-                        <div className="mr-4 cursor-pointer">
+                        {/* <div className="mr-4 cursor-pointer">
                             <BiVolumeFull className="text-xl" />
-                        </div>
+                        </div> */}
                         <div>{`${secondsToTime(currentTime, 0).mm}:${
                             secondsToTime(currentTime, 0).ss
                         }/${secondsToTime(max, 0).mm}:${

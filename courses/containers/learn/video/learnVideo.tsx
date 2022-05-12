@@ -20,6 +20,7 @@ const LearnVideo = ({
                 }
                 video={video?.video_url}
                 thumbnail={video?.thumbnail}
+                key={video.video_url}
             />
             <div className="mt-8 px-4 md:px-0">
                 <h3 className="text-2xl md:text-4xl font-bold">

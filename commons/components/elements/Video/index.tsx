@@ -15,6 +15,19 @@ const VideoPlayer = ({ video }: VideoPlayerProps): JSX.Element => {
     const [fullscreen, setFullscreen] = useState(false);
     const [isPlay, setIsPlay] = useState(false);
 
+    // useEffect(() => {
+    //     if (video) {
+    //         videoRef.current = {} as HTMLVideoElement;
+    //         setCurrentTime(0);
+    //         setDownloadedTime(0);
+    //         setIsPlay(false);
+    //     }
+    // }, [video]);
+
+    useEffect(() => {
+        console.log(videoRef);
+    }, [videoRef]);
+
     const onPlayClick = (): void => {
         if (videoRef.current.paused) {
             videoRef.current.play();
@@ -40,7 +53,7 @@ const VideoPlayer = ({ video }: VideoPlayerProps): JSX.Element => {
                 const calculatedCurrentTime = videoRef?.current?.currentTime;
                 const buffered = videoRef?.current?.buffered;
                 setCurrentTime(calculatedCurrentTime);
-                setDownloadedTime(buffered.end(buffered.length - 1));
+                setDownloadedTime(buffered?.end(buffered?.length - 1));
             },
             false
         );
@@ -69,12 +82,17 @@ const VideoPlayer = ({ video }: VideoPlayerProps): JSX.Element => {
         <div
             className="relative flex flex-col items-center justify-center"
             id="video-container">
-            <video onClick={onPlayClick} width={'100%'} ref={videoRef}>
+            <video
+                onClick={onPlayClick}
+                width={'100%'}
+                ref={videoRef}
+                key={video}>
                 <track kind="captions" />
                 <source src={video} />
             </video>
             <div className="w-full absolute bottom-0 left-0">
                 <VideoSeekSlider
+                    key={video}
                     currentTime={currentTime}
                     max={videoRef.current.duration}
                     onChange={(time) => {
