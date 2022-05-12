@@ -30,6 +30,8 @@ export function AuthProvider({
     useEffect(() => {
         if (isNewUser) {
             setOnboardingOpen(1);
+        } else {
+            setOnboardingOpen(0);
         }
     }, [isNewUser]);
 

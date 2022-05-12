@@ -84,6 +84,15 @@ const userSlice = createSlice({
                 return state;
             }
         );
+        builder.addMatcher(
+            authApi.endpoints.updateUser.matchFulfilled,
+            (state, { payload }: PayloadAction<User>) => {
+                state.user = payload;
+                state.is_new_user = false;
+
+                return state;
+            }
+        );
     }
 });
 

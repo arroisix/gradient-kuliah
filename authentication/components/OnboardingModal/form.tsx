@@ -5,24 +5,35 @@ import Input from 'commons/components/elements/Form/input';
 import Radio from 'commons/components/elements/Form/radio';
 import Select from 'commons/components/elements/Form/select';
 import { useUpdateUserMutation } from 'authentication/redux/api/authApi';
+import { useSelector } from 'react-redux';
+import { getCurrentUser } from 'authentication/redux/selectors/userSelector';
+import { useEffect } from 'react';
 
 const FormSection = ({
     openDialog
 }: {
     openDialog: (status: 1 | 0) => void;
 }): JSX.Element => {
-    const [update, { isLoading }] = useUpdateUserMutation();
+    const [update, { isLoading, isSuccess }] = useUpdateUserMutation();
+    const user = useSelector(getCurrentUser);
+
+    useEffect(() => {
+        if (isSuccess) {
+            openDialog(1);
+        }
+    }, [isSuccess]);
+
     return (
         <Formik
-            initialValues={{} as UpdateUserInputData}
+            initialValues={{ gender: 'MALE' } as UpdateUserInputData}
             onSubmit={async (values, { setSubmitting }) => {
                 await update({
                     ...values,
                     birthdate: moment(values.birthdate).format('YYYY-MM-DD'),
-                    phone_number: values.phone_number?.toString()
+                    phone_number: values.phone_number?.toString(),
+                    full_name: user.full_name
                 });
                 setSubmitting(false);
-                openDialog(1);
             }}>
             {({
                 values,
