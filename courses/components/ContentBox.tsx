@@ -32,6 +32,7 @@ const ContentBox = ({
                             height={width <= 768 ? '28vh' : undefined}
                             video={videoPicked.video_url as string}
                             thumbnail={videoPicked.thumbnail as string}
+                            key={videoPicked.video_url as string}
                         />
                     ) : (
                         <NeedSubscribe thumbnail={thumbnail} />
