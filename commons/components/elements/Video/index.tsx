@@ -24,10 +24,6 @@ const VideoPlayer = ({ video }: VideoPlayerProps): JSX.Element => {
     //     }
     // }, [video]);
 
-    useEffect(() => {
-        console.log(videoRef);
-    }, [videoRef]);
-
     const onPlayClick = (): void => {
         if (videoRef.current.paused) {
             videoRef.current.play();
@@ -59,7 +55,7 @@ const VideoPlayer = ({ video }: VideoPlayerProps): JSX.Element => {
         );
     }, []);
 
-    const onFullScreen = () => {
+    const onFullScreen = (): void => {
         const div = document.getElementById(
             'video-container'
         ) as FullScreenDocumentElement;
@@ -80,11 +76,12 @@ const VideoPlayer = ({ video }: VideoPlayerProps): JSX.Element => {
 
     return (
         <div
-            className="relative flex flex-col items-center justify-center"
+            className="relative flex flex-col items-center justify-center bg-black"
             id="video-container">
             <video
                 onClick={onPlayClick}
                 width={'100%'}
+                height={'100%'}
                 ref={videoRef}
                 key={video}>
                 <track kind="captions" />
@@ -104,7 +101,7 @@ const VideoPlayer = ({ video }: VideoPlayerProps): JSX.Element => {
                     isPlay={isPlay}
                     secondsPrefix="00:00:"
                     minutesPrefix="00:"
-                    hideHoverTime
+                    hideHoverTime={false}
                     onPlay={onPlayClick}
                     onFullScreen={onFullScreen}
                     isFullScreen={fullscreen}

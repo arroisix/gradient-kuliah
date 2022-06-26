@@ -285,19 +285,19 @@ export const VideoSeekSlider: React.FC<Props> = ({
                     </div>
                 </div>
             }
-            {/* 
+
             {!hideHoverTime && (
                 <div
                     className={
                         isThumbActive()
-                            ? { ...styles['hover-time'], ...styles['active'] }
-                            : styles['hover-time']
+                            ? 'absolute bg-neutral-800 rounded-lg p-1 z-10 -top-10'
+                            : 'hidden'
                     }
                     style={getHoverTimePosition()}
                     ref={hoverTime}>
                     {hoverTimeValue}
                 </div>
-            )} */}
+            )}
         </div>
     );
 };
