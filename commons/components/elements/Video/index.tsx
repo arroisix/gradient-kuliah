@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { FaPlay } from 'react-icons/fa';
 import Spinner from '../Spinner';
 import { VideoSeekSlider } from './progress';
@@ -18,7 +17,6 @@ const VideoPlayer = ({ video }: VideoPlayerProps): JSX.Element => {
     const [fullscreen, setFullscreen] = useState(false);
     const [isPlay, setIsPlay] = useState(false);
     const [isBuffering, setIsBuffering] = useState(false);
-    const screen = useFullScreenHandle();
 
     const onPlayClick = (): void => {
         if (videoRef.current.paused) {
@@ -79,54 +77,52 @@ const VideoPlayer = ({ video }: VideoPlayerProps): JSX.Element => {
     };
 
     return (
-        <FullScreen handle={screen}>
-            <div
-                className="relative flex flex-col items-center justify-center bg-black"
-                id="video-container">
-                {(isBuffering || !isPlay) && (
-                    <>
-                        <div className="absolute bg-black opacity-50 w-full h-full left-0 top-0 z-[4000]" />
-                        <div
-                            className="absolute w-full h-full left-0 top-0 z-[4001] flex justify-center items-center"
-                            onClick={onPlayClick}
-                            aria-hidden>
-                            {isBuffering && <Spinner size="large" />}
-                            {!isPlay && <FaPlay className="text-4xl" />}
-                        </div>
-                    </>
-                )}
-                <video
-                    onClick={onPlayClick}
-                    width={'100%'}
-                    height={'100%'}
-                    ref={videoRef}
-                    key={video}>
-                    <track kind="captions" />
-                    <source src={video} />
-                </video>
-                <div className="w-full absolute bottom-0 left-0">
-                    <VideoSeekSlider
-                        key={video}
-                        currentTime={currentTime}
-                        max={videoRef.current.duration}
-                        onChange={(time) => {
-                            videoRef.current.currentTime = time;
-                            setCurrentTime(time);
-                        }}
-                        progress={downloadedTime}
-                        offset={0}
-                        isPlay={isPlay}
-                        secondsPrefix="00:00:"
-                        minutesPrefix="00:"
-                        hideHoverTime={false}
-                        onPlay={onPlayClick}
-                        onFullScreen={onFullScreen}
-                        isFullScreen={fullscreen}
-                        isBuffering={isBuffering}
-                    />
-                </div>
+        <div
+            className="relative flex flex-col items-center justify-center bg-black"
+            id="video-container">
+            {(isBuffering || !isPlay) && (
+                <>
+                    <div className="absolute bg-black opacity-50 w-full h-full left-0 top-0 z-[4000]" />
+                    <div
+                        className="absolute w-full h-full left-0 top-0 z-[4001] flex justify-center items-center"
+                        onClick={onPlayClick}
+                        aria-hidden>
+                        {isBuffering && <Spinner size="large" />}
+                        {!isPlay && <FaPlay className="text-4xl" />}
+                    </div>
+                </>
+            )}
+            <video
+                onClick={onPlayClick}
+                width={'100%'}
+                height={'100%'}
+                ref={videoRef}
+                key={video}>
+                <track kind="captions" />
+                <source src={video} />
+            </video>
+            <div className="w-full absolute bottom-0 left-0">
+                <VideoSeekSlider
+                    key={video}
+                    currentTime={currentTime}
+                    max={videoRef.current.duration}
+                    onChange={(time) => {
+                        videoRef.current.currentTime = time;
+                        setCurrentTime(time);
+                    }}
+                    progress={downloadedTime}
+                    offset={0}
+                    isPlay={isPlay}
+                    secondsPrefix="00:00:"
+                    minutesPrefix="00:"
+                    hideHoverTime={false}
+                    onPlay={onPlayClick}
+                    onFullScreen={onFullScreen}
+                    isFullScreen={fullscreen}
+                    isBuffering={isBuffering}
+                />
             </div>
-        </FullScreen>
+        </div>
     );
 };
 
