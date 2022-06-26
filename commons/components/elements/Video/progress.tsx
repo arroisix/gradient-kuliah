@@ -4,6 +4,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { FaPlay, FaPause } from 'react-icons/fa';
 import { BiFullscreen, BiExitFullscreen, BiVolumeFull } from 'react-icons/bi';
+import Spinner from '../Spinner';
 
 interface Time {
     hh: string;
@@ -25,6 +26,7 @@ export interface Props {
     onPlay: () => void;
     onFullScreen: () => void;
     isFullScreen: boolean;
+    isBuffering?: boolean;
 }
 
 function secondsToTime(seconds: number, offset: number): Time {
@@ -55,7 +57,8 @@ export const VideoSeekSlider: React.FC<Props> = ({
     isPlay = false,
     onPlay,
     onFullScreen,
-    isFullScreen
+    isFullScreen,
+    isBuffering
 }) => {
     const [seekHoverPosition, setSeekHoverPosition] = useState(0);
 
@@ -64,10 +67,6 @@ export const VideoSeekSlider: React.FC<Props> = ({
     const mobileSeeking = useRef(false);
     const track = useRef<HTMLDivElement>(null);
     const hoverTime = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        console.log(currentTime);
-    }, [currentTime]);
 
     const hoverTimeValue = useMemo(() => {
         const percent: number = (seekHoverPosition * 100) / trackWidth.current;
@@ -255,9 +254,9 @@ export const VideoSeekSlider: React.FC<Props> = ({
             </div>
             {
                 <div className="w-full h-8 my-2 flex items-center justify-between">
-                    <div className="flex items-center">
+                    <div className="flex items-center gap-2">
                         <div
-                            className="mr-4 cursor-pointer"
+                            className="cursor-pointer"
                             onClick={onPlay}
                             aria-hidden>
                             {isPlay ? <FaPause /> : <FaPlay />}
@@ -270,6 +269,7 @@ export const VideoSeekSlider: React.FC<Props> = ({
                         }/${secondsToTime(max, 0).mm}:${
                             secondsToTime(max, 0).ss
                         }`}</div>
+                        {isBuffering && <Spinner size="small" />}
                     </div>
                     <div className="flex items-center">
                         <div

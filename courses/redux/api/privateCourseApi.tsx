@@ -17,9 +17,26 @@ export const privateCourseApi = baseApi.injectEndpoints({
             query: (id: string) => ({
                 url: `${PRIVATE_COURSE_BASE_URL}${id}`
             })
+        }),
+        trackSubchapterProgress: builder.mutation<
+            SubchapterProgress,
+            TrackSubchapterProgressInputData
+        >({
+            query: ({
+                subchapter_id,
+                ...data
+            }: TrackSubchapterProgressInputData) => ({
+                url: `${PRIVATE_COURSE_BASE_URL}track-subchapter/${subchapter_id}`,
+                body: {
+                    ...data
+                }
+            })
         })
     })
 });
 
-export const { useGetPrivateCourseQuery, useGetPrivateListCoursesQuery } =
-    privateCourseApi;
+export const {
+    useGetPrivateCourseQuery,
+    useGetPrivateListCoursesQuery,
+    useTrackSubchapterProgressMutation
+} = privateCourseApi;

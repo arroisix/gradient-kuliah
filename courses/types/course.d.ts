@@ -1,8 +1,21 @@
+type ProgressType = 'VIDEO' | 'NOTEBOOK' | 'EXERCISE';
+
 interface FilterCourseQueryParams {
     page?: int;
     limit?: int;
     is_subscribed?: boolean;
     keyword?: string;
+}
+
+interface TrackSubchapterProgressInputData {
+    subchapter_id: string;
+    learning_progres_id: string;
+    progress_type: ProgressType;
+    video_progress?: {
+        video_id: string;
+        last_duration: string;
+        is_finished: boolean;
+    };
 }
 
 type Course = {
@@ -16,6 +29,7 @@ type Course = {
     banner: string;
     thumbnail: string;
     lecturers: Lecturer[];
+    learning_progress?: LearningProgress;
 };
 
 type Lecturer = {
@@ -59,6 +73,24 @@ type Video = {
     thumbnail: string;
     description: string;
     lecturers?: Lecturer[];
+};
+
+type VideoProgress = {
+    id: string;
+    video: Video;
+    last_duration: string;
+    is_finished: boolean;
+};
+
+type SubchapterProgress = {
+    id: string;
+    latest_progress: ProgressType;
+    video: VideoProgress;
+};
+
+type LearningProgress = {
+    id: string;
+    latest_subchapter: SubchapterProgress;
 };
 
 type Packet = {

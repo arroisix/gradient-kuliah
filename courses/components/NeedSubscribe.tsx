@@ -28,7 +28,7 @@ const NeedSubscribe = ({ thumbnail }: { thumbnail?: string }): JSX.Element => {
     const router = useRouter();
     const { id } = router.query;
     return (
-        <div className="relative">
+        <div className="relative overflow-y-scroll">
             <div className="w-full h-full bg-black absolute top-0 flex justify-center items-center opacity-40" />
             <div
                 className="w-full h-[435px] bg-red-100 "

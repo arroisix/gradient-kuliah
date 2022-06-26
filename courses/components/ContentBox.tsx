@@ -26,18 +26,18 @@ const ContentBox = ({
     return (
         <div className="flex h-full flex-col lg:flex-row">
             <div className="w-full lg:w-2/3 h-full" id="video-section">
-                <div className="w-full bg-neutral-900 rounded" id="video">
-                    {videoPicked.is_free || isSubscribed ? (
+                {videoPicked.is_free || isSubscribed ? (
+                    <div className="w-full bg-neutral-900 rounded" id="video">
                         <VideoPlayer
                             height={width <= 768 ? '28vh' : undefined}
                             video={videoPicked.video_url as string}
                             thumbnail={videoPicked.thumbnail as string}
                             key={videoPicked.video_url as string}
                         />
-                    ) : (
-                        <NeedSubscribe thumbnail={thumbnail} />
-                    )}
-                </div>
+                    </div>
+                ) : (
+                    <NeedSubscribe thumbnail={thumbnail} />
+                )}
                 <div className="my-4" id="description">
                     <p>{videoPicked.description}</p>
                 </div>
