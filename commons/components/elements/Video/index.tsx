@@ -2,22 +2,20 @@ import React, { useEffect, useRef, useState } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { VideoSeekSlider } from './progress';
 
+interface FullScreenDocumentElement extends HTMLElement {
+    msRequestFullScreen?: () => void;
+    mozRequestFullScreen?: () => void;
+    webkitRequestFullscreen?: () => void;
+}
+
 const VideoPlayer = ({ video }: VideoPlayerProps): JSX.Element => {
     const videoRef = useRef({} as HTMLVideoElement);
     const [, setDuration] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
     const [downloadedTime, setDownloadedTime] = useState(0);
+    const [fullscreen, setFullscreen] = useState(false);
     const [isPlay, setIsPlay] = useState(false);
     const screen = useFullScreenHandle();
-
-    // useEffect(() => {
-    //     if (video) {
-    //         videoRef.current = {} as HTMLVideoElement;
-    //         setCurrentTime(0);
-    //         setDownloadedTime(0);
-    //         setIsPlay(false);
-    //     }
-    // }, [video]);
 
     const onPlayClick = (): void => {
         if (videoRef.current.paused) {
@@ -50,10 +48,29 @@ const VideoPlayer = ({ video }: VideoPlayerProps): JSX.Element => {
         );
     }, []);
 
+    const onFullScreen = (): void => {
+        const div = document.getElementById(
+            'video-container'
+        ) as FullScreenDocumentElement;
+
+        setFullscreen(!fullscreen);
+        if (!document.fullscreenElement) {
+            if (div?.requestFullscreen) {
+                div?.requestFullscreen();
+            } else if (div?.webkitRequestFullscreen) {
+                div?.webkitRequestFullscreen();
+            } else if (div?.msRequestFullScreen) {
+                div?.msRequestFullScreen();
+            }
+        } else {
+            document.exitFullscreen();
+        }
+    };
+
     return (
         <FullScreen handle={screen}>
             <div
-                className="relative flex flex-col items-center justify-center bg-black h-full"
+                className="relative flex flex-col items-center justify-center bg-black"
                 id="video-container">
                 <video
                     onClick={onPlayClick}
@@ -80,10 +97,8 @@ const VideoPlayer = ({ video }: VideoPlayerProps): JSX.Element => {
                         minutesPrefix="00:"
                         hideHoverTime={false}
                         onPlay={onPlayClick}
-                        onFullScreen={
-                            screen.active ? screen.exit : screen.enter
-                        }
-                        isFullScreen={screen.active}
+                        onFullScreen={onFullScreen}
+                        isFullScreen={fullscreen}
                     />
                 </div>
             </div>
