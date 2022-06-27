@@ -35,7 +35,7 @@ export function LearningProvider({
 
     const [subchapterName, setSubchapterName] = useState(
         videoCourse
-            .filter((c) => c.id === chapter)[0]
+            ?.filter((c) => c.id === chapter)[0]
             ?.subchapters.filter((s) => s.id === sub)[0]?.subchapter_name
     );
     const [videoPicked, setVideoPicked] = useState<Video>(
@@ -43,15 +43,19 @@ export function LearningProvider({
             ? (videoCourse
                   .filter((c) => c.id === chapter)[0]
                   ?.subchapters.filter((s) => s.id === sub)[0]?.video as Video)
-            : (videoCourse[0]?.subchapters[0]?.video as Video)
+            : videoCourse?.length > 0
+            ? (videoCourse[0]?.subchapters[0]?.video as Video)
+            : ({} as Video)
     );
     const [notebookPicked, setNotebookPicked] = useState(
         type === 'notebook'
             ? (notebookCourse
-                  .filter((c) => c.id === chapter)[0]
+                  ?.filter((c) => c.id === chapter)[0]
                   ?.subchapters.filter((s) => s.id === sub)[0]
                   ?.notebook as Notebook)
-            : (notebookCourse[0]?.subchapters[0]?.notebook as Notebook)
+            : notebookCourse?.length > 0
+            ? (notebookCourse[0]?.subchapters[0]?.notebook as Notebook)
+            : ({} as Notebook)
     );
 
     const memoedValue = useMemo(

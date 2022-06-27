@@ -8,12 +8,14 @@ const NotebookSection = ({
     chapters,
     asThrowPage,
     setNotebookPicked,
-    notebookPicked
+    notebookPicked,
+    isSubscribed
 }: {
     chapters: Chapter[];
     asThrowPage?: boolean;
     setNotebookPicked: (notebook: Notebook) => void;
     notebookPicked: Notebook;
+    isSubscribed: boolean;
 }): JSX.Element => {
     const router = useRouter();
     const { id } = router.query;
@@ -63,7 +65,8 @@ const NotebookSection = ({
                                     }`}>
                                     <div className="flex w-full items-center">
                                         <div className="w-1/5 flex justify-center">
-                                            {subchapter.notebook?.is_free ? (
+                                            {subchapter.notebook?.is_free ||
+                                            isSubscribed ? (
                                                 <MdOutlineArticle className="mr-4 text-xl" />
                                             ) : (
                                                 <MdLock className="mr-4 text-xl text-amber-400" />

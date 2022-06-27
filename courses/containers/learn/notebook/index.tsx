@@ -25,6 +25,7 @@ const NotebookLearnContainer = ({
                     chapters={course.chapters}
                     hide={hide}
                     setHide={setHide}
+                    isSubscribed={course.is_subscribed}
                 />
             </div>
         </section>

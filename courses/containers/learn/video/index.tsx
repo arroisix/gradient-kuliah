@@ -25,6 +25,7 @@ const VideoLearnContainer = ({ course }: { course: Course }): JSX.Element => {
                     chapters={course.chapters}
                     hide={hide}
                     setHide={setHide}
+                    isSubscribed={course.is_subscribed}
                 />
             </div>
         </section>

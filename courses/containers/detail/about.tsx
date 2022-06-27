@@ -17,6 +17,7 @@ const About = ({ course }: { course: Course }): JSX.Element => {
                         is_free: true,
                         thumbnail: course.thumbnail
                     }}
+                    isSubscribed={course.is_subscribed}
                     description={course.description}
                     thumbnail={course.thumbnail}
                 />
