@@ -13,7 +13,10 @@ const Catalog = ({ course }: { course: Course }): JSX.Element => {
 
     return (
         <Container>
-            <CatalogContainer chapters={sortChapterOrder()} />
+            <CatalogContainer
+                chapters={sortChapterOrder()}
+                latest_subchapter={course.learning_progress?.latest_subchapter}
+            />
         </Container>
     );
 };

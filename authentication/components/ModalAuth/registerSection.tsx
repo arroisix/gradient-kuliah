@@ -50,7 +50,7 @@ const RegisterSection = ({ changePage }: SectionProps): JSX.Element => {
                         type="text"
                         label="NAMA LENGKAP"
                         placeholder="user"
-                        name="fullName"
+                        name="full_name"
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.full_name}

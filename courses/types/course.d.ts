@@ -75,6 +75,7 @@ type Video = {
     description: string;
     lecturers?: Lecturer[];
     subchapter_id?: string;
+    progress?: VideoProgress;
 };
 
 type VideoProgress = {
