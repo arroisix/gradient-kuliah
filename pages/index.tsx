@@ -7,8 +7,9 @@ import {
 } from 'courses/redux/api/publicCourseApi';
 import { getRunningOperationPromises } from 'redux/api/baseApi';
 import { wrapper } from 'redux/store';
+import withAnon from 'commons/withAnon';
 
-export default function Home(): JSX.Element {
+const Home = (): JSX.Element => {
     const { data: courses } = useGetPublicListCoursesQuery(
         {} as FilterCourseQueryParams
     );
@@ -18,7 +19,9 @@ export default function Home(): JSX.Element {
             <LandingContainer />
         </Layout>
     );
-}
+};
+
+export default withAnon(Home);
 
 export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
     ({ dispatch }) =>

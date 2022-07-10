@@ -3,6 +3,7 @@ import useCourseDetail from 'courses/hooks/useCourseDetail';
 import { useSelector } from 'react-redux';
 import About from './about';
 import Benefit from './benefit';
+import Catalog from './catalog';
 import Faq from './faq';
 import Hero from './hero';
 import Lecturer from './lecturer';
@@ -17,10 +18,16 @@ const AuthDetailCourse = ({ course }: { course: Course }): JSX.Element => {
     return (
         <section>
             <Hero course={data as Course} />
-            <About course={data as Course} />
-            <Lecturer course={data as Course} />
-            <Benefit />
-            <Faq />
+            {!data?.is_subscribed ? (
+                <>
+                    <About course={data as Course} />
+                    <Lecturer course={data as Course} />
+                    <Benefit />
+                    <Faq />
+                </>
+            ) : (
+                <Catalog course={data as Course} />
+            )}
         </section>
     );
 };

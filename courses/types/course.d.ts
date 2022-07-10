@@ -9,7 +9,7 @@ interface FilterCourseQueryParams {
 
 interface TrackSubchapterProgressInputData {
     subchapter_id: string;
-    learning_progres_id: string;
+    learning_progress_id: string;
     progress_type: ProgressType;
     video_progress?: {
         video_id: string;
@@ -52,6 +52,7 @@ type SubChapter = {
     subchapter_name: string;
     notebook?: Notebook;
     video?: Video;
+    thumbnail?: string;
 };
 
 type Notebook = {
@@ -73,6 +74,7 @@ type Video = {
     thumbnail: string;
     description: string;
     lecturers?: Lecturer[];
+    subchapter_id?: string;
 };
 
 type VideoProgress = {
@@ -86,6 +88,7 @@ type SubchapterProgress = {
     id: string;
     latest_progress: ProgressType;
     video: VideoProgress;
+    subchapter: SubChapter;
 };
 
 type LearningProgress = {

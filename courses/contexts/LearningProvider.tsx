@@ -13,8 +13,8 @@ interface LearningContextType {
     videoPicked: Video;
     setNotebookPicked: (notebook: Notebook) => void;
     notebookPicked: Notebook;
-    setSubchapterName: (name: string) => void;
-    subchapterName: string;
+    setSubchapter: (sub: SubChapter) => void;
+    subchapter: SubChapter;
 }
 
 const LearningContext = createContext<LearningContextType>(
@@ -33,15 +33,15 @@ export function LearningProvider({
     const videoCourse = getAllVideoChapter(course?.chapters);
     const notebookCourse = getAllNotebookChapter(course?.chapters);
 
-    const [subchapterName, setSubchapterName] = useState(
+    const [subchapter, setSubchapter] = useState(
         videoCourse
             ?.filter((c) => c.id === chapter)[0]
-            ?.subchapters.filter((s) => s.id === sub)[0]?.subchapter_name
+            ?.subchapters.filter((s) => s.id === sub)[0]
     );
     const [videoPicked, setVideoPicked] = useState<Video>(
         type === 'video'
             ? (videoCourse
-                  .filter((c) => c.id === chapter)[0]
+                  ?.filter((c) => c.id === chapter)[0]
                   ?.subchapters.filter((s) => s.id === sub)[0]?.video as Video)
             : videoCourse?.length > 0
             ? (videoCourse[0]?.subchapters[0]?.video as Video)
@@ -62,12 +62,12 @@ export function LearningProvider({
         () => ({
             videoPicked,
             notebookPicked,
-            subchapterName,
+            subchapter,
             setNotebookPicked,
             setVideoPicked,
-            setSubchapterName
+            setSubchapter
         }),
-        [videoPicked, notebookPicked, subchapterName]
+        [videoPicked, notebookPicked, subchapter]
     );
 
     return (

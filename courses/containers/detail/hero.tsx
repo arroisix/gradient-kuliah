@@ -15,7 +15,7 @@ const Hero = ({ course }: { course: Course }): JSX.Element => {
             style={
                 width > 768
                     ? {
-                          background: `url(${course.banner})`,
+                          background: `url(${course?.banner})`,
                           backgroundSize: 'cover',
                           backgroundPositionX: '80%'
                       }
@@ -24,7 +24,7 @@ const Hero = ({ course }: { course: Course }): JSX.Element => {
             <div
                 className="absolute md:hidden top-0 left-0 w-full h-3/4 flex justify-end"
                 style={{
-                    backgroundImage: `url(${course.banner})`,
+                    backgroundImage: `url(${course?.banner})`,
                     backgroundSize: 'cover',
                     backgroundPositionX: '90%',
                     backgroundColor:
@@ -36,29 +36,59 @@ const Hero = ({ course }: { course: Course }): JSX.Element => {
                         style={{ filter: 'blur(4px)' }}></div>
                 </div>
             </div>
-            <div className="z-10 pb-12">
-                <h1 className="text-4xl md:text-5xl font-bold">
-                    {course.course_name}
-                </h1>
-                <div className="w-full md:w-1/2 my-4">
-                    <p>{course.short_description}</p>
-                </div>
+            <div className="z-10 pb-6 md:pb-12">
+                {!course?.is_subscribed ? (
+                    <>
+                        <h1 className="text-4xl md:text-5xl font-bold">
+                            {course?.course_name}
+                        </h1>
+                        <div className="w-full md:w-1/2 my-4">
+                            <p>{course?.short_description}</p>
+                        </div>
+                    </>
+                ) : (
+                    <div className="max-w-full md:max-w-[40vw]">
+                        <h4 className="text-base font-bold md:text-3xl">
+                            {course?.course_name}
+                        </h4>
+                        <div className="h-px bg-neutral-800 my-4" />
+                        <p className="text-base text-neutral-400">
+                            TERAKHIR DIPELAJARI
+                        </p>
+                        <h3 className="text-2xl md:text-3xl">
+                            {course?.learning_progress?.latest_subchapter
+                                ?.subchapter?.subchapter_name ??
+                                'Belum ada progress belajar'}
+                        </h3>
+                    </div>
+                )}
             </div>
-            {!course.is_subscribed && (
-                <div className="flex mt-4">
+            {!course?.is_subscribed ? (
+                <div className="flex mb-4 md:mt-2 md:mb-0">
                     {isAuthenticated ? (
                         <Button
+                            className="w-full md:w-fit text-center"
                             variant="primary"
-                            href={`/langganan?courseId=${course.id}`}>
+                            href={`/langganan?courseId=${course?.id}`}>
                             Gabung Kelas
                         </Button>
                     ) : (
                         <Button
+                            className="w-full md:w-fit text-center"
                             variant="primary"
                             onClick={() => setModalAuthOpen(1)}>
                             Gabung Kelas
                         </Button>
                     )}
+                </div>
+            ) : (
+                <div className="flex mb-4 md:mt-6 md:mb-0">
+                    <Button
+                        className="w-full md:w-fit text-center"
+                        variant="primary"
+                        href={`/kelas/${course?.id}#learning-catalog`}>
+                        Lanjut Belajar
+                    </Button>
                 </div>
             )}
         </section>

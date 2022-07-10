@@ -27,6 +27,7 @@ export const privateCourseApi = baseApi.injectEndpoints({
                 ...data
             }: TrackSubchapterProgressInputData) => ({
                 url: `${PRIVATE_COURSE_BASE_URL}track-subchapter/${subchapter_id}`,
+                method: 'POST',
                 body: {
                     ...data
                 }

@@ -7,7 +7,7 @@ const Lecturer = ({ course }: { course: Course }): JSX.Element => {
                 Guru spektakuler kelas ini
             </h1>
             <div className="grid grid-cols-2 md:flex md:justify-center md:items-center md:flex-wrap mt-4">
-                {course.lecturers.map((lecturer) => {
+                {course?.lecturers?.map((lecturer) => {
                     return (
                         <div
                             key={lecturer.name}

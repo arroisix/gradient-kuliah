@@ -7,13 +7,15 @@ import useWindowSize from 'commons/hooks/useWindowSize';
 const Gallery = ({
     itemWidth = 24,
     itemCount = 5,
-    items
+    items,
+    alignCenter
 }: // row = 2
 {
     itemWidth: number;
     itemCount: number;
     items: JSX.Element[];
     row?: number;
+    alignCenter?: boolean;
 }): JSX.Element => {
     const [translate, setTranslate] = useState(0);
     const firstRef = useRef({} as HTMLDivElement);
@@ -27,7 +29,7 @@ const Gallery = ({
                 ? () => setTranslate(translate - itemWidth)
                 : undefined,
         onSwipedLeft:
-            translate < itemCount * itemWidth * 0.8
+            translate < itemCount * itemWidth * 0.6
                 ? () => setTranslate(translate + itemWidth)
                 : undefined
     });
@@ -36,11 +38,13 @@ const Gallery = ({
     return (
         <div className="relative overflow-hidden">
             <div
-                className={`w-screen  transition ease-in relative`}
+                className={`w-screen transition ease-in relative`}
                 style={{ transform: `translate(-${translate}rem)` }}
                 {...handlers}>
                 <div
-                    className={`my-16 grid grid-rows-1 grid-flow-col gap-4 overflow-overflow-scroll`}>
+                    className={`my-16 grid grid-rows-1 ${
+                        !alignCenter && 'justify-start'
+                    } grid- grid-flow-col gap-4`}>
                     <div ref={firstRef} />
                     <div />
                     {items}
@@ -52,7 +56,7 @@ const Gallery = ({
                     (isLastOnViewPort || width <= 768) && 'hidden'
                 } absolute right-16 bg-neutral-100 top-[40%] w-16 h-16 rounded-full flex justify-center items-center`}
                 onClick={
-                    translate < itemCount * itemWidth * 0.8
+                    translate < itemCount * itemWidth * 0.6
                         ? () => setTranslate(translate + itemWidth)
                         : undefined
                 }

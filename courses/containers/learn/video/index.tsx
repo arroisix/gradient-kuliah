@@ -4,7 +4,7 @@ import { useLearning } from 'courses/contexts/LearningProvider';
 import LearnVideo from './learnVideo';
 
 const VideoLearnContainer = ({ course }: { course: Course }): JSX.Element => {
-    const { videoPicked, subchapterName } = useLearning();
+    const { videoPicked, subchapter } = useLearning();
 
     const [hide, setHide] = useState(false);
 
@@ -16,11 +16,12 @@ const VideoLearnContainer = ({ course }: { course: Course }): JSX.Element => {
                     <LearnVideo
                         isListHidden={hide}
                         video={videoPicked}
-                        subchapterName={subchapterName}
+                        subchapter={subchapter}
+                        learningProgress={course.learning_progress}
                     />
                 </div>
             </div>
-            <div className="fixed right-0 w-[300px]">
+            <div className="fixed right-0 w-[300px] z-10">
                 <LearnContentBox
                     chapters={course.chapters}
                     hide={hide}
