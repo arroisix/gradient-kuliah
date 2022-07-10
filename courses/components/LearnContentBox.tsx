@@ -18,18 +18,18 @@ const LearnContentBox = ({
     isSubscribed
 }: LearnContentBoxProps): JSX.Element => {
     const {
-        setSubchapterName,
+        setSubchapter,
         setVideoPicked,
         setNotebookPicked,
         videoPicked,
         notebookPicked
     } = useLearning();
     return (
-        <div className={`flex h-full relative`}>
+        <div className={`flex h-full relative z-10`}>
             <div
                 className={`absolute top-0 ${
                     hide ? 'right-0' : '-left-12'
-                } bg-neutral-800 h-12 w-12 flex justify-center items-center`}
+                } bg-neutral-800 h-12 w-12 flex justify-center items-center z-10`}
                 onClick={() => setHide(!hide)}
                 aria-hidden>
                 {hide ? (
@@ -41,7 +41,7 @@ const LearnContentBox = ({
             {!hide && (
                 <ListOfContent
                     firstTab={firstTab}
-                    setSubchapterName={setSubchapterName}
+                    setSubchapter={setSubchapter}
                     setNotebookPicked={setNotebookPicked}
                     notebookPicked={notebookPicked}
                     chapters={chapters}

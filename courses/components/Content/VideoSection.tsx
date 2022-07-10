@@ -11,14 +11,14 @@ interface VideoSectionProps {
     trailerVideo?: Video;
     chapters: Chapter[];
     asThrowPage?: boolean;
-    setSubchapterName?: (name: string) => void;
+    setSubchapter?: (sub: SubChapter) => void;
     isSubscribed: boolean;
 }
 
 const VideoSection = ({
     chapters,
     setVideoPicked,
-    setSubchapterName,
+    setSubchapter,
     trailerVideo,
     videoPicked,
     asThrowPage,
@@ -74,10 +74,8 @@ const VideoSection = ({
                                     aria-hidden={true}
                                     onClick={() => {
                                         if (isAuthenticated) {
-                                            if (setSubchapterName) {
-                                                setSubchapterName(
-                                                    subchapter.subchapter_name
-                                                );
+                                            if (setSubchapter) {
+                                                setSubchapter(subchapter);
                                             }
                                             if (asThrowPage) {
                                                 router.push(
@@ -85,8 +83,11 @@ const VideoSection = ({
                                                 );
                                             } else {
                                                 setVideoPicked(
-                                                    subchapter.video ??
-                                                        ({} as Video)
+                                                    {
+                                                        ...(subchapter.video as Video),
+                                                        subchapter_id:
+                                                            subchapter?.id as string
+                                                    } ?? ({} as Video)
                                                 );
 
                                                 // router.push(

@@ -53,6 +53,7 @@ const ContentHighlight = (): JSX.Element => {
                 </span>
             </div>
             <Gallery
+                alignCenter
                 itemCount={3}
                 itemWidth={width > 768 ? 24 : 18}
                 row={1}

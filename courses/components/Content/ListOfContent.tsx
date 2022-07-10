@@ -8,7 +8,7 @@ import VideoSection from './VideoSection';
 const ListOfContent = ({
     chapters,
     setVideoPicked,
-    setSubchapterName,
+    setSubchapter,
     setNotebookPicked,
     notebookPicked,
     videoPicked,
@@ -20,7 +20,7 @@ const ListOfContent = ({
 }: {
     chapters: Chapter[];
     setVideoPicked: (video: Video) => void;
-    setSubchapterName?: (name: string) => void;
+    setSubchapter?: (sub: SubChapter) => void;
     setNotebookPicked?: (notebook: Notebook) => void;
     notebookPicked?: Notebook;
     videoPicked: Video;
@@ -36,7 +36,7 @@ const ListOfContent = ({
         <div
             className={`h-full w-full bg-neutral-900 ${
                 rounded && 'rounded'
-            } overflow-hidden`}>
+            } overflow-hidden z-10`}>
             <div className="pt-1 bg-neutral-800" id="search-box">
                 {/* <div className="px-4">
                     <Input
@@ -60,7 +60,7 @@ const ListOfContent = ({
                         onClick={() => setTab(0)}>
                         <span>VIDEO</span>
                     </div>
-                    <div
+                    {/* <div
                         aria-hidden={true}
                         className={`text-[1rem] w-full text-center px-1 pt-1 pb-3 cursor-pointer ${
                             tab === 1
@@ -69,7 +69,7 @@ const ListOfContent = ({
                         }`}
                         onClick={() => setTab(1)}>
                         <span>NOTEBOOK</span>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <div>
@@ -77,7 +77,7 @@ const ListOfContent = ({
                     <VideoSection
                         chapters={getAllVideoChapter(chapters)}
                         setVideoPicked={setVideoPicked}
-                        setSubchapterName={setSubchapterName}
+                        setSubchapter={setSubchapter}
                         videoPicked={videoPicked}
                         trailerVideo={trailerVideo as Video}
                         asThrowPage={asThrowPage}

@@ -9,7 +9,10 @@ interface FullScreenDocumentElement extends HTMLElement {
     webkitRequestFullscreen?: () => void;
 }
 
-const VideoPlayer = ({ video }: VideoPlayerProps): JSX.Element => {
+const VideoPlayer = ({
+    video,
+    trackProgress
+}: VideoPlayerProps): JSX.Element => {
     const videoRef = useRef({} as HTMLVideoElement);
     const [, setDuration] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
@@ -18,6 +21,8 @@ const VideoPlayer = ({ video }: VideoPlayerProps): JSX.Element => {
     const [isPlay, setIsPlay] = useState(false);
     const [isBuffering, setIsBuffering] = useState(false);
 
+    let globalCurrentTime = currentTime;
+
     const onPlayClick = (): void => {
         if (videoRef.current.paused) {
             videoRef.current.play();
@@ -25,6 +30,9 @@ const VideoPlayer = ({ video }: VideoPlayerProps): JSX.Element => {
         } else {
             videoRef.current.pause();
             setIsPlay(false);
+            if (trackProgress) {
+                trackProgress(videoRef.current.currentTime);
+            }
         }
     };
 
@@ -41,6 +49,8 @@ const VideoPlayer = ({ video }: VideoPlayerProps): JSX.Element => {
             'timeupdate',
             function () {
                 const calculatedCurrentTime = videoRef?.current?.currentTime;
+                // eslint-disable-next-line react-hooks/exhaustive-deps
+                globalCurrentTime = calculatedCurrentTime;
                 const buffered = videoRef?.current?.buffered;
                 setCurrentTime(calculatedCurrentTime);
                 setDownloadedTime(buffered?.end(buffered?.length - 1));
@@ -55,7 +65,21 @@ const VideoPlayer = ({ video }: VideoPlayerProps): JSX.Element => {
         videoRef.current.addEventListener('playing', () => {
             setIsBuffering(false);
         });
+
+        videoRef.current.addEventListener('ended', () => {
+            if (trackProgress) {
+                trackProgress(videoRef.current.currentTime, true);
+            }
+        });
     }, []);
+
+    useEffect(() => {
+        return () => {
+            if (trackProgress) {
+                console.log(globalCurrentTime);
+            }
+        };
+    }, [trackProgress]);
 
     const onFullScreen = (): void => {
         const div = document.getElementById(
@@ -82,9 +106,9 @@ const VideoPlayer = ({ video }: VideoPlayerProps): JSX.Element => {
             id="video-container">
             {(isBuffering || !isPlay) && (
                 <>
-                    <div className="absolute bg-black opacity-50 w-full h-full left-0 top-0 z-[4000]" />
+                    <div className="absolute bg-black opacity-50 w-full h-full left-0 top-0 z-[5]" />
                     <div
-                        className="absolute w-full h-full left-0 top-0 z-[4001] flex justify-center items-center"
+                        className="absolute w-full h-full left-0 top-0 z-[5] flex justify-center items-center"
                         onClick={onPlayClick}
                         aria-hidden>
                         {isBuffering && <Spinner size="large" />}

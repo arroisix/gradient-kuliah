@@ -3,6 +3,7 @@ import VideoPlayer from 'commons/components/elements/Video';
 import NeedSubscribe from './NeedSubscribe';
 import ListOfContent from './Content/ListOfContent';
 import useWindowSize from 'commons/hooks/useWindowSize';
+import { useTrackSubchapterProgressMutation } from 'courses/redux/api/privateCourseApi';
 
 interface ContentBoxProps {
     chapters: Chapter[];
@@ -10,19 +11,23 @@ interface ContentBoxProps {
     trailer?: Video;
     thumbnail?: string;
     isSubscribed?: boolean;
+    learningProgress?: LearningProgress;
 }
 
 const ContentBox = ({
     chapters,
     trailer,
     thumbnail,
-    isSubscribed
+    isSubscribed,
+    learningProgress
 }: ContentBoxProps): JSX.Element => {
     const [videoPicked, setVideoPicked] = useState<Video>(trailer as Video);
     const [notebookPicked, setNotebookPicked] = useState<Notebook>(
         {} as Notebook
     );
     const { width } = useWindowSize();
+    const [track] = useTrackSubchapterProgressMutation();
+
     return (
         <div className="flex h-full flex-col lg:flex-row">
             <div className="w-full lg:w-2/3 h-full" id="video-section">
@@ -33,6 +38,25 @@ const ContentBox = ({
                             video={videoPicked.video_url as string}
                             thumbnail={videoPicked.thumbnail as string}
                             key={videoPicked.video_url as string}
+                            trackProgress={
+                                videoPicked.id !== 'trailer'
+                                    ? async (last_duration, isFinished) =>
+                                          track({
+                                              subchapter_id:
+                                                  videoPicked.subchapter_id as string,
+                                              learning_progress_id:
+                                                  learningProgress?.id as string,
+                                              progress_type: 'VIDEO',
+                                              video_progress: {
+                                                  video_id: videoPicked.id,
+                                                  last_duration:
+                                                      last_duration as unknown as string,
+                                                  is_finished:
+                                                      isFinished ?? false
+                                              }
+                                          })
+                                    : undefined
+                            }
                         />
                     </div>
                 ) : (
