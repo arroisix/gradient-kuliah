@@ -27,6 +27,7 @@ export interface Props {
     onFullScreen: () => void;
     isFullScreen: boolean;
     isBuffering?: boolean;
+    popupArea?: number[];
 }
 
 function secondsToTime(seconds: number, offset: number): Time {
@@ -58,7 +59,8 @@ export const VideoSeekSlider: React.FC<Props> = ({
     onPlay,
     onFullScreen,
     isFullScreen,
-    isBuffering
+    isBuffering,
+    popupArea
 }) => {
     const [seekHoverPosition, setSeekHoverPosition] = useState(0);
 
@@ -246,11 +248,25 @@ export const VideoSeekSlider: React.FC<Props> = ({
                 </div>
                 <div
                     style={getThumbHandlerPosition()}
-                    className="absolute bottom-[3.2rem] left-[0.2rem] z-10">
+                    className="absolute bottom-[3.2rem] left-[0.2rem] z-[8]">
                     {isThumbActive() && (
                         <div className="w-4 h-4 bg-red-400 rounded-full" />
                     )}
                 </div>
+                {popupArea?.map((position) => (
+                    <div
+                        key={position}
+                        style={{
+                            transform: `translateX(${
+                                trackWidth.current / (max / position)
+                            }px)`
+                        }}
+                        className="absolute bottom-[3.5rem] z-[8] cursor-pointer">
+                        {
+                            <div className="w-[2px] h-2 bg-yellow-400 opacity-30 hover:opacity-100" />
+                        }
+                    </div>
+                ))}
             </div>
             {
                 <div className="w-full h-8 my-2 flex items-center justify-between">
@@ -290,7 +306,7 @@ export const VideoSeekSlider: React.FC<Props> = ({
                 <div
                     className={
                         isThumbActive()
-                            ? 'absolute bg-neutral-800 rounded-lg p-1 z-10 -top-10'
+                            ? 'absolute bg-neutral-800 rounded-lg p-1 z-[8] -top-10'
                             : 'hidden'
                     }
                     style={getHoverTimePosition()}

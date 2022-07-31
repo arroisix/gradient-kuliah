@@ -1,11 +1,11 @@
 import { MdOutlinePlayCircleFilled } from 'react-icons/md';
 import ReactPlayer from 'react-player';
 
-const VideoPlayer = ({
+const VideoPlayer = <T,>({
     video,
     thumbnail,
     height
-}: VideoPlayerProps): JSX.Element => {
+}: VideoPlayerProps<T>): JSX.Element => {
     return (
         <div className="relative flex flex-col items-center justify-center">
             <ReactPlayer

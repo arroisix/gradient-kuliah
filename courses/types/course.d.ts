@@ -76,6 +76,26 @@ type Video = {
     lecturers?: Lecturer[];
     subchapter_id?: string;
     progress?: VideoProgress;
+    popup_questions?: PopupQuestion[];
+};
+
+type PopupQuestion = {
+    id: string;
+    question: ExerciseQuestion;
+};
+
+type ExerciseAnswer = {
+    id: string;
+    answer: string;
+    is_answer?: boolean;
+};
+
+type ExerciseQuestion = {
+    id: string;
+    question_name: string;
+    question: string;
+    solution?: string;
+    answers: ExerciseAnswer[];
 };
 
 type VideoProgress = {

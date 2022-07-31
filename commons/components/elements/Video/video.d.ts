@@ -1,4 +1,4 @@
-type VideoPlayerProps = {
+type VideoPlayerProps<T> = {
     video: string;
     thumbnail: string;
     height?: string;
@@ -6,4 +6,6 @@ type VideoPlayerProps = {
         last_duration: number,
         isFinished?: boolean
     ) => Promise<any>;
+    popupData?: T[];
+    popupComponent?: JSX.Element;
 };

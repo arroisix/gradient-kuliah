@@ -1,5 +1,6 @@
 import VideoPlayer from 'commons/components/elements/Video';
 import useWindowSize from 'commons/hooks/useWindowSize';
+import PopupQuestionContent from 'courses/components/Exercise/PopupQuestion';
 import { useLearning } from 'courses/contexts/LearningProvider';
 import { useTrackSubchapterProgressMutation } from 'courses/redux/api/privateCourseApi';
 
@@ -24,9 +25,11 @@ const LearnVideo = ({
                 height={
                     width <= 768 ? '200px' : isListHidden ? '600px' : '450px'
                 }
+                popupData={video?.popup_questions}
                 video={video?.video_url}
+                popupComponent={<PopupQuestionContent />}
                 thumbnail={video?.thumbnail}
-                key={video.video_url}
+                key={video?.video_url}
                 trackProgress={async (last_duration, isFinished) =>
                     track({
                         subchapter_id: subchapter.id as string,
