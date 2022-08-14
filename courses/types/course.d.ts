@@ -105,6 +105,7 @@ type ExerciseAnswer = {
 type ExerciseQuestion = {
     id: string;
     question_name: string;
+    question_image_url: string;
     question: string;
     solution?: string;
     answers: ExerciseAnswer[];

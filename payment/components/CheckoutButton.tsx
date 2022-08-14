@@ -6,12 +6,14 @@ import useCheckout from '../hooks/useCheckout';
 
 const CheckoutButton = ({
     packetId,
-    paymentMethod
+    paymentMethod,
+    isFree
 }: {
     packetId: string;
     paymentMethod: PaymentMethod;
+    isFree?: boolean;
 }): JSX.Element => {
-    const { checkout } = useCheckout();
+    const { checkout, freeCheckout } = useCheckout();
     const [loading, setLoading] = useState(false);
     const router = useRouter();
 
@@ -37,8 +39,28 @@ const CheckoutButton = ({
         setLoading(false);
     };
 
+    const onClickFree = async (): Promise<void> => {
+        setLoading(true);
+        try {
+            await freeCheckout({ packet_id: packetId });
+
+            toast.success(`Pembayaran Sukses!`, {
+                position: toast.POSITION.TOP_CENTER
+            });
+            router.push('/checkout/sukses');
+        } catch {
+            toast.error(`Pembayaran Gagal!`, {
+                position: toast.POSITION.TOP_CENTER
+            });
+        }
+        setLoading(false);
+    };
+
     return (
-        <Button variant="primary" onClick={onClick} className="w-full">
+        <Button
+            variant="primary"
+            onClick={isFree ? onClickFree : onClick}
+            className="w-full">
             {loading ? 'Memproses Pembayaran...' : 'Proses Pembayaran'}
         </Button>
     );

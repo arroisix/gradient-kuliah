@@ -3,7 +3,8 @@ import {
     PopupQuizProvider,
     usePopupQuiz
 } from 'courses/contexts/PopupQuizProvider';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import Image from 'next/image';
 
 interface PopupProps<T> {
     onSubmit?: () => void;
@@ -19,12 +20,6 @@ const AnswerChoice = ({
 }): JSX.Element => {
     const { isPickedAnswer, clickAnswerChoice, solution, correctAnswer } =
         usePopupQuiz();
-
-    useEffect(() => {
-        console.log(solution);
-    }, [solution]);
-
-    console.log(correctAnswer);
 
     const computeBgColor = (id: string): string => {
         if (solution) {
@@ -69,19 +64,16 @@ const SaveAnswer = ({
     setShowSolution: () => void;
     isShowSolution: boolean;
 }): JSX.Element => {
-    const { submitAnswer, solution } = usePopupQuiz();
+    const { submitAnswer, solution, pickedAnswer } = usePopupQuiz();
 
     const onClick = async (): Promise<void> => {
         await submitAnswer();
-
-        // if (onSubmit) {
-        //     onSubmit();
-        // }
     };
 
     return (
         <div className="w-full flex items-end justify-end">
             <Button
+                disabled={pickedAnswer.length === 0}
                 variant="primary"
                 onClick={
                     solution
@@ -123,7 +115,7 @@ const PopupQuestionBody = ({
     }
 
     return (
-        <div className="flex w-full gap-2 flex-col h-1/2 overflow-auto">
+        <div className="flex w-full gap-2 flex-col h-1/2 overflow-auto my-2">
             {data?.question.answers.map(
                 (answer: ExerciseAnswer, index: number) => (
                     <AnswerChoice
@@ -146,9 +138,20 @@ const PopupQuestionContent = ({
     return (
         <PopupQuizProvider popupQuestion={data}>
             <div className="w-full h-full bg-neutral-800 z-100 rounded-2xl px-12 py-8 flex flex-col justify-between">
-                <p className="text-base leading-6 font-[500]">
-                    {data?.question?.question}
-                </p>
+                <div className="flex gap-2">
+                    {data?.question.question_image_url && (
+                        <Image
+                            src={data?.question.question_image_url as string}
+                            height={150}
+                            width={300}
+                            layout="fixed"
+                            className="object-cover"
+                        />
+                    )}
+                    <p className="text-base leading-6 font-[500]">
+                        {data?.question?.question}
+                    </p>
+                </div>
                 <PopupQuestionBody
                     data={data}
                     isShowSolution={isShowSolution}

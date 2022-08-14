@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 
 interface PopupQuizContextType {
+    pickedAnswer: string[];
     clickAnswerChoice: (id: string) => void;
     isPickedAnswer: (id: string) => boolean;
     submitAnswer: () => Promise<void>;
@@ -82,7 +83,8 @@ export function PopupQuizProvider({
             submitAnswer,
             isSubmitLoading,
             solution,
-            correctAnswer
+            correctAnswer,
+            pickedAnswer
         }),
         [pickedAnswer, isSubmitLoading, solution, correctAnswer]
     );

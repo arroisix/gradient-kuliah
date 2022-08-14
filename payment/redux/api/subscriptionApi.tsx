@@ -15,9 +15,22 @@ export const subscriptionApi = baseApi.injectEndpoints({
             query: (packetId: string) => ({
                 url: `${SUBSCRIPTION_BASE_URL}one-packet-one-course/${packetId}`
             })
+        }),
+        freeCheckout: builder.mutation<
+            string,
+            Omit<CheckoutInputData, 'payment_method'>
+        >({
+            query: (data: Omit<CheckoutInputData, 'payment_method'>) => ({
+                url: `${SUBSCRIPTION_BASE_URL}checkout-free-packet/`,
+                method: 'POST',
+                body: data
+            })
         })
     })
 });
 
-export const { useCheckoutMutation, useGetOnePacketOneCourseQuery } =
-    subscriptionApi;
+export const {
+    useCheckoutMutation,
+    useGetOnePacketOneCourseQuery,
+    useFreeCheckoutMutation
+} = subscriptionApi;

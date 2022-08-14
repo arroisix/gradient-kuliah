@@ -13,6 +13,7 @@ interface VideoSectionProps {
     asThrowPage?: boolean;
     setSubchapter?: (sub: SubChapter) => void;
     isSubscribed: boolean;
+    isFullHeight?: boolean;
 }
 
 const VideoSection = ({
@@ -22,7 +23,8 @@ const VideoSection = ({
     trailerVideo,
     videoPicked,
     asThrowPage,
-    isSubscribed
+    isSubscribed,
+    isFullHeight
 }: VideoSectionProps): JSX.Element => {
     const router = useRouter();
     const { id } = router.query;
@@ -30,7 +32,10 @@ const VideoSection = ({
     const isAuthenticated = useSelector(getIsAuthenticated);
 
     return (
-        <div className="h-[500px] overflow-y-auto">
+        <div
+            className={`${
+                isFullHeight ? 'h-[calc(100vh-65px)]' : 'h-[500px]'
+            } overflow-y-auto`}>
             {trailerVideo && (
                 <div
                     id="trailer"

@@ -5,6 +5,7 @@ const BUTTON_THEME: { [key: string]: string } = {
     primary: 'bg-accent-purple rounded-full text-white',
     secondary: 'bg-accent-blue rounded-full text-primary-blue',
     tertiary: 'text-primary-blue',
+    disabled: 'bg-neutral-400 text-neutral-300 rounded-full',
     custom: 'rounded-full'
 };
 
@@ -29,7 +30,11 @@ const Button = ({
     const computeVariant = (): string => {
         let styling = 'font-bold cursor-pointer';
 
-        styling += ` ${BUTTON_THEME[variant]}`;
+        if (disabled) {
+            styling += ` ${BUTTON_THEME['disabled']}`;
+        } else {
+            styling += ` ${BUTTON_THEME[variant]}`;
+        }
 
         if (size) {
             styling += ` ${BUTTON_SIZE[size]}`;

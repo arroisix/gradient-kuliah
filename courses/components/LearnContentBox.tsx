@@ -1,19 +1,14 @@
-import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import { useLearning } from '../contexts/LearningProvider';
 import ListOfContent from './Content/ListOfContent';
 
 interface LearnContentBoxProps {
     chapters: Chapter[];
-    setHide: (status: boolean) => void;
-    hide: boolean;
     firstTab?: number;
     isSubscribed?: boolean;
 }
 
 const LearnContentBox = ({
     chapters,
-    setHide,
-    hide,
     firstTab,
     isSubscribed
 }: LearnContentBoxProps): JSX.Element => {
@@ -25,31 +20,18 @@ const LearnContentBox = ({
         notebookPicked
     } = useLearning();
     return (
-        <div className={`flex h-full relative z-10`}>
-            <div
-                className={`absolute top-0 ${
-                    hide ? 'right-0' : '-left-12'
-                } bg-neutral-800 h-12 w-12 flex justify-center items-center z-10`}
-                onClick={() => setHide(!hide)}
-                aria-hidden>
-                {hide ? (
-                    <MdChevronLeft className="text-neutral-100 text-3xl" />
-                ) : (
-                    <MdChevronRight className="text-neutral-100 text-3xl" />
-                )}
-            </div>
-            {!hide && (
-                <ListOfContent
-                    firstTab={firstTab}
-                    setSubchapter={setSubchapter}
-                    setNotebookPicked={setNotebookPicked}
-                    notebookPicked={notebookPicked}
-                    chapters={chapters}
-                    setVideoPicked={setVideoPicked}
-                    videoPicked={videoPicked}
-                    isSubscribed={isSubscribed}
-                />
-            )}
+        <div className="flex h-full">
+            <ListOfContent
+                firstTab={firstTab}
+                setSubchapter={setSubchapter}
+                setNotebookPicked={setNotebookPicked}
+                notebookPicked={notebookPicked}
+                chapters={chapters}
+                setVideoPicked={setVideoPicked}
+                videoPicked={videoPicked}
+                isSubscribed={isSubscribed}
+                isFullHeight
+            />
         </div>
     );
 };

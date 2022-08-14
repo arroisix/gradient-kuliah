@@ -5,12 +5,10 @@ import { useLearning } from 'courses/contexts/LearningProvider';
 import { useTrackSubchapterProgressMutation } from 'courses/redux/api/privateCourseApi';
 
 const LearnVideo = ({
-    isListHidden,
     video,
     subchapter,
     learningProgress
 }: {
-    isListHidden: boolean;
     video: Video;
     subchapter: SubChapter;
     learningProgress?: LearningProgress;
@@ -19,14 +17,10 @@ const LearnVideo = ({
     const [track] = useTrackSubchapterProgressMutation();
     const { videoPicked } = useLearning();
 
-    console.log(videoPicked);
-
     return (
         <div className="w-full h-full">
             <VideoPlayer
-                height={
-                    width <= 768 ? '200px' : isListHidden ? '600px' : '450px'
-                }
+                height={width <= 768 ? '200px' : '600px'}
                 popupData={video?.popup_questions}
                 video={video?.video_url}
                 popupComponent={<PopupQuestionContent />}

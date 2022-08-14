@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import LearnContentBox from 'courses/components/LearnContentBox';
 import { useLearning } from 'courses/contexts/LearningProvider';
 import LearnNotebook from './learnNotebook';
@@ -9,13 +8,11 @@ const NotebookLearnContainer = ({
     course: Course;
 }): JSX.Element => {
     const { notebookPicked } = useLearning();
-    const [hide, setHide] = useState(false);
 
     return (
         <section className="min-h-screen pt-[65px] flex justify-between relative">
             <div className="w-full flex h-full px-4 md:px-[7.5rem] pt-8">
-                <div
-                    className={`${hide ? 'w-full' : 'w-full md:w-3/4'} h-full`}>
+                <div className="w-full h-full">
                     <LearnNotebook notebook={notebookPicked} />
                 </div>
             </div>
@@ -23,8 +20,6 @@ const NotebookLearnContainer = ({
                 <LearnContentBox
                     firstTab={1}
                     chapters={course.chapters}
-                    hide={hide}
-                    setHide={setHide}
                     isSubscribed={course.is_subscribed}
                 />
             </div>

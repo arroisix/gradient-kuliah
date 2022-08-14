@@ -16,7 +16,8 @@ const ListOfContent = ({
     rounded,
     asThrowPage,
     firstTab,
-    isSubscribed
+    isSubscribed,
+    isFullHeight
 }: {
     chapters: Chapter[];
     setVideoPicked: (video: Video) => void;
@@ -29,13 +30,14 @@ const ListOfContent = ({
     asThrowPage?: boolean;
     firstTab?: number;
     isSubscribed?: boolean;
+    isFullHeight?: boolean;
 }): JSX.Element => {
     const [tab, setTab] = useState(firstTab ?? 0);
 
     return (
         <div
             className={`h-full w-full bg-neutral-900 ${
-                rounded && 'rounded'
+                rounded ? 'rounded' : ''
             } overflow-hidden z-10`}>
             <div className="pt-1 bg-neutral-800" id="search-box">
                 {/* <div className="px-4">
@@ -82,6 +84,7 @@ const ListOfContent = ({
                         trailerVideo={trailerVideo as Video}
                         asThrowPage={asThrowPage}
                         isSubscribed={isSubscribed ?? false}
+                        isFullHeight={isFullHeight}
                     />
                 ) : (
                     <NotebookSection
