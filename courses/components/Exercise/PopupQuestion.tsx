@@ -5,6 +5,7 @@ import {
 } from 'courses/contexts/PopupQuizProvider';
 import { useState } from 'react';
 import Image from 'next/image';
+import { MdClose } from 'react-icons/md';
 
 interface PopupProps<T> {
     onSubmit?: () => void;
@@ -115,7 +116,7 @@ const PopupQuestionBody = ({
     }
 
     return (
-        <div className="flex w-full gap-2 flex-col h-1/2 overflow-auto my-2">
+        <div className="flex w-full gap-2 flex-col h-1/2 overflow-auto my-2 min-h-[200px] lg:min-h-[130px]">
             {data?.question.answers.map(
                 (answer: ExerciseAnswer, index: number) => (
                     <AnswerChoice
@@ -137,8 +138,12 @@ const PopupQuestionContent = ({
 
     return (
         <PopupQuizProvider popupQuestion={data}>
-            <div className="w-full h-full bg-neutral-800 z-100 rounded-2xl px-12 py-8 flex flex-col justify-between">
-                <div className="flex gap-2">
+            <div className="w-full h-full bg-neutral-800 z-100 rounded-2xl px-12 py-8 flex flex-col justify-between overflow-y-auto lg:overflow-y-hidden relative">
+                <MdClose
+                    className="absolute top-4 right-4 text-2xl cursor-pointer text-neutral-600"
+                    onClick={onSubmit ? () => onSubmit() : undefined}
+                />
+                <div className="flex gap-2 flex-wrap">
                     {data?.question.question_image_url && (
                         <Image
                             src={data?.question.question_image_url as string}

@@ -163,9 +163,7 @@ const VideoPlayer = <T,>({
                 setIsPopup(true);
                 setIsPlay(false);
 
-                setCurrentPopupIndex(
-                    (currentPopupIndex) => currentPopupIndex + 1
-                );
+                setCurrentPopupIndex(currentPopupIndex + 1);
                 setNextPopup(
                     hashMapPopupArea[popupArea[currentPopupIndex + 1]]
                 );
