@@ -51,7 +51,7 @@ const VideoPlayer = <T,>({
         let nextCurrentIndex = 0;
 
         if (time - POPUP_BUFFER < popupArea[currentPopupIndex] + POPUP_BUFFER) {
-            for (let i = 0; i <= currentPopupIndex; i += 1) {
+            for (let i = 0; i <= currentPopupIndex && i; i += 1) {
                 if (time - POPUP_BUFFER <= popupArea[i] + POPUP_BUFFER) {
                     nextCurrentIndex = i;
                 } else {
@@ -153,13 +153,16 @@ const VideoPlayer = <T,>({
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 currentTime >= nextPopup?.popup_timing &&
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                currentTime <= nextPopup?.popup_timing + POPUP_BUFFER * 3
+                currentTime <=
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    nextPopup?.popup_timing + POPUP_BUFFER * 3 &&
+                popupArea[currentPopupIndex] < currentTime
             ) {
                 videoRef.current.pause();
                 setIsPopup(true);
                 setIsPlay(false);
+
                 setCurrentPopupIndex(
                     (currentPopupIndex) => currentPopupIndex + 1
                 );
@@ -214,7 +217,7 @@ const VideoPlayer = <T,>({
                             cloneElement(popupComponent, {
                                 onSubmit: submitPopup,
                                 data: hashMapPopupArea[
-                                    popupArea[currentPopupIndex]
+                                    popupArea[currentPopupIndex - 1]
                                 ]
                             })}
                     </div>

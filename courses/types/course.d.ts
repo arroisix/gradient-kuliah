@@ -18,6 +18,18 @@ interface TrackSubchapterProgressInputData {
     };
 }
 
+interface PopupQuestionAnswerInputData {
+    popup_question_id: string;
+    popup_answer_id: string[];
+}
+
+interface PopupQuestionAnswerResponseData {
+    id: string;
+    popup_question: PopupQuestion;
+    answers: ExerciseAnswer[];
+    is_correct: boolean;
+}
+
 type Course = {
     id: string;
     course_name: string;
@@ -96,6 +108,7 @@ type ExerciseQuestion = {
     question: string;
     solution?: string;
     answers: ExerciseAnswer[];
+    type_name: 'multiple_choice' | 'multiple_answer' | 'short_answer';
 };
 
 type VideoProgress = {

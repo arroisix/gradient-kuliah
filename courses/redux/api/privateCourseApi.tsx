@@ -32,6 +32,16 @@ export const privateCourseApi = baseApi.injectEndpoints({
                     ...data
                 }
             })
+        }),
+        submitPopupQuizAnswer: builder.mutation<
+            PopupQuestionAnswerResponseData,
+            PopupQuestionAnswerInputData
+        >({
+            query: (data: PopupQuestionAnswerInputData) => ({
+                url: `${PRIVATE_COURSE_BASE_URL}save-popup-answer`,
+                method: 'POST',
+                body: data
+            })
         })
     })
 });
@@ -39,5 +49,6 @@ export const privateCourseApi = baseApi.injectEndpoints({
 export const {
     useGetPrivateCourseQuery,
     useGetPrivateListCoursesQuery,
-    useTrackSubchapterProgressMutation
+    useTrackSubchapterProgressMutation,
+    useSubmitPopupQuizAnswerMutation
 } = privateCourseApi;

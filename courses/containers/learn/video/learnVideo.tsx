@@ -19,6 +19,8 @@ const LearnVideo = ({
     const [track] = useTrackSubchapterProgressMutation();
     const { videoPicked } = useLearning();
 
+    console.log(videoPicked);
+
     return (
         <div className="w-full h-full">
             <VideoPlayer
