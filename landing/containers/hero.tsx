@@ -4,11 +4,44 @@ import Button from 'commons/components/elements/Button';
 import EffectButton from 'commons/components/elements/Button/effect';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import HALO from 'vanta/dist/vanta.halo.min';
+import { useState, useRef, useEffect } from 'react';
 
 const Hero = (): JSX.Element => {
     const { setModalAuthOpen } = useAuth();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const router = useRouter();
+
+    const [vantaEffect, setVantaEffect] = useState();
+    const myRef = useRef(null);
+    useEffect(() => {
+        if (!vantaEffect) {
+            setVantaEffect(
+                HALO({
+                    el: myRef.current,
+                    color2: 0x0,
+                    baseColor: 0x0,
+                    mouseControls: true,
+                    touchControls: true,
+                    gyroControls: false,
+                    minHeight: 800.0,
+                    minWidth: 500.0,
+                    backgroundColor: 0x0,
+                    xOffset: 0.35,
+                    yOffset: 0.05,
+                    size: 2,
+                    amplitudeFactor: 30.0,
+                    rotationFactor: 100
+                })
+            );
+        }
+        return () => {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            if (vantaEffect) vantaEffect.destroy();
+        };
+    }, [vantaEffect]);
+
     return (
         <section className="h-screen w-full px-4 md:px-[7.5rem] py-4 flex flex-col justify-center items-center relative">
             <h1
@@ -33,10 +66,7 @@ const Hero = (): JSX.Element => {
                     Belajar dari guru-guru terbaik, video sinematik, dan menarik
                 </span>
             </div>
-            <div className="w-screen h-screen absolute flex justify-center items-center">
-                <div className="hero-blur-red mr-[15vw]" />
-                <div className="hero-blur-blue" />
-            </div>
+            <div className="w-screen h-[80vh] absolute blur-xl" ref={myRef} />
             {isAuthenticated ? (
                 <EffectButton
                     className="bg-accent-purple my-4 z-10"
