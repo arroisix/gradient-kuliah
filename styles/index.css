@@ -90,9 +90,9 @@ input[type='number']::-webkit-outer-spin-button {
 .hero-blur-red {
     width: 344px;
     height: 344px;
-    background: linear-gradient(90.83deg, #9571e3 0.08%, #bf4f44 58.94%);
-    transform: matrix(0.74, -0.67, 0.67, 0.74, 0, 0);
-    background-image: url('/assets/shape1.png');
+    /* background: linear-gradient(90.83deg, #9571e3 0.08%, #bf4f44 58.94%); */
+    /* transform: matrix(0.74, -0.67, 0.67, 0.74, 0, 0); */
+    /* background-image: url('/assets/shape1.png'); */
 }
 
 .hero-blur-blue {
@@ -100,7 +100,7 @@ input[type='number']::-webkit-outer-spin-button {
     height: 344px;
     /* background: #5f2bce; */
     /* filter: blur(200px); */
-    background-image: url('/assets/shape2.png');
+    /* background-image: url('/assets/shape2.png'); */
 }
 
 .sticky-card {

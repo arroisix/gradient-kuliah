@@ -24,7 +24,7 @@ const Hero = (): JSX.Element => {
                     mouseControls: true,
                     touchControls: true,
                     gyroControls: false,
-                    minHeight: 800.0,
+                    minHeight: 500.0,
                     minWidth: 500.0,
                     backgroundColor: 0x0,
                     xOffset: 0.35,
@@ -47,23 +47,12 @@ const Hero = (): JSX.Element => {
             <h1
                 className="text-3xl lg:text-5xl font-bold text-center w-[90vw] md:w-[30rem] z-10"
                 style={{ lineHeight: '1.35' }}>
-                Masa Depan Kuliah Online di{' '}
-                <span
-                    className="text-center flex justify-center items-center -mt-2 lg:-mt-1"
-                    style={{ lineHeight: '0' }}>
-                    Indonesia
-                    <div className="w-12 h-12 ml-1">
-                        <img
-                            src="https://d2uqn6ndx4ow3t.cloudfront.net/assets/indonesia.png"
-                            alt="indonesia"
-                            height="100%"
-                        />
-                    </div>
-                </span>
+                Belajar dengan pengajar terbaik di seluruh Indonesia
             </h1>
             <div className="md:w-1/2 text-center z-10">
-                <span className="text-neutral-300">
-                    Belajar dari guru-guru terbaik, video sinematik, dan menarik
+                <span className="font-body text-neutral-300">
+                    Menyediakan materi belajar yang lengkap untukmu dan video
+                    belajar yang gak ngebosenin.
                 </span>
             </div>
             <div className="w-screen h-[80vh] absolute blur-xl" ref={myRef} />
@@ -82,7 +71,7 @@ const Hero = (): JSX.Element => {
                     </EffectButton>
                     <Button
                         variant="custom"
-                        className="bg-neutral-800 md:my-4 z-10"
+                        className="bg-[#212121] md:my-4 z-10"
                         onClick={() => setModalAuthOpen(1)}>
                         Gabung Sekarang
                     </Button>

@@ -96,7 +96,7 @@ const SaveAnswer = ({
 const PopupQuestionSolution = (): JSX.Element => {
     const { solution } = usePopupQuiz();
     return (
-        <div className="w-full bg-neutral-900 p-4 rounded-lg">
+        <div className="w-full bg-neutral-900 p-4 rounded-lg h-1/2 min-h-[200px] lg:min-h-[130px] my-2">
             <p className="font-bold">Pembahasan</p>
             <div className="h-px bg-neutral-600 w-full my-2" />
             <p className="text-xs">{solution}</p>
@@ -143,7 +143,7 @@ const PopupQuestionContent = ({
                     className="absolute top-4 right-4 text-2xl cursor-pointer text-neutral-600"
                     onClick={onSubmit ? () => onSubmit() : undefined}
                 />
-                <div className="flex gap-2 flex-wrap">
+                <div className="flex gap-2 flex-wrap overflow-y-auto">
                     {data?.question.question_image_url && (
                         <Image
                             src={data?.question.question_image_url as string}
@@ -153,9 +153,11 @@ const PopupQuestionContent = ({
                             className="object-cover"
                         />
                     )}
-                    <p className="text-base leading-6 font-[500]">
-                        {data?.question?.question}
-                    </p>
+                    <div className="w-full">
+                        <p className="text-base leading-6 font-[500]">
+                            {data?.question?.question}
+                        </p>
+                    </div>
                 </div>
                 <PopupQuestionBody
                     data={data}

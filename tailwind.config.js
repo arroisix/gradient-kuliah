@@ -10,7 +10,8 @@ module.exports = {
     ],
     theme: {
         fontFamily: {
-            sans: ['Urbanist', 'sans-serif']
+            sans: ['Raleway', 'sans-serif'],
+            body: ['Open Sans', 'Roboto']
         },
         extend: {
             boxShadow: {
