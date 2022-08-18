@@ -4,6 +4,7 @@ import NeedSubscribe from './NeedSubscribe';
 import ListOfContent from './Content/ListOfContent';
 import useWindowSize from 'commons/hooks/useWindowSize';
 import { useTrackSubchapterProgressMutation } from 'courses/redux/api/privateCourseApi';
+import { getAllVideoChapter } from 'courses/utils';
 
 interface ContentBoxProps {
     chapters: Chapter[];
@@ -21,7 +22,10 @@ const ContentBox = ({
     isSubscribed,
     learningProgress
 }: ContentBoxProps): JSX.Element => {
-    const [videoPicked, setVideoPicked] = useState<Video>(trailer as Video);
+    const [videoPicked, setVideoPicked] = useState<Video>(
+        (trailer as Video) ??
+            getAllVideoChapter(chapters)[0].subchapters[0].video
+    );
     const [notebookPicked, setNotebookPicked] = useState<Notebook>(
         {} as Notebook
     );
@@ -31,7 +35,7 @@ const ContentBox = ({
     return (
         <div className="flex h-full flex-col lg:flex-row">
             <div className="w-full lg:w-2/3 h-full" id="video-section">
-                {videoPicked.is_free || isSubscribed ? (
+                {videoPicked?.is_free || isSubscribed ? (
                     <div className="w-full bg-neutral-900 rounded" id="video">
                         <VideoPlayer
                             height={width <= 768 ? '28vh' : undefined}
@@ -63,7 +67,7 @@ const ContentBox = ({
                     <NeedSubscribe thumbnail={thumbnail} />
                 )}
                 <div className="my-4" id="description">
-                    <p>{videoPicked.description}</p>
+                    <p>{videoPicked?.description}</p>
                 </div>
             </div>
             <div className="w-[32px]" />

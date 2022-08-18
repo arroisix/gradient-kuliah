@@ -1,13 +1,15 @@
 import Link from 'next/link';
-import { FaWhatsapp } from 'react-icons/fa';
-import { MdCopyright } from 'react-icons/md';
+import { FaLine, FaInstagram } from 'react-icons/fa';
+import { MdCopyright, MdMailOutline } from 'react-icons/md';
 
 const Footer = (): JSX.Element => {
     return (
         <footer className="w-full flex flex-col bg-[#121212] px-4 md:px-[7.5rem] py-8">
             <div className="w-full flex flex-col lg:flex-row">
                 <div className="w-full flex flex-col items-center justify-center lg:items-start lg:justify-start">
-                    <h1 className="font-bold text-3xl mb-4">Gradient</h1>
+                    <h1 className="font-bold text-3xl mb-4 font-[Urbanist]">
+                        Gradient
+                    </h1>
                     <Link href="/tentang-kami">
                         <span className="text-neutral-400 cursor-pointer">
                             Tentang Kami
@@ -23,15 +25,36 @@ const Footer = (): JSX.Element => {
                     <h1 className="font-bold text-xl mb-2 mt-2 lg:mb-4 lg:mt-0 text-neutral-400 text-center lg:text-left">
                         Punya pertanyaan
                     </h1>
-                    <Link href="https://api.whatsapp.com/send?phone=+6281310028280">
+                    <a
+                        href="https://www.instagram.com/gradient_idn/"
+                        target="_blank"
+                        rel="noreferrer">
                         <div className="flex items-center justify-center  lg:justify-start text-neutral-400 cursor-pointer">
-                            <FaWhatsapp className="mr-2" />
-                            <span>081310028280</span>
+                            <FaInstagram className="mr-2" />
+                            <span>gradient_idn</span>
                         </div>
-                    </Link>
+                    </a>
+                    <a
+                        href="https://lin.ee/rroxNIp"
+                        target="_blank"
+                        rel="noreferrer">
+                        <div className="flex items-center justify-center  lg:justify-start text-neutral-400 cursor-pointer">
+                            <FaLine className="mr-2" />
+                            <span>@875dxoje</span>
+                        </div>
+                    </a>
+                    <a
+                        href="mailto:business@gradient.academy"
+                        target="_blank"
+                        rel="noreferrer">
+                        <div className="flex items-center justify-center  lg:justify-start text-neutral-400 cursor-pointer">
+                            <MdMailOutline className="mr-2" />
+                            <span>business@gradient.academy</span>
+                        </div>
+                    </a>
                 </div>
             </div>
-            <div className="w-full flex justify-center items-center mt-8">
+            <div className="w-full flex justify-center items-center mt-8 text-neutral-400">
                 <span className="text-accent-violet mr-1">
                     Gradient Academy
                 </span>

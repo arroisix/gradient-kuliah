@@ -9,14 +9,18 @@ const About = ({ course }: { course: Course }): JSX.Element => {
                 </h1>
                 <ContentBox
                     chapters={course?.chapters}
-                    trailer={{
-                        id: 'trailer',
-                        video_url: course?.trailer,
-                        description: course?.description,
-                        duration: '01:30',
-                        is_free: true,
-                        thumbnail: course?.thumbnail
-                    }}
+                    trailer={
+                        course.trailer
+                            ? {
+                                  id: 'trailer',
+                                  video_url: course?.trailer,
+                                  description: course?.description,
+                                  duration: '01:30',
+                                  is_free: true,
+                                  thumbnail: course?.thumbnail
+                              }
+                            : undefined
+                    }
                     learningProgress={course?.learning_progress}
                     isSubscribed={course?.is_subscribed}
                     description={course?.description}

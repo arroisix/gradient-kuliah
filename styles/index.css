@@ -164,3 +164,92 @@ sticky-3.animate {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
 }
+
+.bean-container-1 {
+    position: absolute;
+    width: 1366px;
+    height: 1143.15px;
+    left: 0;
+    top: 0;
+
+    opacity: 0.7;
+    filter: blur(120px);
+}
+
+.bean-container-2 {
+    position: absolute;
+    width: 1366px;
+    height: 1143.15px;
+    left: 652px;
+    top: -66px;
+
+    opacity: 0.7;
+    filter: blur(135px);
+}
+
+.bean1 {
+    position: absolute;
+    left: 80.62%;
+    right: -1.61%;
+
+    background: linear-gradient(90.83deg, #9571E3 0.08%, #BF4F44 58.94%);
+    transform: rotate(-117.26deg);
+    height: 737.12px;
+    width: 969.76px;
+}
+
+.bean2 {
+    position: absolute;
+    left: 40.65%;
+    right: 24.07%;
+    top: 12.42%;
+    bottom: 7.13%;
+    width: 686.83px;
+    height: 473.94px;
+
+    /* Purple */
+
+    background: #5F2BCE;
+    transform: rotate(145.99deg);
+}
+
+.bean3 {
+    position: absolute;
+    left: 29.41%;
+    right: 29.53%;
+    top: 39.73%;
+    bottom: 26.42%;
+    width: 686.83px;
+    height: 473.94px;
+    /* Purple */
+
+    background: #5F2BCE;
+    transform: rotate(94.53deg);
+}
+
+.bean4 {
+    position: absolute;
+    left: 13.88%;
+    right: -10.47%;
+    top: -7.28%;
+    bottom: 19.54%;
+
+    /* Gradient Text Highlighter */
+
+    background: linear-gradient(90.83deg, #9571E3 0.08%, #BF4F44 58.94%);
+    transform: rotate(4.06deg);
+    height: 737.12px;
+    width: 969.76px;
+}
+
+@media screen and (max-width: 720px) {
+    .bean1 {
+        left: 20.62%;
+    }
+
+    .bean2 {
+        left: 10.65%;
+        top: 20.42%;
+        bottom: -12.13%;
+    }
+}

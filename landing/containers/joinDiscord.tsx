@@ -3,22 +3,22 @@ import Button from 'commons/components/elements/Button';
 const JoinDiscord = (): JSX.Element => {
     return (
         <section
-            className="px-[7.5rem] py-4 h-[80vh] flex items-center justify-center flex-col mt-32"
+            className="px-4 md:px-[7.5rem] py-4 h-[80vh] flex items-center justify-center flex-col mt-32"
             style={{
-                // background: `url(assets/discord.png)`,
-                backgroundSize: 'contain',
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'top'
+                background: `url(https://d2uqn6ndx4ow3t.cloudfront.net/assets/discord.png)`,
+                backgroundSize: 'cover',
+                // backgroundRepeat: 'no-repeat'
+                backgroundPosition: 'center'
             }}>
-            <h1 className="text-6xl font-bold bg-gradient-to-r from-accent-purple to-[#B73E32] text-transparent bg-clip-text p-1 text-center">
-                Gabung Discord Gradient
+            <h1 className="text-3xl lg:text-5xl font-bold bg-gradient-to-r from-[#9571E3] to-[#BF4F44] text-transparent bg-clip-text text-center">
+                Gabung Komunitas Gradient
             </h1>
-            <h1 className="text-6xl font-bold"> buat belajar bareng</h1>
-            <span className="text-neutral-400 my-8">
-                <span className="text-white">Gabung</span> bareng orang - orang
-                yang bisa motivasi kamu belajar dan nugas.
+            <span className="text-white font-body my-2 lg:my-4 text-xl lg:text-3xl text-center">
+                ngobrolin keluh kesah kuliah~
             </span>
-            <Button variant="primary">Gabung Discord</Button>
+            <Button variant="primary" href="https://discord.gg/ZC8R3ePHVF">
+                Gabung Discord
+            </Button>
         </section>
     );
 };

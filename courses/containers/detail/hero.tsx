@@ -73,12 +73,22 @@ const Hero = ({ course }: { course: Course }): JSX.Element => {
                             Gabung Kelas
                         </Button>
                     ) : (
-                        <Button
-                            className="w-full md:w-fit text-center"
-                            variant="primary"
-                            onClick={() => setModalAuthOpen(1)}>
-                            Gabung Kelas
-                        </Button>
+                        <div className="flex flex-col-reverse gap-2 lg:justify-start justify-center items-center lg:flex-row w-full">
+                            <Button
+                                className="w-full md:w-fit text-center"
+                                variant="primary"
+                                onClick={() => setModalAuthOpen(1)}>
+                                Gabung Kelas
+                            </Button>
+                            <div>
+                                <p className="font-bold text-xs text-[#353535] line-through">
+                                    Rp50.000/bulan
+                                </p>
+                                <p className="font-bold text-2xl font-white">
+                                    GRATIS!
+                                </p>
+                            </div>
+                        </div>
                     )}
                 </div>
             ) : (

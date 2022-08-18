@@ -1,6 +1,6 @@
 import ContentHighlight from './contentHightlight';
 import Hero from './hero';
-import JoinGradient from './joinGradient';
+import JoinDiscord from './joinDiscord';
 import ValueProposition from './valueProposition';
 
 export default function LandingContainer(): JSX.Element {
@@ -9,7 +9,7 @@ export default function LandingContainer(): JSX.Element {
             <Hero />
             <ContentHighlight />
             <ValueProposition />
-            <JoinGradient />
+            <JoinDiscord />
         </div>
     );
 }

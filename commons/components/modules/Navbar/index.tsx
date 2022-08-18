@@ -114,10 +114,10 @@ const Navbar = ({
         setProfileHovered(true);
     };
 
-    // const onMouseEnterOther = (): void => {
-    //     setHovered(false);
-    //     setProfileHovered(false);
-    // };
+    const onMouseEnterOther = (): void => {
+        setHovered(false);
+        setProfileHovered(false);
+    };
 
     return (
         <header
@@ -126,7 +126,7 @@ const Navbar = ({
             onMouseLeave={onMouseLeaveNavbar}>
             <div className="w-full px-4 md:px-8 py-4 flex items-center justify-between">
                 <Link href={'/'}>
-                    <span className="text-2xl font-bold cursor-pointer">
+                    <span className="text-2xl font-bold cursor-pointer font-[Urbanist]">
                         Gradient
                     </span>
                 </Link>
@@ -156,11 +156,16 @@ const Navbar = ({
                                     </span>
                                 </nav>
                             </Link>
-                            {/* <nav
+                            <nav
                                 className="ml-12 cursor-pointer hover:text-accent-blue"
                                 onMouseEnter={onMouseEnterOther}>
-                                Gabung Discord
-                            </nav> */}
+                                <a
+                                    href="https://discord.gg/ZC8R3ePHVF"
+                                    target="_blank"
+                                    rel="noreferrer">
+                                    Gabung Discord
+                                </a>
+                            </nav>
                             {isAuthenticated ? (
                                 <nav
                                     className={`ml-12 cursor-pointer hover:text-accent-blue relative ${

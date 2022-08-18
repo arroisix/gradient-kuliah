@@ -1,9 +1,4 @@
-import { BsPatchCheck } from 'react-icons/bs';
-import {
-    MdPlayCircleOutline,
-    MdOutlineArticle,
-    MdOutlineGroup
-} from 'react-icons/md';
+import { MdPlayCircleOutline, MdOutlineGroup } from 'react-icons/md';
 
 const BenefitItems = ({
     icons,
@@ -40,21 +35,21 @@ const Benefit = (): JSX.Element => {
                     Yang kamu dapet kalo gabung kelas ini
                 </h1>
                 <div className="mt-12 grid grid-cols-2 gap-4">
-                    <BenefitItems
+                    {/* <BenefitItems
                         icons={<BsPatchCheck />}
                         title="Sertifikat"
                         subtitle="Kamu mendapatkan sertifikat setelah menyelesaikan kelas"
-                    />
+                    /> */}
                     <BenefitItems
                         icons={<MdPlayCircleOutline />}
                         title="Video berkualitas tinggi"
                         subtitle="Video dengan penjelasan yang mudah dipahami dan ramah kuota internet."
                     />
-                    <BenefitItems
+                    {/* <BenefitItems
                         icons={<MdOutlineArticle />}
                         title="Artikel dan latihan soal lengkap"
                         subtitle="Artikel buat referensi nugas, latihan soal buat persiapan ujian."
-                    />
+                    /> */}
                     <BenefitItems
                         icons={<MdOutlineGroup />}
                         title="Komunitas belajar"

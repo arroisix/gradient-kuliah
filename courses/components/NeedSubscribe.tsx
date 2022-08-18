@@ -1,9 +1,4 @@
-import { BsPatchCheck } from 'react-icons/bs';
-import {
-    MdPlayCircleOutline,
-    MdOutlineArticle,
-    MdOutlineGroup
-} from 'react-icons/md';
+import { MdPlayCircleOutline, MdOutlineGroup } from 'react-icons/md';
 import Button from 'commons/components/elements/Button';
 import { useRouter } from 'next/router';
 
@@ -43,18 +38,18 @@ const NeedSubscribe = ({ thumbnail }: { thumbnail?: string }): JSX.Element => {
                 <span className="text-neutral-400">
                     Selain bisa akses materi ini, kamu juga bisa dapat:
                 </span>
-                <BenefitItems
+                {/* <BenefitItems
                     icons={<BsPatchCheck />}
                     title="Sertifikat setelah menyelesaikan kelas"
-                />
+                /> */}
                 <BenefitItems
                     icons={<MdPlayCircleOutline />}
                     title="Semua video materi"
                 />
-                <BenefitItems
+                {/* <BenefitItems
                     icons={<MdOutlineArticle />}
                     title="Semua artikel dan latihan soal"
-                />
+                /> */}
                 <BenefitItems
                     icons={<MdOutlineGroup />}
                     title="Komunitas buat belajar dan nugas bareng"

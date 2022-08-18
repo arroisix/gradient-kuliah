@@ -39,14 +39,19 @@ const MobileNavbar = ({ closeMobile }: MobileNavbarProps): JSX.Element => {
                             <MdChevronRight />
                         </nav>
                     </Link>
-                    {/* <Link href={'/kelas'}>
+                    <Link href={'/kelas'}>
                         <nav className="w-full flex justify-between items-center text-2xl my-4">
                             <span className="flex items-center font-bold">
-                                Gabung Discord
+                                <a
+                                    href="https://discord.gg/ZC8R3ePHVF"
+                                    target="_blank"
+                                    rel="noreferrer">
+                                    Gabung Discord
+                                </a>
                             </span>
                             <MdChevronRight />
                         </nav>
-                    </Link> */}
+                    </Link>
                     {isAuthenticated ? (
                         <>
                             <nav

@@ -27,6 +27,10 @@ const Item = ({
 
 const CONTENT = [
     {
+        thumbnail: 'thumb-4.jpg',
+        title: 'Mengapa ada Bilangan Real?'
+    },
+    {
         thumbnail: 'thumb-2.jpg',
         title: 'Introduksi: Awakening Moment'
     },
@@ -35,8 +39,8 @@ const CONTENT = [
         title: 'Pedang Bermata Dua: Teknologi'
     },
     {
-        thumbnail: 'thumb-3.jpg',
-        title: 'Belajar dari Sejarah'
+        thumbnail: 'thumb-5.jpg',
+        title: 'Sifat Aljabar Bilangan Real'
     }
 ];
 

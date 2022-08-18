@@ -1,7 +1,5 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
-import { MdOutlinePlayCircleFilled } from 'react-icons/md';
-import ReactPlayer from 'react-player';
 import useOnScreen from 'commons/hooks/useOnScreen';
 
 const MobileValueProposition = (): JSX.Element => {
@@ -18,30 +16,16 @@ const MobileValueProposition = (): JSX.Element => {
                 </div>
                 <div className="w-full h-[50vh] sticky-card sticky-1 p-4">
                     <div className="w-full h-full flex justify-center items-center">
-                        <div className="w-full h-full overflow-hidden">
-                            <ReactPlayer
-                                url={
-                                    'https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-page.mp4'
-                                }
-                                controls
-                                config={{
-                                    file: {
-                                        attributes: {
-                                            controlsList: 'nodownload'
-                                        }
-                                    }
-                                }}
-                                className="video-fit"
-                                width="100%"
-                                height="100%"
-                                playIcon={
-                                    <MdOutlinePlayCircleFilled className="text-7xl" />
-                                }
-                                light={
-                                    'https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-thumb-new.png'
-                                }
-                            />
-                        </div>
+                        <img
+                            src="https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-page.gif"
+                            alt="gif"
+                            style={{
+                                height: '100%',
+                                width: '100%',
+                                objectFit: 'cover',
+                                objectPosition: 'top'
+                            }}
+                        />
                     </div>
                 </div>
             </div>
@@ -55,8 +39,8 @@ const MobileValueProposition = (): JSX.Element => {
                 <div className="w-full h-[50vh] sticky-card sticky-2">
                     <div className="w-full h-full flex justify-center items-center">
                         <img
-                            src="https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-page.gif"
-                            alt="gif"
+                            src="https://d2uqn6ndx4ow3t.cloudfront.net/assets/manim-anim.gif"
+                            alt="manim-gif"
                             style={{
                                 height: '100%',
                                 width: '100%',
@@ -79,8 +63,8 @@ const MobileValueProposition = (): JSX.Element => {
                 <div className="w-full h-[50vh] sticky-card sticky-3">
                     <div className="w-full h-full flex justify-center items-center">
                         <img
-                            src="https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-page-new.png"
-                            alt="png"
+                            src="https://d2uqn6ndx4ow3t.cloudfront.net/assets/theo-anim.gif"
+                            alt="story-gif"
                             style={{
                                 height: '100%',
                                 width: '100%',
@@ -112,34 +96,6 @@ const StickyVariants = {
 
 const StickyContent: { [key: string]: JSX.Element } = {
     sticky1: (
-        <div className="w-full h-full flex justify-center items-center">
-            <div className="w-full h-full overflow-hidden">
-                <ReactPlayer
-                    url={
-                        'https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-page.mp4'
-                    }
-                    controls
-                    config={{
-                        file: {
-                            attributes: {
-                                controlsList: 'nodownload'
-                            }
-                        }
-                    }}
-                    className="video-fit"
-                    width="100%"
-                    height="100%"
-                    playIcon={
-                        <MdOutlinePlayCircleFilled className="text-7xl" />
-                    }
-                    light={
-                        'https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-thumb-new.png'
-                    }
-                />
-            </div>
-        </div>
-    ),
-    sticky2: (
         <div className="w-full h-full flex justify-center items-center bg-neutral-600">
             <img
                 src="https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-page.gif"
@@ -153,11 +109,25 @@ const StickyContent: { [key: string]: JSX.Element } = {
             />
         </div>
     ),
-    sticky3: (
-        <div className="w-full h-full flex justify-center items-center bg-neutral-100 overflow-hidden">
+    sticky2: (
+        <div className="w-full h-full flex justify-center items-center bg-neutral-600">
             <img
-                src="https://d2uqn6ndx4ow3t.cloudfront.net/assets/landing-page-new.png"
-                alt="png"
+                src="https://d2uqn6ndx4ow3t.cloudfront.net/assets/manim-anim.gif"
+                alt="manim-gif"
+                style={{
+                    height: '100%',
+                    width: '100%',
+                    objectFit: 'cover',
+                    objectPosition: 'top'
+                }}
+            />
+        </div>
+    ),
+    sticky3: (
+        <div className="w-full h-full flex justify-center items-center bg-neutral-600">
+            <img
+                src="https://d2uqn6ndx4ow3t.cloudfront.net/assets/theo-anim.gif"
+                alt="story-gif"
                 style={{
                     height: '100%',
                     width: '100%',
@@ -210,11 +180,9 @@ const ValueProposition = (): JSX.Element => {
                             ref={firstAnchor}
                         />
                         <div className="w-full h-full flex items-center justify-center">
-                            <h3 className="text-4xl text-neutral-600 font-bold p-[7.25rem]">
-                                <span className="text-white">
-                                    Belajar Tidak Harus Membosankan.
-                                </span>{' '}
-                                Terkurasi agar mudah dipahami dan menarik.
+                            <h3 className="text-4xl text-white font-bold p-[7.25rem]">
+                                Mengenal jurusanmu lebih dekat, dari orang yang
+                                tepat.
                             </h3>
                         </div>
                     </div>
@@ -224,21 +192,17 @@ const ValueProposition = (): JSX.Element => {
                             ref={secondAnchor}
                         />
                         <div className="w-full h-full flex items-center justify-center p-[7.25rem]">
-                            <h3 className="text-4xl text-neutral-600 font-bold">
-                                <span className="text-white">
-                                    Harga Terjangkau.
-                                </span>{' '}
-                                Supaya semua orang punya kesempatan.
+                            <h3 className="text-4xl text-white font-bold">
+                                Materi yang sama, dengan perspektif yang
+                                berbeda.
                             </h3>
                         </div>
                     </div>
                     <div className="h-1/3 relative">
                         <div className="w-full h-full flex items-center justify-center p-[7.25rem]">
-                            <h3 className="text-4xl text-neutral-600 font-bold">
-                                <span className="text-white">
-                                    Artikel, Materi, dan Latihan.
-                                </span>{' '}
-                                Lengkap dalam 1 platform.
+                            <h3 className="text-4xl text-white font-bold">
+                                Menghidupkan yang mati di perkuliahan:
+                                Bercerita.
                             </h3>
                         </div>
                         <div
