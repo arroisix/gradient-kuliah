@@ -192,7 +192,7 @@ sticky-3.animate {
     left: 80.62%;
     right: -1.61%;
 
-    background: linear-gradient(90.83deg, #9571E3 0.08%, #BF4F44 58.94%);
+    background: linear-gradient(90.83deg, #9571e3 0.08%, #bf4f44 58.94%);
     transform: rotate(-117.26deg);
     height: 737.12px;
     width: 969.76px;
@@ -209,7 +209,7 @@ sticky-3.animate {
 
     /* Purple */
 
-    background: #5F2BCE;
+    background: #5f2bce;
     transform: rotate(145.99deg);
 }
 
@@ -223,7 +223,7 @@ sticky-3.animate {
     height: 473.94px;
     /* Purple */
 
-    background: #5F2BCE;
+    background: #5f2bce;
     transform: rotate(94.53deg);
 }
 
@@ -236,7 +236,7 @@ sticky-3.animate {
 
     /* Gradient Text Highlighter */
 
-    background: linear-gradient(90.83deg, #9571E3 0.08%, #BF4F44 58.94%);
+    background: linear-gradient(90.83deg, #9571e3 0.08%, #bf4f44 58.94%);
     transform: rotate(4.06deg);
     height: 737.12px;
     width: 969.76px;
