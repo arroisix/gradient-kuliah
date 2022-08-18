@@ -1,3 +1,4 @@
+import ComingSoon from 'commons/components/elements/Icons/ComingSoon';
 import GreenCheck from 'commons/components/elements/Icons/GreenCheck';
 import Gallery from 'commons/components/modules/Gallery';
 import useWindowSize from 'commons/hooks/useWindowSize';
@@ -68,23 +69,34 @@ const ChapterCatalog = ({
                 {chapter.chapter_name}
             </h4>
             <div>
-                <Gallery
-                    itemCount={chapter.subchapters.length}
-                    itemWidth={width > 768 ? 24 : 18}
-                    row={1}
-                    items={chapter.subchapters.map((subchapter: SubChapter) => (
-                        <ContentCard
-                            subchapter={subchapter}
-                            isLatest={
-                                subchapter.id ===
-                                latest_subchapter?.subchapter.id
-                            }
-                            id={id as string}
-                            chapterId={chapter.id}
-                            key={subchapter.id}
-                        />
-                    ))}
-                />
+                {chapter.subchapters.length > 0 ? (
+                    <Gallery
+                        itemCount={chapter.subchapters.length}
+                        itemWidth={width > 768 ? 24 : 18}
+                        row={1}
+                        items={chapter.subchapters.map(
+                            (subchapter: SubChapter) => (
+                                <ContentCard
+                                    subchapter={subchapter}
+                                    isLatest={
+                                        subchapter.id ===
+                                        latest_subchapter?.subchapter.id
+                                    }
+                                    id={id as string}
+                                    chapterId={chapter.id}
+                                    key={subchapter.id}
+                                />
+                            )
+                        )}
+                    />
+                ) : (
+                    <div className="flex gap-2 items-center py-8">
+                        <ComingSoon />
+                        <span className="font-body text-neutral-400">
+                            Segera hadir
+                        </span>
+                    </div>
+                )}
             </div>
         </div>
     );
