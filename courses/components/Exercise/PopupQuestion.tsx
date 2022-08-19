@@ -151,7 +151,7 @@ const PopupQuestionContent = ({
                     onClick={onSubmit ? () => onSubmit() : undefined}
                 />
                 {!isShowSolution && (
-                    <div className="flex gap-2 flex-wrap overflow-y-auto">
+                    <div className="flex gap-2 flex-wrap overflow-y-auto min-h-[200px] lg:min-h-[130px]">
                         {data?.question.question_image_url && (
                             <img
                                 alt="soal"
