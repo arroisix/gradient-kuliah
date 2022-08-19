@@ -7,7 +7,6 @@ const JoinDiscord = (): JSX.Element => {
             style={{
                 background: `url(https://d2uqn6ndx4ow3t.cloudfront.net/assets/discord.png)`,
                 backgroundSize: 'cover',
-                // backgroundRepeat: 'no-repeat'
                 backgroundPosition: 'center'
             }}>
             <h1 className="text-3xl lg:text-5xl font-bold bg-gradient-to-r from-[#9571E3] to-[#BF4F44] text-transparent bg-clip-text text-center">
@@ -16,7 +15,7 @@ const JoinDiscord = (): JSX.Element => {
             <span className="text-white font-body my-2 lg:my-4 text-xl lg:text-3xl text-center">
                 ngobrolin keluh kesah kuliah~
             </span>
-            <Button variant="primary" href="https://discord.gg/ZC8R3ePHVF">
+            <Button variant="primary" href="https://discord.gg/qU3SB6wxzY">
                 Gabung Discord
             </Button>
         </section>

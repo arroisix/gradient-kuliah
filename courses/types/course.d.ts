@@ -42,6 +42,7 @@ type Course = {
     thumbnail: string;
     lecturers: Lecturer[];
     learning_progress?: LearningProgress;
+    comingSoon?: boolean;
 };
 
 type Lecturer = {

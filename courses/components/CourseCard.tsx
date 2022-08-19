@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 
 const CourseCard = ({ course }: { course: Course }): JSX.Element => {
     const router = useRouter();
@@ -11,7 +12,16 @@ const CourseCard = ({ course }: { course: Course }): JSX.Element => {
                 backgroundColor: '#333333',
                 backgroundSize: 'cover'
             }}
-            onClick={() => router.push(`/kelas/${course.id}`)}
+            onClick={
+                course.comingSoon
+                    ? () =>
+                          toast.info('Segera hadir!', {
+                              position: 'top-center',
+                              theme: 'colored',
+                              hideProgressBar: true
+                          })
+                    : () => router.push(`/kelas/${course.id}`)
+            }
             aria-hidden={true}>
             {course.course_name}
             {course.is_subscribed && (
@@ -22,6 +32,16 @@ const CourseCard = ({ course }: { course: Course }): JSX.Element => {
                             'linear-gradient(267.57deg, #2A0085 47.97%, #5F2BCE 74.23%)'
                     }}>
                     Kelasku
+                </div>
+            )}
+            {course.comingSoon && (
+                <div
+                    className="bg-[#ECD402] px-4 rounded-bl-lg py-1 absolute top-0 right-0 font-bold"
+                    style={{
+                        background:
+                            'linear-gradient(51.63deg, #ECD402 0%, #F03C15 96.9%)'
+                    }}>
+                    Segera hadir
                 </div>
             )}
         </div>

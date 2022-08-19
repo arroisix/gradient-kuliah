@@ -4,7 +4,8 @@ import { useGetPublicListCoursesQuery } from 'courses/redux/api/publicCourseApi'
 
 const Kelas = (): JSX.Element => {
     const { data: courses } = useGetPublicListCoursesQuery(
-        {} as FilterCourseQueryParams
+        {} as FilterCourseQueryParams,
+        { refetchOnMountOrArgChange: true }
     );
 
     return (

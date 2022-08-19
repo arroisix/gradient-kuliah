@@ -54,7 +54,7 @@ const Hero = (): JSX.Element => {
                 <div className="flex flex-col md:flex-row">
                     <EffectButton
                         className="bg-accent-purple my-4 z-10 md:mr-4"
-                        href="https://discord.gg/ZC8R3ePHVF">
+                        href="https://discord.gg/qU3SB6wxzY">
                         Gabung Discord
                     </EffectButton>
                     <Button

@@ -160,7 +160,7 @@ const Navbar = ({
                                 className="ml-12 cursor-pointer hover:text-accent-blue"
                                 onMouseEnter={onMouseEnterOther}>
                                 <a
-                                    href="https://discord.gg/ZC8R3ePHVF"
+                                    href="https://discord.gg/qU3SB6wxzY"
                                     target="_blank"
                                     rel="noreferrer">
                                     Gabung Discord

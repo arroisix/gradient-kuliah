@@ -43,7 +43,7 @@ const MobileNavbar = ({ closeMobile }: MobileNavbarProps): JSX.Element => {
                         <nav className="w-full flex justify-between items-center text-2xl my-4">
                             <span className="flex items-center font-bold">
                                 <a
-                                    href="https://discord.gg/ZC8R3ePHVF"
+                                    href="https://discord.gg/qU3SB6wxzY"
                                     target="_blank"
                                     rel="noreferrer">
                                     Gabung Discord
