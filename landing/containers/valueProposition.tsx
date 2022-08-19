@@ -7,11 +7,8 @@ const MobileValueProposition = (): JSX.Element => {
         <>
             <div className="flex flex-col-reverse md:hidden w-full mb-8">
                 <div className="w-full flex items-center justify-center">
-                    <h3 className="text-2xl text-neutral-600 font-bold p-4">
-                        <span className="text-white">
-                            Belajar Tidak Harus Membosankan.
-                        </span>{' '}
-                        Terkurasi agar mudah dipahami dan menarik.
+                    <h3 className="text-2xl text-white font-bold p-4">
+                        Mengenal jurusanmu lebih dekat, dari orang yang tepat.
                     </h3>
                 </div>
                 <div className="w-full h-[50vh] sticky-card sticky-1 p-4">
@@ -31,9 +28,8 @@ const MobileValueProposition = (): JSX.Element => {
             </div>
             <div className="flex flex-col-reverse md:hidden w-full mb-8">
                 <div className="w-full flex items-center justify-center p-4">
-                    <h3 className="text-2xl text-neutral-600 font-bold">
-                        <span className="text-white">Harga Terjangkau.</span>{' '}
-                        Supaya semua orang punya kesempatan.
+                    <h3 className="text-2xl text-white font-bold">
+                        Materi yang sama, dengan perspektif yang berbeda.
                     </h3>
                 </div>
                 <div className="w-full h-[50vh] sticky-card sticky-2">
@@ -53,11 +49,8 @@ const MobileValueProposition = (): JSX.Element => {
             </div>
             <div className="flex flex-col-reverse md:hidden w-full mb-8">
                 <div className="w-full flex items-center justify-center  p-4">
-                    <h3 className="text-2xl text-neutral-600 font-bold">
-                        <span className="text-white">
-                            Artikel, Materi, dan Latihan.
-                        </span>{' '}
-                        Lengkap dalam 1 platform.
+                    <h3 className="text-2xl text-white font-bold">
+                        Menghidupkan yang mati di perkuliahan: Bercerita.
                     </h3>
                 </div>
                 <div className="w-full h-[50vh] sticky-card sticky-3">
