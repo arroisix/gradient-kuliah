@@ -31,7 +31,6 @@ export default class MyDocument extends Document {
                         async
                         src={`https://www.googletagmanager.com/gtag/js?id=G-33QKLYJL4W`}
                     />
-                    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js" />
                     <script
                         dangerouslySetInnerHTML={{
                             __html: `

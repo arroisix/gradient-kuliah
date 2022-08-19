@@ -23,8 +23,6 @@
         "formik": "^2.2.9",
         "framer-motion": "^6.3.3",
         "graphql": "^16.2.0",
-        "idyll-components": "^6.0.0-alpha.0",
-        "idyll-document": "^4.0.0-alpha.0",
         "moment": "^2.29.3",
         "next": "12.1.6",
         "next-redux-wrapper": "^7.0.5",
@@ -41,8 +39,7 @@
         "react-text-transition": "^3.0.2",
         "react-toastify": "^8.2.0",
         "redux-logger": "^3.0.6",
-        "redux-persist": "^6.0.0",
-        "vanta": "^0.5.22"
+        "redux-persist": "^6.0.0"
     },
     "devDependencies": {
         "@types/node": "^17.0.31",
