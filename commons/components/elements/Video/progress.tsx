@@ -1,9 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-ignore
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { FaPlay, FaPause } from 'react-icons/fa';
-import { BiFullscreen, BiExitFullscreen, BiVolumeFull } from 'react-icons/bi';
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { FaPlay, FaPause, FaVolumeMute, FaVolumeUp } from 'react-icons/fa';
+import {
+    BiFullscreen,
+    BiExitFullscreen,
+    BiVolumeFull,
+    BiVolumeMute
+} from 'react-icons/bi';
 import Spinner from '../Spinner';
 
 interface Time {
@@ -28,6 +33,10 @@ export interface Props {
     isFullScreen: boolean;
     isBuffering?: boolean;
     popupArea?: number[];
+    isMute: boolean;
+    onMute: () => void;
+    volume: number;
+    setVolume: (wantedVolume: number) => void;
 }
 
 function secondsToTime(seconds: number, offset: number): Time {
@@ -57,6 +66,10 @@ export const VideoSeekSlider: React.FC<Props> = ({
     limitTimeTooltipBySides = false,
     isPlay = false,
     onPlay,
+    isMute = false,
+    onMute,
+    volume = 50,
+    setVolume,
     onFullScreen,
     isFullScreen,
     isBuffering,
@@ -69,6 +82,7 @@ export const VideoSeekSlider: React.FC<Props> = ({
     const mobileSeeking = useRef(false);
     const track = useRef<HTMLDivElement>(null);
     const hoverTime = useRef<HTMLDivElement>(null);
+    const [isHoverVolume, setIsHoverVolume] = useState(false);
 
     const hoverTimeValue = useMemo(() => {
         const percent: number = (seekHoverPosition * 100) / trackWidth.current;
@@ -277,9 +291,42 @@ export const VideoSeekSlider: React.FC<Props> = ({
                             aria-hidden>
                             {isPlay ? <FaPause /> : <FaPlay />}
                         </div>
-                        {/* <div className="mr-4 cursor-pointer">
-                            <BiVolumeFull className="text-xl" />
-                        </div> */}
+                        <div
+                            className="mr-4 cursor-pointer flex gap-2"
+                            onMouseEnter={() => setIsHoverVolume(true)}
+                            onMouseLeave={() => setIsHoverVolume(false)}>
+                            {isMute ? (
+                                <FaVolumeMute
+                                    className="text-xl"
+                                    onClick={onMute}
+                                    aria-hidden
+                                />
+                            ) : (
+                                <FaVolumeUp
+                                    className="text-xl"
+                                    onClick={onMute}
+                                    aria-hidden
+                                />
+                            )}
+                            {isHoverVolume && (
+                                <input
+                                    type="range"
+                                    min="0"
+                                    max="100"
+                                    value={volume}
+                                    className="transition-all"
+                                    onChange={(
+                                        event: ChangeEvent<HTMLInputElement>
+                                    ) =>
+                                        setVolume(
+                                            event.target
+                                                .value as unknown as number
+                                        )
+                                    }
+                                    id="myRange"
+                                />
+                            )}
+                        </div>
                         <div>{`${secondsToTime(currentTime, 0).mm}:${
                             secondsToTime(currentTime, 0).ss
                         }/${secondsToTime(max, 0).mm}:${

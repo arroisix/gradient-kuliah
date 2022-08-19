@@ -1,10 +1,8 @@
-import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import VideoPlayer from 'commons/components/elements/Video';
 import useWindowSize from 'commons/hooks/useWindowSize';
 import PopupQuestionContent from 'courses/components/Exercise/PopupQuestion';
 import { useLearning } from 'courses/contexts/LearningProvider';
 import { useTrackSubchapterProgressMutation } from 'courses/redux/api/privateCourseApi';
-import { useSelector } from 'react-redux';
 
 const LearnVideo = ({
     video,
@@ -17,8 +15,7 @@ const LearnVideo = ({
 }): JSX.Element => {
     const { width } = useWindowSize();
     const [track] = useTrackSubchapterProgressMutation();
-    const { videoPicked } = useLearning();
-    const isLoggedIn = useSelector(getIsAuthenticated);
+    const { videoPicked, isSubscribed } = useLearning();
 
     return (
         <div className="w-full h-full">
@@ -30,7 +27,7 @@ const LearnVideo = ({
                 thumbnail={video?.thumbnail}
                 key={video?.video_url}
                 trackProgress={
-                    isLoggedIn
+                    isSubscribed
                         ? async (last_duration, isFinished) =>
                               track({
                                   subchapter_id: subchapter.id as string,

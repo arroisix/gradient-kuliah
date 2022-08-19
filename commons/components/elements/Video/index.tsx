@@ -23,6 +23,8 @@ const VideoPlayer = <T,>({
     const [downloadedTime, setDownloadedTime] = useState(0);
     const [fullscreen, setFullscreen] = useState(false);
     const [isPlay, setIsPlay] = useState(false);
+    const [isMute, setIsMute] = useState(false);
+    const [volume, setVolume] = useState(50);
     const [isBuffering, setIsBuffering] = useState(false);
     const [isPopup, setIsPopup] = useState(false);
     const [popupArea, setPopupArea] = useState<number[]>([]);
@@ -44,6 +46,31 @@ const VideoPlayer = <T,>({
             if (trackProgress) {
                 trackProgress(videoRef.current.currentTime);
             }
+        }
+    };
+
+    const onMuteClick = (): void => {
+        if (videoRef.current.muted) {
+            videoRef.current.muted = false;
+            setIsMute(false);
+        } else {
+            videoRef.current.muted = true;
+            setIsMute(true);
+        }
+    };
+
+    const onChangeVolume = (wantedVolume: number): void => {
+        videoRef.current.volume = wantedVolume / 100;
+        setVolume(wantedVolume);
+
+        if (wantedVolume > 0 && isMute) {
+            videoRef.current.muted = false;
+            setIsMute(false);
+        }
+
+        if (wantedVolume <= 0) {
+            videoRef.current.muted = true;
+            setIsMute(true);
         }
     };
 
@@ -244,10 +271,14 @@ const VideoPlayer = <T,>({
                     progress={downloadedTime}
                     offset={0}
                     isPlay={isPlay}
+                    isMute={isMute}
+                    volume={volume}
+                    setVolume={onChangeVolume}
                     secondsPrefix="00:00:"
                     minutesPrefix="00:"
                     hideHoverTime={false}
                     onPlay={onPlayClick}
+                    onMute={onMuteClick}
                     onFullScreen={onFullScreen}
                     isFullScreen={fullscreen}
                     isBuffering={isBuffering}

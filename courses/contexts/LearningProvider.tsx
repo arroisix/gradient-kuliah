@@ -3,6 +3,7 @@ import React, {
     createContext,
     ReactNode,
     useContext,
+    useEffect,
     useMemo,
     useState
 } from 'react';
@@ -15,6 +16,7 @@ interface LearningContextType {
     notebookPicked: Notebook;
     setSubchapter: (sub: SubChapter) => void;
     subchapter: SubChapter;
+    isSubscribed: boolean;
 }
 
 const LearningContext = createContext<LearningContextType>(
@@ -32,6 +34,11 @@ export function LearningProvider({
     const { type, sub, chapter } = router.query;
     const videoCourse = getAllVideoChapter(course?.chapters);
     const notebookCourse = getAllNotebookChapter(course?.chapters);
+    const [isSubscribed, setIsSubscribed] = useState(false);
+
+    useEffect(() => {
+        setIsSubscribed(course.is_subscribed);
+    }, [course]);
 
     const [subchapter, setSubchapter] = useState(
         videoCourse
@@ -63,11 +70,12 @@ export function LearningProvider({
             videoPicked,
             notebookPicked,
             subchapter,
+            isSubscribed,
             setNotebookPicked,
             setVideoPicked,
             setSubchapter
         }),
-        [videoPicked, notebookPicked, subchapter]
+        [videoPicked, notebookPicked, subchapter, isSubscribed]
     );
 
     return (

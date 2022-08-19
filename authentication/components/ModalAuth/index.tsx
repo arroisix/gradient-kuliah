@@ -27,6 +27,7 @@ const ModalAuth = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
 
     const onGoogleSuccess = async (res: any): Promise<void> => {
         await googleLogin(res.tokenId);
+        setOpen(0);
     };
 
     const onGoogleFailure = (): void => {

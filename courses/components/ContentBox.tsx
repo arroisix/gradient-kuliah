@@ -43,7 +43,7 @@ const ContentBox = ({
                             thumbnail={videoPicked.thumbnail as string}
                             key={videoPicked.video_url as string}
                             trackProgress={
-                                videoPicked.id !== 'trailer'
+                                videoPicked.id !== 'trailer' && isSubscribed
                                     ? async (last_duration, isFinished) =>
                                           track({
                                               subchapter_id:
