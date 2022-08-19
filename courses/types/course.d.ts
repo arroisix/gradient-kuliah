@@ -108,6 +108,7 @@ type ExerciseQuestion = {
     question_image_url: string;
     question: string;
     solution?: string;
+    solution_image_url?: string;
     answers: ExerciseAnswer[];
     type_name: 'multiple_choice' | 'multiple_answer' | 'short_answer';
 };

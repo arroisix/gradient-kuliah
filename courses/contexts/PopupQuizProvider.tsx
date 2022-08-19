@@ -7,12 +7,16 @@ import React, {
     useState
 } from 'react';
 
+type QuizSolution = {
+    text?: string;
+    image?: string;
+};
 interface PopupQuizContextType {
     pickedAnswer: string[];
     clickAnswerChoice: (id: string) => void;
     isPickedAnswer: (id: string) => boolean;
     submitAnswer: () => Promise<void>;
-    solution?: string;
+    solution?: QuizSolution;
     correctAnswer?: string[];
     isSubmitLoading: boolean;
 }
@@ -29,7 +33,7 @@ export function PopupQuizProvider({
     popupQuestion?: PopupQuestion;
 }): JSX.Element {
     const [pickedAnswer, setPickedAnswer] = useState<string[]>([]);
-    const [solution, setSolution] = useState<string>();
+    const [solution, setSolution] = useState<QuizSolution>();
     const [correctAnswer, setCorrectAnswer] = useState<string[]>([]);
     const [save, { isLoading: isSubmitLoading }] =
         useSubmitPopupQuizAnswerMutation();
@@ -67,7 +71,10 @@ export function PopupQuizProvider({
         })) as unknown as SingleResponseData<PopupQuestionAnswerResponseData>;
 
         if (res.data) {
-            setSolution(res.data.popup_question.question.solution);
+            setSolution({
+                text: res.data.popup_question.question.solution,
+                image: res.data.popup_question.question.solution_image_url
+            });
             setCorrectAnswer(
                 res.data.popup_question.question.answers
                     .filter((answer: ExerciseAnswer) => answer.is_answer)
