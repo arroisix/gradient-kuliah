@@ -18,7 +18,7 @@ const LearnVideo = ({
     const { videoPicked, isSubscribed } = useLearning();
 
     return (
-        <div className="w-full h-full">
+        <div className="w-full h-full transition-all">
             <VideoPlayer
                 height={width <= 768 ? '200px' : '600px'}
                 popupData={video?.popup_questions}

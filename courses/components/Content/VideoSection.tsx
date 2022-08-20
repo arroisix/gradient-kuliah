@@ -85,18 +85,19 @@ const VideoSection = ({
                                                     setSubchapter(subchapter);
                                                 }
                                                 if (asThrowPage) {
-                                                    router.push(
-                                                        `/kelas/${id}/belajar?type=video&sub=${subchapter.id}&chapter=${chapter.id}`
-                                                    );
-                                                } else {
-                                                    setVideoPicked(
-                                                        {
-                                                            ...(subchapter.video as Video),
-                                                            subchapter_id:
-                                                                subchapter?.id as string
-                                                        } ?? ({} as Video)
+                                                    router.replace(
+                                                        `/kelas/${id}/belajar?type=video&sub=${subchapter.id}&chapter=${chapter.id}`,
+                                                        undefined,
+                                                        { shallow: true }
                                                     );
                                                 }
+                                                setVideoPicked(
+                                                    {
+                                                        ...(subchapter.video as Video),
+                                                        subchapter_id:
+                                                            subchapter?.id as string
+                                                    } ?? ({} as Video)
+                                                );
                                             } else {
                                                 setModalAuthOpen(1);
                                             }

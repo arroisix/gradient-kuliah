@@ -18,6 +18,11 @@ export const privateCourseApi = baseApi.injectEndpoints({
                 url: `${PRIVATE_COURSE_BASE_URL}${id}`
             })
         }),
+        getSubchapterDetail: builder.query<SubChapter, string>({
+            query: (id: string) => ({
+                url: `${PRIVATE_COURSE_BASE_URL}subchapter/${id}`
+            })
+        }),
         trackSubchapterProgress: builder.mutation<
             SubchapterProgress,
             TrackSubchapterProgressInputData
@@ -50,5 +55,6 @@ export const {
     useGetPrivateCourseQuery,
     useGetPrivateListCoursesQuery,
     useTrackSubchapterProgressMutation,
-    useSubmitPopupQuizAnswerMutation
+    useSubmitPopupQuizAnswerMutation,
+    useGetSubchapterDetailQuery
 } = privateCourseApi;

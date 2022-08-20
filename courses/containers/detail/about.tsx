@@ -10,7 +10,7 @@ const About = ({ course }: { course: Course }): JSX.Element => {
                 <ContentBox
                     chapters={course?.chapters}
                     trailer={
-                        course.trailer
+                        course?.trailer
                             ? {
                                   id: 'trailer',
                                   video_url: course?.trailer,

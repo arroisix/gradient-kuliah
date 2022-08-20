@@ -31,6 +31,7 @@ const LearnContentBox = ({
                 videoPicked={videoPicked}
                 isSubscribed={isSubscribed}
                 isFullHeight
+                asThrowPage
             />
         </div>
     );
