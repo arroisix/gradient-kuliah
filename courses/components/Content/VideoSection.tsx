@@ -81,6 +81,13 @@ const VideoSection = ({
                                         aria-hidden={true}
                                         onClick={() => {
                                             if (isAuthenticated) {
+                                                setVideoPicked(
+                                                    {
+                                                        ...(subchapter.video as Video),
+                                                        subchapter_id:
+                                                            subchapter?.id as string
+                                                    } ?? ({} as Video)
+                                                );
                                                 if (setSubchapter) {
                                                     setSubchapter(subchapter);
                                                 }
@@ -91,13 +98,6 @@ const VideoSection = ({
                                                         { shallow: true }
                                                     );
                                                 }
-                                                setVideoPicked(
-                                                    {
-                                                        ...(subchapter.video as Video),
-                                                        subchapter_id:
-                                                            subchapter?.id as string
-                                                    } ?? ({} as Video)
-                                                );
                                             } else {
                                                 setModalAuthOpen(1);
                                             }

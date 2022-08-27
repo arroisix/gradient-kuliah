@@ -81,6 +81,7 @@ const ContentBox = ({
                     rounded
                     trailerVideo={trailer}
                     isSubscribed={isSubscribed}
+                    asThrowPage
                 />
             </div>
         </div>
