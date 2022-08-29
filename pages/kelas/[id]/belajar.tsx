@@ -64,7 +64,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
     const ids = paths.data.map((course: Course) => ({
         params: {
-            id: course.id
+            id: course.slug
         }
     }));
 

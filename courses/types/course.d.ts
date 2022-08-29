@@ -43,6 +43,7 @@ type Course = {
     lecturers: Lecturer[];
     learning_progress?: LearningProgress;
     comingSoon?: boolean;
+    slug: string;
 };
 
 type Lecturer = {

@@ -20,7 +20,7 @@ const CourseCard = ({ course }: { course: Course }): JSX.Element => {
                               theme: 'colored',
                               hideProgressBar: true
                           })
-                    : () => router.push(`/kelas/${course.id}`)
+                    : () => router.push(`/kelas/${course.slug}`)
             }
             aria-hidden={true}>
             {course.course_name}

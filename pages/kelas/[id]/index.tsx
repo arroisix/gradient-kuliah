@@ -16,6 +16,7 @@ const DetailKelas = ({ id }: { id: string }): JSX.Element => {
         {} as FilterCourseQueryParams
     );
     const { data: course } = useGetPublicCourseQuery(id);
+
     return (
         <Layout courses={courses?.data} shouldTransparent>
             <DetailCourse course={course ? course : ({} as Course)} />
@@ -32,7 +33,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
     const ids = paths.data.map((course: Course) => ({
         params: {
-            id: course.id
+            id: course.slug
         }
     }));
 

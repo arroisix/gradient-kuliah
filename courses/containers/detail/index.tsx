@@ -9,7 +9,7 @@ import Hero from './hero';
 import Lecturer from './lecturer';
 
 const AuthDetailCourse = ({ course }: { course: Course }): JSX.Element => {
-    const { loading, data } = useCourseDetail(course.id);
+    const { loading, data } = useCourseDetail(course.slug);
 
     if (loading) {
         return <h1>Loading...</h1>;
