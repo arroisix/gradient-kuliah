@@ -3,6 +3,7 @@ import { MdOutlineArticle, MdLock, MdChevronRight } from 'react-icons/md';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import ComingSoonContent from './ComingSoonContent';
 
 const NotebookSection = ({
     chapters,
@@ -22,6 +23,8 @@ const NotebookSection = ({
     const { setModalAuthOpen } = useAuth();
     const isAuthenticated = useSelector(getIsAuthenticated);
 
+    console.log(notebookPicked);
+
     return (
         <div className="h-[500px] overflow-y-auto">
             {chapters?.map((chapter) => {
@@ -32,56 +35,55 @@ const NotebookSection = ({
                                 {chapter.chapter_name}
                             </span>
                         </div>
-                        {chapter?.subchapters?.map((subchapter) => {
-                            return (
-                                <div
-                                    key={subchapter.id}
-                                    onClick={() => {
-                                        if (isAuthenticated) {
-                                            if (asThrowPage) {
-                                                router.push(
-                                                    `/kelas/${id}/belajar?type=notebook&sub=${subchapter.id}&chapter=${chapter.id}`
-                                                );
-                                            } else {
+                        {chapter.subchapters.length > 0 ? (
+                            chapter?.subchapters?.map((subchapter) => {
+                                return (
+                                    <div
+                                        key={subchapter.id}
+                                        onClick={() => {
+                                            if (isAuthenticated) {
                                                 setNotebookPicked(
                                                     subchapter.notebook as Notebook
                                                 );
-
-                                                router.push(
-                                                    `/kelas/${id}/belajar?type=notebook&sub=${subchapter.id}&chapter=${chapter.id}`,
-                                                    undefined,
-                                                    { shallow: true }
-                                                );
+                                                if (asThrowPage) {
+                                                    router.push(
+                                                        `/kelas/${id}/belajar?type=notebook&sub=${subchapter.id}&chapter=${chapter.id}`,
+                                                        undefined,
+                                                        { shallow: true }
+                                                    );
+                                                }
+                                            } else {
+                                                setModalAuthOpen(1);
                                             }
-                                        } else {
-                                            setModalAuthOpen(1);
-                                        }
-                                    }}
-                                    aria-hidden
-                                    className={`w-full flex p-4 items-center hover:bg-neutral-600 cursor-pointer ${
-                                        notebookPicked?.id ===
-                                            subchapter.notebook?.id &&
-                                        'bg-neutral-600'
-                                    }`}>
-                                    <div className="flex w-full items-center">
-                                        <div className="w-1/5 flex justify-center">
-                                            {subchapter.notebook?.is_free ||
-                                            isSubscribed ? (
-                                                <MdOutlineArticle className="mr-4 text-xl" />
-                                            ) : (
-                                                <MdLock className="mr-4 text-xl text-amber-400" />
-                                            )}
-                                        </div>
-                                        <div className="w-4/5 flex justify-between">
-                                            <span className="w-full">
-                                                {subchapter.notebook?.title}
-                                            </span>
-                                            <MdChevronRight />
+                                        }}
+                                        aria-hidden
+                                        className={`w-full flex p-4 items-center hover:bg-neutral-600 cursor-pointer ${
+                                            notebookPicked?.id ===
+                                                subchapter.notebook?.id &&
+                                            'bg-neutral-600'
+                                        }`}>
+                                        <div className="flex w-full items-center">
+                                            <div className="w-1/5 flex justify-center">
+                                                {subchapter.notebook?.is_free ||
+                                                isSubscribed ? (
+                                                    <MdOutlineArticle className="mr-4 text-xl" />
+                                                ) : (
+                                                    <MdLock className="mr-4 text-xl text-amber-400" />
+                                                )}
+                                            </div>
+                                            <div className="w-4/5 flex justify-between">
+                                                <span className="w-full">
+                                                    {subchapter.notebook?.title}
+                                                </span>
+                                                <MdChevronRight />
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            );
-                        })}
+                                );
+                            })
+                        ) : (
+                            <ComingSoonContent />
+                        )}
                     </div>
                 );
             })}

@@ -62,7 +62,7 @@ const ListOfContent = ({
                         onClick={() => setTab(0)}>
                         <span>VIDEO</span>
                     </div>
-                    {/* <div
+                    <div
                         aria-hidden={true}
                         className={`text-[1rem] w-full text-center px-1 pt-1 pb-3 cursor-pointer ${
                             tab === 1
@@ -71,7 +71,7 @@ const ListOfContent = ({
                         }`}
                         onClick={() => setTab(1)}>
                         <span>NOTEBOOK</span>
-                    </div> */}
+                    </div>
                 </div>
             </div>
             <div>

@@ -39,7 +39,7 @@ const VideoLearnContainer = ({ course }: { course: Course }): JSX.Element => {
                     )}
                 </div>
             </div>
-            <div className="h-full">
+            <div className="h-full min-w-[30vw]">
                 <LearnContentBox
                     chapters={course.chapters}
                     isSubscribed={course.is_subscribed}

@@ -3,8 +3,9 @@ import { BsPlayCircle } from 'react-icons/bs';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
-import ComingSoon from 'commons/components/elements/Icons/ComingSoon';
+
 import Lock from 'commons/components/elements/Icons/Lock';
+import ComingSoonContent from './ComingSoonContent';
 
 interface VideoSectionProps {
     setVideoPicked: (video: Video) => void;
@@ -130,16 +131,7 @@ const VideoSection = ({
                                 );
                             })
                         ) : (
-                            <div className="flex p-4">
-                                <div className="w-1/5 flex items-center justify-center">
-                                    <div className="mr-4">
-                                        <ComingSoon />
-                                    </div>
-                                </div>
-                                <div className="flex font-body text-neutral-600 flex-col w-4/5">
-                                    <span>Segera Hadir</span>
-                                </div>
-                            </div>
+                            <ComingSoonContent />
                         )}
                     </div>
                 );
