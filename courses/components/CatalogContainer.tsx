@@ -18,7 +18,7 @@ const ContentCard = ({
 }): JSX.Element => {
     return (
         <Link
-            href={`/kelas/${id}/belajar?type=video&sub=${subchapter.id}&chapter=${chapterId}`}
+            href={`/kelas/${id}/belajar/video/${chapterId}/${subchapter.id}}`}
             key={subchapter.id}>
             <div
                 className={`p-4 h-40 w-[18rem] md:h-52 md:w-[24rem] bg-neutral-800 mr-2 rounded-lg cursor-pointer flex justify-end flex-col ${
