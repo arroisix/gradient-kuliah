@@ -10,6 +10,8 @@ import { MdChevronRight, MdContentCopy } from 'react-icons/md';
 import { formatCurrency } from 'commons/utils';
 import { checkExpiry } from '../utils';
 import { NAME_PAYMENT } from './constant';
+import useCopyToClipboard from 'commons/hooks/useCopyToClipboard';
+import { toast } from 'react-toastify';
 
 const STATUS_COLOR: { [key: string]: string } = {
     SUCCESS: 'bg-state-success',
@@ -30,6 +32,15 @@ const TransactionCard = ({
     const { courses } = subscribed_packet || ({} as Packet);
     const router = useRouter();
     const isExpiry = checkExpiry(transaction.deadline as string);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [_, copy] = useCopyToClipboard();
+
+    const copyVA = (): void => {
+        if (transaction) {
+            copy(transaction?.va_number as string);
+            toast.info('Virtual Account berhasil di copy');
+        }
+    };
 
     useEffect(() => {
         if (courses) {
@@ -82,7 +93,7 @@ const TransactionCard = ({
                         <span className="text-xs md:text-base text-neutral-200">
                             Kode Virtual Account
                         </span>
-                        <div className="flex">
+                        <div className="flex" onClick={copyVA} aria-hidden>
                             <h3 className="font-bold text-base md:text-4xl flex cursor-pointer">
                                 {transaction.va_number}
                             </h3>
