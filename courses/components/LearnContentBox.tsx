@@ -19,20 +19,23 @@ const LearnContentBox = ({
         videoPicked,
         notebookPicked
     } = useLearning();
+
     return (
         <div className="flex h-full">
-            <ListOfContent
-                firstTab={firstTab}
-                setSubchapter={setSubchapter}
-                setNotebookPicked={setNotebookPicked}
-                notebookPicked={notebookPicked}
-                chapters={chapters}
-                setVideoPicked={setVideoPicked}
-                videoPicked={videoPicked}
-                isSubscribed={isSubscribed}
-                isFullHeight
-                asThrowPage
-            />
+            {chapters && (
+                <ListOfContent
+                    firstTab={firstTab}
+                    setSubchapter={setSubchapter}
+                    setNotebookPicked={setNotebookPicked}
+                    notebookPicked={notebookPicked}
+                    chapters={chapters}
+                    setVideoPicked={setVideoPicked}
+                    videoPicked={videoPicked}
+                    isSubscribed={isSubscribed}
+                    isFullHeight
+                    asThrowPage
+                />
+            )}
         </div>
     );
 };

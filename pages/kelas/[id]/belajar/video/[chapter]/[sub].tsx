@@ -7,17 +7,25 @@ import { useSelector } from 'react-redux';
 import { useGetPrivateCourseQuery } from 'courses/redux/api/privateCourseApi';
 import withAuth from 'commons/withAuth';
 import VideoLearnContainer from 'courses/containers/learn/video';
+import { useEffect, useState } from 'react';
 
 const Belajar = (): JSX.Element => {
     const router = useRouter();
     const { id } = router.query;
+    const [fetch, setFetch] = useState(false);
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { data: publicCourse } = useGetPublicCourseQuery(id as string, {
-        skip: isAuthenticated || typeof id === 'undefined'
+        skip: isAuthenticated || !fetch
     });
     const { data: privateCourse } = useGetPrivateCourseQuery(id as string, {
-        skip: !isAuthenticated || typeof id === 'undefined'
+        skip: !isAuthenticated || !fetch
     });
+
+    useEffect(() => {
+        if (!fetch && id) {
+            setFetch(true);
+        }
+    }, [id]);
 
     const getCourse = (): Course => {
         if (isAuthenticated) {
