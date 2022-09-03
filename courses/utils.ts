@@ -26,7 +26,7 @@ export const isContentChapterExist = (
     type: 'notebook' | 'video'
 ): boolean => {
     let isExist = false;
-    chapters.forEach((chapter: Chapter) => {
+    chapters?.forEach((chapter: Chapter) => {
         if (
             chapter.subchapters.filter(
                 (subchapter: SubChapter) => subchapter[type] !== null
