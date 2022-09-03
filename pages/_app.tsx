@@ -10,10 +10,22 @@ import useStore, { wrapper } from 'redux/store';
 import 'react-toastify/dist/ReactToastify.css';
 import 'moment/locale/id';
 import { AuthProvider } from 'authentication/contexts/AuthProvider';
+import { useEffect } from 'react';
 
 const store = useStore();
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
+    const loadClientSideOnlyLibrary = async (): Promise<void> => {
+        const TagManager = await import('react-gtm-module');
+        // @ts-ignore
+        TagManager.initialize({
+            gtmId: 'GTM-T3KZ4FB'
+        });
+    };
+    useEffect(() => {
+        loadClientSideOnlyLibrary();
+    }, []);
+
     return (
         <>
             <Head>

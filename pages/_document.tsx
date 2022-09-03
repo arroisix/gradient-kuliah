@@ -27,22 +27,6 @@ export default class MyDocument extends Document {
                         href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap"
                         rel="stylesheet"
                     />
-                    <script
-                        async
-                        src={`https://www.googletagmanager.com/gtag/js?id=G-33QKLYJL4W`}
-                    />
-                    <script
-                        dangerouslySetInnerHTML={{
-                            __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-33QKLYJL4W', {
-              page_path: window.location.pathname,
-            });
-          `
-                        }}
-                    />
                     <link
                         rel="stylesheet"
                         href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css"
