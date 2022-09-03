@@ -8,6 +8,7 @@ import remarkParse from 'remark-parse';
 
 import 'katex/dist/katex.min.css'; //
 import rehypeKatex from 'rehype-katex';
+import NeedSubscribe from 'courses/components/NeedSubscribe';
 
 const LearnNotebook = ({ notebook }: { notebook: Notebook }): JSX.Element => {
     return (
@@ -21,16 +22,24 @@ const LearnNotebook = ({ notebook }: { notebook: Notebook }): JSX.Element => {
                 </p>
             </div>
             <div className="min-h-[50vh] notebook">
-                <ReactMarkdown
-                    remarkPlugins={[
-                        remarkParse,
-                        remarkGfm,
-                        remarkMath,
-                        remarkBreaks
-                    ]}
-                    rehypePlugins={[rehypeKatex, rehypeStringify, rehypeRaw]}>
-                    {notebook.content}
-                </ReactMarkdown>
+                {notebook?.content !== null ? (
+                    <ReactMarkdown
+                        remarkPlugins={[
+                            remarkParse,
+                            remarkGfm,
+                            remarkMath,
+                            remarkBreaks
+                        ]}
+                        rehypePlugins={[
+                            rehypeKatex,
+                            rehypeStringify,
+                            rehypeRaw
+                        ]}>
+                        {notebook?.content}
+                    </ReactMarkdown>
+                ) : (
+                    <NeedSubscribe />
+                )}
             </div>
             <div className="border-b border-neutral-600 my-4" />
             <div className="mb-16">

@@ -1,5 +1,8 @@
 import LearnContentBox from 'courses/components/LearnContentBox';
 import { useLearning } from 'courses/contexts/LearningProvider';
+import { useGetSubchapterDetailQuery } from 'courses/redux/api/privateCourseApi';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import LearnNotebook from './learnNotebook';
 
 const NotebookLearnContainer = ({
@@ -7,7 +10,18 @@ const NotebookLearnContainer = ({
 }: {
     course: Course;
 }): JSX.Element => {
-    const { notebookPicked } = useLearning();
+    const router = useRouter();
+    const { sub } = router.query;
+    const { setNotebookPicked, notebookPicked } = useLearning();
+    const { data } = useGetSubchapterDetailQuery(sub as string, {
+        skip: sub === null || sub === undefined
+    });
+
+    useEffect(() => {
+        if (data) {
+            setNotebookPicked(data.notebook as Notebook);
+        }
+    }, [data]);
 
     return (
         <section className="min-h-screen pt-[65px] flex flex-col md:flex-row justify-between relative">

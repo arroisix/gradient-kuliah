@@ -23,8 +23,6 @@ const NotebookSection = ({
     const { setModalAuthOpen } = useAuth();
     const isAuthenticated = useSelector(getIsAuthenticated);
 
-    console.log(notebookPicked);
-
     return (
         <div className="h-[500px] overflow-y-auto">
             {chapters?.map((chapter) => {
@@ -47,7 +45,7 @@ const NotebookSection = ({
                                                 );
                                                 if (asThrowPage) {
                                                     router.push(
-                                                        `/kelas/${id}/belajar?type=notebook&sub=${subchapter.id}&chapter=${chapter.id}`,
+                                                        `/kelas/${id}/belajar/notebook/${chapter.id}/${subchapter.id}`,
                                                         undefined,
                                                         { shallow: true }
                                                     );

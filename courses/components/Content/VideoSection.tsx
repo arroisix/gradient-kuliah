@@ -94,7 +94,7 @@ const VideoSection = ({
                                                 }
                                                 if (asThrowPage) {
                                                     router.replace(
-                                                        `/kelas/${id}/belajar?type=video&sub=${subchapter.id}&chapter=${chapter.id}`,
+                                                        `/kelas/${id}/belajar/video/${chapter.id}/${subchapter.id}`,
                                                         undefined,
                                                         { shallow: true }
                                                     );

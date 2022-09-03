@@ -25,13 +25,15 @@ const LearningContext = createContext<LearningContextType>(
 
 export function LearningProvider({
     children,
-    course
+    course,
+    type
 }: {
     children: ReactNode;
     course: Course;
+    type: 'video' | 'notebook';
 }): JSX.Element {
     const router = useRouter();
-    const { type, sub, chapter } = router.query;
+    const { sub, chapter } = router.query;
     const videoCourse = getAllVideoChapter(course?.chapters);
     const notebookCourse = getAllNotebookChapter(course?.chapters);
     const [isSubscribed, setIsSubscribed] = useState(false);

@@ -34,7 +34,7 @@ const CourseCard = ({ course }: { course: Course }): JSX.Element => {
                     Kelasku
                 </div>
             )}
-            {course.comingSoon && (
+            {course.is_coming_soon && (
                 <div
                     className="bg-[#ECD402] px-4 rounded-bl-lg py-1 absolute top-0 right-0 font-bold"
                     style={{

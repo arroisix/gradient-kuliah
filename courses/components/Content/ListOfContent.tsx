@@ -1,7 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // import { FaSearch } from 'react-icons/fa';
 // import Input from 'src/commons/components/elements/Form/input';
-import { getAllVideoChapter, getAllNotebookChapter } from 'courses/utils';
+import {
+    getAllVideoChapter,
+    getAllNotebookChapter,
+    isContentChapterExist
+} from 'courses/utils';
 import NotebookSection from './NotebookSection';
 import VideoSection from './VideoSection';
 
@@ -33,6 +37,14 @@ const ListOfContent = ({
     isFullHeight?: boolean;
 }): JSX.Element => {
     const [tab, setTab] = useState(firstTab ?? 0);
+    const isVideoContentExist = isContentChapterExist(chapters, 'video');
+    const isNotebookContentExist = isContentChapterExist(chapters, 'notebook');
+
+    useEffect(() => {
+        if (!isVideoContentExist) {
+            setTab(1);
+        }
+    }, [isVideoContentExist, isNotebookContentExist]);
 
     return (
         <div
@@ -52,26 +64,30 @@ const ListOfContent = ({
                     />
                 </div> */}
                 <div className="w-full flex">
-                    <div
-                        aria-hidden={true}
-                        className={`text-[1rem] w-full text-center px-1 pt-1 pb-3 cursor-pointer ${
-                            tab === 0
-                                ? 'border-b-2 border-accent-blue font-bold text-accent-blue'
-                                : ''
-                        }`}
-                        onClick={() => setTab(0)}>
-                        <span>VIDEO</span>
-                    </div>
-                    <div
-                        aria-hidden={true}
-                        className={`text-[1rem] w-full text-center px-1 pt-1 pb-3 cursor-pointer ${
-                            tab === 1
-                                ? 'border-b-2 border-accent-blue font-bold text-accent-blue'
-                                : ''
-                        }`}
-                        onClick={() => setTab(1)}>
-                        <span>NOTEBOOK</span>
-                    </div>
+                    {isVideoContentExist && (
+                        <div
+                            aria-hidden={true}
+                            className={`text-[1rem] w-full text-center px-1 pt-1 pb-3 cursor-pointer ${
+                                tab === 0
+                                    ? 'border-b-2 border-accent-blue font-bold text-accent-blue'
+                                    : ''
+                            }`}
+                            onClick={() => setTab(0)}>
+                            <span>VIDEO</span>
+                        </div>
+                    )}
+                    {isNotebookContentExist && (
+                        <div
+                            aria-hidden={true}
+                            className={`text-[1rem] w-full text-center px-1 pt-1 pb-3 cursor-pointer ${
+                                tab === 1
+                                    ? 'border-b-2 border-accent-blue font-bold text-accent-blue'
+                                    : ''
+                            }`}
+                            onClick={() => setTab(1)}>
+                            <span>NOTEBOOK</span>
+                        </div>
+                    )}
                 </div>
             </div>
             <div>

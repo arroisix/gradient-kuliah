@@ -39,13 +39,6 @@ const PrivateCourses = ({ myClass }: { myClass: boolean }): JSX.Element => {
                 courses.map((course: Course) => (
                     <CourseCard course={course} key={course.id} />
                 ))}
-            {!loading &&
-                COMING_SOON_COURSE.map((course) => (
-                    <CourseCard
-                        course={course as unknown as Course}
-                        key={course.thumbnail}
-                    />
-                ))}
         </CourseContainer>
     );
 };

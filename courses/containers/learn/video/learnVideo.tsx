@@ -20,7 +20,7 @@ const LearnVideo = ({
 
     return (
         <div className="w-full h-full transition-all">
-            {videoPicked.video_url !== null ? (
+            {videoPicked?.video_url !== null ? (
                 <VideoPlayer
                     height={width <= 768 ? '200px' : '600px'}
                     popupData={video?.popup_questions}

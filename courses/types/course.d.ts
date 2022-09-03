@@ -44,6 +44,9 @@ type Course = {
     learning_progress?: LearningProgress;
     comingSoon?: boolean;
     slug: string;
+    price?: number;
+    discount?: number;
+    is_coming_soon?: boolean;
 };
 
 type Lecturer = {

@@ -3,11 +3,32 @@ import Button from 'commons/components/elements/Button';
 import useWindowSize from 'commons/hooks/useWindowSize';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { formatter } from 'courses/utils';
 
 const Hero = ({ course }: { course: Course }): JSX.Element => {
     const { setModalAuthOpen } = useAuth();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { width } = useWindowSize();
+
+    const calculatePrice = (): string => {
+        if (course.price === null) {
+            return 'GRATIS';
+        }
+
+        if (course.discount) {
+            if (course.discount >= 100) {
+                return 'GRATIS';
+            }
+
+            const calcPrice =
+                (course.price as number) -
+                (course.price as number) * (course.discount / 100);
+
+            return formatter.format(calcPrice).split(',')[0];
+        }
+
+        return formatter.format(course.price as number).split(',')[0];
+    };
 
     return (
         <section
@@ -74,11 +95,17 @@ const Hero = ({ course }: { course: Course }): JSX.Element => {
                                 Gabung Kelas
                             </Button>
                             <div>
-                                <p className="font-bold text-xs text-[#353535] line-through">
-                                    Rp50.000/bulan
-                                </p>
+                                {course.discount && (
+                                    <p className="font-bold text-xs text-[#353535] line-through">
+                                        {`${
+                                            formatter
+                                                .format(course.price as number)
+                                                .split(',')[0]
+                                        }/bulan`}
+                                    </p>
+                                )}
                                 <p className="font-bold text-2xl font-white">
-                                    GRATIS!
+                                    {`${calculatePrice()}/bulan`}
                                 </p>
                             </div>
                         </div>
@@ -91,11 +118,17 @@ const Hero = ({ course }: { course: Course }): JSX.Element => {
                                 Gabung Kelas
                             </Button>
                             <div>
-                                <p className="font-bold text-xs text-[#353535] line-through">
-                                    Rp50.000/bulan
-                                </p>
+                                {course.discount && (
+                                    <p className="font-bold text-xs text-[#353535] line-through">
+                                        {`${
+                                            formatter
+                                                .format(course.price as number)
+                                                .split(',')[0]
+                                        }/bulan`}
+                                    </p>
+                                )}
                                 <p className="font-bold text-2xl font-white">
-                                    GRATIS!
+                                    {`${calculatePrice()}/bulan`}
                                 </p>
                             </div>
                         </div>
