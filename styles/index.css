@@ -255,46 +255,45 @@ sticky-3.animate {
 }
 
 .notebook {
-    font-family: "Open Sans", "Roboto";
-  }
-  
-  .notebook > h1 {
+    font-family: 'Open Sans', 'Roboto';
+}
+
+.notebook > h1 {
     font-size: 2em;
     font-weight: bold;
-  }
-  
-  .notebook > pre {
+}
+
+.notebook > pre {
     padding: 1em;
     background-color: gray;
     border-radius: 1rem;
-  }
-  
-  .notebook > h2 {
+}
+
+.notebook > h2 {
     font-size: 1.5em;
     font-weight: bolder;
-  }
-  
-  .notebook > h3 {
+}
+
+.notebook > h3 {
     font-size: 1.17em;
     font-weight: bolder;
-  }
-  
-  .notebook > h4 {
+}
+
+.notebook > h4 {
     font-size: 1em;
     font-weight: bolder;
-  }
-  
-  .notebook > h5 {
+}
+
+.notebook > h5 {
     font-size: 0.83em;
     font-weight: bolder;
-  }
-  
-  .notebook > h6 {
+}
+
+.notebook > h6 {
     font-size: 0.67em;
     font-weight: bolder;
-  }
-  
-  .notebook > ol {
+}
+
+.notebook > ol {
     list-style-type: decimal;
-  }
-  
+}
