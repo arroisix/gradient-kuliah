@@ -39,7 +39,18 @@
         "react-text-transition": "^3.0.2",
         "react-toastify": "^8.2.0",
         "redux-logger": "^3.0.6",
-        "redux-persist": "^6.0.0"
+        "redux-persist": "^6.0.0",
+        "react-markdown": "^8.0.3",
+        "rehype-highlight": "^5.0.2",
+        "rehype-katex": "^6.0.2",
+        "rehype-mathjax": "^4.0.2",
+        "rehype-raw": "^6.1.1",
+        "rehype-stringify": "^9.0.3",
+        "remark-breaks": "^3.0.2",
+        "remark-gfm": "^3.0.1",
+        "remark-math": "^5.1.1",
+        "remark-parse": "^10.0.1",
+        "remark-rehype": "^10.1.0"
     },
     "devDependencies": {
         "@types/node": "^17.0.31",

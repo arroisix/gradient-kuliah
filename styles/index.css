@@ -253,3 +253,48 @@ sticky-3.animate {
         bottom: -12.13%;
     }
 }
+
+.notebook {
+    font-family: "Open Sans", "Roboto";
+  }
+  
+  .notebook > h1 {
+    font-size: 2em;
+    font-weight: bold;
+  }
+  
+  .notebook > pre {
+    padding: 1em;
+    background-color: gray;
+    border-radius: 1rem;
+  }
+  
+  .notebook > h2 {
+    font-size: 1.5em;
+    font-weight: bolder;
+  }
+  
+  .notebook > h3 {
+    font-size: 1.17em;
+    font-weight: bolder;
+  }
+  
+  .notebook > h4 {
+    font-size: 1em;
+    font-weight: bolder;
+  }
+  
+  .notebook > h5 {
+    font-size: 0.83em;
+    font-weight: bolder;
+  }
+  
+  .notebook > h6 {
+    font-size: 0.67em;
+    font-weight: bolder;
+  }
+  
+  .notebook > ol {
+    list-style-type: decimal;
+  }
+  

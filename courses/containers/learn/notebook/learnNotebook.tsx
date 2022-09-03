@@ -1,5 +1,13 @@
-// import IdyllDocument from 'idyll-document';
-// import * as components from 'idyll-components';
+import ReactMarkdown from 'react-markdown';
+import remarkMath from 'remark-math';
+import rehypeRaw from 'rehype-raw';
+import remarkGfm from 'remark-gfm';
+import remarkBreaks from 'remark-breaks';
+import rehypeStringify from 'rehype-stringify';
+import remarkParse from 'remark-parse';
+
+import 'katex/dist/katex.min.css'; //
+import rehypeKatex from 'rehype-katex';
 
 const LearnNotebook = ({ notebook }: { notebook: Notebook }): JSX.Element => {
     return (
@@ -12,12 +20,17 @@ const LearnNotebook = ({ notebook }: { notebook: Notebook }): JSX.Element => {
                     Oleh {notebook?.authors[0]?.name}
                 </p>
             </div>
-            <div className="min-h-[50vh]">
-                {/* <IdyllDocument
-                    markup={notebook?.content}
-                    components={components}
-                    datasets={{}}
-                /> */}
+            <div className="min-h-[50vh] notebook">
+                <ReactMarkdown
+                    remarkPlugins={[
+                        remarkParse,
+                        remarkGfm,
+                        remarkMath,
+                        remarkBreaks
+                    ]}
+                    rehypePlugins={[rehypeKatex, rehypeStringify, rehypeRaw]}>
+                    {notebook.content}
+                </ReactMarkdown>
             </div>
             <div className="border-b border-neutral-600 my-4" />
             <div className="mb-16">
