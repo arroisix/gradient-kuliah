@@ -24,7 +24,7 @@ const ContentBox = ({
 }: ContentBoxProps): JSX.Element => {
     const [videoPicked, setVideoPicked] = useState<Video>(
         (trailer as Video) ??
-            getAllVideoChapter(chapters)[0].subchapters[0].video
+            getAllVideoChapter(chapters)[0]?.subchapters[0]?.video
     );
     const [notebookPicked, setNotebookPicked] = useState<Notebook>(
         {} as Notebook
