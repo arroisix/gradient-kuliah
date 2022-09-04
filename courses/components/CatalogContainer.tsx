@@ -2,6 +2,7 @@ import ComingSoon from 'commons/components/elements/Icons/ComingSoon';
 import GreenCheck from 'commons/components/elements/Icons/GreenCheck';
 import Gallery from 'commons/components/modules/Gallery';
 import useWindowSize from 'commons/hooks/useWindowSize';
+import { sortByOrder } from 'courses/utils';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -69,12 +70,12 @@ const ChapterCatalog = ({
                 {chapter.chapter_name}
             </h4>
             <div>
-                {chapter.subchapters.length > 0 ? (
+                {chapter.subchapters && chapter.subchapters.length > 0 ? (
                     <Gallery
                         itemCount={chapter.subchapters.length}
                         itemWidth={width > 768 ? 24 : 18}
                         row={1}
-                        items={chapter.subchapters.map(
+                        items={sortByOrder(chapter.subchapters).map(
                             (subchapter: SubChapter) => (
                                 <ContentCard
                                     subchapter={subchapter}
