@@ -52,7 +52,7 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
                             {moment()
                                 .add(packet.active_duration, 'd')
                                 .format('Do MMMM YYYY')}{' '}
-                            {`(${packet.active_duration / 30} Bulan)`}
+                            {`(4 Bulan + GRATIS 2 Bulan)`}
                         </span>
                     </div>
                     <div className="min-w-[100px] flex justify-end">

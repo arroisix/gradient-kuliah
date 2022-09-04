@@ -1,49 +1,23 @@
 {
     "VA_BNI": {
-        "method": ["ATM BNI", "M Banking"],
+        "method": ["ATM BNI"],
         "step": [
             [
                 {
                     "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                    "description": "Pada menu utama, pilih Menu Transfer"
                 },
                 {
                     "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                    "description": "Lalu pilin menu Virtual Account Billing"
                 },
                 {
                     "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                    "description": "Masukkan kode Virtual Account yang sudah tertera pada informasi diatas"
                 },
                 {
                     "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
-                },
-                {
-                    "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
-                }
-            ],
-            [
-                {
-                    "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
-                },
-                {
-                    "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
-                },
-                {
-                    "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
-                },
-                {
-                    "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
-                },
-                {
-                    "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                    "description": "Tekan Lakukan pembayaran"
                 }
             ]
         ]
@@ -117,72 +91,42 @@
             [
                 {
                     "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                    "description": "Pada menu utama, pilih Menu Transfer"
                 },
                 {
                     "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                    "description": "Lalu pilin menu Virtual Account Billing"
                 },
                 {
                     "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                    "description": "Masukkan kode Virtual Account yang sudah tertera pada informasi diatas"
                 },
                 {
                     "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
-                },
-                {
-                    "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                    "description": "Tekan Lakukan pembayaran"
                 }
             ]
         ]
     },
     "VA_MANDIRI": {
-        "method": ["ATM Mandiri", "Livin"],
+        "method": ["ATM Mandiri"],
         "step": [
             [
                 {
                     "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                    "description": "Pada menu utama, pilih Menu Transfer"
                 },
                 {
                     "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                    "description": "Lalu pilin menu Virtual Account Billing"
                 },
                 {
                     "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                    "description": "Masukkan kode Virtual Account yang sudah tertera pada informasi diatas"
                 },
                 {
                     "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
-                },
-                {
-                    "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
-                }
-            ],
-            [
-                {
-                    "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
-                },
-                {
-                    "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
-                },
-                {
-                    "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
-                },
-                {
-                    "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
-                },
-                {
-                    "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                    "description": "Tekan Lakukan pembayaran"
                 }
             ]
         ]

@@ -40,7 +40,7 @@ const FreeModalCheckout = ({
                         <span className="text-xs text-neutral-400">
                             Langganan hingga{' '}
                             {moment()
-                                .add(packet.active_duration, 'M')
+                                .add(packet.active_duration, 'd')
                                 .format('Do MMMM YYYY')}
                         </span>
                     </div>

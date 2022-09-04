@@ -62,8 +62,9 @@ const TransactionCard = ({
                         <span className="text-xs md:text-base text-neutral-200">
                             Langganan hingga{' '}
                             {moment()
-                                .add(subscribed_packet?.active_duration, 'M')
-                                .format('Do MMMM YYYY')}
+                                .add(subscribed_packet?.active_duration, 'd')
+                                .format('Do MMMM YYYY')}{' '}
+                            {`(4 Bulan + GRATIS 2 Bulan)`}
                         </span>
                     </div>
                     <div className="text-left md:text-right">
