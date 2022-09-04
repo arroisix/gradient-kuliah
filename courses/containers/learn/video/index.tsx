@@ -1,16 +1,19 @@
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import LearnContentBox from 'courses/components/LearnContentBox';
 import { useLearning } from 'courses/contexts/LearningProvider';
 import { useGetSubchapterDetailQuery } from 'courses/redux/api/privateCourseApi';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import LearnVideo from './learnVideo';
 
 const VideoLearnContainer = ({ course }: { course: Course }): JSX.Element => {
     const router = useRouter();
     const { sub } = router.query;
+    const isAuthenticated = useSelector(getIsAuthenticated);
     const { setVideoPicked, subchapter } = useLearning();
     const { data, isLoading } = useGetSubchapterDetailQuery(sub as string, {
-        skip: sub === null || sub === undefined
+        skip: sub === null || sub === undefined || !isAuthenticated
     });
 
     useEffect(() => {

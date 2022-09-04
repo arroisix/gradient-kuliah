@@ -1,8 +1,10 @@
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import LearnContentBox from 'courses/components/LearnContentBox';
 import { useLearning } from 'courses/contexts/LearningProvider';
 import { useGetSubchapterDetailQuery } from 'courses/redux/api/privateCourseApi';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import LearnNotebook from './learnNotebook';
 
 const NotebookLearnContainer = ({
@@ -12,9 +14,10 @@ const NotebookLearnContainer = ({
 }): JSX.Element => {
     const router = useRouter();
     const { sub } = router.query;
+    const isAuthenticated = useSelector(getIsAuthenticated);
     const { setNotebookPicked, notebookPicked } = useLearning();
     const { data } = useGetSubchapterDetailQuery(sub as string, {
-        skip: sub === null || sub === undefined
+        skip: sub === null || sub === undefined || !isAuthenticated
     });
 
     useEffect(() => {

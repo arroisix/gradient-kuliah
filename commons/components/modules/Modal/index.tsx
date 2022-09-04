@@ -30,7 +30,7 @@ const Modal = ({
                             : 'bg-white text-black '
                     }`}
                     onClick={(e) => e.stopPropagation()}>
-                    {!dialog && (
+                    {!permanent && !dialog && (
                         <MdClose
                             className={`absolute top-4 right-4 cursor-pointer font-bold text-xl ${
                                 variant === 'dark' && 'text-white'

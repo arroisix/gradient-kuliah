@@ -8,6 +8,7 @@ import LoginSection from './loginSection';
 import RegisterSection from './registerSection';
 import { toast } from 'react-toastify';
 import useSocialLogin from 'authentication/hooks/useSocialLogin';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 export interface SectionProps {
     changePage: (status: boolean) => void;
@@ -16,6 +17,7 @@ export interface SectionProps {
 
 const ModalAuth = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
     const [isLogin, setIsLogin] = useState(true);
+    const { isPermanent } = useAuth();
 
     const { googleLogin, isSuccess } = useSocialLogin();
 
@@ -35,7 +37,10 @@ const ModalAuth = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
     };
 
     return (
-        <Modal isOpen={isOpen ? 1 : 0} setOpen={() => setOpen(0)}>
+        <Modal
+            isOpen={isOpen ? 1 : 0}
+            setOpen={() => setOpen(0)}
+            permanent={isPermanent}>
             <div className="w-full flex flex-col">
                 <h1 className="text-3xl text-center font-bold mb-8">
                     {isLogin ? 'Masuk' : 'Buat akun'}

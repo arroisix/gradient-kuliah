@@ -5,12 +5,13 @@ import { useGetPublicCourseQuery } from 'courses/redux/api/publicCourseApi';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { useSelector } from 'react-redux';
 import { useGetPrivateCourseQuery } from 'courses/redux/api/privateCourseApi';
-import withAuth from 'commons/withAuth';
 import VideoLearnContainer from 'courses/containers/learn/video';
 import { useEffect, useState } from 'react';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 const Belajar = (): JSX.Element => {
     const router = useRouter();
+    const { setModalAuthOpen } = useAuth();
     const { id } = router.query;
     const [fetch, setFetch] = useState(false);
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -26,6 +27,12 @@ const Belajar = (): JSX.Element => {
             setFetch(true);
         }
     }, [id]);
+
+    useEffect(() => {
+        if (id && !isAuthenticated) {
+            setModalAuthOpen(1, true);
+        }
+    }, [isAuthenticated, id]);
 
     const getCourse = (): Course => {
         if (isAuthenticated) {
@@ -43,4 +50,4 @@ const Belajar = (): JSX.Element => {
     );
 };
 
-export default withAuth(Belajar);
+export default Belajar;

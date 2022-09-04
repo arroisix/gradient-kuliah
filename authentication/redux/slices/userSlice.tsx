@@ -18,6 +18,7 @@ const userSlice = createSlice({
     reducers: {
         removeUser: () => {
             window.localStorage.removeItem('token');
+            window.location.href = '/';
             return { token: null, user: {} as User, is_new_user: false };
         },
         setNewUserFlag: (
