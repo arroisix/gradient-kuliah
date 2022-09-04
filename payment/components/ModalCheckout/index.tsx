@@ -44,14 +44,15 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
             </div>
             <div className="w-full flex flex-col mb-4">
                 <p className="text-xs text-neutral-400">DETAIL PEMBAYARAN</p>
-                <div className="flex items-center w-full mt-2 justify-between">
+                <div className="flex items-start w-full mt-2 justify-between">
                     <div className="w-full">
                         <p className="text-base">{course.course_name}</p>
                         <span className="text-xs text-neutral-400">
                             Langganan hingga{' '}
                             {moment()
-                                .add(packet.active_duration, 'M')
-                                .format('Do MMMM YYYY')}
+                                .add(packet.active_duration, 'd')
+                                .format('Do MMMM YYYY')}{' '}
+                            {`(${packet.active_duration / 30} Bulan)`}
                         </span>
                     </div>
                     <div className="min-w-[100px] flex justify-end">
