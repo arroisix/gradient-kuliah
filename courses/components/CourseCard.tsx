@@ -13,7 +13,7 @@ const CourseCard = ({ course }: { course: Course }): JSX.Element => {
                 backgroundSize: 'cover'
             }}
             onClick={
-                course.comingSoon
+                course.is_coming_soon
                     ? () =>
                           toast.info('Segera hadir!', {
                               position: 'top-center',
