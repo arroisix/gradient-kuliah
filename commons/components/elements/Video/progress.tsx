@@ -327,9 +327,11 @@ export const VideoSeekSlider: React.FC<Props> = ({
                                 />
                             )}
                         </div>
-                        <div>{`${secondsToTime(currentTime, 0).mm}:${
-                            secondsToTime(currentTime, 0).ss
-                        }/${secondsToTime(max, 0).mm}:${
+                        <div>{`${secondsToTime(currentTime, 0).hh}:${
+                            secondsToTime(currentTime, 0).mm
+                        }:${secondsToTime(currentTime, 0).ss}/${
+                            secondsToTime(max, 0).hh
+                        }:${secondsToTime(max, 0).mm}:${
                             secondsToTime(max, 0).ss
                         }`}</div>
                         {isBuffering && <Spinner size="small" />}
