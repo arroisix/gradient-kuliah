@@ -4,7 +4,8 @@ import { getToken } from 'authentication/redux/selectors/userSelector';
 import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
-import Layout from './layout';
+import LoadingBackdrop from './components/elements/LoadingBackdrop';
+
 const withAnon = (WrappedComponent: React.ComponentType) => {
     return (props: JSX.IntrinsicAttributes & { children?: ReactNode }) => {
         // checks whether we are on client / browser or server.
@@ -17,21 +18,13 @@ const withAnon = (WrappedComponent: React.ComponentType) => {
                     router.replace('/kelas');
                 }
 
-                return (
-                    <Layout>
-                        <div>Loading...</div>
-                    </Layout>
-                );
+                return <LoadingBackdrop />;
             }
             return <WrappedComponent {...props} />;
         }
 
         // If we are on server, return null
-        return (
-            <Layout>
-                <div>Loading...</div>
-            </Layout>
-        );
+        return <LoadingBackdrop />;
     };
 };
 

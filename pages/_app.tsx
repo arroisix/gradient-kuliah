@@ -11,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'moment/locale/id';
 import { AuthProvider } from 'authentication/contexts/AuthProvider';
 import { useEffect } from 'react';
+import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 
 const store = useStore();
 
@@ -38,7 +39,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
             <PersistGate
                 /* @ts-ignore */
                 persistor={store.__persistor}
-                loading={<div>Loading...</div>}>
+                loading={<LoadingBackdrop />}>
                 <AuthProvider>
                     <Component {...pageProps} />
                 </AuthProvider>

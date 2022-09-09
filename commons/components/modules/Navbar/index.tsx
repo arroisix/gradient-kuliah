@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 // import { AiOutlineArrowRight } from 'react-icons/ai';
-import { FaWhatsapp } from 'react-icons/fa';
+import { FaInstagram } from 'react-icons/fa';
 import {
     MdArrowDropDown,
     MdClose,
@@ -21,6 +21,7 @@ import {
     getIsAuthenticated
 } from 'authentication/redux/selectors/userSelector';
 import { removeUser } from 'authentication/redux/slices/userSlice';
+import Button from 'commons/components/elements/Button';
 // import CourseCard from 'src/courses/components/CourseCard';
 
 const Navbar = ({
@@ -131,14 +132,14 @@ const Navbar = ({
                     </span>
                 </Link>
                 {paymentPage ? (
-                    <Link href="https://api.whatsapp.com/send?phone=+6281310028280">
-                        <div className="flex rounded-full px-4 py-2 bg-[#0F460F]">
-                            <span className="text-base font-bold flex items-center">
-                                <FaWhatsapp className="mr-2 text-xl" />
-                                Hubungi kami
-                            </span>
-                        </div>
-                    </Link>
+                    <Button
+                        variant="primary"
+                        target="__blank"
+                        href="https://www.instagram.com/gradient_idn/">
+                        <span className="flex items-center">
+                            <FaInstagram className="mr-2" /> Hubungi Kami
+                        </span>
+                    </Button>
                 ) : (
                     <>
                         <div className="hidden md:flex font-bold">

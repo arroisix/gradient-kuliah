@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 import { getToken } from 'authentication/redux/selectors/userSelector';
 import { useSelector } from 'react-redux';
-import Layout from './layout';
+import LoadingBackdrop from './components/elements/LoadingBackdrop';
 
 const withAuth = (WrappedComponent: React.ComponentType) => {
     return (props: JSX.IntrinsicAttributes & { children?: JSX.Element }) => {
@@ -14,22 +14,14 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
             // Also clear token from cookie and localstorage
             if (!accessToken && !rawToken) {
                 window.location.href = '/';
-                return (
-                    <Layout>
-                        <div>Loading...</div>
-                    </Layout>
-                );
+                return <LoadingBackdrop />;
             }
 
             // If this is an accessToken we just render the component that was passed with all its props
 
             return <WrappedComponent {...props} />;
         }
-        return (
-            <Layout>
-                <div>Loading...</div>
-            </Layout>
-        );
+        return <LoadingBackdrop />;
     };
 };
 

@@ -16,4 +16,5 @@ interface BaseButtonProps {
 interface ButtonProps extends BaseButtonProps {
     variant: ButtonVariant;
     size?: ButtonSize;
+    target?: string;
 }

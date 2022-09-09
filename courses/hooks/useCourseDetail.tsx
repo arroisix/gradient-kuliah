@@ -2,7 +2,8 @@ import { useGetPrivateCourseQuery } from 'courses/redux/api/privateCourseApi';
 
 const useCourseDetail = (id: string) => {
     const { isLoading, error, data } = useGetPrivateCourseQuery(id, {
-        refetchOnMountOrArgChange: 30
+        refetchOnMountOrArgChange: 30,
+        skip: id === null || id === undefined
     });
 
     return { loading: isLoading, error, data };

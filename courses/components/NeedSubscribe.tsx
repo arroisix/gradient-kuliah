@@ -1,6 +1,7 @@
 import { MdPlayCircleOutline, MdOutlineGroup } from 'react-icons/md';
 import Button from 'commons/components/elements/Button';
 import { useRouter } from 'next/router';
+import useCourseDetail from 'courses/hooks/useCourseDetail';
 
 const BenefitItems = ({
     icons,
@@ -22,6 +23,7 @@ const BenefitItems = ({
 const NeedSubscribe = ({ thumbnail }: { thumbnail?: string }): JSX.Element => {
     const router = useRouter();
     const { id } = router.query;
+    const { data } = useCourseDetail(id as string);
     return (
         <div className="relative overflow-y-scroll">
             <div className="w-full h-full bg-black absolute top-0 flex justify-center items-center opacity-40" />
@@ -57,7 +59,7 @@ const NeedSubscribe = ({ thumbnail }: { thumbnail?: string }): JSX.Element => {
                 <div className="flex">
                     <Button
                         variant="primary"
-                        href={`/langganan?courseId=${id}`}>
+                        href={`/langganan?courseId=${data?.id}`}>
                         Gabung Kelas
                     </Button>
                 </div>

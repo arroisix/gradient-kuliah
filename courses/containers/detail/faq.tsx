@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Button from 'commons/components/elements/Button';
 
-const CALCULUS_ID = '25474ea4-5bbf-4e3e-95e3-4cec647d95bf';
+const CALCULUS_ID = 'kalkulus1';
 // const CALCULUS_ID = '92d9c460-f1cd-4400-ba2b-3477430a11f9';
 
 const FAQ_CONTENT = [

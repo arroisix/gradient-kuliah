@@ -25,6 +25,7 @@ const Button = ({
     size,
     children,
     type,
+    target,
     disabled
 }: ButtonProps): JSX.Element => {
     const computeVariant = (): string => {
@@ -44,6 +45,19 @@ const Button = ({
 
         return `${styling} ${className}`;
     };
+
+    if (target) {
+        return (
+            <a href={href} target={target}>
+                <div
+                    onMouseEnter={onMouseEnter}
+                    onMouseLeave={onMouseLeave}
+                    className={computeVariant()}>
+                    {children}
+                </div>
+            </a>
+        );
+    }
 
     if (href) {
         return (

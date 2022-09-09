@@ -1,4 +1,5 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import useCourseDetail from 'courses/hooks/useCourseDetail';
 import { useSelector } from 'react-redux';
 import About from './about';
@@ -11,8 +12,8 @@ import Lecturer from './lecturer';
 const AuthDetailCourse = ({ course }: { course: Course }): JSX.Element => {
     const { loading, data } = useCourseDetail(course.slug);
 
-    if (loading) {
-        return <h1>Loading...</h1>;
+    if (!loading) {
+        return <LoadingBackdrop />;
     }
 
     return (
