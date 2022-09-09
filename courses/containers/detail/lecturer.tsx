@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
 const Lecturer = ({ course }: { course: Course }): JSX.Element => {
-    if (course.lecturers.length > 0) {
+    if (course?.lecturers.length > 0) {
         return (
             <div className="px-4 md:px-[7.5rem] mb-32">
                 <h1 className="md:text-center text-2xl md:text-4xl font-bold">

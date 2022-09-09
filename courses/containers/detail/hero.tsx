@@ -11,18 +11,18 @@ const Hero = ({ course }: { course: Course }): JSX.Element => {
     const { width } = useWindowSize();
 
     const calculatePrice = (): string => {
-        if (course.price === null) {
+        if (course?.price === null) {
             return 'GRATIS';
         }
 
-        if (course.discount) {
-            if (course.discount >= 100) {
+        if (course?.discount) {
+            if (course?.discount >= 100) {
                 return 'GRATIS';
             }
 
             const calcPrice =
                 (course.price as number) -
-                (course.price as number) * (course.discount / 100);
+                (course.price as number) * (course?.discount / 100);
 
             return formatter.format(calcPrice).split(',')[0];
         }
@@ -95,11 +95,11 @@ const Hero = ({ course }: { course: Course }): JSX.Element => {
                                 Gabung Kelas
                             </Button>
                             <div>
-                                {course.discount && (
+                                {course?.discount && (
                                     <p className="font-bold text-xs text-[#353535] line-through">
                                         {`${
                                             formatter
-                                                .format(course.price as number)
+                                                .format(course?.price as number)
                                                 .split(',')[0]
                                         }/bulan`}
                                     </p>
@@ -118,11 +118,11 @@ const Hero = ({ course }: { course: Course }): JSX.Element => {
                                 Gabung Kelas
                             </Button>
                             <div>
-                                {course.discount && (
+                                {course?.discount && (
                                     <p className="font-bold text-xs text-[#353535] line-through">
                                         {`${
                                             formatter
-                                                .format(course.price as number)
+                                                .format(course?.price as number)
                                                 .split(',')[0]
                                         }/bulan`}
                                     </p>
