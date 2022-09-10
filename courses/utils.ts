@@ -1,4 +1,4 @@
-export const getAllVideoChapter = (chapters: Chapter[]): [Chapter] => {
+export const getAllVideoChapter = (chapters: Chapter[]): Chapter[] => {
     const videoChapter = chapters?.map((chapter) => {
         const res = chapter?.subchapters
             ?.filter((subchapter) => subchapter.video !== null)
@@ -17,13 +17,13 @@ export const getAllVideoChapter = (chapters: Chapter[]): [Chapter] => {
     });
 
     return (videoChapter as [Chapter])?.sort(
-        (ch1: Chapter, ch2: Chapter) => ch1.order - ch2.order
+        (ch1: Chapter, ch2: Chapter) => ch1?.order - ch2?.order
     );
 };
 
 export const sortByOrder = (subchapter: SubChapter[]): SubChapter[] => {
     const tempUnsorted = [...subchapter];
-    return tempUnsorted?.sort((sc1, sc2) => sc1.order - sc2.order);
+    return tempUnsorted?.sort((sc1, sc2) => sc1?.order - sc2?.order);
 };
 
 export const isContentChapterExist = (
@@ -33,7 +33,7 @@ export const isContentChapterExist = (
     let isExist = false;
     chapters?.forEach((chapter: Chapter) => {
         if (
-            chapter.subchapters.filter(
+            chapter?.subchapters?.filter(
                 (subchapter: SubChapter) => subchapter[type] !== null
             ).length > 0
         ) {

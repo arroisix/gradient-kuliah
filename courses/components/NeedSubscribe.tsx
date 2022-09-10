@@ -2,6 +2,9 @@ import { MdPlayCircleOutline, MdOutlineGroup } from 'react-icons/md';
 import Button from 'commons/components/elements/Button';
 import { useRouter } from 'next/router';
 import useCourseDetail from 'courses/hooks/useCourseDetail';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 const BenefitItems = ({
     icons,
@@ -24,6 +27,9 @@ const NeedSubscribe = ({ thumbnail }: { thumbnail?: string }): JSX.Element => {
     const router = useRouter();
     const { id } = router.query;
     const { data } = useCourseDetail(id as string);
+    const isAuthenticated = useSelector(getIsAuthenticated);
+    const { setModalAuthOpen } = useAuth();
+
     return (
         <div className="relative overflow-y-scroll">
             <div className="w-full h-full bg-black absolute top-0 flex justify-center items-center opacity-40" />
@@ -57,11 +63,19 @@ const NeedSubscribe = ({ thumbnail }: { thumbnail?: string }): JSX.Element => {
                     title="Komunitas buat belajar dan nugas bareng"
                 />
                 <div className="flex">
-                    <Button
-                        variant="primary"
-                        href={`/langganan?courseId=${data?.id}`}>
-                        Gabung Kelas
-                    </Button>
+                    {isAuthenticated ? (
+                        <Button
+                            variant="primary"
+                            href={`/langganan?courseId=${data?.id}`}>
+                            Gabung Kelas
+                        </Button>
+                    ) : (
+                        <Button
+                            variant="primary"
+                            onClick={() => setModalAuthOpen(1)}>
+                            Gabung Kelas
+                        </Button>
+                    )}
                 </div>
             </div>
         </div>

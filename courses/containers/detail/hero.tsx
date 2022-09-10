@@ -21,13 +21,13 @@ const Hero = ({ course }: { course: Course }): JSX.Element => {
             }
 
             const calcPrice =
-                (course.price as number) -
-                (course.price as number) * (course?.discount / 100);
+                (course?.price as number) -
+                (course?.price as number) * (course?.discount / 100);
 
             return formatter.format(calcPrice).split(',')[0];
         }
 
-        return formatter.format(course.price as number).split(',')[0];
+        return formatter.format(course?.price as number).split(',')[0];
     };
 
     return (
