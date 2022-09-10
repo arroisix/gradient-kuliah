@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
 const Lecturer = ({ course }: { course: Course }): JSX.Element => {
-    if (course?.lecturers.length > 0) {
+    if (course?.lecturers?.length > 0) {
         return (
             <div className="px-4 md:px-[7.5rem] mb-32">
                 <h1 className="md:text-center text-2xl md:text-4xl font-bold">
@@ -11,12 +11,12 @@ const Lecturer = ({ course }: { course: Course }): JSX.Element => {
                     {course?.lecturers?.map((lecturer) => {
                         return (
                             <div
-                                key={lecturer.name}
+                                key={lecturer?.name}
                                 className="flex flex-col justify-center md:mx-4">
                                 <div className="flex flex-col justify-center items-center">
                                     <div className="w-[140px] md:w-[270px] bg-neutral-900 rounded mb-2 overflow-hidden">
                                         <Image
-                                            src={lecturer.photo}
+                                            src={lecturer?.photo}
                                             height={400}
                                             width={270}
                                             layout="responsive"
@@ -24,10 +24,10 @@ const Lecturer = ({ course }: { course: Course }): JSX.Element => {
                                         />
                                     </div>
                                     <p className="text-center text-neutral-400">
-                                        {lecturer.name}
+                                        {lecturer?.name}
                                     </p>
                                     <p className="text-center">
-                                        {lecturer.role ??
+                                        {lecturer?.role ??
                                             'Dosen Universitas Dummy'}
                                     </p>
                                 </div>

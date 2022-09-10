@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import VideoPlayer from 'commons/components/elements/Video';
 import NeedSubscribe from './NeedSubscribe';
 import ListOfContent from './Content/ListOfContent';
@@ -22,16 +22,25 @@ const ContentBox = ({
     isSubscribed,
     learningProgress
 }: ContentBoxProps): JSX.Element => {
-    const [videoPicked, setVideoPicked] = useState<Video>(
-        (trailer as Video) ??
-            getAllVideoChapter(chapters)[0]?.subchapters[0]?.video
-    );
+    const [videoPicked, setVideoPicked] = useState<Video>(trailer as Video);
     const [notebookPicked, setNotebookPicked] = useState<Notebook>(
         {} as Notebook
     );
     const isVideoContentExist = isContentChapterExist(chapters, 'video');
     const { width } = useWindowSize();
     const [track] = useTrackSubchapterProgressMutation();
+
+    useEffect(() => {
+        if (chapters) {
+            const videoChapters = getAllVideoChapter(chapters);
+            if (
+                videoChapters.length > 0 &&
+                videoChapters[0].subchapters.length > 0
+            ) {
+                setVideoPicked(videoChapters[0].subchapters[0].video as Video);
+            }
+        }
+    }, [chapters]);
 
     return (
         <div

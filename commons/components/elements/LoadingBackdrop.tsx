@@ -4,6 +4,7 @@ const LoadingBackdrop = (): JSX.Element => {
             <span className="animate-pulse text-4xl font-bold cursor-pointer font-[Urbanist]">
                 Gradient
             </span>
+            <span className="my-4 animate-pulse">Tunggu sebentar...</span>
         </div>
     );
 };

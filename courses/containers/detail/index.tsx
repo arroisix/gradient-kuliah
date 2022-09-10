@@ -12,7 +12,7 @@ import Lecturer from './lecturer';
 const AuthDetailCourse = ({ course }: { course: Course }): JSX.Element => {
     const { loading, data } = useCourseDetail(course.slug);
 
-    if (!loading) {
+    if (loading || !data) {
         return <LoadingBackdrop />;
     }
 
