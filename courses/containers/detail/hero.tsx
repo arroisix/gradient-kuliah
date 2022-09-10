@@ -139,7 +139,7 @@ const Hero = ({ course }: { course: Course }): JSX.Element => {
                     <Button
                         className="w-full md:w-fit text-center"
                         variant="primary"
-                        href={`/kelas/${course?.id}#learning-catalog`}>
+                        href={`/kelas/${course?.slug}#learning-catalog`}>
                         Lanjut Belajar
                     </Button>
                 </div>
