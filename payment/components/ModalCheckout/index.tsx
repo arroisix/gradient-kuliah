@@ -51,8 +51,7 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
                             Langganan hingga{' '}
                             {moment()
                                 .add(packet.active_duration, 'd')
-                                .format('Do MMMM YYYY')}{' '}
-                            {`(4 Bulan + GRATIS 2 Bulan)`}
+                                .format('Do MMMM YYYY')}
                         </span>
                     </div>
                     <div className="min-w-[100px] flex justify-end">
