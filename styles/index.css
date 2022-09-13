@@ -3,10 +3,11 @@
 @import 'tailwindcss/utilities';
 
 @layer base {
-    ul, ol {
-      list-style: revert;
+    ul,
+    ol {
+        list-style: revert;
     }
-  }
+}
 
 html {
     overflow-x: hidden;

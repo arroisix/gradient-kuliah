@@ -40,11 +40,6 @@ const FAQ_CALCULUS = [
         title: 'Ada tutorial dan latihan soal ga?',
         content:
             'Gradient akan memberikan tutorial dan latihan soal. Untuk sementara ini kamu bisa nanya-nanya ke Dedicated Student Tutor di Discord Gradient!'
-    },
-    {
-        title: 'Kenapa free trial?',
-        content:
-            'Sekarang, materi pada kelas Kalkulus I Gradient belum lengkap. Kami akan melengkapi materinya secara bertahap. Oleh karena itu, kelas Kalkulus I masih gratis untuk kamu yang ingin coba!'
     }
 ];
 
