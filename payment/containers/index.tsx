@@ -10,7 +10,9 @@ const SubscriptionContainer = (): JSX.Element => {
 
     return (
         <section className="min-h-screen pt-24 px-4 md:px-[7.5rem]">
-            <h1 className="text-5xl font-bold">Pilih metode pembayaran</h1>
+            <h1 className="text-3xl md:text-5xl font-bold">
+                Pilih metode pembayaran
+            </h1>
             {packet.is_free ? <FreeBox /> : <VirtualAccountBox />}
             {packet.is_free ? (
                 <FreeModalCheckout
