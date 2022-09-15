@@ -31,7 +31,7 @@ const Price = ({ course }: { course: Course }): JSX.Element => {
 
     return (
         <div className="px-4 md:px-[7.5rem] flex flex-col justify-center items-center my-8 md:my-16 h-[30vh] md:h-[50vh]">
-            <h3 className="font-thin text-2xl md:text-4xl">
+            <h3 className="font-thin text-2xl md:text-4xl text-center">
                 Akses instan Semuanya Sekarang!
             </h3>
             {course?.discount && (

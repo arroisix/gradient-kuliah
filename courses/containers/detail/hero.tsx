@@ -69,14 +69,14 @@ const Hero = ({ course }: { course: Course }): JSX.Element => {
                         autoPlay
                         muted
                         loop
-                        className="object-cover w-screen">
+                        className="object-cover w-screen max-h-[80vh]">
                         <source
                             src="https://d2uqn6ndx4ow3t.cloudfront.net/courses/calculus/assets/calculus-teaser-mobile.mp4"
                             type="video/mp4"
                         />
                     </video>
                     <div
-                        className="h-[10vh] w-[105vw] bg-black absolute bottom-32 left-0"
+                        className="h-[10vh] w-[105vw] bg-black absolute bottom-32 -left-2"
                         style={{ filter: 'blur(4px)' }}
                     />
                 </div>

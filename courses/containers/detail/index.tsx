@@ -22,8 +22,8 @@ const AuthDetailCourse = ({ course }: { course: Course }): JSX.Element => {
             <Hero course={data as Course} />
             {!data?.is_subscribed ? (
                 <>
-                    <About course={data as Course} />
                     <Benefit />
+                    <About course={data as Course} />
                     <Price course={course} />
                     <Lecturer course={data as Course} />
                     <Price course={course} />
