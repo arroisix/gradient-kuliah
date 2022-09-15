@@ -8,6 +8,7 @@ import Catalog from './catalog';
 import Faq from './faq';
 import Hero from './hero';
 import Lecturer from './lecturer';
+import Price from './price';
 
 const AuthDetailCourse = ({ course }: { course: Course }): JSX.Element => {
     const { loading, data } = useCourseDetail(course.slug);
@@ -43,9 +44,11 @@ const DetailCourse = ({ course }: { course: Course }): JSX.Element => {
     return (
         <section>
             <Hero course={course} />
-            <About course={course} />
-            <Lecturer course={course} />
             <Benefit />
+            <Lecturer course={course} />
+            <Price course={course} />
+            <About course={course} />
+            <Price course={course} />
             <Faq />
         </section>
     );

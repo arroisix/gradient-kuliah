@@ -1,24 +1,6 @@
 import { FaInstagram } from 'react-icons/fa';
 import Accordion from 'commons/components/elements/Accordion';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 import Button from 'commons/components/elements/Button';
-
-const CALCULUS_ID = 'kalkulus1';
-// const CALCULUS_ID = '92d9c460-f1cd-4400-ba2b-3477430a11f9';
-
-const FAQ_CONTENT = [
-    {
-        title: 'Apa itu Gradient?',
-        content:
-            'Gradient adalah alternatif kuliah online dengan harga terjangkau yang menggabungkan guru-guru terbaik, konten sinematik, pedagogi berdasarkan sains, dan teknologi.'
-    },
-    {
-        title: 'Aku masih SMA, aku memenuhi syarat untuk ikut kelas ini ga?',
-        content:
-            'Iya! Kelas ini didesain agar teman-teman SMA juga bisa mencoba kelas kuliah dan mendapatkan wawasan tentang jurusan teknik sipil & lingkungan. Tujuannya untuk membantu teman-teman ga salah ambil jurusan kuliah.'
-    }
-];
 
 const FAQ_CALCULUS = [
     {
@@ -44,17 +26,6 @@ const FAQ_CALCULUS = [
 ];
 
 const Faq = (): JSX.Element => {
-    const router = useRouter();
-    const [faq, setFaq] = useState(FAQ_CONTENT);
-
-    const { id } = router.query;
-
-    useEffect(() => {
-        if (id && (id as string) === CALCULUS_ID) {
-            setFaq(FAQ_CALCULUS);
-        }
-    }, [id]);
-
     return (
         <div className="w-screen py-16 flex-col px-4 md:px-[7.5rem] mb-16">
             <div className="w-full md:text-center">
@@ -63,7 +34,7 @@ const Faq = (): JSX.Element => {
                 </h1>
             </div>
             <div className="w-full">
-                <Accordion item={faq} />
+                <Accordion item={FAQ_CALCULUS} />
             </div>
             <div className="w-full flex flex-col md:flex-row justify-center items-center mt-16">
                 <p className="md:mr-4">Ada yang mau kamu tanya?</p>

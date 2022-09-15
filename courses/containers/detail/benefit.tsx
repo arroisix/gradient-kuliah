@@ -1,4 +1,4 @@
-import { MdPlayCircleOutline, MdOutlineGroup } from 'react-icons/md';
+import { MdPlayCircleOutline, MdOutlineGroup, MdEdit } from 'react-icons/md';
 
 const BenefitItems = ({
     icons,
@@ -10,13 +10,13 @@ const BenefitItems = ({
     subtitle: string;
 }): JSX.Element => {
     return (
-        <div className="flex flex-col md:flex-row items-center my-4">
-            <div className="text-4xl md:text-2xl mr-2">{icons}</div>
+        <div className="flex my-4 gap-2">
+            <div className="text-4xl md:text-2xl mt-2">{icons}</div>
             <div>
-                <h1 className="text-center md:text-left text-xl md:text-2xl font-bold">
+                <h1 className="md:text-left text-xl md:text-2xl font-bold">
                     {title}
                 </h1>
-                <p className="text-center md:text-left text-neutral-400 text-base">
+                <p className="md:text-left text-neutral-400 text-base mt-2">
                     {subtitle}
                 </p>
             </div>
@@ -26,37 +26,38 @@ const BenefitItems = ({
 
 const Benefit = (): JSX.Element => {
     return (
-        <div className="px-4 md:px-[7.5rem] mb-16 flex flex-col md:flex-row w-full">
-            {/* <div className="w-full md:w-1/2 flex justify-center">
-                <div className="rounded-full w-[365px] h-[365px] bg-neutral-900"></div>
-            </div> */}
-            <div className="w-full mt-4 md:mt-0">
-                <h1 className="text-2xl md:text-4xl font-bold w-full md:w-3/4">
-                    Yang kamu dapet kalo gabung kelas ini
-                </h1>
-                <div className="mt-12 grid grid-cols-2 gap-4">
-                    {/* <BenefitItems
-                        icons={<BsPatchCheck />}
-                        title="Sertifikat"
-                        subtitle="Kamu mendapatkan sertifikat setelah menyelesaikan kelas"
-                    /> */}
-                    <BenefitItems
-                        icons={<MdPlayCircleOutline />}
-                        title="Video berkualitas tinggi"
-                        subtitle="Video dengan penjelasan yang mudah dipahami dan ramah kuota internet."
-                    />
-                    {/* <BenefitItems
-                        icons={<MdOutlineArticle />}
-                        title="Artikel dan latihan soal lengkap"
-                        subtitle="Artikel buat referensi nugas, latihan soal buat persiapan ujian."
-                    /> */}
-                    <BenefitItems
-                        icons={<MdOutlineGroup />}
-                        title="Komunitas belajar"
-                        subtitle="Gabung bareng orang - orang yang bisa motivasi kamu belajar dan nugas."
-                    />
-                </div>
+        <div
+            className="pr-4 pl-4 md:pr-0 md:pl-[7.5rem] flex md:flex-row w-full md:h-[75vh] my-8 md:my-16"
+            id="benefit">
+            <div className="w-screen md:w-[50vw] h-full mt-8 flex flex-col gap-2">
+                <h3 className="text-2xl md:text-4xl font-bold w-full md:w-3/4">
+                    Apa yang bakal kamu dapet kalo gabung kelas ini?
+                </h3>
+                <BenefitItems
+                    icons={<MdPlayCircleOutline />}
+                    title="70+ Video Pembelajaran On Demand"
+                    subtitle="Materi lengkap yang bisa kamu akses kapan aja dan diajar langsung sama dosen terbaik di Indonesia"
+                />
+                <BenefitItems
+                    icons={<MdEdit />}
+                    title="1x Live Tutor/Minggu"
+                    subtitle="Mantepin konsep kalkulus dan bahas soal-soal bareng dedicated tutor"
+                />
+                <BenefitItems
+                    icons={<MdOutlineGroup />}
+                    title="Komunitas Gradient"
+                    subtitle="Belajar dan nugas bareng mahasiswa dari seluruh Indonesia"
+                />
             </div>
+            <div
+                className="h-full w-[50vw] hidden md:flex"
+                style={{
+                    background:
+                        'url(https://d2uqn6ndx4ow3t.cloudfront.net/courses/calculus/assets/benefit-asset.png)',
+                    backgroundSize: 'contain',
+                    backgroundRepeat: 'no-repeat'
+                }}
+            />
         </div>
     );
 };

@@ -77,19 +77,6 @@ const Navbar = ({
         return 'bg-[#171717]';
     };
 
-    const onMouseLeaveKelas = (): void => {
-        if (isNavbarHovered) {
-            setHovered(true);
-        } else {
-            setHovered(false);
-        }
-    };
-
-    const onMouseEnterKelas = (): void => {
-        setProfileHovered(false);
-        setHovered(true);
-    };
-
     const onMouseLeaveNavbar = (): void => {
         if (isHovered) {
             setHovered(false);
@@ -143,20 +130,6 @@ const Navbar = ({
                 ) : (
                     <>
                         <div className="hidden md:flex font-bold">
-                            <Link href={'/kelas'}>
-                                <nav
-                                    className={`ml-12 cursor-pointer hover:text-accent-blue h-full ${
-                                        router.pathname === '/kelas' &&
-                                        'text-accent-blue'
-                                    } ${isHovered && 'text-accent-blue'}`}
-                                    onMouseEnter={onMouseEnterKelas}
-                                    onMouseLeave={onMouseLeaveKelas}>
-                                    <span className="flex items-center">
-                                        Kelas
-                                        {/* {courses && <MdArrowDropDown />} */}
-                                    </span>
-                                </nav>
-                            </Link>
                             <nav
                                 className="ml-12 cursor-pointer hover:text-accent-blue"
                                 onMouseEnter={onMouseEnterOther}>

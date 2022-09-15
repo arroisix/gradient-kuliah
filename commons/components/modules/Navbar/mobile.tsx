@@ -1,11 +1,6 @@
 import Link from 'next/link';
 import { useState } from 'react';
-import {
-    MdChevronRight,
-    MdHistory,
-    MdLogout,
-    MdOutlineBook
-} from 'react-icons/md';
+import { MdChevronRight, MdHistory, MdLogout } from 'react-icons/md';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import { renderName } from 'commons/utils';
 import {
@@ -31,27 +26,17 @@ const MobileNavbar = ({ closeMobile }: MobileNavbarProps): JSX.Element => {
             <div
                 className={`w-full p-4 bg-[#171717] flex justify-between md:hidden`}>
                 <div className="w-full">
-                    <Link href={'/kelas'}>
-                        <nav className="w-full flex justify-between items-center text-2xl my-4">
-                            <span className="flex items-center font-bold">
-                                Kelas
-                            </span>
-                            <MdChevronRight />
-                        </nav>
-                    </Link>
-                    <Link href={'/kelas'}>
-                        <nav className="w-full flex justify-between items-center text-2xl my-4">
-                            <span className="flex items-center font-bold">
-                                <a
-                                    href="https://discord.gg/qU3SB6wxzY"
-                                    target="_blank"
-                                    rel="noreferrer">
-                                    Gabung Discord
-                                </a>
-                            </span>
-                            <MdChevronRight />
-                        </nav>
-                    </Link>
+                    <nav className="w-full flex justify-between items-center text-2xl my-4">
+                        <span className="flex items-center font-bold">
+                            <a
+                                href="https://discord.gg/qU3SB6wxzY"
+                                target="_blank"
+                                rel="noreferrer">
+                                Gabung Discord
+                            </a>
+                        </span>
+                        <MdChevronRight />
+                    </nav>
                     {isAuthenticated ? (
                         <>
                             <nav
@@ -82,18 +67,6 @@ const MobileNavbar = ({ closeMobile }: MobileNavbarProps): JSX.Element => {
                                                     {/* <p className="text-xs text-accent-yellow">
                                                 1 Menunggu pembayaran
                                             </p> */}
-                                                </div>
-                                            </div>
-                                        </Link>
-                                        <Link href={'/kelas/?flag=kelasku'}>
-                                            <div className="flex text-white hover:text-accent-blue  font-normal w-full items-center mb-4">
-                                                <div>
-                                                    <MdOutlineBook className="text-2xl" />
-                                                </div>
-                                                <div className="w-full ml-4">
-                                                    <p className="text-base">
-                                                        Kelasku
-                                                    </p>
                                                 </div>
                                             </div>
                                         </Link>
