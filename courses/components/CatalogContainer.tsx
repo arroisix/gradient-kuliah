@@ -4,22 +4,19 @@ import Gallery from 'commons/components/modules/Gallery';
 import useWindowSize from 'commons/hooks/useWindowSize';
 import { sortByOrder } from 'courses/utils';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
 const ContentCard = ({
-    id,
     subchapter,
     chapterId,
     isLatest
 }: {
-    id: string;
     subchapter: SubChapter;
     chapterId: string;
     isLatest: boolean;
 }): JSX.Element => {
     return (
         <Link
-            href={`/kelas/${id}/belajar/video/${chapterId}/${subchapter.id}`}
+            href={`/kelas/kalkulus1/belajar/video/${chapterId}/${subchapter.id}`}
             key={subchapter.id}>
             <div
                 className={`p-4 h-40 w-[18rem] md:h-52 md:w-[24rem] bg-neutral-800 mr-2 rounded-lg cursor-pointer flex justify-end flex-col ${
@@ -61,8 +58,6 @@ const ChapterCatalog = ({
     latest_subchapter?: SubchapterProgress;
 }): JSX.Element => {
     const { width } = useWindowSize();
-    const router = useRouter();
-    const { id } = router.query;
 
     return (
         <div className="w-full flex flex-col gap-4">
@@ -83,7 +78,6 @@ const ChapterCatalog = ({
                                         subchapter.id ===
                                         latest_subchapter?.subchapter.id
                                     }
-                                    id={id as string}
                                     chapterId={chapter.id}
                                     key={subchapter.id}
                                 />

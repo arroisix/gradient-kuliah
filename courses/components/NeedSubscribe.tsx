@@ -1,4 +1,4 @@
-import { MdPlayCircleOutline, MdOutlineGroup } from 'react-icons/md';
+import { MdPlayCircleOutline, MdOutlineGroup, MdEdit } from 'react-icons/md';
 import Button from 'commons/components/elements/Button';
 import { useRouter } from 'next/router';
 import useCourseDetail from 'courses/hooks/useCourseDetail';
@@ -41,26 +41,20 @@ const NeedSubscribe = ({ thumbnail }: { thumbnail?: string }): JSX.Element => {
                 }}></div>
             <div className="w-full h-full absolute top-0 p-16">
                 <h1 className="text-2xl font-bold">
-                    Gabung kelas untuk mengakses materi ini, yuk!{' '}
+                    Tertarik ngelanjutin materinya? <br /> Yuk gabung kelasnya
+                    sekarang
                 </h1>
                 <span className="text-neutral-400">
                     Selain bisa akses materi ini, kamu juga bisa dapat:
                 </span>
-                {/* <BenefitItems
-                    icons={<BsPatchCheck />}
-                    title="Sertifikat setelah menyelesaikan kelas"
-                /> */}
                 <BenefitItems
                     icons={<MdPlayCircleOutline />}
-                    title="Semua video materi"
+                    title="70+ Video Pembelajaran On Demand"
                 />
-                {/* <BenefitItems
-                    icons={<MdOutlineArticle />}
-                    title="Semua artikel dan latihan soal"
-                /> */}
+                <BenefitItems icons={<MdEdit />} title="1x Live Tutor/Minggu" />
                 <BenefitItems
                     icons={<MdOutlineGroup />}
-                    title="Komunitas buat belajar dan nugas bareng"
+                    title="Komunitas Gradient"
                 />
                 <div className="flex">
                     {isAuthenticated ? (

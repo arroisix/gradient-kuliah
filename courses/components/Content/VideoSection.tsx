@@ -29,7 +29,6 @@ const VideoSection = ({
     isFullHeight
 }: VideoSectionProps): JSX.Element => {
     const router = useRouter();
-    const { id } = router.query;
     const { setModalAuthOpen } = useAuth();
     const isAuthenticated = useSelector(getIsAuthenticated);
 
@@ -94,7 +93,7 @@ const VideoSection = ({
                                                 }
                                                 if (asThrowPage) {
                                                     router.replace(
-                                                        `/kelas/${id}/belajar/video/${chapter.id}/${subchapter.id}`,
+                                                        `/kelas/kalkulus1/belajar/video/${chapter.id}/${subchapter.id}`,
                                                         undefined,
                                                         { shallow: true }
                                                     );

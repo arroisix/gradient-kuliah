@@ -59,7 +59,7 @@ const Price = ({ course }: { course: Course }): JSX.Element => {
                 <Button
                     className="md:w-fit text-center"
                     variant="primary"
-                    href={`/langganan?courseId=kalkulus1`}>
+                    href={`/langganan?courseId=${course.id}`}>
                     Akses Sekarang
                 </Button>
             )}

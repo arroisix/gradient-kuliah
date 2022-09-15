@@ -8,8 +8,7 @@ import {
     MdClose,
     MdHistory,
     MdLogout,
-    MdMenu,
-    MdOutlineBook
+    MdMenu
 } from 'react-icons/md';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import useWindowSize from 'commons/hooks/useWindowSize';
@@ -172,18 +171,6 @@ const Navbar = ({
                                                     {/* <p className="text-xs text-accent-yellow">
                                                 1 Menunggu pembayaran
                                             </p> */}
-                                                </div>
-                                            </div>
-                                        </Link>
-                                        <Link href={'/kelas/?flag=kelasku'}>
-                                            <div className="flex text-white hover:text-accent-blue  font-normal w-full items-center mb-4">
-                                                <div>
-                                                    <MdOutlineBook className="text-2xl" />
-                                                </div>
-                                                <div className="w-full ml-4">
-                                                    <p className="text-base">
-                                                        Kelasku
-                                                    </p>
                                                 </div>
                                             </div>
                                         </Link>

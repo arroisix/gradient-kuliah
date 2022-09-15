@@ -19,7 +19,6 @@ const NotebookSection = ({
     isSubscribed: boolean;
 }): JSX.Element => {
     const router = useRouter();
-    const { id } = router.query;
     const { setModalAuthOpen } = useAuth();
     const isAuthenticated = useSelector(getIsAuthenticated);
 
@@ -45,7 +44,7 @@ const NotebookSection = ({
                                                 );
                                                 if (asThrowPage) {
                                                     router.push(
-                                                        `/kelas/${id}/belajar/notebook/${chapter.id}/${subchapter.id}`,
+                                                        `/kelas/kalkulus1/belajar/notebook/${chapter.id}/${subchapter.id}`,
                                                         undefined,
                                                         { shallow: true }
                                                     );
