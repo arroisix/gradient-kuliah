@@ -3,7 +3,7 @@ import MethodBox from './MethodBox';
 
 const VirtualAccountBox = (): JSX.Element => {
     return (
-        <div className="rounded-lg bg-neutral-900 p-8 w-full mt-4 mb-16">
+        <div className="rounded-lg bg-neutral-900 p-8 w-full">
             <div className="mb-4 flex items-center">
                 <AiFillBank className="text-base mr-2" />
                 <h3 className="text-base font-bold">

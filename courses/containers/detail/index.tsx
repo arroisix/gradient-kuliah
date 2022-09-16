@@ -9,6 +9,7 @@ import Faq from './faq';
 import Hero from './hero';
 import Lecturer from './lecturer';
 import Price from './price';
+import Testimony from './testimony';
 
 const AuthDetailCourse = ({ course }: { course: Course }): JSX.Element => {
     const { loading, data } = useCourseDetail(course.slug);
@@ -50,6 +51,7 @@ const DetailCourse = ({ course }: { course: Course }): JSX.Element => {
             <Lecturer course={course} />
             <Price course={course} />
             <About course={course} />
+            <Testimony />
             <Price course={course} />
             <Faq />
         </section>
