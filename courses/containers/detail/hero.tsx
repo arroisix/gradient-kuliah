@@ -1,6 +1,8 @@
 import Button from 'commons/components/elements/Button';
+import useWindowSize from 'commons/hooks/useWindowSize';
 
 const Hero = ({ course }: { course: Course }): JSX.Element => {
+    const { width } = useWindowSize();
     return (
         <section className="h-screen w-full flex flex-col-reverse md:flex-row justify-end md:justify-center relative">
             <div className="w-full h-screen flex flex-col justify-end md:justify-center pl-4 pr-4 md:pr-0 md:pl-[7.5rem] py-4 z-10 mb-8 md:mb-0">
@@ -10,7 +12,11 @@ const Hero = ({ course }: { course: Course }): JSX.Element => {
                             {course?.course_name}
                         </h1>
                         <div className="w-full md:w-1/3 my-4">
-                            <p>{course?.short_description}</p>
+                            <p>
+                                {width > 768
+                                    ? 'Ilmu pengetahuan yang mengkuantifikasi perubahan.'
+                                    : course.short_description}
+                            </p>
                         </div>
                     </>
                 ) : (
@@ -37,12 +43,17 @@ const Hero = ({ course }: { course: Course }): JSX.Element => {
                         Lanjut Belajar
                     </Button>
                 ) : (
-                    <Button
-                        className="md:w-fit text-center mt-4"
-                        variant="primary"
-                        href={`/#benefit`}>
-                        Info Selengkapnya
-                    </Button>
+                    <div>
+                        <Button
+                            className="md:w-fit text-center mt-4"
+                            variant="primary"
+                            href={`/#benefit`}>
+                            Info Selengkapnya
+                        </Button>
+                        <div className="hidden md:block w-1/3 mt-16">
+                            <p>{course.short_description}</p>
+                        </div>
+                    </div>
                 )}
             </div>
             <div className="hidden md:flex h-screen mt-16 md:mt-0 overflow-hidden absolute top-0 right-0">
