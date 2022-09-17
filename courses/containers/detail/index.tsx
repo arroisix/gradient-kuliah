@@ -27,7 +27,7 @@ const AuthDetailCourse = ({ course }: { course: Course }): JSX.Element => {
                     <Lecturer course={data as Course} />
                     <Price course={course} />
                     <About course={data as Course} />
-                    <Testimony />update 
+                    <Testimony />
                     <Price course={course} secondVariant />
                     <Faq />
                 </>
