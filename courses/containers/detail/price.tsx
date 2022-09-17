@@ -4,7 +4,7 @@ import Button from 'commons/components/elements/Button';
 import { formatter } from 'courses/utils';
 import { useSelector } from 'react-redux';
 
-const Price = ({ course }: { course: Course }): JSX.Element => {
+const Price = ({ course, secondVariant }: { course: Course, secondVariant?: boolean }): JSX.Element => {
     const { setModalAuthOpen } = useAuth();
     const isAuthenticated = useSelector(getIsAuthenticated);
 
@@ -31,9 +31,13 @@ const Price = ({ course }: { course: Course }): JSX.Element => {
 
     return (
         <div className="px-4 md:px-[7.5rem] flex flex-col justify-center items-center my-8 md:my-16 h-[30vh] md:h-[50vh]">
+            {secondVariant  ? 
+            <>
+            <h3 className="font-bold text-2xl md:text-4xl text-center">Jadi Pahan Kalkulus bareng Gradient</h3>
+            </> :
             <h3 className="font-thin text-2xl md:text-4xl text-center">
                 Akses instan Semuanya Sekarang!
-            </h3>
+            </h3> }
             {course?.discount && (
                 <p className="font-bold text-xs line-through text-red-400 flex">
                     <h2 className="text-3xl md:text-5xl text-black">-</h2>

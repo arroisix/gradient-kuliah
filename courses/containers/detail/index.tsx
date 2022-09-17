@@ -24,10 +24,11 @@ const AuthDetailCourse = ({ course }: { course: Course }): JSX.Element => {
             {!data?.is_subscribed ? (
                 <>
                     <Benefit />
-                    <About course={data as Course} />
-                    <Price course={course} />
                     <Lecturer course={data as Course} />
                     <Price course={course} />
+                    <About course={data as Course} />
+                    <Testimony />update 
+                    <Price course={course} secondVariant />
                     <Faq />
                 </>
             ) : (
@@ -52,7 +53,7 @@ const DetailCourse = ({ course }: { course: Course }): JSX.Element => {
             <Price course={course} />
             <About course={course} />
             <Testimony />
-            <Price course={course} />
+            <Price course={course} secondVariant  />
             <Faq />
         </section>
     );
