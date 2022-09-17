@@ -34,8 +34,14 @@ export default class MyDocument extends Document {
                         crossOrigin="anonymous"
                     />
                     <noscript>
-                        <img alt="pixel" style={{display: "hidden"}} src="https://facebook.com/tr?4d=400978621960262&ev=PageView&noscript=1" width="1" height="1"
-                    /></noscript>
+                        <img 
+                            alt="pixel" 
+                            style={{display: "hidden"}} 
+                            src={"https://facebook.com/tr?4d=400978621960262&ev=PageView&noscript=1"} 
+                            width="1" 
+                            height="1"
+                        />
+                    </noscript>
                 </Head>
                 <body>
                     <Main />
