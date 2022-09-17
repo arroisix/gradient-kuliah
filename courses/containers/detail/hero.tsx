@@ -1,4 +1,3 @@
-i
 import Button from 'commons/components/elements/Button';
 import useWindowSize from 'commons/hooks/useWindowSize';
 
