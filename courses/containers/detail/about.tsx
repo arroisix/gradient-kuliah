@@ -4,7 +4,7 @@ const About = ({ course }: { course: Course }): JSX.Element => {
     return (
         <section className="px-4 md:px-[7.5rem] mb-16 md:mb-32">
             <div className="w-full flex flex-col h-full">
-                <h1 className="text-2xl md:text-4xl font-bold mb-2">
+                <h1 className="text-2xl md:text-4xl font-bold mb-2 text-center">
                     Coba gratis video belajar Gradient.
                 </h1>
                 <ContentBox

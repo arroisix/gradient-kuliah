@@ -4,24 +4,19 @@ import Button from 'commons/components/elements/Button';
 
 const FAQ_CALCULUS = [
     {
-        title: 'Kelas Kalkulus I untuk siapa?',
-        content:
-            'Kalkulus I adalah kelas yang wajib diambil oleh yang mengambil jurusan Teknik, MIPA, Keuangan, dan lainnya. Tapi buat kamu yang penasaran tentang ilmu matematika yang mencoba untuk “mengkuantifikasi perubahan” juga bisa ambil kelas ini ya!'
-    },
-    {
-        title: 'Aku masih SMA, bisa ambil kelas ini ga?',
-        content:
-            'Bisa! Kelas Kalkulus I sebenarnya mencakup materi yang sudah pernah diajarin di SMA. Yang membedakan cuma cara mengajarnya, yang mana Gradient menekankan pada konsep dan juga cerita di belakang lahirnya Kalkulus!'
-    },
-    {
         title: 'Apakah kurikulum Kalkulus I - Gradient sesuai dengan universitasku?',
         content:
-            'Gradient akan memastikan kurikulum Kalkulus I lebih lengkap dibandingkan universitas pada umumnya. Kalau ada topik materi yang belum ada, kamu bisa lapor ke Discord Gradient dan kami akan melengkapi topik materi tersebut sesegera mungkin.'
+            'Gradient akan memastikan kurikulum Kalkulus I lebih lengkap dibandingkan universitas pada umumnya. Kalau ada topik materi yang belum ada, kamu bisa lapor ke Gradient'
     },
     {
-        title: 'Ada tutorial dan latihan soal ga?',
+        title: 'Isi tutornya bakal ngapain aja ya?',
         content:
-            'Gradient akan memberikan tutorial dan latihan soal. Untuk sementara ini kamu bisa nanya-nanya ke Dedicated Student Tutor di Discord Gradient!'
+            'Kita bakal review konsep yang belom paham dan kita bakal bahas soal-soal supaya bisa kebayang gimana nerapin teori yang udah dipelajarin. Kamu juga bisa request topik, konsep atau soal apa yang bakal dibahas.'
+    },
+    {
+        title: 'Siapa aja yang bisa ambil kelas ini?',
+        content:
+            'Siapapun bisa ngambil kelas ini yaa! Dari universitas manapun, lagi gap year atau bahkan yang belom kuliah, kamu bisa banget ngikutin kelas ini karna bakal dapetin materi materi dasar dari matematika seperti bilangan, fungsi, turunan dan integral.'
     }
 ];
 
