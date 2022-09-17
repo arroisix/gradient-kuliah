@@ -1,3 +1,4 @@
+i
 import Button from 'commons/components/elements/Button';
 import useWindowSize from 'commons/hooks/useWindowSize';
 
@@ -13,9 +14,7 @@ const Hero = ({ course }: { course: Course }): JSX.Element => {
                         </h1>
                         <div className="w-full md:w-1/3 my-4">
                             <p>
-                                {width > 768
-                                    ? 'Ilmu pengetahuan yang mengkuantifikasi perubahan.'
-                                    : course.short_description}
+                                {course.short_description}
                             </p>
                         </div>
                     </>
@@ -43,17 +42,12 @@ const Hero = ({ course }: { course: Course }): JSX.Element => {
                         Lanjut Belajar
                     </Button>
                 ) : (
-                    <div>
                         <Button
                             className="md:w-fit text-center mt-4"
                             variant="primary"
                             href={`/#benefit`}>
                             Info Selengkapnya
                         </Button>
-                        <div className="hidden md:block w-1/3 mt-16">
-                            <p>{course.short_description}</p>
-                        </div>
-                    </div>
                 )}
             </div>
             <div className="hidden md:flex h-screen mt-16 md:mt-0 overflow-hidden absolute top-0 right-0">

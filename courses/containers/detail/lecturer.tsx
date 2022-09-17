@@ -5,7 +5,7 @@ const Lecturer = ({ course }: { course: Course }): JSX.Element => {
         return (
             <div className="px-4 md:px-[7.5rem] my-16">
                 <h1 className="md:text-center text-2xl md:text-4xl font-bold">
-                    Guru spektakuler kelas ini
+                    Pengajar Terbaik Bangsa
                 </h1>
                 <div
                     className={
