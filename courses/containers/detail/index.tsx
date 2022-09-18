@@ -53,7 +53,7 @@ const DetailCourse = ({ course }: { course: Course }): JSX.Element => {
             <Price course={course} />
             <About course={course} />
             <Testimony />
-            <Price course={course} secondVariant  />
+            <Price course={course} secondVariant />
             <Faq />
         </section>
     );

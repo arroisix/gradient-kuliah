@@ -55,48 +55,27 @@ const Price = ({
                     Akses instan Semuanya Sekarang!
                 </h3>
             )}
-            {course?.discount ? (
-                width > 768 ? (
-                    <p className="font-bold text-xs line-through text-red-400 flex">
-                        <h2 className="text-3xl md:text-5xl text-black">-</h2>
-                        <h2 className="text-[#999999] text-3xl md:text-5xl">
-                            {`${
-                                formatter
-                                    .format(course?.price as number)
-                                    .split(',')[0]
-                            }/bulan`}
-                        </h2>
-                        <h2 className="text-3xl md:text-5xl text-black">-</h2>
-                    </p>
-                ) : (
-                    <></>
-                )
-            ) : (
-                <></>
+            {course?.discount && (
+                <p className="font-bold text-xs line-through text-red-400 flex">
+                    <h2 className="text-3xl md:text-5xl text-black">-</h2>
+                    <h2 className="text-[#999999] text-3xl md:text-5xl">
+                        {`${
+                            formatter
+                                .format(course?.price as number)
+                                .split(',')[0]
+                        }/bulan`}
+                    </h2>
+                    <h2 className="text-3xl md:text-5xl text-black">-</h2>
+                </p>
             )}
-            {secondVariant ? (
-                width < 768 ? (
-                    <></>
-                ) : (
-                    <div className="flex items-end gap-2">
-                        <h3 className="font-bold text-2xl md:text-4xl font-white">
-                            {`${calculatePrice()}/bulan`}
-                        </h3>
-                        <span className="text-[#7FFDB1] font-bold">
-                            ({course.discount}% OFF)
-                        </span>
-                    </div>
-                )
-            ) : (
-                <div className="flex items-end gap-2">
-                    <h3 className="font-bold text-2xl md:text-4xl font-white">
-                        {`${calculatePrice()}/bulan`}
-                    </h3>
-                    <span className="text-[#7FFDB1] font-bold">
-                        ({course.discount}% OFF)
-                    </span>
-                </div>
-            )}
+            <div className="flex items-end gap-2">
+                <h3 className="font-bold text-2xl md:text-4xl font-white">
+                    {`${calculatePrice()}/bulan`}
+                </h3>
+                <span className="text-[#7FFDB1] font-bold">
+                    ({course.discount}% OFF)
+                </span>
+            </div>
             {isAuthenticated && !course.is_subscribed && (
                 <Button
                     className="md:w-fit text-center my-2"
