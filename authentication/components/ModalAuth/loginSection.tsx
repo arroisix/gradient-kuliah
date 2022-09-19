@@ -46,7 +46,7 @@ const LoginSection = ({ changePage }: SectionProps): JSX.Element => {
                     <Input
                         type="email"
                         label="EMAIL"
-                        placeholder="user@gradient.academy"
+                        placeholder="Masukkan email kamu"
                         name="email"
                         onChange={handleChange}
                         onBlur={handleBlur}

@@ -49,7 +49,7 @@ const RegisterSection = ({ changePage }: SectionProps): JSX.Element => {
                     <Input
                         type="text"
                         label="NAMA LENGKAP"
-                        placeholder="user"
+                        placeholder="Nama kamu"
                         name="full_name"
                         onChange={handleChange}
                         onBlur={handleBlur}
