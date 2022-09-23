@@ -44,7 +44,7 @@ export default function Career(): JSX.Element {
                 </div>
                 <div className="w-full h-full rounded-md p-4 md:p-8 bg-[#121212] mb-8 flex flex-col md:flex-row items-center md:justify-between">
                     <h3 className="font-bold mb-2 md:mb-0">Hubungi Kami</h3>
-                    <Link href="https://api.whatsapp.com/send?phone=+6281310028280">
+                    <Link href="https://api.whatsapp.com/send?phone=085775405765">
                         <div className="flex rounded-full px-4 py-2 bg-[#0F460F]">
                             <span className="text-base font-bold flex items-center">
                                 <FaWhatsapp className="mr-2 text-xl" />

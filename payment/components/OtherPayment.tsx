@@ -17,7 +17,7 @@ const OtherPaymentBox = (): JSX.Element => {
                 <Button
                     variant="primary"
                     className="bg-[#0F460F] w-full md:w-fit"
-                    href="https://api.whatsapp.com/send?phone=+6285775405765">
+                    href="https://api.whatsapp.com/send?phone=085775405765">
                     <span className="text-base font-bold flex items-center justify-center">
                         <FaWhatsapp className="mr-2 text-xl" />
                         Gabung Gradient
@@ -28,7 +28,7 @@ const OtherPaymentBox = (): JSX.Element => {
                     className="w-full md:w-fit"
                     href="https://www.instagram.com/gradient_idn/">
                     <span className="flex items-center justify-center">
-                        <FaInstagram className="mr-2" /> Hubungi Kami
+                        <FaInstagram className="mr-2" /> Gabung Gradient
                     </span>
                 </Button>
             </div>
