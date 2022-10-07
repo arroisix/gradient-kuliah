@@ -22,6 +22,75 @@
             ]
         ]
     },
+    "VA_BSI": {
+        "method": ["ATM BSI"],
+        "step": [
+            [
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Menu Transfer"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Lalu pilin menu Virtual Account Billing"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Masukkan kode Virtual Account yang sudah tertera pada informasi diatas"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Tekan Lakukan pembayaran"
+                }
+            ]
+        ]
+    },
+    "VA_PERMATA": {
+        "method": ["ATM PERMATA"],
+        "step": [
+            [
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Menu Transfer"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Lalu pilin menu Virtual Account Billing"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Masukkan kode Virtual Account yang sudah tertera pada informasi diatas"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Tekan Lakukan pembayaran"
+                }
+            ]
+        ]
+    },
+    "VA_BJB": {
+        "method": ["ATM BJB"],
+        "step": [
+            [
+                {
+                    "asset": "https://google.com",
+                    "description": "Pada menu utama, pilih Menu Transfer"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Lalu pilin menu Virtual Account Billing"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Masukkan kode Virtual Account yang sudah tertera pada informasi diatas"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Tekan Lakukan pembayaran"
+                }
+            ]
+        ]
+    },
     "VA_BCA": {
         "method": ["ATM BCA", "Klik BCA", "M Banking"],
         "step": [

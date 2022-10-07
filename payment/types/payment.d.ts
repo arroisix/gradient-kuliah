@@ -1,4 +1,12 @@
-type PaymentMethod = 'VA_BNI' | 'VA_MANDIRI' | 'VA_BCA' | 'VA_BRI' | 'QRIS';
+type PaymentMethod =
+    | 'VA_BNI'
+    | 'VA_MANDIRI'
+    | 'VA_BCA'
+    | 'VA_BRI'
+    | 'VA_BSI'
+    | 'VA_BJB'
+    | 'VA_PERMATA'
+    | 'QRIS';
 
 type Subscription = {
     id: string;
