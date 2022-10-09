@@ -3,6 +3,8 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import Button from 'commons/components/elements/Button';
 import useWindowSize from 'commons/hooks/useWindowSize';
 import { formatter } from 'courses/utils';
+import { useGetOneCourseManyPacketQuery } from 'payment/redux/api/subscriptionApi';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 const Price = ({
@@ -12,26 +14,26 @@ const Price = ({
     course: Course;
     secondVariant?: boolean;
 }): JSX.Element => {
+    const { data } = useGetOneCourseManyPacketQuery(course.id);
     const { setModalAuthOpen } = useAuth();
+    const [packet, setPacket] = useState<Packet>();
     const { width } = useWindowSize();
     const isAuthenticated = useSelector(getIsAuthenticated);
 
-    const calculatePrice = (): string => {
-        if (course?.price === null) {
-            return 'GRATIS';
+    useEffect(() => {
+        if (data && data.data.length > 0) {
+            const rawData = [...data.data];
+            const sortedData = rawData.sort(
+                (a: Packet, b: Packet) => a.active_duration - b.active_duration
+            );
+
+            setPacket(sortedData[0]);
         }
+    }, [data]);
 
-        if (course?.discount) {
-            if (course?.discount >= 100) {
-                return 'GRATIS';
-            }
-
-            const calcPrice =
-                ((course?.price as number) -
-                    (course?.price as number) * (course?.discount / 100)) /
-                100;
-
-            return formatter.format(Math.floor(calcPrice) * 100).split(',')[0];
+    const calculatePrice = (): string => {
+        if (packet?.price === null) {
+            return 'GRATIS';
         }
 
         return formatter.format(course?.price as number).split(',')[0];
@@ -61,7 +63,9 @@ const Price = ({
                     <h2 className="text-[#999999] text-3xl md:text-5xl">
                         {`${
                             formatter
-                                .format(course?.price as number)
+                                .format(
+                                    packet?.price_before_discount as unknown as number
+                                )
                                 .split(',')[0]
                         }/bulan`}
                     </h2>
@@ -73,7 +77,7 @@ const Price = ({
                     {`${calculatePrice()}/bulan`}
                 </h3>
                 <span className="text-[#7FFDB1] font-bold">
-                    ({course.discount}% OFF)
+                    ({packet?.discount.split('.')[0]}% OFF)
                 </span>
             </div>
             {isAuthenticated && !course.is_subscribed && (

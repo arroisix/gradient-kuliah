@@ -12,6 +12,8 @@ type Subscription = {
     id: string;
     subscriber: User;
     subscribed_packet: Packet;
+    active_from: string | Date;
+    deactivate_after: string | Date;
 };
 
 type Transaction = {

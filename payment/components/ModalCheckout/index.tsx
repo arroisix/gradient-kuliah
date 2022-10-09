@@ -10,7 +10,7 @@ import { LOGO_PAYMENT, NAME_PAYMENT } from '../constant';
 
 const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
     const [course, setCourse] = useState({} as Course);
-    const { packet, paymentMethod } = usePayment();
+    const { packet, packets, paymentMethod, setPacket } = usePayment();
 
     useEffect(() => {
         if (packet && packet?.courses?.length > 0) {
@@ -18,11 +18,34 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
         }
     }, [course, packet]);
 
+    const onClose = (): void => {
+        setPacket();
+        setOpen(0);
+    };
+
+    if (!packet) {
+        return (
+            <Modal isOpen={isOpen ? 1 : 0} setOpen={onClose} variant="dark">
+                <div className="w-full flex flex-col mb-4">
+                    <h1 className="text-xl  font-bold">Pilih Paket</h1>
+                </div>
+                <div className="flex flex-col gap-2">
+                    {packets.map((p: Packet) => (
+                        <div
+                            className="flex w-full gap-2 hover:bg-neutral-700 p-2 rounded-md underline"
+                            key={p.id}
+                            aria-hidden
+                            onClick={() => setPacket(p)}>
+                            {p.packet_name}
+                        </div>
+                    ))}
+                </div>
+            </Modal>
+        );
+    }
+
     return (
-        <Modal
-            isOpen={isOpen ? 1 : 0}
-            setOpen={() => setOpen(0)}
-            variant="dark">
+        <Modal isOpen={isOpen ? 1 : 0} setOpen={onClose} variant="dark">
             <div className="w-full flex flex-col mb-4">
                 <h1 className="text-xl  font-bold">Konfirmasi Pembayaran</h1>
             </div>
@@ -50,20 +73,20 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
                         <span className="text-xs text-neutral-400">
                             Langganan hingga{' '}
                             {moment()
-                                .add(packet.active_duration, 'd')
+                                .add(packet?.active_duration, 'd')
                                 .format('Do MMMM YYYY')}
                         </span>
                     </div>
                     <div className="min-w-[100px] flex justify-end">
                         <p className="text-base font-bold">
-                            {formatCurrency(packet.price)}
+                            {formatCurrency(packet?.price as string)}
                         </p>
                     </div>
                 </div>
             </div>
             <div className="w-full flex flex-col justify-center items-center">
                 <CheckoutButton
-                    packetId={packet.id}
+                    packetId={packet?.id as string}
                     paymentMethod={paymentMethod}
                 />
                 <span className="flex items-center text-xs mt-2">

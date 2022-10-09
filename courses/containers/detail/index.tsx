@@ -9,6 +9,7 @@ import Faq from './faq';
 import Hero from './hero';
 import Lecturer from './lecturer';
 import Price from './price';
+import TablePrice from './tablePrice';
 import Testimony from './testimony';
 
 const AuthDetailCourse = ({ course }: { course: Course }): JSX.Element => {
@@ -25,7 +26,8 @@ const AuthDetailCourse = ({ course }: { course: Course }): JSX.Element => {
                 <>
                     <Benefit />
                     <Lecturer course={data as Course} />
-                    <Price course={course} />
+                    {/* <Price course={course} /> */}
+                    <TablePrice course={course} />
                     <About course={data as Course} />
                     <Testimony />
                     <Price course={course} secondVariant />
@@ -50,7 +52,8 @@ const DetailCourse = ({ course }: { course: Course }): JSX.Element => {
             <Hero course={course} />
             <Benefit />
             <Lecturer course={course} />
-            <Price course={course} />
+            {/* <Price course={course} /> */}
+            <TablePrice course={course} />
             <About course={course} />
             <Testimony />
             <Price course={course} secondVariant />

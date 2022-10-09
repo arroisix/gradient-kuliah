@@ -10,3 +10,11 @@ export const checkExpiry = (expiryDate: string): boolean => {
 
     return true;
 };
+
+export const countTheDay = (time: string): number => {
+    const targetTime = moment(time);
+    const now = moment();
+    const countByDay = targetTime.diff(now, 'days');
+
+    return countByDay;
+};

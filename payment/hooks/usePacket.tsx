@@ -1,7 +1,7 @@
-import { useGetOnePacketOneCourseQuery } from 'payment/redux/api/subscriptionApi';
+import { useGetOneCourseManyPacketQuery } from 'payment/redux/api/subscriptionApi';
 
 const usePacket = (id: string) => {
-    const { isLoading, error, data } = useGetOnePacketOneCourseQuery(id);
+    const { isLoading, error, data } = useGetOneCourseManyPacketQuery(id);
 
     return { isLoading, error, data };
 };

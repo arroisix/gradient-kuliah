@@ -11,8 +11,9 @@ import usePacket from '../hooks/usePacket';
 interface PaymentContextType {
     isModalCheckoutOpen: 1 | 0;
     setModalCheckoutOpen: (status: 1 | 0) => void;
-    packet: Packet;
-    setPacket: (packet: Packet) => void;
+    packet?: Packet;
+    packets: Packet[];
+    setPacket: (packet?: Packet) => void;
     paymentMethod: PaymentMethod;
     setPaymentMethod: (method: PaymentMethod) => void;
 }
@@ -29,13 +30,14 @@ export function PaymentProvider({
     courseId: string;
 }): JSX.Element {
     const [isModalCheckoutOpen, setModalCheckoutOpen] = useState<1 | 0>(0);
-    const [packet, setPacket] = useState<Packet>({} as Packet);
+    const [packets, setPackets] = useState<Packet[]>([]);
+    const [packet, setPacket] = useState<Packet>();
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('VA_BNI');
     const { data } = usePacket(courseId);
 
     useEffect(() => {
-        if (data) {
-            setPacket(data);
+        if (data?.data) {
+            setPackets(data.data as unknown as Packet[]);
         }
     }, [data]);
 
@@ -44,11 +46,12 @@ export function PaymentProvider({
             isModalCheckoutOpen,
             setModalCheckoutOpen,
             packet,
+            packets,
             setPacket,
             paymentMethod,
             setPaymentMethod
         }),
-        [isModalCheckoutOpen, packet, paymentMethod]
+        [isModalCheckoutOpen, packet, packets, paymentMethod]
     );
 
     return (

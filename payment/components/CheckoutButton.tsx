@@ -13,29 +13,55 @@ const CheckoutButton = ({
     paymentMethod: PaymentMethod;
     isFree?: boolean;
 }): JSX.Element => {
-    const { checkout, freeCheckout } = useCheckout();
+    const { checkout, freeCheckout, extendCheckout } = useCheckout();
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    const { subscriptionId } = router.query;
 
     const onClick = async (): Promise<void> => {
         setLoading(true);
-        const data = (await checkout({
-            packet_id: packetId,
-            payment_method: paymentMethod
-        })) as unknown as SingleResponseData<Transaction>;
 
-        if (data) {
-            const transaction = data.data;
+        if (subscriptionId) {
+            const data = (await extendCheckout({
+                inputData: {
+                    packet_id: packetId,
+                    payment_method: paymentMethod
+                },
+                subscriptionId: subscriptionId as string
+            })) as unknown as SingleResponseData<Transaction>;
 
-            toast.info(
-                `Silahkan lanjutkan proses pembayaran sesuai metode yang kamu pilih`,
-                {
-                    position: toast.POSITION.TOP_CENTER
-                }
-            );
+            if (data) {
+                const transaction = data.data;
 
-            router.push(`/checkout/${transaction.id}`);
+                toast.info(
+                    `Silahkan lanjutkan proses pembayaran sesuai metode yang kamu pilih`,
+                    {
+                        position: toast.POSITION.TOP_CENTER
+                    }
+                );
+
+                router.push(`/checkout/${transaction.id}`);
+            }
+        } else {
+            const data = (await checkout({
+                packet_id: packetId,
+                payment_method: paymentMethod
+            })) as unknown as SingleResponseData<Transaction>;
+
+            if (data) {
+                const transaction = data.data;
+
+                toast.info(
+                    `Silahkan lanjutkan proses pembayaran sesuai metode yang kamu pilih`,
+                    {
+                        position: toast.POSITION.TOP_CENTER
+                    }
+                );
+
+                router.push(`/checkout/${transaction.id}`);
+            }
         }
+
         setLoading(false);
     };
 

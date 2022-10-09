@@ -1,6 +1,21 @@
 import Button from 'commons/components/elements/Button';
+import { useGetActiveSubscriptionQuery } from 'payment/redux/api/subscriptionApi';
+import { countTheDay } from 'payment/utils';
+import { useEffect, useState } from 'react';
+import { MdInfoOutline } from 'react-icons/md';
 
 const Hero = ({ course }: { course: Course }): JSX.Element => {
+    const { data } = useGetActiveSubscriptionQuery(course.id, {
+        skip: course !== undefined && course !== null && !course.is_subscribed
+    });
+    const [expiryDay, setExpiryDay] = useState(30);
+
+    useEffect(() => {
+        if (data) {
+            setExpiryDay(countTheDay(data.deactivate_after as string) + 1);
+        }
+    }, [data]);
+
     return (
         <section className="h-screen w-full flex flex-col-reverse md:flex-row justify-end md:justify-center relative">
             <div className="w-full h-screen flex flex-col justify-end md:justify-center pl-4 pr-4 md:pr-0 md:pl-[7.5rem] py-4 z-10 mb-8 md:mb-0">
@@ -43,6 +58,15 @@ const Hero = ({ course }: { course: Course }): JSX.Element => {
                         href={`/#benefit`}>
                         Info Selengkapnya
                     </Button>
+                )}
+                {course.is_subscribed && expiryDay <= 7 && (
+                    <div className="flex mt-2 items-center gap-2">
+                        <MdInfoOutline className="text-xl" />
+                        <h4 className="font-body">
+                            Waktu berlanggangan Anda akan segera habis dalam{' '}
+                            {expiryDay} hari
+                        </h4>
+                    </div>
                 )}
             </div>
             <div className="hidden md:flex h-screen mt-16 md:mt-0 overflow-hidden absolute top-0 right-0">

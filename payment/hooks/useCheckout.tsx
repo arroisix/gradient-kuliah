@@ -1,5 +1,6 @@
 import {
     useCheckoutMutation,
+    useExtendCheckoutMutation,
     useFreeCheckoutMutation
 } from 'payment/redux/api/subscriptionApi';
 
@@ -8,6 +9,8 @@ const useCheckout = () => {
         useCheckoutMutation();
     const [freeCheckout, { isLoading: freeLoading }] =
         useFreeCheckoutMutation();
+    const [extendCheckout, { isLoading: extendLoading }] =
+        useExtendCheckoutMutation();
 
     return {
         checkout,
@@ -15,7 +18,9 @@ const useCheckout = () => {
         loading,
         error,
         freeCheckout,
-        freeLoading
+        freeLoading,
+        extendCheckout,
+        extendLoading
     };
 };
 

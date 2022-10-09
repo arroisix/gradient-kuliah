@@ -144,5 +144,7 @@ type Packet = {
     active_duration: number;
     is_lifetime: boolean;
     price: string;
+    price_before_discount: string;
+    discount: string;
     courses: Course[];
 };

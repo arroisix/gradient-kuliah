@@ -40,7 +40,7 @@ const FreeModalCheckout = ({
                         <span className="text-xs text-neutral-400">
                             Langganan hingga{' '}
                             {moment()
-                                .add(packet.active_duration, 'd')
+                                .add(packet?.active_duration, 'd')
                                 .format('Do MMMM YYYY')}
                         </span>
                     </div>
@@ -51,7 +51,7 @@ const FreeModalCheckout = ({
             </div>
             <div className="w-full flex flex-col justify-center items-center">
                 <CheckoutButton
-                    packetId={packet.id}
+                    packetId={packet?.id as string}
                     paymentMethod={paymentMethod}
                     isFree
                 />
