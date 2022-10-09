@@ -36,7 +36,9 @@ const Price = ({
             return 'GRATIS';
         }
 
-        return formatter.format(course?.price as number).split(',')[0];
+        return formatter
+            .format(packet?.price as unknown as number)
+            .split(',')[0];
     };
 
     return (
