@@ -43,7 +43,19 @@ export const rtkQueryErrorLogger: Middleware = () => (next) => (action) => {
                         toastId: originalStatus
                     });
                 }
-            } else if (status !== 'FETCH_ERROR') {
+
+                if (originalStatus >= 500) {
+                    toast.error(
+                        'Terjadi kesalahan pada server, mohon coba beberapa saat lagi',
+                        {
+                            position: 'top-center',
+                            theme: 'colored',
+                            hideProgressBar: true,
+                            toastId: 'SERVER ERROR'
+                        }
+                    );
+                }
+            } else if (status !== 'FETCH_ERROR' && isNaN(status)) {
                 const { errors } = action.payload.data as GradientError;
 
                 if (errors.validation_error === null) {
@@ -75,6 +87,28 @@ export const rtkQueryErrorLogger: Middleware = () => (next) => (action) => {
                                     toastId: key
                                 }
                             );
+                        }
+                    });
+                }
+            } else if (status >= 400 && status < 500) {
+                const { data } = action.payload;
+
+                if (Object.keys(data).length > 0) {
+                    Object.keys(data).map((key) => {
+                        if (Array.isArray(data[key])) {
+                            toast.error(`${key} : ${data[key][0]}`, {
+                                position: 'top-center',
+                                theme: 'colored',
+                                hideProgressBar: true,
+                                toastId: key
+                            });
+                        } else {
+                            toast.error(`${data[key]}`, {
+                                position: 'top-center',
+                                theme: 'colored',
+                                hideProgressBar: true,
+                                toastId: key
+                            });
                         }
                     });
                 }
