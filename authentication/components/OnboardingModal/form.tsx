@@ -18,7 +18,7 @@ const FormSection = ({
     openDialog: (status: 1 | 0) => void;
 }): JSX.Element => {
     const [update, { isLoading, isSuccess }] = useUpdateUserMutation();
-    const { data: registerReferences, isLoading: l } =
+    const { data: registerReferences, isLoading: isLoadingReferences } =
         useGetRegisterReferenceQuery({});
     const user = useSelector(getCurrentUser);
 
@@ -145,19 +145,19 @@ const FormSection = ({
                             handleChange({
                                 target: {
                                     value: e.target.value,
-                                    name: 'education_level'
+                                    name: 'register_reference_id'
                                 }
                             })
                         }
                         onBlur={handleBlur}
-                        label="REFERENSI"
+                        label="DARI MANA KAMU MENGETAHUI GRADIENT?"
                         value={values.register_reference_id}
-                        name="educationLevel"
+                        name="register_reference_id"
                         option={
-                            !l && registerReferences
-                                ? registerReferences.data.map((rr) => ({
-                                      key: rr.id,
-                                      value: rr.name
+                            !isLoadingReferences && registerReferences
+                                ? registerReferences.data.map((ref) => ({
+                                      key: ref.id,
+                                      value: ref.name
                                   }))
                                 : ([] as { key: string; value: string }[])
                         }

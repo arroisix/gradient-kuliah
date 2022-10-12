@@ -36,8 +36,7 @@ export const authApi = baseApi.injectEndpoints({
             { data: RegisterReference[] },
             Record<string, never>
         >({
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            query: (_: Record<string, never>) => ({
+            query: () => ({
                 url: `${AUTH_BASE_URL}register-references/`
             })
         })
