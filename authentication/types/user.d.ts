@@ -5,6 +5,11 @@ type User = {
     phone_number: string;
 };
 
+type RegisterReference = {
+    id: string;
+    name: string;
+};
+
 interface LoginInputData {
     email: string;
     password: string;
@@ -33,4 +38,5 @@ interface UpdateUserInputData {
     birthdate?: string;
     gender?: 'FEMALE' | 'MALE';
     education_level?: 'SMP' | 'SMA' | 'SMK' | 'S1' | 'S2';
+    register_reference_id: string;
 }

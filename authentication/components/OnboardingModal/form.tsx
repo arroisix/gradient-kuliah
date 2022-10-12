@@ -4,7 +4,10 @@ import Button from 'commons/components/elements/Button';
 import Input from 'commons/components/elements/Form/input';
 import Radio from 'commons/components/elements/Form/radio';
 import Select from 'commons/components/elements/Form/select';
-import { useUpdateUserMutation } from 'authentication/redux/api/authApi';
+import {
+    useGetRegisterReferenceQuery,
+    useUpdateUserMutation
+} from 'authentication/redux/api/authApi';
 import { useSelector } from 'react-redux';
 import { getCurrentUser } from 'authentication/redux/selectors/userSelector';
 import { useEffect } from 'react';
@@ -15,6 +18,8 @@ const FormSection = ({
     openDialog: (status: 1 | 0) => void;
 }): JSX.Element => {
     const [update, { isLoading, isSuccess }] = useUpdateUserMutation();
+    const { data: registerReferences, isLoading: l } =
+        useGetRegisterReferenceQuery({});
     const user = useSelector(getCurrentUser);
 
     useEffect(() => {
@@ -135,7 +140,28 @@ const FormSection = ({
                         value={values.phone_number}
                         error={errors.phone_number}
                     />
-
+                    <Select
+                        onChange={(e) =>
+                            handleChange({
+                                target: {
+                                    value: e.target.value,
+                                    name: 'education_level'
+                                }
+                            })
+                        }
+                        onBlur={handleBlur}
+                        label="REFERENSI"
+                        value={values.register_reference_id}
+                        name="educationLevel"
+                        option={
+                            !l && registerReferences
+                                ? registerReferences.data.map((rr) => ({
+                                      key: rr.id,
+                                      value: rr.name
+                                  }))
+                                : ([] as { key: string; value: string }[])
+                        }
+                    />
                     <Button
                         variant="custom"
                         className="bg-accent-purple text-white mt-4 w-full"
