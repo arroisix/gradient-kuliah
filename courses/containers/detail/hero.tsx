@@ -59,15 +59,17 @@ const Hero = ({ course }: { course: Course }): JSX.Element => {
                         Info Selengkapnya
                     </Button>
                 )}
-                {course.is_subscribed && expiryDay <= 7 && (
-                    <div className="flex mt-2 items-center gap-2">
-                        <MdInfoOutline className="text-xl" />
-                        <h4 className="font-body">
-                            Waktu berlanggangan Anda akan segera habis dalam{' '}
-                            {expiryDay} hari
-                        </h4>
-                    </div>
-                )}
+                {course.is_subscribed &&
+                    (expiryDay <= 7 ||
+                        new Date() <= new Date('2022-10-13')) && (
+                        <div className="flex mt-2 items-center gap-2">
+                            <MdInfoOutline className="text-xl" />
+                            <h4 className="font-body">
+                                Waktu berlanggangan kamu akan segera habis dalam{' '}
+                                {expiryDay} hari
+                            </h4>
+                        </div>
+                    )}
             </div>
             <div className="hidden md:flex h-screen mt-16 md:mt-0 overflow-hidden absolute top-0 right-0">
                 <div>

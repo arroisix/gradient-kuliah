@@ -25,7 +25,7 @@ const Catalog = ({ course }: { course: Course }): JSX.Element => {
 
     return (
         <Container>
-            {expiryDay <= 7 && (
+            {(expiryDay <= 7 || new Date() <= new Date('2022-10-13')) && (
                 <div className="w-full flex items-center justify-center my-16">
                     <div className="border rounded-lg border-accent-yellow p-4 flex flex-col md:flex-row items-center justify-center gap-2">
                         <span>
