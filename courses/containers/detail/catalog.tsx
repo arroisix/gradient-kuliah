@@ -25,23 +25,24 @@ const Catalog = ({ course }: { course: Course }): JSX.Element => {
 
     return (
         <Container>
-            {(expiryDay <= 7 || new Date() <= new Date('2022-10-13')) && (
-                <div className="w-full flex items-center justify-center my-16">
-                    <div className="border rounded-lg border-accent-yellow p-4 flex flex-col md:flex-row items-center justify-center gap-2">
-                        <span>
-                            Waktu berlanggangan Anda akan segera habis dalam{' '}
-                            {expiryDay} hari. Perpanjang langganan untuk terus
-                            mengakses layanan Gradient.
-                        </span>
-                        <Button
-                            href={`langganan?courseId=${course.id}&subscriptionId=${data?.id}`}
-                            variant="custom"
-                            className="bg-accent-yellow text-black w-full md:w-[250px] font-body text-center">
-                            Perpanjang
-                        </Button>
+            {(expiryDay <= 7 || new Date() <= new Date('2022-10-13')) &&
+                expiryDay < 30 && (
+                    <div className="w-full flex items-center justify-center my-16">
+                        <div className="border rounded-lg border-accent-yellow p-4 flex flex-col md:flex-row items-center justify-center gap-2">
+                            <span>
+                                Waktu berlanggangan Anda akan segera habis dalam{' '}
+                                {expiryDay} hari. Perpanjang langganan untuk
+                                terus mengakses layanan Gradient.
+                            </span>
+                            <Button
+                                href={`langganan?courseId=${course.id}&subscriptionId=${data?.id}`}
+                                variant="custom"
+                                className="bg-accent-yellow text-black w-full md:w-[250px] font-body text-center">
+                                Perpanjang
+                            </Button>
+                        </div>
                     </div>
-                </div>
-            )}
+                )}
             <CatalogContainer
                 chapters={sortChapterOrder()}
                 latest_subchapter={course.learning_progress?.latest_subchapter}
