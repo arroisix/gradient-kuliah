@@ -60,7 +60,7 @@ const Hero = ({ course }: { course: Course }): JSX.Element => {
                     </Button>
                 )}
                 {course.is_subscribed &&
-                    (expiryDay <= 7 || new Date() <= new Date('2022-10-13')) &&
+                    (expiryDay <= 7 || new Date() <= new Date('2022-10-14')) &&
                     expiryDay < 30 && (
                         <div className="flex mt-2 items-center gap-2">
                             <MdInfoOutline className="text-xl" />
