@@ -10,6 +10,8 @@ import {
     BiVolumeMute
 } from 'react-icons/bi';
 import Spinner from '../Spinner';
+import { BsFillGearFill } from 'react-icons/bs';
+import { MdSettings } from 'react-icons/md';
 
 interface Time {
     hh: string;
@@ -37,6 +39,8 @@ export interface Props {
     onMute: () => void;
     volume: number;
     setVolume: (wantedVolume: number) => void;
+    isShowSettings: boolean;
+    setShowSettings: (status: boolean) => void;
 }
 
 function secondsToTime(seconds: number, offset: number): Time {
@@ -73,7 +77,9 @@ export const VideoSeekSlider: React.FC<Props> = ({
     onFullScreen,
     isFullScreen,
     isBuffering,
-    popupArea
+    popupArea,
+    setShowSettings,
+    isShowSettings
 }) => {
     const [seekHoverPosition, setSeekHoverPosition] = useState(0);
 
@@ -336,13 +342,19 @@ export const VideoSeekSlider: React.FC<Props> = ({
                         }`}</div>
                         {isBuffering && <Spinner size="small" />}
                     </div>
-                    <div className="flex items-center">
+                    <div className="flex items-center gap-2">
+                        <div
+                            className="cursor-pointer"
+                            onClick={() => setShowSettings(!isShowSettings)}
+                            aria-hidden>
+                            <MdSettings className="text-xl" />
+                        </div>
                         <div
                             className="cursor-pointer"
                             onClick={onFullScreen}
                             aria-hidden>
                             {isFullScreen ? (
-                                <BiExitFullscreen className="text-xl" />
+                                <BiExitFullscreen className="text-2xl" />
                             ) : (
                                 <BiFullscreen className="text-xl" />
                             )}

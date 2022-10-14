@@ -1,7 +1,9 @@
 import React, { cloneElement, useEffect, useRef, useState } from 'react';
 import { FaPlay } from 'react-icons/fa';
 import Spinner from '../Spinner';
+import HlsPlayer from './hls';
 import { VideoSeekSlider } from './progress';
+import Settings from './settings';
 
 interface FullScreenDocumentElement extends HTMLElement {
     msRequestFullScreen?: () => void;
@@ -25,6 +27,8 @@ const VideoPlayer = <T,>({
     const [isPlay, setIsPlay] = useState(false);
     const [isMute, setIsMute] = useState(false);
     const [volume, setVolume] = useState(50);
+    const [playback, setPlayback] = useState(1);
+    const [isShowSettings, setShowSettings] = useState(false);
     const [isBuffering, setIsBuffering] = useState(false);
     const [isPopup, setIsPopup] = useState(false);
     const [popupArea, setPopupArea] = useState<number[]>([]);
@@ -140,6 +144,10 @@ const VideoPlayer = <T,>({
     }, []);
 
     useEffect(() => {
+        videoRef.current.playbackRate = playback;
+    }, [playback]);
+
+    useEffect(() => {
         if (popupData) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
@@ -229,7 +237,7 @@ const VideoPlayer = <T,>({
             id="video-container">
             {(isBuffering || !isPlay) && (
                 <>
-                    <div className="absolute bg-black opacity-50 w-full h-full left-0 top-0 z-[8]" />
+                    <div className="absolute bg-black opacity-50 w-full h-full left-0 top-0" />
                     <div
                         className="absolute w-full h-full left-0 top-0 z-[9] flex justify-center items-center p-8"
                         onClick={isPopup ? undefined : onPlayClick}
@@ -248,16 +256,37 @@ const VideoPlayer = <T,>({
                     </div>
                 </>
             )}
-            <video
-                onClick={isPopup ? undefined : onPlayClick}
-                width={'100%'}
-                height={'100%'}
-                ref={videoRef}
-                key={video}>
-                <track kind="captions" />
-                <source src={video} />
-            </video>
-            <div className="w-full absolute bottom-0 left-0">
+            {isShowSettings && (
+                <>
+                    <div
+                        className="absolute w-full h-full left-0 top-0 z-[9]"
+                        onClick={() => setShowSettings(false)}
+                        aria-hidden
+                    />
+                    <Settings playback={playback} setPlayback={setPlayback} />
+                </>
+            )}
+            {video.split('.').includes('m3u8') ? (
+                <HlsPlayer
+                    playerRef={videoRef}
+                    onClick={isPopup ? undefined : onPlayClick}
+                    width={'100%'}
+                    height={'100%'}
+                    key={video}
+                    src={video}
+                />
+            ) : (
+                <video
+                    onClick={isPopup ? undefined : onPlayClick}
+                    width={'100%'}
+                    height={'100%'}
+                    ref={videoRef}
+                    key={video}>
+                    <track kind="captions" />
+                    <source src={video} />
+                </video>
+            )}
+            <div className="w-full absolute bottom-0 left-0 z-[9]">
                 <VideoSeekSlider
                     key={video}
                     currentTime={currentTime}
@@ -282,6 +311,8 @@ const VideoPlayer = <T,>({
                     onFullScreen={onFullScreen}
                     isFullScreen={fullscreen}
                     isBuffering={isBuffering}
+                    setShowSettings={setShowSettings}
+                    isShowSettings={isShowSettings}
                 />
             </div>
         </div>
