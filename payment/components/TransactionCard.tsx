@@ -105,9 +105,9 @@ const TransactionCard = ({
                             Tanggal Pembelian
                         </span>
                         <h3 className="font-bold text-base md:text-4xl">
-                            {moment(transaction.created_at).format(
-                                'Do MMM YYYY'
-                            )}
+                            {moment(transaction.created_at)
+                                .utc()
+                                .format('D MMM YYYY')}
                         </h3>
                     </div>
                 </div>
@@ -170,9 +170,9 @@ const TransactionCard = ({
                                 {transaction.status === 'WAITING' && (
                                     <h5 className="text-base md:text-xl font-bold text-black">
                                         Bayar sebelum{' '}
-                                        {moment(transaction.deadline).format(
-                                            'Do MMMM YYYY H:mm'
-                                        )}{' '}
+                                        {moment(transaction.deadline)
+                                            .utc()
+                                            .format('D MMMM YYYY H:mm')}{' '}
                                         WIB
                                     </h5>
                                 )}

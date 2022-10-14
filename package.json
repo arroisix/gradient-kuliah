@@ -23,6 +23,7 @@
         "formik": "^2.2.9",
         "framer-motion": "^6.3.3",
         "graphql": "^16.2.0",
+        "hls.js": "^1.2.4",
         "moment": "^2.29.3",
         "next": "12.1.6",
         "next-redux-wrapper": "^7.0.5",
