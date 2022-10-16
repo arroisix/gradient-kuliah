@@ -266,7 +266,7 @@ const VideoPlayer = <T,>({
                     <Settings playback={playback} setPlayback={setPlayback} />
                 </>
             )}
-            {video.split('.').includes('m3u8') ? (
+            {video.includes('.m3u8') ? (
                 <HlsPlayer
                     playerRef={videoRef}
                     onClick={isPopup ? undefined : onPlayClick}
