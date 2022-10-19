@@ -1,7 +1,9 @@
 import {
+    getCurrentUser,
     getIsAuthenticated,
     getIsNewUser
 } from 'authentication/redux/selectors/userSelector';
+import posthog from 'posthog-js';
 import React, {
     createContext,
     ReactNode,
@@ -32,6 +34,7 @@ export function AuthProvider({
     const [isPermanent, setIsPermanent] = useState(false);
     const isNewUser = useSelector(getIsNewUser);
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const user = useSelector(getCurrentUser);
 
     useEffect(() => {
         if (isNewUser) {
@@ -47,6 +50,12 @@ export function AuthProvider({
             setIsPermanent(false);
         }
     }, [isAuthenticated]);
+
+    useEffect(() => {
+        if (user.email) {
+            posthog.identify(user.email);
+        }
+    }, [user]);
 
     const setModalAuthOpen = (
         status: 1 | 0,
