@@ -9,12 +9,12 @@ const ModalOnboarding = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
     return (
         <>
             <Modal isOpen={isOpen ? 1 : 0} setOpen={() => setOpen(0)} permanent>
-                <div className="w-full flex flex-col">
+                {/* <div className="w-full flex flex-col">
                     <h1 className="text-3xl text-center font-bold mb-8">
                         Lengkapi Akunmu
-                    </h1>
-                    <FormSection openDialog={setSuccess} />
-                </div>
+                    </h1> */}
+                <FormSection openDialog={setSuccess} />
+                {/* </div> */}
             </Modal>
             <DialogSuccess isOpen={success} setOpen={setSuccess} />
         </>
