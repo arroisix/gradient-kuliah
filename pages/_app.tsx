@@ -12,10 +12,14 @@ import 'moment/locale/id';
 import { AuthProvider } from 'authentication/contexts/AuthProvider';
 import { useEffect } from 'react';
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
+import usePosthog from 'commons/hooks/usePosthog';
 
 const store = useStore();
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
+    usePosthog('phc_QeqOZr67qAfgO3mWBQzRHUXbJeDIycKDu2a0NOuGYVj', {
+        api_host: 'https://app.posthog.com'
+    });
     const loadClientSideOnlyLibrary = async (): Promise<void> => {
         const TagManager = await import('react-gtm-module');
         // @ts-ignore
