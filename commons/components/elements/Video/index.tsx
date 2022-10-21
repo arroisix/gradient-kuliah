@@ -1,5 +1,6 @@
 import React, { cloneElement, useEffect, useRef, useState } from 'react';
 import { FaPlay } from 'react-icons/fa';
+import useIdleDetector from '../../../hooks/useIdleDetector';
 import Spinner from '../Spinner';
 import HlsPlayer from './hls';
 import { VideoSeekSlider } from './progress';
@@ -24,6 +25,7 @@ const VideoPlayer = <T,>({
     const [currentTime, setCurrentTime] = useState(0);
     const [downloadedTime, setDownloadedTime] = useState(0);
     const [fullscreen, setFullscreen] = useState(false);
+    const [isShowControl, setShowControl] = useState(false);
     const [isPlay, setIsPlay] = useState(false);
     const [isMute, setIsMute] = useState(false);
     const [volume, setVolume] = useState(50);
@@ -37,7 +39,23 @@ const VideoPlayer = <T,>({
     const [hashMapPopupArea, setHashMapPopupArea] = useState<{
         [key: number]: T;
     }>({});
-
+    useIdleDetector({
+        activityEvents: [
+            'click',
+            'keydown',
+            'DOMMouseScroll',
+            'mousewheel',
+            'mousedown',
+            'touchstart',
+            'touchmove',
+            'focus',
+            'mousemove'
+        ],
+        onIdle: () => setShowControl(false),
+        onActive: () => setShowControl(true),
+        enabled: true,
+        timeout: 3000
+    });
     let globalCurrentTime = currentTime;
 
     const onPlayClick = (): void => {
@@ -232,90 +250,104 @@ const VideoPlayer = <T,>({
     };
 
     return (
-        <div
-            className="relative flex flex-col items-center justify-center bg-black"
-            id="video-container">
-            {(isBuffering || !isPlay) && (
-                <>
-                    <div className="absolute bg-black opacity-50 w-full h-full left-0 top-0" />
-                    <div
-                        className="absolute w-full h-full left-0 top-0 z-[9] flex justify-center items-center p-8"
+        <>
+            <div
+                onMouseEnter={() => setShowControl(true)}
+                onMouseLeave={() => setShowControl(false)}
+                onTouchStart={() => setShowControl(true)}
+                onTouchEnd={() => setShowControl(false)}
+                className="relative flex flex-col items-center justify-center bg-black"
+                id="video-container">
+                {(isBuffering || !isPlay) && (
+                    <>
+                        <div className="absolute bg-black opacity-50 w-full h-full left-0 top-0" />
+                        <div
+                            className="absolute w-full h-full left-0 top-0 z-[9] flex justify-center items-center p-8"
+                            onClick={isPopup ? undefined : onPlayClick}
+                            aria-hidden>
+                            {isBuffering && isPlay && <Spinner size="large" />}
+                            {!isPlay && !isPopup && (
+                                <FaPlay className="text-4xl" />
+                            )}
+                            {popupComponent &&
+                                !isPlay &&
+                                isPopup &&
+                                cloneElement(popupComponent, {
+                                    onSubmit: submitPopup,
+                                    data: hashMapPopupArea[
+                                        popupArea[currentPopupIndex - 1]
+                                    ]
+                                })}
+                        </div>
+                    </>
+                )}
+                {isShowSettings && (
+                    <>
+                        <div
+                            className="absolute w-full h-full left-0 top-0 z-[9]"
+                            onClick={() => setShowSettings(false)}
+                            aria-hidden
+                        />
+                        <Settings
+                            playback={playback}
+                            setPlayback={setPlayback}
+                        />
+                    </>
+                )}
+                {video.includes('.m3u8') ? (
+                    <HlsPlayer
+                        playerRef={videoRef}
                         onClick={isPopup ? undefined : onPlayClick}
-                        aria-hidden>
-                        {isBuffering && isPlay && <Spinner size="large" />}
-                        {!isPlay && !isPopup && <FaPlay className="text-4xl" />}
-                        {popupComponent &&
-                            !isPlay &&
-                            isPopup &&
-                            cloneElement(popupComponent, {
-                                onSubmit: submitPopup,
-                                data: hashMapPopupArea[
-                                    popupArea[currentPopupIndex - 1]
-                                ]
-                            })}
-                    </div>
-                </>
-            )}
-            {isShowSettings && (
-                <>
-                    <div
-                        className="absolute w-full h-full left-0 top-0 z-[9]"
-                        onClick={() => setShowSettings(false)}
-                        aria-hidden
+                        width={'100%'}
+                        height={'100%'}
+                        key={video}
+                        src={video}
                     />
-                    <Settings playback={playback} setPlayback={setPlayback} />
-                </>
-            )}
-            {video.includes('.m3u8') ? (
-                <HlsPlayer
-                    playerRef={videoRef}
-                    onClick={isPopup ? undefined : onPlayClick}
-                    width={'100%'}
-                    height={'100%'}
-                    key={video}
-                    src={video}
-                />
-            ) : (
-                <video
-                    onClick={isPopup ? undefined : onPlayClick}
-                    width={'100%'}
-                    height={'100%'}
-                    ref={videoRef}
-                    key={video}>
-                    <track kind="captions" />
-                    <source src={video} />
-                </video>
-            )}
-            <div className="w-full absolute bottom-0 left-0 z-[9]">
-                <VideoSeekSlider
-                    key={video}
-                    currentTime={currentTime}
-                    popupArea={popupArea}
-                    max={videoRef.current.duration}
-                    onChange={(time) => {
-                        videoRef.current.currentTime = time;
-                        setCurrentTime(time);
-                        checkNextPopupWhenSeekSlider(time);
-                    }}
-                    progress={downloadedTime}
-                    offset={0}
-                    isPlay={isPlay}
-                    isMute={isMute}
-                    volume={volume}
-                    setVolume={onChangeVolume}
-                    secondsPrefix="00:00:"
-                    minutesPrefix="00:"
-                    hideHoverTime={false}
-                    onPlay={onPlayClick}
-                    onMute={onMuteClick}
-                    onFullScreen={onFullScreen}
-                    isFullScreen={fullscreen}
-                    isBuffering={isBuffering}
-                    setShowSettings={setShowSettings}
-                    isShowSettings={isShowSettings}
-                />
+                ) : (
+                    <video
+                        onClick={isPopup ? undefined : onPlayClick}
+                        width={'100%'}
+                        height={'100%'}
+                        ref={videoRef}
+                        key={video}>
+                        <track kind="captions" />
+                        <source src={video} />
+                    </video>
+                )}
+                <div
+                    className={`transition-opacity w-full absolute bottom-0 left-0 z-[9] ${
+                        isShowControl || !isPlay ? 'opacity-100' : 'opacity-0'
+                    }`}>
+                    <VideoSeekSlider
+                        key={video}
+                        currentTime={currentTime}
+                        popupArea={popupArea}
+                        max={videoRef.current.duration}
+                        onChange={(time) => {
+                            videoRef.current.currentTime = time;
+                            setCurrentTime(time);
+                            checkNextPopupWhenSeekSlider(time);
+                        }}
+                        progress={downloadedTime}
+                        offset={0}
+                        isPlay={isPlay}
+                        isMute={isMute}
+                        volume={volume}
+                        setVolume={onChangeVolume}
+                        secondsPrefix="00:00:"
+                        minutesPrefix="00:"
+                        hideHoverTime={false}
+                        onPlay={onPlayClick}
+                        onMute={onMuteClick}
+                        onFullScreen={onFullScreen}
+                        isFullScreen={fullscreen}
+                        isBuffering={isBuffering}
+                        setShowSettings={setShowSettings}
+                        isShowSettings={isShowSettings}
+                    />
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 
