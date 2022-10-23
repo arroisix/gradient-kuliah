@@ -24,7 +24,7 @@ const ContentCard = ({
                 }`}
                 style={{
                     backgroundColor: '#333333',
-                    backgroundSize: 'contain',
+                    backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundImage: `url(${subchapter.thumbnail})`
                 }}
