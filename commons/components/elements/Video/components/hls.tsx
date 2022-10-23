@@ -1,21 +1,23 @@
-import React, { useEffect, RefObject } from 'react';
+import React, { useEffect, useState } from 'react';
 import Hls from 'hls.js';
+import { useVideoPlayer } from '../context/VideoPlayerProvider';
 
 export interface HlsPlayerProps
     extends React.VideoHTMLAttributes<HTMLVideoElement> {
-    playerRef: RefObject<HTMLVideoElement>;
     src: string;
 }
 
-function HlsPlayer({
-    playerRef = React.createRef<HTMLVideoElement>(),
-    src,
-    autoPlay,
-    ...props
-}: HlsPlayerProps) {
-    useEffect(() => {
-        let hls: Hls;
+function HlsPlayer({ src, autoPlay, ...props }: HlsPlayerProps) {
+    const { videoRef, quality } = useVideoPlayer();
+    const [hls, setHls] = useState<Hls>();
 
+    useEffect(() => {
+        if (hls) {
+            hls.currentLevel = quality;
+        }
+    }, [quality]);
+
+    useEffect(() => {
         function _initPlayer() {
             if (hls != null) {
                 hls.destroy();
@@ -26,17 +28,17 @@ function HlsPlayer({
                 maxLoadingDelay: 2
             });
 
-            if (playerRef.current != null) {
-                newHls.attachMedia(playerRef.current);
+            if (videoRef.current != null) {
+                newHls.attachMedia(videoRef.current);
             }
 
             newHls.on(Hls.Events.MEDIA_ATTACHED, () => {
                 newHls.loadSource(src);
 
                 newHls.on(Hls.Events.MANIFEST_PARSED, () => {
-                    newHls.currentLevel = -1;
+                    newHls.currentLevel = quality ?? -1;
                     if (autoPlay) {
-                        playerRef?.current
+                        videoRef?.current
                             ?.play()
                             .catch(() =>
                                 console.log(
@@ -63,7 +65,7 @@ function HlsPlayer({
                 }
             });
 
-            hls = newHls;
+            setHls(newHls);
         }
 
         // Check for Media Source support
@@ -76,15 +78,15 @@ function HlsPlayer({
                 hls.destroy();
             }
         };
-    }, [autoPlay, playerRef, src]);
+    }, [autoPlay, videoRef, src]);
 
     // If Media Source is supported, use HLS.js to play video
     // eslint-disable-next-line jsx-a11y/media-has-caption
-    if (Hls.isSupported()) return <video ref={playerRef} {...props} />;
+    if (Hls.isSupported()) return <video ref={videoRef} {...props} />;
 
     // Fallback to using a regular video player if HLS is supported by default in the user's browser
     // eslint-disable-next-line jsx-a11y/media-has-caption
-    return <video ref={playerRef} src={src} autoPlay={autoPlay} {...props} />;
+    return <video ref={videoRef} src={src} autoPlay={autoPlay} {...props} />;
 }
 
 export default HlsPlayer;

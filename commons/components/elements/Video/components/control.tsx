@@ -9,9 +9,10 @@ import {
     BiVolumeFull,
     BiVolumeMute
 } from 'react-icons/bi';
-import Spinner from '../Spinner';
+import Spinner from '../../Spinner';
 import { BsFillGearFill } from 'react-icons/bs';
 import { MdSettings } from 'react-icons/md';
+import { useVideoPlayer } from '../context/VideoPlayerProvider';
 
 interface Time {
     hh: string;
@@ -21,7 +22,6 @@ interface Time {
 
 export interface Props {
     max: number;
-    currentTime: number;
     progress?: number;
     onChange: (time: number) => void;
     hideHoverTime?: boolean;
@@ -29,18 +29,7 @@ export interface Props {
     secondsPrefix?: string;
     minutesPrefix?: string;
     limitTimeTooltipBySides?: boolean;
-    isPlay: boolean;
-    onPlay: () => void;
-    onFullScreen: () => void;
-    isFullScreen: boolean;
-    isBuffering?: boolean;
     popupArea?: number[];
-    isMute: boolean;
-    onMute: () => void;
-    volume: number;
-    setVolume: (wantedVolume: number) => void;
-    isShowSettings: boolean;
-    setShowSettings: (status: boolean) => void;
 }
 
 function secondsToTime(seconds: number, offset: number): Time {
@@ -60,7 +49,6 @@ function secondsToTime(seconds: number, offset: number): Time {
 
 export const VideoSeekSlider: React.FC<Props> = ({
     max = 100,
-    currentTime = 0,
     progress = 0,
     hideHoverTime = false,
     offset = 0,
@@ -68,21 +56,24 @@ export const VideoSeekSlider: React.FC<Props> = ({
     minutesPrefix = '',
     onChange = () => undefined,
     limitTimeTooltipBySides = false,
-    isPlay = false,
-    onPlay,
-    isMute = false,
-    onMute,
-    volume = 50,
-    setVolume,
-    onFullScreen,
-    isFullScreen,
-    isBuffering,
-    popupArea,
-    setShowSettings,
-    isShowSettings
+    popupArea
 }) => {
+    const {
+        currentTime,
+        isBuffering,
+        isMute,
+        isPlay,
+        isShowSettings,
+        onMuteClick,
+        onPlayClick,
+        onFullScreen,
+        fullscreen,
+        volume,
+        setVolume,
+        setShowSettings,
+        isVideoLoaded
+    } = useVideoPlayer();
     const [seekHoverPosition, setSeekHoverPosition] = useState(0);
-
     const seeking = useRef(false);
     const trackWidth = useRef(0);
     const mobileSeeking = useRef(false);
@@ -293,7 +284,7 @@ export const VideoSeekSlider: React.FC<Props> = ({
                     <div className="flex items-center gap-2">
                         <div
                             className="cursor-pointer"
-                            onClick={onPlay}
+                            onClick={onPlayClick}
                             aria-hidden>
                             {isPlay ? <FaPause /> : <FaPlay />}
                         </div>
@@ -304,13 +295,13 @@ export const VideoSeekSlider: React.FC<Props> = ({
                             {isMute ? (
                                 <FaVolumeMute
                                     className="text-xl"
-                                    onClick={onMute}
+                                    onClick={onMuteClick}
                                     aria-hidden
                                 />
                             ) : (
                                 <FaVolumeUp
                                     className="text-xl"
-                                    onClick={onMute}
+                                    onClick={onMuteClick}
                                     aria-hidden
                                 />
                             )}
@@ -333,14 +324,17 @@ export const VideoSeekSlider: React.FC<Props> = ({
                                 />
                             )}
                         </div>
-                        <div>{`${secondsToTime(currentTime, 0).hh}:${
-                            secondsToTime(currentTime, 0).mm
-                        }:${secondsToTime(currentTime, 0).ss}/${
-                            secondsToTime(max, 0).hh
-                        }:${secondsToTime(max, 0).mm}:${
-                            secondsToTime(max, 0).ss
-                        }`}</div>
-                        {isBuffering && <Spinner size="small" />}
+                        {isVideoLoaded ? (
+                            <div>{`${secondsToTime(currentTime, 0).hh}:${
+                                secondsToTime(currentTime, 0).mm
+                            }:${secondsToTime(currentTime, 0).ss}/${
+                                secondsToTime(max, 0).hh
+                            }:${secondsToTime(max, 0).mm}:${
+                                secondsToTime(max, 0).ss
+                            }`}</div>
+                        ) : (
+                            <div className="w-32 h-4 bg-neutral-600 animate-pulse rounded-md"></div>
+                        )}
                     </div>
                     <div className="flex items-center gap-2">
                         <div
@@ -353,7 +347,7 @@ export const VideoSeekSlider: React.FC<Props> = ({
                             className="cursor-pointer"
                             onClick={onFullScreen}
                             aria-hidden>
-                            {isFullScreen ? (
+                            {fullscreen ? (
                                 <BiExitFullscreen className="text-2xl" />
                             ) : (
                                 <BiFullscreen className="text-xl" />
