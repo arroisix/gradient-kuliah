@@ -14,7 +14,8 @@ const CourseCard = ({ course }: { course: Course }): JSX.Element => {
                 style={{
                     background: `url(${course.thumbnail})`,
                     backgroundColor: '#333333',
-                    backgroundSize: 'cover'
+                    backgroundSize: 'contain',
+                    backgroundPosition: 'center'
                 }}
                 onClick={
                     course.is_coming_soon

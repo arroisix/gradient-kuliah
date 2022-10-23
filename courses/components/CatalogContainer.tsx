@@ -24,7 +24,8 @@ const ContentCard = ({
                 }`}
                 style={{
                     backgroundColor: '#333333',
-                    backgroundSize: 'cover',
+                    backgroundSize: 'contain',
+                    backgroundPosition: 'center',
                     backgroundImage: `url(${subchapter.thumbnail})`
                 }}
                 aria-hidden={true}>
