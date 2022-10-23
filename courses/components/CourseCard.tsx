@@ -14,7 +14,7 @@ const CourseCard = ({ course }: { course: Course }): JSX.Element => {
                 style={{
                     background: `url(${course.thumbnail})`,
                     backgroundColor: '#333333',
-                    backgroundSize: 'contain',
+                    backgroundSize: 'cover',
                     backgroundPosition: 'center'
                 }}
                 onClick={
