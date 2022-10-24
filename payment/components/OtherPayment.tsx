@@ -17,7 +17,7 @@ const OtherPaymentBox = (): JSX.Element => {
                 <Button
                     variant="primary"
                     className="bg-[#0F460F] w-full md:w-fit"
-                    href="https://api.whatsapp.com/send/?phone=6285775405765">
+                    href="https://wa.me/message/R7WKMDMQUUIXH1">
                     <span className="text-base font-bold flex items-center justify-center">
                         <FaWhatsapp className="mr-2 text-xl" />
                         Gabung Gradient
