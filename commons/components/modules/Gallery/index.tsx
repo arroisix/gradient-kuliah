@@ -29,7 +29,7 @@ const Gallery = ({
                 ? () => setTranslate(translate - itemWidth)
                 : undefined,
         onSwipedLeft:
-            translate < itemCount * itemWidth * 0.6
+            translate < itemCount * itemWidth
                 ? () => setTranslate(translate + itemWidth)
                 : undefined
     });
@@ -56,7 +56,7 @@ const Gallery = ({
                     (isLastOnViewPort || width <= 768) && 'hidden'
                 } absolute right-16 bg-neutral-100 top-[40%] w-16 h-16 rounded-full flex justify-center items-center`}
                 onClick={
-                    translate < itemCount * itemWidth * 0.6
+                    translate < itemCount * itemWidth
                         ? () => setTranslate(translate + itemWidth)
                         : undefined
                 }

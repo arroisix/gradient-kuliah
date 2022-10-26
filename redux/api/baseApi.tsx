@@ -7,6 +7,8 @@
  */
 import AbortController from 'abort-controller';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 global.AbortController = AbortController;
 
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';

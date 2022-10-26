@@ -60,42 +60,53 @@ const ChapterCatalog = ({
 }): JSX.Element => {
     const { width } = useWindowSize();
 
-    return (
-        <div className="w-full flex flex-col gap-4">
-            <h4 className="text-2xl md:text-3xl font-bold">
-                {chapter.chapter_name}
-            </h4>
-            <div>
-                {chapter.subchapters && chapter.subchapters.length > 0 ? (
-                    <Gallery
-                        itemCount={chapter.subchapters.length}
-                        itemWidth={width > 768 ? 24 : 18}
-                        row={1}
-                        items={sortByOrder(chapter.subchapters).map(
-                            (subchapter: SubChapter) => (
-                                <ContentCard
-                                    subchapter={subchapter}
-                                    isLatest={
-                                        subchapter.id ===
-                                        latest_subchapter?.subchapter.id
-                                    }
-                                    chapterId={chapter.id}
-                                    key={subchapter.id}
-                                />
-                            )
-                        )}
-                    />
-                ) : (
-                    <div className="flex gap-2 items-center py-8">
-                        <ComingSoon />
-                        <span className="font-body text-neutral-400">
-                            Segera hadir
-                        </span>
-                    </div>
-                )}
+    const checkIsHasVideo = (subchapters: SubChapter[]): boolean => {
+        return !(
+            subchapters.filter((sub: SubChapter) => sub.video === null).length >
+            0
+        );
+    };
+
+    if (checkIsHasVideo(chapter.subchapters)) {
+        return (
+            <div className="w-full flex flex-col gap-4">
+                <h4 className="text-2xl md:text-3xl font-bold">
+                    {chapter.chapter_name}
+                </h4>
+                <div>
+                    {chapter.subchapters && chapter.subchapters.length > 0 ? (
+                        <Gallery
+                            itemCount={chapter.subchapters.length}
+                            itemWidth={width > 768 ? 24 : 18}
+                            row={1}
+                            items={sortByOrder(chapter.subchapters).map(
+                                (subchapter: SubChapter) => (
+                                    <ContentCard
+                                        subchapter={subchapter}
+                                        isLatest={
+                                            subchapter.id ===
+                                            latest_subchapter?.subchapter.id
+                                        }
+                                        chapterId={chapter.id}
+                                        key={subchapter.id}
+                                    />
+                                )
+                            )}
+                        />
+                    ) : (
+                        <div className="flex gap-2 items-center py-8">
+                            <ComingSoon />
+                            <span className="font-body text-neutral-400">
+                                Segera hadir
+                            </span>
+                        </div>
+                    )}
+                </div>
             </div>
-        </div>
-    );
+        );
+    }
+
+    return <></>;
 };
 
 const CatalogContainer = ({
