@@ -11,7 +11,7 @@ const VideoLearnContainer = ({ course }: { course: Course }): JSX.Element => {
     const router = useRouter();
     const { sub } = router.query;
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { setVideoPicked, subchapter } = useLearning();
+    const { setVideoPicked } = useLearning();
     const { data, isLoading } = useGetSubchapterDetailQuery(sub as string, {
         skip: sub === null || sub === undefined || !isAuthenticated
     });
@@ -30,7 +30,7 @@ const VideoLearnContainer = ({ course }: { course: Course }): JSX.Element => {
                         data ? (
                             <LearnVideo
                                 video={data.video as Video}
-                                subchapter={subchapter}
+                                subchapter={data}
                                 key={sub as string}
                                 learningProgress={course.learning_progress}
                             />
