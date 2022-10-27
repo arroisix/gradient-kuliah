@@ -12,6 +12,7 @@ interface InputProps {
     endAddorment?: JSX.Element;
     disabled?: boolean;
     error?: string;
+    required?: boolean;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -26,7 +27,8 @@ const Input: React.FC<InputProps> = ({
     startAddorment,
     endAddorment,
     disabled,
-    error
+    error,
+    required
 }) => (
     <div className="flex flex-col my-4 w-full">
         <span className="mb-1 text-xs">{label}</span>
@@ -46,6 +48,7 @@ const Input: React.FC<InputProps> = ({
                 value={value}
                 name={name}
                 disabled={disabled}
+                required={required}
             />
             <div>{endAddorment}</div>
         </div>

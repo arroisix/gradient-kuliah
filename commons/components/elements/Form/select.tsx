@@ -5,6 +5,7 @@ interface SelectProps {
     onBlur?: (res: any) => void;
     value?: string;
     name: string;
+    required?: boolean;
 }
 
 const Select: React.FC<SelectProps> = ({
@@ -13,7 +14,8 @@ const Select: React.FC<SelectProps> = ({
     onChange,
     onBlur,
     value,
-    name
+    name,
+    required
 }) => {
     return (
         <div className="flex flex-col my-2 w-full">
@@ -23,7 +25,8 @@ const Select: React.FC<SelectProps> = ({
                 onChange={onChange}
                 onBlur={onBlur}
                 value={value}
-                name={name}>
+                name={name}
+                required={required}>
                 {option.map((o) => (
                     <option key={o.key} value={o.key} label={o.value}>
                         {o.value}

@@ -1,20 +1,30 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import Modal from 'commons/components/modules/Modal';
 import DialogSuccess from '../SuccessDialog';
-import FormSection from './form';
+import RegistrationContext from 'authentication/contexts/RegistrationProvider';
+import RegistrationSection from './registrationSection';
+import ReferenceSection from './referenceSection';
+
+const formStep = (step: number): React.ReactNode => {
+    switch (step) {
+        case 0:
+            return <RegistrationSection />;
+        case 1:
+            return <ReferenceSection />;
+        default:
+            return null;
+    }
+};
 
 const ModalOnboarding = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
     const [success, setSuccess] = useState<1 | 0>(0);
+    const { step, formData } = useContext(RegistrationContext);
 
     return (
         <>
+            <div>{JSON.stringify(formData)}</div>
             <Modal isOpen={isOpen ? 1 : 0} setOpen={() => setOpen(0)} permanent>
-                {/* <div className="w-full flex flex-col">
-                    <h1 className="text-3xl text-center font-bold mb-8">
-                        Lengkapi Akunmu
-                    </h1> */}
-                <FormSection openDialog={setSuccess} />
-                {/* </div> */}
+                {formStep(step)}
             </Modal>
             <DialogSuccess isOpen={success} setOpen={setSuccess} />
         </>
