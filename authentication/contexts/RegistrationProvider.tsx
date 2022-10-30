@@ -1,4 +1,3 @@
-// import { MutationTrigger } from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import { useUpdateUserMutation } from 'authentication/redux/api/authApi';
 import { createContext, ReactNode, useMemo, useState } from 'react';
 

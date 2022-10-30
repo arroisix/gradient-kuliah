@@ -27,8 +27,6 @@ const RegistrationSection = (): JSX.Element => {
                     } as UpdateUserInputData
                 }
                 onSubmit={(values) => {
-                    // const result = await validateForm();
-                    console.log('asd');
                     setFormData({
                         ...formData,
                         ...values,
@@ -162,7 +160,6 @@ const RegistrationSection = (): JSX.Element => {
                             }
                             required={true}
                         />
-                        <div>{JSON.stringify(values)}</div>
                         <Button
                             variant="custom"
                             className="bg-accent-purple text-white mt-4 w-full"

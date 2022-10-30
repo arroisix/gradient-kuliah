@@ -11,8 +11,6 @@ const ReferenceSection = (): JSX.Element => {
     const { setStep, formData, setFormData, updateUser } =
         useContext(RegistrationContext);
 
-    console.log(isLoadingReferences, registerReferences);
-
     return (
         <div className="w-full flex flex-col">
             <Formik

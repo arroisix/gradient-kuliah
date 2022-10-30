@@ -18,11 +18,10 @@ const formStep = (step: number): React.ReactNode => {
 
 const ModalOnboarding = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
     const [success, setSuccess] = useState<1 | 0>(0);
-    const { step, formData } = useContext(RegistrationContext);
+    const { step } = useContext(RegistrationContext);
 
     return (
         <>
-            <div>{JSON.stringify(formData)}</div>
             <Modal isOpen={isOpen ? 1 : 0} setOpen={() => setOpen(0)} permanent>
                 {formStep(step)}
             </Modal>
