@@ -38,5 +38,5 @@ interface UpdateUserInputData {
     birthdate?: string;
     gender?: 'FEMALE' | 'MALE';
     education_level?: 'SMP' | 'SMA' | 'SMK' | 'S1' | 'S2';
-    register_reference_id: string;
+    register_reference_id?: string;
 }

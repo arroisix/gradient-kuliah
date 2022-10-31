@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Modal from 'commons/components/modules/Modal';
 import DialogSuccess from '../SuccessDialog';
 import RegistrationContext from 'authentication/contexts/RegistrationProvider';
@@ -18,7 +18,14 @@ const formStep = (step: number): React.ReactNode => {
 
 const ModalOnboarding = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
     const [success, setSuccess] = useState<1 | 0>(0);
-    const { step } = useContext(RegistrationContext);
+    const { step, isUserUpdateLoading, isUserUpdateSuccess } =
+        useContext(RegistrationContext);
+
+    useEffect(() => {
+        if (!isUserUpdateLoading && isUserUpdateSuccess) {
+            setSuccess(1);
+        }
+    }, [isUserUpdateLoading, isUserUpdateSuccess]);
 
     return (
         <>

@@ -2,7 +2,7 @@ import { useUpdateUserMutation } from 'authentication/redux/api/authApi';
 import { createContext, ReactNode, useMemo, useState } from 'react';
 
 interface RegistrationContextType {
-    updateUser: ReturnType<typeof useUpdateUserMutation>[0];
+    updateUser: (data: UpdateUserInputData) => Promise<void>;
     formData: UpdateUserInputData;
     setFormData: (data: UpdateUserInputData) => void;
     step: number;
@@ -26,7 +26,10 @@ export const RegistrationProvider: React.FC<Props> = ({ children }) => {
 
     const memoedValue = useMemo(
         () => ({
-            updateUser: update,
+            updateUser: async (data: UpdateUserInputData) => {
+                setFormData(data);
+                await update(data);
+            },
             isUserUpdateLoading: isLoading,
             isUserUpdateSuccess: isSuccess,
             step,
