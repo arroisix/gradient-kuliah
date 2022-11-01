@@ -14,7 +14,7 @@ const Price = ({
     course: Course;
     secondVariant?: boolean;
 }): JSX.Element => {
-    const { data } = useGetOneCourseManyPacketQuery(course.id);
+    const { data } = useGetOneCourseManyPacketQuery({ course_id: course.id });
     const { setModalAuthOpen } = useAuth();
     const [packet, setPacket] = useState<Packet>();
     const { width } = useWindowSize();

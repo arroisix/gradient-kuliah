@@ -32,3 +32,8 @@ interface CheckoutInputData {
     payment_method: PaymentMethod;
     phone_number?: string;
 }
+
+interface OneCourseManyPacketQuery {
+    course_id: string;
+    add_to_cart?: boolean;
+}

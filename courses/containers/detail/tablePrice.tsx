@@ -8,7 +8,7 @@ import Price from './price';
 
 const TablePrice = ({ course }: { course: Course }): JSX.Element => {
     const { setModalAuthOpen } = useAuth();
-    const { data } = useGetOneCourseManyPacketQuery(course.id);
+    const { data } = useGetOneCourseManyPacketQuery({ course_id: course.id });
     const isAuthenticated = useSelector(getIsAuthenticated);
 
     if (data?.data.length === 1) {

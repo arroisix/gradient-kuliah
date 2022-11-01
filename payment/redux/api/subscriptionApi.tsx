@@ -16,9 +16,15 @@ export const subscriptionApi = baseApi.injectEndpoints({
                 url: `${SUBSCRIPTION_BASE_URL}one-packet-one-course/${packetId}`
             })
         }),
-        getOneCourseManyPacket: builder.query<ResponseData<Packet>, string>({
-            query: (course_id: string) => ({
-                url: `${SUBSCRIPTION_BASE_URL}one-course-many-packet/${course_id}`
+        getOneCourseManyPacket: builder.query<
+            ResponseData<Packet>,
+            OneCourseManyPacketQuery
+        >({
+            query: (data: OneCourseManyPacketQuery) => ({
+                url: `${SUBSCRIPTION_BASE_URL}one-course-many-packet/${data.course_id}`,
+                params: {
+                    add_to_cart: data.add_to_cart ?? false
+                }
             })
         }),
         extendCheckout: builder.mutation<
