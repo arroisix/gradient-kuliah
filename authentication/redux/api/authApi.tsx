@@ -31,6 +31,14 @@ export const authApi = baseApi.injectEndpoints({
                 method: 'PUT',
                 body: data
             })
+        }),
+        getRegisterReference: builder.query<
+            { data: RegisterReference[] },
+            Record<string, never>
+        >({
+            query: () => ({
+                url: `${AUTH_BASE_URL}register-references/`
+            })
         })
     })
 });
@@ -39,5 +47,6 @@ export const {
     useLoginMutation,
     useSocialLoginMutation,
     useRegisterMutation,
-    useUpdateUserMutation
+    useUpdateUserMutation,
+    useGetRegisterReferenceQuery
 } = authApi;

@@ -43,10 +43,10 @@ const Radio = ({
     return (
         <div className="flex flex-col my-4 w-full">
             <span className="mb-1 text-xs">{label}</span>
-            <div className="flex">
+            <div className="flex flex-wrap -mb-2">
                 {options.map((option: RadioOption) => (
                     <div
-                        className={`cursor-pointer py-2 px-5  rounded-full mr-2  ${
+                        className={`cursor-pointer py-2 px-5 rounded-full mr-2 mb-2  ${
                             radioValue === option.key
                                 ? 'bg-accent-blue text-white'
                                 : 'bg-neutral-100'

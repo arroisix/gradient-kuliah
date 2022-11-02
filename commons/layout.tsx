@@ -1,6 +1,7 @@
 import ModalAuth from 'authentication/components/ModalAuth';
 import ModalOnboarding from 'authentication/components/OnboardingModal';
 import { useAuth } from 'authentication/contexts/AuthProvider';
+import { RegistrationProvider } from 'authentication/contexts/RegistrationProvider';
 import Footer from './components/modules/Footer';
 import Navbar from './components/modules/Navbar';
 
@@ -32,10 +33,12 @@ const Layout = ({
                 courses={courses}
             />
             <ModalAuth isOpen={isModalAuthOpen} setOpen={setModalAuthOpen} />
-            <ModalOnboarding
-                isOpen={isOnboardingOpen}
-                setOpen={closeOnboardingModal}
-            />
+            <RegistrationProvider>
+                <ModalOnboarding
+                    isOpen={isOnboardingOpen}
+                    setOpen={closeOnboardingModal}
+                />
+            </RegistrationProvider>
             <div className="min-h-full">{children}</div>
             <Footer />
         </div>
