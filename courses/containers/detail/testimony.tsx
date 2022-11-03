@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { FaQuoteLeft } from 'react-icons/fa';
 
 const TESTIMONY_DATA = [
@@ -50,9 +51,12 @@ const TestimonyCard = ({
             </div>
             <div className="flex w-full items-center">
                 <div className="h-14 w-14 bg-neutral-200 rounded-full overflow-hidden flex justify-center items-center">
-                    <img
+                    <Image
+                        loading="lazy"
                         src={photo}
-                        className="h-full object-cover"
+                        height={56}
+                        width={56}
+                        className="object-cover"
                         alt="lecturer"
                     />
                 </div>

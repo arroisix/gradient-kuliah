@@ -1,4 +1,5 @@
 import { MdPlayCircleOutline, MdOutlineGroup, MdEdit } from 'react-icons/md';
+import Image from 'next/image';
 
 const BenefitItems = ({
     icons,
@@ -27,7 +28,7 @@ const BenefitItems = ({
 const Benefit = (): JSX.Element => {
     return (
         <div
-            className="pr-4 pl-4 md:pr-0 md:pl-[7.5rem] flex md:flex-row w-full md:h-[75vh] my-8 md:my-16"
+            className="pr-4 pl-4 md:pr-0 md:pl-[7.5rem] flex md:flex-row w-full md:h-[75vh] my-8 md:my-16 items-center"
             id="benefit">
             <div className="w-screen md:w-[50vw] h-full mt-8 flex flex-col gap-2">
                 <h3 className="text-2xl md:text-4xl font-bold w-full md:w-3/4">
@@ -51,13 +52,20 @@ const Benefit = (): JSX.Element => {
             </div>
             <div
                 className="h-full w-[50vw] hidden md:flex"
-                style={{
-                    background:
-                        'url(https://d2uqn6ndx4ow3t.cloudfront.net/courses/calculus/assets/benefit-asset.png)',
-                    backgroundSize: 'contain',
-                    backgroundRepeat: 'no-repeat'
-                }}
-            />
+                // style={{
+                //     background:
+                //         'url(https://d2uqn6ndx4ow3t.cloudfront.net/courses/calculus/assets/benefit-asset.png)',
+                //     backgroundSize: 'contain',
+                //     backgroundRepeat: 'no-repeat'
+                // }}
+            >
+                <Image
+                    src="https://assets.gradient.academy/courses/calculus/assets/benefit-asset.png"
+                    loading="lazy"
+                    width={800}
+                    height={'100%'}
+                />
+            </div>
         </div>
     );
 };

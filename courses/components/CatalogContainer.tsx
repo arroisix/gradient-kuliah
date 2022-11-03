@@ -3,6 +3,7 @@ import GreenCheck from 'commons/components/elements/Icons/GreenCheck';
 import Gallery from 'commons/components/modules/Gallery';
 import useWindowSize from 'commons/hooks/useWindowSize';
 import { sortByOrder } from 'courses/utils';
+import Image from 'next/image';
 import Link from 'next/link';
 
 const ContentCard = ({
@@ -19,17 +20,20 @@ const ContentCard = ({
             href={`/kelas/kalkulus1/belajar/video/${chapterId}/${subchapter.id}`}
             key={subchapter.id}>
             <div
-                className={`p-4 h-40 w-[18rem] md:h-52 md:w-[24rem] bg-neutral-800 mr-2 rounded-lg cursor-pointer flex justify-end flex-col ${
+                className={`p-4 h-40 w-[18rem] md:h-52 md:w-[24rem] bg-neutral-800 mr-2 rounded-lg cursor-pointer flex justify-end flex-col relative ${
                     isLatest && 'border-2 border-accent-purple'
-                }`}
-                style={{
-                    backgroundColor: '#333333',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundImage: `url(${subchapter.thumbnail})`
-                }}
+                } overflow-hidden`}
                 aria-hidden={true}>
-                <div className="flex w-full items-center">
+                <Image
+                    src={
+                        subchapter.thumbnail ??
+                        'https://assets.gradient.academy/assets/gradient_thumbnail_black.jpg'
+                    }
+                    loading="lazy"
+                    className="w-full h-full object-cover"
+                    layout="fill"
+                />
+                <div className="flex w-full items-center z-[5]">
                     <p className="text-base md:text-2xl mr-2">
                         {subchapter.subchapter_name}
                     </p>
@@ -40,7 +44,7 @@ const ContentCard = ({
                     )}
                 </div>
                 {isLatest && (
-                    <div>
+                    <div className="z-[5]">
                         <p className="text-base text-neutral-400">
                             TERAKHIR DIPELAJARI
                         </p>
