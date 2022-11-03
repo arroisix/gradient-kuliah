@@ -23,7 +23,8 @@ const LearnVideo = ({
 
     return (
         <div className="w-full h-full transition-all">
-            {videoPicked?.video_url !== null ? (
+            {videoPicked?.video_url !== null &&
+            videoPicked?.id !== undefined ? (
                 <VideoPlayer
                     height={width <= 768 ? '200px' : '600px'}
                     popupData={video?.popup_questions}
@@ -41,7 +42,7 @@ const LearnVideo = ({
                                           learningProgress?.id as string,
                                       progress_type: 'VIDEO',
                                       video_progress: {
-                                          video_id: videoPicked.id,
+                                          video_id: videoPicked?.id,
                                           last_duration:
                                               last_duration as unknown as string,
                                           is_finished: isFinished ?? false

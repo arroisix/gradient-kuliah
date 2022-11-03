@@ -69,7 +69,7 @@ export const VideoSeekSlider: React.FC<Props> = ({
         onFullScreen,
         fullscreen,
         volume,
-        setVolume,
+        onChangeVolume,
         setShowSettings,
         isVideoLoaded
     } = useVideoPlayer();
@@ -315,7 +315,7 @@ export const VideoSeekSlider: React.FC<Props> = ({
                                     onChange={(
                                         event: ChangeEvent<HTMLInputElement>
                                     ) =>
-                                        setVolume(
+                                        onChangeVolume(
                                             event.target
                                                 .value as unknown as number
                                         )

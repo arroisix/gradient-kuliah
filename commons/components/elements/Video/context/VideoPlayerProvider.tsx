@@ -121,7 +121,7 @@ export function VideoProvider({
         videoRef.current.volume = wantedVolume / 100;
         setVolume(wantedVolume);
 
-        if (wantedVolume > 0 && isMute) {
+        if (wantedVolume > 0) {
             videoRef.current.muted = false;
             setIsMute(false);
         }
@@ -170,6 +170,24 @@ export function VideoProvider({
         videoRef.current.addEventListener('ended', () => {
             if (trackProgress) {
                 trackProgress(videoRef.current.currentTime, true);
+            }
+        });
+
+        document.addEventListener('keydown', (event: KeyboardEvent) => {
+            if (event.code === 'Space') {
+                event.preventDefault();
+                onPlayClick();
+            }
+
+            if (event.code === 'ArrowRight') {
+                videoRef.current.currentTime += 10;
+            }
+
+            if (
+                event.code === 'ArrowLeft' &&
+                videoRef.current.currentTime - 10 > 0
+            ) {
+                videoRef.current.currentTime -= 10;
             }
         });
     }, []);
