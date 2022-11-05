@@ -66,7 +66,13 @@ const NeedSubscribe = ({ thumbnail }: { thumbnail?: string }): JSX.Element => {
                     ) : (
                         <Button
                             variant="primary"
-                            onClick={() => setModalAuthOpen(1)}>
+                            onClick={() =>
+                                setModalAuthOpen(
+                                    1,
+                                    false,
+                                    `/langganan?courseId=${data?.id}`
+                                )
+                            }>
                             Gabung Kelas
                         </Button>
                     )}

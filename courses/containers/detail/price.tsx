@@ -96,7 +96,13 @@ const Price = ({
                 <Button
                     className="md:w-fit text-center my-2"
                     variant="primary"
-                    onClick={() => setModalAuthOpen(1)}>
+                    onClick={() =>
+                        setModalAuthOpen(
+                            1,
+                            false,
+                            `/langganan?courseId=${course.id}`
+                        )
+                    }>
                     {secondVariant && width <= 768
                         ? 'Gabung Sekarang'
                         : 'Akses Sekarang'}

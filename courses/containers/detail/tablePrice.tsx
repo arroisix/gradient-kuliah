@@ -69,7 +69,13 @@ const TablePrice = ({ course }: { course: Course }): JSX.Element => {
                 <Button
                     className="md:w-fit text-center my-z"
                     variant="primary"
-                    onClick={() => setModalAuthOpen(1)}>
+                    onClick={() =>
+                        setModalAuthOpen(
+                            1,
+                            false,
+                            `/langganan?courseId=${course.id}`
+                        )
+                    }>
                     Akses Sekarang
                 </Button>
             )}
