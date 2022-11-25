@@ -1,23 +1,26 @@
 import Button from 'commons/components/elements/Button';
+import CommunityPreview from 'landing/components/CommunityPreview';
 
 const JoinDiscord = (): JSX.Element => {
     return (
-        <section
-            className="px-4 md:px-[7.5rem] py-4 h-[80vh] flex items-center justify-center flex-col mt-32"
-            style={{
-                background: `url(https://d2uqn6ndx4ow3t.cloudfront.net/assets/discord.png)`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center'
-            }}>
-            <h1 className="text-3xl lg:text-5xl font-bold bg-gradient-to-r from-[#9571E3] to-[#BF4F44] text-transparent bg-clip-text text-center">
-                Gabung Komunitas Gradient
-            </h1>
-            <span className="text-white font-body my-2 lg:my-4 text-xl lg:text-3xl text-center">
-                ngobrolin keluh kesah kuliah~
-            </span>
-            <Button variant="primary" href="https://discord.gg/qU3SB6wxzY">
-                Gabung Discord
-            </Button>
+        <section className="px-4 md:px-[16rem] py-8 flex items-center justify-center flex-col-reverse md:flex-row lg:mt-16">
+            <div className="w-full text-center lg:text-left -mt-16 lg:mt-0 flex flex-col items-center md:items-start">
+                <h2 className="text-lg lg:text-5xl font-bold">
+                    Gabung Komunitas Gradient
+                </h2>
+                <p className="text-sm lg:text-2xl font-body font-thin text-neutral-200 my-2">
+                    Lebih dari 50 universitas sudah bergabung dalam Gradient
+                </p>
+                <Button
+                    variant="primary"
+                    href="https://discord.gg/qU3SB6wxzY"
+                    className="w-fit">
+                    Gabung Komunitas
+                </Button>
+            </div>
+            <div className="w-full lg:w-1/2 h-full flex justify-center items-center">
+                <CommunityPreview />
+            </div>
         </section>
     );
 };

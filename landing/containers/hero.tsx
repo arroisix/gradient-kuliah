@@ -1,71 +1,86 @@
-import { useRouter } from 'next/router';
 import { useAuth } from 'authentication/contexts/AuthProvider';
-import TextTransition, { presets } from 'react-text-transition';
 import Button from 'commons/components/elements/Button';
-import EffectButton from 'commons/components/elements/Button/effect';
-import { useSelector } from 'react-redux';
-import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
-import { useEffect, useState } from 'react';
-
-const TEXTS = ['berkoneksi.', 'bertumbuh.', 'berkembang.'];
+import Container from 'landing/components/Container';
+import Image from 'next/image';
 
 const Hero = (): JSX.Element => {
     const { setModalAuthOpen } = useAuth();
-    const isAuthenticated = useSelector(getIsAuthenticated);
-    const router = useRouter();
-    const [index, setIndex] = useState(0);
-
-    useEffect(() => {
-        const intervalId = setInterval(
-            () => setIndex((index) => index + 1),
-            2000 // every 3 seconds
-        );
-        return () => clearTimeout(intervalId);
-    }, []);
 
     return (
-        <section className="h-screen w-full px-4 md:px-[7.5rem] py-4 flex flex-col justify-center items-center relative overflow-hidden">
-            <div className="bean-container-1">
-                <div className="bean1" />
-                <div className="bean2" />
+        <Container className="flex-col md:flex-row-reverse gap-16 md:gap-2 md:items-center">
+            <div className="w-full mt-32 md:mt-0">
+                <div className="h-[300px] md:h-[380px] w-full relative">
+                    <div
+                        className="absolute rounded-full w-[51px] h-[51px] lg:w-[130px] lg:h-[130px] -bottom-4 -left-4 lg:-left-16 z-0"
+                        style={{
+                            background:
+                                'linear-gradient(330.33deg, #5F2BCE 4.61%, #030C14 84.77%)',
+                            transform: 'rotate(-180deg)'
+                        }}
+                    />
+                    <div
+                        className="absolute rounded-full w-[84px] h-[84px] lg:w-[216px] lg:h-[216px] top-2 lg:top-12 -right-4 lg:-right-16 z-0"
+                        style={{
+                            background:
+                                'linear-gradient(330.33deg, #5F2BCE 4.61%, #030C14 84.77%)',
+                            transform: 'rotate(-180deg)'
+                        }}
+                    />
+                    <div className="absolute top-0 left-0 w-full h-full bg-[#121212] z-10 rounded-3xl overflow-hidden">
+                        <div className="w-full p-4 flex gap-2">
+                            <div className="rounded-full h-3 w-3 bg-accent-purple" />
+                            <div className="rounded-full h-3 w-3 bg-accent-purple" />
+                            <div className="rounded-full h-3 w-3 bg-accent-purple" />
+                        </div>
+                        <div className="w-full h-full overflow-hidden">
+                            <div className="w-full h-full">
+                                <Image
+                                    src="https://assets.gradient.academy/assets/thumb-1.jpg"
+                                    loading="lazy"
+                                    className="object-cover"
+                                    // layout="fill"
+                                    height={450}
+                                    width={600}
+                                />
+                            </div>
+                            <div className="absolute w-full h-5 bottom-3 left-0 p-4">
+                                <div className="w-full h-1 bg-[#373737] rounded-2xl relative">
+                                    <div className="rounded-full h-2 w-2 bg-accent-purple absolute bottom-[-2px] left-48" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div className="bean-container-2">
-                <div className="bean3" />
-                <div className="bean4" />
-            </div>
-            <h1 className="text-3xl lg:text-5xl font-bold text-center z-10 flex flex-wrap justify-center items-center gap-3">
-                Komunitas untuk Mahasiswa Baru{' '}
-                <TextTransition springConfig={presets.stiff}>
-                    {TEXTS[index % TEXTS.length]}
-                </TextTransition>
-            </h1>
-            <div className="md:w-1/2 text-center z-10 my-2">
-                <span className="font-body text-neutral-300 text-xl lg:text-[32px] font-thin">
-                    Pengalaman Kuliah yang Berbeda
-                </span>
-            </div>
-            {isAuthenticated ? (
-                <EffectButton
-                    className="bg-accent-purple my-4 z-10"
-                    onClick={() => router.push('/kelas')}>
-                    Belajar Sekarang
-                </EffectButton>
-            ) : (
-                <div className="flex flex-col md:flex-row">
-                    <EffectButton
-                        className="bg-accent-purple my-4 z-10 md:mr-4"
-                        href="https://discord.gg/qU3SB6wxzY">
-                        Gabung Discord
-                    </EffectButton>
+            <div className="w-full">
+                <h1 className="lg:text-5xl text-2xl text-center lg:text-left font-bold">
+                    Belajar dari pengajar terbaik di Indonesia
+                </h1>
+                <h4 className="text-base md:text-2xl font-body font-[100] text-center lg:text-left text-neutral-200">
+                    <span className="hidden md:block">
+                        Akses materi belajar terlengkap
+                    </span>
+                    <span className="block md:hidden">
+                        Akses materi belajar yang lengkap dan video belajar yang
+                        gak ngebosenin{' '}
+                    </span>
+                </h4>
+                <div className="flex flex-col md:flex-row gap-2 mt-8 md:mt-0">
                     <Button
-                        variant="custom"
-                        className="bg-[#212121] md:my-4 z-10"
+                        variant="primary"
+                        className="md:my-4 z-10"
                         onClick={() => setModalAuthOpen(1)}>
                         Gabung Sekarang
                     </Button>
+                    <Button
+                        variant="primary"
+                        className="bg-[#212121] md:my-4 z-10 text-center"
+                        href="https://discord.gg/qU3SB6wxzY">
+                        Gabung Komunitas
+                    </Button>
                 </div>
-            )}
-        </section>
+            </div>
+        </Container>
     );
 };
 
