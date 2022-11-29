@@ -135,6 +135,7 @@ type SubchapterProgress = {
 type LearningProgress = {
     id: string;
     latest_subchapter: SubchapterProgress;
+    subchapter_progress: SubchapterProgress[];
 };
 
 type Packet = {

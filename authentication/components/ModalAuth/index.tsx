@@ -16,7 +16,7 @@ export interface SectionProps {
 }
 
 const ModalAuth = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
-    const [isLogin, setIsLogin] = useState(true);
+    const [isLogin, setIsLogin] = useState(false);
     const { isPermanent } = useAuth();
 
     const { googleLogin, isSuccess } = useSocialLogin();

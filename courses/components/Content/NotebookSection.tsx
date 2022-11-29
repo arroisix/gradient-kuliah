@@ -50,7 +50,11 @@ const NotebookSection = ({
                                                     );
                                                 }
                                             } else {
-                                                setModalAuthOpen(1);
+                                                setModalAuthOpen(
+                                                    1,
+                                                    false,
+                                                    `/kelas/kalkulus1/belajar/notebook/${chapter.id}/${subchapter.id}`
+                                                );
                                             }
                                         }}
                                         aria-hidden

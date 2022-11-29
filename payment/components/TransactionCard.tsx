@@ -63,7 +63,8 @@ const TransactionCard = ({
                             Langganan hingga{' '}
                             {moment()
                                 .add(subscribed_packet?.active_duration, 'd')
-                                .format('Do MMMM YYYY')}
+                                .utc()
+                                .format('D MMM YYYY')}
                         </span>
                     </div>
                     <div className="text-left md:text-right">

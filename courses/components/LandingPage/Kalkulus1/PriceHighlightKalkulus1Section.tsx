@@ -2,34 +2,36 @@ import { useAuth } from 'authentication/contexts/AuthProvider';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
 import useWindowSize from 'commons/hooks/useWindowSize';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { useGetLandingCourseDataQuery } from 'courses/redux/api/publicCourseApi';
 import { formatter } from 'courses/utils';
-import { useGetOneCourseManyPacketQuery } from 'payment/redux/api/subscriptionApi';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-const Price = ({
-    course,
-    secondVariant
+const PriceHighlightKalkulus1Section = ({
+    slug,
+    is_second_variant
 }: {
-    course: Course;
-    secondVariant?: boolean;
+    slug: string;
+    is_second_variant?: boolean;
 }): JSX.Element => {
-    const { data } = useGetOneCourseManyPacketQuery({ course_id: course.id });
+    const { data: course } = useGetLandingCourseDataQuery(slug);
+    const { is_subscribed } = useCourseSubscription(slug);
     const { setModalAuthOpen } = useAuth();
     const [packet, setPacket] = useState<Packet>();
     const { width } = useWindowSize();
     const isAuthenticated = useSelector(getIsAuthenticated);
 
     useEffect(() => {
-        if (data && data.data.length > 0) {
-            const rawData = [...data.data];
+        if (course && course.packets.length > 0) {
+            const rawData = [...course.packets];
             const sortedData = rawData.sort(
                 (a: Packet, b: Packet) => a.active_duration - b.active_duration
             );
 
             setPacket(sortedData[0]);
         }
-    }, [data]);
+    }, [course]);
 
     const calculatePrice = (): string => {
         if (packet?.price === null) {
@@ -43,7 +45,7 @@ const Price = ({
 
     return (
         <div className="px-4 md:px-[7.5rem] flex flex-col justify-center items-center my-8 md:my-16 h-[30vh] md:h-[50vh]">
-            {secondVariant ? (
+            {is_second_variant ? (
                 <>
                     <h3 className="font-bold text-2xl md:text-4xl text-center">
                         {width > 768
@@ -59,7 +61,7 @@ const Price = ({
                     Akses instan Semuanya Sekarang!
                 </h3>
             )}
-            {course?.discount && (
+            {packet?.discount.split('.')[0] !== '0' && (
                 <p className="font-bold text-xs line-through text-red-400 flex">
                     <h2 className="text-3xl md:text-5xl text-black">-</h2>
                     <h2 className="text-[#999999] text-3xl md:text-5xl">
@@ -82,17 +84,17 @@ const Price = ({
                     ({packet?.discount.split('.')[0]}% OFF)
                 </span>
             </div>
-            {isAuthenticated && !course.is_subscribed && (
+            {isAuthenticated && !is_subscribed && (
                 <Button
                     className="md:w-fit text-center my-2"
                     variant="primary"
-                    href={`/langganan?courseId=${course.id}`}>
-                    {secondVariant && width <= 768
+                    href={`/langganan?courseId=${course?.course_id}`}>
+                    {is_second_variant && width <= 768
                         ? 'Gabung Sekarang'
                         : 'Akses Sekarang'}
                 </Button>
             )}
-            {!isAuthenticated && !course.is_subscribed && (
+            {!isAuthenticated && !is_subscribed && (
                 <Button
                     className="md:w-fit text-center my-2"
                     variant="primary"
@@ -100,10 +102,10 @@ const Price = ({
                         setModalAuthOpen(
                             1,
                             false,
-                            `/langganan?courseId=${course.id}`
+                            `/langganan?courseId=${course?.course_id}`
                         )
                     }>
-                    {secondVariant && width <= 768
+                    {is_second_variant && width <= 768
                         ? 'Gabung Sekarang'
                         : 'Akses Sekarang'}
                 </Button>
@@ -112,4 +114,4 @@ const Price = ({
     );
 };
 
-export default Price;
+export default PriceHighlightKalkulus1Section;

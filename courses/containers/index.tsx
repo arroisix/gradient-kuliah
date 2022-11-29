@@ -9,7 +9,7 @@ import PublicCourses from './publicCourses';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
-const ClassContainer = ({ courses }: { courses: Course[] }): JSX.Element => {
+const ClassContainer = (): JSX.Element => {
     const router = useRouter();
     const { flag } = router.query;
     const [myClass, setMyClass] = useState(false);
@@ -54,7 +54,7 @@ const ClassContainer = ({ courses }: { courses: Course[] }): JSX.Element => {
                 {isAuthenticated ? (
                     <PrivateCourses myClass={myClass} />
                 ) : (
-                    <PublicCourses courses={courses} />
+                    <PublicCourses />
                 )}
             </div>
         </section>

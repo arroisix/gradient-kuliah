@@ -1,40 +1,13 @@
 import Layout from 'commons/layout';
-import { GetStaticProps } from 'next';
-import DetailCourse from 'courses/containers/detail';
-import { wrapper } from 'redux/store';
-import {
-    getPublicCourse,
-    useGetPublicCourseQuery,
-    useGetPublicListCoursesQuery
-} from 'courses/redux/api/publicCourseApi';
-import { getRunningOperationPromises } from 'redux/api/baseApi';
+import LandingContainer from 'landing/containers';
+import withAnon from 'commons/withAnon';
 
-const DetailKelas = ({ id }: { id: string }): JSX.Element => {
-    const { data: courses } = useGetPublicListCoursesQuery(
-        {} as FilterCourseQueryParams
-    );
-    const { data: course } = useGetPublicCourseQuery(id);
-
+const Home = (): JSX.Element => {
     return (
-        <Layout courses={courses?.data} shouldTransparent>
-            <DetailCourse course={course ? course : ({} as Course)} />
+        <Layout shouldTransparent>
+            <LandingContainer />
         </Layout>
     );
 };
 
-export default DetailKelas;
-
-export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
-    ({ dispatch }) =>
-        async () => {
-            await dispatch<any>(getPublicCourse.initiate('kalkulus1'));
-
-            Promise.all(getRunningOperationPromises());
-
-            return {
-                props: {
-                    id: 'kalkulus1'
-                }
-            };
-        }
-);
+export default withAnon(Home);

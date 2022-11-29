@@ -1,15 +1,21 @@
 import ContentHighlight from './contentHightlight';
 import Hero from './hero';
 import JoinDiscord from './joinDiscord';
-import ValueProposition from './valueProposition';
+import JoinGradient from './joinGradient';
+import KnowDegree from './knowDegree';
+import Testimony from './testimony';
+import UniqueContent from './uniqueContent';
 
 export default function LandingContainer(): JSX.Element {
     return (
         <div>
             <Hero />
             <ContentHighlight />
-            <ValueProposition />
+            <UniqueContent />
+            <KnowDegree />
             <JoinDiscord />
+            <Testimony />
+            <JoinGradient />
         </div>
     );
 }

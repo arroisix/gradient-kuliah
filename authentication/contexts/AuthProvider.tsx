@@ -3,6 +3,7 @@ import {
     getIsAuthenticated,
     getIsNewUser
 } from 'authentication/redux/selectors/userSelector';
+import { useRouter } from 'next/router';
 import posthog from 'posthog-js';
 import React, {
     createContext,
@@ -16,7 +17,11 @@ import { useSelector } from 'react-redux';
 
 interface AuthContextType {
     isModalAuthOpen: 1 | 0;
-    setModalAuthOpen: (status: 1 | 0, isPermanent?: boolean) => void;
+    setModalAuthOpen: (
+        status: 1 | 0,
+        isPermanent?: boolean,
+        redirectPath?: string
+    ) => void;
     isOnboardingOpen: 1 | 0;
     closeOnboardingModal: (status: 1 | 0) => void;
     isPermanent: boolean;
@@ -32,13 +37,19 @@ export function AuthProvider({
     const [isModalAuthOpen, setModalAuthOpenState] = useState<1 | 0>(0);
     const [isOnboardingOpen, setOnboardingOpen] = useState<1 | 0>(0);
     const [isPermanent, setIsPermanent] = useState(false);
+    const [redirectPath, setRedirectPath] = useState<string>();
     const isNewUser = useSelector(getIsNewUser);
     const isAuthenticated = useSelector(getIsAuthenticated);
     const user = useSelector(getCurrentUser);
+    const router = useRouter();
 
     useEffect(() => {
         if (isNewUser) {
             setOnboardingOpen(1);
+
+            if (redirectPath) {
+                router.push(redirectPath);
+            }
         } else {
             setOnboardingOpen(0);
         }
@@ -59,12 +70,21 @@ export function AuthProvider({
 
     const setModalAuthOpen = (
         status: 1 | 0,
-        isNeedPermanent?: boolean
+        isNeedPermanent?: boolean,
+        redirectPath?: string
     ): void => {
         setModalAuthOpenState(status);
 
         if (isNeedPermanent) {
             setIsPermanent(true);
+        }
+
+        if (redirectPath) {
+            setRedirectPath(redirectPath);
+        }
+
+        if (status === 0) {
+            setRedirectPath(undefined);
         }
     };
 

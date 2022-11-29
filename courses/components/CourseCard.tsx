@@ -1,11 +1,16 @@
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import useTransition from 'commons/hooks/useTransition';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 
 const CourseCard = ({ course }: { course: Course }): JSX.Element => {
     const router = useRouter();
     const loadingTransition = useTransition(router);
+
+    useEffect(() => {
+        if (course) router.prefetch(`/kelas/${course.slug}`);
+    }, [course]);
 
     return (
         <>
