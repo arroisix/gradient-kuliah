@@ -47,6 +47,11 @@ export const privateCourseApi = baseApi.injectEndpoints({
                 method: 'POST',
                 body: data
             })
+        }),
+        getLearningProgress: builder.query<LearningProgress, string>({
+            query: (slug: string) => ({
+                url: `${PRIVATE_COURSE_BASE_URL}learning-progress/${slug}`
+            })
         })
     })
 });
@@ -56,5 +61,6 @@ export const {
     useGetPrivateListCoursesQuery,
     useTrackSubchapterProgressMutation,
     useSubmitPopupQuizAnswerMutation,
-    useGetSubchapterDetailQuery
+    useGetSubchapterDetailQuery,
+    useGetLearningProgressQuery
 } = privateCourseApi;

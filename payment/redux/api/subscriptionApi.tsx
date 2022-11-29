@@ -54,6 +54,11 @@ export const subscriptionApi = baseApi.injectEndpoints({
             query: (course_id: string) => ({
                 url: `${SUBSCRIPTION_BASE_URL}active-subscription/${course_id}`
             })
+        }),
+        getActiveSubscriptionBySlug: builder.query<Subscription, string>({
+            query: (slug: string) => ({
+                url: `${SUBSCRIPTION_BASE_URL}active-subscription-by-slug/${slug}`
+            })
         })
     })
 });
@@ -63,6 +68,7 @@ export const {
     useGetOnePacketOneCourseQuery,
     useFreeCheckoutMutation,
     useGetActiveSubscriptionQuery,
+    useGetActiveSubscriptionBySlugQuery,
     useGetOneCourseManyPacketQuery,
     useExtendCheckoutMutation
 } = subscriptionApi;

@@ -50,15 +50,7 @@ const Benefit = (): JSX.Element => {
                     subtitle="Belajar dan nugas bareng mahasiswa dari seluruh Indonesia"
                 />
             </div>
-            <div
-                className="h-full w-[50vw] hidden md:flex"
-                // style={{
-                //     background:
-                //         'url(https://d2uqn6ndx4ow3t.cloudfront.net/courses/calculus/assets/benefit-asset.png)',
-                //     backgroundSize: 'contain',
-                //     backgroundRepeat: 'no-repeat'
-                // }}
-            >
+            <div className="h-full w-[50vw] hidden md:flex">
                 <Image
                     src="https://assets.gradient.academy/courses/calculus/assets/benefit-asset.png"
                     loading="lazy"
