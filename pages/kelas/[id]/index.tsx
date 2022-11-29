@@ -1,26 +1,15 @@
 import Layout from 'commons/layout';
 import { GetStaticProps, GetStaticPaths } from 'next';
-// import DetailCourse from 'courses/containers/detail';
 import { wrapper } from 'redux/store';
-import {
-    getLandingCourseData,
-    useGetLandingCourseDataQuery
-} from 'courses/redux/api/publicCourseApi';
+import { getLandingCourseData } from 'courses/redux/api/publicCourseApi';
 import { getRunningOperationPromises } from 'redux/api/baseApi';
 import config from 'redux/api/config';
+import LandingPageOrchestrator from 'courses/components/LandingPage/LandingPageOrchestrator';
 
 const DetailKelas = ({ id }: { id: string }): JSX.Element => {
-    // const { data: courses } = useGetPublicListCoursesQuery(
-    //     {} as FilterCourseQueryParams
-    // );
-    const { data: course } = useGetLandingCourseDataQuery(id);
-
-    console.log(course);
-
     return (
         <Layout shouldTransparent>
-            <></>
-            {/* <DetailCourse course={course ? course : ({} as Course)} /> */}
+            <LandingPageOrchestrator id={id} />
         </Layout>
     );
 };

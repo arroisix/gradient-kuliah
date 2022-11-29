@@ -49,14 +49,6 @@ type Course = {
     is_coming_soon?: boolean;
 };
 
-interface CourseLandingPageData {
-    course_slug: string;
-    course_name: string;
-    lecturers: Lecturer[];
-    configuration: any;
-    packets: Packet[];
-}
-
 type Lecturer = {
     name: string;
     photo: string;
@@ -143,6 +135,7 @@ type SubchapterProgress = {
 type LearningProgress = {
     id: string;
     latest_subchapter: SubchapterProgress;
+    subchapter_progress: SubchapterProgress[];
 };
 
 type Packet = {

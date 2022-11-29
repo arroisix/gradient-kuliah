@@ -1,6 +1,9 @@
 import Link from 'next/link';
 import Container from 'commons/components/elements/Container';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import useTransition from 'commons/hooks/useTransition';
+import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 
 const ContentCard = ({
     cover,
@@ -39,49 +42,54 @@ const ContentCard = ({
 };
 
 const ContentHighlight = (): JSX.Element => {
+    const router = useRouter();
+    const loadingTransition = useTransition(router);
     return (
-        <Container>
-            <div className="text-center">
-                <h2 className="text-3xl font-bold">
-                    Pilih Kelas Sesuai Kebutuhanmu
-                </h2>
-                <h4 className="text-2xl font-body font-thin text-neutral-200">
-                    Mengenal jurusanmu lebih dekat dan pelajari materinya secara
-                    mendalam
-                </h4>
-            </div>
-            <div className="flex gap-4 items-center justify-center my-4 relative">
-                <div
-                    className="hidden lg:block w-[170px] h-[170px] rounded-full absolute -bottom-14 left-16 lg:left-36 xl:left-32"
-                    style={{
-                        background:
-                            'linear-gradient(330.33deg, #434343 4.61%, #030C14 84.77%)',
-                        transform: 'matrix(-1, 0, 0, 1, 0, 0)'
-                    }}
-                />
-                <ContentCard
-                    cover="https://d2uqn6ndx4ow3t.cloudfront.net/lecturers/theo-profile.jpg"
-                    slug="kalkulus1"
-                    title="Kalkulus 1"
-                    description="Jembatan yang memampukan kita untuk mengkuantifikasi perubahan"
-                />
-                <div
-                    className="w-[320px] h-[320px] rounded-full absolute right-16 hidden lg:block"
-                    style={{
-                        background:
-                            'linear-gradient(49.01deg, #970D00 17.94%, #030C14 86.52%)',
-                        mixBlendMode: 'normal',
-                        filter: 'blur(2px)'
-                    }}
-                />
-                <ContentCard
-                    cover="https://d2uqn6ndx4ow3t.cloudfront.net/lecturers/asih_portrait.jpg"
-                    slug="ptsl"
-                    title="Pengantar Teknik Sipil dan Lingkungan"
-                    description="Bukan hanya tentang pembangunan fisik, kita akan melihat bagaimana teknik membangun peradaban manusia"
-                />
-            </div>
-        </Container>
+        <>
+            <Container>
+                <div className="text-center">
+                    <h2 className="text-3xl font-bold">
+                        Pilih Kelas Sesuai Kebutuhanmu
+                    </h2>
+                    <h4 className="text-2xl font-body font-thin text-neutral-200">
+                        Mengenal jurusanmu lebih dekat dan pelajari materinya
+                        secara mendalam
+                    </h4>
+                </div>
+                <div className="flex gap-4 items-center justify-center my-4 relative">
+                    <div
+                        className="hidden lg:block w-[170px] h-[170px] rounded-full absolute -bottom-14 left-16 lg:left-36 xl:left-32"
+                        style={{
+                            background:
+                                'linear-gradient(330.33deg, #434343 4.61%, #030C14 84.77%)',
+                            transform: 'matrix(-1, 0, 0, 1, 0, 0)'
+                        }}
+                    />
+                    <ContentCard
+                        cover="https://d2uqn6ndx4ow3t.cloudfront.net/lecturers/theo-profile.jpg"
+                        slug="kalkulus1"
+                        title="Kalkulus 1"
+                        description="Jembatan yang memampukan kita untuk mengkuantifikasi perubahan"
+                    />
+                    <div
+                        className="w-[320px] h-[320px] rounded-full absolute right-16 hidden lg:block"
+                        style={{
+                            background:
+                                'linear-gradient(49.01deg, #970D00 17.94%, #030C14 86.52%)',
+                            mixBlendMode: 'normal',
+                            filter: 'blur(2px)'
+                        }}
+                    />
+                    <ContentCard
+                        cover="https://d2uqn6ndx4ow3t.cloudfront.net/lecturers/asih_portrait.jpg"
+                        slug="ptsl"
+                        title="Pengantar Teknik Sipil dan Lingkungan"
+                        description="Bukan hanya tentang pembangunan fisik, kita akan melihat bagaimana teknik membangun peradaban manusia"
+                    />
+                </div>
+            </Container>
+            {loadingTransition && <LoadingBackdrop />}
+        </>
     );
 };
 

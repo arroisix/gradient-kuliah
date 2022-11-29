@@ -64,7 +64,9 @@ const KnowDegree = (): JSX.Element => {
                 style={{
                     transform: 'matrix(-1, 0, 0, 1, 0, 0)'
                 }}>
-                <Button variant="primary">Lihat Kelas</Button>
+                <Button variant="primary" href="/kelas">
+                    Lihat Kelas
+                </Button>
             </div>
         </div>
     );
