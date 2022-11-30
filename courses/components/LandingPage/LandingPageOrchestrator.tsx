@@ -23,7 +23,7 @@ const LandingPageOrchestrator = ({ id }: { id: string }): JSX.Element => {
     const { data: course } = useGetLandingCourseDataQuery(id);
 
     return (
-        <main className="pt-[70px]">
+        <main>
             {course?.configuration?.landing_page_section.map(
                 (section: LandingPageSection) =>
                     cloneElement(COMPONENT_DICTIONARY[section.key], {

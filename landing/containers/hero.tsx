@@ -38,7 +38,7 @@ const Hero = (): JSX.Element => {
                                     src="https://assets.gradient.academy/assets/thumb-1.jpg"
                                     loading="lazy"
                                     className="object-cover"
-                                    // layout="fill"
+                                    layout="responsive"
                                     height={450}
                                     width={600}
                                 />

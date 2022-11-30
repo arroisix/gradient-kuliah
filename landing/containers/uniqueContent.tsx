@@ -30,7 +30,6 @@ const UniqueContent = (): JSX.Element => {
                 style={{
                     background:
                         'linear-gradient(49.01deg, #970D00 17.94%, #030C14 86.52%)',
-                    mixBlendMode: 'normal',
                     filter: 'blur(2px)'
                 }}
             />

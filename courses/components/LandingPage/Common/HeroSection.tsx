@@ -57,7 +57,7 @@ const HeroSection = ({
                     <Button
                         className="md:w-fit text-center mt-4"
                         variant="primary"
-                        href={`/#benefit`}>
+                        href={`/kelas/${slug}#benefit`}>
                         Info Selengkapnya
                     </Button>
                 )}
