@@ -1,6 +1,11 @@
 import Link from 'next/link';
 import { useState } from 'react';
-import { MdChevronRight, MdHistory, MdLogout } from 'react-icons/md';
+import {
+    MdChevronRight,
+    MdHistory,
+    MdLogout,
+    MdOutlineBook
+} from 'react-icons/md';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import { renderName } from 'commons/utils';
 import {
@@ -67,6 +72,18 @@ const MobileNavbar = ({ closeMobile }: MobileNavbarProps): JSX.Element => {
                                                     {/* <p className="text-xs text-accent-yellow">
                                                 1 Menunggu pembayaran
                                             </p> */}
+                                                </div>
+                                            </div>
+                                        </Link>
+                                        <Link href={'/kelas/?flag=kelasku'}>
+                                            <div className="flex text-white hover:text-accent-blue  font-normal w-full items-center mb-4">
+                                                <div>
+                                                    <MdOutlineBook className="text-2xl" />
+                                                </div>
+                                                <div className="w-full ml-4">
+                                                    <p className="text-base">
+                                                        Kelasku
+                                                    </p>
                                                 </div>
                                             </div>
                                         </Link>
