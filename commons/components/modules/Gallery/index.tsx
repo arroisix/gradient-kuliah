@@ -42,9 +42,9 @@ const Gallery = ({
                 style={{ transform: `translate(-${translate}rem)` }}
                 {...handlers}>
                 <div
-                    className={`my-16 grid grid-rows-1 ${
+                    className={`my-8 grid grid-rows-1 ${
                         !alignCenter && 'justify-start'
-                    } grid- grid-flow-col gap-4`}>
+                    } grid-flow-col gap-4`}>
                     <div ref={firstRef} />
                     <div />
                     {items}

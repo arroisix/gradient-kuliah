@@ -73,7 +73,7 @@ const ChapterCatalog = ({
 
     if (checkIsHasVideo(chapter.subchapters)) {
         return (
-            <div className="w-full flex flex-col gap-4">
+            <div className="w-full flex flex-col gap-2">
                 <h4 className="text-2xl md:text-3xl font-bold">
                     {chapter.chapter_name}
                 </h4>
@@ -97,13 +97,15 @@ const ChapterCatalog = ({
                                 )
                             )}
                         />
-                    ) : (
+                    ) : chapter.is_coming_soon_video ? (
                         <div className="flex gap-2 items-center py-8">
                             <ComingSoon />
                             <span className="font-body text-neutral-400">
                                 Segera hadir
                             </span>
                         </div>
+                    ) : (
+                        <></>
                     )}
                 </div>
             </div>
@@ -121,7 +123,7 @@ const CatalogContainer = ({
     latest_subchapter?: SubchapterProgress;
 }): JSX.Element => {
     return (
-        <div className="flex w-full gap-4 flex-col" id="learning-catalog">
+        <div className="flex w-full gap-2 flex-col" id="learning-catalog">
             {chapters.map((chapter: Chapter) => (
                 <ChapterCatalog
                     chapter={chapter}
