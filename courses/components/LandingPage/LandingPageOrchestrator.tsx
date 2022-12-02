@@ -1,5 +1,10 @@
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useGetLandingCourseDataQuery } from 'courses/redux/api/publicCourseApi';
 import { cloneElement } from 'react';
+import { useSelector } from 'react-redux';
+import CatalogSection from './Common/CatalogSection';
 import FAQSection from './Common/FAQSection';
 import HeroSection from './Common/HeroSection';
 import Lecturer from './Common/LecturerSection';
@@ -19,8 +24,48 @@ const COMPONENT_DICTIONARY: { [key in LandingPageSectionKey]: JSX.Element } = {
     price_highlight_kalkulus1: <PriceHighlightKalkulus1Section slug="dummy" />
 };
 
+const AuthLandingPage = ({ id }: { id: string }): JSX.Element => {
+    const { data: course, isLoading } = useGetLandingCourseDataQuery(id);
+    const { is_subscribed } = useCourseSubscription(id);
+
+    if (isLoading || !course) {
+        return <LoadingBackdrop />;
+    }
+
+    return (
+        <section>
+            <HeroSection
+                slug={id}
+                {...course?.configuration?.landing_page_section[0]}
+            />
+            {!is_subscribed ? (
+                <>
+                    {course?.configuration?.landing_page_section
+                        .slice(1)
+                        .map((section: LandingPageSection) =>
+                            cloneElement(COMPONENT_DICTIONARY[section.key], {
+                                ...section,
+                                slug: id
+                            })
+                        )}
+                </>
+            ) : (
+                <CatalogSection
+                    id={course.course_id}
+                    slug={course.course_slug}
+                />
+            )}
+        </section>
+    );
+};
+
 const LandingPageOrchestrator = ({ id }: { id: string }): JSX.Element => {
     const { data: course } = useGetLandingCourseDataQuery(id);
+    const isAuthenticated = useSelector(getIsAuthenticated);
+
+    if (isAuthenticated) {
+        return <AuthLandingPage id={id} />;
+    }
 
     return (
         <main>

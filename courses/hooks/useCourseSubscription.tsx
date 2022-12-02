@@ -28,6 +28,7 @@ const useCourseSubscription = (slug: string) => {
     };
 
     return {
+        subscription_id: data?.id,
         is_subscribed: checkIsSubscribed(),
         expiryDay,
         ...learningProgress
