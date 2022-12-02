@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import Container from 'commons/components/elements/Container';
+import Container from 'landing/components/Container';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import useTransition from 'commons/hooks/useTransition';
@@ -46,7 +46,7 @@ const ContentHighlight = (): JSX.Element => {
     const loadingTransition = useTransition(router);
     return (
         <>
-            <Container>
+            <Container className="mt-16 lg:mt-0 flex-col">
                 <div className="text-center">
                     <h2 className="text-3xl font-bold">
                         Pilih Kelas Sesuai Kebutuhanmu

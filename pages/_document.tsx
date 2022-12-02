@@ -6,6 +6,7 @@ export default class MyDocument extends Document {
         return (
             <Html lang="en">
                 <Head>
+                    <meta name="theme-color" content="#000000" />
                     <link
                         rel="preconnect"
                         href="https://fonts.googleapis.com"

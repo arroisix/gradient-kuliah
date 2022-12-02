@@ -4,14 +4,13 @@ import Image from 'next/image';
 const KnowDegree = (): JSX.Element => {
     return (
         <div
-            className="px-4 md:px-[7.5rem] py-4 flex flex-col justify-center items-center min-h-[70vh] lg:min-h-[80vh] relative"
+            className="px-4 md:px-[7.5rem] py-4 flex flex-col justify-center items-center min-h-[50vh] lg:min-h-[80vh] relative"
             style={{
                 background:
-                    'linear-gradient(178.8deg, rgba(0, 0, 0, 0.8) 1.01%, rgba(0, 0, 0, 0) 27.76%, rgba(0, 0, 0, 0) 78.96%, rgba(0, 0, 0, 0.8) 98.98%), linear-gradient(162.05deg, rgba(0, 0, 0, 0.1) 15.89%, rgba(22, 12, 44, 0.82) 50.43%, rgba(22, 12, 44, 0) 89.88%)',
-                transform: 'matrix(-1, 0, 0, 1, 0, 0)'
+                    'linear-gradient(178.8deg, rgba(0, 0, 0, 0.8) 1.01%, rgba(0, 0, 0, 0) 27.76%, rgba(0, 0, 0, 0) 78.96%, rgba(0, 0, 0, 0.8) 98.98%), linear-gradient(162.05deg, rgba(0, 0, 0, 0.1) 15.89%, rgba(22, 12, 44, 0.82) 50.43%, rgba(22, 12, 44, 0) 89.88%)'
             }}>
             <div
-                className="absolute top-0 right-0 opacity-20 w-[330px] lg:w-[522px]"
+                className="absolute top-0 right-0 opacity-20 w-[330px] lg:w-[522px] hidden lg:block"
                 style={{
                     filter: 'drop-shadow(6px 6px 80px rgba(52, 2, 159, 0.1))'
                 }}>
@@ -25,7 +24,7 @@ const KnowDegree = (): JSX.Element => {
                 />
             </div>
             <div
-                className="absolute top-32 left-0 opacity-20 w-[250px] lg:w-[393px]"
+                className="absolute top-32 left-0 opacity-20 w-[250px] lg:w-[393px] hidden lg:block"
                 style={{
                     filter: 'drop-shadow(6px 6px 80px rgba(52, 2, 159, 0.1))'
                 }}>
@@ -39,7 +38,7 @@ const KnowDegree = (): JSX.Element => {
                 />
             </div>
             <div
-                className="absolute bottom-0 opacity-20 w-[250px] lg:w-[397px]"
+                className="absolute bottom-0 opacity-20 w-[250px] lg:w-[397px] hidden lg:block"
                 style={{
                     filter: 'drop-shadow(6px 6px 80px rgba(52, 2, 159, 0.1))'
                 }}>
@@ -52,18 +51,10 @@ const KnowDegree = (): JSX.Element => {
                     width={397}
                 />
             </div>
-            <h2
-                className="text-lg lg:text-4xl font-bold text-center w-3/4 lg:w-1/2"
-                style={{
-                    transform: 'matrix(-1, 0, 0, 1, 0, 0)'
-                }}>
+            <h2 className="text-lg lg:text-4xl font-bold text-center w-3/4 lg:w-1/2">
                 Mengenal jurusanmu lebih dekat, dari orang yang tepat.
             </h2>
-            <div
-                className="mt-4"
-                style={{
-                    transform: 'matrix(-1, 0, 0, 1, 0, 0)'
-                }}>
+            <div className="mt-4">
                 <Button variant="primary" href="/kelas">
                     Lihat Kelas
                 </Button>

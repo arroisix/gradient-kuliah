@@ -2,19 +2,17 @@ const UniqueContent = (): JSX.Element => {
     return (
         <div
             className="px-4 md:px-[7.5rem] py-4 flex flex-col md:flex-row-reverse items-center min-h-[70vh] relative"
-            style={
-                {
-                    // background:
-                    //     'linear-gradient(162.05deg, rgba(0, 0, 0, 0.1) 15.89%, rgba(22, 12, 44, 0.82) 50.43%, rgba(22, 12, 44, 0) 89.88%)'
-                }
-            }>
+            style={{
+                background:
+                    'linear-gradient(162.05deg, rgba(0, 0, 0, 0.1) 15.89%, rgba(22, 12, 44, 0.82) 50.43%, rgba(22, 12, 44, 0) 89.88%)'
+            }}>
             <div className="w-full h-[40vh] md:h-[70vh] flex justify-center">
                 <div
                     className="w-full h-full"
                     style={{
                         background:
                             'url(https://d2uqn6ndx4ow3t.cloudfront.net/assets/manim-anim.gif)',
-                        // mixBlendMode: 'lighten',
+                        mixBlendMode: 'lighten',
                         backgroundColor: 'cover',
                         backgroundPosition: 'center',
                         backgroundSize: 'cover'
