@@ -55,7 +55,7 @@ const VideoLearnContainer = ({
                             <></>
                         )
                     ) : (
-                        <div className="w-full h-1/2 bg-neutral-600 animate-pulse rounded-lg"></div>
+                        <div className="w-full h-[50vh] bg-neutral-600 animate-pulse rounded-lg" />
                     )}
                 </div>
             </div>

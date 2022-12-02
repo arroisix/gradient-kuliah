@@ -130,7 +130,8 @@ const Player = <T,>({
                 onTouchStart={() => setShowControl(true)}
                 onTouchEnd={() => setShowControl(false)}
                 style={{
-                    height
+                    height,
+                    width: '100%'
                 }}
                 className="relative flex flex-col items-center justify-center bg-black"
                 id="video-container">

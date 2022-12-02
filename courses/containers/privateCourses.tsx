@@ -34,11 +34,19 @@ const PrivateCourses = ({ myClass }: { myClass: boolean }): JSX.Element => {
 
     return (
         <CourseContainer>
-            {loading && <h1>Tunggu Sebentar...</h1>}
-            {!loading &&
+            {loading ? (
+                <>
+                    <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
+                    <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
+                    <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
+                    <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
+                    <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
+                </>
+            ) : (
                 courses.map((course: Course) => (
                     <CourseCard course={course} key={course.id} />
-                ))}
+                ))
+            )}
         </CourseContainer>
     );
 };

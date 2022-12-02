@@ -7,12 +7,14 @@ import { useGetLearningProgressQuery } from 'courses/redux/api/privateCourseApi'
 
 const useCourseSubscription = (slug: string) => {
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { data } = useGetActiveSubscriptionBySlugQuery(slug, {
-        skip: !isAuthenticated || slug === undefined
-    });
-    const { data: learningProgress } = useGetLearningProgressQuery(slug, {
-        skip: !isAuthenticated || slug === undefined
-    });
+    const { data, isLoading: isLoadingSubscription } =
+        useGetActiveSubscriptionBySlugQuery(slug, {
+            skip: !isAuthenticated || slug === undefined
+        });
+    const { data: learningProgress, isLoading: isLoadingLearningProgress } =
+        useGetLearningProgressQuery(slug, {
+            skip: !isAuthenticated || slug === undefined
+        });
     const [expiryDay, setExpiryDay] = useState(30);
 
     useEffect(() => {
@@ -31,6 +33,7 @@ const useCourseSubscription = (slug: string) => {
         subscription_id: data?.id,
         is_subscribed: checkIsSubscribed(),
         expiryDay,
+        isLoading: isLoadingSubscription || isLoadingLearningProgress,
         learning_progress_id: learningProgress?.id,
         ...learningProgress
     };

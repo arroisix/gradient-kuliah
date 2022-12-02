@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 // import { FaSearch } from 'react-icons/fa';
 // import Input from 'src/commons/components/elements/Form/input';
 import {
@@ -7,6 +6,7 @@ import {
     isAnimationExist,
     isContentChapterExist
 } from 'courses/utils';
+import { useState } from 'react';
 import VideoSection from './VideoSection';
 
 const ListOfContent = ({
@@ -36,14 +36,7 @@ const ListOfContent = ({
 }): JSX.Element => {
     const [tab, setTab] = useState(firstTab ?? 0);
     const isVideoContentExist = isContentChapterExist(chapters, 'video');
-    const isNotebookContentExist = isContentChapterExist(chapters, 'notebook');
     const isAnimationContentExist = isAnimationExist(chapters);
-
-    useEffect(() => {
-        if (!isVideoContentExist) {
-            setTab(1);
-        }
-    }, [isVideoContentExist, isNotebookContentExist]);
 
     return (
         <div

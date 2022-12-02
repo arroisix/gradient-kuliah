@@ -12,8 +12,10 @@ interface VideoSectionProps {
 }
 
 const VideoSection = ({ slug }: VideoSectionProps): JSX.Element => {
-    const { data: content } = useGetLandingCourseListContentQuery(slug);
-    const { is_subscribed, learning_progress_id } = useCourseSubscription(slug);
+    const { data: content, isLoading: isLoadingContent } =
+        useGetLandingCourseListContentQuery(slug);
+    const { is_subscribed, learning_progress_id, isLoading } =
+        useCourseSubscription(slug);
     const [videoPicked, setVideoPicked] = useState<Video>({} as Video);
     const [notebookPicked, setNotebookPicked] = useState<Notebook>(
         {} as Notebook
@@ -35,6 +37,15 @@ const VideoSection = ({ slug }: VideoSectionProps): JSX.Element => {
             }
         }
     }, [content?.data]);
+
+    if (isLoading || isLoadingContent) {
+        return (
+            <div className="w-screen py-16 flex-col px-4 md:px-[7.5rem] mb-16 h-[70vh] flex lg:flex-row gap-4">
+                <div className="w-full lg:w-2/3 h-1/2 lg:h-full bg-neutral-600 animate-pulse rounded-lg" />
+                <div className="w-full lg:w-1/3 h-full bg-neutral-600 animate-pulse rounded-lg" />
+            </div>
+        );
+    }
 
     return (
         <div className="w-screen py-16 flex-col px-4 md:px-[7.5rem] mb-16 h-[80vh]">

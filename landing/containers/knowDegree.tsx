@@ -54,7 +54,7 @@ const KnowDegree = (): JSX.Element => {
             <h2 className="text-lg lg:text-4xl font-bold text-center w-3/4 lg:w-1/2">
                 Mengenal jurusanmu lebih dekat, dari orang yang tepat.
             </h2>
-            <div className="mt-4">
+            <div className="mt-4 z-[5]">
                 <Button variant="primary" href="/kelas">
                     Lihat Kelas
                 </Button>

@@ -35,7 +35,7 @@ const NotebookLearnContainer = ({
             </div>
             <div className="h-full min-w-[30vw]">
                 <LearnContentBox
-                    firstTab={1}
+                    firstTab={0}
                     chapters={course.chapters}
                     isSubscribed={course.is_subscribed}
                 />
