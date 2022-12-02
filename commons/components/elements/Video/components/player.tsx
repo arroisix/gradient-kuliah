@@ -170,7 +170,7 @@ const Player = <T,>({
                         <Settings isSupportHLS={video.includes('.m3u8')} />
                     </>
                 )}
-                {video.includes('.m3u8') ? (
+                {video?.includes('.m3u8') ? (
                     <HlsPlayer
                         onClick={isPopup ? undefined : onPlayClick}
                         width={'100%'}
