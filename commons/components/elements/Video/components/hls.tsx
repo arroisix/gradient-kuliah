@@ -25,7 +25,8 @@ function HlsPlayer({ src, autoPlay, ...props }: HlsPlayerProps) {
 
             const newHls = new Hls({
                 enableWorker: true,
-                maxLoadingDelay: 2
+                lowLatencyMode: true,
+                backBufferLength: 90
             });
 
             if (videoRef.current != null) {

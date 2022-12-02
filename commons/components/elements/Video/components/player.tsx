@@ -11,7 +11,8 @@ const POPUP_BUFFER = 0.5;
 const Player = <T,>({
     video,
     popupData,
-    popupComponent
+    popupComponent,
+    height
 }: VideoPlayerProps<T>): JSX.Element => {
     const {
         videoRef,
@@ -128,6 +129,9 @@ const Player = <T,>({
                 onMouseLeave={() => setShowControl(false)}
                 onTouchStart={() => setShowControl(true)}
                 onTouchEnd={() => setShowControl(false)}
+                style={{
+                    height
+                }}
                 className="relative flex flex-col items-center justify-center bg-black"
                 id="video-container">
                 {(isBuffering || !isPlay) && (

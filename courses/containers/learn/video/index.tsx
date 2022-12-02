@@ -1,16 +1,27 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import LearnContentBox from 'courses/components/LearnContentBox';
 import { useLearning } from 'courses/contexts/LearningProvider';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useGetSubchapterDetailQuery } from 'courses/redux/api/privateCourseApi';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import LearnVideo from './learnVideo';
 
-const VideoLearnContainer = ({ course }: { course: Course }): JSX.Element => {
+const VideoLearnContainer = ({
+    chapters
+}: {
+    chapters: Chapter[];
+}): JSX.Element => {
     const router = useRouter();
-    const { sub } = router.query;
+    const { sub, id } = router.query;
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const {
+        is_subscribed,
+        learning_progress_id,
+        latest_subchapter,
+        subchapter_progress
+    } = useCourseSubscription(id as string);
     const { setVideoPicked } = useLearning();
     const { data, isLoading } = useGetSubchapterDetailQuery(sub as string, {
         skip: sub === null || sub === undefined || !isAuthenticated
@@ -32,7 +43,13 @@ const VideoLearnContainer = ({ course }: { course: Course }): JSX.Element => {
                                 video={data.video as Video}
                                 subchapter={data}
                                 key={sub as string}
-                                learningProgress={course.learning_progress}
+                                learningProgress={{
+                                    id: learning_progress_id as string,
+                                    subchapter_progress:
+                                        subchapter_progress as SubchapterProgress[],
+                                    latest_subchapter:
+                                        latest_subchapter as SubchapterProgress
+                                }}
                             />
                         ) : (
                             <></>
@@ -44,8 +61,8 @@ const VideoLearnContainer = ({ course }: { course: Course }): JSX.Element => {
             </div>
             <div className="h-full min-w-[30vw]">
                 <LearnContentBox
-                    chapters={course.chapters}
-                    isSubscribed={course.is_subscribed}
+                    chapters={chapters}
+                    isSubscribed={is_subscribed}
                 />
             </div>
         </section>

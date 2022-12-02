@@ -6,6 +6,8 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 
 import Lock from 'commons/components/elements/Icons/Lock';
 import ComingSoonContent from './ComingSoonContent';
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { useState } from 'react';
 
 interface VideoSectionProps {
     setVideoPicked: (video: Video) => void;
@@ -18,6 +20,143 @@ interface VideoSectionProps {
     isFullHeight?: boolean;
 }
 
+const VideoAccordionItem = ({
+    subchapter,
+    setSubchapter,
+    chapterId,
+    setVideoPicked,
+    asThrowPage,
+    isSubscribed,
+    videoPicked
+}: {
+    asThrowPage?: boolean;
+    chapterId: string;
+    videoPicked: Video;
+    subchapter: SubChapter;
+    setSubchapter?: (sub: SubChapter) => void;
+    setVideoPicked: (video: Video) => void;
+    isSubscribed: boolean;
+}): JSX.Element => {
+    const router = useRouter();
+    const { setModalAuthOpen } = useAuth();
+    const isAuthenticated = useSelector(getIsAuthenticated);
+    return (
+        <div
+            aria-hidden={true}
+            onClick={() => {
+                if (isAuthenticated) {
+                    setVideoPicked(
+                        {
+                            ...(subchapter.video as Video),
+                            subchapter_id: subchapter?.id as string
+                        } ?? ({} as Video)
+                    );
+                    if (setSubchapter) {
+                        setSubchapter(subchapter);
+                    }
+                    if (asThrowPage) {
+                        router.replace(
+                            `/kelas/kalkulus1/belajar/video/${chapterId}/${subchapter.id}`,
+                            undefined,
+                            { shallow: true }
+                        );
+                    }
+                } else {
+                    setModalAuthOpen(
+                        1,
+                        false,
+                        `/kelas/kalkulus1/belajar/video/${chapterId}/${subchapter.id}`
+                    );
+                }
+            }}
+            key={subchapter.id}
+            className={`w-full flex items-center gap-2 px-4 py-2 hover:bg-neutral-600 cursor-pointer ${
+                videoPicked?.id === subchapter?.video?.id && 'bg-neutral-600'
+            }`}>
+            <div>
+                {subchapter?.video?.is_free || isSubscribed ? (
+                    <BsPlayCircle className="text-xl" />
+                ) : (
+                    <Lock />
+                )}
+            </div>
+            {/* <div className="w-full"> */}
+            <span className="font-body w-3/4 truncate">
+                {subchapter?.subchapter_name}
+            </span>
+            {/* </div> */}
+            <div className="w-1/4 flex justify-end">
+                <span
+                    className={
+                        videoPicked?.id === subchapter?.video?.id
+                            ? 'text-neutral-400'
+                            : 'text-neutral-600'
+                    }>
+                    {subchapter?.video?.duration}
+                </span>
+            </div>
+        </div>
+    );
+};
+
+const VideoAccordion = ({
+    initialOpen,
+    chapter,
+    videoPicked,
+    setSubchapter,
+    setVideoPicked,
+    asThrowPage,
+    isSubscribed
+}: {
+    initialOpen: boolean;
+    chapter: Chapter;
+    videoPicked: Video;
+    setSubchapter?: (sub: SubChapter) => void;
+    setVideoPicked: (video: Video) => void;
+    asThrowPage?: boolean;
+    isSubscribed: boolean;
+}): JSX.Element => {
+    const [open, setOpen] = useState(initialOpen ?? false);
+
+    return (
+        <div className="w-full">
+            <div
+                className="p-4 w-full flex justify-between items-center cursor-pointer"
+                onClick={() => setOpen(!open)}
+                aria-hidden>
+                <span className="font-bold">{chapter.chapter_name}</span>
+                {open ? <FaChevronUp /> : <FaChevronDown />}
+            </div>
+            <div
+                className={`transition-all duration-300 ease-out overflow-hidden ${
+                    open ? 'opacity-100 h-auto pb-4' : 'opacity-0 h-0 pb-0'
+                }`}>
+                {chapter.subchapters.length > 0 ? (
+                    chapter?.subchapters?.map((subchapter) => {
+                        return (
+                            <VideoAccordionItem
+                                chapterId={chapter.id}
+                                key={subchapter.id}
+                                subchapter={subchapter}
+                                videoPicked={videoPicked}
+                                setVideoPicked={setVideoPicked}
+                                setSubchapter={setSubchapter}
+                                asThrowPage={asThrowPage}
+                                isSubscribed={isSubscribed}
+                            />
+                        );
+                    })
+                ) : (
+                    <ComingSoonContent />
+                )}
+            </div>
+            <div className="w-full px-4">
+                <div className="h-px bg-[#373737]" />
+            </div>
+        </div>
+    );
+};
+
 const VideoSection = ({
     chapters,
     setVideoPicked,
@@ -28,15 +167,11 @@ const VideoSection = ({
     isSubscribed,
     isFullHeight
 }: VideoSectionProps): JSX.Element => {
-    const router = useRouter();
-    const { setModalAuthOpen } = useAuth();
-    const isAuthenticated = useSelector(getIsAuthenticated);
-
     return (
         <div
             className={`${
-                isFullHeight ? 'h-[calc(100vh-65px)]' : 'h-[500px]'
-            } overflow-y-auto`}>
+                isFullHeight ? 'h-[calc(100vh-65px)]' : 'h-[40vh] lg:h-[80vh]'
+            } overflow-y-scroll lg:pb-72`}>
             {trailerVideo && (
                 <div
                     id="trailer"
@@ -66,77 +201,18 @@ const VideoSection = ({
                     </div>
                 </div>
             )}
-            {chapters?.map((chapter) => {
+            {chapters?.map((chapter, index) => {
                 return (
-                    <div key={chapter.id}>
-                        <div className="p-4">
-                            <span className="font-bold">
-                                {chapter.chapter_name}
-                            </span>
-                        </div>
-                        {chapter.subchapters.length > 0 ? (
-                            chapter?.subchapters?.map((subchapter) => {
-                                return (
-                                    <div
-                                        aria-hidden={true}
-                                        onClick={() => {
-                                            if (isAuthenticated) {
-                                                setVideoPicked(
-                                                    {
-                                                        ...(subchapter.video as Video),
-                                                        subchapter_id:
-                                                            subchapter?.id as string
-                                                    } ?? ({} as Video)
-                                                );
-                                                if (setSubchapter) {
-                                                    setSubchapter(subchapter);
-                                                }
-                                                if (asThrowPage) {
-                                                    router.replace(
-                                                        `/kelas/kalkulus1/belajar/video/${chapter.id}/${subchapter.id}`,
-                                                        undefined,
-                                                        { shallow: true }
-                                                    );
-                                                }
-                                            } else {
-                                                setModalAuthOpen(
-                                                    1,
-                                                    false,
-                                                    `/kelas/kalkulus1/belajar/video/${chapter.id}/${subchapter.id}`
-                                                );
-                                            }
-                                        }}
-                                        key={subchapter.id}
-                                        className={`w-full flex p-4 items-center hover:bg-neutral-600 cursor-pointer ${
-                                            videoPicked?.id ===
-                                                subchapter?.video?.id &&
-                                            'bg-neutral-600'
-                                        }`}>
-                                        <div className="w-1/5 flex items-center justify-center">
-                                            {subchapter?.video?.is_free ||
-                                            isSubscribed ? (
-                                                <BsPlayCircle className="mr-4 text-xl" />
-                                            ) : (
-                                                <div className="mr-4">
-                                                    <Lock />
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div className="flex flex-col w-4/5">
-                                            <span className="font-body">
-                                                {subchapter?.subchapter_name}
-                                            </span>
-                                            <span className="text-neutral-400">
-                                                {subchapter?.video?.duration}
-                                            </span>
-                                        </div>
-                                    </div>
-                                );
-                            })
-                        ) : (
-                            <ComingSoonContent />
-                        )}
-                    </div>
+                    <VideoAccordion
+                        initialOpen={index === 0}
+                        key={chapter.id}
+                        chapter={chapter}
+                        videoPicked={videoPicked}
+                        setVideoPicked={setVideoPicked}
+                        setSubchapter={setSubchapter}
+                        asThrowPage={asThrowPage}
+                        isSubscribed={isSubscribed}
+                    />
                 );
             })}
         </div>

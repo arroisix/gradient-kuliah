@@ -39,6 +39,7 @@ interface CourseLandingPageData {
     course_id: string;
     course_slug: string;
     course_name: string;
+    trailer?: string;
     lecturers: Lecturer[];
     configuration: CourseLandingPageConfig;
     packets: Packet[];

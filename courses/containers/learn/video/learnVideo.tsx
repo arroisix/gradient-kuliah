@@ -3,6 +3,7 @@ import useWindowSize from 'commons/hooks/useWindowSize';
 import PopupQuestionContent from 'courses/components/Exercise/PopupQuestion';
 import NeedSubscribe from 'courses/components/NeedSubscribe';
 import { useLearning } from 'courses/contexts/LearningProvider';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useTrackSubchapterProgressMutation } from 'courses/redux/api/privateCourseApi';
 import { useRouter } from 'next/router';
 
@@ -18,8 +19,9 @@ const LearnVideo = ({
     const { width } = useWindowSize();
     const [track] = useTrackSubchapterProgressMutation();
     const router = useRouter();
-    const { sub } = router.query;
-    const { videoPicked, isSubscribed } = useLearning();
+    const { sub, id } = router.query;
+    const { videoPicked } = useLearning();
+    const { is_subscribed } = useCourseSubscription(id as string);
 
     return (
         <div className="w-full h-full transition-all">
@@ -33,7 +35,7 @@ const LearnVideo = ({
                     thumbnail={video?.thumbnail}
                     key={video?.video_url}
                     trackProgress={
-                        isSubscribed
+                        is_subscribed
                             ? async (last_duration, isFinished) =>
                                   track({
                                       subchapter_id:

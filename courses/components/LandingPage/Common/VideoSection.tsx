@@ -1,0 +1,100 @@
+import { useEffect, useState } from 'react';
+import VideoPlayer from 'commons/components/elements/Video';
+import { useTrackSubchapterProgressMutation } from 'courses/redux/api/privateCourseApi';
+import { getAllVideoChapter, isContentChapterExist } from 'courses/utils';
+import ListOfContent from 'courses/components/Content/ListOfContent';
+import NeedSubscribe from 'courses/components/NeedSubscribe';
+import { useGetLandingCourseListContentQuery } from 'courses/redux/api/publicCourseApi';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+
+interface VideoSectionProps {
+    slug: string;
+}
+
+const VideoSection = ({ slug }: VideoSectionProps): JSX.Element => {
+    const { data: content } = useGetLandingCourseListContentQuery(slug);
+    const { is_subscribed, learning_progress_id } = useCourseSubscription(slug);
+    const [videoPicked, setVideoPicked] = useState<Video>({} as Video);
+    const [notebookPicked, setNotebookPicked] = useState<Notebook>(
+        {} as Notebook
+    );
+    const isVideoContentExist = isContentChapterExist(
+        content?.data ?? [],
+        'video'
+    );
+    const [track] = useTrackSubchapterProgressMutation();
+
+    useEffect(() => {
+        if (content?.data) {
+            const videoChapters = getAllVideoChapter(content?.data);
+            if (
+                videoChapters.length > 0 &&
+                videoChapters[0].subchapters.length > 0
+            ) {
+                setVideoPicked(videoChapters[0].subchapters[0].video as Video);
+            }
+        }
+    }, [content?.data]);
+
+    return (
+        <div className="w-screen py-16 flex-col px-4 md:px-[7.5rem] mb-16 h-[80vh]">
+            <div
+                className={`flex h-full flex-col lg:flex-row ${
+                    !isVideoContentExist && 'justify-center'
+                }`}>
+                {isVideoContentExist && (
+                    <div
+                        className="w-full lg:w-2/3 h-full flex items-center"
+                        id="video-section">
+                        {videoPicked && videoPicked?.is_free ? (
+                            <VideoPlayer
+                                height={'100%'}
+                                video={videoPicked.video_url as string}
+                                thumbnail={videoPicked.thumbnail as string}
+                                key={videoPicked.video_url as string}
+                                trackProgress={
+                                    videoPicked.id !== 'trailer' &&
+                                    is_subscribed &&
+                                    learning_progress_id
+                                        ? async (last_duration, isFinished) =>
+                                              track({
+                                                  subchapter_id:
+                                                      videoPicked.subchapter_id as string,
+                                                  learning_progress_id,
+                                                  progress_type: 'VIDEO',
+                                                  video_progress: {
+                                                      video_id: videoPicked.id,
+                                                      last_duration:
+                                                          last_duration as unknown as string,
+                                                      is_finished:
+                                                          isFinished ?? false
+                                                  }
+                                              })
+                                        : undefined
+                                }
+                            />
+                        ) : (
+                            <NeedSubscribe thumbnail={'https://google.com'} />
+                        )}
+                    </div>
+                )}
+                <div className="w-full lg:w-1/3 h-full" id="content-section">
+                    {content?.data && (
+                        <ListOfContent
+                            chapters={content?.data}
+                            videoPicked={videoPicked}
+                            setVideoPicked={setVideoPicked}
+                            notebookPicked={notebookPicked}
+                            setNotebookPicked={setNotebookPicked}
+                            rounded
+                            isSubscribed={is_subscribed}
+                            asThrowPage
+                        />
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default VideoSection;

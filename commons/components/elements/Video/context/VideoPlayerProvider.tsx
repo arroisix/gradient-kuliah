@@ -95,7 +95,7 @@ export function VideoProvider({
     let globalCurrentTime = currentTime;
 
     const onPlayClick = (): void => {
-        if (videoRef.current.paused) {
+        if (videoRef?.current?.paused) {
             videoRef.current.play();
             setIsPlay(true);
         } else {

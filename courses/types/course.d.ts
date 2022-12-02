@@ -60,6 +60,8 @@ type Chapter = {
     chapter_name: string;
     order: int;
     subchapters: SubChapter[];
+    is_coming_soon_video: boolean;
+    is_coming_soon_animation: boolean;
 };
 
 type SubChapter = {
@@ -87,6 +89,7 @@ type Video = {
     id: string;
     video_url: string;
     is_free: boolean;
+    is_animation?: boolean;
     duration: string;
     thumbnail: string;
     description: string;

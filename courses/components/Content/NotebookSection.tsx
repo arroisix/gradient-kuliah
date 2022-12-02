@@ -23,7 +23,7 @@ const NotebookSection = ({
     const isAuthenticated = useSelector(getIsAuthenticated);
 
     return (
-        <div className="h-[500px] overflow-y-auto">
+        <div className="h-full overflow-y-auto">
             {chapters?.map((chapter) => {
                 return (
                     <div key={chapter.id}>
