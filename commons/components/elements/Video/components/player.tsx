@@ -133,11 +133,11 @@ const Player = <T,>({
                     height,
                     width: '100%'
                 }}
-                className="relative flex flex-col items-center justify-center bg-black"
+                className="relative flex flex-col items-center justify-center bg-black overflow-hidden"
                 id="video-container">
                 {(isBuffering || !isPlay) && (
                     <>
-                        <div className="absolute bg-black opacity-50 w-full h-full left-0 top-0" />
+                        <div className="absolute bg-black opacity-50 w-full h-[110%] left-0 top-0" />
                         <div
                             className="absolute w-full h-full left-0 top-0 z-[9] flex justify-center items-center p-8"
                             onClick={isPopup ? undefined : onPlayClick}
