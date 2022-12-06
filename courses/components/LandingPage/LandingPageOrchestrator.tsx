@@ -8,6 +8,7 @@ import CatalogSection from './Common/CatalogSection';
 import FAQSection from './Common/FAQSection';
 import HeroSection from './Common/HeroSection';
 import Lecturer from './Common/LecturerSection';
+import PosterSection from './Common/PosterSection';
 import PriceHighlightSection from './Common/PriceHighlightSection';
 import TestimonySection from './Common/TestimonySection';
 import VideoSection from './Common/VideoSection';
@@ -23,6 +24,7 @@ const COMPONENT_DICTIONARY: { [key in LandingPageSectionKey]: JSX.Element } = {
     testimony: <TestimonySection />,
     price_highlight: <PriceHighlightSection slug="dummy" />,
     faq: <FAQSection />,
+    poster: <PosterSection slug="dummy" />,
     price_highlight_kalkulus1: <PriceHighlightKalkulus1Section slug="dummy" />,
     benefit_kalkulus1: <BenefitKalkulus1Section />
 };
