@@ -171,7 +171,7 @@ const VideoSection = ({
         <div
             className={`${
                 isFullHeight ? 'h-[calc(100vh-65px)]' : 'h-[40vh] lg:h-[80vh]'
-            } overflow-y-scroll lg:pb-72`}>
+            } overflow-y-scroll`}>
             {trailerVideo && (
                 <div
                     id="trailer"

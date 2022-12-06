@@ -6,6 +6,7 @@ import ListOfContent from 'courses/components/Content/ListOfContent';
 import NeedSubscribe from 'courses/components/NeedSubscribe';
 import { useGetLandingCourseListContentQuery } from 'courses/redux/api/publicCourseApi';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import SubscribeButton from './SubscribeButton';
 
 interface VideoSectionProps {
     slug: string;
@@ -48,9 +49,12 @@ const VideoSection = ({ slug }: VideoSectionProps): JSX.Element => {
     }
 
     return (
-        <div className="w-screen py-16 flex-col px-4 md:px-[7.5rem] mb-16 h-[80vh]">
+        <div className="w-screen py-16 flex-col px-4 md:px-[7.5rem] mb-16 min-h-[80vh]">
+            <h1 className="md:text-center text-2xl md:text-4xl font-bold text-center mb-4">
+                Coba Gratis Video Belajar
+            </h1>
             <div
-                className={`flex h-full flex-col lg:flex-row ${
+                className={`flex flex-col lg:flex-row h-[80vh] ${
                     !isVideoContentExist && 'justify-center'
                 }`}>
                 {isVideoContentExist && (
@@ -103,6 +107,9 @@ const VideoSection = ({ slug }: VideoSectionProps): JSX.Element => {
                         />
                     )}
                 </div>
+            </div>
+            <div className="w-full flex justify-center items-center pt-8">
+                <SubscribeButton slug={slug} label="Akses Semua Video" />
             </div>
         </div>
     );

@@ -11,6 +11,7 @@ import Lecturer from './Common/LecturerSection';
 import PriceHighlightSection from './Common/PriceHighlightSection';
 import TestimonySection from './Common/TestimonySection';
 import VideoSection from './Common/VideoSection';
+import BenefitKalkulus1Section from './Kalkulus1/BenefitKalkulus1Section';
 import PriceHighlightKalkulus1Section from './Kalkulus1/PriceHighlightKalkulus1Section';
 
 const COMPONENT_DICTIONARY: { [key in LandingPageSectionKey]: JSX.Element } = {
@@ -22,7 +23,8 @@ const COMPONENT_DICTIONARY: { [key in LandingPageSectionKey]: JSX.Element } = {
     testimony: <TestimonySection />,
     price_highlight: <PriceHighlightSection slug="dummy" />,
     faq: <FAQSection />,
-    price_highlight_kalkulus1: <PriceHighlightKalkulus1Section slug="dummy" />
+    price_highlight_kalkulus1: <PriceHighlightKalkulus1Section slug="dummy" />,
+    benefit_kalkulus1: <BenefitKalkulus1Section />
 };
 
 const AuthLandingPage = ({ id }: { id: string }): JSX.Element => {
