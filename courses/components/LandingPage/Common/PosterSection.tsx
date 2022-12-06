@@ -11,7 +11,7 @@ const PosterSection = ({
 }: PosterSectionProps): JSX.Element => {
     return (
         <div
-            className="relative px-4 md:px-[7.5rem] my-16 h-[80vh] flex items-center justify-center gap-4 flex-col md:flex-row"
+            className="relative px-4 md:px-[7.5rem] my-16 h-[80vh] flex items-center justify-center gap-4 flex-col md:flex-row overflow-x-hidden"
             style={{
                 background:
                     'linear-gradient(199.59deg, rgba(0, 0, 0, 0.1) 17.05%, rgba(22, 12, 44, 0.82) 48.59%, rgba(22, 12, 44, 0) 84.61%)'
