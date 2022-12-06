@@ -15,7 +15,7 @@ const withAnon = (WrappedComponent: React.ComponentType) => {
 
             if (accessToken) {
                 if (router.pathname === '/') {
-                    router.replace('/');
+                    router.replace('/kelas');
                     return;
                 }
 
