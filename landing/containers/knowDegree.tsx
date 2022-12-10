@@ -15,10 +15,13 @@ const KnowDegree = (): JSX.Element => {
                     filter: 'drop-shadow(6px 6px 80px rgba(52, 2, 159, 0.1))'
                 }}>
                 <Image
-                    src="https://assets.gradient.academy/assets/thumb-1.jpg"
+                    src="https://assets.gradient.academy/assets/thumb-3.jpg"
                     loading="lazy"
                     className="object-cover"
                     // layout="fill"
+                    style={{
+                        filter: 'drop-shadow(6px 6px 80px rgba(52, 2, 159, 0.1))'
+                    }}
                     height={330}
                     width={522}
                 />
@@ -29,7 +32,7 @@ const KnowDegree = (): JSX.Element => {
                     filter: 'drop-shadow(6px 6px 80px rgba(52, 2, 159, 0.1))'
                 }}>
                 <Image
-                    src="https://assets.gradient.academy/assets/thumb-3.jpg"
+                    src="https://assets.gradient.academy/assets/thumb-1.jpg"
                     loading="lazy"
                     className="object-cover"
                     // layout="fill"

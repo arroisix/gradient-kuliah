@@ -69,7 +69,7 @@ const ContentHighlight = (): JSX.Element => {
                         cover="https://d2uqn6ndx4ow3t.cloudfront.net/lecturers/theo-profile.jpg"
                         slug="kalkulus1"
                         title="Kalkulus 1"
-                        description="Jembatan yang memampukan kita untuk mengkuantifikasi perubahan"
+                        description="Ilmu pengetahuan yang mengkuantifikasi perubahan."
                     />
                     <div
                         className="w-[320px] h-[320px] rounded-full absolute right-16 hidden lg:block"
@@ -83,7 +83,7 @@ const ContentHighlight = (): JSX.Element => {
                         cover="https://d2uqn6ndx4ow3t.cloudfront.net/lecturers/asih_portrait.jpg"
                         slug="ptsl"
                         title="Pengantar Teknik Sipil dan Lingkungan"
-                        description="Bukan hanya tentang pembangunan fisik, kita akan melihat bagaimana teknik membangun peradaban manusia"
+                        description="Ilmu untuk yang ingin memajukan peradaban."
                     />
                 </div>
             </Container>
