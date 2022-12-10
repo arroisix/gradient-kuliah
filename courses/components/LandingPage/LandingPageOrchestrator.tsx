@@ -12,6 +12,7 @@ import PriceHighlightSection from './Common/PriceHighlightSection';
 import TestimonySection from './Common/TestimonySection';
 import VideoSection from './Common/VideoSection';
 import PriceHighlightKalkulus1Section from './Kalkulus1/PriceHighlightKalkulus1Section';
+import SubscriptionBanner from '../SubscriptionBanner';
 
 const COMPONENT_DICTIONARY: { [key in LandingPageSectionKey]: JSX.Element } = {
     hero: <HeroSection slug="dummy" />,
