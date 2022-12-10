@@ -6,12 +6,16 @@ interface ModalProps extends ModalBaseProps {
     permanent?: boolean;
     dialog?: boolean;
     variant?: 'light' | 'dark';
+    isPopup?: boolean;
+    className?: string;
 }
 
 const Modal = ({
     isOpen,
     setOpen,
     children,
+    isPopup,
+    className,
     permanent = false,
     dialog = false,
     variant = 'light'
@@ -24,11 +28,13 @@ const Modal = ({
                 onClick={permanent ? undefined : () => setOpen(0)}>
                 <div
                     aria-hidden={true}
-                    className={`relative p-4 rounded-md z-100 w-[365px] min-h-[100px] ${
+                    className={`relative p-4 rounded-md z-100 ${
+                        isPopup ? '' : 'w-[365px]'
+                    } min-h-[100px] ${
                         dialog || variant == 'dark'
                             ? 'bg-neutral-800 text-white'
                             : 'bg-white text-black '
-                    }`}
+                    } ${className}`}
                     onClick={(e) => e.stopPropagation()}>
                     {!permanent && !dialog && (
                         <MdClose
