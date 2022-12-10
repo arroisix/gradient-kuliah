@@ -1,4 +1,15 @@
-const SubscriptionBanner = () => {
+import { useGetLandingCourseDataQuery } from 'courses/redux/api/publicCourseApi';
+
+interface SubscriptionBannerProps {
+    slug: string;
+}
+
+const SubscriptionBanner = ({ slug }: SubscriptionBannerProps): JSX.Element => {
+    const { data: course } = useGetLandingCourseDataQuery(slug);
+
+    // Coba liat ini di console browser
+    console.log(course, 'Data Course');
+
     return (
         <div className="flex flex-col items-center justify-center h-screen w-screen">
             <div className="flex items-center justify-center relative">

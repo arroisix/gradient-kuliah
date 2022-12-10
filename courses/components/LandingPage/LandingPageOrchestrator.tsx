@@ -21,7 +21,7 @@ const COMPONENT_DICTIONARY: { [key in LandingPageSectionKey]: JSX.Element } = {
     video: <VideoSection slug="dummy" />,
     benefit: <></>,
     lecturers: <Lecturer slug="dummy" />,
-    price_table: <></>,
+    price_table: <SubscriptionBanner slug="dummy" />,
     testimony: <TestimonySection />,
     price_highlight: <PriceHighlightSection slug="dummy" />,
     faq: <FAQSection />,
@@ -72,6 +72,8 @@ const LandingPageOrchestrator = ({ id }: { id: string }): JSX.Element => {
     if (isAuthenticated) {
         return <AuthLandingPage id={id} />;
     }
+
+    console.warn(course);
 
     return (
         <main>
