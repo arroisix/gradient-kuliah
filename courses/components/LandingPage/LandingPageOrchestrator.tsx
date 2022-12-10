@@ -15,6 +15,7 @@ import VideoSection from './Common/VideoSection';
 import BenefitKalkulus1Section from './Kalkulus1/BenefitKalkulus1Section';
 import PriceHighlightKalkulus1Section from './Kalkulus1/PriceHighlightKalkulus1Section';
 import SubscriptionBanner from '../SubscriptionBanner';
+import HeroPTSLSection from './PTSL/HeroPTSLSection';
 
 const COMPONENT_DICTIONARY: { [key in LandingPageSectionKey]: JSX.Element } = {
     hero: <HeroSection slug="dummy" />,
@@ -27,7 +28,8 @@ const COMPONENT_DICTIONARY: { [key in LandingPageSectionKey]: JSX.Element } = {
     faq: <FAQSection />,
     poster: <PosterSection slug="dummy" />,
     price_highlight_kalkulus1: <PriceHighlightKalkulus1Section slug="dummy" />,
-    benefit_kalkulus1: <BenefitKalkulus1Section />
+    benefit_kalkulus1: <BenefitKalkulus1Section />,
+    hero_ptsl: <HeroPTSLSection slug="dummy" />
 };
 
 const AuthLandingPage = ({ id }: { id: string }): JSX.Element => {
@@ -72,8 +74,6 @@ const LandingPageOrchestrator = ({ id }: { id: string }): JSX.Element => {
     if (isAuthenticated) {
         return <AuthLandingPage id={id} />;
     }
-
-    console.warn(course);
 
     return (
         <main>
