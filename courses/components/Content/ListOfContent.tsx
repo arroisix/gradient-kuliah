@@ -40,21 +40,10 @@ const ListOfContent = ({
 
     return (
         <div
-            className={`h-full w-full bg-neutral-900 ${
+            className={`h-full w-full bg-neutral-900 overflow-scroll ${
                 rounded ? 'rounded' : ''
             } overflow-hidden z-10`}>
             <div className="pt-1 bg-neutral-800" id="search-box">
-                {/* <div className="px-4">
-                    <Input
-                        type="text"
-                        placeholder="Cari materi"
-                        className="bg-neutral-900 border-none"
-                        name="search"
-                        endAddorment={
-                            <FaSearch className="text-gray-500 cursor-pointer" />
-                        }
-                    />
-                </div> */}
                 <div className="w-full flex">
                     {isVideoContentExist && (
                         <div

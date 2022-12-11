@@ -10,12 +10,12 @@ const KnowDegree = (): JSX.Element => {
                     'linear-gradient(178.8deg, rgba(0, 0, 0, 0.8) 1.01%, rgba(0, 0, 0, 0) 27.76%, rgba(0, 0, 0, 0) 78.96%, rgba(0, 0, 0, 0.8) 98.98%), linear-gradient(162.05deg, rgba(0, 0, 0, 0.1) 15.89%, rgba(22, 12, 44, 0.82) 50.43%, rgba(22, 12, 44, 0) 89.88%)'
             }}>
             <div
-                className="absolute top-0 right-0 opacity-20 w-[330px] lg:w-[522px] hidden lg:block"
+                className="absolute top-0 right-0 opacity-50 w-[330px] lg:w-[522px] hidden lg:block"
                 style={{
                     filter: 'drop-shadow(6px 6px 80px rgba(52, 2, 159, 0.1))'
                 }}>
                 <Image
-                    src="https://assets.gradient.academy/assets/thumb-3.jpg"
+                    src="https://assets.gradient.academy/assets/unique-2.png"
                     loading="lazy"
                     className="object-cover"
                     // layout="fill"
@@ -27,12 +27,12 @@ const KnowDegree = (): JSX.Element => {
                 />
             </div>
             <div
-                className="absolute top-32 left-0 opacity-20 w-[250px] lg:w-[393px] hidden lg:block"
+                className="absolute top-32 left-0 opacity-100 w-[250px] lg:w-[393px] hidden lg:block"
                 style={{
                     filter: 'drop-shadow(6px 6px 80px rgba(52, 2, 159, 0.1))'
                 }}>
                 <Image
-                    src="https://assets.gradient.academy/assets/thumb-1.jpg"
+                    src="https://assets.gradient.academy/assets/unique-1.png"
                     loading="lazy"
                     className="object-cover"
                     // layout="fill"
@@ -41,12 +41,12 @@ const KnowDegree = (): JSX.Element => {
                 />
             </div>
             <div
-                className="absolute bottom-0 opacity-20 w-[250px] lg:w-[397px] hidden lg:block"
+                className="absolute bottom-0 opacity-100 w-[250px] lg:w-[397px] hidden lg:block"
                 style={{
                     filter: 'drop-shadow(6px 6px 80px rgba(52, 2, 159, 0.1))'
                 }}>
                 <Image
-                    src="https://assets.gradient.academy/assets/thumb-5.jpg"
+                    src="https://assets.gradient.academy/assets/unique-3.png"
                     loading="lazy"
                     className="object-cover"
                     // layout="fill"
@@ -54,7 +54,7 @@ const KnowDegree = (): JSX.Element => {
                     width={397}
                 />
             </div>
-            <h2 className="text-lg lg:text-4xl font-bold text-center w-3/4 lg:w-1/2">
+            <h2 className="text-lg lg:text-4xl font-bold text-center w-3/4 lg:w-1/2 z-[5]">
                 Mengenal jurusanmu lebih dekat, dari orang yang tepat.
             </h2>
             <div className="mt-4 z-[5]">

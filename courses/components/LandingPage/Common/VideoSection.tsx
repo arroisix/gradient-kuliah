@@ -49,12 +49,12 @@ const VideoSection = ({ slug }: VideoSectionProps): JSX.Element => {
     }
 
     return (
-        <div className="w-screen py-16 flex-col px-4 md:px-[7.5rem] mb-16 min-h-[80vh]">
+        <div className="w-screen py-16 flex-col px-4 md:px-[7.5rem] mb-16">
             <h1 className="md:text-center text-2xl md:text-4xl font-bold text-center mb-4">
                 Coba Gratis Video Belajar
             </h1>
             <div
-                className={`flex flex-col lg:flex-row h-[80vh] ${
+                className={`flex flex-col lg:flex-row min-h-[80vh] lg:h-[80vh] ${
                     !isVideoContentExist && 'justify-center'
                 }`}>
                 {isVideoContentExist && (
@@ -93,7 +93,7 @@ const VideoSection = ({ slug }: VideoSectionProps): JSX.Element => {
                         )}
                     </div>
                 )}
-                <div className="w-full lg:w-1/3 h-full" id="content-section">
+                <div className="w-full lg:w-1/3" id="content-section">
                     {content?.data && (
                         <ListOfContent
                             chapters={content?.data}

@@ -54,11 +54,11 @@ const Hero = (): JSX.Element => {
             </div>
             <div className="w-full">
                 <h1 className="lg:text-5xl text-2xl text-center lg:text-left font-bold">
-                    Belajar dari pengajar terbaik di Indonesia
+                    Platform Belajar Kuliah No. 1 di Indonesia
                 </h1>
                 <h4 className="text-base md:text-2xl font-body font-[100] text-center lg:text-left text-neutral-200">
                     <span className="hidden md:block">
-                        Akses materi belajar terlengkap
+                        Pengalaman belajar yang berbeda.
                     </span>
                     <span className="block md:hidden">
                         Akses materi belajar yang lengkap dan video belajar yang

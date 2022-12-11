@@ -179,12 +179,16 @@ export function VideoProvider({
                 onPlayClick();
             }
 
-            if (event.code === 'ArrowRight') {
+            if (
+                event.code === 'ArrowRight' &&
+                videoRef.current.currentTime !== null
+            ) {
                 videoRef.current.currentTime += 10;
             }
 
             if (
                 event.code === 'ArrowLeft' &&
+                videoRef.current.currentTime !== null &&
                 videoRef.current.currentTime - 10 > 0
             ) {
                 videoRef.current.currentTime -= 10;

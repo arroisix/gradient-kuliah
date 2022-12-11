@@ -130,6 +130,13 @@ const Navbar = ({
                 ) : (
                     <>
                         <div className="hidden md:flex font-bold">
+                            <Link href="/kelas">
+                                <nav
+                                    className="ml-12 cursor-pointer hover:text-accent-blue"
+                                    onMouseEnter={onMouseEnterOther}>
+                                    Kelas
+                                </nav>
+                            </Link>
                             <nav
                                 className="ml-12 cursor-pointer hover:text-accent-blue"
                                 onMouseEnter={onMouseEnterOther}>

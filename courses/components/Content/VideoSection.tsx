@@ -7,7 +7,7 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import Lock from 'commons/components/elements/Icons/Lock';
 import ComingSoonContent from './ComingSoonContent';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface VideoSectionProps {
     setVideoPicked: (video: Video) => void;
@@ -117,6 +117,13 @@ const VideoAccordion = ({
     isSubscribed: boolean;
 }): JSX.Element => {
     const [open, setOpen] = useState(initialOpen ?? false);
+    const router = useRouter();
+    const { chapter: keyId } = router.query;
+    useEffect(() => {
+        if (keyId && keyId === chapter.id && !open) {
+            setOpen(true);
+        }
+    }, [keyId]);
 
     return (
         <div className="w-full">
@@ -170,7 +177,9 @@ const VideoSection = ({
     return (
         <div
             className={`${
-                isFullHeight ? 'h-[calc(100vh-65px)]' : 'h-[40vh] lg:h-[80vh]'
+                isFullHeight
+                    ? 'h-[calc(120vh-65px)]'
+                    : `h-[${chapters.length * 60}px]`
             } overflow-y-scroll`}>
             {trailerVideo && (
                 <div
