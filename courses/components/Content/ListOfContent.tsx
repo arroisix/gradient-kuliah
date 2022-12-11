@@ -40,10 +40,12 @@ const ListOfContent = ({
 
     return (
         <div
-            className={`h-full w-full bg-neutral-900 overflow-scroll ${
-                rounded ? 'rounded' : ''
+            className={`h-full w-full bg-neutral-900 relative overflow-scroll ${
+                rounded ? 'lg:rounded-r-xl' : ''
             } overflow-hidden z-10`}>
-            <div className="pt-1 bg-neutral-800" id="search-box">
+            <div
+                className="pt-1 bg-neutral-800 sticky top-0 left-0 w-full"
+                id="search-box">
                 <div className="w-full flex">
                     {isVideoContentExist && (
                         <div

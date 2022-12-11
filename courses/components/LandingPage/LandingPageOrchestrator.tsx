@@ -16,6 +16,7 @@ import BenefitKalkulus1Section from './Kalkulus1/BenefitKalkulus1Section';
 import PriceHighlightKalkulus1Section from './Kalkulus1/PriceHighlightKalkulus1Section';
 import SubscriptionBanner from '../SubscriptionBanner';
 import HeroPTSLSection from './PTSL/HeroPTSLSection';
+import PosterKalkulus1Section from './Kalkulus1/PosterKalkulus1Section';
 
 const COMPONENT_DICTIONARY: { [key in LandingPageSectionKey]: JSX.Element } = {
     hero: <HeroSection slug="dummy" />,
@@ -29,6 +30,7 @@ const COMPONENT_DICTIONARY: { [key in LandingPageSectionKey]: JSX.Element } = {
     poster: <PosterSection slug="dummy" />,
     price_highlight_kalkulus1: <PriceHighlightKalkulus1Section slug="dummy" />,
     benefit_kalkulus1: <BenefitKalkulus1Section />,
+    poster_kalkulus1: <PosterKalkulus1Section slug="dummy" />,
     hero_ptsl: <HeroPTSLSection slug="dummy" />
 };
 

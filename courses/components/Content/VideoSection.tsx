@@ -70,7 +70,7 @@ const VideoAccordionItem = ({
                 }
             }}
             key={subchapter.id}
-            className={`w-full flex items-center gap-2 px-4 py-2 hover:bg-neutral-600 cursor-pointer ${
+            className={`w-full flex items-center gap-2 px-7 py-2 hover:bg-neutral-600 cursor-pointer ${
                 videoPicked?.id === subchapter?.video?.id && 'bg-neutral-600'
             }`}>
             <div>
@@ -128,7 +128,7 @@ const VideoAccordion = ({
     return (
         <div className="w-full">
             <div
-                className="p-4 w-full flex justify-between items-center cursor-pointer"
+                className="px-7 py-4 w-full flex justify-between items-center cursor-pointer"
                 onClick={() => setOpen(!open)}
                 aria-hidden>
                 <span className="font-bold">{chapter.chapter_name}</span>

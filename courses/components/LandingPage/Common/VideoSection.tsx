@@ -7,6 +7,7 @@ import NeedSubscribe from 'courses/components/NeedSubscribe';
 import { useGetLandingCourseListContentQuery } from 'courses/redux/api/publicCourseApi';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import SubscribeButton from './SubscribeButton';
+import useWindowSize from 'commons/hooks/useWindowSize';
 
 interface VideoSectionProps {
     slug: string;
@@ -26,6 +27,7 @@ const VideoSection = ({ slug }: VideoSectionProps): JSX.Element => {
         'video'
     );
     const [track] = useTrackSubchapterProgressMutation();
+    const { width } = useWindowSize();
 
     useEffect(() => {
         if (content?.data) {
@@ -54,16 +56,16 @@ const VideoSection = ({ slug }: VideoSectionProps): JSX.Element => {
                 Coba Gratis Video Belajar
             </h1>
             <div
-                className={`flex flex-col lg:flex-row min-h-[80vh] lg:h-[80vh] ${
+                className={`flex flex-col lg:flex-row lg:max-h-[50vh] ${
                     !isVideoContentExist && 'justify-center'
                 }`}>
                 {isVideoContentExist && (
                     <div
-                        className="w-full lg:w-2/3 h-full flex items-center"
+                        className="w-full lg:w-2/3 h-full flex items-center lg:rounded-l-xl overflow-hidden"
                         id="video-section">
                         {videoPicked && videoPicked?.is_free ? (
                             <VideoPlayer
-                                height={'100%'}
+                                height={width >= 1024 ? '50vh' : ''}
                                 video={videoPicked.video_url as string}
                                 thumbnail={videoPicked.thumbnail as string}
                                 key={videoPicked.video_url as string}
