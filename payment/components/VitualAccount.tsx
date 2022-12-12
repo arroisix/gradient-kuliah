@@ -24,10 +24,6 @@ const VirtualAccountBox = (): JSX.Element => {
                     paymentMethod="VA_BRI"
                 />
                 <MethodBox
-                    logoUrl="https://d2uqn6ndx4ow3t.cloudfront.net/assets/payments/bsi.png"
-                    paymentMethod="VA_BSI"
-                />
-                <MethodBox
                     logoUrl="https://d2uqn6ndx4ow3t.cloudfront.net/assets/payments/permata.svg"
                     paymentMethod="VA_PERMATA"
                 />
