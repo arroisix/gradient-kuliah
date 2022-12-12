@@ -36,7 +36,7 @@ const Benefit = (): JSX.Element => {
                 </h3>
                 <BenefitItems
                     icons={<MdPlayCircleOutline />}
-                    title="70+ Video Pembelajaran On Demand"
+                    title="100+ Video Pembelajaran On Demand"
                     subtitle="Materi lengkap yang bisa kamu akses kapan aja dan diajar langsung sama dosen terbaik di Indonesia"
                 />
                 <BenefitItems
