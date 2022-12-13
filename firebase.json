@@ -6,7 +6,7 @@
             "source": ".",
             "rewrites": [
                 {
-                    "source": "**",
+                    "source": "/:path*",
                     "destination": "/:path*"
                 }
             ]
@@ -17,7 +17,7 @@
             "source": ".",
             "rewrites": [
                 {
-                    "source": "**",
+                    "source": "/:path*",
                     "destination": "/:path*"
                 }
             ]
