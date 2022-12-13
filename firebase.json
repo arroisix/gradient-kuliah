@@ -2,13 +2,25 @@
     "hosting": [
         {
             "target": "prod",
-            "source": ".",
-            "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+            "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+            "public": "out",
+            "rewrites": [
+                {
+                    "source": "**",
+                    "destination": "/index.html"
+                }
+            ]
         },
         {
             "target": "dev",
-            "source": ".",
-            "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+            "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+            "public": "out",
+            "rewrites": [
+                {
+                    "source": "**",
+                    "destination": "/index.html"
+                }
+            ]
         }
     ]
 }
