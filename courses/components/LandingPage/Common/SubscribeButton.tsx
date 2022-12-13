@@ -12,8 +12,12 @@ const SubscribeButton = ({
     slug: string;
     label?: string;
 }): JSX.Element => {
-    const { data: course } = useGetLandingCourseDataQuery(slug);
-    const { is_subscribed } = useCourseSubscription(slug);
+    const { data: course } = useGetLandingCourseDataQuery(slug, {
+        skip: slug === undefined || slug == null
+    });
+    const { is_subscribed } = useCourseSubscription(slug, {
+        skip: slug === undefined || slug == null
+    });
     const { setModalAuthOpen } = useAuth();
     const isAuthenticated = useSelector(getIsAuthenticated);
 
