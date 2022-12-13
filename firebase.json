@@ -3,24 +3,12 @@
         {
             "target": "prod",
             "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-            "source": ".",
-            "rewrites": [
-                {
-                    "source": "/**",
-                    "dynamicLinks": true
-                }
-            ]
+            "source": "."
         },
         {
             "target": "dev",
             "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-            "source": ".",
-            "rewrites": [
-                {
-                    "source": "/**",
-                    "dynamicLinks": true
-                }
-            ]
+            "source": "."
         }
     ]
 }
