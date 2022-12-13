@@ -1,5 +1,18 @@
 {
   "projects": {
     "default": "gradient-web-infra"
-  }
+  },
+  "targets": {
+    "gradient-web-infra": {
+      "hosting": {
+        "prod": [
+          "gradient-web-infra"
+        ],
+        "dev": [
+          "gradient-dev-web-infra"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
