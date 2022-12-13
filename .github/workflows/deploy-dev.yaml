@@ -1,7 +1,9 @@
 name: Deploy Gradient Dev Web
 
 on:
-    push: dev
+    push:
+        branches:
+            - dev
 jobs:
     build:
         name: Build and Deploy to Firebase
