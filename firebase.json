@@ -3,7 +3,7 @@
         {
             "target": "prod",
             "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-            "public": "gradient-web-infra",
+            "source": ".",
             "rewrites": [
                 {
                     "source": "**",
@@ -14,7 +14,7 @@
         {
             "target": "dev",
             "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-            "public": "gradient-dev-web-infra",
+            "source": ".",
             "rewrites": [
                 {
                     "source": "**",
