@@ -3,7 +3,7 @@
         {
             "target": "prod",
             "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-            "public": ".next",
+            "public": "_next",
             "rewrites": [
                 {
                     "source": "**",
@@ -14,7 +14,7 @@
         {
             "target": "dev",
             "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-            "public": ".next",
+            "public": "_next",
             "rewrites": [
                 {
                     "source": "**",
