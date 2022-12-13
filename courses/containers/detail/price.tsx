@@ -47,8 +47,8 @@ const Price = ({
                 <>
                     <h3 className="font-bold text-2xl md:text-4xl text-center">
                         {width > 768
-                            ? 'Jadi Paham Kalkulus bareng Gradient'
-                            : '# Jadi Paham Kalkulus bareng Gradient'}
+                            ? 'Jadi Paham Kalkulus 1 bareng Gradient'
+                            : '# Jadi Paham Kalkulus 1 bareng Gradient'}
                     </h3>
                     <p className="text-base md:text-xl text-neutral-400 font-body text-center">
                         Gak takut lagi setiap ngeliat ε-δ dan teman temannya
