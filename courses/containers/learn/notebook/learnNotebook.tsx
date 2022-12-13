@@ -5,8 +5,6 @@ import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 import rehypeStringify from 'rehype-stringify';
 import remarkParse from 'remark-parse';
-
-import 'katex/dist/katex.min.css'; //
 import rehypeKatex from 'rehype-katex';
 import NeedSubscribe from 'courses/components/NeedSubscribe';
 
