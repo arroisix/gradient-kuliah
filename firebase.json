@@ -3,12 +3,14 @@
         {
             "target": "prod",
             "source": ".",
-            "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+            "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+            "public": "out"
         },
         {
             "target": "dev",
             "source": ".",
-            "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+            "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+            "public": "out"
         }
     ]
 }
