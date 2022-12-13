@@ -6,8 +6,8 @@
             "source": ".",
             "rewrites": [
                 {
-                    "source": "/:path*",
-                    "destination": "/:path*"
+                    "source": "/**",
+                    "dynamicLinks": true
                 }
             ]
         },
@@ -17,8 +17,8 @@
             "source": ".",
             "rewrites": [
                 {
-                    "source": "/:path*",
-                    "destination": "/:path*"
+                    "source": "/**",
+                    "dynamicLinks": true
                 }
             ]
         }
