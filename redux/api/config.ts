@@ -3,7 +3,7 @@ const config = {
         API_BASE_URL: 'https://api.gradient.academy/'
     },
     dev: {
-        API_BASE_URL: 'https://api-dev.gradient.academy/'
+        API_BASE_URL: 'https://braided-circuit-360607.et.r.appspot.com/'
     },
     local: {
         API_BASE_URL: 'http://localhost:8000/'
