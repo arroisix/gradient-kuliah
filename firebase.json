@@ -1,34 +1,26 @@
 {
-  "hosting": [
-    {
-      "target": "prod",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
-      "public": "out",
-      "rewrites": [
+    "hosting": [
         {
-          "source": "**",
-          "destination": "/index.html"
-        }
-      ]
-    },
-    {
-      "target": "dev",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
-      "public": "out",
-      "rewrites": [
+            "target": "prod",
+            "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+            "public": ".next",
+            "rewrites": [
+                {
+                    "source": "**",
+                    "destination": "/index.html"
+                }
+            ]
+        },
         {
-          "source": "**",
-          "destination": "/index.html"
+            "target": "dev",
+            "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+            "public": ".next",
+            "rewrites": [
+                {
+                    "source": "**",
+                    "destination": "/index.html"
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ]
 }
