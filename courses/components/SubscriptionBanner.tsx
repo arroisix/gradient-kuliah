@@ -5,9 +5,8 @@ interface SubscriptionBannerProps {
     slug: string;
 }
 
-const Card = (data:any):JSX.Element => {
-
-    console.log(data)
+const Card = (data: any): JSX.Element => {
+    console.log(data);
 
     return (
         <div className="flex flex-col items-center justify-center px-12 py-10 rounded-lg backdrop-blur-sm bg-stone-900/70">
@@ -45,15 +44,15 @@ const Card = (data:any):JSX.Element => {
                 <p className="mb-3 text-xs 2xl:text-sm">
                     *Pembayaran langsung 4 bulan
                 </p>
-                <button type='button'>Akses Sekarang</button>
+                <SubscribeButton slug={data.slug} />
             </div>
         </div>
-    )
-}
+    );
+};
 
 const SubscriptionBanner = ({ slug }: SubscriptionBannerProps): JSX.Element => {
-    const { data:course } = useGetLandingCourseDataQuery(slug);
-    const cardNumber = course?.packets
+    const { data: course } = useGetLandingCourseDataQuery(slug);
+    const cardNumber = course?.packets;
 
     // Coba liat ini di console browser
     console.log(course, 'Data Course');
@@ -70,9 +69,9 @@ const SubscriptionBanner = ({ slug }: SubscriptionBannerProps): JSX.Element => {
                         Akses Instan Semuanya Sekarang!
                     </div>
                     <div className="grid md:grid-cols-2 sm:grid-cols-1 gap-7 mt-5">
-                        {cardNumber?.map((cardData)=>
-                        <Card {...cardData} />
-                        )}
+                        {cardNumber?.map((cardData) => (
+                            <Card {...cardData} />
+                        ))}
                     </div>
                 </div>
             </div>
