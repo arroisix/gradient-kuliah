@@ -1,27 +1,29 @@
 import { useGetLandingCourseDataQuery } from 'courses/redux/api/publicCourseApi';
-import SubscribeButton from './LandingPage/Common/SubscribeButton';
+import { formatter } from 'courses/utils';
+import SubscribeButton from './SubscribeButton';
 
 interface SubscriptionBannerProps {
     slug: string;
 }
 
-const Card = ({benefits,
-                discount,
-                packet_name,
-                price,
-                price_before_discount,
-                slugProp}:{
-                    benefits:object;
-                    discount:any;
-                    packet_name:any;
-                    price:any;
-                    price_before_discount:any;
-                    slugProp:any;
-                }): JSX.Element => {
-    
-    const benefitList:object=benefits.data
-    const paymentPeriodInfo:string=benefits.info
-    
+interface CardProps {
+    benefits: {
+        data: string[];
+        info: string;
+    };
+    price: string;
+    packet_name: string;
+    price_before_discount: string;
+    slugProp: string;
+}
+
+const Card = ({
+    benefits,
+    packet_name,
+    price,
+    price_before_discount,
+    slugProp
+}: CardProps): JSX.Element => {
     return (
         <div className="grid grid-cols-1 place-items-center w-3/5 py-10 sm:w-80 rounded-lg backdrop-blur-sm bg-stone-900/70">
             <div className="flex flex-col">
@@ -29,28 +31,40 @@ const Card = ({benefits,
                     {packet_name}
                 </p>
                 <h3 className="line-through text-2xl font-semibold text-center decoration-4 text-stone-500 decoration-red-600 sm:text-lg 2xl:text-3xl">
-                    {`Rp.${price_before_discount}`}
+                    {
+                        formatter
+                            .format(price_before_discount as unknown as number)
+                            .split(',')[0]
+                    }
                 </h3>
                 <div className="relative">
                     <h1 className="absolute text-3xl font-bold text-center blur sm:text-2xl 2xl:text-4xl">
-                        {`Rp.${price}`}
+                        {
+                            formatter
+                                .format(price as unknown as number)
+                                .split(',')[0]
+                        }
                     </h1>
                     <h1 className="relative text-3xl font-bold text-center sm:text-2xl 2xl:text-4xl">
-                        {`Rp.${price}`}
+                        {
+                            formatter
+                                .format(price as unknown as number)
+                                .split(',')[0]
+                        }
                     </h1>
                 </div>
             </div>
             <ul className="grid grid-cols-1 content-center pt-4">
-                {benefitList.map((benefit)=> (
-                    <li className="text-xs sm:text-xs 2xl:text-base">
+                {benefits.data.map((benefit: string) => (
+                    <li
+                        className="text-xs sm:text-xs 2xl:text-base"
+                        key={benefit}>
                         {benefit}
                     </li>
                 ))}
             </ul>
             <div className="flex flex-col items-center justify-center pt-4">
-                <p className="mb-3 text-xs 2xl:text-sm">
-                    {paymentPeriodInfo}
-                </p>
+                <p className="mb-3 text-xs 2xl:text-sm">{benefits.info}</p>
                 <SubscribeButton slug={slugProp} />
             </div>
         </div>
@@ -60,12 +74,9 @@ const Card = ({benefits,
 const SubscriptionBanner = ({ slug }: SubscriptionBannerProps): JSX.Element => {
     const { data: course } = useGetLandingCourseDataQuery(slug);
     const cardNumber = course?.packets;
-    const slugData = course?.course_slug;
-    // Coba liat ini di console browser
-    console.log(course, 'Data Course');
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen w-screen pt-20">
+        <div className="flex flex-col items-center justify-center min-h-screen w-screen">
             <div className="flex items-center justify-center relative">
                 {/* Bean */}
                 <div className="absolute bg-gradient-to-b from-violet-700 w-5/6 rounded-full aspect-square" />
@@ -77,7 +88,11 @@ const SubscriptionBanner = ({ slug }: SubscriptionBannerProps): JSX.Element => {
                     </div>
                     <div className="grid md:grid-cols-2 place-items-center sm:grid-cols-1 gap-7 mt-5">
                         {cardNumber?.map((cardData) => (
-                            <Card {...cardData} slugProp={slugData} />
+                            <Card
+                                {...cardData}
+                                key={cardData.id}
+                                slugProp={slug}
+                            />
                         ))}
                     </div>
                 </div>

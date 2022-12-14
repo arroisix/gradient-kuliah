@@ -151,4 +151,8 @@ type Packet = {
     price_before_discount: string;
     discount: string;
     courses: Course[];
+    benefits: {
+        data: string[];
+        info: string;
+    };
 };

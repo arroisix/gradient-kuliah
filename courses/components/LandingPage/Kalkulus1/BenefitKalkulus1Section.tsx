@@ -61,7 +61,7 @@ const BenefitKalkulus1Section = (): JSX.Element => {
                     />
                 </div>
             </div>
-            <div className="w-full flex justify-center items-center">
+            <div className="w-full flex justify-center items-center mb-8">
                 <SubscribeButton slug="kalkulus1" />
             </div>
         </>

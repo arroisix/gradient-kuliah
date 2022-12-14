@@ -14,7 +14,7 @@ import TestimonySection from './Common/TestimonySection';
 import VideoSection from './Common/VideoSection';
 import BenefitKalkulus1Section from './Kalkulus1/BenefitKalkulus1Section';
 import PriceHighlightKalkulus1Section from './Kalkulus1/PriceHighlightKalkulus1Section';
-import SubscriptionBanner from '../SubscriptionBanner';
+import SubscriptionBanner from './Common/SubscriptionBanner';
 import HeroPTSLSection from './PTSL/HeroPTSLSection';
 import PosterKalkulus1Section from './Kalkulus1/PosterKalkulus1Section';
 
