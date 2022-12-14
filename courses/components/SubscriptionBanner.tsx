@@ -5,46 +5,53 @@ interface SubscriptionBannerProps {
     slug: string;
 }
 
-const Card = (data: any): JSX.Element => {
-    console.log(data);
-
+const Card = ({benefits,
+                discount,
+                packet_name,
+                price,
+                price_before_discount,
+                slugProp}:{
+                    benefits:object;
+                    discount:any;
+                    packet_name:any;
+                    price:any;
+                    price_before_discount:any;
+                    slugProp:any;
+                }): JSX.Element => {
+    
+    const benefitList:object=benefits.data
+    const paymentPeriodInfo:string=benefits.info
+    
     return (
-        <div className="flex flex-col items-center justify-center px-12 py-10 rounded-lg backdrop-blur-sm bg-stone-900/70">
+        <div className="grid grid-cols-1 place-items-center w-3/5 py-10 sm:w-80 rounded-lg backdrop-blur-sm bg-stone-900/70">
             <div className="flex flex-col">
                 <p className="font-light text-center text-sm 2xl:text-xl">
-                    Nama Paket
+                    {packet_name}
                 </p>
                 <h3 className="line-through text-2xl font-semibold text-center decoration-4 text-stone-500 decoration-red-600 sm:text-lg 2xl:text-3xl">
-                    Harga Sebelom Diskon
+                    {`Rp.${price_before_discount}`}
                 </h3>
                 <div className="relative">
                     <h1 className="absolute text-3xl font-bold text-center blur sm:text-2xl 2xl:text-4xl">
-                        Harga setelah diskon
+                        {`Rp.${price}`}
                     </h1>
                     <h1 className="relative text-3xl font-bold text-center sm:text-2xl 2xl:text-4xl">
-                        Harga lagi bro
+                        {`Rp.${price}`}
                     </h1>
                 </div>
             </div>
-            <ul className="flex flex-col pt-4">
-                <li className="text-sm sm:text-xs 2xl:text-base">
-                    100+ Video Pembelajaran
-                </li>
-                <li className="text-sm sm:text-xs 2xl:text-base">
-                    Latihan Soal dan Pembahasan
-                </li>
-                <li className="text-sm sm:text-xs 2xl:text-base">
-                    Dedicated Tutor
-                </li>
-                <li className="text-sm sm:text-xs 2xl:text-base">
-                    Webinar Gradient tanggal
-                </li>
+            <ul className="grid grid-cols-1 content-center pt-4">
+                {benefitList.map((benefit)=> (
+                    <li className="text-xs sm:text-xs 2xl:text-base">
+                        {benefit}
+                    </li>
+                ))}
             </ul>
             <div className="flex flex-col items-center justify-center pt-4">
                 <p className="mb-3 text-xs 2xl:text-sm">
-                    *Pembayaran langsung 4 bulan
+                    {paymentPeriodInfo}
                 </p>
-                <SubscribeButton slug={data.slug} />
+                <SubscribeButton slug={slugProp} />
             </div>
         </div>
     );
@@ -53,7 +60,7 @@ const Card = (data: any): JSX.Element => {
 const SubscriptionBanner = ({ slug }: SubscriptionBannerProps): JSX.Element => {
     const { data: course } = useGetLandingCourseDataQuery(slug);
     const cardNumber = course?.packets;
-
+    const slugData = course?.course_slug;
     // Coba liat ini di console browser
     console.log(course, 'Data Course');
 
@@ -68,9 +75,9 @@ const SubscriptionBanner = ({ slug }: SubscriptionBannerProps): JSX.Element => {
                     <div className="font-bold text-center text-3xl sm:text-xl">
                         Akses Instan Semuanya Sekarang!
                     </div>
-                    <div className="grid md:grid-cols-2 sm:grid-cols-1 gap-7 mt-5">
+                    <div className="grid md:grid-cols-2 place-items-center sm:grid-cols-1 gap-7 mt-5">
                         {cardNumber?.map((cardData) => (
-                            <Card {...cardData} />
+                            <Card {...cardData} slugProp={slugData} />
                         ))}
                     </div>
                 </div>
