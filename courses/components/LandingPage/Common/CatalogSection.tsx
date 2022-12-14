@@ -11,7 +11,8 @@ const CatalogSection = ({
     slug: string;
     id: string;
 }): JSX.Element => {
-    const { data: content } = useGetLandingCourseListContentQuery(slug);
+    const { data: content, isLoading } =
+        useGetLandingCourseListContentQuery(slug);
     const { expiryDay, latest_subchapter, subscription_id } =
         useCourseSubscription(slug);
     const sortChapterOrder = (chapters: Chapter[]): Chapter[] => {
@@ -43,11 +44,42 @@ const CatalogSection = ({
                         </div>
                     </div>
                 )}
-            {content?.data && (
+            {!isLoading && content?.data ? (
                 <CatalogContainer
                     chapters={sortChapterOrder(content.data)}
                     latest_subchapter={latest_subchapter}
                 />
+            ) : (
+                <div className="flex flex-col gap-2">
+                    <div className="my-2">
+                        <div className="p-4 h-8 w-32 bg-neutral-600 animate-pulse rounded-lg" />
+                        <div className="grid grid-cols-2 gap-2 my-8">
+                            <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
+                            <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
+                        </div>
+                    </div>
+                    <div className="my-2">
+                        <div className="p-4 h-8 w-32 bg-neutral-600 animate-pulse rounded-lg" />
+                        <div className="grid grid-cols-2 gap-2 my-8">
+                            <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
+                            <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
+                        </div>
+                    </div>
+                    <div className="my-2">
+                        <div className="p-4 h-8 w-32 bg-neutral-600 animate-pulse rounded-lg" />
+                        <div className="grid grid-cols-2 gap-2 my-8">
+                            <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
+                            <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
+                        </div>
+                    </div>
+                    <div className="my-2">
+                        <div className="p-4 h-8 w-32 bg-neutral-600 animate-pulse rounded-lg" />
+                        <div className="grid grid-cols-2 gap-2 my-8">
+                            <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
+                            <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
+                        </div>
+                    </div>
+                </div>
             )}
         </Container>
     );

@@ -3,15 +3,6 @@ import CourseCard from '../components/CourseCard';
 import CourseContainer from '../components/CourseContainer';
 import useCourses from '../hooks/useCourses';
 
-export const COMING_SOON_COURSE = [
-    {
-        course_name: 'Pengantar Teknik Sipil & Lingkungan',
-        thumbnail:
-            'https://d2uqn6ndx4ow3t.cloudfront.net/courses/intro-sipil/assets/hero_asih_new.jpg',
-        comingSoon: true
-    }
-];
-
 const PrivateCourses = ({ myClass }: { myClass: boolean }): JSX.Element => {
     const { data, loading } = useCourses();
     const [courses, setCourses] = useState<Course[]>([]);
