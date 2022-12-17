@@ -9,7 +9,7 @@ const JoinDiscord = (): JSX.Element => {
                     Gabung Komunitas Gradient
                 </h2>
                 <p className="text-sm lg:text-2xl font-body font-thin text-neutral-200 my-2">
-                    Lebih dari 50 universitas sudah bergabung dalam Gradient
+                    Lebih dari 70 universitas sudah bergabung dalam Gradient
                 </p>
                 <Button
                     variant="primary"

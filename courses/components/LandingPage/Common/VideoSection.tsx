@@ -6,6 +6,8 @@ import ListOfContent from 'courses/components/Content/ListOfContent';
 import NeedSubscribe from 'courses/components/NeedSubscribe';
 import { useGetLandingCourseListContentQuery } from 'courses/redux/api/publicCourseApi';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import SubscribeButton from './SubscribeButton';
+import useWindowSize from 'commons/hooks/useWindowSize';
 
 interface VideoSectionProps {
     slug: string;
@@ -25,6 +27,7 @@ const VideoSection = ({ slug }: VideoSectionProps): JSX.Element => {
         'video'
     );
     const [track] = useTrackSubchapterProgressMutation();
+    const { width } = useWindowSize();
 
     useEffect(() => {
         if (content?.data) {
@@ -48,18 +51,21 @@ const VideoSection = ({ slug }: VideoSectionProps): JSX.Element => {
     }
 
     return (
-        <div className="w-screen py-16 flex-col px-4 md:px-[7.5rem] mb-16 h-[80vh]">
+        <div className="w-screen py-16 flex-col px-4 md:px-[7.5rem] mb-16">
+            <h1 className="md:text-center text-2xl md:text-4xl font-bold text-center mb-4">
+                Coba Gratis Video Belajar
+            </h1>
             <div
-                className={`flex h-full flex-col lg:flex-row ${
+                className={`flex flex-col lg:flex-row lg:max-h-[50vh] ${
                     !isVideoContentExist && 'justify-center'
                 }`}>
                 {isVideoContentExist && (
                     <div
-                        className="w-full lg:w-2/3 h-full flex items-center"
+                        className="w-full lg:w-2/3 h-full flex items-center lg:rounded-l-xl overflow-hidden"
                         id="video-section">
                         {videoPicked && videoPicked?.is_free ? (
                             <VideoPlayer
-                                height={'100%'}
+                                height={width >= 1024 ? '50vh' : ''}
                                 video={videoPicked.video_url as string}
                                 thumbnail={videoPicked.thumbnail as string}
                                 key={videoPicked.video_url as string}
@@ -89,7 +95,7 @@ const VideoSection = ({ slug }: VideoSectionProps): JSX.Element => {
                         )}
                     </div>
                 )}
-                <div className="w-full lg:w-1/3 h-full" id="content-section">
+                <div className="w-full lg:w-1/3" id="content-section">
                     {content?.data && (
                         <ListOfContent
                             chapters={content?.data}
@@ -103,6 +109,9 @@ const VideoSection = ({ slug }: VideoSectionProps): JSX.Element => {
                         />
                     )}
                 </div>
+            </div>
+            <div className="w-full flex justify-center items-center pt-8">
+                <SubscribeButton slug={slug} label="Akses Semua Video" />
             </div>
         </div>
     );

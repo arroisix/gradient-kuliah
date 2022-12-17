@@ -59,7 +59,7 @@ const VideoLearnContainer = ({
                     )}
                 </div>
             </div>
-            <div className="h-full min-w-[30vw]">
+            <div className="min-h-screen min-w-[30vw]">
                 <LearnContentBox
                     chapters={chapters}
                     isSubscribed={is_subscribed}

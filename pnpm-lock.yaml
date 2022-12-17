@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
     '@apollo/client': ^3.7.0
     '@headlessui/react': ^1.7.3
+    '@react-oauth/google': ^0.5.1
     '@react-spring/parallax': ^9.5.5
     '@reduxjs/toolkit': ^1.8.6
     '@tailwindcss/forms': ^0.5.3
@@ -42,7 +43,6 @@ specifiers:
     react: 18.1.0
     react-copy-to-clipboard: ^5.1.0
     react-dom: 18.1.0
-    react-google-login: ^5.2.2
     react-gtm-module: ^2.0.11
     react-icons: ^4.6.0
     react-intersection-observer: ^9.4.0
@@ -72,6 +72,7 @@ specifiers:
 dependencies:
     '@apollo/client': 3.7.0_tlq3524jpsy5qsxmlglhyg4wdu
     '@headlessui/react': 1.7.3_ef5jwxihqo6n7gxfmzogljlgcm
+    '@react-oauth/google': 0.5.1_ef5jwxihqo6n7gxfmzogljlgcm
     '@react-spring/parallax': 9.5.5_ef5jwxihqo6n7gxfmzogljlgcm
     '@reduxjs/toolkit': 1.8.6_mp2q3xf3lfxx77jlknkvssxmge
     '@tailwindcss/forms': 0.5.3_tailwindcss@3.2.1
@@ -88,7 +89,6 @@ dependencies:
     react: 18.1.0
     react-copy-to-clipboard: 5.1.0_react@18.1.0
     react-dom: 18.1.0_react@18.1.0
-    react-google-login: 5.2.2_ef5jwxihqo6n7gxfmzogljlgcm
     react-gtm-module: 2.0.11
     react-icons: 4.6.0_react@18.1.0
     react-intersection-observer: 9.4.0_react@18.1.0
@@ -544,6 +544,19 @@ packages:
         dependencies:
             '@nodelib/fs.scandir': 2.1.5
             fastq: 1.13.0
+
+    /@react-oauth/google/0.5.1_ef5jwxihqo6n7gxfmzogljlgcm:
+        resolution:
+            {
+                integrity: sha512-XCMMke24klAHIVnrZAMibodyjSUsxBOJ+vO5yvRptWC2Vnq02uLUnydjtIdCzCUIAxbvbFbQWZxG0xF0Y8GtHA==
+            }
+        peerDependencies:
+            react: '>=16.8.0'
+            react-dom: '>=16.8.0'
+        dependencies:
+            react: 18.1.0
+            react-dom: 18.1.0_react@18.1.0
+        dev: false
 
     /@react-spring/animated/9.5.5_react@18.1.0:
         resolution:
@@ -4939,21 +4952,6 @@ packages:
             {
                 integrity: sha512-rtGImPZ0YyLrscKI9xTpV8psd6I8VAtjKCzQDlzyDvqJA8XOW78TXYQwNRNd8g8JZnDu8q9Fu/1v4HPAVwVdHA==
             }
-        dev: false
-
-    /react-google-login/5.2.2_ef5jwxihqo6n7gxfmzogljlgcm:
-        resolution:
-            {
-                integrity: sha512-JUngfvaSMcOuV0lFff7+SzJ2qviuNMQdqlsDJkUM145xkGPVIfqWXq9Ui+2Dr6jdJWH5KYdynz9+4CzKjI5u6g==
-            }
-        peerDependencies:
-            react: ^16 || ^17
-            react-dom: ^16 || ^17
-        dependencies:
-            '@types/react': 18.0.23
-            prop-types: 15.8.1
-            react: 18.1.0
-            react-dom: 18.1.0_react@18.1.0
         dev: false
 
     /react-gtm-module/2.0.11:

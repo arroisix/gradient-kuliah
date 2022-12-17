@@ -1,0 +1,14 @@
+{
+    "hosting": [
+        {
+            "target": "prod",
+            "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+            "source": "."
+        },
+        {
+            "target": "dev",
+            "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+            "source": "."
+        }
+    ]
+}

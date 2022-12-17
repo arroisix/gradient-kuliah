@@ -7,7 +7,7 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import Lock from 'commons/components/elements/Icons/Lock';
 import ComingSoonContent from './ComingSoonContent';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface VideoSectionProps {
     setVideoPicked: (video: Video) => void;
@@ -70,7 +70,7 @@ const VideoAccordionItem = ({
                 }
             }}
             key={subchapter.id}
-            className={`w-full flex items-center gap-2 px-4 py-2 hover:bg-neutral-600 cursor-pointer ${
+            className={`w-full flex items-center gap-2 px-7 py-2 hover:bg-neutral-600 cursor-pointer ${
                 videoPicked?.id === subchapter?.video?.id && 'bg-neutral-600'
             }`}>
             <div>
@@ -117,11 +117,18 @@ const VideoAccordion = ({
     isSubscribed: boolean;
 }): JSX.Element => {
     const [open, setOpen] = useState(initialOpen ?? false);
+    const router = useRouter();
+    const { chapter: keyId } = router.query;
+    useEffect(() => {
+        if (keyId && keyId === chapter.id && !open) {
+            setOpen(true);
+        }
+    }, [keyId]);
 
     return (
         <div className="w-full">
             <div
-                className="p-4 w-full flex justify-between items-center cursor-pointer"
+                className="px-7 py-4 w-full flex justify-between items-center cursor-pointer"
                 onClick={() => setOpen(!open)}
                 aria-hidden>
                 <span className="font-bold">{chapter.chapter_name}</span>
@@ -170,8 +177,10 @@ const VideoSection = ({
     return (
         <div
             className={`${
-                isFullHeight ? 'h-[calc(100vh-65px)]' : 'h-[40vh] lg:h-[80vh]'
-            } overflow-y-scroll lg:pb-72`}>
+                isFullHeight
+                    ? 'h-[calc(120vh-65px)]'
+                    : `h-[${chapters.length * 60}px]`
+            } overflow-y-scroll`}>
             {trailerVideo && (
                 <div
                     id="trailer"

@@ -12,12 +12,14 @@ type LandingPageSectionKey =
     | 'testimony'
     | 'price_highlight'
     | 'faq'
+    | 'poster'
     | `hero_${string}`
     | `video_${string}`
     | `benefit_${string}`
     | `lecturers_${string}`
     | `price_table_${string}`
-    | `price_highlight_${string}`;
+    | `price_highlight_${string}`
+    | `poster_${string}`;
 
 type LandingPageSection = {
     key: LandingPageSectionKey;
