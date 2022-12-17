@@ -86,7 +86,7 @@ const SubscriptionBanner = ({ slug }: SubscriptionBannerProps): JSX.Element => {
                     <div className="font-bold text-center text-3xl sm:text-xl">
                         Akses Instan Semuanya Sekarang!
                     </div>
-                    <div className="grid md:grid-cols-2 place-items-center sm:grid-cols-1 gap-7 mt-5">
+                    <div className="flex gap-2 flex-wrap mt-8 justify-center items-center">
                         {cardNumber?.map((cardData) => (
                             <Card
                                 {...cardData}
