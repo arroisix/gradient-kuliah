@@ -35,7 +35,7 @@ const Catalog = ({ course }: { course: Course }): JSX.Element => {
                                 terus mengakses layanan Gradient.
                             </span>
                             <Button
-                                href={`langganan?courseId=${course.id}&subscriptionId=${data?.id}`}
+                                href={`/langganan?courseId=${course.id}&subscriptionId=${data?.id}`}
                                 variant="custom"
                                 className="bg-accent-yellow text-black w-full md:w-[250px] font-body text-center">
                                 Perpanjang

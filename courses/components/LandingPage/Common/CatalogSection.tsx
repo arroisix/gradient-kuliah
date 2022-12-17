@@ -36,7 +36,7 @@ const CatalogSection = ({
                                 terus mengakses layanan Gradient.
                             </span>
                             <Button
-                                href={`langganan?courseId=${id}&subscriptionId=${subscription_id}`}
+                                href={`/langganan?courseId=${id}&subscriptionId=${subscription_id}`}
                                 variant="custom"
                                 className="bg-accent-yellow text-black w-full md:w-[250px] font-body text-center">
                                 Perpanjang
