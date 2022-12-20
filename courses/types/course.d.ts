@@ -143,7 +143,7 @@ type LearningProgress = {
 
 type Packet = {
     id: string;
-    is_free: string;
+    is_free: boolean;
     packet_name: string;
     active_duration: number;
     is_lifetime: boolean;

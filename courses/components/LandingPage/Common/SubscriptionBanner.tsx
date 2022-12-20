@@ -11,6 +11,7 @@ interface CardProps {
         data: string[];
         info: string;
     };
+    is_free: boolean;
     price: string;
     packet_name: string;
     price_before_discount: string;
@@ -22,6 +23,7 @@ const Card = ({
     packet_name,
     price,
     price_before_discount,
+    is_free,
     slugProp
 }: CardProps): JSX.Element => {
     return (
@@ -46,16 +48,16 @@ const Card = ({
                         }
                     </h1>
                     <h1 className="relative text-3xl font-bold text-center sm:text-2xl 2xl:text-4xl">
-                        {
-                            formatter
-                                .format(price as unknown as number)
-                                .split(',')[0]
-                        }
+                        {is_free
+                            ? 'GRATIS'
+                            : formatter
+                                  .format(price as unknown as number)
+                                  .split(',')[0]}
                     </h1>
                 </div>
             </div>
             <ul className="grid grid-cols-1 content-center pt-4">
-                {benefits.data.map((benefit: string) => (
+                {benefits?.data.map((benefit: string) => (
                     <li
                         className="text-xs sm:text-xs 2xl:text-base"
                         key={benefit}>
@@ -64,7 +66,7 @@ const Card = ({
                 ))}
             </ul>
             <div className="flex flex-col items-center justify-center pt-4">
-                <p className="mb-3 text-xs 2xl:text-sm">{benefits.info}</p>
+                <p className="mb-3 text-xs 2xl:text-sm">{benefits?.info}</p>
                 <SubscribeButton slug={slugProp} />
             </div>
         </div>
@@ -76,18 +78,18 @@ const SubscriptionBanner = ({ slug }: SubscriptionBannerProps): JSX.Element => {
     const cardNumber = course?.packets;
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen w-screen">
+        <div className="flex flex-col items-center justify-center min-h-[70vh] w-screen">
             <div className="flex items-center justify-center relative">
                 {/* Bean */}
                 <div className="absolute bg-gradient-to-b from-violet-700 w-5/6 rounded-full aspect-square" />
 
                 {/* Cards */}
                 <div className="relative">
-                    <div className="font-bold text-center text-3xl sm:text-xl">
+                    <h1 className="md:text-center text-2xl md:text-4xl font-bold text-center">
                         Akses Instan Semuanya Sekarang!
-                    </div>
-                    <div className="grid md:grid-cols-2 place-items-center sm:grid-cols-1 gap-7 mt-5">
-                        {cardNumber?.map((cardData) => (
+                    </h1>
+                    <div className="flex gap-2 flex-wrap mt-8 justify-center items-center">
+                        {cardNumber?.map((cardData: Packet) => (
                             <Card
                                 {...cardData}
                                 key={cardData.id}
