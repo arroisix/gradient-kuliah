@@ -32,9 +32,9 @@ const VideoPreview = ({
             setOpen={(status: number) => setOpen(status === 1)}
             isPopup
             variant="dark"
-            className="w-[60vw] h-[50vh] flex justify-center items-center">
+            className="w-[100vw] lg:w-[60vw] lg:h-[50vh] flex justify-center items-center">
             <VideoPlayer
-                height="50vh"
+                height="100%"
                 video={video_preview}
                 thumbnail={thumbnail}
             />
