@@ -18,6 +18,7 @@ import SubscriptionBanner from './Common/SubscriptionBanner';
 import HeroPTSLSection from './PTSL/HeroPTSLSection';
 import PosterKalkulus1Section from './Kalkulus1/PosterKalkulus1Section';
 import BenefitPTSLSection from './PTSL/BenefitPTSLSection';
+import PriceHighlightPTSLSection from './PTSL/PriceHighlightPTSLSection';
 
 const COMPONENT_DICTIONARY: { [key in LandingPageSectionKey]: JSX.Element } = {
     hero: <HeroSection slug="dummy" />,
@@ -30,6 +31,7 @@ const COMPONENT_DICTIONARY: { [key in LandingPageSectionKey]: JSX.Element } = {
     faq: <FAQSection />,
     poster: <PosterSection slug="dummy" />,
     price_highlight_kalkulus1: <PriceHighlightKalkulus1Section slug="dummy" />,
+    price_highlight_ptsl: <PriceHighlightPTSLSection slug="dummy" />,
     benefit_kalkulus1: <BenefitKalkulus1Section />,
     benefit_ptsl: <BenefitPTSLSection />,
     poster_kalkulus1: <PosterKalkulus1Section slug="dummy" />,

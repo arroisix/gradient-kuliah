@@ -38,18 +38,18 @@ const BenefitPTSLSection = (): JSX.Element => {
                     </h3>
                     <BenefitItems
                         icons={<MdPlayCircleOutline />}
-                        title="100+ Video Pembelajaran On Demand"
-                        subtitle="Materi lengkap yang bisa kamu akses kapan aja dan diajar langsung sama dosen terbaik di Indonesia"
+                        title="Video Pembelajaran On Demand"
+                        subtitle="Cerita unik dari pengajar terbaik tentang pengalamannya di jurusan teknik sipil & lingkungan"
                     />
                     <BenefitItems
                         icons={<MdEdit />}
-                        title="1x Live Tutor/Minggu"
-                        subtitle="Mantepin konsep kalkulus dan bahas soal-soal bareng dedicated tutor"
+                        title="1x LIVE Class/Minggu"
+                        subtitle="Dapet jatah untuk ikut LIVE Class terkait beragam topik tiap minggunya!"
                     />
                     <BenefitItems
                         icons={<MdOutlineGroup />}
-                        title="Komunitas Gradient"
-                        subtitle="Belajar dan nugas bareng mahasiswa dari seluruh Indonesia"
+                        title="Group Exclusive Member"
+                        subtitle="Belajar dan diskusi bareng member Gradient"
                     />
                 </div>
                 <div className="h-full w-[50vw] hidden md:flex">
