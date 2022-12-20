@@ -7,6 +7,7 @@ import { useTrackSubchapterProgressMutation } from 'courses/redux/api/privateCou
 import { getAllVideoChapter, isContentChapterExist } from 'courses/utils';
 
 interface ContentBoxProps {
+    slug: string;
     chapters: Chapter[];
     description?: string;
     trailer?: Video;
@@ -16,6 +17,7 @@ interface ContentBoxProps {
 }
 
 const ContentBox = ({
+    slug,
     chapters,
     trailer,
     thumbnail,
@@ -90,6 +92,7 @@ const ContentBox = ({
             {isVideoContentExist && <div className="w-[32px]" />}
             <div className="w-full lg:w-1/3 h-3/4" id="content-section">
                 <ListOfContent
+                    slug={slug}
                     chapters={chapters}
                     videoPicked={videoPicked}
                     setVideoPicked={setVideoPicked}

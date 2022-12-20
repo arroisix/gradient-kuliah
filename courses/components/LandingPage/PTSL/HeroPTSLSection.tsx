@@ -153,12 +153,14 @@ const HeroPTSLSection = ({
                     />
                 </div>
             </div>
-            <VideoPreview
-                setOpen={setVideoPreview}
-                isOpen={showVideoPreview}
-                video_preview={video_preview as string}
-                thumbnail={thumbnail as string}
-            />
+            {showVideoPreview && (
+                <VideoPreview
+                    setOpen={setVideoPreview}
+                    isOpen={showVideoPreview}
+                    video_preview={video_preview as string}
+                    thumbnail={thumbnail as string}
+                />
+            )}
         </section>
     );
 };

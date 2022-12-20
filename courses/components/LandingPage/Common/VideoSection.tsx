@@ -98,6 +98,7 @@ const VideoSection = ({ slug }: VideoSectionProps): JSX.Element => {
                 <div className="w-full lg:w-1/3" id="content-section">
                     {content?.data && (
                         <ListOfContent
+                            slug={slug}
                             chapters={content?.data}
                             videoPicked={videoPicked}
                             setVideoPicked={setVideoPicked}

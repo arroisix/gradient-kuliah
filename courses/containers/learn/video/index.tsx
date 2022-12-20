@@ -60,10 +60,13 @@ const VideoLearnContainer = ({
                 </div>
             </div>
             <div className="min-h-screen min-w-[30vw]">
-                <LearnContentBox
-                    chapters={chapters}
-                    isSubscribed={is_subscribed}
-                />
+                {id && (
+                    <LearnContentBox
+                        slug={id as string}
+                        chapters={chapters}
+                        isSubscribed={is_subscribed}
+                    />
+                )}
             </div>
         </section>
     );

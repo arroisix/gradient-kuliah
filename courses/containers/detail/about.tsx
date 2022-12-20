@@ -8,6 +8,7 @@ const About = ({ course }: { course: Course }): JSX.Element => {
                     Coba gratis video belajar Gradient.
                 </h1>
                 <ContentBox
+                    slug={course.slug}
                     chapters={course?.chapters}
                     trailer={
                         course?.trailer

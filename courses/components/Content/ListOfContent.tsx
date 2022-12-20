@@ -10,6 +10,7 @@ import { useState } from 'react';
 import VideoSection from './VideoSection';
 
 const ListOfContent = ({
+    slug,
     chapters,
     setVideoPicked,
     setSubchapter,
@@ -21,6 +22,7 @@ const ListOfContent = ({
     isSubscribed,
     isFullHeight
 }: {
+    slug: string;
     chapters: Chapter[];
     setVideoPicked: (video: Video) => void;
     setSubchapter?: (sub: SubChapter) => void;
@@ -80,6 +82,7 @@ const ListOfContent = ({
                             ? getAllVideoChapter(chapters)
                             : getAllAnimationChapter(chapters)
                     }
+                    slug={slug}
                     setVideoPicked={setVideoPicked}
                     setSubchapter={setSubchapter}
                     videoPicked={videoPicked}
