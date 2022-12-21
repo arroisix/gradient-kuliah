@@ -26,7 +26,7 @@ const BenefitItems = ({
     );
 };
 
-const BenefitKalkulus1Section = (): JSX.Element => {
+const BenefitPTSLSection = (): JSX.Element => {
     return (
         <>
             <div
@@ -38,23 +38,23 @@ const BenefitKalkulus1Section = (): JSX.Element => {
                     </h3>
                     <BenefitItems
                         icons={<MdPlayCircleOutline />}
-                        title="100+ Video Pembelajaran On Demand"
-                        subtitle="Materi lengkap yang bisa kamu akses kapan aja dan diajar langsung sama dosen terbaik di Indonesia"
+                        title="Video Pembelajaran On Demand"
+                        subtitle="Cerita unik dari pengajar terbaik tentang pengalamannya di jurusan teknik sipil & lingkungan"
                     />
                     <BenefitItems
                         icons={<MdEdit />}
-                        title="1x Live Tutor/Minggu"
-                        subtitle="Mantepin konsep kalkulus dan bahas soal-soal bareng dedicated tutor"
+                        title="1x LIVE Class/Minggu"
+                        subtitle="Dapet jatah untuk ikut LIVE Class terkait beragam topik tiap minggunya!"
                     />
                     <BenefitItems
                         icons={<MdOutlineGroup />}
-                        title="Komunitas Gradient"
-                        subtitle="Belajar dan nugas bareng mahasiswa dari seluruh Indonesia"
+                        title="Group Exclusive Member"
+                        subtitle="Belajar dan diskusi bareng member Gradient"
                     />
                 </div>
                 <div className="h-full w-[50vw] hidden md:flex">
                     <Image
-                        src="https://assets.gradient.academy/courses/calculus/assets/benefit-asset.png"
+                        src="https://assets.gradient.academy/assets/benefit-asset-ptsl.png"
                         loading="lazy"
                         width={800}
                         height={500}
@@ -68,4 +68,4 @@ const BenefitKalkulus1Section = (): JSX.Element => {
     );
 };
 
-export default BenefitKalkulus1Section;
+export default BenefitPTSLSection;

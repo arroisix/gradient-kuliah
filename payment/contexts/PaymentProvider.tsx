@@ -16,6 +16,8 @@ interface PaymentContextType {
     setPacket: (packet?: Packet) => void;
     paymentMethod: PaymentMethod;
     setPaymentMethod: (method: PaymentMethod) => void;
+    freePacket?: Packet;
+    isFreePacket: () => boolean;
 }
 
 const PaymentContext = createContext<PaymentContextType>(
@@ -34,12 +36,20 @@ export function PaymentProvider({
     const [packet, setPacket] = useState<Packet>();
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('VA_BNI');
     const { data } = usePacket(courseId);
+    const [freePacket, setFreePacket] = useState<Packet>();
 
     useEffect(() => {
         if (data?.data) {
             setPackets(data.data as unknown as Packet[]);
+
+            const checkFreePacket = data.data.filter((p: Packet) => p.is_free);
+            if (checkFreePacket.length > 0) {
+                setFreePacket(checkFreePacket[0]);
+            }
         }
     }, [data]);
+
+    const isFreePacket = (): boolean => freePacket !== undefined;
 
     const memoedValue = useMemo(
         () => ({
@@ -49,9 +59,11 @@ export function PaymentProvider({
             packets,
             setPacket,
             paymentMethod,
-            setPaymentMethod
+            setPaymentMethod,
+            freePacket,
+            isFreePacket
         }),
-        [isModalCheckoutOpen, packet, packets, paymentMethod]
+        [isModalCheckoutOpen, packet, packets, paymentMethod, freePacket]
     );
 
     return (

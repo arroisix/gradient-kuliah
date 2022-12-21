@@ -44,6 +44,7 @@ const Catalog = ({ course }: { course: Course }): JSX.Element => {
                     </div>
                 )}
             <CatalogContainer
+                slug={course.slug}
                 chapters={sortChapterOrder()}
                 latest_subchapter={course.learning_progress?.latest_subchapter}
             />

@@ -18,6 +18,7 @@ interface VideoSectionProps {
     setSubchapter?: (sub: SubChapter) => void;
     isSubscribed: boolean;
     isFullHeight?: boolean;
+    slug: string;
 }
 
 const VideoAccordionItem = ({
@@ -27,7 +28,8 @@ const VideoAccordionItem = ({
     setVideoPicked,
     asThrowPage,
     isSubscribed,
-    videoPicked
+    videoPicked,
+    slug
 }: {
     asThrowPage?: boolean;
     chapterId: string;
@@ -36,6 +38,7 @@ const VideoAccordionItem = ({
     setSubchapter?: (sub: SubChapter) => void;
     setVideoPicked: (video: Video) => void;
     isSubscribed: boolean;
+    slug: string;
 }): JSX.Element => {
     const router = useRouter();
     const { setModalAuthOpen } = useAuth();
@@ -56,7 +59,7 @@ const VideoAccordionItem = ({
                     }
                     if (asThrowPage) {
                         router.replace(
-                            `/kelas/kalkulus1/belajar/video/${chapterId}/${subchapter.id}`,
+                            `/kelas/${slug}/belajar/video/${chapterId}/${subchapter.id}`,
                             undefined,
                             { shallow: true }
                         );
@@ -65,7 +68,7 @@ const VideoAccordionItem = ({
                     setModalAuthOpen(
                         1,
                         false,
-                        `/kelas/kalkulus1/belajar/video/${chapterId}/${subchapter.id}`
+                        `/kelas/${slug}/belajar/video/${chapterId}/${subchapter.id}`
                     );
                 }
             }}
@@ -100,6 +103,7 @@ const VideoAccordionItem = ({
 };
 
 const VideoAccordion = ({
+    slug,
     initialOpen,
     chapter,
     videoPicked,
@@ -108,6 +112,7 @@ const VideoAccordion = ({
     asThrowPage,
     isSubscribed
 }: {
+    slug: string;
     initialOpen: boolean;
     chapter: Chapter;
     videoPicked: Video;
@@ -142,6 +147,7 @@ const VideoAccordion = ({
                     chapter?.subchapters?.map((subchapter) => {
                         return (
                             <VideoAccordionItem
+                                slug={slug}
                                 chapterId={chapter.id}
                                 key={subchapter.id}
                                 subchapter={subchapter}
@@ -165,6 +171,7 @@ const VideoAccordion = ({
 };
 
 const VideoSection = ({
+    slug,
     chapters,
     setVideoPicked,
     setSubchapter,
@@ -179,8 +186,10 @@ const VideoSection = ({
             className={`${
                 isFullHeight
                     ? 'h-[calc(120vh-65px)]'
-                    : `h-[${chapters.length * 60}px]`
-            } overflow-y-scroll`}>
+                    : `h-[${
+                          chapters.length > 8 ? chapters.length * 60 : 800
+                      }px]`
+            }`}>
             {trailerVideo && (
                 <div
                     id="trailer"
@@ -213,6 +222,7 @@ const VideoSection = ({
             {chapters?.map((chapter, index) => {
                 return (
                     <VideoAccordion
+                        slug={slug}
                         initialOpen={index === 0}
                         key={chapter.id}
                         chapter={chapter}

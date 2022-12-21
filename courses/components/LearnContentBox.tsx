@@ -5,9 +5,11 @@ interface LearnContentBoxProps {
     chapters: Chapter[];
     firstTab?: number;
     isSubscribed?: boolean;
+    slug: string;
 }
 
 const LearnContentBox = ({
+    slug,
     chapters,
     firstTab,
     isSubscribed
@@ -24,6 +26,7 @@ const LearnContentBox = ({
         <div className="flex h-full">
             {chapters && (
                 <ListOfContent
+                    slug={slug}
                     firstTab={firstTab}
                     setSubchapter={setSubchapter}
                     setNotebookPicked={setNotebookPicked}

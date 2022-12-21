@@ -10,13 +10,13 @@ const FreeModalCheckout = ({
     setOpen
 }: ModalBaseProps): JSX.Element => {
     const [course, setCourse] = useState({} as Course);
-    const { packet, paymentMethod } = usePayment();
+    const { freePacket, paymentMethod } = usePayment();
 
     useEffect(() => {
-        if (packet && packet?.courses?.length > 0) {
-            setCourse(packet?.courses[0]);
+        if (freePacket) {
+            setCourse(freePacket?.courses[0]);
         }
-    }, [course, packet]);
+    }, [course, freePacket]);
 
     return (
         <Modal
@@ -37,13 +37,15 @@ const FreeModalCheckout = ({
                 <div className="flex items-center w-full mt-2 justify-between">
                     <div className="w-full">
                         <p className="text-base">{course.course_name}</p>
-                        <span className="text-xs text-neutral-400">
-                            Langganan hingga{' '}
-                            {moment()
-                                .add(packet?.active_duration, 'd')
-                                .utc()
-                                .format('D MMM YYYY')}
-                        </span>
+                        {!freePacket?.is_lifetime && (
+                            <span className="text-xs text-neutral-400">
+                                Langganan hingga{' '}
+                                {moment()
+                                    .add(freePacket?.active_duration, 'd')
+                                    .utc()
+                                    .format('D MMM YYYY')}
+                            </span>
+                        )}
                     </div>
                     <div className="min-w-[100px] flex justify-end">
                         <p className="text-base font-bold">GRATIS</p>
@@ -52,7 +54,7 @@ const FreeModalCheckout = ({
             </div>
             <div className="w-full flex flex-col justify-center items-center">
                 <CheckoutButton
-                    packetId={packet?.id as string}
+                    packetId={freePacket?.id as string}
                     paymentMethod={paymentMethod}
                     isFree
                 />

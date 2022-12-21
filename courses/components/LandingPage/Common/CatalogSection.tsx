@@ -46,6 +46,7 @@ const CatalogSection = ({
                 )}
             {!isLoading && content?.data ? (
                 <CatalogContainer
+                    slug={slug}
                     chapters={sortChapterOrder(content.data)}
                     latest_subchapter={latest_subchapter}
                 />
