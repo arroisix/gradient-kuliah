@@ -56,7 +56,7 @@ const VideoSection = ({ slug }: VideoSectionProps): JSX.Element => {
                 Coba Gratis Video Belajar
             </h1>
             <div
-                className={`flex flex-col lg:flex-row lg:max-h-[50vh] ${
+                className={`flex flex-col lg:flex-row lg:max-h-[600px] ${
                     !isVideoContentExist && 'justify-center'
                 }`}>
                 {isVideoContentExist && (
@@ -65,7 +65,7 @@ const VideoSection = ({ slug }: VideoSectionProps): JSX.Element => {
                         id="video-section">
                         {videoPicked && videoPicked?.is_free ? (
                             <VideoPlayer
-                                height={width >= 1024 ? '50vh' : ''}
+                                height={width >= 1024 ? '600px' : ''}
                                 video={videoPicked.video_url as string}
                                 thumbnail={videoPicked.thumbnail as string}
                                 key={videoPicked.video_url as string}

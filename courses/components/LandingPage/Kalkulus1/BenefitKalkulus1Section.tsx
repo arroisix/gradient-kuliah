@@ -30,7 +30,7 @@ const BenefitKalkulus1Section = (): JSX.Element => {
     return (
         <>
             <div
-                className="pr-4 pl-4 md:pr-0 md:pl-[7.5rem] flex md:flex-row w-full md:h-[60vh] mt-8 md:mt-16 items-center"
+                className="pr-4 pl-4 md:pr-0 md:pl-[7.5rem] flex md:flex-row w-full md:h-[60vh] md:min-h-[600px] mt-8 md:mt-16 items-center"
                 id="benefit">
                 <div className="w-screen md:w-[50vw] h-full mt-8 flex flex-col gap-2">
                     <h3 className="text-2xl md:text-4xl font-bold w-full md:w-3/4">

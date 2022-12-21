@@ -42,7 +42,7 @@ const ListOfContent = ({
 
     return (
         <div
-            className={`h-full w-full bg-neutral-900 relative overflow-scroll ${
+            className={`h-full w-full bg-neutral-900 relative overflow-y-scroll ${
                 rounded ? 'lg:rounded-r-xl' : ''
             } overflow-hidden z-10`}>
             <div

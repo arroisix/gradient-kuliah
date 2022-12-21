@@ -186,8 +186,10 @@ const VideoSection = ({
             className={`${
                 isFullHeight
                     ? 'h-[calc(120vh-65px)]'
-                    : `h-[${chapters.length * 60}px]`
-            } overflow-y-scroll`}>
+                    : `h-[${
+                          chapters.length > 8 ? chapters.length * 60 : 800
+                      }px]`
+            }`}>
             {trailerVideo && (
                 <div
                     id="trailer"

@@ -32,7 +32,7 @@ const VideoPreview = ({
             setOpen={(status: number) => setOpen(status === 1)}
             isPopup
             variant="dark"
-            className="w-[100vw] lg:w-[60vw] lg:h-[50vh] flex justify-center items-center">
+            className="w-[100vw] lg:w-[60vw] flex justify-center items-center">
             <VideoPlayer
                 height="100%"
                 video={video_preview}
@@ -54,8 +54,8 @@ const HeroPTSLSection = ({
     const [showVideoPreview, setVideoPreview] = useState(false);
 
     return (
-        <section className="h-screen w-full flex flex-col-reverse md:flex-row justify-end md:justify-center relative">
-            <div className="w-full h-screen flex flex-col justify-end md:justify-center pl-4 pr-4 md:pr-0 md:pl-[7.5rem] py-4 mb-8 md:mb-0">
+        <section className="h-screen w-full flex flex-col-reverse md:flex-row justify-end md:justify-center relative md:min-h-[1000px]">
+            <div className="w-full h-screen flex flex-col justify-end md:justify-center pl-4 pr-4 md:pr-0 md:pl-[7.5rem] py-4 mb-8 md:mb-0 md:min-h-[1000px]">
                 {!is_subscribed ? (
                     <div className="z-10 w-full lg:w-[40vw]">
                         <h1 className="text-4xl md:text-5xl font-bold">
@@ -108,7 +108,7 @@ const HeroPTSLSection = ({
                     )}
             </div>
             <div
-                className="hidden md:flex h-screen mt-16 md:mt-0 overflow-hidden absolute top-0 right-0"
+                className="hidden md:flex h-screen mt-16 md:mt-0 overflow-hidden absolute top-0 right-0 md:min-h-[1000px]"
                 onClick={() => setVideoPreview(true)}
                 aria-hidden>
                 <div className="relative">
