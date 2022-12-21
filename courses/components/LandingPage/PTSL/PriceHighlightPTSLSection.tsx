@@ -44,7 +44,7 @@ const PriceHighlightPTSLSection = ({
                     lingkungan
                 </p>
             </>
-            {packet?.discount.split('.')[0] !== '0' && (
+            {packet?.discount?.split('.')[0] !== '0' && (
                 <p className="font-bold text-xs line-through text-red-400 flex">
                     <h2 className="text-3xl md:text-5xl text-black">-</h2>
                     <h2 className="text-[#999999] text-3xl md:text-5xl">
@@ -64,7 +64,7 @@ const PriceHighlightPTSLSection = ({
                     GRATIS
                 </h3>
                 <span className="text-[#7FFDB1] font-bold">
-                    ({packet?.discount.split('.')[0]}% OFF)
+                    ({packet?.discount?.split('.')[0]}% OFF)
                 </span>
             </div>
             {isAuthenticated && !is_subscribed && (
