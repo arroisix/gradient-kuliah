@@ -13,7 +13,7 @@ const NotebookLearnContainer = ({
     course: Course;
 }): JSX.Element => {
     const router = useRouter();
-    const { sub } = router.query;
+    const { sub, id } = router.query;
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { setNotebookPicked, notebookPicked } = useLearning();
     const { data } = useGetSubchapterDetailQuery(sub as string, {
@@ -34,11 +34,14 @@ const NotebookLearnContainer = ({
                 </div>
             </div>
             <div className="h-full min-w-[30vw]">
-                <LearnContentBox
-                    firstTab={0}
-                    chapters={course.chapters}
-                    isSubscribed={course.is_subscribed}
-                />
+                {id && (
+                    <LearnContentBox
+                        slug={id as string}
+                        firstTab={0}
+                        chapters={course.chapters}
+                        isSubscribed={course.is_subscribed}
+                    />
+                )}
             </div>
         </section>
     );

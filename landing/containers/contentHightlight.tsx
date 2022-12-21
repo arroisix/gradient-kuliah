@@ -116,7 +116,6 @@ const ContentHighlight = (): JSX.Element => {
                         slug="ptsl"
                         title="Pengantar Teknik Sipil dan Lingkungan"
                         description="Ilmu untuk yang ingin memajukan peradaban."
-                        isComingSoon
                     />
                 </div>
             </Container>

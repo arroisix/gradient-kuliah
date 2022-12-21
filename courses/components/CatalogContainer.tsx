@@ -9,15 +9,17 @@ import Link from 'next/link';
 const ContentCard = ({
     subchapter,
     chapterId,
-    isLatest
+    isLatest,
+    slug
 }: {
     subchapter: SubChapter;
     chapterId: string;
     isLatest: boolean;
+    slug: string;
 }): JSX.Element => {
     return (
         <Link
-            href={`/kelas/kalkulus1/belajar/video/${chapterId}/${subchapter.id}`}
+            href={`/kelas/${slug}/belajar/video/${chapterId}/${subchapter.id}`}
             key={subchapter.id}>
             <div
                 className={`p-4 h-40 w-[18rem] md:h-52 md:w-[24rem] bg-neutral-800 mr-2 rounded-lg cursor-pointer flex justify-end flex-col relative ${
@@ -57,10 +59,12 @@ const ContentCard = ({
 
 const ChapterCatalog = ({
     chapter,
-    latest_subchapter
+    latest_subchapter,
+    slug
 }: {
     chapter: Chapter;
     latest_subchapter?: SubchapterProgress;
+    slug: string;
 }): JSX.Element => {
     const { width } = useWindowSize();
 
@@ -86,6 +90,7 @@ const ChapterCatalog = ({
                             items={sortByOrder(chapter.subchapters).map(
                                 (subchapter: SubChapter) => (
                                     <ContentCard
+                                        slug={slug}
                                         subchapter={subchapter}
                                         isLatest={
                                             subchapter.id ===
@@ -116,16 +121,19 @@ const ChapterCatalog = ({
 };
 
 const CatalogContainer = ({
+    slug,
     chapters,
     latest_subchapter
 }: {
     chapters: Chapter[];
+    slug: string;
     latest_subchapter?: SubchapterProgress;
 }): JSX.Element => {
     return (
         <div className="flex w-full gap-2 flex-col" id="learning-catalog">
             {chapters.map((chapter: Chapter) => (
                 <ChapterCatalog
+                    slug={slug}
                     chapter={chapter}
                     key={chapter.id}
                     latest_subchapter={latest_subchapter}

@@ -1,3 +1,4 @@
+import Button from 'commons/components/elements/Button';
 import { usePayment } from 'payment/contexts/PaymentProvider';
 
 const FreeBox = (): JSX.Element => {
@@ -12,12 +13,13 @@ const FreeBox = (): JSX.Element => {
             <div className="mb-4 flex items-center">
                 <h3 className="text-base font-bold">Pembayaran Gratis</h3>
             </div>
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid lg:grid-cols-4 gap-4">
                 <div
                     aria-hidden
-                    onClick={onClick}
                     className="rounded-lg bg-white p-8 h-[150px] cursor-pointer flex items-center justify-center">
-                    <p className="text-black">Beli Gratis!</p>
+                    <Button onClick={onClick} variant="primary">
+                        Beli Gratis!
+                    </Button>
                 </div>
             </div>
         </div>

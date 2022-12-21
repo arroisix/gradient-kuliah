@@ -10,6 +10,7 @@ import { useState } from 'react';
 import VideoSection from './VideoSection';
 
 const ListOfContent = ({
+    slug,
     chapters,
     setVideoPicked,
     setSubchapter,
@@ -21,6 +22,7 @@ const ListOfContent = ({
     isSubscribed,
     isFullHeight
 }: {
+    slug: string;
     chapters: Chapter[];
     setVideoPicked: (video: Video) => void;
     setSubchapter?: (sub: SubChapter) => void;
@@ -40,7 +42,7 @@ const ListOfContent = ({
 
     return (
         <div
-            className={`h-full w-full bg-neutral-900 relative overflow-scroll ${
+            className={`h-full w-full bg-neutral-900 relative overflow-y-scroll ${
                 rounded ? 'lg:rounded-r-xl' : ''
             } overflow-hidden z-10`}>
             <div
@@ -80,6 +82,7 @@ const ListOfContent = ({
                             ? getAllVideoChapter(chapters)
                             : getAllAnimationChapter(chapters)
                     }
+                    slug={slug}
                     setVideoPicked={setVideoPicked}
                     setSubchapter={setSubchapter}
                     videoPicked={videoPicked}

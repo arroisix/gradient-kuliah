@@ -133,7 +133,7 @@ const Player = <T,>({
                     height,
                     width: '100%'
                 }}
-                className="relative flex flex-col items-center justify-center bg-black overflow-hidden"
+                className="relative flex flex-col items-center justify-center bg-black border border-neutral-900 overflow-hidden"
                 id="video-container">
                 {(isBuffering || !isPlay) && (
                     <>
@@ -184,6 +184,7 @@ const Player = <T,>({
                         onClick={isPopup ? undefined : onPlayClick}
                         width={'100%'}
                         height={'100%'}
+                        className="object-cover"
                         ref={videoRef}
                         key={video}>
                         <track kind="captions" />
