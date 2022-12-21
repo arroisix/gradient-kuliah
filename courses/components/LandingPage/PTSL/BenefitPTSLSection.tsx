@@ -56,7 +56,7 @@ const BenefitPTSLSection = (): JSX.Element => {
                     <Image
                         src="https://assets.gradient.academy/assets/benefit-asset-ptsl.png"
                         loading="lazy"
-                        width={800}
+                        width={650}
                         height={500}
                     />
                 </div>
