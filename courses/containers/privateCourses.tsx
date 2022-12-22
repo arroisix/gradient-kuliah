@@ -34,7 +34,7 @@ const PrivateCourses = ({ myClass }: { myClass: boolean }): JSX.Element => {
                     <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
                 </>
             ) : (
-                data.data.map((course: Course) => (
+                courses.map((course: Course) => (
                     <CourseCard course={course} key={course.id} />
                 ))
             )}
