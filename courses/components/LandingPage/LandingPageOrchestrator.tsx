@@ -39,7 +39,9 @@ const COMPONENT_DICTIONARY: { [key in LandingPageSectionKey]: JSX.Element } = {
 };
 
 const AuthLandingPage = ({ id }: { id: string }): JSX.Element => {
-    const { data: course, isLoading } = useGetLandingCourseDataQuery(id);
+    const { data: course, isLoading } = useGetLandingCourseDataQuery(id, {
+        refetchOnMountOrArgChange: true
+    });
     const { is_subscribed } = useCourseSubscription(id);
 
     if (isLoading || !course) {

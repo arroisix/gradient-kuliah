@@ -9,11 +9,13 @@ const useCourseSubscription = (slug: string) => {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { data, isLoading: isLoadingSubscription } =
         useGetActiveSubscriptionBySlugQuery(slug, {
-            skip: !isAuthenticated || slug === undefined
+            skip: !isAuthenticated || slug === undefined,
+            refetchOnMountOrArgChange: true
         });
     const { data: learningProgress, isLoading: isLoadingLearningProgress } =
         useGetLearningProgressQuery(slug, {
-            skip: !isAuthenticated || slug === undefined
+            skip: !isAuthenticated || slug === undefined,
+            refetchOnMountOrArgChange: true
         });
     const [expiryDay, setExpiryDay] = useState(30);
 

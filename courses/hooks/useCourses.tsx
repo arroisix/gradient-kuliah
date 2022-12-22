@@ -2,7 +2,10 @@ import { useGetPrivateListCoursesQuery } from 'courses/redux/api/privateCourseAp
 
 const useCourses = () => {
     const { isLoading, error, data } = useGetPrivateListCoursesQuery(
-        {} as FilterCourseQueryParams
+        {} as FilterCourseQueryParams,
+        {
+            refetchOnMountOrArgChange: true
+        }
     );
 
     return { loading: isLoading, error, data };
