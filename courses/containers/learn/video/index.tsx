@@ -34,32 +34,30 @@ const VideoLearnContainer = ({
     }, [data]);
 
     return (
-        <section className="min-h-screen pt-[65px] flex flex-col md:flex-row justify-between relative">
-            <div className="w-full flex md:px-[7.5rem] md:pt-8">
-                <div className="w-full h-full">
-                    {!isLoading ? (
-                        data ? (
-                            <LearnVideo
-                                video={data.video as Video}
-                                subchapter={data}
-                                key={sub as string}
-                                learningProgress={{
-                                    id: learning_progress_id as string,
-                                    subchapter_progress:
-                                        subchapter_progress as SubchapterProgress[],
-                                    latest_subchapter:
-                                        latest_subchapter as SubchapterProgress
-                                }}
-                            />
-                        ) : (
-                            <></>
-                        )
+        <section className="pt-[65px] flex flex-col md:flex-row relative md:overflow-hidden md:h-[100vh]">
+            <div className="w-full h-full overflow-scroll">
+                {!isLoading ? (
+                    data ? (
+                        <LearnVideo
+                            video={data.video as Video}
+                            subchapter={data}
+                            key={sub as string}
+                            learningProgress={{
+                                id: learning_progress_id as string,
+                                subchapter_progress:
+                                    subchapter_progress as SubchapterProgress[],
+                                latest_subchapter:
+                                    latest_subchapter as SubchapterProgress
+                            }}
+                        />
                     ) : (
-                        <div className="w-full h-[50vh] bg-neutral-600 animate-pulse rounded-lg" />
-                    )}
-                </div>
+                        <></>
+                    )
+                ) : (
+                    <div className="w-full h-[50vh] bg-neutral-600 animate-pulse rounded-lg" />
+                )}
             </div>
-            <div className="min-h-screen min-w-[30vw]">
+            <div className="w-full md:w-[25vw] sticky top-0 right-0">
                 {id && (
                     <LearnContentBox
                         slug={id as string}

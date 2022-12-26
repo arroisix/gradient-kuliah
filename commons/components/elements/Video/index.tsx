@@ -8,11 +8,13 @@ const VideoPlayer = <T,>({
     video,
     trackProgress,
     popupData,
-    popupComponent
+    popupComponent,
+    autoPlay
 }: VideoPlayerProps<T>): JSX.Element => {
     return (
-        <VideoProvider trackProgress={trackProgress}>
+        <VideoProvider trackProgress={trackProgress} autoPlay={autoPlay}>
             <Player
+                autoPlay={autoPlay}
                 height={height}
                 thumbnail={thumbnail}
                 video={video}

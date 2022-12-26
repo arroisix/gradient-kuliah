@@ -185,7 +185,7 @@ const VideoSection = ({
         <div
             className={`${
                 isFullHeight
-                    ? 'h-[calc(120vh-65px)]'
+                    ? 'h-[calc(120vh-64px)]'
                     : `h-[${
                           chapters.length > 8 ? chapters.length * 60 : 800
                       }px]`

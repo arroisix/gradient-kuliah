@@ -1,5 +1,4 @@
 import VideoPlayer from 'commons/components/elements/Video';
-import useWindowSize from 'commons/hooks/useWindowSize';
 import PopupQuestionContent from 'courses/components/Exercise/PopupQuestion';
 import NeedSubscribe from 'courses/components/NeedSubscribe';
 import { useLearning } from 'courses/contexts/LearningProvider';
@@ -16,47 +15,61 @@ const LearnVideo = ({
     subchapter: SubChapter;
     learningProgress?: LearningProgress;
 }): JSX.Element => {
-    const { width } = useWindowSize();
     const [track] = useTrackSubchapterProgressMutation();
     const router = useRouter();
     const { sub, id } = router.query;
     const { videoPicked } = useLearning();
     const { is_subscribed } = useCourseSubscription(id as string);
 
+    const renderVideoPlayer = (): JSX.Element => {
+        if (is_subscribed || videoPicked?.is_free) {
+            if (
+                videoPicked?.video_url !== null &&
+                videoPicked?.id !== undefined &&
+                learningProgress?.id
+            ) {
+                return (
+                    <VideoPlayer
+                        autoPlay
+                        popupData={video?.popup_questions}
+                        video={video?.video_url}
+                        popupComponent={<PopupQuestionContent />}
+                        thumbnail={video?.thumbnail}
+                        key={video?.video_url}
+                        trackProgress={
+                            is_subscribed
+                                ? async (last_duration, isFinished) =>
+                                      track({
+                                          subchapter_id:
+                                              (subchapter?.id as string) ?? sub,
+                                          learning_progress_id:
+                                              learningProgress?.id as string,
+                                          progress_type: 'VIDEO',
+                                          video_progress: {
+                                              video_id: videoPicked?.id,
+                                              last_duration:
+                                                  last_duration as unknown as string,
+                                              is_finished: isFinished ?? false
+                                          }
+                                      })
+                                : undefined
+                        }
+                    />
+                );
+            }
+
+            return (
+                <div className="w-full h-3/4 bg-neutral-600 animate-pulse" />
+            );
+        }
+
+        return <NeedSubscribe />;
+    };
+
     return (
         <div className="w-full h-full transition-all">
-            {videoPicked?.video_url !== null &&
-            videoPicked?.id !== undefined ? (
-                <VideoPlayer
-                    height={width <= 768 ? '200px' : '600px'}
-                    popupData={video?.popup_questions}
-                    video={video?.video_url}
-                    popupComponent={<PopupQuestionContent />}
-                    thumbnail={video?.thumbnail}
-                    key={video?.video_url}
-                    trackProgress={
-                        is_subscribed
-                            ? async (last_duration, isFinished) =>
-                                  track({
-                                      subchapter_id:
-                                          (subchapter?.id as string) ?? sub,
-                                      learning_progress_id:
-                                          learningProgress?.id as string,
-                                      progress_type: 'VIDEO',
-                                      video_progress: {
-                                          video_id: videoPicked?.id,
-                                          last_duration:
-                                              last_duration as unknown as string,
-                                          is_finished: isFinished ?? false
-                                      }
-                                  })
-                            : undefined
-                    }
-                />
-            ) : (
-                <NeedSubscribe />
-            )}
-            <div className="my-8 px-4 md:px-0">
+            {renderVideoPlayer()}
+            <div className="my-8 px-4 md:px-[7.5rem] pb-4 md:pb-[7.5rem]">
                 <h3 className="text-2xl md:text-4xl font-bold">
                     {subchapter?.subchapter_name}
                 </h3>

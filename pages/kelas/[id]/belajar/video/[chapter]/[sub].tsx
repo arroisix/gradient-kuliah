@@ -1,4 +1,3 @@
-import Layout from 'commons/layout';
 import { useRouter } from 'next/router';
 import { LearningProvider } from 'courses/contexts/LearningProvider';
 import { useGetLandingCourseListContentQuery } from 'courses/redux/api/publicCourseApi';
@@ -7,6 +6,7 @@ import { useSelector } from 'react-redux';
 import VideoLearnContainer from 'courses/containers/learn/video';
 import { useEffect, useState } from 'react';
 import { useAuth } from 'authentication/contexts/AuthProvider';
+import LearnLayout from 'commons/learnLayout';
 
 const Belajar = (): JSX.Element => {
     const router = useRouter();
@@ -35,9 +35,9 @@ const Belajar = (): JSX.Element => {
 
     return (
         <LearningProvider chapters={content?.data ?? []} type="video">
-            <Layout>
+            <LearnLayout>
                 <VideoLearnContainer chapters={content?.data ?? []} />
-            </Layout>
+            </LearnLayout>
         </LearningProvider>
     );
 };
