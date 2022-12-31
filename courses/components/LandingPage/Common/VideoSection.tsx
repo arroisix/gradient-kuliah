@@ -19,9 +19,6 @@ const VideoSection = ({ slug }: VideoSectionProps): JSX.Element => {
     const { is_subscribed, learning_progress_id, isLoading } =
         useCourseSubscription(slug);
     const [videoPicked, setVideoPicked] = useState<Video>({} as Video);
-    const [notebookPicked, setNotebookPicked] = useState<Notebook>(
-        {} as Notebook
-    );
     const isVideoContentExist = isContentChapterExist(
         content?.data ?? [],
         'video'
@@ -107,12 +104,8 @@ const VideoSection = ({ slug }: VideoSectionProps): JSX.Element => {
                             slug={slug}
                             chapters={content?.data}
                             videoPicked={videoPicked}
-                            setVideoPicked={setVideoPicked}
-                            notebookPicked={notebookPicked}
-                            setNotebookPicked={setNotebookPicked}
                             rounded
                             isSubscribed={is_subscribed}
-                            asThrowPage
                         />
                     )}
                 </div>

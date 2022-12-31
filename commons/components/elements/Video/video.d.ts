@@ -8,4 +8,5 @@ type VideoPlayerProps<T> = {
     ) => Promise<any>;
     popupData?: T[];
     popupComponent?: JSX.Element;
+    autoPlay?: boolean;
 };

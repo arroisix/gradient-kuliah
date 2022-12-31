@@ -1,20 +1,17 @@
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { useGetSubchapterDetailQuery } from 'courses/redux/api/privateCourseApi';
 import { useRouter } from 'next/router';
-import React, {
-    createContext,
-    ReactNode,
-    useContext,
-    useMemo,
-    useState
-} from 'react';
-import { getAllNotebookChapter, getAllVideoChapter } from '../utils';
+import React, { createContext, ReactNode, useContext, useMemo } from 'react';
+import { useSelector } from 'react-redux';
 
 interface LearningContextType {
-    setVideoPicked: (video: Video) => void;
-    videoPicked: Video;
-    setNotebookPicked: (notebook: Notebook) => void;
-    notebookPicked: Notebook;
-    setSubchapter: (sub: SubChapter) => void;
-    subchapter: SubChapter;
+    video: Video;
+    subchapter?: SubChapter;
+    is_subscribed?: boolean;
+    latest_subchapter?: SubchapterProgress;
+    learning_progress_id?: string;
+    subchapter_progress?: SubchapterProgress[];
 }
 
 const LearningContext = createContext<LearningContextType>(
@@ -22,54 +19,40 @@ const LearningContext = createContext<LearningContextType>(
 );
 
 export function LearningProvider({
-    children,
-    chapters,
-    type
+    children
 }: {
     children: ReactNode;
-    chapters: Chapter[];
-    type: 'video' | 'notebook';
 }): JSX.Element {
     const router = useRouter();
-    const { sub, chapter } = router.query;
-    const videoCourse = getAllVideoChapter(chapters);
-    const notebookCourse = getAllNotebookChapter(chapters);
+    const isAuthenticated = useSelector(getIsAuthenticated);
+    const { id, sub } = router.query;
 
-    const [subchapter, setSubchapter] = useState(
-        videoCourse
-            ?.filter((c) => c.id === chapter)[0]
-            ?.subchapters.filter((s) => s.id === sub)[0]
-    );
-    const [videoPicked, setVideoPicked] = useState<Video>(
-        type === 'video'
-            ? (videoCourse
-                  ?.filter((c) => c.id === chapter)[0]
-                  ?.subchapters.filter((s) => s.id === sub)[0]?.video as Video)
-            : videoCourse?.length > 0
-            ? (videoCourse[0]?.subchapters[0]?.video as Video)
-            : ({} as Video)
-    );
-    const [notebookPicked, setNotebookPicked] = useState(
-        type === 'notebook'
-            ? (notebookCourse
-                  ?.filter((c) => c.id === chapter)[0]
-                  ?.subchapters.filter((s) => s.id === sub)[0]
-                  ?.notebook as Notebook)
-            : notebookCourse?.length > 0
-            ? (notebookCourse[0]?.subchapters[0]?.notebook as Notebook)
-            : ({} as Notebook)
-    );
+    const {
+        is_subscribed,
+        learning_progress_id,
+        latest_subchapter,
+        subchapter_progress
+    } = useCourseSubscription(id as string);
+    const { data } = useGetSubchapterDetailQuery(sub as string, {
+        skip: sub === null || sub === undefined || !isAuthenticated
+    });
 
     const memoedValue = useMemo(
         () => ({
-            videoPicked,
-            notebookPicked,
-            subchapter,
-            setNotebookPicked,
-            setVideoPicked,
-            setSubchapter
+            video: data?.video as Video,
+            subchapter: data,
+            is_subscribed,
+            learning_progress_id,
+            latest_subchapter,
+            subchapter_progress
         }),
-        [videoPicked, notebookPicked, subchapter]
+        [
+            data,
+            is_subscribed,
+            latest_subchapter,
+            subchapter_progress,
+            learning_progress_id
+        ]
     );
 
     return (

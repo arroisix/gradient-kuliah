@@ -12,7 +12,8 @@ const Player = <T,>({
     video,
     popupData,
     popupComponent,
-    height
+    height,
+    autoPlay
 }: VideoPlayerProps<T>): JSX.Element => {
     const {
         videoRef,
@@ -178,6 +179,7 @@ const Player = <T,>({
                         height={'100%'}
                         key={video}
                         src={video}
+                        autoPlay={autoPlay}
                     />
                 ) : (
                     <video
@@ -186,7 +188,8 @@ const Player = <T,>({
                         height={'100%'}
                         className="object-cover"
                         ref={videoRef}
-                        key={video}>
+                        key={video}
+                        autoPlay={autoPlay}>
                         <track kind="captions" />
                         <source src={video} />
                     </video>

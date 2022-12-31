@@ -12,26 +12,16 @@ import VideoSection from './VideoSection';
 const ListOfContent = ({
     slug,
     chapters,
-    setVideoPicked,
-    setSubchapter,
     videoPicked,
-    trailerVideo,
     rounded,
-    asThrowPage,
     firstTab,
     isSubscribed,
     isFullHeight
 }: {
     slug: string;
     chapters: Chapter[];
-    setVideoPicked: (video: Video) => void;
-    setSubchapter?: (sub: SubChapter) => void;
-    setNotebookPicked?: (notebook: Notebook) => void;
-    notebookPicked?: Notebook;
     videoPicked: Video;
-    trailerVideo?: Video;
     rounded?: boolean;
-    asThrowPage?: boolean;
     firstTab?: number;
     isSubscribed?: boolean;
     isFullHeight?: boolean;
@@ -83,11 +73,7 @@ const ListOfContent = ({
                             : getAllAnimationChapter(chapters)
                     }
                     slug={slug}
-                    setVideoPicked={setVideoPicked}
-                    setSubchapter={setSubchapter}
                     videoPicked={videoPicked}
-                    trailerVideo={trailerVideo as Video}
-                    asThrowPage={asThrowPage}
                     isSubscribed={isSubscribed ?? false}
                     isFullHeight={isFullHeight}
                 />

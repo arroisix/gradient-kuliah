@@ -53,9 +53,11 @@ const VideoContext = createContext<VideoContextType>({} as VideoContextType);
 
 export function VideoProvider({
     children,
-    trackProgress
+    trackProgress,
+    autoPlay = false
 }: {
     children: ReactNode;
+    autoPlay?: boolean;
     trackProgress?: (
         last_duration: number,
         isFinished?: boolean
@@ -67,7 +69,7 @@ export function VideoProvider({
     const [downloadedTime, setDownloadedTime] = useState(0);
     const [fullscreen, setFullscreen] = useState(false);
     const [isShowControl, setShowControl] = useState(false);
-    const [isPlay, setIsPlay] = useState(false);
+    const [isPlay, setIsPlay] = useState(autoPlay);
     const [isMute, setIsMute] = useState(false);
     const [volume, setVolume] = useState(50);
     const [playback, setPlayback] = useState(1);
@@ -96,13 +98,13 @@ export function VideoProvider({
 
     const onPlayClick = (): void => {
         if (videoRef?.current?.paused) {
-            videoRef.current.play();
+            videoRef?.current?.play();
             setIsPlay(true);
         } else {
-            videoRef.current.pause();
+            videoRef?.current?.pause();
             setIsPlay(false);
-            if (trackProgress) {
-                trackProgress(videoRef.current.currentTime);
+            if (trackProgress && videoRef?.current) {
+                trackProgress(videoRef?.current?.currentTime);
             }
         }
     };
@@ -174,10 +176,11 @@ export function VideoProvider({
         });
 
         document.addEventListener('keydown', (event: KeyboardEvent) => {
-            if (event.code === 'Space') {
-                event.preventDefault();
-                onPlayClick();
-            }
+            // TODO: conflict with Qna Space function
+            // if (event.code === 'Space') {
+            //     event.preventDefault();
+            //     onPlayClick();
+            // }
 
             if (
                 event.code === 'ArrowRight' &&
