@@ -12,7 +12,8 @@ const BUTTON_THEME: { [key: string]: string } = {
 const BUTTON_SIZE: { [key: string]: string } = {
     large: 'py-4 px-7',
     normal: 'py-3 px-6',
-    small: 'py-2 px-5'
+    small: 'py-2 px-5',
+    extraSmall: 'py-1 px-5'
 };
 
 const Button = ({

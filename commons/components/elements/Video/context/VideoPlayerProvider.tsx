@@ -176,10 +176,11 @@ export function VideoProvider({
         });
 
         document.addEventListener('keydown', (event: KeyboardEvent) => {
-            if (event.code === 'Space') {
-                event.preventDefault();
-                onPlayClick();
-            }
+            // TODO: conflict with Qna Space function
+            // if (event.code === 'Space') {
+            //     event.preventDefault();
+            //     onPlayClick();
+            // }
 
             if (
                 event.code === 'ArrowRight' &&

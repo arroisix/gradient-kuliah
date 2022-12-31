@@ -34,7 +34,7 @@ const Belajar = (): JSX.Element => {
     }, [isAuthenticated, id]);
 
     return (
-        <LearningProvider chapters={content?.data ?? []} type="video">
+        <LearningProvider>
             <LearnLayout>
                 <VideoLearnContainer chapters={content?.data ?? []} />
             </LearnLayout>

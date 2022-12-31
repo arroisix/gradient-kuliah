@@ -1,10 +1,8 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import LearnContentBox from 'courses/components/LearnContentBox';
-import { useLearning } from 'courses/contexts/LearningProvider';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useGetSubchapterDetailQuery } from 'courses/redux/api/privateCourseApi';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import LearnVideo from './learnVideo';
 
@@ -22,16 +20,9 @@ const VideoLearnContainer = ({
         latest_subchapter,
         subchapter_progress
     } = useCourseSubscription(id as string);
-    const { setVideoPicked } = useLearning();
     const { data, isLoading } = useGetSubchapterDetailQuery(sub as string, {
         skip: sub === null || sub === undefined || !isAuthenticated
     });
-
-    useEffect(() => {
-        if (data) {
-            setVideoPicked(data.video as Video);
-        }
-    }, [data]);
 
     return (
         <section className="pt-[65px] flex flex-col md:flex-row relative md:overflow-hidden md:h-[100vh]">
@@ -39,9 +30,7 @@ const VideoLearnContainer = ({
                 {!isLoading ? (
                     data ? (
                         <LearnVideo
-                            video={data.video as Video}
-                            subchapter={data}
-                            key={sub as string}
+                            key={data.id}
                             learningProgress={{
                                 id: learning_progress_id as string,
                                 subchapter_progress:
@@ -54,10 +43,10 @@ const VideoLearnContainer = ({
                         <></>
                     )
                 ) : (
-                    <div className="w-full h-[50vh] bg-neutral-600 animate-pulse rounded-lg" />
+                    <div className="w-full h-3/4 bg-neutral-600 animate-pulse" />
                 )}
             </div>
-            <div className="w-full md:w-[25vw] sticky top-0 right-0">
+            <div className="w-full md:w-[25vw]">
                 {id && (
                     <LearnContentBox
                         slug={id as string}

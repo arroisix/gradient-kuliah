@@ -10,6 +10,12 @@ interface ResponseData<T> {
     data: T[];
 }
 
+interface BaseListQueryParams {
+    page?: int;
+    limit?: int;
+    keyword?: string;
+}
+
 interface ListResponseData<T> {
     count_items: number;
     previous_page: number;

@@ -14,13 +14,7 @@ const LearnContentBox = ({
     firstTab,
     isSubscribed
 }: LearnContentBoxProps): JSX.Element => {
-    const {
-        setSubchapter,
-        setVideoPicked,
-        setNotebookPicked,
-        videoPicked,
-        notebookPicked
-    } = useLearning();
+    const { video } = useLearning();
 
     return (
         <div className="flex h-full">
@@ -28,15 +22,10 @@ const LearnContentBox = ({
                 <ListOfContent
                     slug={slug}
                     firstTab={firstTab}
-                    setSubchapter={setSubchapter}
-                    setNotebookPicked={setNotebookPicked}
-                    notebookPicked={notebookPicked}
                     chapters={chapters}
-                    setVideoPicked={setVideoPicked}
-                    videoPicked={videoPicked}
+                    videoPicked={video as Video}
                     isSubscribed={isSubscribed}
                     isFullHeight
-                    asThrowPage
                 />
             )}
         </div>
