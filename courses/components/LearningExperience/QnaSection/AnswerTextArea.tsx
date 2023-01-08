@@ -6,6 +6,7 @@ import QnaTextArea from './TextArea';
 interface QnaFormInputData {
     content: string;
     attachment?: string;
+    is_anonymous: boolean;
 }
 
 const AnswerTextArea = ({
@@ -21,7 +22,8 @@ const AnswerTextArea = ({
         <Formik
             initialValues={{
                 content: '',
-                attachment: ''
+                attachment: '',
+                is_anonymous: false
             }}
             validate={(values: QnaFormInputData) => {
                 const errors = {} as QnaFormInputData;
@@ -34,14 +36,14 @@ const AnswerTextArea = ({
             onSubmit={async (values, { resetForm }) => {
                 await postAnswer({
                     ...values,
-                    question_id: questionId,
-                    is_anonymous: false
+                    question_id: questionId
                 });
 
                 resetForm({
                     values: {
                         content: '',
-                        attachment: ''
+                        attachment: '',
+                        is_anonymous: false
                     }
                 });
             }}>
@@ -49,14 +51,19 @@ const AnswerTextArea = ({
                 handleChange,
                 handleBlur,
                 handleSubmit,
+                setFieldValue,
                 isSubmitting,
                 isValid,
                 values
             }) => (
                 <form
+                    key={`answer-${questionId}`}
                     className="flex justify-start gap-2"
                     onSubmit={handleSubmit}>
                     <QnaTextArea
+                        placeholder="Tulis jawaban kamu disini..."
+                        key={`answer-${questionId}`}
+                        setFieldValue={setFieldValue}
                         onCancel={onCancel}
                         avatarSize="h-[45px] w-[45px]"
                         handleBlur={handleBlur}

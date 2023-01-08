@@ -7,6 +7,7 @@ import QnaTextArea from './TextArea';
 interface QnaFormInputData {
     content: string;
     attachment?: string;
+    is_anonymous: boolean;
 }
 
 const QuestionTextArea = (): JSX.Element => {
@@ -17,7 +18,8 @@ const QuestionTextArea = (): JSX.Element => {
         <Formik
             initialValues={{
                 content: '',
-                attachment: ''
+                attachment: '',
+                is_anonymous: false
             }}
             validate={(values: QnaFormInputData) => {
                 const errors = {} as QnaFormInputData;
@@ -30,14 +32,14 @@ const QuestionTextArea = (): JSX.Element => {
             onSubmit={async (values, { resetForm }) => {
                 await postQuestion({
                     ...values,
-                    video_id: video.id,
-                    is_anonymous: false
+                    video_id: video.id
                 });
 
                 resetForm({
                     values: {
                         content: '',
-                        attachment: ''
+                        attachment: '',
+                        is_anonymous: false
                     }
                 });
             }}>
@@ -45,6 +47,7 @@ const QuestionTextArea = (): JSX.Element => {
                 handleChange,
                 handleBlur,
                 handleSubmit,
+                setFieldValue,
                 isSubmitting,
                 isValid,
                 values
@@ -53,7 +56,9 @@ const QuestionTextArea = (): JSX.Element => {
                     className="flex justify-start gap-2"
                     onSubmit={handleSubmit}>
                     <QnaTextArea
-                        onCancel={() => undefined}
+                        placeholder="Punya pertanyaan terkait materi?"
+                        key="question"
+                        setFieldValue={setFieldValue}
                         handleBlur={handleBlur}
                         handleChange={handleChange}
                         values={values}

@@ -7,7 +7,11 @@ const SECTION_MAP: { [key: number]: JSX.Element } = {
 };
 
 const ContentSection = ({ tab }: { tab: number }): JSX.Element => {
-    return <div className="w-full min-h-64">{SECTION_MAP[tab]}</div>;
+    return (
+        <div className="w-full min-h-64 overflow-x-hidden">
+            {SECTION_MAP[tab]}
+        </div>
+    );
 };
 
 export default ContentSection;

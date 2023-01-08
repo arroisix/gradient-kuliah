@@ -18,6 +18,7 @@ specifiers:
     '@typescript-eslint/parser': ^5.41.0
     abort-controller: ^3.0.0
     autoprefixer: ^10.4.12
+    axios: ^1.2.2
     eslint: ^8.26.0
     eslint-config-airbnb: ^19.0.4
     eslint-config-next: ^12.3.1
@@ -82,6 +83,7 @@ dependencies:
     '@reduxjs/toolkit': 1.8.6_mp2q3xf3lfxx77jlknkvssxmge
     '@tailwindcss/forms': 0.5.3_tailwindcss@3.2.1
     abort-controller: 3.0.0
+    axios: 1.2.2
     formik: 2.2.9_react@18.1.0
     framer-motion: 6.5.1_ef5jwxihqo6n7gxfmzogljlgcm
     graphql: 16.6.0
@@ -1385,6 +1387,19 @@ packages:
         engines: { node: '>=4' }
         dev: true
 
+    /axios/1.2.2:
+        resolution:
+            {
+                integrity: sha512-bz/J4gS2S3I7mpN/YZfGFTqhXTYzRho8Ay38w2otuuDR322KzFIWm/4W2K6gIwvWaws5n+mnb7D1lN9uD+QH6Q==
+            }
+        dependencies:
+            follow-redirects: 1.15.2
+            form-data: 4.0.0
+            proxy-from-env: 1.1.0
+        transitivePeerDependencies:
+            - debug
+        dev: false
+
     /axobject-query/2.2.0:
         resolution:
             {
@@ -2663,6 +2678,19 @@ packages:
                 integrity: sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==
             }
         dev: true
+
+    /follow-redirects/1.15.2:
+        resolution:
+            {
+                integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==
+            }
+        engines: { node: '>=4.0' }
+        peerDependencies:
+            debug: '*'
+        peerDependenciesMeta:
+            debug:
+                optional: true
+        dev: false
 
     /form-data/4.0.0:
         resolution:
@@ -4925,6 +4953,13 @@ packages:
         resolution:
             {
                 integrity: sha512-hrzC564QIl0r0vy4l6MvRLhafmUowhO/O3KgVSoXIbbA2Sz4j8HGpJc6T2cubRVwMwpdiG/vKGfhT4IixmKN9w==
+            }
+        dev: false
+
+    /proxy-from-env/1.1.0:
+        resolution:
+            {
+                integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==
             }
         dev: false
 

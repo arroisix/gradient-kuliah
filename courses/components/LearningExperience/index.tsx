@@ -4,7 +4,7 @@ import ContentSection from './ContentSection';
 import MenuSection from './MenuSection';
 
 const LearningExperience = (): JSX.Element => {
-    const [tab, setTab] = useState(0);
+    const [tab, setTab] = useState(2);
     const { subchapter } = useLearning();
 
     return (

@@ -1,12 +1,21 @@
 import Button from 'commons/components/elements/Button';
 
-import { ChangeEventHandler, FocusEventHandler } from 'react';
+import {
+    ChangeEvent,
+    ChangeEventHandler,
+    FocusEventHandler,
+    useEffect,
+    useState
+} from 'react';
 
-import { MdInsertPhoto } from 'react-icons/md';
+import { MdClose, MdInsertPhoto } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import TextareaAutosize from 'react-textarea-autosize';
 import { getCurrentUser } from 'authentication/redux/selectors/userSelector';
-import { generateInitial } from 'commons/utils';
+import { generateInitial, makeid } from 'commons/utils';
+import useUploadFile from 'commons/hooks/useUploadFile';
+import Image from 'next/image';
+import Switch from 'commons/components/elements/Form/switch';
 
 interface QnaFormInputData {
     content: string;
@@ -17,18 +26,77 @@ const QnaTextArea = ({
     values,
     handleChange,
     handleBlur,
-    onCancel,
+    setFieldValue,
+    placeholder,
     avatarSize,
     disabled
 }: {
     values: QnaFormInputData;
+    setFieldValue: (
+        field: string,
+        value: any,
+        shouldValidate?: boolean | undefined
+    ) => void;
+    placeholder: string;
     handleChange: ChangeEventHandler;
     handleBlur: FocusEventHandler;
-    onCancel: () => void;
+    onCancel?: () => void;
     avatarSize?: string;
     disabled: boolean;
 }): JSX.Element => {
     const user = useSelector(getCurrentUser);
+    const { uploadFile } = useUploadFile('qna');
+    const [isTextAreaFocus, setOnTextAreaFocus] = useState(false);
+    const [attachment, setAttachment] = useState<string[]>([]);
+    const [isAnon, setIsAnon] = useState(false);
+    const formId = makeid(10);
+
+    const onInputFile = async (
+        event: ChangeEvent<HTMLInputElement>
+    ): Promise<void> => {
+        const files: File[] = [];
+
+        if (event.target.files) {
+            for (let i = 0; i < event?.target?.files.length; ++i) {
+                const file = event?.target?.files[i];
+
+                files.push(file);
+            }
+        }
+        const res = await uploadFile(files);
+        if (res) {
+            setAttachment([...res, ...attachment]);
+        }
+    };
+
+    useEffect(() => {
+        if (attachment.length > 0) {
+            setFieldValue('attachment', JSON.stringify(attachment));
+        }
+    }, [attachment]);
+
+    useEffect(() => {
+        setFieldValue('is_anonymous', isAnon);
+    }, [isAnon]);
+
+    const onFocus = (): void => {
+        setOnTextAreaFocus(true);
+    };
+
+    const onUnFocus = (): void => {
+        setOnTextAreaFocus(false);
+    };
+
+    const removeAttachment = (url: string): void => {
+        setAttachment((current) =>
+            current.filter((data: string) => data !== url)
+        );
+    };
+
+    const resetFormState = (): void => {
+        setAttachment([]);
+        setIsAnon(false);
+    };
 
     return (
         <>
@@ -42,28 +110,83 @@ const QnaTextArea = ({
                     </span>
                 </div>
             </div>
-            <div className="flex flex-col w-full gap-2">
+            <div
+                className="flex flex-col w-full gap-2"
+                onMouseDown={onFocus}
+                onFocusCapture={onFocus}
+                onBlurCapture={onUnFocus}
+                tabIndex={0}
+                role="textbox">
                 <TextareaAutosize
                     value={values.content}
                     name="content"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    placeholder="Punya pertanyaan terkait materi?"
-                    className="bg-transparent transition-all resize-none w-full border-t-0 border-x-0 border-b border-b-neutral-600 focus:border-t-0 focus:border-x-0 focus:border-b-white focus:ring-0"
+                    onFocus={onFocus}
+                    onMouseDown={onFocus}
+                    onMouseEnter={onFocus}
+                    onFocusCapture={onFocus}
+                    onBlurCapture={onUnFocus}
+                    placeholder={placeholder}
+                    className="bg-transparent transition-all resize-none w-full border-transparent focus:border-transparent focus:ring-0 focus:ring-transparent"
                 />
-                <div className="flex justify-between items-center">
+                {attachment.length > 0 && (
+                    <div className="py-2 overflow-x-auto w-full max-w-[70vw] lg:max-w-[50vw]">
+                        <div className="flex gap-2 w-screen">
+                            {attachment.map((url: string) => (
+                                <div
+                                    className="rounded bg-neutral-800 h-32 w-32 relative flex items-center"
+                                    key={url}>
+                                    <Image
+                                        src={url}
+                                        alt={url}
+                                        height={128}
+                                        width={128}
+                                        className="object-contain"
+                                    />
+                                    <MdClose
+                                        className="z-5 absolute right-1 top-1 cursor-pointer"
+                                        onClick={() => removeAttachment(url)}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+                <div
+                    className={`h-[1px] ${
+                        isTextAreaFocus ? 'bg-white' : 'bg-neutral-600'
+                    } w-full`}
+                />
+                <div className="flex justify-between items-center w-full">
                     <div className="flex gap-2">
-                        <MdInsertPhoto className="text-2xl text-neutral-400 cursor-pointer hover:text-white" />
+                        <input
+                            type="file"
+                            id={formId}
+                            hidden
+                            multiple
+                            accept={'image/png,image/gif,image/jpeg,image/jpg'}
+                            onChange={onInputFile}
+                        />
+                        <label htmlFor={formId}>
+                            <MdInsertPhoto className="text-2xl text-neutral-400 cursor-pointer hover:text-white" />
+                        </label>
+                        <div className="flex gap-2">
+                            <Switch
+                                checked={isAnon}
+                                setChecked={() => setIsAnon(!isAnon)}
+                            />
+                            <span
+                                className={`transition-all ${
+                                    isAnon ? 'text-white' : 'text-neutral-600'
+                                }`}>
+                                Anonim
+                            </span>
+                        </div>
                     </div>
                     <div className="flex gap-2">
                         <Button
-                            variant="custom"
-                            size="extraSmall"
-                            type="button"
-                            onClick={onCancel}>
-                            Batal
-                        </Button>
-                        <Button
+                            onClick={resetFormState}
                             disabled={disabled}
                             variant="primary"
                             size="extraSmall"

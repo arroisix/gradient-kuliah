@@ -30,3 +30,34 @@ type GradientError = {
         validation_error: GradientObject;
     };
 };
+
+interface UploadFileInputData {
+    file_names: string[];
+    bucket_key: string;
+}
+
+interface UploadFileResponseData {
+    file_name: string;
+    file_url: string;
+    file_extension: string;
+    file_path: string;
+    presigned_data: {
+        upload_url: string;
+        fields: {
+            'Content-Type': string;
+            acl: 'public-read';
+            key: string;
+            AWSAccessKeyId: string;
+            policy: string;
+            signature: string;
+        };
+    };
+}
+
+type BaseInfiniteScrollHook<T> = {
+    allData?: ListResponseData<T>;
+    isAllLoading: boolean;
+    isLoading: boolean;
+    anchor: React.MutableRefObject<HTMLDivElement>;
+    loadMore?: () => void;
+};

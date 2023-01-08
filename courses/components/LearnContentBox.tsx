@@ -6,13 +6,15 @@ interface LearnContentBoxProps {
     firstTab?: number;
     isSubscribed?: boolean;
     slug: string;
+    extraCallback?: () => void;
 }
 
 const LearnContentBox = ({
     slug,
     chapters,
     firstTab,
-    isSubscribed
+    isSubscribed,
+    extraCallback
 }: LearnContentBoxProps): JSX.Element => {
     const { video } = useLearning();
 
@@ -20,6 +22,7 @@ const LearnContentBox = ({
         <div className="flex h-full">
             {chapters && (
                 <ListOfContent
+                    extraCallback={extraCallback}
                     slug={slug}
                     firstTab={firstTab}
                     chapters={chapters}

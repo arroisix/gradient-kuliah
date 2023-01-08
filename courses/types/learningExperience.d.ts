@@ -23,7 +23,7 @@ type QnaQuestion = {
     author: QnaAuthor;
     video_id: string;
     content: string;
-    attachment: string;
+    attachment: string[];
     is_anonymous: boolean;
     answer_count: number;
 };
@@ -34,6 +34,6 @@ type QnaAnswer = {
     author: QnaAuthor;
     question_id: string;
     content: string;
-    attachment: string;
+    attachment: string[];
     is_anonymous: boolean;
 };

@@ -16,7 +16,8 @@ const ListOfContent = ({
     rounded,
     firstTab,
     isSubscribed,
-    isFullHeight
+    isFullHeight,
+    extraCallback
 }: {
     slug: string;
     chapters: Chapter[];
@@ -25,6 +26,7 @@ const ListOfContent = ({
     firstTab?: number;
     isSubscribed?: boolean;
     isFullHeight?: boolean;
+    extraCallback?: () => void;
 }): JSX.Element => {
     const [tab, setTab] = useState(firstTab ?? 0);
     const isVideoContentExist = isContentChapterExist(chapters, 'video');
@@ -67,6 +69,7 @@ const ListOfContent = ({
             </div>
             <div>
                 <VideoSection
+                    extraCallback={extraCallback}
                     chapters={
                         tab === 0
                             ? getAllVideoChapter(chapters)

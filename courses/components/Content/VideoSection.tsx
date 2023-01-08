@@ -7,7 +7,7 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import Lock from 'commons/components/elements/Icons/Lock';
 import ComingSoonContent from './ComingSoonContent';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface VideoSectionProps {
     videoPicked: Video;
@@ -15,6 +15,7 @@ interface VideoSectionProps {
     isSubscribed: boolean;
     isFullHeight?: boolean;
     slug: string;
+    extraCallback?: () => void;
 }
 
 const VideoAccordionItem = ({
@@ -22,13 +23,15 @@ const VideoAccordionItem = ({
     chapterId,
     isSubscribed,
     videoPicked,
-    slug
+    slug,
+    extraCallback
 }: {
     chapterId: string;
     videoPicked: Video;
     subchapter: SubChapter;
     isSubscribed: boolean;
     slug: string;
+    extraCallback?: () => void;
 }): JSX.Element => {
     const router = useRouter();
     const { setModalAuthOpen } = useAuth();
@@ -38,6 +41,9 @@ const VideoAccordionItem = ({
             aria-hidden={true}
             onClick={() => {
                 if (isAuthenticated) {
+                    if (extraCallback) {
+                        extraCallback();
+                    }
                     router.replace(
                         `/kelas/${slug}/belajar/video/${chapterId}/${subchapter.id}`,
                         undefined,
@@ -62,11 +68,9 @@ const VideoAccordionItem = ({
                     <Lock />
                 )}
             </div>
-            {/* <div className="w-full"> */}
             <span className="font-body w-3/4 truncate">
                 {subchapter?.subchapter_name}
             </span>
-            {/* </div> */}
             <div className="w-1/4 flex justify-end">
                 <span
                     className={
@@ -86,25 +90,32 @@ const VideoAccordion = ({
     initialOpen,
     chapter,
     videoPicked,
-    isSubscribed
+    isSubscribed,
+    extraCallback
 }: {
     slug: string;
     initialOpen: boolean;
     chapter: Chapter;
     videoPicked: Video;
     isSubscribed: boolean;
+    extraCallback?: () => void;
 }): JSX.Element => {
     const [open, setOpen] = useState(initialOpen ?? false);
     const router = useRouter();
+    const ref = useRef({} as HTMLDivElement);
     const { chapter: keyId } = router.query;
     useEffect(() => {
         if (keyId && keyId === chapter.id && !open) {
             setOpen(true);
+            ref.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
         }
     }, [keyId]);
 
     return (
-        <div className="w-full">
+        <div className="w-full" ref={ref}>
             <div
                 className="px-7 py-4 w-full flex justify-between items-center cursor-pointer"
                 onClick={() => setOpen(!open)}
@@ -120,6 +131,7 @@ const VideoAccordion = ({
                     chapter?.subchapters?.map((subchapter) => {
                         return (
                             <VideoAccordionItem
+                                extraCallback={extraCallback}
                                 slug={slug}
                                 chapterId={chapter.id}
                                 key={subchapter.id}
@@ -145,7 +157,8 @@ const VideoSection = ({
     chapters,
     videoPicked,
     isSubscribed,
-    isFullHeight
+    isFullHeight,
+    extraCallback
 }: VideoSectionProps): JSX.Element => {
     return (
         <div
@@ -159,6 +172,7 @@ const VideoSection = ({
             {chapters?.map((chapter, index) => {
                 return (
                     <VideoAccordion
+                        extraCallback={extraCallback}
                         slug={slug}
                         initialOpen={index === 0}
                         key={chapter.id}

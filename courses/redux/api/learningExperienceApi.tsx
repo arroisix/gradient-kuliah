@@ -66,12 +66,15 @@ export const learningExperienceApi = baseApi.injectEndpoints({
                       ]
                     : [{ type: 'QNA_ANSWER', id: 'LIST' }]
         })
-    })
+    }),
+    overrideExisting: false
 });
 
 export const {
     usePostAnswerMutation,
     usePostQuestionMutation,
     useListPostAnswerQuery,
-    useListPostQuestionQuery
+    useLazyListPostAnswerQuery,
+    useListPostQuestionQuery,
+    useLazyListPostQuestionQuery
 } = learningExperienceApi;
