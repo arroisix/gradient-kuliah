@@ -174,8 +174,31 @@ const QuestionItem = ({ question }: { question: QnaQuestion }): JSX.Element => {
     );
 };
 
+const QuestionSkeletonItem = (): JSX.Element => (
+    <div className="flex gap-2 w-full">
+        <div className="w-[60px] h-[60px] rounded-full bg-neutral-600 animate-pulse" />
+        <div className="flex flex-col gap-2 w-full">
+            <div className="p-4 w-1/4 bg-neutral-600 animate-pulse rounded-lg" />
+            <div className="p-4 w-3/4 bg-neutral-600 animate-pulse rounded-lg" />
+        </div>
+    </div>
+);
+
 const ListQuestion = (): JSX.Element => {
-    const { allData, anchor } = useQnaQuestionInfiniteScroll();
+    const { allData, anchor, isAllLoading } = useQnaQuestionInfiniteScroll();
+
+    if (isAllLoading) {
+        return (
+            <div className="w-full flex flex-col gap-4 my-8">
+                <QuestionSkeletonItem />
+                <QuestionSkeletonItem />
+                <QuestionSkeletonItem />
+                <QuestionSkeletonItem />
+                <QuestionSkeletonItem />
+                <div ref={anchor} className="w-full h-0" />
+            </div>
+        );
+    }
 
     return (
         <div className="w-full flex flex-col gap-4 my-8">
