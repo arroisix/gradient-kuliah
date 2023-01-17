@@ -14,7 +14,6 @@ import TextareaAutosize from 'react-textarea-autosize';
 import { getCurrentUser } from 'authentication/redux/selectors/userSelector';
 import { generateInitial, makeid } from 'commons/utils';
 import useUploadFile from 'commons/hooks/useUploadFile';
-import Image from 'next/image';
 import Switch from 'commons/components/elements/Form/switch';
 
 interface QnaFormInputData {
@@ -137,7 +136,7 @@ const QnaTextArea = ({
                                 <div
                                     className="rounded bg-neutral-800 h-32 w-32 relative flex items-center"
                                     key={url}>
-                                    <Image
+                                    <img
                                         src={url}
                                         alt={url}
                                         height={128}
