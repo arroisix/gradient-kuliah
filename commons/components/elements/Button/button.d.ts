@@ -1,6 +1,6 @@
 type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'custom';
 
-type ButtonSize = 'large' | 'normal' | 'small';
+type ButtonSize = 'large' | 'normal' | 'small' | 'extraSmall';
 
 interface BaseButtonProps {
     onClick?: () => void;

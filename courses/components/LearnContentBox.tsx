@@ -6,37 +6,29 @@ interface LearnContentBoxProps {
     firstTab?: number;
     isSubscribed?: boolean;
     slug: string;
+    extraCallback?: () => void;
 }
 
 const LearnContentBox = ({
     slug,
     chapters,
     firstTab,
-    isSubscribed
+    isSubscribed,
+    extraCallback
 }: LearnContentBoxProps): JSX.Element => {
-    const {
-        setSubchapter,
-        setVideoPicked,
-        setNotebookPicked,
-        videoPicked,
-        notebookPicked
-    } = useLearning();
+    const { video } = useLearning();
 
     return (
         <div className="flex h-full">
             {chapters && (
                 <ListOfContent
+                    extraCallback={extraCallback}
                     slug={slug}
                     firstTab={firstTab}
-                    setSubchapter={setSubchapter}
-                    setNotebookPicked={setNotebookPicked}
-                    notebookPicked={notebookPicked}
                     chapters={chapters}
-                    setVideoPicked={setVideoPicked}
-                    videoPicked={videoPicked}
+                    videoPicked={video as Video}
                     isSubscribed={isSubscribed}
                     isFullHeight
-                    asThrowPage
                 />
             )}
         </div>

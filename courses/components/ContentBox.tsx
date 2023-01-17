@@ -25,9 +25,6 @@ const ContentBox = ({
     learningProgress
 }: ContentBoxProps): JSX.Element => {
     const [videoPicked, setVideoPicked] = useState<Video>(trailer as Video);
-    const [notebookPicked, setNotebookPicked] = useState<Notebook>(
-        {} as Notebook
-    );
     const isVideoContentExist = isContentChapterExist(chapters, 'video');
     const { width } = useWindowSize();
     const [track] = useTrackSubchapterProgressMutation();
@@ -95,13 +92,8 @@ const ContentBox = ({
                     slug={slug}
                     chapters={chapters}
                     videoPicked={videoPicked}
-                    setVideoPicked={setVideoPicked}
-                    notebookPicked={notebookPicked}
-                    setNotebookPicked={setNotebookPicked}
                     rounded
-                    trailerVideo={trailer}
                     isSubscribed={isSubscribed}
-                    asThrowPage
                 />
             </div>
         </div>

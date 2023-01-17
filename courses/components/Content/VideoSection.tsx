@@ -7,38 +7,31 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import Lock from 'commons/components/elements/Icons/Lock';
 import ComingSoonContent from './ComingSoonContent';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface VideoSectionProps {
-    setVideoPicked: (video: Video) => void;
     videoPicked: Video;
-    trailerVideo?: Video;
     chapters: Chapter[];
-    asThrowPage?: boolean;
-    setSubchapter?: (sub: SubChapter) => void;
     isSubscribed: boolean;
     isFullHeight?: boolean;
     slug: string;
+    extraCallback?: () => void;
 }
 
 const VideoAccordionItem = ({
     subchapter,
-    setSubchapter,
     chapterId,
-    setVideoPicked,
-    asThrowPage,
     isSubscribed,
     videoPicked,
-    slug
+    slug,
+    extraCallback
 }: {
-    asThrowPage?: boolean;
     chapterId: string;
     videoPicked: Video;
     subchapter: SubChapter;
-    setSubchapter?: (sub: SubChapter) => void;
-    setVideoPicked: (video: Video) => void;
     isSubscribed: boolean;
     slug: string;
+    extraCallback?: () => void;
 }): JSX.Element => {
     const router = useRouter();
     const { setModalAuthOpen } = useAuth();
@@ -48,22 +41,14 @@ const VideoAccordionItem = ({
             aria-hidden={true}
             onClick={() => {
                 if (isAuthenticated) {
-                    setVideoPicked(
-                        {
-                            ...(subchapter.video as Video),
-                            subchapter_id: subchapter?.id as string
-                        } ?? ({} as Video)
+                    if (extraCallback) {
+                        extraCallback();
+                    }
+                    router.replace(
+                        `/kelas/${slug}/belajar/video/${chapterId}/${subchapter.id}`,
+                        undefined,
+                        { shallow: true }
                     );
-                    if (setSubchapter) {
-                        setSubchapter(subchapter);
-                    }
-                    if (asThrowPage) {
-                        router.replace(
-                            `/kelas/${slug}/belajar/video/${chapterId}/${subchapter.id}`,
-                            undefined,
-                            { shallow: true }
-                        );
-                    }
                 } else {
                     setModalAuthOpen(
                         1,
@@ -83,11 +68,9 @@ const VideoAccordionItem = ({
                     <Lock />
                 )}
             </div>
-            {/* <div className="w-full"> */}
             <span className="font-body w-3/4 truncate">
                 {subchapter?.subchapter_name}
             </span>
-            {/* </div> */}
             <div className="w-1/4 flex justify-end">
                 <span
                     className={
@@ -107,31 +90,32 @@ const VideoAccordion = ({
     initialOpen,
     chapter,
     videoPicked,
-    setSubchapter,
-    setVideoPicked,
-    asThrowPage,
-    isSubscribed
+    isSubscribed,
+    extraCallback
 }: {
     slug: string;
     initialOpen: boolean;
     chapter: Chapter;
     videoPicked: Video;
-    setSubchapter?: (sub: SubChapter) => void;
-    setVideoPicked: (video: Video) => void;
-    asThrowPage?: boolean;
     isSubscribed: boolean;
+    extraCallback?: () => void;
 }): JSX.Element => {
     const [open, setOpen] = useState(initialOpen ?? false);
     const router = useRouter();
+    const ref = useRef({} as HTMLDivElement);
     const { chapter: keyId } = router.query;
     useEffect(() => {
         if (keyId && keyId === chapter.id && !open) {
             setOpen(true);
+            ref.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
         }
     }, [keyId]);
 
     return (
-        <div className="w-full">
+        <div className="w-full" ref={ref}>
             <div
                 className="px-7 py-4 w-full flex justify-between items-center cursor-pointer"
                 onClick={() => setOpen(!open)}
@@ -147,14 +131,12 @@ const VideoAccordion = ({
                     chapter?.subchapters?.map((subchapter) => {
                         return (
                             <VideoAccordionItem
+                                extraCallback={extraCallback}
                                 slug={slug}
                                 chapterId={chapter.id}
                                 key={subchapter.id}
                                 subchapter={subchapter}
                                 videoPicked={videoPicked}
-                                setVideoPicked={setVideoPicked}
-                                setSubchapter={setSubchapter}
-                                asThrowPage={asThrowPage}
                                 isSubscribed={isSubscribed}
                             />
                         );
@@ -173,63 +155,29 @@ const VideoAccordion = ({
 const VideoSection = ({
     slug,
     chapters,
-    setVideoPicked,
-    setSubchapter,
-    trailerVideo,
     videoPicked,
-    asThrowPage,
     isSubscribed,
-    isFullHeight
+    isFullHeight,
+    extraCallback
 }: VideoSectionProps): JSX.Element => {
     return (
         <div
             className={`${
                 isFullHeight
-                    ? 'h-[calc(120vh-65px)]'
+                    ? 'h-[calc(120vh-64px)]'
                     : `h-[${
                           chapters.length > 8 ? chapters.length * 60 : 800
                       }px]`
             }`}>
-            {trailerVideo && (
-                <div
-                    id="trailer"
-                    key="trailer"
-                    aria-hidden={true}
-                    onClick={() =>
-                        setVideoPicked({
-                            id: 'trailer',
-                            video_url: trailerVideo.video_url as string,
-                            thumbnail: trailerVideo.thumbnail as string,
-                            is_free: true,
-                            description: trailerVideo.description,
-                            duration: '01:30'
-                        })
-                    }
-                    className={`w-full flex p-4 items-center hover:bg-neutral-600 cursor-pointer ${
-                        videoPicked.id === 'trailer' && 'bg-neutral-600'
-                    }`}>
-                    <div className="w-1/5 flex items-center justify-center">
-                        <BsPlayCircle className="mr-4 text-xl" />
-                    </div>
-                    <div className="flex flex-col w-4/5">
-                        <span>Trailer Kelas</span>
-                        <span className="text-neutral-400">
-                            {trailerVideo.duration}
-                        </span>
-                    </div>
-                </div>
-            )}
             {chapters?.map((chapter, index) => {
                 return (
                     <VideoAccordion
+                        extraCallback={extraCallback}
                         slug={slug}
                         initialOpen={index === 0}
                         key={chapter.id}
                         chapter={chapter}
                         videoPicked={videoPicked}
-                        setVideoPicked={setVideoPicked}
-                        setSubchapter={setSubchapter}
-                        asThrowPage={asThrowPage}
                         isSubscribed={isSubscribed}
                     />
                 );
