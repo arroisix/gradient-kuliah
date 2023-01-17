@@ -31,7 +31,7 @@ const VideoLearnContainer = ({
 
     return (
         <section className="pt-[65px] flex flex-col md:flex-row relative md:overflow-hidden md:h-[100vh]">
-            <div className="w-full h-full overflow-scroll">
+            <div className="w-full h-full">
                 {!isLoading ? (
                     data ? (
                         <LearnVideo
