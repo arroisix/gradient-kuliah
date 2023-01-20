@@ -81,7 +81,7 @@ const SubscriptionBanner = ({ slug }: SubscriptionBannerProps): JSX.Element => {
         <div className="flex flex-col items-center justify-center min-h-[70vh] w-screen">
             <div className="flex items-center justify-center relative">
                 {/* Bean */}
-                <div className="absolute bg-gradient-to-b from-violet-700 w-5/6 rounded-full aspect-square" />
+                <div className="absolute bg-gradient-to-b from-violet-700 w-2/3 rounded-full aspect-square" />
 
                 {/* Cards */}
                 <div className="relative">
