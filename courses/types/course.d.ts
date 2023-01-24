@@ -130,6 +130,7 @@ type VideoProgress = {
 
 type SubchapterProgress = {
     id: string;
+    chapter_id: string;
     latest_progress: ProgressType;
     video: VideoProgress;
     subchapter: SubChapter;

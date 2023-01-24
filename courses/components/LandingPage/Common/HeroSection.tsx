@@ -20,6 +20,8 @@ const HeroSection = ({
     const { is_subscribed, expiryDay, latest_subchapter } =
         useCourseSubscription(slug);
 
+    console.log(latest_subchapter);
+
     return (
         <section className="h-screen w-full flex flex-col-reverse md:flex-row justify-end md:justify-center relative">
             <div className="w-full h-screen flex flex-col justify-end md:justify-center pl-4 pr-4 md:pr-0 md:pl-[7.5rem] py-4 z-10 mb-8 md:mb-0">
@@ -51,7 +53,7 @@ const HeroSection = ({
                     <Button
                         className="md:w-fit text-center mt-4"
                         variant="primary"
-                        href={`/#learning-catalog`}>
+                        href={`/kelas/${slug}/belajar/video/${latest_subchapter?.chapter_id}/${latest_subchapter?.subchapter.id}`}>
                         Lanjut Belajar
                     </Button>
                 ) : (
