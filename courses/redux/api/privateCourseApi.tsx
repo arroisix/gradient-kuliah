@@ -23,21 +23,6 @@ export const privateCourseApi = baseApi.injectEndpoints({
                 url: `${PRIVATE_COURSE_BASE_URL}subchapter/${id}`
             })
         }),
-        trackSubchapterProgress: builder.mutation<
-            SubchapterProgress,
-            TrackSubchapterProgressInputData
-        >({
-            query: ({
-                subchapter_id,
-                ...data
-            }: TrackSubchapterProgressInputData) => ({
-                url: `${PRIVATE_COURSE_BASE_URL}track-subchapter/${subchapter_id}`,
-                method: 'POST',
-                body: {
-                    ...data
-                }
-            })
-        }),
         submitPopupQuizAnswer: builder.mutation<
             PopupQuestionAnswerResponseData,
             PopupQuestionAnswerInputData
@@ -47,11 +32,6 @@ export const privateCourseApi = baseApi.injectEndpoints({
                 method: 'POST',
                 body: data
             })
-        }),
-        getLearningProgress: builder.query<LearningProgress, string>({
-            query: (slug: string) => ({
-                url: `${PRIVATE_COURSE_BASE_URL}learning-progress/${slug}`
-            })
         })
     })
 });
@@ -59,8 +39,6 @@ export const privateCourseApi = baseApi.injectEndpoints({
 export const {
     useGetPrivateCourseQuery,
     useGetPrivateListCoursesQuery,
-    useTrackSubchapterProgressMutation,
     useSubmitPopupQuizAnswerMutation,
-    useGetSubchapterDetailQuery,
-    useGetLearningProgressQuery
+    useGetSubchapterDetailQuery
 } = privateCourseApi;

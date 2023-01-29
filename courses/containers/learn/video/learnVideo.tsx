@@ -3,7 +3,7 @@ import PopupQuestionContent from 'courses/components/Exercise/PopupQuestion';
 import LearningExperience from 'courses/components/LearningExperience';
 import NeedSubscribe from 'courses/components/NeedSubscribe';
 import { useLearning } from 'courses/contexts/LearningProvider';
-import { useTrackSubchapterProgressMutation } from 'courses/redux/api/privateCourseApi';
+import { useTrackSubchapterProgressMutation } from 'courses/redux/api/learningExperienceApi';
 
 const LearnVideo = ({
     learningProgress
@@ -11,7 +11,7 @@ const LearnVideo = ({
     learningProgress?: LearningProgress;
 }): JSX.Element => {
     const [track] = useTrackSubchapterProgressMutation();
-    const { is_subscribed, video, subchapter } = useLearning();
+    const { is_subscribed, video } = useLearning();
 
     const renderVideoPlayer = (): JSX.Element => {
         if (is_subscribed || (video && video.is_free)) {
@@ -28,11 +28,8 @@ const LearnVideo = ({
                             is_subscribed
                                 ? async (last_duration, isFinished) =>
                                       track({
-                                          subchapter_id:
-                                              subchapter?.id as string,
                                           learning_progress_id:
                                               learningProgress?.id as string,
-                                          progress_type: 'VIDEO',
                                           video_progress: {
                                               video_id: video.id,
                                               last_duration:

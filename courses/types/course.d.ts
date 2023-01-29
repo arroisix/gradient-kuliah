@@ -8,9 +8,7 @@ interface FilterCourseQueryParams {
 }
 
 interface TrackSubchapterProgressInputData {
-    subchapter_id: string;
     learning_progress_id: string;
-    progress_type: ProgressType;
     video_progress?: {
         video_id: string;
         last_duration: string;
@@ -138,8 +136,8 @@ type SubchapterProgress = {
 
 type LearningProgress = {
     id: string;
-    latest_subchapter: SubchapterProgress;
-    subchapter_progress: SubchapterProgress[];
+    latest_watch_video: SubchapterProgress;
+    watch_progress: SubchapterProgress[];
 };
 
 type Packet = {

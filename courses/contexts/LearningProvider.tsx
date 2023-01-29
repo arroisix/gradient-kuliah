@@ -2,16 +2,16 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useGetSubchapterDetailQuery } from 'courses/redux/api/privateCourseApi';
 import { useRouter } from 'next/router';
-import React, { createContext, ReactNode, useContext, useMemo } from 'react';
+import { createContext, ReactNode, useContext, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 interface LearningContextType {
     video: Video;
     subchapter?: SubChapter;
     is_subscribed?: boolean;
-    latest_subchapter?: SubchapterProgress;
+    latest_watch_video?: SubchapterProgress;
     learning_progress_id?: string;
-    subchapter_progress?: SubchapterProgress[];
+    watch_progress?: SubchapterProgress[];
 }
 
 const LearningContext = createContext<LearningContextType>(
@@ -30,8 +30,8 @@ export function LearningProvider({
     const {
         is_subscribed,
         learning_progress_id,
-        latest_subchapter,
-        subchapter_progress
+        latest_watch_video,
+        watch_progress
     } = useCourseSubscription(id as string);
     const { data } = useGetSubchapterDetailQuery(sub as string, {
         skip: sub === null || sub === undefined || !isAuthenticated
@@ -43,14 +43,14 @@ export function LearningProvider({
             subchapter: data,
             is_subscribed,
             learning_progress_id,
-            latest_subchapter,
-            subchapter_progress
+            latest_watch_video,
+            watch_progress
         }),
         [
             data,
             is_subscribed,
-            latest_subchapter,
-            subchapter_progress,
+            latest_watch_video,
+            watch_progress,
             learning_progress_id
         ]
     );

@@ -38,7 +38,7 @@ const Hero = ({ course }: { course: Course }): JSX.Element => {
                             TERAKHIR DIPELAJARI
                         </p>
                         <h3 className="text-2xl md:text-3xl">
-                            {course?.learning_progress?.latest_subchapter
+                            {course?.learning_progress?.latest_watch_video
                                 ?.subchapter?.subchapter_name ??
                                 'Belum ada progress belajar'}
                         </h3>

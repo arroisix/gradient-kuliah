@@ -3,7 +3,7 @@ import VideoPlayer from 'commons/components/elements/Video';
 import NeedSubscribe from './NeedSubscribe';
 import ListOfContent from './Content/ListOfContent';
 import useWindowSize from 'commons/hooks/useWindowSize';
-import { useTrackSubchapterProgressMutation } from 'courses/redux/api/privateCourseApi';
+import { useTrackSubchapterProgressMutation } from 'courses/redux/api/learningExperienceApi';
 import { getAllVideoChapter, isContentChapterExist } from 'courses/utils';
 
 interface ContentBoxProps {
@@ -61,11 +61,8 @@ const ContentBox = ({
                                     videoPicked.id !== 'trailer' && isSubscribed
                                         ? async (last_duration, isFinished) =>
                                               track({
-                                                  subchapter_id:
-                                                      videoPicked.subchapter_id as string,
                                                   learning_progress_id:
                                                       learningProgress?.id as string,
-                                                  progress_type: 'VIDEO',
                                                   video_progress: {
                                                       video_id: videoPicked.id,
                                                       last_duration:

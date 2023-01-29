@@ -17,10 +17,8 @@ const HeroSection = ({
     video_preview_mobile,
     slug
 }: HeroCommonProps): JSX.Element => {
-    const { is_subscribed, expiryDay, latest_subchapter } =
+    const { is_subscribed, expiryDay, latest_watch_video } =
         useCourseSubscription(slug);
-
-    console.log(latest_subchapter);
 
     return (
         <section className="h-screen w-full flex flex-col-reverse md:flex-row justify-end md:justify-center relative">
@@ -44,7 +42,7 @@ const HeroSection = ({
                             TERAKHIR DIPELAJARI
                         </p>
                         <h3 className="text-2xl md:text-3xl">
-                            {latest_subchapter?.subchapter.subchapter_name ??
+                            {latest_watch_video?.subchapter.subchapter_name ??
                                 'Belum ada progress belajar'}
                         </h3>
                     </div>
@@ -53,7 +51,7 @@ const HeroSection = ({
                     <Button
                         className="md:w-fit text-center mt-4"
                         variant="primary"
-                        href={`/kelas/${slug}/belajar/video/${latest_subchapter?.chapter_id}/${latest_subchapter?.subchapter.id}`}>
+                        href={`/kelas/${slug}/belajar/video/${latest_watch_video?.chapter_id}/${latest_watch_video?.subchapter.id}`}>
                         Lanjut Belajar
                     </Button>
                 ) : (

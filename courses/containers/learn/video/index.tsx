@@ -20,8 +20,8 @@ const VideoLearnContainer = ({
     const {
         is_subscribed,
         learning_progress_id,
-        latest_subchapter,
-        subchapter_progress
+        latest_watch_video,
+        watch_progress
     } = useCourseSubscription(id as string);
     const { data, isLoading } = useGetSubchapterDetailQuery(sub as string, {
         skip: sub === null || sub === undefined || !isAuthenticated
@@ -38,10 +38,10 @@ const VideoLearnContainer = ({
                             key={data.id}
                             learningProgress={{
                                 id: learning_progress_id as string,
-                                subchapter_progress:
-                                    subchapter_progress as SubchapterProgress[],
-                                latest_subchapter:
-                                    latest_subchapter as SubchapterProgress
+                                watch_progress:
+                                    watch_progress as SubchapterProgress[],
+                                latest_watch_video:
+                                    latest_watch_video as SubchapterProgress
                             }}
                         />
                     ) : (

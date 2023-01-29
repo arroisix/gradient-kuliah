@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import VideoPlayer from 'commons/components/elements/Video';
-import { useTrackSubchapterProgressMutation } from 'courses/redux/api/privateCourseApi';
+import { useTrackSubchapterProgressMutation } from 'courses/redux/api/learningExperienceApi';
 import { getAllVideoChapter, isContentChapterExist } from 'courses/utils';
 import ListOfContent from 'courses/components/Content/ListOfContent';
 import NeedSubscribe from 'courses/components/NeedSubscribe';
@@ -78,10 +78,7 @@ const VideoSection = ({ slug }: VideoSectionProps): JSX.Element => {
                                     learning_progress_id
                                         ? async (last_duration, isFinished) =>
                                               track({
-                                                  subchapter_id:
-                                                      videoPicked.subchapter_id as string,
                                                   learning_progress_id,
-                                                  progress_type: 'VIDEO',
                                                   video_progress: {
                                                       video_id: videoPicked.id,
                                                       last_duration:

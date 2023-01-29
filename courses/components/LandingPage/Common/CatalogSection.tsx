@@ -13,7 +13,7 @@ const CatalogSection = ({
 }): JSX.Element => {
     const { data: content, isLoading } =
         useGetLandingCourseListContentQuery(slug);
-    const { expiryDay, latest_subchapter, subscription_id } =
+    const { expiryDay, latest_watch_video, subscription_id } =
         useCourseSubscription(slug);
     const sortChapterOrder = (chapters: Chapter[]): Chapter[] => {
         const rawChapters = [...chapters];
@@ -48,7 +48,7 @@ const CatalogSection = ({
                 <CatalogContainer
                     slug={slug}
                     chapters={sortChapterOrder(content.data)}
-                    latest_subchapter={latest_subchapter}
+                    latest_subchapter={latest_watch_video}
                 />
             ) : (
                 <div className="flex flex-col gap-2">

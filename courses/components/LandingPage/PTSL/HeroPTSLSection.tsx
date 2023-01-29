@@ -49,7 +49,7 @@ const HeroPTSLSection = ({
     thumbnail,
     slug
 }: HeroPTSLProps): JSX.Element => {
-    const { is_subscribed, expiryDay, latest_subchapter } =
+    const { is_subscribed, expiryDay, latest_watch_video } =
         useCourseSubscription(slug);
     const [showVideoPreview, setVideoPreview] = useState(false);
 
@@ -75,7 +75,7 @@ const HeroPTSLSection = ({
                             TERAKHIR DIPELAJARI
                         </p>
                         <h3 className="text-2xl md:text-3xl">
-                            {latest_subchapter?.subchapter.subchapter_name ??
+                            {latest_watch_video?.subchapter.subchapter_name ??
                                 'Belum ada progress belajar'}
                         </h3>
                     </div>

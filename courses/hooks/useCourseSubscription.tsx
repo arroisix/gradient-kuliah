@@ -3,7 +3,7 @@ import { countTheDay } from 'payment/utils';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
-import { useGetLearningProgressQuery } from 'courses/redux/api/privateCourseApi';
+import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienceApi';
 
 const useCourseSubscription = (slug: string) => {
     const isAuthenticated = useSelector(getIsAuthenticated);

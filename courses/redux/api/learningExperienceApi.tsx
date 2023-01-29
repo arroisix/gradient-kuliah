@@ -65,6 +65,23 @@ export const learningExperienceApi = baseApi.injectEndpoints({
                           { type: 'QNA_ANSWER', id: 'LIST' }
                       ]
                     : [{ type: 'QNA_ANSWER', id: 'LIST' }]
+        }),
+        getLearningProgress: builder.query<LearningProgress, string>({
+            query: (slug: string) => ({
+                url: `${LEARNING_EXPERIENCE_BASE_URL}learning-progress/${slug}/`
+            })
+        }),
+        trackSubchapterProgress: builder.mutation<
+            SubchapterProgress,
+            TrackSubchapterProgressInputData
+        >({
+            query: (data: TrackSubchapterProgressInputData) => ({
+                url: `${LEARNING_EXPERIENCE_BASE_URL}track-subchapter/`,
+                method: 'POST',
+                body: {
+                    ...data
+                }
+            })
         })
     }),
     overrideExisting: false
@@ -76,5 +93,7 @@ export const {
     useListPostAnswerQuery,
     useLazyListPostAnswerQuery,
     useListPostQuestionQuery,
-    useLazyListPostQuestionQuery
+    useLazyListPostQuestionQuery,
+    useGetLearningProgressQuery,
+    useTrackSubchapterProgressMutation
 } = learningExperienceApi;
