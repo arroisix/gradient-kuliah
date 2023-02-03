@@ -1,6 +1,6 @@
 const config = {
     prod: {
-        API_BASE_URL: 'https://api.gradient.academy/'
+        API_BASE_URL: 'https://gradient-infra-prod.et.r.appspot.com/'
     },
     dev: {
         API_BASE_URL: 'https://api-dev.gradient.academy/'
