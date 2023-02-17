@@ -37,3 +37,85 @@ type QnaAnswer = {
     attachment: string[];
     is_anonymous: boolean;
 };
+
+type ExamWorksheet = {
+    id: string;
+    question_count: number;
+    question_id_sequence: string[];
+    test_duration: Date;
+    treshold_score: number;
+    exercise_name: string;
+    is_new_worksheet: boolean;
+    latest_exam_score?: number;
+    exam_available: boolean;
+};
+
+type ExamAnswer = {
+    id: string;
+    answer: string;
+    is_answer?: boolean | null;
+};
+
+type ExamQuestion = {
+    id: string;
+    question_code: string;
+    question: string;
+    solution: string;
+    type_name: 'short_answer' | 'multiple_choice' | 'multiple_answer';
+    answers: ExamAnswer[];
+};
+
+type ExamQuestionSequence = {
+    id: string;
+    is_answered: boolean;
+    is_correct?: boolean;
+};
+
+interface ExamWorksheetInputData {
+    exercise_id: string;
+    learning_progress_id: string;
+    packet_id: string;
+}
+
+interface ExamQuestionResponse {
+    question: ExamQuestion;
+    user_answer: {
+        id: string;
+        answer_text?: string;
+        answers: ExamAnswer[];
+        is_correct_answer?: boolean;
+        question_id: string;
+        question_solution?: string;
+    };
+}
+
+interface ExamQuestionInputData {
+    question_id: string;
+    worksheet_id: string;
+}
+
+interface ExamAnswerInputData {
+    worksheet_id: string;
+    question_id: string;
+    answers?: string[];
+    answer_text?: string;
+}
+
+interface ExamAnswerResponse {
+    id: string;
+    answer_text?: string;
+    answers?: string[];
+    question_id: string;
+}
+
+interface ListQuestionSequenceResponse {
+    questions: ExamQuestionSequence[];
+}
+
+interface FinishExamResponse {
+    is_finished: boolean;
+    final_score: number;
+    correct_answer: number;
+    question_count: number;
+    duration_taken: string;
+}

@@ -82,6 +82,50 @@ export const learningExperienceApi = baseApi.injectEndpoints({
                     ...data
                 }
             })
+        }),
+        getExamExerciseWorksheet: builder.query<
+            ExamWorksheet,
+            ExamWorksheetInputData
+        >({
+            query: (data: ExamWorksheetInputData) => ({
+                url: `${LEARNING_EXPERIENCE_BASE_URL}exam-exercise/worksheet/${data.packet_id}/${data.learning_progress_id}/${data.exercise_id}/`
+            })
+        }),
+        getExamQuestion: builder.query<
+            ExamQuestionResponse,
+            ExamQuestionInputData
+        >({
+            query: (data: ExamQuestionInputData) => ({
+                url: `${LEARNING_EXPERIENCE_BASE_URL}exam-exercise/question/${data.worksheet_id}/${data.question_id}/`
+            })
+        }),
+        getExamListQuestionSequence: builder.query<
+            ListQuestionSequenceResponse,
+            string
+        >({
+            query: (worksheetId: string) => ({
+                url: `${LEARNING_EXPERIENCE_BASE_URL}exam-exercise/list-question/${worksheetId}/`
+            }),
+            providesTags: ['EXAM_QUESTION']
+        }),
+        submitExamAnswer: builder.mutation<
+            ExamAnswerResponse,
+            ExamAnswerInputData
+        >({
+            query: (data: ExamAnswerInputData) => ({
+                url: `${LEARNING_EXPERIENCE_BASE_URL}exam-exercise/submit-answer/`,
+                method: 'POST',
+                body: {
+                    ...data
+                }
+            }),
+            invalidatesTags: ['EXAM_QUESTION']
+        }),
+        finishExam: builder.mutation<FinishExamResponse, string>({
+            query: (worksheetId: string) => ({
+                url: `${LEARNING_EXPERIENCE_BASE_URL}exam-exercise/finish-exam/${worksheetId}/`,
+                method: 'POST'
+            })
         })
     }),
     overrideExisting: false
@@ -95,5 +139,10 @@ export const {
     useListPostQuestionQuery,
     useLazyListPostQuestionQuery,
     useGetLearningProgressQuery,
-    useTrackSubchapterProgressMutation
+    useTrackSubchapterProgressMutation,
+    useGetExamExerciseWorksheetQuery,
+    useGetExamQuestionQuery,
+    useGetExamListQuestionSequenceQuery,
+    useSubmitExamAnswerMutation,
+    useFinishExamMutation
 } = learningExperienceApi;

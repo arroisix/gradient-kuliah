@@ -53,6 +53,17 @@ type Lecturer = {
     role: string;
 };
 
+type SubChapter = {
+    id: string;
+    subchapter_name: string;
+    thumbnail?: string;
+    order: number;
+    video?: Video;
+    notebook?: Notebook;
+    exercise?: CourseExercise;
+    exercises?: CourseExercise[];
+};
+
 type Chapter = {
     id: string;
     chapter_name: string;
@@ -60,16 +71,6 @@ type Chapter = {
     subchapters: SubChapter[];
     is_coming_soon_video: boolean;
     is_coming_soon_animation: boolean;
-};
-
-type SubChapter = {
-    id: string;
-    order: int;
-    type_name: 'lecture' | 'exercise';
-    subchapter_name: string;
-    notebook?: Notebook;
-    video?: Video;
-    thumbnail?: string;
 };
 
 type Notebook = {
@@ -95,6 +96,15 @@ type Video = {
     subchapter_id?: string;
     progress?: VideoProgress;
     popup_questions?: PopupQuestion[];
+};
+
+type CourseExercise = {
+    id: string;
+    packet_id: string;
+    is_free: boolean;
+    exercise_name: string;
+    is_on_progress: boolean;
+    is_finish: boolean;
 };
 
 type PopupQuestion = {
