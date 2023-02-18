@@ -37,9 +37,11 @@ export const getAllChapterContent = (chapters: Chapter[]): Chapter[] => {
             res = [...res, ...flattenSubchapter(subchapter)];
         });
 
+        const uniqueRes = Array.from(new Set(res));
+
         return {
             ...chapter,
-            subchapters: res?.sort((sc1, sc2) => sc1.order - sc2.order)
+            subchapters: uniqueRes?.sort((sc1, sc2) => sc1.order - sc2.order)
         } as unknown as Chapter;
     });
 

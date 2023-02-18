@@ -19,6 +19,8 @@ import HeroPTSLSection from './PTSL/HeroPTSLSection';
 import PosterKalkulus1Section from './Kalkulus1/PosterKalkulus1Section';
 import BenefitPTSLSection from './PTSL/BenefitPTSLSection';
 import PriceHighlightPTSLSection from './PTSL/PriceHighlightPTSLSection';
+import BenefitKalkulus2Section from './Kalkulus2/BenefitKalkulus2Section';
+import PriceHighlightKalkulus2Section from './Kalkulus2/PriceHighlightKalkulus2Section';
 
 const COMPONENT_DICTIONARY: { [key in LandingPageSectionKey]: JSX.Element } = {
     hero: <HeroSection slug="dummy" />,
@@ -35,7 +37,9 @@ const COMPONENT_DICTIONARY: { [key in LandingPageSectionKey]: JSX.Element } = {
     benefit_kalkulus1: <BenefitKalkulus1Section />,
     benefit_ptsl: <BenefitPTSLSection />,
     poster_kalkulus1: <PosterKalkulus1Section slug="dummy" />,
-    hero_ptsl: <HeroPTSLSection slug="dummy" />
+    hero_ptsl: <HeroPTSLSection slug="dummy" />,
+    benefit_kalkulus2: <BenefitKalkulus2Section />,
+    price_highlight_kalkulus2: <PriceHighlightKalkulus2Section slug="dummy" />
 };
 
 const AuthLandingPage = ({ id }: { id: string }): JSX.Element => {

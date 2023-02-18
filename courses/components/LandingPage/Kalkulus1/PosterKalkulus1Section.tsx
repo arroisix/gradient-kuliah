@@ -2,12 +2,14 @@ interface PosterSectionProps {
     slug: string;
     poster?: string;
     label?: string;
+    description?: string;
 }
 
 const PosterKalkulus1Section = ({
     slug,
     poster,
-    label
+    label,
+    description
 }: PosterSectionProps): JSX.Element => {
     return (
         <div
@@ -16,10 +18,13 @@ const PosterKalkulus1Section = ({
                 background:
                     'linear-gradient(199.59deg, rgba(0, 0, 0, 0.1) 17.05%, rgba(22, 12, 44, 0.82) 48.59%, rgba(22, 12, 44, 0) 84.61%)'
             }}>
-            <div className="w-full flex items-center justify-center z-[2] my-4">
+            <div className="w-full flex flex-col items-center justify-center z-[2] my-4">
                 <h2 className="text-xl lg:text-5xl font-bold text-center">
                     {label}
                 </h2>
+                <span className="text-xs lg:text-lg text-center text-neutral-400">
+                    {description}
+                </span>
             </div>
             <div className="w-full max-h-[75vh] flex items-center justify-center z-[2]">
                 <img alt={`poster-${slug}`} src={poster} className="h-full" />

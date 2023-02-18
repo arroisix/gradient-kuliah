@@ -87,7 +87,11 @@ const ContentAccordion = ({
                                 extraCallback={extraCallback}
                                 slug={slug}
                                 chapterId={chapter.id}
-                                key={subchapter.id}
+                                key={
+                                    subchapter.exercise
+                                        ? `${subchapter.id}-${subchapter.exercise.id}`
+                                        : subchapter.id
+                                }
                                 subchapter={subchapter}
                                 contentPicked={contentPicked}
                                 isSubscribed={isSubscribed}

@@ -137,16 +137,6 @@ const Navbar = ({
                                     Kelas
                                 </nav>
                             </Link>
-                            <nav
-                                className="ml-12 cursor-pointer hover:text-accent-blue"
-                                onMouseEnter={onMouseEnterOther}>
-                                <a
-                                    href="https://discord.gg/qU3SB6wxzY"
-                                    target="_blank"
-                                    rel="noreferrer">
-                                    Gabung Discord
-                                </a>
-                            </nav>
                             {isAuthenticated ? (
                                 <nav
                                     className={`ml-12 cursor-pointer hover:text-accent-blue relative ${
