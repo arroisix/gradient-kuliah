@@ -36,6 +36,7 @@ interface ExamContextType {
     finishExam: () => Promise<void>;
     expandTiles: boolean;
     setExpandTiles: (status: boolean) => void;
+    isCurrentQuestionLastQuestion: () => boolean;
 }
 
 const ExamContext = createContext<ExamContextType>({} as ExamContextType);
@@ -102,6 +103,12 @@ export function ExamProvider({
             JSON.stringify(answers) ===
             JSON.stringify(data?.user_answer?.answers)
         );
+    };
+
+    const isCurrentQuestionLastQuestion = (): boolean => {
+        const currentNumber = getCurrentQuestionNumber();
+
+        return currentNumber === questionSequences.length;
     };
 
     const getNextQuestion = async (): Promise<void> => {
@@ -209,9 +216,7 @@ export function ExamProvider({
     };
 
     const finishExam = async (): Promise<void> => {
-        const res = await finishExamMutation(worksheet as string);
-
-        console.log(res);
+        await finishExamMutation(worksheet as string);
 
         router.push(`/kelas/${id}`);
     };
@@ -243,7 +248,8 @@ export function ExamProvider({
             isLoadingAnswer,
             finishExam,
             expandTiles,
-            setExpandTiles
+            setExpandTiles,
+            isCurrentQuestionLastQuestion
         }),
         [
             is_subscribed,

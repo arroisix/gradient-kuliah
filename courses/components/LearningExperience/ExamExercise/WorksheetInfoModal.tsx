@@ -27,9 +27,40 @@ const WorksheetInfoModalContent = ({
     const questionSequence = data?.question_id_sequence;
     const worksheetId = data?.id;
 
+    console.log(data);
+
     return (
         <div className="p-4 w-full flex flex-col gap-4">
             <h5 className="text-2xl font-bold">{data?.exercise_name}</h5>
+            {data?.latest_exam_score && (
+                <div className="w-full flex justify-center items-center flex-col gap-2">
+                    <span className="font-body text-xl text-neutral-200">
+                        Skor Kamu
+                    </span>
+                    <div className="relative">
+                        <div
+                            className="radial-progress z-10"
+                            style={{
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                '--value': data?.latest_exam_score,
+                                '--size': '12rem'
+                            }}>
+                            <span className="font-bold text-7xl">
+                                {data?.latest_exam_score}
+                            </span>
+                        </div>
+                        <div className="w-48 h-48 rounded-full top-0 left-auto right-auto absolute border-[20px] border-neutral-500" />
+                    </div>
+                    {data?.latest_exam_score && (
+                        <h3 className="font-bold text-3xl text-center">
+                            {data?.latest_exam_score < data?.treshold_score
+                                ? 'Semangat, kamu pasti bisa!'
+                                : 'Mantap jiwa! 👍👍'}
+                        </h3>
+                    )}
+                </div>
+            )}
             <div className="flex gap-2 items-center">
                 <div className="rounded-full bg-[#121212] p-2">
                     <MdOutlineHelpCenter className="text-2xl" />
@@ -57,7 +88,7 @@ const WorksheetInfoModalContent = ({
                     </span>
                 </div>
             </div>
-            {data && (
+            {data && data.exam_available && (
                 <Button
                     variant="primary"
                     className="w-full text-center"
@@ -65,7 +96,18 @@ const WorksheetInfoModalContent = ({
                     href={`/kelas/${id}/belajar/latihan/${worksheetId}/${
                         (questionSequence as string[])[0] as string
                     }`}>
-                    Mulai tes
+                    {data.latest_exam_score ? 'Coba lagi' : 'Mulai tes'}
+                </Button>
+            )}
+            {data && !data.exam_available && (
+                <Button
+                    variant="primary"
+                    className="w-full text-center"
+                    disabled={isLoading || questionSequence?.length === 0}
+                    href={`/kelas/${id}/belajar/latihan/${worksheetId}/${
+                        (questionSequence as string[])[0] as string
+                    }`}>
+                    Lihat Pembahasan
                 </Button>
             )}
         </div>
