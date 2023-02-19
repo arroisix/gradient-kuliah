@@ -1,6 +1,7 @@
 import Button from 'commons/components/elements/Button';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { MdInfoOutline } from 'react-icons/md';
+import SubscribeButton from './SubscribeButton';
 
 interface HeroCommonProps {
     title?: string;
@@ -57,12 +58,7 @@ const HeroSection = ({
                         Lanjut Belajar
                     </Button>
                 ) : (
-                    <Button
-                        className="md:w-fit text-center mt-4"
-                        variant="primary"
-                        href={`/kelas/${slug}#benefit`}>
-                        Info Selengkapnya
-                    </Button>
+                    <SubscribeButton slug={slug} />
                 )}
                 {is_subscribed &&
                     (expiryDay <= 7 || new Date() <= new Date('2022-10-14')) &&
