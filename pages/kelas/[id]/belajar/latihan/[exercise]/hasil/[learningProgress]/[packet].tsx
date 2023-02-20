@@ -39,7 +39,7 @@ const Hasil = (): JSX.Element => {
 
     return (
         <LearnLayout hideNavbar>
-            <div className="p-32 w-full flex flex-col gap-4 items-center justify-center">
+            <div className="px-4 py-32 md:p-32 w-full flex flex-col gap-4 items-center justify-center">
                 <h5 className="text-2xl font-bold">{data?.exercise_name}</h5>
                 {(data?.latest_exam_score as number) >= 0 && (
                     <div className="w-full flex justify-center items-center flex-col gap-2">
