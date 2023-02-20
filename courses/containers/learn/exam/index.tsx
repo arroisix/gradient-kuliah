@@ -60,11 +60,13 @@ const ExamLearnContainer = (): JSX.Element => {
                     </div>
                 </header>
                 <div className="w-full p-4 md:px-32  md:pt-16 xl:pt-32 overflow-y-auto overflow-x-hidden h-[100vh] flex flex-col gap-4">
-                    {problemQuestion && (
-                        <MarkedTextContent
-                            content={problemQuestion?.question}
-                        />
-                    )}
+                    <div className="flex justify-center items-center">
+                        {problemQuestion && (
+                            <MarkedTextContent
+                                content={problemQuestion?.question}
+                            />
+                        )}
+                    </div>
                     <span className="font-thin text-neutral-300 font-body">
                         {problemQuestion?.type_name === 'multiple_answer'
                             ? 'Pilih semua jawaban yang paling tepat'
@@ -76,6 +78,7 @@ const ExamLearnContainer = (): JSX.Element => {
                                 (answer: ExamAnswer, index: number) => (
                                     <AnswerChoice
                                         {...answer}
+                                        questionType={problemQuestion.type_name}
                                         index={index}
                                         key={answer.id}
                                     />

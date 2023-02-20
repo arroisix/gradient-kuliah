@@ -22,7 +22,7 @@ const AnswerChoice = ({
 
     return (
         <button
-            className="flex gap-2 items-center w-full !font-body cursor-pointer text-left"
+            className="flex gap-3 items-center w-full !font-body cursor-pointer text-left"
             disabled={isExamFinished}
             onClick={() => pickAnswer({ id, answer, is_answer })}>
             {(questionType === 'multiple_choice' || isExamFinished) && (
