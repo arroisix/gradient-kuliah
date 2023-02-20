@@ -25,7 +25,7 @@ interface ExamContextType {
     answers: ExamAnswer[];
     pickAnswer: (answer: ExamAnswer) => void;
     isAnswerPicked: (answer_id: string) => boolean;
-    submitAnswer: () => Promise<void>;
+    submitAnswer: (preventChangeRoute?: boolean) => Promise<void>;
     questionSequences: string[];
     getCurrentQuestionNumber: (questionId?: string) => number;
     getNextQuestion: () => void;
@@ -228,24 +228,32 @@ export function ExamProvider({
         }
     };
 
-    const submitAnswer = async (): Promise<void> => {
-        await submitAnswerMutation({
-            worksheet_id: worksheet as string,
-            question_id: question as string,
-            answers: answers.map((answer: ExamAnswer) => answer.id)
-        });
-
-        const questionIndex = questionSequences?.indexOf(question as string);
-
-        if (questionIndex + 1 >= questionSequences.length) {
-            return undefined;
+    const submitAnswer = async (
+        preventChangeRoute?: boolean
+    ): Promise<void> => {
+        if (answers.length > 0) {
+            await submitAnswerMutation({
+                worksheet_id: worksheet as string,
+                question_id: question as string,
+                answers: answers.map((answer: ExamAnswer) => answer.id)
+            });
         }
 
-        router.push(
-            `/kelas/${id}/belajar/latihan/${exercise}/${worksheet as string}/${
-                questionSequences[questionIndex + 1]
-            }`
-        );
+        if (!!preventChangeRoute) {
+            const questionIndex = questionSequences?.indexOf(
+                question as string
+            );
+
+            if (questionIndex + 1 >= questionSequences.length) {
+                return undefined;
+            }
+
+            router.push(
+                `/kelas/${id}/belajar/latihan/${exercise}/${
+                    worksheet as string
+                }/${questionSequences[questionIndex + 1]}`
+            );
+        }
     };
 
     const finishExam = async (): Promise<void> => {

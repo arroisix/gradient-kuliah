@@ -33,7 +33,7 @@ const ExamLearnContainer = (): JSX.Element => {
     };
 
     const exitSafely = async (): Promise<void> => {
-        await submitAnswer();
+        await submitAnswer(true);
 
         router.push(`/kelas/${id as string}`);
     };
