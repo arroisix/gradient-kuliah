@@ -80,7 +80,8 @@ const Hasil = (): JSX.Element => {
                         </h5>
                         <span className="text-neutral-400">
                             Pastikan minimal skor kamu adalah{' '}
-                            {data?.treshold_score} agar lulus tes ini
+                            {data?.treshold_score} agar lulus tes ini dan bisa
+                            melihat pembahasan soal
                         </span>
                     </div>
                 </div>
