@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
 import Lock from 'commons/components/elements/Icons/Lock';
-import { MdOutlineBook } from 'react-icons/md';
+import { MdTask } from 'react-icons/md';
 import { ContentAccordionItemProps } from './ContentSection';
 import Modal from 'commons/components/modules/Modal';
 import { useState } from 'react';
@@ -44,7 +44,7 @@ const ExerciseAccordionItem = ({
                 }`}>
                 <div>
                     {subchapter?.exercise?.is_free || isSubscribed ? (
-                        <MdOutlineBook className="text-xl" />
+                        <MdTask className="text-xl" />
                     ) : (
                         <Lock />
                     )}

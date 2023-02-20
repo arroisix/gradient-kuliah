@@ -7,31 +7,37 @@ interface AnswerChoiceProps {
     index: number;
     id: string;
     isPicked?: boolean;
+    questionType?: QuestionType;
 }
 
 const AnswerChoice = ({
     id,
     answer,
     index,
-    is_answer
+    is_answer,
+    questionType
 }: AnswerChoiceProps): JSX.Element => {
-    const { pickAnswer, isAnswerPicked } = useExam();
+    const { pickAnswer, isAnswerPicked, isExamFinished, getAnswerChoiceColor } =
+        useExam();
 
     return (
         <button
             className="flex gap-2 items-center w-full !font-body cursor-pointer text-left"
+            disabled={isExamFinished}
             onClick={() => pickAnswer({ id, answer, is_answer })}>
-            <span className="text-2xl">{String.fromCharCode(index + 65)}</span>
+            {(questionType === 'multiple_choice' || isExamFinished) && (
+                <span className="text-2xl">
+                    {String.fromCharCode(index + 65)}
+                </span>
+            )}
             <div
-                className={`p-5 rounded-lg ${
-                    isAnswerPicked(id)
-                        ? 'bg-white'
-                        : 'bg-[#1D1D1D] hover:bg-[#323232]'
-                } w-full`}>
+                className={`p-5 rounded-lg ${getAnswerChoiceColor(id)} w-full`}>
                 <MarkedTextContent
                     content={answer}
                     className={
-                        isAnswerPicked(id) ? '!text-black' : '!text-white'
+                        isAnswerPicked(id) && !isExamFinished
+                            ? '!text-black'
+                            : '!text-white'
                     }
                 />
             </div>

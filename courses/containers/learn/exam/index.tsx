@@ -4,23 +4,21 @@ import Spinner from 'commons/components/elements/Spinner';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import AnswerChoice from 'courses/components/LearningExperience/ExamExercise/AnswerChoice';
 import ExamQuestionNumber from 'courses/components/LearningExperience/ExamExercise/ExamQuestionNumber';
-import QuestionTile from 'courses/components/LearningExperience/ExamExercise/QuestionTile';
+import ListQuestionTile from 'courses/components/LearningExperience/ExamExercise/ListQuestionTile';
 import { useExam } from 'courses/contexts/ExamProvider';
 import { useRouter } from 'next/router';
-import { MdClose } from 'react-icons/md';
 
 const ExamLearnContainer = (): JSX.Element => {
     const {
         problemQuestion,
         answers,
         submitAnswer,
-        questionSequences,
         isCurrentAnswerSameWithSavedAnswer,
         isLoadingAnswer,
         finishExam,
         expandTiles,
-        setExpandTiles,
-        isCurrentQuestionLastQuestion
+        isCurrentQuestionLastQuestion,
+        isExamFinished
     } = useExam();
     const { isDesktopBreakpoints } = useWindowBreakpoints();
     const router = useRouter();
@@ -30,7 +28,7 @@ const ExamLearnContainer = (): JSX.Element => {
         await submitAnswer();
 
         if (isCurrentQuestionLastQuestion()) {
-            finishExam();
+            await finishExam();
         }
     };
 
@@ -61,12 +59,17 @@ const ExamLearnContainer = (): JSX.Element => {
                         )}
                     </div>
                 </header>
-                <div className="w-full p-4 md:px-32  md:pt-16 xl:pt-32 overflow-y-auto overflow-x-hidden h-[100vh]">
+                <div className="w-full p-4 md:px-32  md:pt-16 xl:pt-32 overflow-y-auto overflow-x-hidden h-[100vh] flex flex-col gap-4">
                     {problemQuestion && (
                         <MarkedTextContent
                             content={problemQuestion?.question}
                         />
                     )}
+                    <span className="font-thin text-neutral-300 font-body">
+                        {problemQuestion?.type_name === 'multiple_answer'
+                            ? 'Pilih semua jawaban yang paling tepat'
+                            : 'Pilih satu jawaban yang paling tepat'}
+                    </span>
                     {problemQuestion && (
                         <div className="w-full flex flex-col gap-4 my-4">
                             {problemQuestion.answers.map(
@@ -81,7 +84,8 @@ const ExamLearnContainer = (): JSX.Element => {
                         </div>
                     )}
                     {answers.length > 0 &&
-                        !isCurrentAnswerSameWithSavedAnswer() && (
+                        !isCurrentAnswerSameWithSavedAnswer() &&
+                        !isExamFinished && (
                             <div className="w-full flex justify-center items-center mt-8">
                                 <Button
                                     variant="primary"
@@ -97,38 +101,21 @@ const ExamLearnContainer = (): JSX.Element => {
                                 </Button>
                             </div>
                         )}
+                    {problemQuestion?.solution && isExamFinished && (
+                        <div className="pb-8">
+                            <h3 className="text-lg font-bold font-body">
+                                Pembahasan
+                            </h3>
+                            {problemQuestion?.solution && (
+                                <MarkedTextContent
+                                    content={problemQuestion?.solution}
+                                />
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
-            {expandTiles && (
-                <div
-                    className={`transition-all ${
-                        expandTiles
-                            ? 'w-screen md:w-1/3 min-w-[350px] relative opacity-100'
-                            : 'w-0 hidden opacity-0'
-                    } h-[100vh] bg-[#1D1D1D] p-4 flex flex-col gap-4 items-center`}>
-                    <h1 className="text-2xl font-bold text-center">
-                        Daftar Soal
-                    </h1>
-                    <MdClose
-                        onClick={() => setExpandTiles(false)}
-                        className="absolute top-4 right-4 text-3xl cursor-pointer"
-                    />
-                    <ExamQuestionNumber />
-                    <div className="grid grid-cols-3 gap-6 h-[75vh]">
-                        {questionSequences.map((question: string) => (
-                            <QuestionTile question={question} key={question} />
-                        ))}
-                    </div>
-                    <div className="w-full items-center justify-center">
-                        <Button
-                            variant="custom"
-                            onClick={finishExam}
-                            className="w-full text-red-500 border border-red-500">
-                            Selesaikan Latihan
-                        </Button>
-                    </div>
-                </div>
-            )}
+            {expandTiles && <ListQuestionTile />}
         </section>
     );
 };

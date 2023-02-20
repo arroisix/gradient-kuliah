@@ -14,6 +14,7 @@ import {
     useMemo,
     useState
 } from 'react';
+import { toast } from 'react-toastify';
 
 interface ExamContextType {
     is_subscribed?: boolean;
@@ -31,12 +32,15 @@ interface ExamContextType {
     getPrevQuestion: () => void;
     goToQuestion: (questionId: string) => void;
     isQuestionHasAnswer: (questionId: string) => boolean;
+    getColorQuestionTile: (questionId: string) => string;
     isCurrentAnswerSameWithSavedAnswer: () => boolean;
     isLoadingAnswer: boolean;
     finishExam: () => Promise<void>;
     expandTiles: boolean;
+    isExamFinished: boolean;
     setExpandTiles: (status: boolean) => void;
     isCurrentQuestionLastQuestion: () => boolean;
+    getAnswerChoiceColor: (answerId: string) => string;
 }
 
 const ExamContext = createContext<ExamContextType>({} as ExamContextType);
@@ -47,7 +51,7 @@ export function ExamProvider({
     children: ReactNode;
 }): JSX.Element {
     const router = useRouter();
-    const { id, worksheet, question } = router.query;
+    const { id, exercise, worksheet, question } = router.query;
     const { is_subscribed, learning_progress_id } = useCourseSubscription(
         id as string
     );
@@ -57,21 +61,28 @@ export function ExamProvider({
     const { data } = useGetExamQuestionQuery(
         {
             worksheet_id: worksheet as string,
-            question_id: question as string
+            question_id: question as string,
+            exercise_id: exercise as string
         },
         {
             skip:
                 question === undefined ||
                 question === null ||
+                exercise === undefined ||
+                exercise === null ||
                 worksheet === undefined ||
                 worksheet === null,
             refetchOnMountOrArgChange: true
         }
     );
     const { data: questionSequence } = useGetExamListQuestionSequenceQuery(
-        worksheet as string,
+        { exerciseId: exercise as string, worksheetId: worksheet as string },
         {
-            skip: worksheet === undefined || worksheet === null
+            skip:
+                worksheet === undefined ||
+                worksheet === null ||
+                exercise === undefined ||
+                exercise === null
         }
     );
     const problemQuestion = data?.question;
@@ -79,6 +90,7 @@ export function ExamProvider({
         questionSequence?.questions.map(
             (question: ExamQuestionSequence) => question.id
         ) ?? [];
+    const isExamFinished = questionSequence?.is_finished ?? false;
     const [answers, setAnswer] = useState<ExamAnswer[]>([]);
     const [expandTiles, setExpandTiles] = useState(false);
 
@@ -126,7 +138,7 @@ export function ExamProvider({
         }
 
         router.push(
-            `/kelas/${id}/belajar/latihan/${worksheet as string}/${
+            `/kelas/${id}/belajar/latihan/${exercise}/${worksheet as string}/${
                 questionSequences[questionIndex + 1]
             }`
         );
@@ -147,7 +159,7 @@ export function ExamProvider({
         }
 
         router.push(
-            `/kelas/${id}/belajar/latihan/${worksheet as string}/${
+            `/kelas/${id}/belajar/latihan/${exercise}/${worksheet as string}/${
                 questionSequences[questionIndex - 1]
             }`
         );
@@ -162,7 +174,9 @@ export function ExamProvider({
             });
         }
         router.push(
-            `/kelas/${id}/belajar/latihan/${worksheet as string}/${questionId}`
+            `/kelas/${id}/belajar/latihan/${exercise}/${
+                worksheet as string
+            }/${questionId}`
         );
     };
 
@@ -177,6 +191,25 @@ export function ExamProvider({
         }
 
         return false;
+    };
+
+    const getColorQuestionTile = (questionId: string): string => {
+        const questionSeq =
+            questionSequence?.questions.filter(
+                (question: ExamQuestionSequence) => question.id === questionId
+            ) ?? [];
+
+        const question = questionSeq[0];
+
+        if (question.is_correct !== null) {
+            if (question.is_correct) {
+                return 'bg-green-500 hover:bg-green-400 text-white';
+            }
+
+            return 'bg-red-500 hover:bg-red-400 text-white';
+        }
+
+        return 'bg-white text-black';
     };
 
     const pickAnswer = (answer: ExamAnswer): void => {
@@ -209,16 +242,24 @@ export function ExamProvider({
         }
 
         router.push(
-            `/kelas/${id}/belajar/latihan/${worksheet as string}/${
+            `/kelas/${id}/belajar/latihan/${exercise}/${worksheet as string}/${
                 questionSequences[questionIndex + 1]
             }`
         );
     };
 
     const finishExam = async (): Promise<void> => {
-        await finishExamMutation(worksheet as string);
+        const res = await finishExamMutation(worksheet as string);
 
-        router.push(`/kelas/${id}`);
+        if (res) {
+            router.push(
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                `/kelas/${id}/belajar/latihan/${exercise}/hasil/${res?.data?.learning_progress_id}/${res?.data?.packet_id}`
+            );
+        } else {
+            toast.error('Gagal Menyelesaikan Tes');
+        }
     };
 
     const getCurrentQuestionNumber = (questionId?: string): number => {
@@ -227,6 +268,37 @@ export function ExamProvider({
         }
 
         return questionSequences?.indexOf(question as string) + 1;
+    };
+
+    const getAnswerChoiceColor = (answerId: string): string => {
+        const userAnswerFilter =
+            problemQuestion?.answers.filter(
+                (answer: ExamAnswer) => answer.id === answerId
+            ) ?? [];
+
+        if (userAnswerFilter?.length > 0) {
+            const userAnswer = userAnswerFilter[0];
+
+            if (userAnswer.is_answer !== null) {
+                if (userAnswer.is_answer) {
+                    return 'bg-green-500';
+                }
+
+                if (isAnswerPicked(answerId)) {
+                    return 'bg-red-500';
+                }
+            }
+        }
+
+        if (isAnswerPicked(answerId)) {
+            return 'bg-white';
+        }
+
+        if (isExamFinished) {
+            return '';
+        }
+
+        return 'bg-[#1D1D1D] hover:bg-[#323232]';
     };
 
     const memoedValue = useMemo(
@@ -249,7 +321,10 @@ export function ExamProvider({
             finishExam,
             expandTiles,
             setExpandTiles,
-            isCurrentQuestionLastQuestion
+            isCurrentQuestionLastQuestion,
+            getColorQuestionTile,
+            isExamFinished,
+            getAnswerChoiceColor
         }),
         [
             is_subscribed,
@@ -258,7 +333,8 @@ export function ExamProvider({
             answers,
             questionSequences,
             isLoadingAnswer,
-            expandTiles
+            expandTiles,
+            isExamFinished
         ]
     );
 

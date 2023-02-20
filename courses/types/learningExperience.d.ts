@@ -56,12 +56,14 @@ type ExamAnswer = {
     is_answer?: boolean | null;
 };
 
+type QuestionType = 'short_answer' | 'multiple_choice' | 'multiple_answer';
+
 type ExamQuestion = {
     id: string;
     question_code: string;
     question: string;
     solution: string;
-    type_name: 'short_answer' | 'multiple_choice' | 'multiple_answer';
+    type_name: QuestionType;
     answers: ExamAnswer[];
 };
 
@@ -92,6 +94,7 @@ interface ExamQuestionResponse {
 interface ExamQuestionInputData {
     question_id: string;
     worksheet_id: string;
+    exercise_id: string;
 }
 
 interface ExamAnswerInputData {
@@ -110,6 +113,7 @@ interface ExamAnswerResponse {
 
 interface ListQuestionSequenceResponse {
     questions: ExamQuestionSequence[];
+    is_finished: boolean;
 }
 
 interface FinishExamResponse {
@@ -118,4 +122,7 @@ interface FinishExamResponse {
     correct_answer: number;
     question_count: number;
     duration_taken: string;
+    packet_id: string;
+    worksheet_id: string;
+    learning_progress_id: string;
 }

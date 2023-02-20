@@ -96,15 +96,21 @@ export const learningExperienceApi = baseApi.injectEndpoints({
             ExamQuestionInputData
         >({
             query: (data: ExamQuestionInputData) => ({
-                url: `${LEARNING_EXPERIENCE_BASE_URL}exam-exercise/question/${data.worksheet_id}/${data.question_id}/`
+                url: `${LEARNING_EXPERIENCE_BASE_URL}exam-exercise/question/${data.exercise_id}/${data.worksheet_id}/${data.question_id}/`
             })
         }),
         getExamListQuestionSequence: builder.query<
             ListQuestionSequenceResponse,
-            string
+            { worksheetId: string; exerciseId: string }
         >({
-            query: (worksheetId: string) => ({
-                url: `${LEARNING_EXPERIENCE_BASE_URL}exam-exercise/list-question/${worksheetId}/`
+            query: ({
+                worksheetId,
+                exerciseId
+            }: {
+                worksheetId: string;
+                exerciseId: string;
+            }) => ({
+                url: `${LEARNING_EXPERIENCE_BASE_URL}exam-exercise/list-question/${exerciseId}/${worksheetId}/`
             }),
             providesTags: ['EXAM_QUESTION']
         }),
@@ -125,7 +131,8 @@ export const learningExperienceApi = baseApi.injectEndpoints({
             query: (worksheetId: string) => ({
                 url: `${LEARNING_EXPERIENCE_BASE_URL}exam-exercise/finish-exam/${worksheetId}/`,
                 method: 'POST'
-            })
+            }),
+            invalidatesTags: ['EXAM_QUESTION']
         })
     }),
     overrideExisting: false

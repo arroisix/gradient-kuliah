@@ -5,13 +5,14 @@ const QuestionTile = ({ question }: { question: string }): JSX.Element => {
         goToQuestion,
         getCurrentQuestionNumber,
         questionId,
-        isQuestionHasAnswer
+        isQuestionHasAnswer,
+        getColorQuestionTile
     } = useExam();
     return (
         <button
             className={`h-20 w-20 ${
                 isQuestionHasAnswer(question)
-                    ? 'bg-white text-black'
+                    ? getColorQuestionTile(question)
                     : 'bg-[#2C2C2C] hover:bg-[#373737]'
             } rounded-lg ${
                 questionId === question

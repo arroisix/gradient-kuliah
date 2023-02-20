@@ -27,8 +27,6 @@ const WorksheetInfoModalContent = ({
     const questionSequence = data?.question_id_sequence;
     const worksheetId = data?.id;
 
-    console.log(data);
-
     return (
         <div className="p-4 w-full flex flex-col gap-4">
             <h5 className="text-2xl font-bold">{data?.exercise_name}</h5>
@@ -93,7 +91,7 @@ const WorksheetInfoModalContent = ({
                     variant="primary"
                     className="w-full text-center"
                     disabled={isLoading || questionSequence?.length === 0}
-                    href={`/kelas/${id}/belajar/latihan/${worksheetId}/${
+                    href={`/kelas/${id}/belajar/latihan/${exercise_id}/${worksheetId}/${
                         (questionSequence as string[])[0] as string
                     }`}>
                     {data.latest_exam_score ? 'Coba lagi' : 'Mulai tes'}
@@ -104,7 +102,7 @@ const WorksheetInfoModalContent = ({
                     variant="primary"
                     className="w-full text-center"
                     disabled={isLoading || questionSequence?.length === 0}
-                    href={`/kelas/${id}/belajar/latihan/${worksheetId}/${
+                    href={`/kelas/${id}/belajar/latihan/${exercise_id}/${worksheetId}/${
                         (questionSequence as string[])[0] as string
                     }`}>
                     Lihat Pembahasan
