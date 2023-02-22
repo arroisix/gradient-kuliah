@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 
 const SubscribeButton = ({
     slug,
-    label = 'Akses Sekarang'
+    label = 'Gabung Sekarang'
 }: {
     slug: string;
     label?: string;
