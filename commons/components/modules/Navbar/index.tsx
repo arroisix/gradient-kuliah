@@ -1,14 +1,12 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-// import { AiOutlineArrowRight } from 'react-icons/ai';
 import { FaInstagram } from 'react-icons/fa';
 import {
     MdArrowDropDown,
-    MdClose,
+    MdArrowDropUp,
     MdHistory,
     MdLogout,
-    MdMenu,
     MdOutlineBook
 } from 'react-icons/md';
 import { useAuth } from 'authentication/contexts/AuthProvider';
@@ -22,18 +20,18 @@ import {
 } from 'authentication/redux/selectors/userSelector';
 import { removeUser } from 'authentication/redux/slices/userSlice';
 import Button from 'commons/components/elements/Button';
-// import CourseCard from 'src/courses/components/CourseCard';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 
 const Navbar = ({
     paymentPage,
     shouldTransparent
-}: // courses
-{
+}: {
     paymentPage: boolean;
     shouldTransparent: boolean;
     courses?: Course[];
 }): JSX.Element => {
     const { setModalAuthOpen } = useAuth();
+    const { isMobileBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const user = useSelector(getCurrentUser);
     const [isHovered, setHovered] = useState(false);
@@ -107,6 +105,8 @@ const Navbar = ({
         setProfileHovered(false);
     };
 
+    console.log(router.pathname);
+
     return (
         <header
             className={`fixed top-0 left-0 w-full z-20 ${computeBgColor()}`}
@@ -115,7 +115,7 @@ const Navbar = ({
             <div className="w-full px-4 md:px-8 py-4 flex items-center justify-between">
                 <Link href={'/'}>
                     <span className="text-2xl font-bold cursor-pointer font-[Urbanist]">
-                        Gradient
+                        {isMobileBreakpoints ? 'G' : 'Gradient'}
                     </span>
                 </Link>
                 {paymentPage ? (
@@ -213,43 +213,31 @@ const Navbar = ({
                         </div>
 
                         <div className="flex md:hidden text-3xl">
-                            {openMobile ? (
-                                <MdClose onClick={() => setOpenMobile(false)} />
+                            {!isAuthenticated ? (
+                                <nav
+                                    className="flex items-center text-base font-bold"
+                                    onClick={() => setModalAuthOpen(1)}
+                                    aria-hidden={true}
+                                    onMouseEnter={() => setHovered(false)}>
+                                    Masuk
+                                </nav>
                             ) : (
-                                <MdMenu onClick={() => setOpenMobile(true)} />
+                                <button
+                                    className="flex items-center text-base font-bold"
+                                    onClick={() => setOpenMobile(!openMobile)}>
+                                    {renderName(user.email, user.full_name)}
+                                    {openMobile ? (
+                                        <MdArrowDropUp />
+                                    ) : (
+                                        <MdArrowDropDown />
+                                    )}
+                                </button>
                             )}
                         </div>
                     </>
                 )}
             </div>
-
             {openMobile && <MobileNavbar closeMobile={setOpenMobile} />}
-
-            {/* {courses && (
-                <div
-                    className={`w-full px-8 py-4 bg-[#171717] flex justify-between ${
-                        isHovered ? 'block' : 'hidden'
-                    }`}>
-                    <div className="w-1/4">
-                        <h1 className="font-bold text-[4rem]">Kelas</h1>
-                    </div>
-                    <div className="w-3/4">
-                        <div className="w-full grid grid-cols-3 gap-4 justify-end">
-                            {courses?.map((course: Course) => (
-                                <CourseCard course={course} key={course.uuid} />
-                            ))}
-                        </div>
-                        <Link href={'/kelas'}>
-                            <div className="mt-4 flex items-center cursor-pointer">
-                                <span className="flex items-center font-bold text-white">
-                                    Lihat semua kelas
-                                </span>
-                                <AiOutlineArrowRight className="text-white ml-2" />
-                            </div>
-                        </Link>
-                    </div>
-                </div>
-            )} */}
         </header>
     );
 };

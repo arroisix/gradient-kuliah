@@ -71,17 +71,17 @@ type Chapter = {
     subchapters: SubChapter[];
     is_coming_soon_video: boolean;
     is_coming_soon_animation: boolean;
+    is_coming_soon_notebook: boolean;
 };
 
 type Notebook = {
     id: string;
     is_free: boolean;
+    is_public: boolean;
     title: string;
-    content: string;
     authors: Lecturer[];
     created_at: string | Date;
-    references: string;
-    thumbnail: string;
+    notebook_url: string;
 };
 
 type Video = {
