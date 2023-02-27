@@ -25,7 +25,7 @@ const ExamLearnContainer = (): JSX.Element => {
     const { id } = router.query;
 
     const submitUserAnswer = async (): Promise<void> => {
-        await submitAnswer();
+        await submitAnswer({ preventChangeRoute: false });
 
         if (isCurrentQuestionLastQuestion()) {
             await finishExam();
@@ -33,7 +33,7 @@ const ExamLearnContainer = (): JSX.Element => {
     };
 
     const exitSafely = async (): Promise<void> => {
-        await submitAnswer(true);
+        await submitAnswer({ preventChangeRoute: true });
 
         router.push(`/kelas/${id as string}`);
     };

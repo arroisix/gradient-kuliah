@@ -25,7 +25,11 @@ interface ExamContextType {
     answers: ExamAnswer[];
     pickAnswer: (answer: ExamAnswer) => void;
     isAnswerPicked: (answer_id: string) => boolean;
-    submitAnswer: (preventChangeRoute?: boolean) => Promise<void>;
+    submitAnswer: ({
+        preventChangeRoute
+    }: {
+        preventChangeRoute?: boolean;
+    }) => Promise<void>;
     questionSequences: string[];
     getCurrentQuestionNumber: (questionId?: string) => number;
     getNextQuestion: () => void;
@@ -228,9 +232,11 @@ export function ExamProvider({
         }
     };
 
-    const submitAnswer = async (
-        preventChangeRoute?: boolean
-    ): Promise<void> => {
+    const submitAnswer = async ({
+        preventChangeRoute = false
+    }: {
+        preventChangeRoute?: boolean;
+    }): Promise<void> => {
         if (answers.length > 0) {
             await submitAnswerMutation({
                 worksheet_id: worksheet as string,
@@ -239,7 +245,7 @@ export function ExamProvider({
             });
         }
 
-        if (!!preventChangeRoute) {
+        if (!preventChangeRoute) {
             const questionIndex = questionSequences?.indexOf(
                 question as string
             );
