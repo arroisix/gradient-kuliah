@@ -1,8 +1,9 @@
 import { useAuth } from 'authentication/contexts/AuthProvider';
+import { useLearning } from 'courses/contexts/LearningProvider';
 import usePublicCourseDetail from 'courses/hooks/usePublicCourseDetail';
 import { getAllNotebookChapter } from 'courses/utils';
 import { useRouter } from 'next/router';
-import { FaFile } from 'react-icons/fa';
+import { FaFile, FaLock } from 'react-icons/fa';
 
 const NotebookIndex = (): JSX.Element => {
     const router = useRouter();
@@ -10,6 +11,7 @@ const NotebookIndex = (): JSX.Element => {
     const { data } = usePublicCourseDetail(id as string);
     const notebook = getAllNotebookChapter(data?.chapters as Chapter[]);
     const { setModalAuthOpen } = useAuth();
+    const { is_subscribed } = useLearning();
 
     return (
         <section className="pt-[65px] flex flex-col md:flex-row relative md:overflow-hidden md:h-[100vh]">
@@ -22,7 +24,10 @@ const NotebookIndex = (): JSX.Element => {
                     <div className="w-full h-px bg-neutral-400" />
                 </div>
                 <div className="flex flex-col gap-4">
-                    {notebook.map((astro: Chapter) => (
+                    {notebook?.length === 0 && (
+                        <span>AstroNotes belum tersedia :(</span>
+                    )}
+                    {notebook?.map((astro: Chapter) => (
                         <div key={astro.id}>
                             <h2 className="text-2xl font-bold mb-4">
                                 {astro.chapter_name}
@@ -37,7 +42,13 @@ const NotebookIndex = (): JSX.Element => {
                                                 href={
                                                     sub?.notebook?.notebook_url
                                                 }>
-                                                <FaFile />
+                                                {sub.notebook.is_free ? (
+                                                    <FaFile />
+                                                ) : is_subscribed ? (
+                                                    <FaFile />
+                                                ) : (
+                                                    <FaLock />
+                                                )}
                                                 {sub.subchapter_name}
                                             </a>
                                         );

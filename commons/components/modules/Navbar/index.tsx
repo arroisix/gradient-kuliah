@@ -21,6 +21,8 @@ import {
 import { removeUser } from 'authentication/redux/slices/userSlice';
 import Button from 'commons/components/elements/Button';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
+import { useGetLandingCourseListContentQuery } from 'courses/redux/api/publicCourseApi';
+import { BiPlayCircle } from 'react-icons/bi';
 
 const Navbar = ({
     paymentPage,
@@ -40,8 +42,17 @@ const Navbar = ({
     const [openMobile, setOpenMobile] = useState(false);
     const { height } = useWindowSize();
     const router = useRouter();
+    const { id } = router.query;
     const dispatch = useDispatch();
-
+    const { data: content } = useGetLandingCourseListContentQuery(
+        id as string,
+        {
+            skip:
+                id === null ||
+                id === undefined ||
+                !router.pathname.includes('kelas/[id]/')
+        }
+    );
     const [scrollPosition, setScrollPosition] = useState(0);
     const handleScroll = (): void => {
         const position = window.pageYOffset;
@@ -105,19 +116,56 @@ const Navbar = ({
         setProfileHovered(false);
     };
 
-    console.log(router.pathname);
-
     return (
         <header
             className={`fixed top-0 left-0 w-full z-20 ${computeBgColor()}`}
             onMouseEnter={() => setNavbarHovered(true)}
             onMouseLeave={onMouseLeaveNavbar}>
             <div className="w-full px-4 md:px-8 py-4 flex items-center justify-between">
-                <Link href={'/'}>
-                    <span className="text-2xl font-bold cursor-pointer font-[Urbanist]">
-                        {isMobileBreakpoints ? 'G' : 'Gradient'}
-                    </span>
-                </Link>
+                <div className="flex gap-4">
+                    <Link href={'/'}>
+                        <span className="text-2xl font-bold cursor-pointer font-[Urbanist]">
+                            {isMobileBreakpoints ? 'G' : 'Gradient'}
+                        </span>
+                    </Link>
+                    {((isMobileBreakpoints &&
+                        router.pathname.includes('kelas/[id]/astronotes')) ||
+                        (!isMobileBreakpoints &&
+                            router.pathname.includes('kelas/[id]/'))) &&
+                        content?.data &&
+                        content?.data.length > 0 &&
+                        content?.data[0].subchapters.length > 0 && (
+                            <Button
+                                className="bg-[#C4B9FF] flex gap-1 items-center text-[#5F2BCE] transition ease-in hover:bg-gradient-to-b hover:from-[#DD837A] hover:to-[#AB8EEC] hover:text-white"
+                                size="extraSmall"
+                                variant="primary"
+                                href={`/kelas/${id}/belajar/video/${content?.data[0].id}/${content?.data[0].subchapters[0].id}`}>
+                                <>
+                                    <BiPlayCircle className="text-xl" />
+                                    <span className="font-bold">VIDEO</span>
+                                </>
+                            </Button>
+                        )}
+                    {((isMobileBreakpoints &&
+                        router.pathname.includes('kelas/[id]/belajar')) ||
+                        (!isMobileBreakpoints &&
+                            router.pathname.includes('kelas/[id]/'))) && (
+                        <Button
+                            className="bg-[#C4B9FF] flex gap-1 items-center text-[#5F2BCE] transition ease-in hover:bg-gradient-to-b hover:from-[#DD837A] hover:to-[#AB8EEC] hover:text-white"
+                            size="extraSmall"
+                            variant="primary"
+                            href={`/kelas/${id}/astronotes`}>
+                            <>
+                                <img
+                                    src="https://storage.googleapis.com/gradient-asset/assets/astronotes.png"
+                                    alt="astronotes"
+                                    className="h-5 w-5"
+                                />
+                                <span className="font-bold">AstroNotes</span>
+                            </>
+                        </Button>
+                    )}
+                </div>
                 {paymentPage ? (
                     <Button
                         variant="primary"

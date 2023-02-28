@@ -1,11 +1,11 @@
 import { useRouter } from 'next/router';
-import { BsPlayCircle } from 'react-icons/bs';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
 import Lock from 'commons/components/elements/Icons/Lock';
 import { ContentAccordionItemProps } from './ContentSection';
+import { BiPlayCircle } from 'react-icons/bi';
 
 const VideoAccordionItem = ({
     subchapter,
@@ -48,7 +48,7 @@ const VideoAccordionItem = ({
             }`}>
             <div>
                 {subchapter?.video?.is_free || isSubscribed ? (
-                    <BsPlayCircle className="text-xl" />
+                    <BiPlayCircle className="text-xl" />
                 ) : (
                     <Lock />
                 )}
