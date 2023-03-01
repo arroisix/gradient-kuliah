@@ -19,6 +19,7 @@ import HeroPTSLSection from './PTSL/HeroPTSLSection';
 import PosterKalkulus1Section from './Kalkulus1/PosterKalkulus1Section';
 import BenefitPTSLSection from './PTSL/BenefitPTSLSection';
 import PriceHighlightPTSLSection from './PTSL/PriceHighlightPTSLSection';
+import PerCourseLandingPage from '../PerCourseLandingPage';
 
 const COMPONENT_DICTIONARY: { [key in LandingPageSectionKey]: JSX.Element } = {
     hero: <HeroSection slug="dummy" />,
@@ -90,13 +91,14 @@ const LandingPageOrchestrator = ({ id }: { id: string }): JSX.Element => {
 
     return (
         <main>
-            {course?.configuration?.landing_page_section.map(
+            {/* {course?.configuration?.landing_page_section.map(
                 (section: LandingPageSection) =>
                     cloneElement(COMPONENT_DICTIONARY[section.key], {
                         ...section,
                         slug: id
                     })
-            )}
+            )} */}
+            <PerCourseLandingPage />
         </main>
     );
 };
