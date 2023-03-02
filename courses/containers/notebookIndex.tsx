@@ -3,6 +3,7 @@ import { useLearning } from 'courses/contexts/LearningProvider';
 import usePublicCourseDetail from 'courses/hooks/usePublicCourseDetail';
 import { getAllNotebookChapter } from 'courses/utils';
 import { useRouter } from 'next/router';
+import { posthog } from 'posthog-js';
 import { FaFile, FaLock } from 'react-icons/fa';
 
 const NotebookIndex = (): JSX.Element => {
@@ -37,6 +38,19 @@ const NotebookIndex = (): JSX.Element => {
                                     if (sub.notebook?.is_public) {
                                         return (
                                             <a
+                                                onClick={() =>
+                                                    posthog.capture(
+                                                        `Click Astronotes Link`,
+                                                        {
+                                                            Subchapter:
+                                                                sub.subchapter_name,
+                                                            Chapter:
+                                                                astro.chapter_name,
+                                                            URL: sub?.notebook
+                                                                ?.notebook_url
+                                                        }
+                                                    )
+                                                }
                                                 className="text-blue-400 hover:underline hover:text-blue-500 cursor-pointer flex items-center gap-2"
                                                 key={sub.id}
                                                 href={
@@ -58,7 +72,20 @@ const NotebookIndex = (): JSX.Element => {
                                         <button
                                             className="text-blue-400 hover:underline hover:text-blue-500 cursor-pointer flex items-center gap-2"
                                             key={sub.id}
-                                            onClick={() => setModalAuthOpen(1)}>
+                                            onClick={() => {
+                                                posthog.capture(
+                                                    `Click Astronotes Link`,
+                                                    {
+                                                        Subchapter:
+                                                            sub.subchapter_name,
+                                                        Chapter:
+                                                            astro.chapter_name,
+                                                        URL: sub?.notebook
+                                                            ?.notebook_url
+                                                    }
+                                                );
+                                                setModalAuthOpen(1);
+                                            }}>
                                             <FaFile />
                                             {sub.subchapter_name}
                                         </button>
