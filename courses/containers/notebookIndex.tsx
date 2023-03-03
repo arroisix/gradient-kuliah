@@ -19,17 +19,17 @@ const NotebookIndex = (): JSX.Element => {
             return (
                 <div className="w-full flex flex-col gap-4">
                     <div className="w-full flex flex-col gap-2">
-                        <div className="p-4 w-96 bg-neutral-600 animate-pulse rounded-md" />
+                        <div className="p-4 w-72 bg-neutral-600 animate-pulse rounded-md" />
                         <div className="p-2 w-64 bg-neutral-600 animate-pulse rounded-md" />
                         <div className="p-2 w-64 bg-neutral-600 animate-pulse rounded-md" />
                     </div>
                     <div className="w-full flex flex-col gap-2">
-                        <div className="p-4 w-96 bg-neutral-600 animate-pulse rounded-md" />
+                        <div className="p-4 w-72 bg-neutral-600 animate-pulse rounded-md" />
                         <div className="p-2 w-64 bg-neutral-600 animate-pulse rounded-md" />
                         <div className="p-2 w-64 bg-neutral-600 animate-pulse rounded-md" />
                     </div>
                     <div className="w-full flex flex-col gap-2">
-                        <div className="p-4 w-96 bg-neutral-600 animate-pulse rounded-md" />
+                        <div className="p-4 w-72 bg-neutral-600 animate-pulse rounded-md" />
                         <div className="p-2 w-64 bg-neutral-600 animate-pulse rounded-md" />
                         <div className="p-2 w-64 bg-neutral-600 animate-pulse rounded-md" />
                     </div>
