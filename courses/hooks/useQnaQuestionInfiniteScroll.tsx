@@ -14,7 +14,7 @@ const useQnaQuestionInfiniteScroll =
         const { data: allQuestionData, isLoading: isAllLoading } =
             useListPostQuestionQuery(
                 {
-                    video_id: video.id,
+                    video_id: video?.id,
                     page: 1
                 },
                 { skip: !video }
