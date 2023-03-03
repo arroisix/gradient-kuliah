@@ -260,15 +260,22 @@ const Navbar = ({
                             )}
                         </div>
 
-                        <div className="flex md:hidden text-3xl">
+                        <div className="flex md:hidden text-3xl gap-4">
                             {!isAuthenticated ? (
-                                <nav
-                                    className="flex items-center text-base font-bold"
-                                    onClick={() => setModalAuthOpen(1)}
-                                    aria-hidden={true}
-                                    onMouseEnter={() => setHovered(false)}>
-                                    Masuk
-                                </nav>
+                                <>
+                                    <Link href="/kelas">
+                                        <nav className="flex items-center text-base font-bold">
+                                            Kelas
+                                        </nav>
+                                    </Link>
+                                    <nav
+                                        className="flex items-center text-base font-bold"
+                                        onClick={() => setModalAuthOpen(1)}
+                                        aria-hidden={true}
+                                        onMouseEnter={() => setHovered(false)}>
+                                        Masuk
+                                    </nav>
+                                </>
                             ) : (
                                 <button
                                     className="flex items-center text-base font-bold"
