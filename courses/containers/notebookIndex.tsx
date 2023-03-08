@@ -14,8 +14,6 @@ const NotebookIndex = (): JSX.Element => {
     const { setModalAuthOpen, isAuthenticated } = useAuth();
     const { is_subscribed } = useLearning();
 
-    console.log(data);
-
     const renderNotebook = (): JSX.Element => {
         if (loading) {
             return (
@@ -40,7 +38,7 @@ const NotebookIndex = (): JSX.Element => {
         }
 
         if (!loading && notebook?.length === 0) {
-            <span>AstroNotes belum tersedia :(</span>;
+            return <span>AstroNotes belum tersedia :(</span>;
         }
 
         return (

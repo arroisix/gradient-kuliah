@@ -45,6 +45,7 @@ type Course = {
     price?: number;
     discount?: number;
     is_coming_soon?: boolean;
+    is_only_notebook?: boolean;
 };
 
 type Lecturer = {
