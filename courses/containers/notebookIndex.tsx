@@ -1,6 +1,6 @@
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import { useLearning } from 'courses/contexts/LearningProvider';
-import usePublicCourseDetail from 'courses/hooks/usePublicCourseDetail';
+import usePublicCourseNotebook from 'courses/hooks/usePublicCourseNotebook';
 import { getAllNotebookChapter } from 'courses/utils';
 import { useRouter } from 'next/router';
 import { posthog } from 'posthog-js';
@@ -9,10 +9,12 @@ import { FaFile, FaLock } from 'react-icons/fa';
 const NotebookIndex = (): JSX.Element => {
     const router = useRouter();
     const { id } = router.query;
-    const { data, loading } = usePublicCourseDetail(id as string);
+    const { data, loading } = usePublicCourseNotebook(id as string);
     const notebook = getAllNotebookChapter(data?.chapters as Chapter[]);
     const { setModalAuthOpen, isAuthenticated } = useAuth();
     const { is_subscribed } = useLearning();
+
+    console.log(data);
 
     const renderNotebook = (): JSX.Element => {
         if (loading) {
