@@ -26,10 +26,12 @@ const ListQuestionTile = (): JSX.Element => {
                 className="absolute top-4 right-4 text-3xl cursor-pointer"
             />
             <ExamQuestionNumber />
-            <div className="grid grid-cols-3 gap-6 h-[75vh]">
-                {questionSequences.map((question: string) => (
-                    <QuestionTile question={question} key={question} />
-                ))}
+            <div className="h-[75vh] overflow-y-auto">
+                <div className="grid grid-cols-3 gap-6">
+                    {questionSequences.map((question: string) => (
+                        <QuestionTile question={question} key={question} />
+                    ))}
+                </div>
             </div>
             {!isExamFinished && (
                 <div className="w-full items-center justify-center">
