@@ -79,6 +79,7 @@ type Notebook = {
     id: string;
     is_free: boolean;
     is_public: boolean;
+    notion_id: string;
     title: string;
     authors: Lecturer[];
     created_at: string | Date;
@@ -166,3 +167,8 @@ type Packet = {
         info: string;
     };
 };
+
+interface NotebookSlugResponse {
+    notionId: string;
+    courseSlug: string;
+}

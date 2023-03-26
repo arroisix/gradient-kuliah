@@ -26,11 +26,13 @@ import { BiPlayCircle } from 'react-icons/bi';
 
 const Navbar = ({
     paymentPage,
-    shouldTransparent
+    shouldTransparent,
+    lightMode
 }: {
     paymentPage: boolean;
     shouldTransparent: boolean;
     courses?: Course[];
+    lightMode?: boolean;
 }): JSX.Element => {
     const { setModalAuthOpen } = useAuth();
     const { isMobileBreakpoints } = useWindowBreakpoints();
@@ -40,6 +42,10 @@ const Navbar = ({
     const [isNavbarHovered, setNavbarHovered] = useState(false);
     const [isProfileHovered, setProfileHovered] = useState(false);
     const [openMobile, setOpenMobile] = useState(false);
+    const pickedColorScheme = {
+        bgColor: lightMode ? 'bg-white' : 'bg-[#171717]',
+        color: lightMode ? 'text-black' : 'text-white'
+    };
     const { height } = useWindowSize();
     const router = useRouter();
     const { id } = router.query;
@@ -69,7 +75,7 @@ const Navbar = ({
 
     const computeBgColor = (): string => {
         if (openMobile) {
-            return 'bg-[#171717]';
+            return lightMode ? 'bg-white shadow-md text-black' : 'bg-[#171717]';
         }
 
         if (shouldTransparent) {
@@ -80,10 +86,10 @@ const Navbar = ({
         }
 
         if (paymentPage) {
-            return 'bg-[#171717]';
+            return lightMode ? 'bg-white shadow-md' : 'bg-[#171717]';
         }
 
-        return 'bg-[#171717]';
+        return lightMode ? 'bg-white text-black shadow-md' : 'bg-[#171717]';
     };
 
     const onMouseLeaveNavbar = (): void => {
@@ -200,13 +206,16 @@ const Navbar = ({
                                         <MdArrowDropDown />
                                     </span>
                                     <div
-                                        className={`px-8 py-4 min-w-[250px] top-10 right-0 absolute rounded-b-md bg-[#171717] ${
+                                        className={`px-8 py-4 min-w-[250px] top-10 right-0 absolute shadow-md rounded-b-md ${
+                                            pickedColorScheme.bgColor
+                                        } ${pickedColorScheme.color} ${
                                             isProfileHovered
                                                 ? 'block'
                                                 : 'hidden'
                                         }`}>
                                         <Link href={'/transaksi'}>
-                                            <div className="flex text-white hover:text-accent-blue font-normal w-full items-center mb-4">
+                                            <div
+                                                className={`flex ${pickedColorScheme.color} hover:text-accent-blue font-normal w-full items-center mb-4`}>
                                                 <div>
                                                     <MdHistory className="text-2xl" />
                                                 </div>
@@ -221,7 +230,8 @@ const Navbar = ({
                                             </div>
                                         </Link>
                                         <Link href={'/kelas/?flag=kelasku'}>
-                                            <div className="flex text-white hover:text-accent-blue  font-normal w-full items-center mb-4">
+                                            <div
+                                                className={`flex ${pickedColorScheme.color} hover:text-accent-blue  font-normal w-full items-center mb-4`}>
                                                 <div>
                                                     <MdOutlineBook className="text-2xl" />
                                                 </div>
@@ -292,7 +302,12 @@ const Navbar = ({
                     </>
                 )}
             </div>
-            {openMobile && <MobileNavbar closeMobile={setOpenMobile} />}
+            {openMobile && (
+                <MobileNavbar
+                    closeMobile={setOpenMobile}
+                    lightMode={lightMode}
+                />
+            )}
         </header>
     );
 };

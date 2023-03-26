@@ -10,6 +10,7 @@ interface LayoutProps {
     shouldTransparent?: boolean;
     courses?: Course[];
     hideNavbar?: boolean;
+    lightMode?: boolean;
 }
 
 const LearnLayout = ({
@@ -17,7 +18,8 @@ const LearnLayout = ({
     paymentPage,
     shouldTransparent,
     courses,
-    hideNavbar
+    hideNavbar,
+    lightMode
 }: LayoutProps): JSX.Element => {
     const {
         isModalAuthOpen,
@@ -30,6 +32,7 @@ const LearnLayout = ({
         <div className="min-h-screen w-screen bg-neutral-1000 relative text-white">
             {!hideNavbar && (
                 <Navbar
+                    lightMode={lightMode}
                     paymentPage={paymentPage ?? false}
                     shouldTransparent={shouldTransparent ?? false}
                     courses={courses}

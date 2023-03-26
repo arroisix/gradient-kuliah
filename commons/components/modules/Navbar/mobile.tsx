@@ -5,20 +5,29 @@ import { useDispatch } from 'react-redux';
 
 interface MobileNavbarProps {
     closeMobile: (status: boolean) => void;
+    lightMode?: boolean;
 }
 
-const MobileNavbar = ({ closeMobile }: MobileNavbarProps): JSX.Element => {
+const MobileNavbar = ({
+    closeMobile,
+    lightMode
+}: MobileNavbarProps): JSX.Element => {
     const dispatch = useDispatch();
 
     return (
         <>
             <div
-                className={`w-full p-4 bg-[#171717] flex justify-between md:hidden`}>
+                className={`w-full p-4 ${
+                    lightMode ? 'bg-white' : 'bg-[#171717]'
+                } flex justify-between md:hidden`}>
                 <div className="w-full">
                     <div className="w-full">
                         <div className="pb-4">
                             <Link href={'/transaksi'}>
-                                <div className="flex text-white hover:text-accent-blue font-normal w-full items-center mb-4">
+                                <div
+                                    className={`flex ${
+                                        lightMode ? 'text-black' : 'text-white'
+                                    } hover:text-accent-blue font-normal w-full items-center mb-4`}>
                                     <div>
                                         <MdHistory className="text-2xl" />
                                     </div>
@@ -30,7 +39,10 @@ const MobileNavbar = ({ closeMobile }: MobileNavbarProps): JSX.Element => {
                                 </div>
                             </Link>
                             <Link href={'/kelas/?flag=kelasku'}>
-                                <div className="flex text-white hover:text-accent-blue  font-normal w-full items-center mb-4">
+                                <div
+                                    className={`flex ${
+                                        lightMode ? 'text-black' : 'text-white'
+                                    } hover:text-accent-blue font-normal w-full items-center mb-4`}>
                                     <div>
                                         <MdOutlineBook className="text-2xl" />
                                     </div>
