@@ -33,27 +33,23 @@ const NeedSubscribe = ({ thumbnail }: { thumbnail?: string }): JSX.Element => {
     const { setModalAuthOpen } = useAuth();
 
     return (
-        <div className="relative overflow-y-scroll">
-            <div className="w-full h-full bg-black absolute top-0 flex justify-center items-center opacity-40" />
-            <div
-                className="w-full h-[435px] bg-red-100 "
-                style={{
-                    background: `url(${thumbnail})`,
-                    backgroundSize: 'cover'
-                }}></div>
-            <div className="w-full h-full absolute top-0 p-16">
+        <div className="relative">
+            <div className="w-full h-full p-16 bg-neutral-400">
                 <h1 className="text-2xl font-bold">
                     Tertarik ngelanjutin materinya? <br /> Yuk gabung kelasnya
                     sekarang
                 </h1>
-                <span className="text-neutral-400">
+                <span className="text-neutral-700">
                     Selain bisa akses materi ini, kamu juga bisa dapat:
                 </span>
                 <BenefitItems
                     icons={<MdPlayCircleOutline />}
-                    title="70+ Video Pembelajaran On Demand"
+                    title="120+ Video Pembelajaran On Demand"
                 />
-                <BenefitItems icons={<MdEdit />} title="1x Live Tutor/Minggu" />
+                <BenefitItems
+                    icons={<MdEdit />}
+                    title="AstroNotes, Catatan materi lengkap dari Gradient"
+                />
                 <BenefitItems
                     icons={<MdOutlineGroup />}
                     title="Komunitas Gradient"

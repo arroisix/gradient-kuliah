@@ -2,10 +2,13 @@ import { NotionRenderer } from 'react-notion-x';
 import dynamic from 'next/dynamic';
 import { ExtendedRecordMap } from 'notion-types';
 import ListOfAstroNotes from 'courses/components/LearningExperience/AstroNotes/ListOfAstroNotes';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FaChevronRight, FaList } from 'react-icons/fa';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import usePublicCourseNotebook from 'courses/hooks/usePublicCourseNotebook';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { useAuth } from 'authentication/contexts/AuthProvider';
+import NeedSubscribe from 'courses/components/NeedSubscribe';
 
 const Code = dynamic(() =>
     import('react-notion-x/build/third-party/code').then((m) => m.Code)
@@ -46,8 +49,53 @@ const LearnAstroNotes = ({
     id: string;
 }): JSX.Element => {
     const { isMobileBreakpoints } = useWindowBreakpoints();
-    const { data, loading } = usePublicCourseNotebook(id as string);
+    const { isAuthenticated, setModalAuthOpen } = useAuth();
+    const { data, loading, getNotebook } = usePublicCourseNotebook(
+        id as string
+    );
     const [showMaterial, setShowMaterial] = useState(false);
+    const notebook = useMemo(() => getNotebook(notionId), [notionId, data]);
+    const { is_subscribed } = useCourseSubscription(id);
+    const [showSubscribe, setShowSubscribe] = useState(false);
+    const [showContent, setShowContent] = useState(false);
+
+    const renderNotebook = (): boolean => {
+        console.log(notebook);
+
+        if (notebook?.is_public && notebook.is_free) {
+            return true;
+        }
+
+        if (notebook?.is_public && !notebook.is_free) {
+            if (!is_subscribed) {
+                setShowSubscribe(true);
+            }
+
+            return false;
+        }
+
+        if (!notebook?.is_public && notebook?.is_free) {
+            if (isAuthenticated) {
+                return true;
+            }
+            setModalAuthOpen(1, true);
+            return false;
+        }
+
+        if (isAuthenticated && is_subscribed) {
+            return true;
+        }
+
+        if (!is_subscribed) {
+            setShowSubscribe(true);
+        }
+
+        return false;
+    };
+
+    useEffect(() => {
+        setShowContent(renderNotebook());
+    }, [data, notebook]);
 
     return (
         <section className="pt-[65px] flex flex-col md:flex-row relative md:overflow-hidden md:h-[100vh] bg-white">
@@ -91,20 +139,31 @@ const LearnAstroNotes = ({
                 </div>
             )}
             <div className="w-full overflow-y-auto">
-                <NotionRenderer
-                    mapPageUrl={customMapPageUrl(id, notionId)}
-                    recordMap={notes}
-                    fullPage={true}
-                    darkMode={false}
-                    disableHeader
-                    components={{
-                        Code,
-                        Collection,
-                        Equation,
-                        Modal,
-                        Pdf
-                    }}
-                />
+                {showContent ? (
+                    <NotionRenderer
+                        mapPageUrl={customMapPageUrl(id, notionId)}
+                        recordMap={notes}
+                        fullPage={true}
+                        darkMode={false}
+                        disableHeader
+                        components={{
+                            Code,
+                            Collection,
+                            Equation,
+                            Modal,
+                            Pdf
+                        }}
+                    />
+                ) : (
+                    <></>
+                )}
+                {showSubscribe ? (
+                    <div className="w-full h-screen p-4">
+                        <NeedSubscribe />
+                    </div>
+                ) : (
+                    <></>
+                )}
             </div>
         </section>
     );

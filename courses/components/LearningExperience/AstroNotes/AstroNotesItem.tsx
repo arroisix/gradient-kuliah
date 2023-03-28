@@ -66,7 +66,11 @@ const AstroNotesItem = ({
                                         URL: sub?.notebook?.notebook_url
                                     })
                                 }
-                                className="text-blue-400 hover:underline hover:text-blue-500 cursor-pointer flex items-center gap-2"
+                                className={`${
+                                    notionId === sub?.notebook?.notion_id
+                                        ? 'text-blue-400'
+                                        : 'text-neutral-500 '
+                                } hover:underline cursor-pointer flex items-center gap-2 text-left`}
                                 key={sub.id}
                                 href={sub?.notebook?.notebook_url}>
                                 {sub?.notebook?.is_free ? (
@@ -83,7 +87,11 @@ const AstroNotesItem = ({
 
                     return (
                         <button
-                            className="text-blue-400 hover:underline hover:text-blue-500 cursor-pointer flex items-center gap-2"
+                            className={`${
+                                notionId === sub?.notebook?.notion_id
+                                    ? 'text-blue-400'
+                                    : 'text-neutral-500 '
+                            } hover:underline cursor-pointer flex items-center gap-2 text-left`}
                             key={sub.id}
                             onClick={() => {
                                 posthog.capture(`Click Astronotes Link`, {
@@ -93,7 +101,7 @@ const AstroNotesItem = ({
                                 });
                                 setModalAuthOpen(1);
                             }}>
-                            <FaFile />
+                            <FaFilePdf />
                             {sub.subchapter_name}
                         </button>
                     );
