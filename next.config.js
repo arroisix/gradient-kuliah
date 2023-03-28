@@ -9,7 +9,8 @@ module.exports = {
             's3.ap-southeast-1.amazonaws.com',
             'storage.googleapis.com',
             'gradient-asset.storage.googleapis.com',
-            'gradient-asset-dev.storage.googleapis.com'
+            'gradient-asset-dev.storage.googleapis.com',
+            'notion.so'
         ]
     },
     redirects() {
