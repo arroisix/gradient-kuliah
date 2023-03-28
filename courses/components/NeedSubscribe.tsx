@@ -23,7 +23,7 @@ const BenefitItems = ({
     );
 };
 
-const NeedSubscribe = ({ thumbnail }: { thumbnail?: string }): JSX.Element => {
+const NeedSubscribe = ({}: { thumbnail?: string }): JSX.Element => {
     const router = useRouter();
     const { id } = router.query;
     const { data } = useGetLandingCourseDataQuery(id as string, {

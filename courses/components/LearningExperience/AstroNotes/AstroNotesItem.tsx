@@ -3,7 +3,7 @@ import { useLearning } from 'courses/contexts/LearningProvider';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { posthog } from 'posthog-js';
-import { FaFile, FaFilePdf, FaLock } from 'react-icons/fa';
+import { FaFilePdf, FaLock } from 'react-icons/fa';
 
 const AstroNotesItem = ({
     astro,
