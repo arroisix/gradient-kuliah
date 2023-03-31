@@ -99,7 +99,7 @@ const LearnAstroNotes = ({
 
     return (
         <section className="pt-[65px] flex flex-col md:flex-row relative md:overflow-hidden md:h-[100vh] bg-white">
-            <div className="w-[25vw] hidden md:block md:border-r md:border-neutral-200">
+            <div className="w-[20vw] hidden md:block md:border-r md:border-neutral-200 h-[calc(100vh-64px)] overflow-auto">
                 <ListOfAstroNotes />
             </div>
             <div

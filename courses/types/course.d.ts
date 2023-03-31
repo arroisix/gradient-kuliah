@@ -75,6 +75,12 @@ type Chapter = {
     is_coming_soon_notebook: boolean;
 };
 
+type NotebookSubSection<T> = {
+    key: T;
+    title: T;
+    sections?: NotebookSubSection<T>[];
+};
+
 type Notebook = {
     id: string;
     is_free: boolean;
@@ -84,6 +90,9 @@ type Notebook = {
     authors: Lecturer[];
     created_at: string | Date;
     notebook_url: string;
+    subsection: {
+        sections: NotebookSubSection[];
+    };
 };
 
 type Video = {
