@@ -46,7 +46,7 @@ const NotebookIndex = (): JSX.Element => {
     };
 
     return (
-        <section className="pt-[65px] min-h-[100vh] flex flex-col md:flex-row relative md:overflow-hidden md:h-[100vh] bg-white text-black">
+        <section className="pt-[65px] min-h-[100vh] flex flex-col md:flex-row relative md:overflow-x-hidden overflow-y-auto md:h-[100vh] bg-white text-black">
             <div className="md:px-32 md:py-8 p-4 w-full">
                 <div className="flex flex-col gap-4 mb-4">
                     <h1 className="text-2xl md:text-4xl font-bold break-word flex gap-1 items-center">
@@ -60,7 +60,9 @@ const NotebookIndex = (): JSX.Element => {
                     <h3 className="text-neutral-400">Oleh Gradient</h3>
                     <div className="w-full h-px bg-neutral-400" />
                 </div>
-                <div className="flex flex-col gap-4">{renderNotebook()}</div>
+                <div className="flex flex-col gap-4 pb-32">
+                    {renderNotebook()}
+                </div>
             </div>
         </section>
     );

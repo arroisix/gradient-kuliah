@@ -203,7 +203,7 @@ const AstroNotesItem = ({
     extraCallback?: () => void;
 }): JSX.Element => {
     return (
-        <div key={astro.id} className="mb-4">
+        <div key={astro.id} className="">
             <div className="flex flex-col gap-2">
                 {astro.subchapters.map((sub: SubChapter) => (
                     <div key={sub.id}>

@@ -75,6 +75,7 @@ const LearnAstroNotes = ({
         }
 
         if (!notebook?.is_public && notebook?.is_free) {
+            setShowSubscribe(false);
             if (isAuthenticated) {
                 return true;
             }
@@ -95,11 +96,11 @@ const LearnAstroNotes = ({
 
     useEffect(() => {
         setShowContent(renderNotebook());
-    }, [data, notebook]);
+    }, [data, notebook, is_subscribed, isAuthenticated]);
 
     return (
         <section className="pt-[65px] flex flex-col md:flex-row relative md:overflow-hidden md:h-[100vh] bg-white">
-            <div className="w-[20vw] hidden md:block md:border-r md:border-neutral-200 h-[calc(100vh-64px)] overflow-auto">
+            <div className="min-w-[300px] w-[20vw] hidden md:block md:border-r md:border-neutral-200 h-[calc(100vh-64px)] overflow-auto">
                 <ListOfAstroNotes />
             </div>
             <div
