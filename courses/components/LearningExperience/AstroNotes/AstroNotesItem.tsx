@@ -37,7 +37,7 @@ const MainTitle = ({
                         !router.asPath.includes('#')
                             ? 'text-blue-400 bg-neutral-100'
                             : 'text-neutral-500 '
-                    } hover:bg-neutral-100 cursor-pointer flex items-center gap-2 text-left font-bold  w-full px-2 py-1 rounded-md`}>
+                    } hover:bg-neutral-100 cursor-pointer flex items-center gap-2 text-left w-full px-2 py-1 rounded-md`}>
                     {sub?.notebook?.is_free ? (
                         <></>
                     ) : is_subscribed ? (
@@ -70,13 +70,15 @@ const MainTitle = ({
                 } hover:underline cursor-pointer flex items-center gap-2 text-left rounded-md`}
                 key={sub.id}
                 href={sub?.notebook?.notebook_url}>
-                {sub?.notebook?.is_free ? (
-                    <FaFilePdf />
-                ) : is_subscribed ? (
-                    <FaFilePdf />
-                ) : (
-                    <FaLock />
-                )}
+                <div>
+                    {sub?.notebook?.is_free ? (
+                        <FaFilePdf />
+                    ) : is_subscribed ? (
+                        <FaFilePdf />
+                    ) : (
+                        <FaLock />
+                    )}
+                </div>
                 {sub?.notebook?.title}
             </a>
         );
@@ -211,7 +213,7 @@ const AstroNotesItem = ({
                             extraCallback={extraCallback}
                             key={sub.id}
                         />
-                        {sub.notebook?.subsection.sections.map(
+                        {sub.notebook?.subsection?.sections.map(
                             (section: NotebookSubSection<string>) => (
                                 <SubTitle
                                     sub={sub}
