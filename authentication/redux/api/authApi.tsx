@@ -26,7 +26,7 @@ export const authApi = baseApi.injectEndpoints({
                 body: data
             })
         }),
-        updateUser: builder.mutation<User, UpdateUserInputData>({
+        updateUser: builder.mutation<LoginResponseData, UpdateUserInputData>({
             query: (data: UpdateUserInputData) => ({
                 url: `${STUDENT_BASE_URL}onboarding/`,
                 method: 'PUT',
