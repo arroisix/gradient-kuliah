@@ -22,7 +22,7 @@ const Radio = ({
     name,
     options
 }: RadioProps): JSX.Element => {
-    const [radioValue, setValue] = useState(value ?? options[0].key);
+    const [radioValue, setValue] = useState(value ?? options[0]?.key);
 
     const changeValue = (data: RadioOption): void => {
         setValue(data.key);

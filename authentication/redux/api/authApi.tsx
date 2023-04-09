@@ -1,6 +1,7 @@
 import { baseApi } from 'redux/api/baseApi';
 
 const AUTH_BASE_URL = 'identities/';
+const STUDENT_BASE_URL = 'students/';
 
 export const authApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -27,7 +28,7 @@ export const authApi = baseApi.injectEndpoints({
         }),
         updateUser: builder.mutation<User, UpdateUserInputData>({
             query: (data: UpdateUserInputData) => ({
-                url: `${AUTH_BASE_URL}user-update/`,
+                url: `${STUDENT_BASE_URL}onboarding/`,
                 method: 'PUT',
                 body: data
             })
@@ -37,7 +38,7 @@ export const authApi = baseApi.injectEndpoints({
             Record<string, never>
         >({
             query: () => ({
-                url: `${AUTH_BASE_URL}register-references/`
+                url: `${STUDENT_BASE_URL}register-references/`
             })
         })
     })
