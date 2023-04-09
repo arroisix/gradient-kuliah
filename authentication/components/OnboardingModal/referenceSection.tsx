@@ -4,7 +4,6 @@ import Radio from 'commons/components/elements/Form/radio';
 import { useGetRegisterReferenceQuery } from 'authentication/redux/api/authApi';
 import { useContext } from 'react';
 import RegistrationContext from 'authentication/contexts/RegistrationProvider';
-import Input from 'commons/components/elements/Form/input';
 import TextArea from 'commons/components/elements/Form/TextArea';
 
 const ReferenceSection = (): JSX.Element => {
