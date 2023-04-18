@@ -1,5 +1,5 @@
 export const getCurrentUser = (state: RootState): User =>
-    state.authentication.user.user as User;
+    state.authentication.user?.user as User;
 export const getToken = (state: RootState): string =>
     state.authentication.user.token as string;
 export const getIsNewUser = (state: RootState): boolean =>
