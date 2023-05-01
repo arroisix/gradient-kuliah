@@ -57,7 +57,7 @@ const Card = ({
                     </h1>
                 </div>
             </div>
-            <ul className="grid grid-cols-1 content-center pt-4">
+            <ul className="grid grid-cols-1 content-center pt-4 px-12">
                 {benefits?.data.map((benefit: string) => (
                     <li
                         className="text-xs sm:text-xs 2xl:text-base"
