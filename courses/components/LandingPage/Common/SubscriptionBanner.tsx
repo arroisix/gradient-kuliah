@@ -4,6 +4,7 @@ import SubscribeButton from './SubscribeButton';
 
 interface SubscriptionBannerProps {
     slug: string;
+    title?: string;
 }
 
 interface CardProps {
@@ -73,7 +74,10 @@ const Card = ({
     );
 };
 
-const SubscriptionBanner = ({ slug }: SubscriptionBannerProps): JSX.Element => {
+const SubscriptionBanner = ({
+    slug,
+    title
+}: SubscriptionBannerProps): JSX.Element => {
     const { data: course } = useGetLandingCourseDataQuery(slug);
     const cardNumber = course?.packets;
 
@@ -86,7 +90,7 @@ const SubscriptionBanner = ({ slug }: SubscriptionBannerProps): JSX.Element => {
                 {/* Cards */}
                 <div className="relative">
                     <h1 className="md:text-center text-2xl md:text-4xl font-bold text-center">
-                        Akses Instan Semuanya Sekarang!
+                        {title ?? 'Akses Instan Semuanya Sekarang!'}
                     </h1>
                     <div className="flex gap-2 flex-wrap mt-8 justify-center items-center">
                         {cardNumber?.map((cardData: Packet) => (
