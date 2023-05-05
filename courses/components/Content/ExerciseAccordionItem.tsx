@@ -38,9 +38,9 @@ const ExerciseAccordionItem = ({
                 aria-hidden={true}
                 onClick={decideOnClickAction}
                 key={subchapter.id}
-                className={`w-full flex items-center gap-2 px-7 py-2 hover:bg-neutral-600 cursor-pointer ${
+                className={`w-full flex items-center gap-2 px-7 py-2 hover:bg-[#272727] cursor-pointer ${
                     contentPicked?.id === subchapter?.video?.id &&
-                    'bg-neutral-600'
+                    'bg-[#272727]'
                 }`}>
                 <div>
                     {subchapter?.exercise?.is_free || isSubscribed ? (
@@ -49,9 +49,7 @@ const ExerciseAccordionItem = ({
                         <Lock />
                     )}
                 </div>
-                <span className="font-body w-3/4 truncate">
-                    {subchapter?.subchapter_name}
-                </span>
+                <span className="font-body">{subchapter?.subchapter_name}</span>
             </div>
             <Modal
                 isOpen={openWorksheetInfo}
