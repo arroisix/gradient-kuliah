@@ -1,6 +1,8 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import LearnContentBox from 'courses/components/LearnContentBox';
+import AiTutor from 'courses/components/LearningExperience/AiTutor';
+import { useLearning } from 'courses/contexts/LearningProvider';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useGetSubchapterDetailQuery } from 'courses/redux/api/privateCourseApi';
 import { useRouter } from 'next/router';
@@ -28,6 +30,7 @@ const VideoLearnContainer = ({
     });
     const { isMobileBreakpoints } = useWindowBreakpoints();
     const [showMaterial, setShowMaterial] = useState(false);
+    const { video } = useLearning();
 
     return (
         <section className="pt-[65px] flex flex-col md:flex-row relative md:overflow-hidden md:h-[100vh]">
@@ -81,7 +84,7 @@ const VideoLearnContainer = ({
                     />
                 </div>
             )}
-            <div className="w-full md:w-[25vw] hidden md:block">
+            <div className="w-full md:w-[30vw] hidden md:block">
                 {id && (
                     <LearnContentBox
                         slug={id as string}
@@ -90,6 +93,7 @@ const VideoLearnContainer = ({
                     />
                 )}
             </div>
+            {video?.ai_unique_id && <AiTutor uniqueId={video.ai_unique_id} />}
         </section>
     );
 };

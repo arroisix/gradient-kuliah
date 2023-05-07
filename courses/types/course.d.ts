@@ -107,6 +107,7 @@ type Video = {
     subchapter_id?: string;
     progress?: VideoProgress;
     popup_questions?: PopupQuestion[];
+    ai_unique_id?: string;
 };
 
 type CourseExercise = {

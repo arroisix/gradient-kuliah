@@ -52,7 +52,7 @@ const LearnVideo = ({
     };
 
     return (
-        <div className="w-full h-full transition-all overflow-x-hidden">
+        <div className="w-full h-full transition-all overflow-x-hidden relative">
             {renderVideoPlayer()}
             <LearningExperience />
         </div>

@@ -43,8 +43,8 @@ const VideoAccordionItem = ({
             aria-hidden={true}
             onClick={decideOnClickAction}
             key={subchapter.id}
-            className={`w-full flex items-center gap-2 px-7 py-2 hover:bg-neutral-600 cursor-pointer ${
-                contentPicked?.id === subchapter?.video?.id && 'bg-neutral-600'
+            className={`w-full flex items-center gap-2 px-7 py-2 hover:bg-[#272727] cursor-pointer ${
+                contentPicked?.id === subchapter?.video?.id && 'bg-[#272727]'
             }`}>
             <div>
                 {subchapter?.video?.is_free || isSubscribed ? (
@@ -53,18 +53,18 @@ const VideoAccordionItem = ({
                     <Lock />
                 )}
             </div>
-            <span className="font-body w-3/4 truncate">
-                {subchapter?.subchapter_name}
-            </span>
-            <div className="w-1/4 flex justify-end">
-                <span
-                    className={
-                        contentPicked?.id === subchapter?.video?.id
-                            ? 'text-neutral-400'
-                            : 'text-neutral-600'
-                    }>
-                    {subchapter?.video?.duration}
-                </span>
+            <div>
+                <span className="font-body">{subchapter?.subchapter_name}</span>
+                <div>
+                    <span
+                        className={
+                            contentPicked?.id === subchapter?.video?.id
+                                ? 'text-neutral-400'
+                                : 'text-neutral-600'
+                        }>
+                        {subchapter?.video?.duration}
+                    </span>
+                </div>
             </div>
         </div>
     );
