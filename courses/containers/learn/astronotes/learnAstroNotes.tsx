@@ -60,8 +60,6 @@ const LearnAstroNotes = ({
     const [showContent, setShowContent] = useState(false);
 
     const renderNotebook = (): boolean => {
-        console.log(notebook);
-
         if (notebook?.is_public && notebook.is_free) {
             return true;
         }
