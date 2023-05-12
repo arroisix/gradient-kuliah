@@ -59,7 +59,7 @@ const BenefitStatprobSection = (): JSX.Element => {
                 </div>
                 <div className="h-full w-[50vw] hidden md:flex">
                     <Image
-                        src="https://storage.googleapis.com/gradient-asset-dev/courses/statprob/assets/benefit_statprob.jpg"
+                        src="https://storage.googleapis.com/gradient-asset-dev/courses/statprob/assets/benefit_statprob.png"
                         loading="lazy"
                         width={650}
                         height={500}

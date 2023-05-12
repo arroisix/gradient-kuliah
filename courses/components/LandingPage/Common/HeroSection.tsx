@@ -20,7 +20,7 @@ const HeroSection = ({
     hero_image,
     slug
 }: HeroCommonProps): JSX.Element => {
-    const { is_subscribed, expiryDay, latest_watch_video } =
+    const { is_subscribed, expiryDay, latest_watch_video, isLoading } =
         useCourseSubscription(slug);
 
     return (
@@ -50,7 +50,7 @@ const HeroSection = ({
                         </h3>
                     </div>
                 )}
-                {is_subscribed ? (
+                {is_subscribed && !isLoading ? (
                     <Button
                         className="md:w-fit text-center mt-4"
                         variant="primary"
@@ -73,7 +73,7 @@ const HeroSection = ({
                     )}
             </div>
             <div className="hidden md:flex h-screen mt-16 md:mt-0 overflow-hidden absolute top-0 right-0">
-                <div>
+                <div className="max-w-[60vw]">
                     {video_preview && (
                         <video
                             autoPlay
@@ -87,7 +87,7 @@ const HeroSection = ({
                         <img
                             src={hero_image}
                             alt={`hero-img-${slug}`}
-                            className="mt-16 object-contain h-screen"
+                            className="object-cover h-screen"
                         />
                     )}
                     <div
