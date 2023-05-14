@@ -1,4 +1,4 @@
-import { MdPlayCircleOutline, MdOutlineGroup } from 'react-icons/md';
+import { MdPlayCircleOutline, MdOutlineGroup, MdNotes } from 'react-icons/md';
 import Image from 'next/image';
 import SubscribeButton from '../Common/SubscribeButton';
 
@@ -46,11 +46,11 @@ const BenefitStatprobSection = (): JSX.Element => {
                         title="Latihan Soal + Pembahasan"
                         subtitle="Belajar sambil ngerjain latihan soal per topik dan ada pembahasannya!"
                     /> */}
-                    {/* <BenefitItems
+                    <BenefitItems
                         icons={<MdNotes />}
                         title="AstroNotes: Notebook (Catatan) dari Gradient, Lengkap!"
                         subtitle="Catatan dan Rangkuman Materi yang disusun oleh Gradient"
-                    /> */}
+                    />
                     <BenefitItems
                         icons={<MdOutlineGroup />}
                         title="Group Exclusive Member"
@@ -59,7 +59,7 @@ const BenefitStatprobSection = (): JSX.Element => {
                 </div>
                 <div className="h-full w-[50vw] hidden md:flex">
                     <Image
-                        src="https://storage.googleapis.com/gradient-asset-dev/courses/statprob/assets/benefit_statprob.png"
+                        src="https://storage.googleapis.com/gradient-asset/courses/statprob/assets/benefit_statprob.png"
                         loading="lazy"
                         width={650}
                         height={500}
