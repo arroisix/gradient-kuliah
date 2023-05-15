@@ -2,6 +2,8 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import { useGetSubchapterDetailQuery } from 'courses/redux/api/privateCourseApi';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
+import { marked } from 'marked';
+import markedKatex from 'library/marked-katex';
 
 const DescriptionSection = (): JSX.Element => {
     const router = useRouter();
@@ -10,13 +12,25 @@ const DescriptionSection = (): JSX.Element => {
     const { data } = useGetSubchapterDetailQuery(sub as string, {
         skip: sub === null || sub === undefined || !isAuthenticated
     });
+    marked.use(
+        markedKatex({
+            throwOnError: false
+        })
+    );
     return (
         <div className="w-full py-4 px-4 md:px-0">
-            <p className="text-base font-body text-white">
-                {data?.video?.description !== '-'
-                    ? data?.video?.description
-                    : ''}
-            </p>
+            <div className="text-base font-body text-white">
+                <div
+                    className="break-all markdown-body"
+                    dangerouslySetInnerHTML={{
+                        __html: marked.parse(
+                            data?.video?.description !== '-'
+                                ? (data?.video?.description as string)
+                                : ''
+                        )
+                    }}
+                />
+            </div>
             <p className="text-neutral-600 my-4">PENGAJAR</p>
             {data?.video?.lecturers?.map((lecturer) => (
                 <div
