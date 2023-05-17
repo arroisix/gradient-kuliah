@@ -14,7 +14,7 @@ const ListOfAstroNotes = ({
     const notebook = getAllNotebookChapter(data?.chapters as Chapter[]);
 
     return (
-        <div className="w-full bg-white p-4 text-black">
+        <div className="w-full bg-white py-8 px-1 text-black">
             {notebook?.map((astro: Chapter) => (
                 <AstroNotesItem
                     astro={astro}

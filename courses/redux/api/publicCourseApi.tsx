@@ -35,6 +35,19 @@ export const publicCourseApi = baseApi.injectEndpoints({
             query: (id: string) => ({
                 url: `${PUBLIC_COURSE_BASE_URL}landing/${id}/notebook/`
             })
+        }),
+        getListCourseChapter: builder.query<ResponseData<Chapter>, string>({
+            query: (slug: string) => ({
+                url: `${PUBLIC_COURSE_BASE_URL}list-chapter/${slug}/`
+            })
+        }),
+        getListCourseSubChapter: builder.query<
+            ResponseData<SubChapter>,
+            string
+        >({
+            query: (id: string) => ({
+                url: `${PUBLIC_COURSE_BASE_URL}list-subchapter/${id}/`
+            })
         })
     })
 });
@@ -44,7 +57,9 @@ export const {
     useGetPublicListCoursesQuery,
     useGetLandingCourseDataQuery,
     useGetLandingCourseListContentQuery,
-    useGetPublicCourseNotebookQuery
+    useGetPublicCourseNotebookQuery,
+    useGetListCourseChapterQuery,
+    useGetListCourseSubChapterQuery
 } = publicCourseApi;
 
 export const { getPublicListCourses, getPublicCourse, getLandingCourseData } =

@@ -21,6 +21,9 @@ import BenefitPTSLSection from './PTSL/BenefitPTSLSection';
 import PriceHighlightPTSLSection from './PTSL/PriceHighlightPTSLSection';
 import BenefitKalkulus2Section from './Kalkulus2/BenefitKalkulus2Section';
 import PriceHighlightKalkulus2Section from './Kalkulus2/PriceHighlightKalkulus2Section';
+import PriceHighlightStatprobSection from './Statprob/PriceHighlightStaprobSection';
+import BenefitStatprobSection from './Statprob/BenefitStatprobSection';
+import CourseDetail from '../CourseDetail';
 
 const COMPONENT_DICTIONARY: { [key in LandingPageSectionKey]: JSX.Element } = {
     hero: <HeroSection slug="dummy" />,
@@ -34,15 +37,17 @@ const COMPONENT_DICTIONARY: { [key in LandingPageSectionKey]: JSX.Element } = {
     poster: <PosterSection slug="dummy" />,
     price_highlight_kalkulus1: <PriceHighlightKalkulus1Section slug="dummy" />,
     price_highlight_ptsl: <PriceHighlightPTSLSection slug="dummy" />,
+    price_highlight_kalkulus2: <PriceHighlightKalkulus2Section slug="dummy" />,
+    price_highlight_statprob: <PriceHighlightStatprobSection slug="dummy" />,
     benefit_kalkulus1: <BenefitKalkulus1Section />,
     benefit_ptsl: <BenefitPTSLSection />,
-    poster_kalkulus1: <PosterKalkulus1Section slug="dummy" />,
-    hero_ptsl: <HeroPTSLSection slug="dummy" />,
+    benefit_statprob: <BenefitStatprobSection />,
     benefit_kalkulus2: <BenefitKalkulus2Section />,
-    price_highlight_kalkulus2: <PriceHighlightKalkulus2Section slug="dummy" />
+    poster_kalkulus1: <PosterKalkulus1Section slug="dummy" />,
+    hero_ptsl: <HeroPTSLSection slug="dummy" />
 };
 
-const AuthLandingPage = ({ id }: { id: string }): JSX.Element => {
+export const AuthLandingPage = ({ id }: { id: string }): JSX.Element => {
     const { data: course, isLoading } = useGetLandingCourseDataQuery(id, {
         refetchOnMountOrArgChange: true
     });
@@ -89,7 +94,7 @@ const LandingPageOrchestrator = ({ id }: { id: string }): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
 
     if (isAuthenticated) {
-        return <AuthLandingPage id={id} />;
+        return <CourseDetail slug={id} />;
     }
 
     return (

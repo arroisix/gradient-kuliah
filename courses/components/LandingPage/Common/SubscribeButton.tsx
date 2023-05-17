@@ -23,7 +23,7 @@ const SubscribeButton = ({
         <>
             {isAuthenticated && !is_subscribed && (
                 <Button
-                    className="md:w-fit text-center my-2 z-[5]"
+                    className="md:w-fit text-center my-2 z-[5] min-w-[200px]"
                     variant="primary"
                     href={`/langganan?courseId=${course?.course_id}`}>
                     Akses Sekarang
@@ -31,7 +31,7 @@ const SubscribeButton = ({
             )}
             {!isAuthenticated && !is_subscribed && (
                 <Button
-                    className="md:w-fit text-center my-2 z-[5]"
+                    className="md:w-fit text-center my-2 z-[5] min-w-[200px]"
                     variant="primary"
                     onClick={() =>
                         setModalAuthOpen(

@@ -23,6 +23,7 @@ const RegistrationSection = (): JSX.Element => {
                         education_level: formData.education_level || 'SMP',
                         phone_number: formData.phone_number || '',
                         institution: formData.institution || '',
+                        major: formData.major || '',
                         birthdate: formData.birthdate || ''
                     } as UpdateUserInputData
                 }
@@ -46,6 +47,7 @@ const RegistrationSection = (): JSX.Element => {
                         errors.education_level = 'Required';
                     if (!values.institution) errors.institution = 'Required';
                     if (!values.phone_number) errors.phone_number = 'Required';
+                    if (!values.major) errors.major = 'Required';
 
                     return errors;
                 }}>
@@ -125,6 +127,10 @@ const RegistrationSection = (): JSX.Element => {
                                 {
                                     key: 'S2',
                                     value: 'Magister'
+                                },
+                                {
+                                    key: 'S3',
+                                    value: 'Doktor'
                                 }
                             ]}
                         />
@@ -132,12 +138,28 @@ const RegistrationSection = (): JSX.Element => {
                             type="text"
                             label="INSTITUSI"
                             name="institution"
+                            placeholder="ex: UI / SMAN 1 Depok / PT. ABC"
                             onChange={handleChange}
                             onBlur={handleBlur}
                             value={values.institution}
                             error={
                                 touched.institution && errors.institution
                                     ? errors.institution
+                                    : undefined
+                            }
+                            required={true}
+                        />
+                        <Input
+                            type="text"
+                            label="JURUSAN"
+                            name="major"
+                            placeholder="Ilmu Komputer"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.major}
+                            error={
+                                touched.major && errors.major
+                                    ? errors.major
                                     : undefined
                             }
                             required={true}
@@ -150,7 +172,7 @@ const RegistrationSection = (): JSX.Element => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             startAddorment={
-                                <p className="text-neutral-200">+62</p>
+                                <p className="text-neutral-400">+62</p>
                             }
                             value={values.phone_number}
                             error={

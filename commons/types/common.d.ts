@@ -61,3 +61,11 @@ type BaseInfiniteScrollHook<T> = {
     anchor: React.MutableRefObject<HTMLDivElement>;
     loadMore?: () => void;
 };
+
+interface GradientBaseComponentWithSlug {
+    slug: string;
+}
+
+interface GradientBaseComponentWithId {
+    id: string;
+}

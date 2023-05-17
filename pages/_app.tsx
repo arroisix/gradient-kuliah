@@ -48,6 +48,8 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
                     name="viewport"
                     content="initial-scale=1.0, width=device-width"
                 />
+                <link rel="icon" type="image/x-icon" href="/gradient.ico" />
+                <link rel="apple-touch-icon" href="/gradient.ico" />
             </Head>
             <PersistGate
                 /* @ts-ignore */

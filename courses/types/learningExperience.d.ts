@@ -126,3 +126,27 @@ interface FinishExamResponse {
     worksheet_id: string;
     learning_progress_id: string;
 }
+
+type AiTutorMessage = {
+    id: string;
+    agent?: string;
+    message: {
+        message: string;
+    };
+    model_name?: string;
+};
+
+interface ChatRoomResponse {
+    id: string;
+    messages: AiTutorMessage[];
+}
+
+interface AskTutorInput {
+    query: string;
+    ai_unique_id: string;
+}
+
+interface TutorAnswerResponse {
+    question: AiTutorMessage;
+    answer: AiTutorMessage;
+}

@@ -1,6 +1,6 @@
 import { useGetLandingCourseDataQuery } from 'courses/redux/api/publicCourseApi';
 import { formatter } from 'courses/utils';
-import SubscribeButton from './SubscribeButton';
+import SubscribeButton from '../Common/SubscribeButton';
 
 interface SubscriptionBannerProps {
     slug: string;
@@ -74,7 +74,7 @@ const Card = ({
     );
 };
 
-const SubscriptionBanner = ({
+const StatprobSubscriptionBanner = ({
     slug,
     title
 }: SubscriptionBannerProps): JSX.Element => {
@@ -107,4 +107,4 @@ const SubscriptionBanner = ({
     );
 };
 
-export default SubscriptionBanner;
+export default StatprobSubscriptionBanner;

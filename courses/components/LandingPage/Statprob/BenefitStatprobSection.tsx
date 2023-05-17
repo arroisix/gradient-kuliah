@@ -1,4 +1,4 @@
-import { MdPlayCircleOutline, MdOutlineGroup, MdNotes } from 'react-icons/md';
+import { MdPlayCircleOutline, MdOutlineGroup, MdEdit } from 'react-icons/md';
 import Image from 'next/image';
 import SubscribeButton from '../Common/SubscribeButton';
 
@@ -26,7 +26,7 @@ const BenefitItems = ({
     );
 };
 
-const BenefitKalkulus1Section = (): JSX.Element => {
+const BenefitStatprobSection = (): JSX.Element => {
     return (
         <>
             <div
@@ -38,23 +38,29 @@ const BenefitKalkulus1Section = (): JSX.Element => {
                     </h3>
                     <BenefitItems
                         icons={<MdPlayCircleOutline />}
-                        title="120+ Video Pembelajaran On Demand"
+                        title="Video Pembelajaran On Demand"
                         subtitle="Materi lengkap yang bisa kamu akses kapan aja dan diajar langsung sama dosen terbaik di Indonesia"
                     />
+                    {/* <BenefitItems
+                        icons={<MdEdit />}
+                        title="Latihan Soal + Pembahasan"
+                        subtitle="Belajar sambil ngerjain latihan soal per topik dan ada pembahasannya!"
+                    /> */}
                     <BenefitItems
-                        icons={<MdNotes />}
-                        title="AstroNotes: Notebook (Catatan) dari Gradient, Lengkap!"
-                        subtitle="Catatan dan Rangkuman Materi yang disusun oleh Gradient"
+                        icons={<MdEdit />}
+                        title="Astronotes: Notebook Gradient"
+                        subtitle="Catatan digital untuk kamu yang ingin
+                        review materi dengan cepat"
                     />
                     <BenefitItems
                         icons={<MdOutlineGroup />}
-                        title="Komunitas Gradient"
-                        subtitle="Belajar dan nugas bareng mahasiswa dari seluruh Indonesia"
+                        title="Group Exclusive Member"
+                        subtitle="Belajar dan diskusi bareng member Gradient"
                     />
                 </div>
                 <div className="h-full w-[50vw] hidden md:flex">
                     <Image
-                        src="https://assets.gradient.academy/courses/calculus/assets/benefit-asset.png"
+                        src="https://storage.googleapis.com/gradient-asset/courses/statprob/assets/benefit_statprob_new.png"
                         loading="lazy"
                         width={650}
                         height={500}
@@ -62,10 +68,10 @@ const BenefitKalkulus1Section = (): JSX.Element => {
                 </div>
             </div>
             <div className="w-full flex justify-center items-center mb-8">
-                <SubscribeButton slug="kalkulus1" />
+                <SubscribeButton slug="probstat" />
             </div>
         </>
     );
 };
 
-export default BenefitKalkulus1Section;
+export default BenefitStatprobSection;

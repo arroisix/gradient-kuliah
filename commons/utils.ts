@@ -16,7 +16,7 @@ export const formatCurrency = (amount: string): string => {
 };
 
 export const generateInitial = (target: string): string => {
-    const name = target;
+    const name = target ?? '';
     const rgx = new RegExp(/(\p{L}{1})\p{L}+/, 'gu');
 
     const initials = [...name.matchAll(rgx)] || [];

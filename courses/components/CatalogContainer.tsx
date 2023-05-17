@@ -74,9 +74,11 @@ const ChapterCatalog = ({
 
     return (
         <div className="w-full flex flex-col gap-2">
-            <h4 className="text-2xl md:text-3xl font-bold">
-                {chapter.chapter_name}
-            </h4>
+            {!chapter.is_coming_soon_notebook && (
+                <h4 className="text-2xl md:text-3xl font-bold">
+                    {chapter.chapter_name}
+                </h4>
+            )}
             <div>
                 {chapter.subchapters && chapter.subchapters.length > 0 ? (
                     <Gallery

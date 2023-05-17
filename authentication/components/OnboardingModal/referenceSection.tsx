@@ -4,6 +4,7 @@ import Radio from 'commons/components/elements/Form/radio';
 import { useGetRegisterReferenceQuery } from 'authentication/redux/api/authApi';
 import { useContext } from 'react';
 import RegistrationContext from 'authentication/contexts/RegistrationProvider';
+import TextArea from 'commons/components/elements/Form/TextArea';
 
 const ReferenceSection = (): JSX.Element => {
     const { data: registerReferences, isLoading: isLoadingReferences } =
@@ -16,7 +17,9 @@ const ReferenceSection = (): JSX.Element => {
                 <Formik
                     initialValues={
                         {
-                            register_reference_id: registerReferences.data[0].id
+                            register_reference_id:
+                                registerReferences?.data[0]?.id,
+                            join_reasoning: formData.join_reasoning || ''
                         } as UpdateUserInputData
                     }
                     onSubmit={async (values, { setSubmitting }) => {
@@ -26,6 +29,8 @@ const ReferenceSection = (): JSX.Element => {
                     }}>
                     {({
                         values,
+                        errors,
+                        touched,
                         handleChange,
                         handleBlur,
                         handleSubmit,
@@ -45,6 +50,21 @@ const ReferenceSection = (): JSX.Element => {
                                             value: ref.name
                                         })
                                     )}
+                                />
+                                <TextArea
+                                    label="APA YANG MEMBUAT KAMU TERTARIK DENGAN GRADIENT? (Optional)"
+                                    name="join_reasoning"
+                                    placeholder="Saya membutuhkan materi tambahan untuk kuliah"
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.join_reasoning}
+                                    error={
+                                        touched.join_reasoning &&
+                                        errors.join_reasoning
+                                            ? errors.join_reasoning
+                                            : undefined
+                                    }
+                                    required={true}
                                 />
                                 <div className="flex space-x-2">
                                     <Button

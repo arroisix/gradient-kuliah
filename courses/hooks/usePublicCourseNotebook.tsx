@@ -16,9 +16,38 @@ const usePublicCourseNotebook = (id: string) => {
             skip: isAuthenticated || id === null || id === undefined
         });
 
+    const getNotebook = (notionId: string): Notebook | undefined => {
+        let data;
+
+        if (isAuthenticated) {
+            data = privateData;
+        } else {
+            data = publicData;
+        }
+
+        const allNotebook: Notebook[] = [];
+
+        data?.chapters.forEach((chapter: Chapter) => {
+            chapter.subchapters.forEach((subchapter: SubChapter) => {
+                if (subchapter.notebook) {
+                    allNotebook.push(subchapter.notebook);
+                }
+            });
+        });
+
+        const resNotebook = allNotebook.filter(
+            (notebook: Notebook) => notebook.notion_id === notionId
+        );
+
+        if (resNotebook.length > 0) return resNotebook[0];
+
+        return;
+    };
+
     return {
         loading: isLoadingPrivate || isLoadingPublic,
-        data: isAuthenticated ? privateData : publicData
+        data: isAuthenticated ? privateData : publicData,
+        getNotebook
     };
 };
 

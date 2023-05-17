@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 interface InputProps {
     label?: string;
-    type: string;
     placeholder?: string;
     className?: string;
     onChange?: (res: any) => void;
@@ -15,9 +14,8 @@ interface InputProps {
     required?: boolean;
 }
 
-const Input: React.FC<InputProps> = ({
+const TextArea: React.FC<InputProps> = ({
     label,
-    type,
     placeholder,
     onChange,
     onBlur,
@@ -33,12 +31,11 @@ const Input: React.FC<InputProps> = ({
     <div className="flex flex-col my-4 w-full">
         <span className="mb-1 text-xs">{label}</span>
         <div
-            className={`flex w-full items-center rounded-lg px-2 h-[48px] border ${
+            className={`flex w-full items-center rounded-lg p-2 border ${
                 error ? 'border-red-500' : 'border-neutral-400'
             } ${className}`}>
             <div>{startAddorment}</div>
-            <input
-                type={type}
+            <textarea
                 className={`form-input bg-transparent border-0 w-full focus:outline-none focus:ring-0 focus:appearance-none placeholder-gray-300`}
                 placeholder={placeholder}
                 onChange={onChange}
@@ -56,4 +53,4 @@ const Input: React.FC<InputProps> = ({
     </div>
 );
 
-export default Input;
+export default TextArea;
