@@ -23,6 +23,11 @@ export const privateCourseApi = baseApi.injectEndpoints({
                 url: `${PRIVATE_COURSE_BASE_URL}subchapter/${id}`
             })
         }),
+        getCourseNotebook: builder.query<Course, string>({
+            query: (id: string) => ({
+                url: `${PRIVATE_COURSE_BASE_URL}landing/${id}/notebook/`
+            })
+        }),
         submitPopupQuizAnswer: builder.mutation<
             PopupQuestionAnswerResponseData,
             PopupQuestionAnswerInputData
@@ -40,5 +45,6 @@ export const {
     useGetPrivateCourseQuery,
     useGetPrivateListCoursesQuery,
     useSubmitPopupQuizAnswerMutation,
-    useGetSubchapterDetailQuery
+    useGetSubchapterDetailQuery,
+    useGetCourseNotebookQuery
 } = privateCourseApi;

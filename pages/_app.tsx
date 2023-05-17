@@ -2,6 +2,14 @@
 import Head from 'next/head';
 import { AppProps } from 'next/app';
 import 'styles/index.css';
+// core styles shared by all of react-notion-x (required)
+import 'react-notion-x/src/styles.css';
+
+// used for code syntax highlighting (optional)
+import 'prismjs/themes/prism-tomorrow.css';
+
+// used for rendering equations (optional)
+import 'katex/dist/katex.min.css';
 import { ToastContainer } from 'react-toastify';
 
 import { PersistGate } from 'redux-persist/integration/react';
@@ -40,6 +48,8 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
                     name="viewport"
                     content="initial-scale=1.0, width=device-width"
                 />
+                <link rel="icon" type="image/x-icon" href="/gradient.ico" />
+                <link rel="apple-touch-icon" href="/gradient.ico" />
             </Head>
             <PersistGate
                 /* @ts-ignore */

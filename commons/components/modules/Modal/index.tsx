@@ -24,7 +24,7 @@ const Modal = ({
         return (
             <div
                 aria-hidden={true}
-                className="fixed h-screen w-screen bg-black bg-opacity-75 flex items-center justify-center top-0 left-0 z-50 shadow-sm"
+                className="fixed h-screen w-screen bg-black bg-opacity-75 flex items-center justify-center top-0 left-0 z-[100000] shadow-sm"
                 onClick={permanent ? undefined : () => setOpen(0)}>
                 <div
                     aria-hidden={true}

@@ -9,8 +9,17 @@ const CourseCard = ({ course }: { course: Course }): JSX.Element => {
     const loadingTransition = useTransition(router);
 
     useEffect(() => {
-        if (course) router.prefetch(`/kelas/${course.slug}`);
+        if (course && !course.is_only_notebook)
+            router.prefetch(`/kelas/${course.slug}`);
     }, [course]);
+
+    const decideUrl = (): string => {
+        if (course.is_only_notebook) {
+            return `/kelas/${course.slug}/astronotes`;
+        }
+
+        return `/kelas/${course.slug}`;
+    };
 
     return (
         <>
@@ -30,7 +39,7 @@ const CourseCard = ({ course }: { course: Course }): JSX.Element => {
                                   theme: 'colored',
                                   hideProgressBar: true
                               })
-                        : () => router.push(`/kelas/${course.slug}`)
+                        : () => router.push(decideUrl())
                 }
                 aria-hidden={true}>
                 {course.course_name}

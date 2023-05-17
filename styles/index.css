@@ -1286,3 +1286,11 @@ sticky-3.animate {
     margin: 0 0.2em 0.25em -1.6em;
     vertical-align: middle;
 }
+
+.notion blockquote {
+    overflow: auto;
+}
+
+.notion img {
+    object-fit: contain !important;
+}

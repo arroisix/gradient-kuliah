@@ -1,16 +1,13 @@
 import { useRouter } from 'next/router';
-import { BsPlayCircle } from 'react-icons/bs';
-import { useAuth } from 'authentication/contexts/AuthProvider';
-import { useSelector } from 'react-redux';
-import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
-import Lock from 'commons/components/elements/Icons/Lock';
 import ComingSoonContent from './ComingSoonContent';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { useEffect, useRef, useState } from 'react';
+import VideoAccordionItem from './VideoAccordionItem';
+import ExerciseAccordionItem from './ExerciseAccordionItem';
 
-interface VideoSectionProps {
-    videoPicked: Video;
+interface ContentSectionProps {
+    contentPicked: Video;
     chapters: Chapter[];
     isSubscribed: boolean;
     isFullHeight?: boolean;
@@ -18,85 +15,41 @@ interface VideoSectionProps {
     extraCallback?: () => void;
 }
 
-const VideoAccordionItem = ({
-    subchapter,
-    chapterId,
-    isSubscribed,
-    videoPicked,
-    slug,
-    extraCallback
-}: {
+export interface ContentAccordionItemProps {
     chapterId: string;
-    videoPicked: Video;
+    contentPicked: Video;
     subchapter: SubChapter;
     isSubscribed: boolean;
     slug: string;
     extraCallback?: () => void;
-}): JSX.Element => {
-    const router = useRouter();
-    const { setModalAuthOpen } = useAuth();
-    const isAuthenticated = useSelector(getIsAuthenticated);
-    return (
-        <div
-            aria-hidden={true}
-            onClick={() => {
-                if (isAuthenticated) {
-                    if (extraCallback) {
-                        extraCallback();
-                    }
-                    router.replace(
-                        `/kelas/${slug}/belajar/video/${chapterId}/${subchapter.id}`,
-                        undefined,
-                        { shallow: true }
-                    );
-                } else {
-                    setModalAuthOpen(
-                        1,
-                        false,
-                        `/kelas/${slug}/belajar/video/${chapterId}/${subchapter.id}`
-                    );
-                }
-            }}
-            key={subchapter.id}
-            className={`w-full flex items-center gap-2 px-7 py-2 hover:bg-neutral-600 cursor-pointer ${
-                videoPicked?.id === subchapter?.video?.id && 'bg-neutral-600'
-            }`}>
-            <div>
-                {subchapter?.video?.is_free || isSubscribed ? (
-                    <BsPlayCircle className="text-xl" />
-                ) : (
-                    <Lock />
-                )}
-            </div>
-            <span className="font-body w-3/4 truncate">
-                {subchapter?.subchapter_name}
-            </span>
-            <div className="w-1/4 flex justify-end">
-                <span
-                    className={
-                        videoPicked?.id === subchapter?.video?.id
-                            ? 'text-neutral-400'
-                            : 'text-neutral-600'
-                    }>
-                    {subchapter?.video?.duration}
-                </span>
-            </div>
-        </div>
-    );
+}
+
+const ContentAccordionItem = (
+    props: ContentAccordionItemProps
+): JSX.Element => {
+    if (props.subchapter.video) {
+        return <VideoAccordionItem {...props} />;
+    }
+
+    if (props.subchapter.exercise) {
+        return <ExerciseAccordionItem {...props} />;
+    }
+
+    return <></>;
 };
 
-const VideoAccordion = ({
+const ContentAccordion = ({
     slug,
     initialOpen,
     chapter,
-    videoPicked,
+    contentPicked,
     isSubscribed,
     extraCallback
 }: {
     slug: string;
     initialOpen: boolean;
     chapter: Chapter;
-    videoPicked: Video;
+    contentPicked: Video;
     isSubscribed: boolean;
     extraCallback?: () => void;
 }): JSX.Element => {
@@ -130,13 +83,17 @@ const VideoAccordion = ({
                 {chapter.subchapters.length > 0 ? (
                     chapter?.subchapters?.map((subchapter) => {
                         return (
-                            <VideoAccordionItem
+                            <ContentAccordionItem
                                 extraCallback={extraCallback}
                                 slug={slug}
                                 chapterId={chapter.id}
-                                key={subchapter.id}
+                                key={
+                                    subchapter.exercise
+                                        ? `${subchapter.id}-${subchapter.exercise.id}`
+                                        : subchapter.id
+                                }
                                 subchapter={subchapter}
-                                videoPicked={videoPicked}
+                                contentPicked={contentPicked}
                                 isSubscribed={isSubscribed}
                             />
                         );
@@ -152,14 +109,14 @@ const VideoAccordion = ({
     );
 };
 
-const VideoSection = ({
+const ContentSection = ({
     slug,
     chapters,
-    videoPicked,
+    contentPicked,
     isSubscribed,
     isFullHeight,
     extraCallback
-}: VideoSectionProps): JSX.Element => {
+}: ContentSectionProps): JSX.Element => {
     return (
         <div
             className={`${
@@ -171,13 +128,13 @@ const VideoSection = ({
             }`}>
             {chapters?.map((chapter, index) => {
                 return (
-                    <VideoAccordion
+                    <ContentAccordion
                         extraCallback={extraCallback}
                         slug={slug}
                         initialOpen={index === 0}
                         key={chapter.id}
                         chapter={chapter}
-                        videoPicked={videoPicked}
+                        contentPicked={contentPicked}
                         isSubscribed={isSubscribed}
                     />
                 );
@@ -186,4 +143,4 @@ const VideoSection = ({
     );
 };
 
-export default VideoSection;
+export default ContentSection;

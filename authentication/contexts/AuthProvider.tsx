@@ -25,6 +25,7 @@ interface AuthContextType {
     isOnboardingOpen: 1 | 0;
     closeOnboardingModal: (status: 1 | 0) => void;
     isPermanent: boolean;
+    isAuthenticated: boolean;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -99,9 +100,10 @@ export function AuthProvider({
             setModalAuthOpen,
             isOnboardingOpen,
             closeOnboardingModal,
-            isPermanent
+            isPermanent,
+            isAuthenticated
         }),
-        [isModalAuthOpen, isOnboardingOpen, isPermanent]
+        [isModalAuthOpen, isOnboardingOpen, isPermanent, isAuthenticated]
     );
 
     return (

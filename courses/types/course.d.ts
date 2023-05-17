@@ -45,12 +45,26 @@ type Course = {
     price?: number;
     discount?: number;
     is_coming_soon?: boolean;
+    is_only_notebook?: boolean;
 };
 
 type Lecturer = {
     name: string;
     photo: string;
     role: string;
+};
+
+type SubChapter = {
+    id: string;
+    subchapter_name: string;
+    thumbnail?: string;
+    order: number;
+    video?: Video;
+    notebook?: Notebook;
+    exercise?: CourseExercise;
+    exercises?: CourseExercise[];
+    type_name?: 'lecture' | 'notebook' | 'exercise';
+    duration?: string;
 };
 
 type Chapter = {
@@ -60,27 +74,27 @@ type Chapter = {
     subchapters: SubChapter[];
     is_coming_soon_video: boolean;
     is_coming_soon_animation: boolean;
+    is_coming_soon_notebook: boolean;
 };
 
-type SubChapter = {
-    id: string;
-    order: int;
-    type_name: 'lecture' | 'exercise';
-    subchapter_name: string;
-    notebook?: Notebook;
-    video?: Video;
-    thumbnail?: string;
+type NotebookSubSection<T> = {
+    key: T;
+    title: T;
+    sections?: NotebookSubSection<T>[];
 };
 
 type Notebook = {
     id: string;
     is_free: boolean;
+    is_public: boolean;
+    notion_id: string;
     title: string;
-    content: string;
     authors: Lecturer[];
     created_at: string | Date;
-    references: string;
-    thumbnail: string;
+    notebook_url: string;
+    subsection: {
+        sections: NotebookSubSection[];
+    };
 };
 
 type Video = {
@@ -95,6 +109,16 @@ type Video = {
     subchapter_id?: string;
     progress?: VideoProgress;
     popup_questions?: PopupQuestion[];
+    ai_unique_id?: string;
+};
+
+type CourseExercise = {
+    id: string;
+    packet_id: string;
+    is_free: boolean;
+    exercise_name: string;
+    is_on_progress: boolean;
+    is_finish: boolean;
 };
 
 type PopupQuestion = {
@@ -155,3 +179,8 @@ type Packet = {
         info: string;
     };
 };
+
+interface NotebookSlugResponse {
+    notionId: string;
+    courseSlug: string;
+}

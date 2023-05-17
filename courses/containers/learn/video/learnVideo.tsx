@@ -19,11 +19,11 @@ const LearnVideo = ({
                 return (
                     <VideoPlayer
                         autoPlay
-                        popupData={video.popup_questions}
-                        video={video.video_url}
+                        popupData={video?.popup_questions}
+                        video={video?.video_url}
                         popupComponent={<PopupQuestionContent />}
-                        thumbnail={video.thumbnail}
-                        key={video.video_url}
+                        thumbnail={video?.thumbnail}
+                        key={video?.video_url}
                         trackProgress={
                             is_subscribed
                                 ? async (last_duration, isFinished) =>
@@ -52,7 +52,7 @@ const LearnVideo = ({
     };
 
     return (
-        <div className="w-full h-full transition-all overflow-x-hidden">
+        <div className="w-full h-full transition-all overflow-x-hidden relative">
             {renderVideoPlayer()}
             <LearningExperience />
         </div>

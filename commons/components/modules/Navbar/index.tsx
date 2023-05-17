@@ -1,14 +1,12 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-// import { AiOutlineArrowRight } from 'react-icons/ai';
 import { FaInstagram } from 'react-icons/fa';
 import {
     MdArrowDropDown,
-    MdClose,
+    MdArrowDropUp,
     MdHistory,
     MdLogout,
-    MdMenu,
     MdOutlineBook
 } from 'react-icons/md';
 import { useAuth } from 'authentication/contexts/AuthProvider';
@@ -22,28 +20,45 @@ import {
 } from 'authentication/redux/selectors/userSelector';
 import { removeUser } from 'authentication/redux/slices/userSlice';
 import Button from 'commons/components/elements/Button';
-// import CourseCard from 'src/courses/components/CourseCard';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
+import { useGetLandingCourseListContentQuery } from 'courses/redux/api/publicCourseApi';
+import { BiPlayCircle } from 'react-icons/bi';
 
 const Navbar = ({
     paymentPage,
-    shouldTransparent
-}: // courses
-{
+    shouldTransparent,
+    lightMode
+}: {
     paymentPage: boolean;
     shouldTransparent: boolean;
     courses?: Course[];
+    lightMode?: boolean;
 }): JSX.Element => {
     const { setModalAuthOpen } = useAuth();
+    const { isMobileBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const user = useSelector(getCurrentUser);
     const [isHovered, setHovered] = useState(false);
     const [isNavbarHovered, setNavbarHovered] = useState(false);
     const [isProfileHovered, setProfileHovered] = useState(false);
     const [openMobile, setOpenMobile] = useState(false);
+    const pickedColorScheme = {
+        bgColor: lightMode ? 'bg-white' : 'bg-[#171717]',
+        color: lightMode ? 'text-black' : 'text-white'
+    };
     const { height } = useWindowSize();
     const router = useRouter();
+    const { id } = router.query;
     const dispatch = useDispatch();
-
+    const { data: content } = useGetLandingCourseListContentQuery(
+        id as string,
+        {
+            skip:
+                id === null ||
+                id === undefined ||
+                !router.pathname.includes('kelas/[id]/')
+        }
+    );
     const [scrollPosition, setScrollPosition] = useState(0);
     const handleScroll = (): void => {
         const position = window.pageYOffset;
@@ -60,7 +75,7 @@ const Navbar = ({
 
     const computeBgColor = (): string => {
         if (openMobile) {
-            return 'bg-[#171717]';
+            return lightMode ? 'bg-white shadow-md text-black' : 'bg-[#171717]';
         }
 
         if (shouldTransparent) {
@@ -71,10 +86,10 @@ const Navbar = ({
         }
 
         if (paymentPage) {
-            return 'bg-[#171717]';
+            return lightMode ? 'bg-white shadow-md' : 'bg-[#171717]';
         }
 
-        return 'bg-[#171717]';
+        return lightMode ? 'bg-white text-black shadow-md' : 'bg-[#171717]';
     };
 
     const onMouseLeaveNavbar = (): void => {
@@ -113,11 +128,50 @@ const Navbar = ({
             onMouseEnter={() => setNavbarHovered(true)}
             onMouseLeave={onMouseLeaveNavbar}>
             <div className="w-full px-4 md:px-8 py-4 flex items-center justify-between">
-                <Link href={'/'}>
-                    <span className="text-2xl font-bold cursor-pointer font-[Urbanist]">
-                        Gradient
-                    </span>
-                </Link>
+                <div className="flex gap-4">
+                    <Link href={'/'}>
+                        <span className="text-2xl font-bold cursor-pointer font-[Urbanist]">
+                            {isMobileBreakpoints ? 'G' : 'Gradient'}
+                        </span>
+                    </Link>
+                    {((isMobileBreakpoints &&
+                        router.pathname.includes('kelas/[id]/astronotes')) ||
+                        (!isMobileBreakpoints &&
+                            router.pathname.includes('kelas/[id]/'))) &&
+                        content?.data &&
+                        content?.data.length > 0 &&
+                        content?.data[0].subchapters.length > 0 && (
+                            <Button
+                                className="bg-[#C4B9FF] flex gap-1 items-center text-[#5F2BCE] transition ease-in hover:bg-gradient-to-b hover:from-[#DD837A] hover:to-[#AB8EEC] hover:text-white"
+                                size="extraSmall"
+                                variant="primary"
+                                href={`/kelas/${id}/belajar/video/${content?.data[0].id}/${content?.data[0].subchapters[0].id}`}>
+                                <>
+                                    <BiPlayCircle className="text-xl" />
+                                    <span className="font-bold">VIDEO</span>
+                                </>
+                            </Button>
+                        )}
+                    {((isMobileBreakpoints &&
+                        router.pathname.includes('kelas/[id]/belajar')) ||
+                        (!isMobileBreakpoints &&
+                            router.pathname.includes('kelas/[id]/'))) && (
+                        <Button
+                            className="bg-[#C4B9FF] flex gap-1 items-center text-[#5F2BCE] transition ease-in hover:bg-gradient-to-b hover:from-[#DD837A] hover:to-[#AB8EEC] hover:text-white"
+                            size="extraSmall"
+                            variant="primary"
+                            href={`/kelas/${id}/astronotes`}>
+                            <>
+                                <img
+                                    src="https://storage.googleapis.com/gradient-asset/assets/astronotes.png"
+                                    alt="astronotes"
+                                    className="h-5 w-5"
+                                />
+                                <span className="font-bold">AstroNotes</span>
+                            </>
+                        </Button>
+                    )}
+                </div>
                 {paymentPage ? (
                     <Button
                         variant="primary"
@@ -137,16 +191,6 @@ const Navbar = ({
                                     Kelas
                                 </nav>
                             </Link>
-                            <nav
-                                className="ml-12 cursor-pointer hover:text-accent-blue"
-                                onMouseEnter={onMouseEnterOther}>
-                                <a
-                                    href="https://discord.gg/qU3SB6wxzY"
-                                    target="_blank"
-                                    rel="noreferrer">
-                                    Gabung Discord
-                                </a>
-                            </nav>
                             {isAuthenticated ? (
                                 <nav
                                     className={`ml-12 cursor-pointer hover:text-accent-blue relative ${
@@ -162,13 +206,16 @@ const Navbar = ({
                                         <MdArrowDropDown />
                                     </span>
                                     <div
-                                        className={`px-8 py-4 min-w-[250px] top-10 right-0 absolute rounded-b-md bg-[#171717] ${
+                                        className={`px-8 py-4 min-w-[250px] top-10 right-0 absolute shadow-md rounded-b-md ${
+                                            pickedColorScheme.bgColor
+                                        } ${pickedColorScheme.color} ${
                                             isProfileHovered
                                                 ? 'block'
                                                 : 'hidden'
                                         }`}>
                                         <Link href={'/transaksi'}>
-                                            <div className="flex text-white hover:text-accent-blue font-normal w-full items-center mb-4">
+                                            <div
+                                                className={`flex ${pickedColorScheme.color} hover:text-accent-blue font-normal w-full items-center mb-4`}>
                                                 <div>
                                                     <MdHistory className="text-2xl" />
                                                 </div>
@@ -183,7 +230,8 @@ const Navbar = ({
                                             </div>
                                         </Link>
                                         <Link href={'/kelas/?flag=kelasku'}>
-                                            <div className="flex text-white hover:text-accent-blue  font-normal w-full items-center mb-4">
+                                            <div
+                                                className={`flex ${pickedColorScheme.color} hover:text-accent-blue  font-normal w-full items-center mb-4`}>
                                                 <div>
                                                     <MdOutlineBook className="text-2xl" />
                                                 </div>
@@ -222,44 +270,44 @@ const Navbar = ({
                             )}
                         </div>
 
-                        <div className="flex md:hidden text-3xl">
-                            {openMobile ? (
-                                <MdClose onClick={() => setOpenMobile(false)} />
+                        <div className="flex md:hidden text-3xl gap-4">
+                            {!isAuthenticated ? (
+                                <>
+                                    <Link href="/kelas">
+                                        <nav className="flex items-center text-base font-bold">
+                                            Kelas
+                                        </nav>
+                                    </Link>
+                                    <nav
+                                        className="flex items-center text-base font-bold"
+                                        onClick={() => setModalAuthOpen(1)}
+                                        aria-hidden={true}
+                                        onMouseEnter={() => setHovered(false)}>
+                                        Masuk
+                                    </nav>
+                                </>
                             ) : (
-                                <MdMenu onClick={() => setOpenMobile(true)} />
+                                <button
+                                    className="flex items-center text-base font-bold"
+                                    onClick={() => setOpenMobile(!openMobile)}>
+                                    {renderName(user.email, user.full_name)}
+                                    {openMobile ? (
+                                        <MdArrowDropUp />
+                                    ) : (
+                                        <MdArrowDropDown />
+                                    )}
+                                </button>
                             )}
                         </div>
                     </>
                 )}
             </div>
-
-            {openMobile && <MobileNavbar closeMobile={setOpenMobile} />}
-
-            {/* {courses && (
-                <div
-                    className={`w-full px-8 py-4 bg-[#171717] flex justify-between ${
-                        isHovered ? 'block' : 'hidden'
-                    }`}>
-                    <div className="w-1/4">
-                        <h1 className="font-bold text-[4rem]">Kelas</h1>
-                    </div>
-                    <div className="w-3/4">
-                        <div className="w-full grid grid-cols-3 gap-4 justify-end">
-                            {courses?.map((course: Course) => (
-                                <CourseCard course={course} key={course.uuid} />
-                            ))}
-                        </div>
-                        <Link href={'/kelas'}>
-                            <div className="mt-4 flex items-center cursor-pointer">
-                                <span className="flex items-center font-bold text-white">
-                                    Lihat semua kelas
-                                </span>
-                                <AiOutlineArrowRight className="text-white ml-2" />
-                            </div>
-                        </Link>
-                    </div>
-                </div>
-            )} */}
+            {openMobile && (
+                <MobileNavbar
+                    closeMobile={setOpenMobile}
+                    lightMode={lightMode}
+                />
+            )}
         </header>
     );
 };

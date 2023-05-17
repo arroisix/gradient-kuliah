@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { FaPlay } from 'react-icons/fa';
 import { MdInfoOutline } from 'react-icons/md';
+import SubscribeButton from '../Common/SubscribeButton';
 
 interface HeroPTSLProps {
     title?: string;
@@ -88,12 +89,7 @@ const HeroPTSLSection = ({
                         Lanjut Belajar
                     </Button>
                 ) : (
-                    <Button
-                        className="md:w-fit text-center mt-4 z-10"
-                        variant="primary"
-                        href={`/kelas/${slug}#benefit`}>
-                        Info Selengkapnya
-                    </Button>
+                    <SubscribeButton slug={slug} />
                 )}
                 {is_subscribed &&
                     (expiryDay <= 7 || new Date() <= new Date('2022-10-14')) &&

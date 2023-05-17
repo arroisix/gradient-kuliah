@@ -26,7 +26,10 @@ function HlsPlayer({ src, autoPlay, ...props }: HlsPlayerProps) {
             const newHls = new Hls({
                 enableWorker: true,
                 lowLatencyMode: true,
-                backBufferLength: 90
+                backBufferLength: 90,
+                progressive: true,
+                liveSyncDurationCount: 3,
+                initialLiveManifestSize: 3
             });
 
             if (videoRef.current != null) {

@@ -1,4 +1,4 @@
-import { MdPlayCircleOutline, MdOutlineGroup } from 'react-icons/md';
+import { MdPlayCircleOutline, MdOutlineGroup, MdNotes } from 'react-icons/md';
 import Image from 'next/image';
 import SubscribeButton from '../Common/SubscribeButton';
 
@@ -38,8 +38,13 @@ const BenefitKalkulus1Section = (): JSX.Element => {
                     </h3>
                     <BenefitItems
                         icons={<MdPlayCircleOutline />}
-                        title="100+ Video Pembelajaran On Demand"
+                        title="120+ Video Pembelajaran On Demand"
                         subtitle="Materi lengkap yang bisa kamu akses kapan aja dan diajar langsung sama dosen terbaik di Indonesia"
+                    />
+                    <BenefitItems
+                        icons={<MdNotes />}
+                        title="AstroNotes: Notebook (Catatan) dari Gradient, Lengkap!"
+                        subtitle="Catatan dan Rangkuman Materi yang disusun oleh Gradient"
                     />
                     <BenefitItems
                         icons={<MdOutlineGroup />}

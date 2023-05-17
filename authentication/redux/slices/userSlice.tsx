@@ -87,8 +87,8 @@ const userSlice = createSlice({
         );
         builder.addMatcher(
             authApi.endpoints.updateUser.matchFulfilled,
-            (state, { payload }: PayloadAction<User>) => {
-                state.user = payload;
+            (state, { payload }: PayloadAction<LoginResponseData>) => {
+                state.user = payload.user;
                 state.is_new_user = false;
 
                 return state;

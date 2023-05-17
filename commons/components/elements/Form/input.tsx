@@ -39,7 +39,7 @@ const Input: React.FC<InputProps> = ({
             <div>{startAddorment}</div>
             <input
                 type={type}
-                className={`form-input bg-transparent border-0 w-full focus:outline-none focus:ring-0 focus:appearance-none`}
+                className={`form-input bg-transparent border-0 w-full focus:outline-none focus:ring-0 focus:appearance-none placeholder-gray-300`}
                 placeholder={placeholder}
                 onChange={onChange}
                 // @ts-ignore

@@ -1,12 +1,14 @@
 import Button from 'commons/components/elements/Button';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { MdInfoOutline } from 'react-icons/md';
+import SubscribeButton from './SubscribeButton';
 
 interface HeroCommonProps {
     title?: string;
     tagline?: string;
     video_preview?: string;
     video_preview_mobile?: string;
+    hero_image?: string;
     slug: string;
 }
 
@@ -15,9 +17,10 @@ const HeroSection = ({
     tagline,
     video_preview,
     video_preview_mobile,
+    hero_image,
     slug
 }: HeroCommonProps): JSX.Element => {
-    const { is_subscribed, expiryDay, latest_watch_video } =
+    const { is_subscribed, expiryDay, latest_watch_video, isLoading } =
         useCourseSubscription(slug);
 
     return (
@@ -47,7 +50,7 @@ const HeroSection = ({
                         </h3>
                     </div>
                 )}
-                {is_subscribed ? (
+                {is_subscribed && !isLoading ? (
                     <Button
                         className="md:w-fit text-center mt-4"
                         variant="primary"
@@ -55,12 +58,7 @@ const HeroSection = ({
                         Lanjut Belajar
                     </Button>
                 ) : (
-                    <Button
-                        className="md:w-fit text-center mt-4"
-                        variant="primary"
-                        href={`/kelas/${slug}#benefit`}>
-                        Info Selengkapnya
-                    </Button>
+                    <SubscribeButton slug={slug} />
                 )}
                 {is_subscribed &&
                     (expiryDay <= 7 || new Date() <= new Date('2022-10-14')) &&
@@ -75,14 +73,23 @@ const HeroSection = ({
                     )}
             </div>
             <div className="hidden md:flex h-screen mt-16 md:mt-0 overflow-hidden absolute top-0 right-0">
-                <div>
-                    <video
-                        autoPlay
-                        muted
-                        loop
-                        className="object-contain h-screen">
-                        <source src={video_preview} type="video/mp4" />
-                    </video>
+                <div className="max-w-[60vw]">
+                    {video_preview && (
+                        <video
+                            autoPlay
+                            muted
+                            loop
+                            className="object-contain h-screen">
+                            <source src={video_preview} type="video/mp4" />
+                        </video>
+                    )}
+                    {hero_image && (
+                        <img
+                            src={hero_image}
+                            alt={`hero-img-${slug}`}
+                            className="object-cover h-screen"
+                        />
+                    )}
                     <div
                         className="h-[105vh] w-[10vw] bg-black absolute -left-32 top-0"
                         style={{ filter: 'blur(4px)' }}
@@ -91,13 +98,25 @@ const HeroSection = ({
             </div>
             <div className="flex md:hidden h-screen w-screen mt-16 overflow-hidden absolute top-0 left-0">
                 <div className="relative">
-                    <video
-                        autoPlay
-                        muted
-                        loop
-                        className="object-cover w-screen max-h-[80vh]">
-                        <source src={video_preview_mobile} type="video/mp4" />
-                    </video>
+                    {video_preview_mobile && (
+                        <video
+                            autoPlay
+                            muted
+                            loop
+                            className="object-cover w-screen max-h-[80vh]">
+                            <source
+                                src={video_preview_mobile}
+                                type="video/mp4"
+                            />
+                        </video>
+                    )}
+                    {hero_image && (
+                        <img
+                            src={hero_image}
+                            alt={`hero-img-${slug}`}
+                            className="object-cover h-[75vh]"
+                        />
+                    )}
                     <div
                         className="h-[10vh] w-[105vw] bg-black absolute bottom-32 -left-2"
                         style={{ filter: 'blur(4px)' }}

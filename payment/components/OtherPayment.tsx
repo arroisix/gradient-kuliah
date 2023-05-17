@@ -11,7 +11,7 @@ const OtherPaymentBox = (): JSX.Element => {
             </div>
             <span className="text-base font-body text-neutral-200">
                 Untuk metode pembayaran selain bank yang tersedia dapat
-                dilakukan dengan menguhungi Customer Service kami.
+                dilakukan dengan menghubungi Customer Service kami.
             </span>
             <div className="flex gap-4 md:gap-2 my-4 flex-wrap">
                 <Button
