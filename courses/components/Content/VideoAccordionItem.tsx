@@ -5,7 +5,9 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 
 import Lock from 'commons/components/elements/Icons/Lock';
 import { ContentAccordionItemProps } from './ContentSection';
-import { BiPlayCircle } from 'react-icons/bi';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import Play from 'commons/components/elements/Icons/Play';
+import GreenCheck from 'commons/components/elements/Icons/GreenCheck';
 
 const VideoAccordionItem = ({
     subchapter,
@@ -18,6 +20,7 @@ const VideoAccordionItem = ({
     const router = useRouter();
     const { setModalAuthOpen } = useAuth();
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const { watch_progress } = useCourseSubscription(slug);
 
     const decideOnClickAction = (): void => {
         if (isAuthenticated) {
@@ -48,7 +51,15 @@ const VideoAccordionItem = ({
             }`}>
             <div>
                 {subchapter?.video?.is_free || isSubscribed ? (
-                    <BiPlayCircle className="text-xl" />
+                    watch_progress?.filter(
+                        (progress: SubchapterProgress) =>
+                            progress?.subchapter?.id === subchapter?.id &&
+                            progress?.video?.is_finished
+                    )?.length ?? 0 > 0 ? (
+                        <GreenCheck />
+                    ) : (
+                        <Play />
+                    )
                 ) : (
                     <Lock />
                 )}

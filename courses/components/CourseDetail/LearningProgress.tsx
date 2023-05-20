@@ -6,12 +6,50 @@ import { MdInfoOutline } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
+export const PercentageProgess = ({
+    slug
+}: GradientBaseComponentWithSlug): JSX.Element => {
+    const { completion_percentage } = useCourseSubscription(slug);
+    return (
+        <div className="flex flex-col gap-2 w-full">
+            <div className="h-2 bg-gray-500 rounded-full w-full relative overflow-hidden">
+                <div
+                    style={{
+                        width: `${
+                            (completion_percentage?.total_finished_video /
+                                completion_percentage?.total_video_count) *
+                            100
+                        }%`
+                    }}
+                    className={`h-2 absolute rounded-full left-0 z-10 bg-[#D9B8FF]`}
+                />
+            </div>
+            <div>
+                Progress Belajar:
+                <span className="font-semibold text-green-500 ml-2">
+                    {Math.round(
+                        (completion_percentage?.total_finished_video /
+                            completion_percentage?.total_video_count) *
+                            100
+                    )}
+                    %
+                </span>
+            </div>
+        </div>
+    );
+};
+
 const LearningProgress = ({
     slug
 }: GradientBaseComponentWithSlug): JSX.Element => {
     const { data } = useGetLandingCourseDataQuery(slug);
-    const { is_subscribed, expiryDay, latest_watch_video, isLoading } =
-        useCourseSubscription(slug);
+    const {
+        is_subscribed,
+        expiryDay,
+        latest_watch_video,
+        isLoading,
+        first_video_in_course
+    } = useCourseSubscription(slug);
     const isAuthenticated = useSelector(getIsAuthenticated);
 
     return (
@@ -49,24 +87,26 @@ const LearningProgress = ({
                     )}
                 </div>
                 <div className="flex flex-col gap-3 lg:flex-row-reverse lg:justify-end lg:items-center lg:ml-3">
-                    {isAuthenticated && (
-                        <div className="flex flex-col gap-2 w-full">
-                            <div className="h-2 bg-gray-500 rounded-full w-full lg:w-8/12" />
-                            <div className="">
-                                Progress Belajar:
-                                <span className="font-semibold text-green-500">
-                                    3%
-                                </span>
-                            </div>
-                        </div>
-                    )}
+                    {isAuthenticated &&
+                        latest_watch_video?.subchapter.subchapter_name && (
+                            <PercentageProgess slug={slug} />
+                        )}
                     {is_subscribed && !isLoading ? (
-                        <Button
-                            className="md:w-fit text-center mt-4 min-w-[200px]"
-                            variant="primary"
-                            href={`/kelas/${slug}/belajar/video/${latest_watch_video?.chapter_id}/${latest_watch_video?.subchapter.id}`}>
-                            Lanjut Belajar
-                        </Button>
+                        latest_watch_video?.subchapter.subchapter_name ? (
+                            <Button
+                                className="md:w-fit text-center mt-4 min-w-[200px]"
+                                variant="primary"
+                                href={`/kelas/${slug}/belajar/video/${latest_watch_video?.chapter_id}/${latest_watch_video?.subchapter.id}`}>
+                                Lanjut Belajar
+                            </Button>
+                        ) : (
+                            <Button
+                                className="md:w-fit text-center mt-4 min-w-[200px]"
+                                variant="primary"
+                                href={`/kelas/${slug}/belajar/video/${first_video_in_course?.chapter_id}/${first_video_in_course?.subchapter_id}`}>
+                                Mulai Belajar
+                            </Button>
+                        )
                     ) : (
                         <SubscribeButton slug={slug} />
                     )}

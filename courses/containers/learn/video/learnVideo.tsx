@@ -1,9 +1,11 @@
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import VideoPlayer from 'commons/components/elements/Video';
 import PopupQuestionContent from 'courses/components/Exercise/PopupQuestion';
 import LearningExperience from 'courses/components/LearningExperience';
 import NeedSubscribe from 'courses/components/NeedSubscribe';
 import { useLearning } from 'courses/contexts/LearningProvider';
 import { useTrackSubchapterProgressMutation } from 'courses/redux/api/learningExperienceApi';
+import { useSelector } from 'react-redux';
 
 const LearnVideo = ({
     learningProgress
@@ -11,6 +13,7 @@ const LearnVideo = ({
     learningProgress?: LearningProgress;
 }): JSX.Element => {
     const [track] = useTrackSubchapterProgressMutation();
+    const isAuthenticated = useSelector(getIsAuthenticated);
     const { is_subscribed, video } = useLearning();
 
     const renderVideoPlayer = (): JSX.Element => {
@@ -25,7 +28,7 @@ const LearnVideo = ({
                         thumbnail={video?.thumbnail}
                         key={video?.video_url}
                         trackProgress={
-                            is_subscribed
+                            isAuthenticated
                                 ? async (last_duration, isFinished) =>
                                       track({
                                           learning_progress_id:

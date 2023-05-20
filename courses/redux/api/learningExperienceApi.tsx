@@ -69,7 +69,8 @@ export const learningExperienceApi = baseApi.injectEndpoints({
         getLearningProgress: builder.query<LearningProgress, string>({
             query: (slug: string) => ({
                 url: `${LEARNING_EXPERIENCE_BASE_URL}learning-progress/${slug}/`
-            })
+            }),
+            providesTags: ['WATCH_PROGRESS']
         }),
         trackSubchapterProgress: builder.mutation<
             SubchapterProgress,
@@ -81,7 +82,8 @@ export const learningExperienceApi = baseApi.injectEndpoints({
                 body: {
                     ...data
                 }
-            })
+            }),
+            invalidatesTags: ['WATCH_PROGRESS']
         }),
         getExamExerciseWorksheet: builder.query<
             ExamWorksheet,

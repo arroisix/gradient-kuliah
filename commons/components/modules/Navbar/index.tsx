@@ -21,8 +21,8 @@ import {
 import { removeUser } from 'authentication/redux/slices/userSlice';
 import Button from 'commons/components/elements/Button';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
-import { useGetLandingCourseListContentQuery } from 'courses/redux/api/publicCourseApi';
 import { BiPlayCircle } from 'react-icons/bi';
+import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienceApi';
 
 const Navbar = ({
     paymentPage,
@@ -50,15 +50,15 @@ const Navbar = ({
     const router = useRouter();
     const { id } = router.query;
     const dispatch = useDispatch();
-    const { data: content } = useGetLandingCourseListContentQuery(
-        id as string,
-        {
+    const { data: learningProgress, isLoading: isLoadingLearningProgress } =
+        useGetLearningProgressQuery(id as string, {
             skip:
+                !isAuthenticated ||
                 id === null ||
                 id === undefined ||
-                !router.pathname.includes('kelas/[id]/')
-        }
-    );
+                !router.pathname.includes('kelas/[id]/'),
+            refetchOnMountOrArgChange: true
+        });
     const [scrollPosition, setScrollPosition] = useState(0);
     const handleScroll = (): void => {
         const position = window.pageYOffset;
@@ -138,14 +138,13 @@ const Navbar = ({
                         router.pathname.includes('kelas/[id]/astronotes')) ||
                         (!isMobileBreakpoints &&
                             router.pathname.includes('kelas/[id]/'))) &&
-                        content?.data &&
-                        content?.data.length > 0 &&
-                        content?.data[0].subchapters.length > 0 && (
+                        !isLoadingLearningProgress &&
+                        learningProgress?.first_video_in_course && (
                             <Button
                                 className="bg-[#C4B9FF] flex gap-1 items-center text-[#5F2BCE] transition ease-in hover:bg-gradient-to-b hover:from-[#DD837A] hover:to-[#AB8EEC] hover:text-white"
                                 size="extraSmall"
                                 variant="primary"
-                                href={`/kelas/${id}/belajar/video/${content?.data[0].id}/${content?.data[0].subchapters[0].id}`}>
+                                href={`/kelas/${id}/belajar/video/${learningProgress.first_video_in_course.chapter_id}/${learningProgress.first_video_in_course.subchapter_id}`}>
                                 <>
                                     <BiPlayCircle className="text-xl" />
                                     <span className="font-bold">VIDEO</span>

@@ -6,7 +6,7 @@ const CourseDetail = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
     return (
         <main className="flex flex-col gap-16 mb-16">
             <LearningProgress slug={slug} />
-            <div className="flex flex-col lg:items-start lg:flex-row-reverse lg:justify-center">
+            <div className="flex flex-col lg:items-start lg:flex-row-reverse lg:justify-center gap-8 lg:gap-0">
                 <CourseDescription slug={slug} />
                 <Sylabbus slug={slug} />
             </div>

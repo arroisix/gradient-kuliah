@@ -7,9 +7,11 @@ import { useSelector } from 'react-redux';
 
 const SubscribeButton = ({
     slug,
+    className,
     label = 'Gabung Sekarang'
 }: {
     slug: string;
+    className?: string;
     label?: string;
 }): JSX.Element => {
     const { data: course } = useGetLandingCourseDataQuery(slug, {
@@ -23,7 +25,9 @@ const SubscribeButton = ({
         <>
             {isAuthenticated && !is_subscribed && (
                 <Button
-                    className="md:w-fit text-center my-2 z-[5] min-w-[200px]"
+                    className={`text-center my-2 z-[5] ${
+                        className ?? 'md:w-fit min-w-[200px]'
+                    }`}
                     variant="primary"
                     href={`/langganan?courseId=${course?.course_id}`}>
                     Akses Sekarang
@@ -31,7 +35,9 @@ const SubscribeButton = ({
             )}
             {!isAuthenticated && !is_subscribed && (
                 <Button
-                    className="md:w-fit text-center my-2 z-[5] min-w-[200px]"
+                    className={`text-center my-2 z-[5] ${
+                        className ?? 'md:w-fit min-w-[200px]'
+                    }`}
                     variant="primary"
                     onClick={() =>
                         setModalAuthOpen(

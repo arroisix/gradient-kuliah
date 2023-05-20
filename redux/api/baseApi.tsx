@@ -16,7 +16,13 @@ import config from './config';
 import { HYDRATE } from 'next-redux-wrapper';
 
 export const baseApi = createApi({
-    tagTypes: ['QNA_QUESTION', 'QNA_ANSWER', 'EXAM_QUESTION', 'AI_TUTOR'],
+    tagTypes: [
+        'QNA_QUESTION',
+        'QNA_ANSWER',
+        'EXAM_QUESTION',
+        'AI_TUTOR',
+        'WATCH_PROGRESS'
+    ],
     baseQuery: fetchBaseQuery({
         baseUrl: config.API_BASE_URL,
         prepareHeaders: (headers, { getState }) => {

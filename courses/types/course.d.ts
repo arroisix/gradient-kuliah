@@ -158,10 +158,24 @@ type SubchapterProgress = {
     subchapter: SubChapter;
 };
 
+interface FirstVideoInCourse {
+    subchapter_id: string;
+    subchapter_name: string;
+    chapter_id: string;
+    chapter_name: string;
+}
+
+type CompletionPercentage = {
+    total_finished_video: int;
+    total_video_count: int;
+};
+
 type LearningProgress = {
     id: string;
+    first_video_in_course?: FirstVideoInCourse;
     latest_watch_video: SubchapterProgress;
     watch_progress: SubchapterProgress[];
+    completion_percentage?: CompletionPercentage;
 };
 
 type Packet = {

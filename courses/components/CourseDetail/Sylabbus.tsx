@@ -1,6 +1,8 @@
 import Accordion from 'commons/components/elements/Accordion';
 import Article from 'commons/components/elements/Icons/Article';
+import GreenCheck from 'commons/components/elements/Icons/GreenCheck';
 import Play from 'commons/components/elements/Icons/Play';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import {
     useGetListCourseChapterQuery,
     useGetListCourseSubChapterQuery
@@ -12,6 +14,7 @@ const SylabbusContent = ({
     slug
 }: GradientBaseComponentWithId & { slug: string }): JSX.Element => {
     const { data: subchapters } = useGetListCourseSubChapterQuery(id);
+    const { watch_progress } = useCourseSubscription(slug);
 
     return (
         <div className="flex flex-col gap-2">
@@ -31,11 +34,22 @@ const SylabbusContent = ({
                                 alt="Video Thumbnail"
                             />
                         </div>
-                        {subchapter.type_name === 'lecture' ? (
-                            <Play />
-                        ) : (
-                            <Article />
-                        )}
+                        <div>
+                            {subchapter.type_name === 'lecture' ? (
+                                watch_progress?.filter(
+                                    (progress: SubchapterProgress) =>
+                                        progress?.subchapter?.id ===
+                                            subchapter?.id &&
+                                        progress?.video?.is_finished
+                                )?.length ?? 0 > 0 ? (
+                                    <GreenCheck />
+                                ) : (
+                                    <Play />
+                                )
+                            ) : (
+                                <Article />
+                            )}
+                        </div>
                         <div className="flex flex-col text-left">
                             <p className="text-lg text-neutral-200">
                                 {subchapter.subchapter_name}

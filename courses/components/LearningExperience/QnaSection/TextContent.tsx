@@ -9,7 +9,7 @@ const TextContent = ({ content }: { content: string }): JSX.Element => {
     );
     return (
         <div
-            className="break-all markdown-body"
+            className="break-all markdown-body max-w-[50vw]"
             dangerouslySetInnerHTML={{
                 __html: marked.parse(content)
             }}
