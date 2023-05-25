@@ -6,7 +6,7 @@ import Footer from './components/modules/Footer';
 import Navbar from './components/modules/Navbar';
 
 interface LayoutProps {
-    children: JSX.Element;
+    children?: JSX.Element;
     paymentPage?: boolean;
     shouldTransparent?: boolean;
     courses?: Course[];

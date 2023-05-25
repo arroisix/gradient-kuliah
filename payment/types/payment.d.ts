@@ -16,6 +16,33 @@ type Subscription = {
     deactivate_after: string | Date;
 };
 
+type ActivePacket = {
+    packet_id: string;
+    subscription_id: string;
+    active_from: string | Date;
+    deactivate_after: string | Date;
+    is_all_courses: boolean;
+    courses: string[];
+    is_all_features: boolean;
+    features: string[];
+};
+
+type PacketOffer = {
+    id: string;
+    is_free: boolean;
+    packet_name: string;
+    active_duration: number;
+    is_lifetime: boolean;
+    price: string;
+    price_before_discount: string;
+    discount: string;
+    order: number;
+    benefits: {
+        data: string[];
+        info: string;
+    };
+};
+
 type Transaction = {
     created_at: string | Date;
     id: string;

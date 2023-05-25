@@ -88,6 +88,7 @@ const LearningProgress = ({
                 </div>
                 <div className="flex flex-col gap-3 lg:flex-row-reverse lg:justify-end lg:items-center lg:ml-3">
                     {isAuthenticated &&
+                        is_subscribed &&
                         latest_watch_video?.subchapter.subchapter_name && (
                             <PercentageProgess slug={slug} />
                         )}

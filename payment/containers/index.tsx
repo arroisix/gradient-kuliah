@@ -6,8 +6,7 @@ import VirtualAccountBox from '../components/VitualAccount';
 import { usePayment } from '../contexts/PaymentProvider';
 
 const SubscriptionContainer = (): JSX.Element => {
-    const { isModalCheckoutOpen, setModalCheckoutOpen, isFreePacket } =
-        usePayment();
+    const { isModalCheckoutOpen, setModalCheckoutOpen, packet } = usePayment();
 
     return (
         <section className="min-h-screen pt-24 px-4 md:px-[7.5rem]">
@@ -15,7 +14,7 @@ const SubscriptionContainer = (): JSX.Element => {
                 Pilih metode pembayaran
             </h1>
             <div className="flex flex-col gap-4 mt-4">
-                {isFreePacket() ? (
+                {packet?.is_free ? (
                     <FreeBox />
                 ) : (
                     <>
@@ -24,7 +23,7 @@ const SubscriptionContainer = (): JSX.Element => {
                     </>
                 )}
             </div>
-            {isFreePacket() ? (
+            {packet?.is_free ? (
                 <FreeModalCheckout
                     isOpen={isModalCheckoutOpen}
                     setOpen={setModalCheckoutOpen}

@@ -1,19 +1,19 @@
-import { useGetActiveSubscriptionBySlugQuery } from 'payment/redux/api/subscriptionApi';
+import { useGetActiveSubscriptionQuery } from 'payment/redux/api/subscriptionApi';
 import { countTheDay } from 'payment/utils';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienceApi';
 
-const useCourseSubscription = (slug: string) => {
+const useCourseSubscription = (slug?: string) => {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { data, isLoading: isLoadingSubscription } =
-        useGetActiveSubscriptionBySlugQuery(slug, {
-            skip: !isAuthenticated || slug === undefined,
+        useGetActiveSubscriptionQuery(undefined, {
+            skip: !isAuthenticated,
             refetchOnMountOrArgChange: true
         });
     const { data: learningProgress, isLoading: isLoadingLearningProgress } =
-        useGetLearningProgressQuery(slug, {
+        useGetLearningProgressQuery(slug as string, {
             skip: !isAuthenticated || slug === undefined,
             refetchOnMountOrArgChange: true
         });
@@ -26,13 +26,17 @@ const useCourseSubscription = (slug: string) => {
     }, [data]);
 
     const checkIsSubscribed = (): boolean => {
-        if (data?.id) return true;
+        if (data?.subscription_id && data.is_all_courses) return true;
+
+        if (data?.subscription_id && !data.is_all_courses)
+            return data.courses.includes(slug as string);
 
         return false;
     };
 
     return {
-        subscription_id: data?.id,
+        subscription_id: data?.subscription_id,
+        packet_id: data?.packet_id,
         is_subscribed: checkIsSubscribed(),
         expiryDay,
         isLoading: isLoadingSubscription || isLoadingLearningProgress,

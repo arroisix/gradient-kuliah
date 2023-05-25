@@ -50,9 +50,19 @@ export const subscriptionApi = baseApi.injectEndpoints({
                 body: data
             })
         }),
-        getActiveSubscription: builder.query<Subscription, string>({
-            query: (course_id: string) => ({
-                url: `${SUBSCRIPTION_BASE_URL}active-subscription/${course_id}`
+        getActiveSubscription: builder.query<ActivePacket, void>({
+            query: () => ({
+                url: `${SUBSCRIPTION_BASE_URL}active-packet/`
+            })
+        }),
+        getPacketOffer: builder.query<ResponseData<PacketOffer>, void>({
+            query: () => ({
+                url: `${SUBSCRIPTION_BASE_URL}packet-offer/`
+            })
+        }),
+        getDetailPacketOffer: builder.query<PacketOffer, string>({
+            query: (packet_id: string) => ({
+                url: `${SUBSCRIPTION_BASE_URL}packet-detail/${packet_id}/`
             })
         }),
         getActiveSubscriptionBySlug: builder.query<Subscription, string>({
@@ -70,5 +80,7 @@ export const {
     useGetActiveSubscriptionQuery,
     useGetActiveSubscriptionBySlugQuery,
     useGetOneCourseManyPacketQuery,
-    useExtendCheckoutMutation
+    useExtendCheckoutMutation,
+    useGetDetailPacketOfferQuery,
+    useGetPacketOfferQuery
 } = subscriptionApi;

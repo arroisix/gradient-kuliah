@@ -1,6 +1,5 @@
 import moment from 'moment';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
 import { BsShieldFillCheck } from 'react-icons/bs';
 import Modal from 'commons/components/modules/Modal';
 import { formatCurrency } from 'commons/utils';
@@ -9,43 +8,13 @@ import CheckoutButton from '../CheckoutButton';
 import { LOGO_PAYMENT, NAME_PAYMENT } from '../constant';
 
 const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
-    const [course, setCourse] = useState({} as Course);
-    const { packet, packets, paymentMethod, setPacket } = usePayment();
-
-    useEffect(() => {
-        if (packet && packet?.courses?.length > 0) {
-            setCourse(packet?.courses[0]);
-        }
-    }, [course, packet]);
-
-    const onClose = (): void => {
-        setPacket();
-        setOpen(0);
-    };
-
-    if (!packet) {
-        return (
-            <Modal isOpen={isOpen ? 1 : 0} setOpen={onClose} variant="dark">
-                <div className="w-full flex flex-col mb-4">
-                    <h1 className="text-xl  font-bold">Pilih Paket</h1>
-                </div>
-                <div className="flex flex-col gap-2">
-                    {packets.map((p: Packet) => (
-                        <div
-                            className="flex w-full gap-2 hover:bg-neutral-700 p-2 rounded-md underline"
-                            key={p.id}
-                            aria-hidden
-                            onClick={() => setPacket(p)}>
-                            {p.packet_name}
-                        </div>
-                    ))}
-                </div>
-            </Modal>
-        );
-    }
+    const { packet, paymentMethod } = usePayment();
 
     return (
-        <Modal isOpen={isOpen ? 1 : 0} setOpen={onClose} variant="dark">
+        <Modal
+            isOpen={isOpen ? 1 : 0}
+            setOpen={() => setOpen(0)}
+            variant="dark">
             <div className="w-full flex flex-col mb-4">
                 <h1 className="text-xl  font-bold">Konfirmasi Pembayaran</h1>
             </div>
@@ -69,7 +38,7 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
                 <p className="text-xs text-neutral-400">DETAIL PEMBAYARAN</p>
                 <div className="flex items-start w-full mt-2 justify-between">
                     <div className="w-full">
-                        <p className="text-base">{course.course_name}</p>
+                        <p className="text-base">{packet?.packet_name}</p>
                         <span className="text-xs text-neutral-400">
                             Langganan hingga{' '}
                             {moment()

@@ -2,21 +2,19 @@ import { useAuth } from 'authentication/contexts/AuthProvider';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
-import { useGetLandingCourseDataQuery } from 'courses/redux/api/publicCourseApi';
 import { useSelector } from 'react-redux';
 
 const SubscribeButton = ({
     slug,
+    packetId,
     className,
     label = 'Gabung Sekarang'
 }: {
-    slug: string;
+    slug?: string;
+    packetId?: string;
     className?: string;
     label?: string;
 }): JSX.Element => {
-    const { data: course } = useGetLandingCourseDataQuery(slug, {
-        skip: slug === undefined || slug == null
-    });
     const { is_subscribed } = useCourseSubscription(slug);
     const { setModalAuthOpen } = useAuth();
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -29,7 +27,11 @@ const SubscribeButton = ({
                         className ?? 'md:w-fit min-w-[200px]'
                     }`}
                     variant="primary"
-                    href={`/langganan?courseId=${course?.course_id}`}>
+                    href={
+                        packetId
+                            ? `/pembayaran?packetId=${packetId}`
+                            : `/langganan`
+                    }>
                     Akses Sekarang
                 </Button>
             )}
@@ -39,13 +41,7 @@ const SubscribeButton = ({
                         className ?? 'md:w-fit min-w-[200px]'
                     }`}
                     variant="primary"
-                    onClick={() =>
-                        setModalAuthOpen(
-                            1,
-                            false,
-                            `/langganan?courseId=${course?.course_id}`
-                        )
-                    }>
+                    onClick={() => setModalAuthOpen(1, false, `/langganan`)}>
                     {label}
                 </Button>
             )}

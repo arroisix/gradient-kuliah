@@ -27,9 +27,13 @@ export const baseApi = createApi({
         baseUrl: config.API_BASE_URL,
         prepareHeaders: (headers, { getState }) => {
             const token = (getState() as RootState).authentication.user.token;
+            const rawToken =
+                typeof window !== 'undefined'
+                    ? window.localStorage.getItem('token')
+                    : null;
 
-            if (token) {
-                headers.set('Authorization', `Token ${token}`);
+            if (token || rawToken) {
+                headers.set('Authorization', `Token ${token ?? rawToken}`);
             }
             return headers;
         }

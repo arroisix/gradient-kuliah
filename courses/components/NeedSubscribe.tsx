@@ -1,10 +1,8 @@
 import { MdPlayCircleOutline, MdOutlineGroup, MdEdit } from 'react-icons/md';
 import Button from 'commons/components/elements/Button';
-import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { useAuth } from 'authentication/contexts/AuthProvider';
-import { useGetLandingCourseDataQuery } from 'courses/redux/api/publicCourseApi';
 
 const BenefitItems = ({
     icons,
@@ -24,11 +22,6 @@ const BenefitItems = ({
 };
 
 const NeedSubscribe = ({}: { thumbnail?: string }): JSX.Element => {
-    const router = useRouter();
-    const { id } = router.query;
-    const { data } = useGetLandingCourseDataQuery(id as string, {
-        skip: id === undefined || id === null
-    });
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { setModalAuthOpen } = useAuth();
 
@@ -56,20 +49,14 @@ const NeedSubscribe = ({}: { thumbnail?: string }): JSX.Element => {
                 />
                 <div className="flex">
                     {isAuthenticated ? (
-                        <Button
-                            variant="primary"
-                            href={`/langganan?courseId=${data?.course_id}`}>
+                        <Button variant="primary" href={`/langganan`}>
                             Gabung Kelas
                         </Button>
                     ) : (
                         <Button
                             variant="primary"
                             onClick={() =>
-                                setModalAuthOpen(
-                                    1,
-                                    false,
-                                    `/langganan?courseId=${data?.course_id}`
-                                )
+                                setModalAuthOpen(1, false, `/langganan`)
                             }>
                             Gabung Kelas
                         </Button>

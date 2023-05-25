@@ -6,7 +6,7 @@ import { countTheDay } from 'payment/utils';
 import { useState, useEffect } from 'react';
 
 const Catalog = ({ course }: { course: Course }): JSX.Element => {
-    const { data } = useGetActiveSubscriptionQuery(course.id);
+    const { data } = useGetActiveSubscriptionQuery();
     const sortChapterOrder = (): Chapter[] => {
         const rawChapters = [...course.chapters];
         const sortedChapter = rawChapters?.sort(
@@ -35,7 +35,7 @@ const Catalog = ({ course }: { course: Course }): JSX.Element => {
                                 terus mengakses layanan Gradient.
                             </span>
                             <Button
-                                href={`/langganan?courseId=${course.id}&subscriptionId=${data?.id}`}
+                                href={`/pembayaran?packetId=${data?.packet_id}&subscriptionId=${data?.subscription_id}`}
                                 variant="custom"
                                 className="bg-accent-yellow text-black w-full md:w-[250px] font-body text-center">
                                 Perpanjang

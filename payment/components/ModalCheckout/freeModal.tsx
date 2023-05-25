@@ -1,5 +1,4 @@
 import moment from 'moment';
-import { useEffect, useState } from 'react';
 import { BsShieldFillCheck } from 'react-icons/bs';
 import Modal from 'commons/components/modules/Modal';
 import { usePayment } from 'payment/contexts/PaymentProvider';
@@ -9,14 +8,7 @@ const FreeModalCheckout = ({
     isOpen,
     setOpen
 }: ModalBaseProps): JSX.Element => {
-    const [course, setCourse] = useState({} as Course);
-    const { freePacket, paymentMethod } = usePayment();
-
-    useEffect(() => {
-        if (freePacket) {
-            setCourse(freePacket?.courses[0]);
-        }
-    }, [course, freePacket]);
+    const { packet, paymentMethod } = usePayment();
 
     return (
         <Modal
@@ -36,12 +28,12 @@ const FreeModalCheckout = ({
                 <p className="text-xs text-neutral-400">DETAIL PEMBAYARAN</p>
                 <div className="flex items-center w-full mt-2 justify-between">
                     <div className="w-full">
-                        <p className="text-base">{course.course_name}</p>
-                        {!freePacket?.is_lifetime && (
+                        <p className="text-base">{packet?.packet_name}</p>
+                        {!packet?.is_lifetime && (
                             <span className="text-xs text-neutral-400">
                                 Langganan hingga{' '}
                                 {moment()
-                                    .add(freePacket?.active_duration, 'd')
+                                    .add(packet?.active_duration, 'd')
                                     .utc()
                                     .format('D MMM YYYY')}
                             </span>
@@ -54,7 +46,7 @@ const FreeModalCheckout = ({
             </div>
             <div className="w-full flex flex-col justify-center items-center">
                 <CheckoutButton
-                    packetId={freePacket?.id as string}
+                    packetId={packet?.id as string}
                     paymentMethod={paymentMethod}
                     isFree
                 />

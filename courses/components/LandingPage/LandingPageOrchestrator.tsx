@@ -1,9 +1,7 @@
-import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useGetLandingCourseDataQuery } from 'courses/redux/api/publicCourseApi';
 import { cloneElement } from 'react';
-import { useSelector } from 'react-redux';
 import CatalogSection from './Common/CatalogSection';
 import FAQSection from './Common/FAQSection';
 import HeroSection from './Common/HeroSection';
@@ -90,24 +88,7 @@ export const AuthLandingPage = ({ id }: { id: string }): JSX.Element => {
 };
 
 const LandingPageOrchestrator = ({ id }: { id: string }): JSX.Element => {
-    const { data: course } = useGetLandingCourseDataQuery(id);
-    const isAuthenticated = useSelector(getIsAuthenticated);
-
-    if (isAuthenticated) {
-        return <CourseDetail slug={id} />;
-    }
-
-    return (
-        <main>
-            {course?.configuration?.landing_page_section.map(
-                (section: LandingPageSection) =>
-                    cloneElement(COMPONENT_DICTIONARY[section.key], {
-                        ...section,
-                        slug: id
-                    })
-            )}
-        </main>
-    );
+    return <CourseDetail slug={id} />;
 };
 
 export default LandingPageOrchestrator;

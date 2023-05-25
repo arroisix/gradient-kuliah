@@ -69,3 +69,7 @@ interface GradientBaseComponentWithSlug {
 interface GradientBaseComponentWithId {
     id: string;
 }
+
+interface GradientBaseComponentWithData<T> {
+    data: T;
+}

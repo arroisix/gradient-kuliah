@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { MdInfoOutline } from 'react-icons/md';
 
 const Hero = ({ course }: { course: Course }): JSX.Element => {
-    const { data } = useGetActiveSubscriptionQuery(course.id, {
+    const { data } = useGetActiveSubscriptionQuery(undefined, {
         skip: course !== undefined && course !== null && !course.is_subscribed
     });
     const [expiryDay, setExpiryDay] = useState(30);

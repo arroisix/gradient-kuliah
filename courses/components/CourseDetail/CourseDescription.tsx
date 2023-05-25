@@ -51,6 +51,7 @@ const CourseDescription = ({
                 </div>
                 <div className="flex flex-col gap-2">
                     {isAuthenticated &&
+                        is_subscribed &&
                         latest_watch_video?.subchapter.subchapter_name && (
                             <PercentageProgess slug={slug} />
                         )}

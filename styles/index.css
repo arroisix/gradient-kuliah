@@ -87,6 +87,37 @@ input[type='number']::-webkit-outer-spin-button {
     }
 }
 
+.gradient-text {
+    background: linear-gradient(
+        43.82deg,
+        #cac7e4 0%,
+        #ab8eec 28.4%,
+        #dd837a 65.1%,
+        #ecd0cd 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-emphasis-color: transparent;
+}
+
+.gradient-blur-text {
+    background: linear-gradient(
+        43.82deg,
+        #cac7e4 0%,
+        #ab8eec 28.4%,
+        #dd837a 65.1%,
+        #ecd0cd 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-emphasis-color: transparent;
+
+    text-shadow: 0px 0px 569.319px #5f2bce, 0px 0px 325.325px #5f2bce,
+        0px 0px 189.773px #5f2bce, 0px 0px 94.8864px #5f2bce;
+}
+
 .blur-bg {
     width: 50vw;
     height: 100vh;
