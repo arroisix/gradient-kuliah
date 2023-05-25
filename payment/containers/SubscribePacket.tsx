@@ -12,8 +12,8 @@ const PacketCard = ({
         <div
             className={
                 isHighlighted
-                    ? 'w-full p-[5px] bg-[linear-gradient(43.82deg,#ECD0CD_0%,#DD837A_28.35%,#CAC7E4_56.15%,#AB8EEC_74.31%)] rounded-[20px] overflow-hidden'
-                    : 'w-full '
+                    ? 'w-full lg:w-fit p-[5px] bg-[linear-gradient(43.82deg,#ECD0CD_0%,#DD837A_28.35%,#CAC7E4_56.15%,#AB8EEC_74.31%)] rounded-[20px] overflow-hidden'
+                    : 'w-full lg:w-fit'
             }>
             {isHighlighted && (
                 <div className="w-full p-2 flex justify-center items-center animate-pulse">
@@ -87,7 +87,7 @@ const SubscribePacket = (): JSX.Element => {
             <h4 className="text-2xl lg:text-3xl font-bold">
                 Akses Semua Kelas Tanpa Batas.
             </h4>
-            <div className="flex flex-col lg:flex-row gap-4 items-end w-full">
+            <div className="flex flex-col lg:flex-row gap-4 items-end justify-center w-full">
                 {isLoading && (
                     <>
                         <div className="h-[402px] w-full lg:w-[380px] bg-neutral-600 animate-pulse rounded-[20px]" />
