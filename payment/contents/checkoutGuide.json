@@ -155,42 +155,222 @@
             [
                 {
                     "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Menu Transfer"
+                    "description": "Masukkan kartu ATM Permata anda"
                 },
                 {
                     "asset": "https://google.com",
-                    "description": "Lalu pilin menu Virtual Account Billing"
+                    "description": "Masukkan PIN"
                 },
                 {
                     "asset": "https://google.com",
-                    "description": "Masukkan kode Virtual Account yang sudah tertera pada informasi diatas"
+                    "description": "Pilih menu \"Transaksi Lainnya\""
                 },
                 {
                     "asset": "https://google.com",
-                    "description": "Tekan Lakukan pembayaran"
+                    "description": "Pilih menu \"Pembayaran\""
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pilih menu \"Pembayaran Lainnya\""
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pilih menu \"Virtual Account\""
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Masukkan Nomor Virtual Account"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Lalu pilih rekening debet yang akan digunakan"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Konfirmasi detail transaksi anda"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Setelah transaksi anda selesai, invoice ini akan diupdate secara otomatis. Proses ini mungkin memakan waktu hingga 5 menit"
+                }
+            ],
+            [
+                {
+                    "asset": "https://google.com",
+                    "description": "Buka situs https://new.permatanet.com"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Masukkan User ID dan Password"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pilih \"Pembayaran Tagihan\""
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pilih \"Virtual Account\""
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Masukkan Nomor Virtual Account"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pilih menu \"Virtual Account\""
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Masukkan Nomor Virtual Account"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Periksa kembali detail pembayaran anda"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Masukkan otentikasi transaksi/token"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Setelah transaksi anda selesai, invoice ini akan diupdate secara otomatis. Proses ini mungkin memakan waktu hingga 5 menit"
+                }
+            ],
+            [
+                {
+                    "asset": "https://google.com",
+                    "description": "Buka aplikasi PermataMobile Internet"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Masukkan User ID dan Password"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pilih \"Pembayaran Tagihan\""
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pilih \"Virtual Account\""
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Masukkan Nomor Virtual Account"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pilih menu \"Virtual Account\""
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Masukkan Nomor Virtual Account"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Masukkan otentikasi transaksi/token"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Setelah transaksi anda selesai, invoice ini akan diupdate secara otomatis. Proses ini mungkin memakan waktu hingga 5 menit"
                 }
             ]
         ]
     },
     "VA_BJB": {
-        "method": ["ATM BJB"],
+        "method": ["ATM", "IBANKING", "MBANKING"],
         "step": [
             [
                 {
                     "asset": "https://google.com",
-                    "description": "Pada menu utama, pilih Menu Transfer"
+                    "description": "Masukkan kartu ATM BJB anda"
                 },
                 {
                     "asset": "https://google.com",
-                    "description": "Lalu pilin menu Virtual Account Billing"
+                    "description": "Masukkan PIN"
                 },
                 {
                     "asset": "https://google.com",
-                    "description": "Masukkan kode Virtual Account yang sudah tertera pada informasi diatas"
+                    "description": "Pilih menu \"Transaksi Lainnya\""
                 },
                 {
                     "asset": "https://google.com",
-                    "description": "Tekan Lakukan pembayaran"
+                    "description": "Pilih menu \"Virtual Account\""
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Lalu pilih rekening debet yang akan digunakan"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Masukkan Nomor Virtual Account "
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Konfirmasi detail transaksi anda"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Setelah transaksi anda selesai, invoice ini akan diupdate secara otomatis. Proses ini mungkin memakan waktu hingga 5 menit"
+                }
+            ],
+            [
+                {
+                    "asset": "https://google.com",
+                    "description": "Buka halaman https://ib.bankbjb.co.id/bjb.net"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Masukkan User ID dan Password"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pilih menu \"Virtual Account\""
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Lalu pilih rekening debet yang akan digunakan"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Masukkan Nomor Virtual Account"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Konfirmasi detail transaksi anda"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Setelah transaksi anda selesai, invoice ini akan diupdate secara otomatis. Proses ini mungkin memakan waktu hingga 5 menit"
+                }
+            ],
+            [
+                {
+                    "asset": "https://google.com",
+                    "description": "Buka aplikasi BJB Mobile"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Masukkan User ID dan Password"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Pilih menu \"Virtual Account\""
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Lalu pilih rekening debet yang akan digunakan"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Masukkan Nomor Virtual Account"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Konfirmasi detail transaksi anda"
+                },
+                {
+                    "asset": "https://google.com",
+                    "description": "Setelah transaksi anda selesai, invoice ini akan diupdate secara otomatis. Proses ini mungkin memakan waktu hingga 5 menit"
                 }
             ]
         ]

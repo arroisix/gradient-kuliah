@@ -20,7 +20,7 @@ const MethodBox = ({
             className="rounded-lg bg-white p-8 h-[150px] cursor-pointer flex items-center justify-center"
             onClick={onClick}>
             <div className="w-[170px] h-[50px] relative">
-                <Image src={logoUrl} layout="fill" />
+                <Image src={logoUrl} layout="fill" className="object-contain" />
             </div>
         </div>
     );

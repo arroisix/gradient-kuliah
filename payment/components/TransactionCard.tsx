@@ -181,7 +181,7 @@ const TransactionCard = ({
                         )}
                     </div>
                 </div>
-                {!isExpiry && transaction.status === 'WAITING' && (
+                {!isExpiry && transaction.status === 'WAITING' && isList && (
                     <div className="flex md:justify-end w-full mt-4 md:mt-0 border-t border-neutral-900 py-2 md:border-0 md:py-0">
                         <h5 className="md:text-xl text-black flex justify-between md:justify-start w-full md:w-auto items-center">
                             Lihat cara bayar <MdChevronRight />

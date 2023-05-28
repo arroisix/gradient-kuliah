@@ -2,6 +2,7 @@ import Accordion from 'commons/components/elements/Accordion';
 import Article from 'commons/components/elements/Icons/Article';
 import GreenCheck from 'commons/components/elements/Icons/GreenCheck';
 import Play from 'commons/components/elements/Icons/Play';
+import Skeleton from 'commons/components/elements/Skeleton';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import {
     useGetListCourseChapterQuery,
@@ -13,11 +14,44 @@ const SylabbusContent = ({
     id,
     slug
 }: GradientBaseComponentWithId & { slug: string }): JSX.Element => {
-    const { data: subchapters } = useGetListCourseSubChapterQuery(id);
+    const { data: subchapters, isLoading } =
+        useGetListCourseSubChapterQuery(id);
     const { watch_progress } = useCourseSubscription(slug);
 
     return (
         <div className="flex flex-col gap-2">
+            {isLoading && (
+                <>
+                    <div className='flex items-center gap-4 w-full relative"'>
+                        <Skeleton className="h-[98px] w-[240px]" />
+                        <div className="w-full">
+                            <Skeleton className="h-4" />
+                            <Skeleton className="h-4 w-1/4" />
+                        </div>
+                    </div>
+                    <div className='flex items-center gap-4 w-full relative"'>
+                        <Skeleton className="h-[98px] w-[240px]" />
+                        <div className="w-full">
+                            <Skeleton className="h-4" />
+                            <Skeleton className="h-4 w-1/4" />
+                        </div>
+                    </div>
+                    <div className='flex items-center gap-4 w-full relative"'>
+                        <Skeleton className="h-[98px] w-[240px]" />
+                        <div className="w-full">
+                            <Skeleton className="h-4" />
+                            <Skeleton className="h-4 w-1/4" />
+                        </div>
+                    </div>
+                    <div className='flex items-center gap-4 w-full relative"'>
+                        <Skeleton className="h-[98px] w-[240px]" />
+                        <div className="w-full">
+                            <Skeleton className="h-4" />
+                            <Skeleton className="h-4 w-1/4" />
+                        </div>
+                    </div>
+                </>
+            )}
             {subchapters?.data.map((subchapter: SubChapter) => (
                 <Link
                     key={subchapter.id}
@@ -71,7 +105,7 @@ const SylabbusContent = ({
 };
 
 const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
-    const { data } = useGetListCourseChapterQuery(slug);
+    const { data, isLoading } = useGetListCourseChapterQuery(slug);
 
     return (
         <div className="px-5 w-screen flex flex-col lg:w-5/12">
@@ -85,6 +119,15 @@ const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
                     })) ?? []
                 }
             />
+            {isLoading && (
+                <div className="flex flex-col gap-2 w-full">
+                    <Skeleton className="h-14" />
+                    <Skeleton className="h-14" />
+                    <Skeleton className="h-14" />
+                    <Skeleton className="h-14" />
+                    <Skeleton className="h-14" />
+                </div>
+            )}
         </div>
     );
 };

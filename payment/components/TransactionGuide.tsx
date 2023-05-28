@@ -1,8 +1,9 @@
-import { useCheckout } from '../contexts/TransactionProvider';
 import { LOGO_PAYMENT } from './constant';
 import Image from 'next/image';
 import { useState } from 'react';
 import guide from '../contents/checkoutGuide.json';
+import { useGetTransactionQuery } from 'payment/redux/api/transactionApi';
+import { useRouter } from 'next/router';
 
 const Option = ({
     title,
@@ -75,19 +76,38 @@ const GuideStep = ({ step, index }: GuideStepProps): JSX.Element => {
 };
 
 const TabContent = ({ tab }: { tab: number }) => {
-    const { transaction } = useCheckout();
+    const router = useRouter();
+    const { id } = router.query;
+    const { data: transaction } = useGetTransactionQuery(id as string, {
+        skip: id === undefined || id === null
+    });
     return (
         <div className="py-8">
-            {guide[transaction.payment_method]?.step[tab].map((s, index) => (
-                <GuideStep step={s} index={index} key={index + 'key'} />
-            ))}
+            {guide[transaction?.payment_method as PaymentMethod]?.step[tab].map(
+                (s, index) => (
+                    <GuideStep step={s} index={index} key={index + 'key'} />
+                )
+            )}
         </div>
     );
 };
 
 const TransactionGuide = (): JSX.Element => {
-    const { transaction } = useCheckout();
+    const router = useRouter();
+    const { id } = router.query;
+    const { data: transaction, isLoading } = useGetTransactionQuery(
+        id as string,
+        {
+            skip: id === undefined || id === null
+        }
+    );
     const [tab, setTab] = useState(0);
+
+    if (isLoading) {
+        return (
+            <div className="p-4 h-[40vh] w-full bg-neutral-600 animate-pulse rounded-lg" />
+        );
+    }
 
     return (
         <div className="w-full mt-4">
@@ -97,8 +117,11 @@ const TransactionGuide = (): JSX.Element => {
                     <div className="h-[35px] w-[100px] relative">
                         <Image
                             src={`https://d2uqn6ndx4ow3t.cloudfront.net/assets/payments/${
-                                LOGO_PAYMENT[transaction.payment_method]
+                                LOGO_PAYMENT[
+                                    transaction?.payment_method as PaymentMethod
+                                ]
                             }`}
+                            className="object-contain"
                             layout="fill"
                         />
                     </div>
@@ -107,7 +130,10 @@ const TransactionGuide = (): JSX.Element => {
             <TabOption
                 tab={tab}
                 setTab={setTab}
-                options={guide[transaction.payment_method]?.method}
+                options={
+                    guide[transaction?.payment_method as PaymentMethod]
+                        ?.method as string[]
+                }
             />
             <TabContent tab={tab} />
         </div>

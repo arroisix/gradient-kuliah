@@ -2,8 +2,6 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 // import { FaSearch } from 'react-icons/fa';
 // import Input from 'src/commons/components/elements/Form/input';
-import Switch from 'commons/components/elements/Form/switch';
-import useWindowSize from 'commons/hooks/useWindowSize';
 import PrivateCourses from './privateCourses';
 import PublicCourses from './publicCourses';
 import { useSelector } from 'react-redux';
@@ -14,7 +12,6 @@ const ClassContainer = (): JSX.Element => {
     const { flag } = router.query;
     const [myClass, setMyClass] = useState(false);
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { width } = useWindowSize();
 
     useEffect(() => {
         if (flag && flag === 'kelasku') {
@@ -37,18 +34,6 @@ const ClassContainer = (): JSX.Element => {
                         }
                     />
                 </div> */}
-                {isAuthenticated && (
-                    <div className="flex items-center justify-between">
-                        <span className="block md:hidden">
-                            Tampilkan kelasku saja
-                        </span>
-                        <Switch
-                            label={width > 768 ? 'Tampilkan kelasku saja' : ''}
-                            checked={myClass}
-                            setChecked={() => setMyClass(!myClass)}
-                        />
-                    </div>
-                )}
             </div>
             <div className="my-4">
                 {isAuthenticated ? (
