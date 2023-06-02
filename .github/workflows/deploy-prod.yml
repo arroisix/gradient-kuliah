@@ -1,9 +1,9 @@
-name: Deploy to Vercel Development
+name: Deploy to Vercel
 
 on:
     push:
         branches:
-            - dev
+            - main
 
 jobs:
     deploy:
@@ -25,3 +25,4 @@ jobs:
                   vercel-token: ${{ secrets.VERCEL_TOKEN }}
                   vercel-org-id: ${{ secrets.VERCEL_ORG_ID}} # Replace with your Vercel team ID
                   vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+                  vercel-args: '--prod'
