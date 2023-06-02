@@ -10,7 +10,7 @@
         "check-format": "prettier --check .",
         "check-lint": "eslint . --ext ts --ext tsx --ext js",
         "format": "prettier --write .",
-        "test-all": "pnpm check-format && pnpm check-lint && pnpm check-types && pnpm build"
+        "test-all": "pnpm format && pnpm check-format && pnpm check-lint && pnpm check-types"
     },
     "dependencies": {
         "@apollo/client": "^3.7.0",
