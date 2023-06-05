@@ -1,5 +1,5 @@
 import { Formik } from 'formik';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaEyeSlash, FaEye } from 'react-icons/fa';
 import Button from 'commons/components/elements/Button';
 import Input from 'commons/components/elements/Form/input';
@@ -17,10 +17,23 @@ interface ReduxHttpError {
 }
 
 export const LoginSection: React.FC = () => {
-    const [reveal, setReveal] = useState(false);
+    const [state, setState] = useState({
+        reveal: false,
+        skip: true
+    });
     const [login, { isLoading }] = useLoginMutation();
-    const { data: profile } = useGetProfileQuery({});
+    const { data: profile } = useGetProfileQuery({}, { skip: state.skip });
     const router = useRouter();
+
+    useEffect(() => {
+        if (!!profile) {
+            if (!profile.username) {
+                router.push('/onboarding');
+            } else {
+                router.push('/kelas');
+            }
+        }
+    }, [profile, router]);
 
     return (
         <Formik
@@ -46,14 +59,11 @@ export const LoginSection: React.FC = () => {
                 setSubmitting(false);
 
                 if (!(result as ReduxHttpError).error) {
-                    if (!profile?.username) {
-                        return router.push('/onboarding');
-                    }
-
-                    return router.push('/kelas');
+                    setState({
+                        ...state,
+                        skip: false
+                    });
                 }
-
-                return;
             }}>
             {({
                 values,
@@ -83,7 +93,7 @@ export const LoginSection: React.FC = () => {
                             }
                         />
                         <Input
-                            type={reveal ? 'text' : 'password'}
+                            type={state.reveal ? 'text' : 'password'}
                             placeholder="Password"
                             name="password"
                             onChange={handleChange}
@@ -95,14 +105,24 @@ export const LoginSection: React.FC = () => {
                                     : undefined
                             }
                             endAddorment={
-                                reveal ? (
+                                state.reveal ? (
                                     <FaEyeSlash
-                                        onClick={() => setReveal(false)}
+                                        onClick={() =>
+                                            setState({
+                                                ...state,
+                                                reveal: false
+                                            })
+                                        }
                                         className="text-gray-500 cursor-pointer"
                                     />
                                 ) : (
                                     <FaEye
-                                        onClick={() => setReveal(true)}
+                                        onClick={() =>
+                                            setState({
+                                                ...state,
+                                                reveal: true
+                                            })
+                                        }
                                         className="text-gray-500 cursor-pointer"
                                     />
                                 )
