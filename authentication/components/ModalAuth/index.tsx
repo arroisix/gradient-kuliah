@@ -3,7 +3,6 @@ import { AiOutlineGoogle } from 'react-icons/ai';
 
 import Button from 'commons/components/elements/Button';
 import Modal from 'commons/components/modules/Modal';
-import LoginSection from './loginSection';
 import RegisterSection from './registerSection';
 import { toast } from 'react-toastify';
 import useSocialLogin from 'authentication/hooks/useSocialLogin';
@@ -41,29 +40,26 @@ const ModalAuth = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
             isOpen={isOpen ? 1 : 0}
             setOpen={() => setOpen(0)}
             permanent={isPermanent}>
-            <div className="w-full flex flex-col">
-                <h1 className="text-3xl text-center font-bold mb-8">
+            <div className="flex flex-col w-full">
+                <h1 className="mb-8 text-3xl font-bold text-center">
                     {isLogin ? 'Masuk' : 'Buat akun'}
                 </h1>
                 <Button
                     variant="custom"
-                    className="bg-primary-blue text-white"
+                    className="text-white bg-primary-blue"
                     onClick={login}>
                     <div className="flex items-center justify-center">
-                        <AiOutlineGoogle className="text-2xl mr-2" />
+                        <AiOutlineGoogle className="mr-2 text-2xl" />
                         <span>Lanjutkan Dengan Google</span>
                     </div>
                 </Button>
-                <div className="my-4 flex items-center justify-center">
+                <div className="flex items-center justify-center my-4">
                     <div className="w-full bg-neutral-400 h-[1px]" />
-                    <span className="mx-4 text-neutral-400 text-xs">ATAU</span>
+                    <span className="mx-4 text-xs text-neutral-400">ATAU</span>
                     <div className="w-full bg-neutral-400 h-[1px]" />
                 </div>
                 {isLogin ? (
-                    <LoginSection
-                        changePage={setIsLogin}
-                        closeModal={() => setOpen(0)}
-                    />
+                    <></>
                 ) : (
                     <RegisterSection
                         changePage={setIsLogin}
