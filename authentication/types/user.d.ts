@@ -52,7 +52,7 @@ interface ProfileData {
     education_level: 'SMP' | 'SMA' | 'SMK' | 'S1' | 'S2' | 'S3';
     institution?: string;
     major?: string;
-    profession?: string;
+    profession?: 'student' | 'employed' | 'unemployed' | 'fresh_grad';
     profession_field?: string;
     photo_profile?: string;
 }
