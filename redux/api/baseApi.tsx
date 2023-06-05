@@ -46,4 +46,4 @@ export const baseApi = createApi({
     endpoints: () => ({})
 });
 
-export const { getRunningOperationPromises } = baseApi.util;
+export const { getRunningQueriesThunk } = baseApi.util;
