@@ -30,16 +30,16 @@ const Input: React.FC<InputProps> = ({
     error,
     required
 }) => (
-    <div className="flex flex-col my-4 w-full">
-        <span className="mb-1 text-xs">{label}</span>
+    <div className="flex flex-col w-full font-body ">
+        {label && <span className="mb-1 text-xs">{label}</span>}
         <div
-            className={`flex w-full items-center rounded-lg px-2 h-[48px] border ${
-                error ? 'border-red-500' : 'border-neutral-400'
+            className={`flex w-full items-center rounded-lg px-2 h-[48px] bg-[#121212] border ${
+                error ? 'border-red-500' : 'border-[#242424]'
             } ${className}`}>
             <div>{startAddorment}</div>
             <input
                 type={type}
-                className={`form-input bg-transparent border-0 w-full focus:outline-none focus:ring-0 focus:appearance-none placeholder-gray-300`}
+                className={`form-input bg-transparent border-0 w-full  focus:outline-none focus:ring-0 focus:appearance-none placeholder-gray-300`}
                 placeholder={placeholder}
                 onChange={onChange}
                 // @ts-ignore
@@ -52,7 +52,7 @@ const Input: React.FC<InputProps> = ({
             />
             <div>{endAddorment}</div>
         </div>
-        {error && <span className="text-red-500 text-sm mt-2">{error}</span>}
+        {error && <span className="mt-2 text-sm text-red-500">{error}</span>}
     </div>
 );
 

@@ -40,6 +40,11 @@ export const authApi = baseApi.injectEndpoints({
             query: () => ({
                 url: `${STUDENT_BASE_URL}register-references/`
             })
+        }),
+        getProfile: builder.query<ProfileData, Record<string, never>>({
+            query: () => ({
+                url: `${STUDENT_BASE_URL}profile/`
+            })
         })
     })
 });
@@ -49,5 +54,6 @@ export const {
     useSocialLoginMutation,
     useRegisterMutation,
     useUpdateUserMutation,
-    useGetRegisterReferenceQuery
+    useGetRegisterReferenceQuery,
+    useGetProfileQuery
 } = authApi;

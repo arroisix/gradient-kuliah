@@ -37,8 +37,22 @@ interface UpdateUserInputData {
     education_level?: string;
     birthdate?: string;
     gender?: 'FEMALE' | 'MALE';
-    education_level?: 'SMP' | 'SMA' | 'SMK' | 'S1' | 'S2';
+    education_level?: 'SMP' | 'SMA' | 'SMK' | 'S1' | 'S2' | 'S3';
     register_reference_id?: string;
     major?: string;
     join_reasoning?: string;
+}
+
+interface ProfileData {
+    full_name?: string;
+    email: string;
+    phone_number?: string;
+    username?: string;
+    birthdate?: string;
+    education_level: 'SMP' | 'SMA' | 'SMK' | 'S1' | 'S2' | 'S3';
+    institution?: string;
+    major?: string;
+    profession?: 'student' | 'employed' | 'unemployed' | 'fresh_grad';
+    profession_field?: string;
+    photo_profile?: string;
 }
