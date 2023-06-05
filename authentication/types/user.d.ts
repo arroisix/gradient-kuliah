@@ -42,3 +42,17 @@ interface UpdateUserInputData {
     major?: string;
     join_reasoning?: string;
 }
+
+interface ProfileData {
+    full_name?: string;
+    email: string;
+    phone_number?: string;
+    username?: string;
+    birthdate?: string;
+    education_level: 'SMP' | 'SMA' | 'SMK' | 'S1' | 'S2';
+    institution?: string;
+    major?: string;
+    profession?: string;
+    profession_field?: string;
+    photo_profile?: string;
+}

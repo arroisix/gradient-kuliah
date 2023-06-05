@@ -3,12 +3,25 @@ import { useState } from 'react';
 import { FaEyeSlash, FaEye } from 'react-icons/fa';
 import Button from 'commons/components/elements/Button';
 import Input from 'commons/components/elements/Form/input';
-import { useLoginMutation } from 'authentication/redux/api/authApi';
+import {
+    useGetProfileQuery,
+    useLoginMutation
+} from 'authentication/redux/api/authApi';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query';
+import { SerializedError } from '@reduxjs/toolkit';
+
+interface ReduxHttpError {
+    error: FetchBaseQueryError | SerializedError;
+}
 
 export const LoginSection: React.FC = () => {
     const [reveal, setReveal] = useState(false);
     const [login, { isLoading }] = useLoginMutation();
+    const { data: profile } = useGetProfileQuery({});
+    const router = useRouter();
+
     return (
         <Formik
             initialValues={{ email: '', password: '' }}
@@ -29,8 +42,18 @@ export const LoginSection: React.FC = () => {
                 return errors;
             }}
             onSubmit={async (values, { setSubmitting }) => {
-                await login(values);
+                const result = await login(values);
                 setSubmitting(false);
+
+                if (!(result as ReduxHttpError).error) {
+                    if (!profile?.username) {
+                        return router.push('/onboarding');
+                    }
+
+                    return router.push('/kelas');
+                }
+
+                return;
             }}>
             {({
                 values,
