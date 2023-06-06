@@ -51,4 +51,5 @@ interface ProfileData {
     profession?: 'student' | 'employed' | 'unemployed' | 'fresh_grad';
     profession_field?: string;
     photo_profile?: string;
+    is_profile_complete?: boolean;
 }

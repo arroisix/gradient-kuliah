@@ -25,7 +25,7 @@ const withAnon = (WrappedComponent: React.ComponentType) => {
                         router.pathname
                     )
                 ) {
-                    if (!profile.username) {
+                    if (!profile.is_profile_complete) {
                         router.replace('/onboarding');
                     } else {
                         router.replace('/kelas');
