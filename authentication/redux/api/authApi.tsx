@@ -5,22 +5,22 @@ const STUDENT_BASE_URL = 'students/';
 
 export const authApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        login: builder.mutation<LoginResponseData, LoginInputData>({
-            query: (data: LoginInputData) => ({
+        login: builder.mutation<LoginResponseData, AuthInputData>({
+            query: (data: AuthInputData) => ({
                 url: `${AUTH_BASE_URL}login/`,
                 method: 'POST',
                 body: data
             })
         }),
-        socialLogin: builder.mutation<LoginResponseData, SocialLoginInputData>({
-            query: (data: SocialLoginInputData) => ({
+        socialLogin: builder.mutation<LoginResponseData, SocialAuthInputData>({
+            query: (data: SocialAuthInputData) => ({
                 url: `${AUTH_BASE_URL}social/${data.provider}/`,
                 method: 'POST',
                 body: data
             })
         }),
-        register: builder.mutation<LoginResponseData, RegisterInputData>({
-            query: (data: RegisterInputData) => ({
+        register: builder.mutation<LoginResponseData, AuthInputData>({
+            query: (data: AuthInputData) => ({
                 url: `${AUTH_BASE_URL}register/`,
                 method: 'POST',
                 body: data
