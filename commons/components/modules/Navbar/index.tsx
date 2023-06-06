@@ -22,6 +22,7 @@ import Button from 'commons/components/elements/Button';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { BiPlayCircle } from 'react-icons/bi';
 import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienceApi';
+import { AUTHENTICATION_ROUTE } from 'commons/constants';
 
 const Navbar = ({
     paymentPage,
@@ -257,7 +258,7 @@ const Navbar = ({
                                     </div>
                                 </nav>
                             ) : (
-                                <Link href={'/registrasi'}>
+                                <Link href={AUTHENTICATION_ROUTE}>
                                     <nav className="ml-12 cursor-pointer">
                                         Masuk
                                     </nav>
@@ -273,7 +274,7 @@ const Navbar = ({
                                             Kelas
                                         </nav>
                                     </Link>
-                                    <Link href={'/registrasi'}>
+                                    <Link href={AUTHENTICATION_ROUTE}>
                                         <nav className="flex items-center text-base font-bold">
                                             Masuk
                                         </nav>

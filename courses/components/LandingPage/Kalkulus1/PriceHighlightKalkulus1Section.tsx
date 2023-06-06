@@ -1,5 +1,6 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
+import { AUTHENTICATION_ROUTE } from 'commons/constants';
 import useWindowSize from 'commons/hooks/useWindowSize';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useGetLandingCourseDataQuery } from 'courses/redux/api/publicCourseApi';
@@ -100,7 +101,7 @@ const PriceHighlightKalkulus1Section = ({
                     variant="primary"
                     onClick={
                         // TODO: Implement redirection for `/langganan?courseId=${course?.course_id}`
-                        () => router.push('/registrasi')
+                        () => router.push(AUTHENTICATION_ROUTE)
                     }>
                     {is_second_variant && width <= 768
                         ? 'Gabung Sekarang'

@@ -5,6 +5,7 @@ import { dayToMonth, formatter } from 'courses/utils';
 import { useGetOneCourseManyPacketQuery } from 'payment/redux/api/subscriptionApi';
 import { useSelector } from 'react-redux';
 import Price from './price';
+import { AUTHENTICATION_ROUTE } from 'commons/constants';
 
 const TablePrice = ({ course }: { course: Course }): JSX.Element => {
     const router = useRouter();
@@ -71,7 +72,7 @@ const TablePrice = ({ course }: { course: Course }): JSX.Element => {
                     variant="primary"
                     onClick={
                         // TODO: Implement redirection for `/langganan?courseId=${course.id}`
-                        () => router.push('/registrasi')
+                        () => router.push(AUTHENTICATION_ROUTE)
                     }>
                     Akses Sekarang
                 </Button>

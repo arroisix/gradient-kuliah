@@ -10,6 +10,7 @@ import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useRouter } from 'next/router';
 import NeedSubscribe from 'courses/components/NeedSubscribe';
 import { useAuth } from 'authentication/contexts/AuthProvider';
+import { AUTHENTICATION_ROUTE } from 'commons/constants';
 
 const Code = dynamic(() =>
     import('react-notion-x/build/third-party/code').then((m) => m.Code)
@@ -79,7 +80,7 @@ const LearnAstroNotes = ({
             if (isAuthenticated) {
                 return true;
             }
-            router.push('/registrasi');
+            router.push(AUTHENTICATION_ROUTE);
             return false;
         }
 

@@ -3,6 +3,7 @@ import Button from 'commons/components/elements/Button';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { useRouter } from 'next/router';
+import { AUTHENTICATION_ROUTE } from 'commons/constants';
 
 const BenefitItems = ({
     icons,
@@ -58,7 +59,7 @@ const NeedSubscribe = ({}: { thumbnail?: string }): JSX.Element => {
                             onClick={
                                 // TODO: Implement redirection for `/langganan?courseId=${course.id}`
 
-                                () => router.push('/registrasi')
+                                () => router.push(AUTHENTICATION_ROUTE)
                             }>
                             Gabung Kelas
                         </Button>

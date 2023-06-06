@@ -6,6 +6,7 @@ import LearnLayout from 'commons/learnLayout';
 import { useGetExamExerciseWorksheetQuery } from 'courses/redux/api/learningExperienceApi';
 import Button from 'commons/components/elements/Button';
 import { MdGrade } from 'react-icons/md';
+import { AUTHENTICATION_ROUTE } from 'commons/constants';
 
 const Hasil = (): JSX.Element => {
     const router = useRouter();
@@ -31,7 +32,7 @@ const Hasil = (): JSX.Element => {
 
     useEffect(() => {
         if (id && !isAuthenticated) {
-            router.push('/registrasi');
+            router.push(AUTHENTICATION_ROUTE);
         }
     }, [isAuthenticated, id]);
 

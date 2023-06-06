@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { posthog } from 'posthog-js';
 import { FaFilePdf, FaLock } from 'react-icons/fa';
 import { useAuth } from 'authentication/contexts/AuthProvider';
+import { AUTHENTICATION_ROUTE } from 'commons/constants';
 
 const MainTitle = ({
     sub,
@@ -98,7 +99,7 @@ const MainTitle = ({
                     Chapter: astro.chapter_name,
                     URL: sub?.notebook?.notebook_url
                 });
-                router.push('/registrasi');
+                router.push(AUTHENTICATION_ROUTE);
             }}>
             <FaFilePdf />
             {sub.subchapter_name}
@@ -168,7 +169,7 @@ const SubTitle = ({
                         Chapter: astro.chapter_name,
                         URL: sub?.notebook?.notebook_url
                     });
-                    router.push('/registrasi');
+                    router.push(AUTHENTICATION_ROUTE);
                 }}>
                 <FaFilePdf />
                 {subSection.title}

@@ -1,4 +1,5 @@
 import Button from 'commons/components/elements/Button';
+import { AUTHENTICATION_ROUTE } from 'commons/constants';
 import Container from 'landing/components/Container';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -64,7 +65,7 @@ const Hero = (): JSX.Element => {
                     </span>
                 </h4>
                 <div className="flex flex-col gap-2 mt-8 md:flex-row md:mt-0">
-                    <Link href={'/registrasi'}>
+                    <Link href={AUTHENTICATION_ROUTE}>
                         <Button variant="primary" className="z-10 md:my-4">
                             Gabung Sekarang
                         </Button>

@@ -6,6 +6,7 @@ import { formatter } from 'courses/utils';
 import { useGetOneCourseManyPacketQuery } from 'payment/redux/api/subscriptionApi';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { AUTHENTICATION_ROUTE } from 'commons/constants';
 
 const Price = ({
     course,
@@ -98,7 +99,7 @@ const Price = ({
                     variant="primary"
                     onClick={
                         // TODO: Implement redirection for `/langganan?courseId=${course.id}`
-                        () => router.push('/registrasi')
+                        () => router.push(AUTHENTICATION_ROUTE)
                     }>
                     {secondVariant && width <= 768
                         ? 'Gabung Sekarang'

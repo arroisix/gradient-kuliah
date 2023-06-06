@@ -1,5 +1,6 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
+import { AUTHENTICATION_ROUTE } from 'commons/constants';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
@@ -43,7 +44,7 @@ const SubscribeButton = ({
                     variant="primary"
                     onClick={
                         // TODO: Implement redirection for `/langganan`
-                        () => router.push('/registrasi')
+                        () => router.push(AUTHENTICATION_ROUTE)
                     }>
                     {label}
                 </Button>

@@ -7,6 +7,7 @@ import { useGetLandingCourseDataQuery } from 'courses/redux/api/publicCourseApi'
 import { formatter } from 'courses/utils';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { AUTHENTICATION_ROUTE } from 'commons/constants';
 
 const PriceHighlightKalkulus2Section = ({
     slug,
@@ -100,7 +101,7 @@ const PriceHighlightKalkulus2Section = ({
                     variant="primary"
                     onClick={
                         // TODO: Implement redirection for `/langganan?courseId=${course?.course_id}`
-                        () => router.push('/registrasi')
+                        () => router.push(AUTHENTICATION_ROUTE)
                     }>
                     {is_second_variant && width <= 768
                         ? 'Gabung Sekarang'

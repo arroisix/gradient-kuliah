@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import LearnLayout from 'commons/learnLayout';
 import { ExamProvider } from 'courses/contexts/ExamProvider';
 import ExamLearnContainer from 'courses/containers/learn/exam';
+import { AUTHENTICATION_ROUTE } from 'commons/constants';
 
 const Belajar = (): JSX.Element => {
     const router = useRouter();
@@ -13,7 +14,7 @@ const Belajar = (): JSX.Element => {
 
     useEffect(() => {
         if (id && !isAuthenticated) {
-            router.push('/registrasi');
+            router.push(AUTHENTICATION_ROUTE);
         }
     }, [isAuthenticated, id]);
 

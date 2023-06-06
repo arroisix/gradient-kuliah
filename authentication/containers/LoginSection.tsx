@@ -5,6 +5,7 @@ import Button from 'commons/components/elements/Button';
 import Input from 'commons/components/elements/Form/input';
 import { useLoginMutation } from 'authentication/redux/api/authApi';
 import Link from 'next/link';
+import { AUTHENTICATION_ROUTE } from 'commons/constants';
 
 export const LoginSection: React.FC = () => {
     const [reveal, setReveal] = useState(false);
@@ -99,7 +100,7 @@ export const LoginSection: React.FC = () => {
 
                         <div className="flex justify-center w-full gap-2">
                             <span>Belum punya akun?</span>
-                            <Link href={'/registrasi'}>
+                            <Link href={AUTHENTICATION_ROUTE}>
                                 <span className="font-extrabold text-[#7264EB] cursor-pointer hover:text-[#7264EB]/75 transition-all duration-500">
                                     Buat Akun
                                 </span>

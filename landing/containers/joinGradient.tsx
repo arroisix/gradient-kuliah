@@ -1,4 +1,5 @@
 import Button from 'commons/components/elements/Button';
+import { AUTHENTICATION_ROUTE } from 'commons/constants';
 import Link from 'next/link';
 
 const JoinGradient = (): JSX.Element => {
@@ -17,7 +18,7 @@ const JoinGradient = (): JSX.Element => {
                 <div className="hero-blur-blue" />
             </div>
             <div className="flex flex-col my-4 md:flex-row lg:gap-4">
-                <Link href={'/registrasi'}>
+                <Link href={AUTHENTICATION_ROUTE}>
                     <Button variant="primary" className="z-10 md:my-4">
                         Gabung Sekarang
                     </Button>

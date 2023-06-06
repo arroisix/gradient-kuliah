@@ -7,6 +7,7 @@ import { ContentAccordionItemProps } from './ContentSection';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import Play from 'commons/components/elements/Icons/Play';
 import GreenCheck from 'commons/components/elements/Icons/GreenCheck';
+import { AUTHENTICATION_ROUTE } from 'commons/constants';
 
 const VideoAccordionItem = ({
     subchapter,
@@ -32,7 +33,7 @@ const VideoAccordionItem = ({
             );
         } else {
             // TODO: Implement redirection for `/kelas/${slug}/belajar/video/${chapterId}/${subchapter.id}`
-            router.push('/registrasi');
+            router.push(AUTHENTICATION_ROUTE);
         }
     };
 

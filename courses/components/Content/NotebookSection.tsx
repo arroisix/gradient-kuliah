@@ -3,6 +3,7 @@ import { MdOutlineArticle, MdLock, MdChevronRight } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import ComingSoonContent from './ComingSoonContent';
+import { AUTHENTICATION_ROUTE } from 'commons/constants';
 
 const NotebookSection = ({
     chapters,
@@ -49,7 +50,9 @@ const NotebookSection = ({
                                                 }
                                             } else {
                                                 // TODO: Implement redirection for `/kelas/kalkulus1/belajar/notebook/${chapter.id}/${subchapter.id}`
-                                                router.push('/registrasi');
+                                                router.push(
+                                                    AUTHENTICATION_ROUTE
+                                                );
                                             }
                                         }}
                                         aria-hidden
