@@ -32,7 +32,7 @@ const VideoAccordionItem = ({
             );
         } else {
             // TODO: Implement redirection for `/kelas/${slug}/belajar/video/${chapterId}/${subchapter.id}`
-            router.push('/masuk');
+            router.push('/registrasi');
         }
     };
 

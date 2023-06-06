@@ -71,7 +71,7 @@ const TablePrice = ({ course }: { course: Course }): JSX.Element => {
                     variant="primary"
                     onClick={
                         // TODO: Implement redirection for `/langganan?courseId=${course.id}`
-                        () => router.push('/masuk')
+                        () => router.push('/registrasi')
                     }>
                     Akses Sekarang
                 </Button>

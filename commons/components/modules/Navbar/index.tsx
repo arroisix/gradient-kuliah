@@ -257,9 +257,9 @@ const Navbar = ({
                                     </div>
                                 </nav>
                             ) : (
-                                <Link href={'/masuk'}>
+                                <Link href={'/registrasi'}>
                                     <nav className="ml-12 cursor-pointer">
-                                        Masuk
+                                        Registrasi
                                     </nav>
                                 </Link>
                             )}
@@ -273,9 +273,9 @@ const Navbar = ({
                                             Kelas
                                         </nav>
                                     </Link>
-                                    <Link href={'/masuk'}>
+                                    <Link href={'/registrasi'}>
                                         <nav className="flex items-center text-base font-bold">
-                                            Masuk
+                                            Registrasi
                                         </nav>
                                     </Link>
                                 </>

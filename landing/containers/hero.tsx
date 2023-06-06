@@ -64,7 +64,7 @@ const Hero = (): JSX.Element => {
                     </span>
                 </h4>
                 <div className="flex flex-col gap-2 mt-8 md:flex-row md:mt-0">
-                    <Link href={'/masuk'}>
+                    <Link href={'/registrasi'}>
                         <Button variant="primary" className="z-10 md:my-4">
                             Gabung Sekarang
                         </Button>

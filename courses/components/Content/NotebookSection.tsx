@@ -49,7 +49,7 @@ const NotebookSection = ({
                                                 }
                                             } else {
                                                 // TODO: Implement redirection for `/kelas/kalkulus1/belajar/notebook/${chapter.id}/${subchapter.id}`
-                                                router.push('/masuk');
+                                                router.push('/registrasi');
                                             }
                                         }}
                                         aria-hidden

@@ -27,7 +27,7 @@ const Belajar = (): JSX.Element => {
 
     useEffect(() => {
         if (id && !isAuthenticated) {
-            router.push('/masuk');
+            router.push('/registrasi');
         }
     }, [isAuthenticated, id]);
 

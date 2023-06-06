@@ -58,7 +58,7 @@ const NeedSubscribe = ({}: { thumbnail?: string }): JSX.Element => {
                             onClick={
                                 // TODO: Implement redirection for `/langganan?courseId=${course.id}`
 
-                                () => router.push('/masuk')
+                                () => router.push('/registrasi')
                             }>
                             Gabung Kelas
                         </Button>

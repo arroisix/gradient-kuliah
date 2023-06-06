@@ -43,7 +43,7 @@ const SubscribeButton = ({
                     variant="primary"
                     onClick={
                         // TODO: Implement redirection for `/langganan`
-                        () => router.push('/masuk')
+                        () => router.push('/registrasi')
                     }>
                     {label}
                 </Button>

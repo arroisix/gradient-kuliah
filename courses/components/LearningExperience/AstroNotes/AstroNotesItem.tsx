@@ -98,7 +98,7 @@ const MainTitle = ({
                     Chapter: astro.chapter_name,
                     URL: sub?.notebook?.notebook_url
                 });
-                router.push('/masuk');
+                router.push('/registrasi');
             }}>
             <FaFilePdf />
             {sub.subchapter_name}
@@ -168,7 +168,7 @@ const SubTitle = ({
                         Chapter: astro.chapter_name,
                         URL: sub?.notebook?.notebook_url
                     });
-                    router.push('/masuk');
+                    router.push('/registrasi');
                 }}>
                 <FaFilePdf />
                 {subSection.title}

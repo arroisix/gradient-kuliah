@@ -98,7 +98,7 @@ const Price = ({
                     variant="primary"
                     onClick={
                         // TODO: Implement redirection for `/langganan?courseId=${course.id}`
-                        () => router.push('/masuk')
+                        () => router.push('/registrasi')
                     }>
                     {secondVariant && width <= 768
                         ? 'Gabung Sekarang'

@@ -79,7 +79,7 @@ const LearnAstroNotes = ({
             if (isAuthenticated) {
                 return true;
             }
-            router.push('/masuk');
+            router.push('/registrasi');
             return false;
         }
 

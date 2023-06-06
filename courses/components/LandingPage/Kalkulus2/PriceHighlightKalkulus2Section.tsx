@@ -100,7 +100,7 @@ const PriceHighlightKalkulus2Section = ({
                     variant="primary"
                     onClick={
                         // TODO: Implement redirection for `/langganan?courseId=${course?.course_id}`
-                        () => router.push('/masuk')
+                        () => router.push('/registrasi')
                     }>
                     {is_second_variant && width <= 768
                         ? 'Gabung Sekarang'

@@ -17,7 +17,7 @@ const JoinGradient = (): JSX.Element => {
                 <div className="hero-blur-blue" />
             </div>
             <div className="flex flex-col my-4 md:flex-row lg:gap-4">
-                <Link href={'/masuk'}>
+                <Link href={'/registrasi'}>
                     <Button variant="primary" className="z-10 md:my-4">
                         Gabung Sekarang
                     </Button>
