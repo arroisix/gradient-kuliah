@@ -21,7 +21,7 @@ const withAnon = (WrappedComponent: React.ComponentType) => {
             const router = useRouter();
             if (!!profile) {
                 if (
-                    ['/masuk', '/registrasi', '/onboarding'].includes(
+                    ['/masuk', '/daftar', '/onboarding'].includes(
                         router.pathname
                     )
                 ) {
