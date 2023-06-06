@@ -8,6 +8,7 @@ import Modal from 'commons/components/modules/Modal';
 import { useState } from 'react';
 import WorksheetInfoModalContent from '../LearningExperience/ExamExercise/WorksheetInfoModal';
 import { useRouter } from 'next/router';
+import { AUTHENTICATION_ROUTE } from 'commons/constants';
 
 const ExerciseAccordionItem = ({
     subchapter,
@@ -23,7 +24,7 @@ const ExerciseAccordionItem = ({
             setOpenWorksheetInfo(1);
         } else {
             // TODO: Implement redirection for `/kelas/${slug}/belajar/latihan/${chapterId}/${subchapter.id}`
-            push('/masuk');
+            push(AUTHENTICATION_ROUTE);
         }
     };
 
