@@ -1,39 +1,14 @@
 import { Formik } from 'formik';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FaEyeSlash, FaEye } from 'react-icons/fa';
 import Button from 'commons/components/elements/Button';
 import Input from 'commons/components/elements/Form/input';
-import {
-    useGetProfileQuery,
-    useLoginMutation
-} from 'authentication/redux/api/authApi';
+import { useLoginMutation } from 'authentication/redux/api/authApi';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query';
-import { SerializedError } from '@reduxjs/toolkit';
-
-interface ReduxHttpError {
-    error: FetchBaseQueryError | SerializedError;
-}
 
 export const LoginSection: React.FC = () => {
-    const [state, setState] = useState({
-        reveal: false,
-        skip: true
-    });
+    const [reveal, setReveal] = useState(false);
     const [login, { isLoading }] = useLoginMutation();
-    const { data: profile } = useGetProfileQuery({}, { skip: state.skip });
-    const router = useRouter();
-
-    useEffect(() => {
-        if (!!profile) {
-            if (!profile.username) {
-                router.push('/onboarding');
-            } else {
-                router.push('/kelas');
-            }
-        }
-    }, [profile, router]);
 
     return (
         <Formik
@@ -55,15 +30,8 @@ export const LoginSection: React.FC = () => {
                 return errors;
             }}
             onSubmit={async (values, { setSubmitting }) => {
-                const result = await login(values);
+                await login(values);
                 setSubmitting(false);
-
-                if (!(result as ReduxHttpError).error) {
-                    setState({
-                        ...state,
-                        skip: false
-                    });
-                }
             }}>
             {({
                 values,
@@ -93,7 +61,7 @@ export const LoginSection: React.FC = () => {
                             }
                         />
                         <Input
-                            type={state.reveal ? 'text' : 'password'}
+                            type={reveal ? 'text' : 'password'}
                             placeholder="Password"
                             name="password"
                             onChange={handleChange}
@@ -105,24 +73,14 @@ export const LoginSection: React.FC = () => {
                                     : undefined
                             }
                             endAddorment={
-                                state.reveal ? (
+                                reveal ? (
                                     <FaEyeSlash
-                                        onClick={() =>
-                                            setState({
-                                                ...state,
-                                                reveal: false
-                                            })
-                                        }
+                                        onClick={() => setReveal(false)}
                                         className="text-gray-500 cursor-pointer"
                                     />
                                 ) : (
                                     <FaEye
-                                        onClick={() =>
-                                            setState({
-                                                ...state,
-                                                reveal: true
-                                            })
-                                        }
+                                        onClick={() => setReveal(true)}
                                         className="text-gray-500 cursor-pointer"
                                     />
                                 )
