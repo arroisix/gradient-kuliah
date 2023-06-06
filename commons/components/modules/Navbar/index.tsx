@@ -259,7 +259,7 @@ const Navbar = ({
                             ) : (
                                 <Link href={'/registrasi'}>
                                     <nav className="ml-12 cursor-pointer">
-                                        Registrasi
+                                        Masuk
                                     </nav>
                                 </Link>
                             )}
@@ -275,7 +275,7 @@ const Navbar = ({
                                     </Link>
                                     <Link href={'/registrasi'}>
                                         <nav className="flex items-center text-base font-bold">
-                                            Registrasi
+                                            Masuk
                                         </nav>
                                     </Link>
                                 </>
