@@ -1,6 +1,5 @@
 import moment from 'moment';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 import {
     AiOutlineCheck,
     AiOutlineClockCircle,
@@ -26,10 +25,8 @@ const TransactionCard = ({
     transaction: Transaction;
     isList?: boolean;
 }): JSX.Element => {
-    const [course, setCourse] = useState({} as Course);
     const { subscribed_packet } =
         transaction.subscriber || ({} as Subscription);
-    const { courses } = subscribed_packet || ({} as Packet);
     const router = useRouter();
     const isExpiry = checkExpiry(transaction.deadline as string);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -42,12 +39,6 @@ const TransactionCard = ({
         }
     };
 
-    useEffect(() => {
-        if (courses) {
-            setCourse(courses[0]);
-        }
-    }, [courses]);
-
     return (
         <div
             className={`rounded-lg bg-[#242424] w-full overflow-hidden ${
@@ -56,9 +47,6 @@ const TransactionCard = ({
             <div className="p-4 md:p-8">
                 <div className="w-full flex flex-col-reverse md:flex-row justify-between md:items-center">
                     <div className="w-full">
-                        <p className="md:text-2xl font-bold">
-                            {course?.course_name}
-                        </p>
                         <span className="text-xs md:text-base text-neutral-200">
                             Langganan hingga{' '}
                             {moment()
