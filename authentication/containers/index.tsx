@@ -7,8 +7,8 @@ import { AiOutlineGoogle } from 'react-icons/ai';
 import { toast } from 'react-toastify';
 
 export const AuthenticationContainer: React.FC = () => {
-    const router = useRouter();
-    const AuthSection = AUTH_SECTION[router.pathname];
+    const { pathname } = useRouter();
+    const AuthSection = AUTH_SECTION[pathname];
     const { googleLogin } = useSocialLogin();
 
     const login = useGoogleLogin({
@@ -25,15 +25,20 @@ export const AuthenticationContainer: React.FC = () => {
             <div className="w-[324px] flex flex-col gap-8 justify-center items-center">
                 <h1 className="font-bold font-[Urbanist] text-5xl">Gradient</h1>
                 <div className="flex flex-col items-center justify-center gap-4">
-                    <Button
-                        variant="custom"
-                        className="text-white bg-[#7264EB] w-full"
-                        onClick={login}>
-                        <div className="flex items-center justify-center ">
-                            <AiOutlineGoogle className="mr-2 text-2xl" />
-                            <span>Lanjutkan Dengan Google</span>
-                        </div>
-                    </Button>
+                    <div className="flex flex-col gap-1 text-center">
+                        <span className="text-2xl font-extrabold text-White">
+                            {pathname === '/masuk' ? 'Log In' : 'Buat akun'}
+                        </span>
+                        <Button
+                            variant="custom"
+                            className="text-white bg-[#7264EB] w-full"
+                            onClick={login}>
+                            <div className="flex items-center justify-center ">
+                                <AiOutlineGoogle className="mr-2 text-2xl" />
+                                <span>Lanjutkan Dengan Google</span>
+                            </div>
+                        </Button>
+                    </div>
                     <span className="font-extrabold text-[#666666]">ATAU</span>
                     <AuthSection />
                 </div>

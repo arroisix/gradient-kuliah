@@ -13,8 +13,8 @@ export const LoginSection: React.FC = () => {
     return (
         <Formik
             initialValues={{ email: '', password: '' }}
-            validate={(values: LoginInputData) => {
-                const errors: LoginInputData = {} as LoginInputData;
+            validate={(values: AuthInputData) => {
+                const errors: AuthInputData = {} as AuthInputData;
                 if (!values.email) {
                     errors.email = 'Required';
                 } else if (
@@ -94,9 +94,7 @@ export const LoginSection: React.FC = () => {
                             className="w-full text-white bg-accent-purple"
                             type="submit"
                             disabled={isSubmitting}>
-                            {isLoading
-                                ? 'Tunggu Sebentar...'
-                                : 'Masuk Sekarang'}
+                            {isLoading ? 'Tunggu Sebentar...' : 'Masuk'}
                         </Button>
 
                         <div className="flex justify-center w-full gap-2">
