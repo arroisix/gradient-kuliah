@@ -1,17 +1,14 @@
-import { useRouter } from 'next/router';
-import { useAuth } from 'authentication/contexts/AuthProvider';
 import Button from 'commons/components/elements/Button';
+import Link from 'next/link';
 
 const JoinGradient = (): JSX.Element => {
-    const { setModalAuthOpen } = useAuth();
-    const router = useRouter();
     return (
         <section className="min-h-[60vh] md:h-screen w-full px-4 md:px-[7.5rem] py-4 flex flex-col justify-center items-center relative overflow-hidden">
             <h2 className="text-3xl lg:text-5xl font-bold text-center w-[90vw] md:w-[50rem] z-10">
                 Gabung Gradient Sekarang
             </h2>
-            <div className="md:w-1/2 text-center z-10 mt-4">
-                <span className="text-neutral-300 text-2xl font-body font-thin">
+            <div className="z-10 mt-4 text-center md:w-1/2">
+                <span className="text-2xl font-thin text-neutral-300 font-body">
                     Materi lengkap. Video gak bosenin. Murah lagi.
                 </span>
             </div>
@@ -19,19 +16,19 @@ const JoinGradient = (): JSX.Element => {
                 <div className="hero-blur-red mr-[15vw]" />
                 <div className="hero-blur-blue" />
             </div>
-            <div className="flex flex-col md:flex-row lg:gap-4 my-4">
-                <Button
-                    variant="primary"
-                    className="md:my-4 z-10"
-                    onClick={() => setModalAuthOpen(1)}>
-                    Gabung Sekarang
-                </Button>
-                <Button
-                    variant="custom"
-                    className="bg-neutral-800  my-4 z-10 md:mr-4"
-                    onClick={() => router.push('/kelas')}>
-                    Lihat kelas
-                </Button>
+            <div className="flex flex-col my-4 md:flex-row lg:gap-4">
+                <Link href={'/masuk'}>
+                    <Button variant="primary" className="z-10 md:my-4">
+                        Gabung Sekarang
+                    </Button>
+                </Link>
+                <Link href={'/kelas'}>
+                    <Button
+                        variant="custom"
+                        className="z-10 my-4 bg-neutral-800 md:mr-4">
+                        Lihat kelas
+                    </Button>
+                </Link>
             </div>
             <div
                 className="w-[200px] h-[200px] lg:w-[517px] lg:h-[517px] rounded-full absolute -left-8 bottom-16 lg:bottom-auto lg:left-64"

@@ -5,12 +5,10 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import { useSelector } from 'react-redux';
 import VideoLearnContainer from 'courses/containers/learn/video';
 import { useEffect, useState } from 'react';
-import { useAuth } from 'authentication/contexts/AuthProvider';
 import LearnLayout from 'commons/learnLayout';
 
 const Belajar = (): JSX.Element => {
     const router = useRouter();
-    const { setModalAuthOpen } = useAuth();
     const { id } = router.query;
     const [fetch, setFetch] = useState(false);
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -29,7 +27,7 @@ const Belajar = (): JSX.Element => {
 
     useEffect(() => {
         if (id && !isAuthenticated) {
-            setModalAuthOpen(1, true);
+            router.push('/masuk');
         }
     }, [isAuthenticated, id]);
 

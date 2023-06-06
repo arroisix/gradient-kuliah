@@ -7,8 +7,9 @@ import { FaChevronRight, FaList } from 'react-icons/fa';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import usePublicCourseNotebook from 'courses/hooks/usePublicCourseNotebook';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
-import { useAuth } from 'authentication/contexts/AuthProvider';
+import { useRouter } from 'next/router';
 import NeedSubscribe from 'courses/components/NeedSubscribe';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 const Code = dynamic(() =>
     import('react-notion-x/build/third-party/code').then((m) => m.Code)
@@ -49,7 +50,7 @@ const LearnAstroNotes = ({
     id: string;
 }): JSX.Element => {
     const { isMobileBreakpoints } = useWindowBreakpoints();
-    const { isAuthenticated, setModalAuthOpen } = useAuth();
+    const { isAuthenticated } = useAuth();
     const { data, loading, getNotebook } = usePublicCourseNotebook(
         id as string
     );
@@ -58,6 +59,7 @@ const LearnAstroNotes = ({
     const { is_subscribed } = useCourseSubscription(id);
     const [showSubscribe, setShowSubscribe] = useState(false);
     const [showContent, setShowContent] = useState(false);
+    const router = useRouter();
 
     const renderNotebook = (): boolean => {
         if (notebook?.is_public && notebook.is_free) {
@@ -77,7 +79,7 @@ const LearnAstroNotes = ({
             if (isAuthenticated) {
                 return true;
             }
-            setModalAuthOpen(1, true);
+            router.push('/masuk');
             return false;
         }
 

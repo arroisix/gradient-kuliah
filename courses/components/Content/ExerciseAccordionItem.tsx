@@ -1,4 +1,3 @@
-import { useAuth } from 'authentication/contexts/AuthProvider';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
@@ -8,27 +7,23 @@ import { ContentAccordionItemProps } from './ContentSection';
 import Modal from 'commons/components/modules/Modal';
 import { useState } from 'react';
 import WorksheetInfoModalContent from '../LearningExperience/ExamExercise/WorksheetInfoModal';
+import { useRouter } from 'next/router';
 
 const ExerciseAccordionItem = ({
     subchapter,
-    chapterId,
     isSubscribed,
-    contentPicked,
-    slug
+    contentPicked
 }: ContentAccordionItemProps): JSX.Element => {
-    const { setModalAuthOpen } = useAuth();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const [openWorksheetInfo, setOpenWorksheetInfo] = useState<1 | 0>(0);
+    const { push } = useRouter();
 
     const decideOnClickAction = (): void => {
         if (isAuthenticated) {
             setOpenWorksheetInfo(1);
         } else {
-            setModalAuthOpen(
-                1,
-                false,
-                `/kelas/${slug}/belajar/latihan/${chapterId}/${subchapter.id}`
-            );
+            // TODO: Implement redirection for `/kelas/${slug}/belajar/latihan/${chapterId}/${subchapter.id}`
+            push('/masuk');
         }
     };
 

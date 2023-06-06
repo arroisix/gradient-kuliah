@@ -1,9 +1,9 @@
-import { useAuth } from 'authentication/contexts/AuthProvider';
+import { useRouter } from 'next/router';
 import { useLearning } from 'courses/contexts/LearningProvider';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { posthog } from 'posthog-js';
 import { FaFilePdf, FaLock } from 'react-icons/fa';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 const MainTitle = ({
     sub,
@@ -16,7 +16,7 @@ const MainTitle = ({
 }): JSX.Element => {
     const router = useRouter();
     const { id, notionId } = router.query;
-    const { setModalAuthOpen, isAuthenticated } = useAuth();
+    const { isAuthenticated } = useAuth();
     const { is_subscribed } = useLearning();
 
     if (sub.notebook?.is_public || isAuthenticated) {
@@ -98,7 +98,7 @@ const MainTitle = ({
                     Chapter: astro.chapter_name,
                     URL: sub?.notebook?.notebook_url
                 });
-                setModalAuthOpen(1);
+                router.push('/masuk');
             }}>
             <FaFilePdf />
             {sub.subchapter_name}
@@ -119,7 +119,7 @@ const SubTitle = ({
 }): JSX.Element => {
     const router = useRouter();
     const { id } = router.query;
-    const { setModalAuthOpen, isAuthenticated } = useAuth();
+    const { isAuthenticated } = useAuth();
     const { is_subscribed } = useLearning();
 
     const renderSubTitle = (): JSX.Element => {
@@ -168,7 +168,7 @@ const SubTitle = ({
                         Chapter: astro.chapter_name,
                         URL: sub?.notebook?.notebook_url
                     });
-                    setModalAuthOpen(1);
+                    router.push('/masuk');
                 }}>
                 <FaFilePdf />
                 {subSection.title}

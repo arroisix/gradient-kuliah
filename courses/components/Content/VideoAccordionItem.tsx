@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-import { useAuth } from 'authentication/contexts/AuthProvider';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
@@ -18,7 +17,6 @@ const VideoAccordionItem = ({
     extraCallback
 }: ContentAccordionItemProps): JSX.Element => {
     const router = useRouter();
-    const { setModalAuthOpen } = useAuth();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { watch_progress } = useCourseSubscription(slug);
 
@@ -33,11 +31,8 @@ const VideoAccordionItem = ({
                 { shallow: true }
             );
         } else {
-            setModalAuthOpen(
-                1,
-                false,
-                `/kelas/${slug}/belajar/video/${chapterId}/${subchapter.id}`
-            );
+            // TODO: Implement redirection for `/kelas/${slug}/belajar/video/${chapterId}/${subchapter.id}`
+            router.push('/masuk');
         }
     };
 

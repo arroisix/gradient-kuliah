@@ -2,7 +2,7 @@ import { MdPlayCircleOutline, MdOutlineGroup, MdEdit } from 'react-icons/md';
 import Button from 'commons/components/elements/Button';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
-import { useAuth } from 'authentication/contexts/AuthProvider';
+import { useRouter } from 'next/router';
 
 const BenefitItems = ({
     icons,
@@ -13,7 +13,7 @@ const BenefitItems = ({
 }): JSX.Element => {
     return (
         <div className="flex items-center my-4">
-            <div className="text-xl mr-2">{icons}</div>
+            <div className="mr-2 text-xl">{icons}</div>
             <div>
                 <h1 className="text-xl">{title}</h1>
             </div>
@@ -23,7 +23,7 @@ const BenefitItems = ({
 
 const NeedSubscribe = ({}: { thumbnail?: string }): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { setModalAuthOpen } = useAuth();
+    const router = useRouter();
 
     return (
         <div className="relative">
@@ -55,8 +55,10 @@ const NeedSubscribe = ({}: { thumbnail?: string }): JSX.Element => {
                     ) : (
                         <Button
                             variant="primary"
-                            onClick={() =>
-                                setModalAuthOpen(1, false, `/langganan`)
+                            onClick={
+                                // TODO: Implement redirection for `/langganan?courseId=${course.id}`
+
+                                () => router.push('/masuk')
                             }>
                             Gabung Kelas
                         </Button>

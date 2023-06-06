@@ -1,4 +1,4 @@
-import { useAuth } from 'authentication/contexts/AuthProvider';
+import { useRouter } from 'next/router';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
 import useWindowSize from 'commons/hooks/useWindowSize';
@@ -17,7 +17,7 @@ const PriceHighlightPTSLSection = ({
 }): JSX.Element => {
     const { data: course } = useGetLandingCourseDataQuery(slug);
     const { is_subscribed } = useCourseSubscription(slug);
-    const { setModalAuthOpen } = useAuth();
+    const router = useRouter();
     const [packet, setPacket] = useState<Packet>();
     const { width } = useWindowSize();
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -81,12 +81,9 @@ const PriceHighlightPTSLSection = ({
                 <Button
                     className="md:w-fit text-center my-2"
                     variant="primary"
-                    onClick={() =>
-                        setModalAuthOpen(
-                            1,
-                            false,
-                            `/langganan?courseId=${course?.course_id}`
-                        )
+                    onClick={
+                        // TODO: Implement redirection for `/langganan?courseId=${course?.course_id}`
+                        () => router.push('/masuk')
                     }>
                     {is_second_variant && width <= 768
                         ? 'Gabung Sekarang'

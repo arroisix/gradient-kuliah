@@ -1,7 +1,7 @@
-import { useAuth } from 'authentication/contexts/AuthProvider';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
 const SubscribeButton = ({
@@ -16,8 +16,8 @@ const SubscribeButton = ({
     label?: string;
 }): JSX.Element => {
     const { is_subscribed } = useCourseSubscription(slug);
-    const { setModalAuthOpen } = useAuth();
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const router = useRouter();
 
     return (
         <>
@@ -41,7 +41,10 @@ const SubscribeButton = ({
                         className ?? 'md:w-fit min-w-[200px]'
                     }`}
                     variant="primary"
-                    onClick={() => setModalAuthOpen(1, false, `/langganan`)}>
+                    onClick={
+                        // TODO: Implement redirection for `/langganan`
+                        () => router.push('/masuk')
+                    }>
                     {label}
                 </Button>
             )}
