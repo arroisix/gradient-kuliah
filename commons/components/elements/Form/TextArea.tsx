@@ -38,7 +38,7 @@ const TextArea: React.FC<InputProps> = ({
             } ${className}`}>
             <div>{startAddorment}</div>
             <textarea
-                className={`form-input bg-transparent border-0 w-full focus:outline-none focus:ring-0 focus:appearance-none placeholder-gray-300`}
+                className={`form-input bg-transparent border-0 w-full focus:outline-none focus:ring-0 focus:appearance-none placeholder:text-neutral-400`}
                 placeholder={placeholder}
                 onChange={onChange}
                 onWheel={(e) => (e.target as HTMLElement).blur()}
