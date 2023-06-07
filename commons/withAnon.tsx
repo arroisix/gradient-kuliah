@@ -20,17 +20,9 @@ const withAnon = (WrappedComponent: React.ComponentType) => {
 
             const router = useRouter();
             if (!!profile) {
-                if (
-                    ['/masuk', '/registrasi', '/onboarding'].includes(
-                        router.pathname
-                    )
-                ) {
+                if (['/masuk', '/registrasi'].includes(router.pathname)) {
                     if (!profile.is_profile_complete) {
-                        if (router.pathname === '/onboarding') {
-                            return <WrappedComponent {...props} />;
-                        } else {
-                            router.replace('/onboarding');
-                        }
+                        router.replace('/onboarding');
                     } else {
                         router.replace('/kelas');
                     }
