@@ -5,10 +5,12 @@ import Button from 'commons/components/elements/Button';
 import Input from 'commons/components/elements/Form/input';
 import { useRegisterMutation } from 'authentication/redux/api/authApi';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 export const RegistrationSection: React.FC = () => {
     const [reveal, setReveal] = useState(false);
     const [register, { isLoading }] = useRegisterMutation();
+    const router = useRouter();
 
     return (
         <Formik
@@ -99,7 +101,12 @@ export const RegistrationSection: React.FC = () => {
 
                         <div className="flex justify-center w-full gap-2">
                             <span>Sudah punya akun?</span>
-                            <Link href={'/masuk'}>
+                            <Link
+                                href={`/masuk${
+                                    !!router.query.redirect
+                                        ? `?redirect=${router.query.redirect}`
+                                        : ''
+                                }`}>
                                 <span className="font-extrabold text-[#7264EB] cursor-pointer hover:text-[#7264EB]/75 transition-all duration-500">
                                     Login
                                 </span>

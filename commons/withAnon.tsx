@@ -19,10 +19,19 @@ const withAnon = (WrappedComponent: React.ComponentType) => {
             );
 
             const router = useRouter();
+
             if (!!profile) {
-                if (['/masuk', '/registrasi'].includes(router.pathname)) {
+                if (['/masuk', '/daftar'].includes(router.pathname)) {
                     if (!profile.is_profile_complete) {
-                        router.replace('/onboarding');
+                        router.replace(
+                            `/onboarding${
+                                !!router.query.redirect
+                                    ? `?redirect=${router.query.redirect}`
+                                    : ''
+                            }`
+                        );
+                    } else if (!!router.query.redirect) {
+                        router.replace(`${router.query.redirect}`);
                     } else {
                         router.replace('/kelas');
                     }
