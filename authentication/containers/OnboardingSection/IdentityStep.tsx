@@ -42,7 +42,8 @@ export const IdentityStep = (): JSX.Element => {
                 onSubmit={(values) => {
                     setFormData({
                         ...formData,
-                        ...values
+                        ...values,
+                        photo_profile: ''
                     });
                     setStep(1);
                 }}
