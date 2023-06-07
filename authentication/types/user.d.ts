@@ -28,6 +28,7 @@ interface LoginResponseData {
 
 interface UpdateUserInputData {
     full_name?: string;
+    username?: string;
     phone_number?: string;
     institution?: string;
     education_level?: string;

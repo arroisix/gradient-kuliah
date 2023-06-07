@@ -1,5 +1,6 @@
 import { useGoogleLogin } from '@react-oauth/google';
 import { AUTH_SECTION } from 'authentication/constants';
+import { RegistrationProvider } from 'authentication/contexts/RegistrationProvider';
 import useSocialLogin from 'authentication/hooks/useSocialLogin';
 import Button from 'commons/components/elements/Button';
 import { useRouter } from 'next/router';
@@ -22,25 +23,50 @@ export const AuthenticationContainer: React.FC = () => {
 
     return (
         <section className="flex items-center justify-center w-screen min-h-screen text-white bg-neutral-1000">
-            <div className="w-[324px] flex flex-col gap-8 justify-center items-center">
-                <h1 className="font-bold font-[Urbanist] text-5xl">Gradient</h1>
-                <div className="flex flex-col items-center justify-center gap-4">
-                    <div className="flex flex-col gap-1 text-center">
-                        <span className="text-2xl font-extrabold text-White">
-                            {pathname === '/masuk' ? 'Log In' : 'Buat akun'}
-                        </span>
-                        <Button
-                            variant="custom"
-                            className="text-white bg-[#7264EB] w-full"
-                            onClick={login}>
-                            <div className="flex items-center justify-center ">
-                                <AiOutlineGoogle className="mr-2 text-2xl" />
-                                <span>Lanjutkan Dengan Google</span>
+            <div
+                className={`${
+                    pathname !== '/onboarding' ? 'w-[324px]' : 'w-[360px]'
+                } flex flex-col gap-8 justify-center items-center`}>
+                {pathname !== '/onboarding' && (
+                    <h1 className="font-bold font-[Urbanist] text-5xl">
+                        Gradient
+                    </h1>
+                )}
+                <div className="flex flex-col items-center justify-center w-full gap-4">
+                    {pathname !== '/onboarding' ? (
+                        <>
+                            <div className="flex flex-col gap-1 text-center">
+                                <span className="text-2xl font-extrabold text-White">
+                                    {pathname === '/masuk'
+                                        ? 'Log In'
+                                        : 'Buat akun'}
+                                </span>
+                                <Button
+                                    variant="custom"
+                                    className="text-white bg-[#7264EB] w-full"
+                                    onClick={login}>
+                                    <div className="flex items-center justify-center ">
+                                        <AiOutlineGoogle className="mr-2 text-2xl" />
+                                        <span>Lanjutkan Dengan Google</span>
+                                    </div>
+                                </Button>
                             </div>
-                        </Button>
-                    </div>
-                    <span className="font-extrabold text-[#666666]">ATAU</span>
-                    <AuthSection />
+                            <span className="font-extrabold text-[#666666]">
+                                ATAU
+                            </span>
+                        </>
+                    ) : (
+                        <h1 className="w-full text-3xl font-extrabold">
+                            Lengkapi akunmu
+                        </h1>
+                    )}
+                    {pathname === '/onboarding' ? (
+                        <RegistrationProvider>
+                            <AuthSection />
+                        </RegistrationProvider>
+                    ) : (
+                        <AuthSection />
+                    )}
                 </div>
             </div>
         </section>

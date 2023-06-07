@@ -30,8 +30,8 @@ const Input: React.FC<InputProps> = ({
     error,
     required
 }) => (
-    <div className="flex flex-col w-full font-body ">
-        {label && <span className="mb-1 text-xs">{label}</span>}
+    <div className="flex flex-col w-full gap-1 font-body">
+        {label && <span className="text-[#999999] text-sm">{label}</span>}
         <div
             className={`flex w-full items-center rounded-lg px-2 h-[48px] bg-[#121212] border ${
                 error ? 'border-red-500' : 'border-[#242424]'
