@@ -13,7 +13,7 @@ interface AuthSectionInterface {
 
 export const AUTH_SECTION: AuthSectionInterface = {
     '/masuk': LoginSection,
-    '/registrasi': RegistrationSection,
+    '/daftar': RegistrationSection,
     '/onboarding': OnboardingSection
 };
 
