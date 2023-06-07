@@ -1,6 +1,3 @@
-import ModalOnboarding from 'authentication/components/OnboardingModal';
-import { useAuth } from 'authentication/contexts/AuthProvider';
-import { RegistrationProvider } from 'authentication/contexts/RegistrationProvider';
 import Navbar from './components/modules/Navbar';
 
 interface LayoutProps {
@@ -20,8 +17,6 @@ const LearnLayout = ({
     hideNavbar,
     lightMode
 }: LayoutProps): JSX.Element => {
-    const { isOnboardingOpen, closeOnboardingModal } = useAuth();
-
     return (
         <div className="relative w-screen min-h-screen text-white bg-neutral-1000">
             {!hideNavbar && (
@@ -32,12 +27,6 @@ const LearnLayout = ({
                     courses={courses}
                 />
             )}
-            <RegistrationProvider>
-                <ModalOnboarding
-                    isOpen={isOnboardingOpen}
-                    setOpen={closeOnboardingModal}
-                />
-            </RegistrationProvider>
             <div className="min-h-full md:h-[100vh - 65px]">{children}</div>
         </div>
     );
