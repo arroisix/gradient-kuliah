@@ -24,6 +24,8 @@ export const ReferenceStep = (): JSX.Element => {
                     }
                     onSubmit={async (values, { setSubmitting }) => {
                         setSubmitting(true);
+                        localStorage.setItem('isLastOnboardingStep', `true`);
+
                         await updateUser({ ...formData, ...values });
                         setSubmitting(false);
                     }}>

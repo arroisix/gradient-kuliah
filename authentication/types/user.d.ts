@@ -23,6 +23,7 @@ interface SocialAuthInputData {
 interface LoginResponseData {
     user: User;
     token: string;
+    is_profile_complete: boolean;
 }
 
 interface UpdateUserResponseData {
@@ -38,9 +39,6 @@ interface UpdateUserResponseData {
     profession?: 'student' | 'employed' | 'unemployed' | 'fresh_grad';
     profession_field?: string;
     photo_profile?: string;
-}
-
-interface GetProfileResponseData extends UpdateUserResponseData {
     is_profile_complete?: boolean;
 }
 

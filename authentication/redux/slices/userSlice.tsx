@@ -5,19 +5,31 @@ import { toast } from 'react-toastify';
 type UserSliceState = {
     user: User;
     token: string | null;
+    is_profile_complete: boolean;
 };
 
 const userSlice = createSlice({
     name: 'user',
     initialState: {
         user: {} as User,
-        token: null
+        token: null,
+        is_profile_complete: true
     } as UserSliceState,
     reducers: {
         removeUser: () => {
             window.localStorage.clear();
             window.location.href = '/';
-            return { token: null, user: {} as User };
+            return {
+                token: null,
+                user: {} as User,
+                is_profile_complete: true
+            };
+        },
+        setNewUserFlag: (
+            state: UserSliceState,
+            { payload }: PayloadAction<boolean>
+        ) => {
+            return { ...state, is_profile_complete: payload };
         },
         clearCache: (state: UserSliceState) => {
             return state;
@@ -29,6 +41,7 @@ const userSlice = createSlice({
             (state, { payload }: PayloadAction<LoginResponseData>) => {
                 state.user = payload.user;
                 state.token = payload.token;
+                state.is_profile_complete = payload.is_profile_complete;
 
                 window.localStorage.setItem('token', payload.token);
 
@@ -46,6 +59,7 @@ const userSlice = createSlice({
             (state, { payload }: PayloadAction<LoginResponseData>) => {
                 state.user = payload.user;
                 state.token = payload.token;
+                state.is_profile_complete = payload.is_profile_complete;
 
                 window.localStorage.setItem('token', payload.token);
 
@@ -63,6 +77,7 @@ const userSlice = createSlice({
             (state, { payload }: PayloadAction<LoginResponseData>) => {
                 state.user = payload.user;
                 state.token = payload.token;
+                state.is_profile_complete = false;
 
                 window.localStorage.setItem('token', payload.token);
 
@@ -78,9 +93,10 @@ const userSlice = createSlice({
         builder.addMatcher(
             authApi.endpoints.updateUser.matchFulfilled,
             (state, { payload }: PayloadAction<UpdateUserResponseData>) => {
-                const { user_id: id } = payload;
+                const { user_id: id, is_profile_complete } = payload;
 
                 state.user = { id, ...payload };
+                state.is_profile_complete = is_profile_complete as boolean;
 
                 return state;
             }

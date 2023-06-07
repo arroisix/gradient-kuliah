@@ -1,8 +1,10 @@
 /* eslint-disable react/display-name */
-import { getToken } from 'authentication/redux/selectors/userSelector';
+import {
+    getIsProfileComplete,
+    getToken
+} from 'authentication/redux/selectors/userSelector';
 import { useSelector } from 'react-redux';
 import LoadingBackdrop from './components/elements/LoadingBackdrop';
-import { useGetProfileQuery } from 'authentication/redux/api/authApi';
 import { useRouter } from 'next/router';
 
 const withAuth = (WrappedComponent: React.ComponentType) => {
@@ -13,11 +15,17 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
             const accessToken = useSelector(getToken);
             const rawToken = window.localStorage.getItem('token');
 
-            const { data: profile } = useGetProfileQuery({});
-
+            const isProfileComplete = useSelector(getIsProfileComplete);
+            const isLastOnboardingStep = localStorage.getItem(
+                'isLastOnboardingStep'
+            );
             // If there is no access token we redirect to "/" page.
             // Also clear token from cookie and localstorage
-            if (pathname === '/onboarding' && profile?.is_profile_complete) {
+            if (
+                pathname === '/onboarding' &&
+                isProfileComplete &&
+                !(isLastOnboardingStep === 'true')
+            ) {
                 window.location.href = '/kelas';
                 return;
             }

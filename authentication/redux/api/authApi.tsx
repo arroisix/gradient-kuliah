@@ -45,7 +45,7 @@ export const authApi = baseApi.injectEndpoints({
             })
         }),
         getProfile: builder.query<
-            GetProfileResponseData,
+            UpdateUserResponseData,
             Record<string, never>
         >({
             query: () => ({
