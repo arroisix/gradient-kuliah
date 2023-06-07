@@ -16,8 +16,8 @@ const PacketCard = ({
                     : 'w-full lg:w-fit'
             }>
             {isHighlighted && (
-                <div className="w-full p-2 flex justify-center items-center animate-pulse">
-                    <span className="text-center font-bold">
+                <div className="flex items-center justify-center w-full p-2 animate-pulse">
+                    <span className="font-bold text-center">
                         PENAWARAN TERBAIK!
                     </span>
                 </div>
@@ -37,7 +37,7 @@ const PacketCard = ({
                     `}>
                         {data.packet_name}
                     </p>
-                    <h3 className="line-through text-xl lg:text-2xl font-bold text-center decoration-2 text-stone-500 decoration-red-600">
+                    <h3 className="text-xl font-bold text-center line-through lg:text-2xl decoration-2 text-stone-500 decoration-red-600">
                         {
                             formatter
                                 .format(
@@ -61,7 +61,7 @@ const PacketCard = ({
                         </h1>
                     </div>
                 </div>
-                <ul className="grid grid-cols-1 content-center py-4">
+                <ul className="grid content-center grid-cols-1 py-4">
                     {data.benefits?.data.map((benefit: string) => (
                         <li className="font-body lg:text-lg" key={benefit}>
                             {benefit}
@@ -84,10 +84,10 @@ const SubscribePacket = (): JSX.Element => {
 
     return (
         <section className="min-h-screen py-24 px-4 md:px-[7.5rem] flex flex-col items-center justify-center gap-8 lg:gap-16">
-            <h4 className="text-2xl lg:text-3xl font-bold">
+            <h4 className="text-2xl font-bold lg:text-3xl">
                 Akses Semua Kelas Tanpa Batas.
             </h4>
-            <div className="flex flex-col lg:flex-row gap-4 items-end justify-center w-full">
+            <div className="flex flex-col items-end justify-center w-full gap-4 lg:flex-row">
                 {isLoading && (
                     <>
                         <div className="h-[402px] w-full lg:w-[380px] bg-neutral-600 animate-pulse rounded-[20px]" />

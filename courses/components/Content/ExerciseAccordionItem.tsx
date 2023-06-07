@@ -13,7 +13,9 @@ import { AUTHENTICATION_ROUTE } from 'commons/constants';
 const ExerciseAccordionItem = ({
     subchapter,
     isSubscribed,
-    contentPicked
+    contentPicked,
+    slug,
+    chapterId
 }: ContentAccordionItemProps): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const [openWorksheetInfo, setOpenWorksheetInfo] = useState<1 | 0>(0);
@@ -23,8 +25,9 @@ const ExerciseAccordionItem = ({
         if (isAuthenticated) {
             setOpenWorksheetInfo(1);
         } else {
-            // TODO: Implement redirection for `/kelas/${slug}/belajar/latihan/${chapterId}/${subchapter.id}`
-            push(AUTHENTICATION_ROUTE);
+            push(
+                `${AUTHENTICATION_ROUTE}?redirect=/kelas/${slug}/belajar/latihan/${chapterId}/${subchapter.id}`
+            );
         }
     };
 

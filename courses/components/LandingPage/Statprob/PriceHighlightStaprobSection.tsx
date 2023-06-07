@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
 import useWindowSize from 'commons/hooks/useWindowSize';
@@ -8,6 +7,7 @@ import { formatter } from 'courses/utils';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { AUTHENTICATION_ROUTE } from 'commons/constants';
+import Link from 'next/link';
 
 const PriceHighlightStatprobSection = ({
     slug,
@@ -18,7 +18,6 @@ const PriceHighlightStatprobSection = ({
 }): JSX.Element => {
     const { data: course } = useGetLandingCourseDataQuery(slug);
     const { is_subscribed } = useCourseSubscription(slug);
-    const router = useRouter();
     const [packet, setPacket] = useState<Packet>();
     const { width } = useWindowSize();
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -97,17 +96,16 @@ const PriceHighlightStatprobSection = ({
                 </Button>
             )}
             {!isAuthenticated && !is_subscribed && (
-                <Button
-                    className="my-2 text-center md:w-fit"
-                    variant="primary"
-                    onClick={
-                        // TODO: Implement redirection for `/langganan?courseId=${course?.course_id}`
-                        () => router.push(AUTHENTICATION_ROUTE)
-                    }>
-                    {is_second_variant && width <= 768
-                        ? 'Gabung Sekarang'
-                        : 'Akses Sekarang'}
-                </Button>
+                <Link
+                    href={`${AUTHENTICATION_ROUTE}?redirect=/langganan?courseId=${course?.course_id}`}>
+                    <Button
+                        className="my-2 text-center md:w-fit"
+                        variant="primary">
+                        {is_second_variant && width <= 768
+                            ? 'Gabung Sekarang'
+                            : 'Akses Sekarang'}
+                    </Button>
+                </Link>
             )}
         </div>
     );

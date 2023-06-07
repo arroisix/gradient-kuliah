@@ -5,11 +5,12 @@ import Button from 'commons/components/elements/Button';
 import Input from 'commons/components/elements/Form/input';
 import { useLoginMutation } from 'authentication/redux/api/authApi';
 import Link from 'next/link';
-import { AUTHENTICATION_ROUTE } from 'commons/constants';
+import { useRouter } from 'next/router';
 
 export const LoginSection: React.FC = () => {
     const [reveal, setReveal] = useState(false);
     const [login, { isLoading }] = useLoginMutation();
+    const router = useRouter();
 
     return (
         <Formik
@@ -100,7 +101,12 @@ export const LoginSection: React.FC = () => {
 
                         <div className="flex justify-center w-full gap-2">
                             <span>Belum punya akun?</span>
-                            <Link href={AUTHENTICATION_ROUTE}>
+                            <Link
+                                href={`/daftar${
+                                    !!router.query.redirect
+                                        ? `?redirect=${router.query.redirect}`
+                                        : ''
+                                }`}>
                                 <span className="font-extrabold text-[#7264EB] cursor-pointer hover:text-[#7264EB]/75 transition-all duration-500">
                                     Buat Akun
                                 </span>

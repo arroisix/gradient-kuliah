@@ -26,9 +26,12 @@ export const authApi = baseApi.injectEndpoints({
                 body: data
             })
         }),
-        updateUser: builder.mutation<LoginResponseData, UpdateUserInputData>({
+        updateUser: builder.mutation<
+            UpdateUserResponseData,
+            UpdateUserInputData
+        >({
             query: (data: UpdateUserInputData) => ({
-                url: `${STUDENT_BASE_URL}onboarding/`,
+                url: `${STUDENT_BASE_URL}update-profile/`,
                 method: 'PUT',
                 body: data
             })
@@ -41,9 +44,22 @@ export const authApi = baseApi.injectEndpoints({
                 url: `${STUDENT_BASE_URL}register-references/`
             })
         }),
-        getProfile: builder.query<ProfileData, Record<string, never>>({
+        getProfile: builder.query<
+            UpdateUserResponseData,
+            Record<string, never>
+        >({
             query: () => ({
                 url: `${STUDENT_BASE_URL}profile/`
+            })
+        }),
+        checkUsernameAvailability: builder.mutation<
+            CheckUsernameAvailabilityResponseData,
+            CheckUsernameAvailabilityInputData
+        >({
+            query: (data: CheckUsernameAvailabilityInputData) => ({
+                url: `${STUDENT_BASE_URL}check-username-availability/`,
+                method: 'POST',
+                body: data
             })
         })
     })
@@ -55,5 +71,6 @@ export const {
     useRegisterMutation,
     useUpdateUserMutation,
     useGetRegisterReferenceQuery,
-    useGetProfileQuery
+    useGetProfileQuery,
+    useCheckUsernameAvailabilityMutation
 } = authApi;

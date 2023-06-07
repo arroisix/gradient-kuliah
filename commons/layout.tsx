@@ -1,6 +1,3 @@
-import ModalOnboarding from 'authentication/components/OnboardingModal';
-import { useAuth } from 'authentication/contexts/AuthProvider';
-import { RegistrationProvider } from 'authentication/contexts/RegistrationProvider';
 import Footer from './components/modules/Footer';
 import Navbar from './components/modules/Navbar';
 
@@ -17,8 +14,6 @@ const Layout = ({
     shouldTransparent,
     courses
 }: LayoutProps): JSX.Element => {
-    const { isOnboardingOpen, closeOnboardingModal } = useAuth();
-
     return (
         <div className="relative w-screen min-h-screen text-white bg-neutral-1000">
             <Navbar
@@ -26,12 +21,6 @@ const Layout = ({
                 shouldTransparent={shouldTransparent ?? false}
                 courses={courses}
             />
-            <RegistrationProvider>
-                <ModalOnboarding
-                    isOpen={isOnboardingOpen}
-                    setOpen={closeOnboardingModal}
-                />
-            </RegistrationProvider>
             <div className="min-h-full">{children}</div>
             <Footer />
         </div>

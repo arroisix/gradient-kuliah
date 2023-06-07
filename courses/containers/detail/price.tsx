@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
 import useWindowSize from 'commons/hooks/useWindowSize';
@@ -7,6 +6,7 @@ import { useGetOneCourseManyPacketQuery } from 'payment/redux/api/subscriptionAp
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { AUTHENTICATION_ROUTE } from 'commons/constants';
+import Link from 'next/link';
 
 const Price = ({
     course,
@@ -16,7 +16,6 @@ const Price = ({
     secondVariant?: boolean;
 }): JSX.Element => {
     const { data } = useGetOneCourseManyPacketQuery({ course_id: course.id });
-    const router = useRouter();
     const [packet, setPacket] = useState<Packet>();
     const { width } = useWindowSize();
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -94,17 +93,16 @@ const Price = ({
                 </Button>
             )}
             {!isAuthenticated && !course.is_subscribed && (
-                <Button
-                    className="my-2 text-center md:w-fit"
-                    variant="primary"
-                    onClick={
-                        // TODO: Implement redirection for `/langganan?courseId=${course.id}`
-                        () => router.push(AUTHENTICATION_ROUTE)
-                    }>
-                    {secondVariant && width <= 768
-                        ? 'Gabung Sekarang'
-                        : 'Akses Sekarang'}
-                </Button>
+                <Link
+                    href={`${AUTHENTICATION_ROUTE}?redirect=/langganan?courseId=${course.id}`}>
+                    <Button
+                        className="my-2 text-center md:w-fit"
+                        variant="primary">
+                        {secondVariant && width <= 768
+                            ? 'Gabung Sekarang'
+                            : 'Akses Sekarang'}
+                    </Button>
+                </Link>
             )}
         </div>
     );

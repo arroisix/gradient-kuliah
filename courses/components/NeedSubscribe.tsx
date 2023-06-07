@@ -56,10 +56,10 @@ const NeedSubscribe = ({}: { thumbnail?: string }): JSX.Element => {
                     ) : (
                         <Button
                             variant="primary"
-                            onClick={
-                                // TODO: Implement redirection for `/langganan?courseId=${course.id}`
-
-                                () => router.push(AUTHENTICATION_ROUTE)
+                            onClick={() =>
+                                router.push(
+                                    `${AUTHENTICATION_ROUTE}?redirect=/langganan`
+                                )
                             }>
                             Gabung Kelas
                         </Button>

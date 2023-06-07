@@ -5,7 +5,7 @@ import useWindowSize from 'commons/hooks/useWindowSize';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useGetLandingCourseDataQuery } from 'courses/redux/api/publicCourseApi';
 import { formatter } from 'courses/utils';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -21,7 +21,6 @@ const PriceHighlightKalkulus1Section = ({
     const [packet, setPacket] = useState<Packet>();
     const { width } = useWindowSize();
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const router = useRouter();
 
     useEffect(() => {
         if (course && course.packets.length > 0) {
@@ -96,17 +95,16 @@ const PriceHighlightKalkulus1Section = ({
                 </Button>
             )}
             {!isAuthenticated && !is_subscribed && (
-                <Button
-                    className="my-2 text-center md:w-fit"
-                    variant="primary"
-                    onClick={
-                        // TODO: Implement redirection for `/langganan?courseId=${course?.course_id}`
-                        () => router.push(AUTHENTICATION_ROUTE)
-                    }>
-                    {is_second_variant && width <= 768
-                        ? 'Gabung Sekarang'
-                        : 'Akses Sekarang'}
-                </Button>
+                <Link
+                    href={`${AUTHENTICATION_ROUTE}?redirect=/langganan?courseId=${course?.course_id}`}>
+                    <Button
+                        className="my-2 text-center md:w-fit"
+                        variant="primary">
+                        {is_second_variant && width <= 768
+                            ? 'Gabung Sekarang'
+                            : 'Akses Sekarang'}
+                    </Button>
+                </Link>
             )}
         </div>
     );

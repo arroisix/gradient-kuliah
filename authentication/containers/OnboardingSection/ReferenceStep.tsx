@@ -1,18 +1,18 @@
 import { Formik } from 'formik';
 import Button from 'commons/components/elements/Button';
-import Radio from 'commons/components/elements/Form/radio';
-import { useGetRegisterReferenceQuery } from 'authentication/redux/api/authApi';
 import { useContext } from 'react';
 import RegistrationContext from 'authentication/contexts/RegistrationProvider';
+import { useGetRegisterReferenceQuery } from 'authentication/redux/api/authApi';
+import Radio from 'commons/components/elements/Form/radio';
 import TextArea from 'commons/components/elements/Form/TextArea';
 
-const ReferenceSection = (): JSX.Element => {
+export const ReferenceStep = (): JSX.Element => {
+    const { formData, updateUser } = useContext(RegistrationContext);
     const { data: registerReferences, isLoading: isLoadingReferences } =
         useGetRegisterReferenceQuery({});
-    const { setStep, formData, updateUser } = useContext(RegistrationContext);
 
     return (
-        <div className="w-full flex flex-col">
+        <div className="flex flex-col w-full">
             {!isLoadingReferences && registerReferences ? (
                 <Formik
                     initialValues={
@@ -24,6 +24,8 @@ const ReferenceSection = (): JSX.Element => {
                     }
                     onSubmit={async (values, { setSubmitting }) => {
                         setSubmitting(true);
+                        localStorage.setItem('isLastOnboardingStep', `true`);
+
                         await updateUser({ ...formData, ...values });
                         setSubmitting(false);
                     }}>
@@ -35,15 +37,15 @@ const ReferenceSection = (): JSX.Element => {
                         handleBlur,
                         handleSubmit,
                         isSubmitting
-                    }) => {
-                        return (
-                            <form onSubmit={handleSubmit} className="container">
+                    }) => (
+                        <form onSubmit={handleSubmit} className="container">
+                            <div className="flex flex-col gap-4">
                                 <Radio
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     value={values.register_reference_id}
                                     name="register_reference_id"
-                                    label="DARI MANA KAMU MENGETAHUI GRADIENT?"
+                                    label="Dari mana kamu mengetahui Gradient?"
                                     options={registerReferences.data.map(
                                         (ref) => ({
                                             key: ref.id,
@@ -52,9 +54,9 @@ const ReferenceSection = (): JSX.Element => {
                                     )}
                                 />
                                 <TextArea
-                                    label="APA YANG MEMBUAT KAMU TERTARIK DENGAN GRADIENT? (Optional)"
+                                    label="Apa yang membuatmu tertarik bergabung bersama Gradient?"
                                     name="join_reasoning"
-                                    placeholder="Saya membutuhkan materi tambahan untuk kuliah"
+                                    placeholder="Cara Penyampaian yang menarik"
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     value={values.join_reasoning}
@@ -66,33 +68,22 @@ const ReferenceSection = (): JSX.Element => {
                                     }
                                     required={true}
                                 />
-                                <div className="flex space-x-2">
-                                    <Button
-                                        variant="custom"
-                                        className="bg-neutral-100 text-neutral-700 mt-4 w-full"
-                                        type="button"
-                                        onClick={() => {
-                                            setStep(0);
-                                        }}>
-                                        Kembali
-                                    </Button>
-                                    <Button
-                                        variant="custom"
-                                        className="bg-accent-purple text-white mt-4 w-full"
-                                        type="submit"
-                                        disabled={isSubmitting}>
-                                        {isSubmitting
-                                            ? 'Menyimpan...'
-                                            : 'Simpan'}
-                                    </Button>
-                                </div>
-                            </form>
-                        );
-                    }}
+                            </div>
+                            <Button
+                                variant="custom"
+                                className="w-full mt-4 text-white bg-accent-purple"
+                                type="submit"
+                                disabled={isSubmitting}>
+                                {isSubmitting ? 'Menyimpan...' : 'Simpan'}
+                            </Button>
+                        </form>
+                    )}
                 </Formik>
-            ) : null}
+            ) : (
+                <span className="font-extrabold text-[#666666] animate-pulse">
+                    Loading...
+                </span>
+            )}
         </div>
     );
 };
-
-export default ReferenceSection;

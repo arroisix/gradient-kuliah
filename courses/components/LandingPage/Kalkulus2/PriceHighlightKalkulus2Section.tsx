@@ -99,9 +99,10 @@ const PriceHighlightKalkulus2Section = ({
                 <Button
                     className="my-2 text-center md:w-fit"
                     variant="primary"
-                    onClick={
-                        // TODO: Implement redirection for `/langganan?courseId=${course?.course_id}`
-                        () => router.push(AUTHENTICATION_ROUTE)
+                    onClick={() =>
+                        router.push(
+                            `${AUTHENTICATION_ROUTE}?redirect=/langganan?courseId=${course?.course_id}`
+                        )
                     }>
                     {is_second_variant && width <= 768
                         ? 'Gabung Sekarang'

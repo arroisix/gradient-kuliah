@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
 import { dayToMonth, formatter } from 'courses/utils';
@@ -6,9 +5,9 @@ import { useGetOneCourseManyPacketQuery } from 'payment/redux/api/subscriptionAp
 import { useSelector } from 'react-redux';
 import Price from './price';
 import { AUTHENTICATION_ROUTE } from 'commons/constants';
+import Link from 'next/link';
 
 const TablePrice = ({ course }: { course: Course }): JSX.Element => {
-    const router = useRouter();
     const { data } = useGetOneCourseManyPacketQuery({ course_id: course.id });
     const isAuthenticated = useSelector(getIsAuthenticated);
 
@@ -67,15 +66,14 @@ const TablePrice = ({ course }: { course: Course }): JSX.Element => {
                 </Button>
             )}
             {!isAuthenticated && !course.is_subscribed && (
-                <Button
-                    className="text-center md:w-fit my-z"
-                    variant="primary"
-                    onClick={
-                        // TODO: Implement redirection for `/langganan?courseId=${course.id}`
-                        () => router.push(AUTHENTICATION_ROUTE)
-                    }>
-                    Akses Sekarang
-                </Button>
+                <Link
+                    href={`${AUTHENTICATION_ROUTE}?redirect=/langganan?courseId=${course.id}`}>
+                    <Button
+                        className="my-2 text-center md:w-fit"
+                        variant="primary">
+                        Akses Sekarang
+                    </Button>
+                </Link>
             )}
         </div>
     );

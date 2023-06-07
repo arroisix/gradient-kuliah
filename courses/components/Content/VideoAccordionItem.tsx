@@ -32,8 +32,9 @@ const VideoAccordionItem = ({
                 { shallow: true }
             );
         } else {
-            // TODO: Implement redirection for `/kelas/${slug}/belajar/video/${chapterId}/${subchapter.id}`
-            router.push(AUTHENTICATION_ROUTE);
+            router.push(
+                `${AUTHENTICATION_ROUTE}?redirect=/kelas/${slug}/belajar/video/${chapterId}/${subchapter.id}`
+            );
         }
     };
 

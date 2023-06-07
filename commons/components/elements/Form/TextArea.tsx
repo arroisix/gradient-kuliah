@@ -1,10 +1,12 @@
+import { ChangeEventHandler, FocusEventHandler } from 'react';
+
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 interface InputProps {
     label?: string;
     placeholder?: string;
     className?: string;
-    onChange?: (res: any) => void;
-    onBlur?: (res: any) => void;
+    onChange?: ChangeEventHandler<HTMLTextAreaElement> | undefined;
+    onBlur?: FocusEventHandler<HTMLTextAreaElement> | undefined;
     value?: string;
     name: string;
     startAddorment?: JSX.Element;
@@ -28,19 +30,18 @@ const TextArea: React.FC<InputProps> = ({
     error,
     required
 }) => (
-    <div className="flex flex-col my-4 w-full">
-        <span className="mb-1 text-xs">{label}</span>
+    <div className="flex flex-col w-full gap-1 font-body">
+        {label && <span className="text-[#999999] text-sm">{label}</span>}
         <div
             className={`flex w-full items-center rounded-lg p-2 border ${
-                error ? 'border-red-500' : 'border-neutral-400'
+                error ? 'border-red-500' : 'border-[#242424]'
             } ${className}`}>
             <div>{startAddorment}</div>
             <textarea
-                className={`form-input bg-transparent border-0 w-full focus:outline-none focus:ring-0 focus:appearance-none placeholder-gray-300`}
+                className={`form-input bg-transparent border-0 w-full focus:outline-none focus:ring-0 focus:appearance-none placeholder:text-neutral-400`}
                 placeholder={placeholder}
                 onChange={onChange}
-                // @ts-ignore
-                onWheel={(e) => e.target.blur()}
+                onWheel={(e) => (e.target as HTMLElement).blur()}
                 onBlur={onBlur}
                 value={value}
                 name={name}
@@ -49,7 +50,7 @@ const TextArea: React.FC<InputProps> = ({
             />
             <div>{endAddorment}</div>
         </div>
-        {error && <span className="text-red-500 text-sm mt-2">{error}</span>}
+        {error && <span className="mt-2 text-sm text-red-500">{error}</span>}
     </div>
 );
 
