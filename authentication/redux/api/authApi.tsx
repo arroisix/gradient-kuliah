@@ -45,6 +45,16 @@ export const authApi = baseApi.injectEndpoints({
             query: () => ({
                 url: `${STUDENT_BASE_URL}profile/`
             })
+        }),
+        checkUsernameAvailability: builder.mutation<
+            CheckUsernameAvailabilityResponseData,
+            CheckUsernameAvailabilityInputData
+        >({
+            query: (data: CheckUsernameAvailabilityInputData) => ({
+                url: `${STUDENT_BASE_URL}check-username-availability/`,
+                method: 'POST',
+                body: data
+            })
         })
     })
 });
@@ -55,5 +65,6 @@ export const {
     useRegisterMutation,
     useUpdateUserMutation,
     useGetRegisterReferenceQuery,
-    useGetProfileQuery
+    useGetProfileQuery,
+    useCheckUsernameAvailabilityMutation
 } = authApi;

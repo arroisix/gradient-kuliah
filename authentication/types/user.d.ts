@@ -46,3 +46,11 @@ interface UpdateUserInputData extends ProfileData {
     register_reference_id?: string;
     join_reasoning?: string;
 }
+
+interface CheckUsernameAvailabilityInputData {
+    username: string;
+}
+
+interface CheckUsernameAvailabilityResponseData {
+    is_available: boolean;
+}
