@@ -10,18 +10,14 @@ type RegisterReference = {
     name: string;
 };
 
-interface LoginInputData {
+interface AuthInputData {
     email: string;
     password: string;
 }
 
-interface SocialLoginInputData {
+interface SocialAuthInputData {
     provider: 'google' | 'facebook';
     access_token: string;
-}
-
-interface RegisterInputData extends LoginInputData {
-    full_name: string;
 }
 
 interface LoginResponseData {
@@ -55,4 +51,5 @@ interface ProfileData {
     profession?: 'student' | 'employed' | 'unemployed' | 'fresh_grad';
     profession_field?: string;
     photo_profile?: string;
+    is_profile_complete?: boolean;
 }

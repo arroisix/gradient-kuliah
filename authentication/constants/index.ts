@@ -1,4 +1,5 @@
 import { LoginSection } from 'authentication/containers/LoginSection';
+import { RegistrationSection } from 'authentication/containers/RegistrationSection';
 import React from 'react';
 
 interface AuthSectionInterface {
@@ -6,5 +7,6 @@ interface AuthSectionInterface {
 }
 
 export const AUTH_SECTION: AuthSectionInterface = {
-    '/masuk': LoginSection
+    '/masuk': LoginSection,
+    '/daftar': RegistrationSection
 };

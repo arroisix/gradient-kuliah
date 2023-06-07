@@ -3,13 +3,12 @@ import { useState } from 'react';
 import { FaEyeSlash, FaEye } from 'react-icons/fa';
 import Button from 'commons/components/elements/Button';
 import Input from 'commons/components/elements/Form/input';
-import { useLoginMutation } from 'authentication/redux/api/authApi';
+import { useRegisterMutation } from 'authentication/redux/api/authApi';
 import Link from 'next/link';
-import { AUTHENTICATION_ROUTE } from 'commons/constants';
 
-export const LoginSection: React.FC = () => {
+export const RegistrationSection: React.FC = () => {
     const [reveal, setReveal] = useState(false);
-    const [login, { isLoading }] = useLoginMutation();
+    const [register, { isLoading }] = useRegisterMutation();
 
     return (
         <Formik
@@ -31,7 +30,7 @@ export const LoginSection: React.FC = () => {
                 return errors;
             }}
             onSubmit={async (values, { setSubmitting }) => {
-                await login(values);
+                await register(values);
                 setSubmitting(false);
             }}>
             {({
@@ -95,14 +94,14 @@ export const LoginSection: React.FC = () => {
                             className="w-full text-white bg-accent-purple"
                             type="submit"
                             disabled={isSubmitting}>
-                            {isLoading ? 'Tunggu Sebentar...' : 'Masuk'}
+                            {isLoading ? 'Tunggu Sebentar...' : 'Buat Akun'}
                         </Button>
 
                         <div className="flex justify-center w-full gap-2">
-                            <span>Belum punya akun?</span>
-                            <Link href={AUTHENTICATION_ROUTE}>
+                            <span>Sudah punya akun?</span>
+                            <Link href={'/masuk'}>
                                 <span className="font-extrabold text-[#7264EB] cursor-pointer hover:text-[#7264EB]/75 transition-all duration-500">
-                                    Buat Akun
+                                    Login
                                 </span>
                             </Link>
                         </div>

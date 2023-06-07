@@ -5,16 +5,32 @@ import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 import LoadingBackdrop from './components/elements/LoadingBackdrop';
+import { useGetProfileQuery } from 'authentication/redux/api/authApi';
 
 const withAnon = (WrappedComponent: React.ComponentType) => {
     return (props: JSX.IntrinsicAttributes & { children?: ReactNode }) => {
         // checks whether we are on client / browser or server.
         if (typeof window !== 'undefined') {
             const accessToken = useSelector(getToken);
-            const router = useRouter();
 
-            if (accessToken) {
-                if (router.pathname === '/') {
+            const { data: profile } = useGetProfileQuery(
+                {},
+                { skip: !accessToken }
+            );
+
+            const router = useRouter();
+            if (!!profile) {
+                if (
+                    ['/masuk', '/daftar', '/onboarding'].includes(
+                        router.pathname
+                    )
+                ) {
+                    if (!profile.is_profile_complete) {
+                        router.replace('/onboarding');
+                    } else {
+                        router.replace('/kelas');
+                    }
+                } else if (router.pathname === '/') {
                     router.replace('/kelas');
                 }
 
