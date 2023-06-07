@@ -3,21 +3,18 @@ import {
     getIsAuthenticated,
     getIsNewUser
 } from 'authentication/redux/selectors/userSelector';
+import { useRouter } from 'next/router';
 import posthog from 'posthog-js';
 import React, {
     createContext,
     ReactNode,
     useContext,
     useEffect,
-    useMemo,
-    useState
+    useMemo
 } from 'react';
 import { useSelector } from 'react-redux';
 
 interface AuthContextType {
-    isOnboardingOpen: 1 | 0;
-    closeOnboardingModal: (status: 1 | 0) => void;
-    isPermanent: boolean;
     isAuthenticated: boolean;
 }
 
@@ -28,25 +25,16 @@ export function AuthProvider({
 }: {
     children: ReactNode;
 }): JSX.Element {
-    const [isOnboardingOpen, setOnboardingOpen] = useState<1 | 0>(0);
-    const [isPermanent, setIsPermanent] = useState(false);
     const isNewUser = useSelector(getIsNewUser);
     const isAuthenticated = useSelector(getIsAuthenticated);
     const user = useSelector(getCurrentUser);
+    const router = useRouter();
 
     useEffect(() => {
         if (isNewUser) {
-            setOnboardingOpen(1);
-        } else {
-            setOnboardingOpen(0);
+            router.push('/onboarding');
         }
-    }, [isNewUser]);
-
-    useEffect(() => {
-        if (isAuthenticated) {
-            setIsPermanent(false);
-        }
-    }, [isAuthenticated]);
+    }, [isNewUser, router]);
 
     useEffect(() => {
         if (user.email) {
@@ -54,19 +42,11 @@ export function AuthProvider({
         }
     }, [user]);
 
-    const closeOnboardingModal = (status: 1 | 0): void => {
-        setOnboardingOpen(status);
-        window.localStorage.removeItem('nur');
-    };
-
     const memoedValue = useMemo(
         () => ({
-            isOnboardingOpen,
-            closeOnboardingModal,
-            isPermanent,
             isAuthenticated
         }),
-        [isOnboardingOpen, isPermanent, isAuthenticated]
+        [isAuthenticated]
     );
 
     return (
