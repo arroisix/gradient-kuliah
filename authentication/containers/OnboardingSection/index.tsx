@@ -15,7 +15,7 @@ export const OnboardingSection = (): JSX.Element => {
                 <OnboardingSuccess />
             ) : (
                 <div
-                    className={`w-[360px] flex flex-col gap-8 justify-center items-center`}>
+                    className={`w-[280px] md:w-[360px] flex flex-col gap-8 justify-center items-center`}>
                     <h1 className="w-full text-3xl font-extrabold">
                         Lengkapi akunmu
                     </h1>

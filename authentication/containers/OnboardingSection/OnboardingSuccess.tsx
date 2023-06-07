@@ -6,7 +6,7 @@ export const OnboardingSuccess = (): JSX.Element => {
     const router = useRouter();
     return (
         <div className="flex flex-col items-center justify-center gap-5">
-            <h1 className="font-sans text-4xl font-extrabold">
+            <h1 className="font-sans text-4xl font-extrabold text-center">
                 Selamat Datang di{' '}
                 <span className=" font-[Urbanist]">Gradient</span>
             </h1>
@@ -17,7 +17,7 @@ export const OnboardingSuccess = (): JSX.Element => {
                         ? `${router.query.redirect}`
                         : '/kelas'
                 }>
-                <Button variant="primary" className="w-1/2">
+                <Button variant="primary" size="small" className="md:w-1/2">
                     Mulai Sekarang
                 </Button>
             </Link>
