@@ -46,7 +46,7 @@ export const PersonalDataStep = (): JSX.Element => {
                         <div className="flex flex-col gap-4">
                             <Input
                                 type="date"
-                                label="TANGGAL LAHIR"
+                                label="Tanggal Lahir"
                                 name="birthdate"
                                 onChange={handleChange}
                                 onBlur={handleBlur}
@@ -63,7 +63,7 @@ export const PersonalDataStep = (): JSX.Element => {
                                 onBlur={handleBlur}
                                 value={values.gender}
                                 name="gender"
-                                label="JENIS KELAMIN"
+                                label="Jenis Kelamin"
                                 options={[
                                     {
                                         key: 'MALE',
@@ -77,7 +77,7 @@ export const PersonalDataStep = (): JSX.Element => {
                             />
                             <Input
                                 type="number"
-                                label="NOMOR HANDPHONE"
+                                label="Nomor Handphone"
                                 placeholder="8211234567"
                                 name="phone_number"
                                 onChange={handleChange}

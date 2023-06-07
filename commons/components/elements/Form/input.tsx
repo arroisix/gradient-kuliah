@@ -1,11 +1,13 @@
+import { ChangeEventHandler, FocusEventHandler } from 'react';
+
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 interface InputProps {
     label?: string;
     type: string;
     placeholder?: string;
     className?: string;
-    onChange?: (res: any) => void;
-    onBlur?: (res: any) => void;
+    onChange?: ChangeEventHandler<HTMLInputElement> | undefined;
+    onBlur?: FocusEventHandler<HTMLInputElement> | undefined;
     value?: string;
     name: string;
     startAddorment?: JSX.Element;
@@ -42,8 +44,7 @@ const Input: React.FC<InputProps> = ({
                 className={`form-input bg-transparent border-0 w-full  focus:outline-none focus:ring-0 focus:appearance-none placeholder-gray-300`}
                 placeholder={placeholder}
                 onChange={onChange}
-                // @ts-ignore
-                onWheel={(e) => e.target.blur()}
+                onWheel={(e) => (e.target as HTMLElement).blur()}
                 onBlur={onBlur}
                 value={value}
                 name={name}

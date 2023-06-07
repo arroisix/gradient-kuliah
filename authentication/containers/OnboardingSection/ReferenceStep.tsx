@@ -43,7 +43,7 @@ export const ReferenceStep = (): JSX.Element => {
                                     onBlur={handleBlur}
                                     value={values.register_reference_id}
                                     name="register_reference_id"
-                                    label="DARI MANA KAMU MENGETAHUI GRADIENT?"
+                                    label="Dari mana kamu mengetahui Gradient?"
                                     options={registerReferences.data.map(
                                         (ref) => ({
                                             key: ref.id,
@@ -52,9 +52,9 @@ export const ReferenceStep = (): JSX.Element => {
                                     )}
                                 />
                                 <TextArea
-                                    label="APA YANG MEMBUAT KAMU TERTARIK DENGAN GRADIENT? (Optional)"
+                                    label="Apa yang membuatmu tertarik bergabung bersama Gradient?"
                                     name="join_reasoning"
-                                    placeholder="Saya membutuhkan materi tambahan untuk kuliah"
+                                    placeholder="Cara Penyampaian yang menarik"
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     value={values.join_reasoning}

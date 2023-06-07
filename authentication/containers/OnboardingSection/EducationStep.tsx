@@ -55,7 +55,7 @@ export const EducationStep = (): JSX.Element => {
                                     })
                                 }
                                 onBlur={handleBlur}
-                                label="TINGKAT PENDIDIKAN"
+                                label="Tingkat Pendidikan"
                                 value={values.education_level}
                                 name="educationLevel"
                                 option={[
@@ -87,7 +87,7 @@ export const EducationStep = (): JSX.Element => {
                             />
                             <Input
                                 type="text"
-                                label="INSTITUSI"
+                                label="Institusi"
                                 name="institution"
                                 placeholder="ex: UI / SMAN 1 Depok / PT. ABC"
                                 onChange={handleChange}
@@ -102,7 +102,7 @@ export const EducationStep = (): JSX.Element => {
                             />
                             <Input
                                 type="text"
-                                label="JURUSAN"
+                                label="Jurusan"
                                 name="major"
                                 placeholder="Ilmu Komputer"
                                 onChange={handleChange}
