@@ -3,10 +3,9 @@ import Button from 'commons/components/elements/Button';
 import Input from 'commons/components/elements/Form/input';
 import { useSelector } from 'react-redux';
 import { getCurrentUser } from 'authentication/redux/selectors/userSelector';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import RegistrationContext from 'authentication/contexts/RegistrationProvider';
 import { useCheckUsernameAvailabilityMutation } from 'authentication/redux/api/authApi';
-import { useDebouncedCallback } from 'use-debounce';
 
 interface CheckUsernameAvailabilityResponse {
     data: CheckUsernameAvailabilityResponseData;
@@ -15,18 +14,6 @@ interface CheckUsernameAvailabilityResponse {
 export const IdentityStep = (): JSX.Element => {
     const user = useSelector(getCurrentUser);
     const [checkUsernameAvailability] = useCheckUsernameAvailabilityMutation();
-    const [isUsernameAvailable, setIsUsernameAvailable] = useState(true);
-
-    const debounced = useDebouncedCallback(async (value) => {
-        const result = await checkUsernameAvailability({
-            username: value
-        });
-
-        const {
-            data: { is_available }
-        } = result as CheckUsernameAvailabilityResponse;
-        setIsUsernameAvailable(is_available);
-    }, 1000);
 
     const { setStep, formData, setFormData } = useContext(RegistrationContext);
 
@@ -47,13 +34,24 @@ export const IdentityStep = (): JSX.Element => {
                     });
                     setStep(1);
                 }}
-                validate={(values) => {
+                validate={async (values) => {
                     const errors: { [key: string]: string } = {};
 
                     if (!values.full_name) errors.full_name = 'Required';
                     if (!values.username) errors.username = 'Required';
-                    if (!isUsernameAvailable)
-                        errors.username = 'Username is not available';
+
+                    if (!!values.username) {
+                        const result = await checkUsernameAvailability({
+                            username: values.username
+                        });
+
+                        const {
+                            data: { is_available }
+                        } = result as CheckUsernameAvailabilityResponse;
+
+                        if (!is_available)
+                            errors.username = 'Username is not available';
+                    }
 
                     return errors;
                 }}
@@ -88,20 +86,12 @@ export const IdentityStep = (): JSX.Element => {
                                 type="text"
                                 placeholder="Username"
                                 name="username"
-                                onChange={async (e) => {
-                                    handleChange(e);
-
-                                    if (e.target.value !== '') {
-                                        await debounced(e.target.value);
-                                    }
-                                }}
+                                onChange={handleChange}
                                 onBlur={handleBlur}
                                 value={values.username}
                                 error={
                                     touched.username && errors.username
                                         ? errors.username
-                                        : !isUsernameAvailable
-                                        ? 'Username not available'
                                         : undefined
                                 }
                             />
