@@ -2,7 +2,7 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import Button from 'commons/components/elements/Button';
 import { AUTHENTICATION_ROUTE } from 'commons/constants';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { useSelector } from 'react-redux';
 
 const SubscribeButton = ({
@@ -18,7 +18,6 @@ const SubscribeButton = ({
 }): JSX.Element => {
     const { is_subscribed } = useCourseSubscription(slug);
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const router = useRouter();
 
     return (
         <>
@@ -37,17 +36,15 @@ const SubscribeButton = ({
                 </Button>
             )}
             {!isAuthenticated && !is_subscribed && (
-                <Button
-                    className={`text-center my-2 z-[5] ${
-                        className ?? 'md:w-fit min-w-[200px]'
-                    }`}
-                    variant="primary"
-                    onClick={
-                        // TODO: Implement redirection for `/langganan`
-                        () => router.push(AUTHENTICATION_ROUTE)
-                    }>
-                    {label}
-                </Button>
+                <Link href={`${AUTHENTICATION_ROUTE}?redirect=/langganan`}>
+                    <Button
+                        className={`text-center my-2 z-[5] ${
+                            className ?? 'md:w-fit min-w-[200px]'
+                        }`}
+                        variant="primary">
+                        {label}
+                    </Button>
+                </Link>
             )}
         </>
     );

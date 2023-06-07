@@ -49,9 +49,8 @@ const NotebookSection = ({
                                                     );
                                                 }
                                             } else {
-                                                // TODO: Implement redirection for `/kelas/kalkulus1/belajar/notebook/${chapter.id}/${subchapter.id}`
                                                 router.push(
-                                                    AUTHENTICATION_ROUTE
+                                                    `${AUTHENTICATION_ROUTE}?redirect=/kelas/kalkulus1/belajar/latihan/${chapter.id}/${subchapter.id}`
                                                 );
                                             }
                                         }}

@@ -50,7 +50,7 @@ export const AuthenticationContainer: React.FC = () => {
                         Gradient
                     </h1>
                     <div className="flex flex-col items-center justify-center w-full gap-4">
-                        <div className="flex flex-col gap-1 text-center">
+                        <div className="flex flex-col w-full gap-1 text-center">
                             <span className="text-2xl font-extrabold text-White">
                                 {pathname === '/masuk' ? 'Log In' : 'Buat akun'}
                             </span>
