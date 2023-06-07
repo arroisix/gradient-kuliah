@@ -31,7 +31,7 @@ export const AuthenticationContainer: React.FC = () => {
     return (
         <section className="flex items-center justify-center w-screen min-h-screen text-white bg-neutral-1000">
             {pathname === '/onboarding' && (
-                <div className="top-0 left-0 hidden gap-2 px-6 py-3 md:fixed font-body">
+                <div className="fixed top-0 left-0 hidden gap-2 px-6 py-3 md:flex font-body">
                     <span className="text-[#666666]">
                         Terdaftar sebagai {user.email}
                     </span>{' '}
