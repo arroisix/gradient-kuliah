@@ -24,7 +24,7 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
 
             if (!accessToken && !rawToken) {
                 window.location.href = '/';
-                return <LoadingBackdrop />;
+                return;
             }
 
             // If this is an accessToken we just render the component that was passed with all its props

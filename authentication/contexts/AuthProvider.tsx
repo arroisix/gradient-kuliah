@@ -31,7 +31,9 @@ export function AuthProvider({
     const router = useRouter();
 
     useEffect(() => {
-        if (isNewUser) {
+        if (isNewUser && router.pathname !== '/onboarding') {
+            console.log('test');
+
             router.push('/onboarding');
         }
     }, [isNewUser, router]);
