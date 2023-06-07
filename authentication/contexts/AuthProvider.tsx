@@ -1,7 +1,7 @@
+import { useGetProfileQuery } from 'authentication/redux/api/authApi';
 import {
     getCurrentUser,
-    getIsAuthenticated,
-    getIsNewUser
+    getIsAuthenticated
 } from 'authentication/redux/selectors/userSelector';
 import { useRouter } from 'next/router';
 import posthog from 'posthog-js';
@@ -25,18 +25,20 @@ export function AuthProvider({
 }: {
     children: ReactNode;
 }): JSX.Element {
-    const isNewUser = useSelector(getIsNewUser);
+    const { data: profile } = useGetProfileQuery({});
     const isAuthenticated = useSelector(getIsAuthenticated);
     const user = useSelector(getCurrentUser);
     const router = useRouter();
 
     useEffect(() => {
-        if (isNewUser && router.pathname !== '/onboarding') {
-            console.log('test');
-
+        if (
+            !!profile &&
+            !profile.is_profile_complete &&
+            router.pathname !== '/onboarding'
+        ) {
             router.push('/onboarding');
         }
-    }, [isNewUser, router]);
+    }, [profile, router]);
 
     useEffect(() => {
         if (user.email) {

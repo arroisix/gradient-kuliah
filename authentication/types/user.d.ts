@@ -23,7 +23,6 @@ interface SocialAuthInputData {
 interface LoginResponseData {
     user: User;
     token: string;
-    is_new_user?: boolean;
 }
 
 interface UpdateUserResponseData {

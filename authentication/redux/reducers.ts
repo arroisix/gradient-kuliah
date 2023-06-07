@@ -6,7 +6,7 @@ import storage from 'redux/_sync_storage';
 const userPersistConfig = {
     key: 'user',
     storage,
-    whitelist: ['user', 'token', 'is_new_user']
+    whitelist: ['user', 'token']
 };
 
 const authenticationReducer = combineReducers({

@@ -5,27 +5,19 @@ import { toast } from 'react-toastify';
 type UserSliceState = {
     user: User;
     token: string | null;
-    is_new_user: boolean;
 };
 
 const userSlice = createSlice({
     name: 'user',
     initialState: {
         user: {} as User,
-        token: null,
-        is_new_user: false
+        token: null
     } as UserSliceState,
     reducers: {
         removeUser: () => {
             window.localStorage.clear();
             window.location.href = '/';
-            return { token: null, user: {} as User, is_new_user: false };
-        },
-        setNewUserFlag: (
-            state: UserSliceState,
-            { payload }: PayloadAction<boolean>
-        ) => {
-            return { ...state, is_new_user: payload };
+            return { token: null, user: {} as User };
         },
         clearCache: (state: UserSliceState) => {
             return state;
@@ -54,7 +46,6 @@ const userSlice = createSlice({
             (state, { payload }: PayloadAction<LoginResponseData>) => {
                 state.user = payload.user;
                 state.token = payload.token;
-                state.is_new_user = payload.is_new_user ?? false;
 
                 window.localStorage.setItem('token', payload.token);
 
@@ -72,7 +63,6 @@ const userSlice = createSlice({
             (state, { payload }: PayloadAction<LoginResponseData>) => {
                 state.user = payload.user;
                 state.token = payload.token;
-                state.is_new_user = true;
 
                 window.localStorage.setItem('token', payload.token);
 
@@ -91,7 +81,6 @@ const userSlice = createSlice({
                 const { user_id: id } = payload;
 
                 state.user = { id, ...payload };
-                state.is_new_user = false;
 
                 return state;
             }
