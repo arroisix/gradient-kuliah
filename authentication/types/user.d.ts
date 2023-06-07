@@ -26,20 +26,6 @@ interface LoginResponseData {
     is_new_user?: boolean;
 }
 
-interface UpdateUserInputData {
-    full_name?: string;
-    username?: string;
-    phone_number?: string;
-    institution?: string;
-    education_level?: string;
-    birthdate?: string;
-    gender?: 'FEMALE' | 'MALE';
-    education_level?: 'SMP' | 'SMA' | 'SMK' | 'S1' | 'S2' | 'S3';
-    register_reference_id?: string;
-    major?: string;
-    join_reasoning?: string;
-}
-
 interface ProfileData {
     full_name?: string;
     email: string;
@@ -53,4 +39,10 @@ interface ProfileData {
     profession_field?: string;
     photo_profile?: string;
     is_profile_complete?: boolean;
+}
+
+interface UpdateUserInputData extends ProfileData {
+    gender?: 'FEMALE' | 'MALE';
+    register_reference_id?: string;
+    join_reasoning?: string;
 }

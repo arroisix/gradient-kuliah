@@ -4,6 +4,10 @@ import Input from 'commons/components/elements/Form/input';
 import { useContext } from 'react';
 import RegistrationContext from 'authentication/contexts/RegistrationProvider';
 import Select from 'commons/components/elements/Form/select';
+import {
+    EDUCATION_OPTIONS,
+    PROFESSION_OPTIONS
+} from 'authentication/constants';
 
 export const EducationStep = (): JSX.Element => {
     const { setStep, formData, setFormData } = useContext(RegistrationContext);
@@ -13,9 +17,11 @@ export const EducationStep = (): JSX.Element => {
             <Formik
                 initialValues={
                     {
-                        education_level: formData.education_level || 'SMP',
+                        education_level: formData.education_level || '',
                         institution: formData.institution || '',
-                        major: formData.major || ''
+                        major: formData.major || '',
+                        profession: formData.profession || '',
+                        profession_field: formData.profession_field || ''
                     } as UpdateUserInputData
                 }
                 onSubmit={(values) => {
@@ -32,6 +38,12 @@ export const EducationStep = (): JSX.Element => {
                         errors.education_level = 'Required';
                     if (!values.institution) errors.institution = 'Required';
                     if (!values.major) errors.major = 'Required';
+                    if (!values.profession) errors.profession = 'Required';
+                    if (
+                        values.profession === 'employed' &&
+                        !values.profession_field
+                    )
+                        errors.profession_field = 'Required';
 
                     return errors;
                 }}>
@@ -58,38 +70,13 @@ export const EducationStep = (): JSX.Element => {
                                 label="Tingkat Pendidikan"
                                 value={values.education_level}
                                 name="educationLevel"
-                                option={[
-                                    {
-                                        key: 'SMP',
-                                        value: 'SMP'
-                                    },
-                                    {
-                                        key: 'SMA',
-                                        value: 'SMA'
-                                    },
-                                    {
-                                        key: 'SMK',
-                                        value: 'SMK'
-                                    },
-                                    {
-                                        key: 'S1',
-                                        value: 'Sarjana'
-                                    },
-                                    {
-                                        key: 'S2',
-                                        value: 'Magister'
-                                    },
-                                    {
-                                        key: 'S3',
-                                        value: 'Doktor'
-                                    }
-                                ]}
+                                option={EDUCATION_OPTIONS}
                             />
                             <Input
                                 type="text"
-                                label="Institusi"
+                                label="Asal Sekolah/Universitas"
                                 name="institution"
-                                placeholder="ex: UI / SMAN 1 Depok / PT. ABC"
+                                placeholder="Nama sekolah atau universitas"
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 value={values.institution}
@@ -104,7 +91,7 @@ export const EducationStep = (): JSX.Element => {
                                 type="text"
                                 label="Jurusan"
                                 name="major"
-                                placeholder="Ilmu Komputer"
+                                placeholder="Nama jurusan"
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 value={values.major}
@@ -115,6 +102,39 @@ export const EducationStep = (): JSX.Element => {
                                 }
                                 required={true}
                             />
+                            <Select
+                                onChange={(e) =>
+                                    handleChange({
+                                        target: {
+                                            value: e.target.value,
+                                            name: 'profession'
+                                        }
+                                    })
+                                }
+                                onBlur={handleBlur}
+                                label="Pekerjaan"
+                                value={values.profession}
+                                name="profession"
+                                option={PROFESSION_OPTIONS}
+                            />
+                            {values.profession === 'employed' && (
+                                <Input
+                                    type="text"
+                                    label="Bidang Pekerjaan"
+                                    name="profession_field"
+                                    placeholder="Nama bidang"
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    value={values.profession_field}
+                                    error={
+                                        touched.profession_field &&
+                                        errors.profession_field
+                                            ? errors.profession_field
+                                            : undefined
+                                    }
+                                    required={values.profession === 'employed'}
+                                />
+                            )}
                         </div>
                         <Button
                             variant="custom"

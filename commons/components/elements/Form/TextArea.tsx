@@ -32,7 +32,7 @@ const TextArea: React.FC<InputProps> = ({
         {label && <span className="text-[#999999] text-sm">{label}</span>}
         <div
             className={`flex w-full items-center rounded-lg p-2 border ${
-                error ? 'border-red-500' : 'border-neutral-400'
+                error ? 'border-red-500' : 'border-[#242424]'
             } ${className}`}>
             <div>{startAddorment}</div>
             <textarea

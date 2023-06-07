@@ -23,3 +23,57 @@ export const ONBOARDING_STEP = [
     EducationStep,
     ReferenceStep
 ];
+
+export const EDUCATION_OPTIONS = [
+    {
+        key: '',
+        value: 'Pilih pendidikan'
+    },
+    {
+        key: 'SMP',
+        value: 'SMP'
+    },
+    {
+        key: 'SMA',
+        value: 'SMA'
+    },
+    {
+        key: 'SMK',
+        value: 'SMK'
+    },
+    {
+        key: 'S1',
+        value: 'Sarjana'
+    },
+    {
+        key: 'S2',
+        value: 'Magister'
+    },
+    {
+        key: 'S3',
+        value: 'Doktor'
+    }
+];
+
+export const PROFESSION_OPTIONS = [
+    {
+        key: '',
+        value: 'Pilih pekerjaan'
+    },
+    {
+        key: 'student',
+        value: 'Pelajar/Mahasiswa'
+    },
+    {
+        key: 'employed',
+        value: 'Bekerja'
+    },
+    {
+        key: 'fresh_grad',
+        value: 'Fresh Graduate'
+    },
+    {
+        key: 'unemployed',
+        value: 'Tidak Bekerja'
+    }
+];
