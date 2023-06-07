@@ -26,10 +26,11 @@ interface LoginResponseData {
     is_new_user?: boolean;
 }
 
-interface ProfileData {
-    full_name?: string;
+interface UpdateUserResponseData {
+    user_id: string;
+    full_name: string;
     email: string;
-    phone_number?: string;
+    phone_number: string;
     username?: string;
     birthdate?: string;
     education_level: 'SMP' | 'SMA' | 'SMK' | 'S1' | 'S2' | 'S3';
@@ -38,10 +39,13 @@ interface ProfileData {
     profession?: 'student' | 'employed' | 'unemployed' | 'fresh_grad';
     profession_field?: string;
     photo_profile?: string;
+}
+
+interface GetProfileResponseData extends UpdateUserResponseData {
     is_profile_complete?: boolean;
 }
 
-interface UpdateUserInputData extends ProfileData {
+interface UpdateUserInputData extends UpdateUserResponseData {
     gender?: 'FEMALE' | 'MALE';
     register_reference_id?: string;
     join_reasoning?: string;
