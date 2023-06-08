@@ -31,10 +31,8 @@ jobs:
                   vercel-token: ${{ secrets.VERCEL_TOKEN }}
                   vercel-org-id: ${{ secrets.VERCEL_ORG_ID}} # Replace with your Vercel team ID
                   vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-              id: deployment
 
             - name: Extract deployment URL
-              id: deployment
               run: |
                   deployment_url=$(curl -s -X GET \
                     -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
