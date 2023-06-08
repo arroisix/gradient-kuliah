@@ -31,3 +31,16 @@ jobs:
                   vercel-token: ${{ secrets.VERCEL_TOKEN }}
                   vercel-org-id: ${{ secrets.VERCEL_ORG_ID}} # Replace with your Vercel team ID
                   vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+              id: deployment
+
+            - name: Extract deployment URL
+              id: deployment
+              run: |
+                  deployment_url=$(curl -s -X GET \
+                    -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+                    "https://api.vercel.com/v4/now/deployments?limit=1&projectId=${{ secrets.VERCEL_PROJECT_ID }}" | jq -r '.[0].url')
+                  echo "::set-output name=url::$deployment_url"
+
+            - name: Comment deployment URL
+              run: |
+                  echo "Preview URL: ${{ needs.deployment.outputs.url }}" # Use the output URL in a comment or any desired location
