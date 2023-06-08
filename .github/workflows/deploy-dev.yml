@@ -36,7 +36,7 @@ jobs:
               run: |
                   deployment_url=$(curl -s -X GET \
                     -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
-                    "https://api.vercel.com/v4/now/deployments?limit=1&projectId=${{ secrets.VERCEL_PROJECT_ID }}" | jq -r '.[0].url')
+                    "https://api.vercel.com/v9/now/deployments?projectId=${{ secrets.VERCEL_PROJECT_ID }}" | jq -r '.deployments[0].url')
                   echo "::set-output name=url::$deployment_url"
 
             - name: Comment deployment URL
