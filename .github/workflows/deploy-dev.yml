@@ -42,10 +42,6 @@ jobs:
                   echo "url=${deployment_url}" >> "$GITHUB_ENV"
 
             - name: Comment deployment URL
-              run: |
-                  echo "Preview URL: https://${{ env.url }}" # Use the output URL in a comment or any desired location
-
-            - name: Comment deployment URL to Github
               uses: actions/github-script@v5
               with:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
