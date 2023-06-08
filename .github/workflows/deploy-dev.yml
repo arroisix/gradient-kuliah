@@ -34,8 +34,13 @@ jobs:
               id: deploy-vercel
 
             - name: Extract deployment URL
+              id: get-url
               run: |
                   deployment_url=$(curl -s -X GET \
                     -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
                     "https://api.vercel.com/v5/now/deployments?projectId=${{ secrets.VERCEL_PROJECT_ID }}" | jq -r '.deployments[0].url')
-                  echo "$deployment_url"
+                  echo "url=${deployment_url}" >> $GITHUB_ENV
+
+            - name: Comment deployment URL
+              run: |
+                  echo "Preview URL: ${{ needs.get-url.outputs.url }}" # Use the output URL in a comment or any desired location
