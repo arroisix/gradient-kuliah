@@ -31,3 +31,26 @@ jobs:
                   vercel-token: ${{ secrets.VERCEL_TOKEN }}
                   vercel-org-id: ${{ secrets.VERCEL_ORG_ID}} # Replace with your Vercel team ID
                   vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+              id: deploy-vercel
+
+            - name: Extract deployment URL
+              id: get-url
+              run: |
+                  deployment_url=$(curl -s -X GET \
+                    -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+                    "https://api.vercel.com/v5/now/deployments?projectId=${{ secrets.VERCEL_PROJECT_ID }}" | jq -r '.deployments[0].url')
+                  echo "url=${deployment_url}" >> "$GITHUB_ENV"
+
+            - name: Comment deployment URL
+              uses: actions/github-script@v5
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  script: |
+                      const url = 'https://${{ env.url }}';
+                      const pullRequestNumber = context.payload.pull_request.number;
+                      github.rest.issues.createComment({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        issue_number: pullRequestNumber,
+                        body: `Preview URL: ${url}`
+                      });
