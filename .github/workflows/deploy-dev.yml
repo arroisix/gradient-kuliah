@@ -44,3 +44,18 @@ jobs:
             - name: Comment deployment URL
               run: |
                   echo "Preview URL: ${{ env.url }}" # Use the output URL in a comment or any desired location
+
+            - name: Comment deployment URL to Github
+              uses: actions/github-script@v5
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  script: |
+                      const url = 'https://${{ env.url }}';
+                      const pullRequestNumber = context.payload.pull_request.number;
+                      const octokit = github.getOctokit("${{ secrets.GITHUB_TOKEN }}");
+                      octokit.issues.createComment({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        issue_number: pullRequestNumber,
+                        body: `Preview URL: ${url}`
+                      });
