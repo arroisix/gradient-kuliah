@@ -6,7 +6,8 @@ module.exports = {
         './courses/**/*.{ts,js,jsx,tsx}',
         './commons/**/*.{ts,js,jsx,tsx}',
         './pages/**/*.{ts,js,jsx,tsx}',
-        './payment/**/*.{ts,js,jsx,tsx}'
+        './payment/**/*.{ts,js,jsx,tsx}',
+        './profile/**/*.{ts,js,jsx,tsx}'
     ],
     theme: {
         fontFamily: {
