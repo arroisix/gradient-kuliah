@@ -156,7 +156,7 @@ const SubscribePacket = (): JSX.Element => {
                     </div>
                 </div>
             </h4>
-            <div className="flex flex-col items-end justify-center w-full gap-4 lg:flex-row">
+            <div className="flex flex-col flex-wrap items-end justify-center w-full gap-4 lg:flex-row">
                 {isLoading && (
                     <>
                         <div className="h-[402px] w-full lg:w-[380px] bg-neutral-600 animate-pulse rounded-[20px]" />
