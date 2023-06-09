@@ -1,7 +1,7 @@
 import SubscribeButton from 'courses/components/LandingPage/Common/SubscribeButton';
 import { formatter } from 'courses/utils';
 import { useGetPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 const PacketCard = ({
     data
@@ -82,10 +82,79 @@ const PacketCard = ({
 const SubscribePacket = (): JSX.Element => {
     const { data: packets, isLoading } = useGetPacketOfferQuery();
 
+    const [countdown, setCountdown] = useState({
+        hours: 0,
+        minutes: 0,
+        seconds: 0
+    });
+
+    useEffect(() => {
+        const countdownInterval = setInterval(() => {
+            const now = new Date();
+            const endDay =
+                new Date(
+                    now.getFullYear(),
+                    now.getMonth(),
+                    now.getDate() + 1,
+                    0,
+                    0,
+                    0
+                ).getTime() - now.getTime();
+
+            const hours = Math.floor(
+                (endDay % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+            );
+            const minutes = Math.floor(
+                (endDay % (1000 * 60 * 60)) / (1000 * 60)
+            );
+            const seconds = Math.floor((endDay % (1000 * 60)) / 1000);
+
+            setCountdown({ hours, minutes, seconds });
+        }, 1000);
+
+        return () => {
+            clearInterval(countdownInterval);
+        };
+    }, []);
+
     return (
         <section className="min-h-screen py-24 px-4 md:px-[7.5rem] flex flex-col items-center justify-center gap-8 lg:gap-16">
-            <h4 className="text-2xl font-bold lg:text-3xl">
-                Akses Semua Kelas Tanpa Batas.
+            <h4 className="flex flex-col lg:flex-row gap-3 items-center font-bold text-3xl text-center">
+                <span>Promo akan berakhir dalam</span>
+                <div className="grid grid-flow-col gap-1 items-center text-center auto-cols-max">
+                    <div className="flex flex-col p-2 pb-3 bg-[#212121] rounded-box">
+                        <span className="countdown font-semibold text-3xl">
+                            <span
+                                style={
+                                    {
+                                        '--value': countdown.hours
+                                    } as React.CSSProperties
+                                }></span>
+                        </span>
+                    </div>
+                    :
+                    <div className="flex flex-col p-2 pb-3 bg-[#212121] rounded-box">
+                        <span className="countdown font-semibold text-3xl">
+                            <span
+                                style={
+                                    {
+                                        '--value': countdown.minutes
+                                    } as React.CSSProperties
+                                }></span>
+                        </span>
+                    </div>
+                    :
+                    <div className="flex flex-col p-2 pb-3 bg-[#212121] rounded-box">
+                        <span className="countdown font-semibold text-3xl">
+                            <span
+                                style={
+                                    {
+                                        '--value': countdown.seconds
+                                    } as React.CSSProperties
+                                }></span>
+                        </span>
+                    </div>
+                </div>
             </h4>
             <div className="flex flex-col items-end justify-center w-full gap-4 lg:flex-row">
                 {isLoading && (
