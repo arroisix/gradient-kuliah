@@ -9,7 +9,6 @@ import {
     MdLogout,
     MdOutlineBook
 } from 'react-icons/md';
-import { useAuth } from 'authentication/contexts/AuthProvider';
 import useWindowSize from 'commons/hooks/useWindowSize';
 import { renderName } from 'commons/utils';
 import MobileNavbar from './mobile';
@@ -23,6 +22,7 @@ import Button from 'commons/components/elements/Button';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { BiPlayCircle } from 'react-icons/bi';
 import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienceApi';
+import { AUTHENTICATION_ROUTE } from 'commons/constants';
 
 const Navbar = ({
     paymentPage,
@@ -34,7 +34,6 @@ const Navbar = ({
     courses?: Course[];
     lightMode?: boolean;
 }): JSX.Element => {
-    const { setModalAuthOpen } = useAuth();
     const { isMobileBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const user = useSelector(getCurrentUser);
@@ -127,7 +126,7 @@ const Navbar = ({
             className={`fixed top-0 left-0 w-full z-20 ${computeBgColor()}`}
             onMouseEnter={() => setNavbarHovered(true)}
             onMouseLeave={onMouseLeaveNavbar}>
-            <div className="w-full px-4 md:px-8 py-4 flex items-center justify-between">
+            <div className="flex items-center justify-between w-full px-4 py-4 md:px-8">
                 <div className="flex gap-4">
                     <Link href={'/'}>
                         <span className="text-2xl font-bold cursor-pointer font-[Urbanist]">
@@ -164,7 +163,7 @@ const Navbar = ({
                                 <img
                                     src="https://storage.googleapis.com/gradient-asset/assets/astronotes.png"
                                     alt="astronotes"
-                                    className="h-5 w-5"
+                                    className="w-5 h-5"
                                 />
                                 <span className="font-bold">AstroNotes</span>
                             </>
@@ -182,7 +181,7 @@ const Navbar = ({
                     </Button>
                 ) : (
                     <>
-                        <div className="hidden md:flex font-bold">
+                        <div className="hidden font-bold md:flex">
                             <Link href="/kelas">
                                 <nav
                                     className="ml-12 cursor-pointer hover:text-accent-blue"
@@ -242,7 +241,7 @@ const Navbar = ({
                                             </div>
                                         </Link>
                                         <div
-                                            className="flex text-accent-orange hover:text-state-error font-normal w-full items-center mb-4"
+                                            className="flex items-center w-full mb-4 font-normal text-accent-orange hover:text-state-error"
                                             onClick={() =>
                                                 dispatch(removeUser())
                                             }
@@ -259,17 +258,15 @@ const Navbar = ({
                                     </div>
                                 </nav>
                             ) : (
-                                <nav
-                                    className="ml-12 cursor-pointer"
-                                    onClick={() => setModalAuthOpen(1)}
-                                    aria-hidden={true}
-                                    onMouseEnter={() => setHovered(false)}>
-                                    Masuk
-                                </nav>
+                                <Link href={AUTHENTICATION_ROUTE}>
+                                    <nav className="ml-12 cursor-pointer">
+                                        Masuk
+                                    </nav>
+                                </Link>
                             )}
                         </div>
 
-                        <div className="flex md:hidden text-3xl gap-4">
+                        <div className="flex gap-4 text-3xl md:hidden">
                             {!isAuthenticated ? (
                                 <>
                                     <Link href="/kelas">
@@ -277,13 +274,11 @@ const Navbar = ({
                                             Kelas
                                         </nav>
                                     </Link>
-                                    <nav
-                                        className="flex items-center text-base font-bold"
-                                        onClick={() => setModalAuthOpen(1)}
-                                        aria-hidden={true}
-                                        onMouseEnter={() => setHovered(false)}>
-                                        Masuk
-                                    </nav>
+                                    <Link href={AUTHENTICATION_ROUTE}>
+                                        <nav className="flex items-center text-base font-bold">
+                                            Masuk
+                                        </nav>
+                                    </Link>
                                 </>
                             ) : (
                                 <button

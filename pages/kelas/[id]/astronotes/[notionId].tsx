@@ -17,7 +17,7 @@ const AstroNotes = ({
     id,
     notionId
 }: {
-    notes: ExtendedRecordMap;
+    notes: ExtendedRecordMap | null;
     notionId: string;
     id: string;
 }): JSX.Element => {
@@ -60,7 +60,11 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
     () =>
         async ({ params }) => {
             // Call an external API endpoint to get posts
-            const page = await notionClient.getPage(params?.notionId as string);
+            let page = null;
+
+            try {
+                page = await notionClient.getPage(params?.notionId as string);
+            } catch (error) {}
 
             return {
                 props: {

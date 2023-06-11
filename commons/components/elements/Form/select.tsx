@@ -18,10 +18,10 @@ const Select: React.FC<SelectProps> = ({
     required
 }) => {
     return (
-        <div className="flex flex-col my-2 w-full">
-            <span className="mb-1 text-xs">{label}</span>
+        <div className="flex flex-col w-full gap-1 font-body">
+            {label && <span className="text-[#999999] text-sm">{label}</span>}
             <select
-                className="rounded-lg border border-neutral-400  h-[48px]"
+                className="rounded-lg border bg-[#121212] border-[#242424] h-[48px]"
                 onChange={onChange}
                 onBlur={onBlur}
                 value={value}

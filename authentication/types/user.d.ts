@@ -10,35 +10,48 @@ type RegisterReference = {
     name: string;
 };
 
-interface LoginInputData {
+interface AuthInputData {
     email: string;
     password: string;
 }
 
-interface SocialLoginInputData {
+interface SocialAuthInputData {
     provider: 'google' | 'facebook';
     access_token: string;
-}
-
-interface RegisterInputData extends LoginInputData {
-    full_name: string;
 }
 
 interface LoginResponseData {
     user: User;
     token: string;
-    is_new_user?: boolean;
+    is_profile_complete: boolean;
 }
 
-interface UpdateUserInputData {
-    full_name?: string;
-    phone_number?: string;
-    institution?: string;
-    education_level?: string;
+interface UpdateUserResponseData {
+    user_id: string;
+    full_name: string;
+    email: string;
+    phone_number: string;
+    username?: string;
     birthdate?: string;
-    gender?: 'FEMALE' | 'MALE';
-    education_level?: 'SMP' | 'SMA' | 'SMK' | 'S1' | 'S2';
-    register_reference_id?: string;
+    education_level: 'SMP' | 'SMA' | 'SMK' | 'S1' | 'S2' | 'S3';
+    institution?: string;
     major?: string;
+    profession?: 'student' | 'employed' | 'unemployed' | 'fresh_grad';
+    profession_field?: string;
+    photo_profile?: string;
+    is_profile_complete?: boolean;
+}
+
+interface UpdateUserInputData extends UpdateUserResponseData {
+    gender?: 'FEMALE' | 'MALE';
+    register_reference_id?: string;
     join_reasoning?: string;
+}
+
+interface CheckUsernameAvailabilityInputData {
+    username: string;
+}
+
+interface CheckUsernameAvailabilityResponseData {
+    is_available: boolean;
 }

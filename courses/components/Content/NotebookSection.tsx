@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
 import { MdOutlineArticle, MdLock, MdChevronRight } from 'react-icons/md';
-import { useAuth } from 'authentication/contexts/AuthProvider';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import ComingSoonContent from './ComingSoonContent';
+import { AUTHENTICATION_ROUTE } from 'commons/constants';
 
 const NotebookSection = ({
     chapters,
@@ -19,7 +19,6 @@ const NotebookSection = ({
     isSubscribed: boolean;
 }): JSX.Element => {
     const router = useRouter();
-    const { setModalAuthOpen } = useAuth();
     const isAuthenticated = useSelector(getIsAuthenticated);
 
     return (
@@ -50,10 +49,8 @@ const NotebookSection = ({
                                                     );
                                                 }
                                             } else {
-                                                setModalAuthOpen(
-                                                    1,
-                                                    false,
-                                                    `/kelas/kalkulus1/belajar/notebook/${chapter.id}/${subchapter.id}`
+                                                router.push(
+                                                    `${AUTHENTICATION_ROUTE}?redirect=/kelas/kalkulus1/belajar/latihan/${chapter.id}/${subchapter.id}`
                                                 );
                                             }
                                         }}
@@ -63,8 +60,8 @@ const NotebookSection = ({
                                                 subchapter.notebook?.id &&
                                             'bg-neutral-600'
                                         }`}>
-                                        <div className="flex w-full items-center">
-                                            <div className="w-1/5 flex justify-center">
+                                        <div className="flex items-center w-full">
+                                            <div className="flex justify-center w-1/5">
                                                 {subchapter.notebook?.is_free ||
                                                 isSubscribed ? (
                                                     <MdOutlineArticle className="mr-4 text-xl" />
@@ -72,7 +69,7 @@ const NotebookSection = ({
                                                     <MdLock className="mr-4 text-xl text-amber-400" />
                                                 )}
                                             </div>
-                                            <div className="w-4/5 flex justify-between">
+                                            <div className="flex justify-between w-4/5">
                                                 <span className="w-full">
                                                     {subchapter.notebook?.title}
                                                 </span>

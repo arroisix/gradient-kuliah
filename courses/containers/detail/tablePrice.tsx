@@ -1,13 +1,13 @@
-import { useAuth } from 'authentication/contexts/AuthProvider';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
 import { dayToMonth, formatter } from 'courses/utils';
 import { useGetOneCourseManyPacketQuery } from 'payment/redux/api/subscriptionApi';
 import { useSelector } from 'react-redux';
 import Price from './price';
+import { AUTHENTICATION_ROUTE } from 'commons/constants';
+import Link from 'next/link';
 
 const TablePrice = ({ course }: { course: Course }): JSX.Element => {
-    const { setModalAuthOpen } = useAuth();
     const { data } = useGetOneCourseManyPacketQuery({ course_id: course.id });
     const isAuthenticated = useSelector(getIsAuthenticated);
 
@@ -20,18 +20,18 @@ const TablePrice = ({ course }: { course: Course }): JSX.Element => {
             <h2 className="text-2xl md:text-4xl">
                 Akses Instan Semuanya Sekarang!
             </h2>
-            <div className="my-4 w-full flex justify-center items-center">
+            <div className="flex items-center justify-center w-full my-4">
                 {data?.data.map((packet: Packet) => (
                     <div
-                        className="flex flex-col text-center overflow-hidden first:rounded-l-lg last:rounded-r-lg"
+                        className="flex flex-col overflow-hidden text-center first:rounded-l-lg last:rounded-r-lg"
                         key={packet.id}>
                         <div className="px-2 md:px-12 py-2 bg-[#373737]">
-                            <h5 className="text-base md:text-2xl font-bold">
+                            <h5 className="text-base font-bold md:text-2xl">
                                 {dayToMonth(packet.active_duration)}
                             </h5>
                         </div>
                         <div className="px-2 md:px-12 py-2 bg-[#1D1D1D]">
-                            <p className="line-through text-red-400 flex">
+                            <p className="flex text-red-400 line-through">
                                 <h5 className="text-[16px] md:text-[22px] font-body font-thin text-[#999999]">
                                     {
                                         formatter
@@ -59,25 +59,21 @@ const TablePrice = ({ course }: { course: Course }): JSX.Element => {
             </div>
             {isAuthenticated && !course.is_subscribed && (
                 <Button
-                    className="md:w-fit text-center my-2"
+                    className="my-2 text-center md:w-fit"
                     variant="primary"
                     href={`/langganan?courseId=${course.id}`}>
                     Akses Sekarang
                 </Button>
             )}
             {!isAuthenticated && !course.is_subscribed && (
-                <Button
-                    className="md:w-fit text-center my-z"
-                    variant="primary"
-                    onClick={() =>
-                        setModalAuthOpen(
-                            1,
-                            false,
-                            `/langganan?courseId=${course.id}`
-                        )
-                    }>
-                    Akses Sekarang
-                </Button>
+                <Link
+                    href={`${AUTHENTICATION_ROUTE}?redirect=/langganan?courseId=${course.id}`}>
+                    <Button
+                        className="my-2 text-center md:w-fit"
+                        variant="primary">
+                        Akses Sekarang
+                    </Button>
+                </Link>
             )}
         </div>
     );

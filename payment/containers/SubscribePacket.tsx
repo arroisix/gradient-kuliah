@@ -1,7 +1,7 @@
 import SubscribeButton from 'courses/components/LandingPage/Common/SubscribeButton';
 import { formatter } from 'courses/utils';
 import { useGetPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 const PacketCard = ({
     data
@@ -16,8 +16,8 @@ const PacketCard = ({
                     : 'w-full lg:w-fit'
             }>
             {isHighlighted && (
-                <div className="w-full p-2 flex justify-center items-center animate-pulse">
-                    <span className="text-center font-bold">
+                <div className="flex items-center justify-center w-full p-2 animate-pulse">
+                    <span className="font-bold text-center">
                         PENAWARAN TERBAIK!
                     </span>
                 </div>
@@ -37,7 +37,7 @@ const PacketCard = ({
                     `}>
                         {data.packet_name}
                     </p>
-                    <h3 className="line-through text-xl lg:text-2xl font-bold text-center decoration-2 text-stone-500 decoration-red-600">
+                    <h3 className="text-xl font-bold text-center line-through lg:text-2xl decoration-2 text-stone-500 decoration-red-600">
                         {
                             formatter
                                 .format(
@@ -61,7 +61,7 @@ const PacketCard = ({
                         </h1>
                     </div>
                 </div>
-                <ul className="grid grid-cols-1 content-center py-4">
+                <ul className="grid content-center grid-cols-1 py-4">
                     {data.benefits?.data.map((benefit: string) => (
                         <li className="font-body lg:text-lg" key={benefit}>
                             {benefit}
@@ -82,12 +82,81 @@ const PacketCard = ({
 const SubscribePacket = (): JSX.Element => {
     const { data: packets, isLoading } = useGetPacketOfferQuery();
 
+    const [countdown, setCountdown] = useState({
+        hours: 0,
+        minutes: 0,
+        seconds: 0
+    });
+
+    useEffect(() => {
+        const countdownInterval = setInterval(() => {
+            const now = new Date();
+            const endDay =
+                new Date(
+                    now.getFullYear(),
+                    now.getMonth(),
+                    now.getDate() + 1,
+                    0,
+                    0,
+                    0
+                ).getTime() - now.getTime();
+
+            const hours = Math.floor(
+                (endDay % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+            );
+            const minutes = Math.floor(
+                (endDay % (1000 * 60 * 60)) / (1000 * 60)
+            );
+            const seconds = Math.floor((endDay % (1000 * 60)) / 1000);
+
+            setCountdown({ hours, minutes, seconds });
+        }, 1000);
+
+        return () => {
+            clearInterval(countdownInterval);
+        };
+    }, []);
+
     return (
         <section className="min-h-screen py-24 px-4 md:px-[7.5rem] flex flex-col items-center justify-center gap-8 lg:gap-16">
-            <h4 className="text-2xl lg:text-3xl font-bold">
-                Akses Semua Kelas Tanpa Batas.
+            <h4 className="flex flex-col lg:flex-row gap-3 items-center font-bold text-3xl text-center">
+                <span>Promo akan berakhir dalam</span>
+                <div className="grid grid-flow-col gap-1 items-center text-center auto-cols-max">
+                    <div className="flex flex-col p-2 pb-3 bg-[#212121] rounded-box">
+                        <span className="countdown font-semibold text-3xl">
+                            <span
+                                style={
+                                    {
+                                        '--value': countdown.hours
+                                    } as React.CSSProperties
+                                }></span>
+                        </span>
+                    </div>
+                    :
+                    <div className="flex flex-col p-2 pb-3 bg-[#212121] rounded-box">
+                        <span className="countdown font-semibold text-3xl">
+                            <span
+                                style={
+                                    {
+                                        '--value': countdown.minutes
+                                    } as React.CSSProperties
+                                }></span>
+                        </span>
+                    </div>
+                    :
+                    <div className="flex flex-col p-2 pb-3 bg-[#212121] rounded-box">
+                        <span className="countdown font-semibold text-3xl">
+                            <span
+                                style={
+                                    {
+                                        '--value': countdown.seconds
+                                    } as React.CSSProperties
+                                }></span>
+                        </span>
+                    </div>
+                </div>
             </h4>
-            <div className="flex flex-col lg:flex-row gap-4 items-end justify-center w-full">
+            <div className="flex flex-col flex-wrap items-end justify-center w-full gap-4 lg:flex-row">
                 {isLoading && (
                     <>
                         <div className="h-[402px] w-full lg:w-[380px] bg-neutral-600 animate-pulse rounded-[20px]" />

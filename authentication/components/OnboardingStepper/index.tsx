@@ -1,0 +1,34 @@
+import { useContext } from 'react';
+import RegistrationContext from 'authentication/contexts/RegistrationProvider';
+import { ONBOARDING_STEP } from 'authentication/constants';
+
+type HandleStepperClickInterface = (index: number) => void;
+
+export const OnboardingStepper = (): JSX.Element => {
+    const { step, setStep } = useContext(RegistrationContext);
+    const handleStepperClick: HandleStepperClickInterface = (index: number) => {
+        if (index <= step) {
+            setStep(index);
+        }
+    };
+
+    return (
+        <ul className="flex w-full gap-2 list-none">
+            {ONBOARDING_STEP.map((_, index) => (
+                <li
+                    key={index}
+                    className="h-1"
+                    style={{
+                        width: `${(1 / ONBOARDING_STEP.length) * 100}%`
+                    }}>
+                    <button
+                        onClick={() => handleStepperClick(index)}
+                        type="button"
+                        className={`h-1 rounded-2xl w-full ${
+                            step === index ? 'bg-[#333333]' : 'bg-[#1D1D1D]'
+                        }`}></button>
+                </li>
+            ))}
+        </ul>
+    );
+};
