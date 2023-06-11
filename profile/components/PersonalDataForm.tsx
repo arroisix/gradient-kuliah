@@ -12,22 +12,19 @@ interface ReduxHTTPError {
     error: FetchBaseQueryError | SerializedError;
 }
 
-export const PersonalDataForm = ({
-    gender,
-    birthdate,
-    phone_number,
-    ...profile
-}: UpdateUserResponseData): JSX.Element => {
-    const { isLoading, updateUser } = useProfileContext();
+export const PersonalDataForm = (): JSX.Element => {
+    const { isLoading, updateUser, profile } = useProfileContext();
     return (
         <Formik
             initialValues={
                 {
-                    gender: gender || 'MALE',
-                    phone_number: phone_number
-                        ? phone_number.replace('+62', '')
+                    gender: profile?.gender || 'MALE',
+                    phone_number: profile?.phone_number
+                        ? profile?.phone_number.replace('+62', '')
                         : '',
-                    birthdate: birthdate ? birthdate.split('T')[0] : ''
+                    birthdate: profile?.birthdate
+                        ? profile?.birthdate.split('T')[0]
+                        : ''
                 } as UpdateUserResponseData
             }
             onSubmit={async (values, { setSubmitting }) => {

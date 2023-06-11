@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
-import { ProfileMenuTab } from 'profile/components';
-import { EditProfile } from 'profile/components/EditProfile';
+import { EditProfile, ProfileMenuTab } from 'profile/components';
 import { PROFILE_MENUS } from 'profile/constants';
 import { ProfileProvider } from 'profile/contexts/ProfileProvider';
 
