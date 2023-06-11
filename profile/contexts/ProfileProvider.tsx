@@ -51,11 +51,11 @@ export const ProfileProvider: React.FC<Props> = ({ children }) => {
             updateUser: async (data: UpdateUserResponseData) => {
                 const cleanedPayload = {
                     ...data,
-                    phone_number: profile?.phone_number.replace(
+                    phone_number: data.phone_number.replace(
                         '+62',
                         ''
                     ) as string,
-                    birthdate: profile?.birthdate.split('T')[0]
+                    birthdate: data.birthdate.split('T')[0]
                 };
 
                 return await update(cleanedPayload);
