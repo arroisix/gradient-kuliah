@@ -55,3 +55,7 @@ interface CheckUsernameAvailabilityInputData {
 interface CheckUsernameAvailabilityResponseData {
     is_available: boolean;
 }
+
+interface CheckUsernameAvailabilityResponse {
+    data: CheckUsernameAvailabilityResponseData;
+}

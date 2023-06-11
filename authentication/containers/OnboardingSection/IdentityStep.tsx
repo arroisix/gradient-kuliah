@@ -7,10 +7,6 @@ import { useContext } from 'react';
 import RegistrationContext from 'authentication/contexts/RegistrationProvider';
 import { useCheckUsernameAvailabilityMutation } from 'authentication/redux/api/authApi';
 
-interface CheckUsernameAvailabilityResponse {
-    data: CheckUsernameAvailabilityResponseData;
-}
-
 export const IdentityStep = (): JSX.Element => {
     const user = useSelector(getCurrentUser);
     const [checkUsernameAvailability] = useCheckUsernameAvailabilityMutation();
