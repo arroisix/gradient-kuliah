@@ -1,11 +1,15 @@
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import Link from 'next/link';
-import { PersonalDataForm } from 'profile/components/PersonalDataForm';
+import { useRouter } from 'next/router';
+import { PROFILE_MANAGEMENT_FORMS } from 'profile/constants';
 import { useProfileContext } from 'profile/contexts/ProfileProvider';
 import { FaAngleLeft } from 'react-icons/fa';
 
 export const EditProfile = (): JSX.Element => {
     const { profile, menuName } = useProfileContext();
+    const router = useRouter();
+
+    const Form = PROFILE_MANAGEMENT_FORMS[router.pathname];
 
     if (!profile) {
         return <LoadingBackdrop />;
@@ -21,7 +25,7 @@ export const EditProfile = (): JSX.Element => {
                     </Link>
                     <span className="text-lg font-semibold">{menuName}</span>
                 </div>
-                <PersonalDataForm {...profile} />
+                <Form />
             </div>
         );
     }

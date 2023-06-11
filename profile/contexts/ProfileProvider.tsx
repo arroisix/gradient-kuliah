@@ -36,7 +36,10 @@ interface Props {
 export const ProfileProvider: React.FC<Props> = ({ children }) => {
     const { pathname } = useRouter();
     const [update, { isLoading }] = useUpdateUserMutation();
-    const { data: profile } = useGetProfileQuery({});
+    const { data: profile } = useGetProfileQuery(
+        {},
+        { refetchOnMountOrArgChange: true }
+    );
 
     const pathArr = pathname.split('/');
     const menuName = capitalize(
@@ -45,8 +48,18 @@ export const ProfileProvider: React.FC<Props> = ({ children }) => {
 
     const memoedValue = useMemo(
         () => ({
-            updateUser: async (data: UpdateUserResponseData) =>
-                await update(data),
+            updateUser: async (data: UpdateUserResponseData) => {
+                const cleanedPayload = {
+                    ...data,
+                    phone_number: profile?.phone_number.replace(
+                        '+62',
+                        ''
+                    ) as string,
+                    birthdate: profile?.birthdate.split('T')[0]
+                };
+
+                return await update(cleanedPayload);
+            },
             menuName,
             profile,
             isLoading
