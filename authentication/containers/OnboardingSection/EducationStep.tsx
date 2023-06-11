@@ -35,15 +35,21 @@ export const EducationStep = (): JSX.Element => {
                     const errors: { [key: string]: string } = {};
 
                     if (!values.education_level)
-                        errors.education_level = 'Required';
-                    if (!values.institution) errors.institution = 'Required';
-                    if (!values.major) errors.major = 'Required';
-                    if (!values.profession) errors.profession = 'Required';
+                        errors.education_level =
+                            'Tingkat pendidikan tidak boleh kosong';
+                    if (!values.institution)
+                        errors.institution =
+                            'Asal sekolah/universitas tidak boleh kosong';
+                    if (!values.major)
+                        errors.major = 'Jurusan tidak boleh kosong';
+                    if (!values.profession)
+                        errors.profession = 'Pekerjaan tidak boleh kosong';
                     if (
                         values.profession === 'employed' &&
                         !values.profession_field
                     )
-                        errors.profession_field = 'Required';
+                        errors.profession_field =
+                            'Bidang pekerjaan tidak boleh kosong';
 
                     return errors;
                 }}>
