@@ -14,23 +14,50 @@ export const PersonalDataStep = (): JSX.Element => {
                 initialValues={
                     {
                         gender: formData.gender || 'MALE',
-                        phone_number: formData.phone_number || '',
-                        birthdate: formData.birthdate || ''
+                        phone_number: formData.phone_number
+                            ? formData.phone_number.replace('+62', '')
+                            : '',
+                        birthdate: formData.birthdate
+                            ? formData.birthdate.split('T')[0]
+                            : ''
                     } as UpdateUserInputData
                 }
                 onSubmit={(values) => {
-                    setFormData({
+                    const payload = {
                         ...formData,
                         ...values
-                    });
+                    };
+
+                    if (values.phone_number?.substring(0, 1) === '0') {
+                        payload.phone_number = values.phone_number.replace(
+                            '0',
+                            ''
+                        );
+                    } else if (values.phone_number?.substring(0, 2) === '62') {
+                        payload.phone_number = values.phone_number.replace(
+                            '62',
+                            ''
+                        );
+                    }
+
+                    setFormData(payload);
+
                     setStep(2);
                 }}
                 validate={(values) => {
                     const errors: { [key: string]: string } = {};
 
-                    if (!values.gender) errors.gender = 'Required';
-                    if (!values.birthdate) errors.birthdate = 'Required';
-                    if (!values.phone_number) errors.phone_number = 'Required';
+                    if (!values.gender)
+                        errors.gender = 'Jenis kelamin tidak boleh kosong';
+                    if (!values.birthdate)
+                        errors.birthdate = 'Tanggal lahir tidak boleh kosong';
+                    if (!values.phone_number) {
+                        errors.phone_number =
+                            'Nomor handphone tidak boleh kosong';
+                    } else if (values.phone_number.length < 10) {
+                        errors.phone_number =
+                            'Masukkan nomor handphone yang valid';
+                    }
 
                     return errors;
                 }}>
@@ -76,7 +103,7 @@ export const PersonalDataStep = (): JSX.Element => {
                                 ]}
                             />
                             <Input
-                                type="number"
+                                type="tel"
                                 label="Nomor Handphone"
                                 placeholder="8211234567"
                                 name="phone_number"

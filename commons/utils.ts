@@ -40,3 +40,13 @@ export const makeid = (length: number): string => {
     }
     return result;
 };
+
+export const capitalize = (sentence: string): string => {
+    const words = sentence.split(' ');
+
+    const capitalizeWords = words.map(
+        (word) => word[0].toUpperCase() + word.substring(1)
+    );
+
+    return capitalizeWords.join(' ');
+};

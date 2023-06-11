@@ -6,16 +6,16 @@ export const PROFILE_MENUS = [
     {
         label: 'Profil Umum',
         Icon: CgBell,
-        url: 'edit-profil'
+        url: 'profil/profil-umum'
     },
     {
-        label: 'Data Umum',
+        label: 'Data Diri',
         Icon: GoHome,
-        url: 'edit-data-umum'
+        url: 'profil/data-diri'
     },
     {
         label: 'Pendidikan',
         Icon: HiOutlineAcademicCap,
-        url: 'edit-pendidikan'
+        url: 'profil/pendidikan'
     }
 ];
