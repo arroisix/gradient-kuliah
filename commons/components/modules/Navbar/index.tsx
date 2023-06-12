@@ -4,7 +4,6 @@ import { useContext, useEffect, useState } from 'react';
 import { FaInstagram } from 'react-icons/fa';
 import {
     MdArrowDropDown,
-    MdArrowDropUp,
     MdHistory,
     MdLogout,
     MdOutlineBook,
@@ -205,7 +204,9 @@ const Navbar = ({
                                     onMouseEnter={onMouseEnterProfile}
                                     onMouseLeave={onMouseLeaveProfile}>
                                     <div className="flex items-center gap-2">
-                                        {!!profile?.photo_profile ? (
+                                        {!profile ? (
+                                            <div className="w-[23px] h-[23px] bg-neutral-600 animate-pulse rounded-full"></div>
+                                        ) : !!profile.photo_profile ? (
                                             <div className="w-[23px] h-[23px] relative">
                                                 <Image
                                                     src={profile.photo_profile}
@@ -215,7 +216,7 @@ const Navbar = ({
                                             </div>
                                         ) : (
                                             <Avatar
-                                                name={profile?.full_name}
+                                                name={profile.full_name}
                                                 size="23"
                                                 round
                                             />
@@ -322,31 +323,27 @@ const Navbar = ({
                                 </>
                             ) : (
                                 <div className="flex items-center gap-2">
-                                    {!!profile?.photo_profile ? (
-                                        <div className="w-[23px] h-[23px] relative">
-                                            <Image
-                                                src={profile.photo_profile}
-                                                layout="fill"
-                                                className="rounded-full"
-                                            />
-                                        </div>
-                                    ) : (
-                                        <Avatar
-                                            name={profile?.full_name}
-                                            size="23"
-                                            round
-                                        />
-                                    )}
                                     <button
                                         className="flex items-center text-base font-bold"
                                         onClick={() =>
                                             setOpenMobile(!openMobile)
                                         }>
-                                        {renderName(user.email, user.full_name)}
-                                        {openMobile ? (
-                                            <MdArrowDropUp />
+                                        {!profile ? (
+                                            <div className="w-[23px] h-[23px] bg-neutral-600 animate-pulse rounded-full"></div>
+                                        ) : !!profile.photo_profile ? (
+                                            <div className="w-[23px] h-[23px] relative">
+                                                <Image
+                                                    src={profile.photo_profile}
+                                                    layout="fill"
+                                                    className="rounded-full"
+                                                />
+                                            </div>
                                         ) : (
-                                            <MdArrowDropDown />
+                                            <Avatar
+                                                name={profile.full_name}
+                                                size="23"
+                                                round
+                                            />
                                         )}
                                     </button>
                                 </div>

@@ -29,7 +29,10 @@ export function AuthProvider({
 }): JSX.Element {
     const isProfileComplete = useSelector(getIsProfileComplete);
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { data: profile } = useGetProfileQuery({});
+    const { data: profile } = useGetProfileQuery(
+        {},
+        { skip: !localStorage.getItem('token') }
+    );
     const user = useSelector(getCurrentUser);
     const router = useRouter();
 
