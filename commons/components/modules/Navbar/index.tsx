@@ -319,16 +319,35 @@ const Navbar = ({
                                     </Link>
                                 </>
                             ) : (
-                                <button
-                                    className="flex items-center text-base font-bold"
-                                    onClick={() => setOpenMobile(!openMobile)}>
-                                    {renderName(user.email, user.full_name)}
-                                    {openMobile ? (
-                                        <MdArrowDropUp />
+                                <div className="flex items-center gap-2">
+                                    {!!user.photo_profile ? (
+                                        <div className="w-[23px] h-[23px] relative">
+                                            <Image
+                                                src={user.photo_profile}
+                                                layout="fill"
+                                                className="rounded-full"
+                                            />
+                                        </div>
                                     ) : (
-                                        <MdArrowDropDown />
+                                        <Avatar
+                                            name={user.full_name}
+                                            size="23"
+                                            round
+                                        />
                                     )}
-                                </button>
+                                    <button
+                                        className="flex items-center text-base font-bold"
+                                        onClick={() =>
+                                            setOpenMobile(!openMobile)
+                                        }>
+                                        {renderName(user.email, user.full_name)}
+                                        {openMobile ? (
+                                            <MdArrowDropUp />
+                                        ) : (
+                                            <MdArrowDropDown />
+                                        )}
+                                    </button>
+                                </div>
                             )}
                         </div>
                     </>
