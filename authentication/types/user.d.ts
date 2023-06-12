@@ -3,6 +3,7 @@ type User = {
     email: string;
     full_name: string;
     phone_number: string;
+    photo_profile: string;
 };
 
 type RegisterReference = {
@@ -41,6 +42,10 @@ interface UpdateUserResponseData {
     profession_field: string;
     photo_profile: string;
     is_profile_complete: boolean;
+}
+
+interface UpdateGeneralProfileInputData extends UpdateUserResponseData {
+    photo_profile_file?: FileList;
 }
 
 interface UpdateUserInputData extends Partial<UpdateUserResponseData> {

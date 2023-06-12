@@ -6,6 +6,7 @@ type UserSliceState = {
     user: User;
     token: string | null;
     is_profile_complete: boolean;
+    photo_profile?: string;
 };
 
 const userSlice = createSlice({
@@ -13,7 +14,8 @@ const userSlice = createSlice({
     initialState: {
         user: {} as User,
         token: null,
-        is_profile_complete: true
+        is_profile_complete: true,
+        photo_profile: undefined
     } as UserSliceState,
     reducers: {
         removeUser: () => {
