@@ -31,7 +31,9 @@ export function AuthProvider({
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { data: profile } = useGetProfileQuery(
         {},
-        { skip: !localStorage.getItem('token') }
+        {
+            skip: !localStorage.getItem('token')
+        }
     );
     const user = useSelector(getCurrentUser);
     const router = useRouter();

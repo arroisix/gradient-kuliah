@@ -34,7 +34,8 @@ export const authApi = baseApi.injectEndpoints({
                 url: `${STUDENT_BASE_URL}update-profile/`,
                 method: 'PUT',
                 body: data
-            })
+            }),
+            invalidatesTags: ['PROFILE']
         }),
         getRegisterReference: builder.query<
             { data: RegisterReference[] },
@@ -50,7 +51,8 @@ export const authApi = baseApi.injectEndpoints({
         >({
             query: () => ({
                 url: `${STUDENT_BASE_URL}profile/`
-            })
+            }),
+            providesTags: ['PROFILE']
         }),
         checkUsernameAvailability: builder.mutation<
             CheckUsernameAvailabilityResponseData,
