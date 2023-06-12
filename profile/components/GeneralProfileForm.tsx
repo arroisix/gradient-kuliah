@@ -26,6 +26,8 @@ export const GeneralProfileForm = (): JSX.Element => {
     const [checkUsernameAvailability, { isLoading: isCheckUsernameLoading }] =
         useCheckUsernameAvailabilityMutation();
 
+    console.log(previewImage);
+
     const debounced = useDebouncedCallback(
         async (
             value: string,
@@ -124,14 +126,15 @@ export const GeneralProfileForm = (): JSX.Element => {
             }) => (
                 <form onSubmit={handleSubmit} className="container">
                     <div className="flex flex-col gap-4">
-                        <div className="flex items-center w-full gap-6">
+                        <div className="flex items-center w-full">
                             <div className="w-1/6">
                                 {!!profile?.photo_profile || !!previewImage ? (
                                     <div className="w-[43px] h-[43px] relative">
                                         <Image
                                             src={
-                                                profile?.photo_profile ||
-                                                (previewImage as string)
+                                                !!previewImage || !profile
+                                                    ? (previewImage as string)
+                                                    : profile.photo_profile
                                             }
                                             layout="fill"
                                             className="rounded-full"
