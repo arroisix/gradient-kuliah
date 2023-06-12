@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { FaInstagram } from 'react-icons/fa';
+import { FiMenu } from 'react-icons/fi';
 import {
     MdArrowDropDown,
     MdArrowDropUp,
@@ -23,6 +24,7 @@ import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { BiPlayCircle } from 'react-icons/bi';
 import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienceApi';
 import { AUTHENTICATION_ROUTE } from 'commons/constants';
+import MobileSidebar from '../Sidebar/mobile';
 
 const Navbar = ({
     paymentPage,
@@ -41,6 +43,7 @@ const Navbar = ({
     const [isNavbarHovered, setNavbarHovered] = useState(false);
     const [isProfileHovered, setProfileHovered] = useState(false);
     const [openMobile, setOpenMobile] = useState(false);
+    const [openSidebar, setOpenSidebar] = useState(false);
     const pickedColorScheme = {
         bgColor: lightMode ? 'bg-white' : 'bg-[#171717]',
         color: lightMode ? 'text-black' : 'text-white'
@@ -127,7 +130,13 @@ const Navbar = ({
             onMouseEnter={() => setNavbarHovered(true)}
             onMouseLeave={onMouseLeaveNavbar}>
             <div className="flex items-center justify-between w-full px-4 py-4 md:px-8">
-                <div className="flex gap-4">
+                <div className="flex gap-4 items-center">
+                    {isAuthenticated && isMobileBreakpoints && (
+                        <FiMenu
+                            stroke="#666666"
+                            onClick={() => setOpenSidebar(true)}
+                        />
+                    )}
                     <Link href={'/'}>
                         <span className="text-2xl font-bold cursor-pointer font-[Urbanist]">
                             {isMobileBreakpoints ? 'G' : 'Gradient'}
@@ -302,6 +311,7 @@ const Navbar = ({
                     lightMode={lightMode}
                 />
             )}
+            {openSidebar && <MobileSidebar setOpenSidebar={setOpenSidebar} />}
         </header>
     );
 };
