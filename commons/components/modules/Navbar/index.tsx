@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { FaInstagram } from 'react-icons/fa';
 import {
     MdArrowDropDown,
@@ -26,6 +26,7 @@ import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienc
 import { AUTHENTICATION_ROUTE } from 'commons/constants';
 import Avatar from 'react-avatar';
 import Image from 'next/image';
+import AuthContext from 'authentication/contexts/AuthProvider';
 
 const Navbar = ({
     paymentPage,
@@ -39,6 +40,7 @@ const Navbar = ({
 }): JSX.Element => {
     const { isMobileBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const { profile } = useContext(AuthContext);
     const user = useSelector(getCurrentUser);
     const [isHovered, setHovered] = useState(false);
     const [isNavbarHovered, setNavbarHovered] = useState(false);
@@ -203,17 +205,17 @@ const Navbar = ({
                                     onMouseEnter={onMouseEnterProfile}
                                     onMouseLeave={onMouseLeaveProfile}>
                                     <div className="flex items-center gap-2">
-                                        {!!user.photo_profile ? (
+                                        {!!profile?.photo_profile ? (
                                             <div className="w-[23px] h-[23px] relative">
                                                 <Image
-                                                    src={user.photo_profile}
+                                                    src={profile.photo_profile}
                                                     layout="fill"
                                                     className="rounded-full"
                                                 />
                                             </div>
                                         ) : (
                                             <Avatar
-                                                name={user.full_name}
+                                                name={profile?.full_name}
                                                 size="23"
                                                 round
                                             />
@@ -320,17 +322,17 @@ const Navbar = ({
                                 </>
                             ) : (
                                 <div className="flex items-center gap-2">
-                                    {!!user.photo_profile ? (
+                                    {!!profile?.photo_profile ? (
                                         <div className="w-[23px] h-[23px] relative">
                                             <Image
-                                                src={user.photo_profile}
+                                                src={profile.photo_profile}
                                                 layout="fill"
                                                 className="rounded-full"
                                             />
                                         </div>
                                     ) : (
                                         <Avatar
-                                            name={user.full_name}
+                                            name={profile?.full_name}
                                             size="23"
                                             round
                                         />
