@@ -3,15 +3,49 @@ import Button from 'commons/components/elements/Button';
 import Input from 'commons/components/elements/Form/input';
 import { useSelector } from 'react-redux';
 import { getCurrentUser } from 'authentication/redux/selectors/userSelector';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import RegistrationContext from 'authentication/contexts/RegistrationProvider';
 import { useCheckUsernameAvailabilityMutation } from 'authentication/redux/api/authApi';
+import { FaCheckCircle, FaSpinner, FaTimesCircle } from 'react-icons/fa';
+import { useDebouncedCallback } from 'use-debounce';
 
 export const IdentityStep = (): JSX.Element => {
+    const [isTyping, setIsTyping] = useState(false);
+    const [isValid, setIsValid] = useState(false);
     const user = useSelector(getCurrentUser);
-    const [checkUsernameAvailability] = useCheckUsernameAvailabilityMutation();
-
+    const [checkUsernameAvailability, { isLoading: isCheckUsernameLoading }] =
+        useCheckUsernameAvailabilityMutation();
     const { setStep, formData, setFormData } = useContext(RegistrationContext);
+
+    const debounced = useDebouncedCallback(
+        async (
+            value: string,
+            setError: (field: string, message: string | undefined) => void
+        ) => {
+            const result = await checkUsernameAvailability({
+                username: value
+            });
+
+            const {
+                data: { is_available }
+            } = result as CheckUsernameAvailabilityResponse;
+
+            setIsValid(is_available);
+
+            setIsTyping(false);
+
+            if (!is_available) {
+                setError('username', 'Username tidak tersedia');
+            }
+        },
+        1000
+    );
+
+    const Icon = isValid
+        ? FaCheckCircle
+        : isCheckUsernameLoading || isTyping
+        ? FaSpinner
+        : FaTimesCircle;
 
     return (
         <div className="flex flex-col w-full">
@@ -33,21 +67,10 @@ export const IdentityStep = (): JSX.Element => {
                 validate={async (values) => {
                     const errors: { [key: string]: string } = {};
 
-                    if (!values.full_name) errors.full_name = 'Required';
-                    if (!values.username) errors.username = 'Required';
-
-                    if (!!values.username) {
-                        const result = await checkUsernameAvailability({
-                            username: values.username
-                        });
-
-                        const {
-                            data: { is_available }
-                        } = result as CheckUsernameAvailabilityResponse;
-
-                        if (!is_available)
-                            errors.username = 'Username is not available';
-                    }
+                    if (!values.full_name)
+                        errors.full_name = 'Nama lengkap dibutuhkan';
+                    if (!values.username)
+                        errors.username = 'Username dibutuhkan';
 
                     return errors;
                 }}
@@ -59,7 +82,10 @@ export const IdentityStep = (): JSX.Element => {
                     touched,
                     handleChange,
                     handleBlur,
-                    handleSubmit
+                    handleSubmit,
+                    setFieldError,
+                    initialValues,
+                    isValid: isFormValid
                 }) => (
                     <form onSubmit={handleSubmit} className="container">
                         <div className="flex flex-col gap-4">
@@ -82,7 +108,60 @@ export const IdentityStep = (): JSX.Element => {
                                 type="text"
                                 placeholder="Username"
                                 name="username"
-                                onChange={handleChange}
+                                endAddorment={
+                                    initialValues.username !==
+                                    values.username ? (
+                                        <Icon
+                                            className={` ${
+                                                isCheckUsernameLoading ||
+                                                isTyping
+                                                    ? 'animate-spin text-[#999999]'
+                                                    : isValid
+                                                    ? 'text-green-600'
+                                                    : 'text-red-600'
+                                            }`}
+                                        />
+                                    ) : undefined
+                                }
+                                onChange={async (event) => {
+                                    handleChange(event);
+
+                                    if (
+                                        event.target.value !== '' &&
+                                        event.target.value !==
+                                            initialValues.username
+                                    ) {
+                                        setIsValid(false);
+                                        setIsTyping(true);
+                                        let message = undefined;
+                                        setFieldError('username', message);
+
+                                        if (event.target.value.length < 5) {
+                                            message =
+                                                'Username terdiri dari minimal 5 karakter alphanumeric';
+                                        } else if (
+                                            event.target.value.length > 16
+                                        ) {
+                                            message =
+                                                'Username terdiri dari maksimal 16 karakter alphanumeric';
+                                        } else if (
+                                            event.target.value.includes(' ')
+                                        ) {
+                                            message =
+                                                'Username tidak boleh mengandung spasi';
+                                        }
+
+                                        if (!!message) {
+                                            setFieldError('username', message);
+                                            setIsTyping(false);
+                                        } else {
+                                            await debounced(
+                                                event.target.value,
+                                                setFieldError
+                                            );
+                                        }
+                                    }
+                                }}
                                 onBlur={handleBlur}
                                 value={values.username}
                                 error={
@@ -93,6 +172,13 @@ export const IdentityStep = (): JSX.Element => {
                             />
                         </div>
                         <Button
+                            disabled={
+                                (initialValues.full_name === values.full_name &&
+                                    initialValues.username ===
+                                        values.username) ||
+                                isTyping ||
+                                !isFormValid
+                            }
                             variant="custom"
                             className="w-full mt-4 text-white bg-accent-purple"
                             type="submit">
