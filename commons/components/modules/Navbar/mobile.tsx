@@ -1,5 +1,10 @@
 import Link from 'next/link';
-import { MdHistory, MdLogout, MdOutlineBook } from 'react-icons/md';
+import {
+    MdHistory,
+    MdLogout,
+    MdOutlineBook,
+    MdOutlinePersonOutline
+} from 'react-icons/md';
 import { removeUser } from 'authentication/redux/slices/userSlice';
 import { useDispatch } from 'react-redux';
 
@@ -23,6 +28,19 @@ const MobileNavbar = ({
                 <div className="w-full">
                     <div className="w-full">
                         <div className="pb-4">
+                            <Link href={'/profil'}>
+                                <div
+                                    className={`flex ${
+                                        lightMode ? 'text-black' : 'text-white'
+                                    } hover:text-accent-blue font-normal w-full items-center mb-4`}>
+                                    <div>
+                                        <MdOutlinePersonOutline className="text-2xl" />
+                                    </div>
+                                    <div className="w-full ml-4">
+                                        <p className="text-base">Profil</p>
+                                    </div>
+                                </div>
+                            </Link>
                             <Link href={'/transaksi'}>
                                 <div
                                     className={`flex ${
@@ -52,7 +70,7 @@ const MobileNavbar = ({
                                 </div>
                             </Link>
                             <div
-                                className="flex text-accent-orange hover:text-state-error font-normal w-full items-center mb-4"
+                                className="flex items-center w-full mb-4 font-normal text-accent-orange hover:text-state-error"
                                 onClick={() => dispatch(removeUser())}
                                 aria-hidden>
                                 <div>
@@ -68,7 +86,7 @@ const MobileNavbar = ({
             </div>
             <div
                 aria-hidden
-                className="w-screen h-screen absolute bg-black opacity-30"
+                className="absolute w-screen h-screen bg-black opacity-30"
                 onClick={() => closeMobile(false)}></div>
         </>
     );
