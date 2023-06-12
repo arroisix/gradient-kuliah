@@ -7,7 +7,8 @@ import {
     MdArrowDropUp,
     MdHistory,
     MdLogout,
-    MdOutlineBook
+    MdOutlineBook,
+    MdOutlinePersonOutline
 } from 'react-icons/md';
 import useWindowSize from 'commons/hooks/useWindowSize';
 import { renderName } from 'commons/utils';
@@ -23,6 +24,8 @@ import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { BiPlayCircle } from 'react-icons/bi';
 import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienceApi';
 import { AUTHENTICATION_ROUTE } from 'commons/constants';
+import Avatar from 'react-avatar';
+import Image from 'next/image';
 
 const Navbar = ({
     paymentPage,
@@ -199,10 +202,32 @@ const Navbar = ({
                                     }`}
                                     onMouseEnter={onMouseEnterProfile}
                                     onMouseLeave={onMouseLeaveProfile}>
-                                    <span className="flex items-center">
-                                        {renderName(user.email, user.full_name)}
-                                        <MdArrowDropDown />
-                                    </span>
+                                    <div className="flex items-center gap-2">
+                                        {!!user.photo_profile ? (
+                                            <div className="w-[23px] h-[23px] relative">
+                                                <Image
+                                                    src={user.photo_profile}
+                                                    layout="fill"
+                                                    className="rounded-full"
+                                                />
+                                            </div>
+                                        ) : (
+                                            <Avatar
+                                                name={user.full_name}
+                                                size="23"
+                                                round
+                                            />
+                                        )}
+                                        <div className="flex items-center">
+                                            <span>
+                                                {renderName(
+                                                    user.email,
+                                                    user.full_name
+                                                )}
+                                            </span>
+                                            <MdArrowDropDown />
+                                        </div>
+                                    </div>
                                     <div
                                         className={`px-8 py-4 min-w-[250px] top-10 right-0 absolute shadow-md rounded-b-md ${
                                             pickedColorScheme.bgColor
@@ -211,6 +236,19 @@ const Navbar = ({
                                                 ? 'block'
                                                 : 'hidden'
                                         }`}>
+                                        <Link href={'/profil'}>
+                                            <div
+                                                className={`flex ${pickedColorScheme.color} hover:text-accent-blue  font-normal w-full items-center mb-4`}>
+                                                <div>
+                                                    <MdOutlinePersonOutline className="text-2xl" />
+                                                </div>
+                                                <div className="w-full ml-4">
+                                                    <p className="text-base">
+                                                        Profil
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </Link>
                                         <Link href={'/transaksi'}>
                                             <div
                                                 className={`flex ${pickedColorScheme.color} hover:text-accent-blue font-normal w-full items-center mb-4`}>

@@ -1,4 +1,5 @@
 import { EducationLevelForm } from 'profile/components/EducationLevelForm';
+import { GeneralProfileForm } from 'profile/components/GeneralProfileForm';
 import { PersonalDataForm } from 'profile/components/PersonalDataForm';
 import { CgBell } from 'react-icons/cg';
 import { GoHome } from 'react-icons/go';
@@ -27,6 +28,7 @@ interface ProfileManagementFormsInterface {
 }
 
 export const PROFILE_MANAGEMENT_FORMS: ProfileManagementFormsInterface = {
+    '/profil/profil-umum': GeneralProfileForm,
     '/profil/data-diri': PersonalDataForm,
     '/profil/pendidikan': EducationLevelForm
 };
