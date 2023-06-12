@@ -11,7 +11,8 @@ module.exports = {
             'gradient-asset.storage.googleapis.com',
             'gradient-asset-dev.storage.googleapis.com',
             'notion.so',
-            'gradient-public-student-dev.s3.ap-southeast-1.amazonaws.com'
+            'gradient-public-student-dev.s3.ap-southeast-1.amazonaws.com',
+            'gradient-public-student-prod.s3.ap-southeast-1.amazonaws.com'
         ]
     },
     redirects() {
