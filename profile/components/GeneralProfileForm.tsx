@@ -232,6 +232,7 @@ export const GeneralProfileForm = (): JSX.Element => {
                             placeholder="Username"
                             name="username"
                             endAddorment={
+                                values.username !== '' &&
                                 initialValues.username !== values.username ? (
                                     <Icon
                                         className={` ${
@@ -285,9 +286,7 @@ export const GeneralProfileForm = (): JSX.Element => {
                             onBlur={handleBlur}
                             value={values.username}
                             error={
-                                touched.username && errors.username
-                                    ? errors.username
-                                    : undefined
+                                errors.username ? errors.username : undefined
                             }
                         />
                     </div>
