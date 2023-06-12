@@ -9,7 +9,7 @@ export const PROFILE_MENUS = [
     {
         label: 'Profil Umum',
         Icon: CgBell,
-        url: 'profil/umum'
+        url: 'profil/profil-umum'
     },
     {
         label: 'Data Diri',
@@ -28,7 +28,7 @@ interface ProfileManagementFormsInterface {
 }
 
 export const PROFILE_MANAGEMENT_FORMS: ProfileManagementFormsInterface = {
-    '/profil/umum': GeneralProfileForm,
+    '/profil/profil-umum': GeneralProfileForm,
     '/profil/data-diri': PersonalDataForm,
     '/profil/pendidikan': EducationLevelForm
 };

@@ -8,34 +8,51 @@ import {
     ReduxHTTPError,
     useProfileContext
 } from 'profile/contexts/ProfileProvider';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { FaCheckCircle, FaSpinner, FaTimesCircle } from 'react-icons/fa';
+import Avatar from 'react-avatar';
+import useUploadFile from 'commons/hooks/useUploadFile';
+import Image from 'next/image';
 
 export const GeneralProfileForm = (): JSX.Element => {
+    const [isValid, setIsValid] = useState(false);
+    const [isTyping, setIsTyping] = useState(false);
+    const [previewImage, setPreviewImage] = useState<
+        string | ArrayBuffer | null
+    >(null);
     const { isLoading, updateUser, profile } = useProfileContext();
+    const { uploadFile } = useUploadFile('public_student');
     const [checkUsernameAvailability, { isLoading: isCheckUsernameLoading }] =
         useCheckUsernameAvailabilityMutation();
-    const [isValid, setIsValid] = useState(false);
 
-    useEffect(() => {
-        console.log(isValid);
-    }, [isValid]);
+    const debounced = useDebouncedCallback(
+        async (
+            value: string,
+            setError: (field: string, message: string | undefined) => void
+        ) => {
+            const result = await checkUsernameAvailability({
+                username: value
+            });
 
-    const debounced = useDebouncedCallback(async (value) => {
-        const result = await checkUsernameAvailability({
-            username: value
-        });
+            const {
+                data: { is_available }
+            } = result as CheckUsernameAvailabilityResponse;
 
-        const {
-            data: { is_available }
-        } = result as CheckUsernameAvailabilityResponse;
-        setIsValid(is_available);
-    }, 1000);
+            setIsValid(is_available);
+
+            setIsTyping(false);
+
+            if (!is_available) {
+                setError('username', 'Username tidak tersedia');
+            }
+        },
+        1000
+    );
 
     const Icon = isValid
         ? FaCheckCircle
-        : isCheckUsernameLoading
+        : isCheckUsernameLoading || isTyping
         ? FaSpinner
         : FaTimesCircle;
 
@@ -44,15 +61,33 @@ export const GeneralProfileForm = (): JSX.Element => {
             initialValues={
                 {
                     full_name: profile?.full_name || '',
-                    username: profile?.username || ''
-                } as UpdateUserResponseData
+                    username: profile?.username || '',
+                    photo_profile: profile?.photo_profile || ''
+                } as UpdateGeneralProfileInputData
             }
             onSubmit={async (values, { setSubmitting }) => {
                 setSubmitting(true);
+                const { photo_profile_file, ...res } = values;
+
                 const payload = {
                     ...profile,
-                    ...values
+                    ...res
                 };
+
+                if (!!photo_profile_file) {
+                    const fileUrls = await uploadFile([...photo_profile_file]);
+
+                    if (!fileUrls || fileUrls.length <= 0) {
+                        return toast.error(
+                            `Terjadi kesalahan saat mengupload foto profil`,
+                            {
+                                position: toast.POSITION.TOP_CENTER
+                            }
+                        );
+                    }
+
+                    payload.photo_profile = fileUrls[0];
+                }
 
                 const result = await updateUser(payload);
 
@@ -62,7 +97,7 @@ export const GeneralProfileForm = (): JSX.Element => {
                     });
                 }
 
-                setSubmitting(false);
+                return setSubmitting(false);
             }}
             validate={async (values) => {
                 const errors: { [key: string]: string } = {};
@@ -80,12 +115,100 @@ export const GeneralProfileForm = (): JSX.Element => {
                 errors,
                 touched,
                 initialValues,
+                isValid: isFormValid,
                 handleChange,
                 handleBlur,
-                handleSubmit
+                handleSubmit,
+                setFieldValue,
+                setFieldError
             }) => (
                 <form onSubmit={handleSubmit} className="container">
                     <div className="flex flex-col gap-4">
+                        <div className="flex items-center w-full gap-6">
+                            <div className="w-1/6">
+                                {!!profile?.photo_profile || !!previewImage ? (
+                                    <div className="w-[43px] h-[43px] relative">
+                                        <Image
+                                            src={
+                                                profile?.photo_profile ||
+                                                (previewImage as string)
+                                            }
+                                            layout="fill"
+                                            className="rounded-full"
+                                        />
+                                    </div>
+                                ) : (
+                                    <Avatar
+                                        name={profile?.full_name}
+                                        size="43"
+                                        round
+                                    />
+                                )}
+                            </div>
+
+                            <div className="flex flex-col w-5/6">
+                                <span className="text-[#FFFFFF]">
+                                    {profile?.username}
+                                </span>
+                                <div className="flex flex-col gap-1">
+                                    <label
+                                        htmlFor="photo-profile"
+                                        className="text-[#B6A6F3] hover:text-[#B6A6F3]/75 cursor-pointer">
+                                        Ganti foto profile
+                                    </label>
+                                    <input
+                                        id="photo-profile"
+                                        className="hidden"
+                                        type="file"
+                                        name="photo_profile_file"
+                                        accept="image/*"
+                                        onChange={(event) => {
+                                            const files = event.target.files;
+                                            if (
+                                                !!files &&
+                                                files[0] &&
+                                                files[0].size > 3 * 1024 * 1024
+                                            ) {
+                                                setFieldError(
+                                                    'photo_profile_file',
+                                                    'Ukuran foto tidak boleh lebih dari 3Mb'
+                                                );
+                                            } else {
+                                                // Preview the selected image
+                                                if (files) {
+                                                    const reader =
+                                                        new FileReader();
+                                                    reader.onloadend = () => {
+                                                        setPreviewImage(
+                                                            reader.result
+                                                        );
+                                                    };
+                                                    reader.readAsDataURL(
+                                                        files[0]
+                                                    );
+                                                } else {
+                                                    setPreviewImage(null);
+                                                }
+
+                                                setFieldError(
+                                                    'photo_profile_file',
+                                                    undefined
+                                                );
+                                                setFieldValue(
+                                                    'photo_profile_file',
+                                                    event.target.files
+                                                );
+                                            }
+                                        }}
+                                    />
+                                    {errors.photo_profile_file && (
+                                        <small className="text-sm text-red-500">
+                                            {errors.photo_profile_file}
+                                        </small>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
                         <Input
                             label="Nama Lengkap"
                             type="text"
@@ -106,30 +229,54 @@ export const GeneralProfileForm = (): JSX.Element => {
                             placeholder="Username"
                             name="username"
                             endAddorment={
-                                initialValues !== values ? (
+                                initialValues.username !== values.username ? (
                                     <Icon
                                         className={` ${
-                                            isValid
-                                                ? 'text-green-600'
-                                                : isLoading
+                                            isCheckUsernameLoading || isTyping
                                                 ? 'animate-spin text-[#999999]'
+                                                : isValid
+                                                ? 'text-green-600'
                                                 : 'text-red-600'
                                         }`}
                                     />
                                 ) : undefined
                             }
-                            className={
-                                initialValues === values
-                                    ? ''
-                                    : isValid
-                                    ? 'border-green-600'
-                                    : 'border-red-600'
-                            }
                             onChange={async (event) => {
                                 handleChange(event);
-                                setIsValid(false);
-                                if (event.target.value !== '') {
-                                    await debounced(event.target.value);
+
+                                if (
+                                    event.target.value !== '' &&
+                                    event.target.value !==
+                                        initialValues.username
+                                ) {
+                                    setIsValid(false);
+                                    setIsTyping(true);
+
+                                    let message = undefined;
+                                    setFieldError('username', message);
+
+                                    if (event.target.value.length < 5) {
+                                        message =
+                                            'Username terdiri dari minimal 5 karakter alphanumeric';
+                                    } else if (event.target.value.length > 16) {
+                                        message =
+                                            'Username terdiri dari maksimal 16 karakter alphanumeric';
+                                    } else if (
+                                        event.target.value.includes(' ')
+                                    ) {
+                                        message =
+                                            'Username tidak boleh mengandung spasi';
+                                    }
+
+                                    if (!!message) {
+                                        setFieldError('username', message);
+                                        setIsTyping(false);
+                                    } else {
+                                        await debounced(
+                                            event.target.value,
+                                            setFieldError
+                                        );
+                                    }
                                 }
                             }}
                             onBlur={handleBlur}
@@ -137,8 +284,6 @@ export const GeneralProfileForm = (): JSX.Element => {
                             error={
                                 touched.username && errors.username
                                     ? errors.username
-                                    : !isValid
-                                    ? 'Username tidak tersedia'
                                     : undefined
                             }
                         />
@@ -146,9 +291,12 @@ export const GeneralProfileForm = (): JSX.Element => {
                     <Button
                         disabled={
                             isLoading ||
-                            initialValues === values ||
-                            isCheckUsernameLoading ||
-                            !isValid
+                            (initialValues.full_name === values.full_name &&
+                                initialValues.photo_profile_file ===
+                                    values.photo_profile_file &&
+                                initialValues.username === values.username) ||
+                            isTyping ||
+                            !isFormValid
                         }
                         variant="custom"
                         className="w-full mt-4 text-white bg-accent-purple"
