@@ -109,8 +109,9 @@ export const IdentityStep = (): JSX.Element => {
                                 placeholder="Username"
                                 name="username"
                                 endAddorment={
+                                    values.username !== '' &&
                                     initialValues.username !==
-                                    values.username ? (
+                                        values.username ? (
                                         <Icon
                                             className={` ${
                                                 isCheckUsernameLoading ||
@@ -165,7 +166,7 @@ export const IdentityStep = (): JSX.Element => {
                                 onBlur={handleBlur}
                                 value={values.username}
                                 error={
-                                    touched.username && errors.username
+                                    errors.username
                                         ? errors.username
                                         : undefined
                                 }
