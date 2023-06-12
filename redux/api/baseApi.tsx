@@ -21,7 +21,8 @@ export const baseApi = createApi({
         'QNA_ANSWER',
         'EXAM_QUESTION',
         'AI_TUTOR',
-        'WATCH_PROGRESS'
+        'WATCH_PROGRESS',
+        'PROFILE'
     ],
     baseQuery: fetchBaseQuery({
         baseUrl: config.API_BASE_URL,

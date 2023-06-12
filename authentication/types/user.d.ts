@@ -3,6 +3,7 @@ type User = {
     email: string;
     full_name: string;
     phone_number: string;
+    photo_profile: string;
 };
 
 type RegisterReference = {
@@ -27,23 +28,27 @@ interface LoginResponseData {
 }
 
 interface UpdateUserResponseData {
+    gender: string;
     user_id: string;
     full_name: string;
     email: string;
     phone_number: string;
-    username?: string;
-    birthdate?: string;
+    username: string;
+    birthdate: string;
     education_level: 'SMP' | 'SMA' | 'SMK' | 'S1' | 'S2' | 'S3';
-    institution?: string;
-    major?: string;
-    profession?: 'student' | 'employed' | 'unemployed' | 'fresh_grad';
-    profession_field?: string;
-    photo_profile?: string;
-    is_profile_complete?: boolean;
+    institution: string;
+    major: string;
+    profession: 'student' | 'employed' | 'unemployed' | 'fresh_grad';
+    profession_field: string;
+    photo_profile: string;
+    is_profile_complete: boolean;
 }
 
-interface UpdateUserInputData extends UpdateUserResponseData {
-    gender?: 'FEMALE' | 'MALE';
+interface UpdateGeneralProfileInputData extends UpdateUserResponseData {
+    photo_profile_file?: FileList;
+}
+
+interface UpdateUserInputData extends Partial<UpdateUserResponseData> {
     register_reference_id?: string;
     join_reasoning?: string;
 }
@@ -54,4 +59,8 @@ interface CheckUsernameAvailabilityInputData {
 
 interface CheckUsernameAvailabilityResponseData {
     is_available: boolean;
+}
+
+interface CheckUsernameAvailabilityResponse {
+    data: CheckUsernameAvailabilityResponseData;
 }

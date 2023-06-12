@@ -1,3 +1,4 @@
+import { useGetProfileQuery } from 'authentication/redux/api/authApi';
 import {
     getCurrentUser,
     getIsAuthenticated,
@@ -16,6 +17,7 @@ import { useSelector } from 'react-redux';
 
 interface AuthContextType {
     isAuthenticated: boolean;
+    profile?: UpdateUserResponseData;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -27,6 +29,12 @@ export function AuthProvider({
 }): JSX.Element {
     const isProfileComplete = useSelector(getIsProfileComplete);
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const { data: profile } = useGetProfileQuery(
+        {},
+        {
+            skip: !localStorage.getItem('token')
+        }
+    );
     const user = useSelector(getCurrentUser);
     const router = useRouter();
 
@@ -44,9 +52,10 @@ export function AuthProvider({
 
     const memoedValue = useMemo(
         () => ({
-            isAuthenticated
+            isAuthenticated,
+            profile
         }),
-        [isAuthenticated]
+        [isAuthenticated, profile]
     );
 
     return (
