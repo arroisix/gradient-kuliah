@@ -3,6 +3,7 @@ type User = {
     email: string;
     full_name: string;
     phone_number: string;
+    photo_profile: string;
 };
 
 type RegisterReference = {
@@ -43,6 +44,10 @@ interface UpdateUserResponseData {
     is_profile_complete: boolean;
 }
 
+interface UpdateGeneralProfileInputData extends UpdateUserResponseData {
+    photo_profile_file?: FileList;
+}
+
 interface UpdateUserInputData extends Partial<UpdateUserResponseData> {
     register_reference_id?: string;
     join_reasoning?: string;
@@ -54,4 +59,8 @@ interface CheckUsernameAvailabilityInputData {
 
 interface CheckUsernameAvailabilityResponseData {
     is_available: boolean;
+}
+
+interface CheckUsernameAvailabilityResponse {
+    data: CheckUsernameAvailabilityResponseData;
 }

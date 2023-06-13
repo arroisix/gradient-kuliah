@@ -1,16 +1,13 @@
-import { SerializedError } from '@reduxjs/toolkit';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query';
 import Button from 'commons/components/elements/Button';
 import Input from 'commons/components/elements/Form/input';
 import Radio from 'commons/components/elements/Form/radio';
 import Spinner from 'commons/components/elements/Spinner';
 import { Formik } from 'formik';
-import { useProfileContext } from 'profile/contexts/ProfileProvider';
+import {
+    ReduxHTTPError,
+    useProfileContext
+} from 'profile/contexts/ProfileProvider';
 import { toast } from 'react-toastify';
-
-interface ReduxHTTPError {
-    error: FetchBaseQueryError | SerializedError;
-}
 
 export const PersonalDataForm = (): JSX.Element => {
     const { isLoading, updateUser, profile } = useProfileContext();

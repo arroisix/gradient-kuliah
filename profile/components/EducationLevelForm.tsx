@@ -1,5 +1,3 @@
-import { SerializedError } from '@reduxjs/toolkit';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query';
 import {
     EDUCATION_OPTIONS,
     PROFESSION_OPTIONS
@@ -9,12 +7,11 @@ import Input from 'commons/components/elements/Form/input';
 import Select from 'commons/components/elements/Form/select';
 import Spinner from 'commons/components/elements/Spinner';
 import { Formik } from 'formik';
-import { useProfileContext } from 'profile/contexts/ProfileProvider';
+import {
+    ReduxHTTPError,
+    useProfileContext
+} from 'profile/contexts/ProfileProvider';
 import { toast } from 'react-toastify';
-
-interface ReduxHTTPError {
-    error: FetchBaseQueryError | SerializedError;
-}
 
 export const EducationLevelForm = (): JSX.Element => {
     const { isLoading, updateUser, profile } = useProfileContext();

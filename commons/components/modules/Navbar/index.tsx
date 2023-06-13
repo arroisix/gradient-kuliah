@@ -1,14 +1,14 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { FaInstagram } from 'react-icons/fa';
 import { FiMenu } from 'react-icons/fi';
 import {
     MdArrowDropDown,
-    MdArrowDropUp,
     MdHistory,
     MdLogout,
-    MdOutlineBook
+    MdOutlineBook,
+    MdOutlinePersonOutline
 } from 'react-icons/md';
 import useWindowSize from 'commons/hooks/useWindowSize';
 import { renderName } from 'commons/utils';
@@ -25,6 +25,9 @@ import { BiPlayCircle } from 'react-icons/bi';
 import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienceApi';
 import { AUTHENTICATION_ROUTE } from 'commons/constants';
 import MobileSidebar from '../Sidebar/mobile';
+import Avatar from 'react-avatar';
+import Image from 'next/image';
+import AuthContext from 'authentication/contexts/AuthProvider';
 
 const Navbar = ({
     paymentPage,
@@ -38,6 +41,7 @@ const Navbar = ({
 }): JSX.Element => {
     const { isMobileBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const { profile } = useContext(AuthContext);
     const user = useSelector(getCurrentUser);
     const [isHovered, setHovered] = useState(false);
     const [isNavbarHovered, setNavbarHovered] = useState(false);
@@ -208,10 +212,34 @@ const Navbar = ({
                                     }`}
                                     onMouseEnter={onMouseEnterProfile}
                                     onMouseLeave={onMouseLeaveProfile}>
-                                    <span className="flex items-center">
-                                        {renderName(user.email, user.full_name)}
-                                        <MdArrowDropDown />
-                                    </span>
+                                    <div className="flex items-center gap-2">
+                                        {!profile ? (
+                                            <div className="w-[23px] h-[23px] bg-neutral-600 animate-pulse rounded-full"></div>
+                                        ) : !!profile.photo_profile ? (
+                                            <div className="w-[23px] h-[23px] relative">
+                                                <Image
+                                                    src={profile.photo_profile}
+                                                    layout="fill"
+                                                    className="rounded-full"
+                                                />
+                                            </div>
+                                        ) : (
+                                            <Avatar
+                                                name={profile.full_name}
+                                                size="23"
+                                                round
+                                            />
+                                        )}
+                                        <div className="flex items-center">
+                                            <span>
+                                                {renderName(
+                                                    user.email,
+                                                    user.full_name
+                                                )}
+                                            </span>
+                                            <MdArrowDropDown />
+                                        </div>
+                                    </div>
                                     <div
                                         className={`px-8 py-4 min-w-[250px] top-10 right-0 absolute shadow-md rounded-b-md ${
                                             pickedColorScheme.bgColor
@@ -220,6 +248,19 @@ const Navbar = ({
                                                 ? 'block'
                                                 : 'hidden'
                                         }`}>
+                                        <Link href={'/profil'}>
+                                            <div
+                                                className={`flex ${pickedColorScheme.color} hover:text-accent-blue  font-normal w-full items-center mb-4`}>
+                                                <div>
+                                                    <MdOutlinePersonOutline className="text-2xl" />
+                                                </div>
+                                                <div className="w-full ml-4">
+                                                    <p className="text-base">
+                                                        Profil
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </Link>
                                         <Link href={'/transaksi'}>
                                             <div
                                                 className={`flex ${pickedColorScheme.color} hover:text-accent-blue font-normal w-full items-center mb-4`}>
@@ -290,16 +331,31 @@ const Navbar = ({
                                     </Link>
                                 </>
                             ) : (
-                                <button
-                                    className="flex items-center text-base font-bold"
-                                    onClick={() => setOpenMobile(!openMobile)}>
-                                    {renderName(user.email, user.full_name)}
-                                    {openMobile ? (
-                                        <MdArrowDropUp />
-                                    ) : (
-                                        <MdArrowDropDown />
-                                    )}
-                                </button>
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        className="flex items-center text-base font-bold"
+                                        onClick={() =>
+                                            setOpenMobile(!openMobile)
+                                        }>
+                                        {!profile ? (
+                                            <div className="w-[23px] h-[23px] bg-neutral-600 animate-pulse rounded-full"></div>
+                                        ) : !!profile.photo_profile ? (
+                                            <div className="w-[23px] h-[23px] relative">
+                                                <Image
+                                                    src={profile.photo_profile}
+                                                    layout="fill"
+                                                    className="rounded-full"
+                                                />
+                                            </div>
+                                        ) : (
+                                            <Avatar
+                                                name={profile.full_name}
+                                                size="23"
+                                                round
+                                            />
+                                        )}
+                                    </button>
+                                </div>
                             )}
                         </div>
                     </>

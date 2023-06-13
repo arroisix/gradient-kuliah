@@ -33,6 +33,10 @@ interface Props {
     children: ReactNode;
 }
 
+export interface ReduxHTTPError {
+    error: FetchBaseQueryError | SerializedError;
+}
+
 export const ProfileProvider: React.FC<Props> = ({ children }) => {
     const { pathname } = useRouter();
     const [update, { isLoading }] = useUpdateUserMutation();
