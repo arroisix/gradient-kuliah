@@ -33,13 +33,18 @@ const Layout = ({
             <section
                 className={`min-h-screen ${
                     showSidebar && isAuthenticated
-                        ? 'pt-24 pb-10 px-4 md:pl-5 md:pr-[5rem] lg:pr-[7.5rem] flex gap-[3rem] lg:gap-[10rem]'
+                        ? 'pt-24 pb-10 px-4 md:pl-5 md:pr-[5rem] lg:pr-[7.5rem] flex gap-[2rem] lg:gap-[6rem]'
                         : ''
                 }`}>
                 {showSidebar && isAuthenticated && (
                     <Sidebar fullHeight={fullHeightSidebar} />
                 )}
-                <div className="min-h-full w-full">{children}</div>
+                <div
+                    className={`min-h-full md:h-[100vh - 65px] w-full ${
+                        fullHeightSidebar ? 'md:pl-[12rem] lg:pl-[16rem]' : ''
+                    }`}>
+                    {children}
+                </div>
             </section>
             <Footer />
         </div>
