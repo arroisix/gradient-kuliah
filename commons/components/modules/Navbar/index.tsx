@@ -135,8 +135,9 @@ const Navbar = ({
             onMouseLeave={onMouseLeaveNavbar}>
             <div className="flex items-center justify-between w-full px-4 py-4 md:px-8">
                 <div className="flex gap-4 items-center">
-                    {isAuthenticated && isMobileBreakpoints && (
+                    {isAuthenticated && (
                         <FiMenu
+                            className="md:hidden"
                             stroke="#666666"
                             onClick={() => setOpenSidebar(true)}
                         />
