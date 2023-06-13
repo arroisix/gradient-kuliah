@@ -195,13 +195,15 @@ const Navbar = ({
                 ) : (
                     <>
                         <div className="hidden font-bold md:flex">
-                            <Link href="/kelas">
-                                <nav
-                                    className="ml-12 cursor-pointer hover:text-accent-blue"
-                                    onMouseEnter={onMouseEnterOther}>
-                                    Kelas
-                                </nav>
-                            </Link>
+                            {!isAuthenticated && (
+                                <Link href="/kelas">
+                                    <nav
+                                        className="ml-12 cursor-pointer hover:text-accent-blue"
+                                        onMouseEnter={onMouseEnterOther}>
+                                        Kelas
+                                    </nav>
+                                </Link>
+                            )}
                             {isAuthenticated ? (
                                 <nav
                                     className={`ml-12 cursor-pointer hover:text-accent-blue relative ${
