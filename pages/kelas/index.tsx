@@ -3,7 +3,7 @@ import ClassContainer from 'courses/containers';
 
 const ListClass = (): JSX.Element => {
     return (
-        <Layout>
+        <Layout showSidebar fullHeightSidebar>
             <ClassContainer />
         </Layout>
     );
