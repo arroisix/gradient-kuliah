@@ -7,7 +7,6 @@ import {
     MdArrowDropDown,
     MdHistory,
     MdLogout,
-    MdOutlineBook,
     MdOutlinePersonOutline
 } from 'react-icons/md';
 import useWindowSize from 'commons/hooks/useWindowSize';
