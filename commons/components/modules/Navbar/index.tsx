@@ -278,19 +278,6 @@ const Navbar = ({
                                                 </div>
                                             </div>
                                         </Link>
-                                        <Link href={'/kelas/?flag=kelasku'}>
-                                            <div
-                                                className={`flex ${pickedColorScheme.color} hover:text-accent-blue  font-normal w-full items-center mb-4`}>
-                                                <div>
-                                                    <MdOutlineBook className="text-2xl" />
-                                                </div>
-                                                <div className="w-full ml-4">
-                                                    <p className="text-base">
-                                                        Kelasku
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </Link>
                                         <div
                                             className="flex items-center w-full mb-4 font-normal text-accent-orange hover:text-state-error"
                                             onClick={() =>
