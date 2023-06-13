@@ -20,7 +20,10 @@ const ClassContainer = (): JSX.Element => {
     }, [flag]);
 
     return (
-        <section className="min-h-screen">
+        <section
+            className={`min-h-screen ${
+                !isAuthenticated ? 'px-4 md:px-[7.5rem]' : ''
+            }`}>
             <h1 className="text-4xl md:text-5xl font-bold">Kelas</h1>
             <div className="w-full flex flex-col md:flex-row mt-6 justify-end">
                 {/* <div className="md:w-1/3 w-full">
