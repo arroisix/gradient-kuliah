@@ -2,11 +2,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { FaInstagram } from 'react-icons/fa';
+import { FiMenu } from 'react-icons/fi';
 import {
     MdArrowDropDown,
     MdHistory,
     MdLogout,
-    MdOutlineBook,
     MdOutlinePersonOutline
 } from 'react-icons/md';
 import useWindowSize from 'commons/hooks/useWindowSize';
@@ -23,6 +23,7 @@ import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { BiPlayCircle } from 'react-icons/bi';
 import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienceApi';
 import { AUTHENTICATION_ROUTE } from 'commons/constants';
+import MobileSidebar from '../Sidebar/mobile';
 import Avatar from 'react-avatar';
 import Image from 'next/image';
 import AuthContext from 'authentication/contexts/AuthProvider';
@@ -45,6 +46,7 @@ const Navbar = ({
     const [isNavbarHovered, setNavbarHovered] = useState(false);
     const [isProfileHovered, setProfileHovered] = useState(false);
     const [openMobile, setOpenMobile] = useState(false);
+    const [openSidebar, setOpenSidebar] = useState(false);
     const pickedColorScheme = {
         bgColor: lightMode ? 'bg-white' : 'bg-[#171717]',
         color: lightMode ? 'text-black' : 'text-white'
@@ -131,7 +133,14 @@ const Navbar = ({
             onMouseEnter={() => setNavbarHovered(true)}
             onMouseLeave={onMouseLeaveNavbar}>
             <div className="flex items-center justify-between w-full px-4 py-4 md:px-8">
-                <div className="flex gap-4">
+                <div className="flex gap-4 items-center">
+                    {isAuthenticated && (
+                        <FiMenu
+                            className="md:hidden"
+                            stroke="#666666"
+                            onClick={() => setOpenSidebar(true)}
+                        />
+                    )}
                     <Link href={'/'}>
                         <span className="text-2xl font-bold cursor-pointer font-[Urbanist]">
                             {isMobileBreakpoints ? 'G' : 'Gradient'}
@@ -186,13 +195,15 @@ const Navbar = ({
                 ) : (
                     <>
                         <div className="hidden font-bold md:flex">
-                            <Link href="/kelas">
-                                <nav
-                                    className="ml-12 cursor-pointer hover:text-accent-blue"
-                                    onMouseEnter={onMouseEnterOther}>
-                                    Kelas
-                                </nav>
-                            </Link>
+                            {!isAuthenticated && (
+                                <Link href="/kelas">
+                                    <nav
+                                        className="ml-12 cursor-pointer hover:text-accent-blue"
+                                        onMouseEnter={onMouseEnterOther}>
+                                        Kelas
+                                    </nav>
+                                </Link>
+                            )}
                             {isAuthenticated ? (
                                 <nav
                                     className={`ml-12 cursor-pointer hover:text-accent-blue relative ${
@@ -265,19 +276,6 @@ const Navbar = ({
                                                     {/* <p className="text-xs text-accent-yellow">
                                                 1 Menunggu pembayaran
                                             </p> */}
-                                                </div>
-                                            </div>
-                                        </Link>
-                                        <Link href={'/kelas/?flag=kelasku'}>
-                                            <div
-                                                className={`flex ${pickedColorScheme.color} hover:text-accent-blue  font-normal w-full items-center mb-4`}>
-                                                <div>
-                                                    <MdOutlineBook className="text-2xl" />
-                                                </div>
-                                                <div className="w-full ml-4">
-                                                    <p className="text-base">
-                                                        Kelasku
-                                                    </p>
                                                 </div>
                                             </div>
                                         </Link>
@@ -358,6 +356,7 @@ const Navbar = ({
                     lightMode={lightMode}
                 />
             )}
+            {openSidebar && <MobileSidebar setOpenSidebar={setOpenSidebar} />}
         </header>
     );
 };

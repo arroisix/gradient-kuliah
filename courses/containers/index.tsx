@@ -20,18 +20,21 @@ const ClassContainer = (): JSX.Element => {
     }, [flag]);
 
     return (
-        <section className="min-h-screen pt-24 px-4 md:px-[7.5rem]">
+        <section
+            className={`min-h-screen ${
+                !isAuthenticated ? 'px-4 md:px-[7.5rem]' : ''
+            }`}>
             <h1 className="text-4xl md:text-5xl font-bold">Kelas</h1>
             <div className="w-full flex flex-col md:flex-row mt-6 justify-end">
                 {/* <div className="md:w-1/3 w-full">
                     <Input
-                        type="text"
-                        placeholder="cari kelas"
-                        className="bg-neutral-900 border-neutral-900 border-none"
-                        name="password"
-                        endAddorment={
-                            <FaSearch className="text-gray-500 cursor-pointer" />
-                        }
+                    type="text"
+                    placeholder="cari kelas"
+                    className="bg-neutral-900 border-neutral-900 border-none"
+                    name="password"
+                    endAddorment={
+                        <FaSearch className="text-gray-500 cursor-pointer" />
+                    }
                     />
                 </div> */}
             </div>
