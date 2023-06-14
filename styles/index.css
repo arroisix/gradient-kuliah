@@ -1325,3 +1325,16 @@ sticky-3.animate {
 .notion img {
     object-fit: contain !important;
 }
+
+.notion-callout > .notion-page-icon-inline {
+    display: none;
+}
+
+.notion-asset-wrapper-video > div {
+    height: auto !important;
+    width: 95% !important;
+}
+
+.notion-equation-block {
+    align-items: center;
+}
