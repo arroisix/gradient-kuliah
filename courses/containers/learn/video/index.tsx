@@ -33,7 +33,7 @@ const VideoLearnContainer = ({
     const { video } = useLearning();
 
     return (
-        <section className="pt-[65px] flex flex-col md:flex-row relative md:overflow-hidden md:h-[100vh]">
+        <section className="pt-[65px] flex flex-col md:flex-row relative md:overflow-hidden min-h-[100vh] md:h-screen">
             <div className="w-full h-full">
                 {!isLoading ? (
                     data ? (
