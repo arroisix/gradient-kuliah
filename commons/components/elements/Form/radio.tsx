@@ -7,8 +7,8 @@ type RadioOption = {
 
 interface RadioProps {
     label?: string;
-    onChange: (res: any) => void;
-    onBlur: (res: any) => void;
+    onChange: (res: unknown) => void;
+    onBlur: (res: unknown) => void;
     value?: string;
     name: string;
     options: Array<RadioOption>;
@@ -41,15 +41,15 @@ const Radio = ({
     };
 
     return (
-        <div className="flex flex-col my-4 w-full">
-            <span className="mb-1 text-xs">{label}</span>
-            <div className="flex flex-wrap -mb-2">
+        <div className="flex flex-col w-full gap-1 font-body">
+            {label && <span className="text-[#999999] text-sm">{label}</span>}
+            <div className="flex flex-wrap ">
                 {options.map((option: RadioOption) => (
                     <div
-                        className={`cursor-pointer py-2 px-5 rounded-full mr-2 mb-2  ${
+                        className={`cursor-pointer py-2 px-5 rounded-full border mr-2 mb-2  ${
                             radioValue === option.key
-                                ? 'bg-accent-blue text-white'
-                                : 'bg-neutral-100'
+                                ? 'bg-[#7264EB] border-[#5F2BCE] text-white'
+                                : 'bg-[#121212] border-[#242424]'
                         }`}
                         key={option.key}
                         onClick={() => changeValue(option)}

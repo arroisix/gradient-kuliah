@@ -2,15 +2,14 @@ import { useRouter } from 'next/router';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { useAuth } from 'authentication/contexts/AuthProvider';
 import LearnLayout from 'commons/learnLayout';
 import { useGetExamExerciseWorksheetQuery } from 'courses/redux/api/learningExperienceApi';
 import Button from 'commons/components/elements/Button';
 import { MdGrade } from 'react-icons/md';
+import { AUTHENTICATION_ROUTE } from 'commons/constants';
 
 const Hasil = (): JSX.Element => {
     const router = useRouter();
-    const { setModalAuthOpen } = useAuth();
     const { id, exercise, learningProgress, packet } = router.query;
     const { data, isLoading } = useGetExamExerciseWorksheetQuery(
         {
@@ -33,22 +32,22 @@ const Hasil = (): JSX.Element => {
 
     useEffect(() => {
         if (id && !isAuthenticated) {
-            setModalAuthOpen(1, true);
+            router.push(AUTHENTICATION_ROUTE);
         }
     }, [isAuthenticated, id]);
 
     return (
         <LearnLayout hideNavbar>
-            <div className="px-4 py-32 md:p-32 w-full flex flex-col gap-4 items-center justify-center">
+            <div className="flex flex-col items-center justify-center w-full gap-4 px-4 py-32 md:p-32">
                 <h5 className="text-2xl font-bold">{data?.exercise_name}</h5>
                 {(data?.latest_exam_score as number) >= 0 && (
-                    <div className="w-full flex justify-center items-center flex-col gap-2">
-                        <span className="font-body text-xl text-neutral-200">
+                    <div className="flex flex-col items-center justify-center w-full gap-2">
+                        <span className="text-xl font-body text-neutral-200">
                             Skor Kamu
                         </span>
                         <div className="relative">
                             <div
-                                className="radial-progress z-10"
+                                className="z-10 radial-progress"
                                 style={{
                                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                     // @ts-ignore
@@ -62,7 +61,7 @@ const Hasil = (): JSX.Element => {
                             <div className="w-48 h-48 rounded-full top-0 left-auto right-auto absolute border-[20px] border-neutral-500" />
                         </div>
                         {data?.latest_exam_score && (
-                            <h3 className="font-bold text-3xl text-center">
+                            <h3 className="text-3xl font-bold text-center">
                                 {data?.latest_exam_score < data?.treshold_score
                                     ? 'Semangat, kamu pasti bisa!'
                                     : 'Mantap jiwa! 👍👍'}
@@ -70,7 +69,7 @@ const Hasil = (): JSX.Element => {
                         )}
                     </div>
                 )}
-                <div className="flex gap-2 items-center">
+                <div className="flex items-center gap-2">
                     <div className="rounded-full bg-[#121212] p-2">
                         <MdGrade className="text-2xl" />
                     </div>

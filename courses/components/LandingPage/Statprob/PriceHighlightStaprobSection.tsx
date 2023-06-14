@@ -1,4 +1,3 @@
-import { useAuth } from 'authentication/contexts/AuthProvider';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
 import useWindowSize from 'commons/hooks/useWindowSize';
@@ -7,6 +6,8 @@ import { useGetLandingCourseDataQuery } from 'courses/redux/api/publicCourseApi'
 import { formatter } from 'courses/utils';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { AUTHENTICATION_ROUTE } from 'commons/constants';
+import Link from 'next/link';
 
 const PriceHighlightStatprobSection = ({
     slug,
@@ -17,7 +18,6 @@ const PriceHighlightStatprobSection = ({
 }): JSX.Element => {
     const { data: course } = useGetLandingCourseDataQuery(slug);
     const { is_subscribed } = useCourseSubscription(slug);
-    const { setModalAuthOpen } = useAuth();
     const [packet, setPacket] = useState<Packet>();
     const { width } = useWindowSize();
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -47,24 +47,24 @@ const PriceHighlightStatprobSection = ({
         <div className="px-4 md:px-[7.5rem] flex flex-col justify-center items-center my-8 md:my-16 h-[30vh] md:h-[50vh]">
             {is_second_variant ? (
                 <>
-                    <h3 className="font-bold text-2xl md:text-4xl text-center">
+                    <h3 className="text-2xl font-bold text-center md:text-4xl">
                         {width > 768
                             ? 'Kelas yang Berfokus pada Aplikasi dan Intuisi.'
                             : '# Kelas yang Berfokus pada Aplikasi dan Intuisi.'}
                     </h3>
-                    <p className="text-base md:text-xl text-neutral-400 font-body text-center">
+                    <p className="text-base text-center md:text-xl text-neutral-400 font-body">
                         Gak takut lagi liat rumus-rumus rumit probabilitas dan
                         statistika.
                     </p>
                 </>
             ) : (
-                <h3 className="font-thin text-2xl md:text-4xl text-center">
+                <h3 className="text-2xl font-thin text-center md:text-4xl">
                     Akses instan Semuanya Sekarang!
                 </h3>
             )}
             {packet?.discount.split('.')[0] !== '0' && (
-                <p className="font-bold text-xs line-through text-red-400 flex">
-                    <h2 className="text-3xl md:text-5xl text-black">-</h2>
+                <p className="flex text-xs font-bold text-red-400 line-through">
+                    <h2 className="text-3xl text-black md:text-5xl">-</h2>
                     <h2 className="text-[#999999] text-3xl md:text-5xl">
                         {`${
                             formatter
@@ -74,11 +74,11 @@ const PriceHighlightStatprobSection = ({
                                 .split(',')[0]
                         }/bulan`}
                     </h2>
-                    <h2 className="text-3xl md:text-5xl text-black">-</h2>
+                    <h2 className="text-3xl text-black md:text-5xl">-</h2>
                 </p>
             )}
             <div className="flex items-end gap-2">
-                <h3 className="font-bold text-2xl md:text-4xl font-white">
+                <h3 className="text-2xl font-bold md:text-4xl font-white">
                     {`${calculatePrice()}/bulan`}
                 </h3>
                 <span className="text-[#7FFDB1] font-bold">
@@ -87,7 +87,7 @@ const PriceHighlightStatprobSection = ({
             </div>
             {isAuthenticated && !is_subscribed && (
                 <Button
-                    className="md:w-fit text-center my-2"
+                    className="my-2 text-center md:w-fit"
                     variant="primary"
                     href={`/langganan?courseId=${course?.course_id}`}>
                     {is_second_variant && width <= 768
@@ -96,20 +96,16 @@ const PriceHighlightStatprobSection = ({
                 </Button>
             )}
             {!isAuthenticated && !is_subscribed && (
-                <Button
-                    className="md:w-fit text-center my-2"
-                    variant="primary"
-                    onClick={() =>
-                        setModalAuthOpen(
-                            1,
-                            false,
-                            `/langganan?courseId=${course?.course_id}`
-                        )
-                    }>
-                    {is_second_variant && width <= 768
-                        ? 'Gabung Sekarang'
-                        : 'Akses Sekarang'}
-                </Button>
+                <Link
+                    href={`${AUTHENTICATION_ROUTE}?redirect=/langganan?courseId=${course?.course_id}`}>
+                    <Button
+                        className="my-2 text-center md:w-fit"
+                        variant="primary">
+                        {is_second_variant && width <= 768
+                            ? 'Gabung Sekarang'
+                            : 'Akses Sekarang'}
+                    </Button>
+                </Link>
             )}
         </div>
     );

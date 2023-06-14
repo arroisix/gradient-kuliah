@@ -1,15 +1,14 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { FaInstagram } from 'react-icons/fa';
 import {
     MdArrowDropDown,
-    MdArrowDropUp,
     MdHistory,
     MdLogout,
-    MdOutlineBook
+    MdOutlineBook,
+    MdOutlinePersonOutline
 } from 'react-icons/md';
-import { useAuth } from 'authentication/contexts/AuthProvider';
 import useWindowSize from 'commons/hooks/useWindowSize';
 import { renderName } from 'commons/utils';
 import MobileNavbar from './mobile';
@@ -23,6 +22,10 @@ import Button from 'commons/components/elements/Button';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { BiPlayCircle } from 'react-icons/bi';
 import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienceApi';
+import { AUTHENTICATION_ROUTE } from 'commons/constants';
+import Avatar from 'react-avatar';
+import Image from 'next/image';
+import AuthContext from 'authentication/contexts/AuthProvider';
 
 const Navbar = ({
     paymentPage,
@@ -34,9 +37,9 @@ const Navbar = ({
     courses?: Course[];
     lightMode?: boolean;
 }): JSX.Element => {
-    const { setModalAuthOpen } = useAuth();
     const { isMobileBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const { profile } = useContext(AuthContext);
     const user = useSelector(getCurrentUser);
     const [isHovered, setHovered] = useState(false);
     const [isNavbarHovered, setNavbarHovered] = useState(false);
@@ -127,7 +130,7 @@ const Navbar = ({
             className={`fixed top-0 left-0 w-full z-20 ${computeBgColor()}`}
             onMouseEnter={() => setNavbarHovered(true)}
             onMouseLeave={onMouseLeaveNavbar}>
-            <div className="w-full px-4 md:px-8 py-4 flex items-center justify-between">
+            <div className="flex items-center justify-between w-full px-4 py-4 md:px-8">
                 <div className="flex gap-4">
                     <Link href={'/'}>
                         <span className="text-2xl font-bold cursor-pointer font-[Urbanist]">
@@ -164,7 +167,7 @@ const Navbar = ({
                                 <img
                                     src="https://storage.googleapis.com/gradient-asset/assets/astronotes.png"
                                     alt="astronotes"
-                                    className="h-5 w-5"
+                                    className="w-5 h-5"
                                 />
                                 <span className="font-bold">AstroNotes</span>
                             </>
@@ -182,7 +185,7 @@ const Navbar = ({
                     </Button>
                 ) : (
                     <>
-                        <div className="hidden md:flex font-bold">
+                        <div className="hidden font-bold md:flex">
                             <Link href="/kelas">
                                 <nav
                                     className="ml-12 cursor-pointer hover:text-accent-blue"
@@ -200,10 +203,34 @@ const Navbar = ({
                                     }`}
                                     onMouseEnter={onMouseEnterProfile}
                                     onMouseLeave={onMouseLeaveProfile}>
-                                    <span className="flex items-center">
-                                        {renderName(user.email, user.full_name)}
-                                        <MdArrowDropDown />
-                                    </span>
+                                    <div className="flex items-center gap-2">
+                                        {!profile ? (
+                                            <div className="w-[23px] h-[23px] bg-neutral-600 animate-pulse rounded-full"></div>
+                                        ) : !!profile.photo_profile ? (
+                                            <div className="w-[23px] h-[23px] relative">
+                                                <Image
+                                                    src={profile.photo_profile}
+                                                    layout="fill"
+                                                    className="rounded-full"
+                                                />
+                                            </div>
+                                        ) : (
+                                            <Avatar
+                                                name={profile.full_name}
+                                                size="23"
+                                                round
+                                            />
+                                        )}
+                                        <div className="flex items-center">
+                                            <span>
+                                                {renderName(
+                                                    user.email,
+                                                    user.full_name
+                                                )}
+                                            </span>
+                                            <MdArrowDropDown />
+                                        </div>
+                                    </div>
                                     <div
                                         className={`px-8 py-4 min-w-[250px] top-10 right-0 absolute shadow-md rounded-b-md ${
                                             pickedColorScheme.bgColor
@@ -212,6 +239,19 @@ const Navbar = ({
                                                 ? 'block'
                                                 : 'hidden'
                                         }`}>
+                                        <Link href={'/profil'}>
+                                            <div
+                                                className={`flex ${pickedColorScheme.color} hover:text-accent-blue  font-normal w-full items-center mb-4`}>
+                                                <div>
+                                                    <MdOutlinePersonOutline className="text-2xl" />
+                                                </div>
+                                                <div className="w-full ml-4">
+                                                    <p className="text-base">
+                                                        Profil
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </Link>
                                         <Link href={'/transaksi'}>
                                             <div
                                                 className={`flex ${pickedColorScheme.color} hover:text-accent-blue font-normal w-full items-center mb-4`}>
@@ -242,7 +282,7 @@ const Navbar = ({
                                             </div>
                                         </Link>
                                         <div
-                                            className="flex text-accent-orange hover:text-state-error font-normal w-full items-center mb-4"
+                                            className="flex items-center w-full mb-4 font-normal text-accent-orange hover:text-state-error"
                                             onClick={() =>
                                                 dispatch(removeUser())
                                             }
@@ -259,17 +299,15 @@ const Navbar = ({
                                     </div>
                                 </nav>
                             ) : (
-                                <nav
-                                    className="ml-12 cursor-pointer"
-                                    onClick={() => setModalAuthOpen(1)}
-                                    aria-hidden={true}
-                                    onMouseEnter={() => setHovered(false)}>
-                                    Masuk
-                                </nav>
+                                <Link href={AUTHENTICATION_ROUTE}>
+                                    <nav className="ml-12 cursor-pointer">
+                                        Masuk
+                                    </nav>
+                                </Link>
                             )}
                         </div>
 
-                        <div className="flex md:hidden text-3xl gap-4">
+                        <div className="flex gap-4 text-3xl md:hidden">
                             {!isAuthenticated ? (
                                 <>
                                     <Link href="/kelas">
@@ -277,25 +315,38 @@ const Navbar = ({
                                             Kelas
                                         </nav>
                                     </Link>
-                                    <nav
-                                        className="flex items-center text-base font-bold"
-                                        onClick={() => setModalAuthOpen(1)}
-                                        aria-hidden={true}
-                                        onMouseEnter={() => setHovered(false)}>
-                                        Masuk
-                                    </nav>
+                                    <Link href={AUTHENTICATION_ROUTE}>
+                                        <nav className="flex items-center text-base font-bold">
+                                            Masuk
+                                        </nav>
+                                    </Link>
                                 </>
                             ) : (
-                                <button
-                                    className="flex items-center text-base font-bold"
-                                    onClick={() => setOpenMobile(!openMobile)}>
-                                    {renderName(user.email, user.full_name)}
-                                    {openMobile ? (
-                                        <MdArrowDropUp />
-                                    ) : (
-                                        <MdArrowDropDown />
-                                    )}
-                                </button>
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        className="flex items-center text-base font-bold"
+                                        onClick={() =>
+                                            setOpenMobile(!openMobile)
+                                        }>
+                                        {!profile ? (
+                                            <div className="w-[23px] h-[23px] bg-neutral-600 animate-pulse rounded-full"></div>
+                                        ) : !!profile.photo_profile ? (
+                                            <div className="w-[23px] h-[23px] relative">
+                                                <Image
+                                                    src={profile.photo_profile}
+                                                    layout="fill"
+                                                    className="rounded-full"
+                                                />
+                                            </div>
+                                        ) : (
+                                            <Avatar
+                                                name={profile.full_name}
+                                                size="23"
+                                                round
+                                            />
+                                        )}
+                                    </button>
+                                </div>
                             )}
                         </div>
                     </>

@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-import { useAuth } from 'authentication/contexts/AuthProvider';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
@@ -8,6 +7,7 @@ import { ContentAccordionItemProps } from './ContentSection';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import Play from 'commons/components/elements/Icons/Play';
 import GreenCheck from 'commons/components/elements/Icons/GreenCheck';
+import { AUTHENTICATION_ROUTE } from 'commons/constants';
 
 const VideoAccordionItem = ({
     subchapter,
@@ -18,7 +18,6 @@ const VideoAccordionItem = ({
     extraCallback
 }: ContentAccordionItemProps): JSX.Element => {
     const router = useRouter();
-    const { setModalAuthOpen } = useAuth();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { watch_progress } = useCourseSubscription(slug);
 
@@ -33,10 +32,8 @@ const VideoAccordionItem = ({
                 { shallow: true }
             );
         } else {
-            setModalAuthOpen(
-                1,
-                false,
-                `/kelas/${slug}/belajar/video/${chapterId}/${subchapter.id}`
+            router.push(
+                `${AUTHENTICATION_ROUTE}?redirect=/kelas/${slug}/belajar/video/${chapterId}/${subchapter.id}`
             );
         }
     };

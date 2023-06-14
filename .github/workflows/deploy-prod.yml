@@ -1,0 +1,31 @@
+name: Deploy to Vercel
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Install pnpm
+              run: npm install -g pnpm
+
+            - name: Install dependencies
+              run: pnpm install
+
+            - name: Check lint and format
+              run: pnpm test-all
+
+            - name: Deploy to Vercel
+              uses: amondnet/vercel-action@v20
+              with:
+                  vercel-token: ${{ secrets.VERCEL_TOKEN }}
+                  vercel-org-id: ${{ secrets.VERCEL_ORG_ID}} # Replace with your Vercel team ID
+                  vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+                  vercel-args: '--prod'

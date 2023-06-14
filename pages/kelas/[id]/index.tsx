@@ -2,7 +2,7 @@ import Layout from 'commons/layout';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { wrapper } from 'redux/store';
 import { getLandingCourseData } from 'courses/redux/api/publicCourseApi';
-import { getRunningOperationPromises } from 'redux/api/baseApi';
+import { getRunningQueriesThunk } from 'redux/api/baseApi';
 import config from 'redux/api/config';
 import LandingPageOrchestrator from 'courses/components/LandingPage/LandingPageOrchestrator';
 
@@ -36,7 +36,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                 getLandingCourseData.initiate(params?.id as string)
             );
 
-            Promise.all(getRunningOperationPromises());
+            await Promise.all([getRunningQueriesThunk()]);
 
             return {
                 props: {
