@@ -4,9 +4,9 @@ const AI_TUTOR_BASE_URL = 'ai-tutor/';
 
 export const aiTutorApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        getChatRoom: builder.query<ChatRoomResponse, void>({
-            query: () => ({
-                url: `${AI_TUTOR_BASE_URL}chat-room/`
+        getChatRoom: builder.query<ChatRoomResponse, string>({
+            query: (videoId: string) => ({
+                url: `${AI_TUTOR_BASE_URL}video-chat-room/${videoId}/`
             }),
             providesTags: ['AI_TUTOR']
         }),
