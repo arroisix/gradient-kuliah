@@ -3,7 +3,7 @@ import DashboardContainer from 'dashboard/containers';
 
 const Dashboard = (): JSX.Element => {
     return (
-        <LearnLayout>
+        <LearnLayout showSidebar fullHeightSidebar>
             <DashboardContainer />
         </LearnLayout>
     );
