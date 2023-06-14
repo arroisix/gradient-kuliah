@@ -1,11 +1,11 @@
-import Layout from 'commons/layout';
+import LearnLayout from 'commons/learnLayout';
 import ClassContainer from 'courses/containers';
 
 const ListClass = (): JSX.Element => {
     return (
-        <Layout>
+        <LearnLayout showSidebar fullHeightSidebar>
             <ClassContainer />
-        </Layout>
+        </LearnLayout>
     );
 };
 
