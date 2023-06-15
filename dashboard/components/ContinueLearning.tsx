@@ -1,9 +1,8 @@
-import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { HiOutlinePlusSm } from 'react-icons/hi';
-import { useSelector } from 'react-redux';
 import ProgressBar from './ProgressBar';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 const dummyData = {
     learning_progress: [
@@ -22,7 +21,7 @@ const dummyData = {
             chapter_id: 'sdasda',
             subchapter_id: 'asdasd',
             subchapter_thumbnail: 'asdasdasda',
-            subchapter_name: 'Apa itu Fungsi?',
+            subchapter_name: 'Ganti Gambar! Kalo udh nyambung BE',
             course_name: 'Kalkulus 1',
             progress_percentage: '20%'
         }
@@ -101,13 +100,13 @@ const ListContinueLearning = (): JSX.Element => {
 
 const NoLearningProgress = (): JSX.Element => {
     const router = useRouter();
-    const isAuthenticated = useSelector(getIsAuthenticated);
+    const { is_subscribed } = useCourseSubscription();
 
     return (
         <div
             className="flex flex-col md:flex-row gap-[8px] md:gap-[30px] items-start justify-start md:items-center md:justify-center cursor-pointer"
             onClick={() =>
-                router.push(`${isAuthenticated ? '/kelas' : '/langganan'}`)
+                router.push(`${is_subscribed ? '/kelas' : '/langganan'}`)
             }
             aria-hidden>
             <div className="relative flex items-center justify-center w-[260px] md:w-[160px] lg:w-[260px] min-h-[150px] rounded-lg bg-[#242424]">
