@@ -3,10 +3,7 @@ import { useRouter } from 'next/router';
 import { HiOutlinePlusSm } from 'react-icons/hi';
 import ProgressBar from './ProgressBar';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
-import {
-    LearningProgress,
-    useGetStudentLearningProgressQuery
-} from 'dashboard/redux/api/dashboardApi';
+import { useGetStudentLearningProgressQuery } from 'dashboard/redux/api/dashboardApi';
 
 const ContinueLearning = ({
     className
@@ -42,7 +39,7 @@ const ContinueLearning = ({
 const ListContinueLearning = ({
     learning_progress
 }: {
-    learning_progress?: LearningProgress[];
+    learning_progress?: StudentLearningProgress[];
 }): JSX.Element => {
     const router = useRouter();
 

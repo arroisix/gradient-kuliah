@@ -1,9 +1,6 @@
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import useTransition from 'commons/hooks/useTransition';
-import {
-    StudentCourse,
-    useGetStudentCourseQuery
-} from 'dashboard/redux/api/dashboardApi';
+import { useGetStudentCourseQuery } from 'dashboard/redux/api/dashboardApi';
 import { useRouter } from 'next/router';
 
 const MyClass = ({ className }: { className?: string }): JSX.Element => {
