@@ -1,13 +1,16 @@
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import useTransition from 'commons/hooks/useTransition';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useGetStudentCourseQuery } from 'dashboard/redux/api/dashboardApi';
 import { useRouter } from 'next/router';
+import { HiOutlinePlusSm } from 'react-icons/hi';
 
 const MyClass = ({ className }: { className?: string }): JSX.Element => {
     const router = useRouter();
     const loadingTransition = useTransition(router);
 
     const { data, isLoading } = useGetStudentCourseQuery();
+    const { is_subscribed } = useCourseSubscription();
 
     return (
         <div className={`flex flex-col gap-3 md:gap-5 ${className}`}>
@@ -21,12 +24,22 @@ const MyClass = ({ className }: { className?: string }): JSX.Element => {
                     </div>
                 ) : (
                     <>
-                        {data?.courses.length === 0 ? (
+                        {!is_subscribed ? (
                             <div
                                 className="w-full bg-accent-purple p-2 rounded-[20px] text-center font-extrabold"
                                 onClick={() => router.push('/langganan')}
                                 aria-hidden>
                                 <span>Akses Kelas</span>
+                            </div>
+                        ) : data?.courses.length === 0 ? (
+                            <div
+                                className="flex justify-center items-center w-full h-8 bg-[#121212] p-2 rounded-[20px] cursor-pointer"
+                                onClick={() => router.push('/kelas')}
+                                aria-hidden>
+                                <HiOutlinePlusSm
+                                    className="text-[#373737]"
+                                    size={24}
+                                />
                             </div>
                         ) : (
                             <ListMyClass courses={data?.courses} />
