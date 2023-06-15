@@ -31,10 +31,10 @@ const withAnon = (WrappedComponent: React.ComponentType) => {
                     } else if (!!router.query.redirect) {
                         router.replace(`${router.query.redirect}`);
                     } else {
-                        router.replace('/kelas');
+                        router.replace('/dashboard');
                     }
                 } else if (router.pathname === '/') {
-                    router.replace('/kelas');
+                    router.replace('/dashboard');
                 }
 
                 return <LoadingBackdrop />;

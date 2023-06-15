@@ -26,7 +26,7 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
                 isProfileComplete &&
                 !(isLastOnboardingStep === 'true')
             ) {
-                window.location.href = '/kelas';
+                window.location.href = '/dashboard';
                 return;
             }
 
