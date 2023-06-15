@@ -26,7 +26,7 @@ const MyClass = ({ className }: { className?: string }): JSX.Element => {
                     <>
                         {!is_subscribed ? (
                             <div
-                                className="w-full bg-accent-purple p-2 rounded-[20px] text-center font-extrabold"
+                                className="w-full bg-accent-purple p-2 rounded-[20px] text-center font-extrabold cursor-pointer"
                                 onClick={() => router.push('/langganan')}
                                 aria-hidden>
                                 <span>Akses Kelas</span>
