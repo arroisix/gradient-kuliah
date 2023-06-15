@@ -6,11 +6,11 @@ import { useState } from 'react';
 
 const DashboardContainer = (): JSX.Element => {
     const [showOffer, setShowOffer] = useState(true);
-    const { is_subscribed } = useCourseSubscription();
+    const { is_subscribed, isLoading } = useCourseSubscription();
 
     return (
         <section className="min-h-screen flex flex-col gap-6">
-            {showOffer && !is_subscribed && (
+            {showOffer && !is_subscribed && !isLoading && (
                 <OfferNotification setShowOffer={setShowOffer} />
             )}
             <div className="flex flex-col md:flex-row-reverse gap-[2rem]">
