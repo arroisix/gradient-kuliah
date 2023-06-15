@@ -1,5 +1,6 @@
 import Button from 'commons/components/elements/Button';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
+import Link from 'next/link';
 import { Dispatch, SetStateAction } from 'react';
 import { CgClose } from 'react-icons/cg';
 
@@ -20,11 +21,13 @@ const OfferNotification = ({
                 Beli sekali. Akses tanpa batas.
             </span>
             <div className="flex items-center gap-[0.75rem]">
-                <Button
-                    variant="primary"
-                    className="px-[13px] md:px-[2rem] py-[0.5rem] text-xs">
-                    {checkCustomBreakpoints(406) ? 'Akses' : 'Akses Kelas'}
-                </Button>
+                <Link href={'/langganan'}>
+                    <Button
+                        variant="primary"
+                        className="px-[13px] md:px-[2rem] py-[0.5rem] text-xs">
+                        {checkCustomBreakpoints(406) ? 'Akses' : 'Akses Kelas'}
+                    </Button>
+                </Link>
                 <CgClose
                     size={12}
                     className="text-neutral-600 cursor-pointer"
