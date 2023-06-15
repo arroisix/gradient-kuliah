@@ -17,7 +17,7 @@ const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
         <aside
             className={`hidden md:block top-[76px] w-min ${
                 fullHeight ? 'fixed h-[90vh]' : 'h-fit sticky'
-            } bg-[#121212] rounded-lg px-3 py-4`}>
+            } bg-[#121212] rounded-lg w-[158px] px-3 py-4`}>
             <div className="flex flex-col gap-3">
                 {/* <Link href={'/notifikasi'}>
                     <span
