@@ -3,11 +3,11 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { BiBookReader } from 'react-icons/bi';
 import { FiHome } from 'react-icons/fi';
-import {
-    RiQuestionnaireLine,
-    RiNotification3Line,
-    RiBookOpenLine
-} from 'react-icons/ri';
+// import {
+//     RiQuestionnaireLine,
+//     RiNotification3Line,
+//     RiBookOpenLine
+// } from 'react-icons/ri';
 
 const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
     const route = useRouter();
@@ -19,7 +19,7 @@ const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
                 fullHeight ? 'fixed h-[90vh]' : 'h-fit sticky'
             } bg-[#121212] rounded-lg px-3 py-4`}>
             <div className="flex flex-col gap-3">
-                <Link href={'/notifikasi'}>
+                {/* <Link href={'/notifikasi'}>
                     <span
                         className={`flex gap-4 cursor-pointer ${
                             pathname === '/notifikasi'
@@ -29,7 +29,7 @@ const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
                         <RiNotification3Line size={20} />
                         Notifikasi
                     </span>
-                </Link>
+                </Link> */}
                 <Link href={'/dashboard'}>
                     <span
                         className={`flex gap-4 cursor-pointer ${
@@ -41,7 +41,7 @@ const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
                         Home
                     </span>
                 </Link>
-                <Link href={'/komunitas'}>
+                {/* <Link href={'/komunitas'}>
                     <span
                         className={`flex gap-4 cursor-pointer ${
                             pathname === '/komunitas'
@@ -51,7 +51,7 @@ const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
                         <RiQuestionnaireLine size={20} />
                         Komunitas
                     </span>
-                </Link>
+                </Link> */}
                 <Link href={'/kelas'}>
                     <span
                         className={`flex gap-4 cursor-pointer ${
@@ -63,7 +63,7 @@ const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
                         Kelas
                     </span>
                 </Link>
-                <Link href={'/buku'}>
+                {/* <Link href={'/buku'}>
                     <span
                         className={`flex gap-4 cursor-pointer ${
                             pathname === '/buku'
@@ -73,7 +73,7 @@ const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
                         <RiBookOpenLine size={20} />
                         Buku
                     </span>
-                </Link>
+                </Link> */}
             </div>
         </aside>
     );
