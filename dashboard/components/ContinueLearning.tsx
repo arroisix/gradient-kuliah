@@ -3,57 +3,52 @@ import { useRouter } from 'next/router';
 import { HiOutlinePlusSm } from 'react-icons/hi';
 import ProgressBar from './ProgressBar';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
-
-const dummyData = {
-    learning_progress: [
-        {
-            course_slug: 'kalkulus2',
-            chapter_id: 'sdasda',
-            subchapter_id: 'asdasd',
-            subchapter_thumbnail: 'asdasdasda',
-            subchapter_name:
-                'Estimasi Nilai Pi dengan menggunakan Metode Monte Carlo',
-            course_name: 'Probabilitas dan Statistika',
-            progress_percentage: '80%'
-        },
-        {
-            course_slug: 'kalkulus1',
-            chapter_id: 'sdasda',
-            subchapter_id: 'asdasd',
-            subchapter_thumbnail: 'asdasdasda',
-            subchapter_name: 'Ganti Gambar! Kalo udh nyambung BE',
-            course_name: 'Kalkulus 1',
-            progress_percentage: '20%'
-        }
-    ]
-};
-// const dummyData = {
-//     learning_progress: []
-// };
+import {
+    LearningProgress,
+    useGetStudentLearningProgressQuery
+} from 'dashboard/redux/api/dashboardApi';
 
 const ContinueLearning = ({
     className
 }: {
     className?: string;
 }): JSX.Element => {
+    const { data, isLoading } = useGetStudentLearningProgressQuery();
+
     return (
         <div className={`flex flex-col gap-3 md:gap-5 ${className}`}>
             <h3 className="text-lg font-extrabold">Lanjut Belajar</h3>
-            {dummyData.learning_progress.length === 0 ? (
-                <NoLearningProgress />
+            {isLoading ? (
+                <div className="flex flex-col gap-4">
+                    <div className="p-4 h-44 w-full bg-neutral-800 animate-pulse rounded-lg" />
+                    <div className="p-4 h-44 w-full bg-neutral-800 animate-pulse rounded-lg" />
+                    <div className="p-4 h-44 w-full bg-neutral-800 animate-pulse rounded-lg" />
+                </div>
             ) : (
-                <ListContinueLearning />
+                <>
+                    {data?.learning_progress.length === 0 ? (
+                        <NoLearningProgress />
+                    ) : (
+                        <ListContinueLearning
+                            learning_progress={data?.learning_progress}
+                        />
+                    )}
+                </>
             )}
         </div>
     );
 };
 
-const ListContinueLearning = (): JSX.Element => {
+const ListContinueLearning = ({
+    learning_progress
+}: {
+    learning_progress?: LearningProgress[];
+}): JSX.Element => {
     const router = useRouter();
 
     return (
         <div className="relative flex flex-col gap-4">
-            {dummyData?.learning_progress.map(
+            {learning_progress?.map(
                 ({
                     course_slug,
                     chapter_id,
@@ -68,16 +63,14 @@ const ListContinueLearning = (): JSX.Element => {
                         className="flex flex-col md:flex-row gap-[8px] md:gap-[30px] items-start justify-start md:items-center md:justify-center cursor-pointer"
                         onClick={() =>
                             router.push(
-                                `/kelas/${course_slug}/${chapter_id}/${subchapter_id}`
+                                `/kelas/${course_slug}/belajar/video/${chapter_id}/${subchapter_id}`
                             )
                         }
                         aria-hidden>
                         <div className="relative w-[260px] md:w-[160px] lg:w-[260px] min-h-[150px] rounded-lg overflow-hidden">
                             <Image
-                                src={
-                                    'https://storage.googleapis.com/gradient-asset-dev/courses/calculus2/assets/kalkulus2-thumbnail.png'
-                                }
-                                alt={subchapter_thumbnail}
+                                src={subchapter_thumbnail}
+                                alt={subchapter_name}
                                 layout="fill"
                                 className="object-contain"
                             />
