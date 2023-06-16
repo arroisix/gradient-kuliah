@@ -10,7 +10,7 @@ const AiTutor = ({ uniqueId }: AiTutorProps): JSX.Element => {
     const [openChatRoom, setOpenChatRoom] = useState(false);
 
     return (
-        <div className="absolute bottom-0 right-[28vw] z-[100000]">
+        <div className="fixed bottom-0 md:right-[28vw] z-[100000]">
             {openChatRoom ? (
                 <ChatRoom
                     uniqueId={uniqueId}

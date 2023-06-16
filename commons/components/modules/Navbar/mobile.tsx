@@ -1,10 +1,5 @@
 import Link from 'next/link';
-import {
-    MdHistory,
-    MdLogout,
-    MdOutlineBook,
-    MdOutlinePersonOutline
-} from 'react-icons/md';
+import { MdHistory, MdLogout, MdOutlinePersonOutline } from 'react-icons/md';
 import { removeUser } from 'authentication/redux/slices/userSlice';
 import { useDispatch } from 'react-redux';
 
@@ -53,19 +48,6 @@ const MobileNavbar = ({
                                         <p className="text-base">
                                             Riwayat Pembelian
                                         </p>
-                                    </div>
-                                </div>
-                            </Link>
-                            <Link href={'/kelas/?flag=kelasku'}>
-                                <div
-                                    className={`flex ${
-                                        lightMode ? 'text-black' : 'text-white'
-                                    } hover:text-accent-blue font-normal w-full items-center mb-4`}>
-                                    <div>
-                                        <MdOutlineBook className="text-2xl" />
-                                    </div>
-                                    <div className="w-full ml-4">
-                                        <p className="text-base">Kelasku</p>
                                     </div>
                                 </div>
                             </Link>

@@ -1,9 +1,5 @@
 import Button from 'commons/components/elements/Button';
-import { generateInitial } from 'commons/utils';
-import { FaRobot } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
-import { useSelector } from 'react-redux';
-import { getCurrentUser } from 'authentication/redux/selectors/userSelector';
 import {
     useAskTutorMutation,
     useGetChatRoomQuery
@@ -11,6 +7,11 @@ import {
 
 import { Formik } from 'formik';
 import { MouseEventHandler } from 'react';
+import { useLearning } from 'courses/contexts/LearningProvider';
+import Spinner from 'commons/components/elements/Spinner';
+import { useAuth } from 'authentication/contexts/AuthProvider';
+import Image from 'next/image';
+import Avatar from 'react-avatar';
 
 interface ChatRoomProps {
     uniqueId: string;
@@ -21,15 +22,31 @@ interface BubbleProps {
     message: AiTutorMessage;
 }
 
+const processMessage = (message: string): JSX.Element[] => {
+    const messagesClean = message.split('\n');
+
+    return messagesClean.map((m: string) => <p key={m}>{m}</p>);
+};
+
 const StudentQuestionBubble = ({ message }: BubbleProps): JSX.Element => {
-    const user = useSelector(getCurrentUser);
+    const { profile } = useAuth();
 
     return (
         <div className="w-full bg-neutral-100 p-4 flex gap-2">
-            <span className="text-2xl font-bold">
-                {generateInitial(user.full_name)}
-            </span>
-            <span>{message.message.message}</span>
+            {!profile ? (
+                <div className="w-[24px] h-[24px] bg-neutral-600 animate-pulse rounded-full"></div>
+            ) : !!profile.photo_profile ? (
+                <div className="w-[24px] h-[24px] relative">
+                    <Image
+                        src={profile.photo_profile}
+                        layout="fill"
+                        className="rounded-full"
+                    />
+                </div>
+            ) : (
+                <Avatar name={profile.full_name} size="24" round />
+            )}
+            <span>{processMessage(message.message.message)}</span>
         </div>
     );
 };
@@ -43,7 +60,6 @@ const TutorAnswerBubble = ({ message }: BubbleProps): JSX.Element => {
                     .replaceAll('\n', '\\n')
             ).answer;
         } catch {
-            console.log('rusak');
             return message.message.message;
         }
     };
@@ -51,28 +67,33 @@ const TutorAnswerBubble = ({ message }: BubbleProps): JSX.Element => {
     return (
         <div className="w-full bg-neutral-300 p-4 flex gap-2">
             <div>
-                <FaRobot className="text-2xl text-center" />
+                <div className="bg-white rounded-full flex justify-center items-center w-[24px] h-[24px]">
+                    <span className="text-xl font-bold cursor-pointer font-[Urbanist]">
+                        G
+                    </span>
+                </div>
             </div>
-            <span>{renderTutorAnswer()}</span>
+            <span>{processMessage(renderTutorAnswer())}</span>
         </div>
     );
 };
 
 const ChatRoom = ({ uniqueId, onClick }: ChatRoomProps): JSX.Element => {
-    const { data } = useGetChatRoomQuery();
+    const { video } = useLearning();
+    const { data } = useGetChatRoomQuery(video.id, {
+        skip: video.id === undefined || video.id === null
+    });
     const [askTutor] = useAskTutorMutation();
 
     return (
-        <div className="w-[30vw] h-[70vh] bg-white rounded-t-lg z-[100000] text-black">
+        <div className="w-screen md:w-[400px] h-[70vh] bg-white rounded-t-lg z-[100000] text-black">
             <div
                 className="flex h-16 justify-between items-center p-4 border-b border-neutral-200 cursor-pointer"
                 aria-hidden
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 onClick={onClick}>
-                <h3 className="text-2xl font-bold">
-                    Gradient AI Tutor (alpha)
-                </h3>
+                <h3 className="text-2xl font-bold">Tutor Gradient</h3>
                 <MdClose
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
@@ -142,18 +163,22 @@ const ChatRoom = ({ uniqueId, onClick }: ChatRoomProps): JSX.Element => {
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 placeholder={
-                                    'Jelaskan ulang yang dijelaskan pada menit ke 2'
+                                    'ex: Tolong jelaskan ulang yang dijelaskan pada menit ke 2, saya kurang paham'
                                 }
                                 className="bg-transparent transition-all resize-none h-full w-full border-transparent focus:border-transparent focus:ring-0 focus:ring-transparent"
                             />
                         </div>
                         <div className="w-full p-4 flex justify-end items-center bg-neutral-200">
-                            <Button
-                                variant="primary"
-                                type="submit"
-                                disabled={isSubmitting}>
-                                {isSubmitting ? 'Mencari jawaban...' : 'Tanya'}
-                            </Button>
+                            {isSubmitting ? (
+                                <Spinner size="medium" />
+                            ) : (
+                                <Button
+                                    variant="primary"
+                                    type="submit"
+                                    disabled={isSubmitting}>
+                                    Tanya
+                                </Button>
+                            )}
                         </div>
                     </form>
                 )}
