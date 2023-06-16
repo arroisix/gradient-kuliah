@@ -6,6 +6,7 @@ interface SelectProps {
     value?: string;
     name: string;
     required?: boolean;
+    error?: string;
 }
 
 const Select: React.FC<SelectProps> = ({
@@ -15,13 +16,16 @@ const Select: React.FC<SelectProps> = ({
     onBlur,
     value,
     name,
-    required
+    required,
+    error
 }) => {
     return (
         <div className="flex flex-col w-full gap-1 font-body">
             {label && <span className="text-[#999999] text-sm">{label}</span>}
             <select
-                className="rounded-lg border bg-[#121212] border-[#242424] h-[48px]"
+                className={`rounded-lg h-[48px] border bg-[#121212] ${
+                    error ? 'border-red-500' : 'border-[#242424]'
+                }`}
                 onChange={onChange}
                 onBlur={onBlur}
                 value={value}
@@ -33,6 +37,9 @@ const Select: React.FC<SelectProps> = ({
                     </option>
                 ))}
             </select>
+            {error && (
+                <span className="mt-2 text-sm text-red-500">{error}</span>
+            )}
         </div>
     );
 };
