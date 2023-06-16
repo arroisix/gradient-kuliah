@@ -77,6 +77,12 @@ export const EducationStep = (): JSX.Element => {
                                 value={values.education_level}
                                 name="educationLevel"
                                 option={EDUCATION_OPTIONS}
+                                error={
+                                    touched.education_level &&
+                                    errors.education_level
+                                        ? errors.education_level
+                                        : undefined
+                                }
                             />
                             <Input
                                 type="text"
@@ -122,6 +128,11 @@ export const EducationStep = (): JSX.Element => {
                                 value={values.profession}
                                 name="profession"
                                 option={PROFESSION_OPTIONS}
+                                error={
+                                    touched.profession && errors.profession
+                                        ? errors.profession
+                                        : undefined
+                                }
                             />
                             {values.profession === 'employed' && (
                                 <Input
