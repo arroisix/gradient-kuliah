@@ -6,12 +6,13 @@ import {
 } from 'courses/redux/api/aiTutorApi';
 
 import { Formik } from 'formik';
-import { MouseEventHandler } from 'react';
+import { MouseEventHandler, useEffect, useRef } from 'react';
 import { useLearning } from 'courses/contexts/LearningProvider';
 import Spinner from 'commons/components/elements/Spinner';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import Image from 'next/image';
 import Avatar from 'react-avatar';
+import TextContent from './TextContent';
 
 interface ChatRoomProps {
     uniqueId: string;
@@ -22,7 +23,7 @@ interface BubbleProps {
     message: AiTutorMessage;
 }
 
-const processMessage = (message: string): JSX.Element[] => {
+export const processMessage = (message: string): JSX.Element[] => {
     const messagesClean = message.split('\n');
 
     return messagesClean.map((m: string) => <p key={m}>{m}</p>);
@@ -40,13 +41,13 @@ const StudentQuestionBubble = ({ message }: BubbleProps): JSX.Element => {
                     <Image
                         src={profile.photo_profile}
                         layout="fill"
-                        className="rounded-full"
+                        className="rounded-full w-[24px] h-[24px]"
                     />
                 </div>
             ) : (
                 <Avatar name={profile.full_name} size="24" round />
             )}
-            <span>{processMessage(message.message.message)}</span>
+            <TextContent content={message.message.message} />
         </div>
     );
 };
@@ -73,7 +74,7 @@ const TutorAnswerBubble = ({ message }: BubbleProps): JSX.Element => {
                     </span>
                 </div>
             </div>
-            <span>{processMessage(renderTutorAnswer())}</span>
+            <TextContent content={renderTutorAnswer()} />
         </div>
     );
 };
@@ -84,6 +85,15 @@ const ChatRoom = ({ uniqueId, onClick }: ChatRoomProps): JSX.Element => {
         skip: video.id === undefined || video.id === null
     });
     const [askTutor] = useAskTutorMutation();
+    const room = useRef({} as HTMLDivElement);
+
+    useEffect(() => {
+        if (data && data?.messages?.length > 0) {
+            room.current.scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+    }, [data]);
 
     return (
         <div className="w-screen md:w-[400px] h-[70vh] bg-white rounded-t-lg z-[100000] text-black">
@@ -119,6 +129,7 @@ const ChatRoom = ({ uniqueId, onClick }: ChatRoomProps): JSX.Element => {
                         />
                     );
                 })}
+                <div id="dummy-box" ref={room} />
             </div>
             <Formik
                 initialValues={{
@@ -144,6 +155,9 @@ const ChatRoom = ({ uniqueId, onClick }: ChatRoomProps): JSX.Element => {
                             ai_unique_id: uniqueId
                         }
                     });
+                    room.current.scrollIntoView({
+                        behavior: 'smooth'
+                    });
                 }}>
                 {({
                     handleChange,
@@ -158,6 +172,7 @@ const ChatRoom = ({ uniqueId, onClick }: ChatRoomProps): JSX.Element => {
                         onSubmit={handleSubmit}>
                         <div className="border-y h-full border-neutral-200">
                             <textarea
+                                disabled={isSubmitting}
                                 name="query"
                                 value={values.query}
                                 onChange={handleChange}
@@ -170,7 +185,7 @@ const ChatRoom = ({ uniqueId, onClick }: ChatRoomProps): JSX.Element => {
                         </div>
                         <div className="w-full p-4 flex justify-end items-center bg-neutral-200">
                             {isSubmitting ? (
-                                <Spinner size="medium" />
+                                <Spinner size="small" />
                             ) : (
                                 <Button
                                     variant="primary"
