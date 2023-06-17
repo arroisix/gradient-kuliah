@@ -107,7 +107,9 @@ const ChatRoom = ({ uniqueId, onClick }: ChatRoomProps): JSX.Element => {
                 onClick={onClick}>
                 <div className="flex items-center gap-2 w-full">
                     <CopilotFill />
-                    <h3 className="text-2xl font-bold">Gradient Copilot</h3>
+                    <h3 className="text-base sm:text-xl md:text-2xl font-bold">
+                        Gradient Copilot
+                    </h3>
                     <span className="italic text-center text-accent-purple">
                         Beta
                     </span>
