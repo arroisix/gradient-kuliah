@@ -13,6 +13,7 @@ import { useAuth } from 'authentication/contexts/AuthProvider';
 import Image from 'next/image';
 import Avatar from 'react-avatar';
 import TextContent from './TextContent';
+import Skeleton from 'commons/components/elements/Skeleton';
 
 interface ChatRoomProps {
     uniqueId: string;
@@ -81,7 +82,7 @@ const TutorAnswerBubble = ({ message }: BubbleProps): JSX.Element => {
 
 const ChatRoom = ({ uniqueId, onClick }: ChatRoomProps): JSX.Element => {
     const { video } = useLearning();
-    const { data } = useGetChatRoomQuery(video.id, {
+    const { data, isLoading } = useGetChatRoomQuery(video.id, {
         skip: video.id === undefined || video.id === null
     });
     const [askTutor] = useAskTutorMutation();
@@ -112,6 +113,22 @@ const ChatRoom = ({ uniqueId, onClick }: ChatRoomProps): JSX.Element => {
                 />
             </div>
             <div className="h-[calc(50vh-4rem)] w-full overflow-y-auto">
+                {isLoading && (
+                    <div className="flex flex-col gap-2 p-4">
+                        <div className="w-full flex gap-2">
+                            <Skeleton className="w-[24px] h-[24px] !rounded-full !bg-neutral-300" />
+                            <Skeleton className="w-full h-40 !bg-neutral-300" />
+                        </div>
+                        <div className="w-full flex gap-2">
+                            <Skeleton className="w-[24px] h-[24px] !rounded-full !bg-neutral-300" />
+                            <Skeleton className="w-full h-40 !bg-neutral-300" />
+                        </div>
+                        <div className="w-full flex gap-2">
+                            <Skeleton className="w-[24px] h-[24px] !rounded-full !bg-neutral-300" />
+                            <Skeleton className="w-full h-40 !bg-neutral-300" />
+                        </div>
+                    </div>
+                )}
                 {data?.messages.map((message: AiTutorMessage) => {
                     if (message.agent) {
                         return (
