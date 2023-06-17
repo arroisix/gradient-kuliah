@@ -14,6 +14,7 @@ import Image from 'next/image';
 import Avatar from 'react-avatar';
 import TextContent from './TextContent';
 import Skeleton from 'commons/components/elements/Skeleton';
+import CopilotFill from 'commons/components/elements/Icons/CopilotFill';
 
 interface ChatRoomProps {
     uniqueId: string;
@@ -104,7 +105,13 @@ const ChatRoom = ({ uniqueId, onClick }: ChatRoomProps): JSX.Element => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 onClick={onClick}>
-                <h3 className="text-2xl font-bold">Tutor Gradient</h3>
+                <div className="flex items-center gap-2 w-full">
+                    <CopilotFill />
+                    <h3 className="text-2xl font-bold">Gradient Copilot</h3>
+                    <span className="italic text-center text-accent-purple">
+                        Beta
+                    </span>
+                </div>
                 <MdClose
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
