@@ -1,5 +1,5 @@
+import Copilot from 'commons/components/elements/Icons/Copilot';
 import { MouseEventHandler } from 'react';
-import { MdHelp } from 'react-icons/md';
 
 interface TutorButtonProps {
     onClick: MouseEventHandler<HTMLButtonElement>;
@@ -9,11 +9,11 @@ const TutorButton = ({ onClick }: TutorButtonProps): JSX.Element => {
     return (
         <button
             onClick={onClick}
-            className="flex justify-between items-center w-screen md:w-[400px] p-4 rounded-t-lg bg-accent-purple shadow-md cursor-pointer cursor-pointer">
+            className="flex justify-between items-center w-screen md:w-[400px] py-4 px-3 rounded-t-lg bg-accent-purple shadow-md cursor-pointer cursor-pointer">
             <h3 className="text-base sm:text-xl md:text-2xl font-bold">
-                Bingung? Coba tanya tutor
+                Bingung? tanya Copilot
             </h3>
-            <MdHelp className="text-3xl animate-pulse" />
+            <Copilot />
         </button>
     );
 };
