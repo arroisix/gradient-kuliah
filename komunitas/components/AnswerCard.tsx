@@ -6,6 +6,7 @@ import Avatar from 'react-avatar';
 import { BsHexagonFill, BsCheck } from 'react-icons/bs';
 import { FaCircle, FaRegComment } from 'react-icons/fa';
 import ReplyComment from './ReplyComment';
+import KomunitasInput from './KomunitasInput';
 
 const DUMMY_COMMENT = [
     {
@@ -116,13 +117,12 @@ const AnswerCard = ({
                             />
                         )}
                     </div>
-                    <input
+                    <KomunitasInput
                         type="text"
                         name="comment"
                         value={comment}
                         onChange={handleChangeComment}
                         placeholder="Tambahkan komentar"
-                        className="w-full text-xs bg-[#1D1D1D] rounded-[70px] border-none placeholder:text-neutral-600 focus:outline-none focus:ring-0 focus:appearance-none"
                     />
                 </div>
                 {showComment && (
