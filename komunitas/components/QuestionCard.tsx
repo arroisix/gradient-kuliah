@@ -8,7 +8,7 @@ const QuestionCard = (): JSX.Element => {
     const { data } = useGetProfileQuery({});
 
     return (
-        <div className="w-full border-[1px] border-neutral-800 rounded-xl p-5">
+        <div className="w-full border-[1px] border-neutral-800 rounded-xl p-[18px] md:p-5">
             <div className="relative flex items-center gap-3">
                 <div className="relative w-[24px] h-[24px]">
                     {data?.photo_profile ? (
@@ -19,7 +19,12 @@ const QuestionCard = (): JSX.Element => {
                             className="rounded-full object-contain"
                         />
                     ) : (
-                        <Avatar name={data?.full_name} size="24" round />
+                        <Avatar
+                            name={data?.full_name}
+                            size="24"
+                            round
+                            className="!block"
+                        />
                     )}
                 </div>
                 <div className="flex flex-col md:flex-row md:gap-[6px] md:items-center">
@@ -35,9 +40,9 @@ const QuestionCard = (): JSX.Element => {
                     </span>
                 </div>
             </div>
-            <div className="text-xs pt-[12px] pb-[18px] lg:pl-[56px]">
-                pertanayan
-            </div>
+            <article className="pt-[12px] pb-[18px] lg:pl-[56px]">
+                <p className="text-xs font-body">pertanayan</p>
+            </article>
             <div className="flex justify-between">
                 <div className="flex gap-6 items-center">
                     <div className="flex items-center gap-2">
