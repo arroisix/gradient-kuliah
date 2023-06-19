@@ -7,7 +7,8 @@ module.exports = {
         './commons/**/*.{ts,js,jsx,tsx}',
         './pages/**/*.{ts,js,jsx,tsx}',
         './payment/**/*.{ts,js,jsx,tsx}',
-        './profile/**/*.{ts,js,jsx,tsx}'
+        './profile/**/*.{ts,js,jsx,tsx}',
+        './komunitas/**/*.{ts,js,jsx,tsx}'
     ],
     theme: {
         fontFamily: {
