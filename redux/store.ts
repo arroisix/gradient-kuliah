@@ -123,6 +123,11 @@ export const rtkQueryErrorLogger: Middleware = () => (next) => (action) => {
                     }
                 );
             }
+
+            if (status === 401) {
+                window.localStorage.clear();
+                window.location.href = '/';
+            }
         } catch (e) {
             toast.error(
                 'Terjadi kesalahan pada server, mohon coba beberapa saat lagi',
