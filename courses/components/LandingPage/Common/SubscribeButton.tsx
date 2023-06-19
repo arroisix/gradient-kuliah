@@ -35,7 +35,7 @@ const SubscribeButton = ({
                     target={packetId ? '__blank' : undefined}
                     href={
                         packetId
-                            ? `https://wa.me/message/R7WKMDMQUUIXH1?text=${encodeURIComponent(
+                            ? `https://api.whatsapp.com/send?phone=085173430127&text=${encodeURIComponent(
                                   `Halo,saya tertarik berlangganan ${
                                       packet?.packet_name
                                   }#${currentDate.getDate()}${
