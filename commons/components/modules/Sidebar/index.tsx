@@ -3,11 +3,11 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { BiBookReader } from 'react-icons/bi';
 import { FiHome } from 'react-icons/fi';
-// import {
-//     RiQuestionnaireLine,
-//     RiNotification3Line,
-//     RiBookOpenLine
-// } from 'react-icons/ri';
+import {
+    RiQuestionnaireLine
+    // RiNotification3Line,
+    // RiBookOpenLine
+} from 'react-icons/ri';
 
 const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
     const route = useRouter();
@@ -41,7 +41,7 @@ const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
                         Home
                     </span>
                 </Link>
-                {/* <Link href={'/komunitas'}>
+                <Link href={'/komunitas'}>
                     <span
                         className={`flex gap-4 cursor-pointer ${
                             pathname === '/komunitas'
@@ -51,7 +51,7 @@ const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
                         <RiQuestionnaireLine size={20} />
                         Komunitas
                     </span>
-                </Link> */}
+                </Link>
                 <Link href={'/kelas'}>
                     <span
                         className={`flex gap-4 cursor-pointer ${
