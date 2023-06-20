@@ -1,26 +1,33 @@
 import Image from 'next/image';
 import Avatar from 'react-avatar';
 
-type DUMMY = {
-    photo_profile: string;
-    full_name: string;
-    text: string;
+type User = {
+    id: string;
+    photo_url: string;
+    username: string;
+    is_expert: boolean;
 };
 
-const ReplyComment = ({ data }: { data: DUMMY }): JSX.Element => {
+const ReplyComment = ({
+    content,
+    user
+}: {
+    content: string;
+    user: User;
+}): JSX.Element => {
     return (
         <div className="flex gap-3 items-center">
             <div className="relative w-[20px] h-[20px]">
-                {data?.photo_profile ? (
+                {user?.photo_url ? (
                     <Image
-                        src={data?.photo_profile}
-                        alt={data?.full_name}
+                        src={user?.photo_url}
+                        alt={user?.username}
                         layout="fill"
                         className="rounded-full object-contain"
                     />
                 ) : (
                     <Avatar
-                        name={data?.full_name}
+                        name={user?.username}
                         size="20"
                         round
                         className="!block"
@@ -28,7 +35,7 @@ const ReplyComment = ({ data }: { data: DUMMY }): JSX.Element => {
                 )}
             </div>
             <article className="w-full">
-                <p className="text-xs font-body">{data.text}</p>
+                <p className="text-xs font-body">{content}</p>
             </article>
         </div>
     );
