@@ -63,8 +63,8 @@ const KomunitasContainer = (): JSX.Element => {
     }
 
     return (
-        <section className="flex flex-col md:flex-row gap-[2rem]">
-            <div className="w-full md:w-9/12 flex flex-col gap-6">
+        <section className="flex flex-col lg:flex-row gap-[2rem]">
+            <div className="w-full lg:w-8/12 flex flex-col gap-6">
                 <KomunitasInput
                     type="text"
                     name="search"
@@ -97,7 +97,7 @@ const KomunitasContainer = (): JSX.Element => {
                     ))}
                 </div>
             </div>
-            <div className="hidden md:block w-full md:w-3/12">Pertanyaanku</div>
+            <div className="hidden md:block w-full lg:w-4/12">Pertanyaanku</div>
         </section>
     );
 };
