@@ -1,84 +1,70 @@
 import Button from 'commons/components/elements/Button';
-import { AUTHENTICATION_ROUTE } from 'commons/constants';
 import Container from 'landing/components/Container';
 import Image from 'next/image';
 import Link from 'next/link';
 
 const Hero = (): JSX.Element => {
     return (
-        <Container className="flex-col gap-16 md:flex-row-reverse md:gap-2 md:items-center">
-            <div className="w-full mt-32 md:mt-0">
-                <div className="h-[300px] md:h-[380px] w-full relative">
-                    <div
-                        className="absolute rounded-full w-[51px] h-[51px] lg:w-[130px] lg:h-[130px] -bottom-4 -left-4 lg:-left-16 z-0"
-                        style={{
-                            background:
-                                'linear-gradient(330.33deg, #5F2BCE 4.61%, #030C14 84.77%)',
-                            transform: 'rotate(-180deg)'
-                        }}
+        <Container className="relative flex flex-col gap-12 bg-gradient-purple pt-28 pb-16 md:pb-28 overflow-hidden">
+            <div className="absolute w-screen h-[30%] bottom-0 left-[50%] translate-x-[-50%] bg-gradient-to-b from-transparent to-black z-[19]"></div>
+            <div className="w-full mx-auto flex flex-col">
+                <h1 className="text-2xl font-extrabold text-center whitespace-pre-line sm:text-4xl lg:text-5xl z-[1]">
+                    {'Platform Belajar Kuliah \n No. 1 di Indonesia'}
+                </h1>
+                <Link href={'#pricing'}>
+                    <Button
+                        variant="primary"
+                        className="w-fit mx-auto z-10 mt-[14px] lg:mt-6 sm:px-[47px] sm:py-2 font-sans text-xs sm:text-sm lg:text-base">
+                        Gabung Kelas
+                    </Button>
+                </Link>
+            </div>
+            <div className="w-full max-w-[1440px] mx-auto">
+                <VideoPlayerImage />
+            </div>
+            <EllipseGroup />
+        </Container>
+    );
+};
+
+const EllipseGroup = (): JSX.Element => {
+    return (
+        <div className="w-[600px] h-[600px] sm:w-[1100px] sm:h-[1100px] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] mt-28">
+            <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-full h-full border-[1px] border-white/20 rounded-full"></div>
+            <div className="absolute top-[50%] left-[50%]  translate-x-[-50%] translate-y-[-50%] w-[80%] h-[80%] border-[1px] border-white/20 rounded-full"></div>
+            <div className="absolute top-[50%] left-[50%]  translate-x-[-50%] translate-y-[-50%] w-[60%] h-[60%] border-[1px] border-white/20 rounded-full"></div>
+            <div className="absolute top-[50%] left-[50%]  translate-x-[-50%] translate-y-[-50%] w-[40%] h-[40%] border-[1px] border-white/20 rounded-full"></div>
+            <div className="absolute top-[50%] left-[50%]  translate-x-[-50%] translate-y-[-50%] w-[20%] h-[20%] border-[1px] border-white/20 rounded-full"></div>
+        </div>
+    );
+};
+
+const VideoPlayerImage = (): JSX.Element => {
+    return (
+        <div className="relative w-full md:w-[70%] mx-auto bg-[#121212] z-10 rounded-3xl overflow-hidden">
+            <div className="flex w-full gap-2 p-4">
+                <div className="w-3 h-3 rounded-full bg-accent-purple" />
+                <div className="w-3 h-3 rounded-full bg-accent-purple" />
+                <div className="w-3 h-3 rounded-full bg-accent-purple" />
+            </div>
+            <div className="w-full h-full overflow-hidden">
+                <div className="w-full h-full">
+                    <Image
+                        src="https://assets.gradient.academy/assets/thumb-1.jpg"
+                        loading="lazy"
+                        className="object-cover"
+                        layout="responsive"
+                        height={350}
+                        width={600}
                     />
-                    <div
-                        className="absolute rounded-full w-[84px] h-[84px] lg:w-[216px] lg:h-[216px] top-2 lg:top-12 -right-4 lg:-right-16 z-0"
-                        style={{
-                            background:
-                                'linear-gradient(330.33deg, #5F2BCE 4.61%, #030C14 84.77%)',
-                            transform: 'rotate(-180deg)'
-                        }}
-                    />
-                    <div className="absolute top-0 left-0 w-full h-full bg-[#121212] z-10 rounded-3xl overflow-hidden">
-                        <div className="flex w-full gap-2 p-4">
-                            <div className="w-3 h-3 rounded-full bg-accent-purple" />
-                            <div className="w-3 h-3 rounded-full bg-accent-purple" />
-                            <div className="w-3 h-3 rounded-full bg-accent-purple" />
-                        </div>
-                        <div className="w-full h-full overflow-hidden">
-                            <div className="w-full h-full">
-                                <Image
-                                    src="https://assets.gradient.academy/assets/thumb-1.jpg"
-                                    loading="lazy"
-                                    className="object-cover"
-                                    layout="responsive"
-                                    height={450}
-                                    width={600}
-                                />
-                            </div>
-                            <div className="absolute left-0 w-full h-5 p-4 bottom-3">
-                                <div className="w-full h-1 bg-[#373737] rounded-2xl relative">
-                                    <div className="rounded-full h-2 w-2 bg-accent-purple absolute bottom-[-2px] left-48" />
-                                </div>
-                            </div>
-                        </div>
+                </div>
+                <div className="absolute left-0 w-full h-5 p-4 bottom-3">
+                    <div className="w-full h-1 md:h-2 bg-[#373737] rounded-2xl relative">
+                        <div className="rounded-full h-2 w-2 md:h-4 md:w-4 bg-accent-purple absolute bottom-[-2px] md:bottom-[-4px] left-48" />
                     </div>
                 </div>
             </div>
-            <div className="w-full">
-                <h1 className="text-2xl font-bold text-center lg:text-5xl lg:text-left">
-                    Platform Belajar Kuliah No. 1 di Indonesia
-                </h1>
-                <h4 className="text-base md:text-2xl font-body font-[100] text-center lg:text-left text-neutral-200">
-                    <span className="hidden md:block">
-                        Pengalaman belajar yang berbeda.
-                    </span>
-                    <span className="block md:hidden">
-                        Akses materi belajar yang lengkap dan video belajar yang
-                        gak ngebosenin{' '}
-                    </span>
-                </h4>
-                <div className="flex flex-col gap-2 mt-8 md:flex-row md:mt-0">
-                    <Link href={AUTHENTICATION_ROUTE}>
-                        <Button variant="primary" className="z-10 md:my-4">
-                            Gabung Sekarang
-                        </Button>
-                    </Link>
-                    <Button
-                        variant="primary"
-                        className="bg-[#212121] md:my-4 z-10 text-center"
-                        href="https://discord.gg/qU3SB6wxzY">
-                        Gabung Komunitas
-                    </Button>
-                </div>
-            </div>
-        </Container>
+        </div>
     );
 };
 
