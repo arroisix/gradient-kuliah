@@ -43,9 +43,15 @@ module.exports = {
                 primary: {
                     blue: '#0266D3'
                 }
+            },
+            backgroundImage: {
+                'gradient-purple':
+                    'radial-gradient(60% 60% at 50% 50%, rgba(100, 75, 169, 0.53) 0%, #030317 100%)'
             }
         }
     },
     variants: {},
     plugins: [require('@tailwindcss/forms'), require('daisyui')]
 };
+
+// background: radial-gradient(50% 50% at 50% 50%, rgba(100, 75, 169, 0.53) 0%, #030317 100%)
