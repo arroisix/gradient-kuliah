@@ -185,3 +185,7 @@ export const dayToMonth = (day: number): string => {
 
     return `${day} Hari`;
 };
+
+export const addZeroBefore = (data: number): string => {
+    return `${data < 10 ? '0' : ''}${data}`;
+};
