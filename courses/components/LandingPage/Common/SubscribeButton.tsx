@@ -38,7 +38,7 @@ const SubscribeButton = ({
                             ? `https://api.whatsapp.com/send?phone=085173430127&text=${encodeURIComponent(
                                   `Halo,saya tertarik berlangganan ${
                                       packet?.packet_name
-                                  }#${currentDate.getDate()}${
+                                  } #${currentDate.getDate()}${
                                       currentDate.getMonth() + 1
                                   }${currentDate.getFullYear()}`
                               )}`
