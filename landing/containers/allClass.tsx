@@ -58,15 +58,15 @@ const AllClass = (): JSX.Element => {
                 <h2 className="font-extrabold text-xl md:text-4xl">
                     Belajar dari pengajar terbaik bangsa.
                 </h2>
-                <span className="pt-[10px] md:pt-[18px] text-[#999999] md:text-2xl">
+                <span className="inline-block pt-[10px] md:pt-[18px] text-[#999999] md:text-2xl">
                     Pilih mata kuliah yang kamu minati.
                 </span>
             </div>
             <div className="relative group">
                 <div
                     ref={ref}
-                    className="w-full overflow-x-scroll snap-x body scroll-smooth">
-                    <div className="w-max flex gap-[18px] md:gap-7">
+                    className="w-full overflow-x-scroll snap-x body scroll-smooth px-[18px]">
+                    <div className="w-max mx-auto flex gap-[18px] md:gap-7">
                         {LIST_CLASS.map(
                             ({ cover, title, description }, index) => (
                                 <ClassCard
