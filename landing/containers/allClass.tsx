@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { useRef } from 'react';
-import { MdKeyboardArrowRight } from 'react-icons/md';
+import { FaChevronRight } from 'react-icons/fa';
 
 const LIST_CLASS = [
     {
@@ -81,14 +81,11 @@ const AllClass = (): JSX.Element => {
                 </div>
                 <div className="absolute top-0 h-full justify-between w-full hidden group-hover:flex px-5">
                     <button className="h-full z-[1]" onClick={scrollLeft}>
-                        <MdKeyboardArrowRight
-                            size={40}
-                            className="rotate-180"
-                        />
+                        <FaChevronRight size={26} className="rotate-180" />
                     </button>
                     <div className="w-[50px] h-full absolute left-0 bg-gradient-to-r from-black to-transparent"></div>
                     <button className="h-full z-[1]" onClick={scrollRight}>
-                        <MdKeyboardArrowRight size={40} />
+                        <FaChevronRight size={26} />
                     </button>
                     <div className="w-[50px] h-full absolute right-0 bg-gradient-to-l from-black to-transparent"></div>
                 </div>
@@ -122,10 +119,7 @@ const ClassCard = ({
                     <span className="font-extrabold text-xs md:text-lg">
                         {title}
                     </span>
-                    <MdKeyboardArrowRight
-                        size={15}
-                        className="text-[#FFFFFF33]"
-                    />
+                    <FaChevronRight size={10} className="text-[#FFFFFF33]" />
                 </div>
                 <span className="font-medium text-[#FFFFFF80] text-[10px] md:text-base">
                     {description}
