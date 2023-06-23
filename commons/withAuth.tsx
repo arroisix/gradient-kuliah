@@ -6,6 +6,7 @@ import {
 import { useSelector } from 'react-redux';
 import LoadingBackdrop from './components/elements/LoadingBackdrop';
 import { useRouter } from 'next/router';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 const withAuth = (WrappedComponent: React.ComponentType) => {
     return (props: JSX.IntrinsicAttributes & { children?: JSX.Element }) => {
@@ -15,6 +16,7 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
             const accessToken = useSelector(getToken);
             const rawToken = window.localStorage.getItem('token');
 
+            const { is_subscribed } = useCourseSubscription();
             const isProfileComplete = useSelector(getIsProfileComplete);
             const isLastOnboardingStep = localStorage.getItem(
                 'isLastOnboardingStep'
@@ -24,9 +26,24 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
             if (
                 pathname === '/onboarding' &&
                 isProfileComplete &&
-                !(isLastOnboardingStep === 'true')
+                !(isLastOnboardingStep === 'true') &&
+                is_subscribed
             ) {
                 window.location.href = '/dashboard';
+                return;
+            }
+
+            if (
+                pathname === '/onboarding' &&
+                isProfileComplete &&
+                !(isLastOnboardingStep === 'true') &&
+                !is_subscribed
+            ) {
+                return <WrappedComponent {...props} />;
+            }
+
+            if (pathname !== '/onboarding' && !is_subscribed) {
+                window.location.href = '/';
                 return;
             }
 

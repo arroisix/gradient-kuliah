@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 import LoadingBackdrop from './components/elements/LoadingBackdrop';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 const withAnon = (WrappedComponent: React.ComponentType) => {
     return (props: JSX.IntrinsicAttributes & { children?: ReactNode }) => {
@@ -15,7 +16,7 @@ const withAnon = (WrappedComponent: React.ComponentType) => {
         if (typeof window !== 'undefined') {
             const accessToken = useSelector(getToken);
             const isProfileComplete = useSelector(getIsProfileComplete);
-
+            const { is_subscribed } = useCourseSubscription();
             const router = useRouter();
 
             if (!!accessToken) {
@@ -31,10 +32,18 @@ const withAnon = (WrappedComponent: React.ComponentType) => {
                     } else if (!!router.query.redirect) {
                         router.replace(`${router.query.redirect}`);
                     } else {
-                        router.replace('/dashboard');
+                        if (is_subscribed) {
+                            router.replace('/dashboard');
+                        } else {
+                            router.replace('/onboarding');
+                        }
                     }
                 } else if (router.pathname === '/') {
-                    router.replace('/dashboard');
+                    if (is_subscribed) {
+                        router.replace('/dashboard');
+                    } else {
+                        return <WrappedComponent {...(props as P)} />;
+                    }
                 }
 
                 return <LoadingBackdrop />;
