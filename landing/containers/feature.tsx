@@ -151,7 +151,7 @@ const Card = ({
             <div className="w-full md:w-1/2">
                 <div
                     className={`lg:w-[400px] mx-auto text-center md:text-left ${
-                        isEven ? 'md:mr-[81px]' : 'md:ml-[81px]'
+                        isEven ? 'md:pr-[81px]' : 'md:pl-[81px]'
                     }`}>
                     <div className="flex justify-center md:justify-start items-center gap-[6px] md:gap-[18px]">
                         <div className="bg-[#323232] w-[24px] h-[24px] md:w-[44px] md:h-[44px] rounded-full flex justify-center items-center">
