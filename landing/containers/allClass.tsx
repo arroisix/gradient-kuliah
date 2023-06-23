@@ -4,8 +4,8 @@ import { FaChevronRight } from 'react-icons/fa';
 
 const LIST_CLASS = [
     {
-        cover: 'https://d2uqn6ndx4ow3t.cloudfront.net/lecturers/theo-profile.jpg',
-        title: 'Kalkulus 1',
+        cover: 'https://assets.gradient.academy/assets/lp-probstat.jpg',
+        title: 'Probabilitas & Statistika',
         description: 'Kuantifikasi perubahan'
     },
     {
@@ -14,23 +14,8 @@ const LIST_CLASS = [
         description: 'Kuantifikasi perubahan'
     },
     {
-        cover: 'https://d2uqn6ndx4ow3t.cloudfront.net/lecturers/theo-profile.jpg',
-        title: 'Kalkulus 1',
-        description: 'Kuantifikasi perubahan'
-    },
-    {
-        cover: 'https://d2uqn6ndx4ow3t.cloudfront.net/lecturers/theo-profile.jpg',
-        title: 'Kalkulus 1',
-        description: 'Kuantifikasi perubahan'
-    },
-    {
-        cover: 'https://d2uqn6ndx4ow3t.cloudfront.net/lecturers/theo-profile.jpg',
-        title: 'Kalkulus 1',
-        description: 'Kuantifikasi perubahan'
-    },
-    {
-        cover: 'https://d2uqn6ndx4ow3t.cloudfront.net/lecturers/theo-profile.jpg',
-        title: 'Kalkulus 1',
+        cover: 'https://assets.gradient.academy/assets/lp-ptsl.png',
+        title: 'Pengantar Teknik Sipil & Lingkungan',
         description: 'Kuantifikasi perubahan'
     }
 ];
@@ -104,8 +89,8 @@ const ClassCard = ({
     description: string;
 }): JSX.Element => {
     return (
-        <div className="w-fit snap-center bg-[#5F2BCE33] rounded-3xl overflow-hidden">
-            <div className="relative w-[208px] h-[142px] md:h-[225px] md:w-[330px] ">
+        <div className="relative w-fit snap-center bg-[#5F2BCE33] rounded-3xl overflow-hidden">
+            <div className="relative w-[208px] h-[142px] md:h-[225px] md:w-[330px]">
                 <Image
                     src={cover}
                     loading="lazy"
@@ -114,14 +99,14 @@ const ClassCard = ({
                     className="object-cover object-top"
                 />
             </div>
-            <div className="px-[18px] py-2 md:py-[14px]">
+            <div className="w-[200px] md:w-[330px] px-[18px] py-2 md:py-[14px]">
                 <div className="flex items-center gap-1">
-                    <span className="font-extrabold text-xs md:text-lg">
+                    <span className="inline-block font-extrabold text-xs md:text-lg">
                         {title}
                     </span>
                     <FaChevronRight size={10} className="text-[#FFFFFF33]" />
                 </div>
-                <span className="font-medium text-[#FFFFFF80] text-[10px] md:text-base">
+                <span className="inline-block font-medium text-[#FFFFFF80] text-[10px] md:text-base">
                     {description}
                 </span>
             </div>
