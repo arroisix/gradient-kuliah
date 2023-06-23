@@ -27,6 +27,11 @@ type ActivePacket = {
     features: string[];
 };
 
+type PacketFeature = {
+    title: string;
+    description: string;
+};
+
 type PacketOffer = {
     id: string;
     is_free: boolean;
@@ -40,6 +45,7 @@ type PacketOffer = {
     benefits: {
         data: string[];
         info: string;
+        feature: PacketFeature[];
     };
 };
 
