@@ -1,36 +1,65 @@
 import Button from 'commons/components/elements/Button';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
+import { addZeroBefore } from 'courses/utils';
+import Image from 'next/image';
 
 type HandleIsLastOnboardingStep = () => void;
 
 export const OnboardingSuccess = (): JSX.Element => {
-    const router = useRouter();
+    const currentDate = new Date();
+    const { isMobileBreakpoints } = useWindowBreakpoints();
     const handleIsLastOnboardingStep: HandleIsLastOnboardingStep = () => {
         localStorage.removeItem('isLastOnboardingStep');
+        window.open(
+            `https://api.whatsapp.com/send?phone=6285173430127&text=${encodeURIComponent(
+                `Halo, Saya tertarik untuk berlangganan\n\n[ID:${currentDate.getDate()}${addZeroBefore(
+                    currentDate.getMonth() + 1
+                )}${currentDate.getFullYear()}]`
+            )}`
+        );
     };
 
     return (
-        <div className="flex flex-col items-center justify-center gap-5">
-            <h1 className="font-sans text-4xl font-extrabold text-center">
-                Selamat Datang di{' '}
-                <span className=" font-[Urbanist]">Gradient</span>
-            </h1>
-
-            <Link
-                href={
-                    !!router.query.redirect
-                        ? `${router.query.redirect}`
-                        : '/kelas'
-                }>
+        <section className="relative w-full h-screen bg-gradient-purple overflow-hidden">
+            <div className="w-full h-full relative flex flex-col items-center justify-center gap-2 md:gap-3 px-[18px] text-center z-[1]">
+                <h1 className="font-sans text-3xl md:text-4xl font-extrabold">
+                    Selamat Datang di{' '}
+                    <span className=" font-[Urbanist]">Gradient</span>
+                </h1>
+                <span className="inline-block font-body ">
+                    Mulai dengan memilih paket yang cocok untukmu
+                </span>
                 <Button
                     onClick={handleIsLastOnboardingStep}
                     variant="primary"
                     size="small"
-                    className="md:w-1/2">
-                    Mulai Sekarang
+                    className="px-[76px] py-3 mt-[14px] md:mt-3 font-extrabold text-base">
+                    Beli Paket
                 </Button>
-            </Link>
+            </div>
+            <EllipseGroup />
+            <Image
+                src={
+                    isMobileBreakpoints
+                        ? 'https://assets.gradient.academy/assets/welcome-dots-mobile.png'
+                        : 'https://assets.gradient.academy/assets/welcome-dots.png'
+                }
+                loading="lazy"
+                sizes="none"
+                layout="fill"
+                className="object-cover"
+            />
+        </section>
+    );
+};
+
+const EllipseGroup = (): JSX.Element => {
+    return (
+        <div className="w-[900px] h-[900px] md:w-[1400px] md:h-[1400px] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+            <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-full h-full border-[1px] border-white/5 rounded-full"></div>
+            <div className="absolute top-[50%] left-[50%]  translate-x-[-50%] translate-y-[-50%] w-[80%] h-[80%] border-[1px] border-white/5 rounded-full"></div>
+            <div className="absolute top-[50%] left-[50%]  translate-x-[-50%] translate-y-[-50%] w-[60%] h-[60%] border-[1px] border-white/10 rounded-full"></div>
+            <div className="absolute top-[50%] left-[50%]  translate-x-[-50%] translate-y-[-50%] w-[40%] h-[40%] border-[1px] border-white/20 rounded-full"></div>
         </div>
     );
 };
