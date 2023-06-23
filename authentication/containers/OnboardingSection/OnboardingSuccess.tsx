@@ -33,7 +33,7 @@ export const OnboardingSuccess = (): JSX.Element => {
                     onClick={handleIsLastOnboardingStep}
                     variant="primary"
                     size="small"
-                    className="px-[76px] py-3 mt-[14px] md:mt-3 font-extrabold text-base">
+                    className="!px-[76px] !mt-[14px] !md:mt-3 !font-extrabold">
                     Beli Paket
                 </Button>
             </div>
