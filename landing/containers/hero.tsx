@@ -1,9 +1,11 @@
 import Button from 'commons/components/elements/Button';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import Container from 'landing/components/Container';
 import Image from 'next/image';
 import Link from 'next/link';
 
 const Hero = (): JSX.Element => {
+    const { isMobileBreakpoints } = useWindowBreakpoints();
     return (
         <Container className="relative flex flex-col gap-12 bg-gradient-purple pt-28 pb-16 md:pb-28 overflow-hidden">
             <div className="absolute w-screen h-[30%] bottom-0 left-[50%] translate-x-[-50%] bg-gradient-to-b from-transparent to-black z-[19]"></div>
@@ -23,6 +25,17 @@ const Hero = (): JSX.Element => {
                 <VideoPlayerImage />
             </div>
             <EllipseGroup />
+            <Image
+                src={
+                    isMobileBreakpoints
+                        ? 'https://assets.gradient.academy/assets/hero-dots-mobile.png'
+                        : 'https://assets.gradient.academy/assets/hero-dots.png'
+                }
+                loading="lazy"
+                sizes="none"
+                layout="fill"
+                className="object-cover"
+            />
         </Container>
     );
 };
