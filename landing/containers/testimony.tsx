@@ -28,6 +28,27 @@ const TESTIMONY_DATA = [
         name: 'I Putu Bagus Tegar Suputra J.',
         role: 'Universitas Brawijaya',
         photo: 'https://cdn.discordapp.com/attachments/1009679303186862140/1020333855716155412/841C750D-E040-4AB4-A047-7E2442CFAC37.jpg'
+    },
+    {
+        testimony:
+            'Untuk materi di Gradient saya apresiasi karena berorientasi ke konsep yang disertai visualisasi yang membantu.Untuk itu, saya ingin berterima kasih kepada Gradient karena telah membuka akses materi-materi yang biasanya diajarkan di perguruan tinggi kepada masyarakat luas, semoga kedepannya tetap semangat untuk mencerdaskan bangsa 🙏',
+        name: 'Dietrich',
+        role: 'SMKN 58 Jakarta',
+        photo: 'https://assets.gradient.academy/assets/testimony-Dietrich.jpg'
+    },
+    {
+        testimony:
+            'Thank you banget udah ciptain Gradient.Bener-bener ngebantu aku buat paham konsep kalkulus dimana kalo kuliah itu dijelasinnya cuma setengah-setengah doang. Tapi di Gradient ini bener-bener full jelasinnya. Overall gradient keren banget.',
+        name: 'Melya',
+        role: 'UPN Veteran Jawa Timur',
+        photo: 'https://assets.gradient.academy/assets/testimony-Melya.jpg'
+    },
+    {
+        testimony:
+            'Pengalaman saya make Gradient sangat bagus ya. Cakupan materinya luas dan dalam, penyampaiannya juga menarik. Susah menemukan penjelasan dan penyampaian materi kalkulus yg bagus di luaran, bahkan di kampus sekalipun. Semoga Gradient bisa mencakup lebih banyak user lagi dan materinya juga lebih beragam.',
+        name: 'Muhammad Fauzan Insanda',
+        role: 'Universitas Lambung Mangkurat',
+        photo: 'https://assets.gradient.academy/assets/testimony-Fauzan.jpeg'
     }
 ];
 
@@ -101,7 +122,7 @@ const Testimony = (): JSX.Element => {
                             />
                         ))}
                     </div>
-                    <div className="flex gap-5 md:gap-6 px-[10px] md:px-3 animate-slide-left group-hover:animate-pause">
+                    {/* <div className="flex gap-5 md:gap-6 px-[10px] md:px-3 animate-slide-left group-hover:animate-pause">
                         {TESTIMONY_DATA.map((data) => (
                             <TestimonyCard
                                 testimony={data.testimony}
@@ -111,7 +132,7 @@ const Testimony = (): JSX.Element => {
                                 key={data.name}
                             />
                         ))}
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </section>
