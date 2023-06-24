@@ -9,6 +9,12 @@
     }
 }
 
+@layer utilities {
+    .animate-pause {
+        animation-play-state: paused;
+    }
+}
+
 html {
     overflow-x: hidden;
     scroll-behavior: smooth;

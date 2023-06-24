@@ -1,4 +1,5 @@
 import LearnLayout from 'commons/learnLayout';
+import withAuth from 'commons/withAuth';
 import DashboardContainer from 'dashboard/containers';
 
 const Dashboard = (): JSX.Element => {
@@ -9,4 +10,4 @@ const Dashboard = (): JSX.Element => {
     );
 };
 
-export default Dashboard;
+export default withAuth(Dashboard);

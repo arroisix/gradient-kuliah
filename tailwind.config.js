@@ -43,6 +43,23 @@ module.exports = {
                 primary: {
                     blue: '#0266D3'
                 }
+            },
+            backgroundImage: {
+                'gradient-purple':
+                    'radial-gradient(60% 60% at 50% 50%, rgba(100, 75, 169, 0.53) 0%, #030317 100%)',
+                'gradient-purple-thin':
+                    'radial-gradient(60% 60% at 50% 50%, rgba(95, 43, 206, 0.5) 0%, rgba(0, 0, 0, 0) 70%)',
+                'gradient-purple-pricing':
+                    'radial-gradient(146.27% 146.27% at 50% 50%, rgba(95, 43, 206, 0.3) 0%, rgba(0, 0, 0, 0) 100%)'
+            },
+            keyframes: {
+                slideLeft: {
+                    '0%': { transform: 'translateX(0)' },
+                    '100%': { transform: 'translateX(-100%)' }
+                }
+            },
+            animation: {
+                'slide-left': 'slideLeft 40s linear infinite'
             }
         }
     },
