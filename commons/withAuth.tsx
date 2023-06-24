@@ -42,6 +42,10 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
                 return <WrappedComponent {...props} />;
             }
 
+            if (['/langganan'].includes(pathname) && !is_subscribed) {
+                return <WrappedComponent {...props} />;
+            }
+
             if (pathname !== '/onboarding' && !is_subscribed) {
                 window.location.href = '/';
                 return;
