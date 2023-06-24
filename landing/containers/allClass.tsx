@@ -6,17 +6,17 @@ const LIST_CLASS = [
     {
         cover: 'https://assets.gradient.academy/assets/lp-probstat.jpg',
         title: 'Probabilitas & Statistika',
-        description: 'Kuantifikasi perubahan'
+        description: 'Mendeskripsikan dunia dengan data.'
     },
     {
         cover: 'https://d2uqn6ndx4ow3t.cloudfront.net/lecturers/theo-profile.jpg',
         title: 'Kalkulus 1',
-        description: 'Kuantifikasi perubahan'
+        description: 'Matematika dari perubahan.'
     },
     {
         cover: 'https://assets.gradient.academy/assets/lp-ptsl.png',
         title: 'Pengantar Teknik Sipil & Lingkungan',
-        description: 'Kuantifikasi perubahan'
+        description: 'Ilmu membangun peradaban.'
     }
 ];
 
@@ -101,7 +101,7 @@ const ClassCard = ({
             </div>
             <div className="w-[200px] md:w-[330px] px-[18px] py-2 md:py-[14px]">
                 <div className="flex items-center gap-1">
-                    <span className="inline-block font-extrabold text-xs md:text-lg">
+                    <span className="inline-block font-extrabold text-xs md:text-lg whitespace-nowrap text-ellipsis overflow-hidden">
                         {title}
                     </span>
                     <FaChevronRight size={10} className="text-[#FFFFFF33]" />
