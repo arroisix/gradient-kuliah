@@ -4,7 +4,7 @@ import { BiBookReader } from 'react-icons/bi';
 import { HiOutlineFilm } from 'react-icons/hi';
 // import { RiBookOpenLine, RiQuestionnaireLine } from 'react-icons/ri';
 import { TfiMenuAlt } from 'react-icons/tfi';
-// import { VscHubot } from 'react-icons/vsc';
+import { VscHubot } from 'react-icons/vsc';
 
 const LIST_FEATURE = [
     {
@@ -32,7 +32,7 @@ const LIST_FEATURE = [
         icon: (
             <TfiMenuAlt className="w-full md:w-[44px] h-full p-[5px] md:p-[12px] object-contain" />
         )
-    }
+    },
     // {
     //     title: 'Komunitas',
     //     description: 'Tanya, jawab, & diskusi dengan member lain.',
@@ -42,15 +42,15 @@ const LIST_FEATURE = [
     //         <RiQuestionnaireLine className="w-full h-full p-[5px] md:p-[10px] object-contain" />
     //     )
     // },
-    // {
-    //     title: 'Copilot',
-    //     description:
-    //         'Asisten belajar AI yang jawab apapun pertanyaanmu kapan saja.',
-    //     imageUrl: 'https://assets.gradient.academy/assets/feature-copilot.png',
-    //     icon: (
-    //         <VscHubot className="w-full h-full p-[5px] md:p-[10px] object-contain" />
-    //     )
-    // },
+    {
+        title: 'Copilot',
+        description:
+            'Asisten belajar AI yang jawab apapun pertanyaanmu kapan saja.',
+        imageUrl: 'https://assets.gradient.academy/assets/feature-copilot.png',
+        icon: (
+            <VscHubot className="w-full h-full p-[5px] md:p-[10px] object-contain" />
+        )
+    }
     // {
     //     title: 'Studio',
     //     description: 'Akses buku gratis atau upload materimu & chat dengannya.',
