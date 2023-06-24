@@ -17,6 +17,11 @@ const LIST_CLASS = [
         cover: 'https://assets.gradient.academy/assets/lp-ptsl.png',
         title: 'Pengantar Teknik Sipil & Lingkungan',
         description: 'Ilmu membangun peradaban.'
+    },
+    {
+        cover: 'https://d2uqn6ndx4ow3t.cloudfront.net/lecturers/theo-profile.jpg',
+        title: 'Kalkulus 2',
+        description: 'Kuantifikasi perubahan.'
     }
 ];
 
