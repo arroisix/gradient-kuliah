@@ -43,11 +43,11 @@ const Hero = (): JSX.Element => {
 const EllipseGroup = (): JSX.Element => {
     return (
         <div className="w-[600px] h-[600px] sm:w-[1100px] sm:h-[1100px] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] mt-28">
-            <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-full h-full border-[1px] border-white/20 rounded-full"></div>
-            <div className="absolute top-[50%] left-[50%]  translate-x-[-50%] translate-y-[-50%] w-[80%] h-[80%] border-[1px] border-white/20 rounded-full"></div>
+            <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-full h-full border-[1px] border-white/5 rounded-full"></div>
+            <div className="absolute top-[50%] left-[50%]  translate-x-[-50%] translate-y-[-50%] w-[80%] h-[80%] border-[1px] border-white/10 rounded-full"></div>
             <div className="absolute top-[50%] left-[50%]  translate-x-[-50%] translate-y-[-50%] w-[60%] h-[60%] border-[1px] border-white/20 rounded-full"></div>
-            <div className="absolute top-[50%] left-[50%]  translate-x-[-50%] translate-y-[-50%] w-[40%] h-[40%] border-[1px] border-white/20 rounded-full"></div>
-            <div className="absolute top-[50%] left-[50%]  translate-x-[-50%] translate-y-[-50%] w-[20%] h-[20%] border-[1px] border-white/20 rounded-full"></div>
+            <div className="absolute top-[50%] left-[50%]  translate-x-[-50%] translate-y-[-50%] w-[40%] h-[40%] border-[1px] border-white/25 rounded-full"></div>
+            <div className="absolute top-[50%] left-[50%]  translate-x-[-50%] translate-y-[-50%] w-[20%] h-[20%] border-[1px] border-white/30 rounded-full"></div>
         </div>
     );
 };
