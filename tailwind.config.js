@@ -59,7 +59,7 @@ module.exports = {
                 }
             },
             animation: {
-                'slide-left': 'slideLeft 20s linear infinite'
+                'slide-left': 'slideLeft 40s linear infinite'
             }
         }
     },
