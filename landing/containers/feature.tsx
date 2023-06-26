@@ -138,7 +138,7 @@ const FeatureCard = ({
                 isEven ? 'md:flex-row-reverse' : 'md:flex-row'
             } ${isFirst ? '' : 'border-t-[1px] border-[#FFFFFF1A]'}`}>
             <div className="w-full md:w-1/2 relative">
-                <div className="relative w-full h-[190px] md:h-[210px] mx-auto z-[1]">
+                <div className="relative w-full h-[190px] md:h-[290px] mx-auto z-[1]">
                     <Image
                         src={imageUrl}
                         loading="lazy"
@@ -147,7 +147,7 @@ const FeatureCard = ({
                         className="object-contain"
                     />
                 </div>
-                <div className="w-[300px] h-[300px] md:w-[350px] md:h-[350px] bg-gradient-purple-thin absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"></div>
+                <div className="w-[250px] h-[250px] md:w-[350px] md:h-[350px] bg-gradient-purple-thin absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"></div>
             </div>
             <div className="w-full md:w-1/2">
                 <div
