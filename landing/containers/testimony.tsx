@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { FaQuoteLeft } from 'react-icons/fa';
 
 const TESTIMONY_DATA = [
     {
@@ -29,6 +28,27 @@ const TESTIMONY_DATA = [
         name: 'I Putu Bagus Tegar Suputra J.',
         role: 'Universitas Brawijaya',
         photo: 'https://cdn.discordapp.com/attachments/1009679303186862140/1020333855716155412/841C750D-E040-4AB4-A047-7E2442CFAC37.jpg'
+    },
+    {
+        testimony:
+            'Untuk materi di Gradient saya apresiasi karena berorientasi ke konsep yang disertai visualisasi yang membantu.Untuk itu, saya ingin berterima kasih kepada Gradient karena telah membuka akses materi-materi yang biasanya diajarkan di perguruan tinggi kepada masyarakat luas, semoga kedepannya tetap semangat untuk mencerdaskan bangsa 🙏',
+        name: 'Dietrich',
+        role: 'SMKN 58 Jakarta',
+        photo: 'https://assets.gradient.academy/assets/testimony-Dietrich.jpg'
+    },
+    {
+        testimony:
+            'Thank you banget udah ciptain Gradient.Bener-bener ngebantu aku buat paham konsep kalkulus dimana kalo kuliah itu dijelasinnya cuma setengah-setengah doang. Tapi di Gradient ini bener-bener full jelasinnya. Overall gradient keren banget.',
+        name: 'Melya',
+        role: 'UPN Veteran Jawa Timur',
+        photo: 'https://assets.gradient.academy/assets/testimony-Melya.jpg'
+    },
+    {
+        testimony:
+            'Pengalaman saya make Gradient sangat bagus ya. Cakupan materinya luas dan dalam, penyampaiannya juga menarik. Susah menemukan penjelasan dan penyampaian materi kalkulus yg bagus di luaran, bahkan di kampus sekalipun. Semoga Gradient bisa mencakup lebih banyak user lagi dan materinya juga lebih beragam.',
+        name: 'Muhammad Fauzan Insanda',
+        role: 'Universitas Lambung Mangkurat',
+        photo: 'https://assets.gradient.academy/assets/testimony-Fauzan.jpeg'
     }
 ];
 
@@ -44,51 +64,78 @@ const TestimonyCard = ({
     photo: string;
 }): JSX.Element => {
     return (
-        <div className="w-[320px] border-[#666666] rounded-lg border h-[300px] flex flex-col justify-between p-4">
-            <div>
-                <FaQuoteLeft className="text-xl text-neutral-500 mb-2" />
-                <span className="font-body text-[14px]">{testimony}</span>
-            </div>
-            <div className="flex w-full items-center">
-                <div className="h-14 w-14 bg-neutral-200 rounded-full overflow-hidden flex justify-center items-center">
+        <div className="w-[245px] md:w-[422px] p-6 bg-gradient-to-t from-[#FFFFFF00] to-[#FFFFFF0D] border-[1px] border-[#2D2D2D] rounded-[24px]">
+            <div className="flex gap-4 items-center pb-6 border-b-[1px] border-[#2D2D2D]">
+                <div className="h-10 w-10 rounded-full overflow-hidden">
                     <Image
                         loading="lazy"
                         src={photo}
                         height={56}
                         width={56}
                         className="object-cover"
-                        alt="lecturer"
+                        alt="testimony"
                     />
                 </div>
-                <div className="ml-2">
-                    <h5 className="text-xs text-white font-bold">{name}</h5>
-                    <h5 className="text-[11px] font-thin text-neutral-400 font-body">
+                <div className="flex flex-col md:gap-[6px]">
+                    <span className="inline-block font-extrabold text-xs">
+                        {name}
+                    </span>
+                    <span className="inline-block font-body text-[10px] text-neutral-400">
                         {role}
-                    </h5>
+                    </span>
                 </div>
             </div>
+            <article>
+                <p className="pt-6 font-body text-xs md:text-sm">{testimony}</p>
+            </article>
         </div>
     );
 };
 
 const Testimony = (): JSX.Element => {
     return (
-        <div className="pl-4 md:pl-[7.5rem] py-4 my-32 lg:my-10">
-            <h3 className="text-2xl md:text-4xl font-bold">Kata Mereka</h3>
-            <div className="w-full py-4 overflow-x-auto">
-                <div className="w-[1400px] flex gap-8">
-                    {TESTIMONY_DATA.map((data) => (
-                        <TestimonyCard
-                            testimony={data.testimony}
-                            photo={data.photo}
-                            name={data.name}
-                            role={data.role}
-                            key={data.name}
-                        />
-                    ))}
+        <section className="">
+            <h3 className="font-extrabold text-center text-xl md:text-4xl">
+                Kata Mereka
+            </h3>
+            <div className="w-full h-full py-10 overflow-hidden">
+                <div className="flex group">
+                    <div className="flex gap-5 md:gap-6 px-[10px] md:px-3 animate-slide-left group-hover:animate-pause">
+                        {TESTIMONY_DATA.map((data) => (
+                            <TestimonyCard
+                                testimony={data.testimony}
+                                photo={data.photo}
+                                name={data.name}
+                                role={data.role}
+                                key={data.name}
+                            />
+                        ))}
+                    </div>
+                    <div className="flex gap-5 md:gap-6 px-[10px] md:px-3 animate-slide-left group-hover:animate-pause">
+                        {TESTIMONY_DATA.map((data) => (
+                            <TestimonyCard
+                                testimony={data.testimony}
+                                photo={data.photo}
+                                name={data.name}
+                                role={data.role}
+                                key={data.name}
+                            />
+                        ))}
+                    </div>
+                    {/* <div className="flex gap-5 md:gap-6 px-[10px] md:px-3 animate-slide-left group-hover:animate-pause">
+                        {TESTIMONY_DATA.map((data) => (
+                            <TestimonyCard
+                                testimony={data.testimony}
+                                photo={data.photo}
+                                name={data.name}
+                                role={data.role}
+                                key={data.name}
+                            />
+                        ))}
+                    </div> */}
                 </div>
             </div>
-        </div>
+        </section>
     );
 };
 
