@@ -65,7 +65,7 @@ const LIST_FEATURE = [
 const Feature = (): JSX.Element => {
     return (
         <section className="relative overflow-hidden min-h-screen">
-            <Hiasan>
+            <Ornament>
                 <div className="text-center pt-[53px] md:pt-[101px] px-[18px]">
                     <h2 className="font-extrabold text-xl md:text-4xl">
                         Fitur-fitur di Gradient
@@ -76,11 +76,11 @@ const Feature = (): JSX.Element => {
                         }
                     </span>
                 </div>
-            </Hiasan>
+            </Ornament>
             <div className="w-[80%] mx-auto">
                 {LIST_FEATURE.map(
                     ({ title, description, imageUrl, icon }, index) => (
-                        <Card
+                        <FeatureCard
                             key={index}
                             title={title}
                             description={description}
@@ -92,12 +92,12 @@ const Feature = (): JSX.Element => {
                     )
                 )}
             </div>
-            <Hiasan className="rotate-180" />
+            <Ornament className="rotate-180" />
         </section>
     );
 };
 
-const Hiasan = ({
+const Ornament = ({
     className,
     children
 }: {
@@ -117,7 +117,7 @@ const Hiasan = ({
     );
 };
 
-const Card = ({
+const FeatureCard = ({
     title,
     description,
     imageUrl,
