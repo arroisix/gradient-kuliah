@@ -19,9 +19,9 @@ const LIST_CLASS = [
         description: 'Ilmu membangun peradaban.'
     },
     {
-        cover: 'https://d2uqn6ndx4ow3t.cloudfront.net/lecturers/theo-profile.jpg',
-        title: 'Kalkulus 2',
-        description: 'Kuantifikasi perubahan.'
+        cover: 'https://storage.googleapis.com/gradient-asset-dev/courses/calculus2/assets/kalkulus2-thumbnail.png',
+        title: 'Kalkulus II',
+        description: 'Kalkulus di ruang berdimensi n.'
     }
 ];
 

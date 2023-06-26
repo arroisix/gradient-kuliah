@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { ReactNode } from 'react';
 import { BiBookReader } from 'react-icons/bi';
 import { HiOutlineFilm } from 'react-icons/hi';
-import { RiBookOpenLine, RiQuestionnaireLine } from 'react-icons/ri';
+// import { RiBookOpenLine, RiQuestionnaireLine } from 'react-icons/ri';
 import { TfiMenuAlt } from 'react-icons/tfi';
 import { VscHubot } from 'react-icons/vsc';
 
@@ -18,7 +18,8 @@ const LIST_FEATURE = [
     {
         title: 'Latihan',
         description: 'Latihan dan pembahasan dari textbook & ujian tahun lalu.',
-        imageUrl: 'https://assets.gradient.academy/assets/feature-latihan.png',
+        imageUrl:
+            'https://assets.gradient.academy/assets/feature-latihan-2.png',
         icon: (
             <BiBookReader className="w-full h-full p-[5px] md:p-[10px] object-contain" />
         )
@@ -33,15 +34,15 @@ const LIST_FEATURE = [
             <TfiMenuAlt className="w-full md:w-[44px] h-full p-[5px] md:p-[12px] object-contain" />
         )
     },
-    {
-        title: 'Komunitas',
-        description: 'Tanya, jawab, & diskusi dengan member lain.',
-        imageUrl:
-            'https://assets.gradient.academy/assets/feature-komunitas.png',
-        icon: (
-            <RiQuestionnaireLine className="w-full h-full p-[5px] md:p-[10px] object-contain" />
-        )
-    },
+    // {
+    //     title: 'Komunitas',
+    //     description: 'Tanya, jawab, & diskusi dengan member lain.',
+    //     imageUrl:
+    //         'https://assets.gradient.academy/assets/feature-komunitas.png',
+    //     icon: (
+    //         <RiQuestionnaireLine className="w-full h-full p-[5px] md:p-[10px] object-contain" />
+    //     )
+    // },
     {
         title: 'Copilot',
         description:
@@ -50,21 +51,21 @@ const LIST_FEATURE = [
         icon: (
             <VscHubot className="w-full h-full p-[5px] md:p-[10px] object-contain" />
         )
-    },
-    {
-        title: 'Studio',
-        description: 'Akses buku gratis atau upload materimu & chat dengannya.',
-        imageUrl: 'https://assets.gradient.academy/assets/feature-studio.png',
-        icon: (
-            <RiBookOpenLine className="w-full h-full p-[5px] md:p-[10px]  object-contain" />
-        )
     }
+    // {
+    //     title: 'Studio',
+    //     description: 'Akses buku gratis atau upload materimu & chat dengannya.',
+    //     imageUrl: 'https://assets.gradient.academy/assets/feature-studio.png',
+    //     icon: (
+    //         <RiBookOpenLine className="w-full h-full p-[5px] md:p-[10px]  object-contain" />
+    //     )
+    // }
 ];
 
 const Feature = (): JSX.Element => {
     return (
         <section className="relative overflow-hidden min-h-screen">
-            <Hiasan>
+            <Ornament>
                 <div className="text-center pt-[53px] md:pt-[101px] px-[18px]">
                     <h2 className="font-extrabold text-xl md:text-4xl">
                         Fitur-fitur di Gradient
@@ -75,11 +76,11 @@ const Feature = (): JSX.Element => {
                         }
                     </span>
                 </div>
-            </Hiasan>
+            </Ornament>
             <div className="w-[80%] mx-auto">
                 {LIST_FEATURE.map(
                     ({ title, description, imageUrl, icon }, index) => (
-                        <Card
+                        <FeatureCard
                             key={index}
                             title={title}
                             description={description}
@@ -91,12 +92,12 @@ const Feature = (): JSX.Element => {
                     )
                 )}
             </div>
-            <Hiasan className="rotate-180" />
+            <Ornament className="rotate-180" />
         </section>
     );
 };
 
-const Hiasan = ({
+const Ornament = ({
     className,
     children
 }: {
@@ -116,7 +117,7 @@ const Hiasan = ({
     );
 };
 
-const Card = ({
+const FeatureCard = ({
     title,
     description,
     imageUrl,
@@ -137,7 +138,7 @@ const Card = ({
                 isEven ? 'md:flex-row-reverse' : 'md:flex-row'
             } ${isFirst ? '' : 'border-t-[1px] border-[#FFFFFF1A]'}`}>
             <div className="w-full md:w-1/2 relative">
-                <div className="relative w-full h-[190px] md:h-[210px] mx-auto z-[1]">
+                <div className="relative w-full h-[190px] md:h-[290px] mx-auto z-[1]">
                     <Image
                         src={imageUrl}
                         loading="lazy"
@@ -146,7 +147,7 @@ const Card = ({
                         className="object-contain"
                     />
                 </div>
-                <div className="w-[300px] h-[300px] md:w-[350px] md:h-[350px] bg-gradient-purple-thin absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"></div>
+                <div className="w-[250px] h-[250px] md:w-[350px] md:h-[350px] bg-gradient-purple-thin absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"></div>
             </div>
             <div className="w-full md:w-1/2">
                 <div
