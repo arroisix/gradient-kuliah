@@ -18,7 +18,8 @@ const LIST_FEATURE = [
     {
         title: 'Latihan',
         description: 'Latihan dan pembahasan dari textbook & ujian tahun lalu.',
-        imageUrl: 'https://assets.gradient.academy/assets/feature-latihan.png',
+        imageUrl:
+            'https://assets.gradient.academy/assets/feature-latihan-2.png',
         icon: (
             <BiBookReader className="w-full h-full p-[5px] md:p-[10px] object-contain" />
         )
