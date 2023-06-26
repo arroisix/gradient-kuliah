@@ -1,21 +1,23 @@
-import ContentHighlight from './contentHightlight';
+import AllClass from './allClass';
+import Certificate from './certificate';
+import Feature from './feature';
 import Hero from './hero';
-import JoinDiscord from './joinDiscord';
-import JoinGradient from './joinGradient';
-import KnowDegree from './knowDegree';
+import Pricing from './pricing';
 import Testimony from './testimony';
-import UniqueContent from './uniqueContent';
 
-export default function LandingContainer(): JSX.Element {
+export default function LandingContainer({
+    pricingData
+}: {
+    pricingData?: PacketOffer[];
+}): JSX.Element {
     return (
         <div>
             <Hero />
-            <ContentHighlight />
-            <UniqueContent />
-            <KnowDegree />
-            <JoinDiscord />
+            <AllClass />
+            <Feature />
             <Testimony />
-            <JoinGradient />
+            <Certificate />
+            <Pricing pricingData={pricingData} />
         </div>
     );
 }

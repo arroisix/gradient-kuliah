@@ -2,7 +2,9 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import Button from 'commons/components/elements/Button';
 import { AUTHENTICATION_ROUTE } from 'commons/constants';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { addZeroBefore } from 'courses/utils';
 import Link from 'next/link';
+import { useGetDetailPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
 import { useSelector } from 'react-redux';
 
 const SubscribeButton = ({
@@ -18,6 +20,10 @@ const SubscribeButton = ({
 }): JSX.Element => {
     const { is_subscribed } = useCourseSubscription(slug);
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const { data: packet } = useGetDetailPacketOfferQuery(packetId as string, {
+        skip: packetId === null || packetId === undefined
+    });
+    const currentDate = new Date();
 
     return (
         <>
@@ -27,9 +33,16 @@ const SubscribeButton = ({
                         className ?? 'md:w-fit min-w-[200px]'
                     }`}
                     variant="primary"
+                    target={packetId ? '__blank' : undefined}
                     href={
                         packetId
-                            ? `/pembayaran?packetId=${packetId}`
+                            ? `https://api.whatsapp.com/send?phone=6285173430127&text=${encodeURIComponent(
+                                  `Halo,saya tertarik untuk berlangganan ${
+                                      packet?.packet_name
+                                  }\n\n[ID:${currentDate.getDate()}${addZeroBefore(
+                                      currentDate.getMonth() + 1
+                                  )}${currentDate.getFullYear()}]`
+                              )}`
                             : `/langganan`
                     }>
                     Akses Sekarang

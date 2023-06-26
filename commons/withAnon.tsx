@@ -8,14 +8,17 @@ import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 import LoadingBackdrop from './components/elements/LoadingBackdrop';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
-const withAnon = (WrappedComponent: React.ComponentType) => {
+const withAnon = <P extends object>(
+    WrappedComponent: React.ComponentType<P>
+) => {
     return (props: JSX.IntrinsicAttributes & { children?: ReactNode }) => {
         // checks whether we are on client / browser or server.
         if (typeof window !== 'undefined') {
             const accessToken = useSelector(getToken);
             const isProfileComplete = useSelector(getIsProfileComplete);
-
+            const { is_subscribed } = useCourseSubscription();
             const router = useRouter();
 
             if (!!accessToken) {
@@ -31,15 +34,23 @@ const withAnon = (WrappedComponent: React.ComponentType) => {
                     } else if (!!router.query.redirect) {
                         router.replace(`${router.query.redirect}`);
                     } else {
-                        router.replace('/dashboard');
+                        if (is_subscribed) {
+                            router.replace('/dashboard');
+                        } else {
+                            router.replace('/onboarding');
+                        }
                     }
                 } else if (router.pathname === '/') {
-                    router.replace('/dashboard');
+                    if (is_subscribed) {
+                        router.replace('/dashboard');
+                    } else {
+                        return <WrappedComponent {...(props as P)} />;
+                    }
                 }
 
                 return <LoadingBackdrop />;
             }
-            return <WrappedComponent {...props} />;
+            return <WrappedComponent {...(props as P)} />;
         }
 
         // If we are on server, return null
