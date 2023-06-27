@@ -27,7 +27,8 @@ const Button = ({
     children,
     type,
     target,
-    disabled
+    disabled,
+    id
 }: ButtonProps): JSX.Element => {
     const computeVariant = (): string => {
         let styling = 'font-bold cursor-pointer';
@@ -49,7 +50,7 @@ const Button = ({
 
     if (target) {
         return (
-            <a href={href} target={target}>
+            <a href={href} target={target} id={id}>
                 <div
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
@@ -64,6 +65,7 @@ const Button = ({
         return (
             <Link href={href}>
                 <div
+                    id={id}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
                     className={computeVariant()}>
@@ -80,6 +82,7 @@ const Button = ({
             onMouseLeave={onMouseLeave}
             onClick={onClick}
             disabled={disabled}
+            id={id}
             className={computeVariant()}>
             {children}
         </button>

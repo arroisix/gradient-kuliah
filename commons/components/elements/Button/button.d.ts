@@ -11,6 +11,7 @@ interface BaseButtonProps {
     children: JSX.Element | string;
     type?: 'button' | 'submit';
     className?: string;
+    id?: string;
 }
 
 interface ButtonProps extends BaseButtonProps {
