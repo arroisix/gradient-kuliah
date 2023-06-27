@@ -5,7 +5,7 @@ import Avatar from 'react-avatar';
 import { AiOutlineEye } from 'react-icons/ai';
 import { FaCircle, FaRegComment } from 'react-icons/fa';
 
-type User = {
+type Student = {
     id: string;
     photo_url: string;
     username: string;
@@ -18,7 +18,7 @@ const QuestionCard = ({
     viewer_counts,
     comment_counts,
     created_at,
-    user
+    student
 }: {
     clickable: boolean;
     id: string;
@@ -26,7 +26,7 @@ const QuestionCard = ({
     viewer_counts: number;
     comment_counts: number;
     created_at: number;
-    user: User;
+    student: Student;
 }): JSX.Element => {
     const router = useRouter();
 
@@ -41,16 +41,16 @@ const QuestionCard = ({
             aria-hidden>
             <div className="relative flex items-center gap-3">
                 <div className="relative w-[24px] h-[24px]">
-                    {user?.photo_url ? (
+                    {student?.photo_url ? (
                         <Image
-                            src={user?.photo_url}
-                            alt={user?.username}
+                            src={student?.photo_url}
+                            alt={student?.username}
                             layout="fill"
                             className="rounded-full object-contain"
                         />
                     ) : (
                         <Avatar
-                            name={user?.username}
+                            name={student?.username}
                             size="24"
                             round
                             className="!block"
@@ -59,7 +59,7 @@ const QuestionCard = ({
                 </div>
                 <div className="flex flex-col md:flex-row md:gap-[6px] md:items-center">
                     <span className="inline-block font-extrabold text-xs">
-                        {user?.username}
+                        {student?.username}
                     </span>
                     <FaCircle
                         className="hidden md:block text-neutral-600"

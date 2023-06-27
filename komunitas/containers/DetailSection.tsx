@@ -1,6 +1,8 @@
 import AnswerCard from 'komunitas/components/AnswerCard';
 import QuestionCard from 'komunitas/components/QuestionCard';
+import { useGetCommunityPostDetailQuery } from 'komunitas/redux/api/komunitasApi';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { MdChevronRight } from 'react-icons/md';
 
 const DUMMY_SIMILIAR = {
@@ -30,7 +32,7 @@ const DUMMY_SIMILIAR = {
             content: 'okh mas'
         },
         {
-            id: '1233',
+            id: '12331',
             content: 'halo alo hahahah ihiy'
         }
     ]
@@ -43,7 +45,7 @@ const DUMMY_QUESTION = {
     comment_counts: 3,
     created_at: 1687229985,
     course_name: 'bahasa indonesia',
-    user: {
+    student: {
         id: '4',
         photo_url: '',
         username: 'irfan.kamil'
@@ -95,6 +97,18 @@ const DUMMY_ANSWER = {
 };
 
 const DetailSection = (): JSX.Element => {
+    const router = useRouter();
+
+    const data = useGetCommunityPostDetailQuery(
+        router.query.id
+            ? {
+                  slug: router.query.id as string
+              }
+            : { slug: 'none' }
+    );
+
+    console.log(data);
+
     return (
         <section className="flex flex-col lg:flex-row gap-[2rem]">
             <div className="w-full lg:w-8/12 flex flex-col gap-9">
@@ -110,7 +124,7 @@ const DetailSection = (): JSX.Element => {
                                 key={value.id}
                                 {...value}
                                 isExpert={
-                                    DUMMY_QUESTION.user.username !==
+                                    DUMMY_QUESTION.student.username !==
                                         value.user.username &&
                                     value.user.is_expert
                                 }

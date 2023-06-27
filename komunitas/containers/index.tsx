@@ -1,48 +1,54 @@
+import AuthContext from 'authentication/contexts/AuthProvider';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import DropdownFilter from 'komunitas/components/DropdownFilter';
 import DropdownSort from 'komunitas/components/DropdownSort';
 import KomunitasInput from 'komunitas/components/KomunitasInput';
 import MobileTabs from 'komunitas/components/MobileTabs';
 import QuestionCard from 'komunitas/components/QuestionCard';
-import React, { useState } from 'react';
+import { useGetCommunityPostQuery } from 'komunitas/redux/api/komunitasApi';
+import React, { useContext, useState } from 'react';
 import { CgSearch } from 'react-icons/cg';
 
-const DUMMY_DATA = {
-    community_posts: [
-        {
-            id: '1',
-            content: 'haloo',
-            viewer_counts: 10,
-            comment_counts: 10,
-            created_at: 1687229985,
-            course_name: 'matematika',
-            user: {
-                id: '90',
-                photo_url: '',
-                username: 'irfan.kamil'
-            }
-        },
-        {
-            id: '2',
-            content: 'bang aku ga ngerti',
-            viewer_counts: 17,
-            comment_counts: 3,
-            created_at: 1687229985,
-            course_name: 'fisika',
-            user: {
-                id: '90',
-                photo_url: '',
-                username: 'irfan.kamil'
-            }
-        }
-    ],
-    total_items: 10,
-    current_page: 10,
-    items_per_page: 10
-};
+// const DUMMY_DATA = {
+//     community_posts: [
+//         {
+//             id: '1',
+//             content: 'haloo',
+//             viewer_counts: 10,
+//             comment_counts: 10,
+//             created_at: 1687229985,
+//             course_name: 'matematika',
+//             student: {
+//                 id: '90',
+//                 photo_url: '',
+//                 username: 'irfan.kamil'
+//             }
+//         },
+//         {
+//             id: '2',
+//             content: 'bang aku ga ngerti',
+//             viewer_counts: 17,
+//             comment_counts: 3,
+//             created_at: 1687229985,
+//             course_name: 'fisika',
+//             student: {
+//                 id: '90',
+//                 photo_url: '',
+//                 username: 'irfan.kamil'
+//             }
+//         }
+//     ],
+//     total_items: 10,
+//     current_page: 10,
+//     items_per_page: 10
+// };
 
 const KomunitasContainer = (): JSX.Element => {
+    const { profile } = useContext(AuthContext);
     const { isMobileBreakpoints } = useWindowBreakpoints();
+    const { data } = useGetCommunityPostQuery(
+        profile ? { user_id: profile.user_id } : {}
+    );
 
     const [search, setSearch] = useState('');
     const [showFilter, setShowFilter] = useState(false);
@@ -88,7 +94,7 @@ const KomunitasContainer = (): JSX.Element => {
                     </div>
                 </div>
                 <div className="flex flex-col gap-[18px]">
-                    {DUMMY_DATA.community_posts.map((value) => (
+                    {data?.community_posts.map((value) => (
                         <QuestionCard
                             key={value.id}
                             {...value}
