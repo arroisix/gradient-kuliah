@@ -33,20 +33,25 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
                 return;
             }
 
+            if (pathname === '/onboarding' && !isProfileComplete) {
+                return <WrappedComponent {...props} />;
+            }
+
             if (
                 pathname === '/onboarding' &&
                 isProfileComplete &&
-                !(isLastOnboardingStep === 'true') &&
+                isLastOnboardingStep === 'true' &&
                 !is_subscribed
             ) {
-                return <WrappedComponent {...props} />;
+                window.location.href = '/mulai';
+                return;
             }
 
             if (['/langganan'].includes(pathname) && !is_subscribed) {
                 return <WrappedComponent {...props} />;
             }
 
-            if (pathname !== '/onboarding' && !is_subscribed) {
+            if (pathname !== '/mulai' && !is_subscribed) {
                 window.location.href = '/';
                 return;
             }
