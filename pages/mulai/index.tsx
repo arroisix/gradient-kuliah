@@ -21,7 +21,7 @@ const Mulai = (): JSX.Element => {
                     Sign Out
                 </button>
             </div>
-            <OnboardingSuccess />;
+            <OnboardingSuccess />
         </section>
     );
 };
