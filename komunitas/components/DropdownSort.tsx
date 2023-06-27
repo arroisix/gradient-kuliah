@@ -6,7 +6,7 @@ interface SubjectInterface {
     value: string;
 }
 
-const SORT_SUBJECTS: SubjectInterface[] = [
+const SORT_OPTIONS: SubjectInterface[] = [
     { key: 'LATEST', value: 'Terbaru' },
     { key: 'POPULAR', value: 'Populer' },
     { key: 'ANSWERED', value: 'Terjawab' },
@@ -41,7 +41,7 @@ const DropdownSort = ({
                 className={`absolute top-[120%] right-0 w-max bg-[#2C2C2C] text-xs rounded-lg z-[9] ${
                     showSort ? '' : 'hidden'
                 }`}>
-                {SORT_SUBJECTS.map(({ key, value }) => (
+                {SORT_OPTIONS.map(({ key, value }) => (
                     <span
                         key={key}
                         id={key}
