@@ -40,7 +40,7 @@ const DUMMY_COMMENT = {
     items_per_page: 10
 };
 
-type User = {
+type Student = {
     id: string;
     photo_url: string;
     username: string;
@@ -53,14 +53,14 @@ const AnswerCard = ({
     content,
     comment_counts,
     created_at,
-    user
+    student
 }: {
     isExpert: boolean;
     id: string;
     content: string;
     comment_counts: number;
     created_at: number;
-    user: User;
+    student: Student;
 }): JSX.Element => {
     const [comment, setComment] = useState('');
     const [showComment, setShowComment] = useState(false);
@@ -84,20 +84,20 @@ const AnswerCard = ({
             <div className="flex justify-between items-center gap-4">
                 <div className="flex items-center gap-3">
                     <div className="relative w-[24px] h-[24px]">
-                        {user?.photo_url ? (
+                        {student?.photo_url ? (
                             <Image
-                                src={user?.photo_url}
-                                alt={user?.username}
+                                src={student?.photo_url}
+                                alt={student?.username}
                                 layout="fill"
                                 className="rounded-full object-contain"
                             />
                         ) : (
-                            <Avatar name={user?.username} size="24" round />
+                            <Avatar name={student?.username} size="24" round />
                         )}
                     </div>
                     <div className="flex flex-col md:flex-row md:gap-[6px] md:items-center">
                         <span className="inline-block font-extrabold text-xs">
-                            {user?.username}
+                            {student?.username}
                         </span>
                         <FaCircle
                             className="hidden md:block text-neutral-600"
@@ -139,16 +139,16 @@ const AnswerCard = ({
             <div className="flex flex-col gap-6 border-t-[1px] border-[#272727] pt-[18px]">
                 <div className="flex gap-3 items-center">
                     <div className="relative w-[24px] h-[24px]">
-                        {user?.photo_url ? (
+                        {student?.photo_url ? (
                             <Image
-                                src={user?.photo_url}
-                                alt={user?.username}
+                                src={student?.photo_url}
+                                alt={student?.username}
                                 layout="fill"
                                 className="rounded-full object-contain"
                             />
                         ) : (
                             <Avatar
-                                name={user?.username}
+                                name={student?.username}
                                 size="24"
                                 round
                                 className="!block"

@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Avatar from 'react-avatar';
 
-type User = {
+type Student = {
     id: string;
     photo_url: string;
     username: string;
@@ -10,24 +10,24 @@ type User = {
 
 const ReplyComment = ({
     content,
-    user
+    student
 }: {
     content: string;
-    user: User;
+    student: Student;
 }): JSX.Element => {
     return (
         <div className="flex gap-3 items-center">
             <div className="relative w-[20px] h-[20px]">
-                {user?.photo_url ? (
+                {student?.photo_url ? (
                     <Image
-                        src={user?.photo_url}
-                        alt={user?.username}
+                        src={student?.photo_url}
+                        alt={student?.username}
                         layout="fill"
                         className="rounded-full object-contain"
                     />
                 ) : (
                     <Avatar
-                        name={user?.username}
+                        name={student?.username}
                         size="20"
                         round
                         className="!block"
