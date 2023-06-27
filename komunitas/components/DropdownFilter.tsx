@@ -1,7 +1,7 @@
 import React from 'react';
 
 const OPTIONS = [
-    { key: 'semua', value: 'Semua' },
+    { key: '', value: 'Semua' },
     { key: 'matematika', value: 'Matematika' },
     { key: 'fisika', value: 'Fisika' },
     { key: 'kimia', value: 'Kimia' }

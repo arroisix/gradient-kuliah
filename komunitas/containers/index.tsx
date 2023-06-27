@@ -44,11 +44,18 @@ import { CgSearch } from 'react-icons/cg';
 
 const KomunitasContainer = (): JSX.Element => {
     const { isMobileBreakpoints } = useWindowBreakpoints();
-    const { data } = useGetCommunityPostQuery({});
 
     const [search, setSearch] = useState('');
-    const [showFilter, setShowFilter] = useState(false);
-    const [filter, setFilter] = useState('LATEST');
+    const [showSort, setShowSort] = useState(false);
+    const [filter, setFilter] = useState('');
+    const [sort, setSort] = useState<
+        'LATEST' | 'POPULAR' | 'ANSWERED' | 'NOT_ANSWERED'
+    >('LATEST');
+
+    const { data } = useGetCommunityPostQuery({
+        sort_by: sort,
+        category_id: filter
+    });
 
     function handleChangeSearch(
         event: React.ChangeEvent<HTMLInputElement>
@@ -57,11 +64,11 @@ const KomunitasContainer = (): JSX.Element => {
     }
 
     function handleChangeFilter(e: React.ChangeEvent<HTMLSelectElement>): void {
-        console.log(e.target.value);
+        setFilter(e.target.value);
     }
 
     function handleChangeSort(event: any): void {
-        console.log(event.target.id);
+        setSort(event.target.id);
     }
 
     return (
@@ -81,10 +88,10 @@ const KomunitasContainer = (): JSX.Element => {
                     <div className="flex gap-3 items-center w-full md:w-fit">
                         <DropdownFilter onChange={handleChangeFilter} />
                         <DropdownSort
-                            showFilter={showFilter}
-                            setShowFilter={setShowFilter}
-                            filter={filter}
-                            setFilter={setFilter}
+                            showSort={showSort}
+                            setShowSort={setShowSort}
+                            sort={sort}
+                            setSort={setSort}
                             onChange={handleChangeSort}
                         />
                     </div>
