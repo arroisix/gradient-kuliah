@@ -4,7 +4,10 @@ import DropdownSort from 'komunitas/components/DropdownSort';
 import KomunitasInput from 'komunitas/components/KomunitasInput';
 import MobileTabs from 'komunitas/components/MobileTabs';
 import QuestionCard from 'komunitas/components/QuestionCard';
-import { useGetCommunityPostQuery } from 'komunitas/redux/api/komunitasApi';
+import {
+    useGetCommunityPostQuery,
+    useGetSubjectCategoriesQuery
+} from 'komunitas/redux/api/komunitasApi';
 import React, { useState } from 'react';
 import { CgSearch } from 'react-icons/cg';
 
@@ -44,6 +47,8 @@ import { CgSearch } from 'react-icons/cg';
 
 const KomunitasContainer = (): JSX.Element => {
     const { isMobileBreakpoints } = useWindowBreakpoints();
+
+    const { data: subjects } = useGetSubjectCategoriesQuery();
 
     const [search, setSearch] = useState('');
     const [showSort, setShowSort] = useState(false);
@@ -86,7 +91,10 @@ const KomunitasContainer = (): JSX.Element => {
                 <div className="flex justify-between items-center">
                     <h2 className="hidden md:block font-extrabold">Eksplor</h2>
                     <div className="flex gap-3 items-center w-full md:w-fit">
-                        <DropdownFilter onChange={handleChangeFilter} />
+                        <DropdownFilter
+                            onChange={handleChangeFilter}
+                            options={subjects}
+                        />
                         <DropdownSort
                             showSort={showSort}
                             setShowSort={setShowSort}
