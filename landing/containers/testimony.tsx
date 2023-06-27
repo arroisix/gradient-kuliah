@@ -3,34 +3,6 @@ import Image from 'next/image';
 const TESTIMONY_DATA = [
     {
         testimony:
-            'Pertama kali ikut tutor bahas soal dan bener-bener bikin aku paham sama soal matematika yang pusing. Udah gitu kita bisa request materi apa yang mau dibahas dan juga insight baru tentang matematika pokoknya lovee banget',
-        name: 'Zahra Ameldinata',
-        role: 'Institut Teknologi Bandung',
-        photo: 'https://cdn.discordapp.com/attachments/1009679303186862140/1020333856861212712/35FB82BD-3B5D-4981-B22B-A0FE6067EA9B.jpg'
-    },
-    {
-        testimony:
-            'Gradient  membuatku lebih paham lagi tentang kalkulus. Ditambah dengan tutornya yang friendly dan kece, aku mendapatkan jawaban-jawaban dari pertanyaanku',
-        name: 'Viona Siagian',
-        role: 'Institut Teknologi Bandung',
-        photo: 'https://cdn.discordapp.com/attachments/1009679303186862140/1020333857318387722/310301.jpg'
-    },
-    {
-        testimony:
-            'Video materinya memberikan feel berbeda karena penyampaiannya yang profesional namun mudah untuk dimengerti. Tutorialnya juga sangat menarik karena cara penyampaian materi oleh tutor berbeda dengan tutor yang pernah saya temui sebelumnya',
-        name: 'Khairul Amtsal',
-        role: 'Universitas Mataram',
-        photo: 'https://cdn.discordapp.com/attachments/1009679303186862140/1020333856378863686/DSC_54562.jpg'
-    },
-    {
-        testimony:
-            'Cara ngajarnya kakak-kakak tutor di Gradient enak dan seru! Materi yang disampaikan selaras dengan materi di perkuliahan. Keren dan asik deh jadi paham',
-        name: 'I Putu Bagus Tegar Suputra J.',
-        role: 'Universitas Brawijaya',
-        photo: 'https://cdn.discordapp.com/attachments/1009679303186862140/1020333855716155412/841C750D-E040-4AB4-A047-7E2442CFAC37.jpg'
-    },
-    {
-        testimony:
             'Untuk materi di Gradient saya apresiasi karena berorientasi ke konsep yang disertai visualisasi yang membantu.Untuk itu, saya ingin berterima kasih kepada Gradient karena telah membuka akses materi-materi yang biasanya diajarkan di perguruan tinggi kepada masyarakat luas, semoga kedepannya tetap semangat untuk mencerdaskan bangsa 🙏',
         name: 'Dietrich',
         role: 'SMKN 58 Jakarta',
@@ -49,6 +21,13 @@ const TESTIMONY_DATA = [
         name: 'Muhammad Fauzan Insanda',
         role: 'Universitas Lambung Mangkurat',
         photo: 'https://assets.gradient.academy/assets/testimony-Fauzan.jpeg'
+    },
+    {
+        testimony:
+            'Materi yang diajarkan di Gradient sangat relevan dan mudah dimengerti. Pengajar-pengajarnya memiliki skill yang sesuai dan berkelas! Pengalaman menggunakan Gradient juga sangat unik dan eksklusif. Pokoknya nyaman banget dan emang se-worth it itu!',
+        name: 'Irfan Musthofa',
+        role: 'Institut Teknologi Bandung',
+        photo: 'https://assets.gradient.academy/assets/testimony-Irfan.png'
     }
 ];
 
@@ -122,7 +101,7 @@ const Testimony = (): JSX.Element => {
                             />
                         ))}
                     </div>
-                    {/* <div className="flex gap-5 md:gap-6 px-[10px] md:px-3 animate-slide-left group-hover:animate-pause">
+                    <div className="flex gap-5 md:gap-6 px-[10px] md:px-3 animate-slide-left group-hover:animate-pause">
                         {TESTIMONY_DATA.map((data) => (
                             <TestimonyCard
                                 testimony={data.testimony}
@@ -132,7 +111,7 @@ const Testimony = (): JSX.Element => {
                                 key={data.name}
                             />
                         ))}
-                    </div> */}
+                    </div>
                 </div>
             </div>
         </section>

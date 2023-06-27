@@ -37,7 +37,7 @@ const withAnon = <P extends object>(
                         if (is_subscribed) {
                             router.replace('/dashboard');
                         } else {
-                            router.replace('/onboarding');
+                            router.replace('/mulai');
                         }
                     }
                 } else if (router.pathname === '/') {

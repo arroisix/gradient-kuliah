@@ -20,7 +20,7 @@ const LIST_CLASS = [
     },
     {
         cover: 'https://storage.googleapis.com/gradient-asset-dev/courses/calculus2/assets/kalkulus2-thumbnail.png',
-        title: 'Kalkulus II',
+        title: 'Kalkulus 2',
         description: 'Kalkulus di ruang berdimensi n.'
     }
 ];
