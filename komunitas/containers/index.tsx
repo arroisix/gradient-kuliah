@@ -46,9 +46,7 @@ import { CgSearch } from 'react-icons/cg';
 const KomunitasContainer = (): JSX.Element => {
     const { profile } = useContext(AuthContext);
     const { isMobileBreakpoints } = useWindowBreakpoints();
-    const { data } = useGetCommunityPostQuery(
-        profile ? { user_id: profile.user_id } : {}
-    );
+    const { data } = useGetCommunityPostQuery({ user_id: profile?.user_id });
 
     const [search, setSearch] = useState('');
     const [showFilter, setShowFilter] = useState(false);

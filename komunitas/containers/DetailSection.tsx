@@ -1,132 +1,149 @@
 import AnswerCard from 'komunitas/components/AnswerCard';
 import QuestionCard from 'komunitas/components/QuestionCard';
-import { useGetCommunityPostDetailQuery } from 'komunitas/redux/api/komunitasApi';
+import {
+    useGetCommunityPostCommentDetailQuery,
+    useGetCommunityPostDetailQuery,
+    useGetExploreQuestionQuery
+} from 'komunitas/redux/api/komunitasApi';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { MdChevronRight } from 'react-icons/md';
 
-const DUMMY_SIMILIAR = {
-    questions: [
-        {
-            id: '12312373',
-            content: 'Ada yang ngerti turunan integrsdajkhd'
-        },
-        {
-            id: '231731973',
-            content: 'kajd asdjas ldaldjad alda'
-        },
-        {
-            id: '1731973',
-            content: 'satu tambah satu berapa ya?'
-        },
-        {
-            id: '31731973',
-            content: 'ku tak tau mau mu apa'
-        },
-        {
-            id: '1233',
-            content: 'are u okeh?'
-        },
-        {
-            id: '121973',
-            content: 'okh mas'
-        },
-        {
-            id: '12331',
-            content: 'halo alo hahahah ihiy'
-        }
-    ]
-};
+// const DUMMY_SIMILIAR = {
+//     questions: [
+//         {
+//             id: '12312373',
+//             content: 'Ada yang ngerti turunan integrsdajkhd'
+//         },
+//         {
+//             id: '231731973',
+//             content: 'kajd asdjas ldaldjad alda'
+//         },
+//         {
+//             id: '1731973',
+//             content: 'satu tambah satu berapa ya?'
+//         },
+//         {
+//             id: '31731973',
+//             content: 'ku tak tau mau mu apa'
+//         },
+//         {
+//             id: '1233',
+//             content: 'are u okeh?'
+//         },
+//         {
+//             id: '121973',
+//             content: 'okh mas'
+//         },
+//         {
+//             id: '12331',
+//             content: 'halo alo hahahah ihiy'
+//         }
+//     ]
+// };
 
-const DUMMY_QUESTION = {
-    id: '1',
-    content: 'aps kabars bangs',
-    viewer_counts: 8,
-    comment_counts: 3,
-    created_at: 1687229985,
-    course_name: 'bahasa indonesia',
-    student: {
-        id: '4',
-        photo_url: '',
-        username: 'irfan.kamil'
-    }
-};
+// const DUMMY_QUESTION = {
+//     id: '1',
+//     content: 'aps kabars bangs',
+//     viewer_counts: 8,
+//     comment_counts: 3,
+//     created_at: 1687229985,
+//     course_name: 'bahasa indonesia',
+//     student: {
+//         id: '4',
+//         photo_url: '',
+//         username: 'irfan.kamil'
+//     }
+// };
 
-const DUMMY_ANSWER = {
-    comments: [
-        {
-            id: '45',
-            content: 'baik bangs',
-            comment_counts: 2,
-            created_at: 4087229405,
-            user: {
-                id: '5',
-                photo_url: '',
-                username: 'kamil.irfan',
-                is_expert: true
-            }
-        },
-        {
-            id: '4128',
-            content: 'Aku expert bang',
-            comment_counts: 0,
-            created_at: 1687229985,
-            user: {
-                id: '5',
-                photo_url: '',
-                username: 'irfan.kamil',
-                is_expert: true
-            }
-        },
-        {
-            id: '451',
-            content: 'Keren kamu bang',
-            comment_counts: 0,
-            created_at: 1687229985,
-            user: {
-                id: '5',
-                photo_url: '',
-                username: 'irpan.k',
-                is_expert: false
-            }
-        }
-    ],
-    total_items: 10,
-    current_page: 10,
-    items_per_page: 10
-};
+// const DUMMY_ANSWER = {
+//     comments: [
+//         {
+//             id: '45',
+//             content: 'baik bangs',
+//             comment_counts: 2,
+//             created_at: 4087229405,
+//             user: {
+//                 id: '5',
+//                 photo_url: '',
+//                 username: 'kamil.irfan',
+//                 is_expert: true
+//             }
+//         },
+//         {
+//             id: '4128',
+//             content: 'Aku expert bang',
+//             comment_counts: 0,
+//             created_at: 1687229985,
+//             user: {
+//                 id: '5',
+//                 photo_url: '',
+//                 username: 'irfan.kamil',
+//                 is_expert: true
+//             }
+//         },
+//         {
+//             id: '451',
+//             content: 'Keren kamu bang',
+//             comment_counts: 0,
+//             created_at: 1687229985,
+//             user: {
+//                 id: '5',
+//                 photo_url: '',
+//                 username: 'irpan.k',
+//                 is_expert: false
+//             }
+//         }
+//     ],
+//     total_items: 10,
+//     current_page: 10,
+//     items_per_page: 10
+// };
 
 const DetailSection = (): JSX.Element => {
     const router = useRouter();
 
-    const data = useGetCommunityPostDetailQuery(
-        router.query.id
-            ? {
-                  slug: router.query.id as string
-              }
-            : { slug: 'none' }
-    );
+    const { data: question, error } = useGetCommunityPostDetailQuery({
+        slug: router.query.id as string
+    });
 
-    console.log(data);
+    const { data: comments } = useGetCommunityPostCommentDetailQuery({
+        post_id: question?.id as string
+    });
+
+    const { data: similiars } = useGetExploreQuestionQuery({
+        category_id: question?.category
+    });
+
+    useEffect(() => {
+        if (error) {
+            router.replace('/');
+        }
+    }, [error, router]);
 
     return (
         <section className="flex flex-col lg:flex-row gap-[2rem]">
             <div className="w-full lg:w-8/12 flex flex-col gap-9">
                 <div>
                     <h3 className="font-bold text-sm pb-5">Pertanyaan</h3>
-                    <QuestionCard {...DUMMY_QUESTION} clickable={false} />
+                    {question ? (
+                        <QuestionCard {...question} clickable={false} />
+                    ) : (
+                        <>Loading... padahal mah ga ada</>
+                    )}
                 </div>
                 <div>
                     <h3 className="font-bold text-sm pb-5">Jawaban</h3>
                     <div className="flex flex-col gap-[18px]">
-                        {DUMMY_ANSWER?.comments?.map((value) => (
+                        {comments?.comments?.map((value) => (
                             <AnswerCard
                                 key={value.id}
                                 {...value}
                                 isExpert={
-                                    DUMMY_QUESTION.student.username !==
-                                        value.user.username &&
-                                    value.user.is_expert
+                                    question?.student.username !==
+                                        value.student.username &&
+                                    value.student.is_expert
                                 }
                             />
                         ))}
@@ -136,7 +153,7 @@ const DetailSection = (): JSX.Element => {
             <div className="relative w-screen md:w-full lg:w-4/12 h-[350px] bg-[#121212] ml-[-16px] mb-[-40px] md:m-0 px-[18px] py-5 md:rounded-lg overflow-hidden">
                 <h4 className="font-extrabold pb-[20px]">Pertanyaan Serupa</h4>
                 <div className="flex flex-col gap-2 px-[10px] py-[10px] bg-[#1D1D1D] rounded">
-                    {DUMMY_SIMILIAR?.questions?.map(({ id, content }) => (
+                    {similiars?.questions?.map(({ id, content }) => (
                         <Link key={id} href={`/komunitas/${id}`}>
                             <div className="flex justify-between items-center gap-2 py-1 cursor-pointer z-[1]">
                                 <span className="text-xs whitespace-nowrap text-ellipsis overflow-hidden">

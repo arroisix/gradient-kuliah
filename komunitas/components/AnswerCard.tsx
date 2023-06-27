@@ -7,38 +7,39 @@ import { FaCircle, FaRegComment } from 'react-icons/fa';
 import ReplyComment from './ReplyComment';
 import KomunitasInput from './KomunitasInput';
 import moment from 'moment';
+import { useGetCommunityPostCommentDetailQuery } from 'komunitas/redux/api/komunitasApi';
 
-const DUMMY_COMMENT = {
-    comments: [
-        {
-            id: '45',
-            content: 'baik bangs',
-            comment_counts: 8,
-            created_at: 1687229985,
-            user: {
-                id: '5',
-                photo_url: '',
-                username: 'kamil.irfan',
-                is_expert: true
-            }
-        },
-        {
-            id: '43',
-            content: 'Sehat serta mulia gan',
-            comment_counts: 8,
-            created_at: 187229985,
-            user: {
-                id: '5',
-                photo_url: '',
-                username: 'bang.mil',
-                is_expert: false
-            }
-        }
-    ],
-    total_items: 10,
-    current_page: 10,
-    items_per_page: 10
-};
+// const DUMMY_COMMENT = {
+//     comments: [
+//         {
+//             id: '45',
+//             content: 'baik bangs',
+//             comment_counts: 8,
+//             created_at: 1687229985,
+//             user: {
+//                 id: '5',
+//                 photo_url: '',
+//                 username: 'kamil.irfan',
+//                 is_expert: true
+//             }
+//         },
+//         {
+//             id: '43',
+//             content: 'Sehat serta mulia gan',
+//             comment_counts: 8,
+//             created_at: 187229985,
+//             user: {
+//                 id: '5',
+//                 photo_url: '',
+//                 username: 'bang.mil',
+//                 is_expert: false
+//             }
+//         }
+//     ],
+//     total_items: 10,
+//     current_page: 10,
+//     items_per_page: 10
+// };
 
 type Student = {
     id: string;
@@ -67,10 +68,13 @@ const AnswerCard = ({
 
     const { checkCustomBreakpoints } = useWindowBreakpoints();
 
+    const { data: replies } = useGetCommunityPostCommentDetailQuery({
+        post_id: id
+    });
+
     function handleChangeComment(
         event: React.ChangeEvent<HTMLInputElement>
     ): void {
-        console.log(id); // prevent error
         setComment(event.target.value);
     }
 
@@ -165,15 +169,13 @@ const AnswerCard = ({
                 </div>
                 {showComment && (
                     <div className="flex flex-col gap-[18px]">
-                        {DUMMY_COMMENT?.comments?.map(
-                            ({ id, content, user }) => (
-                                <ReplyComment
-                                    key={id}
-                                    content={content}
-                                    user={user}
-                                />
-                            )
-                        )}
+                        {replies?.comments?.map(({ id, content, student }) => (
+                            <ReplyComment
+                                key={id}
+                                content={content}
+                                student={student}
+                            />
+                        ))}
                     </div>
                 )}
             </div>
