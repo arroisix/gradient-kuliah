@@ -21,7 +21,11 @@ export const komunitasApi = baseApi.injectEndpoints({
             })
         }),
         getCommunityPost: builder.query<
-            ListResponseData<CommunityPostResponse>,
+            CommunityPostResponse & {
+                count_items: number;
+                next_page?: number;
+                previous_page?: number;
+            },
             BaseListQueryParams & CommunityPostQuery
         >({
             query: ({ sort_by = 'LATEST', ...params }) => ({
@@ -51,7 +55,11 @@ export const komunitasApi = baseApi.injectEndpoints({
             })
         }),
         getCommunityPostCommentDetail: builder.query<
-            ListResponseData<CommunityPostCommentDetailResponse>,
+            CommunityPostCommentDetailResponse & {
+                count_items: number;
+                next_page?: number;
+                previous_page?: number;
+            },
             BaseListQueryParams & { post_id: string }
         >({
             query: ({ post_id, ...params }) => ({
