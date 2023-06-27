@@ -41,9 +41,13 @@ export const komunitasApi = baseApi.injectEndpoints({
                 url: `${KOMUNITAS_BASE_URL}post/list/${user_id}/`
             })
         }),
-        getExploreQuestion: builder.query<ExploreQuestionResponse, void>({
-            query: () => ({
-                url: `${KOMUNITAS_BASE_URL}post/list/`
+        getExploreQuestion: builder.query<
+            ExploreQuestionResponse,
+            { category_id?: string }
+        >({
+            query: ({ category_id }) => ({
+                url: `${KOMUNITAS_BASE_URL}post/list/`,
+                params: { category_id }
             })
         }),
         getCommunityPostDetail: builder.query<
@@ -51,7 +55,7 @@ export const komunitasApi = baseApi.injectEndpoints({
             { slug: string }
         >({
             query: ({ slug }) => ({
-                url: `${KOMUNITAS_BASE_URL}post/${slug}`
+                url: `${KOMUNITAS_BASE_URL}post/${slug}/`
             })
         }),
         getCommunityPostCommentDetail: builder.query<
