@@ -1,4 +1,3 @@
-import AuthContext from 'authentication/contexts/AuthProvider';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import DropdownFilter from 'komunitas/components/DropdownFilter';
 import DropdownSort from 'komunitas/components/DropdownSort';
@@ -6,7 +5,7 @@ import KomunitasInput from 'komunitas/components/KomunitasInput';
 import MobileTabs from 'komunitas/components/MobileTabs';
 import QuestionCard from 'komunitas/components/QuestionCard';
 import { useGetCommunityPostQuery } from 'komunitas/redux/api/komunitasApi';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { CgSearch } from 'react-icons/cg';
 
 // const DUMMY_DATA = {
@@ -44,9 +43,8 @@ import { CgSearch } from 'react-icons/cg';
 // };
 
 const KomunitasContainer = (): JSX.Element => {
-    const { profile } = useContext(AuthContext);
     const { isMobileBreakpoints } = useWindowBreakpoints();
-    const { data } = useGetCommunityPostQuery({ user_id: profile?.user_id });
+    const { data } = useGetCommunityPostQuery({});
 
     const [search, setSearch] = useState('');
     const [showFilter, setShowFilter] = useState(false);
