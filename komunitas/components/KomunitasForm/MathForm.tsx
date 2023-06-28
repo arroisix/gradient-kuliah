@@ -2,7 +2,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import TextareaAutosize from 'react-textarea-autosize';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 import Button from 'commons/components/elements/Button';
 import { MATH_NOTATION } from './constant';
 
@@ -12,6 +12,8 @@ const MathForm = ({
     setFormContent: React.Dispatch<React.SetStateAction<string>>;
 }): JSX.Element => {
     const [mathContent, setMathContent] = useState('');
+
+    const mathTextareaRef = useRef<HTMLTextAreaElement>(null);
 
     function handleClickTextArea(
         event: React.MouseEvent<HTMLTextAreaElement, MouseEvent>
@@ -36,6 +38,22 @@ const MathForm = ({
         setMathContent('');
     }
 
+    function handleInsertMathTextarea(latex: string): void {
+        const cursorPosition = mathTextareaRef.current
+            ?.selectionStart as number;
+        const textBeforeCursorPosition = mathContent.substring(
+            0,
+            cursorPosition
+        );
+        const textAfterCursorPosition = mathContent.substring(
+            cursorPosition,
+            mathContent.length
+        );
+        setMathContent(
+            `${textBeforeCursorPosition} ${latex} ${textAfterCursorPosition}`
+        );
+    }
+
     return (
         <div className="flex flex-col gap-[10px] py-6">
             <ReactMarkdown
@@ -55,7 +73,7 @@ const MathForm = ({
                     <div
                         key={index}
                         className="hover:bg-[#2C2C2C] p-2 rounded-lg text-xs"
-                        onClick={() => setMathContent((prev) => prev + latex)}
+                        onClick={() => handleInsertMathTextarea(latex)}
                         aria-hidden>
                         <ReactMarkdown
                             remarkPlugins={[remarkMath]}
@@ -67,6 +85,7 @@ const MathForm = ({
             </div>
             <div className="border-[1px] border-[#373737] rounded-[4px]">
                 <TextareaAutosize
+                    ref={mathTextareaRef}
                     value={mathContent}
                     name="form"
                     onChange={handleMathContent}
