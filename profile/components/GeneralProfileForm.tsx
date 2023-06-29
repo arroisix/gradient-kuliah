@@ -26,8 +26,6 @@ export const GeneralProfileForm = (): JSX.Element => {
     const [checkUsernameAvailability, { isLoading: isCheckUsernameLoading }] =
         useCheckUsernameAvailabilityMutation();
 
-    console.log(previewImage);
-
     const debounced = useDebouncedCallback(
         async (
             value: string,
