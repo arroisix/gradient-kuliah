@@ -3,11 +3,11 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { BiBookReader } from 'react-icons/bi';
 import { FiHome } from 'react-icons/fi';
-// import {
-//     RiQuestionnaireLine,
-//     RiNotification3Line,
-//     RiBookOpenLine
-// } from 'react-icons/ri';
+import {
+    RiQuestionnaireLine
+    // RiNotification3Line,
+    // RiBookOpenLine
+} from 'react-icons/ri';
 
 const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
     const route = useRouter();
@@ -22,7 +22,7 @@ const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
                 {/* <Link href={'/notifikasi'}>
                     <span
                         className={`flex gap-4 cursor-pointer ${
-                            pathname === '/notifikasi'
+                            pathname.includes('/notifikasi')
                                 ? 'text-[#CCCCCC]'
                                 : 'text-[#666666]'
                         }  hover:text-[#999999]`}>
@@ -33,7 +33,7 @@ const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
                 <Link href={'/dashboard'}>
                     <span
                         className={`flex gap-4 cursor-pointer ${
-                            pathname === '/dashboard'
+                            pathname.includes('/dashboard')
                                 ? 'text-[#CCCCCC]'
                                 : 'text-[#666666]'
                         }  hover:text-[#999999]`}>
@@ -41,21 +41,21 @@ const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
                         Home
                     </span>
                 </Link>
-                {/* <Link href={'/komunitas'}>
+                <Link href={'/komunitas'}>
                     <span
                         className={`flex gap-4 cursor-pointer ${
-                            pathname === '/komunitas'
+                            pathname.includes('/komunitas')
                                 ? 'text-[#CCCCCC]'
                                 : 'text-[#666666]'
                         }  hover:text-[#999999]`}>
                         <RiQuestionnaireLine size={20} />
                         Komunitas
                     </span>
-                </Link> */}
+                </Link>
                 <Link href={'/kelas'}>
                     <span
                         className={`flex gap-4 cursor-pointer ${
-                            pathname === '/kelas'
+                            pathname.includes('/kelas')
                                 ? 'text-[#CCCCCC]'
                                 : 'text-[#666666]'
                         }  hover:text-[#999999]`}>
@@ -66,7 +66,7 @@ const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
                 {/* <Link href={'/buku'}>
                     <span
                         className={`flex gap-4 cursor-pointer ${
-                            pathname === '/buku'
+                            pathname.includes('/buku')
                                 ? 'text-[#CCCCCC]'
                                 : 'text-[#666666]'
                         } text-[#666666] hover:text-[#999999]`}>

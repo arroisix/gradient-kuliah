@@ -4,11 +4,11 @@ import { Dispatch, SetStateAction } from 'react';
 import { BiBookReader } from 'react-icons/bi';
 import { FiHome } from 'react-icons/fi';
 import { MdOutlineClose } from 'react-icons/md';
-// import {
-//     RiBookOpenLine,
-//     RiNotification3Line,
-//     RiQuestionnaireLine
-// } from 'react-icons/ri';
+import {
+    // RiBookOpenLine,
+    // RiNotification3Line,
+    RiQuestionnaireLine
+} from 'react-icons/ri';
 
 const MobileSidebar = ({
     setOpenSidebar
@@ -53,7 +53,7 @@ const MobileSidebar = ({
                         Home
                     </span>
                 </Link>
-                {/* <Link href={'/komunitas'}>
+                <Link href={'/komunitas'}>
                     <span
                         className={`flex gap-4 cursor-pointer ${
                             pathname === '/komunitas'
@@ -63,7 +63,7 @@ const MobileSidebar = ({
                         <RiQuestionnaireLine size={20} />
                         Komunitas
                     </span>
-                </Link> */}
+                </Link>
                 <Link href={'/kelas'}>
                     <span
                         className={`flex gap-4 cursor-pointer ${

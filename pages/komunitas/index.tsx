@@ -1,10 +1,10 @@
 import LearnLayout from 'commons/learnLayout';
-import KomunitasForm from 'komunitas/components/KomunitasForm';
+import KomunitasContainer from 'komunitas/containers';
 
 const Komunitas = (): JSX.Element => {
     return (
         <LearnLayout showSidebar fullHeightSidebar>
-            <KomunitasForm />
+            <KomunitasContainer />
         </LearnLayout>
     );
 };
