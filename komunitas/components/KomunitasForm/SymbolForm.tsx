@@ -63,7 +63,7 @@ const SymbolForm = ({
                     </option>
                 ))}
             </select>
-            <div className="flex flex-wrap justify-around items-center">
+            <div className="flex flex-wrap items-center">
                 {SYMBOL[symbolType].map(({ display, value }, index) => (
                     <div
                         key={index}
