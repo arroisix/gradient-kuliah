@@ -63,7 +63,7 @@ export const MATH_NOTATION = [
 ];
 
 export const SYMBOL = {
-    matematika: [
+    math: [
         { display: '²', value: '²' },
         { display: '³', value: '³' },
         { display: '√', value: '√' },
@@ -166,7 +166,7 @@ export const SYMBOL = {
         { display: 'ⁿ', value: 'ⁿ' },
         { display: 'ˣ', value: 'ˣ' }
     ],
-    sirilik: [
+    cyrillic: [
         { display: 'А', value: 'А' },
         { display: 'Б', value: 'Б' },
         { display: 'В', value: 'В' },
@@ -234,7 +234,7 @@ export const SYMBOL = {
         { display: 'ю', value: 'ю' },
         { display: 'я', value: 'я' }
     ],
-    yunani: [
+    greece: [
         { display: 'Α', value: 'Α' },
         { display: 'Β', value: 'Β' },
         { display: 'Γ', value: 'Γ' },
@@ -285,7 +285,7 @@ export const SYMBOL = {
         { display: 'ψ', value: 'ψ' },
         { display: 'ω', value: 'ω' }
     ],
-    eropa: [
+    europe: [
         { display: 'À', value: 'À' },
         { display: 'Â', value: 'Â' },
         { display: 'Ç', value: 'Ç' },
@@ -320,7 +320,7 @@ export const SYMBOL = {
         { display: 'ö', value: 'ö' },
         { display: 'ü', value: 'ü' }
     ],
-    lainnya: [
+    other: [
         { display: '€', value: '€' },
         { display: '£', value: '£' },
         { display: '¥', value: '¥' },

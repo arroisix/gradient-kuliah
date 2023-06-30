@@ -2,13 +2,21 @@ import { useState } from 'react';
 import { SYMBOL } from './constant';
 
 const SYMBOL_OPTIONS = [
-    { key: 'matematika', name: 'Simbol: Matematika' },
+    { key: 'math', name: 'Simbol: Matematika' },
     { key: 'supersub', name: 'Simbol: Superskrip dan subskrip' },
-    { key: 'sirilik', name: 'Simbol Bahasa: Sirilik' },
-    { key: 'yunani', name: 'Simbol Bahasa: Yunani' },
-    { key: 'eropa', name: 'Simbol Bahasa: Eropa' },
-    { key: 'lainnya', name: 'Simbol lain' }
+    { key: 'cyrillic', name: 'Simbol Bahasa: Sirilik' },
+    { key: 'greece', name: 'Simbol Bahasa: Yunani' },
+    { key: 'europe', name: 'Simbol Bahasa: Eropa' },
+    { key: 'other', name: 'Simbol lain' }
 ];
+
+type SymbolOption =
+    | 'math'
+    | 'supersub'
+    | 'cyrillic'
+    | 'greece'
+    | 'europe'
+    | 'other';
 
 const SymbolForm = ({
     setFormContent,
@@ -17,22 +25,12 @@ const SymbolForm = ({
     setFormContent: React.Dispatch<React.SetStateAction<string>>;
     formRef: React.RefObject<HTMLTextAreaElement>;
 }): JSX.Element => {
-    const [symbolType, setSymbolType] = useState<
-        'matematika' | 'supersub' | 'sirilik' | 'yunani' | 'eropa' | 'lainnya'
-    >('matematika');
+    const [symbolType, setSymbolType] = useState<SymbolOption>('math');
 
     function handleSymbolTypeChange(
         event: React.ChangeEvent<HTMLSelectElement>
     ): void {
-        setSymbolType(
-            event.target.value as
-                | 'matematika'
-                | 'supersub'
-                | 'sirilik'
-                | 'yunani'
-                | 'eropa'
-                | 'lainnya'
-        );
+        setSymbolType(event.target.value as SymbolOption);
     }
 
     function handleInsertSymbol(symbol: string): void {
