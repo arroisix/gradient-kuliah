@@ -18,33 +18,36 @@ const withAnon = <P extends object>(
         if (typeof window !== 'undefined') {
             const accessToken = useSelector(getToken);
             const isProfileComplete = useSelector(getIsProfileComplete);
-            const { is_subscribed } = useCourseSubscription();
+            const { is_subscribed, isLoading: isLoadingSubscribed } =
+                useCourseSubscription();
             const router = useRouter();
 
             if (!!accessToken) {
-                if (['/masuk', '/daftar'].includes(router.pathname)) {
-                    if (!isProfileComplete) {
-                        router.replace(
-                            `/onboarding${
-                                !!router.query.redirect
-                                    ? `?redirect=${router.query.redirect}`
-                                    : ''
-                            }`
-                        );
-                    } else if (!!router.query.redirect) {
-                        router.replace(`${router.query.redirect}`);
-                    } else {
+                if (!isLoadingSubscribed) {
+                    if (['/masuk', '/daftar'].includes(router.pathname)) {
+                        if (!isProfileComplete) {
+                            router.replace(
+                                `/onboarding${
+                                    !!router.query.redirect
+                                        ? `?redirect=${router.query.redirect}`
+                                        : ''
+                                }`
+                            );
+                        } else if (!!router.query.redirect) {
+                            router.replace(`${router.query.redirect}`);
+                        } else {
+                            if (is_subscribed) {
+                                router.replace('/dashboard');
+                            } else {
+                                router.replace('/mulai');
+                            }
+                        }
+                    } else if (router.pathname === '/') {
                         if (is_subscribed) {
                             router.replace('/dashboard');
                         } else {
-                            router.replace('/onboarding');
+                            return <WrappedComponent {...(props as P)} />;
                         }
-                    }
-                } else if (router.pathname === '/') {
-                    if (is_subscribed) {
-                        router.replace('/dashboard');
-                    } else {
-                        return <WrappedComponent {...(props as P)} />;
                     }
                 }
 

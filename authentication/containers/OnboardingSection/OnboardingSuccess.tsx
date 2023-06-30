@@ -30,6 +30,7 @@ export const OnboardingSuccess = (): JSX.Element => {
                     Mulai dengan memilih paket yang cocok untukmu
                 </span>
                 <Button
+                    id={'checkout-cta'}
                     onClick={handleIsLastOnboardingStep}
                     variant="primary"
                     size="small"
