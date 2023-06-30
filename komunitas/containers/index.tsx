@@ -1,6 +1,7 @@
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import DropdownFilter from 'komunitas/components/DropdownFilter';
 import DropdownSort from 'komunitas/components/DropdownSort';
+import KomunitasForm from 'komunitas/components/KomunitasForm';
 import KomunitasInput from 'komunitas/components/KomunitasInput';
 import MobileTabs from 'komunitas/components/MobileTabs';
 import QuestionCard from 'komunitas/components/QuestionCard';
@@ -87,6 +88,7 @@ const KomunitasContainer = (): JSX.Element => {
                     onChange={handleChangeSearch}
                     rightIcon={<CgSearch />}
                 />
+                <KomunitasForm />
                 {isMobileBreakpoints && <MobileTabs />}
                 <div className="flex justify-between items-center">
                     <h2 className="hidden md:block font-extrabold">Eksplor</h2>
