@@ -5,6 +5,7 @@ import Avatar from 'react-avatar';
 import useUploadFile from 'commons/hooks/useUploadFile';
 import TextareaAutosize from 'react-textarea-autosize';
 import AdvanceForm from './AdvanceForm';
+import { IoMdClose } from 'react-icons/io';
 
 const OPTIONS = [
     { key: '', value: 'Pilih Kategori' },
@@ -112,13 +113,31 @@ const KomunitasForm = (): JSX.Element => {
                 </div>
                 <div className="flex gap-3 flex-wrap">
                     {attachmentName.map((value, index) => (
-                        <span
+                        <div
                             key={index}
-                            className="inline-block px-[10px] py-[6px] text-[10px] font-body bg-[#272727] rounded-[4px]"
-                            onClick={() => window.open(attachmentUrl[index])}
-                            aria-hidden>
-                            {value}
-                        </span>
+                            className="relative px-[10px] py-[6px] text-[10px] font-body bg-[#272727] rounded-[4px]">
+                            <span
+                                className="inline-block"
+                                onClick={() =>
+                                    window.open(attachmentUrl[index])
+                                }
+                                aria-hidden>
+                                {value}
+                            </span>
+                            <div
+                                className="absolute top-[-5px] right-[-5px] w-[15px] h-[15px] bg-[#373737] rounded-full flex justify-center items-center cursor-pointer"
+                                onClick={() => {
+                                    setAttachmentName((prev) =>
+                                        prev.filter((item, id) => id !== index)
+                                    );
+                                    setAttachmentUrl((prev) =>
+                                        prev.filter((item, id) => id !== index)
+                                    );
+                                }}
+                                aria-hidden>
+                                <IoMdClose className="text-neutral-400" />
+                            </div>
+                        </div>
                     ))}
                 </div>
             </div>
