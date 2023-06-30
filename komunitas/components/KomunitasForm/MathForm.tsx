@@ -72,7 +72,7 @@ const MathForm = ({
                 {MATH_NOTATION.map(({ display, latex }, index) => (
                     <div
                         key={index}
-                        className="hover:bg-[#2C2C2C] p-2 rounded-lg text-xs"
+                        className="hover:bg-[#2C2C2C] cursor-pointer p-2 rounded-lg text-xs"
                         onClick={() => handleInsertMathTextarea(latex)}
                         aria-hidden>
                         <ReactMarkdown
