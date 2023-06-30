@@ -1,6 +1,6 @@
 import AuthContext from 'authentication/contexts/AuthProvider';
 import Image from 'next/image';
-import { ChangeEvent, useContext, useState } from 'react';
+import { ChangeEvent, useContext, useRef, useState } from 'react';
 import Avatar from 'react-avatar';
 import useUploadFile from 'commons/hooks/useUploadFile';
 import TextareaAutosize from 'react-textarea-autosize';
@@ -19,6 +19,8 @@ const KomunitasForm = (): JSX.Element => {
     const [category, setCategory] = useState('');
     const [attachmentUrl, setAttachmentUrl] = useState<string[]>([]);
     const [attachmentName, setAttachmentName] = useState<string[]>([]);
+
+    const formRef = useRef<HTMLTextAreaElement>(null);
 
     const { uploadFile } = useUploadFile('qna');
 
@@ -100,6 +102,7 @@ const KomunitasForm = (): JSX.Element => {
                 </div>
                 <div className="w-full h-full md:pl-[24px]">
                     <TextareaAutosize
+                        ref={formRef}
                         value={formContent}
                         name="form"
                         onChange={handleChange}
@@ -119,7 +122,7 @@ const KomunitasForm = (): JSX.Element => {
                     ))}
                 </div>
             </div>
-            <AdvanceForm setFormContent={setFormContent} />
+            <AdvanceForm setFormContent={setFormContent} formRef={formRef} />
         </div>
     );
 };

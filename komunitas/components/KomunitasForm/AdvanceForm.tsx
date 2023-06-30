@@ -4,6 +4,7 @@ import { FiPaperclip } from 'react-icons/fi';
 import { ImOmega } from 'react-icons/im';
 import { TbSquareRoot2 } from 'react-icons/tb';
 import MathForm from './MathForm';
+import SymbolForm from './SymbolForm';
 
 const ICON = [
     {
@@ -15,9 +16,11 @@ const ICON = [
 ];
 
 const AdvanceForm = ({
-    setFormContent
+    setFormContent,
+    formRef
 }: {
     setFormContent: React.Dispatch<React.SetStateAction<string>>;
+    formRef: React.RefObject<HTMLTextAreaElement>;
 }): JSX.Element => {
     const [iconClicked, setIconClicked] = useState(-1);
 
@@ -64,6 +67,9 @@ const AdvanceForm = ({
                 )}
             </div>
             {iconClicked === 0 && <MathForm setFormContent={setFormContent} />}
+            {iconClicked === 1 && (
+                <SymbolForm setFormContent={setFormContent} formRef={formRef} />
+            )}
             {iconClicked !== -1 && (
                 <div className="flex gap-2 justify-end pb-[10px]">
                     <Button
