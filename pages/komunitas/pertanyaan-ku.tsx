@@ -1,4 +1,5 @@
 import LearnLayout from 'commons/learnLayout';
+import withAuth from 'commons/withAuth';
 import KomunitasContainer from 'komunitas/containers';
 import React from 'react';
 
@@ -10,4 +11,4 @@ const PertanyaanKu = (): JSX.Element => {
     );
 };
 
-export default PertanyaanKu;
+export default withAuth(PertanyaanKu);

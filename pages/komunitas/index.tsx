@@ -1,4 +1,5 @@
 import LearnLayout from 'commons/learnLayout';
+import withAuth from 'commons/withAuth';
 import KomunitasContainer from 'komunitas/containers';
 
 const Komunitas = (): JSX.Element => {
@@ -9,4 +10,4 @@ const Komunitas = (): JSX.Element => {
     );
 };
 
-export default Komunitas;
+export default withAuth(Komunitas);
