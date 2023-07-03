@@ -1,4 +1,5 @@
 import AuthContext from 'authentication/contexts/AuthProvider';
+import Button from 'commons/components/elements/Button';
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import Skeleton from 'commons/components/elements/Skeleton';
 import useTransition from 'commons/hooks/useTransition';
@@ -42,6 +43,7 @@ const KomunitasContainer = (): JSX.Element => {
     const [attachmentName, setAttachmentName] = useState<string[]>([]);
     const [search, setSearch] = useState('');
     const [showSort, setShowSort] = useState(false);
+    const [showForm, setShowForm] = useState(false);
     const [filter, setFilter] = useState('');
     const [sort, setSort] = useState<
         'LATEST' | 'POPULAR' | 'ANSWERED' | 'NOT_ANSWERED'
@@ -146,27 +148,48 @@ const KomunitasContainer = (): JSX.Element => {
                     rightIcon={<CgSearch />}
                     handleSubmit={() => undefined}
                 />
-                <KomunitasForm
-                    formContent={formContent}
-                    setFormContent={setFormContent}
-                    category={category}
-                    setCategory={setCategory}
-                    attachmentUrl={attachmentUrl}
-                    setAttachmentUrl={setAttachmentUrl}
-                    attachmentName={attachmentName}
-                    setAttachmentName={setAttachmentName}
-                    bucketKey="qna"
-                    handleSubmit={handleSubmit}
-                    isUsingCategories={true}
-                    subjectCategories={subjects?.categories}
-                    submitButtonText={
-                        isLoadingPost ? (
-                            <AiOutlineLoading3Quarters className="animate-spin" />
-                        ) : (
-                            'Tanyakan'
-                        )
-                    }
-                />
+                {showForm ? (
+                    <KomunitasForm
+                        formContent={formContent}
+                        setFormContent={setFormContent}
+                        category={category}
+                        setCategory={setCategory}
+                        attachmentUrl={attachmentUrl}
+                        setAttachmentUrl={setAttachmentUrl}
+                        attachmentName={attachmentName}
+                        setAttachmentName={setAttachmentName}
+                        bucketKey="qna"
+                        handleSubmit={handleSubmit}
+                        cancelButton={() => setShowForm((prev) => !prev)}
+                        isUsingCategories={true}
+                        subjectCategories={subjects?.categories}
+                        submitButtonText={
+                            isLoadingPost ? (
+                                <AiOutlineLoading3Quarters className="animate-spin" />
+                            ) : (
+                                'Tanyakan'
+                            )
+                        }
+                    />
+                ) : (
+                    <div className="flex flex-col md:flex-row justify-between items-center gap-3 w-full px-5 py-[14px] bg-[#5F2BCE] rounded-lg">
+                        <div className="flex items-center gap-3">
+                            <span className="inline-block px-[6px] font-bold font-[Urbanist] text-center bg-black rounded-full">
+                                G
+                            </span>
+                            <span className="inline-block font-body text-xs">
+                                Tidak menemukan jawaban di komunitas?
+                            </span>
+                        </div>
+                        <Button
+                            variant="custom"
+                            className="font-extrabold text-xs px-6 bg-black w-full md:w-fit"
+                            onClick={() => setShowForm((prev) => !prev)}>
+                            Tanya Sekarang
+                        </Button>
+                    </div>
+                )}
+
                 {isMobileBreakpoints && <MobileTabs />}
                 <div className="flex justify-between items-center">
                     <h2 className="hidden md:block font-extrabold">
