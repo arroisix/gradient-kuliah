@@ -1,45 +1,20 @@
+import ReactMarkdown from 'react-markdown';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import Avatar from 'react-avatar';
 import { BsHexagonFill, BsCheck } from 'react-icons/bs';
 import { FaCircle, FaRegComment } from 'react-icons/fa';
 import ReplyComment from './ReplyComment';
 import KomunitasInput from './KomunitasInput';
 import moment from 'moment';
-import { useGetCommunityPostCommentDetailQuery } from 'komunitas/redux/api/komunitasApi';
-
-// const DUMMY_COMMENT = {
-//     comments: [
-//         {
-//             id: '45',
-//             content: 'baik bangs',
-//             comment_counts: 8,
-//             created_at: 1687229985,
-//             user: {
-//                 id: '5',
-//                 photo_url: '',
-//                 username: 'kamil.irfan',
-//                 is_expert: true
-//             }
-//         },
-//         {
-//             id: '43',
-//             content: 'Sehat serta mulia gan',
-//             comment_counts: 8,
-//             created_at: 187229985,
-//             user: {
-//                 id: '5',
-//                 photo_url: '',
-//                 username: 'bang.mil',
-//                 is_expert: false
-//             }
-//         }
-//     ],
-//     total_items: 10,
-//     current_page: 10,
-//     items_per_page: 10
-// };
+import {
+    useGetCommunityPostCommentDetailQuery,
+    usePostQuestionAnswerMutation
+} from 'komunitas/redux/api/komunitasApi';
+import AuthContext from 'authentication/contexts/AuthProvider';
 
 type Student = {
     id: string;
@@ -54,7 +29,8 @@ const AnswerCard = ({
     content,
     comment_counts,
     created_at,
-    student
+    student,
+    category
 }: {
     isExpert: boolean;
     id: string;
@@ -62,12 +38,15 @@ const AnswerCard = ({
     comment_counts: number;
     created_at: number;
     student: Student;
+    category: string;
 }): JSX.Element => {
     const [comment, setComment] = useState('');
     const [showComment, setShowComment] = useState(false);
 
     const { checkCustomBreakpoints } = useWindowBreakpoints();
+    const { profile } = useContext(AuthContext);
 
+    const [postComment] = usePostQuestionAnswerMutation();
     const { data: replies } = useGetCommunityPostCommentDetailQuery({
         post_id: id
     });
@@ -76,6 +55,17 @@ const AnswerCard = ({
         event: React.ChangeEvent<HTMLInputElement>
     ): void {
         setComment(event.target.value);
+    }
+
+    async function handleSubmitComment(): Promise<void> {
+        await postComment({
+            post_id: id,
+            content: comment,
+            category_id: category,
+            attachment_urls: []
+        });
+
+        setComment('');
     }
 
     return (
@@ -128,9 +118,14 @@ const AnswerCard = ({
                     </div>
                 )}
             </div>
-            <div className="flex flex-col gap-[18px]">
+            <div className="flex flex-col gap-[18px] lg:pl-[36px]">
                 <article>
-                    <p className="text-xs font-body lg:pl-[36px]">{content}</p>
+                    <ReactMarkdown
+                        className="text-xs font-body"
+                        remarkPlugins={[remarkMath]}
+                        rehypePlugins={[rehypeKatex]}>
+                        {content?.replaceAll('\n', '\n\n')}
+                    </ReactMarkdown>
                 </article>
                 <div
                     className="flex items-center gap-2 w-fit cursor-pointer"
@@ -145,14 +140,14 @@ const AnswerCard = ({
                     <div className="relative w-[24px] h-[24px]">
                         {student?.photo_url ? (
                             <Image
-                                src={student?.photo_url}
-                                alt={student?.username}
+                                src={profile?.photo_profile as string}
+                                alt={profile?.username}
                                 layout="fill"
                                 className="rounded-full object-contain"
                             />
                         ) : (
                             <Avatar
-                                name={student?.username}
+                                name={profile?.username}
                                 size="24"
                                 round
                                 className="!block"
@@ -165,9 +160,10 @@ const AnswerCard = ({
                         value={comment}
                         onChange={handleChangeComment}
                         placeholder="Tambahkan komentar"
+                        handleSubmit={handleSubmitComment}
                     />
                 </div>
-                {showComment && (
+                {showComment && comment_counts !== 0 && (
                     <div className="flex flex-col gap-[18px]">
                         {replies?.comments?.map(({ id, content, student }) => (
                             <ReplyComment
