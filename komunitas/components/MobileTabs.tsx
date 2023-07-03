@@ -16,10 +16,10 @@ const MobileTabs = (): JSX.Element => {
                     Eksplor
                 </span>
             </Link>
-            <Link href={'/pertanyaan-ku'}>
+            <Link href={'/komunitas/pertanyaan-ku'}>
                 <span
                     className={`text-center text-sm w-1/2 py-[6px] border-b-2 ${
-                        pathname === '/pertanyaan-ku'
+                        pathname === '/komunitas/pertanyaan-ku'
                             ? 'border-accent-purple font-bold'
                             : 'border-[#2D2D2D] font-medium text-neutral-600'
                     }`}>
