@@ -17,10 +17,16 @@ const ICON = [
 
 const AdvanceForm = ({
     setFormContent,
-    formRef
+    formRef,
+    handleSubmit,
+    cancelButton,
+    submitButtonText
 }: {
     setFormContent: React.Dispatch<React.SetStateAction<string>>;
     formRef: React.RefObject<HTMLTextAreaElement>;
+    handleSubmit: () => Promise<void>;
+    cancelButton?: () => void;
+    submitButtonText: JSX.Element | string;
 }): JSX.Element => {
     const [iconClicked, setIconClicked] = useState(-1);
 
@@ -55,13 +61,15 @@ const AdvanceForm = ({
                     <div className="flex gap-2">
                         <Button
                             variant="custom"
-                            className="text-neutral-600 font-extrabold text-xs px-[10px]">
+                            className="text-neutral-600 font-extrabold text-xs px-[10px]"
+                            onClick={cancelButton}>
                             Batal
                         </Button>
                         <Button
                             variant="primary"
-                            className="font-extrabold text-xs px-[17px]">
-                            Tanyakan
+                            className="font-extrabold text-xs px-[17px]"
+                            onClick={handleSubmit}>
+                            {submitButtonText}
                         </Button>
                     </div>
                 )}
@@ -74,13 +82,15 @@ const AdvanceForm = ({
                 <div className="flex gap-2 justify-end pb-[10px]">
                     <Button
                         variant="custom"
-                        className="text-neutral-600 font-extrabold text-xs px-[10px]">
+                        className="text-neutral-600 font-extrabold text-xs px-[10px]"
+                        onClick={cancelButton}>
                         Batal
                     </Button>
                     <Button
                         variant="primary"
-                        className="font-extrabold text-xs px-[17px]">
-                        Tanyakan
+                        className="font-extrabold text-xs px-[17px]"
+                        onClick={handleSubmit}>
+                        {submitButtonText}
                     </Button>
                 </div>
             )}

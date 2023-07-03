@@ -1,36 +1,65 @@
 import AuthContext from 'authentication/contexts/AuthProvider';
 import Image from 'next/image';
-import { ChangeEvent, useContext, useRef, useState } from 'react';
+import {
+    ChangeEvent,
+    Dispatch,
+    SetStateAction,
+    useContext,
+    useRef
+} from 'react';
 import Avatar from 'react-avatar';
 import useUploadFile from 'commons/hooks/useUploadFile';
 import TextareaAutosize from 'react-textarea-autosize';
 import AdvanceForm from './AdvanceForm';
 import { IoMdClose } from 'react-icons/io';
 
-const OPTIONS = [
-    { key: '', value: 'Pilih Kategori' },
-    { key: 'matematika', value: 'Matematika' },
-    { key: 'fisika', value: 'Fisika' },
-    { key: 'kimia', value: 'Kimia' }
-];
-
-const KomunitasForm = (): JSX.Element => {
+const KomunitasForm = ({
+    formContent,
+    setFormContent,
+    category,
+    setCategory,
+    attachmentUrl,
+    setAttachmentUrl,
+    attachmentName,
+    setAttachmentName,
+    bucketKey,
+    handleSubmit,
+    cancelButton,
+    isUsingCategories,
+    subjectCategories,
+    submitButtonText,
+    className
+}: {
+    formContent: string;
+    setFormContent: Dispatch<SetStateAction<string>>;
+    category?: string;
+    setCategory?: Dispatch<SetStateAction<string>>;
+    attachmentUrl: string[];
+    setAttachmentUrl: Dispatch<SetStateAction<string[]>>;
+    attachmentName: string[];
+    setAttachmentName: Dispatch<SetStateAction<string[]>>;
+    bucketKey?: string;
+    handleSubmit: () => Promise<void>;
+    cancelButton?: () => void;
+    isUsingCategories: boolean;
+    subjectCategories?: [{ id: string; name: string }];
+    submitButtonText: JSX.Element | string;
+    className?: string;
+}): JSX.Element => {
     const { profile } = useContext(AuthContext);
-    const [formContent, setFormContent] = useState(``);
-    const [category, setCategory] = useState('');
-    const [attachmentUrl, setAttachmentUrl] = useState<string[]>([]);
-    const [attachmentName, setAttachmentName] = useState<string[]>([]);
 
     const formRef = useRef<HTMLTextAreaElement>(null);
 
-    const { uploadFile } = useUploadFile('qna');
+    const { uploadFile } = useUploadFile(bucketKey);
 
     function handleChange(event: ChangeEvent<HTMLTextAreaElement>): void {
         setFormContent(event.target.value);
     }
 
     function handleSelectCategory(event: ChangeEvent<HTMLSelectElement>): void {
-        setCategory(event.target.value);
+        if (setCategory) {
+            setCategory(event.target.value);
+        }
     }
 
     async function handleInputFile(
@@ -62,7 +91,8 @@ const KomunitasForm = (): JSX.Element => {
                 accept={'image/png,image/gif,image/jpeg,image/jpg'}
                 onChange={handleInputFile}
             />
-            <div className="w-full bg-[#1D1D1D] p-[18px] md:p-5 rounded-t-[20px]">
+            <div
+                className={`w-full bg-[#1D1D1D] p-[18px] md:p-5 rounded-t-[20px] ${className}`}>
                 <div className="flex flex-wrap justify-between gap-2">
                     <div className="flex items-center gap-3">
                         {!!profile?.photo_profile ? (
@@ -80,26 +110,31 @@ const KomunitasForm = (): JSX.Element => {
                             {profile?.username}
                         </span>
                     </div>
-                    <select
-                        className={`pl-[18px] pr-[50px] border-none bg-[#2C2C2C] rounded-[70px] text-xs font-bold cursor-pointer focus:outline-none focus:ring-0 focus:appearance-none ${
-                            category === '' ? 'text-neutral-600' : ''
-                        }`}
-                        onChange={handleSelectCategory}
-                        name={'name'}>
-                        {OPTIONS.map((o) => (
+                    {isUsingCategories && (
+                        <select
+                            className={`pl-[18px] pr-[50px] border-none bg-[#2C2C2C] rounded-[70px] text-xs font-bold cursor-pointer focus:outline-none focus:ring-0 focus:appearance-none ${
+                                category === '' ? 'text-neutral-600' : ''
+                            }`}
+                            onChange={handleSelectCategory}
+                            name={'name'}>
                             <option
-                                className={`pt-4 ${
-                                    o.key === ''
-                                        ? 'text-neutral-600'
-                                        : 'text-white'
-                                }`}
-                                key={o.key}
-                                value={o.key}
-                                label={o.value}>
-                                {o.value}
+                                className="pt-4 text-neutral-600"
+                                key=""
+                                value=""
+                                label="Pilih Kategori">
+                                Pilih Kategori
                             </option>
-                        ))}
-                    </select>
+                            {subjectCategories?.map((option) => (
+                                <option
+                                    className="pt-4 text-white"
+                                    key={option.id}
+                                    value={option.id}
+                                    label={option.name}>
+                                    {option.name}
+                                </option>
+                            ))}
+                        </select>
+                    )}
                 </div>
                 <div className="w-full h-full md:pl-[24px]">
                     <TextareaAutosize
@@ -141,7 +176,13 @@ const KomunitasForm = (): JSX.Element => {
                     ))}
                 </div>
             </div>
-            <AdvanceForm setFormContent={setFormContent} formRef={formRef} />
+            <AdvanceForm
+                setFormContent={setFormContent}
+                formRef={formRef}
+                handleSubmit={handleSubmit}
+                cancelButton={cancelButton}
+                submitButtonText={submitButtonText}
+            />
         </div>
     );
 };
