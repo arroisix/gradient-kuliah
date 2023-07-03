@@ -12,7 +12,7 @@ interface CommunityNotification {
 }
 
 interface PostQuestionAnswerPayload {
-    post_id?: string;
+    post_id?: string | null;
     content: string;
     category_id: string;
     attachment_urls: string[];

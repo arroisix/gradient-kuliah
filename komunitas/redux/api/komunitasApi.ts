@@ -18,7 +18,11 @@ export const komunitasApi = baseApi.injectEndpoints({
                 url: `${KOMUNITAS_BASE_URL}post/`,
                 method: 'POST',
                 body: { ...payload }
-            })
+            }),
+            invalidatesTags: (result, error, arg) => [
+                { type: 'COMMUNITIES', id: 'LIST' },
+                { type: 'COMMUNITIES', id: arg.post_id as string }
+            ]
         }),
         getCommunityPost: builder.query<
             CommunityPostResponse & {
@@ -31,7 +35,16 @@ export const komunitasApi = baseApi.injectEndpoints({
             query: ({ sort_by = 'LATEST', ...params }) => ({
                 url: `${KOMUNITAS_BASE_URL}post/`,
                 params: { sort_by, ...params }
-            })
+            }),
+            providesTags: (result) =>
+                result
+                    ? [
+                          ...result.community_posts.map(
+                              ({ id }) => ({ type: 'COMMUNITIES', id } as const)
+                          ),
+                          { type: 'COMMUNITIES', id: 'LIST' }
+                      ]
+                    : [{ type: 'COMMUNITIES', id: 'LIST' }]
         }),
         getMyQuestionList: builder.query<
             MyQuestionListResponse,
@@ -39,7 +52,8 @@ export const komunitasApi = baseApi.injectEndpoints({
         >({
             query: ({ user_id }) => ({
                 url: `${KOMUNITAS_BASE_URL}post/list/${user_id}/`
-            })
+            }),
+            providesTags: [{ type: 'COMMUNITIES', id: 'LIST' }]
         }),
         getExploreQuestion: builder.query<
             ExploreQuestionResponse,
@@ -48,7 +62,8 @@ export const komunitasApi = baseApi.injectEndpoints({
             query: ({ category_id }) => ({
                 url: `${KOMUNITAS_BASE_URL}post/list/`,
                 params: { category_id }
-            })
+            }),
+            providesTags: [{ type: 'COMMUNITIES', id: 'LIST' }]
         }),
         getCommunityPostDetail: builder.query<
             CommunityPostDetailResponse,
@@ -56,7 +71,8 @@ export const komunitasApi = baseApi.injectEndpoints({
         >({
             query: ({ slug }) => ({
                 url: `${KOMUNITAS_BASE_URL}post/${slug}/`
-            })
+            }),
+            providesTags: (result) => [{ type: 'COMMUNITIES', id: result?.id }]
         }),
         getCommunityPostCommentDetail: builder.query<
             CommunityPostCommentDetailResponse & {
@@ -69,7 +85,26 @@ export const komunitasApi = baseApi.injectEndpoints({
             query: ({ post_id, ...params }) => ({
                 url: `${KOMUNITAS_BASE_URL}post/${post_id}/comment/`,
                 params
-            })
+            }),
+            providesTags: (result, error, arg) =>
+                result
+                    ? [
+                          ...result.comments.map(
+                              () =>
+                                  ({
+                                      type: 'COMMUNITIES',
+                                      id: arg.post_id
+                                  } as const)
+                          ),
+                          ...result.comments.map(
+                              (value) =>
+                                  ({
+                                      type: 'COMMUNITIES',
+                                      id: value.id
+                                  } as const)
+                          )
+                      ]
+                    : [{ type: 'COMMUNITIES', id: 'LIST' }]
         })
     })
 });
