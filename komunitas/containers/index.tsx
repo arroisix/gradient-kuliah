@@ -174,7 +174,7 @@ const KomunitasContainer = (): JSX.Element => {
                 ) : (
                     <div className="flex flex-col md:flex-row justify-between items-center gap-3 w-full px-5 py-[14px] bg-[#5F2BCE] rounded-lg">
                         <div className="flex items-center gap-3">
-                            <span className="inline-block px-[6px] font-bold font-[Urbanist] text-center bg-black rounded-full">
+                            <span className="inline-block leading-none py-[4px] px-[6px] font-bold font-[Urbanist] text-center bg-black rounded-full">
                                 G
                             </span>
                             <span className="inline-block font-body text-xs">
@@ -285,7 +285,12 @@ const KomunitasContainer = (): JSX.Element => {
                                     </span>
                                     <div className="flex flex-col gap-2 px-[10px] py-[10px] bg-[#1D1D1D] rounded">
                                         {value.items.map(
-                                            ({ slug, content, id }) => (
+                                            ({
+                                                slug,
+                                                content,
+                                                id,
+                                                unseen_comment_counts
+                                            }) => (
                                                 <Link
                                                     key={id}
                                                     href={`/komunitas/${slug}`}>
@@ -293,7 +298,14 @@ const KomunitasContainer = (): JSX.Element => {
                                                         <span className="text-xs whitespace-nowrap text-ellipsis overflow-hidden">
                                                             {content}
                                                         </span>
-                                                        <div>
+                                                        <div className="flex items-center">
+                                                            {unseen_comment_counts ? (
+                                                                <span className="inline-block leading-none py-[2px] pl-[3px] pr-[4px] font-body text-center text-[10px] bg-[#B92011] rounded-full">
+                                                                    {
+                                                                        unseen_comment_counts
+                                                                    }
+                                                                </span>
+                                                            ) : null}
                                                             <MdChevronRight
                                                                 className="text-neutral-600"
                                                                 size={18}
