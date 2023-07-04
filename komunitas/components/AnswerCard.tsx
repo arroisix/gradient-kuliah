@@ -98,7 +98,7 @@ const AnswerCard = ({
                             size={4}
                         />
                         <span className="inline-block font-body text-xs text-neutral-600">
-                            {moment(created_at).fromNow()}
+                            {moment(created_at).utc().calendar()}
                         </span>
                     </div>
                 </div>

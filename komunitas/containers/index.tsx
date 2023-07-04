@@ -269,7 +269,9 @@ const KomunitasContainer = (): JSX.Element => {
                                     key={value.date}
                                     className="flex flex-col gap-2">
                                     <span className="font-body text-xs text-neutral-600">
-                                        {moment(value.date).fromNow()}
+                                        {moment(value.date)
+                                            .utc()
+                                            .format('MMM DD')}
                                     </span>
                                     <div className="flex flex-col gap-2 px-[10px] py-[10px] bg-[#1D1D1D] rounded">
                                         {value.items.map(
