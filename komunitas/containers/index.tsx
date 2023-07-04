@@ -36,8 +36,10 @@ const KomunitasContainer = (): JSX.Element => {
     const anchor = useRef({} as HTMLDivElement);
 
     const { data: subjects } = useGetSubjectCategoriesQuery();
-    const [postCommunity, { isLoading: isLoadingPost }] =
-        usePostQuestionAnswerMutation();
+    const [
+        postCommunity,
+        { isLoading: isLoadingPost, isSuccess: isPostSuccess }
+    ] = usePostQuestionAnswerMutation();
 
     const [formContent, setFormContent] = useState('');
     const [category, setCategory] = useState('');
@@ -53,7 +55,11 @@ const KomunitasContainer = (): JSX.Element => {
     >('LATEST');
     const isAnchorOnScreen = useOnScreen(anchor);
 
-    const { data, isLoading: isLoadingData } = useGetCommunityPostQuery(
+    const {
+        data,
+        isLoading: isLoadingData,
+        isFetching: isFetchingData
+    } = useGetCommunityPostQuery(
         {
             sort_by: sort,
             category_id: filter,
@@ -62,7 +68,9 @@ const KomunitasContainer = (): JSX.Element => {
                 : undefined,
             page: page
         },
-        { refetchOnMountOrArgChange: true }
+        {
+            refetchOnMountOrArgChange: true
+        }
     );
 
     useEffect(() => {
@@ -219,7 +227,7 @@ const KomunitasContainer = (): JSX.Element => {
                     </div>
                 </div>
                 <div className="flex flex-col gap-[18px]">
-                    {isLoadingData ? (
+                    {!isPostSuccess && (isLoadingData || isFetchingData) ? (
                         <>
                             <Skeleton className="!mb-0 h-40" />
                             <Skeleton className="!mb-0 h-40" />
