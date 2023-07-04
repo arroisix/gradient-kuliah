@@ -1,4 +1,5 @@
 import Skeleton from 'commons/components/elements/Skeleton';
+import useOnScreen from 'commons/hooks/useOnScreen';
 import AnswerCard from 'komunitas/components/AnswerCard';
 import QuestionCard from 'komunitas/components/QuestionCard';
 import {
@@ -9,10 +10,14 @@ import {
 } from 'komunitas/redux/api/komunitasApi';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useEffect, useRef, useState } from 'react';
 import { MdChevronRight } from 'react-icons/md';
 
 const DetailSection = (): JSX.Element => {
+    const anchor = useRef({} as HTMLDivElement);
     const router = useRouter();
+    const isAnchorOnScreen = useOnScreen(anchor);
+    const [page, setPage] = useState(1);
 
     const { data: subjects } = useGetSubjectCategoriesQuery();
 
@@ -34,7 +39,8 @@ const DetailSection = (): JSX.Element => {
         refetch: refetchPostComment
     } = useGetCommunityPostCommentDetailQuery(
         {
-            post_id: question?.id as string
+            post_id: question?.id as string,
+            page: page
         },
         { skip: !question?.id }
     );
@@ -47,6 +53,16 @@ const DetailSection = (): JSX.Element => {
             skip: !category?.id
         }
     );
+
+    useEffect(() => {
+        if (
+            comments?.next_page !== null &&
+            isAnchorOnScreen &&
+            !isLoadingComment
+        ) {
+            setPage((prev) => prev + 1);
+        }
+    }, [isAnchorOnScreen]);
 
     return (
         <section className="flex flex-col lg:flex-row gap-[2rem]">
@@ -86,6 +102,7 @@ const DetailSection = (): JSX.Element => {
                                 />
                             ))
                         )}
+                        <div ref={anchor} className="w-full h-0" />
                     </div>
                 </div>
             </div>

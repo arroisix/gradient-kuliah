@@ -46,23 +46,23 @@ interface CommunityPostQuery {
     user_id?: string;
 }
 
+interface CommunityPost {
+    id: string;
+    content: string;
+    slug: string;
+    category: string;
+    viewer_counts: number;
+    comment_counts: number;
+    created_at: timestamp;
+    student: {
+        id: string;
+        photo_url: string;
+        username: string;
+    };
+}
+
 interface CommunityPostResponse {
-    community_posts: [
-        {
-            id: string;
-            content: string;
-            slug: string;
-            category: string;
-            viewer_counts: number;
-            comment_counts: number;
-            created_at: timestamp;
-            student: {
-                id: string;
-                photo_url: string;
-                username: string;
-            };
-        }
-    ];
+    community_posts: CommunityPost[];
 }
 
 interface MyQuestionListResponse {

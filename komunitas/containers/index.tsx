@@ -2,6 +2,7 @@ import AuthContext from 'authentication/contexts/AuthProvider';
 import Button from 'commons/components/elements/Button';
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import Skeleton from 'commons/components/elements/Skeleton';
+import useOnScreen from 'commons/hooks/useOnScreen';
 import useTransition from 'commons/hooks/useTransition';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import DropdownFilter from 'komunitas/components/DropdownFilter';
@@ -20,7 +21,7 @@ import {
 import moment from 'moment';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { CgSearch } from 'react-icons/cg';
 import { MdChevronRight } from 'react-icons/md';
@@ -32,6 +33,7 @@ const KomunitasContainer = (): JSX.Element => {
     const { pathname } = router;
     const loadingTransition = useTransition(router);
     const { profile } = useContext(AuthContext);
+    const anchor = useRef({} as HTMLDivElement);
 
     const { data: subjects } = useGetSubjectCategoriesQuery();
     const [postCommunity, { isLoading: isLoadingPost }] =
@@ -44,18 +46,27 @@ const KomunitasContainer = (): JSX.Element => {
     const [search, setSearch] = useState('');
     const [showSort, setShowSort] = useState(false);
     const [showForm, setShowForm] = useState(false);
+    const [page, setPage] = useState(1);
     const [filter, setFilter] = useState('');
     const [sort, setSort] = useState<
         'LATEST' | 'POPULAR' | 'ANSWERED' | 'NOT_ANSWERED'
     >('LATEST');
+    const isAnchorOnScreen = useOnScreen(anchor);
 
     const { data, isLoading: isLoadingData } = useGetCommunityPostQuery({
         sort_by: sort,
         category_id: filter,
         user_id: pathname.includes('pertanyaan-ku')
             ? profile?.user_id
-            : undefined
+            : undefined,
+        page: page
     });
+
+    useEffect(() => {
+        if (data?.next_page !== null && isAnchorOnScreen && !isLoadingData) {
+            setPage((prev) => prev + 1);
+        }
+    }, [isAnchorOnScreen]);
 
     const { data: myQuestion, isLoading: isLoadingMyQuestion } =
         useGetMyQuestionListQuery(
@@ -120,10 +131,12 @@ const KomunitasContainer = (): JSX.Element => {
     }
 
     function handleChangeFilter(e: React.ChangeEvent<HTMLSelectElement>): void {
+        setPage(1);
         setFilter(e.target.value);
     }
 
     function handleChangeSort(event: any): void {
+        setPage(1);
         setSort(event.target.id);
     }
 
@@ -210,7 +223,7 @@ const KomunitasContainer = (): JSX.Element => {
                             <Skeleton className="!mb-0 h-40" />
                         </>
                     ) : (
-                        data?.community_posts.map((value) => (
+                        data?.community_posts?.map((value) => (
                             <QuestionCard
                                 key={value.id}
                                 {...value}
@@ -218,6 +231,7 @@ const KomunitasContainer = (): JSX.Element => {
                             />
                         ))
                     )}
+                    <div ref={anchor} className="w-full h-0" />
                 </div>
             </div>
             <div className="relative w-screen md:w-full lg:w-4/12">
