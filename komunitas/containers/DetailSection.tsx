@@ -57,6 +57,7 @@ const DetailSection = (): JSX.Element => {
     useEffect(() => {
         if (
             comments?.next_page !== null &&
+            comments?.next_page !== undefined &&
             isAnchorOnScreen &&
             !isLoadingComment
         ) {

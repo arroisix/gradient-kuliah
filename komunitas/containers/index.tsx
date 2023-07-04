@@ -53,14 +53,17 @@ const KomunitasContainer = (): JSX.Element => {
     >('LATEST');
     const isAnchorOnScreen = useOnScreen(anchor);
 
-    const { data, isLoading: isLoadingData } = useGetCommunityPostQuery({
-        sort_by: sort,
-        category_id: filter,
-        user_id: pathname.includes('pertanyaan-ku')
-            ? profile?.user_id
-            : undefined,
-        page: page
-    });
+    const { data, isLoading: isLoadingData } = useGetCommunityPostQuery(
+        {
+            sort_by: sort,
+            category_id: filter,
+            user_id: pathname.includes('pertanyaan-ku')
+                ? profile?.user_id
+                : undefined,
+            page: page
+        },
+        { refetchOnMountOrArgChange: true }
+    );
 
     useEffect(() => {
         if (data?.next_page !== null && isAnchorOnScreen && !isLoadingData) {
@@ -73,7 +76,7 @@ const KomunitasContainer = (): JSX.Element => {
             {
                 user_id: profile?.user_id as string
             },
-            { skip: !profile?.user_id }
+            { skip: !profile?.user_id, refetchOnMountOrArgChange: true }
         );
 
     const { data: sideExploreData, isLoading: isLoadingSideExplore } =
@@ -223,9 +226,9 @@ const KomunitasContainer = (): JSX.Element => {
                             <Skeleton className="!mb-0 h-40" />
                         </>
                     ) : (
-                        data?.community_posts?.map((value) => (
+                        data?.community_posts?.map((value, index) => (
                             <QuestionCard
-                                key={value.id}
+                                key={index}
                                 {...value}
                                 clickable={true}
                             />
