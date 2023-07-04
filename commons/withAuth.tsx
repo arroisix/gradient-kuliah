@@ -16,59 +16,62 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
             const accessToken = useSelector(getToken);
             const rawToken = window.localStorage.getItem('token');
 
-            const { is_subscribed } = useCourseSubscription();
+            const { is_subscribed, isLoading: isLoadingSubscribed } =
+                useCourseSubscription();
             const isProfileComplete = useSelector(getIsProfileComplete);
             const isLastOnboardingStep = localStorage.getItem(
                 'isLastOnboardingStep'
             );
             // If there is no access token we redirect to "/" page.
             // Also clear token from cookie and localstorage
-            if (
-                pathname === '/onboarding' &&
-                isProfileComplete &&
-                !(isLastOnboardingStep === 'true') &&
-                is_subscribed
-            ) {
-                window.location.href = '/dashboard';
-                return;
-            }
+            if (!isLoadingSubscribed) {
+                if (
+                    pathname === '/onboarding' &&
+                    isProfileComplete &&
+                    !(isLastOnboardingStep === 'true') &&
+                    is_subscribed
+                ) {
+                    window.location.href = '/dashboard';
+                    return;
+                }
 
-            if (pathname === '/onboarding' && !isProfileComplete) {
+                if (pathname === '/onboarding' && !isProfileComplete) {
+                    return <WrappedComponent {...props} />;
+                }
+
+                if (
+                    pathname === '/onboarding' &&
+                    isProfileComplete &&
+                    isLastOnboardingStep === 'true' &&
+                    !is_subscribed
+                ) {
+                    window.location.href = '/mulai';
+                    return;
+                }
+
+                if (
+                    ['/langganan', '/profil', '/transaksi'].some((value) =>
+                        pathname.includes(value)
+                    ) &&
+                    !is_subscribed
+                ) {
+                    return <WrappedComponent {...props} />;
+                }
+
+                if (pathname !== '/mulai' && !is_subscribed) {
+                    window.location.href = '/';
+                    return;
+                }
+
+                if (!accessToken && !rawToken) {
+                    window.location.href = '/';
+                    return;
+                }
+
+                // If this is an accessToken we just render the component that was passed with all its props
+
                 return <WrappedComponent {...props} />;
             }
-
-            if (
-                pathname === '/onboarding' &&
-                isProfileComplete &&
-                isLastOnboardingStep === 'true' &&
-                !is_subscribed
-            ) {
-                window.location.href = '/mulai';
-                return;
-            }
-
-            if (
-                ['/langganan', '/profil', '/transaksi'].some((value) =>
-                    pathname.includes(value)
-                ) &&
-                !is_subscribed
-            ) {
-                return <WrappedComponent {...props} />;
-            }
-
-            if (pathname !== '/mulai' && !is_subscribed) {
-                window.location.href = '/';
-                return;
-            }
-
-            if (!accessToken && !rawToken) {
-                window.location.href = '/';
-                return;
-            }
-
-            // If this is an accessToken we just render the component that was passed with all its props
-
-            return <WrappedComponent {...props} />;
         }
         return <LoadingBackdrop />;
     };
