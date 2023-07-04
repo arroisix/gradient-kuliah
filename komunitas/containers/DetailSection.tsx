@@ -16,16 +16,13 @@ const DetailSection = (): JSX.Element => {
 
     const { data: subjects } = useGetSubjectCategoriesQuery();
 
-    const {
-        data: question,
-        isLoading: isLoadingQuestion,
-        isFetching: isFetchingQuestion
-    } = useGetCommunityPostDetailQuery(
-        {
-            slug: router.query.id as string
-        },
-        { skip: !router.query.id }
-    );
+    const { data: question, isLoading: isLoadingQuestion } =
+        useGetCommunityPostDetailQuery(
+            {
+                slug: router.query.id as string
+            },
+            { skip: !router.query.id }
+        );
 
     const category = subjects?.categories.filter(
         (value) => value.name === question?.category
@@ -34,7 +31,6 @@ const DetailSection = (): JSX.Element => {
     const {
         data: comments,
         isLoading: isLoadingComment,
-        isFetching: isFetchingComment,
         refetch: refetchPostComment
     } = useGetCommunityPostCommentDetailQuery(
         {
@@ -57,7 +53,7 @@ const DetailSection = (): JSX.Element => {
             <div className="w-full lg:w-8/12 flex flex-col gap-9">
                 <div>
                     <h3 className="font-bold text-sm pb-5">Pertanyaan</h3>
-                    {isLoadingQuestion || isFetchingQuestion ? (
+                    {isLoadingQuestion ? (
                         <Skeleton className="!mb-0 h-40" />
                     ) : (
                         <QuestionCard
@@ -71,10 +67,7 @@ const DetailSection = (): JSX.Element => {
                 <div>
                     <h3 className="font-bold text-sm pb-5">Jawaban</h3>
                     <div className="flex flex-col gap-[18px]">
-                        {isLoadingQuestion ||
-                        isFetchingQuestion ||
-                        isLoadingComment ||
-                        isFetchingComment ? (
+                        {isLoadingQuestion || isLoadingComment ? (
                             <>
                                 <Skeleton className="!mb-0 h-40" />
                                 <Skeleton className="!mb-0 h-40" />

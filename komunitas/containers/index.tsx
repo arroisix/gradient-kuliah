@@ -49,11 +49,7 @@ const KomunitasContainer = (): JSX.Element => {
         'LATEST' | 'POPULAR' | 'ANSWERED' | 'NOT_ANSWERED'
     >('LATEST');
 
-    const {
-        data,
-        isLoading: isLoadingData,
-        isFetching: isFetchingData
-    } = useGetCommunityPostQuery({
+    const { data, isLoading: isLoadingData } = useGetCommunityPostQuery({
         sort_by: sort,
         category_id: filter,
         user_id: pathname.includes('pertanyaan-ku')
@@ -61,25 +57,19 @@ const KomunitasContainer = (): JSX.Element => {
             : undefined
     });
 
-    const {
-        data: myQuestion,
-        isLoading: isLoadingMyQuestion,
-        isFetching: isFetchingMyQuestion
-    } = useGetMyQuestionListQuery(
-        {
-            user_id: profile?.user_id as string
-        },
-        { skip: !profile?.user_id }
-    );
+    const { data: myQuestion, isLoading: isLoadingMyQuestion } =
+        useGetMyQuestionListQuery(
+            {
+                user_id: profile?.user_id as string
+            },
+            { skip: !profile?.user_id }
+        );
 
-    const {
-        data: sideExploreData,
-        isLoading: isLoadingSideExplore,
-        isFetching: isFetchingSideExplore
-    } = useGetExploreQuestionQuery(
-        {},
-        { skip: !pathname.includes('pertanyaan-ku') }
-    );
+    const { data: sideExploreData, isLoading: isLoadingSideExplore } =
+        useGetExploreQuestionQuery(
+            {},
+            { skip: !pathname.includes('pertanyaan-ku') }
+        );
 
     async function handleSubmit(): Promise<void> {
         if (!category) {
@@ -212,7 +202,7 @@ const KomunitasContainer = (): JSX.Element => {
                     </div>
                 </div>
                 <div className="flex flex-col gap-[18px]">
-                    {isLoadingData || isFetchingData ? (
+                    {isLoadingData ? (
                         <>
                             <Skeleton className="!mb-0 h-40" />
                             <Skeleton className="!mb-0 h-40" />
@@ -238,7 +228,7 @@ const KomunitasContainer = (): JSX.Element => {
                     </h4>
                     <div className="flex flex-col gap-[18px]">
                         {pathname.includes('pertanyaan-ku') ? (
-                            isLoadingSideExplore || isFetchingSideExplore ? (
+                            isLoadingSideExplore ? (
                                 <>
                                     <Skeleton className="h-3 !mb-0" />
                                     <Skeleton className="h-3 !mb-0" />
@@ -267,9 +257,7 @@ const KomunitasContainer = (): JSX.Element => {
                                     )}
                                 </div>
                             )
-                        ) : isLoadingMyQuestion ||
-                          isFetchingMyQuestion ||
-                          !profile ? (
+                        ) : isLoadingMyQuestion || !profile ? (
                             <>
                                 <Skeleton className="h-3 !mb-0" />
                                 <Skeleton className="h-3 !mb-0" />
