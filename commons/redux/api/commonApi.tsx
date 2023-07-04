@@ -13,9 +13,14 @@ export const commonApi = baseApi.injectEndpoints({
                 body: data,
                 method: 'POST'
             })
+        }),
+        getConfig: builder.query<ConfigResponse, void>({
+            query: () => ({
+                url: `${COMMONS_BASE_URL}config/`
+            })
         })
     }),
     overrideExisting: false
 });
 
-export const { useUploadFileMutation } = commonApi;
+export const { useUploadFileMutation, useGetConfigQuery } = commonApi;

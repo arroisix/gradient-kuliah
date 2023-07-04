@@ -1,3 +1,5 @@
+import { useGetConfigQuery } from 'commons/redux/api/commonApi';
+import { useGetCommunityNotificationQuery } from 'komunitas/redux/api/komunitasApi';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -13,11 +15,14 @@ const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
     const route = useRouter();
     const { pathname } = route;
 
+    const { data: configData } = useGetConfigQuery();
+    const { data: communityNotification } = useGetCommunityNotificationQuery();
+
     return (
         <aside
             className={`hidden md:block top-[76px] w-min ${
                 fullHeight ? 'fixed h-[90vh]' : 'h-fit sticky'
-            } bg-[#121212] rounded-lg w-[158px] px-3 py-4`}>
+            } bg-[#121212] rounded-lg w-[175px] px-3 py-4`}>
             <div className="flex flex-col gap-3">
                 {/* <Link href={'/notifikasi'}>
                     <span
@@ -41,17 +46,26 @@ const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
                         Home
                     </span>
                 </Link>
-                <Link href={'/komunitas'}>
-                    <span
-                        className={`flex gap-4 cursor-pointer ${
-                            pathname.includes('/komunitas')
-                                ? 'text-[#CCCCCC]'
-                                : 'text-[#666666]'
-                        }  hover:text-[#999999]`}>
-                        <RiQuestionnaireLine size={20} />
-                        Komunitas
-                    </span>
-                </Link>
+                {configData?.configs.is_community_config_enabled && (
+                    <Link href={'/komunitas'}>
+                        <span
+                            className={`flex items-center gap-4 cursor-pointer ${
+                                pathname.includes('/komunitas')
+                                    ? 'text-[#CCCCCC]'
+                                    : 'text-[#666666]'
+                            }  hover:text-[#999999]`}>
+                            <RiQuestionnaireLine size={20} />
+                            Komunitas
+                            {communityNotification?.unseen_comment_counts ? (
+                                <span className="inline-block leading-none h-min py-[2px] pl-[3px] pr-[4px] font-body text-center text-white text-[10px] bg-[#B92011] rounded-full">
+                                    {
+                                        communityNotification?.unseen_comment_counts
+                                    }
+                                </span>
+                            ) : null}
+                        </span>
+                    </Link>
+                )}
                 <Link href={'/kelas'}>
                     <span
                         className={`flex gap-4 cursor-pointer ${
