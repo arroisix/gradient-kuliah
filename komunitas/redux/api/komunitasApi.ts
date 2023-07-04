@@ -9,7 +9,7 @@ export const komunitasApi = baseApi.injectEndpoints({
         }),
         getCommunityNotification: builder.query<CommunityNotification, void>({
             query: () => ({ url: `${KOMUNITAS_BASE_URL}notification/` }),
-            providesTags: ['COMMUNITIES']
+            providesTags: [{ type: 'COMMUNITIES', id: 'LIST' }]
         }),
         postQuestionAnswer: builder.mutation<
             PostQuestionAnswerResponse,
