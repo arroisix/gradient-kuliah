@@ -66,6 +66,7 @@ const AnswerCard = ({
         });
 
         setComment('');
+        setShowComment(true);
     }
 
     return (
