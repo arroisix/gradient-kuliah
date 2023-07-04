@@ -49,9 +49,7 @@ export const komunitasApi = baseApi.injectEndpoints({
                     currentCache.next_page = newItems.next_page;
                     currentCache.previous_page = newItems.previous_page;
                 } else {
-                    currentCache.community_posts.unshift(
-                        ...newItems.community_posts
-                    );
+                    currentCache.community_posts = newItems.community_posts;
                 }
             },
             forceRefetch({ currentArg, previousArg }) {
@@ -120,7 +118,7 @@ export const komunitasApi = baseApi.injectEndpoints({
                     currentCache.next_page = newItems.next_page;
                     currentCache.previous_page = newItems.previous_page;
                 } else {
-                    currentCache.comments.unshift(...newItems.comments);
+                    currentCache.comments = newItems.comments;
                 }
             },
             forceRefetch({ currentArg, previousArg }) {

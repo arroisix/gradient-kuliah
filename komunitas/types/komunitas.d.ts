@@ -106,19 +106,19 @@ interface CommunityPostDetailResponse {
     };
 }
 
+interface CommunityPostCommentDetail {
+    id: string;
+    content: string;
+    comment_counts: number;
+    created_at: timestamp;
+    student: {
+        id: string;
+        photo_url: string;
+        username: string;
+        is_expert: boolean;
+    };
+}
+
 interface CommunityPostCommentDetailResponse {
-    comments: [
-        {
-            id: string;
-            content: string;
-            comment_counts: number;
-            created_at: timestamp;
-            student: {
-                id: string;
-                photo_url: string;
-                username: string;
-                is_expert: boolean;
-            };
-        }
-    ];
+    comments: CommunityPostCommentDetail[];
 }
