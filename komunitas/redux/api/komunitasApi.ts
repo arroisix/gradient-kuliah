@@ -8,7 +8,8 @@ export const komunitasApi = baseApi.injectEndpoints({
             query: () => ({ url: `${KOMUNITAS_BASE_URL}subject-category/` })
         }),
         getCommunityNotification: builder.query<CommunityNotification, void>({
-            query: () => ({ url: `${KOMUNITAS_BASE_URL}notification/` })
+            query: () => ({ url: `${KOMUNITAS_BASE_URL}notification/` }),
+            providesTags: ['COMMUNITIES']
         }),
         postQuestionAnswer: builder.mutation<
             PostQuestionAnswerResponse,
@@ -21,7 +22,8 @@ export const komunitasApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: (result, error, arg) => [
                 { type: 'COMMUNITIES', id: 'LIST' },
-                { type: 'COMMUNITIES', id: arg.post_id as string }
+                { type: 'COMMUNITIES', id: arg.post_id as string },
+                'COMMUNITIES'
             ]
         }),
         getCommunityPost: builder.query<
@@ -42,7 +44,8 @@ export const komunitasApi = baseApi.injectEndpoints({
                           ...result.community_posts.map(
                               ({ id }) => ({ type: 'COMMUNITIES', id } as const)
                           ),
-                          { type: 'COMMUNITIES', id: 'LIST' }
+                          { type: 'COMMUNITIES', id: 'LIST' },
+                          'COMMUNITIES'
                       ]
                     : [{ type: 'COMMUNITIES', id: 'LIST' }]
         }),
@@ -72,7 +75,10 @@ export const komunitasApi = baseApi.injectEndpoints({
             query: ({ slug }) => ({
                 url: `${KOMUNITAS_BASE_URL}post/${slug}/`
             }),
-            providesTags: (result) => [{ type: 'COMMUNITIES', id: result?.id }]
+            providesTags: (result) => [
+                { type: 'COMMUNITIES', id: result?.id } as const,
+                'COMMUNITIES'
+            ]
         }),
         getCommunityPostCommentDetail: builder.query<
             CommunityPostCommentDetailResponse & {
@@ -102,7 +108,8 @@ export const komunitasApi = baseApi.injectEndpoints({
                                       type: 'COMMUNITIES',
                                       id: value.id
                                   } as const)
-                          )
+                          ),
+                          'COMMUNITIES'
                       ]
                     : [{ type: 'COMMUNITIES', id: 'LIST' }]
         })
