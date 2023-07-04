@@ -13,6 +13,13 @@ const SORT_OPTIONS: SubjectInterface[] = [
     { key: 'NOT_ANSWERED', value: 'Belum terjawab' }
 ];
 
+const SORT_KEY_VALUE = {
+    LATEST: 'Terbaru',
+    POPULAR: 'Populer',
+    ANSWERED: 'Terjawab',
+    NOT_ANSWERED: 'Belum terjawab'
+};
+
 const DropdownSort = ({
     showSort,
     sort,
@@ -21,7 +28,7 @@ const DropdownSort = ({
     onChange
 }: {
     showSort: boolean;
-    sort: string;
+    sort: 'LATEST' | 'POPULAR' | 'ANSWERED' | 'NOT_ANSWERED';
     setShowSort: React.Dispatch<React.SetStateAction<boolean>>;
     setSort: React.Dispatch<
         React.SetStateAction<'LATEST' | 'POPULAR' | 'ANSWERED' | 'NOT_ANSWERED'>
@@ -31,10 +38,12 @@ const DropdownSort = ({
     return (
         <div className="w-1/2 relative cursor-pointer">
             <div
-                className="flex justify-between items-center text-xs font-bold w-full md:w-fit pl-[18px] pr-2 py-[7.5px] md:p-[7px] bg-[#2C2C2C] rounded-full"
+                className="flex justify-between items-center gap-1 text-xs font-bold w-full md:w-fit pl-[18px] pr-2 py-[7.5px] md:p-[7px] bg-[#2C2C2C] rounded-full"
                 onClick={() => setShowSort((prev) => !prev)}
                 aria-hidden>
-                <span className="md:hidden">Filter</span>
+                <span className="md:hidden whitespace-nowrap text-ellipsis overflow-hidden">
+                    {SORT_KEY_VALUE[sort]}
+                </span>
                 <BiFilter size={18} />
             </div>
             <div
