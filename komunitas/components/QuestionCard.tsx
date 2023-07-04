@@ -27,8 +27,7 @@ const QuestionCard = ({
     viewer_counts,
     comment_counts,
     created_at,
-    student,
-    refetchPostComment
+    student
 }: {
     clickable: boolean;
     id?: string;
@@ -39,7 +38,6 @@ const QuestionCard = ({
     comment_counts: number;
     created_at: number;
     student: Student;
-    refetchPostComment?: () => void;
 }): JSX.Element => {
     const [postCommunity, { isLoading }] = usePostQuestionAnswerMutation();
     const router = useRouter();
@@ -74,7 +72,6 @@ const QuestionCard = ({
             attachment_urls: attachmentUrl
         });
 
-        if (refetchPostComment) refetchPostComment();
         setFormContent('');
         setAttachmentUrl([]);
         setAttachmentName([]);

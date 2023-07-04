@@ -33,17 +33,14 @@ const DetailSection = (): JSX.Element => {
         (value) => value.name === question?.category
     )[0];
 
-    const {
-        data: comments,
-        isLoading: isLoadingComment,
-        refetch: refetchPostComment
-    } = useGetCommunityPostCommentDetailQuery(
-        {
-            post_id: question?.id as string,
-            page: page
-        },
-        { skip: !question?.id }
-    );
+    const { data: comments, isLoading: isLoadingComment } =
+        useGetCommunityPostCommentDetailQuery(
+            {
+                post_id: question?.id as string,
+                page: page
+            },
+            { skip: !question?.id }
+        );
 
     const { data: similiars } = useGetExploreQuestionQuery(
         {
@@ -76,7 +73,6 @@ const DetailSection = (): JSX.Element => {
                         <QuestionCard
                             {...(question as CommunityPostDetailResponse)}
                             category={category?.id as string}
-                            refetchPostComment={refetchPostComment}
                             clickable={false}
                         />
                     )}
