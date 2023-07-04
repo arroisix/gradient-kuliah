@@ -110,6 +110,7 @@ const KomunitasContainer = (): JSX.Element => {
         setCategory('');
         setAttachmentUrl([]);
         setAttachmentName([]);
+        setShowForm(false);
     }
 
     function handleChangeSearch(
