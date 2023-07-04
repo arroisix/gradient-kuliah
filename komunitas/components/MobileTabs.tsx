@@ -6,7 +6,7 @@ const MobileTabs = (): JSX.Element => {
 
     return (
         <div className="relative flex justify-between w-full overflow-hidden">
-            <Link href={'/komunitas'}>
+            <Link href={'/komunitas'} shallow>
                 <span
                     className={`text-center text-sm w-1/2 py-[6px] border-b-2 ${
                         pathname === '/komunitas'
@@ -16,7 +16,7 @@ const MobileTabs = (): JSX.Element => {
                     Eksplor
                 </span>
             </Link>
-            <Link href={'/komunitas/pertanyaan-ku'}>
+            <Link href={'/komunitas/pertanyaan-ku'} shallow>
                 <span
                     className={`text-center text-sm w-1/2 py-[6px] border-b-2 ${
                         pathname === '/komunitas/pertanyaan-ku'
