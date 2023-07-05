@@ -16,10 +16,7 @@ const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
     const { pathname } = route;
 
     const { data: configData } = useGetConfigQuery();
-    const { data: communityNotification } = useGetCommunityNotificationQuery(
-        undefined,
-        { refetchOnMountOrArgChange: true }
-    );
+    const { data: communityNotification } = useGetCommunityNotificationQuery();
 
     return (
         <aside

@@ -8,8 +8,7 @@ export const komunitasApi = baseApi.injectEndpoints({
             query: () => ({ url: `${KOMUNITAS_BASE_URL}subject-category/` })
         }),
         getCommunityNotification: builder.query<CommunityNotification, void>({
-            query: () => ({ url: `${KOMUNITAS_BASE_URL}notification/` }),
-            providesTags: [{ type: 'COMMUNITIES', id: 'LIST' }]
+            query: () => ({ url: `${KOMUNITAS_BASE_URL}notification/` })
         }),
         postQuestionAnswer: builder.mutation<
             PostQuestionAnswerResponse,
@@ -123,6 +122,15 @@ export const komunitasApi = baseApi.injectEndpoints({
             },
             forceRefetch({ currentArg, previousArg }) {
                 return currentArg !== previousArg;
+            },
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                    const getCommunityNotification = dispatch(
+                        komunitasApi.endpoints.getCommunityNotification.initiate()
+                    );
+                    getCommunityNotification.refetch();
+                } catch {}
             },
             providesTags: (result, error, arg) =>
                 result
