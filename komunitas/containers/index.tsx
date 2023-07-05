@@ -110,12 +110,6 @@ const KomunitasContainer = (): JSX.Element => {
             return;
         }
 
-        // await postCommunity({
-        //     post_id: null,
-        //     content: contentwithAttachments,
-        //     category_id: category,
-        //     attachment_urls: attachmentUrl
-        // });
         await handleSubmitPost({
             content: contentwithAttachments,
             category_id: category,
