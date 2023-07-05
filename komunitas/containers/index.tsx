@@ -11,12 +11,11 @@ import KomunitasForm from 'komunitas/components/KomunitasForm';
 import KomunitasInput from 'komunitas/components/KomunitasInput';
 import MobileTabs from 'komunitas/components/MobileTabs';
 import QuestionCard from 'komunitas/components/QuestionCard';
+import { useKomunitas } from 'komunitas/contexts/KomunitasProvider';
 import {
-    useGetCommunityPostQuery,
     useGetExploreQuestionQuery,
     useGetMyQuestionListQuery,
-    useGetSubjectCategoriesQuery,
-    usePostQuestionAnswerMutation
+    useGetSubjectCategoriesQuery
 } from 'komunitas/redux/api/komunitasApi';
 import moment from 'moment';
 import Link from 'next/link';
@@ -36,46 +35,36 @@ const KomunitasContainer = (): JSX.Element => {
     const anchor = useRef({} as HTMLDivElement);
 
     const { data: subjects } = useGetSubjectCategoriesQuery();
-    const [
-        postCommunity,
-        { isLoading: isLoadingPost, isSuccess: isPostSuccess }
-    ] = usePostQuestionAnswerMutation();
+
+    const {
+        dataHome,
+        isLoadingDataHome,
+        isLoadingPost,
+        handleSearch,
+        handleSubmitPost,
+        sort,
+        search,
+        setSearch,
+        setPage,
+        setFilter,
+        setSort
+    } = useKomunitas();
 
     const [formContent, setFormContent] = useState('');
     const [category, setCategory] = useState('');
     const [attachmentUrl, setAttachmentUrl] = useState<string[]>([]);
     const [attachmentName, setAttachmentName] = useState<string[]>([]);
-    const [search, setSearch] = useState('');
     const [showSort, setShowSort] = useState(false);
     const [showForm, setShowForm] = useState(false);
-    const [page, setPage] = useState(1);
-    const [filter, setFilter] = useState('');
-    const [sort, setSort] = useState<
-        'LATEST' | 'POPULAR' | 'ANSWERED' | 'NOT_ANSWERED'
-    >('LATEST');
     const isAnchorOnScreen = useOnScreen(anchor);
 
-    const {
-        data,
-        isLoading: isLoadingData,
-        isFetching: isFetchingData
-    } = useGetCommunityPostQuery(
-        {
-            sort_by: sort,
-            category_id: filter,
-            user_id: pathname.includes('pertanyaan-ku')
-                ? profile?.user_id
-                : undefined,
-            page: page
-        },
-        {
-            refetchOnMountOrArgChange: true
-        }
-    );
-
     useEffect(() => {
-        if (data?.next_page !== null && isAnchorOnScreen && !isLoadingData) {
-            setPage((prev) => prev + 1);
+        if (
+            dataHome?.next_page !== null &&
+            isAnchorOnScreen &&
+            !isLoadingDataHome
+        ) {
+            setPage(dataHome?.next_page as number);
         }
     }, [isAnchorOnScreen]);
 
@@ -121,8 +110,13 @@ const KomunitasContainer = (): JSX.Element => {
             return;
         }
 
-        await postCommunity({
-            post_id: null,
+        // await postCommunity({
+        //     post_id: null,
+        //     content: contentwithAttachments,
+        //     category_id: category,
+        //     attachment_urls: attachmentUrl
+        // });
+        await handleSubmitPost({
             content: contentwithAttachments,
             category_id: category,
             attachment_urls: attachmentUrl
@@ -162,7 +156,7 @@ const KomunitasContainer = (): JSX.Element => {
                         placeholder="Cari pertanyaan"
                         onChange={handleChangeSearch}
                         rightIcon={<CgSearch />}
-                        handleSubmit={() => undefined}
+                        handleSubmit={() => handleSearch()}
                     />
                     {showForm ? (
                         <KomunitasForm
@@ -229,14 +223,14 @@ const KomunitasContainer = (): JSX.Element => {
                     </div>
                 </div>
                 <div className="flex flex-col gap-[18px]">
-                    {!isPostSuccess && (isLoadingData || isFetchingData) ? (
+                    {isLoadingDataHome ? (
                         <>
                             <Skeleton className="!mb-0 h-40" />
                             <Skeleton className="!mb-0 h-40" />
                             <Skeleton className="!mb-0 h-40" />
                         </>
                     ) : (
-                        data?.community_posts?.map((value, index) => (
+                        dataHome?.community_posts?.map((value, index) => (
                             <QuestionCard
                                 key={index}
                                 {...value}
@@ -263,13 +257,13 @@ const KomunitasContainer = (): JSX.Element => {
                                     <Skeleton className="h-3 !mb-0" />
                                 </>
                             ) : (
-                                <div className="flex flex-col gap-2 px-[10px] py-[10px] bg-[#1D1D1D] rounded">
+                                <div className="flex flex-col gap-2 bg-[#1D1D1D] rounded">
                                     {sideExploreData?.questions?.map(
                                         ({ slug, content }) => (
                                             <Link
                                                 key={slug}
                                                 href={`/komunitas/${slug}`}>
-                                                <div className="flex justify-between items-center gap-2 py-1 cursor-pointer z-[1]">
+                                                <div className="flex justify-between items-center gap-2 cursor-pointer z-[1] px-[10px] py-[10px] first:border-none border-t-[1px] border-t-[#2C2C2C]">
                                                     <span className="text-xs whitespace-nowrap text-ellipsis overflow-hidden">
                                                         {content}
                                                     </span>
@@ -312,7 +306,9 @@ const KomunitasContainer = (): JSX.Element => {
                                                 <Link
                                                     key={id}
                                                     href={`/komunitas/${slug}`}>
-                                                    <div className="flex justify-between items-center gap-2 cursor-pointer z-[1] px-[10px] py-[10px] first:border-none border-t-[1px] border-t-[#2C2C2C]">
+                                                    <div
+                                                        key={id}
+                                                        className="flex justify-between items-center gap-2 cursor-pointer z-[1] px-[10px] py-[10px] first:border-none border-t-[1px] border-t-[#2C2C2C]">
                                                         <span className="text-xs whitespace-nowrap text-ellipsis overflow-hidden">
                                                             {content}
                                                         </span>

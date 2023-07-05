@@ -37,23 +37,6 @@ export const komunitasApi = baseApi.injectEndpoints({
                 url: `${KOMUNITAS_BASE_URL}post/`,
                 params: { sort_by, ...params }
             }),
-            serializeQueryArgs: ({ queryArgs, endpointName }) => {
-                return endpointName + queryArgs.category_id + queryArgs.sort_by;
-            },
-            merge: (currentCache, newItems, other) => {
-                if (other.arg.page > 1) {
-                    currentCache.community_posts.push(
-                        ...newItems.community_posts
-                    );
-                    currentCache.next_page = newItems.next_page;
-                    currentCache.previous_page = newItems.previous_page;
-                } else {
-                    currentCache.community_posts = newItems.community_posts;
-                }
-            },
-            forceRefetch({ currentArg, previousArg }) {
-                return currentArg !== previousArg;
-            },
             providesTags: (result) =>
                 result
                     ? [

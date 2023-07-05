@@ -2,52 +2,45 @@ import Skeleton from 'commons/components/elements/Skeleton';
 import useOnScreen from 'commons/hooks/useOnScreen';
 import AnswerCard from 'komunitas/components/AnswerCard';
 import QuestionCard from 'komunitas/components/QuestionCard';
+import { useKomunitas } from 'komunitas/contexts/KomunitasProvider';
 import {
     useGetCommunityPostCommentDetailQuery,
-    useGetCommunityPostDetailQuery,
     useGetExploreQuestionQuery,
     useGetSubjectCategoriesQuery
 } from 'komunitas/redux/api/komunitasApi';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { MdChevronRight } from 'react-icons/md';
 
 const DetailSection = (): JSX.Element => {
     const anchor = useRef({} as HTMLDivElement);
-    const router = useRouter();
     const isAnchorOnScreen = useOnScreen(anchor);
     const [page, setPage] = useState(1);
 
     const { data: subjects } = useGetSubjectCategoriesQuery();
 
-    const { data: question, isLoading: isLoadingQuestion } =
-        useGetCommunityPostDetailQuery(
-            {
-                slug: router.query.id as string
-            },
-            { skip: !router.query.id }
-        );
+    const { detailQuestion, isLoadingQuestion } = useKomunitas();
 
     const category = subjects?.categories.filter(
-        (value) => value.name === question?.category
+        (value) => value.name === detailQuestion?.category
     )[0];
 
     const { data: comments, isLoading: isLoadingComment } =
         useGetCommunityPostCommentDetailQuery(
             {
-                post_id: question?.id as string,
+                post_id: detailQuestion?.id as string,
                 page: page
             },
-            { skip: !question?.id }
+            { skip: !detailQuestion?.id }
         );
 
     const { data: similiars } = useGetExploreQuestionQuery(
         {
-            category_id: category?.id as string
+            category_id: category?.id,
+            current_post: detailQuestion?.id
         },
         {
-            skip: !category?.id
+            skip: !category?.id || !detailQuestion?.id
         }
     );
 
@@ -58,7 +51,7 @@ const DetailSection = (): JSX.Element => {
             isAnchorOnScreen &&
             !isLoadingComment
         ) {
-            setPage((prev) => prev + 1);
+            setPage(comments.next_page);
         }
     }, [isAnchorOnScreen]);
 
@@ -71,7 +64,7 @@ const DetailSection = (): JSX.Element => {
                         <Skeleton className="!mb-0 h-40" />
                     ) : (
                         <QuestionCard
-                            {...(question as CommunityPostDetailResponse)}
+                            {...(detailQuestion as CommunityPostDetailResponse)}
                             category={category?.id as string}
                             clickable={false}
                         />
@@ -92,7 +85,7 @@ const DetailSection = (): JSX.Element => {
                                     {...value}
                                     category={category?.id as string}
                                     isExpert={
-                                        question?.student.username !==
+                                        detailQuestion?.student.username !==
                                             value.student.username &&
                                         value.student.is_expert
                                     }
