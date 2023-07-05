@@ -154,56 +154,58 @@ const KomunitasContainer = (): JSX.Element => {
     return (
         <section className="flex flex-col lg:flex-row gap-[2rem]">
             <div className="w-full lg:w-8/12 flex flex-col gap-6">
-                <KomunitasInput
-                    type="text"
-                    name="search"
-                    value={search}
-                    placeholder="Cari pertanyaan"
-                    onChange={handleChangeSearch}
-                    rightIcon={<CgSearch />}
-                    handleSubmit={() => undefined}
-                />
-                {showForm ? (
-                    <KomunitasForm
-                        formContent={formContent}
-                        setFormContent={setFormContent}
-                        category={category}
-                        setCategory={setCategory}
-                        attachmentUrl={attachmentUrl}
-                        setAttachmentUrl={setAttachmentUrl}
-                        attachmentName={attachmentName}
-                        setAttachmentName={setAttachmentName}
-                        bucketKey="qna"
-                        handleSubmit={handleSubmit}
-                        cancelButton={() => setShowForm((prev) => !prev)}
-                        isUsingCategories={true}
-                        subjectCategories={subjects?.categories}
-                        submitButtonText={
-                            isLoadingPost ? (
-                                <AiOutlineLoading3Quarters className="animate-spin" />
-                            ) : (
-                                'Tanyakan'
-                            )
-                        }
+                <div className="sticky top-16 flex flex-col gap-6 z-[2] bg-black p-1">
+                    <KomunitasInput
+                        type="text"
+                        name="search"
+                        value={search}
+                        placeholder="Cari pertanyaan"
+                        onChange={handleChangeSearch}
+                        rightIcon={<CgSearch />}
+                        handleSubmit={() => undefined}
                     />
-                ) : (
-                    <div className="flex flex-col md:flex-row justify-between items-center gap-3 w-full px-5 py-[14px] bg-[#5F2BCE] rounded-lg">
-                        <div className="flex items-center gap-3">
-                            <span className="inline-block leading-none py-[4px] px-[6px] font-bold font-[Urbanist] text-center bg-black rounded-full">
-                                G
-                            </span>
-                            <span className="inline-block font-body text-xs">
-                                Tidak menemukan jawaban di komunitas?
-                            </span>
+                    {showForm ? (
+                        <KomunitasForm
+                            formContent={formContent}
+                            setFormContent={setFormContent}
+                            category={category}
+                            setCategory={setCategory}
+                            attachmentUrl={attachmentUrl}
+                            setAttachmentUrl={setAttachmentUrl}
+                            attachmentName={attachmentName}
+                            setAttachmentName={setAttachmentName}
+                            bucketKey="qna"
+                            handleSubmit={handleSubmit}
+                            cancelButton={() => setShowForm((prev) => !prev)}
+                            isUsingCategories={true}
+                            subjectCategories={subjects?.categories}
+                            submitButtonText={
+                                isLoadingPost ? (
+                                    <AiOutlineLoading3Quarters className="animate-spin" />
+                                ) : (
+                                    'Tanyakan'
+                                )
+                            }
+                        />
+                    ) : (
+                        <div className="flex flex-col md:flex-row justify-between items-center gap-3 w-full px-5 py-[14px] bg-[#5F2BCE] rounded-lg">
+                            <div className="flex items-center gap-3">
+                                <span className="inline-block leading-none py-[4px] px-[6px] font-bold font-[Urbanist] text-center bg-black rounded-full">
+                                    G
+                                </span>
+                                <span className="inline-block font-body text-xs">
+                                    Tidak menemukan jawaban di komunitas?
+                                </span>
+                            </div>
+                            <Button
+                                variant="custom"
+                                className="font-extrabold text-xs px-6 bg-black w-full md:w-fit"
+                                onClick={() => setShowForm((prev) => !prev)}>
+                                Tanya Sekarang
+                            </Button>
                         </div>
-                        <Button
-                            variant="custom"
-                            className="font-extrabold text-xs px-6 bg-black w-full md:w-fit"
-                            onClick={() => setShowForm((prev) => !prev)}>
-                            Tanya Sekarang
-                        </Button>
-                    </div>
-                )}
+                    )}
+                </div>
 
                 {isMobileBreakpoints && <MobileTabs />}
                 <div className="flex justify-between items-center">
