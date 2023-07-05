@@ -299,7 +299,7 @@ const KomunitasContainer = (): JSX.Element => {
                                             .utc()
                                             .format('MMM DD')}
                                     </span>
-                                    <div className="flex flex-col gap-2 px-[10px] py-[10px] bg-[#1D1D1D] rounded">
+                                    <div className="flex flex-col gap-2 bg-[#1D1D1D] rounded">
                                         {value.items.map(
                                             ({
                                                 slug,
@@ -310,7 +310,7 @@ const KomunitasContainer = (): JSX.Element => {
                                                 <Link
                                                     key={id}
                                                     href={`/komunitas/${slug}`}>
-                                                    <div className="flex justify-between items-center gap-2 py-1 cursor-pointer z-[1]">
+                                                    <div className="flex justify-between items-center gap-2 cursor-pointer z-[1] px-[10px] py-[10px] first:border-none border-t-[1px] border-t-[#2C2C2C]">
                                                         <span className="text-xs whitespace-nowrap text-ellipsis overflow-hidden">
                                                             {content}
                                                         </span>
