@@ -44,6 +44,7 @@ interface CommunityPostQuery {
     category_id?: string;
     sort_by?: 'LATEST' | 'POPULAR' | 'ANSWERED' | 'NOT_ANSWERED';
     user_id?: string;
+    search?: string;
 }
 
 interface CommunityPost {

@@ -59,11 +59,11 @@ export const komunitasApi = baseApi.injectEndpoints({
         }),
         getExploreQuestion: builder.query<
             ExploreQuestionResponse,
-            { category_id?: string }
+            { category_id?: string; current_post?: string }
         >({
-            query: ({ category_id }) => ({
+            query: ({ category_id, current_post }) => ({
                 url: `${KOMUNITAS_BASE_URL}post/list/`,
-                params: { category_id }
+                params: { category_id, current_post }
             }),
             providesTags: [{ type: 'COMMUNITIES', id: 'LIST' }]
         }),
