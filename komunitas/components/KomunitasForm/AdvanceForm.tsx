@@ -5,13 +5,16 @@ import { ImOmega } from 'react-icons/im';
 import { TbSquareRoot2 } from 'react-icons/tb';
 import MathForm from './MathForm';
 import SymbolForm from './SymbolForm';
+import { posthog } from 'posthog-js';
 
 const ICON = [
     {
-        icon: <TbSquareRoot2 className="text-[20px]" />
+        icon: <TbSquareRoot2 className="text-[20px]" />,
+        tracker: 'Click Latex Menu'
     },
     {
-        icon: <ImOmega className="text-[18px]" />
+        icon: <ImOmega className="text-[18px]" />,
+        tracker: 'Click Symbol Menu'
     }
 ];
 
@@ -42,18 +45,23 @@ const AdvanceForm = ({
                                     ? 'text-white bg-[#2C2C2C]'
                                     : 'text-neutral-600'
                             }`}
-                            onClick={() =>
+                            onClick={() => {
+                                posthog.capture(value.tracker);
                                 setIconClicked((prev) =>
                                     prev === index ? -1 : index
-                                )
-                            }
+                                );
+                            }}
                             aria-hidden>
                             {value.icon}
                         </div>
                     ))}
                     <label
                         htmlFor={'inputFile'}
-                        className="block hover:bg-[#2C2C2C] px-[12px] py-[6px] rounded-[100px] cursor-pointer">
+                        className="block hover:bg-[#2C2C2C] px-[12px] py-[6px] rounded-[100px] cursor-pointer"
+                        onClick={() => {
+                            posthog.capture('Click Attachment Menu');
+                        }}
+                        aria-hidden>
                         <FiPaperclip className="text-[18px] text-neutral-600" />
                     </label>
                 </div>

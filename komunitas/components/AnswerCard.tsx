@@ -15,6 +15,7 @@ import {
     usePostQuestionAnswerMutation
 } from 'komunitas/redux/api/komunitasApi';
 import AuthContext from 'authentication/contexts/AuthProvider';
+import { posthog } from 'posthog-js';
 
 type Student = {
     id: string;
@@ -30,7 +31,8 @@ const AnswerCard = ({
     comment_counts,
     created_at,
     student,
-    category
+    category,
+    questionId
 }: {
     isExpert: boolean;
     id: string;
@@ -39,6 +41,7 @@ const AnswerCard = ({
     created_at: number;
     student: Student;
     category: string;
+    questionId: string;
 }): JSX.Element => {
     const [comment, setComment] = useState('');
     const [showComment, setShowComment] = useState(false);
@@ -63,6 +66,11 @@ const AnswerCard = ({
             content: comment,
             category_id: category,
             attachment_urls: []
+        });
+
+        posthog.capture('Submit Answer Comment on Community', {
+            POST_ID: questionId,
+            ANSWER_ID: id
         });
 
         setComment('');

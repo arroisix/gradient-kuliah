@@ -11,6 +11,8 @@ import {
 } from 'komunitas/redux/api/komunitasApi';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { posthog } from 'posthog-js';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { MdChevronRight } from 'react-icons/md';
 
@@ -85,6 +87,7 @@ const DetailSection = (): JSX.Element => {
                                             value.student.username &&
                                         value.student.is_expert
                                     }
+                                    questionId={detailQuestion?.id as string}
                                 />
                             ))
                         )}
@@ -105,6 +108,7 @@ const RightSidebar = ({
         name: string;
     };
 }): JSX.Element => {
+    const router = useRouter();
     const { detailQuestion } = useKomunitas();
 
     const { data: similiars } = useGetExploreQuestionQuery(
@@ -148,11 +152,16 @@ const RightSidebar = ({
             <div className="absolute w-full h-full left-0 top-0">
                 <div className="absolute bottom-0 left-0 w-full h-[150px] bg-gradient-to-b from-transparent via-[#121212] to-[#121212] z-[1]"></div>
                 <div className="absolute bottom-0 left-0 w-full px-[18px] z-[1]">
-                    <Link href={'/komunitas'}>
-                        <button className="bg-neutral-800 font-extrabold text-xs w-full py-2 rounded-[70px]">
-                            Lihat di Komunitas
-                        </button>
-                    </Link>
+                    <button
+                        className="bg-neutral-800 font-extrabold text-xs w-full py-2 rounded-[70px]"
+                        onClick={() => {
+                            posthog.capture(
+                                'Click "Lihat di Komunitas" Button'
+                            );
+                            router.push('/komunitas');
+                        }}>
+                        Lihat di Komunitas
+                    </button>
                     <div className="w-full h-[48px] md:h-[20px] bg-[#121212]"></div>
                 </div>
             </div>

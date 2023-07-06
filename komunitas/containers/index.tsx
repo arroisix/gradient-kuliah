@@ -21,6 +21,7 @@ import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { posthog } from 'posthog-js';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { CgSearch } from 'react-icons/cg';
@@ -103,6 +104,8 @@ const KomunitasContainer = (): JSX.Element => {
             attachment_urls: attachmentUrl
         });
 
+        posthog.capture('Submit Question on Community');
+
         setFormContent('');
         setCategory('');
         setAttachmentUrl([]);
@@ -117,11 +120,17 @@ const KomunitasContainer = (): JSX.Element => {
     }
 
     function handleChangeFilter(e: React.ChangeEvent<HTMLSelectElement>): void {
+        posthog.capture('Filter Community Post', {
+            CATEGORY_NAME: e.target.options[e.target.options.selectedIndex].text
+        });
         setPage(1);
         setFilter(e.target.value);
     }
 
     function handleChangeSort(event: any): void {
+        posthog.capture('Sort Community Post', {
+            SORT_BY: event.target.textContent
+        });
         setPage(1);
         setSort(event.target.id);
     }
@@ -175,7 +184,12 @@ const KomunitasContainer = (): JSX.Element => {
                             <Button
                                 variant="custom"
                                 className="font-extrabold text-xs px-6 bg-black w-full md:w-fit"
-                                onClick={() => setShowForm((prev) => !prev)}>
+                                onClick={() => {
+                                    posthog.capture(
+                                        'Click "Tanya Sekarang" Button'
+                                    );
+                                    setShowForm((prev) => !prev);
+                                }}>
                                 Tanya Sekarang
                             </Button>
                         </div>
@@ -236,7 +250,8 @@ const KomunitasContainer = (): JSX.Element => {
 };
 
 const RightSidebar = (): JSX.Element => {
-    const { pathname } = useRouter();
+    const router = useRouter();
+    const { pathname } = router;
     const { profile } = useContext(AuthContext);
 
     const { data: myQuestion, isLoading: isLoadingMyQuestion } =
@@ -345,18 +360,24 @@ const RightSidebar = (): JSX.Element => {
             <div className="absolute w-full h-full left-0 top-0">
                 <div className="absolute bottom-0 left-0 w-full h-[150px] bg-gradient-to-b from-transparent via-[#121212] to-[#121212] z-[1]"></div>
                 <div className="absolute bottom-0 left-0 w-full px-[18px] z-[1]">
-                    <Link
-                        href={
-                            pathname.includes('pertanyaan-ku')
-                                ? '/komunitas'
-                                : '/komunitas/pertanyaan-ku'
-                        }>
-                        <button className="bg-neutral-800 font-extrabold text-xs w-full py-2 rounded-[70px]">
-                            {pathname.includes('pertanyaan-ku')
-                                ? 'Lihat di Komunitas'
-                                : 'Lihat Semua'}
-                        </button>
-                    </Link>
+                    <button
+                        className="bg-neutral-800 font-extrabold text-xs w-full py-2 rounded-[70px]"
+                        onClick={() => {
+                            posthog.capture(
+                                pathname.includes('pertanyaan-ku')
+                                    ? 'Visit Community Explore Page'
+                                    : 'Visit Community Pertanyaanku Page'
+                            );
+                            router.push(
+                                pathname.includes('pertanyaan-ku')
+                                    ? '/komunitas'
+                                    : '/komunitas/pertanyaan-ku'
+                            );
+                        }}>
+                        {pathname.includes('pertanyaan-ku')
+                            ? 'Lihat di Komunitas'
+                            : 'Lihat Semua'}
+                    </button>
                     <div className="w-full h-[48px] md:h-[20px] bg-[#121212]"></div>
                 </div>
             </div>

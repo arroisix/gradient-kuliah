@@ -11,6 +11,7 @@ import { useState } from 'react';
 import KomunitasForm from './KomunitasForm';
 import { usePostQuestionAnswerMutation } from 'komunitas/redux/api/komunitasApi';
 import { toast } from 'react-toastify';
+import { posthog } from 'posthog-js';
 
 type Student = {
     id: string;
@@ -75,6 +76,10 @@ const QuestionCard = ({
             attachment_urls: attachmentUrl
         });
 
+        posthog.capture('Submit Answer on Community', {
+            POST_SLUG: slug
+        });
+
         setFormContent('');
         setAttachmentUrl([]);
         setAttachmentName([]);
@@ -88,7 +93,12 @@ const QuestionCard = ({
                 } ${isShowForm ? '!rounded-b-none' : ''}`}
                 onClick={
                     clickable
-                        ? () => router.push(`/komunitas/${slug}`)
+                        ? () => {
+                              posthog.capture('Visit Community Detail Page', {
+                                  POST_SLUG: slug
+                              });
+                              router.push(`/komunitas/${slug}`);
+                          }
                         : undefined
                 }
                 aria-hidden>
@@ -149,7 +159,12 @@ const QuestionCard = ({
                     {!isShowForm && setIsShowForm && (
                         <button
                             className="bg-neutral-800 px-[27px] py-[7.5px] rounded-[70px] font-extrabold text-xs hover:bg-accent-purple transition-all"
-                            onClick={() => setIsShowForm(true)}>
+                            onClick={() => {
+                                posthog.capture('Click "Jawab" Button', {
+                                    POST_SLUG: slug
+                                });
+                                setIsShowForm(true);
+                            }}>
                             Jawab
                         </button>
                     )}

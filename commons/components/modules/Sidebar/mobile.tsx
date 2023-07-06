@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { posthog } from 'posthog-js';
 import { Dispatch, SetStateAction } from 'react';
 import { BiBookReader } from 'react-icons/bi';
 import { FiHome } from 'react-icons/fi';
@@ -53,17 +54,20 @@ const MobileSidebar = ({
                         Home
                     </span>
                 </Link>
-                <Link href={'/komunitas'}>
-                    <span
-                        className={`flex gap-4 cursor-pointer ${
-                            pathname === '/komunitas'
-                                ? 'text-[#CCCCCC]'
-                                : 'text-[#666666]'
-                        }  hover:text-[#999999]`}>
-                        <RiQuestionnaireLine size={20} />
-                        Komunitas
-                    </span>
-                </Link>
+                <span
+                    className={`flex gap-4 cursor-pointer ${
+                        pathname === '/komunitas'
+                            ? 'text-[#CCCCCC]'
+                            : 'text-[#666666]'
+                    }  hover:text-[#999999]`}
+                    onClick={() => {
+                        posthog.capture('Visit Community Explore Page');
+                        route.push('/komunitas');
+                    }}
+                    aria-hidden>
+                    <RiQuestionnaireLine size={20} />
+                    Komunitas
+                </span>
                 <Link href={'/kelas'}>
                     <span
                         className={`flex gap-4 cursor-pointer ${

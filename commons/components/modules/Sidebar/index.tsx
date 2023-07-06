@@ -2,6 +2,7 @@ import { useGetConfigQuery } from 'commons/redux/api/commonApi';
 import { useGetCommunityNotificationQuery } from 'komunitas/redux/api/komunitasApi';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { posthog } from 'posthog-js';
 import React from 'react';
 import { BiBookReader } from 'react-icons/bi';
 import { FiHome } from 'react-icons/fi';
@@ -47,24 +48,27 @@ const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
                     </span>
                 </Link>
                 {configData?.configs.is_community_config_enabled && (
-                    <Link href={'/komunitas'}>
-                        <span
-                            className={`flex items-center gap-4 cursor-pointer ${
-                                pathname.includes('/komunitas')
-                                    ? 'text-[#CCCCCC]'
-                                    : 'text-[#666666]'
-                            }  hover:text-[#999999]`}>
-                            <RiQuestionnaireLine size={20} />
-                            Komunitas
-                            {communityNotification?.unseen_comment_counts ? (
-                                <span className="inline-block leading-none h-min py-[2px] pl-[3px] pr-[4px] font-body text-center text-white text-[10px] bg-[#B92011] rounded-full">
-                                    {
-                                        communityNotification?.unseen_comment_counts
-                                    }
-                                </span>
-                            ) : null}
-                        </span>
-                    </Link>
+                    <span
+                        className={`flex items-center gap-4 cursor-pointer ${
+                            pathname.includes('/komunitas')
+                                ? 'text-[#CCCCCC]'
+                                : 'text-[#666666]'
+                        }  hover:text-[#999999]`}
+                        onClick={() => {
+                            posthog.capture('Visit Community Explore Page', {
+                                description: 'User visit Community Page'
+                            });
+                            route.push('/komunitas');
+                        }}
+                        aria-hidden>
+                        <RiQuestionnaireLine size={20} />
+                        Komunitas
+                        {communityNotification?.unseen_comment_counts ? (
+                            <span className="inline-block leading-none h-min py-[2px] pl-[3px] pr-[4px] font-body text-center text-white text-[10px] bg-[#B92011] rounded-full">
+                                {communityNotification?.unseen_comment_counts}
+                            </span>
+                        ) : null}
+                    </span>
                 )}
                 <Link href={'/kelas'}>
                     <span

@@ -6,6 +6,7 @@ import {
     usePostQuestionAnswerMutation
 } from 'komunitas/redux/api/komunitasApi';
 import { useRouter } from 'next/router';
+import { posthog } from 'posthog-js';
 import {
     Dispatch,
     ReactNode,
@@ -126,6 +127,7 @@ export function KomunitasProvider({
         usePostQuestionAnswerMutation();
 
     function handleSearch(): void {
+        posthog.capture('Search Community Post', { QUERY: search });
         setSearchState(search);
         setPage(1);
         router.push(pathname);
