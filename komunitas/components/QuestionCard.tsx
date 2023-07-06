@@ -27,7 +27,9 @@ const QuestionCard = ({
     viewer_counts,
     comment_counts,
     created_at,
-    student
+    student,
+    isShowForm,
+    setIsShowForm
 }: {
     clickable: boolean;
     id?: string;
@@ -38,6 +40,8 @@ const QuestionCard = ({
     comment_counts: number;
     created_at: number;
     student: Student;
+    isShowForm?: boolean;
+    setIsShowForm?: React.Dispatch<React.SetStateAction<boolean>>;
 }): JSX.Element => {
     const [postCommunity, { isLoading }] = usePostQuestionAnswerMutation();
     const router = useRouter();
@@ -45,7 +49,6 @@ const QuestionCard = ({
     const [formContent, setFormContent] = useState('');
     const [attachmentUrl, setAttachmentUrl] = useState<string[]>([]);
     const [attachmentName, setAttachmentName] = useState<string[]>([]);
-    const [isShowForm, setIsShowForm] = useState(false);
 
     async function handleSubmit(): Promise<void> {
         const contentwithAttachments =
@@ -143,7 +146,7 @@ const QuestionCard = ({
                             </span>
                         </div>
                     </div>
-                    {!isShowForm && (
+                    {!isShowForm && setIsShowForm && (
                         <button
                             className="bg-neutral-800 px-[27px] py-[7.5px] rounded-[70px] font-extrabold text-xs hover:bg-accent-purple transition-all"
                             onClick={() => setIsShowForm(true)}>
@@ -163,7 +166,7 @@ const QuestionCard = ({
                     bucketKey="qna"
                     handleSubmit={handleSubmit}
                     isUsingCategories={false}
-                    cancelButton={() => setIsShowForm(false)}
+                    cancelButton={() => setIsShowForm && setIsShowForm(false)}
                     submitButtonText={
                         isLoading ? (
                             <AiOutlineLoading3Quarters className="animate-spin" />
