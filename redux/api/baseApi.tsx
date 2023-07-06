@@ -22,7 +22,8 @@ export const baseApi = createApi({
         'EXAM_QUESTION',
         'AI_TUTOR',
         'WATCH_PROGRESS',
-        'PROFILE'
+        'PROFILE',
+        'COMMUNITIES'
     ],
     baseQuery: fetchBaseQuery({
         baseUrl: config.API_BASE_URL,
