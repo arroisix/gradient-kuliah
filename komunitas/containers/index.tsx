@@ -18,6 +18,7 @@ import {
     useGetSubjectCategoriesQuery
 } from 'komunitas/redux/api/komunitasApi';
 import moment from 'moment';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useContext, useEffect, useRef, useState } from 'react';
@@ -31,7 +32,6 @@ const KomunitasContainer = (): JSX.Element => {
     const router = useRouter();
     const { pathname } = router;
     const loadingTransition = useTransition(router);
-    const { profile } = useContext(AuthContext);
     const anchor = useRef({} as HTMLDivElement);
 
     const { data: subjects } = useGetSubjectCategoriesQuery();
@@ -44,6 +44,7 @@ const KomunitasContainer = (): JSX.Element => {
         handleSubmitPost,
         sort,
         search,
+        searchState,
         setSearch,
         setPage,
         setFilter,
@@ -67,20 +68,6 @@ const KomunitasContainer = (): JSX.Element => {
             setPage(dataHome?.next_page as number);
         }
     }, [isAnchorOnScreen]);
-
-    const { data: myQuestion, isLoading: isLoadingMyQuestion } =
-        useGetMyQuestionListQuery(
-            {
-                user_id: profile?.user_id as string
-            },
-            { skip: !profile?.user_id, refetchOnMountOrArgChange: true }
-        );
-
-    const { data: sideExploreData, isLoading: isLoadingSideExplore } =
-        useGetExploreQuestionQuery(
-            {},
-            { skip: !pathname.includes('pertanyaan-ku') }
-        );
 
     async function handleSubmit(): Promise<void> {
         if (!category) {
@@ -223,6 +210,11 @@ const KomunitasContainer = (): JSX.Element => {
                             <Skeleton className="!mb-0 h-40" />
                             <Skeleton className="!mb-0 h-40" />
                         </>
+                    ) : dataHome?.community_posts.length === 0 ? (
+                        <EmptyState
+                            setShowForm={setShowForm}
+                            isOnSearch={searchState !== ''}
+                        />
                     ) : (
                         dataHome?.community_posts?.map((value, index) => (
                             <QuestionCard
@@ -236,120 +228,205 @@ const KomunitasContainer = (): JSX.Element => {
                 </div>
             </div>
             <div className="relative w-screen md:w-full lg:w-4/12">
-                <div className="hidden md:block lg:fixed lg:w-[30%] lg:right-[2%] h-[85vh] bg-[#121212] ml-[-16px] mb-[-40px] md:m-0 px-[18px] py-5 md:rounded-lg overflow-hidden">
-                    <h4 className="font-extrabold pb-[20px]">
-                        {pathname.includes('pertanyaan-ku')
-                            ? 'Eksplor'
-                            : 'Pertanyaanku'}
-                    </h4>
-                    <div className="flex flex-col gap-[18px]">
-                        {pathname.includes('pertanyaan-ku') ? (
-                            isLoadingSideExplore ? (
-                                <>
-                                    <Skeleton className="h-3 !mb-0" />
-                                    <Skeleton className="h-3 !mb-0" />
-                                    <Skeleton className="h-3 !mb-0" />
-                                </>
-                            ) : (
-                                <div className="flex flex-col gap-2 bg-[#1D1D1D] rounded">
-                                    {sideExploreData?.questions?.map(
-                                        ({ slug, content }) => (
-                                            <Link
-                                                key={slug}
-                                                href={`/komunitas/${slug}`}>
-                                                <div className="flex justify-between items-center gap-2 cursor-pointer z-[1] px-[10px] py-[10px] first:border-none border-t-[1px] border-t-[#2C2C2C]">
-                                                    <span className="text-xs whitespace-nowrap text-ellipsis overflow-hidden">
-                                                        {content}
-                                                    </span>
-                                                    <div>
-                                                        <MdChevronRight
-                                                            className="text-neutral-600"
-                                                            size={18}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </Link>
-                                        )
-                                    )}
-                                </div>
-                            )
-                        ) : isLoadingMyQuestion || !profile ? (
-                            <>
-                                <Skeleton className="h-3 !mb-0" />
-                                <Skeleton className="h-3 !mb-0" />
-                                <Skeleton className="h-3 !mb-0" />
-                            </>
-                        ) : (
-                            myQuestion?.questions?.map((value) => (
-                                <div
-                                    key={value.date}
-                                    className="flex flex-col gap-2">
-                                    <span className="font-body text-xs text-neutral-600">
-                                        {moment(value.date)
-                                            .utc()
-                                            .format('MMM DD')}
-                                    </span>
-                                    <div className="flex flex-col gap-2 bg-[#1D1D1D] rounded">
-                                        {value.items.map(
-                                            ({
-                                                slug,
-                                                content,
-                                                id,
-                                                unseen_comment_counts
-                                            }) => (
-                                                <Link
-                                                    key={id}
-                                                    href={`/komunitas/${slug}`}>
-                                                    <div
-                                                        key={id}
-                                                        className="flex justify-between items-center gap-2 cursor-pointer z-[1] px-[10px] py-[10px] first:border-none border-t-[1px] border-t-[#2C2C2C]">
-                                                        <span className="text-xs whitespace-nowrap text-ellipsis overflow-hidden">
-                                                            {content}
-                                                        </span>
-                                                        <div className="flex items-center">
-                                                            {unseen_comment_counts ? (
-                                                                <span className="inline-block leading-none py-[2px] pl-[3px] pr-[4px] font-body text-center text-[10px] bg-[#B92011] rounded-full">
-                                                                    {
-                                                                        unseen_comment_counts
-                                                                    }
-                                                                </span>
-                                                            ) : null}
-                                                            <MdChevronRight
-                                                                className="text-neutral-600"
-                                                                size={18}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </Link>
-                                            )
-                                        )}
-                                    </div>
-                                </div>
-                            ))
-                        )}
-                    </div>
-                    <div className="absolute w-full h-full left-0 top-0">
-                        <div className="absolute bottom-0 left-0 w-full h-[150px] bg-gradient-to-b from-transparent via-[#121212] to-[#121212] z-[1]"></div>
-                        <div className="absolute bottom-0 left-0 w-full px-[18px] z-[1]">
-                            <Link
-                                href={
-                                    pathname.includes('pertanyaan-ku')
-                                        ? '/komunitas'
-                                        : '/komunitas/pertanyaan-ku'
-                                }>
-                                <button className="bg-neutral-800 font-extrabold text-xs w-full py-2 rounded-[70px]">
-                                    {pathname.includes('pertanyaan-ku')
-                                        ? 'Lihat di Komunitas'
-                                        : 'Lihat Semua'}
-                                </button>
-                            </Link>
-                            <div className="w-full h-[48px] md:h-[20px] bg-[#121212]"></div>
-                        </div>
-                    </div>
-                </div>
+                <RightSidebar />
             </div>
             {loadingTransition && <LoadingBackdrop />}
         </section>
+    );
+};
+
+const RightSidebar = (): JSX.Element => {
+    const { pathname } = useRouter();
+    const { profile } = useContext(AuthContext);
+
+    const { data: myQuestion, isLoading: isLoadingMyQuestion } =
+        useGetMyQuestionListQuery(
+            {
+                user_id: profile?.user_id as string
+            },
+            { skip: !profile?.user_id, refetchOnMountOrArgChange: true }
+        );
+
+    const { data: sideExploreData, isLoading: isLoadingSideExplore } =
+        useGetExploreQuestionQuery(
+            {},
+            { skip: !pathname.includes('pertanyaan-ku') }
+        );
+
+    return (
+        <div className="hidden md:block lg:fixed lg:w-[30%] lg:right-[2%] h-[85vh] bg-[#121212] ml-[-16px] mb-[-40px] md:m-0 px-[18px] py-5 md:rounded-lg overflow-hidden">
+            <h4 className="font-extrabold pb-[20px]">
+                {pathname.includes('pertanyaan-ku')
+                    ? 'Eksplor'
+                    : 'Pertanyaanku'}
+            </h4>
+            <div className="flex flex-col gap-[18px]">
+                {pathname.includes('pertanyaan-ku') ? (
+                    isLoadingSideExplore ? (
+                        <>
+                            <Skeleton className="h-3 !mb-0" />
+                            <Skeleton className="h-3 !mb-0" />
+                            <Skeleton className="h-3 !mb-0" />
+                        </>
+                    ) : (
+                        <div className="flex flex-col gap-2 bg-[#1D1D1D] rounded">
+                            {sideExploreData?.questions?.map(
+                                ({ slug, content }) => (
+                                    <Link
+                                        key={slug}
+                                        href={`/komunitas/${slug}`}>
+                                        <div className="flex justify-between items-center gap-2 cursor-pointer z-[1] px-[10px] py-[10px] first:border-none border-t-[1px] border-t-[#2C2C2C]">
+                                            <span className="text-xs whitespace-nowrap text-ellipsis overflow-hidden">
+                                                {content}
+                                            </span>
+                                            <div>
+                                                <MdChevronRight
+                                                    className="text-neutral-600"
+                                                    size={18}
+                                                />
+                                            </div>
+                                        </div>
+                                    </Link>
+                                )
+                            )}
+                        </div>
+                    )
+                ) : isLoadingMyQuestion || !profile ? (
+                    <>
+                        <Skeleton className="h-3 !mb-0" />
+                        <Skeleton className="h-3 !mb-0" />
+                        <Skeleton className="h-3 !mb-0" />
+                    </>
+                ) : (
+                    myQuestion?.questions?.map((value) => (
+                        <div key={value.date} className="flex flex-col gap-2">
+                            <span className="font-body text-xs text-neutral-600">
+                                {moment(value.date).utc().format('MMM DD')}
+                            </span>
+                            <div className="flex flex-col gap-2 bg-[#1D1D1D] rounded">
+                                {value.items.map(
+                                    ({
+                                        slug,
+                                        content,
+                                        id,
+                                        unseen_comment_counts
+                                    }) => (
+                                        <Link
+                                            key={id}
+                                            href={`/komunitas/${slug}`}>
+                                            <div
+                                                key={id}
+                                                className="flex justify-between items-center gap-2 cursor-pointer z-[1] px-[10px] py-[10px] first:border-none border-t-[1px] border-t-[#2C2C2C]">
+                                                <span className="text-xs whitespace-nowrap text-ellipsis overflow-hidden">
+                                                    {content}
+                                                </span>
+                                                <div className="flex items-center">
+                                                    {unseen_comment_counts ? (
+                                                        <span className="inline-block leading-none py-[2px] pl-[3px] pr-[4px] font-body text-center text-[10px] bg-[#B92011] rounded-full">
+                                                            {
+                                                                unseen_comment_counts
+                                                            }
+                                                        </span>
+                                                    ) : null}
+                                                    <MdChevronRight
+                                                        className="text-neutral-600"
+                                                        size={18}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </Link>
+                                    )
+                                )}
+                            </div>
+                        </div>
+                    ))
+                )}
+            </div>
+            <div className="absolute w-full h-full left-0 top-0">
+                <div className="absolute bottom-0 left-0 w-full h-[150px] bg-gradient-to-b from-transparent via-[#121212] to-[#121212] z-[1]"></div>
+                <div className="absolute bottom-0 left-0 w-full px-[18px] z-[1]">
+                    <Link
+                        href={
+                            pathname.includes('pertanyaan-ku')
+                                ? '/komunitas'
+                                : '/komunitas/pertanyaan-ku'
+                        }>
+                        <button className="bg-neutral-800 font-extrabold text-xs w-full py-2 rounded-[70px]">
+                            {pathname.includes('pertanyaan-ku')
+                                ? 'Lihat di Komunitas'
+                                : 'Lihat Semua'}
+                        </button>
+                    </Link>
+                    <div className="w-full h-[48px] md:h-[20px] bg-[#121212]"></div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const EmptyState = ({
+    setShowForm,
+    isOnSearch
+}: {
+    setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
+    isOnSearch: boolean;
+}): JSX.Element => {
+    const { pathname } = useRouter();
+
+    return (
+        <div className="flex flex-col gap-6 pt-6">
+            <div className="relative h-[250px]">
+                <Image
+                    src={
+                        isOnSearch
+                            ? 'https://assets.gradient.academy/assets/empty-search-community.png'
+                            : pathname === '/komunitas'
+                            ? 'https://assets.gradient.academy/assets/empty-explore-community.png'
+                            : 'https://assets.gradient.academy/assets/empty-my-question-community.png'
+                    }
+                    alt={
+                        isOnSearch
+                            ? 'empty-search-community'
+                            : pathname === '/komunitas'
+                            ? 'empty-explore-community'
+                            : 'empty-my-question-community'
+                    }
+                    layout="fill"
+                    className="object-contain"
+                />
+            </div>
+            <div className="flex flex-col items-center gap-[18px]">
+                {isOnSearch ? (
+                    <span className="inline-block font-extrabold">
+                        Tidak ada yang cocok
+                    </span>
+                ) : pathname === '/komunitas' ? (
+                    <>
+                        <span className="inline-block font-extrabold">
+                            Belum ada postingan
+                        </span>
+                        <Button
+                            variant="primary"
+                            className="font-extrabold text-xs"
+                            onClick={() => setShowForm(true)}>
+                            Mulai Post
+                        </Button>
+                    </>
+                ) : (
+                    <>
+                        <span className="inline-block font-extrabold">
+                            Kamu belum pernah menanyakan apapun
+                        </span>
+                        <Button
+                            variant="custom"
+                            className="font-extrabold text-xs bg-[#242424]"
+                            onClick={() => setShowForm(true)}>
+                            Mulai Bertanya
+                        </Button>
+                    </>
+                )}
+            </div>
+        </div>
     );
 };
 
