@@ -132,7 +132,8 @@ const AnswerCard = ({
                     <ReactMarkdown
                         className="text-xs font-body"
                         remarkPlugins={[remarkMath]}
-                        rehypePlugins={[rehypeKatex]}>
+                        rehypePlugins={[rehypeKatex]}
+                        linkTarget={'_blank'}>
                         {content?.replaceAll('\n', '\n\n')}
                     </ReactMarkdown>
                 </article>

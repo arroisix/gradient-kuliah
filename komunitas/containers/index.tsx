@@ -84,7 +84,7 @@ const KomunitasContainer = (): JSX.Element => {
         const contentwithAttachments =
             attachmentUrl.length !== 0
                 ? `${formContent}${attachmentUrl.map(
-                      (value) => `\n\n![image](${value})`
+                      (value) => `\n\n[![image](${value})](${value})`
                   )}`
                 : formContent;
 

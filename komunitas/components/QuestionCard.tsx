@@ -55,7 +55,7 @@ const QuestionCard = ({
         const contentwithAttachments =
             attachmentUrl.length !== 0
                 ? `${formContent}${attachmentUrl.map(
-                      (value) => `\n\n![image](${value})`
+                      (value) => `\n\n[![image](${value})](${value})`
                   )}`
                 : formContent;
 
@@ -135,9 +135,12 @@ const QuestionCard = ({
                 </div>
                 <article className="pt-[12px] pb-[18px] lg:pl-[36px]">
                     <ReactMarkdown
-                        className="text-xs font-body"
+                        className={`text-xs font-body ${
+                            clickable ? 'pointer-events-none' : ''
+                        }`}
                         remarkPlugins={[remarkMath]}
-                        rehypePlugins={[rehypeKatex]}>
+                        rehypePlugins={[rehypeKatex]}
+                        linkTarget={clickable ? '' : '_blank'}>
                         {content?.replaceAll('\n', '\n\n')}
                     </ReactMarkdown>
                 </article>
