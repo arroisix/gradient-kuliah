@@ -67,7 +67,11 @@ const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
                             <span className="inline-block leading-none h-min py-[2px] pl-[3px] pr-[4px] font-body text-center text-white text-[10px] bg-[#B92011] rounded-full">
                                 {communityNotification?.unseen_comment_counts}
                             </span>
-                        ) : null}
+                        ) : (
+                            <span className="inline-block leading-none h-min py-[2px] pl-[3px] pr-[4px] font-body text-center text-white text-[10px] bg-[#B92011] rounded-full animate-pulse">
+                                new
+                            </span>
+                        )}
                     </span>
                 )}
                 <Link href={'/kelas'}>

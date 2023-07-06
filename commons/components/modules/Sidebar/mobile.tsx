@@ -1,3 +1,5 @@
+import { useGetConfigQuery } from 'commons/redux/api/commonApi';
+import { useGetCommunityNotificationQuery } from 'komunitas/redux/api/komunitasApi';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { posthog } from 'posthog-js';
@@ -18,6 +20,9 @@ const MobileSidebar = ({
 }): JSX.Element => {
     const route = useRouter();
     const { pathname } = route;
+
+    const { data: configData } = useGetConfigQuery();
+    const { data: communityNotification } = useGetCommunityNotificationQuery();
 
     return (
         <div className="fixed z-[100] top-0 right-0 w-screen h-screen bg-[#121212]">
@@ -54,20 +59,31 @@ const MobileSidebar = ({
                         Home
                     </span>
                 </Link>
-                <span
-                    className={`flex gap-4 cursor-pointer ${
-                        pathname === '/komunitas'
-                            ? 'text-[#CCCCCC]'
-                            : 'text-[#666666]'
-                    }  hover:text-[#999999]`}
-                    onClick={() => {
-                        posthog.capture('Visit Community Explore Page');
-                        route.push('/komunitas');
-                    }}
-                    aria-hidden>
-                    <RiQuestionnaireLine size={20} />
-                    Komunitas
-                </span>
+                {configData?.configs.is_community_config_enabled && (
+                    <span
+                        className={`flex items-center gap-4 cursor-pointer ${
+                            pathname === '/komunitas'
+                                ? 'text-[#CCCCCC]'
+                                : 'text-[#666666]'
+                        }  hover:text-[#999999]`}
+                        onClick={() => {
+                            posthog.capture('Visit Community Explore Page');
+                            route.push('/komunitas');
+                        }}
+                        aria-hidden>
+                        <RiQuestionnaireLine size={20} />
+                        Komunitas
+                        {communityNotification?.unseen_comment_counts ? (
+                            <span className="inline-block leading-none h-min py-[2px] pl-[3px] pr-[4px] font-body text-center text-white text-[10px] bg-[#B92011] rounded-full">
+                                {communityNotification?.unseen_comment_counts}
+                            </span>
+                        ) : (
+                            <span className="inline-block leading-none h-min py-[2px] pl-[3px] pr-[4px] font-body text-center text-white text-[10px] bg-[#B92011] rounded-full animate-pulse">
+                                new
+                            </span>
+                        )}
+                    </span>
+                )}
                 <Link href={'/kelas'}>
                     <span
                         className={`flex gap-4 cursor-pointer ${
