@@ -33,7 +33,9 @@ interface KomunitasContextType {
         previous_page?: number;
     };
     isLoadingComments?: boolean;
+    subjects?: SubjectCategoriesResponse;
     search: string;
+    searchState: string;
     page: number;
     filter: string;
     sort: 'LATEST' | 'POPULAR' | 'ANSWERED' | 'NOT_ANSWERED';
@@ -234,7 +236,9 @@ export function KomunitasProvider({
             isLoadingDataHome,
             detailQuestion,
             isLoadingQuestion,
+            subjects,
             search,
+            searchState,
             page,
             filter,
             sort,
@@ -252,7 +256,9 @@ export function KomunitasProvider({
             detailQuestion,
             isLoadingQuestion,
             isLoadingPost,
+            subjects,
             search,
+            searchState,
             page,
             filter,
             sort
