@@ -73,3 +73,9 @@ interface GradientBaseComponentWithId {
 interface GradientBaseComponentWithData<T> {
     data: T;
 }
+
+interface ConfigResponse {
+    configs: {
+        [key: string]: object;
+    };
+}
