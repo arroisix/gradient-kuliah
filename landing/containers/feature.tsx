@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { ReactNode } from 'react';
 import { BiBookReader } from 'react-icons/bi';
 import { HiOutlineFilm } from 'react-icons/hi';
+import { RiQuestionnaireLine } from 'react-icons/ri';
 // import { RiBookOpenLine, RiQuestionnaireLine } from 'react-icons/ri';
 import { TfiMenuAlt } from 'react-icons/tfi';
 import { VscHubot } from 'react-icons/vsc';
@@ -34,15 +35,15 @@ const LIST_FEATURE = [
             <TfiMenuAlt className="w-full md:w-[44px] h-full p-[5px] md:p-[12px] object-contain" />
         )
     },
-    // {
-    //     title: 'Komunitas',
-    //     description: 'Tanya, jawab, & diskusi dengan member lain.',
-    //     imageUrl:
-    //         'https://assets.gradient.academy/assets/feature-komunitas.png',
-    //     icon: (
-    //         <RiQuestionnaireLine className="w-full h-full p-[5px] md:p-[10px] object-contain" />
-    //     )
-    // },
+    {
+        title: 'Komunitas',
+        description: 'Tanya, jawab, & diskusi dengan member lain.',
+        imageUrl:
+            'https://assets.gradient.academy/assets/feature-komunitas.png',
+        icon: (
+            <RiQuestionnaireLine className="w-full h-full p-[5px] md:p-[10px] object-contain" />
+        )
+    },
     {
         title: 'Copilot',
         description:
