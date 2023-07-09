@@ -96,7 +96,7 @@ const ChatRoom = ({ uniqueId, onClick }: ChatRoomProps): JSX.Element => {
     }, [data]);
 
     return (
-        <div className="w-screen md:w-[400px] h-[70vh] bg-[#212121] rounded-lg z-[100000] text-black overflow-hidden">
+        <div className="w-screen md:w-[400px] h-[70vh] bg-[#212121] rounded-t-lg md:rounded-lg z-[100000] text-black overflow-hidden">
             <div
                 className="flex h-16 py-3 pl-6 pr-3 bg-accent-purple cursor-pointer"
                 aria-hidden
@@ -143,7 +143,9 @@ const ChatRoom = ({ uniqueId, onClick }: ChatRoomProps): JSX.Element => {
                 {data?.messages.map((message: AiTutorMessage) => {
                     if (message.agent) {
                         return (
-                            <div key={message.id} className="w-full flex px-6">
+                            <div
+                                key={message.id}
+                                className="w-full flex px-[18px] md:px-6">
                                 <TutorAnswerBubble
                                     message={message}
                                     key={message.id}
@@ -155,7 +157,7 @@ const ChatRoom = ({ uniqueId, onClick }: ChatRoomProps): JSX.Element => {
                     return (
                         <div
                             key={message.id}
-                            className="w-full flex justify-end px-6">
+                            className="w-full flex justify-end px-[18px] md:px-6">
                             <StudentQuestionBubble
                                 message={message}
                                 key={message.id}

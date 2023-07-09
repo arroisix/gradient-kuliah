@@ -10,7 +10,7 @@ interface AiTutorProps {
 const AiTutor = ({ uniqueId }: AiTutorProps): JSX.Element => {
     const [openChatRoom, setOpenChatRoom] = useState(false);
 
-    const { isMobileBreakpoints, isDesktopBreakpoints } =
+    const { isMobileBreakpoints, isTabletBreakpoints, isDesktopBreakpoints } =
         useWindowBreakpoints();
 
     return (
@@ -26,7 +26,9 @@ const AiTutor = ({ uniqueId }: AiTutorProps): JSX.Element => {
                     onClick={() => setOpenChatRoom(false)}
                 />
             )}
-            {isDesktopBreakpoints || (isMobileBreakpoints && !openChatRoom) ? (
+            {isTabletBreakpoints ||
+            isDesktopBreakpoints ||
+            (isMobileBreakpoints && !openChatRoom) ? (
                 <TutorButton onClick={() => setOpenChatRoom((prev) => !prev)} />
             ) : (
                 <></>
