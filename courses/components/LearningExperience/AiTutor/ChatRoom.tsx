@@ -1,5 +1,6 @@
 import Button from 'commons/components/elements/Button';
 import { MdClose } from 'react-icons/md';
+// import { MdClose, MdThumbUpAlt } from 'react-icons/md';
 import {
     useAskTutorMutation,
     useGetChatRoomQuery
@@ -8,13 +9,10 @@ import {
 import { Formik } from 'formik';
 import { MouseEventHandler, useEffect, useRef } from 'react';
 import { useLearning } from 'courses/contexts/LearningProvider';
-import Spinner from 'commons/components/elements/Spinner';
-import { useAuth } from 'authentication/contexts/AuthProvider';
-import Image from 'next/image';
-import Avatar from 'react-avatar';
-import TextContent from './TextContent';
 import Skeleton from 'commons/components/elements/Skeleton';
 import CopilotFill from 'commons/components/elements/Icons/CopilotFill';
+import { TbSend } from 'react-icons/tb';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 interface ChatRoomProps {
     uniqueId: string;
@@ -32,24 +30,13 @@ export const processMessage = (message: string): JSX.Element[] => {
 };
 
 const StudentQuestionBubble = ({ message }: BubbleProps): JSX.Element => {
-    const { profile } = useAuth();
+    // const { profile } = useAuth();
 
     return (
-        <div className="w-full bg-neutral-100 p-4 flex gap-2">
-            {!profile ? (
-                <div className="w-[24px] h-[24px] bg-neutral-600 animate-pulse rounded-full"></div>
-            ) : !!profile.photo_profile ? (
-                <div className="w-[24px] h-[24px] relative">
-                    <Image
-                        src={profile.photo_profile}
-                        layout="fill"
-                        className="rounded-full w-[24px] h-[24px]"
-                    />
-                </div>
-            ) : (
-                <Avatar name={profile.full_name} size="24" round />
-            )}
-            <TextContent content={message.message.message} />
+        <div className="px-4 py-[6px] bg-accent-purple rounded-lg !text-white">
+            <span className="inline-block font-body text-xs">
+                {message.message.message}
+            </span>
         </div>
     );
 };
@@ -68,15 +55,26 @@ const TutorAnswerBubble = ({ message }: BubbleProps): JSX.Element => {
     };
 
     return (
-        <div className="w-full bg-neutral-300 p-4 flex gap-2">
+        <div className="w-full flex gap-2">
             <div>
-                <div className="bg-white rounded-full flex justify-center items-center w-[24px] h-[24px]">
-                    <span className="text-xl font-bold cursor-pointer font-[Urbanist]">
-                        G
-                    </span>
+                <div className="bg-white p-[4px] rounded-full">
+                    <CopilotFill width={20} height={18} />
                 </div>
             </div>
-            <TextContent content={renderTutorAnswer()} />
+            <span className="inline-block font-body text-xs text-black bg-white px-4 py-[6px] rounded-lg">
+                {renderTutorAnswer()}
+            </span>
+            {/* hide copilot feedback */}
+            {/* <div className="flex gap-[14px] self-end">
+                <MdThumbUpAlt
+                    size={16}
+                    className="text-neutral-600 cursor-pointer hover:text-[#00DE09] transition-all"
+                />
+                <MdThumbUpAlt
+                    size={16}
+                    className="text-neutral-600 rotate-180 cursor-pointer hover:text-[#db1f1f] transition-all"
+                />
+            </div> */}
         </div>
     );
 };
@@ -98,30 +96,34 @@ const ChatRoom = ({ uniqueId, onClick }: ChatRoomProps): JSX.Element => {
     }, [data]);
 
     return (
-        <div className="w-screen md:w-[400px] h-[70vh] bg-white rounded-t-lg z-[100000] text-black">
+        <div className="w-screen md:w-[400px] h-[70vh] bg-[#212121] rounded-lg z-[100000] text-black overflow-hidden">
             <div
-                className="flex h-16 justify-between items-center p-4 border-b border-neutral-200 cursor-pointer"
+                className="flex h-16 py-3 pl-6 pr-3 bg-accent-purple cursor-pointer"
                 aria-hidden
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 onClick={onClick}>
                 <div className="flex items-center gap-2 w-full">
-                    <CopilotFill />
-                    <h3 className="text-base sm:text-xl md:text-2xl font-bold">
-                        Gradient Copilot
-                    </h3>
-                    <span className="italic text-center text-accent-purple">
-                        Beta
-                    </span>
+                    <div className="bg-white p-[6px] rounded-full">
+                        <CopilotFill width={27} height={25} />
+                    </div>
+                    <div className="flex flex-col gap-[2px]">
+                        <span className="inline-block font-extrabold text-xs text-white">
+                            Copilot
+                        </span>
+                        <span className="inline-block font-body text-xs text-[#FFFFFF80]">
+                            AI Powered
+                        </span>
+                    </div>
                 </div>
                 <MdClose
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
                     onClick={onClick}
-                    className="text-2xl cursor-pointer"
+                    className="text-white text-2xl cursor-pointer"
                 />
             </div>
-            <div className="h-[calc(50vh-4rem)] w-full overflow-y-auto">
+            <div className="h-[calc(70vh-9rem)] w-full overflow-y-auto flex flex-col gap-6 pt-6">
                 {isLoading && (
                     <div className="flex flex-col gap-2 p-4">
                         <div className="w-full flex gap-2">
@@ -141,18 +143,24 @@ const ChatRoom = ({ uniqueId, onClick }: ChatRoomProps): JSX.Element => {
                 {data?.messages.map((message: AiTutorMessage) => {
                     if (message.agent) {
                         return (
-                            <TutorAnswerBubble
-                                message={message}
-                                key={message.id}
-                            />
+                            <div key={message.id} className="w-full flex px-6">
+                                <TutorAnswerBubble
+                                    message={message}
+                                    key={message.id}
+                                />
+                            </div>
                         );
                     }
 
                     return (
-                        <StudentQuestionBubble
-                            message={message}
+                        <div
                             key={message.id}
-                        />
+                            className="w-full flex justify-end px-6">
+                            <StudentQuestionBubble
+                                message={message}
+                                key={message.id}
+                            />
+                        </div>
                     );
                 })}
                 <div id="dummy-box" ref={room} />
@@ -194,32 +202,38 @@ const ChatRoom = ({ uniqueId, onClick }: ChatRoomProps): JSX.Element => {
                 }) => (
                     <form
                         id="tutor-ai"
-                        className="w-full h-[20vh] flex flex-col justify-end"
+                        className="w-full h-20 flex p-6 border-t-2 border-[#373737]"
                         onSubmit={handleSubmit}>
-                        <div className="border-y h-full border-neutral-200">
-                            <textarea
+                        <div className="w-full flex justify-end pl-1 pr-5 bg-white rounded-[70px] overflow-hidden">
+                            <input
+                                className="w-full text-sm font-semibold text-neutral-600 border-none focus:outline-none focus:ring-0 focus:appearance-none"
+                                type="text"
                                 disabled={isSubmitting}
                                 name="query"
                                 value={values.query}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                placeholder={
-                                    'ex: Tolong jelaskan ulang yang dijelaskan pada menit ke 2, saya kurang paham'
-                                }
-                                className="bg-transparent transition-all resize-none h-full w-full border-transparent focus:border-transparent focus:ring-0 focus:ring-transparent"
+                                placeholder="Tanya Chatbot"
                             />
-                        </div>
-                        <div className="w-full p-4 flex justify-end items-center bg-neutral-200">
-                            {isSubmitting ? (
-                                <Spinner size="small" />
-                            ) : (
+                            <div>
                                 <Button
-                                    variant="primary"
+                                    className="!p-0 w-full h-full bg-transparent"
+                                    variant="custom"
                                     type="submit"
                                     disabled={isSubmitting}>
-                                    Tanya
+                                    {isSubmitting ? (
+                                        <AiOutlineLoading3Quarters
+                                            size={16}
+                                            className="animate-spin text-neutral-600"
+                                        />
+                                    ) : (
+                                        <TbSend
+                                            size={16}
+                                            className="text-neutral-600"
+                                        />
+                                    )}
                                 </Button>
-                            )}
+                            </div>
                         </div>
                     </form>
                 )}

@@ -9,8 +9,8 @@ const TutorButton = ({ onClick }: TutorButtonProps): JSX.Element => {
     return (
         <button
             onClick={onClick}
-            className="flex justify-between items-center w-screen md:w-[400px] py-4 px-3 rounded-t-lg bg-accent-purple shadow-md cursor-pointer cursor-pointer">
-            <h3 className="text-base sm:text-xl md:text-2xl font-bold">
+            className="w-max flex justify-between items-center gap-[14px] md:gap-[10px] py-[9px] md:py-[6px] px-[14px] rounded-[100px] bg-accent-purple shadow-md cursor-pointer">
+            <h3 className="font-extrabold text-sm md:text-xs">
                 Bingung? tanya Copilot
             </h3>
             <Copilot />
