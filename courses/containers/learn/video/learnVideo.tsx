@@ -1,7 +1,6 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import VideoPlayer from 'commons/components/elements/Video';
 import PopupQuestionContent from 'courses/components/Exercise/PopupQuestion';
-import LearningExperience from 'courses/components/LearningExperience';
 import NeedSubscribe from 'courses/components/NeedSubscribe';
 import { useLearning } from 'courses/contexts/LearningProvider';
 import { useTrackSubchapterProgressMutation } from 'courses/redux/api/learningExperienceApi';
@@ -57,7 +56,6 @@ const LearnVideo = ({
     return (
         <div className="w-full h-full transition-all overflow-x-hidden relative">
             {renderVideoPlayer()}
-            <LearningExperience />
         </div>
     );
 };
