@@ -1345,6 +1345,9 @@ sticky-3.animate {
     align-items: center;
 }
 
-.markdown-body-xs p {
+.markdown-body-xs p,
+.markdown-body-xs ul,
+.markdown-body-xs ol,
+.markdown-body-xs li {
     font-size: 12px;
 }
