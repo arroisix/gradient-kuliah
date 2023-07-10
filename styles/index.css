@@ -1344,3 +1344,7 @@ sticky-3.animate {
 .notion-equation-block {
     align-items: center;
 }
+
+.markdown-body-xs p {
+    font-size: 12px;
+}

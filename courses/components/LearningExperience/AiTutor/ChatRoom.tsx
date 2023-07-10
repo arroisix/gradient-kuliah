@@ -13,6 +13,7 @@ import Skeleton from 'commons/components/elements/Skeleton';
 import CopilotFill from 'commons/components/elements/Icons/CopilotFill';
 import { TbSend } from 'react-icons/tb';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import TextContent from './TextContent';
 
 interface ChatRoomProps {
     uniqueId: string;
@@ -30,13 +31,12 @@ export const processMessage = (message: string): JSX.Element[] => {
 };
 
 const StudentQuestionBubble = ({ message }: BubbleProps): JSX.Element => {
-    // const { profile } = useAuth();
-
     return (
         <div className="px-4 py-[6px] bg-accent-purple rounded-lg !text-white">
-            <span className="inline-block font-body text-xs">
-                {message.message.message}
-            </span>
+            <TextContent
+                content={message.message.message}
+                className="text-white markdown-body-xs"
+            />
         </div>
     );
 };
@@ -62,7 +62,10 @@ const TutorAnswerBubble = ({ message }: BubbleProps): JSX.Element => {
                 </div>
             </div>
             <span className="inline-block font-body text-xs text-black bg-white px-4 py-[6px] rounded-lg">
-                {renderTutorAnswer()}
+                <TextContent
+                    content={renderTutorAnswer()}
+                    className="!text-black font-normal font-body markdown-body-xs"
+                />
             </span>
             {/* hide copilot feedback */}
             {/* <div className="flex gap-[14px] self-end">
