@@ -8,20 +8,12 @@ import { useSelector } from 'react-redux';
 import LearnVideo from './learnVideo';
 import CourseDetailBox from 'courses/components/CourseDetailBox';
 
-const VideoLearnContainer = ({
-    chapters
-}: {
-    chapters: Chapter[];
-}): JSX.Element => {
+const VideoLearnContainer = (): JSX.Element => {
     const router = useRouter();
     const { sub, id } = router.query;
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const {
-        is_subscribed,
-        learning_progress_id,
-        latest_watch_video,
-        watch_progress
-    } = useCourseSubscription(id as string);
+    const { learning_progress_id, latest_watch_video, watch_progress } =
+        useCourseSubscription(id as string);
     const { data, isLoading } = useGetSubchapterDetailQuery(sub as string, {
         skip: sub === null || sub === undefined || !isAuthenticated
     });
