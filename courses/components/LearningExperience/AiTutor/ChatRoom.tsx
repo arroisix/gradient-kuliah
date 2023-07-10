@@ -112,7 +112,7 @@ const ChatRoom = ({ uniqueId, onClick }: ChatRoomProps): JSX.Element => {
                     </div>
                     <div className="flex flex-col gap-[2px]">
                         <span className="inline-block font-extrabold text-xs text-white">
-                            Copilot
+                            Copilot (Beta)
                         </span>
                         <span className="inline-block font-body text-xs text-[#FFFFFF80]">
                             AI Powered
