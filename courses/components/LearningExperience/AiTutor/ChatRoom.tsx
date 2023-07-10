@@ -35,7 +35,7 @@ const StudentQuestionBubble = ({ message }: BubbleProps): JSX.Element => {
         <div className="px-4 py-[6px] bg-accent-purple rounded-lg !text-white">
             <TextContent
                 content={message.message.message}
-                className="text-white markdown-body-xs"
+                className="text-white !font-body markdown-body-xs"
             />
         </div>
     );
@@ -64,7 +64,7 @@ const TutorAnswerBubble = ({ message }: BubbleProps): JSX.Element => {
             <span className="inline-block font-body text-xs text-black bg-white px-4 py-[6px] rounded-lg">
                 <TextContent
                     content={renderTutorAnswer()}
-                    className="!text-black font-normal font-body markdown-body-xs"
+                    className="!text-black !font-body markdown-body-xs"
                 />
             </span>
             {/* hide copilot feedback */}
