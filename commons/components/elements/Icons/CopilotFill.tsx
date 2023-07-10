@@ -1,8 +1,14 @@
-const CopilotFill = (): JSX.Element => {
+const CopilotFill = ({
+    width,
+    height
+}: {
+    width?: number;
+    height?: number;
+}): JSX.Element => {
     return (
         <svg
-            width="33"
-            height="30"
+            width={`${width ? width : '33'}`}
+            height={`${height ? height : '30'}`}
             viewBox="0 0 33 30"
             fill="none"
             xmlns="http://www.w3.org/2000/svg">
