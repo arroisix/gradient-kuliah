@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import LearnVideo from './learnVideo';
 import CourseDetailBox from 'courses/components/CourseDetailBox';
 import CourseSummary from 'courses/components/CourseSummary';
+import AnotherClass from 'courses/components/AnotherClass';
 
 const VideoLearnContainer = (): JSX.Element => {
     const router = useRouter();
@@ -51,6 +52,7 @@ const VideoLearnContainer = (): JSX.Element => {
                 Pelajaran Tiga
             </h2>
             <CourseSummary />
+            <AnotherClass />
             {video?.ai_unique_id && <AiTutor uniqueId={video.ai_unique_id} />}
         </section>
     );
