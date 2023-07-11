@@ -1,29 +1,206 @@
 import { useState } from 'react';
 import ProgressBar from './ProgressBar';
 import { MdStarPurple500 } from 'react-icons/md';
-import { IoIosSearch } from 'react-icons/io';
+import { IoIosSearch, IoMdClose } from 'react-icons/io';
 import Collapse from './Collapse';
+import Image from 'next/image';
+import { AiFillStar } from 'react-icons/ai';
 
-const Accordion = (): JSX.Element => {
-    return (
-        <Collapse
-            title="HALOhagSGDJHAG djasgd jagdjagghjasdoasudasdo as d asdjasjd asj dlasdasj"
-            content={
-                <div className="px-3 py-[10px] cursor-pointer hover:bg-[#272727]">
-                    haolasl
-                </div>
+const DUMMY_COURSE_CONTENT = {
+    chapters: [
+        {
+            chapter_id: 'asldhjad',
+            chapter_name: 'asldhjad',
+            order: 1,
+            subchapter_counts: 4,
+            learning_progress: {
+                is_finished: false
             }
-        />
+        },
+        {
+            chapter_id: 'asldhjad',
+            chapter_name: 'asldhjad',
+            order: 1,
+            subchapter_counts: 4,
+            learning_progress: {
+                is_finished: false
+            }
+        },
+        {
+            chapter_id: 'asldhjad',
+            chapter_name: 'asldhjad',
+            order: 1,
+            subchapter_counts: 4,
+            learning_progress: {
+                is_finished: false
+            }
+        },
+        {
+            chapter_id: 'asldhjad',
+            chapter_name: 'asldhjad',
+            order: 1,
+            subchapter_counts: 4,
+            learning_progress: {
+                is_finished: false
+            }
+        },
+        {
+            chapter_id: 'asldhjad',
+            chapter_name: 'asldhjad',
+            order: 1,
+            subchapter_counts: 4,
+            learning_progress: {
+                is_finished: false
+            }
+        },
+        {
+            chapter_id: 'asldhjad',
+            chapter_name: 'asldhjad',
+            order: 1,
+            subchapter_counts: 4,
+            learning_progress: {
+                is_finished: false
+            }
+        },
+        {
+            chapter_id: 'asldhjad',
+            chapter_name: 'asldhjad',
+            order: 1,
+            subchapter_counts: 4,
+            learning_progress: {
+                is_finished: false
+            }
+        },
+        {
+            chapter_id: 'asldhjad',
+            chapter_name: 'asldhjad',
+            order: 1,
+            subchapter_counts: 4,
+            learning_progress: {
+                is_finished: false
+            }
+        },
+        {
+            chapter_id: 'baru',
+            chapter_name: 'Kalkulus',
+            order: 2,
+            subchapter_counts: 7,
+            learning_progress: {
+                is_finished: true
+            }
+        }
+    ],
+    books: [
+        {
+            book_id: 'asldhjad',
+            title: 'asldhjad',
+            rating: 5.0,
+            book_cover_url: 'asldhjad',
+            author: ['Gradient', 'Budient']
+        },
+        {
+            book_id: 'sadq1erfq12',
+            title: 'AstroNotes: Kalkulus 1',
+            rating: 4.9,
+            book_cover_url: 'asldhjad',
+            author: ['Gradient']
+        }
+    ]
+};
+
+const AccordionVideo = ({
+    chapters
+}: {
+    chapters: {
+        chapter_id: string;
+        chapter_name: string;
+        order: number;
+        subchapter_counts: number;
+        learning_progress: {
+            is_finished: boolean;
+        };
+    }[];
+}): JSX.Element => {
+    return (
+        <div className="flex flex-col gap-3">
+            {chapters?.map(
+                ({
+                    chapter_id,
+                    chapter_name,
+                    subchapter_counts,
+                    learning_progress
+                }) => (
+                    <Collapse
+                        key={chapter_id}
+                        title={`${chapter_name} (${subchapter_counts})`}
+                        chapter_id={chapter_id}
+                        is_finished={learning_progress.is_finished}
+                    />
+                )
+            )}
+        </div>
+    );
+};
+
+const ListBooks = ({
+    books
+}: {
+    books: {
+        book_id: string;
+        title: string;
+        rating: number;
+        book_cover_url: string;
+        author: string[];
+    }[];
+}): JSX.Element => {
+    return (
+        <div className="flex flex-col gap-[14px]">
+            {books?.map(({ book_id, title, author, rating }) => (
+                <div className="flex gap-5" key={book_id}>
+                    <div>
+                        <Image
+                            src={'/'} // ! ganti jadi book cover url
+                            width={79}
+                            height={113}
+                            className="object-contain"
+                        />
+                    </div>
+                    <div className="flex flex-col gap-[6px]">
+                        <span className="inline-block font-body text-lg text-neutral-200">
+                            {title}
+                        </span>
+                        <div>
+                            <span className="inline-block font-body text-base text-neutral-600">
+                                {`oleh ${author[0]}${
+                                    author.length > 1 ? ', dkk.' : ''
+                                }`}
+                            </span>
+                            <span className="flex items-center gap-[2px] font-body text-xs text-neutral-600">
+                                <AiFillStar />
+                                {rating}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </div>
     );
 };
 
 const CourseDetailBox = (): JSX.Element => {
-    const [navigation, setNavigation] = useState<'VIDEO' | 'BUKU'>('VIDEO');
+    const [navigation, setNavigation] = useState<
+        'VIDEO' | 'BOOK' | 'ON_SEARCH'
+    >('VIDEO');
     const [isSearch, setIsSearch] = useState(false);
+    const [search, setSearch] = useState('');
+
+    function handleSearch(): void {
+        // logic search
+    }
 
     return (
-        <div className="w-full h-full bg-[#121212] rounded-lg overflow-hidden">
-            <div className="flex flex-col gap-[14px] px-[18px] py-[18px] bg-[#1D1D1D]">
+        <div className="w-full h-full bg-[#121212] lg:rounded-lg lg:overflow-hidden">
+            <div className="flex flex-col gap-[14px] px-5 md:px-16 lg:px-[18px] py-[18px] bg-[#1D1D1D]">
                 <div className="flex justify-between items-center">
                     <h4 className="font-sans font-extrabold text-base xl:text-lg">
                         Dasar Integral{' '}
@@ -35,10 +212,32 @@ const CourseDetailBox = (): JSX.Element => {
                 </div>
                 <ProgressBar total_finished_video={2} total_video_count={40} />
             </div>
-            <div className="flex flex-col gap-[18px] px-[14px] pt-[14px]">
+            <div className="flex flex-col gap-[18px] px-5 md:px-16 lg:px-[14px] pt-[14px]">
                 {isSearch ? (
-                    <div onClick={() => setIsSearch(false)} aria-hidden>
-                        Searhc state
+                    <div className="flex items-center px-3 bg-[#212121] rounded-[100px] border-[1px] border-neutral-400">
+                        <IoIosSearch
+                            size={20}
+                            className="text-[#DADADA]"
+                            onClick={handleSearch}
+                        />
+                        <input
+                            className="w-full bg-transparent border-none font-body text-xs focus:outline-none focus:ring-0 focus:appearance-none"
+                            type="text"
+                            value={search}
+                            name="search"
+                            onChange={(event) => setSearch(event.target.value)}
+                            onKeyDown={(event) => {
+                                event.key === 'Enter' ? handleSearch() : null;
+                            }}
+                        />
+                        <IoMdClose
+                            size={16}
+                            className="text-white"
+                            onClick={() => {
+                                setIsSearch(false);
+                                setNavigation('VIDEO');
+                            }}
+                        />
                     </div>
                 ) : (
                     <div className="flex justify-between items-center">
@@ -55,11 +254,11 @@ const CourseDetailBox = (): JSX.Element => {
                             </span>
                             <span
                                 className={`inline-block font-bold text-sm pb-[6px] cursor-pointer ${
-                                    navigation === 'BUKU'
+                                    navigation === 'BOOK'
                                         ? 'border-b-2 border-accent-purple'
                                         : 'text-neutral-600 border-none hover:text-neutral-500'
                                 }`}
-                                onClick={() => setNavigation('BUKU')}
+                                onClick={() => setNavigation('BOOK')}
                                 aria-hidden>
                                 BUKU
                             </span>
@@ -71,8 +270,15 @@ const CourseDetailBox = (): JSX.Element => {
                         />
                     </div>
                 )}
-                <div>
-                    <Accordion />
+                <div className="overflow-auto">
+                    {navigation === 'VIDEO' && (
+                        <AccordionVideo
+                            chapters={DUMMY_COURSE_CONTENT.chapters}
+                        />
+                    )}
+                    {navigation === 'BOOK' && (
+                        <ListBooks books={DUMMY_COURSE_CONTENT.books} />
+                    )}
                 </div>
             </div>
         </div>

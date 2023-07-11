@@ -1,15 +1,17 @@
-import { ReactNode, useState } from 'react';
-import { HiOutlineChevronDown } from 'react-icons/hi';
+import { useState } from 'react';
+import { HiCheck, HiOutlineChevronDown } from 'react-icons/hi';
 
 const Collapse = ({
     key,
     title,
-    content,
+    chapter_id,
+    is_finished,
     initialOpen = false
 }: {
     key?: string;
     title: string;
-    content: ReactNode;
+    chapter_id: string;
+    is_finished: boolean;
     initialOpen?: boolean;
 }): JSX.Element => {
     const [isOpen, setIsOpen] = useState(initialOpen);
@@ -22,9 +24,14 @@ const Collapse = ({
                 }`}
                 onClick={() => setIsOpen((prev) => !prev)}
                 aria-hidden>
-                <span className="inline-block font-extrabold text-sm whitespace-nowrap text-ellipsis overflow-hidden">
-                    {title}
-                </span>
+                <div className="flex gap-2">
+                    {is_finished && (
+                        <HiCheck size={18} className="text-[#02EC60]" />
+                    )}
+                    <span className="inline-block font-extrabold text-sm whitespace-nowrap text-ellipsis overflow-hidden">
+                        {title}
+                    </span>
+                </div>
                 <HiOutlineChevronDown
                     size={18}
                     className={`text-white ${
@@ -32,7 +39,12 @@ const Collapse = ({
                     } transition-all`}
                 />
             </div>
-            <div className={`${isOpen ? '' : 'hidden'}`}>{content}</div>
+            <div
+                className={`px-3 py-[10px] cursor-pointer hover:bg-[#272727] ${
+                    isOpen ? '' : 'hidden'
+                }`}>
+                {chapter_id}
+            </div>
         </div>
     );
 };
