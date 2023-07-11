@@ -15,7 +15,7 @@ const AiTutor = ({ uniqueId }: AiTutorProps): JSX.Element => {
 
     return (
         <div
-            className={`fixed left-[50%] translate-x-[-50%] md:left-0 md:translate-x-0 md:right-[2vw] flex flex-col md:items-end md:gap-[14px] z-[100000] ${
+            className={`fixed w-min left-[50%] translate-x-[-50%] md:left-auto md:translate-x-0 md:right-[2vw] flex flex-col md:items-end md:gap-[14px] z-[100000] ${
                 isMobileBreakpoints && openChatRoom
                     ? 'bottom-0'
                     : 'bottom-[2vh]'
