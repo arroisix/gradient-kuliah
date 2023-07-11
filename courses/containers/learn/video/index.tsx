@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import LearnVideo from './learnVideo';
 import CourseDetailBox from 'courses/components/CourseDetailBox';
+import CourseSummary from 'courses/components/CourseSummary';
 
 const VideoLearnContainer = (): JSX.Element => {
     const router = useRouter();
@@ -20,9 +21,9 @@ const VideoLearnContainer = (): JSX.Element => {
     const { video } = useLearning();
 
     return (
-        <section className="relative pt-[97px] min-h-[100vh]">
-            <div className="w-full flex gap-8 px-16">
-                <div className="w-full lg:w-[70%] h-full rounded-lg overflow-hidden">
+        <section className="relative pt-[64px] md:pt-[97px] pb-16 min-h-[100vh] flex flex-col gap-8">
+            <div className="w-full h-full flex gap-5 lg:gap-8 px-0 md:px-16">
+                <div className="w-full lg:w-[70%] h-max md:rounded-lg md:overflow-hidden">
                     {!isLoading ? (
                         data ? (
                             <LearnVideo
@@ -46,6 +47,10 @@ const VideoLearnContainer = (): JSX.Element => {
                     <CourseDetailBox />
                 </div>
             </div>
+            <h2 className="font-extrabold text-base md:text-2xl px-5 md:px-16">
+                Pelajaran Tiga
+            </h2>
+            <CourseSummary />
             {video?.ai_unique_id && <AiTutor uniqueId={video.ai_unique_id} />}
         </section>
     );
