@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import ProgressBar from './ProgressBar';
 import { MdStarPurple500 } from 'react-icons/md';
 import { IoIosSearch, IoMdClose } from 'react-icons/io';
 import Collapse from './Collapse';
 import Image from 'next/image';
 import { AiFillStar } from 'react-icons/ai';
+import useElementSize from 'commons/hooks/useElementSize';
+import useOnScreen from 'commons/hooks/useOnScreen';
 
 const DUMMY_COURSE_CONTENT = {
     chapters: [
@@ -122,7 +124,7 @@ const AccordionVideo = ({
     }[];
 }): JSX.Element => {
     return (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 pb-[18px]">
             {chapters?.map(
                 ({
                     chapter_id,
@@ -194,13 +196,26 @@ const CourseDetailBox = (): JSX.Element => {
     const [isSearch, setIsSearch] = useState(false);
     const [search, setSearch] = useState('');
 
+    const anchor = useRef<HTMLDivElement>({} as HTMLDivElement);
+    const { height: boxHeight, ref: boxRef } = useElementSize<HTMLDivElement>();
+    const { height: headerBoxHeight, ref: headerBoxRef } =
+        useElementSize<HTMLDivElement>();
+    const isOnScreen = useOnScreen(anchor);
+
     function handleSearch(): void {
         // logic search
     }
 
     return (
-        <div className="w-full h-full bg-[#121212] lg:rounded-lg lg:overflow-hidden">
-            <div className="flex flex-col gap-[14px] px-5 md:px-16 lg:px-[18px] py-[18px] bg-[#1D1D1D]">
+        <div
+            className="relative w-full h-full bg-[#121212] lg:rounded-lg lg:overflow-hidden"
+            ref={boxRef}>
+            {!isOnScreen && (
+                <div className="w-full h-[40px] absolute bottom-0 bg-gradient-to-b from-transparent to-[#000000c7] z-[1]"></div>
+            )}
+            <div
+                className="flex flex-col gap-[14px] px-5 md:px-16 lg:px-[18px] py-[18px] bg-[#1D1D1D]"
+                ref={headerBoxRef}>
                 <div className="flex justify-between items-center">
                     <h4 className="font-sans font-extrabold text-base xl:text-lg">
                         Dasar Integral{' '}
@@ -212,7 +227,9 @@ const CourseDetailBox = (): JSX.Element => {
                 </div>
                 <ProgressBar total_finished_video={2} total_video_count={40} />
             </div>
-            <div className="flex flex-col gap-[18px] px-5 md:px-16 lg:px-[14px] pt-[14px]">
+            <div
+                className="flex flex-col gap-[18px] px-5 md:px-16 lg:px-[14px] pt-[14px]"
+                style={{ height: boxHeight - headerBoxHeight }}>
                 {isSearch ? (
                     <div className="flex items-center px-3 bg-[#212121] rounded-[100px] border-[1px] border-neutral-400">
                         <IoIosSearch
@@ -279,6 +296,7 @@ const CourseDetailBox = (): JSX.Element => {
                     {navigation === 'BOOK' && (
                         <ListBooks books={DUMMY_COURSE_CONTENT.books} />
                     )}
+                    <div ref={anchor}></div>
                 </div>
             </div>
         </div>
