@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { AiFillStar } from 'react-icons/ai';
 import useElementSize from 'commons/hooks/useElementSize';
 import useOnScreen from 'commons/hooks/useOnScreen';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 
 const DUMMY_COURSE_CONTENT = {
     chapters: [
@@ -124,7 +125,7 @@ const AccordionVideo = ({
     }[];
 }): JSX.Element => {
     return (
-        <div className="flex flex-col gap-3 pb-[18px]">
+        <div className="flex flex-col gap-3 lg:pb-[18px]">
             {chapters?.map(
                 ({
                     chapter_id,
@@ -196,6 +197,7 @@ const CourseDetailBox = (): JSX.Element => {
     const [isSearch, setIsSearch] = useState(false);
     const [search, setSearch] = useState('');
 
+    const { isDesktopBreakpoints } = useWindowBreakpoints();
     const anchor = useRef<HTMLDivElement>({} as HTMLDivElement);
     const { height: boxHeight, ref: boxRef } = useElementSize<HTMLDivElement>();
     const { height: headerBoxHeight, ref: headerBoxRef } =
@@ -210,7 +212,7 @@ const CourseDetailBox = (): JSX.Element => {
         <div
             className="relative w-full h-full bg-[#121212] lg:rounded-lg lg:overflow-hidden"
             ref={boxRef}>
-            {!isOnScreen && (
+            {!isOnScreen && isDesktopBreakpoints && (
                 <div className="w-full h-[40px] absolute bottom-0 bg-gradient-to-b from-transparent to-[#000000c7] z-[1]"></div>
             )}
             <div
@@ -229,12 +231,16 @@ const CourseDetailBox = (): JSX.Element => {
             </div>
             <div
                 className="flex flex-col gap-[18px] px-5 md:px-16 lg:px-[14px] pt-[14px]"
-                style={{ height: boxHeight - headerBoxHeight }}>
+                style={{
+                    height: isDesktopBreakpoints
+                        ? boxHeight - headerBoxHeight
+                        : '100%'
+                }}>
                 {isSearch ? (
                     <div className="flex items-center px-3 bg-[#212121] rounded-[100px] border-[1px] border-neutral-400">
                         <IoIosSearch
                             size={20}
-                            className="text-[#DADADA]"
+                            className="text-[#DADADA] cursor-pointer"
                             onClick={handleSearch}
                         />
                         <input
@@ -249,7 +255,7 @@ const CourseDetailBox = (): JSX.Element => {
                         />
                         <IoMdClose
                             size={16}
-                            className="text-white"
+                            className="text-white cursor-pointer"
                             onClick={() => {
                                 setIsSearch(false);
                                 setNavigation('VIDEO');
@@ -282,12 +288,12 @@ const CourseDetailBox = (): JSX.Element => {
                         </div>
                         <IoIosSearch
                             size={20}
-                            className="text-[#DADADA]"
+                            className="text-[#DADADA] hover:text-white cursor-pointer"
                             onClick={() => setIsSearch(true)}
                         />
                     </div>
                 )}
-                <div className="overflow-auto">
+                <div className="h-full lg:overflow-auto">
                     {navigation === 'VIDEO' && (
                         <AccordionVideo
                             chapters={DUMMY_COURSE_CONTENT.chapters}

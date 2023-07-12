@@ -9,7 +9,7 @@ const CourseSummary = (): JSX.Element => {
     >('DESCRIPTION');
 
     return (
-        <div className="flex flex-col gap-5 py-8 bg-[#121212]">
+        <div className="flex flex-col gap-5 pt-8 pb-12 bg-[#121212]">
             <div className="flex gap-5 lg:gap-8 px-5 md:px-16">
                 <span
                     className={`inline-block lg:hidden font-bold text-sm pb-[6px] cursor-pointer ${
