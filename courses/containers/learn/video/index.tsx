@@ -60,7 +60,7 @@ const VideoLearnContainer = (): JSX.Element => {
                 )}
             </div>
             <h2 className="font-extrabold text-base md:text-2xl px-5 md:px-16">
-                Pelajaran Tiga
+                {data?.subchapter_name}
             </h2>
             <CourseSummary />
             <AnotherClass />

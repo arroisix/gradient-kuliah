@@ -8,6 +8,9 @@ import { AiFillStar } from 'react-icons/ai';
 import useElementSize from 'commons/hooks/useElementSize';
 import useOnScreen from 'commons/hooks/useOnScreen';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
+import { useRouter } from 'next/router';
+import { useGetLandingCourseListContentQuery } from 'courses/redux/api/publicCourseApi';
+import { getAllChapterContent } from 'courses/utils';
 
 const DUMMY_COURSE_CONTENT = {
     chapters: [
@@ -21,8 +24,8 @@ const DUMMY_COURSE_CONTENT = {
             }
         },
         {
-            chapter_id: 'asldhjad',
-            chapter_name: 'asldhjad',
+            chapter_id: 'a',
+            chapter_name: 'bnc',
             order: 1,
             subchapter_counts: 4,
             learning_progress: {
@@ -30,8 +33,8 @@ const DUMMY_COURSE_CONTENT = {
             }
         },
         {
-            chapter_id: 'asldhjad',
-            chapter_name: 'asldhjad',
+            chapter_id: 'c',
+            chapter_name: 'twe',
             order: 1,
             subchapter_counts: 4,
             learning_progress: {
@@ -39,8 +42,8 @@ const DUMMY_COURSE_CONTENT = {
             }
         },
         {
-            chapter_id: 'asldhjad',
-            chapter_name: 'asldhjad',
+            chapter_id: 's',
+            chapter_name: 'hdffd',
             order: 1,
             subchapter_counts: 4,
             learning_progress: {
@@ -48,8 +51,8 @@ const DUMMY_COURSE_CONTENT = {
             }
         },
         {
-            chapter_id: 'asldhjad',
-            chapter_name: 'asldhjad',
+            chapter_id: 'd',
+            chapter_name: 'hfd',
             order: 1,
             subchapter_counts: 4,
             learning_progress: {
@@ -57,8 +60,8 @@ const DUMMY_COURSE_CONTENT = {
             }
         },
         {
-            chapter_id: 'asldhjad',
-            chapter_name: 'asldhjad',
+            chapter_id: 'fdas',
+            chapter_name: 'hdf',
             order: 1,
             subchapter_counts: 4,
             learning_progress: {
@@ -66,8 +69,8 @@ const DUMMY_COURSE_CONTENT = {
             }
         },
         {
-            chapter_id: 'asldhjad',
-            chapter_name: 'asldhjad',
+            chapter_id: 'w',
+            chapter_name: 'ffsg',
             order: 1,
             subchapter_counts: 4,
             learning_progress: {
@@ -75,8 +78,8 @@ const DUMMY_COURSE_CONTENT = {
             }
         },
         {
-            chapter_id: 'asldhjad',
-            chapter_name: 'asldhjad',
+            chapter_id: 'f',
+            chapter_name: 'wad',
             order: 1,
             subchapter_counts: 4,
             learning_progress: {
@@ -84,7 +87,7 @@ const DUMMY_COURSE_CONTENT = {
             }
         },
         {
-            chapter_id: 'baru',
+            chapter_id: 'gw',
             chapter_name: 'Kalkulus',
             order: 2,
             subchapter_counts: 7,
@@ -114,32 +117,41 @@ const DUMMY_COURSE_CONTENT = {
 const AccordionVideo = ({
     chapters
 }: {
-    chapters: {
-        chapter_id: string;
-        chapter_name: string;
-        order: number;
-        subchapter_counts: number;
-        learning_progress: {
-            is_finished: boolean;
-        };
-    }[];
+    chapters: Chapter[];
+    // chapters: {
+    //     chapter_id: string;
+    //     chapter_name: string;
+    //     order: number;
+    //     subchapter_counts: number;
+    //     learning_progress: {
+    //         is_finished: boolean;
+    //     };
+    // }[];
 }): JSX.Element => {
     return (
         <div className="flex flex-col gap-3 lg:pb-[18px]">
             {chapters?.map(
-                ({
-                    chapter_id,
-                    chapter_name,
-                    subchapter_counts,
-                    learning_progress
-                }) => (
+                ({ id, chapter_name, subchapters }) => (
                     <Collapse
-                        key={chapter_id}
-                        title={`${chapter_name} (${subchapter_counts})`}
-                        chapter_id={chapter_id}
-                        is_finished={learning_progress.is_finished}
+                        key={id}
+                        title={`${chapter_name} (${subchapters.length})`}
+                        chapter_id={id}
+                        is_finished={false}
                     />
                 )
+                // ({
+                //     chapter_id,
+                //     chapter_name,
+                //     subchapter_counts,
+                //     learning_progress
+                // }) => (
+                //     <Collapse
+                //         key={chapter_id}
+                //         title={`${chapter_name} (${subchapter_counts})`}
+                //         chapter_id={chapter_id}
+                //         is_finished={learning_progress.is_finished}
+                //     />
+                // )
             )}
         </div>
     );
@@ -197,12 +209,23 @@ const CourseDetailBox = (): JSX.Element => {
     const [isSearch, setIsSearch] = useState(false);
     const [search, setSearch] = useState('');
 
-    const { isDesktopBreakpoints } = useWindowBreakpoints();
+    const { checkCustomBreakpoints } = useWindowBreakpoints();
     const anchor = useRef<HTMLDivElement>({} as HTMLDivElement);
     const { height: boxHeight, ref: boxRef } = useElementSize<HTMLDivElement>();
     const { height: headerBoxHeight, ref: headerBoxRef } =
         useElementSize<HTMLDivElement>();
     const isOnScreen = useOnScreen(anchor);
+
+    const router = useRouter();
+    const { id } = router.query;
+    const { data: content } = useGetLandingCourseListContentQuery(
+        id as string,
+        {
+            skip: !id
+        }
+    );
+
+    const chapters = getAllChapterContent(content?.data as Chapter[]);
 
     function handleSearch(): void {
         // logic search
@@ -212,8 +235,8 @@ const CourseDetailBox = (): JSX.Element => {
         <div
             className="relative w-full h-full bg-[#121212] lg:rounded-lg lg:overflow-hidden"
             ref={boxRef}>
-            {!isOnScreen && isDesktopBreakpoints && (
-                <div className="w-full h-[40px] absolute bottom-0 bg-gradient-to-b from-transparent to-[#000000c7] z-[1]"></div>
+            {!isOnScreen && !checkCustomBreakpoints(1024) && (
+                <div className="w-full h-[40px] absolute bottom-0 bg-gradient-to-b from-transparent to-[#121212] z-[1]"></div>
             )}
             <div
                 className="flex flex-col gap-[14px] px-5 md:px-16 lg:px-[18px] py-[18px] bg-[#1D1D1D]"
@@ -232,7 +255,7 @@ const CourseDetailBox = (): JSX.Element => {
             <div
                 className="flex flex-col gap-[18px] px-5 md:px-16 lg:px-[14px] pt-[14px]"
                 style={{
-                    height: isDesktopBreakpoints
+                    height: !checkCustomBreakpoints(1024)
                         ? boxHeight - headerBoxHeight
                         : '100%'
                 }}>
@@ -293,11 +316,9 @@ const CourseDetailBox = (): JSX.Element => {
                         />
                     </div>
                 )}
-                <div className="h-full lg:overflow-auto">
+                <div className="h-full lg:overflow-y-auto">
                     {navigation === 'VIDEO' && (
-                        <AccordionVideo
-                            chapters={DUMMY_COURSE_CONTENT.chapters}
-                        />
+                        <AccordionVideo chapters={chapters} />
                     )}
                     {navigation === 'BOOK' && (
                         <ListBooks books={DUMMY_COURSE_CONTENT.books} />
