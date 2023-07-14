@@ -16,6 +16,7 @@ import {
 } from 'komunitas/redux/api/komunitasApi';
 import AuthContext from 'authentication/contexts/AuthProvider';
 import { posthog } from 'posthog-js';
+import { isNotNullAndUndefined } from 'commons/utils';
 
 type Student = {
     id: string;
@@ -87,9 +88,9 @@ const AnswerCard = ({
             <div className="flex justify-between items-center gap-4">
                 <div className="flex items-center gap-3">
                     <div className="relative w-[24px] h-[24px]">
-                        {student?.photo_url ? (
+                        {isNotNullAndUndefined(student?.photo_url) ? (
                             <Image
-                                src={student?.photo_url}
+                                src={student?.photo_url ?? ''}
                                 alt={student?.username}
                                 layout="fill"
                                 className="rounded-full object-contain"
@@ -148,7 +149,7 @@ const AnswerCard = ({
             <div className="flex flex-col gap-6 border-t-[1px] border-[#272727] pt-[18px]">
                 <div className="flex gap-3 items-center">
                     <div className="relative w-[24px] h-[24px]">
-                        {student?.photo_url ? (
+                        {isNotNullAndUndefined(profile?.photo_profile) ? (
                             <Image
                                 src={profile?.photo_profile as string}
                                 alt={profile?.username}

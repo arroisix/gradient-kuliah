@@ -7,11 +7,13 @@ import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienc
 
 const useCourseSubscription = (slug?: string) => {
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { data, isLoading: isLoadingSubscription } =
-        useGetActiveSubscriptionQuery(undefined, {
-            skip: !isAuthenticated,
-            refetchOnMountOrArgChange: true
-        });
+    const {
+        data,
+        isLoading: isLoadingSubscription,
+        isSuccess: isDoneFetching
+    } = useGetActiveSubscriptionQuery(undefined, {
+        skip: !isAuthenticated
+    });
     const { data: learningProgress, isLoading: isLoadingLearningProgress } =
         useGetLearningProgressQuery(slug as string, {
             skip: !isAuthenticated || slug === undefined,
@@ -40,6 +42,7 @@ const useCourseSubscription = (slug?: string) => {
         is_subscribed: checkIsSubscribed(),
         expiryDay,
         isLoading: isLoadingSubscription || isLoadingLearningProgress,
+        isDoneFetchingSubcription: isDoneFetching,
         learning_progress_id: learningProgress?.id,
         ...learningProgress
     };

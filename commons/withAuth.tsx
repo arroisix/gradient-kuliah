@@ -16,7 +16,7 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
             const accessToken = useSelector(getToken);
             const rawToken = window.localStorage.getItem('token');
 
-            const { is_subscribed, isLoading: isLoadingSubscribed } =
+            const { is_subscribed, isDoneFetchingSubcription } =
                 useCourseSubscription();
             const isProfileComplete = useSelector(getIsProfileComplete);
             const isLastOnboardingStep = localStorage.getItem(
@@ -24,7 +24,7 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
             );
             // If there is no access token we redirect to "/" page.
             // Also clear token from cookie and localstorage
-            if (!isLoadingSubscribed) {
+            if (isDoneFetchingSubcription) {
                 if (
                     pathname === '/onboarding' &&
                     isProfileComplete &&

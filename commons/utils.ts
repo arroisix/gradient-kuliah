@@ -50,3 +50,7 @@ export const capitalize = (sentence: string): string => {
 
     return capitalizeWords.join(' ');
 };
+
+export const isNotNullAndUndefined = <T>(data: T): boolean => {
+    return data !== undefined && data !== null;
+};
