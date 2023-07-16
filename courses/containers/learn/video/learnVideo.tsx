@@ -23,6 +23,7 @@ const LearnVideo = ({
                 return (
                     <VideoPlayer
                         autoPlay
+                        token={video?.token}
                         popupData={video?.popup_questions}
                         video={video?.video_url}
                         popupComponent={<PopupQuestionContent />}
