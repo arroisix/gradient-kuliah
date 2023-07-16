@@ -1,5 +1,6 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import VideoPlayer from 'commons/components/elements/Video';
+import { isNotNullAndUndefined } from 'commons/utils';
 import PopupQuestionContent from 'courses/components/Exercise/PopupQuestion';
 import LearningExperience from 'courses/components/LearningExperience';
 import NeedSubscribe from 'courses/components/NeedSubscribe';
@@ -27,6 +28,9 @@ const LearnVideo = ({
                         popupComponent={<PopupQuestionContent />}
                         thumbnail={video?.thumbnail}
                         key={video?.video_url}
+                        isMuxVideo={isNotNullAndUndefined(
+                            video.mux_playback_id
+                        )}
                         trackProgress={
                             isAuthenticated
                                 ? async (last_duration, isFinished) =>

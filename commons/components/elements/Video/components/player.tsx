@@ -13,7 +13,8 @@ const Player = <T,>({
     popupData,
     popupComponent,
     height,
-    autoPlay
+    autoPlay,
+    isMuxVideo
 }: VideoPlayerProps<T>): JSX.Element => {
     const {
         videoRef,
@@ -169,7 +170,10 @@ const Player = <T,>({
                             onClick={() => setShowSettings(false)}
                             aria-hidden
                         />
-                        <Settings isSupportHLS={video.includes('.m3u8')} />
+                        <Settings
+                            isSupportHLS={video.includes('.m3u8')}
+                            isMuxVideo={isMuxVideo ?? false}
+                        />
                     </>
                 )}
                 {video?.includes('.m3u8') ? (

@@ -9,4 +9,5 @@ type VideoPlayerProps<T> = {
     popupData?: T[];
     popupComponent?: JSX.Element;
     autoPlay?: boolean;
+    isMuxVideo?: boolean;
 };

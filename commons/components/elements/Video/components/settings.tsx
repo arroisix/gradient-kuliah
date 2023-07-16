@@ -59,7 +59,13 @@ const MenuContainer = <T,>({
     );
 };
 
-const Settings = ({ isSupportHLS }: { isSupportHLS: boolean }): JSX.Element => {
+const Settings = ({
+    isSupportHLS,
+    isMuxVideo
+}: {
+    isSupportHLS: boolean;
+    isMuxVideo: boolean;
+}): JSX.Element => {
     const { playback, setPlayback, quality, setQuality } = useVideoPlayer();
     const [showPlayback, setShowPlayback] = useState(false);
     const [showQuality, setShowQuality] = useState(false);
@@ -74,36 +80,61 @@ const Settings = ({ isSupportHLS }: { isSupportHLS: boolean }): JSX.Element => {
                     data={quality}
                     title="Kualitas"
                     setData={setQuality}
-                    dataOption={[
-                        {
-                            value: -1,
-                            label: 'Otomatis'
-                        },
-                        {
-                            value: 0,
-                            label: '144p'
-                        },
-                        {
-                            value: 1,
-                            label: '240p'
-                        },
-                        {
-                            value: 2,
-                            label: '360p'
-                        },
-                        {
-                            value: 3,
-                            label: '480p'
-                        },
-                        {
-                            value: 4,
-                            label: '720p'
-                        },
-                        {
-                            value: 5,
-                            label: '1080p [HD]'
-                        }
-                    ]}
+                    dataOption={
+                        isMuxVideo
+                            ? [
+                                  {
+                                      value: -1,
+                                      label: 'Otomatis'
+                                  },
+                                  {
+                                      value: 0,
+                                      label: '144p'
+                                  },
+                                  {
+                                      value: 1,
+                                      label: '240p'
+                                  },
+                                  {
+                                      value: 2,
+                                      label: '360p'
+                                  },
+                                  {
+                                      value: 3,
+                                      label: '480p'
+                                  }
+                              ]
+                            : [
+                                  {
+                                      value: -1,
+                                      label: 'Otomatis'
+                                  },
+                                  {
+                                      value: 0,
+                                      label: '144p'
+                                  },
+                                  {
+                                      value: 1,
+                                      label: '240p'
+                                  },
+                                  {
+                                      value: 2,
+                                      label: '360p'
+                                  },
+                                  {
+                                      value: 3,
+                                      label: '480p'
+                                  },
+                                  {
+                                      value: 4,
+                                      label: '720p'
+                                  },
+                                  {
+                                      value: 5,
+                                      label: '1080p [HD]'
+                                  }
+                              ]
+                    }
                 />
             )}
             {showPlayback && (

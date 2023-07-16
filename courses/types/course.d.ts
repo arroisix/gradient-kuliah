@@ -110,6 +110,7 @@ type Video = {
     progress?: VideoProgress;
     popup_questions?: PopupQuestion[];
     ai_unique_id?: string;
+    mux_playback_id?: string;
 };
 
 type CourseExercise = {
