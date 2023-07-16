@@ -14,7 +14,8 @@ const Player = <T,>({
     popupComponent,
     height,
     autoPlay,
-    isMuxVideo
+    isMuxVideo,
+    token
 }: VideoPlayerProps<T>): JSX.Element => {
     const {
         videoRef,
@@ -182,7 +183,7 @@ const Player = <T,>({
                         width={'100%'}
                         height={'100%'}
                         key={video}
-                        src={video}
+                        src={token ? `${video}?token=${token}` : video}
                         autoPlay={autoPlay}
                     />
                 ) : (

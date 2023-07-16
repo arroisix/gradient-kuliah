@@ -111,6 +111,7 @@ type Video = {
     popup_questions?: PopupQuestion[];
     ai_unique_id?: string;
     mux_playback_id?: string;
+    token?: string;
 };
 
 type CourseExercise = {
