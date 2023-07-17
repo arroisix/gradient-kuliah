@@ -12,7 +12,7 @@ import { useRouter } from 'next/router';
 import { useGetLandingCourseListContentQuery } from 'courses/redux/api/publicCourseApi';
 import { getAllChapterContent } from 'courses/utils';
 
-const DUMMY_COURSE_CONTENT = {
+export const DUMMY_COURSE_CONTENT = {
     chapters: [
         {
             chapter_id: 'asldhjad',
@@ -157,7 +157,7 @@ const AccordionVideo = ({
     );
 };
 
-const ListBooks = ({
+export const ListBooks = ({
     books
 }: {
     books: {
