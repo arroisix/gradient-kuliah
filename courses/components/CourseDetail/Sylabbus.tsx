@@ -9,6 +9,9 @@ import {
     useGetListCourseSubChapterQuery
 } from 'courses/redux/api/publicCourseApi';
 import Link from 'next/link';
+import { useState } from 'react';
+import { IoIosSearch } from 'react-icons/io';
+import { DUMMY_COURSE_CONTENT, ListBooks } from '../CourseDetailBox';
 
 const SylabbusContent = ({
     id,
@@ -17,6 +20,9 @@ const SylabbusContent = ({
     const { data: subchapters, isLoading } =
         useGetListCourseSubChapterQuery(id);
     const { watch_progress } = useCourseSubscription(slug);
+
+    // TODO: change API using new API
+    // Using same styling, only change the API
 
     return (
         <div className="flex flex-col gap-2">
@@ -107,26 +113,87 @@ const SylabbusContent = ({
 const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
     const { data, isLoading } = useGetListCourseChapterQuery(slug);
 
+    const [search, setSearch] = useState('');
+    const [navigation, setNavigation] = useState<
+        'VIDEO' | 'BOOK' | 'EXAM' | 'ON_SEARCH'
+    >('VIDEO');
+
+    function handleSearch(): void {
+        // logic search
+    }
+
     return (
         <div className="px-5 w-screen flex flex-col lg:w-5/12">
-            <Accordion
-                item={
-                    data?.data.map((chapter: Chapter) => ({
-                        title: chapter.chapter_name,
-                        jsxContent: (
-                            <SylabbusContent id={chapter.id} slug={slug} />
-                        )
-                    })) ?? []
-                }
-            />
-            {isLoading && (
-                <div className="flex flex-col gap-2 w-full">
-                    <Skeleton className="h-14" />
-                    <Skeleton className="h-14" />
-                    <Skeleton className="h-14" />
-                    <Skeleton className="h-14" />
-                    <Skeleton className="h-14" />
+            <div className="flex items-center px-4 bg-[#212121] rounded-lg">
+                <input
+                    className="w-full px-0 bg-transparent border-none font-body text-sm md:text-base focus:outline-none focus:ring-0 focus:appearance-none placeholder:text-[#666666]"
+                    type="text"
+                    value={search}
+                    name="search"
+                    onChange={(event) => setSearch(event.target.value)}
+                    onKeyDown={(event) => {
+                        event.key === 'Enter' ? handleSearch() : null;
+                    }}
+                    placeholder="Cari materi"
+                />
+                <IoIosSearch
+                    size={20}
+                    className="text-[#DADADA] cursor-pointer"
+                    onClick={handleSearch}
+                />
+            </div>
+            <div className="pt-[17px] md:pt-6 pb-[14px] md:pb-4">
+                <div className="flex">
+                    <span
+                        className={`inline-block w-full text-center text-sm pb-[6px] cursor-pointer ${
+                            navigation === 'VIDEO'
+                                ? 'border-b-2 border-[#C4B9FF] font-extrabold text-[#C4B9FF]'
+                                : 'font-medium text-[#CCCCCC] border-b border-[#272727] hover:text-neutral-500'
+                        }`}
+                        onClick={() => setNavigation('VIDEO')}
+                        aria-hidden>
+                        VIDEO
+                    </span>
+                    <span
+                        className={`inline-block w-full text-center text-sm pb-[6px] cursor-pointer ${
+                            navigation === 'BOOK'
+                                ? 'border-b-2 border-[#C4B9FF] font-extrabold text-[#C4B9FF]'
+                                : 'font-medium text-[#CCCCCC] border-b border-[#272727] hover:text-neutral-500'
+                        }`}
+                        onClick={() => setNavigation('BOOK')}
+                        aria-hidden>
+                        BUKU
+                    </span>
                 </div>
+            </div>
+            {navigation === 'VIDEO' && (
+                <>
+                    <Accordion
+                        item={
+                            data?.data.map((chapter: Chapter) => ({
+                                title: chapter.chapter_name,
+                                jsxContent: (
+                                    <SylabbusContent
+                                        id={chapter.id}
+                                        slug={slug}
+                                    />
+                                )
+                            })) ?? []
+                        }
+                    />
+                    {isLoading && (
+                        <div className="flex flex-col gap-2 w-full">
+                            <Skeleton className="h-14" />
+                            <Skeleton className="h-14" />
+                            <Skeleton className="h-14" />
+                            <Skeleton className="h-14" />
+                            <Skeleton className="h-14" />
+                        </div>
+                    )}
+                </>
+            )}
+            {navigation === 'BOOK' && (
+                <ListBooks books={DUMMY_COURSE_CONTENT.books} />
             )}
         </div>
     );
