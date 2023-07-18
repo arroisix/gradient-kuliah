@@ -34,12 +34,14 @@ const LearnLayout = ({
                     paymentPage={paymentPage ?? false}
                     shouldTransparent={shouldTransparent ?? false}
                     courses={courses}
+                    showSidebar={showSidebar}
+                    fullHeightSidebar={fullHeightSidebar}
                 />
             )}
             <section
                 className={`min-h-screen ${
                     showSidebar && isAuthenticated
-                        ? 'pt-24 pb-10 px-4 md:pl-5 md:pr-[5rem] lg:pr-[7.5rem] flex gap-[2rem] lg:gap-[6rem]'
+                        ? 'pt-24 pb-10 px-4 md:px-0 flex gap-[2rem] lg:gap-[6rem]'
                         : ''
                 }`}>
                 {showSidebar && isAuthenticated && (
@@ -48,7 +50,7 @@ const LearnLayout = ({
                 <div
                     className={`min-h-full md:h-[100vh - 65px] w-full ${
                         fullHeightSidebar && isAuthenticated
-                            ? 'md:pl-[12rem] lg:pl-[16rem]'
+                            ? 'md:pl-[18rem] lg:pl-[19rem] md:pr-[2rem] lg:pr-[7.5rem]'
                             : ''
                     }`}>
                     {children}
