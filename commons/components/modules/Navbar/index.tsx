@@ -260,7 +260,7 @@ const Navbar = ({
                                         </div>
                                     </div>
                                     <div
-                                        className={`px-8 py-4 min-w-[250px] top-10 right-0 absolute shadow-md rounded-b-md ${
+                                        className={`px-8 py-4 min-w-[250px] top-10 right-0 absolute shadow-md rounded-md ${
                                             pickedColorScheme.bgColor
                                         } ${pickedColorScheme.color} ${
                                             isProfileHovered
@@ -297,7 +297,7 @@ const Navbar = ({
                                             </div>
                                         </Link>
                                         <div
-                                            className="flex items-center w-full mb-4 font-normal text-accent-orange hover:text-state-error"
+                                            className="flex items-center w-full font-normal text-accent-orange hover:text-state-error"
                                             onClick={() =>
                                                 dispatch(removeUser())
                                             }
