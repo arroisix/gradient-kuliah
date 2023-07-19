@@ -72,11 +72,11 @@ const ListContinueLearning = ({
                                 className="rounded-lg object-cover object-top"
                             />
                         </div>
-                        <div className="flex flex-col gap-[5px] w-full whitespace-nowrap text-ellipsis overflow-hidden">
+                        <div className="flex flex-col gap-[2px] w-full whitespace-nowrap text-ellipsis overflow-hidden">
                             <span className="inline-block font-body whitespace-nowrap text-ellipsis overflow-hidden">
                                 {subchapter_name}
                             </span>
-                            <span className="inline-block font-body text-xs text-neutral-200 whitespace-nowrap text-ellipsis overflow-hidden">
+                            <span className="inline-block pb-3 font-body text-xs text-neutral-200 whitespace-nowrap text-ellipsis overflow-hidden">
                                 {course_name}
                             </span>
                             <ProgressBar percent={progress_percentage} />
