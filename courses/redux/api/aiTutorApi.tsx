@@ -17,6 +17,16 @@ export const aiTutorApi = baseApi.injectEndpoints({
                 method: 'POST'
             }),
             invalidatesTags: ['AI_TUTOR']
+        }),
+        AITutorFeedback: builder.mutation<
+            AITutorFeedbackResponse,
+            AITutorFeedbackInput
+        >({
+            query: (body) => ({
+                url: `${AI_TUTOR_BASE_URL}feedback/`,
+                method: 'POST',
+                body
+            })
         })
     })
 });

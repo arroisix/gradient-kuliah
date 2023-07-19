@@ -65,6 +65,8 @@ type SubChapter = {
     exercises?: CourseExercise[];
     type_name?: 'lecture' | 'notebook' | 'exercise';
     duration?: string;
+    last_duration?: string | null;
+    is_finished?: boolean | null;
 };
 
 type Chapter = {
@@ -199,4 +201,85 @@ type Packet = {
 interface NotebookSlugResponse {
     notionId: string;
     courseSlug: string;
+}
+
+type Course = {
+    id: string;
+    course_name: string;
+    thumbnail: string;
+    slug: string;
+    short_description: string;
+};
+
+interface CoursesResponse {
+    courses: Course[];
+}
+
+type CourseChapter = {
+    chapter_id: string;
+    chapter_name: string;
+    order: number;
+    subchapter_counts?: number;
+    is_finished?: boolean;
+};
+
+type Book = {
+    book_id: string;
+    title: string;
+    rating: number;
+    book_cover_url?: string | null;
+    author: string;
+};
+
+interface CourseContentResponse {
+    chapters: CourseChapter[];
+    books: Book[];
+}
+
+interface SubchapterResponse {
+    subchapters: SubChapter[];
+}
+
+interface SubchapterSearch {
+    chapter: string;
+    items: {
+        subchapter_id: string;
+        subchapter_name: string;
+        order: string;
+        duration: string;
+        last_duration: string;
+    }[];
+}
+
+interface SearchInterface<T> {
+    contents: T[];
+    count_items: number;
+    next_page?: number | null;
+    previous_page?: number | null;
+}
+
+interface SearchCourseResponse {
+    subchapter: SearchInterface<SubchapterSearch>;
+    books: SearchInterface<Book>;
+    chapters: SearchInterface<CourseChapter>;
+}
+
+type CourseDetail = {
+    level: string;
+    rating: number;
+    total_books: number;
+    lecturers: {
+        name: string;
+        role: string;
+        photo: string;
+    }[];
+};
+
+interface CourseDetailResponse {
+    course_detail: CourseDetail;
+}
+
+interface CourseFeedback {
+    content: string;
+    rating: number;
 }
