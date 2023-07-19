@@ -98,17 +98,15 @@ const Navbar = ({
             return lightMode ? 'bg-white shadow-md' : 'bg-[#171717]';
         }
 
-        if (scrollPosition >= 60) {
-            return lightMode
-                ? 'bg-white text-black shadow-md'
-                : 'bg-[#171717] md:bg-[#121212]';
+        if (showSidebar && fullHeightSidebar) {
+            if (scrollPosition >= 60) {
+                return 'bg-[#171717] md:bg-[#121212]';
+            }
+
+            return '';
         }
 
-        return lightMode
-            ? 'bg-white text-black shadow-md'
-            : showSidebar && fullHeightSidebar
-            ? ''
-            : 'bg-[#171717]';
+        return lightMode ? 'bg-white text-black shadow-md' : 'bg-[#171717]';
     };
 
     const onMouseLeaveNavbar = (): void => {
