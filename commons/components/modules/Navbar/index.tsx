@@ -31,12 +31,16 @@ import AuthContext from 'authentication/contexts/AuthProvider';
 const Navbar = ({
     paymentPage,
     shouldTransparent,
-    lightMode
+    lightMode,
+    showSidebar,
+    fullHeightSidebar
 }: {
     paymentPage: boolean;
     shouldTransparent: boolean;
     courses?: Course[];
     lightMode?: boolean;
+    showSidebar?: boolean;
+    fullHeightSidebar?: boolean;
 }): JSX.Element => {
     const { isMobileBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -94,6 +98,14 @@ const Navbar = ({
             return lightMode ? 'bg-white shadow-md' : 'bg-[#171717]';
         }
 
+        if (showSidebar && fullHeightSidebar) {
+            if (scrollPosition >= 60) {
+                return 'bg-[#171717] md:bg-[#121212]';
+            }
+
+            return '';
+        }
+
         return lightMode ? 'bg-white text-black shadow-md' : 'bg-[#171717]';
     };
 
@@ -129,10 +141,10 @@ const Navbar = ({
 
     return (
         <header
-            className={`fixed top-0 left-0 w-full z-20 ${computeBgColor()}`}
+            className={`fixed top-0 left-0 w-full z-20 ${computeBgColor()} transition-all ease-in-out duration-200`}
             onMouseEnter={() => setNavbarHovered(true)}
             onMouseLeave={onMouseLeaveNavbar}>
-            <div className="flex items-center justify-between w-full px-4 py-4 md:px-8">
+            <div className="flex items-center justify-between w-full px-4 py-4 md:px-6">
                 <div className="flex gap-4 items-center">
                     {isAuthenticated && (
                         <FiMenu
@@ -146,6 +158,9 @@ const Navbar = ({
                             {isMobileBreakpoints ? 'G' : 'Gradient'}
                         </span>
                     </Link>
+                    {showSidebar && fullHeightSidebar && isAuthenticated && (
+                        <div className="hidden md:block w-[250px] h-[64px] fixed top-0 left-0 bg-[#121212] z-[-1]" />
+                    )}
                     {((isMobileBreakpoints &&
                         router.pathname.includes('kelas/[id]/astronotes')) ||
                         (!isMobileBreakpoints &&
@@ -243,7 +258,7 @@ const Navbar = ({
                                         </div>
                                     </div>
                                     <div
-                                        className={`px-8 py-4 min-w-[250px] top-10 right-0 absolute shadow-md rounded-b-md ${
+                                        className={`px-8 py-4 min-w-[250px] top-10 right-0 absolute shadow-md rounded-md ${
                                             pickedColorScheme.bgColor
                                         } ${pickedColorScheme.color} ${
                                             isProfileHovered
@@ -280,7 +295,7 @@ const Navbar = ({
                                             </div>
                                         </Link>
                                         <div
-                                            className="flex items-center w-full mb-4 font-normal text-accent-orange hover:text-state-error"
+                                            className="flex items-center w-full font-normal text-accent-orange hover:text-state-error"
                                             onClick={() =>
                                                 dispatch(removeUser())
                                             }

@@ -21,17 +21,17 @@ const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
 
     return (
         <aside
-            className={`hidden md:block top-[76px] w-min ${
-                fullHeight ? 'fixed h-[90vh]' : 'h-fit sticky'
-            } bg-[#121212] rounded-lg w-[175px] px-3 py-4`}>
-            <div className="flex flex-col gap-3">
+            className={`hidden md:block top-[64px] ${
+                fullHeight ? 'fixed h-full' : 'h-fit sticky'
+            } bg-[#121212] w-[250px] pl-6 pr-3 py-4`}>
+            <div className="flex flex-col gap-[18px]">
                 {/* <Link href={'/notifikasi'}>
                     <span
                         className={`flex gap-4 cursor-pointer ${
                             pathname.includes('/notifikasi')
-                                ? 'text-[#CCCCCC]'
+                                ? 'text-white'
                                 : 'text-[#666666]'
-                        }  hover:text-[#999999]`}>
+                        }  font-body text-sm hover:text-[#999999]`}>
                         <RiNotification3Line size={20} />
                         Notifikasi
                     </span>
@@ -40,9 +40,9 @@ const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
                     <span
                         className={`flex gap-4 cursor-pointer ${
                             pathname.includes('/dashboard')
-                                ? 'text-[#CCCCCC]'
+                                ? 'text-white'
                                 : 'text-[#666666]'
-                        }  hover:text-[#999999]`}>
+                        }  font-body text-sm hover:text-[#999999]`}>
                         <FiHome size={20} />
                         Home
                     </span>
@@ -51,9 +51,9 @@ const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
                     <span
                         className={`flex items-center gap-4 cursor-pointer ${
                             pathname.includes('/komunitas')
-                                ? 'text-[#CCCCCC]'
+                                ? 'text-white'
                                 : 'text-[#666666]'
-                        }  hover:text-[#999999]`}
+                        }  font-body text-sm hover:text-[#999999]`}
                         onClick={() => {
                             posthog.capture('Visit Community Explore Page', {
                                 description: 'User visit Community Page'
@@ -78,9 +78,9 @@ const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
                     <span
                         className={`flex gap-4 cursor-pointer ${
                             pathname.includes('/kelas')
-                                ? 'text-[#CCCCCC]'
+                                ? 'text-white'
                                 : 'text-[#666666]'
-                        }  hover:text-[#999999]`}>
+                        }  font-body text-sm hover:text-[#999999]`}>
                         <BiBookReader size={20} />
                         Kelas
                     </span>
@@ -89,9 +89,9 @@ const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
                     <span
                         className={`flex gap-4 cursor-pointer ${
                             pathname.includes('/buku')
-                                ? 'text-[#CCCCCC]'
+                                ? 'text-white'
                                 : 'text-[#666666]'
-                        } text-[#666666] hover:text-[#999999]`}>
+                        } font-body text-sm hover:text-[#999999]`}>
                         <RiBookOpenLine size={20} />
                         Buku
                     </span>
