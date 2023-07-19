@@ -9,9 +9,9 @@ const DashboardContainer = (): JSX.Element => {
     return (
         <section className="min-h-screen flex flex-col gap-6">
             {!is_subscribed && !isLoading && <OfferNotification />}
-            <div className="flex flex-col md:flex-row-reverse gap-[2rem]">
-                <MyClass className="w-full md:w-3/12" />
-                <ContinueLearning className="w-full md:w-9/12" />
+            <div className="flex flex-col lg:flex-row-reverse gap-[2rem]">
+                <MyClass className="w-full lg:w-3/12" />
+                <ContinueLearning className="w-full lg:w-9/12" />
             </div>
         </section>
     );

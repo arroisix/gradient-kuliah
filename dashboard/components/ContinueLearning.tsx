@@ -44,7 +44,7 @@ const ListContinueLearning = ({
     const router = useRouter();
 
     return (
-        <div className="relative flex flex-col gap-4">
+        <div className="relative flex flex-col gap-[18px] lg:gap-6">
             {learning_progress?.map(
                 ({
                     course_slug,
@@ -57,26 +57,26 @@ const ListContinueLearning = ({
                 }) => (
                     <div
                         key={course_slug}
-                        className="flex flex-col md:flex-row gap-[8px] md:gap-[30px] items-start justify-start md:items-center md:justify-center cursor-pointer"
+                        className="flex gap-[18px] md:gap-[30px] items-center justify-start md:justify-center cursor-pointer"
                         onClick={() =>
                             router.push(
                                 `/kelas/${course_slug}/belajar/video/${chapter_id}/${subchapter_id}`
                             )
                         }
                         aria-hidden>
-                        <div className="relative w-[260px] md:w-[160px] lg:w-[260px] min-h-[150px] rounded-lg overflow-hidden">
+                        <div className="relative min-w-[120px] sm:min-w-[160px] lg:min-w-[220px] w-1/2 min-h-[83px] sm:h-[120px] lg:h-[150px] max-w-[260px]">
                             <Image
                                 src={subchapter_thumbnail}
                                 alt={subchapter_name}
                                 layout="fill"
-                                className="object-contain"
+                                className="rounded-lg object-cover object-top"
                             />
                         </div>
-                        <div className="flex flex-col gap-[5px] w-full">
-                            <span className="inline-block font-body">
+                        <div className="flex flex-col gap-[5px] w-full whitespace-nowrap text-ellipsis overflow-hidden">
+                            <span className="inline-block font-body whitespace-nowrap text-ellipsis overflow-hidden">
                                 {subchapter_name}
                             </span>
-                            <span className="inline-block font-body text-xs text-neutral-200">
+                            <span className="inline-block font-body text-xs text-neutral-200 whitespace-nowrap text-ellipsis overflow-hidden">
                                 {course_name}
                             </span>
                             <ProgressBar percent={progress_percentage} />
