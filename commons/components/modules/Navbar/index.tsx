@@ -98,7 +98,7 @@ const Navbar = ({
             return lightMode ? 'bg-white shadow-md' : 'bg-[#171717]';
         }
 
-        if (scrollPosition >= 100) {
+        if (scrollPosition >= 60) {
             return lightMode
                 ? 'bg-white text-black shadow-md'
                 : 'bg-[#171717] md:bg-[#121212]';
@@ -160,7 +160,9 @@ const Navbar = ({
                             {isMobileBreakpoints ? 'G' : 'Gradient'}
                         </span>
                     </Link>
-                    <div className="hidden md:block w-[250px] h-[64px] fixed top-0 left-0 bg-[#121212] z-[-1]" />
+                    {showSidebar && fullHeightSidebar && isAuthenticated && (
+                        <div className="hidden md:block w-[250px] h-[64px] fixed top-0 left-0 bg-[#121212] z-[-1]" />
+                    )}
                     {((isMobileBreakpoints &&
                         router.pathname.includes('kelas/[id]/astronotes')) ||
                         (!isMobileBreakpoints &&
