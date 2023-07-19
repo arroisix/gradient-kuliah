@@ -1,43 +1,67 @@
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import useTransition from 'commons/hooks/useTransition';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { useGetStudentCourseQuery } from 'dashboard/redux/api/dashboardApi';
 import { useRouter } from 'next/router';
-import { HiOutlinePlusSm } from 'react-icons/hi';
+import { useState } from 'react';
+import { HiChevronDown, HiOutlinePlusSm } from 'react-icons/hi';
 
 const MyClass = ({ className }: { className?: string }): JSX.Element => {
     const router = useRouter();
     const loadingTransition = useTransition(router);
+    const { isMobileBreakpoints, isTabletBreakpoints } = useWindowBreakpoints();
 
     const { data, isLoading } = useGetStudentCourseQuery();
 
+    const [isShow, setIsShow] = useState(false);
+
+    function handleShowClass(): void {
+        if (isMobileBreakpoints || isTabletBreakpoints) {
+            setIsShow((prev) => !prev);
+        }
+    }
+
     return (
         <div className={`flex flex-col gap-3 md:gap-5 ${className}`}>
-            <h4 className="text-lg font-extrabold">Kelasku</h4>
-            <div>
-                {isLoading ? (
-                    <div className="flex flex-col gap-3">
-                        <div className="w-full h-8 py-2 px-4 rounded-[20px] bg-neutral-800 text-neutral-800 animate-pulse"></div>
-                        <div className="w-full h-8 py-2 px-4 rounded-[20px] bg-neutral-800 text-neutral-800 animate-pulse"></div>
-                        <div className="w-full h-8 py-2 px-4 rounded-[20px] bg-neutral-800 text-neutral-800 animate-pulse"></div>
-                    </div>
-                ) : (
-                    <>
-                        {data?.courses.length === 0 ? (
-                            <div
-                                className="flex justify-center items-center w-full h-8 bg-[#121212] p-2 rounded-[20px] cursor-pointer"
-                                onClick={() => router.push('/kelas')}
-                                aria-hidden>
-                                <HiOutlinePlusSm
-                                    className="text-[#373737]"
-                                    size={24}
-                                />
-                            </div>
-                        ) : (
-                            <ListMyClass courses={data?.courses} />
-                        )}
-                    </>
-                )}
+            <div
+                className="flex items-center justify-between cursor-pointer"
+                onClick={handleShowClass}
+                aria-hidden>
+                <h4 className="text-lg font-extrabold">Kelasku</h4>
+                <HiChevronDown
+                    size={22}
+                    className={`lg:hidden ${
+                        isShow && 'rotate-180'
+                    } transition-all`}
+                />
             </div>
+            {(isShow || (!isMobileBreakpoints && !isTabletBreakpoints)) && (
+                <div>
+                    {isLoading ? (
+                        <div className="flex flex-col gap-3">
+                            <div className="w-full h-8 py-2 px-4 rounded-[20px] bg-neutral-800 text-neutral-800 animate-pulse"></div>
+                            <div className="w-full h-8 py-2 px-4 rounded-[20px] bg-neutral-800 text-neutral-800 animate-pulse"></div>
+                            <div className="w-full h-8 py-2 px-4 rounded-[20px] bg-neutral-800 text-neutral-800 animate-pulse"></div>
+                        </div>
+                    ) : (
+                        <>
+                            {data?.courses.length === 0 ? (
+                                <div
+                                    className="flex justify-center items-center w-full h-8 bg-[#121212] p-2 rounded-[20px] cursor-pointer"
+                                    onClick={() => router.push('/kelas')}
+                                    aria-hidden>
+                                    <HiOutlinePlusSm
+                                        className="text-[#373737]"
+                                        size={24}
+                                    />
+                                </div>
+                            ) : (
+                                <ListMyClass courses={data?.courses} />
+                            )}
+                        </>
+                    )}
+                </div>
+            )}
             {loadingTransition && <LoadingBackdrop />}
         </div>
     );
