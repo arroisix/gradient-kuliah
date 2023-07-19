@@ -46,3 +46,12 @@ export const courseApi = baseApi.injectEndpoints({
         })
     })
 });
+
+export const {
+    useGetCourseQuery,
+    useGetCourseContentQuery,
+    useGetSubchapterQuery,
+    useGetSearchCourseContentQuery,
+    useGetCourseDetailQuery,
+    usePostCourseFeedbackMutation
+} = courseApi;

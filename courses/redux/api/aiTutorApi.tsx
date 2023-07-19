@@ -31,4 +31,8 @@ export const aiTutorApi = baseApi.injectEndpoints({
     })
 });
 
-export const { useAskTutorMutation, useGetChatRoomQuery } = aiTutorApi;
+export const {
+    useAskTutorMutation,
+    useGetChatRoomQuery,
+    useAITutorFeedbackMutation
+} = aiTutorApi;
