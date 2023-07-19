@@ -42,6 +42,8 @@ const LearnLayout = ({
                 className={`min-h-screen ${
                     showSidebar && isAuthenticated
                         ? 'pt-24 pb-10 px-4 md:px-0 flex gap-[2rem] lg:gap-[6rem]'
+                        : showSidebar && !isAuthenticated
+                        ? 'pt-24'
                         : ''
                 }`}>
                 {showSidebar && isAuthenticated && (
