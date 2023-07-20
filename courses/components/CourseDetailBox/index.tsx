@@ -9,195 +9,82 @@ import useElementSize from 'commons/hooks/useElementSize';
 import useOnScreen from 'commons/hooks/useOnScreen';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { useRouter } from 'next/router';
-import { useGetLandingCourseListContentQuery } from 'courses/redux/api/publicCourseApi';
-import { getAllChapterContent } from 'courses/utils';
-
-export const DUMMY_COURSE_CONTENT = {
-    chapters: [
-        {
-            chapter_id: 'asldhjad',
-            chapter_name: 'asldhjad',
-            order: 1,
-            subchapter_counts: 4,
-            learning_progress: {
-                is_finished: false
-            }
-        },
-        {
-            chapter_id: 'a',
-            chapter_name: 'bnc',
-            order: 1,
-            subchapter_counts: 4,
-            learning_progress: {
-                is_finished: false
-            }
-        },
-        {
-            chapter_id: 'c',
-            chapter_name: 'twe',
-            order: 1,
-            subchapter_counts: 4,
-            learning_progress: {
-                is_finished: false
-            }
-        },
-        {
-            chapter_id: 's',
-            chapter_name: 'hdffd',
-            order: 1,
-            subchapter_counts: 4,
-            learning_progress: {
-                is_finished: false
-            }
-        },
-        {
-            chapter_id: 'd',
-            chapter_name: 'hfd',
-            order: 1,
-            subchapter_counts: 4,
-            learning_progress: {
-                is_finished: false
-            }
-        },
-        {
-            chapter_id: 'fdas',
-            chapter_name: 'hdf',
-            order: 1,
-            subchapter_counts: 4,
-            learning_progress: {
-                is_finished: false
-            }
-        },
-        {
-            chapter_id: 'w',
-            chapter_name: 'ffsg',
-            order: 1,
-            subchapter_counts: 4,
-            learning_progress: {
-                is_finished: false
-            }
-        },
-        {
-            chapter_id: 'f',
-            chapter_name: 'wad',
-            order: 1,
-            subchapter_counts: 4,
-            learning_progress: {
-                is_finished: false
-            }
-        },
-        {
-            chapter_id: 'gw',
-            chapter_name: 'Kalkulus',
-            order: 2,
-            subchapter_counts: 7,
-            learning_progress: {
-                is_finished: true
-            }
-        }
-    ],
-    books: [
-        {
-            book_id: 'asldhjad',
-            title: 'asldhjad',
-            rating: 5.0,
-            book_cover_url: 'asldhjad',
-            author: ['Gradient', 'Budient']
-        },
-        {
-            book_id: 'sadq1erfq12',
-            title: 'AstroNotes: Kalkulus 1',
-            rating: 4.9,
-            book_cover_url: 'asldhjad',
-            author: ['Gradient']
-        }
-    ]
-};
+import { useGetCourseContentQuery } from 'courses/redux/api/courseApi';
+import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienceApi';
+import Skeleton from 'commons/components/elements/Skeleton';
 
 const AccordionVideo = ({
-    chapters
+    chapters,
+    isLoading
 }: {
-    chapters: Chapter[];
-    // chapters: {
-    //     chapter_id: string;
-    //     chapter_name: string;
-    //     order: number;
-    //     subchapter_counts: number;
-    //     learning_progress: {
-    //         is_finished: boolean;
-    //     };
-    // }[];
+    chapters: CourseChapter[];
+    isLoading: boolean;
 }): JSX.Element => {
     return (
         <div className="flex flex-col gap-3 lg:pb-[18px]">
-            {chapters?.map(
-                ({ id, chapter_name, subchapters }) => (
-                    <Collapse
-                        key={id}
-                        title={`${chapter_name} (${subchapters.length})`}
-                        chapter_id={id}
-                        is_finished={false}
-                    />
-                )
-                // ({
-                //     chapter_id,
-                //     chapter_name,
-                //     subchapter_counts,
-                //     learning_progress
-                // }) => (
-                //     <Collapse
-                //         key={chapter_id}
-                //         title={`${chapter_name} (${subchapter_counts})`}
-                //         chapter_id={chapter_id}
-                //         is_finished={learning_progress.is_finished}
-                //     />
-                // )
+            {isLoading && (
+                <>
+                    <Skeleton className="h-[40px] !m-0" />
+                    <Skeleton className="h-[40px] !m-0" />
+                    <Skeleton className="h-[40px] !m-0" />
+                </>
             )}
+            {chapters?.map(({ chapter_id, chapter_name, is_finished }) => (
+                <Collapse
+                    key={chapter_id}
+                    title={chapter_name}
+                    chapter_id={chapter_id}
+                    is_finished={is_finished ?? false}
+                />
+            ))}
         </div>
     );
 };
 
 export const ListBooks = ({
-    books
+    books,
+    isLoading
 }: {
-    books: {
-        book_id: string;
-        title: string;
-        rating: number;
-        book_cover_url: string;
-        author: string[];
-    }[];
+    books: Book[];
+    isLoading: boolean;
 }): JSX.Element => {
     return (
         <div className="flex flex-col gap-[14px]">
-            {books?.map(({ book_id, title, author, rating }) => (
-                <div className="flex gap-5" key={book_id}>
-                    <div>
-                        <Image
-                            src={'/'} // ! ganti jadi book cover url
-                            width={79}
-                            height={113}
-                            className="object-contain"
-                        />
-                    </div>
-                    <div className="flex flex-col gap-[6px]">
-                        <span className="inline-block font-body text-lg text-neutral-200">
-                            {title}
-                        </span>
+            {isLoading && (
+                <>
+                    <Skeleton className="h-[60px] !m-0" />
+                    <Skeleton className="h-[60px] !m-0" />
+                    <Skeleton className="h-[60px] !m-0" />
+                </>
+            )}
+            {books?.map(
+                ({ book_id, title, authors, rating, book_cover_url }) => (
+                    <div className="flex gap-5" key={book_id}>
                         <div>
-                            <span className="inline-block font-body text-base text-neutral-600">
-                                {`oleh ${author[0]}${
-                                    author.length > 1 ? ', dkk.' : ''
-                                }`}
+                            <Image
+                                src={book_cover_url ?? '/'} // ! foto dummy
+                                width={79}
+                                height={113}
+                                className="object-contain"
+                            />
+                        </div>
+                        <div className="flex flex-col gap-[6px]">
+                            <span className="inline-block font-body text-lg text-neutral-200">
+                                {title}
                             </span>
-                            <span className="flex items-center gap-[2px] font-body text-xs text-neutral-600">
-                                <AiFillStar />
-                                {rating}
-                            </span>
+                            <div>
+                                <span className="inline-block font-body text-base text-neutral-600">
+                                    {`oleh ${authors}`}
+                                </span>
+                                <span className="flex items-center gap-[2px] font-body text-xs text-neutral-600">
+                                    <AiFillStar />
+                                    {rating}
+                                </span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            ))}
+                )
+            )}
         </div>
     );
 };
@@ -218,14 +105,18 @@ const CourseDetailBox = (): JSX.Element => {
 
     const router = useRouter();
     const { id } = router.query;
-    const { data: content } = useGetLandingCourseListContentQuery(
-        id as string,
-        {
-            skip: !id
-        }
-    );
 
-    const chapters = getAllChapterContent(content?.data as Chapter[]);
+    const { data: courseContent, isLoading: isLoadingCourse } =
+        useGetCourseContentQuery(
+            {
+                slug: id as string
+            },
+            { skip: !id }
+        );
+    const { data: learningProgress } = useGetLearningProgressQuery(
+        id as string,
+        { skip: !id }
+    );
 
     function handleSearch(): void {
         // logic search
@@ -250,7 +141,16 @@ const CourseDetailBox = (): JSX.Element => {
                     </h4>
                     <MdStarPurple500 size={20} className="text-neutral-400" />
                 </div>
-                <ProgressBar total_finished_video={2} total_video_count={40} />
+                <ProgressBar
+                    total_finished_video={
+                        learningProgress?.completion_percentage
+                            ?.total_finished_video
+                    }
+                    total_video_count={
+                        learningProgress?.completion_percentage
+                            ?.total_video_count
+                    }
+                />
             </div>
             <div
                 className="flex flex-col gap-[18px] px-5 md:px-16 lg:px-[14px] pt-[14px]"
@@ -318,10 +218,18 @@ const CourseDetailBox = (): JSX.Element => {
                 )}
                 <div className="h-full lg:overflow-y-auto">
                     {navigation === 'VIDEO' && (
-                        <AccordionVideo chapters={chapters} />
+                        <AccordionVideo
+                            chapters={
+                                courseContent?.chapters as CourseChapter[]
+                            }
+                            isLoading={isLoadingCourse}
+                        />
                     )}
                     {navigation === 'BOOK' && (
-                        <ListBooks books={DUMMY_COURSE_CONTENT.books} />
+                        <ListBooks
+                            books={courseContent?.books as Book[]}
+                            isLoading={isLoadingCourse}
+                        />
                     )}
                     <div ref={anchor}></div>
                 </div>

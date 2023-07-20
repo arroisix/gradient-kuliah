@@ -1,8 +1,11 @@
-import { useGetLandingCourseListContentQuery } from 'courses/redux/api/publicCourseApi';
-import { getAllChapterContent } from 'courses/utils';
+import Skeleton from 'commons/components/elements/Skeleton';
+import { useGetSubchapterQuery } from 'courses/redux/api/courseApi';
+import moment from 'moment';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { FaPlay } from 'react-icons/fa';
 import { HiCheck, HiOutlineChevronDown, HiPlay } from 'react-icons/hi';
+import { IoIosCheckmarkCircle } from 'react-icons/io';
 
 const Collapse = ({
     key,
@@ -20,19 +23,11 @@ const Collapse = ({
     const [isOpen, setIsOpen] = useState(initialOpen);
 
     const router = useRouter();
-    const { id, sub } = router.query;
+    const { id, sub, chapter } = router.query;
 
-    // change get data. integrate with new API
-    const { data: content } = useGetLandingCourseListContentQuery(
-        id as string,
-        {
-            skip: !id
-        }
-    );
-    const chapters = getAllChapterContent(content?.data as Chapter[]);
-    const filteredChapter = chapters.filter(
-        (value) => value.id === chapter_id
-    )[0];
+    const { data, isLoading } = useGetSubchapterQuery({
+        chapterId: chapter_id
+    });
 
     return (
         <div key={key} className="bg-[#1D1D1D] rounded">
@@ -42,12 +37,14 @@ const Collapse = ({
                 }`}
                 onClick={() => setIsOpen((prev) => !prev)}
                 aria-hidden>
-                <div className="w-[85%] flex gap-2">
-                    {is_finished && (
+                <div className="w-[85%] flex items-center gap-2">
+                    {is_finished ? (
                         <HiCheck size={18} className="text-[#02EC60]" />
-                    )}
+                    ) : chapter === chapter_id ? (
+                        <FaPlay size={14} />
+                    ) : null}
                     <span className="inline-block font-extrabold text-sm whitespace-nowrap text-ellipsis overflow-hidden">
-                        {title}
+                        {title} ({data?.subchapters.length})
                     </span>
                 </div>
                 <HiOutlineChevronDown
@@ -58,67 +55,120 @@ const Collapse = ({
                 />
             </div>
             <div className={`${isOpen ? '' : 'hidden'}`}>
-                {/* change mapping logic */}
-                {filteredChapter.subchapters.map((value) => (
-                    <div
-                        key={value.id}
-                        className="flex justify-between px-3 py-[10px] cursor-pointer hover:bg-[#272727]"
-                        onClick={() =>
-                            router.push(
-                                `/kelas/${id}/belajar/video/${chapter_id}/${value.id}`
-                            )
-                        }
-                        aria-hidden>
-                        <div
-                            className={`flex items-center gap-[10px] ${
-                                sub === value.id ? 'w-[65%]' : 'w-[80%]'
-                            }`}>
-                            <div className="w-[18px] h-[18px]">
-                                {sub === value.id ? (
-                                    <div className="w-[18px] h-[18px] relative flex justify-center items-center">
-                                        <div
-                                            className="radial-progress"
-                                            style={
-                                                {
-                                                    '--value': '70',
-                                                    '--size': '15px',
-                                                    '--thickness': '2px'
-                                                } as React.CSSProperties
-                                            }></div>
-                                        <div
-                                            className="radial-progress absolute"
-                                            style={
-                                                {
-                                                    color: '#FFFFFF1A',
-                                                    '--value': '100',
-                                                    '--size': '15px',
-                                                    '--thickness': '2px'
-                                                } as React.CSSProperties
-                                            }></div>
-                                    </div>
-                                ) : (
-                                    <HiPlay size={18} />
-                                )}
-                            </div>
-                            <span className="inline-block font-body text-xs whitespace-nowrap text-ellipsis overflow-hidden">
-                                {value.subchapter_name}
-                            </span>
-                        </div>
-                        <div className="flex gap-1 font-body text-xs">
-                            {sub === value.id && (
-                                <>
-                                    <span className="inline-block">02:08</span>
-                                    <span className="inline-block text-[#FFFFFF80]">
-                                        /
-                                    </span>
-                                </>
-                            )}
-                            <span className="inline-block text-[#FFFFFF80]">
-                                07:25
-                            </span>
-                        </div>
+                {isLoading && (
+                    <div className="flex flex-col gap-2 p-2">
+                        <Skeleton className="h-[30px] !m-0" />
+                        <Skeleton className="h-[30px] !m-0" />
+                        <Skeleton className="h-[30px] !m-0" />
                     </div>
-                ))}
+                )}
+                {!isLoading &&
+                    data &&
+                    data.subchapters.map((value) => {
+                        const totalDuration = value?.duration
+                            ?.split(':')
+                            ?.reverse()
+                            ?.reduce(
+                                (prev, curr, i) =>
+                                    +prev + +curr * +Math.pow(60, i),
+                                0
+                            );
+
+                        const totalLastDuration = value?.last_duration
+                            ?.split(':')
+                            ?.reverse()
+                            ?.reduce(
+                                (prev, curr, i) =>
+                                    +prev + +curr * +Math.pow(60, i),
+                                0
+                            );
+
+                        return (
+                            <div
+                                key={value.id}
+                                className="flex justify-between px-3 py-[10px] cursor-pointer hover:bg-[#272727]"
+                                onClick={() =>
+                                    router.push(
+                                        `/kelas/${id}/belajar/video/${chapter_id}/${value.id}`
+                                    )
+                                }
+                                aria-hidden>
+                                <div
+                                    className={`flex items-center gap-[10px] ${
+                                        sub === value.id ? 'w-[65%]' : 'w-[80%]'
+                                    }`}>
+                                    <div className="w-[18px] h-[18px]">
+                                        {value.is_finished ? (
+                                            <IoIosCheckmarkCircle
+                                                size={18}
+                                                className="text-[#02EC60]"
+                                            />
+                                        ) : sub === value.id ? (
+                                            <div className="w-[18px] h-[18px] relative flex justify-center items-center">
+                                                <div
+                                                    className="radial-progress"
+                                                    style={
+                                                        {
+                                                            '--value':
+                                                                Math.floor(
+                                                                    ((totalLastDuration ??
+                                                                        0) /
+                                                                        (totalDuration ??
+                                                                            0)) *
+                                                                        100
+                                                                ),
+                                                            '--size': '15px',
+                                                            '--thickness': '2px'
+                                                        } as React.CSSProperties
+                                                    }></div>
+                                                <div
+                                                    className="radial-progress absolute"
+                                                    style={
+                                                        {
+                                                            color: '#FFFFFF1A',
+                                                            '--value': '100',
+                                                            '--size': '15px',
+                                                            '--thickness': '2px'
+                                                        } as React.CSSProperties
+                                                    }></div>
+                                            </div>
+                                        ) : (
+                                            <HiPlay size={18} />
+                                        )}
+                                    </div>
+                                    <span className="inline-block font-body text-xs whitespace-nowrap text-ellipsis overflow-hidden">
+                                        {value.subchapter_name}
+                                    </span>
+                                </div>
+                                <div className="flex gap-1 font-body text-xs">
+                                    {sub === value.id && (
+                                        <>
+                                            <span className="inline-block">
+                                                {value?.last_duration
+                                                    ? moment
+                                                          .utc(
+                                                              (totalLastDuration as number) *
+                                                                  1000
+                                                          )
+                                                          .format('mm:ss')
+                                                    : '00:00'}
+                                            </span>
+                                            <span className="inline-block text-[#FFFFFF80]">
+                                                /
+                                            </span>
+                                        </>
+                                    )}
+                                    <span className="inline-block text-[#FFFFFF80]">
+                                        {moment
+                                            .utc(
+                                                (totalDuration as number) * 1000
+                                            )
+                                            .format('mm:ss')}
+                                    </span>
+                                </div>
+                            </div>
+                        );
+                    })}
             </div>
         </div>
     );

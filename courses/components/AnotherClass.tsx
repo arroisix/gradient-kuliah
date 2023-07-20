@@ -1,41 +1,28 @@
+import Skeleton from 'commons/components/elements/Skeleton';
+import { useGetCourseQuery } from 'courses/redux/api/courseApi';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useRef } from 'react';
 import { FaChevronRight } from 'react-icons/fa';
-
-const LIST_CLASS = [
-    {
-        cover: 'https://assets.gradient.academy/assets/lp-probstat.jpg',
-        title: 'Probabilitas & Statistika',
-        description: 'Mendeskripsikan dunia dengan data.'
-    },
-    {
-        cover: 'https://d2uqn6ndx4ow3t.cloudfront.net/lecturers/theo-profile.jpg',
-        title: 'Kalkulus 1',
-        description: 'Matematika dari perubahan.'
-    },
-    {
-        cover: 'https://assets.gradient.academy/assets/lp-ptsl.png',
-        title: 'Pengantar Teknik Sipil & Lingkungan',
-        description: 'Ilmu membangun peradaban.'
-    },
-    {
-        cover: 'https://storage.googleapis.com/gradient-asset-dev/courses/calculus2/assets/kalkulus2-thumbnail.png',
-        title: 'Kalkulus 2',
-        description: 'Kalkulus di ruang berdimensi n.'
-    }
-];
 
 const ClassCard = ({
     cover,
     title,
-    description
+    description,
+    slug
 }: {
     cover: string;
     title: string;
     description: string;
+    slug: string;
 }): JSX.Element => {
+    const router = useRouter();
+
     return (
-        <div className="relative w-fit snap-center bg-[#5F2BCE33] rounded-3xl overflow-hidden">
+        <div
+            className="relative w-fit snap-center bg-[#5F2BCE33] rounded-3xl overflow-hidden cursor-pointer"
+            onClick={() => router.push(`/kelas/${slug}`)}
+            aria-hidden>
             <div className="relative w-[208px] h-[142px] md:h-[225px] md:w-[330px]">
                 <Image
                     src={cover}
@@ -62,6 +49,15 @@ const ClassCard = ({
 
 const AnotherClass = (): JSX.Element => {
     const ref = useRef<HTMLDivElement>(null);
+    const router = useRouter();
+    const { id } = router.query;
+
+    const { data, isLoading } = useGetCourseQuery(undefined, {
+        selectFromResult: ({ data, isLoading }) => ({
+            data: data?.courses.filter(({ slug }) => slug !== id),
+            isLoading: isLoading
+        })
+    });
 
     function scrollRight(): void {
         const SCROLL_CONSTANT = 200;
@@ -100,14 +96,27 @@ const AnotherClass = (): JSX.Element => {
                 ref={ref}
                 className="w-full overflow-x-scroll snap-x body scroll-smooth px-5 md:px-16">
                 <div className="w-max mx-auto flex gap-[18px] md:gap-7">
-                    {LIST_CLASS.map(({ cover, title, description }, index) => (
-                        <ClassCard
-                            key={index}
-                            cover={cover}
-                            title={title}
-                            description={description}
-                        />
-                    ))}
+                    {isLoading && (
+                        <>
+                            <Skeleton className="w-[300px] h-[200px]" />
+                            <Skeleton className="w-[300px] h-[200px]" />
+                            <Skeleton className="w-[300px] h-[200px]" />
+                        </>
+                    )}
+                    {data?.map(
+                        (
+                            { thumbnail, course_name, short_description, slug },
+                            index
+                        ) => (
+                            <ClassCard
+                                key={index}
+                                cover={thumbnail}
+                                title={course_name}
+                                description={short_description}
+                                slug={slug}
+                            />
+                        )
+                    )}
                 </div>
             </div>
         </div>

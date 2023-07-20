@@ -1,28 +1,23 @@
 import Accordion from 'commons/components/elements/Accordion';
-import Article from 'commons/components/elements/Icons/Article';
 import GreenCheck from 'commons/components/elements/Icons/GreenCheck';
 import Play from 'commons/components/elements/Icons/Play';
 import Skeleton from 'commons/components/elements/Skeleton';
-import useCourseSubscription from 'courses/hooks/useCourseSubscription';
-import {
-    useGetListCourseChapterQuery,
-    useGetListCourseSubChapterQuery
-} from 'courses/redux/api/publicCourseApi';
 import Link from 'next/link';
 import { useState } from 'react';
 import { IoIosSearch } from 'react-icons/io';
-import { DUMMY_COURSE_CONTENT, ListBooks } from '../CourseDetailBox';
+import { ListBooks } from '../CourseDetailBox';
+import {
+    useGetCourseContentQuery,
+    useGetSubchapterQuery
+} from 'courses/redux/api/courseApi';
 
 const SylabbusContent = ({
     id,
     slug
 }: GradientBaseComponentWithId & { slug: string }): JSX.Element => {
-    const { data: subchapters, isLoading } =
-        useGetListCourseSubChapterQuery(id);
-    const { watch_progress } = useCourseSubscription(slug);
-
-    // TODO: change API using new API
-    // Using same styling, only change the API
+    const { data: subchapters, isLoading } = useGetSubchapterQuery({
+        chapterId: id
+    });
 
     return (
         <div className="flex flex-col gap-2">
@@ -58,7 +53,7 @@ const SylabbusContent = ({
                     </div>
                 </>
             )}
-            {subchapters?.data.map((subchapter: SubChapter) => (
+            {subchapters?.subchapters.map((subchapter: SubChapter) => (
                 <Link
                     key={subchapter.id}
                     href={
@@ -75,20 +70,7 @@ const SylabbusContent = ({
                             />
                         </div>
                         <div>
-                            {subchapter.type_name === 'lecture' ? (
-                                watch_progress?.filter(
-                                    (progress: SubchapterProgress) =>
-                                        progress?.subchapter?.id ===
-                                            subchapter?.id &&
-                                        progress?.video?.is_finished
-                                )?.length ?? 0 > 0 ? (
-                                    <GreenCheck />
-                                ) : (
-                                    <Play />
-                                )
-                            ) : (
-                                <Article />
-                            )}
+                            {subchapter.is_finished ? <GreenCheck /> : <Play />}
                         </div>
                         <div className="flex flex-col text-left">
                             <p className="text-lg text-neutral-200">
@@ -111,7 +93,10 @@ const SylabbusContent = ({
 };
 
 const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
-    const { data, isLoading } = useGetListCourseChapterQuery(slug);
+    const { data: courseContent, isLoading: isLoadingCourse } =
+        useGetCourseContentQuery({
+            slug: slug as string
+        });
 
     const [search, setSearch] = useState('');
     const [navigation, setNavigation] = useState<
@@ -170,18 +155,18 @@ const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
                 <>
                     <Accordion
                         item={
-                            data?.data.map((chapter: Chapter) => ({
-                                title: chapter.chapter_name,
+                            courseContent?.chapters?.map((value) => ({
+                                title: value.chapter_name,
                                 jsxContent: (
                                     <SylabbusContent
-                                        id={chapter.id}
+                                        id={value.chapter_id}
                                         slug={slug}
                                     />
                                 )
                             })) ?? []
                         }
                     />
-                    {isLoading && (
+                    {isLoadingCourse && (
                         <div className="flex flex-col gap-2 w-full">
                             <Skeleton className="h-14" />
                             <Skeleton className="h-14" />
@@ -193,7 +178,10 @@ const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
                 </>
             )}
             {navigation === 'BOOK' && (
-                <ListBooks books={DUMMY_COURSE_CONTENT.books} />
+                <ListBooks
+                    books={courseContent?.books as Book[]}
+                    isLoading={isLoadingCourse}
+                />
             )}
         </div>
     );
