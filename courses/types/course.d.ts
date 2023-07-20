@@ -228,7 +228,7 @@ type Book = {
     title: string;
     rating: number;
     book_cover_url?: string | null;
-    author: string;
+    authors: string;
 };
 
 interface CourseContentResponse {

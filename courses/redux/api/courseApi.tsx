@@ -16,7 +16,7 @@ export const courseApi = baseApi.injectEndpoints({
         getSubchapter: builder.query<SubchapterResponse, { chapterId: string }>(
             {
                 query: ({ chapterId }) => ({
-                    url: `${COURSE_BASE_URL}${chapterId}/subchapter`
+                    url: `${COURSE_BASE_URL}${chapterId}/subchapter/`
                 })
             }
         ),
