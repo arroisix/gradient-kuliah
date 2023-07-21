@@ -56,11 +56,7 @@ const SylabbusContent = ({
             {subchapters?.subchapters.map((subchapter: SubChapter) => (
                 <Link
                     key={subchapter.id}
-                    href={
-                        subchapter.type_name === 'lecture'
-                            ? `/kelas/${slug}/belajar/video/${id}/${subchapter.id}`
-                            : `/kelas/${slug}/astronotes`
-                    }>
+                    href={`/kelas/${slug}/belajar/video/${id}/${subchapter.id}`}>
                     <button className="flex items-center gap-4 w-full relative">
                         <div className="h-[98px] min-w-[163px]">
                             <img
@@ -81,9 +77,7 @@ const SylabbusContent = ({
                             </p>
                         </div>
                         <span className="sr-only">
-                            {subchapter.type_name === 'lecture'
-                                ? `/kelas/${slug}/belajar/video/${id}/${subchapter.id}`
-                                : `/kelas/${slug}/astronotes`}
+                            {`/kelas/${slug}/belajar/video/${id}/${subchapter.id}`}
                         </span>
                     </button>
                 </Link>
