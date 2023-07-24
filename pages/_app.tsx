@@ -8,6 +8,10 @@ import 'react-notion-x/src/styles.css';
 // used for code syntax highlighting (optional)
 import 'prismjs/themes/prism-tomorrow.css';
 
+// style for video.js
+import 'video.js/dist/video-js.css';
+import '@mux/videojs-kit/dist/index.css';
+
 // used for rendering equations (optional)
 import 'katex/dist/katex.min.css';
 import { ToastContainer } from 'react-toastify';

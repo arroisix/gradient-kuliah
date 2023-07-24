@@ -1,22 +1,20 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import AiTutor from 'courses/components/LearningExperience/AiTutor';
 import { useLearning } from 'courses/contexts/LearningProvider';
-import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useGetSubchapterDetailQuery } from 'courses/redux/api/privateCourseApi';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
-import LearnVideo from './learnVideo';
 import CourseDetailBox from 'courses/components/CourseDetailBox';
 import CourseSummary from 'courses/components/CourseSummary';
 import AnotherClass from 'courses/components/AnotherClass';
 import useElementSize from 'commons/hooks/useElementSize';
+import { isNotNullAndUndefined } from 'commons/utils';
+import VideoJS from 'commons/components/elements/Video/VideoJS';
 
 const VideoLearnContainer = (): JSX.Element => {
     const router = useRouter();
-    const { sub, id } = router.query;
+    const { sub } = router.query;
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { learning_progress_id, latest_watch_video, watch_progress } =
-        useCourseSubscription(id as string);
     const { data, isLoading } = useGetSubchapterDetailQuery(sub as string, {
         skip: sub === null || sub === undefined || !isAuthenticated
     });
@@ -30,23 +28,25 @@ const VideoLearnContainer = (): JSX.Element => {
                 <div
                     className="w-full lg:w-[70%] h-max md:rounded-lg md:overflow-hidden"
                     ref={videoRef}>
-                    {!isLoading ? (
-                        data ? (
-                            <LearnVideo
-                                key={data.id}
-                                learningProgress={{
-                                    id: learning_progress_id as string,
-                                    watch_progress:
-                                        watch_progress as SubchapterProgress[],
-                                    latest_watch_video:
-                                        latest_watch_video as SubchapterProgress
-                                }}
-                            />
-                        ) : (
-                            <></>
-                        )
-                    ) : (
+                    {isLoading && (
                         <div className="w-full h-[300px] bg-neutral-600 animate-pulse" />
+                    )}
+                    {!isLoading && (
+                        <div>
+                            <VideoJS
+                                src={
+                                    isNotNullAndUndefined(
+                                        data?.video?.mux_playback_id
+                                    )
+                                        ? (data?.video
+                                              ?.mux_playback_id as string)
+                                        : (data?.video?.video_url as string)
+                                }
+                                isMuxVideo={isNotNullAndUndefined(
+                                    data?.video?.mux_playback_id
+                                )}
+                            />
+                        </div>
                     )}
                 </div>
                 {!isLoading ? (
