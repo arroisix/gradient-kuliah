@@ -102,8 +102,12 @@ export const ListBooks = ({
                                     {`oleh ${authors}`}
                                 </span>
                                 <span className="flex items-center gap-[2px] font-body text-xs text-neutral-600">
-                                    <AiFillStar />
-                                    {rating}
+                                    {rating !== 0 && (
+                                        <>
+                                            <AiFillStar />
+                                            {+rating.toFixed(1)}
+                                        </>
+                                    )}
                                 </span>
                             </div>
                         </div>

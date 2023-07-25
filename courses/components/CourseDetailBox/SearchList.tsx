@@ -222,8 +222,16 @@ const SearchList = ({
                                                 {`oleh ${value.authors}`}
                                             </span>
                                             <span className="flex items-center gap-[2px] font-body text-xs text-neutral-600">
-                                                <AiFillStar />
-                                                {value.rating}
+                                                {value.rating !== 0 && (
+                                                    <>
+                                                        <AiFillStar />
+                                                        {
+                                                            +value.rating.toFixed(
+                                                                1
+                                                            )
+                                                        }
+                                                    </>
+                                                )}
                                             </span>
                                         </div>
                                     </div>
