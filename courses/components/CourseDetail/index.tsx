@@ -12,7 +12,7 @@ const CourseDetail = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
             <div className="flex flex-col lg:items-start lg:flex-row-reverse lg:justify-center gap-8 lg:gap-0">
                 <CourseDescription slug={slug} />
                 <Sylabbus slug={slug} />
-                <Sidebar className="!hidden lg:!block top-[80px] rounded" />
+                <Sidebar className="!hidden lg:!block top-[90px] rounded" />
             </div>
         </main>
     );
