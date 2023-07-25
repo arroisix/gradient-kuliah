@@ -1,6 +1,7 @@
 import Button from 'commons/components/elements/Button';
+import Spinner from 'commons/components/elements/Spinner';
 import { useAITutorFeedbackMutation } from 'courses/redux/api/aiTutorApi';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { MdThumbUpAlt } from 'react-icons/md';
 import TextareaAutosize from 'react-textarea-autosize';
 
@@ -16,7 +17,8 @@ const AiModalFeedback = ({
 }): JSX.Element => {
     const [content, setContent] = useState('');
 
-    const [postFeedback] = useAITutorFeedbackMutation();
+    const [postFeedback, { isLoading, isSuccess }] =
+        useAITutorFeedbackMutation();
 
     function handleChange(event: React.ChangeEvent<HTMLTextAreaElement>): void {
         setContent(event.target.value);
@@ -28,8 +30,13 @@ const AiModalFeedback = ({
             feedback_content: content,
             answer_id: feedbackStatus.answer_id
         });
-        setOpen(0);
     }
+
+    useEffect(() => {
+        if (isSuccess) {
+            setOpen(0);
+        }
+    }, [isSuccess, setOpen]);
 
     return (
         <div className="flex flex-col gap-8">
@@ -58,7 +65,11 @@ const AiModalFeedback = ({
                     value={content}
                     name="feedback"
                     onChange={handleChange}
-                    placeholder="Apa yang kamu sukai dengan jawaban Copilot?"
+                    placeholder={
+                        feedbackStatus.status === 'HELPING'
+                            ? 'Apa yang kamu sukai dengan jawaban Copilot?'
+                            : 'Apa yang tidak kamu sukai dari jawaban Copilot?'
+                    }
                     className="w-full h-full min-h-[124px] p-[10px] font-body text-xs bg-[#242424] border-none rounded-[10px] focus:outline-none focus:ring-0 focus:appearance-none placeholder:text-neutral-600"
                 />
             </div>
@@ -67,7 +78,7 @@ const AiModalFeedback = ({
                 className="w-full"
                 onClick={handleSubmit}
                 disabled={!content}>
-                Kirim
+                {isLoading ? <Spinner size="small" /> : 'Kirim'}
             </Button>
         </div>
     );

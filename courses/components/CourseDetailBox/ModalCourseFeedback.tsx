@@ -1,9 +1,10 @@
 import Button from 'commons/components/elements/Button';
 import TextareaAutosize from 'react-textarea-autosize';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MdStarPurple500 } from 'react-icons/md';
 import { usePostCourseFeedbackMutation } from 'courses/redux/api/courseApi';
 import { useRouter } from 'next/router';
+import Spinner from 'commons/components/elements/Spinner';
 
 const ModalCourseFeedback = ({
     setOpen
@@ -15,7 +16,8 @@ const ModalCourseFeedback = ({
     const stars = [1, 2, 3, 4, 5];
 
     const { id } = useRouter().query;
-    const [postFeedback] = usePostCourseFeedbackMutation();
+    const [postFeedback, { isLoading, isSuccess }] =
+        usePostCourseFeedbackMutation();
 
     function handleChange(event: React.ChangeEvent<HTMLTextAreaElement>): void {
         setContent(event.target.value);
@@ -23,8 +25,13 @@ const ModalCourseFeedback = ({
 
     function handleSubmit(): void {
         postFeedback({ slug: id as string, content, rating: starClicked });
-        setOpen(0);
     }
+
+    useEffect(() => {
+        if (isSuccess) {
+            setOpen(0);
+        }
+    }, [isSuccess, setOpen]);
 
     return (
         <div className="flex flex-col gap-8">
@@ -62,7 +69,7 @@ const ModalCourseFeedback = ({
                 className="w-full"
                 onClick={handleSubmit}
                 disabled={!content || starClicked === 0}>
-                Kirim
+                {isLoading ? <Spinner size="small" /> : 'Kirim'}
             </Button>
         </div>
     );
