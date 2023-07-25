@@ -81,7 +81,7 @@ export const ListBooks = ({
                         className="flex gap-5 cursor-pointer"
                         key={book_id}
                         onClick={() =>
-                            router.push(`/astronote/${id}/${book_id}`)
+                            router.push(`/astronotes/${id}/${book_id}`)
                         }
                         aria-hidden>
                         <div>

@@ -1,6 +1,5 @@
 import LearnLayout from 'commons/learnLayout';
 import AstronoteDetail from 'courses/containers/learn/astronotes/detail';
-import { LearningProvider } from 'courses/contexts/LearningProvider';
 import notionClient from 'library/notion/client';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { ExtendedRecordMap } from 'notion-types';
@@ -12,11 +11,9 @@ const AstroNotes = ({
     notes: ExtendedRecordMap | null;
 }): JSX.Element => {
     return (
-        <LearningProvider>
-            <LearnLayout lightMode>
-                <AstronoteDetail notes={notes} />
-            </LearnLayout>
-        </LearningProvider>
+        <LearnLayout lightMode>
+            <AstronoteDetail notes={notes} />
+        </LearnLayout>
     );
 };
 

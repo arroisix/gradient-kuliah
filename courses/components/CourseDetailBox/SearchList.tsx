@@ -200,7 +200,7 @@ const SearchList = ({
                                     className="flex gap-5 cursor-pointer"
                                     onClick={() =>
                                         router.push(
-                                            `/astronote/${id}/${value.book_id}`
+                                            `/astronotes/${id}/${value.book_id}`
                                         )
                                     }
                                     aria-hidden>

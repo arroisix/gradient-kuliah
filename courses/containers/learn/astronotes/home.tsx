@@ -1,10 +1,10 @@
 import { useGetBookContentQuery } from 'courses/redux/api/courseApi';
 import { useRouter } from 'next/router';
-import { useLearning } from 'courses/contexts/LearningProvider';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import { FaLock } from 'react-icons/fa';
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import useTransition from 'commons/hooks/useTransition';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 const SubTitle = ({
     value,
@@ -23,7 +23,7 @@ const SubTitle = ({
         <button
             onClick={() => {
                 extraCallback && extraCallback();
-                router.push(`/astronote/${slug}/${id}/${value.key}`);
+                router.push(`/astronotes/${slug}/${id}/${value.key}`);
             }}
             key={value.key}
             className={`${
@@ -45,10 +45,10 @@ export const AstroNotesItem = ({
     extraCallback?: () => void;
     book: BookContent;
 }): JSX.Element => {
-    const { isAuthenticated } = useAuth();
-    const { is_subscribed } = useLearning();
     const router = useRouter();
     const { slug, id, notionId } = router.query;
+    const { isAuthenticated } = useAuth();
+    const { is_subscribed } = useCourseSubscription(slug as string);
 
     if (book?.is_public || isAuthenticated) {
         return (
@@ -58,7 +58,7 @@ export const AstroNotesItem = ({
                         onClick={() => {
                             extraCallback && extraCallback();
                             router.push(
-                                `/astronote/${slug}/${id}/${astro.notion_id}`
+                                `/astronotes/${slug}/${id}/${astro.notion_id}`
                             );
                         }}
                         key={astro.id}

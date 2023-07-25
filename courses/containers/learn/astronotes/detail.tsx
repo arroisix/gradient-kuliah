@@ -38,7 +38,7 @@ const Modal = dynamic(
 
 export const customMapPageUrl =
     (rootPageId: string, notionId: string) => () => {
-        return `/astronote/${rootPageId}/${notionId}`;
+        return `/astronotes/${rootPageId}/${notionId}`;
     };
 
 const ListOfAstroNotes = ({

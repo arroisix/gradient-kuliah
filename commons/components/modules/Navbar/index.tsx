@@ -151,7 +151,7 @@ const Navbar = ({
                     )}
                     {!isMobileBreakpoints &&
                         (router.pathname.includes('kelas/[id]/') ||
-                            router.pathname.includes('astronote/')) && (
+                            router.pathname.includes('astronotes/')) && (
                             <div className="flex gap-6 pl-4">
                                 <Button
                                     href="/"
