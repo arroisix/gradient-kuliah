@@ -78,7 +78,7 @@ export const ListBooks = ({
             {books?.map(
                 ({ book_id, title, authors, rating, book_cover_url }) => (
                     <div
-                        className="flex gap-5"
+                        className="flex gap-5 cursor-pointer"
                         key={book_id}
                         onClick={() =>
                             router.push(`/astronote/${id}/${book_id}`)
