@@ -10,6 +10,9 @@ import CourseDetailBox from 'courses/components/CourseDetailBox';
 import CourseSummary from 'courses/components/CourseSummary';
 import AnotherClass from 'courses/components/AnotherClass';
 import useElementSize from 'commons/hooks/useElementSize';
+import Modal from 'commons/components/modules/Modal';
+import { useState } from 'react';
+import AiModalFeedback from 'courses/components/LearningExperience/AiTutor/AiModalFeedback';
 
 const VideoLearnContainer = (): JSX.Element => {
     const router = useRouter();
@@ -23,6 +26,11 @@ const VideoLearnContainer = (): JSX.Element => {
     const { video } = useLearning();
     const { height: videoHeight, ref: videoRef } =
         useElementSize<HTMLDivElement>();
+    const [isShowModal, setIsShowModal] = useState<0 | 1>(0);
+    const [feedbackStatus, setFeedbackStatus] = useState<{
+        status: 'NOT_HELPING' | 'HELPING' | 'NOT_SELECTED';
+        answer_id: string;
+    }>({ status: 'NOT_SELECTED', answer_id: '' });
 
     return (
         <section className="relative pt-[64px] md:pt-[97px] pb-16 min-h-[100vh] flex flex-col gap-8">
@@ -64,7 +72,23 @@ const VideoLearnContainer = (): JSX.Element => {
             </h2>
             <CourseSummary />
             <AnotherClass />
-            {video?.ai_unique_id && <AiTutor uniqueId={video.ai_unique_id} />}
+            {video?.ai_unique_id && (
+                <AiTutor
+                    uniqueId={video.ai_unique_id}
+                    setIsShowModal={setIsShowModal}
+                    setFeedbackStatus={setFeedbackStatus}
+                />
+            )}
+            <Modal
+                className="!bg-[#1D1D1D]"
+                isOpen={isShowModal}
+                setOpen={setIsShowModal}
+                variant="dark">
+                <AiModalFeedback
+                    feedbackStatus={feedbackStatus}
+                    setOpen={setIsShowModal}
+                />
+            </Modal>
         </section>
     );
 };

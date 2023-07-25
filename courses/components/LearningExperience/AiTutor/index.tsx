@@ -1,13 +1,24 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import ChatRoom from './ChatRoom';
 import TutorButton from './TutorButton';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 
 interface AiTutorProps {
     uniqueId: string;
+    setIsShowModal: Dispatch<SetStateAction<0 | 1>>;
+    setFeedbackStatus: Dispatch<
+        SetStateAction<{
+            status: 'NOT_HELPING' | 'HELPING' | 'NOT_SELECTED';
+            answer_id: string;
+        }>
+    >;
 }
 
-const AiTutor = ({ uniqueId }: AiTutorProps): JSX.Element => {
+const AiTutor = ({
+    uniqueId,
+    setIsShowModal,
+    setFeedbackStatus
+}: AiTutorProps): JSX.Element => {
     const [openChatRoom, setOpenChatRoom] = useState(false);
 
     const { isMobileBreakpoints } = useWindowBreakpoints();
@@ -23,6 +34,8 @@ const AiTutor = ({ uniqueId }: AiTutorProps): JSX.Element => {
                 <ChatRoom
                     uniqueId={uniqueId}
                     onClick={() => setOpenChatRoom(false)}
+                    setIsShowModal={setIsShowModal}
+                    setFeedbackStatus={setFeedbackStatus}
                 />
             )}
             {!isMobileBreakpoints || (isMobileBreakpoints && !openChatRoom) ? (
