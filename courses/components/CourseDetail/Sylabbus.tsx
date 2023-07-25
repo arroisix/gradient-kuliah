@@ -15,9 +15,17 @@ const SylabbusContent = ({
     id,
     slug
 }: GradientBaseComponentWithId & { slug: string }): JSX.Element => {
-    const { data: subchapters, isLoading } = useGetSubchapterQuery({
-        chapterId: id
-    });
+    const { data: subchapters, isLoading } = useGetSubchapterQuery(
+        {
+            chapterId: id
+        },
+        {
+            selectFromResult: ({ data, isLoading }) => ({
+                data: data?.subchapters.filter(({ type }) => type === 'video'),
+                isLoading: isLoading
+            })
+        }
+    );
 
     return (
         <div className="flex flex-col gap-2">
@@ -53,7 +61,7 @@ const SylabbusContent = ({
                     </div>
                 </>
             )}
-            {subchapters?.subchapters.map((subchapter: SubChapter) => (
+            {subchapters?.map((subchapter: SubChapter) => (
                 <Link
                     key={subchapter.id}
                     href={`/kelas/${slug}/belajar/video/${id}/${subchapter.id}`}>
