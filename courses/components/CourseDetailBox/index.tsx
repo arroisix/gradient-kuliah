@@ -78,20 +78,21 @@ export const ListBooks = ({
             {books?.map(
                 ({ book_id, title, authors, rating, book_cover_url }) => (
                     <div
-                        className="flex gap-5 cursor-pointer"
+                        className="flex items-center gap-5 cursor-pointer"
                         key={book_id}
                         onClick={() =>
                             router.push(`/astronotes/${id}/${book_id}`)
                         }
                         aria-hidden>
-                        <div>
-                            <Image
-                                src={book_cover_url ?? '/'} // ! foto dummy
-                                width={79}
-                                height={113}
-                                className="object-contain"
-                            />
-                        </div>
+                        <Image
+                            src={
+                                book_cover_url ??
+                                'https://assets.gradient.academy/assets/astronotes-kalkulus2-placeholder.jpg'
+                            }
+                            width={79}
+                            height={113}
+                            className="object-contain rounded"
+                        />
                         <div className="flex flex-col gap-[6px]">
                             <span className="inline-block font-body text-lg text-neutral-200">
                                 {title}

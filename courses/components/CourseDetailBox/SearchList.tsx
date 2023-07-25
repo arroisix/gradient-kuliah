@@ -197,21 +197,22 @@ const SearchList = ({
                             {searchResult?.books.contents.map((value) => (
                                 <div
                                     key={value.book_id}
-                                    className="flex gap-5 cursor-pointer"
+                                    className="flex items-center gap-5 cursor-pointer"
                                     onClick={() =>
                                         router.push(
                                             `/astronotes/${id}/${value.book_id}`
                                         )
                                     }
                                     aria-hidden>
-                                    <div>
-                                        <Image
-                                            src={value.book_cover_url ?? '/'} // ! foto dummy
-                                            width={79}
-                                            height={113}
-                                            className="object-contain"
-                                        />
-                                    </div>
+                                    <Image
+                                        src={
+                                            value.book_cover_url ??
+                                            'https://assets.gradient.academy/assets/astronotes-kalkulus2-placeholder.jpg'
+                                        }
+                                        width={79}
+                                        height={113}
+                                        className="object-contain rounded"
+                                    />
                                     <div className="flex flex-col gap-[6px]">
                                         <span className="inline-block font-body text-lg text-neutral-200">
                                             {value.title}
