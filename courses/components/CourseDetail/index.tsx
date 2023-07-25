@@ -1,3 +1,4 @@
+import Sidebar from 'commons/components/modules/Sidebar';
 import CourseDescription from './CourseDescription';
 import ExpiryAnnouncement from './ExpiryAnnouncement';
 import LearningProgress from './LearningProgress';
@@ -11,6 +12,7 @@ const CourseDetail = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
             <div className="flex flex-col lg:items-start lg:flex-row-reverse lg:justify-center gap-8 lg:gap-0">
                 <CourseDescription slug={slug} />
                 <Sylabbus slug={slug} />
+                <Sidebar className="!hidden lg:!block top-[80px] rounded" />
             </div>
         </main>
     );
