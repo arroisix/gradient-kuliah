@@ -77,7 +77,7 @@ export const AstroNotesItem = ({
                         )}
                         {astro.title}
                     </button>
-                    {astro.subsection.sections.map((value) => (
+                    {astro.subsection?.sections.map((value) => (
                         <SubTitle
                             key={value.key}
                             value={value}
