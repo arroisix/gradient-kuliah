@@ -82,7 +82,7 @@ const Description = (): JSX.Element => {
                     {courseDetail?.course_detail.rating ? (
                         <div className="flex flex-col gap-[10px] items-center">
                             <span className="inline-block font-body font-bold text-[22px] md:text-[28px]">
-                                {courseDetail?.course_detail.rating}
+                                {courseDetail?.course_detail.rating.toFixed(1)}
                             </span>
                             <span className="inline-block font-body text-[#CCCCCC] text-xs md:text-base">
                                 Nilai
