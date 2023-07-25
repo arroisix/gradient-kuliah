@@ -148,7 +148,7 @@ const AstronoteHome = (): JSX.Element => {
         <section className="pt-[65px] min-h-[100vh] flex flex-col md:flex-row relative md:overflow-x-hidden overflow-y-auto md:h-[100vh] bg-white">
             <div className="md:px-32 md:py-8 p-4 w-full">
                 <div className="flex flex-col gap-4 mb-4">
-                    <h1 className="text-2xl md:text-4xl font-bold break-word flex gap-1 items-center">
+                    <h1 className="text-2xl md:text-4xl font-bold break-word flex gap-1 items-center text-black">
                         {isLoading ? (
                             <div className="p-4 w-64 bg-neutral-600 animate-pulse rounded-lg" />
                         ) : (
