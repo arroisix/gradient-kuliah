@@ -3,6 +3,8 @@ import { FaLine, FaInstagram } from 'react-icons/fa';
 import { MdCopyright, MdMailOutline } from 'react-icons/md';
 
 const Footer = (): JSX.Element => {
+    const thisYear = new Date().getFullYear();
+
     return (
         <footer className="w-full flex flex-col bg-[#121212] px-4 md:px-[7.5rem] py-8">
             <div className="w-full flex flex-col lg:flex-row">
@@ -59,7 +61,7 @@ const Footer = (): JSX.Element => {
                     Gradient Academy
                 </span>
                 <MdCopyright className="text-accent-violet" />
-                <span className="text-accent-violet ml-1">2022</span>
+                <span className="text-accent-violet ml-1">{thisYear}</span>
             </div>
         </footer>
     );

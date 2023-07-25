@@ -150,3 +150,14 @@ interface TutorAnswerResponse {
     question: AiTutorMessage;
     answer: AiTutorMessage;
 }
+
+interface AITutorFeedbackResponse {
+    feedback_status: string;
+    feedback_content: string;
+}
+
+interface AITutorFeedbackInput {
+    feedback_status: string;
+    feedback_content: string;
+    answer_id: string;
+}

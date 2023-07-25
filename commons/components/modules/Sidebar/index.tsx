@@ -12,7 +12,13 @@ import {
     // RiBookOpenLine
 } from 'react-icons/ri';
 
-const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
+const Sidebar = ({
+    fullHeight,
+    className
+}: {
+    fullHeight?: boolean;
+    className?: string;
+}): JSX.Element => {
     const route = useRouter();
     const { pathname } = route;
 
@@ -23,7 +29,7 @@ const Sidebar = ({ fullHeight }: { fullHeight?: boolean }): JSX.Element => {
         <aside
             className={`hidden md:block top-[64px] ${
                 fullHeight ? 'fixed h-full' : 'h-fit sticky'
-            } bg-[#121212] w-[250px] pl-6 pr-3 py-4`}>
+            } bg-[#121212] w-[250px] pl-6 pr-3 py-4 ${className}`}>
             <div className="flex flex-col gap-[18px]">
                 {/* <Link href={'/notifikasi'}>
                     <span
