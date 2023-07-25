@@ -56,7 +56,7 @@ type Lecturer = {
 
 type SubChapter = {
     id: string;
-    subchapter_name: string;
+    subchapter_name?: string;
     thumbnail?: string;
     order: number;
     video?: Video;
@@ -67,6 +67,11 @@ type SubChapter = {
     duration?: string;
     last_duration?: string | null;
     is_finished?: boolean | null;
+    exercise_name?: string | null;
+    is_on_progress?: boolean | null;
+    type?: 'video' | 'exercise';
+    exercise_id?: string;
+    packet_id?: string;
 };
 
 type Chapter = {
@@ -180,6 +185,7 @@ type LearningProgress = {
     latest_watch_video: SubchapterProgress;
     watch_progress: SubchapterProgress[];
     completion_percentage?: CompletionPercentage;
+    total_duration?: number;
 };
 
 type Packet = {
@@ -243,7 +249,7 @@ interface SubchapterResponse {
 interface SubchapterSearch {
     chapter: string;
     items: {
-        subchapter_id: string;
+        id: string;
         subchapter_name: string;
         order: string;
         duration: string;
@@ -259,7 +265,7 @@ interface SearchInterface<T> {
 }
 
 interface SearchCourseResponse {
-    subchapter: SearchInterface<SubchapterSearch>;
+    subchapters: SearchInterface<SubchapterSearch>;
     books: SearchInterface<Book>;
     chapters: SearchInterface<CourseChapter>;
 }
@@ -282,4 +288,27 @@ interface CourseDetailResponse {
 interface CourseFeedback {
     content: string;
     rating: number;
+}
+
+interface BookChapter {
+    id: string;
+    title: string;
+    notebook_url: string;
+    notion_id: string;
+    subsection: { sections: { key: string; title: string }[] };
+    order: number;
+}
+
+interface BookContent {
+    id: string;
+    title: string;
+    is_free: boolean;
+    is_public: boolean;
+    book_cover_url: string;
+    rating: number;
+    chapters: BookChapter[];
+}
+
+interface BookResponse {
+    book: BookContent;
 }
