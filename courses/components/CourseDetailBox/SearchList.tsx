@@ -117,6 +117,8 @@ const SearchList = ({
     isLoading: boolean;
     isFetching: boolean;
 }): JSX.Element => {
+    const router = useRouter();
+    const { id } = router.query;
     const [navigation, setNavigation] = useState<'SEARCH_LIST' | 'SUBCHAPTER'>(
         'SEARCH_LIST'
     );
@@ -193,7 +195,15 @@ const SearchList = ({
                                 </span>
                             )}
                             {searchResult?.books.contents.map((value) => (
-                                <div className="flex gap-5" key={value.book_id}>
+                                <div
+                                    key={value.book_id}
+                                    className="flex gap-5 cursor-pointer"
+                                    onClick={() =>
+                                        router.push(
+                                            `/astronote/${id}/${value.book_id}`
+                                        )
+                                    }
+                                    aria-hidden>
                                     <div>
                                         <Image
                                             src={value.book_cover_url ?? '/'} // ! foto dummy
