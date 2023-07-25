@@ -26,8 +26,6 @@ const Description = (): JSX.Element => {
         }
     );
 
-    console.log({ subchapterDetail, courseDetail });
-
     return (
         <div className="flex flex-col lg:flex-row justify-between gap-4 lg:gap-[150px] px-5 md:px-16">
             <article>
