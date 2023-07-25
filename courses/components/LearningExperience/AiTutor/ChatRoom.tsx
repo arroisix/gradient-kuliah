@@ -1,13 +1,18 @@
 import Button from 'commons/components/elements/Button';
-import { MdClose } from 'react-icons/md';
-// import { MdClose, MdThumbUpAlt } from 'react-icons/md';
+import { MdClose, MdThumbUpAlt } from 'react-icons/md';
 import {
     useAskTutorMutation,
     useGetChatRoomQuery
 } from 'courses/redux/api/aiTutorApi';
 
 import { Formik } from 'formik';
-import { MouseEventHandler, useEffect, useRef } from 'react';
+import {
+    Dispatch,
+    MouseEventHandler,
+    SetStateAction,
+    useEffect,
+    useRef
+} from 'react';
 import { useLearning } from 'courses/contexts/LearningProvider';
 import Skeleton from 'commons/components/elements/Skeleton';
 import CopilotFill from 'commons/components/elements/Icons/CopilotFill';
@@ -18,6 +23,13 @@ import TextContent from './TextContent';
 interface ChatRoomProps {
     uniqueId: string;
     onClick: (event: boolean) => void | MouseEventHandler<HTMLDivElement>;
+    setIsShowModal: Dispatch<SetStateAction<0 | 1>>;
+    setFeedbackStatus: Dispatch<
+        SetStateAction<{
+            status: 'NOT_HELPING' | 'HELPING' | 'NOT_SELECTED';
+            answer_id: string;
+        }>
+    >;
 }
 
 interface BubbleProps {
@@ -41,7 +53,21 @@ const StudentQuestionBubble = ({ message }: BubbleProps): JSX.Element => {
     );
 };
 
-const TutorAnswerBubble = ({ message }: BubbleProps): JSX.Element => {
+const TutorAnswerBubble = ({
+    message,
+    setIsShowModal,
+    setFeedbackStatus,
+    answer_id
+}: BubbleProps & {
+    setIsShowModal: Dispatch<SetStateAction<0 | 1>>;
+    setFeedbackStatus: Dispatch<
+        SetStateAction<{
+            status: 'NOT_HELPING' | 'HELPING' | 'NOT_SELECTED';
+            answer_id: string;
+        }>
+    >;
+    answer_id: string;
+}): JSX.Element => {
     const renderTutorAnswer = (): string => {
         try {
             return JSON.parse(
@@ -68,21 +94,34 @@ const TutorAnswerBubble = ({ message }: BubbleProps): JSX.Element => {
                 />
             </span>
             {/* hide copilot feedback */}
-            {/* <div className="flex gap-[14px] self-end">
+            <div className="flex gap-[14px] self-end">
                 <MdThumbUpAlt
+                    onClick={() => {
+                        setFeedbackStatus({ status: 'HELPING', answer_id });
+                        setIsShowModal(1);
+                    }}
                     size={16}
                     className="text-neutral-600 cursor-pointer hover:text-[#00DE09] transition-all"
                 />
                 <MdThumbUpAlt
+                    onClick={() => {
+                        setFeedbackStatus({ status: 'NOT_HELPING', answer_id });
+                        setIsShowModal(1);
+                    }}
                     size={16}
                     className="text-neutral-600 rotate-180 cursor-pointer hover:text-[#db1f1f] transition-all"
                 />
-            </div> */}
+            </div>
         </div>
     );
 };
 
-const ChatRoom = ({ uniqueId, onClick }: ChatRoomProps): JSX.Element => {
+const ChatRoom = ({
+    uniqueId,
+    onClick,
+    setIsShowModal,
+    setFeedbackStatus
+}: ChatRoomProps): JSX.Element => {
     const { video } = useLearning();
     const { data, isLoading } = useGetChatRoomQuery(video.id, {
         skip: video.id === undefined || video.id === null
@@ -152,6 +191,9 @@ const ChatRoom = ({ uniqueId, onClick }: ChatRoomProps): JSX.Element => {
                                 <TutorAnswerBubble
                                     message={message}
                                     key={message.id}
+                                    setIsShowModal={setIsShowModal}
+                                    setFeedbackStatus={setFeedbackStatus}
+                                    answer_id={message.id}
                                 />
                             </div>
                         );

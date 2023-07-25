@@ -1,99 +1,94 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
-import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
-import LearnContentBox from 'courses/components/LearnContentBox';
 import AiTutor from 'courses/components/LearningExperience/AiTutor';
 import { useLearning } from 'courses/contexts/LearningProvider';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useGetSubchapterDetailQuery } from 'courses/redux/api/privateCourseApi';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import LearnVideo from './learnVideo';
+import CourseDetailBox from 'courses/components/CourseDetailBox';
+import CourseSummary from 'courses/components/CourseSummary';
+import AnotherClass from 'courses/components/AnotherClass';
+import useElementSize from 'commons/hooks/useElementSize';
+import Modal from 'commons/components/modules/Modal';
+import { useState } from 'react';
+import AiModalFeedback from 'courses/components/LearningExperience/AiTutor/AiModalFeedback';
 
-const VideoLearnContainer = ({
-    chapters
-}: {
-    chapters: Chapter[];
-}): JSX.Element => {
+const VideoLearnContainer = (): JSX.Element => {
     const router = useRouter();
     const { sub, id } = router.query;
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const {
-        is_subscribed,
-        learning_progress_id,
-        latest_watch_video,
-        watch_progress
-    } = useCourseSubscription(id as string);
+    const { learning_progress_id, latest_watch_video, watch_progress } =
+        useCourseSubscription(id as string);
     const { data, isLoading } = useGetSubchapterDetailQuery(sub as string, {
         skip: sub === null || sub === undefined || !isAuthenticated
     });
-    const { isMobileBreakpoints } = useWindowBreakpoints();
-    const [showMaterial, setShowMaterial] = useState(false);
     const { video } = useLearning();
+    const { height: videoHeight, ref: videoRef } =
+        useElementSize<HTMLDivElement>();
+    const [isShowModal, setIsShowModal] = useState<0 | 1>(0);
+    const [feedbackStatus, setFeedbackStatus] = useState<{
+        status: 'NOT_HELPING' | 'HELPING' | 'NOT_SELECTED';
+        answer_id: string;
+    }>({ status: 'NOT_SELECTED', answer_id: '' });
 
     return (
-        <section className="pt-[65px] flex flex-col md:flex-row relative md:overflow-hidden min-h-[100vh] md:h-screen">
-            <div className="w-full h-full">
-                {!isLoading ? (
-                    data ? (
-                        <LearnVideo
-                            key={data.id}
-                            learningProgress={{
-                                id: learning_progress_id as string,
-                                watch_progress:
-                                    watch_progress as SubchapterProgress[],
-                                latest_watch_video:
-                                    latest_watch_video as SubchapterProgress
-                            }}
-                        />
+        <section className="relative pt-[64px] md:pt-[97px] pb-16 min-h-[100vh] flex flex-col gap-8">
+            <div className="w-full h-full flex gap-5 lg:gap-8 px-0 md:px-16">
+                <div
+                    className="w-full lg:w-[70%] h-max md:rounded-lg md:overflow-hidden"
+                    ref={videoRef}>
+                    {!isLoading ? (
+                        data ? (
+                            <LearnVideo
+                                key={data.id}
+                                learningProgress={{
+                                    id: learning_progress_id as string,
+                                    watch_progress:
+                                        watch_progress as SubchapterProgress[],
+                                    latest_watch_video:
+                                        latest_watch_video as SubchapterProgress
+                                }}
+                            />
+                        ) : (
+                            <></>
+                        )
                     ) : (
-                        <></>
-                    )
-                ) : (
-                    <div className="w-full h-3/4 bg-neutral-600 animate-pulse" />
-                )}
-            </div>
-            <div
-                className="md:hidden bg-neutral-800 border-4 border-neutral-600 text-neutral-200 top-[65px] right-0 w-8 rounded-l-xl h-16 z-10 fixed flex justify-center items-center"
-                onClick={() => setShowMaterial(true)}
-                aria-hidden>
-                <FaChevronLeft />
-                <FaChevronLeft className="-ml-2" />
-            </div>
-            {isMobileBreakpoints && id && showMaterial && (
-                <div className="fixed z-[100] top-0 right-0 w-screen h-[calc(100vh-64px)] bg-neutral-900">
-                    <header className="w-full px-4 md:px-8 py-4 flex items-center justify-between">
-                        <span className="text-2xl font-bold cursor-pointer font-[Urbanist]">
-                            Gradient
-                        </span>
-                        <div
-                            className="flex items-center"
-                            onClick={() => setShowMaterial(false)}
-                            aria-hidden>
-                            <FaChevronRight />
-                            <FaChevronRight className="-ml-2" />
-                            <span className="text-bold">Tutup</span>
-                        </div>
-                    </header>
-                    <LearnContentBox
-                        extraCallback={() => setShowMaterial(false)}
-                        slug={id as string}
-                        chapters={chapters}
-                        isSubscribed={is_subscribed}
-                    />
+                        <div className="w-full h-[300px] bg-neutral-600 animate-pulse" />
+                    )}
                 </div>
-            )}
-            <div className="w-full md:w-[30vw] hidden md:block">
-                {id && (
-                    <LearnContentBox
-                        slug={id as string}
-                        chapters={chapters}
-                        isSubscribed={is_subscribed}
-                    />
+                {!isLoading ? (
+                    <div
+                        className="w-[30%] hidden lg:block"
+                        style={{ height: videoHeight }}>
+                        <CourseDetailBox />
+                    </div>
+                ) : (
+                    <div className="w-[30%] hidden lg:block h-[300px] bg-neutral-600 rounded-lg animate-pulse" />
                 )}
             </div>
-            {video?.ai_unique_id && <AiTutor uniqueId={video.ai_unique_id} />}
+            <h2 className="font-extrabold text-base md:text-2xl px-5 md:px-16">
+                {data?.subchapter_name}
+            </h2>
+            <CourseSummary />
+            <AnotherClass />
+            {video?.ai_unique_id && (
+                <AiTutor
+                    uniqueId={video.ai_unique_id}
+                    setIsShowModal={setIsShowModal}
+                    setFeedbackStatus={setFeedbackStatus}
+                />
+            )}
+            <Modal
+                className="!bg-[#1D1D1D]"
+                isOpen={isShowModal}
+                setOpen={setIsShowModal}
+                variant="dark">
+                <AiModalFeedback
+                    feedbackStatus={feedbackStatus}
+                    setOpen={setIsShowModal}
+                />
+            </Modal>
         </section>
     );
 };

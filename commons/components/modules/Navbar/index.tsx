@@ -20,8 +20,6 @@ import {
 import { removeUser } from 'authentication/redux/slices/userSlice';
 import Button from 'commons/components/elements/Button';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
-import { BiPlayCircle } from 'react-icons/bi';
-import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienceApi';
 import { AUTHENTICATION_ROUTE } from 'commons/constants';
 import MobileSidebar from '../Sidebar/mobile';
 import Avatar from 'react-avatar';
@@ -57,17 +55,7 @@ const Navbar = ({
     };
     const { height } = useWindowSize();
     const router = useRouter();
-    const { id } = router.query;
     const dispatch = useDispatch();
-    const { data: learningProgress, isLoading: isLoadingLearningProgress } =
-        useGetLearningProgressQuery(id as string, {
-            skip:
-                !isAuthenticated ||
-                id === null ||
-                id === undefined ||
-                !router.pathname.includes('kelas/[id]/'),
-            refetchOnMountOrArgChange: true
-        });
     const [scrollPosition, setScrollPosition] = useState(0);
     const handleScroll = (): void => {
         const position = window.pageYOffset;
@@ -161,42 +149,52 @@ const Navbar = ({
                     {showSidebar && fullHeightSidebar && isAuthenticated && (
                         <div className="hidden md:block w-[250px] h-[64px] fixed top-0 left-0 bg-[#121212] z-[-1]" />
                     )}
-                    {((isMobileBreakpoints &&
-                        router.pathname.includes('kelas/[id]/astronotes')) ||
-                        (!isMobileBreakpoints &&
-                            router.pathname.includes('kelas/[id]/'))) &&
-                        !isLoadingLearningProgress &&
-                        learningProgress?.first_video_in_course && (
-                            <Button
-                                className="bg-[#C4B9FF] flex gap-1 items-center text-[#5F2BCE] transition ease-in hover:bg-gradient-to-b hover:from-[#DD837A] hover:to-[#AB8EEC] hover:text-white"
-                                size="extraSmall"
-                                variant="primary"
-                                href={`/kelas/${id}/belajar/video/${learningProgress.first_video_in_course.chapter_id}/${learningProgress.first_video_in_course.subchapter_id}`}>
-                                <>
-                                    <BiPlayCircle className="text-xl" />
-                                    <span className="font-bold">VIDEO</span>
-                                </>
-                            </Button>
+                    {!isMobileBreakpoints &&
+                        (router.pathname.includes('kelas/[id]/') ||
+                            router.pathname.includes('astronotes/')) && (
+                            <div className="flex gap-6 pl-4">
+                                <Button
+                                    href="/"
+                                    variant="custom"
+                                    className={`!p-0 font-body font-normal text-xs text-neutral-400 ${
+                                        router.pathname.includes('kelas/[id]/')
+                                            ? 'hover:text-white'
+                                            : 'hover:text-black'
+                                    }`}>
+                                    Home
+                                </Button>
+                                <Button
+                                    href="/komunitas"
+                                    variant="custom"
+                                    className={`!p-0 font-body font-normal text-xs text-neutral-400 ${
+                                        router.pathname.includes('kelas/[id]/')
+                                            ? 'hover:text-white'
+                                            : 'hover:text-black'
+                                    }`}>
+                                    Komunitas
+                                </Button>
+                                <Button
+                                    href="/kelas"
+                                    variant="custom"
+                                    className={`!p-0 font-body font-normal text-xs text-neutral-400 ${
+                                        router.pathname.includes('kelas/[id]/')
+                                            ? 'hover:text-white'
+                                            : 'hover:text-black'
+                                    }`}>
+                                    Kelas
+                                </Button>
+                                {/* <Button
+                                    href="/perpustakaan"
+                                    variant="custom"
+                                    className={`!p-0 font-body font-normal text-xs text-neutral-400 ${
+                                        router.pathname.includes('kelas/[id]/')
+                                            ? 'hover:text-white'
+                                            : 'hover:text-black'
+                                    }`}>
+                                    Perpustakaan
+                                </Button> */}
+                            </div>
                         )}
-                    {((isMobileBreakpoints &&
-                        router.pathname.includes('kelas/[id]/belajar')) ||
-                        (!isMobileBreakpoints &&
-                            router.pathname.includes('kelas/[id]/'))) && (
-                        <Button
-                            className="bg-[#C4B9FF] flex gap-1 items-center text-[#5F2BCE] transition ease-in hover:bg-gradient-to-b hover:from-[#DD837A] hover:to-[#AB8EEC] hover:text-white"
-                            size="extraSmall"
-                            variant="primary"
-                            href={`/kelas/${id}/astronotes`}>
-                            <>
-                                <img
-                                    src="https://storage.googleapis.com/gradient-asset/assets/astronotes.png"
-                                    alt="astronotes"
-                                    className="w-5 h-5"
-                                />
-                                <span className="font-bold">AstroNotes</span>
-                            </>
-                        </Button>
-                    )}
                 </div>
                 {paymentPage ? (
                     <Button
