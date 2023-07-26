@@ -1,0 +1,35 @@
+const Pen = ({
+    size = 18,
+    className = 'stroke-white'
+}: {
+    size?: number;
+    className?: string;
+}): JSX.Element => {
+    return (
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 18 18"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M9 15H15.75"
+                className={className}
+                strokeOpacity="0.2"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+            <path
+                d="M12.375 2.62615C12.6734 2.32778 13.078 2.16016 13.5 2.16016C13.7089 2.16016 13.9158 2.20131 14.1088 2.28126C14.3019 2.36122 14.4773 2.47841 14.625 2.62615C14.7727 2.77388 14.8899 2.94927 14.9699 3.1423C15.0498 3.33533 15.091 3.54221 15.091 3.75115C15.091 3.96008 15.0498 4.16696 14.9699 4.35999C14.8899 4.55302 14.7727 4.72841 14.625 4.87615L5.25 14.2511L2.25 15.0011L3 12.0011L12.375 2.62615Z"
+                className={className}
+                strokeOpacity="0.2"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+        </svg>
+    );
+};
+
+export default Pen;

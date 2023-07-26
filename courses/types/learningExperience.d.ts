@@ -159,6 +159,5 @@ interface AITutorFeedbackResponse {
 interface AITutorFeedbackInput {
     feedback_status: string;
     feedback_content: string;
-    ai_agent_id: string;
-    room_id: string;
+    answer_id: string;
 }

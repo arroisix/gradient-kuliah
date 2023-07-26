@@ -4,20 +4,31 @@ import Play from 'commons/components/elements/Icons/Play';
 import Skeleton from 'commons/components/elements/Skeleton';
 import Link from 'next/link';
 import { useState } from 'react';
-import { IoIosSearch } from 'react-icons/io';
+import { IoIosSearch, IoMdClose } from 'react-icons/io';
 import { ListBooks } from '../CourseDetailBox';
 import {
     useGetCourseContentQuery,
-    useGetSubchapterQuery
+    useGetSubchapterQuery,
+    useLazyGetSearchCourseContentQuery
 } from 'courses/redux/api/courseApi';
+import SearchList from '../CourseDetailBox/SearchList';
+import { useRouter } from 'next/router';
 
 const SylabbusContent = ({
     id,
     slug
 }: GradientBaseComponentWithId & { slug: string }): JSX.Element => {
-    const { data: subchapters, isLoading } = useGetSubchapterQuery({
-        chapterId: id
-    });
+    const { data: subchapters, isLoading } = useGetSubchapterQuery(
+        {
+            chapterId: id
+        },
+        {
+            selectFromResult: ({ data, isLoading }) => ({
+                data: data?.subchapters.filter(({ type }) => type === 'video'),
+                isLoading: isLoading
+            })
+        }
+    );
 
     return (
         <div className="flex flex-col gap-2">
@@ -53,7 +64,7 @@ const SylabbusContent = ({
                     </div>
                 </>
             )}
-            {subchapters?.subchapters.map((subchapter: SubChapter) => (
+            {subchapters?.map((subchapter: SubChapter) => (
                 <Link
                     key={subchapter.id}
                     href={`/kelas/${slug}/belajar/video/${id}/${subchapter.id}`}>
@@ -91,14 +102,42 @@ const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
         useGetCourseContentQuery({
             slug: slug as string
         });
+    const [
+        triggerSearch,
+        {
+            data: searchResult,
+            isLoading: isSearchingLoading,
+            isFetching: isSearchingFetching
+        }
+    ] = useLazyGetSearchCourseContentQuery();
 
+    const router = useRouter();
+    const { id } = router.query;
+    const [isSearch, setIsSearch] = useState(false);
     const [search, setSearch] = useState('');
     const [navigation, setNavigation] = useState<
         'VIDEO' | 'BOOK' | 'EXAM' | 'ON_SEARCH'
     >('VIDEO');
 
-    function handleSearch(): void {
-        // logic search
+    function handleSearch({
+        type,
+        page = 1
+    }: {
+        type?: 'BOOK' | 'CHAPTER' | 'SUBCHAPTER';
+        page?: number;
+    }): void {
+        setNavigation('ON_SEARCH');
+        triggerSearch({
+            slug: id as string,
+            content: search,
+            type,
+            page
+        });
+    }
+
+    function keyDown(): void {
+        setIsSearch(true);
+        handleSearch({});
     }
 
     return (
@@ -111,39 +150,55 @@ const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
                     name="search"
                     onChange={(event) => setSearch(event.target.value)}
                     onKeyDown={(event) => {
-                        event.key === 'Enter' ? handleSearch() : null;
+                        event.key === 'Enter' ? keyDown() : null;
                     }}
                     placeholder="Cari materi"
                 />
                 <IoIosSearch
                     size={20}
                     className="text-[#DADADA] cursor-pointer"
-                    onClick={handleSearch}
+                    onClick={() => {
+                        handleSearch({});
+                        setIsSearch(true);
+                    }}
                 />
+                {isSearch && (
+                    <IoMdClose
+                        size={16}
+                        className="text-white cursor-pointer ml-2"
+                        onClick={() => {
+                            setIsSearch(false);
+                            setSearch('');
+                            setNavigation('VIDEO');
+                        }}
+                    />
+                )}
             </div>
             <div className="pt-[17px] md:pt-6 pb-[14px] md:pb-4">
-                <div className="flex">
-                    <span
-                        className={`inline-block w-full text-center text-sm pb-[6px] cursor-pointer ${
-                            navigation === 'VIDEO'
-                                ? 'border-b-2 border-[#C4B9FF] font-extrabold text-[#C4B9FF]'
-                                : 'font-medium text-[#CCCCCC] border-b border-[#272727] hover:text-neutral-500'
-                        }`}
-                        onClick={() => setNavigation('VIDEO')}
-                        aria-hidden>
-                        VIDEO
-                    </span>
-                    <span
-                        className={`inline-block w-full text-center text-sm pb-[6px] cursor-pointer ${
-                            navigation === 'BOOK'
-                                ? 'border-b-2 border-[#C4B9FF] font-extrabold text-[#C4B9FF]'
-                                : 'font-medium text-[#CCCCCC] border-b border-[#272727] hover:text-neutral-500'
-                        }`}
-                        onClick={() => setNavigation('BOOK')}
-                        aria-hidden>
-                        BUKU
-                    </span>
-                </div>
+                {!isSearch && (
+                    <div className="flex">
+                        <span
+                            className={`inline-block w-full text-center text-sm pb-[6px] cursor-pointer ${
+                                navigation === 'VIDEO'
+                                    ? 'border-b-2 border-[#C4B9FF] font-extrabold text-[#C4B9FF]'
+                                    : 'font-medium text-[#CCCCCC] border-b border-[#272727] hover:text-neutral-500'
+                            }`}
+                            onClick={() => setNavigation('VIDEO')}
+                            aria-hidden>
+                            VIDEO
+                        </span>
+                        <span
+                            className={`inline-block w-full text-center text-sm pb-[6px] cursor-pointer ${
+                                navigation === 'BOOK'
+                                    ? 'border-b-2 border-[#C4B9FF] font-extrabold text-[#C4B9FF]'
+                                    : 'font-medium text-[#CCCCCC] border-b border-[#272727] hover:text-neutral-500'
+                            }`}
+                            onClick={() => setNavigation('BOOK')}
+                            aria-hidden>
+                            BUKU
+                        </span>
+                    </div>
+                )}
             </div>
             {navigation === 'VIDEO' && (
                 <>
@@ -175,6 +230,14 @@ const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
                 <ListBooks
                     books={courseContent?.books as Book[]}
                     isLoading={isLoadingCourse}
+                />
+            )}
+            {navigation === 'ON_SEARCH' && (
+                <SearchList
+                    searchResult={searchResult}
+                    handleSearch={handleSearch}
+                    isLoading={isSearchingLoading}
+                    isFetching={isSearchingFetching}
                 />
             )}
         </div>
