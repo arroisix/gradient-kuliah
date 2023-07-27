@@ -53,11 +53,6 @@ const VideoJS = ({
             setIsRendered(true);
         }
 
-        videoRef.current?.addEventListener('play', () => {
-            setIsPlay(true);
-            setIsBuffering(false);
-        });
-
         videoRef.current?.addEventListener('playing', () => {
             setIsPlay(true);
             setIsBuffering(false);
