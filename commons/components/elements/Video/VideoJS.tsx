@@ -146,7 +146,6 @@ const VideoJS = ({
                 }
             },
             playbackRates: [0.5, 0.75, 1, 1.5, 2],
-            bigPlayButton: false,
             controlBar: {
                 remainingTimeDisplay: false
             },
@@ -225,7 +224,7 @@ const VideoJS = ({
             />
             {!isPlay && (
                 <>
-                    <div className="absolute bg-black opacity-50 w-full h-[110%] left-0 top-0 pointer-events-none" />
+                    <div className="absolute bg-black opacity-50 w-full h-full left-0 top-0 pointer-events-none" />
                     <div
                         className="absolute w-full h-full left-0 top-0 z-[9] flex justify-center items-center p-8 pointer-events-none"
                         aria-hidden>
