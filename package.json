@@ -15,6 +15,7 @@
     "dependencies": {
         "@apollo/client": "^3.7.0",
         "@headlessui/react": "^1.7.3",
+        "@mux/videojs-kit": "^0.12.0",
         "@react-oauth/google": "^0.5.1",
         "@react-spring/parallax": "^9.5.5",
         "@reduxjs/toolkit": "^1.9.5",
@@ -65,7 +66,11 @@
         "remark-math": "^5.1.1",
         "remark-parse": "^10.0.1",
         "remark-rehype": "^10.1.0",
-        "use-debounce": "^9.0.4"
+        "use-debounce": "^9.0.4",
+        "video.js": "^8.3.0",
+        "videojs-contrib-quality-levels": "^4.0.0",
+        "videojs-http-source-selector": "^1.1.6",
+        "videojs-mux": "^4.15.3"
     },
     "devDependencies": {
         "@types/marked": "^4.0.8",
@@ -75,6 +80,7 @@
         "@types/react-dom": "^18.0.7",
         "@types/react-gtm-module": "^2.0.1",
         "@types/redux-logger": "^3.0.9",
+        "@types/video.js": "^7.3.52",
         "@typescript-eslint/eslint-plugin": "^5.41.0",
         "@typescript-eslint/parser": "^5.41.0",
         "autoprefixer": "^10.4.12",
