@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 // @ts-ignore
 import videojs from '@mux/videojs-kit';
 import { FaPlay } from 'react-icons/fa';
+import { useRouter } from 'next/router';
 
 // const buildSettingComponent = (element: HTMLDivElement): void => {
 //     element.innerHTML = '';
@@ -12,7 +13,8 @@ import { FaPlay } from 'react-icons/fa';
 const VideoJS = ({
     src,
     isMuxVideo,
-    trackProgress
+    trackProgress,
+    next_subchapter_link
 }: {
     src: string;
     isMuxVideo: boolean;
@@ -20,7 +22,9 @@ const VideoJS = ({
         last_duration: string,
         isFinished?: boolean
     ) => Promise<any>;
+    next_subchapter_link?: string;
 }): JSX.Element => {
+    const router = useRouter();
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const [isRendered, setIsRendered] = useState(false);
     const [isPlay, setIsPlay] = useState(false);
@@ -38,6 +42,10 @@ const VideoJS = ({
         }
     }
 
+    function handleNextVideo(): void {
+        if (next_subchapter_link) router.push(next_subchapter_link);
+    }
+
     async function handleTrackProgress(isFinished?: boolean): Promise<void> {
         setIsPlay(false);
         if (trackProgress) {
@@ -46,6 +54,15 @@ const VideoJS = ({
                 isFinished ?? false
             );
         }
+    }
+
+    function handlePauseEvent(): void {
+        handleTrackProgress();
+    }
+
+    function handleEndedEvent(): void {
+        handleTrackProgress(true);
+        handleNextVideo();
     }
 
     useEffect(() => {
@@ -64,22 +81,14 @@ const VideoJS = ({
 
         videoRef.current?.addEventListener('canplay', () => setIsPlay(false));
 
-        videoRef.current?.addEventListener('pause', () =>
-            handleTrackProgress()
-        );
+        videoRef.current?.addEventListener('pause', handlePauseEvent);
 
-        videoRef.current?.addEventListener('ended', () =>
-            handleTrackProgress(true)
-        );
+        videoRef.current?.addEventListener('ended', handleEndedEvent);
 
-        return () => {
-            videoRef.current?.removeEventListener('pause', () =>
-                handleTrackProgress()
-            );
+        return function cleanUpListener() {
+            videoRef.current?.removeEventListener('pause', handlePauseEvent);
 
-            videoRef.current?.removeEventListener('ended', () =>
-                handleTrackProgress(true)
-            );
+            videoRef.current?.removeEventListener('ended', handleEndedEvent);
 
             videoRef.current?.removeEventListener('playing', () => {
                 setIsPlay(true);
@@ -94,7 +103,29 @@ const VideoJS = ({
                 setIsPlay(false)
             );
         };
-    }, []);
+    }, [next_subchapter_link]);
+
+    // useEffect(() => {
+    //     videoRef.current?.addEventListener('pause', () =>
+    //         handleTrackProgress()
+    //     );
+
+    //     videoRef.current?.addEventListener('ended', () => {
+    //         handleTrackProgress(true);
+    //         handleNextVideo();
+    //     });
+
+    //     return () => {
+    //         videoRef.current?.removeEventListener('pause', () =>
+    //             handleTrackProgress()
+    //         );
+
+    //         videoRef.current?.removeEventListener('ended', () => {
+    //             handleTrackProgress(true);
+    //             handleNextVideo();
+    //         });
+    //     };
+    // }, [next_subchapter_link]);
 
     useEffect(() => {
         const player = videojs(videoRef.current, {
