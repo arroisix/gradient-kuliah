@@ -26,7 +26,7 @@ const VideoLearnContainer = (): JSX.Element => {
     const { learning_progress_id, isLoading: isLoadingSubscription } =
         useCourseSubscription(id as string);
     const [track] = useTrackSubchapterProgressMutation();
-    const { video } = useLearning();
+    const { video, subchapter } = useLearning();
     const { height: videoHeight, ref: videoRef } =
         useElementSize<HTMLDivElement>();
     const [isShowModal, setIsShowModal] = useState<0 | 1>(0);
@@ -73,6 +73,12 @@ const VideoLearnContainer = (): JSX.Element => {
                                                   }
                                               })
                                         : undefined
+                                }
+                                next_subchapter_link={
+                                    subchapter?.next_subchapter?.chapter_id &&
+                                    subchapter.next_subchapter.id
+                                        ? `/kelas/${id}/belajar/video/${subchapter?.next_subchapter?.chapter_id}/${subchapter?.next_subchapter?.id}`
+                                        : ''
                                 }
                             />
                         </div>
