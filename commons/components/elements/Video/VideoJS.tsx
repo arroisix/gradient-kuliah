@@ -211,6 +211,7 @@ const VideoJS = ({
                 e.preventDefault();
                 return false;
             }
+            return;
         };
     }, [isMuxVideo, src]);
 
