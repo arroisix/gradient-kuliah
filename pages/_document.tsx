@@ -21,6 +21,14 @@ export default class MyDocument extends Document {
                         rel="stylesheet"
                     />
                     <link
+                        rel="stylesheet"
+                        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"
+                    />
+                    <link
+                        rel="stylesheet"
+                        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0"
+                    />
+                    <link
                         href="https://fonts.googleapis.com/css2?family=Urbanist:wght@100;400;800&display=swap"
                         rel="stylesheet"
                     />
