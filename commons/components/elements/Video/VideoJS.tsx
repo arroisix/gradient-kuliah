@@ -105,28 +105,6 @@ const VideoJS = ({
         };
     }, [next_subchapter_link]);
 
-    // useEffect(() => {
-    //     videoRef.current?.addEventListener('pause', () =>
-    //         handleTrackProgress()
-    //     );
-
-    //     videoRef.current?.addEventListener('ended', () => {
-    //         handleTrackProgress(true);
-    //         handleNextVideo();
-    //     });
-
-    //     return () => {
-    //         videoRef.current?.removeEventListener('pause', () =>
-    //             handleTrackProgress()
-    //         );
-
-    //         videoRef.current?.removeEventListener('ended', () => {
-    //             handleTrackProgress(true);
-    //             handleNextVideo();
-    //         });
-    //     };
-    // }, [next_subchapter_link]);
-
     useEffect(() => {
         const player = videojs(videoRef.current, {
             userActions: {
