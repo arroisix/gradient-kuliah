@@ -116,9 +116,15 @@
 .video-js {
     font-family: 'Open Sans' !important;
     position: relative !important;
+    border-radius: 0.5rem !important;
+}
+
+.video-js .vjs-tech {
+    border-radius: 0.5rem !important;
 }
 
 .video-js .vjs-control-bar {
+    bottom: 10px !important;
     background: transparent !important;
     padding: 0 12px;
     z-index: 1;
