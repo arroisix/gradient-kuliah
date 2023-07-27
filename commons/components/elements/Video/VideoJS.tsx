@@ -207,7 +207,11 @@ const VideoJS = ({
         });
 
         window.onkeydown = function (e) {
-            return e.keyCode !== 32;
+            if (e.keyCode === 32 && e.target === videoRef.current) {
+                e.preventDefault();
+                return false;
+            }
+            return;
         };
     }, [isMuxVideo, src]);
 
