@@ -169,3 +169,7 @@
 .video-js .vjs-volume-level::before {
     top: 0 !important;
 }
+
+.video-js .vjs-big-play-button {
+    opacity: 0 !important;
+}
