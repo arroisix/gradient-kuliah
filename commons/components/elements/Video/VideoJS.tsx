@@ -53,6 +53,11 @@ const VideoJS = ({
             setIsRendered(true);
         }
 
+        videoRef.current?.addEventListener('play', () => {
+            setIsPlay(true);
+            setIsBuffering(false);
+        });
+
         videoRef.current?.addEventListener('playing', () => {
             setIsPlay(true);
             setIsBuffering(false);
@@ -207,7 +212,10 @@ const VideoJS = ({
         });
 
         window.onkeydown = function (e) {
-            return e.keyCode !== 32;
+            if (e.keyCode === 32 && e.target === videoRef.current) {
+                e.preventDefault();
+                return false;
+            }
         };
     }, [isMuxVideo, src]);
 
