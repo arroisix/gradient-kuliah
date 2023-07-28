@@ -1,0 +1,180 @@
+.button-forward::before {
+    content: '\e056';
+}
+
+.button-forward:hover::after {
+    content: 'Forward 10s (→)';
+    position: absolute;
+    top: -40px;
+    left: -20px;
+    font-size: 10px;
+    font-family: 'Open Sans' !important;
+    background-color: #212121;
+    padding: 4px 8px;
+    border-radius: 2px;
+}
+
+.button-backward::before {
+    content: '\e059';
+}
+
+.button-backward:hover::after {
+    content: 'Rewind 10s (←)';
+    position: absolute;
+    top: -40px;
+    left: -20px;
+    /* transform: translateX(50%); */
+    font-size: 10px;
+    font-family: 'Open Sans' !important;
+    background-color: #212121;
+    padding: 4px 8px;
+    border-radius: 2px;
+}
+
+@media (max-width: 48em) {
+    .button-forward {
+        display: none !important;
+    }
+
+    .button-backward {
+        display: none !important;
+    }
+}
+
+.vjs-mute-control:hover::after {
+    content: 'Mute (m)';
+    position: absolute;
+    width: 60px;
+    top: -40px;
+    left: -5px;
+    /* transform: translateX(50%); */
+    font-size: 10px;
+    font-family: 'Open Sans' !important;
+    background-color: #212121;
+    padding: 4px 8px;
+    border-radius: 2px;
+}
+
+.vjs-picture-in-picture-control:hover::after {
+    content: 'Miniplayer (i)';
+    position: absolute;
+    width: 80px;
+    top: -40px;
+    left: -20px;
+    font-size: 10px;
+    font-family: 'Open Sans' !important;
+    background-color: #212121;
+    padding: 4px 8px;
+    border-radius: 2px;
+}
+
+.vjs-fullscreen-control:hover::after {
+    content: 'Fullscreen (f)';
+    position: absolute;
+    width: 80px;
+    top: -40px;
+    right: 5px;
+    font-size: 10px;
+    font-family: 'Open Sans' !important;
+    background-color: #212121;
+    padding: 4px 8px;
+    border-radius: 2px;
+}
+
+.button-settings {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.button-settings::before {
+    content: '\e8b8';
+}
+
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+}
+
+.material-symbols-rounded {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+}
+
+.video-js .vjs-current-time,
+.video-js .vjs-time-divider,
+.video-js .vjs-duration {
+    display: flex !important;
+    align-items: center;
+    padding: 0 !important;
+    min-width: 0 !important;
+    font-size: 14px !important;
+}
+
+.video-js .vjs-time-divider {
+    padding-inline: 4px !important;
+}
+
+.video-js {
+    font-family: 'Open Sans' !important;
+    position: relative !important;
+}
+
+.video-js .vjs-tech {
+    border-radius: 0.5rem !important;
+}
+
+.video-js .vjs-control-bar {
+    bottom: 10px !important;
+    background: transparent !important;
+    padding: 0 12px;
+    z-index: 1;
+}
+
+.video-js .vjs-progress-control {
+    position: absolute !important;
+    top: -25px;
+    left: 0;
+    width: 100% !important;
+    border-radius: 10px;
+}
+
+.video-js .vjs-progress-holder {
+    background-color: #ffffff1a !important;
+    width: 100% !important;
+    height: 6px !important;
+    margin: 0 24px !important;
+    border-radius: 10px !important;
+}
+
+.video-js .vjs-play-progress {
+    background-color: #5f2bce !important;
+    border-radius: 10px;
+}
+
+.video-js .vjs-play-progress::before {
+    top: 0 !important;
+    display: none;
+}
+
+.video-js .vjs-play-progress .vjs-time-tooltip {
+    display: none;
+    visibility: hidden;
+}
+
+.video-js .vjs-load-progress {
+    background-color: #ffffff80 !important;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.video-js .control-spacer {
+    display: flex;
+    flex: 1 1 auto;
+}
+
+.video-js .vjs-volume-level::before {
+    top: 0 !important;
+}
+
+.video-js .vjs-big-play-button {
+    opacity: 0 !important;
+}

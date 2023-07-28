@@ -72,6 +72,10 @@ type SubChapter = {
     type?: 'video' | 'exercise';
     exercise_id?: string;
     packet_id?: string;
+    next_subchapter?: {
+        chapter_id: string;
+        id: string;
+    };
 };
 
 type Chapter = {

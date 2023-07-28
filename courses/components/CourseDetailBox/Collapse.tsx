@@ -2,7 +2,6 @@ import Pen from 'commons/components/elements/Icons/Pen';
 import Skeleton from 'commons/components/elements/Skeleton';
 import Modal from 'commons/components/modules/Modal';
 import { useGetSubchapterQuery } from 'courses/redux/api/courseApi';
-import moment from 'moment';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { FaPlay } from 'react-icons/fa';
@@ -68,6 +67,11 @@ const VideoItem = ({
         ?.reverse()
         ?.reduce((prev, curr, i) => +prev + +curr * +Math.pow(60, i), 0);
 
+    const totalDurationSecond = (totalDuration as number) % 60;
+    const totalDurationMinute = Math.floor((totalDuration as number) / 60);
+    const lastDurationSecond = (totalLastDuration as number) % 60;
+    const lastDurationMinute = Math.floor((totalLastDuration as number) / 60);
+
     return (
         <div
             key={value.id}
@@ -128,13 +132,14 @@ const VideoItem = ({
                         {sub === value.id && (
                             <>
                                 <span className="inline-block">
-                                    {value?.last_duration
-                                        ? moment
-                                              .utc(
-                                                  (totalLastDuration as number) *
-                                                      1000
-                                              )
-                                              .format('mm:ss')
+                                    {value.last_duration
+                                        ? `${`${lastDurationMinute}`.padStart(
+                                              2,
+                                              '0'
+                                          )}:${`${lastDurationSecond}`.padStart(
+                                              2,
+                                              '0'
+                                          )}`
                                         : '00:00'}
                                 </span>
                                 <span className="inline-block text-[#FFFFFF80]">
@@ -143,9 +148,15 @@ const VideoItem = ({
                             </>
                         )}
                         <span className="inline-block text-[#FFFFFF80]">
-                            {moment
-                                .utc((totalDuration as number) * 1000)
-                                .format('mm:ss')}
+                            {value.duration
+                                ? `${`${totalDurationMinute}`.padStart(
+                                      2,
+                                      '0'
+                                  )}:${`${totalDurationSecond}`.padStart(
+                                      2,
+                                      '0'
+                                  )}`
+                                : '00:00'}
                         </span>
                     </>
                 )}
