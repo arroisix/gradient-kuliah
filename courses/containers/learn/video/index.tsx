@@ -56,7 +56,7 @@ const VideoLearnContainer = (): JSX.Element => {
                                                   ?.mux_playback_id as string
                                           }${
                                               data?.video?.token
-                                                  ? `?token${data?.video?.token}`
+                                                  ? `?token=${data?.video?.token}`
                                                   : ''
                                           }`
                                         : (data?.video?.video_url as string)
