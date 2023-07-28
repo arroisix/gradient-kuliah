@@ -51,8 +51,14 @@ const VideoLearnContainer = (): JSX.Element => {
                                     isNotNullAndUndefined(
                                         data?.video?.mux_playback_id
                                     )
-                                        ? (data?.video
-                                              ?.mux_playback_id as string)
+                                        ? `${
+                                              data?.video
+                                                  ?.mux_playback_id as string
+                                          }${
+                                              data?.video?.token
+                                                  ? `?token${data?.video?.token}`
+                                                  : ''
+                                          }`
                                         : (data?.video?.video_url as string)
                                 }
                                 isMuxVideo={isNotNullAndUndefined(
