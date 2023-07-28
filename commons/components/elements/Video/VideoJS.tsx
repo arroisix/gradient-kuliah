@@ -234,6 +234,7 @@ const VideoJS = ({
                 controls
                 preload="auto"
                 width="100%"
+                autoPlay
             />
             {!isPlay && (
                 <>
