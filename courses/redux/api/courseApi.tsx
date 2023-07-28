@@ -17,7 +17,8 @@ export const courseApi = baseApi.injectEndpoints({
             {
                 query: ({ chapterId }) => ({
                     url: `${COURSE_BASE_URL}${chapterId}/subchapter/`
-                })
+                }),
+                providesTags: ['WATCH_PROGRESS']
             }
         ),
         getSearchCourseContent: builder.query<
