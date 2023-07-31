@@ -1351,3 +1351,10 @@ sticky-3.animate {
 .markdown-body-xs li {
     font-size: 12px;
 }
+
+.markdown-body-sm p,
+.markdown-body-sm ul,
+.markdown-body-sm ol,
+.markdown-body-sm li {
+    font-size: 14px;
+}
