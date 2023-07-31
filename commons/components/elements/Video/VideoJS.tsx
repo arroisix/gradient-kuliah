@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from 'react';
 // @ts-ignore
 import videojs from '@mux/videojs-kit';
 import { FaPlay } from 'react-icons/fa';
-import { useRouter } from 'next/router';
 
 // const buildSettingComponent = (element: HTMLDivElement): void => {
 //     element.innerHTML = '';
@@ -24,7 +23,6 @@ const VideoJS = ({
     ) => Promise<any>;
     next_subchapter_link?: string;
 }): JSX.Element => {
-    const router = useRouter();
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const [isRendered, setIsRendered] = useState(false);
     const [isPlay, setIsPlay] = useState(false);
@@ -43,7 +41,7 @@ const VideoJS = ({
     }
 
     function handleNextVideo(): void {
-        if (next_subchapter_link) router.push(next_subchapter_link);
+        if (next_subchapter_link) window.location.replace(next_subchapter_link);
     }
 
     async function handleTrackProgress(isFinished?: boolean): Promise<void> {

@@ -77,7 +77,7 @@ const VideoItem = ({
             key={value.id}
             className="flex justify-between px-3 py-[10px] cursor-pointer hover:bg-[#272727]"
             onClick={() =>
-                router.push(
+                window.location.replace(
                     `/kelas/${id}/belajar/video/${chapter_id}/${value.id}`
                 )
             }
