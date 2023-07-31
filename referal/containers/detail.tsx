@@ -32,7 +32,6 @@ const MyVoucher = (): JSX.Element => {
     const { width } = useWindowSize();
     const { width: voucherWidth, ref: voucherRef } =
         useElementSize<HTMLDivElement>();
-
     const { data, isLoading } = useGetVoucherQuery();
 
     return (
@@ -44,95 +43,117 @@ const MyVoucher = (): JSX.Element => {
                 </>
             )}
             {data && !isLoading && data?.vouchers?.length !== 0 ? (
-                data?.vouchers?.map(({ id, code, expired_at, label }) => (
-                    <div
-                        key={id}
-                        className="relative max-h-[170px] flex flex-col"
-                        style={{
-                            height: isMobileBreakpoints
-                                ? (width * 23) / 100
-                                : (width * 16) / 100
-                        }}
-                        ref={voucherRef}>
-                        <Image
-                            src={
-                                'https://assets.gradient.academy/assets/voucher-bg.png'
-                            }
-                            alt="voucher-bg"
-                            layout="fill"
-                            sizes="none"
-                            className="object-contain"
-                            loading="lazy"
-                        />
-                        <div className="flex flex-col gap-2 sm:gap-3 absolute top-[50%] left-4 md:left-8 translate-y-[-50%]">
-                            <span
-                                className="inline-block font-extrabold leading-none"
-                                style={{
-                                    fontSize: isMobileBreakpoints
-                                        ? (voucherWidth * 5) / 100
-                                        : (voucherWidth * 3.5) / 100
-                                }}>
-                                {label}
-                            </span>
-                            <div className="flex items-center gap-[6px]">
-                                <HiClock />
-                                <span
-                                    className="inline-block font-body leading-none"
-                                    style={{
-                                        fontSize: isMobileBreakpoints
-                                            ? (voucherWidth * 3.5) / 100
-                                            : (voucherWidth * 2) / 100
-                                    }}>
-                                    {`Valid till ${`${new Date(
-                                        expired_at
-                                    ).getDate()}`.padStart(2, '0')} ${
-                                        arrMonth[
-                                            new Date(expired_at).getMonth()
-                                        ]
-                                    } ${new Date(expired_at).getFullYear()}`}
-                                </span>
-                            </div>
-                        </div>
+                data?.vouchers?.map(({ id, code, expired_at, label }) => {
+                    const [showTooltips, setShowtooltips] = useState(false);
+
+                    function handleCopy(): void {
+                        navigator.clipboard.writeText(code);
+                        setShowtooltips(true);
+                        setTimeout(() => {
+                            setShowtooltips(false);
+                        }, 1000);
+                    }
+                    return (
                         <div
-                            className="flex flex-col absolute top-[50%] translate-y-[-50%]"
+                            key={id}
+                            className="relative max-h-[170px] flex flex-col"
                             style={{
-                                left: (voucherWidth * 66) / 100,
-                                gap: (voucherWidth * 3.5) / 100
-                            }}>
-                            <div
-                                className="flex flex-col"
-                                style={{ gap: (voucherWidth * 2) / 100 }}>
+                                height: isMobileBreakpoints
+                                    ? (width * 23) / 100
+                                    : (width * 16) / 100
+                            }}
+                            ref={voucherRef}>
+                            <Image
+                                src={
+                                    'https://assets.gradient.academy/assets/voucher-bg.png'
+                                }
+                                alt="voucher-bg"
+                                layout="fill"
+                                sizes="none"
+                                className="object-contain"
+                                loading="lazy"
+                            />
+                            <div className="flex flex-col gap-2 sm:gap-3 absolute top-[50%] left-4 md:left-8 translate-y-[-50%]">
                                 <span
-                                    className="inline-block font-body font-bold text-[#FFFFFF80] leading-none"
+                                    className="inline-block font-extrabold leading-none"
                                     style={{
                                         fontSize: isMobileBreakpoints
-                                            ? (voucherWidth * 3.5) / 100
-                                            : (voucherWidth * 3) / 100
+                                            ? (voucherWidth * 5) / 100
+                                            : (voucherWidth * 3.5) / 100
                                     }}>
-                                    Kode Voucher
+                                    {label}
                                 </span>
-                                <span
-                                    className="inline-block font-body font-bold leading-none"
-                                    style={{
-                                        fontSize: isMobileBreakpoints
-                                            ? (voucherWidth * 3.5) / 100
-                                            : (voucherWidth * 3) / 100
-                                    }}>
-                                    {code}
-                                </span>
+                                <div className="flex items-center gap-[6px]">
+                                    <HiClock />
+                                    <span
+                                        className="inline-block font-body leading-none"
+                                        style={{
+                                            fontSize: isMobileBreakpoints
+                                                ? (voucherWidth * 3.5) / 100
+                                                : (voucherWidth * 2) / 100
+                                        }}>
+                                        {`Valid till ${`${new Date(
+                                            expired_at
+                                        ).getDate()}`.padStart(2, '0')} ${
+                                            arrMonth[
+                                                new Date(expired_at).getMonth()
+                                            ]
+                                        } ${new Date(
+                                            expired_at
+                                        ).getFullYear()}`}
+                                    </span>
+                                </div>
                             </div>
-                            <button
-                                className="w-max bg-white text-black leading-none font-bold px-3 py-1 md:px-6 md:py-2 rounded-[70px]"
+                            <div
+                                className="flex flex-col absolute top-[50%] translate-y-[-50%]"
                                 style={{
-                                    fontSize: isMobileBreakpoints
-                                        ? (voucherWidth * 2.5) / 100
-                                        : (voucherWidth * 1.6) / 100
+                                    left: (voucherWidth * 66) / 100,
+                                    gap: (voucherWidth * 3.5) / 100
                                 }}>
-                                Salin Kode
-                            </button>
+                                <div
+                                    className="flex flex-col"
+                                    style={{ gap: (voucherWidth * 2) / 100 }}>
+                                    <span
+                                        className="inline-block font-body font-bold text-[#FFFFFF80] leading-none"
+                                        style={{
+                                            fontSize: isMobileBreakpoints
+                                                ? (voucherWidth * 3.5) / 100
+                                                : (voucherWidth * 3) / 100
+                                        }}>
+                                        Kode Voucher
+                                    </span>
+                                    <span
+                                        className="inline-block font-body font-bold leading-none"
+                                        style={{
+                                            fontSize: isMobileBreakpoints
+                                                ? (voucherWidth * 3.5) / 100
+                                                : (voucherWidth * 3) / 100
+                                        }}>
+                                        {code}
+                                    </span>
+                                </div>
+                                <button
+                                    className="relative w-max bg-white text-black leading-none font-bold px-3 py-1 md:px-6 md:py-2 rounded-[70px]"
+                                    style={{
+                                        fontSize: isMobileBreakpoints
+                                            ? (voucherWidth * 2.5) / 100
+                                            : (voucherWidth * 1.6) / 100
+                                    }}
+                                    onClick={handleCopy}>
+                                    <>
+                                        Salin Kode
+                                        <div
+                                            className={`${
+                                                !showTooltips && 'hidden'
+                                            } absolute top-[-35px] left-[50%] translate-x-[-50%] px-3 py-1 bg-[#212121] rounded-[2px] font-body font-normal text-white text-sm`}>
+                                            Tersalin
+                                        </div>
+                                    </>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                ))
+                    );
+                })
             ) : (
                 <div className="flex flex-col gap-6 pt-[80px]">
                     <div className="relative h-[200px] md:h-[250px]">

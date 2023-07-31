@@ -3,6 +3,7 @@ import Coin from 'commons/components/elements/Icons/Coin';
 import Ticket from 'commons/components/elements/Icons/Ticket';
 import Skeleton from 'commons/components/elements/Skeleton';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { FaUserPlus } from 'react-icons/fa';
 import DisclosureTutorial from 'referal/components/DisclosureTutorial';
 import Menu from 'referal/components/Menu';
@@ -10,8 +11,17 @@ import { useGetReferralQuery } from 'referal/redux/referalApi';
 
 const ReferalContainer = (): JSX.Element => {
     const router = useRouter();
+    const [showTooltips, setShowtooltips] = useState(false);
 
     const { data, isLoading } = useGetReferralQuery();
+
+    function handleCopy(): void {
+        navigator.clipboard.writeText(data?.referral_code ?? '');
+        setShowtooltips(true);
+        setTimeout(() => {
+            setShowtooltips(false);
+        }, 1000);
+    }
 
     return (
         <section className="flex flex-col gap-6 w-full md:w-[70%] max-w-[725px] mx-auto pt-[96px]">
@@ -46,8 +56,17 @@ const ReferalContainer = (): JSX.Element => {
                     <div className="flex gap-2">
                         <Button
                             variant="custom"
-                            className="w-[80px] md:w-[105px] !p-0 !py-[7.5px] font-bold text-xs bg-[#272727]">
-                            Salin
+                            className="relative w-[80px] md:w-[105px] !p-0 !py-[7.5px] font-bold text-xs bg-[#272727]"
+                            onClick={handleCopy}>
+                            <>
+                                Salin
+                                <div
+                                    className={`${
+                                        !showTooltips && 'hidden'
+                                    } absolute top-[-35px] left-[50%] translate-x-[-50%] px-3 py-1 bg-[#212121] rounded-[2px] font-body font-normal text-sm`}>
+                                    Tersalin
+                                </div>
+                            </>
                         </Button>
                         <Button
                             variant="primary"
