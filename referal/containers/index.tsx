@@ -23,6 +23,14 @@ const ReferalContainer = (): JSX.Element => {
         }, 1000);
     }
 
+    function handleShare(): void {
+        navigator.clipboard.writeText(
+            `masukkan ${
+                data?.referral_code ?? 'kode mu'
+            } saat kamu mau berlangganan di Gradient`
+        );
+    }
+
     return (
         <section className="flex flex-col gap-6 w-full md:w-[70%] max-w-[725px] mx-auto pt-[96px]">
             <h2 className="font-extrabold text-center text-base md:text-2xl">
