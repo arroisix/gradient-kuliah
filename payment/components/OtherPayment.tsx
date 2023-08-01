@@ -1,8 +1,11 @@
 import Button from 'commons/components/elements/Button';
+import { addZeroBefore } from 'courses/utils';
 import { AiFillBank } from 'react-icons/ai';
 import { FaInstagram, FaWhatsapp } from 'react-icons/fa';
 
 const OtherPaymentBox = (): JSX.Element => {
+    const currentDate = new Date();
+
     return (
         <div className="rounded-lg bg-neutral-900 p-8 w-full mt-4 mb-16">
             <div className="mb-4 flex items-center">
@@ -17,7 +20,15 @@ const OtherPaymentBox = (): JSX.Element => {
                 <Button
                     variant="primary"
                     className="bg-[#0F460F] w-full md:w-fit"
-                    href="https://wa.me/message/R7WKMDMQUUIXH1">
+                    onClick={() =>
+                        window.open(
+                            `https://api.whatsapp.com/send?phone=6285173430127&text=${encodeURIComponent(
+                                `Halo, Saya tertarik untuk berlangganan\n\n[ID:${currentDate.getDate()}${addZeroBefore(
+                                    currentDate.getMonth() + 1
+                                )}${currentDate.getFullYear()}]`
+                            )}`
+                        )
+                    }>
                     <span className="text-base font-bold flex items-center justify-center">
                         <FaWhatsapp className="mr-2 text-xl" />
                         Gabung Gradient
@@ -26,7 +37,9 @@ const OtherPaymentBox = (): JSX.Element => {
                 <Button
                     variant="primary"
                     className="w-full md:w-fit"
-                    href="https://www.instagram.com/gradient_idn/">
+                    onClick={() =>
+                        window.open('https://www.instagram.com/gradient_idn/')
+                    }>
                     <span className="flex items-center justify-center">
                         <FaInstagram className="mr-2" /> Gabung Gradient
                     </span>
