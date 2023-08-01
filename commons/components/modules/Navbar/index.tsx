@@ -303,19 +303,21 @@ const Navbar = ({
                                                 </div>
                                             </div>
                                         </Link>
-                                        <Link href={'/referal'}>
-                                            <div
-                                                className={`flex ${pickedColorScheme.color} hover:bg-[#1D1D1D] px-2 py-3 rounded-sm font-normal w-full items-center`}>
-                                                <div>
-                                                    <HiOutlineUsers className="text-xl" />
+                                        {is_subscribed && (
+                                            <Link href={'/referal'}>
+                                                <div
+                                                    className={`flex ${pickedColorScheme.color} hover:bg-[#1D1D1D] px-2 py-3 rounded-sm font-normal w-full items-center`}>
+                                                    <div>
+                                                        <HiOutlineUsers className="text-xl" />
+                                                    </div>
+                                                    <div className="w-full ml-4">
+                                                        <p className="text-base">
+                                                            Referal
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                                <div className="w-full ml-4">
-                                                    <p className="text-base">
-                                                        Referal
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </Link>
+                                            </Link>
+                                        )}
                                         <div
                                             className="flex items-center w-full font-normal text-accent-orange hover:bg-[#1D1D1D] px-2 py-3 rounded-sm"
                                             onClick={() =>
