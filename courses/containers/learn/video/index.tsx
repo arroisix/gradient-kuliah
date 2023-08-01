@@ -47,6 +47,7 @@ const VideoLearnContainer = (): JSX.Element => {
                     {!isLoading && !isLoadingSubscription && (
                         <div>
                             <VideoJS
+                                key={data?.video?.video_url}
                                 src={
                                     isNotNullAndUndefined(
                                         data?.video?.mux_playback_id
