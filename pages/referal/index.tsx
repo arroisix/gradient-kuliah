@@ -1,4 +1,5 @@
 import LearnLayout from 'commons/learnLayout';
+import withAuth from 'commons/withAuth';
 import ReferalContainer from 'referal/containers';
 
 const Referral = (): JSX.Element => {
@@ -9,4 +10,4 @@ const Referral = (): JSX.Element => {
     );
 };
 
-export default Referral;
+export default withAuth(Referral);
