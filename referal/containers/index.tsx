@@ -2,6 +2,7 @@ import Button from 'commons/components/elements/Button';
 import Coin from 'commons/components/elements/Icons/Coin';
 import Ticket from 'commons/components/elements/Icons/Ticket';
 import Skeleton from 'commons/components/elements/Skeleton';
+import { formatCurrency } from 'commons/utils';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { FaUserPlus } from 'react-icons/fa';
@@ -43,9 +44,11 @@ const ReferalContainer = (): JSX.Element => {
                         Ajak Teman ke Gradient. Dapat Voucher Cashback!
                     </h3>
                     <p className="font-body text-center text-xs md:text-sm">
-                        Dapatkan voucher cashback senilai Rp25,000 untuk setiap
+                        {`Dapatkan voucher cashback senilai ${formatCurrency(
+                            data?.config.voucher_cashback_amount ?? ''
+                        )} untuk setiap
                         teman yang mendaftar dan mulai kelas pertamanya di
-                        Gradient menggunakan kode referal kamu.[API]
+                        Gradient menggunakan kode referal kamu.`}
                     </p>
                 </article>
             </div>
@@ -78,7 +81,8 @@ const ReferalContainer = (): JSX.Element => {
                         </Button>
                         <Button
                             variant="primary"
-                            className="w-[80px] md:w-[105px] !p-0 !py-[7.5px] font-bold text-xs">
+                            className="w-[80px] md:w-[105px] !p-0 !py-[7.5px] font-bold text-xs"
+                            onClick={handleShare}>
                             Bagikan
                         </Button>
                     </div>
