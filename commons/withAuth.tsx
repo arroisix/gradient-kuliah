@@ -50,8 +50,8 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
                 }
 
                 if (
-                    ['/langganan', '/profil', '/transaksi'].some((value) =>
-                        pathname.includes(value)
+                    ['/langganan', '/profil', '/transaksi', '/pembayaran'].some(
+                        (value) => pathname.includes(value)
                     ) &&
                     !is_subscribed
                 ) {
