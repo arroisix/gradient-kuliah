@@ -11,7 +11,7 @@ export const referalApi = baseApi.injectEndpoints({
             query: () => ({ url: `${REFERAL_BASE_URL}voucher/` })
         }),
         getReferee: builder.query<GetRefereeResponse, void>({
-            query: () => ({ url: `${REFERAL_BASE_URL}referee/` })
+            query: () => ({ url: `${REFERAL_BASE_URL}referees/` })
         }),
         validatePromo: builder.mutation<
             ValidatePromoResponse,
