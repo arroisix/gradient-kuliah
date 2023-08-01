@@ -58,12 +58,16 @@ type Transaction = {
     deadline: string | Date;
     payment_method: PaymentMethod;
     subscriber: Subscription;
+    payment_amount: number;
+    discount_amount: number;
+    promo_code: string;
 };
 
 interface CheckoutInputData {
     packet_id: string;
     payment_method: PaymentMethod;
     phone_number?: string;
+    promo_code?: string;
 }
 
 interface OneCourseManyPacketQuery {
