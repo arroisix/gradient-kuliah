@@ -26,6 +26,8 @@ import Avatar from 'react-avatar';
 import Image from 'next/image';
 import AuthContext from 'authentication/contexts/AuthProvider';
 import { HiOutlineUsers } from 'react-icons/hi';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { useGetConfigQuery } from 'commons/redux/api/commonApi';
 
 const Navbar = ({
     paymentPage,
@@ -43,6 +45,7 @@ const Navbar = ({
 }): JSX.Element => {
     const { isMobileBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const { is_subscribed } = useCourseSubscription();
     const { profile } = useContext(AuthContext);
     const user = useSelector(getCurrentUser);
     const [isHovered, setHovered] = useState(false);
@@ -62,6 +65,7 @@ const Navbar = ({
         const position = window.pageYOffset;
         setScrollPosition(position);
     };
+    const { data: configData } = useGetConfigQuery();
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll, { passive: true });
@@ -174,16 +178,19 @@ const Navbar = ({
                                 }`}>
                                 Home
                             </Button>
-                            <Button
-                                href="/komunitas"
-                                variant="custom"
-                                className={`!p-0 font-body font-normal text-xs text-neutral-400 ${
-                                    lightMode
-                                        ? 'hover:text-black'
-                                        : 'hover:text-white'
-                                }`}>
-                                Komunitas
-                            </Button>
+                            {configData?.configs
+                                .is_community_config_enabled && (
+                                <Button
+                                    href="/komunitas"
+                                    variant="custom"
+                                    className={`!p-0 font-body font-normal text-xs text-neutral-400 ${
+                                        lightMode
+                                            ? 'hover:text-black'
+                                            : 'hover:text-white'
+                                    }`}>
+                                    Komunitas
+                                </Button>
+                            )}
                             <Button
                                 href="/kelas"
                                 variant="custom"
