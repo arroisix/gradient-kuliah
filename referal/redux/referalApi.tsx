@@ -7,11 +7,36 @@ export const referalApi = baseApi.injectEndpoints({
         getReferral: builder.query<GetReferralResponse, void>({
             query: () => ({ url: `${REFERAL_BASE_URL}referral/` })
         }),
-        getVoucher: builder.query<GetVoucherResponse, void>({
-            query: () => ({ url: `${REFERAL_BASE_URL}voucher/` })
+        getVoucher: builder.query<GetVoucherResponse, BaseListQueryParams>({
+            query: (params) => ({ url: `${REFERAL_BASE_URL}voucher/`, params }),
+            serializeQueryArgs: ({ endpointName }) => {
+                return endpointName;
+            },
+            merge: (currentCache, newItems) => {
+                currentCache.vouchers.push(...newItems.vouchers);
+                currentCache.next_page = newItems.next_page;
+                currentCache.previous_page = newItems.previous_page;
+            },
+            forceRefetch({ currentArg, previousArg }) {
+                return currentArg !== previousArg;
+            }
         }),
-        getReferee: builder.query<GetRefereeResponse, void>({
-            query: () => ({ url: `${REFERAL_BASE_URL}referees/` })
+        getReferee: builder.query<GetRefereeResponse, BaseListQueryParams>({
+            query: (params) => ({
+                url: `${REFERAL_BASE_URL}referees/`,
+                params
+            }),
+            serializeQueryArgs: ({ endpointName }) => {
+                return endpointName;
+            },
+            merge: (currentCache, newItems) => {
+                currentCache.referees.push(...newItems.referees);
+                currentCache.next_page = newItems.next_page;
+                currentCache.previous_page = newItems.previous_page;
+            },
+            forceRefetch({ currentArg, previousArg }) {
+                return currentArg !== previousArg;
+            }
         }),
         validatePromo: builder.mutation<
             ValidatePromoResponse,
