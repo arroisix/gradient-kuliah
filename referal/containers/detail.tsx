@@ -298,7 +298,7 @@ const ListReferee = (): JSX.Element => {
                         />
                     </div>
                     <span className="inline-block w-full font-extrabold text-center text-sm md:text-base">
-                        Belum ada voucher
+                        Belum ada teman terdaftar
                     </span>
                 </div>
             )}
