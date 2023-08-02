@@ -57,13 +57,12 @@ const MyVoucher = (): JSX.Element => {
 
     return (
         <div className="flex flex-col gap-[18px] md:gap-6">
-            {isLoading && (
+            {isLoading ? (
                 <>
                     <Skeleton className="h-[140px] !m-0" />
                     <Skeleton className="h-[140px] !m-0" />
                 </>
-            )}
-            {data && !isLoading && data?.vouchers?.length !== 0 ? (
+            ) : data && !isLoading && data?.vouchers?.length !== 0 ? (
                 <>
                     {data?.vouchers?.map(({ id, code, expired_at, label }) => (
                         <div
@@ -227,14 +226,13 @@ const ListReferee = (): JSX.Element => {
 
     return (
         <>
-            {isLoading && (
+            {isLoading ? (
                 <>
                     <Skeleton className="h-[40px] !m-0" />
                     <Skeleton className="h-[40px] !m-0" />
                     <Skeleton className="h-[40px] !m-0" />
                 </>
-            )}
-            {data && data?.referees?.length !== 0 ? (
+            ) : data && data?.referees?.length !== 0 ? (
                 <div className="flex flex-col gap-6 px-0 py-6 md:p-6 rounded-xl md:bg-[#121212]">
                     <>
                         {data?.referees?.map(
