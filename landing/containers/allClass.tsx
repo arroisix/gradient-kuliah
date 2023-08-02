@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useRef } from 'react';
 import { FaChevronRight } from 'react-icons/fa';
 
@@ -6,23 +7,39 @@ const LIST_CLASS = [
     {
         cover: 'https://assets.gradient.academy/assets/lp-probstat.jpg',
         title: 'Probabilitas & Statistika',
-        description: 'Mendeskripsikan dunia dengan data.'
+        description: 'Mendeskripsikan dunia dengan data.',
+        slug: 'probstat'
     },
     {
         cover: 'https://d2uqn6ndx4ow3t.cloudfront.net/lecturers/theo-profile.jpg',
         title: 'Kalkulus 1',
-        description: 'Matematika dari perubahan.'
+        description: 'Matematika dari perubahan.',
+        slug: 'kalkulus1'
     },
     {
         cover: 'https://assets.gradient.academy/assets/lp-ptsl.png',
         title: 'Pengantar Teknik Sipil & Lingkungan',
-        description: 'Ilmu membangun peradaban.'
+        description: 'Ilmu membangun peradaban.',
+        slug: 'ptsl'
     },
     {
         cover: 'https://storage.googleapis.com/gradient-asset-dev/courses/calculus2/assets/kalkulus2-thumbnail.png',
         title: 'Kalkulus 2',
-        description: 'Kalkulus di ruang berdimensi n.'
+        description: 'Kalkulus di ruang berdimensi n.',
+        slug: 'kalkulus2'
     }
+    // {
+    //     cover: 'https://storage.googleapis.com/gradient-asset/courses/physics/fisika-thumbnail.jpg',
+    //     title: 'Fisika Dasar 1',
+    //     description: 'COPY_WRITING_FISDAS',
+    //     slug: 'fisdas1'
+    // },
+    // {
+    //     cover: 'https://storage.googleapis.com/gradient-asset/courses/diffequation/assets/thumbnail_diffequation.jpg',
+    //     title: 'Persamaan Diferensial',
+    //     description: 'COPY_WRITING_PERSAMAAN_DIFF',
+    //     slug: 'persamaan-diferensial'
+    // }
 ];
 
 const AllClass = (): JSX.Element => {
@@ -55,15 +72,16 @@ const AllClass = (): JSX.Element => {
             <div className="relative group">
                 <div
                     ref={ref}
-                    className="w-full overflow-x-scroll snap-x body scroll-smooth px-[18px]">
+                    className="w-full overflow-x-scroll snap-x body scroll-smooth px-[18px] md:px-[32px]">
                     <div className="w-max mx-auto flex gap-[18px] md:gap-7">
                         {LIST_CLASS.map(
-                            ({ cover, title, description }, index) => (
+                            ({ cover, title, description, slug }, index) => (
                                 <ClassCard
                                     key={index}
                                     cover={cover}
                                     title={title}
                                     description={description}
+                                    slug={slug}
                                 />
                             )
                         )}
@@ -87,14 +105,21 @@ const AllClass = (): JSX.Element => {
 const ClassCard = ({
     cover,
     title,
-    description
+    description,
+    slug
 }: {
     cover: string;
     title: string;
     description: string;
+    slug: string;
 }): JSX.Element => {
+    const router = useRouter();
+
     return (
-        <div className="relative w-fit snap-center bg-[#5F2BCE33] rounded-3xl overflow-hidden">
+        <div
+            className="relative w-fit snap-center bg-[#5F2BCE33] rounded-3xl overflow-hidden cursor-pointer"
+            onClick={() => router.push(`/kelas/${slug}`)}
+            aria-hidden>
             <div className="relative w-[208px] h-[142px] md:h-[225px] md:w-[330px]">
                 <Image
                     src={cover}

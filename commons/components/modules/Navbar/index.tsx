@@ -219,15 +219,28 @@ const Navbar = ({
                             )}
                             {isAuthenticated ? (
                                 <nav
-                                    className={`ml-12 cursor-pointer hover:text-accent-blue relative ${
-                                        router.pathname === '/dashboard' &&
-                                        'text-accent-blue'
-                                    } ${
-                                        isProfileHovered && 'text-accent-blue'
-                                    }`}
-                                    onMouseEnter={onMouseEnterProfile}
-                                    onMouseLeave={onMouseLeaveProfile}>
-                                    <div className="flex items-center gap-2">
+                                    className={`ml-12 flex gap-6 cursor-pointer relative`}>
+                                    {router.pathname === '/' && (
+                                        <Link href="/kelas">
+                                            <nav
+                                                className="ml-12 cursor-pointer hover:text-accent-blue"
+                                                onMouseEnter={
+                                                    onMouseEnterOther
+                                                }>
+                                                Kelas
+                                            </nav>
+                                        </Link>
+                                    )}
+                                    <div
+                                        className={`flex items-center gap-2 hover:text-accent-blue ${
+                                            router.pathname === '/dashboard' &&
+                                            'text-accent-blue'
+                                        } ${
+                                            isProfileHovered &&
+                                            'text-accent-blue'
+                                        }`}
+                                        onMouseEnter={onMouseEnterProfile}
+                                        onMouseLeave={onMouseLeaveProfile}>
                                         {!profile ? (
                                             <div className="w-[23px] h-[23px] bg-neutral-600 animate-pulse rounded-full"></div>
                                         ) : !!profile.photo_profile ? (
@@ -333,7 +346,18 @@ const Navbar = ({
                                     </Link>
                                 </>
                             ) : (
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-4">
+                                    {router.pathname === '/' && (
+                                        <Link href="/kelas">
+                                            <nav
+                                                className="font-bold text-sm ml-12 cursor-pointer hover:text-accent-blue"
+                                                onMouseEnter={
+                                                    onMouseEnterOther
+                                                }>
+                                                Kelas
+                                            </nav>
+                                        </Link>
+                                    )}
                                     <button
                                         className="flex items-center text-base font-bold"
                                         onClick={() =>
