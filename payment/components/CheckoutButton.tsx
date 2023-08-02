@@ -30,7 +30,7 @@ const CheckoutButton = ({
                 inputData: {
                     packet_id: packetId,
                     payment_method: paymentMethod,
-                    promo_code: promoCode
+                    promo_code: promoCode !== '' ? promoCode : null
                 },
                 subscriptionId: subscriptionId as string
             })) as unknown as SingleResponseData<Transaction>;
@@ -51,7 +51,7 @@ const CheckoutButton = ({
             const data = (await checkout({
                 packet_id: packetId,
                 payment_method: paymentMethod,
-                promo_code: promoCode
+                promo_code: promoCode !== '' ? promoCode : null
             })) as unknown as SingleResponseData<Transaction>;
 
             if (!!data?.data) {
