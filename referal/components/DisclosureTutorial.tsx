@@ -31,11 +31,11 @@ const DisclosureTutorial = ({ content }: { content: string }): JSX.Element => {
             </div>
             <div className={`p-4 ${isOpen ? '' : 'hidden'}`}>
                 <ReactMarkdown
-                    className="markdown-body-sm font-body text-neutral-400"
+                    className="markdown-body-sm markdown-pre-code font-body text-neutral-400"
                     remarkPlugins={[remarkMath]}
                     rehypePlugins={[rehypeKatex]}
                     linkTarget={'_blank'}>
-                    {content?.replaceAll('\n', '\n\n')}
+                    {content}
                 </ReactMarkdown>
             </div>
         </div>
