@@ -4,24 +4,20 @@ import Ticket from 'commons/components/elements/Icons/Ticket';
 import Skeleton from 'commons/components/elements/Skeleton';
 import { formatCurrency } from 'commons/utils';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 import { FaUserPlus } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 import DisclosureTutorial from 'referal/components/DisclosureTutorial';
 import Menu from 'referal/components/Menu';
 import { useGetReferralQuery } from 'referal/redux/referalApi';
 
 const ReferalContainer = (): JSX.Element => {
     const router = useRouter();
-    const [showTooltips, setShowtooltips] = useState(false);
 
     const { data, isLoading } = useGetReferralQuery();
 
     function handleCopy(): void {
         navigator.clipboard.writeText(data?.referral_code ?? '');
-        setShowtooltips(true);
-        setTimeout(() => {
-            setShowtooltips(false);
-        }, 1000);
+        toast.info('Berhasil tersalin ke clipboard');
     }
 
     function handleShare(): void {
@@ -30,6 +26,7 @@ const ReferalContainer = (): JSX.Element => {
                 data?.referral_code ?? 'kode mu'
             } saat kamu mau berlangganan di Gradient`
         );
+        toast.info('Berhasil tersalin ke clipboard');
     }
 
     return (
@@ -69,15 +66,7 @@ const ReferalContainer = (): JSX.Element => {
                             variant="custom"
                             className="relative w-[80px] md:w-[105px] !p-0 !py-[7.5px] font-bold text-xs bg-[#272727]"
                             onClick={handleCopy}>
-                            <>
-                                Salin
-                                <div
-                                    className={`${
-                                        !showTooltips && 'hidden'
-                                    } absolute top-[-35px] left-[50%] translate-x-[-50%] px-3 py-1 bg-[#212121] rounded-[2px] font-body font-normal text-sm`}>
-                                    Tersalin
-                                </div>
-                            </>
+                            Salin
                         </Button>
                         <Button
                             variant="primary"
