@@ -1,4 +1,5 @@
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useGetCommunityNotificationQuery } from 'komunitas/redux/api/komunitasApi';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -20,6 +21,7 @@ const MobileSidebar = ({
 }): JSX.Element => {
     const route = useRouter();
     const { pathname } = route;
+    const { is_subscribed } = useCourseSubscription();
 
     const { data: configData } = useGetConfigQuery();
     const { data: communityNotification } = useGetCommunityNotificationQuery();
@@ -59,31 +61,34 @@ const MobileSidebar = ({
                         Home
                     </span>
                 </Link>
-                {configData?.configs.is_community_config_enabled && (
-                    <span
-                        className={`flex items-center gap-4 cursor-pointer ${
-                            pathname === '/komunitas'
-                                ? 'text-[#CCCCCC]'
-                                : 'text-[#666666]'
-                        }  hover:text-[#999999]`}
-                        onClick={() => {
-                            posthog.capture('Visit Community Explore Page');
-                            route.push('/komunitas');
-                        }}
-                        aria-hidden>
-                        <RiQuestionnaireLine size={20} />
-                        Komunitas
-                        {communityNotification?.unseen_comment_counts ? (
-                            <span className="inline-block leading-none h-min py-[2px] pl-[3px] pr-[4px] font-body text-center text-white text-[10px] bg-[#B92011] rounded-full">
-                                {communityNotification?.unseen_comment_counts}
-                            </span>
-                        ) : (
-                            <span className="inline-block leading-none h-min py-[2px] pl-[3px] pr-[4px] font-body text-center text-white text-[10px] bg-[#B92011] rounded-full animate-pulse">
-                                new
-                            </span>
-                        )}
-                    </span>
-                )}
+                {configData?.configs.is_community_config_enabled &&
+                    is_subscribed && (
+                        <span
+                            className={`flex items-center gap-4 cursor-pointer ${
+                                pathname === '/komunitas'
+                                    ? 'text-[#CCCCCC]'
+                                    : 'text-[#666666]'
+                            }  hover:text-[#999999]`}
+                            onClick={() => {
+                                posthog.capture('Visit Community Explore Page');
+                                route.push('/komunitas');
+                            }}
+                            aria-hidden>
+                            <RiQuestionnaireLine size={20} />
+                            Komunitas
+                            {communityNotification?.unseen_comment_counts ? (
+                                <span className="inline-block leading-none h-min py-[2px] pl-[3px] pr-[4px] font-body text-center text-white text-[10px] bg-[#B92011] rounded-full">
+                                    {
+                                        communityNotification?.unseen_comment_counts
+                                    }
+                                </span>
+                            ) : (
+                                <span className="inline-block leading-none h-min py-[2px] pl-[3px] pr-[4px] font-body text-center text-white text-[10px] bg-[#B92011] rounded-full animate-pulse">
+                                    new
+                                </span>
+                            )}
+                        </span>
+                    )}
                 <Link href={'/kelas'}>
                     <span
                         className={`flex gap-4 cursor-pointer ${
