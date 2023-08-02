@@ -3,11 +3,13 @@ import Spinner from 'commons/components/elements/Spinner';
 import useOnScreen from 'commons/hooks/useOnScreen';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import useWindowSize from 'commons/hooks/useWindowSize';
+import moment from 'moment';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import Avatar from 'react-avatar';
 import { HiClock } from 'react-icons/hi';
+import { toast } from 'react-toastify';
 import {
     useGetRefereeQuery,
     useGetVoucherQuery
@@ -38,6 +40,7 @@ const MyVoucher = (): JSX.Element => {
 
     function handleCopy(code: string): void {
         navigator.clipboard.writeText(code);
+        toast.info('Berhasil tersalin ke clipboard');
     }
 
     useEffect(() => {
@@ -85,12 +88,11 @@ const MyVoucher = (): JSX.Element => {
                                 <span
                                     className="inline-block font-extrabold leading-none"
                                     style={{
-                                        // fontSize: isMobileBreakpoints
-                                        //     ? (voucherWidth * 5) / 100
-                                        //     : (voucherWidth * 3.5) / 100
                                         fontSize: isMobileBreakpoints
-                                            ? (width * 50) / 100
-                                            : (width * 2) / 100
+                                            ? (width * 4) / 100
+                                            : width >= 1063
+                                            ? (1063 * 2.5) / 100
+                                            : (width * 2.5) / 100
                                     }}>
                                     {label}
                                 </span>
@@ -99,14 +101,11 @@ const MyVoucher = (): JSX.Element => {
                                     <span
                                         className="inline-block font-body leading-none"
                                         style={{
-                                            // fontSize: isMobileBreakpoints
-                                            //     ? (voucherWidth * 3.5) / 100
-                                            //     : (voucherWidth * 2) / 100
                                             fontSize: isMobileBreakpoints
-                                                ? (((width * 23) / 100) * 3.5) /
-                                                  100
-                                                : (((width * 16) / 100) * 2) /
-                                                  100
+                                                ? (width * 2.5) / 100
+                                                : width >= 1063
+                                                ? (1063 * 1) / 100
+                                                : (width * 1) / 100
                                         }}>
                                         {`Valid till ${`${new Date(
                                             expired_at
@@ -123,48 +122,45 @@ const MyVoucher = (): JSX.Element => {
                             <div
                                 className="flex flex-col absolute top-[50%] translate-y-[-50%]"
                                 style={{
-                                    // left: (voucherWidth * 66) / 100,
-                                    // gap: (voucherWidth * 3.5) / 100
                                     left: isMobileBreakpoints
-                                        ? (((width * 23) / 100) * 66) / 100
-                                        : (((width * 16) / 100) * 66) / 100,
+                                        ? (width * 59) / 100
+                                        : width >= 1063
+                                        ? (1063 * 42) / 100
+                                        : (width * 42) / 100,
                                     gap: isMobileBreakpoints
-                                        ? (((width * 23) / 100) * 3.5) / 100
-                                        : (((width * 16) / 100) * 3.5) / 100
+                                        ? (width * 2) / 100
+                                        : width >= 1063
+                                        ? (1063 * 2) / 100
+                                        : (width * 2) / 100
                                 }}>
                                 <div
                                     className="flex flex-col"
                                     style={{
-                                        // gap: (voucherWidth * 2) / 100
                                         gap: isMobileBreakpoints
-                                            ? (((width * 23) / 100) * 2) / 100
-                                            : (((width * 16) / 100) * 2) / 100
+                                            ? (width * 1) / 100
+                                            : width >= 1063
+                                            ? (1063 * 1) / 100
+                                            : (width * 1) / 100
                                     }}>
                                     <span
                                         className="inline-block font-body font-bold text-[#FFFFFF80] leading-none"
                                         style={{
-                                            // fontSize: isMobileBreakpoints
-                                            //     ? (voucherWidth * 3.5) / 100
-                                            //     : (voucherWidth * 3) / 100
                                             fontSize: isMobileBreakpoints
-                                                ? (((width * 23) / 100) * 3.5) /
-                                                  100
-                                                : (((width * 16) / 100) * 3) /
-                                                  100
+                                                ? (width * 3) / 100
+                                                : width >= 1063
+                                                ? (1063 * 2) / 100
+                                                : (width * 2) / 100
                                         }}>
                                         Kode Voucher
                                     </span>
                                     <span
                                         className="inline-block font-body font-bold leading-none"
                                         style={{
-                                            // fontSize: isMobileBreakpoints
-                                            //     ? (voucherWidth * 3.5) / 100
-                                            //     : (voucherWidth * 3) / 100
                                             fontSize: isMobileBreakpoints
-                                                ? (((width * 23) / 100) * 3.5) /
-                                                  100
-                                                : (((width * 16) / 100) * 3) /
-                                                  100
+                                                ? (width * 3) / 100
+                                                : width >= 1063
+                                                ? (1063 * 2) / 100
+                                                : (width * 2) / 100
                                         }}>
                                         {code}
                                     </span>
@@ -172,15 +168,14 @@ const MyVoucher = (): JSX.Element => {
                                 <button
                                     className="relative w-max bg-white text-black leading-none font-bold px-3 py-1 md:px-6 md:py-2 rounded-[70px]"
                                     style={{
-                                        // fontSize: isMobileBreakpoints
-                                        //     ? (voucherWidth * 2.5) / 100
-                                        //     : (voucherWidth * 1.6) / 100
                                         fontSize: isMobileBreakpoints
-                                            ? (((width * 23) / 100) * 2.5) / 100
-                                            : (((width * 16) / 100) * 1.6) / 100
+                                            ? (width * 2) / 100
+                                            : width >= 1063
+                                            ? (1063 * 1.2) / 100
+                                            : (width * 1.2) / 100
                                     }}
                                     onClick={() => handleCopy(code)}>
-                                    <>Salin Kode</>
+                                    Salin Kode
                                 </button>
                             </div>
                         </div>
@@ -232,15 +227,15 @@ const ListReferee = (): JSX.Element => {
 
     return (
         <>
+            {isLoading && (
+                <>
+                    <Skeleton className="h-[40px] !m-0" />
+                    <Skeleton className="h-[40px] !m-0" />
+                    <Skeleton className="h-[40px] !m-0" />
+                </>
+            )}
             {data && data?.referees?.length !== 0 ? (
                 <div className="flex flex-col gap-6 px-0 py-6 md:p-6 rounded-xl md:bg-[#121212]">
-                    {isLoading && (
-                        <>
-                            <Skeleton className="h-[40px] !m-0" />
-                            <Skeleton className="h-[40px] !m-0" />
-                            <Skeleton className="h-[40px] !m-0" />
-                        </>
-                    )}
                     <>
                         {data?.referees?.map(
                             (
@@ -284,7 +279,9 @@ const ListReferee = (): JSX.Element => {
                                         </div>
                                     </div>
                                     <span className="inline-block font-body text-xs md:text-sm">
-                                        {referred_at}
+                                        {moment(referred_at)
+                                            .utc()
+                                            .format('DD MMM YYYY')}
                                     </span>
                                 </div>
                             )
