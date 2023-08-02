@@ -346,7 +346,18 @@ const Navbar = ({
                                     </Link>
                                 </>
                             ) : (
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-4">
+                                    {router.pathname === '/' && (
+                                        <Link href="/kelas">
+                                            <nav
+                                                className="font-bold text-sm ml-12 cursor-pointer hover:text-accent-blue"
+                                                onMouseEnter={
+                                                    onMouseEnterOther
+                                                }>
+                                                Kelas
+                                            </nav>
+                                        </Link>
+                                    )}
                                     <button
                                         className="flex items-center text-base font-bold"
                                         onClick={() =>
