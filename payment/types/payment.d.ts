@@ -67,7 +67,7 @@ interface CheckoutInputData {
     packet_id: string;
     payment_method: PaymentMethod;
     phone_number?: string;
-    promo_code?: string;
+    promo_code?: string | null;
 }
 
 interface OneCourseManyPacketQuery {
