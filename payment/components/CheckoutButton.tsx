@@ -14,7 +14,7 @@ const CheckoutButton = ({
     packetId: string;
     paymentMethod: PaymentMethod;
     isFree?: boolean;
-    promoCode: string;
+    promoCode?: string;
 }): JSX.Element => {
     const { checkout, freeCheckout, extendCheckout } = useCheckout();
     const { setModalCheckoutOpen } = usePayment();
