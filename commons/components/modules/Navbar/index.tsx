@@ -220,13 +220,17 @@ const Navbar = ({
                             {isAuthenticated ? (
                                 <nav
                                     className={`ml-12 flex gap-6 cursor-pointer relative`}>
-                                    <Link href="/kelas">
-                                        <nav
-                                            className="ml-12 cursor-pointer hover:text-accent-blue"
-                                            onMouseEnter={onMouseEnterOther}>
-                                            Kelas
-                                        </nav>
-                                    </Link>
+                                    {router.pathname === '/' && (
+                                        <Link href="/kelas">
+                                            <nav
+                                                className="ml-12 cursor-pointer hover:text-accent-blue"
+                                                onMouseEnter={
+                                                    onMouseEnterOther
+                                                }>
+                                                Kelas
+                                            </nav>
+                                        </Link>
+                                    )}
                                     <div
                                         className={`flex items-center gap-2 hover:text-accent-blue ${
                                             router.pathname === '/dashboard' &&
