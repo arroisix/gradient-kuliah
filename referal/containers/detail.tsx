@@ -322,7 +322,7 @@ const ReferalDetailContainer = (): JSX.Element => {
     }, [router]);
 
     return (
-        <section className="flex flex-col gap-6 w-full md:w-[70%] max-w-[725px] mx-auto pt-[96px] px-[18px]">
+        <section className="flex flex-col gap-6 w-full md:w-[70%] max-w-[725px] mx-auto pt-[96px] pb-5 px-[18px]">
             <div className="w-full flex">
                 <span
                     className={`inline-block w-full pb-[6px] font-bold text-center text-xs md:text-base border-b-2 cursor-pointer ${

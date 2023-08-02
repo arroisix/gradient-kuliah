@@ -33,7 +33,7 @@ const ReferalContainer = (): JSX.Element => {
     }
 
     return (
-        <section className="flex flex-col gap-6 w-full md:w-[70%] max-w-[725px] mx-auto pt-[96px]">
+        <section className="flex flex-col gap-6 w-full md:w-[70%] max-w-[725px] mx-auto pt-[96px] pb-5">
             <h2 className="font-extrabold text-center text-base md:text-2xl">
                 Kode Referral
             </h2>
