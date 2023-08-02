@@ -18,7 +18,7 @@ export const referalApi = baseApi.injectEndpoints({
                 currentCache.previous_page = newItems.previous_page;
             },
             forceRefetch({ currentArg, previousArg }) {
-                return currentArg !== previousArg;
+                return currentArg?.page !== previousArg?.page;
             }
         }),
         getReferee: builder.query<GetRefereeResponse, BaseListQueryParams>({
@@ -35,7 +35,7 @@ export const referalApi = baseApi.injectEndpoints({
                 currentCache.previous_page = newItems.previous_page;
             },
             forceRefetch({ currentArg, previousArg }) {
-                return currentArg !== previousArg;
+                return currentArg?.page !== previousArg?.page;
             }
         }),
         validatePromo: builder.mutation<
