@@ -1,6 +1,8 @@
+import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
+import useTransition from 'commons/hooks/useTransition';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { FaChevronRight } from 'react-icons/fa';
 
 const LIST_CLASS = [
@@ -43,7 +45,10 @@ const LIST_CLASS = [
 ];
 
 const AllClass = (): JSX.Element => {
+    const [isHover, setIsHover] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
+    const router = useRouter();
+    const loadingTransition = useTransition(router);
 
     function scrollRight(): void {
         const SCROLL_CONSTANT = 200;
@@ -59,6 +64,14 @@ const AllClass = (): JSX.Element => {
         }
     }
 
+    function handleMouseEnter(): void {
+        setIsHover(true);
+    }
+
+    function handleMouseLeave(): void {
+        setIsHover(false);
+    }
+
     return (
         <section className="flex flex-col gap-8 md:gap-10">
             <div className="text-center px-[18px]">
@@ -69,7 +82,10 @@ const AllClass = (): JSX.Element => {
                     Pilih mata kuliah yang kamu minati.
                 </span>
             </div>
-            <div className="relative group">
+            <div
+                className="relative"
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}>
                 <div
                     ref={ref}
                     className="w-full overflow-x-scroll snap-x body scroll-smooth px-[18px] md:px-[32px]">
@@ -87,17 +103,26 @@ const AllClass = (): JSX.Element => {
                         )}
                     </div>
                 </div>
-                <div className="absolute top-0 h-full justify-between w-full hidden group-hover:flex px-5">
-                    <button className="h-full z-[1]" onClick={scrollLeft}>
+                <div
+                    className={`absolute top-0 left-0 h-full px-5 ${
+                        isHover ? 'block' : 'hidden'
+                    }`}>
+                    <div className="w-[50px] h-full absolute top-0 left-0 bg-gradient-to-r from-black to-transparent" />
+                    <button className="h-full" onClick={scrollLeft}>
                         <FaChevronRight size={26} className="rotate-180" />
                     </button>
-                    <div className="w-[50px] h-full absolute left-0 bg-gradient-to-r from-black to-transparent"></div>
-                    <button className="h-full z-[1]" onClick={scrollRight}>
-                        <FaChevronRight size={26} />
+                </div>
+                <div
+                    className={`absolute top-0 right-0 h-full px-5 ${
+                        isHover ? 'block' : 'hidden'
+                    }`}>
+                    <div className="w-[50px] h-full absolute top-0 right-0 bg-gradient-to-l from-black to-transparent" />
+                    <button className="h-full" onClick={scrollRight}>
+                        <FaChevronRight size={26} className="rotate-0" />
                     </button>
-                    <div className="w-[50px] h-full absolute right-0 bg-gradient-to-l from-black to-transparent"></div>
                 </div>
             </div>
+            {loadingTransition && <LoadingBackdrop />}
         </section>
     );
 };
@@ -136,7 +161,7 @@ const ClassCard = ({
                     </span>
                     <FaChevronRight size={10} className="text-[#FFFFFF33]" />
                 </div>
-                <span className="inline-block font-medium text-[#FFFFFF80] text-[10px] md:text-base">
+                <span className="inline-block w-full font-medium text-[#FFFFFF80] text-[10px] md:text-base whitespace-nowrap text-ellipsis overflow-hidden">
                     {description}
                 </span>
             </div>
