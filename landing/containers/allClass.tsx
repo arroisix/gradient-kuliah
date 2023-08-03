@@ -7,28 +7,10 @@ import { FaChevronRight } from 'react-icons/fa';
 
 const LIST_CLASS = [
     {
-        cover: 'https://assets.gradient.academy/assets/lp-probstat.jpg',
-        title: 'Probabilitas & Statistika',
-        description: 'Mendeskripsikan dunia dengan data.',
-        slug: 'probstat'
-    },
-    {
         cover: 'https://d2uqn6ndx4ow3t.cloudfront.net/lecturers/theo-profile.jpg',
         title: 'Kalkulus 1',
         description: 'Matematika dari perubahan.',
         slug: 'kalkulus1'
-    },
-    {
-        cover: 'https://assets.gradient.academy/assets/lp-ptsl.png',
-        title: 'Pengantar Teknik Sipil & Lingkungan',
-        description: 'Ilmu membangun peradaban.',
-        slug: 'ptsl'
-    },
-    {
-        cover: 'https://storage.googleapis.com/gradient-asset-dev/courses/calculus2/assets/kalkulus2-thumbnail.png',
-        title: 'Kalkulus 2',
-        description: 'Kalkulus di ruang berdimensi n.',
-        slug: 'kalkulus2'
     },
     {
         cover: 'https://storage.googleapis.com/gradient-asset/courses/physics/fisika-thumbnail.jpg',
@@ -37,10 +19,28 @@ const LIST_CLASS = [
         slug: 'fisdas1'
     },
     {
+        cover: 'https://assets.gradient.academy/assets/lp-probstat.jpg',
+        title: 'Probabilitas & Statistika',
+        description: 'Mendeskripsikan dunia dengan data.',
+        slug: 'probstat'
+    },
+    {
+        cover: 'https://storage.googleapis.com/gradient-asset-dev/courses/calculus2/assets/kalkulus2-thumbnail.png',
+        title: 'Kalkulus 2',
+        description: 'Kalkulus di ruang berdimensi n.',
+        slug: 'kalkulus2'
+    },
+    {
         cover: 'https://storage.googleapis.com/gradient-asset/courses/diffequation/assets/thumbnail_diffequation.jpg',
         title: 'Persamaan Diferensial',
         description: 'Aplikasi matematika di dunia nyata.',
         slug: 'persamaan-diferensial'
+    },
+    {
+        cover: 'https://assets.gradient.academy/assets/lp-ptsl.png',
+        title: 'Pengantar Teknik Sipil & Lingkungan',
+        description: 'Ilmu membangun peradaban.',
+        slug: 'ptsl'
     }
 ];
 
