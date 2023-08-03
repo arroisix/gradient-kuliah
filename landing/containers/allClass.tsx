@@ -27,19 +27,19 @@ const LIST_CLASS = [
         title: 'Kalkulus 2',
         description: 'Kalkulus di ruang berdimensi n.',
         slug: 'kalkulus2'
+    },
+    {
+        cover: 'https://storage.googleapis.com/gradient-asset/courses/physics/fisika-thumbnail.jpg',
+        title: 'Fisika Dasar 1',
+        description: 'Mempelajari fenomena alam pada objek.',
+        slug: 'fisdas1'
+    },
+    {
+        cover: 'https://storage.googleapis.com/gradient-asset/courses/diffequation/assets/thumbnail_diffequation.jpg',
+        title: 'Persamaan Diferensial',
+        description: 'Aplikasi matematika di dunia nyata.',
+        slug: 'persamaan-diferensial'
     }
-    // {
-    //     cover: 'https://storage.googleapis.com/gradient-asset/courses/physics/fisika-thumbnail.jpg',
-    //     title: 'Fisika Dasar 1',
-    //     description: 'COPY_WRITING_FISDAS',
-    //     slug: 'fisdas1'
-    // },
-    // {
-    //     cover: 'https://storage.googleapis.com/gradient-asset/courses/diffequation/assets/thumbnail_diffequation.jpg',
-    //     title: 'Persamaan Diferensial',
-    //     description: 'COPY_WRITING_PERSAMAAN_DIFF',
-    //     slug: 'persamaan-diferensial'
-    // }
 ];
 
 const AllClass = (): JSX.Element => {
