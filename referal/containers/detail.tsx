@@ -40,7 +40,9 @@ const MyVoucher = (): JSX.Element => {
 
     function handleCopy(code: string): void {
         navigator.clipboard.writeText(code);
-        toast.info('Berhasil tersalin ke clipboard');
+        toast.info('Berhasil tersalin ke clipboard', {
+            theme: 'colored'
+        });
     }
 
     useEffect(() => {

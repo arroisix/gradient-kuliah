@@ -17,7 +17,9 @@ const ReferalContainer = (): JSX.Element => {
 
     function handleCopy(): void {
         navigator.clipboard.writeText(data?.referral_code ?? '');
-        toast.info('Berhasil tersalin ke clipboard');
+        toast.info('Berhasil tersalin ke clipboard', {
+            theme: 'colored'
+        });
     }
 
     function handleShare(): void {
@@ -26,7 +28,9 @@ const ReferalContainer = (): JSX.Element => {
                 data?.referral_code ?? 'kode mu'
             } saat kamu mau berlangganan di Gradient`
         );
-        toast.info('Berhasil tersalin ke clipboard');
+        toast.info('Berhasil tersalin ke clipboard', {
+            theme: 'colored'
+        });
     }
 
     return (
