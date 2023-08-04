@@ -191,8 +191,10 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
                     paymentMethod={paymentMethod}
                     promoCode={inputCode}
                     disabled={
-                        validateResult && inputCode !== ''
-                            ? !!!validateResult?.is_valid
+                        inputCode === ''
+                            ? false
+                            : validateResult || loadingValidate
+                            ? !!!validateResult?.is_valid || loadingValidate
                             : false
                     }
                 />
