@@ -32,6 +32,7 @@ const Pricing = ({
                         packet_name={packet_name}
                         price={parseInt(price)}
                         price_before_discount={parseInt(price_before_discount)}
+                        packetId={id}
                     />
                 )
             )}
@@ -53,13 +54,15 @@ const CardPrice = ({
     order,
     packet_name,
     price,
-    price_before_discount
+    price_before_discount,
+    packetId
 }: {
     benefits: Benefits;
     order: number;
     packet_name: string;
     price: number;
     price_before_discount: number;
+    packetId: string;
 }): JSX.Element => {
     const { checkCustomBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -68,9 +71,10 @@ const CardPrice = ({
 
     function handleClick(): void {
         if (!isAuthenticated) {
+            localStorage.setItem('packetId', packetId);
             router.push('/daftar');
         } else {
-            router.push('/mulai');
+            router.push(`/pembayaran?packetId=${packetId}`);
         }
     }
 
