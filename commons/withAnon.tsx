@@ -39,7 +39,15 @@ const withAnon = <P extends object>(
                             if (is_subscribed) {
                                 router.replace('/dashboard');
                             } else {
-                                router.replace('/mulai');
+                                const packetId =
+                                    localStorage.getItem('packetId');
+                                if (packetId) {
+                                    router.replace(
+                                        `/pembayaran?packetId=${packetId}`
+                                    );
+                                } else {
+                                    router.replace('/');
+                                }
                             }
                         }
                     } else if (router.pathname === '/') {
