@@ -190,6 +190,11 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
                     packetId={packet?.id as string}
                     paymentMethod={paymentMethod}
                     promoCode={inputCode}
+                    disabled={
+                        validateResult && inputCode !== ''
+                            ? !!!validateResult?.is_valid
+                            : false
+                    }
                 />
                 <span className="flex items-center text-xs mt-2">
                     <BsShieldFillCheck className="mr-2" />
