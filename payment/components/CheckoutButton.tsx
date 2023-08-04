@@ -3,17 +3,21 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import Button from 'commons/components/elements/Button';
 import useCheckout from '../hooks/useCheckout';
+import { usePayment } from 'payment/contexts/PaymentProvider';
 
 const CheckoutButton = ({
     packetId,
     paymentMethod,
-    isFree
+    isFree,
+    promoCode
 }: {
     packetId: string;
     paymentMethod: PaymentMethod;
     isFree?: boolean;
+    promoCode?: string;
 }): JSX.Element => {
     const { checkout, freeCheckout, extendCheckout } = useCheckout();
+    const { setModalCheckoutOpen } = usePayment();
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const { subscriptionId } = router.query;
@@ -25,12 +29,13 @@ const CheckoutButton = ({
             const data = (await extendCheckout({
                 inputData: {
                     packet_id: packetId,
-                    payment_method: paymentMethod
+                    payment_method: paymentMethod,
+                    promo_code: promoCode !== '' ? promoCode : null
                 },
                 subscriptionId: subscriptionId as string
             })) as unknown as SingleResponseData<Transaction>;
 
-            if (data) {
+            if (!!data?.data) {
                 const transaction = data.data;
 
                 toast.info(
@@ -45,10 +50,11 @@ const CheckoutButton = ({
         } else {
             const data = (await checkout({
                 packet_id: packetId,
-                payment_method: paymentMethod
+                payment_method: paymentMethod,
+                promo_code: promoCode !== '' ? promoCode : null
             })) as unknown as SingleResponseData<Transaction>;
 
-            if (data) {
+            if (!!data?.data) {
                 const transaction = data.data;
 
                 toast.info(
@@ -62,6 +68,7 @@ const CheckoutButton = ({
             }
         }
 
+        setModalCheckoutOpen(0);
         setLoading(false);
     };
 

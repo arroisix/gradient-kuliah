@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 const Success = (): JSX.Element => {
     const router = useRouter();
     useEffect(() => {
-        const timer1 = setTimeout(() => router.push('/'), 5000);
+        const timer1 = setTimeout(() => router.push('/dashboard'), 5000);
         return () => {
             clearTimeout(timer1);
         };
