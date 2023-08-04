@@ -9,12 +9,14 @@ const CheckoutButton = ({
     packetId,
     paymentMethod,
     isFree,
-    promoCode
+    promoCode,
+    disabled
 }: {
     packetId: string;
     paymentMethod: PaymentMethod;
     isFree?: boolean;
     promoCode?: string;
+    disabled?: boolean;
 }): JSX.Element => {
     const { checkout, freeCheckout, extendCheckout } = useCheckout();
     const { setModalCheckoutOpen } = usePayment();
@@ -93,7 +95,8 @@ const CheckoutButton = ({
         <Button
             variant="primary"
             onClick={isFree ? onClickFree : onClick}
-            className="w-full">
+            className="w-full"
+            disabled={disabled}>
             {loading ? 'Memproses Pembayaran...' : 'Proses Pembayaran'}
         </Button>
     );
