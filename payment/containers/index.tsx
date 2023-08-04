@@ -4,9 +4,14 @@ import OtherPaymentBox from 'payment/components/OtherPayment';
 import ModalCheckout from '../components/ModalCheckout';
 import VirtualAccountBox from '../components/VitualAccount';
 import { usePayment } from '../contexts/PaymentProvider';
+import { useEffect } from 'react';
 
 const SubscriptionContainer = (): JSX.Element => {
     const { isModalCheckoutOpen, setModalCheckoutOpen, packet } = usePayment();
+
+    useEffect(() => {
+        localStorage.removeItem('packetId');
+    }, []);
 
     return (
         <section className="min-h-screen pt-24 px-4 md:px-[7.5rem]">
