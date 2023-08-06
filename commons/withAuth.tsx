@@ -45,14 +45,23 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
                     isLastOnboardingStep === 'true' &&
                     !is_subscribed
                 ) {
-                    window.location.href = '/mulai';
+                    const packetId = localStorage.getItem('packetId');
+                    if (packetId) {
+                        window.location.href = `/pembayaran?packetId=${packetId}`;
+                    } else {
+                        window.location.href = '/';
+                    }
                     return;
                 }
 
                 if (
-                    ['/langganan', '/profil', '/transaksi'].some((value) =>
-                        pathname.includes(value)
-                    ) &&
+                    [
+                        '/langganan',
+                        '/profil',
+                        '/transaksi',
+                        '/pembayaran',
+                        '/checkout'
+                    ].some((value) => pathname.includes(value)) &&
                     !is_subscribed
                 ) {
                     return <WrappedComponent {...props} />;

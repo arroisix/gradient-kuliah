@@ -8,7 +8,8 @@ module.exports = {
         './pages/**/*.{ts,js,jsx,tsx}',
         './payment/**/*.{ts,js,jsx,tsx}',
         './profile/**/*.{ts,js,jsx,tsx}',
-        './komunitas/**/*.{ts,js,jsx,tsx}'
+        './komunitas/**/*.{ts,js,jsx,tsx}',
+        './referal/**/*.{ts,js,jsx,tsx}'
     ],
     theme: {
         fontFamily: {

@@ -25,6 +25,9 @@ import MobileSidebar from '../Sidebar/mobile';
 import Avatar from 'react-avatar';
 import Image from 'next/image';
 import AuthContext from 'authentication/contexts/AuthProvider';
+import { HiOutlineUsers } from 'react-icons/hi';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { useGetConfigQuery } from 'commons/redux/api/commonApi';
 
 const Navbar = ({
     paymentPage,
@@ -42,6 +45,7 @@ const Navbar = ({
 }): JSX.Element => {
     const { isMobileBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const { is_subscribed } = useCourseSubscription();
     const { profile } = useContext(AuthContext);
     const user = useSelector(getCurrentUser);
     const [isHovered, setHovered] = useState(false);
@@ -50,7 +54,7 @@ const Navbar = ({
     const [openMobile, setOpenMobile] = useState(false);
     const [openSidebar, setOpenSidebar] = useState(false);
     const pickedColorScheme = {
-        bgColor: lightMode ? 'bg-white' : 'bg-[#171717]',
+        bgColor: lightMode ? 'bg-white' : 'bg-black',
         color: lightMode ? 'text-black' : 'text-white'
     };
     const { height } = useWindowSize();
@@ -61,6 +65,7 @@ const Navbar = ({
         const position = window.pageYOffset;
         setScrollPosition(position);
     };
+    const { data: configData } = useGetConfigQuery();
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll, { passive: true });
@@ -95,6 +100,18 @@ const Navbar = ({
         }
 
         return lightMode ? 'bg-white text-black shadow-md' : 'bg-[#171717]';
+    };
+
+    const isShowNavbarMenu = (): boolean => {
+        if (
+            router.pathname.includes('kelas/[id]/') ||
+            router.pathname.includes('astronotes/') ||
+            router.pathname.includes('referal')
+        ) {
+            return true;
+        }
+
+        return false;
     };
 
     const onMouseLeaveNavbar = (): void => {
@@ -149,52 +166,53 @@ const Navbar = ({
                     {showSidebar && fullHeightSidebar && isAuthenticated && (
                         <div className="hidden md:block w-[250px] h-[64px] fixed top-0 left-0 bg-[#121212] z-[-1]" />
                     )}
-                    {!isMobileBreakpoints &&
-                        (router.pathname.includes('kelas/[id]/') ||
-                            router.pathname.includes('astronotes/')) && (
-                            <div className="flex gap-6 pl-4">
-                                <Button
-                                    href="/"
-                                    variant="custom"
-                                    className={`!p-0 font-body font-normal text-xs text-neutral-400 ${
-                                        router.pathname.includes('kelas/[id]/')
-                                            ? 'hover:text-white'
-                                            : 'hover:text-black'
-                                    }`}>
-                                    Home
-                                </Button>
+                    {!isMobileBreakpoints && isShowNavbarMenu() && (
+                        <div className="flex gap-6 pl-4">
+                            <Button
+                                href="/"
+                                variant="custom"
+                                className={`!p-0 font-body font-normal text-xs text-neutral-400 ${
+                                    lightMode
+                                        ? 'hover:text-black'
+                                        : 'hover:text-white'
+                                }`}>
+                                Home
+                            </Button>
+                            {configData?.configs
+                                .is_community_config_enabled && (
                                 <Button
                                     href="/komunitas"
                                     variant="custom"
                                     className={`!p-0 font-body font-normal text-xs text-neutral-400 ${
-                                        router.pathname.includes('kelas/[id]/')
-                                            ? 'hover:text-white'
-                                            : 'hover:text-black'
+                                        lightMode
+                                            ? 'hover:text-black'
+                                            : 'hover:text-white'
                                     }`}>
                                     Komunitas
                                 </Button>
-                                <Button
-                                    href="/kelas"
-                                    variant="custom"
-                                    className={`!p-0 font-body font-normal text-xs text-neutral-400 ${
-                                        router.pathname.includes('kelas/[id]/')
-                                            ? 'hover:text-white'
-                                            : 'hover:text-black'
-                                    }`}>
-                                    Kelas
-                                </Button>
-                                {/* <Button
+                            )}
+                            <Button
+                                href="/kelas"
+                                variant="custom"
+                                className={`!p-0 font-body font-normal text-xs text-neutral-400 ${
+                                    lightMode
+                                        ? 'hover:text-black'
+                                        : 'hover:text-white'
+                                }`}>
+                                Kelas
+                            </Button>
+                            {/* <Button
                                     href="/perpustakaan"
                                     variant="custom"
                                     className={`!p-0 font-body font-normal text-xs text-neutral-400 ${
-                                        router.pathname.includes('kelas/[id]/')
-                                            ? 'hover:text-white'
-                                            : 'hover:text-black'
+                                        lightMode 
+                                            ? 'hover:text-black'
+                                            : 'hover:text-white'
                                     }`}>
                                     Perpustakaan
                                 </Button> */}
-                            </div>
-                        )}
+                        </div>
+                    )}
                 </div>
                 {paymentPage ? (
                     <Button
@@ -269,7 +287,7 @@ const Navbar = ({
                                         </div>
                                     </div>
                                     <div
-                                        className={`px-8 py-4 min-w-[250px] top-10 right-0 absolute shadow-md rounded-md ${
+                                        className={`p-4 min-w-[250px] top-10 right-0 absolute shadow-md rounded-md border border-[#2D2D2D] ${
                                             pickedColorScheme.bgColor
                                         } ${pickedColorScheme.color} ${
                                             isProfileHovered
@@ -278,7 +296,7 @@ const Navbar = ({
                                         }`}>
                                         <Link href={'/profil'}>
                                             <div
-                                                className={`flex ${pickedColorScheme.color} hover:text-accent-blue  font-normal w-full items-center mb-4`}>
+                                                className={`flex ${pickedColorScheme.color} hover:bg-[#1D1D1D] px-2 py-3 rounded-sm font-normal w-full items-center`}>
                                                 <div>
                                                     <MdOutlinePersonOutline className="text-2xl" />
                                                 </div>
@@ -291,7 +309,7 @@ const Navbar = ({
                                         </Link>
                                         <Link href={'/transaksi'}>
                                             <div
-                                                className={`flex ${pickedColorScheme.color} hover:text-accent-blue font-normal w-full items-center mb-4`}>
+                                                className={`flex ${pickedColorScheme.color} hover:bg-[#1D1D1D] px-2 py-3 rounded-sm font-normal w-full items-center`}>
                                                 <div>
                                                     <MdHistory className="text-2xl" />
                                                 </div>
@@ -305,8 +323,23 @@ const Navbar = ({
                                                 </div>
                                             </div>
                                         </Link>
+                                        {is_subscribed && (
+                                            <Link href={'/referal'}>
+                                                <div
+                                                    className={`flex ${pickedColorScheme.color} hover:bg-[#1D1D1D] px-2 py-3 rounded-sm font-normal w-full items-center`}>
+                                                    <div>
+                                                        <HiOutlineUsers className="text-xl" />
+                                                    </div>
+                                                    <div className="w-full ml-4">
+                                                        <p className="text-base">
+                                                            Referal
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </Link>
+                                        )}
                                         <div
-                                            className="flex items-center w-full font-normal text-accent-orange hover:text-state-error"
+                                            className="flex items-center w-full font-normal text-accent-orange hover:bg-[#1D1D1D] px-2 py-3 rounded-sm"
                                             onClick={() =>
                                                 dispatch(removeUser())
                                             }

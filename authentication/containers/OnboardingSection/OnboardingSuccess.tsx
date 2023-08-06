@@ -1,22 +1,28 @@
 import Button from 'commons/components/elements/Button';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
-import { addZeroBefore } from 'courses/utils';
+// import { addZeroBefore } from 'courses/utils';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 type HandleIsLastOnboardingStep = () => void;
 
 export const OnboardingSuccess = (): JSX.Element => {
-    const currentDate = new Date();
+    const router = useRouter();
+    // const currentDate = new Date();
     const { isMobileBreakpoints } = useWindowBreakpoints();
     const handleIsLastOnboardingStep: HandleIsLastOnboardingStep = () => {
         localStorage.removeItem('isLastOnboardingStep');
-        window.open(
-            `https://api.whatsapp.com/send?phone=6285173430127&text=${encodeURIComponent(
-                `Halo, Saya tertarik untuk berlangganan\n\n[ID:${currentDate.getDate()}${addZeroBefore(
-                    currentDate.getMonth() + 1
-                )}${currentDate.getFullYear()}]`
-            )}`
-        );
+        // redirect to langganan page
+        router.push('/langganan');
+
+        // redirect to WhatsApp
+        // window.open(
+        //     `https://api.whatsapp.com/send?phone=6285173430127&text=${encodeURIComponent(
+        //         `Halo, Saya tertarik untuk berlangganan\n\n[ID:${currentDate.getDate()}${addZeroBefore(
+        //             currentDate.getMonth() + 1
+        //         )}${currentDate.getFullYear()}]`
+        //     )}`
+        // );
     };
 
     return (

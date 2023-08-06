@@ -67,7 +67,7 @@ const TransactionCard = ({
                             Total Pembayaran
                         </span>
                         <h3 className="font-bold text-base md:text-4xl">
-                            {formatCurrency(transaction.amount)}
+                            {formatCurrency(`${transaction.payment_amount}`)}
                         </h3>
                     </div>
                     <div>

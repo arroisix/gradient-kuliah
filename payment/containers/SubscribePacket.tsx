@@ -1,7 +1,8 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
-import { addZeroBefore, formatter } from 'courses/utils';
+import { formatter } from 'courses/utils';
+// import { addZeroBefore, formatter } from 'courses/utils';
 import { useRouter } from 'next/router';
 import { useGetPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
 import { useEffect, useMemo, useState } from 'react';
@@ -15,21 +16,25 @@ const PacketCard = ({
     const isAuthenticated = useSelector(getIsAuthenticated);
     const isHighlighted = useMemo(() => data.order === 1, [data.order]);
     const router = useRouter();
-    const currentDate = new Date();
+    // const currentDate = new Date();
 
     function handleClick(): void {
         if (!isAuthenticated) {
             router.push('/daftar');
         } else {
-            window.open(
-                `https://api.whatsapp.com/send?phone=6285173430127&text=${encodeURIComponent(
-                    `Halo, Saya tertarik untuk berlangganan ${
-                        data.packet_name
-                    }\n\n[ID:${currentDate.getDate()}${addZeroBefore(
-                        currentDate.getMonth() + 1
-                    )}${currentDate.getFullYear()}]`
-                )}`
-            );
+            // redirect to pembayaran page
+            router.push(`/pembayaran?packetId=${data.id}`);
+
+            // redirect to WhatsApp
+            // window.open(
+            //     `https://api.whatsapp.com/send?phone=6285173430127&text=${encodeURIComponent(
+            //         `Halo, Saya tertarik untuk berlangganan ${
+            //             data.packet_name
+            //         }\n\n[ID:${currentDate.getDate()}${addZeroBefore(
+            //             currentDate.getMonth() + 1
+            //         )}${currentDate.getFullYear()}]`
+            //     )}`
+            // );
         }
     }
 

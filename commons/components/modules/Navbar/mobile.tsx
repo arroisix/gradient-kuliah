@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { MdHistory, MdLogout, MdOutlinePersonOutline } from 'react-icons/md';
 import { removeUser } from 'authentication/redux/slices/userSlice';
 import { useDispatch } from 'react-redux';
+import { HiOutlineUsers } from 'react-icons/hi';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 interface MobileNavbarProps {
     closeMobile: (status: boolean) => void;
@@ -13,6 +15,7 @@ const MobileNavbar = ({
     lightMode
 }: MobileNavbarProps): JSX.Element => {
     const dispatch = useDispatch();
+    const { is_subscribed } = useCourseSubscription();
 
     return (
         <>
@@ -51,8 +54,25 @@ const MobileNavbar = ({
                                     </div>
                                 </div>
                             </Link>
+                            {is_subscribed && (
+                                <Link href={'/referal'}>
+                                    <div
+                                        className={`flex ${
+                                            lightMode
+                                                ? 'text-black'
+                                                : 'text-white'
+                                        } hover:text-accent-blue font-normal w-full items-center mb-4`}>
+                                        <div>
+                                            <HiOutlineUsers className="text-xl" />
+                                        </div>
+                                        <div className="w-full ml-4">
+                                            <p className="text-base">Referal</p>
+                                        </div>
+                                    </div>
+                                </Link>
+                            )}
                             <div
-                                className="flex items-center w-full mb-4 font-normal text-accent-orange hover:text-state-error"
+                                className="flex items-center w-full font-normal text-accent-orange hover:text-state-error"
                                 onClick={() => dispatch(removeUser())}
                                 aria-hidden>
                                 <div>
