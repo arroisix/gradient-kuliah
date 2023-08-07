@@ -8,7 +8,7 @@ const ProgressBar = ({ percent = '0%' }: { percent?: string }): JSX.Element => {
                     style={{ width: percent }}></div>
             </div>
             <span className="font-body text-xs">
-                Progress Belajar:{' '}
+                Progress Terakhir Menonton:{' '}
                 <span className="text-state-success">{percent}</span>
             </span>
         </div>
