@@ -7,9 +7,11 @@ const ProgressBar = ({ percent = '0%' }: { percent?: string }): JSX.Element => {
                     className="absolute h-full bg-accent-purple rounded-[10px]"
                     style={{ width: percent }}></div>
             </div>
-            <span className="font-body text-xs">
+            <span className="inline-block pt-[6px] font-body text-xs">
                 Progress Terakhir Menonton:{' '}
-                <span className="text-state-success">{percent}</span>
+                <span className="inline-block text-state-success">
+                    {percent}
+                </span>
             </span>
         </div>
     );
