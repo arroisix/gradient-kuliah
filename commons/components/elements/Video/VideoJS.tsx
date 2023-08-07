@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import videojs from '@mux/videojs-kit';
@@ -65,7 +65,7 @@ const VideoJS = ({
         handleNextVideo();
     }
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (!isRendered) {
             setIsRendered(true);
         }
@@ -86,6 +86,8 @@ const VideoJS = ({
         videoRef.current?.addEventListener('ended', handleEndedEvent);
 
         return function cleanUpListener() {
+            handleTrackProgress();
+
             videoRef.current?.removeEventListener('pause', handlePauseEvent);
 
             videoRef.current?.removeEventListener('ended', handleEndedEvent);
