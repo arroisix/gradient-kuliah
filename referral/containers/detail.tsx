@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 import {
     useGetRefereeQuery,
     useGetVoucherQuery
-} from 'referal/redux/referalApi';
+} from 'referral/redux/referalApi';
 
 const arrMonth = [
     'January',
@@ -313,7 +313,7 @@ const ListReferee = (): JSX.Element => {
     );
 };
 
-const ReferalDetailContainer = (): JSX.Element => {
+const ReferralDetailContainer = (): JSX.Element => {
     const [navigation, setNavigation] = useState<'MY_VOUCHER' | 'REFEREE'>(
         'MY_VOUCHER'
     );
@@ -358,4 +358,4 @@ const ReferalDetailContainer = (): JSX.Element => {
     );
 };
 
-export default ReferalDetailContainer;
+export default ReferralDetailContainer;

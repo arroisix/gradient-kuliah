@@ -55,7 +55,7 @@ const MobileNavbar = ({
                                 </div>
                             </Link>
                             {is_subscribed && (
-                                <Link href={'/referal'}>
+                                <Link href={'/referral'}>
                                     <div
                                         className={`flex ${
                                             lightMode
@@ -66,7 +66,9 @@ const MobileNavbar = ({
                                             <HiOutlineUsers className="text-xl" />
                                         </div>
                                         <div className="w-full ml-4">
-                                            <p className="text-base">Referal</p>
+                                            <p className="text-base">
+                                                Referral
+                                            </p>
                                         </div>
                                     </div>
                                 </Link>
