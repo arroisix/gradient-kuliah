@@ -47,6 +47,8 @@ const AnswerCard = ({
 }): JSX.Element => {
     const [comment, setComment] = useState('');
     const [showComment, setShowComment] = useState(true);
+    const [authorImageError, setAuthorImageError] = useState(false);
+    const [myImageError, setMyImageError] = useState(false);
 
     const { checkCustomBreakpoints } = useWindowBreakpoints();
     const { profile } = useContext(AuthContext);
@@ -89,12 +91,14 @@ const AnswerCard = ({
             <div className="flex justify-between items-center gap-4">
                 <div className="flex items-center gap-3">
                     <div className="relative w-[24px] h-[24px]">
-                        {isNotNullAndUndefined(student?.photo_url) ? (
+                        {isNotNullAndUndefined(student?.photo_url) &&
+                        !authorImageError ? (
                             <Image
                                 src={student?.photo_url ?? ''}
                                 alt={student?.username}
                                 layout="fill"
                                 className="rounded-full object-contain"
+                                onError={() => setAuthorImageError(true)}
                             />
                         ) : (
                             <Avatar name={student?.username} size="24" round />
@@ -150,12 +154,14 @@ const AnswerCard = ({
             <div className="flex flex-col gap-6 border-t-[1px] border-[#272727] pt-[18px]">
                 <div className="flex gap-3 items-center">
                     <div className="relative w-[24px] h-[24px]">
-                        {isNotNullAndUndefined(profile?.photo_profile) ? (
+                        {isNotNullAndUndefined(profile?.photo_profile) &&
+                        !myImageError ? (
                             <Image
                                 src={profile?.photo_profile as string}
                                 alt={profile?.username}
                                 layout="fill"
                                 className="rounded-full object-contain"
+                                onError={() => setMyImageError(true)}
                             />
                         ) : (
                             <Avatar
