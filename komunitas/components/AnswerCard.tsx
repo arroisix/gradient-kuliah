@@ -17,6 +17,7 @@ import {
 import AuthContext from 'authentication/contexts/AuthProvider';
 import { posthog } from 'posthog-js';
 import { isNotNullAndUndefined } from 'commons/utils';
+import Skeleton from 'commons/components/elements/Skeleton';
 
 type Student = {
     id: string;
@@ -51,7 +52,7 @@ const AnswerCard = ({
     const { profile } = useContext(AuthContext);
 
     const [postComment] = usePostQuestionAnswerMutation();
-    const { data: replies } = useGetCommunityPostCommentDetailQuery({
+    const { data: replies, isLoading } = useGetCommunityPostCommentDetailQuery({
         post_id: id
     });
 
@@ -176,6 +177,7 @@ const AnswerCard = ({
                 </div>
                 {showComment && comment_counts !== 0 && (
                     <div className="flex flex-col gap-[18px]">
+                        {isLoading && <Skeleton className="h-[16px] !m-0" />}
                         {replies?.comments?.map(({ id, content, student }) => (
                             <ReplyComment
                                 key={id}
