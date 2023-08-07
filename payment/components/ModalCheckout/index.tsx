@@ -9,7 +9,7 @@ import { LOGO_PAYMENT, NAME_PAYMENT } from '../constant';
 import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import Spinner from 'commons/components/elements/Spinner';
-import { useValidatePromoMutation } from 'referal/redux/referalApi';
+import { useValidatePromoMutation } from 'referral/redux/referalApi';
 
 const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
     const [inputCode, setInputCode] = useState('');
