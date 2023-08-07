@@ -45,7 +45,7 @@ const AnswerCard = ({
     questionId: string;
 }): JSX.Element => {
     const [comment, setComment] = useState('');
-    const [showComment, setShowComment] = useState(false);
+    const [showComment, setShowComment] = useState(true);
 
     const { checkCustomBreakpoints } = useWindowBreakpoints();
     const { profile } = useContext(AuthContext);
