@@ -15,10 +15,10 @@ const VirtualAccountBox = (): JSX.Element => {
                     logoUrl="https://d2uqn6ndx4ow3t.cloudfront.net/assets/payments/bni.png"
                     paymentMethod="VA_BNI"
                 />
-                <MethodBox
+                {/* <MethodBox
                     logoUrl="https://d2uqn6ndx4ow3t.cloudfront.net/assets/payments/mandiri.png"
                     paymentMethod="VA_MANDIRI"
-                />
+                /> */}
                 <MethodBox
                     logoUrl="https://d2uqn6ndx4ow3t.cloudfront.net/assets/payments/bri.png"
                     paymentMethod="VA_BRI"

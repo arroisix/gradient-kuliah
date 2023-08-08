@@ -72,7 +72,7 @@ const ListContinueLearning = ({
                                 className="rounded-lg object-cover object-top"
                             />
                         </div>
-                        <div className="flex flex-col gap-[2px] w-full whitespace-nowrap text-ellipsis overflow-hidden">
+                        <div className="flex flex-col gap-[2px] w-full overflow-hidden">
                             <span className="inline-block font-body whitespace-nowrap text-ellipsis overflow-hidden">
                                 {subchapter_name}
                             </span>

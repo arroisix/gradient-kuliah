@@ -106,7 +106,7 @@ const Navbar = ({
         if (
             router.pathname.includes('kelas/[id]/') ||
             router.pathname.includes('astronotes/') ||
-            router.pathname.includes('referal')
+            router.pathname.includes('referral')
         ) {
             return true;
         }
@@ -324,7 +324,7 @@ const Navbar = ({
                                             </div>
                                         </Link>
                                         {is_subscribed && (
-                                            <Link href={'/referal'}>
+                                            <Link href={'/referral'}>
                                                 <div
                                                     className={`flex ${pickedColorScheme.color} hover:bg-[#1D1D1D] px-2 py-3 rounded-sm font-normal w-full items-center`}>
                                                     <div>
@@ -332,7 +332,7 @@ const Navbar = ({
                                                     </div>
                                                     <div className="w-full ml-4">
                                                         <p className="text-base">
-                                                            Referal
+                                                            Referral
                                                         </p>
                                                     </div>
                                                 </div>

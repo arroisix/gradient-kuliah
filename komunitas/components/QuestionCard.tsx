@@ -50,6 +50,7 @@ const QuestionCard = ({
     const [formContent, setFormContent] = useState('');
     const [attachmentUrl, setAttachmentUrl] = useState<string[]>([]);
     const [attachmentName, setAttachmentName] = useState<string[]>([]);
+    const [imageError, setImageError] = useState(false);
 
     async function handleSubmit(): Promise<void> {
         const contentwithAttachments =
@@ -104,12 +105,13 @@ const QuestionCard = ({
                 aria-hidden>
                 <div className="relative flex items-center gap-3">
                     <div className="relative w-[24px] h-[24px]">
-                        {student?.photo_url ? (
+                        {student?.photo_url && !imageError ? (
                             <Image
                                 src={student?.photo_url}
                                 alt={student?.username}
                                 layout="fill"
                                 className="rounded-full object-contain"
+                                onError={() => setImageError(true)}
                             />
                         ) : (
                             <Avatar

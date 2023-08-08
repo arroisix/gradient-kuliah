@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import videojs from '@mux/videojs-kit';
@@ -29,6 +29,7 @@ const VideoJS = ({
     const [isRendered, setIsRendered] = useState(false);
     const [isPlay, setIsPlay] = useState(false);
     const [isBuffering, setIsBuffering] = useState(false);
+    let trackInterval: NodeJS.Timeout | undefined;
 
     function handleForward(): void {
         if (videoRef.current?.currentTime) {
@@ -47,7 +48,6 @@ const VideoJS = ({
     }
 
     async function handleTrackProgress(isFinished?: boolean): Promise<void> {
-        setIsPlay(false);
         if (trackProgress) {
             await trackProgress(
                 videoRef.current?.currentTime as unknown as string,
@@ -57,15 +57,19 @@ const VideoJS = ({
     }
 
     function handlePauseEvent(): void {
+        setIsPlay(false);
         handleTrackProgress();
+        clearInterval(trackInterval);
     }
 
     function handleEndedEvent(): void {
+        setIsPlay(false);
         handleTrackProgress(true);
         handleNextVideo();
+        clearInterval(trackInterval);
     }
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (!isRendered) {
             setIsRendered(true);
         }
@@ -73,6 +77,10 @@ const VideoJS = ({
         videoRef.current?.addEventListener('playing', () => {
             setIsPlay(true);
             setIsBuffering(false);
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+            trackInterval = setInterval(() => {
+                handleTrackProgress();
+            }, 30000);
         });
 
         videoRef.current?.addEventListener('waiting', () => {
@@ -86,6 +94,8 @@ const VideoJS = ({
         videoRef.current?.addEventListener('ended', handleEndedEvent);
 
         return function cleanUpListener() {
+            handleTrackProgress();
+
             videoRef.current?.removeEventListener('pause', handlePauseEvent);
 
             videoRef.current?.removeEventListener('ended', handleEndedEvent);
@@ -102,6 +112,8 @@ const VideoJS = ({
             videoRef.current?.removeEventListener('canplay', () =>
                 setIsPlay(false)
             );
+
+            clearInterval(trackInterval);
         };
     }, [next_subchapter_link]);
 
