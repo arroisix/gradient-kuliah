@@ -72,7 +72,7 @@ const VideoLearnContainer = (): JSX.Element => {
                                                   learning_progress_id:
                                                       learning_progress_id as string,
                                                   video_progress: {
-                                                      video_id: video.id,
+                                                      video_id: video?.id,
                                                       last_duration:
                                                           last_duration as unknown as string,
                                                       is_finished:
