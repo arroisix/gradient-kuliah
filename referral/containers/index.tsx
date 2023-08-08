@@ -6,11 +6,11 @@ import { formatCurrency } from 'commons/utils';
 import { useRouter } from 'next/router';
 import { FaUserPlus } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import DisclosureTutorial from 'referal/components/DisclosureTutorial';
-import Menu from 'referal/components/Menu';
-import { useGetReferralQuery } from 'referal/redux/referalApi';
+import DisclosureTutorial from 'referral/components/DisclosureTutorial';
+import Menu from 'referral/components/Menu';
+import { useGetReferralQuery } from 'referral/redux/referalApi';
 
-const ReferalContainer = (): JSX.Element => {
+const ReferralContainer = (): JSX.Element => {
     const router = useRouter();
 
     const { data, isLoading } = useGetReferralQuery();
@@ -85,13 +85,13 @@ const ReferalContainer = (): JSX.Element => {
                 <Menu
                     icon={<Ticket />}
                     text={`${data?.voucher_count ?? 0} Voucher Saya`}
-                    handleClick={() => router.push('/referal/detail')}
+                    handleClick={() => router.push('/referral/detail')}
                 />
                 <Menu
                     icon={<FaUserPlus size={22} />}
                     text={`${data?.referee_count ?? 0} Teman Terdaftar`}
                     handleClick={() =>
-                        router.push('/referal/detail?open=referee')
+                        router.push('/referral/detail?open=referee')
                     }
                 />
                 <DisclosureTutorial
@@ -102,4 +102,4 @@ const ReferalContainer = (): JSX.Element => {
     );
 };
 
-export default ReferalContainer;
+export default ReferralContainer;

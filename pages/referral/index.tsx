@@ -1,11 +1,11 @@
 import LearnLayout from 'commons/learnLayout';
 import withAuth from 'commons/withAuth';
-import ReferalContainer from 'referal/containers';
+import ReferralContainer from 'referral/containers';
 
 const Referral = (): JSX.Element => {
     return (
         <LearnLayout>
-            <ReferalContainer />
+            <ReferralContainer />
         </LearnLayout>
     );
 };
