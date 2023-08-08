@@ -9,7 +9,7 @@ module.exports = {
         './payment/**/*.{ts,js,jsx,tsx}',
         './profile/**/*.{ts,js,jsx,tsx}',
         './komunitas/**/*.{ts,js,jsx,tsx}',
-        './referal/**/*.{ts,js,jsx,tsx}'
+        './referral/**/*.{ts,js,jsx,tsx}'
     ],
     theme: {
         fontFamily: {
