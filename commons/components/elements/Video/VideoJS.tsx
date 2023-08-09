@@ -48,7 +48,7 @@ const VideoJS = ({
     }
 
     async function handleTrackProgress(isFinished?: boolean): Promise<void> {
-        if (trackProgress) {
+        if (trackProgress && videoRef.current?.currentTime) {
             await trackProgress(
                 videoRef.current?.currentTime as unknown as string,
                 isFinished ?? false
