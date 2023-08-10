@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react';
 import TransactionCard from '../components/TransactionCard';
 import useAllTransaction from '../hooks/useAllTransaction';
 import moment from 'moment';
+import Skeleton from 'commons/components/elements/Skeleton';
 
 const TransactionListContainer = (): JSX.Element => {
     const [activeTransaction, setActiveTransaction] = useState<Transaction>();
     const [inactiveTransaction, setInactiveTransaction] =
         useState<Transaction[]>();
 
-    const { data } = useAllTransaction();
+    const { data, loading } = useAllTransaction();
 
     useEffect(() => {
         data?.data.forEach((value) => {
@@ -40,6 +41,13 @@ const TransactionListContainer = (): JSX.Element => {
             <h1 className="sm:text-2xl text-center font-bold mb-6 sm:mb-8">
                 Riwayat Pembelian
             </h1>
+            {loading && (
+                <>
+                    <Skeleton className="h-[150px]" />
+                    <Skeleton className="h-[150px]" />
+                    <Skeleton className="h-[150px]" />
+                </>
+            )}
             {activeTransaction && (
                 <>
                     <span className="inline-block font-body text-sm mb-[18px]">
