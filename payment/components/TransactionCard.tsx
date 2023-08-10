@@ -10,9 +10,6 @@ import { toast } from 'react-toastify';
 import Button from 'commons/components/elements/Button';
 import { HiCheckCircle } from 'react-icons/hi';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
-import { useSelector } from 'react-redux';
-import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
-import { useGetActiveSubscriptionQuery } from 'payment/redux/api/subscriptionApi';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 const STATUS_COLOR: { [key: string]: string } = {
@@ -62,11 +59,6 @@ const TransactionCard = ({
     const isExpiry = checkExpiry(transaction.deadline as string);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, copy] = useCopyToClipboard();
-
-    const isAuthenticated = useSelector(getIsAuthenticated);
-    const { data } = useGetActiveSubscriptionQuery(undefined, {
-        skip: !isAuthenticated
-    });
     const { expiryDay, subscription_id } = useCourseSubscription();
 
     const copyVA = (): void => {
@@ -166,16 +158,11 @@ const TransactionCard = ({
     }
 
     function activeTransaction(): boolean | string {
-        if (!data) return false;
-
-        if (
-            moment(data.active_from).unix() <
-            moment(transaction.deadline).unix()
-        ) {
+        if (transaction.status === 'SUCCESS') {
             if (
                 moment(moment(transaction.created_at).startOf('day'))
                     .add(subscribed_packet?.active_duration, 'd')
-                    .unix() > moment(data.deactivate_after).unix()
+                    .unix() < moment().unix()
             ) {
                 return 'Perbarui';
             } else if (expiryDay <= 14) {
