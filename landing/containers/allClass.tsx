@@ -19,6 +19,12 @@ const LIST_CLASS = [
         slug: 'fisdas1'
     },
     {
+        cover: 'https://assets.gradient.academy/assets/lp-kimdas1.jpg',
+        title: 'Kimia Dasar 1',
+        description: 'Mengenal lebih dekat dengan atom dan unsur.',
+        slug: 'kimdas1'
+    },
+    {
         cover: 'https://assets.gradient.academy/assets/lp-probstat.jpg',
         title: 'Probabilitas & Statistika',
         description: 'Mendeskripsikan dunia dengan data.',
