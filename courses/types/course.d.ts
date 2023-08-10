@@ -76,6 +76,7 @@ type SubChapter = {
         chapter_id: string;
         id: string;
     };
+    video_id?: string;
 };
 
 type Chapter = {

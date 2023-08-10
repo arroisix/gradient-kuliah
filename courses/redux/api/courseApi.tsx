@@ -18,7 +18,15 @@ export const courseApi = baseApi.injectEndpoints({
                 query: ({ chapterId }) => ({
                     url: `${COURSE_BASE_URL}${chapterId}/subchapter/`
                 }),
-                providesTags: ['WATCH_PROGRESS']
+                providesTags: (result) =>
+                    result
+                        ? [
+                              ...result.subchapters.map(({ video_id }) => ({
+                                  type: 'WATCH_PROGRESS' as const,
+                                  id: video_id
+                              }))
+                          ]
+                        : [{ type: 'WATCH_PROGRESS', id: 'LIST' }]
             }
         ),
         getSearchCourseContent: builder.query<
