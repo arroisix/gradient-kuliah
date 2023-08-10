@@ -159,14 +159,14 @@ const TransactionCard = ({
 
     function activeTransaction(): boolean | string {
         if (transaction.status === 'SUCCESS') {
-            if (expiryDay <= 14) {
-                return 'Perpanjang';
-            } else if (
+            if (
                 moment(moment(transaction.created_at).startOf('day'))
                     .add(subscribed_packet?.active_duration, 'd')
                     .unix() < moment().unix()
             ) {
                 return 'Perbarui';
+            } else if (expiryDay <= 14) {
+                return 'Perpanjang';
             }
         }
 
