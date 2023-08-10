@@ -1,21 +1,48 @@
 import moment from 'moment';
 import { useRouter } from 'next/router';
-import {
-    AiOutlineCheck,
-    AiOutlineClockCircle,
-    AiOutlineClose
-} from 'react-icons/ai';
+import { AiFillClockCircle, AiFillCloseCircle } from 'react-icons/ai';
 import { MdChevronRight, MdContentCopy } from 'react-icons/md';
 import { formatCurrency } from 'commons/utils';
 import { checkExpiry } from '../utils';
 import { NAME_PAYMENT } from './constant';
 import useCopyToClipboard from 'commons/hooks/useCopyToClipboard';
 import { toast } from 'react-toastify';
+import Button from 'commons/components/elements/Button';
+import { HiCheckCircle } from 'react-icons/hi';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 const STATUS_COLOR: { [key: string]: string } = {
     SUCCESS: 'bg-state-success',
     WAITING: 'bg-accent-yellow',
     EXPIRY: 'bg-state-error'
+};
+
+const STATUS: { [key: string]: JSX.Element } = {
+    SUCCESS: (
+        <div className="flex items-center gap-[8px] text-state-success">
+            <HiCheckCircle size={16} />
+            <span className="inline-body font-body text-sm">
+                Pembayaran Selesai
+            </span>
+        </div>
+    ),
+    WAITING: (
+        <div className="flex items-center gap-[8px] text-accent-yellow">
+            <AiFillClockCircle size={16} />
+            <span className="inline-body font-body text-sm">
+                Menunggu Pembayaran
+            </span>
+        </div>
+    ),
+    EXPIRY: (
+        <div className="flex items-center gap-[8px] text-state-error">
+            <AiFillCloseCircle size={16} />
+            <span className="inline-body font-body text-sm">
+                Pembayaran Gagal
+            </span>
+        </div>
+    )
 };
 
 const TransactionCard = ({
@@ -28,9 +55,11 @@ const TransactionCard = ({
     const { subscribed_packet } =
         transaction.subscriber || ({} as Subscription);
     const router = useRouter();
+    const { isMobileBreakpoints } = useWindowBreakpoints();
     const isExpiry = checkExpiry(transaction.deadline as string);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, copy] = useCopyToClipboard();
+    const { expiryDay, subscription_id } = useCourseSubscription();
 
     const copyVA = (): void => {
         if (transaction) {
@@ -39,143 +68,190 @@ const TransactionCard = ({
         }
     };
 
-    return (
-        <div
-            className={`rounded-lg bg-[#242424] w-full overflow-hidden ${
-                isList && 'mb-4'
-            }`}>
-            <div className="p-4 md:p-8">
-                <div className="w-full flex flex-col-reverse md:flex-row justify-between md:items-center">
-                    <div className="w-full">
-                        <span className="text-xs md:text-base text-neutral-200">
-                            Langganan hingga{' '}
-                            {moment()
-                                .add(subscribed_packet?.active_duration, 'd')
-                                .utc()
-                                .format('D MMM YYYY')}
+    function generateStatus(): JSX.Element {
+        if (isExpiry && transaction.status !== 'SUCCESS') {
+            return (
+                <div className="flex items-center gap-[8px] text-state-error">
+                    <AiFillCloseCircle size={16} />
+                    <span className="inline-body font-body text-sm">
+                        Pembayaran Gagal
+                    </span>
+                </div>
+            );
+        } else {
+            return STATUS[transaction.status];
+        }
+    }
+
+    function generateStatusInfo(): JSX.Element {
+        if (!isList) return <></>;
+
+        if (isExpiry && transaction.status !== 'SUCCESS') {
+            return (
+                <div
+                    className="flex justify-center items-center gap-[6px] mt-[18px] px-3 py-2 bg-[#E9202A1A] border border-[#E9202A1A] rounded"
+                    onClick={() =>
+                        isMobileBreakpoints
+                            ? router.push(
+                                  `/pembayaran?packetId=${subscribed_packet.id}`
+                              )
+                            : null
+                    }
+                    aria-hidden>
+                    <span className="inline-block font-body text-[#CCCCCC80] text-xs sm:text-sm">
+                        Masa waktu bayar habis.{' '}
+                        <span
+                            className="text-[#CCCCCC] cursor-pointer hover:underline"
+                            onClick={() =>
+                                router.push(
+                                    `/pembayaran?packetId=${subscribed_packet.id}`
+                                )
+                            }
+                            aria-hidden>
+                            Beli lagi
                         </span>
-                    </div>
-                    <div className="text-left md:text-right">
-                        <span className="text-base text-neutral-400 uppercase">
-                            {transaction.id?.substring(0, 8)}
-                        </span>
+                    </span>
+                    <div className="w-[18px] h-[18px] cursor-pointer">
+                        <MdChevronRight size={18} />
                     </div>
                 </div>
-                <div className="w-full grid grid-cols-2 gap-2 md:flex md:justify-between  my-4">
-                    <div>
-                        <span className="text-xs md:text-base text-neutral-200 uppercase">
-                            Total Pembayaran
+            );
+        } else if (transaction.status === 'WAITING') {
+            return (
+                <div
+                    className="flex justify-center items-center gap-[6px] mt-[18px] px-3 py-2 bg-[#F2C04C1A] border border-[#F2C04C1A] rounded"
+                    onClick={() =>
+                        isMobileBreakpoints
+                            ? router.push(`/checkout/${transaction.id}`)
+                            : null
+                    }
+                    aria-hidden>
+                    <span className="inline-block font-body text-[#CCCCCC80] text-xs sm:text-sm">
+                        {`Bayar sebelum ${moment(transaction.deadline)
+                            .utc()
+                            .format('D MMM YYYY HH:mm')} WIB. `}
+                        <span
+                            className="text-[#CCCCCC] cursor-pointer hover:underline"
+                            onClick={() =>
+                                router.push(`/checkout/${transaction.id}`)
+                            }
+                            aria-hidden>
+                            Lihat cara bayar
                         </span>
-                        <h3 className="font-bold text-base md:text-4xl">
-                            {formatCurrency(`${transaction.payment_amount}`)}
-                        </h3>
+                    </span>
+                    <div className="w-[18px] h-[18px] cursor-pointer">
+                        <MdChevronRight size={18} />
                     </div>
-                    <div>
-                        <span className="text-xs md:text-base text-neutral-200">
-                            Metode Pembayaran
-                        </span>
-                        <h3 className="font-bold text-base md:text-4xl">
-                            {NAME_PAYMENT[transaction.payment_method]}
-                        </h3>
-                    </div>
-                    <div>
-                        <span className="text-xs md:text-base text-neutral-200">
-                            Kode Virtual Account
-                        </span>
-                        <div className="flex" onClick={copyVA} aria-hidden>
-                            <h3 className="font-bold text-base md:text-4xl flex cursor-pointer">
-                                {transaction.va_number}
-                            </h3>
-                            <MdContentCopy className="text-2xl md:text-4xl ml-2" />
-                        </div>
-                    </div>
-                    <div>
-                        <span className="text-xs md:text-base text-neutral-200">
-                            Tanggal Pembelian
-                        </span>
-                        <h3 className="font-bold text-base md:text-4xl">
-                            {moment(transaction.created_at)
-                                .utc()
-                                .format('D MMM YYYY')}
-                        </h3>
-                    </div>
+                </div>
+            );
+        }
+
+        return <></>;
+    }
+
+    function generateStatusColor(): string {
+        if (isExpiry && transaction.status !== 'SUCCESS') {
+            return 'EXPIRY';
+        } else {
+            return transaction.status;
+        }
+    }
+
+    function activeTransaction(): boolean | string {
+        if (transaction.status === 'SUCCESS') {
+            if (
+                moment(moment(transaction.created_at).startOf('day'))
+                    .add(subscribed_packet?.active_duration, 'd')
+                    .unix() < moment().unix()
+            ) {
+                return 'Perbarui';
+            } else if (expiryDay <= 14) {
+                return 'Perpanjang';
+            }
+        }
+
+        return false;
+    }
+
+    return (
+        <div className="relative p-6 md:px-8 md:pt-6 md:pb-5 bg-[#121212] rounded-[10px]">
+            <div
+                className={`w-[8px] h-[65px] absolute top-6 left-0 rounded-r ${
+                    STATUS_COLOR[generateStatusColor()]
+                }`}
+            />
+            <div className="flex justify-between flex-wrap gap-6 pb-[18px] border-b border-[#242424]">
+                <div className="flex flex-col gap-1">
+                    <span className="inline-body font-body font-extrabold text-sm md:text-base">
+                        {subscribed_packet?.packet_name}
+                    </span>
+                    <span className="inline-body font-body text-xs md:text-sm">
+                        {`${moment(transaction.created_at)
+                            .utc()
+                            .format('D MMM YYYY')} hingga ${moment(
+                            transaction.created_at
+                        )
+                            .add(subscribed_packet?.active_duration, 'd')
+                            .utc()
+                            .format('D MMM YYYY')}`}
+                    </span>
+                </div>
+                <div className="w-full sm:w-max flex flex-col sm:items-end gap-3">
+                    {generateStatus()}
+                    {transaction.status === 'SUCCESS' &&
+                        isList &&
+                        activeTransaction() && (
+                            <Button
+                                variant="custom"
+                                className="w-full sm:w-min !px-5 !py-[7.5px] !text-xs text-black bg-white"
+                                onClick={() =>
+                                    router.push(
+                                        `/pembayaran?packetId=${
+                                            subscribed_packet.id
+                                        }${
+                                            activeTransaction() === 'Perpanjang'
+                                                ? `&subscriptionId=${subscription_id}`
+                                                : ''
+                                        }`
+                                    )
+                                }>
+                                {`${activeTransaction()}`}
+                            </Button>
+                        )}
                 </div>
             </div>
-            <div
-                aria-hidden
-                onClick={
-                    isList && transaction.status === 'WAITING' && !isExpiry
-                        ? () => router.push(`/checkout/${transaction.id}`)
-                        : undefined
-                }
-                className={`w-full ${
-                    STATUS_COLOR[
-                        isExpiry && transaction.status !== 'SUCCESS'
-                            ? 'EXPIRY'
-                            : transaction.status
-                    ]
-                } px-4 md:px-8 py-2 flex flex-col md:flex-row ${
-                    isList &&
-                    transaction.status === 'WAITING' &&
-                    'cursor-pointer'
-                }`}>
-                <div className="flex items-center">
-                    {isExpiry && transaction.status !== 'SUCCESS' ? (
-                        <div>
-                            <AiOutlineClose className="text-3xl" />
-                        </div>
-                    ) : (
-                        <div>
-                            {transaction.status === 'SUCCESS' && (
-                                <AiOutlineCheck className="text-3xl" />
-                            )}
-                            {transaction.status === 'WAITING' && (
-                                <AiOutlineClockCircle className="text-black text-3xl" />
-                            )}
-                        </div>
-                    )}
-                    <div className="ml-2 w-full">
-                        {isExpiry && transaction.status !== 'SUCCESS' ? (
-                            <>
-                                <h6 className="text-xs md:text-base uppercase font-bold text-neutral-800">
-                                    PEMBAYARAN GAGAL
-                                </h6>
-                                <h5 className="text-base md:text-xl font-bold text-white">
-                                    Masa waktu bayar habis
-                                </h5>
-                            </>
-                        ) : (
-                            <>
-                                {transaction.status === 'WAITING' && (
-                                    <h6 className="text-xs md:text-base text-[#735103] uppercase font-bold">
-                                        Menunggu Pembayaran
-                                    </h6>
-                                )}
-                                {transaction.status === 'SUCCESS' && (
-                                    <h6 className="text-base text-white uppercase font-bold">
-                                        Pembayaran Berhasil
-                                    </h6>
-                                )}
-                                {transaction.status === 'WAITING' && (
-                                    <h5 className="text-base md:text-xl font-bold text-black">
-                                        Bayar sebelum{' '}
-                                        {moment(transaction.deadline)
-                                            .utc()
-                                            .format('D MMMM YYYY H:mm')}{' '}
-                                        WIB
-                                    </h5>
-                                )}
-                            </>
-                        )}
+            {generateStatusInfo()}
+            <div className="flex flex-col sm:flex-row justify-between flex-wrap gap-3 pt-[18px]">
+                <div className="flex flex-col gap-1">
+                    <span className="inline-block font-body text-[#CCCCCC] text-xs sm:text-sm">
+                        Total Pembayaran
+                    </span>
+                    <span className="inline-block font-body font-extrabold text-sm sm:text-lg">
+                        {formatCurrency(`${transaction.payment_amount}`)}
+                    </span>
+                </div>
+                <div className="flex flex-col gap-1">
+                    <span className="inline-block font-body text-[#CCCCCC] text-xs sm:text-sm">
+                        Metode Pembayaran
+                    </span>
+                    <span className="inline-block font-extrabold text-sm sm:text-lg">
+                        {NAME_PAYMENT[transaction.payment_method]}
+                    </span>
+                </div>
+                <div className="flex flex-col gap-1">
+                    <span className="inline-block font-body text-[#CCCCCC] text-xs sm:text-sm">
+                        Kode Virtual Account
+                    </span>
+                    <div className="flex items-center gap-2">
+                        <span className="inline-block font-body font-extrabold text-sm sm:text-lg">
+                            {transaction.va_number}
+                        </span>
+                        <MdContentCopy
+                            onClick={copyVA}
+                            className="text-[18px] sm:text-[23px] cursor-pointer"
+                        />
                     </div>
                 </div>
-                {!isExpiry && transaction.status === 'WAITING' && isList && (
-                    <div className="flex md:justify-end w-full mt-4 md:mt-0 border-t border-neutral-900 py-2 md:border-0 md:py-0">
-                        <h5 className="md:text-xl text-black flex justify-between md:justify-start w-full md:w-auto items-center">
-                            Lihat cara bayar <MdChevronRight />
-                        </h5>
-                    </div>
-                )}
             </div>
         </div>
     );
