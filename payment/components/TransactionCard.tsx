@@ -188,7 +188,9 @@ const TransactionCard = ({
                     <span className="inline-body font-body text-xs md:text-sm">
                         {`${moment(transaction.created_at)
                             .utc()
-                            .format('D MMM YYYY')} hingga ${moment()
+                            .format('D MMM YYYY')} hingga ${moment(
+                            transaction.created_at
+                        )
                             .add(subscribed_packet?.active_duration, 'd')
                             .utc()
                             .format('D MMM YYYY')}`}
