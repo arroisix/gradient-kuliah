@@ -143,10 +143,8 @@ const CourseDetailBox = (): JSX.Element => {
             },
             { skip: !id }
         );
-    const { data: learningProgress } = useGetLearningProgressQuery(
-        id as string,
-        { skip: !id }
-    );
+    const { data: learningProgress, isLoading: isLoadingLearning } =
+        useGetLearningProgressQuery(id as string, { skip: !id });
     const { data: course } = useGetCourseQuery(undefined, {
         selectFromResult: ({ data, isLoading }) => ({
             data: data?.courses.find(({ slug }) => slug === id),
@@ -201,11 +199,19 @@ const CourseDetailBox = (): JSX.Element => {
                             {course?.course_name}
                         </h4>
                         <span className="min-w-[100px] font-body font-extrabold text-base xl:text-lg text-[#FFFFFF80] pl-1">
-                            {`(${moment
-                                .utc(learningProgress?.total_duration as number)
-                                .format('H')}h ${moment
-                                .utc(learningProgress?.total_duration as number)
-                                .format('mm')}m)`}
+                            {isLoadingLearning ? (
+                                <Skeleton className="h-[20px] !m-0 !p-0" />
+                            ) : (
+                                `(${moment
+                                    .utc(
+                                        learningProgress?.total_duration as number
+                                    )
+                                    .format('H')}h ${moment
+                                    .utc(
+                                        learningProgress?.total_duration as number
+                                    )
+                                    .format('mm')}m)`
+                            )}
                         </span>
                         <div className="w-[20px] grow">
                             <MdStarPurple500
@@ -224,6 +230,7 @@ const CourseDetailBox = (): JSX.Element => {
                             learningProgress?.completion_percentage
                                 ?.total_video_count
                         }
+                        isLoading={isLoadingLearning}
                     />
                 </div>
                 <div
