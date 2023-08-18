@@ -11,7 +11,7 @@ const AstroNotes = ({
     notes: ExtendedRecordMap | null;
 }): JSX.Element => {
     return (
-        <LearnLayout lightMode>
+        <LearnLayout>
             <AstronoteDetail notes={notes} />
         </LearnLayout>
     );
