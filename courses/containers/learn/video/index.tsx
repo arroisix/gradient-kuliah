@@ -15,6 +15,7 @@ import { useState } from 'react';
 import AiModalFeedback from 'courses/components/LearningExperience/AiTutor/AiModalFeedback';
 import { useTrackSubchapterProgressMutation } from 'courses/redux/api/learningExperienceApi';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import NeedSubscribe from 'courses/components/NeedSubscribe';
 
 const VideoLearnContainer = (): JSX.Element => {
     const router = useRouter();
@@ -23,8 +24,11 @@ const VideoLearnContainer = (): JSX.Element => {
     const { data, isLoading } = useGetSubchapterDetailQuery(sub as string, {
         skip: sub === null || sub === undefined || !isAuthenticated
     });
-    const { learning_progress_id, isLoading: isLoadingSubscription } =
-        useCourseSubscription(id as string);
+    const {
+        learning_progress_id,
+        isLoading: isLoadingSubscription,
+        is_subscribed
+    } = useCourseSubscription(id as string);
     const [track] = useTrackSubchapterProgressMutation();
     const { video, subchapter } = useLearning();
     const { height: videoHeight, ref: videoRef } =
@@ -44,52 +48,61 @@ const VideoLearnContainer = (): JSX.Element => {
                     {(isLoading || isLoadingSubscription) && (
                         <div className="w-full h-[300px] bg-neutral-600 animate-pulse" />
                     )}
-                    {!isLoading && !isLoadingSubscription && (
-                        <div>
-                            <VideoJS
-                                key={data?.video?.video_url}
-                                src={
-                                    isNotNullAndUndefined(
+                    {!isLoading &&
+                        !isLoadingSubscription &&
+                        (is_subscribed || data?.video?.is_free ? (
+                            <div>
+                                <VideoJS
+                                    key={data?.video?.video_url}
+                                    src={
+                                        isNotNullAndUndefined(
+                                            data?.video?.mux_playback_id
+                                        )
+                                            ? `${
+                                                  data?.video
+                                                      ?.mux_playback_id as string
+                                              }${
+                                                  data?.video?.token
+                                                      ? `?token=${data?.video?.token}`
+                                                      : ''
+                                              }`
+                                            : (data?.video?.video_url as string)
+                                    }
+                                    isMuxVideo={isNotNullAndUndefined(
                                         data?.video?.mux_playback_id
-                                    )
-                                        ? `${
-                                              data?.video
-                                                  ?.mux_playback_id as string
-                                          }${
-                                              data?.video?.token
-                                                  ? `?token=${data?.video?.token}`
-                                                  : ''
-                                          }`
-                                        : (data?.video?.video_url as string)
-                                }
-                                isMuxVideo={isNotNullAndUndefined(
-                                    data?.video?.mux_playback_id
-                                )}
-                                trackProgress={
-                                    isAuthenticated
-                                        ? async (last_duration, isFinished) =>
-                                              track({
-                                                  learning_progress_id:
-                                                      learning_progress_id as string,
-                                                  video_progress: {
-                                                      video_id: video?.id,
-                                                      last_duration:
-                                                          last_duration as unknown as string,
-                                                      is_finished:
-                                                          isFinished ?? false
-                                                  }
-                                              })
-                                        : undefined
-                                }
-                                next_subchapter_link={
-                                    subchapter?.next_subchapter?.chapter_id &&
-                                    subchapter.next_subchapter.id
-                                        ? `/kelas/${id}/belajar/video/${subchapter?.next_subchapter?.chapter_id}/${subchapter?.next_subchapter?.id}`
-                                        : ''
-                                }
-                            />
-                        </div>
-                    )}
+                                    )}
+                                    trackProgress={
+                                        isAuthenticated
+                                            ? async (
+                                                  last_duration,
+                                                  isFinished
+                                              ) =>
+                                                  track({
+                                                      learning_progress_id:
+                                                          learning_progress_id as string,
+                                                      video_progress: {
+                                                          video_id: video?.id,
+                                                          last_duration:
+                                                              last_duration as unknown as string,
+                                                          is_finished:
+                                                              isFinished ??
+                                                              false
+                                                      }
+                                                  })
+                                            : undefined
+                                    }
+                                    next_subchapter_link={
+                                        subchapter?.next_subchapter
+                                            ?.chapter_id &&
+                                        subchapter.next_subchapter.id
+                                            ? `/kelas/${id}/belajar/video/${subchapter?.next_subchapter?.chapter_id}/${subchapter?.next_subchapter?.id}`
+                                            : ''
+                                    }
+                                />
+                            </div>
+                        ) : (
+                            <NeedSubscribe />
+                        ))}
                 </div>
                 {!isLoading ? (
                     <div
