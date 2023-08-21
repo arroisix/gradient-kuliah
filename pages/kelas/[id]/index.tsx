@@ -5,11 +5,18 @@ import { getLandingCourseData } from 'courses/redux/api/publicCourseApi';
 import { getRunningQueriesThunk } from 'redux/api/baseApi';
 import config from 'redux/api/config';
 import LandingPageOrchestrator from 'courses/components/LandingPage/LandingPageOrchestrator';
+import axios from 'axios';
 
-const DetailKelas = ({ id }: { id: string }): JSX.Element => {
+const DetailKelas = ({
+    id,
+    packetOffer
+}: {
+    id: string;
+    packetOffer: PacketOffer[];
+}): JSX.Element => {
     return (
         <Layout shouldTransparent>
-            <LandingPageOrchestrator id={id} />
+            <LandingPageOrchestrator id={id} packetOffer={packetOffer} />
         </Layout>
     );
 };
@@ -35,12 +42,16 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
             await dispatch<any>(
                 getLandingCourseData.initiate(params?.id as string)
             );
+            const { data }: { data: { data: PacketOffer[] } } = await axios.get(
+                `${config.API_BASE_URL}subscriptions/packet-offer/`
+            );
 
             await Promise.all([getRunningQueriesThunk()]);
 
             return {
                 props: {
-                    id: params?.id
+                    id: params?.id,
+                    packetOffer: data.data
                 },
                 revalidate: 300
             };
