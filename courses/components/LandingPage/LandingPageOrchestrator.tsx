@@ -22,6 +22,7 @@ import PriceHighlightKalkulus2Section from './Kalkulus2/PriceHighlightKalkulus2S
 import PriceHighlightStatprobSection from './Statprob/PriceHighlightStaprobSection';
 import BenefitStatprobSection from './Statprob/BenefitStatprobSection';
 import CourseDetail from '../CourseDetail';
+import Pricing from 'landing/containers/pricing';
 
 const COMPONENT_DICTIONARY: { [key in LandingPageSectionKey]: JSX.Element } = {
     hero: <HeroSection slug="dummy" />,
@@ -87,8 +88,19 @@ export const AuthLandingPage = ({ id }: { id: string }): JSX.Element => {
     );
 };
 
-const LandingPageOrchestrator = ({ id }: { id: string }): JSX.Element => {
-    return <CourseDetail slug={id} />;
+const LandingPageOrchestrator = ({
+    id,
+    packetOffer
+}: {
+    id: string;
+    packetOffer: PacketOffer[];
+}): JSX.Element => {
+    return (
+        <>
+            <CourseDetail slug={id} />
+            <Pricing pricingData={packetOffer} />
+        </>
+    );
 };
 
 export default LandingPageOrchestrator;
