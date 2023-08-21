@@ -22,6 +22,9 @@ import PriceHighlightKalkulus2Section from './Kalkulus2/PriceHighlightKalkulus2S
 import PriceHighlightStatprobSection from './Statprob/PriceHighlightStaprobSection';
 import BenefitStatprobSection from './Statprob/BenefitStatprobSection';
 import CourseDetail from '../CourseDetail';
+import Pricing from 'landing/containers/pricing';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
 const COMPONENT_DICTIONARY: { [key in LandingPageSectionKey]: JSX.Element } = {
     hero: <HeroSection slug="dummy" />,
@@ -87,8 +90,24 @@ export const AuthLandingPage = ({ id }: { id: string }): JSX.Element => {
     );
 };
 
-const LandingPageOrchestrator = ({ id }: { id: string }): JSX.Element => {
-    return <CourseDetail slug={id} />;
+const LandingPageOrchestrator = ({
+    id,
+    packetOffer
+}: {
+    id: string;
+    packetOffer: PacketOffer[];
+}): JSX.Element => {
+    const { is_subscribed, isDoneFetchingSubcription } =
+        useCourseSubscription();
+    const isAuthenticated = useSelector(getIsAuthenticated);
+
+    return (
+        <>
+            <CourseDetail slug={id} />
+            {((!is_subscribed && isDoneFetchingSubcription) ||
+                !isAuthenticated) && <Pricing pricingData={packetOffer} />}
+        </>
+    );
 };
 
 export default LandingPageOrchestrator;
