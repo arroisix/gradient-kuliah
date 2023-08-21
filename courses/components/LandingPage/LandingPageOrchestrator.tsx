@@ -23,6 +23,8 @@ import PriceHighlightStatprobSection from './Statprob/PriceHighlightStaprobSecti
 import BenefitStatprobSection from './Statprob/BenefitStatprobSection';
 import CourseDetail from '../CourseDetail';
 import Pricing from 'landing/containers/pricing';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
 const COMPONENT_DICTIONARY: { [key in LandingPageSectionKey]: JSX.Element } = {
     hero: <HeroSection slug="dummy" />,
@@ -95,10 +97,15 @@ const LandingPageOrchestrator = ({
     id: string;
     packetOffer: PacketOffer[];
 }): JSX.Element => {
+    const { is_subscribed, isDoneFetchingSubcription } =
+        useCourseSubscription();
+    const isAuthenticated = useSelector(getIsAuthenticated);
+
     return (
         <>
             <CourseDetail slug={id} />
-            <Pricing pricingData={packetOffer} />
+            {((!is_subscribed && isDoneFetchingSubcription) ||
+                !isAuthenticated) && <Pricing pricingData={packetOffer} />}
         </>
     );
 };
