@@ -2,7 +2,14 @@ import { useState, useRef, Dispatch, SetStateAction } from 'react';
 import { BiMenu } from 'react-icons/bi';
 import { FaChevronRight } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
-import { NavigationTypes, SidebarNav, Subchapter } from './sidebar';
+import {
+    Bookmark,
+    Highlight,
+    NavigationTypes,
+    Settings,
+    SidebarNav,
+    Subchapter
+} from './sidebar';
 
 export const AstronotesFooter = ({
     data
@@ -39,7 +46,7 @@ const MobileSideBar = ({ data }: { data: BookResponse }): JSX.Element => {
                 <SidebarNav
                     navigation={navigation}
                     setNavigation={setNavigation}
-                    className="absolute left-[-5px] bottom-[30px]"
+                    className="absolute left-[-5px] bottom-[30px] z-[2]"
                 />
             )}
             {navigation === 'LIST_CONTENT' && (
@@ -48,6 +55,23 @@ const MobileSideBar = ({ data }: { data: BookResponse }): JSX.Element => {
                     setNavigation={setNavigation}
                 />
             )}
+            {navigation === 'BOOKMARK' && (
+                <MobileBookmarkSidebar setNavigation={setNavigation} />
+            )}
+            {navigation === 'SETTING' && (
+                <MobileSetting setNavigation={setNavigation} />
+            )}
+            {navigation !== 'CLOSE' ||
+                (isShow && (
+                    <div
+                        className="absolute left-[-20px] bottom-[-25px] w-screen h-screen bg-transparent z-[1]"
+                        onClick={() => {
+                            setIsShow(false);
+                            setNavigation('CLOSE');
+                        }}
+                        aria-hidden
+                    />
+                ))}
         </div>
     );
 };
@@ -75,6 +99,76 @@ const MobileListOfContent = ({
                 {data.book.chapters.map((value) => (
                     <Subchapter key={value.id} value={value} />
                 ))}
+            </div>
+        </div>
+    );
+};
+
+const MobileBookmarkSidebar = ({
+    setNavigation
+}: {
+    setNavigation: Dispatch<SetStateAction<NavigationTypes>>;
+}): JSX.Element => {
+    const [selected, setSelected] = useState<'HIGHLIGHT' | 'BOOKMARK'>(
+        'HIGHLIGHT'
+    );
+
+    return (
+        <div className="absolute left-[-20px] bottom-[-24px] w-screen h-[calc(100vh-200px)] bg-[#1D1D1D] z-10">
+            <div className="flex justify-between p-5">
+                <div className="flex gap-8">
+                    <span
+                        className={`inline-block font-extrabold text-base pb-[6px] cursor-pointer ${
+                            selected === 'HIGHLIGHT' &&
+                            'text-[#B6A6F3] border-b-2 border-[#C4B9FF]'
+                        }`}
+                        onClick={() => setSelected('HIGHLIGHT')}
+                        aria-hidden>
+                        Highlight
+                    </span>
+                    <span
+                        className={`inline-block font-extrabold text-base pb-[6px] cursor-pointer ${
+                            selected === 'BOOKMARK' &&
+                            'text-[#B6A6F3] border-b-2 border-[#C4B9FF]'
+                        }`}
+                        onClick={() => setSelected('BOOKMARK')}
+                        aria-hidden>
+                        Bookmark
+                    </span>
+                </div>
+                <MdClose
+                    size={24}
+                    className="text-white cursor-pointer"
+                    onClick={() => setNavigation('CLOSE')}
+                />
+            </div>
+            <div className="px-5 py-3 flex flex-col gap-2">
+                {selected === 'HIGHLIGHT' && <Highlight />}
+                {selected === 'BOOKMARK' && <Bookmark />}
+            </div>
+        </div>
+    );
+};
+
+const MobileSetting = ({
+    setNavigation
+}: {
+    setNavigation: Dispatch<SetStateAction<NavigationTypes>>;
+}): JSX.Element => {
+    return (
+        <div className="absolute left-[-20px] bottom-[-24px] w-screen h-[calc(100vh-200px)] bg-[#1D1D1D] z-10">
+            <div className="flex justify-between p-5">
+                <span className="inline-block font-extrabold text-base pt-[2px]">
+                    Opsi Tampilan
+                </span>
+                <MdClose
+                    size={24}
+                    className="text-white cursor-pointer"
+                    onClick={() => setNavigation('CLOSE')}
+                />
+            </div>
+            <div className="px-5 py-3 flex flex-col gap-2">
+                <Settings />
             </div>
         </div>
     );
