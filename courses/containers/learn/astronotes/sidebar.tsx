@@ -29,7 +29,7 @@ export const AstronotesSidebar = ({
                 <ListOfContent data={data} setNavigation={setNavigation} />
             )}
             {navigation === 'BOOKMARK' && (
-                <Bookmark setNavigation={setNavigation} />
+                <BookmarkSidebar setNavigation={setNavigation} />
             )}
             {navigation === 'SETTING' && (
                 <SidebarSetting setNavigation={setNavigation} />
@@ -115,7 +115,7 @@ const ListOfContent = ({
         <div className="w-[230px] h-[calc(100vh-88px)] bg-[#121212] rounded-lg text-white">
             <div className="flex justify-between p-2 border-b border-[#2D2D2D]">
                 <span className="inline-block font-body text-xs pt-[2px]">
-                    DAFTAR ISI
+                    Daftar Isi
                 </span>
                 <IoMdClose
                     size={18}
@@ -173,7 +173,7 @@ export const Subchapter = ({ value }: { value: BookChapter }): JSX.Element => {
     );
 };
 
-const Bookmark = ({
+const BookmarkSidebar = ({
     setNavigation
 }: {
     setNavigation: Dispatch<SetStateAction<NavigationTypes>>;
@@ -211,7 +211,131 @@ const Bookmark = ({
                     onClick={() => setNavigation('CLOSE')}
                 />
             </div>
-            <div className="px-2 py-[10px] flex flex-col gap-2">ISINYA</div>
+            <div className="px-2 py-[10px] flex flex-col gap-2">
+                {selected === 'HIGHLIGHT' && <Highlight />}
+                {selected === 'BOOKMARK' && <Bookmark />}
+            </div>
+        </div>
+    );
+};
+
+const DUMMY_HIGHLIGHTS = {
+    data: [
+        {
+            book_chapter_id: 'asiqei12b31',
+            title: 'Bab 1. Unsur Molekul dan Tabel Periodik',
+            order: 1,
+            blocks: [
+                {
+                    block_id: 'aslkdhj1q89741',
+                    block_heading: '1.1 Struktur Atom',
+                    highlights: [
+                        {
+                            text: 'tiga jenis partikel subatom, yaitu proton, neutron dan elektron',
+                            page_id: 'asdkg1236192'
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+};
+
+export const Highlight = (): JSX.Element => {
+    const [isShow, setIsShow] = useState(false);
+
+    return (
+        <div>
+            {DUMMY_HIGHLIGHTS.data?.map((value) => (
+                <>
+                    <div
+                        key={value.book_chapter_id}
+                        className="flex gap-[6px] cursor-pointer"
+                        onClick={() => setIsShow((prev) => !prev)}
+                        aria-hidden>
+                        <FaChevronRight
+                            size={12}
+                            className={`text-[#CCCCCC] mt-[2px] ${
+                                isShow && 'rotate-90'
+                            }`}
+                        />
+                        <span className="inline-block font-body text-xs text-[#CCCCCC]">
+                            {value.title}
+                        </span>
+                    </div>
+                    {value.blocks?.map((block) => (
+                        <div
+                            key={block.block_id}
+                            className={`flex flex-col gap-1 pt-2 pl-4 ${
+                                isShow ? '' : 'hidden'
+                            }`}>
+                            <span className="inline-block font-body text-[10px] text-[#999999]">
+                                {block.block_heading}
+                            </span>
+                            {block.highlights.map((highlight) => (
+                                <span
+                                    key={highlight.page_id}
+                                    className="inline-block font-body text-xs pl-2 border-l-2"
+                                    style={{ borderColor: '#D85140' }}>
+                                    {highlight.text}
+                                </span>
+                            ))}
+                        </div>
+                    ))}
+                </>
+            ))}
+        </div>
+    );
+};
+
+const DUMMY_BOOKMARKS = {
+    bookmarks: [
+        {
+            book_chapter_id: 'asdkhi1231',
+            title: 'Bab 1. Unsur Molekul dan Tabel Periodik',
+            order: 1,
+            page_id: 'askjgd119gw',
+            block_headings: ['1.1 Struktur Atom', '1.2 Struktur Molukel']
+        }
+    ]
+};
+
+export const Bookmark = (): JSX.Element => {
+    const [isShow, setIsShow] = useState(false);
+
+    return (
+        <div>
+            {DUMMY_BOOKMARKS.bookmarks?.map((value) => (
+                <>
+                    <div
+                        key={value.book_chapter_id}
+                        className="flex gap-[6px] cursor-pointer"
+                        onClick={() => setIsShow((prev) => !prev)}
+                        aria-hidden>
+                        <FaChevronRight
+                            size={12}
+                            className={`text-[#CCCCCC] mt-[2px] ${
+                                isShow && 'rotate-[-90deg]'
+                            }`}
+                        />
+                        <span className="inline-block font-body text-xs text-[#CCCCCC]">
+                            {value.title}
+                        </span>
+                    </div>
+                    <div
+                        className={`flex flex-col gap-1 pt-2 pl-4 ${
+                            isShow ? '' : 'hidden'
+                        }`}>
+                        {value.block_headings?.map((block, index) => (
+                            <span
+                                key={index}
+                                className="inline-block font-body text-[10px] text-[#999999]">
+                                {block}
+                            </span>
+                        ))}
+                    </div>
+                </>
+            ))}
         </div>
     );
 };
@@ -234,12 +358,101 @@ const SidebarSetting = ({
                 />
             </div>
             <div className="px-2 py-[10px] flex flex-col gap-2">
-                ISINYA
-                <div className="relative w-max h-max">
-                    <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[20px] h-[10px] bg-[#D9D9D9]" />
-                    <FaToggleOn size={24} className="relative text-[#333333]" />
-                </div>
+                <Settings />
             </div>
         </div>
+    );
+};
+
+export const Settings = (): JSX.Element => {
+    const [darkMode, setDarkMode] = useState(true);
+    const [smallText, setSmallText] = useState(false);
+    const [fontStyle, setFontStyle] = useState<'DEFAULT' | 'SERIF' | 'MONO'>(
+        'DEFAULT'
+    );
+
+    return (
+        <>
+            <div
+                className="flex justify-between items-center cursor-pointer"
+                onClick={() => setDarkMode((prev) => !prev)}
+                aria-hidden>
+                <span className="inline-block font-body text-xs text-[#CCCCCC]">
+                    Tampilan Gelap
+                </span>
+                <div className="relative w-max h-max">
+                    <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[20px] h-[10px] bg-[#D9D9D9]" />
+                    <FaToggleOn
+                        size={24}
+                        className={`relative text-[#333333] ${
+                            !darkMode && 'rotate-180'
+                        }`}
+                    />
+                </div>
+            </div>
+            <div className="flex flex-col gap-2">
+                <span className="inline-block font-body text-xs text-[#CCCCCC]">
+                    Style
+                </span>
+                <div className="flex gap-2">
+                    <div
+                        className={`flex flex-col items-center gap-[2px] w-[55px] pt-[5px] pb-[7px] hover:bg-[#2D2D2D] rounded-lg cursor-pointer ${
+                            fontStyle === 'DEFAULT' && 'bg-[#212121]'
+                        }`}
+                        onClick={() => setFontStyle('DEFAULT')}
+                        aria-hidden>
+                        <span className="inline-block font-body text-[#B6A6F3]">
+                            Ag
+                        </span>
+                        <span className="inline-block font-body text-[10px] text-[#CCCCCC]">
+                            Default
+                        </span>
+                    </div>
+                    <div
+                        className={`flex flex-col items-center gap-[2px] w-[55px] pt-[5px] pb-[7px] hover:bg-[#2D2D2D] rounded-lg cursor-pointer ${
+                            fontStyle === 'SERIF' && 'bg-[#212121]'
+                        }`}
+                        onClick={() => setFontStyle('SERIF')}
+                        aria-hidden>
+                        <span className="inline-block font-body text-[#B6A6F3]">
+                            Ag
+                        </span>
+                        <span className="inline-block font-body text-[10px] text-[#CCCCCC]">
+                            Serif
+                        </span>
+                    </div>
+                    <div
+                        className={`flex flex-col items-center gap-[2px] w-[55px] pt-[5px] pb-[7px] hover:bg-[#2D2D2D] rounded-lg cursor-pointer ${
+                            fontStyle === 'MONO' && 'bg-[#212121]'
+                        }`}
+                        onClick={() => setFontStyle('MONO')}
+                        aria-hidden>
+                        <span className="inline-block font-body text-[#B6A6F3]">
+                            Ag
+                        </span>
+                        <span className="inline-block font-body text-[10px] text-[#CCCCCC]">
+                            Mono
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div
+                className="flex justify-between items-center cursor-pointer"
+                onClick={() => setSmallText((prev) => !prev)}
+                aria-hidden>
+                <span className="inline-block font-body text-xs text-[#CCCCCC]">
+                    Small text
+                </span>
+                <div className="relative w-max h-max">
+                    <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[20px] h-[10px] bg-[#D9D9D9]" />
+                    <FaToggleOn
+                        size={24}
+                        className={`relative text-[#333333] ${
+                            !smallText && 'rotate-180'
+                        }`}
+                    />
+                </div>
+            </div>
+        </>
     );
 };
