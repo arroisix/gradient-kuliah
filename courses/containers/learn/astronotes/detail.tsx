@@ -1,16 +1,13 @@
 import { NotionRenderer } from 'react-notion-x';
 import dynamic from 'next/dynamic';
 import { ExtendedRecordMap } from 'notion-types';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { FaChevronRight, FaList } from 'react-icons/fa';
-import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
+import { useEffect, useState } from 'react';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useRouter } from 'next/router';
 import NeedSubscribe from 'courses/components/NeedSubscribe';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import { AUTHENTICATION_ROUTE } from 'commons/constants';
 import { useGetBookContentQuery } from 'courses/redux/api/courseApi';
-import { AstroNotesItem } from './home';
 import useElementSize from 'commons/hooks/useElementSize';
 import { AstronotesSidebar } from './sidebar';
 import { AstronotesFooter } from './footer';
@@ -44,31 +41,6 @@ export const customMapPageUrl =
         return `/astronotes/${rootPageId}/${notionId}`;
     };
 
-const ListOfAstroNotes = ({
-    data,
-    setShowMaterial
-}: {
-    data: BookResponse;
-    setShowMaterial?: Dispatch<SetStateAction<boolean>>;
-}): JSX.Element => {
-    return (
-        <div className="py-4">
-            {data?.book.chapters?.map((astro: BookChapter) => (
-                <AstroNotesItem
-                    astro={astro}
-                    key={astro.id}
-                    book={data.book}
-                    extraCallback={
-                        setShowMaterial
-                            ? () => setShowMaterial(false)
-                            : undefined
-                    }
-                />
-            ))}
-        </div>
-    );
-};
-
 const AstronoteDetail = ({
     notes
 }: {
@@ -76,12 +48,10 @@ const AstronoteDetail = ({
 }): JSX.Element => {
     const router = useRouter();
     const { slug, id } = router.query;
-    const { isMobileBreakpoints } = useWindowBreakpoints();
     const { width: notebookWidth, ref: notebookRef } =
         useElementSize<HTMLDivElement>();
     const { isAuthenticated } = useAuth();
-    const [showMaterial, setShowMaterial] = useState(false);
-    const { data, isLoading } = useGetBookContentQuery(
+    const { data } = useGetBookContentQuery(
         {
             slug: slug as string,
             book_id: id as string
@@ -134,44 +104,6 @@ const AstronoteDetail = ({
             <div className="hidden md:block h-[calc(100vh-88px)] my-auto pl-5">
                 <AstronotesSidebar data={data as BookResponse} />
             </div>
-            <div
-                className="md:hidden bg-neutral-800 border-4 border-neutral-600 text-neutral-200 top-[70px] right-0 w-8 rounded-l-xl h-16 z-10 fixed flex justify-center items-center"
-                onClick={() => setShowMaterial(true)}
-                aria-hidden>
-                <FaList />
-            </div>
-            {isMobileBreakpoints && showMaterial && (
-                <div className="fixed z-[100] top-0 right-0 w-screen h-screen bg-white">
-                    <header className="flex items-center justify-between w-full px-4 py-4 text-black md:px-8">
-                        <span className="text-2xl font-bold cursor-pointer font-[Urbanist]">
-                            G
-                        </span>
-                        <div
-                            className="flex items-center"
-                            onClick={() => setShowMaterial(false)}
-                            aria-hidden>
-                            <FaChevronRight />
-                            <FaChevronRight className="-ml-2" />
-                            <span className="text-bold">Tutup</span>
-                        </div>
-                    </header>
-                    <div className="px-4">
-                        <h1 className="flex items-center gap-1 text-2xl font-bold text-black md:text-4xl break-word">
-                            {isLoading ? (
-                                <div className="w-64 p-4 rounded-lg bg-neutral-300 animate-pulse" />
-                            ) : (
-                                data?.book.title
-                            )}
-                        </h1>
-                        <div className="h-[calc(95vh-100px)] overflow-auto">
-                            <ListOfAstroNotes
-                                data={data as BookResponse}
-                                setShowMaterial={setShowMaterial}
-                            />
-                        </div>
-                    </div>
-                </div>
-            )}
             <div className="w-full overflow-y-auto" ref={notebookRef}>
                 {!!notes && showContent ? (
                     <NotionRenderer
