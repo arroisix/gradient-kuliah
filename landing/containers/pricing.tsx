@@ -116,6 +116,9 @@ const CardPrice = ({
                 </h6>
             </div>
             <div className="flex flex-col gap-[10px] md:gap-3 h-full">
+                <h5 className="font-extrabold text-xl">
+                    Akses Semua Kelas & Fitur
+                </h5>
                 {benefits?.feature?.map(({ title, description }, index) => (
                     <div key={index} className="flex items-center gap-3">
                         <SlCheck className="text-accent-purple" size={32} />
