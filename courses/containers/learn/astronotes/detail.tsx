@@ -102,7 +102,7 @@ const AstronoteDetail = ({
     return (
         <section className="pt-[65px] flex flex-col md:flex-row relative md:overflow-hidden md:h-[100vh] bg-black">
             <div className="hidden md:block h-[calc(100vh-88px)] my-auto pl-5">
-                <AstronotesSidebar data={data as BookResponse} />
+                <AstronotesSidebar />
             </div>
             <div className="w-full overflow-y-auto" ref={notebookRef}>
                 {!!notes && showContent ? (
@@ -138,7 +138,7 @@ const AstronoteDetail = ({
             <div
                 className="fixed bottom-0 right-0 pt-2 pb-6 bg-black"
                 style={{ width: notebookWidth }}>
-                <AstronotesFooter data={data as BookResponse} />
+                <AstronotesFooter />
             </div>
         </section>
     );

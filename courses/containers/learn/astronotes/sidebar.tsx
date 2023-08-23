@@ -12,11 +12,7 @@ import { RiQuestionLine } from 'react-icons/ri';
 
 export type NavigationTypes = 'CLOSE' | 'LIST_CONTENT' | 'BOOKMARK' | 'SETTING';
 
-export const AstronotesSidebar = ({
-    data
-}: {
-    data: BookResponse;
-}): JSX.Element => {
+export const AstronotesSidebar = (): JSX.Element => {
     const [navigation, setNavigation] = useState<NavigationTypes>('CLOSE');
     return (
         <div className="flex gap-[10px]">
@@ -26,7 +22,7 @@ export const AstronotesSidebar = ({
                 className="h-[calc(100vh-88px)]"
             />
             {navigation === 'LIST_CONTENT' && (
-                <ListOfContent data={data} setNavigation={setNavigation} />
+                <ListOfContent setNavigation={setNavigation} />
             )}
             {navigation === 'BOOKMARK' && (
                 <BookmarkSidebar setNavigation={setNavigation} />
@@ -104,11 +100,35 @@ export const SidebarNav = ({
     );
 };
 
+export interface TABLE_CONTENT_INTERFACE {
+    book_chapter_id: string;
+    title: string;
+    order: number;
+    page_id: string;
+    blocks: { block_id: string; block_heading: string; page_id: string }[];
+}
+
+export const DUMMY_TABLE_CONTENT: { contents: TABLE_CONTENT_INTERFACE[] } = {
+    contents: [
+        {
+            book_chapter_id: 'asdhkg1k2938',
+            title: 'Bab 1.  Unsur Molekul dan Tabel Periodik',
+            order: 1,
+            page_id: 'aksudg131h',
+            blocks: [
+                {
+                    block_id: 'adkjg2i3169',
+                    block_heading: 'Struktur Atom',
+                    page_id: 'asdjkhq1236'
+                }
+            ]
+        }
+    ]
+};
+
 const ListOfContent = ({
-    data,
     setNavigation
 }: {
-    data: BookResponse;
     setNavigation: Dispatch<SetStateAction<NavigationTypes>>;
 }): JSX.Element => {
     return (
@@ -124,28 +144,34 @@ const ListOfContent = ({
                 />
             </div>
             <div className="px-2 py-[10px] flex flex-col gap-2">
-                {data.book.chapters.map((value) => (
-                    <Subchapter key={value.id} value={value} />
+                {DUMMY_TABLE_CONTENT.contents?.map((value) => (
+                    <Content key={value.page_id} value={value} />
                 ))}
             </div>
         </div>
     );
 };
 
-export const Subchapter = ({ value }: { value: BookChapter }): JSX.Element => {
+export const Content = ({
+    value
+}: {
+    value: TABLE_CONTENT_INTERFACE;
+}): JSX.Element => {
     const router = useRouter();
     const { slug, id } = router.query;
     const [isShow, setIsShow] = useState(false);
 
     return (
-        <div key={value.id}>
+        <div key={value.page_id}>
             <div
-                className="flex items-center gap-[6px] cursor-pointer"
+                className="flex gap-[6px] cursor-pointer"
                 onClick={() => setIsShow((prev) => !prev)}
                 aria-hidden>
                 <FaChevronRight
                     size={12}
-                    className={`text-[#CCCCCC] ${isShow && 'rotate-[-90deg]'}`}
+                    className={`text-[#CCCCCC] mt-[2px] ${
+                        isShow && 'rotate-[-90deg]'
+                    }`}
                 />
                 <span className="inline-block font-body text-xs text-[#CCCCCC] pb-[1px]">
                     {value.title}
@@ -155,17 +181,17 @@ export const Subchapter = ({ value }: { value: BookChapter }): JSX.Element => {
                 className={`flex flex-col gap-1 pt-2 pl-4 ${
                     isShow ? '' : 'hidden'
                 }`}>
-                {value.subsection.sections.map((subsection) => (
+                {value.blocks?.map((block) => (
                     <span
-                        key={subsection.key}
+                        key={block.block_id}
                         className="inline-block font-body text-xs text-[#CCCCCC] p-1 cursor-pointer hover:bg-neutral-700 rounded"
                         onClick={() =>
                             router.push(
-                                `/astronotes/${slug}/${id}/${subsection.key}`
+                                `/astronotes/${slug}/${id}/${block.block_id}`
                             )
                         }
                         aria-hidden>
-                        {subsection.title}
+                        {block.block_heading}
                     </span>
                 ))}
             </div>

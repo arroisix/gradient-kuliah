@@ -4,22 +4,19 @@ import { FaChevronRight } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
 import {
     Bookmark,
+    Content,
+    DUMMY_TABLE_CONTENT,
     Highlight,
     NavigationTypes,
     Settings,
-    SidebarNav,
-    Subchapter
+    SidebarNav
 } from './sidebar';
 
-export const AstronotesFooter = ({
-    data
-}: {
-    data: BookResponse;
-}): JSX.Element => {
+export const AstronotesFooter = (): JSX.Element => {
     return (
         <div className="relative flex">
             <div className="md:hidden pl-5">
-                <MobileSideBar data={data} />
+                <MobileSideBar />
             </div>
             <div className="w-full px-5">
                 <Pagination />
@@ -31,7 +28,7 @@ export const AstronotesFooter = ({
     );
 };
 
-const MobileSideBar = ({ data }: { data: BookResponse }): JSX.Element => {
+const MobileSideBar = (): JSX.Element => {
     const [isShow, setIsShow] = useState(false);
     const [navigation, setNavigation] = useState<NavigationTypes>('CLOSE');
 
@@ -50,10 +47,7 @@ const MobileSideBar = ({ data }: { data: BookResponse }): JSX.Element => {
                 />
             )}
             {navigation === 'LIST_CONTENT' && (
-                <MobileListOfContent
-                    data={data}
-                    setNavigation={setNavigation}
-                />
+                <MobileListOfContent setNavigation={setNavigation} />
             )}
             {navigation === 'BOOKMARK' && (
                 <MobileBookmarkSidebar setNavigation={setNavigation} />
@@ -77,10 +71,8 @@ const MobileSideBar = ({ data }: { data: BookResponse }): JSX.Element => {
 };
 
 const MobileListOfContent = ({
-    data,
     setNavigation
 }: {
-    data: BookResponse;
     setNavigation: Dispatch<SetStateAction<NavigationTypes>>;
 }): JSX.Element => {
     return (
@@ -96,8 +88,8 @@ const MobileListOfContent = ({
                 />
             </div>
             <div className="px-5 py-3 flex flex-col gap-2">
-                {data.book.chapters.map((value) => (
-                    <Subchapter key={value.id} value={value} />
+                {DUMMY_TABLE_CONTENT.contents?.map((value) => (
+                    <Content key={value.page_id} value={value} />
                 ))}
             </div>
         </div>
