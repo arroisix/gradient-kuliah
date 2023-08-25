@@ -1368,3 +1368,7 @@ sticky-3.animate {
     max-height: 300px;
     object-fit: contain;
 }
+
+.markdown-overflow-break-word {
+    overflow-wrap: break-word;
+}
