@@ -1372,3 +1372,11 @@ sticky-3.animate {
 .markdown-overflow-break-word {
     overflow-wrap: break-word;
 }
+
+.markdown-blue-link a {
+    color: #58a6ff;
+}
+
+.markdown-blue-link a:hover {
+    text-decoration: underline;
+}
