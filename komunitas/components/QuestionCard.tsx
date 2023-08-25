@@ -137,7 +137,7 @@ const QuestionCard = ({
                 </div>
                 <article className="pt-[12px] pb-[18px] lg:pl-[36px]">
                     <ReactMarkdown
-                        className={`text-xs font-body ${
+                        className={`text-xs font-body markdown-img-max-height ${
                             clickable ? 'pointer-events-none' : ''
                         }`}
                         remarkPlugins={[remarkMath]}

@@ -136,7 +136,7 @@ const AnswerCard = ({
             <div className="flex flex-col gap-[18px] lg:pl-[36px]">
                 <article>
                     <ReactMarkdown
-                        className="text-xs font-body"
+                        className="text-xs font-body markdown-img-max-height"
                         remarkPlugins={[remarkMath]}
                         rehypePlugins={[rehypeKatex]}
                         linkTarget={'_blank'}>
