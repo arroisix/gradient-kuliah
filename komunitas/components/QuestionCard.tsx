@@ -1,6 +1,7 @@
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import remarkGfm from 'remark-gfm';
 import moment from 'moment';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -137,10 +138,10 @@ const QuestionCard = ({
                 </div>
                 <article className="pt-[12px] pb-[18px] lg:pl-[36px]">
                     <ReactMarkdown
-                        className={`text-xs font-body markdown-img-max-height ${
+                        className={`markdown-body-xs markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height ${
                             clickable ? 'pointer-events-none' : ''
                         }`}
-                        remarkPlugins={[remarkMath]}
+                        remarkPlugins={[remarkMath, remarkGfm]}
                         rehypePlugins={[rehypeKatex]}
                         linkTarget={clickable ? '' : '_blank'}>
                         {content?.replaceAll('\n', '\n\n')}

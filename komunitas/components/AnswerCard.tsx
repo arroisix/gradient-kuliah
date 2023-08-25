@@ -1,6 +1,7 @@
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import remarkGfm from 'remark-gfm';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import Image from 'next/image';
 import { useContext, useState } from 'react';
@@ -136,8 +137,8 @@ const AnswerCard = ({
             <div className="flex flex-col gap-[18px] lg:pl-[36px]">
                 <article>
                     <ReactMarkdown
-                        className="text-xs font-body markdown-img-max-height"
-                        remarkPlugins={[remarkMath]}
+                        className="markdown-body-xs markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height"
+                        remarkPlugins={[remarkMath, remarkGfm]}
                         rehypePlugins={[rehypeKatex]}
                         linkTarget={'_blank'}>
                         {content?.replaceAll('\n', '\n\n')}
