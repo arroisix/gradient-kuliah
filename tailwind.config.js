@@ -11,6 +11,7 @@ module.exports = {
         './komunitas/**/*.{ts,js,jsx,tsx}',
         './referral/**/*.{ts,js,jsx,tsx}'
     ],
+    darkMode: 'class',
     theme: {
         fontFamily: {
             sans: ['Raleway', 'sans-serif'],
