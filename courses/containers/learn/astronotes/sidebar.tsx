@@ -1,3 +1,4 @@
+import { useThemeContext } from 'commons/contexts/ThemeProvider';
 import { useRouter } from 'next/router';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { AiOutlineFontColors } from 'react-icons/ai';
@@ -391,7 +392,7 @@ const SidebarSetting = ({
 };
 
 export const Settings = (): JSX.Element => {
-    const [darkMode, setDarkMode] = useState(true);
+    const { theme, toggleTheme } = useThemeContext();
     const [smallText, setSmallText] = useState(false);
     const [fontStyle, setFontStyle] = useState<'DEFAULT' | 'SERIF' | 'MONO'>(
         'DEFAULT'
@@ -401,7 +402,7 @@ export const Settings = (): JSX.Element => {
         <>
             <div
                 className="flex justify-between items-center cursor-pointer"
-                onClick={() => setDarkMode((prev) => !prev)}
+                onClick={toggleTheme}
                 aria-hidden>
                 <span className="inline-block font-body text-xs text-[#CCCCCC]">
                     Tampilan Gelap
@@ -411,7 +412,7 @@ export const Settings = (): JSX.Element => {
                     <FaToggleOn
                         size={24}
                         className={`relative text-[#333333] ${
-                            !darkMode && 'rotate-180'
+                            theme === 'light' && 'rotate-180'
                         }`}
                     />
                 </div>
