@@ -38,7 +38,7 @@ const NeedSubscribe = ({}: { thumbnail?: string }): JSX.Element => {
                 </span>
                 <BenefitItems
                     icons={<MdPlayCircleOutline />}
-                    title="120+ Video Pembelajaran On Demand"
+                    title="Akses semua video pembelajaran on demand"
                 />
                 <BenefitItems
                     icons={<MdEdit />}

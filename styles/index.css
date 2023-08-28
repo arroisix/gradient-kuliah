@@ -1363,3 +1363,20 @@ sticky-3.animate {
 .markdown-pre-code code {
     white-space: pre-line;
 }
+
+.markdown-img-max-height img {
+    max-height: 300px;
+    object-fit: contain;
+}
+
+.markdown-overflow-break-word {
+    overflow-wrap: break-word;
+}
+
+.markdown-blue-link a {
+    color: #58a6ff;
+}
+
+.markdown-blue-link a:hover {
+    text-decoration: underline;
+}
