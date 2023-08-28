@@ -27,6 +27,7 @@ import { useEffect } from 'react';
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import usePosthog from 'commons/hooks/usePosthog';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { ThemeContextProvider } from 'commons/contexts/ThemeProvider';
 
 const store = useStore();
 
@@ -61,9 +62,11 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
                 persistor={store.__persistor}
                 loading={<LoadingBackdrop />}>
                 <GoogleOAuthProvider clientId="3688986116-g7dlt8prm1gimh870k4h0trds8njq4rj.apps.googleusercontent.com">
-                    <AuthProvider>
-                        <Component {...pageProps} />
-                    </AuthProvider>
+                    <ThemeContextProvider>
+                        <AuthProvider>
+                            <Component {...pageProps} />
+                        </AuthProvider>
+                    </ThemeContextProvider>
                 </GoogleOAuthProvider>
             </PersistGate>
             <ToastContainer />
