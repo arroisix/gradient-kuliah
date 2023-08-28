@@ -15,7 +15,9 @@ module.exports = {
     theme: {
         fontFamily: {
             sans: ['Raleway', 'sans-serif'],
-            body: ['Open Sans', 'Roboto']
+            body: ['Open Sans', 'Roboto'],
+            serif: ['Playfair Display', 'serif'],
+            mono: ['Roboto Mono', 'serif']
         },
         extend: {
             boxShadow: {

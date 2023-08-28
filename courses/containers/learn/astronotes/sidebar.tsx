@@ -13,7 +13,13 @@ import { RiQuestionLine } from 'react-icons/ri';
 
 export type NavigationTypes = 'CLOSE' | 'LIST_CONTENT' | 'BOOKMARK' | 'SETTING';
 
-export const AstronotesSidebar = (): JSX.Element => {
+export const AstronotesSidebar = ({
+    fontStyle,
+    setFontStyle
+}: {
+    fontStyle: 'DEFAULT' | 'SERIF' | 'MONO';
+    setFontStyle: Dispatch<SetStateAction<'DEFAULT' | 'SERIF' | 'MONO'>>;
+}): JSX.Element => {
     const [navigation, setNavigation] = useState<NavigationTypes>('CLOSE');
     return (
         <div className="flex gap-[10px]">
@@ -29,7 +35,11 @@ export const AstronotesSidebar = (): JSX.Element => {
                 <BookmarkSidebar setNavigation={setNavigation} />
             )}
             {navigation === 'SETTING' && (
-                <SidebarSetting setNavigation={setNavigation} />
+                <SidebarSetting
+                    fontStyle={fontStyle}
+                    setFontStyle={setFontStyle}
+                    setNavigation={setNavigation}
+                />
             )}
         </div>
     );
@@ -368,8 +378,12 @@ export const Bookmark = (): JSX.Element => {
 };
 
 const SidebarSetting = ({
+    fontStyle,
+    setFontStyle,
     setNavigation
 }: {
+    fontStyle: 'DEFAULT' | 'SERIF' | 'MONO';
+    setFontStyle: Dispatch<SetStateAction<'DEFAULT' | 'SERIF' | 'MONO'>>;
     setNavigation: Dispatch<SetStateAction<NavigationTypes>>;
 }): JSX.Element => {
     return (
@@ -385,18 +399,21 @@ const SidebarSetting = ({
                 />
             </div>
             <div className="px-2 py-[10px] flex flex-col gap-2">
-                <Settings />
+                <Settings fontStyle={fontStyle} setFontStyle={setFontStyle} />
             </div>
         </div>
     );
 };
 
-export const Settings = (): JSX.Element => {
+export const Settings = ({
+    fontStyle,
+    setFontStyle
+}: {
+    fontStyle: 'DEFAULT' | 'SERIF' | 'MONO';
+    setFontStyle: Dispatch<SetStateAction<'DEFAULT' | 'SERIF' | 'MONO'>>;
+}): JSX.Element => {
     const { theme, toggleTheme } = useThemeContext();
     const [smallText, setSmallText] = useState(false);
-    const [fontStyle, setFontStyle] = useState<'DEFAULT' | 'SERIF' | 'MONO'>(
-        'DEFAULT'
-    );
 
     return (
         <>
@@ -428,7 +445,10 @@ export const Settings = (): JSX.Element => {
                         }`}
                         onClick={() => setFontStyle('DEFAULT')}
                         aria-hidden>
-                        <span className="inline-block font-body text-[#B6A6F3]">
+                        <span
+                            className={`inline-block font-body ${
+                                fontStyle === 'DEFAULT' && 'text-[#B6A6F3]'
+                            }`}>
                             Ag
                         </span>
                         <span className="inline-block font-body text-[10px] text-[#CCCCCC]">
@@ -441,7 +461,10 @@ export const Settings = (): JSX.Element => {
                         }`}
                         onClick={() => setFontStyle('SERIF')}
                         aria-hidden>
-                        <span className="inline-block font-body text-[#B6A6F3]">
+                        <span
+                            className={`inline-block font-serif ${
+                                fontStyle === 'SERIF' && 'text-[#B6A6F3]'
+                            }`}>
                             Ag
                         </span>
                         <span className="inline-block font-body text-[10px] text-[#CCCCCC]">
@@ -454,7 +477,10 @@ export const Settings = (): JSX.Element => {
                         }`}
                         onClick={() => setFontStyle('MONO')}
                         aria-hidden>
-                        <span className="inline-block font-body text-[#B6A6F3]">
+                        <span
+                            className={`inline-block font-mono ${
+                                fontStyle === 'MONO' && 'text-[#B6A6F3]'
+                            }`}>
                             Ag
                         </span>
                         <span className="inline-block font-body text-[10px] text-[#CCCCCC]">

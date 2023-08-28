@@ -12,11 +12,20 @@ import {
     SidebarNav
 } from './sidebar';
 
-export const AstronotesFooter = (): JSX.Element => {
+export const AstronotesFooter = ({
+    fontStyle,
+    setFontStyle
+}: {
+    fontStyle: 'DEFAULT' | 'SERIF' | 'MONO';
+    setFontStyle: Dispatch<SetStateAction<'DEFAULT' | 'SERIF' | 'MONO'>>;
+}): JSX.Element => {
     return (
         <div className="relative flex">
             <div className="md:hidden pl-5">
-                <MobileSideBar />
+                <MobileSideBar
+                    fontStyle={fontStyle}
+                    setFontStyle={setFontStyle}
+                />
             </div>
             <div className="w-full px-5">
                 <Pagination />
@@ -28,7 +37,13 @@ export const AstronotesFooter = (): JSX.Element => {
     );
 };
 
-const MobileSideBar = (): JSX.Element => {
+const MobileSideBar = ({
+    fontStyle,
+    setFontStyle
+}: {
+    fontStyle: 'DEFAULT' | 'SERIF' | 'MONO';
+    setFontStyle: Dispatch<SetStateAction<'DEFAULT' | 'SERIF' | 'MONO'>>;
+}): JSX.Element => {
     const [isShow, setIsShow] = useState(false);
     const [navigation, setNavigation] = useState<NavigationTypes>('CLOSE');
 
@@ -53,7 +68,11 @@ const MobileSideBar = (): JSX.Element => {
                 <MobileBookmarkSidebar setNavigation={setNavigation} />
             )}
             {navigation === 'SETTING' && (
-                <MobileSetting setNavigation={setNavigation} />
+                <MobileSetting
+                    fontStyle={fontStyle}
+                    setFontStyle={setFontStyle}
+                    setNavigation={setNavigation}
+                />
             )}
             {navigation !== 'CLOSE' ||
                 (isShow && (
@@ -143,8 +162,12 @@ const MobileBookmarkSidebar = ({
 };
 
 const MobileSetting = ({
+    fontStyle,
+    setFontStyle,
     setNavigation
 }: {
+    fontStyle: 'DEFAULT' | 'SERIF' | 'MONO';
+    setFontStyle: Dispatch<SetStateAction<'DEFAULT' | 'SERIF' | 'MONO'>>;
     setNavigation: Dispatch<SetStateAction<NavigationTypes>>;
 }): JSX.Element => {
     return (
@@ -160,7 +183,7 @@ const MobileSetting = ({
                 />
             </div>
             <div className="px-5 py-3 flex flex-col gap-2">
-                <Settings />
+                <Settings fontStyle={fontStyle} setFontStyle={setFontStyle} />
             </div>
         </div>
     );

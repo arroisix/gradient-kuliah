@@ -99,6 +99,9 @@ const AstronoteDetail = (): JSX.Element => {
     // const [showContent, setShowContent] = useState(false);
     const [highlighted, setHighlighted] = useState(false);
     const [points, setPoints] = useState({ x: 0, y: 0, width: 0 });
+    const [fontStyle, setFontStyle] = useState<'DEFAULT' | 'SERIF' | 'MONO'>(
+        'DEFAULT'
+    );
 
     // const renderNotebook = (): boolean => {
     //     if (data?.book?.is_public && data?.book.is_free) {
@@ -167,10 +170,20 @@ const AstronoteDetail = (): JSX.Element => {
                 />
             )}
             <div className="hidden md:block h-[calc(100vh-88px)] my-auto pl-5">
-                <AstronotesSidebar />
+                <AstronotesSidebar
+                    fontStyle={fontStyle}
+                    setFontStyle={setFontStyle}
+                />
             </div>
             <div className="w-full overflow-y-auto" ref={notebookRef}>
-                <div className="w-[80%] mx-auto">
+                <div
+                    className={`w-[80%] mx-auto ${
+                        fontStyle === 'DEFAULT'
+                            ? 'font-body'
+                            : fontStyle === 'SERIF'
+                            ? 'font-serif'
+                            : 'font-mono'
+                    }`}>
                     {DUMMY_BOOK_PROGRESS.blocks?.map((block) => (
                         <>
                             {block.contents?.map((content) => (
@@ -217,7 +230,10 @@ const AstronoteDetail = (): JSX.Element => {
             <div
                 className="fixed bottom-0 right-[17px] pt-2 pb-6 bg-black"
                 style={{ width: notebookWidth - 17 }}>
-                <AstronotesFooter />
+                <AstronotesFooter
+                    fontStyle={fontStyle}
+                    setFontStyle={setFontStyle}
+                />
             </div>
         </section>
     );
