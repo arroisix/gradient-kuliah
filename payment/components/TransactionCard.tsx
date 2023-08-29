@@ -47,10 +47,12 @@ const STATUS: { [key: string]: JSX.Element } = {
 
 const TransactionCard = ({
     transaction,
-    isList
+    isList,
+    active = false
 }: {
     transaction: Transaction;
     isList?: boolean;
+    active?: boolean;
 }): JSX.Element => {
     const { subscribed_packet } =
         transaction.subscriber || ({} as Subscription);
@@ -186,14 +188,22 @@ const TransactionCard = ({
                         {subscribed_packet?.packet_name}
                     </span>
                     <span className="inline-body font-body text-xs md:text-sm">
-                        {`${moment(transaction.created_at)
-                            .utc()
-                            .format('D MMM YYYY')} hingga ${moment(
-                            transaction.created_at
-                        )
-                            .add(subscribed_packet?.active_duration, 'd')
-                            .utc()
-                            .format('D MMM YYYY')}`}
+                        {active
+                            ? `${moment(transaction.subscriber.active_from)
+                                  .utc()
+                                  .format('D MMM YYYY')} hingga ${moment(
+                                  transaction.subscriber.deactivate_after
+                              )
+                                  .utc()
+                                  .format('D MMM YYYY')}`
+                            : `${moment(transaction.created_at)
+                                  .utc()
+                                  .format('D MMM YYYY')} hingga ${moment(
+                                  transaction.created_at
+                              )
+                                  .add(subscribed_packet?.active_duration, 'd')
+                                  .utc()
+                                  .format('D MMM YYYY')}`}
                     </span>
                 </div>
                 <div className="w-full sm:w-max flex flex-col sm:items-end gap-3">

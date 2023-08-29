@@ -54,6 +54,7 @@ const TransactionListContainer = (): JSX.Element => {
                         Aktif
                     </span>
                     <TransactionCard
+                        active
                         isList
                         transaction={activeTransaction as Transaction}
                     />
