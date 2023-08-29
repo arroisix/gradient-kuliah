@@ -83,16 +83,39 @@ const AstronoteDetail = ({
         },
         { skip: !slug || !id }
     );
-    const { is_subscribed } = useCourseSubscription(slug as string);
+    const { is_subscribed, isDoneFetchingSubcription } = useCourseSubscription(
+        slug as string
+    );
     const [showSubscribe, setShowSubscribe] = useState(false);
     const [showContent, setShowContent] = useState(false);
 
     const renderNotebook = (): boolean => {
-        if (data?.book?.is_public && data?.book.is_free) {
-            return true;
-        }
+        if (isDoneFetchingSubcription) {
+            if (data?.book?.is_public && data?.book.is_free) {
+                return true;
+            }
 
-        if (data?.book?.is_public && !data?.book.is_free) {
+            if (data?.book?.is_public && !data?.book.is_free) {
+                if (!is_subscribed) {
+                    setShowSubscribe(true);
+                }
+
+                return false;
+            }
+
+            if (!data?.book?.is_public && data?.book?.is_free) {
+                setShowSubscribe(false);
+                if (isAuthenticated) {
+                    return true;
+                }
+                router.push(AUTHENTICATION_ROUTE);
+                return false;
+            }
+
+            if (isAuthenticated && is_subscribed) {
+                return true;
+            }
+
             if (!is_subscribed) {
                 setShowSubscribe(true);
             }
@@ -100,29 +123,12 @@ const AstronoteDetail = ({
             return false;
         }
 
-        if (!data?.book?.is_public && data?.book?.is_free) {
-            setShowSubscribe(false);
-            if (isAuthenticated) {
-                return true;
-            }
-            router.push(AUTHENTICATION_ROUTE);
-            return false;
-        }
-
-        if (isAuthenticated && is_subscribed) {
-            return true;
-        }
-
-        if (!is_subscribed) {
-            setShowSubscribe(true);
-        }
-
         return false;
     };
 
     useEffect(() => {
         setShowContent(renderNotebook());
-    }, [data, is_subscribed, isAuthenticated]);
+    }, [data, is_subscribed, isAuthenticated, isDoneFetchingSubcription]);
 
     return (
         <section className="pt-[65px] flex flex-col md:flex-row relative md:overflow-hidden md:h-[100vh] bg-white">
