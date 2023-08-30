@@ -1,3 +1,8 @@
+import ReactMarkdown from 'react-markdown';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 import { useEffect, useState } from 'react';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useRouter } from 'next/router';
@@ -44,42 +49,42 @@ const AstronotesContextMenu = ({
     );
 };
 
-const DUMMY_BOOK_PROGRESS = {
-    page_id: 'askdjgh12319',
-    is_bookmarked: false,
-    slug: 'sataos',
-    chapter_title: 'Probabilitas',
-    total_page: 200,
-    current_page: 1,
-    blocks: [
-        {
-            id: 'askjdg17267',
-            order: 1,
-            contents: [
-                {
-                    id: 'asdkjh1491',
-                    text: 'Suatu eksperimen secara natural melibatkan komponen acak. Komponen acak dapat bernilai sangat kecil sehingga dapat diabaikan. Namun, sebaik apapun eksperimen yang dilakukan, variasi pada hasil akan selalu ada. Maka, tujuan kita dari belajar probabilitas adalah untuk mengerti, mengkuantifikasi dan memodelkan variasi tersebut.',
-                    type: 'TEXT',
-                    annotation: {
-                        anchor_offset: '20',
-                        focus_offset: '40',
-                        color: 'red'
-                    }
-                },
-                {
-                    id: 'aseiuqwwenas',
-                    text: 'Pada awalnya, para ilmuwan seperti John Dalton menyatakan bahwa semua materi terdiri atas atom yang merupakan unit terkecil dan tidak dapat dibagi-bagi lagi. Akan tetapi, berbagai eksperimen lanjutan yang dilakukan pada abad ke-19 menunjukkan bahwa atom terdiri dari tiga jenis partikel subatom, yaitu proton, neutron, dan elektron. Atom memiliki inti atom (disebut sebagai nukleus) yang tersusun atas proton dan neutron. Elektron dalam atom mengelilingi inti dan mengisi sisa volume atom. Elektron memiliki muatan negatif (-1), proton memiliki muatan positif (+1), dan neutron memiliki muatan netral (0)',
-                    type: 'TEXT',
-                    annotation: {
-                        anchor_offset: '0',
-                        focus_offset: '12',
-                        color: 'red'
-                    }
-                }
-            ]
-        }
-    ]
-};
+// const DUMMY_BOOK_PROGRESS = {
+//     page_id: 'askdjgh12319',
+//     is_bookmarked: false,
+//     slug: 'sataos',
+//     chapter_title: 'Probabilitas',
+//     total_page: 200,
+//     current_page: 1,
+//     blocks: [
+//         {
+//             id: 'askjdg17267',
+//             order: 1,
+//             contents: [
+//                 {
+//                     id: 'asdkjh1491',
+//                     text: 'Suatu eksperimen secara natural melibatkan komponen acak. Komponen acak dapat bernilai sangat kecil sehingga dapat diabaikan. Namun, sebaik apapun eksperimen yang dilakukan, variasi pada hasil akan selalu ada. Maka, tujuan kita dari belajar probabilitas adalah untuk mengerti, mengkuantifikasi dan memodelkan variasi tersebut.',
+//                     type: 'TEXT',
+//                     annotation: {
+//                         anchor_offset: '20',
+//                         focus_offset: '40',
+//                         color: 'red'
+//                     }
+//                 },
+//                 {
+//                     id: 'aseiuqwwenas',
+//                     text: 'Pada awalnya, para ilmuwan seperti John Dalton menyatakan bahwa semua materi terdiri atas atom yang merupakan unit terkecil dan tidak dapat dibagi-bagi lagi. Akan tetapi, berbagai eksperimen lanjutan yang dilakukan pada abad ke-19 menunjukkan bahwa atom terdiri dari tiga jenis partikel subatom, yaitu proton, neutron, dan elektron. Atom memiliki inti atom (disebut sebagai nukleus) yang tersusun atas proton dan neutron. Elektron dalam atom mengelilingi inti dan mengisi sisa volume atom. Elektron memiliki muatan negatif (-1), proton memiliki muatan positif (+1), dan neutron memiliki muatan netral (0)',
+//                     type: 'TEXT',
+//                     annotation: {
+//                         anchor_offset: '0',
+//                         focus_offset: '12',
+//                         color: 'red'
+//                     }
+//                 }
+//             ]
+//         }
+//     ]
+// };
 
 const AstronoteDetail = (): JSX.Element => {
     const router = useRouter();
@@ -161,6 +166,67 @@ const AstronoteDetail = (): JSX.Element => {
         // setShowContent(renderNotebook());
     }, [data, is_subscribed, isAuthenticated]);
 
+    const text = `
+# Pendahuluan
+
+## DIGIDAW $S=\\{0,1\\}$
+
+<span data-type="b" style="background-color: red;">test2</span>
+
+Dalam hidup kita seringkali menemui permasalahan yang kompleks dan diperhadapkan dengan berbagai alternatif solusi. Untuk memperoleh solusi yang terbaik (dari segi waktu, biaya, utilitas, fungsinal), perlu estimasi yang diperoleh dengan menggunakan model.
+
+$$
+S=\\{0,1\\}
+$$
+
+- test
+    
+    asdihasoidhoa
+    
+
+Model adalah \`representasi\` aproksimasi dari situasi fisis atau sebenarnya. Model dapat kita gunakan untuk beberapa hal berikut:
+
+1. Memperoleh kelakukan dan menjelaskanya  menggunakan sekumpulan $parameter$ 
+    1. hahaha
+2. Menghemat sumber daya eksperimen
+3. Ketika fenomena yang diobserasi memiliki kuantitas/properti yang dapat diukur
+
+[https://www.youtube.com/watch?v=GoA9KsQ_Pns](https://www.youtube.com/watch?v=GoA9KsQ_Pns)
+
+| a$12312$ | b |
+| --- | --- |
+| c | d |
+| e | f |
+
+Berikut adalah proses dari modeling. 
+
+![Untitled](Pendahuluan%20dce6c47a1fe24fb381cd795c4e06c338/Untitled.png)
+
+<aside>
+💡 test $digidaw$
+
+</aside>
+
+/boo
+
+> hidup ini tidak selalu digidaw awe $awe$
+> 
+
+- [ ]  berak
+
+\`\`\`go
+print("hello world of warcraft")
+\`\`\`
+
+[digidaw](https://www.google.com/maps/place/Faculty+of+Computer+Science,+University+of+Indonesia/@-6.3703237,106.8244792,17z/data=!3m1!4b1!4m6!3m5!1s0x2e69ec1ad14fb6cf:0xc94e4d829420fa15!8m2!3d-6.3703237!4d106.8270541!16s%2Fg%2F120kn47h?entry=ttu)
+
+digidaw
+
+[Python Dictionary Extend - Complete Tutorial - Python Guides](https://pythonguides.com/python-dictionary-extend/)
+
+[Pendahuluan dce6c47a1fe24fb381cd795c4e06c338.md](Pendahuluan%20dce6c47a1fe24fb381cd795c4e06c338/Pendahuluan_dce6c47a1fe24fb381cd795c4e06c338.md)
+`;
+
     return (
         <section className="pt-[65px] flex flex-col md:flex-row relative md:overflow-hidden md:h-[100vh] bg-black">
             {highlighted && (
@@ -184,7 +250,7 @@ const AstronoteDetail = (): JSX.Element => {
                             ? 'font-serif'
                             : 'font-mono'
                     }`}>
-                    {DUMMY_BOOK_PROGRESS.blocks?.map((block) => (
+                    {/* {DUMMY_BOOK_PROGRESS.blocks?.map((block) => (
                         <>
                             {block.contents?.map((content) => (
                                 <div
@@ -195,7 +261,16 @@ const AstronoteDetail = (): JSX.Element => {
                                 </div>
                             ))}
                         </>
-                    ))}
+                    ))} */}
+                    <div onMouseUp={handleHighlight} aria-hidden>
+                        <ReactMarkdown
+                            className="markdown-body-xs markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height"
+                            remarkPlugins={[remarkMath, remarkGfm]}
+                            rehypePlugins={[rehypeKatex, rehypeRaw]}
+                            linkTarget={'_blank'}>
+                            {text}
+                        </ReactMarkdown>
+                    </div>
                 </div>
                 {/* {!!notes && showContent ? (
                     <NotionRenderer
