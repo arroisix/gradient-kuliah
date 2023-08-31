@@ -71,7 +71,15 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                         type: 'website',
                         title: `Belajar ${courseData?.course_name} | Materi dan Latihan Soal`,
                         description: `Belajar materi ${courseData?.course_name} dari video lengkap dan latihan soal serta pembahasan di Gradient`,
-                        url: `https://gradient.academy/kelas/${params?.id}`
+                        url: `https://gradient.academy/kelas/${params?.id}`,
+                        images: [
+                            {
+                                url: 'https://assets.gradient.academy/assets/gradient_generic_thumbnail_black.jpg',
+                                width: 800,
+                                height: 600,
+                                alt: 'Gradient Logo'
+                            }
+                        ]
                     },
                     packetOffer: data.data
                 },

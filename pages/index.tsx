@@ -22,6 +22,12 @@ export async function getStaticProps(): Promise<{
             title: string;
             description: string;
             url: string;
+            images: {
+                url: string;
+                width: number;
+                height: number;
+                alt: string;
+            }[];
         };
     };
     revalidate: number;
@@ -40,7 +46,15 @@ export async function getStaticProps(): Promise<{
                 type: 'website',
                 title: `Platform Belajar Kuliah  No. 1 di Indonesia`,
                 description: `Tempat belajar materi kuliah nomor 1 di Indonesia. Lengkap materi dan pembahasan soal`,
-                url: `https://gradient.academy`
+                url: `https://gradient.academy`,
+                images: [
+                    {
+                        url: 'https://assets.gradient.academy/assets/gradient_generic_thumbnail_black.jpg',
+                        width: 800,
+                        height: 600,
+                        alt: 'Gradient Logo'
+                    }
+                ]
             }
         },
         revalidate: 60
