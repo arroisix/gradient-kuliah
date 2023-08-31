@@ -51,7 +51,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
             <NextSeo
                 defaultTitle="Gradient Academy"
                 title={pageProps?.title}
-                description={pageProps?.title}
+                description={pageProps?.description}
                 openGraph={pageProps?.openGraph}
             />
             <Head>
