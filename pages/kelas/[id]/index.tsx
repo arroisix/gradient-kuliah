@@ -7,8 +7,6 @@ import config from 'redux/api/config';
 import LandingPageOrchestrator from 'courses/components/LandingPage/LandingPageOrchestrator';
 import axios from 'axios';
 import { CourseJsonLd } from 'next-seo';
-import Head from 'next/head';
-// import { CourseJsonLd, NextSeo } from 'next-seo';
 
 const DetailKelas = ({
     id,
@@ -21,29 +19,6 @@ const DetailKelas = ({
 }): JSX.Element => {
     return (
         <>
-            <Head>
-                <title>{`Belajar ${courseData?.course_name} | Materi dan Latihan Soal`}</title>
-                <meta
-                    name="description"
-                    content={`Belajar materi ${courseData?.course_name} dari video lengkap dan latihan soal serta pembahasan di Gradient`}
-                    key="description"
-                />
-                <meta
-                    name="og:description"
-                    content={`Belajar materi ${courseData?.course_name} dari video lengkap dan latihan soal serta pembahasan di Gradient`}
-                    key="og:description"
-                />
-            </Head>
-            {/* <NextSeo
-                title={`Belajar ${courseData?.course_name} | Materi dan Latihan Soal`}
-                description={`Belajar materi ${courseData?.course_name} dari video lengkap dan latihan soal serta pembahasan di Gradient`}
-                openGraph={{
-                    type: 'website',
-                    title: `Belajar ${courseData?.course_name} | Materi dan Latihan Soal`,
-                    description: `Belajar materi ${courseData?.course_name} dari video lengkap dan latihan soal serta pembahasan di Gradient`,
-                    url: `https://gradient.academy/kelas/${id}`
-                }}
-            /> */}
             <CourseJsonLd
                 courseName={courseData?.course_name}
                 description={courseData?.description}
@@ -90,6 +65,14 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                 props: {
                     id: params?.id,
                     courseData,
+                    title: `Belajar ${courseData?.course_name} | Materi dan Latihan Soal`,
+                    description: `Belajar materi ${courseData?.course_name} dari video lengkap dan latihan soal serta pembahasan di Gradient`,
+                    openGraph: {
+                        type: 'website',
+                        title: `Belajar ${courseData?.course_name} | Materi dan Latihan Soal`,
+                        description: `Belajar materi ${courseData?.course_name} dari video lengkap dan latihan soal serta pembahasan di Gradient`,
+                        url: `https://gradient.academy/kelas/${params?.id}`
+                    },
                     packetOffer: data.data
                 },
                 revalidate: 300

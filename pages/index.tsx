@@ -3,30 +3,27 @@ import LandingContainer from 'landing/containers';
 import withAnon from 'commons/withAnon';
 import axios from 'axios';
 import config from 'redux/api/config';
-import { NextSeo } from 'next-seo';
 
-const Home = ({ data }: { data: PacketOffer[] }): JSX.Element => {
+const Home = ({ data }: { data: { data: PacketOffer[] } }): JSX.Element => {
     return (
-        <>
-            <NextSeo
-                title="Platform Belajar Kuliah  No. 1 di Indonesia"
-                description="Tempat belajar materi kuliah nomor 1 di Indonesia. Lengkap materi dan pembahasan soal"
-                openGraph={{
-                    type: 'website',
-                    title: `Platform Belajar Kuliah  No. 1 di Indonesia`,
-                    description: `Tempat belajar materi kuliah nomor 1 di Indonesia. Lengkap materi dan pembahasan soal`,
-                    url: `https://gradient.academy`
-                }}
-            />
-            <Layout shouldTransparent>
-                <LandingContainer pricingData={data} />
-            </Layout>
-        </>
+        <Layout shouldTransparent>
+            <LandingContainer pricingData={data.data} />
+        </Layout>
     );
 };
 
 export async function getStaticProps(): Promise<{
-    props: PacketOffer[];
+    props: {
+        data: PacketOffer[];
+        title: string;
+        description: string;
+        openGraph: {
+            type: string;
+            title: string;
+            description: string;
+            url: string;
+        };
+    };
     revalidate: number;
 }> {
     const { data }: { data: PacketOffer[] } = await axios.get(
@@ -34,7 +31,18 @@ export async function getStaticProps(): Promise<{
     );
 
     return {
-        props: data,
+        props: {
+            data,
+            title: 'Platform Belajar Kuliah  No. 1 di Indonesia',
+            description:
+                'Tempat belajar materi kuliah nomor 1 di Indonesia. Lengkap materi dan pembahasan soal',
+            openGraph: {
+                type: 'website',
+                title: `Platform Belajar Kuliah  No. 1 di Indonesia`,
+                description: `Tempat belajar materi kuliah nomor 1 di Indonesia. Lengkap materi dan pembahasan soal`,
+                url: `https://gradient.academy`
+            }
+        },
         revalidate: 60
     };
 }
