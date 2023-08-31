@@ -3,12 +3,25 @@ import LandingContainer from 'landing/containers';
 import withAnon from 'commons/withAnon';
 import axios from 'axios';
 import config from 'redux/api/config';
+import { NextSeo } from 'next-seo';
 
 const Home = ({ data }: { data: PacketOffer[] }): JSX.Element => {
     return (
-        <Layout shouldTransparent>
-            <LandingContainer pricingData={data} />
-        </Layout>
+        <>
+            <NextSeo
+                title="Platform Belajar Kuliah  No. 1 di Indonesia"
+                description="Tempat belajar materi kuliah nomor 1 di Indonesia. Lengkap materi dan pembahasan soal"
+                openGraph={{
+                    type: 'website',
+                    title: `Platform Belajar Kuliah  No. 1 di Indonesia`,
+                    description: `Tempat belajar materi kuliah nomor 1 di Indonesia. Lengkap materi dan pembahasan soal`,
+                    url: `https://gradient.academy`
+                }}
+            />
+            <Layout shouldTransparent>
+                <LandingContainer pricingData={data} />
+            </Layout>
+        </>
     );
 };
 
