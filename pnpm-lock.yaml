@@ -68,6 +68,9 @@ dependencies:
   next-redux-wrapper:
     specifier: ^7.0.5
     version: 7.0.5(next@12.1.6)(react-redux@8.0.7)(react@18.1.0)
+  next-seo:
+    specifier: ^6.1.0
+    version: 6.1.0(next@12.1.6)(react-dom@18.1.0)(react@18.1.0)
   node-fetch:
     specifier: ^3.2.10
     version: 3.2.10
@@ -7831,6 +7834,18 @@ packages:
       next: 12.1.6(@babel/core@7.22.5)(react-dom@18.1.0)(react@18.1.0)(sass@1.55.0)
       react: 18.1.0
       react-redux: 8.0.7(@reduxjs/toolkit@1.9.5)(@types/react-dom@18.0.7)(@types/react@18.0.23)(react-dom@18.1.0)(react-native@0.71.11)(react@18.1.0)(redux@4.2.1)
+    dev: false
+
+  /next-seo@6.1.0(next@12.1.6)(react-dom@18.1.0)(react@18.1.0):
+    resolution: {integrity: sha512-iMBpFoJsR5zWhguHJvsoBDxDSmdYTHtnVPB1ij+CD0NReQCP78ZxxbdL9qkKIf4oEuZEqZkrjAQLB0bkII7RYA==}
+    peerDependencies:
+      next: ^8.1.1-canary.54 || >=9.0.0
+      react: '>=16.0.0'
+      react-dom: '>=16.0.0'
+    dependencies:
+      next: 12.1.6(@babel/core@7.22.5)(react-dom@18.1.0)(react@18.1.0)(sass@1.55.0)
+      react: 18.1.0
+      react-dom: 18.1.0(react@18.1.0)
     dev: false
 
   /next@12.1.6(@babel/core@7.22.5)(react-dom@18.1.0)(react@18.1.0)(sass@1.55.0):
