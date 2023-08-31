@@ -74,7 +74,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                         url: `https://gradient.academy/kelas/${params?.id}`,
                         images: [
                             {
-                                url: 'https://assets.gradient.academy/assets/gradient_generic_thumbnail_black.jpg',
+                                url: 'https://assets.gradient.academy/assets/gradient.ico',
                                 width: 800,
                                 height: 600,
                                 alt: 'Gradient Logo'
