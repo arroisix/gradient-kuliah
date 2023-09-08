@@ -224,7 +224,7 @@ const AstronoteDetail = (): JSX.Element => {
                     }`}>
                     {/* <div onMouseUp={handleHighlight} aria-hidden>
                         <ReactMarkdown
-                            className="markdown-body-xs markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height"
+                            className="markdown-body-xs markdown-overflow-break-word markdown-blue-link markdown-img-max-height"
                             remarkPlugins={[remarkMath, remarkGfm]}
                             rehypePlugins={[rehypeKatex, rehypeRaw]}
                             linkTarget={'_blank'}>
@@ -239,7 +239,7 @@ const AstronoteDetail = (): JSX.Element => {
                     {data && (
                         <div onMouseUp={handleHighlight} aria-hidden>
                             <ReactMarkdown
-                                className="markdown-body-xs markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height"
+                                className="markdown-body-xs markdown-overflow-break-word markdown-blue-link markdown-img-max-height"
                                 remarkPlugins={[remarkMath, remarkGfm]}
                                 rehypePlugins={[rehypeKatex, rehypeRaw]}
                                 linkTarget={'_blank'}>
