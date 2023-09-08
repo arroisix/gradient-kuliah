@@ -64,7 +64,7 @@ export const ListBooks = ({
     isLoading: boolean;
 }): JSX.Element => {
     const router = useRouter();
-    const { id } = router.query;
+    // const { id } = router.query;
 
     return (
         <div className="flex flex-col gap-[14px]">
@@ -76,17 +76,15 @@ export const ListBooks = ({
                 </>
             )}
             {books?.map(
-                ({ book_id, title, authors, rating, book_cover_url }) => (
+                ({ book_id, title, authors, rating, book_cover_url, slug }) => (
                     <div
                         className="flex items-center gap-5 cursor-pointer"
                         key={book_id}
-                        onClick={() =>
-                            router.push(`/astronotes/${id}/${book_id}`)
-                        }
+                        onClick={() => router.push(`/astronotes/${slug}`)}
                         aria-hidden>
                         <Image
                             src={
-                                book_cover_url ??
+                                book_cover_url ||
                                 'https://assets.gradient.academy/assets/astronotes-kalkulus2-placeholder.jpg'
                             }
                             width={79}
