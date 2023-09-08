@@ -3,11 +3,10 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
-import { useEffect, useState } from 'react';
-import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 // import NeedSubscribe from 'courses/components/NeedSubscribe';
-import { useAuth } from 'authentication/contexts/AuthProvider';
+// import { useAuth } from 'authentication/contexts/AuthProvider';
 // import { AUTHENTICATION_ROUTE } from 'commons/constants';
 import useElementSize from 'commons/hooks/useElementSize';
 import { AstronotesSidebar } from './sidebar';
@@ -114,7 +113,7 @@ const AstronoteDetail = (): JSX.Element => {
     const { slug } = router.query;
     const { width: notebookWidth, ref: notebookRef } =
         useElementSize<HTMLDivElement>();
-    const { isAuthenticated } = useAuth();
+    // const { isAuthenticated } = useAuth();
 
     const { data } = useGetBookProgressQuery(
         { slug: slug as string },
