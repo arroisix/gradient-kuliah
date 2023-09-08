@@ -148,7 +148,7 @@ const ListOfContent = ({
             </div>
             <div className="h-[calc(100vh-126px)] overflow-y-auto px-2 py-[10px] flex flex-col gap-2">
                 {data?.contents?.map((value) => (
-                    <Content key={value.page_id} value={value} />
+                    <Content key={value.book_chapter_id} value={value} />
                 ))}
             </div>
         </div>
@@ -166,7 +166,7 @@ export const Content = ({
     const [postBookProgress] = usePostBookProgressMutation();
 
     return (
-        <div key={value.page_id}>
+        <div key={value.book_chapter_id}>
             <div
                 className="flex gap-[6px] cursor-pointer"
                 onClick={() => setIsShow((prev) => !prev)}
@@ -225,6 +225,10 @@ const BookmarkSidebar = ({
         { slug: slug as string },
         { skip: !slug }
     );
+    const { data: bookmarkData } = useGetBookmarksQuery(
+        { slug: slug as string },
+        { skip: !slug }
+    );
 
     return (
         <div className="w-[230px] h-[calc(100vh-88px)] bg-[#121212] rounded-lg text-white">
@@ -260,7 +264,10 @@ const BookmarkSidebar = ({
                     highlightData?.data?.map((value) => (
                         <Highlight key={value.book_chapter_id} data={value} />
                     ))}
-                {selected === 'BOOKMARK' && <Bookmark />}
+                {selected === 'BOOKMARK' &&
+                    bookmarkData?.bookmarks?.map((value, index) => (
+                        <Bookmark key={index} data={value} />
+                    ))}
             </div>
         </div>
     );
@@ -324,51 +331,58 @@ export const Highlight = ({
     );
 };
 
-export const Bookmark = (): JSX.Element => {
-    const [isShow, setIsShow] = useState(false);
-
+export const Bookmark = ({
+    data
+}: {
+    data: BookmarkInterface;
+}): JSX.Element => {
+    const [postBookProgress] = usePostBookProgressMutation();
     const router = useRouter();
     const { slug } = router.query;
-    const { data: bookmarkData } = useGetBookmarksQuery(
-        { slug: slug as string },
-        { skip: !slug }
-    );
 
-    // TODO: handle navigation
+    const [isShow, setIsShow] = useState(false);
 
     return (
         <div>
-            {bookmarkData?.bookmarks?.map((value) => (
-                <>
-                    <div
-                        key={value.book_chapter_id}
-                        className="flex gap-[6px] cursor-pointer"
-                        onClick={() => setIsShow((prev) => !prev)}
+            <div
+                className="flex gap-[6px] cursor-pointer"
+                onClick={() => setIsShow((prev) => !prev)}
+                aria-hidden>
+                <FaChevronRight
+                    size={12}
+                    className={`text-[#CCCCCC] mt-[2px] ${
+                        isShow && 'rotate-[-90deg]'
+                    }`}
+                />
+                <span className="inline-block font-body text-xs text-[#CCCCCC]">
+                    {data.title}
+                </span>
+            </div>
+            <div
+                className={`flex flex-col gap-1 pt-2 pl-4 ${
+                    isShow ? '' : 'hidden'
+                }`}>
+                {data.block_headings?.map((block, index) => (
+                    <span
+                        key={index}
+                        className="text-[#999999] cursor-pointer"
+                        onClick={() =>
+                            postBookProgress({
+                                slug: slug as string,
+                                next_page_order: data.page_order
+                            })
+                        }
                         aria-hidden>
-                        <FaChevronRight
-                            size={12}
-                            className={`text-[#CCCCCC] mt-[2px] ${
-                                isShow && 'rotate-[-90deg]'
-                            }`}
-                        />
-                        <span className="inline-block font-body text-xs text-[#CCCCCC]">
-                            {value.title}
-                        </span>
-                    </div>
-                    <div
-                        className={`flex flex-col gap-1 pt-2 pl-4 ${
-                            isShow ? '' : 'hidden'
-                        }`}>
-                        {value.block_headings?.map((block, index) => (
-                            <span
-                                key={index}
-                                className="inline-block font-body text-[10px] text-[#999999]">
-                                {block}
-                            </span>
-                        ))}
-                    </div>
-                </>
-            ))}
+                        <ReactMarkdown
+                            className="markdown-body-xs markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height"
+                            remarkPlugins={[remarkMath, remarkGfm]}
+                            rehypePlugins={[rehypeKatex, rehypeRaw]}
+                            linkTarget={'_blank'}>
+                            {block}
+                        </ReactMarkdown>
+                    </span>
+                ))}
+            </div>
         </div>
     );
 };

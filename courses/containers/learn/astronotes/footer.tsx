@@ -11,6 +11,7 @@ import {
     SidebarNav
 } from './sidebar';
 import {
+    useGetBookmarksQuery,
     useGetHighlightQuery,
     useGetTableContentsQuery
 } from 'courses/redux/api/astronotesApi';
@@ -119,7 +120,7 @@ const MobileListOfContent = ({
             </div>
             <div className="px-5 py-3 flex flex-col gap-2">
                 {data?.contents?.map((value) => (
-                    <Content key={value.page_id} value={value} />
+                    <Content key={value.book_chapter_id} value={value} />
                 ))}
             </div>
         </div>
@@ -138,6 +139,10 @@ const MobileBookmarkSidebar = ({
     const router = useRouter();
     const { slug } = router.query;
     const { data: highlightData } = useGetHighlightQuery(
+        { slug: slug as string },
+        { skip: !slug }
+    );
+    const { data: bookmarkData } = useGetBookmarksQuery(
         { slug: slug as string },
         { skip: !slug }
     );
@@ -176,7 +181,10 @@ const MobileBookmarkSidebar = ({
                     highlightData?.data?.map((value) => (
                         <Highlight key={value.book_chapter_id} data={value} />
                     ))}
-                {selected === 'BOOKMARK' && <Bookmark />}
+                {selected === 'BOOKMARK' &&
+                    bookmarkData?.bookmarks?.map((value, index) => (
+                        <Bookmark key={index} data={value} />
+                    ))}
             </div>
         </div>
     );
