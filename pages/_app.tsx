@@ -28,6 +28,7 @@ import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import usePosthog from 'commons/hooks/usePosthog';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { ThemeContextProvider } from 'commons/contexts/ThemeProvider';
+import { NextSeo } from 'next-seo';
 
 const store = useStore();
 
@@ -48,8 +49,13 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 
     return (
         <>
+            <NextSeo
+                defaultTitle="Gradient Academy"
+                title={pageProps?.title}
+                description={pageProps?.description}
+                openGraph={pageProps?.openGraph}
+            />
             <Head>
-                <title>Gradient Academy</title>
                 <meta
                     name="viewport"
                     content="initial-scale=1.0, width=device-width"

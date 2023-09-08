@@ -6,18 +6,31 @@ import { getRunningQueriesThunk } from 'redux/api/baseApi';
 import config from 'redux/api/config';
 import LandingPageOrchestrator from 'courses/components/LandingPage/LandingPageOrchestrator';
 import axios from 'axios';
+import { CourseJsonLd } from 'next-seo';
 
 const DetailKelas = ({
     id,
-    packetOffer
+    packetOffer,
+    courseData
 }: {
     id: string;
     packetOffer: PacketOffer[];
+    courseData: CourseLandingPageData;
 }): JSX.Element => {
     return (
-        <Layout shouldTransparent>
-            <LandingPageOrchestrator id={id} packetOffer={packetOffer} />
-        </Layout>
+        <>
+            <CourseJsonLd
+                courseName={courseData?.course_name}
+                description={courseData?.description}
+                provider={{
+                    name: 'Gradient Academy',
+                    url: `https://gradient.academy`
+                }}
+            />
+            <Layout shouldTransparent>
+                <LandingPageOrchestrator id={id} packetOffer={packetOffer} />
+            </Layout>
+        </>
     );
 };
 
@@ -39,7 +52,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
     ({ dispatch }) =>
         async ({ params }) => {
-            await dispatch<any>(
+            const { data: courseData } = await dispatch<any>(
                 getLandingCourseData.initiate(params?.id as string)
             );
             const { data }: { data: { data: PacketOffer[] } } = await axios.get(
@@ -51,6 +64,23 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
             return {
                 props: {
                     id: params?.id,
+                    courseData,
+                    title: `Belajar ${courseData?.course_name} | Materi dan Latihan Soal`,
+                    description: `Belajar materi ${courseData?.course_name} dari video lengkap dan latihan soal serta pembahasan di Gradient`,
+                    openGraph: {
+                        type: 'website',
+                        title: `Belajar ${courseData?.course_name} | Materi dan Latihan Soal`,
+                        description: `Belajar materi ${courseData?.course_name} dari video lengkap dan latihan soal serta pembahasan di Gradient`,
+                        url: `https://gradient.academy/kelas/${params?.id}`,
+                        images: [
+                            {
+                                url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
+                                width: 48,
+                                height: 48,
+                                alt: 'Gradient Logo'
+                            }
+                        ]
+                    },
                     packetOffer: data.data
                 },
                 revalidate: 300
