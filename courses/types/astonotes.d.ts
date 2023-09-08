@@ -12,7 +12,7 @@ interface tableContentInterface {
     book_chapter_id: string;
     title: string;
     order: number;
-    page_id: string;
+    page_order: number;
     blocks: {
         block_id: string;
         block_heading: string;
@@ -51,12 +51,12 @@ interface postHighlightBody {
     slug: string;
 }
 
+interface BookmarkInterface {
+    title: string;
+    page_order: number;
+    block_headings: string[];
+}
+
 interface getBookmarksReponse {
-    bookmarks: {
-        book_chapter_id: string;
-        title: string;
-        order: number;
-        page_id: string;
-        block_headings: string[];
-    }[];
+    bookmarks: BookmarkInterface[];
 }

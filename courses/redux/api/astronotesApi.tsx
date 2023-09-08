@@ -69,7 +69,7 @@ export const astronotesApi = baseApi.injectEndpoints({
             {
                 message: string;
             },
-            { slug: string; page_id: string }
+            { slug: string; page_order: number; is_active: boolean }
         >({
             query: ({ slug, ...body }) => ({
                 url: `${COURSE_BASE_URL}${slug}/bookmark`,
