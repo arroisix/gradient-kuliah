@@ -1,6 +1,6 @@
 import { baseApi } from 'redux/api/baseApi';
 
-const COURSE_BASE_URL = 'courses/';
+const COURSE_BASE_URL = 'books/';
 
 export const astronotesApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -9,39 +9,39 @@ export const astronotesApi = baseApi.injectEndpoints({
             { slug: string }
         >({
             query: ({ slug }) => ({
-                url: `${COURSE_BASE_URL}book/${slug}`
+                url: `${COURSE_BASE_URL}${slug}`
             }),
-            providesTags: ['ASTRONOTES']
+            providesTags: [{ type: 'ASTRONOTES', id: 'ALL' }]
         }),
         postBookProgress: builder.mutation<
             {
                 message: string;
             },
             {
-                user_id: string;
                 slug: string;
-                page_id: string;
-                next_page_order?: number;
+                next_page_order: number;
             }
         >({
-            query: ({ user_id, ...body }) => ({
-                url: `${COURSE_BASE_URL}book/${user_id}/progress`,
+            query: ({ slug, ...body }) => ({
+                url: `${COURSE_BASE_URL}${slug}`,
+                method: 'POST',
                 body
             }),
-            invalidatesTags: ['ASTRONOTES']
+            invalidatesTags: [{ type: 'ASTRONOTES', id: 'ALL' }]
         }),
         getTableContents: builder.query<
             getTableContentsResponse,
             { slug: string }
         >({
             query: ({ slug }) => ({
-                url: `${COURSE_BASE_URL}book/${slug}/contents`
+                url: `${COURSE_BASE_URL}${slug}/contents`
             })
         }),
         getHighlight: builder.query<getHighlightReponse, { slug: string }>({
             query: ({ slug }) => ({
-                url: `${COURSE_BASE_URL}book/${slug}/highlight`
-            })
+                url: `${COURSE_BASE_URL}${slug}/highlight`
+            }),
+            providesTags: [{ type: 'ASTRONOTES', id: 'HIGHLIGHT' }]
         }),
         postHighlight: builder.mutation<
             {
@@ -50,15 +50,20 @@ export const astronotesApi = baseApi.injectEndpoints({
             postHighlightBody
         >({
             query: ({ slug, ...body }) => ({
-                url: `${COURSE_BASE_URL}book/${slug}/highlight`,
+                url: `${COURSE_BASE_URL}${slug}/highlight`,
+                method: 'POST',
                 body
             }),
-            invalidatesTags: ['ASTRONOTES']
+            invalidatesTags: [
+                { type: 'ASTRONOTES', id: 'HIGHLIGHT' },
+                { type: 'ASTRONOTES', id: 'ALL' }
+            ]
         }),
         getBookmarks: builder.query<getBookmarksReponse, { slug: string }>({
             query: ({ slug }) => ({
-                url: `${COURSE_BASE_URL}book/${slug}/bookmark`
-            })
+                url: `${COURSE_BASE_URL}${slug}/bookmark`
+            }),
+            providesTags: [{ type: 'ASTRONOTES', id: 'BOOKMARK' }]
         }),
         postBookmarks: builder.mutation<
             {
@@ -67,10 +72,14 @@ export const astronotesApi = baseApi.injectEndpoints({
             { slug: string; page_id: string }
         >({
             query: ({ slug, ...body }) => ({
-                url: `${COURSE_BASE_URL}book/${slug}/bookmark`,
+                url: `${COURSE_BASE_URL}${slug}/bookmark`,
+                method: 'POST',
                 body
             }),
-            invalidatesTags: ['ASTRONOTES']
+            invalidatesTags: [
+                { type: 'ASTRONOTES', id: 'BOOKMARK' },
+                { type: 'ASTRONOTES', id: 'ALL' }
+            ]
         }),
         postRating: builder.mutation<
             {
@@ -79,7 +88,8 @@ export const astronotesApi = baseApi.injectEndpoints({
             { slug: string; rate: number }
         >({
             query: ({ slug, ...body }) => ({
-                url: `${COURSE_BASE_URL}book/${slug}/rating`,
+                url: `${COURSE_BASE_URL}${slug}/rating`,
+                method: 'POST',
                 body
             })
         }),
@@ -90,7 +100,8 @@ export const astronotesApi = baseApi.injectEndpoints({
             { slug: string; feedback: string }
         >({
             query: ({ slug, ...body }) => ({
-                url: `${COURSE_BASE_URL}book/${slug}/feedback`,
+                url: `${COURSE_BASE_URL}${slug}/feedback`,
+                method: 'POST',
                 body
             })
         })

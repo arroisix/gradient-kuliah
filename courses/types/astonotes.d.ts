@@ -5,58 +5,44 @@ interface getBookProgressResponse {
     chapter_title: string;
     total_page: number;
     current_page: number;
+    page_content: string;
+}
+
+interface tableContentInterface {
+    book_chapter_id: string;
+    title: string;
+    order: number;
+    page_id: string;
     blocks: {
-        id: string;
-        order: number;
-        contents: [
-            {
-                id: string;
-                text: string;
-                type: string;
-                annotation: {
-                    anchor_offset: string;
-                    focus_offset: string;
-                    color: string;
-                };
-            }
-        ];
+        block_id: string;
+        block_heading: string;
+        page_order: number;
     }[];
 }
 
 interface getTableContentsResponse {
-    contents: [
-        {
-            book_chapter_id: string;
-            title: string;
-            order: number;
-            page_id: string;
-            blocks: {
-                block_id: string;
-                block_heading: string;
-                page_id: string;
-            }[];
-        }
-    ];
+    contents: tableContentInterface[];
 }
 
-interface getHighlightReponse {
-    data: {
-        book_chapter_id: string;
-        title: string;
-        order: number;
-        blocks: {
-            block_id: string;
-            block_heading: string | null;
-            highlights: {
-                text: string;
-                page_id: string;
-            }[];
+interface HighlightsInterface {
+    book_chapter_id: string;
+    title: string;
+    order: number;
+    blocks: {
+        block_heading: string | null;
+        highlights: {
+            text: string;
+            page_order: number;
+            color: string;
         }[];
     }[];
 }
 
+interface getHighlightReponse {
+    data: HighlightsInterface[];
+}
+
 interface postHighlightBody {
-    page_id: string;
     block_content_id: string;
     text: string;
     anchor_offset: number;
