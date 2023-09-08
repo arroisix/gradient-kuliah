@@ -1,4 +1,15 @@
+import ReactMarkdown from 'react-markdown';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 import { useThemeContext } from 'commons/contexts/ThemeProvider';
+import {
+    useGetBookmarksQuery,
+    useGetHighlightQuery,
+    useGetTableContentsQuery,
+    usePostBookProgressMutation
+} from 'courses/redux/api/astronotesApi';
 import { useRouter } from 'next/router';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { AiOutlineFontColors } from 'react-icons/ai';
@@ -111,39 +122,20 @@ export const SidebarNav = ({
     );
 };
 
-export interface TABLE_CONTENT_INTERFACE {
-    book_chapter_id: string;
-    title: string;
-    order: number;
-    page_id: string;
-    blocks: { block_id: string; block_heading: string; page_id: string }[];
-}
-
-export const DUMMY_TABLE_CONTENT: { contents: TABLE_CONTENT_INTERFACE[] } = {
-    contents: [
-        {
-            book_chapter_id: 'asdhkg1k2938',
-            title: 'Bab 1.  Unsur Molekul dan Tabel Periodik',
-            order: 1,
-            page_id: 'aksudg131h',
-            blocks: [
-                {
-                    block_id: 'adkjg2i3169',
-                    block_heading: 'Struktur Atom',
-                    page_id: 'asdjkhq1236'
-                }
-            ]
-        }
-    ]
-};
-
 const ListOfContent = ({
     setNavigation
 }: {
     setNavigation: Dispatch<SetStateAction<NavigationTypes>>;
 }): JSX.Element => {
+    const router = useRouter();
+    const { slug } = router.query;
+    const { data } = useGetTableContentsQuery(
+        { slug: slug as string },
+        { skip: !slug }
+    );
+
     return (
-        <div className="w-[230px] h-[calc(100vh-88px)] bg-[#121212] rounded-lg text-white">
+        <div className="relative w-[230px] h-[calc(100vh-88px)] bg-[#121212] rounded-lg text-white">
             <div className="flex justify-between p-2 border-b border-[#2D2D2D]">
                 <span className="inline-block font-body text-xs pt-[2px]">
                     Daftar Isi
@@ -154,8 +146,8 @@ const ListOfContent = ({
                     onClick={() => setNavigation('CLOSE')}
                 />
             </div>
-            <div className="px-2 py-[10px] flex flex-col gap-2">
-                {DUMMY_TABLE_CONTENT.contents?.map((value) => (
+            <div className="h-[calc(100vh-126px)] overflow-y-auto px-2 py-[10px] flex flex-col gap-2">
+                {data?.contents?.map((value) => (
                     <Content key={value.page_id} value={value} />
                 ))}
             </div>
@@ -166,11 +158,12 @@ const ListOfContent = ({
 export const Content = ({
     value
 }: {
-    value: TABLE_CONTENT_INTERFACE;
+    value: tableContentInterface;
 }): JSX.Element => {
     const router = useRouter();
-    const { slug, id } = router.query;
+    const { slug } = router.query;
     const [isShow, setIsShow] = useState(false);
+    const [postBookProgress] = usePostBookProgressMutation();
 
     return (
         <div key={value.page_id}>
@@ -195,14 +188,21 @@ export const Content = ({
                 {value.blocks?.map((block) => (
                     <span
                         key={block.block_id}
-                        className="inline-block font-body text-xs text-[#CCCCCC] p-1 cursor-pointer hover:bg-neutral-700 rounded"
+                        className="text-[#CCCCCC] p-1 cursor-pointer hover:bg-neutral-700 rounded"
                         onClick={() =>
-                            router.push(
-                                `/astronotes/${slug}/${id}/${block.block_id}`
-                            )
+                            postBookProgress({
+                                slug: slug as string,
+                                next_page_order: block.page_order
+                            })
                         }
                         aria-hidden>
-                        {block.block_heading}
+                        <ReactMarkdown
+                            className="markdown-body-xs markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height"
+                            remarkPlugins={[remarkMath, remarkGfm]}
+                            rehypePlugins={[rehypeKatex, rehypeRaw]}
+                            linkTarget={'_blank'}>
+                            {block.block_heading}
+                        </ReactMarkdown>
                     </span>
                 ))}
             </div>
@@ -217,6 +217,13 @@ const BookmarkSidebar = ({
 }): JSX.Element => {
     const [selected, setSelected] = useState<'HIGHLIGHT' | 'BOOKMARK'>(
         'HIGHLIGHT'
+    );
+
+    const router = useRouter();
+    const { slug } = router.query;
+    const { data: highlightData } = useGetHighlightQuery(
+        { slug: slug as string },
+        { skip: !slug }
     );
 
     return (
@@ -249,100 +256,89 @@ const BookmarkSidebar = ({
                 />
             </div>
             <div className="px-2 py-[10px] flex flex-col gap-2">
-                {selected === 'HIGHLIGHT' && <Highlight />}
+                {selected === 'HIGHLIGHT' &&
+                    highlightData?.data?.map((value) => (
+                        <Highlight key={value.book_chapter_id} data={value} />
+                    ))}
                 {selected === 'BOOKMARK' && <Bookmark />}
             </div>
         </div>
     );
 };
 
-const DUMMY_HIGHLIGHTS = {
-    data: [
-        {
-            book_chapter_id: 'asiqei12b31',
-            title: 'Bab 1. Unsur Molekul dan Tabel Periodik',
-            order: 1,
-            blocks: [
-                {
-                    block_id: 'aslkdhj1q89741',
-                    block_heading: '1.1 Struktur Atom',
-                    highlights: [
-                        {
-                            text: 'tiga jenis partikel subatom, yaitu proton, neutron dan elektron',
-                            page_id: 'asdkg1236192'
-                        }
-                    ]
-                }
-            ]
-        }
-    ]
-};
+export const Highlight = ({
+    data
+}: {
+    data: HighlightsInterface;
+}): JSX.Element => {
+    const [postBookProgress] = usePostBookProgressMutation();
+    const router = useRouter();
+    const { slug } = router.query;
 
-export const Highlight = (): JSX.Element => {
     const [isShow, setIsShow] = useState(false);
 
     return (
         <div>
-            {DUMMY_HIGHLIGHTS.data?.map((value) => (
-                <>
-                    <div
-                        key={value.book_chapter_id}
-                        className="flex gap-[6px] cursor-pointer"
-                        onClick={() => setIsShow((prev) => !prev)}
-                        aria-hidden>
-                        <FaChevronRight
-                            size={12}
-                            className={`text-[#CCCCCC] mt-[2px] ${
-                                isShow && 'rotate-90'
-                            }`}
-                        />
-                        <span className="inline-block font-body text-xs text-[#CCCCCC]">
-                            {value.title}
+            <div
+                key={data.book_chapter_id}
+                className="flex gap-[6px] cursor-pointer"
+                onClick={() => setIsShow((prev) => !prev)}
+                aria-hidden>
+                <FaChevronRight
+                    size={12}
+                    className={`text-[#CCCCCC] mt-[2px] ${
+                        isShow && 'rotate-90'
+                    }`}
+                />
+                <span className="inline-block font-body text-xs text-[#CCCCCC]">
+                    {data.title}
+                </span>
+            </div>
+            {data.blocks?.map((block, index) => (
+                <div
+                    key={index}
+                    className={`flex flex-col gap-1 pt-2 pl-4 ${
+                        isShow ? '' : 'hidden'
+                    }`}>
+                    <span className="inline-block font-body text-[10px] text-[#999999]">
+                        {block.block_heading}
+                    </span>
+                    {block.highlights.map((highlight, index) => (
+                        <span
+                            onClick={() =>
+                                postBookProgress({
+                                    slug: slug as string,
+                                    next_page_order: highlight.page_order
+                                })
+                            }
+                            key={index}
+                            className="inline-block font-body text-xs pl-2 border-l-2 cursor-pointer"
+                            style={{ borderColor: highlight.color }}
+                            aria-hidden>
+                            {highlight.text}
                         </span>
-                    </div>
-                    {value.blocks?.map((block) => (
-                        <div
-                            key={block.block_id}
-                            className={`flex flex-col gap-1 pt-2 pl-4 ${
-                                isShow ? '' : 'hidden'
-                            }`}>
-                            <span className="inline-block font-body text-[10px] text-[#999999]">
-                                {block.block_heading}
-                            </span>
-                            {block.highlights.map((highlight) => (
-                                <span
-                                    key={highlight.page_id}
-                                    className="inline-block font-body text-xs pl-2 border-l-2"
-                                    style={{ borderColor: '#D85140' }}>
-                                    {highlight.text}
-                                </span>
-                            ))}
-                        </div>
                     ))}
-                </>
+                </div>
             ))}
         </div>
     );
 };
 
-const DUMMY_BOOKMARKS = {
-    bookmarks: [
-        {
-            book_chapter_id: 'asdkhi1231',
-            title: 'Bab 1. Unsur Molekul dan Tabel Periodik',
-            order: 1,
-            page_id: 'askjgd119gw',
-            block_headings: ['1.1 Struktur Atom', '1.2 Struktur Molukel']
-        }
-    ]
-};
-
 export const Bookmark = (): JSX.Element => {
     const [isShow, setIsShow] = useState(false);
 
+    const router = useRouter();
+    const { slug } = router.query;
+    const { data: bookmarkData } = useGetBookmarksQuery(
+        { slug: slug as string },
+        { skip: !slug }
+    );
+
+    // TODO: handle navigation
+
     return (
         <div>
-            {DUMMY_BOOKMARKS.bookmarks?.map((value) => (
+            {bookmarkData?.bookmarks?.map((value) => (
                 <>
                     <div
                         key={value.book_chapter_id}

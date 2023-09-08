@@ -5,12 +5,16 @@ import { MdClose } from 'react-icons/md';
 import {
     Bookmark,
     Content,
-    DUMMY_TABLE_CONTENT,
     Highlight,
     NavigationTypes,
     Settings,
     SidebarNav
 } from './sidebar';
+import {
+    useGetHighlightQuery,
+    useGetTableContentsQuery
+} from 'courses/redux/api/astronotesApi';
+import { useRouter } from 'next/router';
 
 export const AstronotesFooter = ({
     fontStyle,
@@ -94,6 +98,13 @@ const MobileListOfContent = ({
 }: {
     setNavigation: Dispatch<SetStateAction<NavigationTypes>>;
 }): JSX.Element => {
+    const router = useRouter();
+    const { slug } = router.query;
+    const { data } = useGetTableContentsQuery(
+        { slug: slug as string },
+        { skip: !slug }
+    );
+
     return (
         <div className="absolute left-[-20px] bottom-[-24px] w-screen h-[calc(100vh-200px)] bg-[#1D1D1D] z-10">
             <div className="flex justify-between p-5">
@@ -107,7 +118,7 @@ const MobileListOfContent = ({
                 />
             </div>
             <div className="px-5 py-3 flex flex-col gap-2">
-                {DUMMY_TABLE_CONTENT.contents?.map((value) => (
+                {data?.contents?.map((value) => (
                     <Content key={value.page_id} value={value} />
                 ))}
             </div>
@@ -122,6 +133,13 @@ const MobileBookmarkSidebar = ({
 }): JSX.Element => {
     const [selected, setSelected] = useState<'HIGHLIGHT' | 'BOOKMARK'>(
         'HIGHLIGHT'
+    );
+
+    const router = useRouter();
+    const { slug } = router.query;
+    const { data: highlightData } = useGetHighlightQuery(
+        { slug: slug as string },
+        { skip: !slug }
     );
 
     return (
@@ -154,7 +172,10 @@ const MobileBookmarkSidebar = ({
                 />
             </div>
             <div className="px-5 py-3 flex flex-col gap-2">
-                {selected === 'HIGHLIGHT' && <Highlight />}
+                {selected === 'HIGHLIGHT' &&
+                    highlightData?.data?.map((value) => (
+                        <Highlight key={value.book_chapter_id} data={value} />
+                    ))}
                 {selected === 'BOOKMARK' && <Bookmark />}
             </div>
         </div>
