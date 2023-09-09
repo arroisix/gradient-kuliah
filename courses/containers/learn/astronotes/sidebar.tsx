@@ -259,7 +259,7 @@ const BookmarkSidebar = ({
                     onClick={() => setNavigation('CLOSE')}
                 />
             </div>
-            <div className="px-2 py-[10px] flex flex-col gap-2">
+            <div className="h-[calc(100vh-126px)] overflow-y-auto px-2 py-[10px] flex flex-col gap-2">
                 {selected === 'HIGHLIGHT' &&
                     highlightData?.data?.map((value) => (
                         <Highlight key={value.book_chapter_id} data={value} />

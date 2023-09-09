@@ -118,7 +118,7 @@ const MobileListOfContent = ({
                     onClick={() => setNavigation('CLOSE')}
                 />
             </div>
-            <div className="px-5 py-3 flex flex-col gap-2">
+            <div className="h-[calc(100vh-266px)] overflow-y-auto px-5 py-3 flex flex-col gap-2">
                 {data?.contents?.map((value) => (
                     <Content key={value.book_chapter_id} value={value} />
                 ))}
@@ -176,7 +176,7 @@ const MobileBookmarkSidebar = ({
                     onClick={() => setNavigation('CLOSE')}
                 />
             </div>
-            <div className="px-5 py-3 flex flex-col gap-2">
+            <div className="h-[calc(100vh-272px)] overflow-y-auto px-5 py-3 flex flex-col gap-2">
                 {selected === 'HIGHLIGHT' &&
                     highlightData?.data?.map((value) => (
                         <Highlight key={value.book_chapter_id} data={value} />
