@@ -26,7 +26,6 @@ import Avatar from 'react-avatar';
 import Image from 'next/image';
 import AuthContext from 'authentication/contexts/AuthProvider';
 import { HiOutlineUsers } from 'react-icons/hi';
-import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
 
 const Navbar = ({
@@ -45,7 +44,6 @@ const Navbar = ({
 }): JSX.Element => {
     const { isMobileBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { is_subscribed } = useCourseSubscription();
     const { profile } = useContext(AuthContext);
     const user = useSelector(getCurrentUser);
     const [isHovered, setHovered] = useState(false);
@@ -323,21 +321,19 @@ const Navbar = ({
                                                 </div>
                                             </div>
                                         </Link>
-                                        {is_subscribed && (
-                                            <Link href={'/referral'}>
-                                                <div
-                                                    className={`flex ${pickedColorScheme.color} hover:bg-[#1D1D1D] px-2 py-3 rounded-sm font-normal w-full items-center`}>
-                                                    <div>
-                                                        <HiOutlineUsers className="text-xl" />
-                                                    </div>
-                                                    <div className="w-full ml-4">
-                                                        <p className="text-base">
-                                                            Referral
-                                                        </p>
-                                                    </div>
+                                        <Link href={'/referral'}>
+                                            <div
+                                                className={`flex ${pickedColorScheme.color} hover:bg-[#1D1D1D] px-2 py-3 rounded-sm font-normal w-full items-center`}>
+                                                <div>
+                                                    <HiOutlineUsers className="text-xl" />
                                                 </div>
-                                            </Link>
-                                        )}
+                                                <div className="w-full ml-4">
+                                                    <p className="text-base">
+                                                        Referral
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </Link>
                                         <div
                                             className="flex items-center w-full font-normal text-accent-orange hover:bg-[#1D1D1D] px-2 py-3 rounded-sm"
                                             onClick={() =>
