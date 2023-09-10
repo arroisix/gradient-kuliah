@@ -1,4 +1,4 @@
-import { useState, useRef, Dispatch, SetStateAction } from 'react';
+import { useState, useRef, Dispatch, SetStateAction, useEffect } from 'react';
 import { BiMenu } from 'react-icons/bi';
 import { FaChevronRight } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
@@ -11,9 +11,11 @@ import {
     SidebarNav
 } from './sidebar';
 import {
+    useGetBookProgressQuery,
     useGetBookmarksQuery,
     useGetHighlightQuery,
-    useGetTableContentsQuery
+    useGetTableContentsQuery,
+    usePostBookProgressMutation
 } from 'courses/redux/api/astronotesApi';
 import { useRouter } from 'next/router';
 
@@ -219,7 +221,15 @@ const MobileSetting = ({
 };
 
 const Pagination = (): JSX.Element => {
-    const MAX_VALUE = 10;
+    const router = useRouter();
+    const { slug } = router.query;
+    const { data } = useGetBookProgressQuery(
+        { slug: slug as string },
+        { skip: !slug }
+    );
+    const [postBookProgress] = usePostBookProgressMutation();
+
+    const MAX_VALUE = data?.total_page ?? 0;
     const ref = useRef<HTMLDivElement>(null);
     const [value, setValue] = useState(1);
     const [percent, setPercent] = useState(0);
@@ -279,6 +289,21 @@ const Pagination = (): JSX.Element => {
         const barPercent = ((percent * multiple + 1) / MAX_VALUE) * 100;
         setPercent(barPercent < 0 ? 0 : barPercent > 100 ? 100 : barPercent);
     }
+
+    useEffect(() => {
+        let changePage: NodeJS.Timeout;
+
+        if (value) {
+            changePage = setTimeout(() => {
+                postBookProgress({
+                    slug: slug as string,
+                    next_page_order: value
+                });
+            }, 1000);
+        }
+
+        return () => clearTimeout(changePage);
+    }, [value, slug]);
 
     return (
         <div className="flex gap-6">
