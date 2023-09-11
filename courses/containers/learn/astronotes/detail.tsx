@@ -214,7 +214,9 @@ const AstronoteDetail = (): JSX.Element => {
                     setFontStyle={setFontStyle}
                 />
             </div>
-            <div className="w-full overflow-y-auto" ref={notebookRef}>
+            <div
+                className="w-full ml-7 mt-5 mb-[55px] overflow-y-auto"
+                ref={notebookRef}>
                 <div
                     className={`w-[80%] mx-auto ${
                         fontStyle === 'DEFAULT'
@@ -274,7 +276,7 @@ const AstronoteDetail = (): JSX.Element => {
             </div>
             <div
                 className="fixed bottom-0 right-[17px] pt-2 pb-6 bg-white dark:bg-black"
-                style={{ width: notebookWidth - 17 }}>
+                style={{ width: notebookWidth }}>
                 <AstronotesFooter
                     fontStyle={fontStyle}
                     setFontStyle={setFontStyle}
