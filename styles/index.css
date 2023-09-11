@@ -1380,3 +1380,12 @@ sticky-3.animate {
 .markdown-blue-link a:hover {
     text-decoration: underline;
 }
+
+.callout {
+    display: flex;
+    gap: 0.5rem;
+    background-color: rgba(128, 128, 128, 0.5);
+    padding: 0.75rem;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+}
