@@ -237,7 +237,7 @@ const MobileSetting = ({
 const Pagination = (): JSX.Element => {
     const router = useRouter();
     const { slug } = router.query;
-    const { data } = useGetBookProgressQuery(
+    const { data, isLoading } = useGetBookProgressQuery(
         { slug: slug as string },
         { skip: !slug }
     );
@@ -319,6 +319,13 @@ const Pagination = (): JSX.Element => {
         return () => clearTimeout(changePage);
     }, [value, slug]);
 
+    useEffect(() => {
+        if (data?.current_page) {
+            setValue(data?.current_page);
+            setPercent((data.current_page / MAX_VALUE) * 100);
+        }
+    }, [data?.current_page]);
+
     return (
         <div className="flex gap-6">
             <div
@@ -346,7 +353,11 @@ const Pagination = (): JSX.Element => {
                     onClick={handlePrev}
                 />
                 <span className="inline-block font-body text-xs select-none">
-                    {value}/{MAX_VALUE}
+                    {isLoading ? (
+                        <Skeleton className="h-5 w-6 p-0 !m-0" />
+                    ) : (
+                        `${value}/${MAX_VALUE}`
+                    )}
                 </span>
                 <FaChevronRight
                     size={12}
