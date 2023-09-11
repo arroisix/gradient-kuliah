@@ -8,10 +8,12 @@ import {
     useGetBookmarksQuery,
     useGetHighlightQuery,
     useGetTableContentsQuery,
-    usePostBookProgressMutation
+    usePostBookProgressMutation,
+    usePostFeedbackMutation,
+    usePostRatingMutation
 } from 'courses/redux/api/astronotesApi';
 import { useRouter } from 'next/router';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { AiOutlineFontColors } from 'react-icons/ai';
 import { FaChevronRight, FaToggleOn } from 'react-icons/fa';
 import { IoMdClose } from 'react-icons/io';
@@ -21,6 +23,10 @@ import {
     MdStarPurple500
 } from 'react-icons/md';
 import { RiQuestionLine } from 'react-icons/ri';
+import Modal from 'commons/components/modules/Modal';
+import Button from 'commons/components/elements/Button';
+import TextareaAutosize from 'react-textarea-autosize';
+import Spinner from 'commons/components/elements/Spinner';
 
 export type NavigationTypes = 'CLOSE' | 'LIST_CONTENT' | 'BOOKMARK' | 'SETTING';
 
@@ -65,9 +71,26 @@ export const SidebarNav = ({
     setNavigation: Dispatch<SetStateAction<NavigationTypes>>;
     className?: string;
 }): JSX.Element => {
+    const [isModalRatingOpen, setIsModalRatingOpen] = useState<0 | 1>(0);
+    const [isModalFeedbackOpen, setIsModalFeedbackOpen] = useState<0 | 1>(0);
+
     return (
         <div
             className={`flex flex-col gap-3 bg-[#F6F5F8] dark:bg-[#121212] rounded-[20px] px-1 py-[15px] text-black dark:text-[#999999] ${className}`}>
+            <Modal
+                isOpen={isModalRatingOpen}
+                setOpen={setIsModalRatingOpen}
+                variant="dark"
+                className="!bg-[#1D1D1D] sm:!w-[500px] !max-w-[500px]">
+                <ModalRatingBook setOpen={setIsModalRatingOpen} />
+            </Modal>
+            <Modal
+                isOpen={isModalFeedbackOpen}
+                setOpen={setIsModalFeedbackOpen}
+                variant="dark"
+                className="!bg-[#1D1D1D]">
+                <ModalFeedbackBook setOpen={setIsModalFeedbackOpen} />
+            </Modal>
             <div
                 className={`hover:bg-neutral-300 dark:hover:bg-neutral-700 cursor-pointer rounded-full p-1 ${
                     navigation === 'LIST_CONTENT'
@@ -112,13 +135,19 @@ export const SidebarNav = ({
             </div>
             <div
                 className={`hover:bg-neutral-300 dark:hover:bg-neutral-700 cursor-pointer rounded-full p-1 text-[#999999]`}
-                onClick={() => setNavigation('CLOSE')}
+                onClick={() => {
+                    setNavigation('CLOSE');
+                    setIsModalRatingOpen(1);
+                }}
                 aria-hidden>
                 <MdStarPurple500 size={18} />
             </div>
             <div
                 className={`hover:bg-neutral-300 dark:hover:bg-neutral-700 cursor-pointer rounded-full p-1 text-[#999999]`}
-                onClick={() => setNavigation('CLOSE')}
+                onClick={() => {
+                    setNavigation('CLOSE');
+                    setIsModalFeedbackOpen(1);
+                }}
                 aria-hidden>
                 <RiQuestionLine size={18} />
             </div>
@@ -523,5 +552,118 @@ export const Settings = ({
                 </div>
             </div>
         </>
+    );
+};
+
+const ModalRatingBook = ({
+    setOpen
+}: {
+    setOpen: (status: 1 | 0) => void;
+}): JSX.Element => {
+    const [rating, setRating] = useState(0);
+    const CONSTANT_RATING = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+    const router = useRouter();
+    const { slug } = router.query;
+    const [postRating, { isLoading, isSuccess }] = usePostRatingMutation();
+
+    useEffect(() => {
+        if (isSuccess) {
+            setOpen(0);
+        }
+    }, [isSuccess, setOpen]);
+
+    return (
+        <div className="flex flex-col gap-8">
+            <span className="inline-block font-extrabold mr-5">
+                Seberapa membantu buku ini dalam pelajaranmu?
+            </span>
+            <div className="flex flex-col gap-2">
+                <div className="flex justify-between gap-2">
+                    {CONSTANT_RATING.map((value) => (
+                        <span
+                            key={value}
+                            className={`w-[22px] h-[22px] sm:w-[32px] sm:h-[32px] flex justify-center items-center hover:bg-white font-bold text-[#333333] rounded-full cursor-pointer ${
+                                rating === value ? 'bg-white' : 'bg-neutral-400'
+                            }`}
+                            onClick={() => setRating(value)}
+                            aria-hidden>
+                            {value}
+                        </span>
+                    ))}
+                </div>
+                <div className="flex justify-between">
+                    <span className="inline-block font-body text-[10px]">
+                        Tidak membantu
+                    </span>
+                    <span className="inline-block font-body text-[10px]">
+                        Sangat membantu
+                    </span>
+                </div>
+            </div>
+            <Button
+                variant="custom"
+                className="bg-white text-black text-xs"
+                onClick={() =>
+                    postRating({ slug: slug as string, rate: rating / 2 })
+                }>
+                {isLoading ? (
+                    <Spinner size="small" className="border-black" />
+                ) : (
+                    'Kirim'
+                )}
+            </Button>
+        </div>
+    );
+};
+
+const ModalFeedbackBook = ({
+    setOpen
+}: {
+    setOpen: (status: 1 | 0) => void;
+}): JSX.Element => {
+    const [content, setContent] = useState('');
+
+    const router = useRouter();
+    const { slug } = router.query;
+    const [postFeedback, { isLoading, isSuccess }] = usePostFeedbackMutation();
+
+    function handleChange(event: React.ChangeEvent<HTMLTextAreaElement>): void {
+        setContent(event.target.value);
+    }
+
+    useEffect(() => {
+        if (isSuccess) {
+            setOpen(0);
+        }
+    }, [isSuccess, setOpen]);
+
+    return (
+        <div className="flex flex-col gap-8">
+            <span className="inline-block font-extrabold mr-5">
+                Bantuan dan Masukan
+            </span>
+            <div>
+                <TextareaAutosize
+                    value={content}
+                    name="feedback"
+                    onChange={handleChange}
+                    placeholder="Kirim masukan ke Buku Gradient"
+                    className="w-full h-full min-h-[124px] p-[10px] font-body text-xs bg-[#242424] border-none rounded-[8px] focus:outline-none focus:ring-0 focus:appearance-none placeholder:text-neutral-400"
+                />
+            </div>
+            <Button
+                variant="custom"
+                className="bg-white text-black text-xs"
+                onClick={() =>
+                    postFeedback({ slug: slug as string, feedback: content })
+                }>
+                {isLoading ? (
+                    <Spinner size="small" className="border-black" />
+                ) : (
+                    'Kirim'
+                )}
+            </Button>
+        </div>
     );
 };
