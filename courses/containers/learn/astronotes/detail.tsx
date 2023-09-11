@@ -259,7 +259,7 @@ const AstronoteDetail = (): JSX.Element => {
                 )} */}
             </div>
             <div
-                className="fixed bottom-0 right-[17px] pt-2 pb-6 bg-black"
+                className="fixed bottom-0 right-[17px] pt-2 pb-6 bg-white dark:bg-black"
                 style={{ width: notebookWidth - 17 }}>
                 <AstronotesFooter
                     fontStyle={fontStyle}

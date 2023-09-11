@@ -109,14 +109,14 @@ const MobileListOfContent = ({
     );
 
     return (
-        <div className="absolute left-[-20px] bottom-[-24px] w-screen h-[calc(100vh-200px)] bg-[#1D1D1D] z-10">
+        <div className="absolute left-[-20px] bottom-[-24px] w-screen h-[calc(100vh-200px)] bg-[#F6F5F8] dark:bg-[#1D1D1D] z-10">
             <div className="flex justify-between p-5">
                 <span className="inline-block font-extrabold text-base pt-[2px]">
                     Daftar Isi
                 </span>
                 <MdClose
                     size={24}
-                    className="text-white cursor-pointer"
+                    className="text-black dark:text-white cursor-pointer"
                     onClick={() => setNavigation('CLOSE')}
                 />
             </div>
@@ -150,7 +150,7 @@ const MobileBookmarkSidebar = ({
     );
 
     return (
-        <div className="absolute left-[-20px] bottom-[-24px] w-screen h-[calc(100vh-200px)] bg-[#1D1D1D] z-10">
+        <div className="absolute left-[-20px] bottom-[-24px] w-screen h-[calc(100vh-200px)] bg-[#F6F5F8] dark:bg-[#1D1D1D] z-10">
             <div className="flex justify-between p-5">
                 <div className="flex gap-8">
                     <span
@@ -174,7 +174,7 @@ const MobileBookmarkSidebar = ({
                 </div>
                 <MdClose
                     size={24}
-                    className="text-white cursor-pointer"
+                    className="text-black dark:text-white cursor-pointer"
                     onClick={() => setNavigation('CLOSE')}
                 />
             </div>
@@ -202,14 +202,14 @@ const MobileSetting = ({
     setNavigation: Dispatch<SetStateAction<NavigationTypes>>;
 }): JSX.Element => {
     return (
-        <div className="absolute left-[-20px] bottom-[-24px] w-screen h-[calc(100vh-200px)] bg-[#1D1D1D] z-10">
+        <div className="absolute left-[-20px] bottom-[-24px] w-screen h-[calc(100vh-200px)] bg-[#F6F5F8] dark:bg-[#1D1D1D] z-10">
             <div className="flex justify-between p-5">
                 <span className="inline-block font-extrabold text-base pt-[2px]">
                     Opsi Tampilan
                 </span>
                 <MdClose
                     size={24}
-                    className="text-white cursor-pointer"
+                    className="text-black dark:text-white cursor-pointer"
                     onClick={() => setNavigation('CLOSE')}
                 />
             </div>
@@ -328,7 +328,7 @@ const Pagination = (): JSX.Element => {
             <div className="flex items-center gap-[10px]">
                 <FaChevronRight
                     size={12}
-                    className="text-[#666666] hover:text-white rotate-180 cursor-pointer transition-all"
+                    className="text-[#666666] hover:text-black dark:hover:text-white rotate-180 cursor-pointer transition-all"
                     onClick={handlePrev}
                 />
                 <span className="inline-block font-body text-xs select-none">
@@ -336,7 +336,7 @@ const Pagination = (): JSX.Element => {
                 </span>
                 <FaChevronRight
                     size={12}
-                    className="text-[#666666] hover:text-white cursor-pointer transition-all"
+                    className="text-[#666666] hover:text-black dark:hover:text-white cursor-pointer transition-all"
                     onClick={handleNext}
                 />
             </div>
@@ -357,7 +357,7 @@ const ZoomPercentage = (): JSX.Element => {
     return (
         <div className="flex items-center gap-[10px]">
             <div
-                className="w-[16px] h-[16px] pb-[2px] flex items-center justify-center font-body leading-[0] bg-[#666666] rounded-full cursor-pointer select-none"
+                className="w-[16px] h-[16px] pb-[2px] flex items-center justify-center font-body leading-[0] bg-neutral-200 dark:bg-[#666666] rounded-full cursor-pointer select-none"
                 onClick={handleZoomOut}
                 aria-hidden>
                 -
@@ -366,7 +366,7 @@ const ZoomPercentage = (): JSX.Element => {
                 {zoom}%
             </span>
             <div
-                className="w-[16px] h-[16px] pb-[1px] flex items-center justify-center font-body leading-[0] bg-[#666666] rounded-full cursor-pointer select-none"
+                className="w-[16px] h-[16px] pb-[1px] flex items-center justify-center font-body leading-[0] bg-neutral-200 dark:bg-[#666666] rounded-full cursor-pointer select-none"
                 onClick={handleZoomIn}
                 aria-hidden>
                 +
