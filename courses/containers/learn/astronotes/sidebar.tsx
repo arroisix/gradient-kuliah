@@ -27,6 +27,7 @@ import Modal from 'commons/components/modules/Modal';
 import Button from 'commons/components/elements/Button';
 import TextareaAutosize from 'react-textarea-autosize';
 import Spinner from 'commons/components/elements/Spinner';
+import Skeleton from 'commons/components/elements/Skeleton';
 
 export type NavigationTypes = 'CLOSE' | 'LIST_CONTENT' | 'BOOKMARK' | 'SETTING';
 
@@ -162,7 +163,7 @@ const ListOfContent = ({
 }): JSX.Element => {
     const router = useRouter();
     const { slug } = router.query;
-    const { data } = useGetTableContentsQuery(
+    const { data, isLoading } = useGetTableContentsQuery(
         { slug: slug as string },
         { skip: !slug }
     );
@@ -180,6 +181,14 @@ const ListOfContent = ({
                 />
             </div>
             <div className="h-[calc(100vh-126px)] overflow-y-auto px-2 py-[10px] flex flex-col gap-2">
+                {isLoading && (
+                    <>
+                        <Skeleton className="h-[20px] p-0 mb-0" />
+                        <Skeleton className="h-[20px] p-0 mb-0" />
+                        <Skeleton className="h-[20px] p-0 mb-0" />
+                        <Skeleton className="h-[20px] p-0 mb-0" />
+                    </>
+                )}
                 {data?.contents?.map((value) => (
                     <Content key={value.book_chapter_id} value={value} />
                 ))}
@@ -254,14 +263,10 @@ const BookmarkSidebar = ({
 
     const router = useRouter();
     const { slug } = router.query;
-    const { data: highlightData } = useGetHighlightQuery(
-        { slug: slug as string },
-        { skip: !slug }
-    );
-    const { data: bookmarkData } = useGetBookmarksQuery(
-        { slug: slug as string },
-        { skip: !slug }
-    );
+    const { data: highlightData, isLoading: isLoadingHighlight } =
+        useGetHighlightQuery({ slug: slug as string }, { skip: !slug });
+    const { data: bookmarkData, isLoading: isLoadingBookmark } =
+        useGetBookmarksQuery({ slug: slug as string }, { skip: !slug });
 
     return (
         <div className="w-[230px] h-[calc(100vh-88px)] bg-[#F6F5F8] dark:bg-[#121212] rounded-lg text-black dark:text-white">
@@ -293,6 +298,15 @@ const BookmarkSidebar = ({
                 />
             </div>
             <div className="h-[calc(100vh-126px)] overflow-y-auto px-2 py-[10px] flex flex-col gap-2">
+                {((selected === 'HIGHLIGHT' && isLoadingHighlight) ||
+                    (selected === 'BOOKMARK' && isLoadingBookmark)) && (
+                    <>
+                        <Skeleton className="h-[20px] p-0 mb-0" />
+                        <Skeleton className="h-[20px] p-0 mb-0" />
+                        <Skeleton className="h-[20px] p-0 mb-0" />
+                        <Skeleton className="h-[20px] p-0 mb-0" />
+                    </>
+                )}
                 {selected === 'HIGHLIGHT' &&
                     highlightData?.data?.map((value) => (
                         <Highlight key={value.book_chapter_id} data={value} />

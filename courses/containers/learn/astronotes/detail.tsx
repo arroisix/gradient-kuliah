@@ -15,6 +15,7 @@ import {
     useGetBookProgressQuery,
     usePostHighlightMutation
 } from 'courses/redux/api/astronotesApi';
+import Skeleton from 'commons/components/elements/Skeleton';
 
 export const customMapPageUrl =
     (rootPageId: string, notionId: string) => () => {
@@ -115,7 +116,7 @@ const AstronoteDetail = (): JSX.Element => {
         useElementSize<HTMLDivElement>();
     // const { isAuthenticated } = useAuth();
 
-    const { data } = useGetBookProgressQuery(
+    const { data, isLoading } = useGetBookProgressQuery(
         { slug: slug as string },
         { skip: !slug }
     );
@@ -236,6 +237,19 @@ const AstronoteDetail = (): JSX.Element => {
                                 ?.replaceAll('9unix9', '\\textup')}
                         </ReactMarkdown>
                     </div> */}
+                    {isLoading && (
+                        <>
+                            <Skeleton className="w-[30%] h-[26px] p-0 !mb-2" />
+                            <Skeleton className="h-[26px] p-0 !mb-2" />
+                            <Skeleton className="h-[26px] p-0 !mb-2" />
+                            <Skeleton className="h-[26px] p-0 !mb-2" />
+                            <Skeleton className="w-[30%] h-[26px] p-0 !mb-2" />
+                            <Skeleton className="h-[26px] p-0 !mb-2" />
+                            <Skeleton className="h-[26px] p-0 !mb-2" />
+                            <Skeleton className="h-[26px] p-0 !mb-2" />
+                            <Skeleton className="h-[26px] p-0 !mb-2" />
+                        </>
+                    )}
                     {data && (
                         <div onMouseUp={handleHighlight} aria-hidden>
                             <ReactMarkdown

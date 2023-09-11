@@ -18,6 +18,7 @@ import {
     usePostBookProgressMutation
 } from 'courses/redux/api/astronotesApi';
 import { useRouter } from 'next/router';
+import Skeleton from 'commons/components/elements/Skeleton';
 
 export const AstronotesFooter = ({
     fontStyle,
@@ -103,7 +104,7 @@ const MobileListOfContent = ({
 }): JSX.Element => {
     const router = useRouter();
     const { slug } = router.query;
-    const { data } = useGetTableContentsQuery(
+    const { data, isLoading } = useGetTableContentsQuery(
         { slug: slug as string },
         { skip: !slug }
     );
@@ -121,6 +122,14 @@ const MobileListOfContent = ({
                 />
             </div>
             <div className="h-[calc(100vh-266px)] overflow-y-auto px-5 py-3 flex flex-col gap-2">
+                {isLoading && (
+                    <>
+                        <Skeleton className="h-[20px] p-0 mb-0" />
+                        <Skeleton className="h-[20px] p-0 mb-0" />
+                        <Skeleton className="h-[20px] p-0 mb-0" />
+                        <Skeleton className="h-[20px] p-0 mb-0" />
+                    </>
+                )}
                 {data?.contents?.map((value) => (
                     <Content key={value.book_chapter_id} value={value} />
                 ))}
@@ -140,14 +149,10 @@ const MobileBookmarkSidebar = ({
 
     const router = useRouter();
     const { slug } = router.query;
-    const { data: highlightData } = useGetHighlightQuery(
-        { slug: slug as string },
-        { skip: !slug }
-    );
-    const { data: bookmarkData } = useGetBookmarksQuery(
-        { slug: slug as string },
-        { skip: !slug }
-    );
+    const { data: highlightData, isLoading: isLoadingHighlight } =
+        useGetHighlightQuery({ slug: slug as string }, { skip: !slug });
+    const { data: bookmarkData, isLoading: isLoadingBookmark } =
+        useGetBookmarksQuery({ slug: slug as string }, { skip: !slug });
 
     return (
         <div className="absolute left-[-20px] bottom-[-24px] w-screen h-[calc(100vh-200px)] bg-[#F6F5F8] dark:bg-[#1D1D1D] z-10">
@@ -179,6 +184,15 @@ const MobileBookmarkSidebar = ({
                 />
             </div>
             <div className="h-[calc(100vh-272px)] overflow-y-auto px-5 py-3 flex flex-col gap-2">
+                {((selected === 'HIGHLIGHT' && isLoadingHighlight) ||
+                    (selected === 'BOOKMARK' && isLoadingBookmark)) && (
+                    <>
+                        <Skeleton className="h-[20px] p-0 mb-0" />
+                        <Skeleton className="h-[20px] p-0 mb-0" />
+                        <Skeleton className="h-[20px] p-0 mb-0" />
+                        <Skeleton className="h-[20px] p-0 mb-0" />
+                    </>
+                )}
                 {selected === 'HIGHLIGHT' &&
                     highlightData?.data?.map((value) => (
                         <Highlight key={value.book_chapter_id} data={value} />
