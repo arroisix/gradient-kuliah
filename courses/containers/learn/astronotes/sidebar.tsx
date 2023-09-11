@@ -67,11 +67,11 @@ export const SidebarNav = ({
 }): JSX.Element => {
     return (
         <div
-            className={`flex flex-col gap-3 bg-[#121212] rounded-[20px] px-1 py-[15px] text-[#999999] ${className}`}>
+            className={`flex flex-col gap-3 bg-[#F6F5F8] dark:bg-[#121212] rounded-[20px] px-1 py-[15px] text-black dark:text-[#999999] ${className}`}>
             <div
-                className={`hover:bg-neutral-700 cursor-pointer rounded-full p-1 ${
+                className={`hover:bg-neutral-300 dark:hover:bg-neutral-700 cursor-pointer rounded-full p-1 ${
                     navigation === 'LIST_CONTENT'
-                        ? 'text-white'
+                        ? 'text-black dark:text-white'
                         : 'text-[#999999]'
                 }`}
                 onClick={() =>
@@ -83,8 +83,10 @@ export const SidebarNav = ({
                 <MdFormatListBulleted size={18} />
             </div>
             <div
-                className={`hover:bg-neutral-700 cursor-pointer rounded-full p-1 ${
-                    navigation === 'BOOKMARK' ? 'text-white' : 'text-[#999999]'
+                className={`hover:bg-neutral-300 dark:hover:bg-neutral-700 cursor-pointer rounded-full p-1 ${
+                    navigation === 'BOOKMARK'
+                        ? 'text-black dark:text-white'
+                        : 'text-[#999999]'
                 }`}
                 onClick={() =>
                     setNavigation((prev) =>
@@ -95,8 +97,10 @@ export const SidebarNav = ({
                 <MdLibraryBooks size={18} />
             </div>
             <div
-                className={`hover:bg-neutral-700 cursor-pointer rounded-full p-1 ${
-                    navigation === 'SETTING' ? 'text-white' : 'text-[#999999]'
+                className={`hover:bg-neutral-300 dark:hover:bg-neutral-700 cursor-pointer rounded-full p-1 ${
+                    navigation === 'SETTING'
+                        ? 'text-black dark:text-white'
+                        : 'text-[#999999]'
                 }`}
                 onClick={() =>
                     setNavigation((prev) =>
@@ -107,13 +111,13 @@ export const SidebarNav = ({
                 <AiOutlineFontColors size={18} />
             </div>
             <div
-                className={`hover:bg-neutral-700 cursor-pointer rounded-full p-1 text-[#999999]`}
+                className={`hover:bg-neutral-300 dark:hover:bg-neutral-700 cursor-pointer rounded-full p-1 text-[#999999]`}
                 onClick={() => setNavigation('CLOSE')}
                 aria-hidden>
                 <MdStarPurple500 size={18} />
             </div>
             <div
-                className={`hover:bg-neutral-700 cursor-pointer rounded-full p-1 text-[#999999]`}
+                className={`hover:bg-neutral-300 dark:hover:bg-neutral-700 cursor-pointer rounded-full p-1 text-[#999999]`}
                 onClick={() => setNavigation('CLOSE')}
                 aria-hidden>
                 <RiQuestionLine size={18} />
@@ -135,14 +139,14 @@ const ListOfContent = ({
     );
 
     return (
-        <div className="relative w-[230px] h-[calc(100vh-88px)] bg-[#121212] rounded-lg text-white">
-            <div className="flex justify-between p-2 border-b border-[#2D2D2D]">
+        <div className="relative w-[230px] h-[calc(100vh-88px)] bg-[#F6F5F8] dark:bg-[#121212] rounded-lg text-black dark:text-white">
+            <div className="flex justify-between p-2 border-b border-[#c0c0c0] dark:border-[#2D2D2D]">
                 <span className="inline-block font-body text-xs pt-[2px]">
                     Daftar Isi
                 </span>
                 <IoMdClose
                     size={18}
-                    className="text-[#333333] hover:text-white cursor-pointer"
+                    className="text-[#333333] hover:text-black dark:hover:text-white cursor-pointer"
                     onClick={() => setNavigation('CLOSE')}
                 />
             </div>
@@ -173,11 +177,11 @@ export const Content = ({
                 aria-hidden>
                 <FaChevronRight
                     size={12}
-                    className={`text-[#CCCCCC] mt-[2px] ${
+                    className={`text-black dark:text-[#CCCCCC] mt-[2px] ${
                         isShow && 'rotate-[-90deg]'
                     }`}
                 />
-                <span className="inline-block font-body text-xs text-[#CCCCCC] pb-[1px]">
+                <span className="inline-block font-body text-xs text-black dark:text-[#CCCCCC] pb-[1px]">
                     {value.title}
                 </span>
             </div>
@@ -188,7 +192,7 @@ export const Content = ({
                 {value.blocks?.map((block) => (
                     <span
                         key={block.block_id}
-                        className="text-[#CCCCCC] p-1 cursor-pointer hover:bg-neutral-700 rounded"
+                        className="text-black dark:text-[#CCCCCC] p-1 cursor-pointer hover:bg-neutral-300 dark:hover:bg-neutral-700 rounded"
                         onClick={() =>
                             postBookProgress({
                                 slug: slug as string,
@@ -231,13 +235,13 @@ const BookmarkSidebar = ({
     );
 
     return (
-        <div className="w-[230px] h-[calc(100vh-88px)] bg-[#121212] rounded-lg text-white">
-            <div className="flex justify-around pl-4 pr-2 pt-[10px] border-b border-[#2D2D2D]">
+        <div className="w-[230px] h-[calc(100vh-88px)] bg-[#F6F5F8] dark:bg-[#121212] rounded-lg text-black dark:text-white">
+            <div className="flex justify-around pl-4 pr-2 pt-[10px] dark:border-b dark:border-[#2D2D2D]">
                 <div className="flex gap-4">
                     <span
                         className={`inline-block font-body text-xs pb-[7px] cursor-pointer ${
                             selected === 'HIGHLIGHT' &&
-                            'text-[#B6A6F3] border-b-2 border-[#C4B9FF]'
+                            'text-[#7264EB] dark:text-[#B6A6F3] border-b-2 border-[#7264EB] dark:border-[#C4B9FF]'
                         }`}
                         onClick={() => setSelected('HIGHLIGHT')}
                         aria-hidden>
@@ -246,7 +250,7 @@ const BookmarkSidebar = ({
                     <span
                         className={`inline-block font-body text-xs pb-[7px] cursor-pointer ${
                             selected === 'BOOKMARK' &&
-                            'text-[#B6A6F3] border-b-2 border-[#C4B9FF]'
+                            'text-[#7264EB] dark:text-[#B6A6F3] border-b-2 border-[#7264EB] dark:border-[#C4B9FF]'
                         }`}
                         onClick={() => setSelected('BOOKMARK')}
                         aria-hidden>
@@ -255,7 +259,7 @@ const BookmarkSidebar = ({
                 </div>
                 <IoMdClose
                     size={18}
-                    className="text-[#333333] hover:text-white cursor-pointer"
+                    className="text-[#333333] hover:text-black dark:hover:text-white cursor-pointer"
                     onClick={() => setNavigation('CLOSE')}
                 />
             </div>
@@ -293,11 +297,11 @@ export const Highlight = ({
                 aria-hidden>
                 <FaChevronRight
                     size={12}
-                    className={`text-[#CCCCCC] mt-[2px] ${
+                    className={`text-black dark:text-[#CCCCCC] mt-[2px] ${
                         isShow && 'rotate-90'
                     }`}
                 />
-                <span className="inline-block font-body text-xs text-[#CCCCCC]">
+                <span className="inline-block font-body text-xs text-black dark:text-[#CCCCCC]">
                     {data.title}
                 </span>
             </div>
@@ -307,7 +311,7 @@ export const Highlight = ({
                     className={`flex flex-col gap-1 pt-2 pl-4 ${
                         isShow ? '' : 'hidden'
                     }`}>
-                    <span className="inline-block font-body text-[10px] text-[#999999]">
+                    <span className="inline-block font-body text-[10px] text-[#666666] dark:text-[#999999]">
                         {block.block_heading}
                     </span>
                     {block.highlights.map((highlight, index) => (
@@ -350,11 +354,11 @@ export const Bookmark = ({
                 aria-hidden>
                 <FaChevronRight
                     size={12}
-                    className={`text-[#CCCCCC] mt-[2px] ${
+                    className={`text-black dark:text-[#CCCCCC] mt-[2px] ${
                         isShow && 'rotate-[-90deg]'
                     }`}
                 />
-                <span className="inline-block font-body text-xs text-[#CCCCCC]">
+                <span className="inline-block font-body text-xs text-black dark:text-[#CCCCCC]">
                     {data.title}
                 </span>
             </div>
@@ -365,7 +369,7 @@ export const Bookmark = ({
                 {data.block_headings?.map((block, index) => (
                     <span
                         key={index}
-                        className="text-[#999999] cursor-pointer"
+                        className="text-[#666666] dark:text-[#999999] cursor-pointer"
                         onClick={() =>
                             postBookProgress({
                                 slug: slug as string,
@@ -397,14 +401,14 @@ const SidebarSetting = ({
     setNavigation: Dispatch<SetStateAction<NavigationTypes>>;
 }): JSX.Element => {
     return (
-        <div className="w-[230px] h-[calc(100vh-88px)] bg-[#121212] rounded-lg text-white">
-            <div className="flex justify-between p-2 border-b border-[#2D2D2D]">
+        <div className="w-[230px] h-[calc(100vh-88px)] bg-[#F6F5F8] dark:bg-[#121212] rounded-lg text-black dark:text-white">
+            <div className="flex justify-between p-2 border-b border-[#c0c0c0] dark:border-[#2D2D2D]">
                 <span className="inline-block font-body text-xs pt-[2px]">
                     Opsi Tampilan
                 </span>
                 <IoMdClose
                     size={18}
-                    className="text-[#333333] hover:text-white cursor-pointer"
+                    className="text-[#333333] hover:text-black dark:hover:text-white cursor-pointer"
                     onClick={() => setNavigation('CLOSE')}
                 />
             </div>
@@ -431,7 +435,7 @@ export const Settings = ({
                 className="flex justify-between items-center cursor-pointer"
                 onClick={toggleTheme}
                 aria-hidden>
-                <span className="inline-block font-body text-xs text-[#CCCCCC]">
+                <span className="inline-block font-body text-xs text-black dark:text-[#CCCCCC]">
                     Tampilan Gelap
                 </span>
                 <div className="relative w-max h-max">
@@ -445,13 +449,14 @@ export const Settings = ({
                 </div>
             </div>
             <div className="flex flex-col gap-2">
-                <span className="inline-block font-body text-xs text-[#CCCCCC]">
+                <span className="inline-block font-body text-xs text-black dark:text-[#CCCCCC]">
                     Style
                 </span>
                 <div className="flex gap-2">
                     <div
-                        className={`flex flex-col items-center gap-[2px] w-[55px] pt-[5px] pb-[7px] hover:bg-[#2D2D2D] rounded-lg cursor-pointer ${
-                            fontStyle === 'DEFAULT' && 'bg-[#212121]'
+                        className={`flex flex-col items-center gap-[2px] w-[55px] pt-[5px] pb-[7px] hover:bg-neutral-200 dark:hover:bg-[#2D2D2D] rounded-lg cursor-pointer ${
+                            fontStyle === 'DEFAULT' &&
+                            'bg-white dark:bg-[#212121]'
                         }`}
                         onClick={() => setFontStyle('DEFAULT')}
                         aria-hidden>
@@ -461,13 +466,14 @@ export const Settings = ({
                             }`}>
                             Ag
                         </span>
-                        <span className="inline-block font-body text-[10px] text-[#CCCCCC]">
+                        <span className="inline-block font-body text-[10px] text-[#999999] dark:text-[#CCCCCC]">
                             Default
                         </span>
                     </div>
                     <div
-                        className={`flex flex-col items-center gap-[2px] w-[55px] pt-[5px] pb-[7px] hover:bg-[#2D2D2D] rounded-lg cursor-pointer ${
-                            fontStyle === 'SERIF' && 'bg-[#212121]'
+                        className={`flex flex-col items-center gap-[2px] w-[55px] pt-[5px] pb-[7px] hover:bg-neutral-200 dark:hover:bg-[#2D2D2D] rounded-lg cursor-pointer ${
+                            fontStyle === 'SERIF' &&
+                            'bg-white dark:bg-[#212121]'
                         }`}
                         onClick={() => setFontStyle('SERIF')}
                         aria-hidden>
@@ -477,13 +483,13 @@ export const Settings = ({
                             }`}>
                             Ag
                         </span>
-                        <span className="inline-block font-body text-[10px] text-[#CCCCCC]">
+                        <span className="inline-block font-body text-[10px] text-[#999999] dark:text-[#CCCCCC]">
                             Serif
                         </span>
                     </div>
                     <div
-                        className={`flex flex-col items-center gap-[2px] w-[55px] pt-[5px] pb-[7px] hover:bg-[#2D2D2D] rounded-lg cursor-pointer ${
-                            fontStyle === 'MONO' && 'bg-[#212121]'
+                        className={`flex flex-col items-center gap-[2px] w-[55px] pt-[5px] pb-[7px] hover:bg-neutral-200 dark:hover:bg-[#2D2D2D] rounded-lg cursor-pointer ${
+                            fontStyle === 'MONO' && 'bg-white dark:bg-[#212121]'
                         }`}
                         onClick={() => setFontStyle('MONO')}
                         aria-hidden>
@@ -493,7 +499,7 @@ export const Settings = ({
                             }`}>
                             Ag
                         </span>
-                        <span className="inline-block font-body text-[10px] text-[#CCCCCC]">
+                        <span className="inline-block font-body text-[10px] text-[#999999] dark:text-[#CCCCCC]">
                             Mono
                         </span>
                     </div>
@@ -503,7 +509,7 @@ export const Settings = ({
                 className="flex justify-between items-center cursor-pointer"
                 onClick={() => setSmallText((prev) => !prev)}
                 aria-hidden>
-                <span className="inline-block font-body text-xs text-[#CCCCCC]">
+                <span className="inline-block font-body text-xs text-black dark:text-[#CCCCCC]">
                     Small text
                 </span>
                 <div className="relative w-max h-max">

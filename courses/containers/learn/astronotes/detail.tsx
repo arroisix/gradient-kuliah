@@ -197,7 +197,7 @@ const AstronoteDetail = (): JSX.Element => {
     // }, [data, is_subscribed, isAuthenticated]);
 
     return (
-        <section className="pt-[65px] flex flex-col md:flex-row relative md:overflow-hidden md:h-[100vh] bg-black">
+        <section className="pt-[65px] flex flex-col md:flex-row relative md:overflow-hidden md:h-[100vh] bg-white dark:bg-black text-black dark:text-white">
             {highlighted && (
                 <AstronotesContextMenu
                     points={points}
@@ -250,28 +250,6 @@ const AstronoteDetail = (): JSX.Element => {
                         </div>
                     )}
                 </div>
-                {/* {!!notes && showContent ? (
-                    <NotionRenderer
-                        className="!bg-black"
-                        mapPageUrl={customMapPageUrl(
-                            id as string,
-                            slug as string
-                        )}
-                        recordMap={notes}
-                        fullPage={true}
-                        darkMode={true}
-                        disableHeader
-                        components={{
-                            Code,
-                            Collection,
-                            Equation,
-                            Modal,
-                            Pdf
-                        }}
-                    />
-                ) : (
-                    <></>
-                )} */}
                 {/* {showSubscribe ? (
                     <div className="w-full h-screen p-4">
                         <NeedSubscribe />
