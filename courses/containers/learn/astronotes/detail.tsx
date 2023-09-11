@@ -261,7 +261,8 @@ const AstronoteDetail = (): JSX.Element => {
                                 linkTarget={'_blank'}>
                                 {data?.page_content
                                     ?.replaceAll('\n', '\n\n')
-                                    ?.replaceAll('\t', '')}
+                                    ?.replaceAll('\t', '')
+                                    ?.replaceAll('div', 'span')}
                             </ReactMarkdown>
                         </div>
                     )}
