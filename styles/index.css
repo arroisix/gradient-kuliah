@@ -1388,6 +1388,12 @@ sticky-3.animate {
     text-decoration: underline;
 }
 
+.markdown-table table th,
+.markdown-table table td {
+    padding: 6px 13px;
+    border: 1px solid #999999;
+}
+
 .callout {
     display: flex;
     gap: 0.5rem;
