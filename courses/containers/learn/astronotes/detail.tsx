@@ -130,11 +130,13 @@ const HighlightContextMenu = ({
 const RemoveHighlightContextMenu = ({
     setRemoveHighlighted,
     highlightId,
-    setHighlightId
+    setHighlightId,
+    points
 }: {
     setRemoveHighlighted: React.Dispatch<React.SetStateAction<boolean>>;
     highlightId: string;
     setHighlightId: React.Dispatch<string>;
+    points: { x: number; y: number; width: number };
 }): JSX.Element => {
     const router = useRouter();
     const { slug } = router.query;
@@ -148,14 +150,19 @@ const RemoveHighlightContextMenu = ({
     }
 
     return (
-        <div className="flex items-center py-3 px-4 bg-neutral-200 dark:bg-[#242424] rounded-xl">
-            <AiFillDelete
-                className="mr-3 hover:text-error cursor-pointer"
-                onClick={handleDeleteHighlight}
-            />
-            <span className="inline-block text-xs border-l border-black dark:border-white pl-3">
-                You highlighted
-            </span>
+        <div
+            className="pt-[30px] flex justify-center"
+            style={{ width: `${points.width}px` }}
+            onMouseLeave={() => setRemoveHighlighted(false)}>
+            <div className="w-max flex items-center py-3 px-4 bg-neutral-200 dark:bg-[#242424] rounded-xl">
+                <AiFillDelete
+                    className="mr-3 hover:text-error cursor-pointer"
+                    onClick={handleDeleteHighlight}
+                />
+                <span className="inline-block text-xs border-l border-black dark:border-white pl-3 whitespace-nowrap">
+                    You highlighted
+                </span>
+            </div>
         </div>
     );
 };
@@ -247,8 +254,9 @@ const AstronoteDetail = (): JSX.Element => {
                 <AstronotesContextMenu
                     points={points}
                     setHighlighted={setRemoveHighlighted}
-                    transform={`translateX(${points.width / 2 - 80}px)`}>
+                    transform={`translateY(-30px)`}>
                     <RemoveHighlightContextMenu
+                        points={points}
                         setRemoveHighlighted={setRemoveHighlighted}
                         highlightId={highlightId}
                         setHighlightId={setHighlightId}
