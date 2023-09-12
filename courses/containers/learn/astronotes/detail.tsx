@@ -131,39 +131,8 @@ const AstronoteDetail = (): JSX.Element => {
     const [fontStyle, setFontStyle] = useState<'DEFAULT' | 'SERIF' | 'MONO'>(
         'DEFAULT'
     );
-
-    // const renderNotebook = (): boolean => {
-    //     if (data?.book?.is_public && data?.book.is_free) {
-    //         return true;
-    //     }
-
-    //     if (data?.book?.is_public && !data?.book.is_free) {
-    //         if (!is_subscribed) {
-    //             setShowSubscribe(true);
-    //         }
-
-    //         return false;
-    //     }
-
-    //     if (!data?.book?.is_public && data?.book?.is_free) {
-    //         setShowSubscribe(false);
-    //         if (isAuthenticated) {
-    //             return true;
-    //         }
-    //         router.push(AUTHENTICATION_ROUTE);
-    //         return false;
-    //     }
-
-    //     if (isAuthenticated && is_subscribed) {
-    //         return true;
-    //     }
-
-    //     if (!is_subscribed) {
-    //         setShowSubscribe(true);
-    //     }
-
-    //     return false;
-    // };
+    const [smallText, setSmallText] = useState(false);
+    // const [zoom, setZoom] = useState(100);
 
     const handleHighlight = (): void => {
         const objectSelection = window.getSelection();
@@ -193,10 +162,6 @@ const AstronoteDetail = (): JSX.Element => {
         });
     };
 
-    // useEffect(() => {
-    //     // setShowContent(renderNotebook());
-    // }, [data, is_subscribed, isAuthenticated]);
-
     return (
         <section className="pt-[65px] flex flex-col md:flex-row relative md:overflow-hidden md:h-[100vh] bg-white dark:bg-black text-black dark:text-white">
             {highlighted && (
@@ -212,6 +177,8 @@ const AstronoteDetail = (): JSX.Element => {
                 <AstronotesSidebar
                     fontStyle={fontStyle}
                     setFontStyle={setFontStyle}
+                    smallText={smallText}
+                    setSmallText={setSmallText}
                 />
             </div>
             <div
@@ -225,20 +192,6 @@ const AstronoteDetail = (): JSX.Element => {
                             ? 'font-serif'
                             : 'font-mono'
                     }`}>
-                    {/* <div onMouseUp={handleHighlight} aria-hidden>
-                        <ReactMarkdown
-                            className="markdown-body-xs markdown-overflow-break-word markdown-blue-link markdown-img-max-height"
-                            remarkPlugins={[remarkMath, remarkGfm]}
-                            rehypePlugins={[rehypeKatex, rehypeRaw]}
-                            linkTarget={'_blank'}>
-                            {text
-                                ?.replaceAll('\n', '\n\n')
-                                ?.replaceAll(/\\/g, '\\\\')
-                                ?.replaceAll(/\textup/g, '9unix9')
-                                ?.replaceAll(/\t/g, '')
-                                ?.replaceAll('9unix9', '\\textup')}
-                        </ReactMarkdown>
-                    </div> */}
                     {isLoading && (
                         <>
                             <Skeleton className="w-[30%] h-[26px] p-0 !mb-2" />
@@ -255,7 +208,11 @@ const AstronoteDetail = (): JSX.Element => {
                     {data && (
                         <div onMouseUp={handleHighlight} aria-hidden>
                             <ReactMarkdown
-                                className="markdown-body-xs markdown-overflow-break-word markdown-blue-link markdown-img-max-height"
+                                className={`markdown-overflow-break-word markdown-blue-link markdown-img-max-height ${
+                                    smallText
+                                        ? 'markdown-body-very-small'
+                                        : 'markdown-body-xs'
+                                }`}
                                 remarkPlugins={[remarkMath, remarkGfm]}
                                 rehypePlugins={[rehypeKatex, rehypeRaw]}
                                 linkTarget={'_blank'}>
@@ -267,13 +224,6 @@ const AstronoteDetail = (): JSX.Element => {
                         </div>
                     )}
                 </div>
-                {/* {showSubscribe ? (
-                    <div className="w-full h-screen p-4">
-                        <NeedSubscribe />
-                    </div>
-                ) : (
-                    <></>
-                )} */}
             </div>
             <div
                 className="fixed bottom-0 right-[17px] pt-2 pb-6 bg-white dark:bg-black"
@@ -281,6 +231,8 @@ const AstronoteDetail = (): JSX.Element => {
                 <AstronotesFooter
                     fontStyle={fontStyle}
                     setFontStyle={setFontStyle}
+                    smallText={smallText}
+                    setSmallText={setSmallText}
                 />
             </div>
         </section>

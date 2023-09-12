@@ -1359,6 +1359,13 @@ sticky-3.animate {
     font-size: 14px;
 }
 
+.markdown-body-very-small p,
+.markdown-body-very-small ul,
+.markdown-body-very-small ol,
+.markdown-body-very-small li {
+    font-size: 10px;
+}
+
 .markdown-pre-code pre,
 .markdown-pre-code code {
     white-space: pre-line;

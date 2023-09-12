@@ -33,10 +33,14 @@ export type NavigationTypes = 'CLOSE' | 'LIST_CONTENT' | 'BOOKMARK' | 'SETTING';
 
 export const AstronotesSidebar = ({
     fontStyle,
-    setFontStyle
+    setFontStyle,
+    smallText,
+    setSmallText
 }: {
     fontStyle: 'DEFAULT' | 'SERIF' | 'MONO';
     setFontStyle: Dispatch<SetStateAction<'DEFAULT' | 'SERIF' | 'MONO'>>;
+    smallText: boolean;
+    setSmallText: Dispatch<SetStateAction<boolean>>;
 }): JSX.Element => {
     const [navigation, setNavigation] = useState<NavigationTypes>('CLOSE');
     return (
@@ -57,6 +61,8 @@ export const AstronotesSidebar = ({
                     fontStyle={fontStyle}
                     setFontStyle={setFontStyle}
                     setNavigation={setNavigation}
+                    smallText={smallText}
+                    setSmallText={setSmallText}
                 />
             )}
         </div>
@@ -437,11 +443,15 @@ export const Bookmark = ({
 const SidebarSetting = ({
     fontStyle,
     setFontStyle,
-    setNavigation
+    setNavigation,
+    smallText,
+    setSmallText
 }: {
     fontStyle: 'DEFAULT' | 'SERIF' | 'MONO';
     setFontStyle: Dispatch<SetStateAction<'DEFAULT' | 'SERIF' | 'MONO'>>;
     setNavigation: Dispatch<SetStateAction<NavigationTypes>>;
+    smallText: boolean;
+    setSmallText: Dispatch<SetStateAction<boolean>>;
 }): JSX.Element => {
     return (
         <div className="w-[230px] h-[calc(100vh-88px)] bg-[#F6F5F8] dark:bg-[#121212] rounded-lg text-black dark:text-white">
@@ -456,7 +466,12 @@ const SidebarSetting = ({
                 />
             </div>
             <div className="px-2 py-[10px] flex flex-col gap-2">
-                <Settings fontStyle={fontStyle} setFontStyle={setFontStyle} />
+                <Settings
+                    fontStyle={fontStyle}
+                    setFontStyle={setFontStyle}
+                    smallText={smallText}
+                    setSmallText={setSmallText}
+                />
             </div>
         </div>
     );
@@ -464,13 +479,16 @@ const SidebarSetting = ({
 
 export const Settings = ({
     fontStyle,
-    setFontStyle
+    setFontStyle,
+    smallText,
+    setSmallText
 }: {
     fontStyle: 'DEFAULT' | 'SERIF' | 'MONO';
     setFontStyle: Dispatch<SetStateAction<'DEFAULT' | 'SERIF' | 'MONO'>>;
+    smallText: boolean;
+    setSmallText: Dispatch<SetStateAction<boolean>>;
 }): JSX.Element => {
     const { theme, toggleTheme } = useThemeContext();
-    const [smallText, setSmallText] = useState(false);
 
     return (
         <>

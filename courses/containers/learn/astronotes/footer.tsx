@@ -22,10 +22,14 @@ import Skeleton from 'commons/components/elements/Skeleton';
 
 export const AstronotesFooter = ({
     fontStyle,
-    setFontStyle
+    setFontStyle,
+    smallText,
+    setSmallText
 }: {
     fontStyle: 'DEFAULT' | 'SERIF' | 'MONO';
     setFontStyle: Dispatch<SetStateAction<'DEFAULT' | 'SERIF' | 'MONO'>>;
+    smallText: boolean;
+    setSmallText: Dispatch<SetStateAction<boolean>>;
 }): JSX.Element => {
     return (
         <div className="relative flex">
@@ -33,24 +37,30 @@ export const AstronotesFooter = ({
                 <MobileSideBar
                     fontStyle={fontStyle}
                     setFontStyle={setFontStyle}
+                    smallText={smallText}
+                    setSmallText={setSmallText}
                 />
             </div>
             <div className="w-full px-5">
                 <Pagination />
             </div>
-            <div className="hidden md:flex items-center px-5 border-l-2 border-[#333333]">
-                <ZoomPercentage />
-            </div>
+            {/* <div className="hidden md:flex items-center px-5 border-l-2 border-[#333333]">
+                <ZoomPercentage zoom={zoom} setZoom={setZoom} />
+            </div> */}
         </div>
     );
 };
 
 const MobileSideBar = ({
     fontStyle,
-    setFontStyle
+    setFontStyle,
+    smallText,
+    setSmallText
 }: {
     fontStyle: 'DEFAULT' | 'SERIF' | 'MONO';
     setFontStyle: Dispatch<SetStateAction<'DEFAULT' | 'SERIF' | 'MONO'>>;
+    smallText: boolean;
+    setSmallText: Dispatch<SetStateAction<boolean>>;
 }): JSX.Element => {
     const [isShow, setIsShow] = useState(false);
     const [navigation, setNavigation] = useState<NavigationTypes>('CLOSE');
@@ -80,6 +90,8 @@ const MobileSideBar = ({
                     fontStyle={fontStyle}
                     setFontStyle={setFontStyle}
                     setNavigation={setNavigation}
+                    smallText={smallText}
+                    setSmallText={setSmallText}
                 />
             )}
             {navigation !== 'CLOSE' ||
@@ -209,11 +221,15 @@ const MobileBookmarkSidebar = ({
 const MobileSetting = ({
     fontStyle,
     setFontStyle,
-    setNavigation
+    setNavigation,
+    smallText,
+    setSmallText
 }: {
     fontStyle: 'DEFAULT' | 'SERIF' | 'MONO';
     setFontStyle: Dispatch<SetStateAction<'DEFAULT' | 'SERIF' | 'MONO'>>;
     setNavigation: Dispatch<SetStateAction<NavigationTypes>>;
+    smallText: boolean;
+    setSmallText: Dispatch<SetStateAction<boolean>>;
 }): JSX.Element => {
     return (
         <div className="absolute left-[-20px] bottom-[-24px] w-screen h-[calc(100vh-200px)] bg-[#F6F5F8] dark:bg-[#1D1D1D] z-10">
@@ -228,7 +244,12 @@ const MobileSetting = ({
                 />
             </div>
             <div className="px-5 py-3 flex flex-col gap-2">
-                <Settings fontStyle={fontStyle} setFontStyle={setFontStyle} />
+                <Settings
+                    fontStyle={fontStyle}
+                    setFontStyle={setFontStyle}
+                    smallText={smallText}
+                    setSmallText={setSmallText}
+                />
             </div>
         </div>
     );
@@ -369,9 +390,14 @@ const Pagination = (): JSX.Element => {
     );
 };
 
-const ZoomPercentage = (): JSX.Element => {
-    const [zoom, setZoom] = useState(100);
-
+// Using export to prevent eslint error
+export const ZoomPercentage = ({
+    zoom,
+    setZoom
+}: {
+    zoom: number;
+    setZoom: Dispatch<SetStateAction<number>>;
+}): JSX.Element => {
     function handleZoomIn(): void {
         setZoom((prev) => (prev + 25 > 500 ? 500 : prev + 25));
     }
