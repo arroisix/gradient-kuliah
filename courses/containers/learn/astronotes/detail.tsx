@@ -178,7 +178,7 @@ const AstronoteDetail = (): JSX.Element => {
                 />
             </div>
             <div
-                className="w-full ml-7 mt-5 mb-[55px] overflow-y-auto"
+                className="w-full md:ml-7 mt-5 mb-[55px] overflow-y-auto"
                 ref={notebookRef}>
                 <div
                     className={`w-[80%] mx-auto ${
@@ -222,7 +222,7 @@ const AstronoteDetail = (): JSX.Element => {
                 </div>
             </div>
             <div
-                className="fixed bottom-0 right-[17px] pt-2 pb-6 bg-white dark:bg-black"
+                className="fixed bottom-0 md:right-[17px] pt-2 pb-6 bg-white dark:bg-black"
                 style={{ width: notebookWidth }}>
                 <AstronotesFooter
                     fontStyle={fontStyle}
