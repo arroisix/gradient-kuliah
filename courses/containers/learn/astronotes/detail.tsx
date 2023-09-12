@@ -3,18 +3,20 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { useRouter } from 'next/router';
 import useElementSize from 'commons/hooks/useElementSize';
 import { AstronotesSidebar } from './sidebar';
 import { AstronotesFooter } from './footer';
 import {
+    useDeleteHighlightMutation,
     useGetBookProgressQuery,
     usePostHighlightMutation
 } from 'courses/redux/api/astronotesApi';
 import Skeleton from 'commons/components/elements/Skeleton';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import NeedSubscribe from 'courses/components/NeedSubscribe';
+import { AiFillDelete } from 'react-icons/ai';
 
 export const customMapPageUrl =
     (rootPageId: string, notionId: string) => () => {
@@ -31,16 +33,14 @@ interface DataHighlightedInterface {
 const AstronotesContextMenu = ({
     points,
     setHighlighted,
-    dataHighlighted
+    transform = '',
+    children
 }: {
     points: { x: number; y: number; width: number };
     setHighlighted: React.Dispatch<React.SetStateAction<boolean>>;
-    dataHighlighted: DataHighlightedInterface;
+    transform?: string;
+    children: ReactNode;
 }): JSX.Element => {
-    const router = useRouter();
-    const { slug } = router.query;
-    const [postHighlight] = usePostHighlightMutation();
-
     return (
         <>
             <div
@@ -49,62 +49,114 @@ const AstronotesContextMenu = ({
                 aria-hidden
             />
             <div
-                className="absolute flex gap-6 p-4 bg-[#242424] rounded-xl z-[2]"
                 style={{
+                    position: 'absolute',
+                    zIndex: '2',
                     top: points.y + 24,
                     left: points.x,
-                    transform: `translateX(${points.width / 2 - 92}px)`
+                    transform: transform
                 }}>
-                <div
-                    className="w-5 h-5 rounded-full bg-[#F1BF42] cursor-pointer"
-                    onClick={() => {
-                        postHighlight({
-                            ...dataHighlighted,
-                            slug: slug as string,
-                            color: '#F1BF42'
-                        });
-                        setHighlighted(false);
-                    }}
-                    aria-hidden
-                />
-                <div
-                    className="w-5 h-5 rounded-full bg-[#D85140] cursor-pointer"
-                    onClick={() => {
-                        postHighlight({
-                            ...dataHighlighted,
-                            slug: slug as string,
-                            color: '#D85140'
-                        });
-                        setHighlighted(false);
-                    }}
-                    aria-hidden
-                />
-                <div
-                    className="w-5 h-5 rounded-full bg-[#58A65C] cursor-pointer"
-                    onClick={() => {
-                        postHighlight({
-                            ...dataHighlighted,
-                            slug: slug as string,
-                            color: '#58A65C'
-                        });
-                        setHighlighted(false);
-                    }}
-                    aria-hidden
-                />
-                <div
-                    className="w-5 h-5 rounded-full bg-[#3C89E4] cursor-pointer"
-                    onClick={() => {
-                        postHighlight({
-                            ...dataHighlighted,
-                            slug: slug as string,
-                            color: '#3C89E4'
-                        });
-                        setHighlighted(false);
-                    }}
-                    aria-hidden
-                />
+                {children}
             </div>
         </>
+    );
+};
+
+const HighlightContextMenu = ({
+    setHighlighted,
+    dataHighlighted
+}: {
+    setHighlighted: React.Dispatch<React.SetStateAction<boolean>>;
+    dataHighlighted: DataHighlightedInterface;
+}): JSX.Element => {
+    const router = useRouter();
+    const { slug } = router.query;
+    const [postHighlight] = usePostHighlightMutation();
+
+    return (
+        <div className="flex gap-6 p-4 bg-[#242424] rounded-xl">
+            <div
+                className="w-5 h-5 rounded-full bg-[#F1BF42] cursor-pointer"
+                onClick={() => {
+                    postHighlight({
+                        ...dataHighlighted,
+                        slug: slug as string,
+                        color: '#F1BF42'
+                    });
+                    setHighlighted(false);
+                }}
+                aria-hidden
+            />
+            <div
+                className="w-5 h-5 rounded-full bg-[#D85140] cursor-pointer"
+                onClick={() => {
+                    postHighlight({
+                        ...dataHighlighted,
+                        slug: slug as string,
+                        color: '#D85140'
+                    });
+                    setHighlighted(false);
+                }}
+                aria-hidden
+            />
+            <div
+                className="w-5 h-5 rounded-full bg-[#58A65C] cursor-pointer"
+                onClick={() => {
+                    postHighlight({
+                        ...dataHighlighted,
+                        slug: slug as string,
+                        color: '#58A65C'
+                    });
+                    setHighlighted(false);
+                }}
+                aria-hidden
+            />
+            <div
+                className="w-5 h-5 rounded-full bg-[#3C89E4] cursor-pointer"
+                onClick={() => {
+                    postHighlight({
+                        ...dataHighlighted,
+                        slug: slug as string,
+                        color: '#3C89E4'
+                    });
+                    setHighlighted(false);
+                }}
+                aria-hidden
+            />
+        </div>
+    );
+};
+
+const RemoveHighlightContextMenu = ({
+    setRemoveHighlighted,
+    highlightId,
+    setHighlightId
+}: {
+    setRemoveHighlighted: React.Dispatch<React.SetStateAction<boolean>>;
+    highlightId: string;
+    setHighlightId: React.Dispatch<string>;
+}): JSX.Element => {
+    const router = useRouter();
+    const { slug } = router.query;
+
+    const [deleteHighlight] = useDeleteHighlightMutation();
+
+    function handleDeleteHighlight(): void {
+        deleteHighlight({ slug: slug as string, highlight_id: highlightId });
+        setHighlightId('');
+        setRemoveHighlighted(false);
+    }
+
+    return (
+        <div className="flex items-center py-3 px-4 bg-[#242424] rounded-xl">
+            <AiFillDelete
+                className="mr-3 hover:text-error cursor-pointer"
+                onClick={handleDeleteHighlight}
+            />
+            <span className="inline-block text-xs border-l border-white pl-3">
+                You highlighted
+            </span>
+        </div>
     );
 };
 
@@ -121,6 +173,8 @@ const AstronoteDetail = (): JSX.Element => {
     );
 
     const [highlighted, setHighlighted] = useState(false);
+    const [removeHighlighted, setRemoveHighlighted] = useState(false);
+    const [highlightId, setHighlightId] = useState('');
     const [dataHighlighted, setDataHighlighted] =
         useState<DataHighlightedInterface>();
     const [points, setPoints] = useState({ x: 0, y: 0, width: 0 });
@@ -158,16 +212,48 @@ const AstronoteDetail = (): JSX.Element => {
         });
     };
 
+    const handleHover = (event: React.MouseEvent<HTMLDivElement>): void => {
+        const selectedNode = event.target as HTMLDivElement;
+        const isHighlighted = !!selectedNode?.getAttribute('data-highlight');
+        const highlightId = selectedNode.getAttribute('id');
+
+        if (isHighlighted) {
+            setPoints({
+                x: selectedNode.getBoundingClientRect().x as number,
+                y: selectedNode.getBoundingClientRect().y as number,
+                width: selectedNode.getBoundingClientRect().width as number
+            });
+            setHighlightId(highlightId as string);
+            setRemoveHighlighted(true);
+        }
+    };
+
     return (
         <section className="pt-[65px] flex flex-col md:flex-row relative md:overflow-hidden md:h-[100vh] bg-white dark:bg-black text-black dark:text-white">
             {highlighted && (
                 <AstronotesContextMenu
                     points={points}
                     setHighlighted={setHighlighted}
-                    dataHighlighted={
-                        dataHighlighted as DataHighlightedInterface
-                    }
-                />
+                    transform={`translateX(${points.width / 2 - 92}px)`}>
+                    <HighlightContextMenu
+                        dataHighlighted={
+                            dataHighlighted as DataHighlightedInterface
+                        }
+                        setHighlighted={setHighlighted}
+                    />
+                </AstronotesContextMenu>
+            )}
+            {removeHighlighted && (
+                <AstronotesContextMenu
+                    points={points}
+                    setHighlighted={setRemoveHighlighted}
+                    transform={`translateX(${points.width / 2 - 80}px)`}>
+                    <RemoveHighlightContextMenu
+                        setRemoveHighlighted={setRemoveHighlighted}
+                        highlightId={highlightId}
+                        setHighlightId={setHighlightId}
+                    />
+                </AstronotesContextMenu>
             )}
             <div className="hidden md:block h-[calc(100vh-88px)] my-auto pl-5">
                 <AstronotesSidebar
@@ -204,7 +290,10 @@ const AstronoteDetail = (): JSX.Element => {
                         </>
                     ) : (
                         data && (
-                            <div onMouseUp={handleHighlight} aria-hidden>
+                            <div
+                                onMouseUp={handleHighlight}
+                                onMouseOverCapture={handleHover}
+                                aria-hidden>
                                 <ReactMarkdown
                                     className={`markdown-table markdown-overflow-break-word markdown-blue-link markdown-img-max-height ${
                                         smallText
