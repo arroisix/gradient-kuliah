@@ -59,6 +59,21 @@ export const astronotesApi = baseApi.injectEndpoints({
                 { type: 'ASTRONOTES', id: 'ALL' }
             ]
         }),
+        deleteHighlight: builder.mutation<
+            {
+                message: string;
+            },
+            { slug: string; highlight_id: string }
+        >({
+            query: ({ slug, highlight_id }) => ({
+                url: `${COURSE_BASE_URL}${slug}/highlight?highlight_id=${highlight_id}`,
+                method: 'DELETE'
+            }),
+            invalidatesTags: [
+                { type: 'ASTRONOTES', id: 'HIGHLIGHT' },
+                { type: 'ASTRONOTES', id: 'ALL' }
+            ]
+        }),
         getBookmarks: builder.query<getBookmarksReponse, { slug: string }>({
             query: ({ slug }) => ({
                 url: `${COURSE_BASE_URL}${slug}/bookmark`
@@ -114,6 +129,7 @@ export const {
     useGetTableContentsQuery,
     useGetHighlightQuery,
     usePostHighlightMutation,
+    useDeleteHighlightMutation,
     useGetBookmarksQuery,
     usePostBookmarksMutation,
     usePostRatingMutation,
