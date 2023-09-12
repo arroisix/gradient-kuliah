@@ -5,9 +5,6 @@ import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-// import NeedSubscribe from 'courses/components/NeedSubscribe';
-// import { useAuth } from 'authentication/contexts/AuthProvider';
-// import { AUTHENTICATION_ROUTE } from 'commons/constants';
 import useElementSize from 'commons/hooks/useElementSize';
 import { AstronotesSidebar } from './sidebar';
 import { AstronotesFooter } from './footer';
@@ -16,6 +13,8 @@ import {
     usePostHighlightMutation
 } from 'courses/redux/api/astronotesApi';
 import Skeleton from 'commons/components/elements/Skeleton';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import NeedSubscribe from 'courses/components/NeedSubscribe';
 
 export const customMapPageUrl =
     (rootPageId: string, notionId: string) => () => {
@@ -114,6 +113,7 @@ const AstronoteDetail = (): JSX.Element => {
     const { slug } = router.query;
     const { width: notebookWidth, ref: notebookRef } =
         useElementSize<HTMLDivElement>();
+    const { is_subscribed } = useCourseSubscription();
 
     const { data, isLoading, isFetching } = useGetBookProgressQuery(
         { slug: slug as string },
@@ -188,7 +188,9 @@ const AstronoteDetail = (): JSX.Element => {
                             ? 'font-serif'
                             : 'font-mono'
                     }`}>
-                    {isLoading || isFetching ? (
+                    {!is_subscribed ? (
+                        <NeedSubscribe />
+                    ) : isLoading || isFetching ? (
                         <>
                             <Skeleton className="w-[30%] h-[26px] p-0 !mb-2" />
                             <Skeleton className="h-[26px] p-0 !mb-2" />
