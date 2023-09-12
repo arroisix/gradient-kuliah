@@ -114,16 +114,12 @@ const AstronoteDetail = (): JSX.Element => {
     const { slug } = router.query;
     const { width: notebookWidth, ref: notebookRef } =
         useElementSize<HTMLDivElement>();
-    // const { isAuthenticated } = useAuth();
 
-    const { data, isLoading } = useGetBookProgressQuery(
+    const { data, isLoading, isFetching } = useGetBookProgressQuery(
         { slug: slug as string },
         { skip: !slug }
     );
 
-    // const { is_subscribed } = useCourseSubscription(slug as string);
-    // const [showSubscribe, setShowSubscribe] = useState(false);
-    // const [showContent, setShowContent] = useState(false);
     const [highlighted, setHighlighted] = useState(false);
     const [dataHighlighted, setDataHighlighted] =
         useState<DataHighlightedInterface>();
@@ -192,7 +188,7 @@ const AstronoteDetail = (): JSX.Element => {
                             ? 'font-serif'
                             : 'font-mono'
                     }`}>
-                    {isLoading && (
+                    {isLoading || isFetching ? (
                         <>
                             <Skeleton className="w-[30%] h-[26px] p-0 !mb-2" />
                             <Skeleton className="h-[26px] p-0 !mb-2" />
@@ -204,24 +200,25 @@ const AstronoteDetail = (): JSX.Element => {
                             <Skeleton className="h-[26px] p-0 !mb-2" />
                             <Skeleton className="h-[26px] p-0 !mb-2" />
                         </>
-                    )}
-                    {data && (
-                        <div onMouseUp={handleHighlight} aria-hidden>
-                            <ReactMarkdown
-                                className={`markdown-overflow-break-word markdown-blue-link markdown-img-max-height ${
-                                    smallText
-                                        ? 'markdown-body-very-small'
-                                        : 'markdown-body-xs'
-                                }`}
-                                remarkPlugins={[remarkMath, remarkGfm]}
-                                rehypePlugins={[rehypeKatex, rehypeRaw]}
-                                linkTarget={'_blank'}>
-                                {data?.page_content
-                                    ?.replaceAll('\n', '\n\n')
-                                    ?.replaceAll('\t', '')
-                                    ?.replaceAll('div', 'span')}
-                            </ReactMarkdown>
-                        </div>
+                    ) : (
+                        data && (
+                            <div onMouseUp={handleHighlight} aria-hidden>
+                                <ReactMarkdown
+                                    className={`markdown-overflow-break-word markdown-blue-link markdown-img-max-height ${
+                                        smallText
+                                            ? 'markdown-body-very-small'
+                                            : 'markdown-body-xs'
+                                    }`}
+                                    remarkPlugins={[remarkMath, remarkGfm]}
+                                    rehypePlugins={[rehypeKatex, rehypeRaw]}
+                                    linkTarget={'_blank'}>
+                                    {data?.page_content
+                                        ?.replaceAll('\n', '\n\n')
+                                        ?.replaceAll('\t', '')
+                                        ?.replaceAll('div', 'span')}
+                                </ReactMarkdown>
+                            </div>
+                        )
                     )}
                 </div>
             </div>
