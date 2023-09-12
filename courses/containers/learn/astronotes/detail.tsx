@@ -148,12 +148,12 @@ const RemoveHighlightContextMenu = ({
     }
 
     return (
-        <div className="flex items-center py-3 px-4 bg-[#242424] rounded-xl">
+        <div className="flex items-center py-3 px-4 bg-neutral-200 dark:bg-[#242424] rounded-xl">
             <AiFillDelete
                 className="mr-3 hover:text-error cursor-pointer"
                 onClick={handleDeleteHighlight}
             />
-            <span className="inline-block text-xs border-l border-white pl-3">
+            <span className="inline-block text-xs border-l border-black dark:border-white pl-3">
                 You highlighted
             </span>
         </div>
