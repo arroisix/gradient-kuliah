@@ -303,7 +303,7 @@ const AstronoteDetail = (): JSX.Element => {
                                 onMouseOverCapture={handleHover}
                                 aria-hidden>
                                 <ReactMarkdown
-                                    className={`markdown-table markdown-overflow-break-word markdown-blue-link markdown-img-max-height ${
+                                    className={`markdown-table markdown-overflow-break-word markdown-blue-link markdown-img-max-height astronotes ${
                                         smallText
                                             ? 'markdown-body-very-small'
                                             : 'markdown-body-xs'

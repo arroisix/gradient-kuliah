@@ -550,46 +550,60 @@ sticky-3.animate {
     margin-bottom: 0;
 }
 
-.markdown-body h1 {
+.markdown-body h1,
+.astronotes h1 {
     font-size: 32px;
 }
 
 .markdown-body h1,
-.markdown-body h2 {
+.markdown-body h2,
+.astronotes h1,
+.astronotes h2 {
     font-weight: 600;
 }
 
-.markdown-body h2 {
+.markdown-body h2,
+.astronotes h2 {
     font-size: 24px;
 }
 
-.markdown-body h3 {
+.markdown-body h3,
+.astronotes h3 {
     font-size: 20px;
+    margin: 0.5rem 0;
 }
 
 .markdown-body h3,
-.markdown-body h4 {
+.markdown-body h4,
+.astronotes h3,
+.astronotes h4 {
     font-weight: 600;
 }
 
-.markdown-body h4 {
+.markdown-body h4,
+.astronotes h4 {
     font-size: 16px;
 }
 
-.markdown-body h5 {
+.markdown-body h5,
+.astronotes h5 {
     font-size: 14px;
 }
 
 .markdown-body h5,
-.markdown-body h6 {
+.markdown-body h6,
+.astronotes h5,
+.astronotes h6 {
     font-weight: 600;
 }
 
-.markdown-body h6 {
+.markdown-body h6,
+.astronotes h6 {
     font-size: 12px;
 }
 
-.markdown-body p {
+.markdown-body p,
+.astronotes p {
     margin-top: 0;
     margin-bottom: 0px;
 }
@@ -599,35 +613,47 @@ sticky-3.animate {
 }
 
 .markdown-body ol,
-.markdown-body ul {
+.markdown-body ul,
+.astronotes ol,
+.astronotes ul {
     padding-left: 0;
     margin-top: 0;
     margin-bottom: 0;
 }
 
 .markdown-body ol ol,
-.markdown-body ul ol {
+.markdown-body ul ol,
+.astronotes ol ol,
+.astronotes ul ol {
     list-style-type: lower-roman;
 }
 
 .markdown-body ol ol ol,
 .markdown-body ol ul ol,
 .markdown-body ul ol ol,
-.markdown-body ul ul ol {
+.markdown-body ul ul ol,
+.astronotes ol ol ol,
+.astronotes ol ul ol,
+.astronotes ul ol ol,
+.astronotes ul ul ol {
     list-style-type: lower-alpha;
 }
 
-.markdown-body dd {
+.markdown-body dd,
+.astronotes dd {
     margin-left: 0;
 }
 
 .markdown-body code,
-.markdown-body pre {
+.markdown-body pre,
+.astronotes code,
+.astronotes pre {
     font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
     font-size: 12px;
 }
 
-.markdown-body pre {
+.markdown-body pre,
+.astronotes pre {
     margin-top: 0;
     margin-bottom: 0;
 }
@@ -1401,4 +1427,31 @@ sticky-3.animate {
     padding: 0.75rem;
     border-radius: 0.25rem;
     font-size: 1rem;
+    margin: 0.5rem 0;
+}
+
+hr {
+    margin: 0.5rem 0;
+}
+
+.astronotes-image {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0.5rem;
+}
+
+.astronotes-image img {
+    background: white;
+}
+
+.astronotes table {
+    width: 100%;
+    margin: 0.5rem;
+    text-align: center;
+}
+
+.astronotes details {
+    cursor: pointer;
 }
