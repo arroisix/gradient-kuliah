@@ -23,7 +23,8 @@ export const baseApi = createApi({
         'AI_TUTOR',
         'WATCH_PROGRESS',
         'PROFILE',
-        'COMMUNITIES'
+        'COMMUNITIES',
+        'ASTRONOTES'
     ],
     baseQuery: fetchBaseQuery({
         baseUrl: config.API_BASE_URL,

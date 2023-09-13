@@ -118,7 +118,6 @@ const SearchList = ({
     isFetching: boolean;
 }): JSX.Element => {
     const router = useRouter();
-    const { id } = router.query;
     const [navigation, setNavigation] = useState<'SEARCH_LIST' | 'SUBCHAPTER'>(
         'SEARCH_LIST'
     );
@@ -199,9 +198,7 @@ const SearchList = ({
                                     key={value.book_id}
                                     className="flex items-center gap-5 cursor-pointer"
                                     onClick={() =>
-                                        router.push(
-                                            `/astronotes/${id}/${value.book_id}`
-                                        )
+                                        router.push(`/astronotes/${value.slug}`)
                                     }
                                     aria-hidden>
                                     <Image

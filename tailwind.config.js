@@ -11,10 +11,13 @@ module.exports = {
         './komunitas/**/*.{ts,js,jsx,tsx}',
         './referral/**/*.{ts,js,jsx,tsx}'
     ],
+    darkMode: 'class',
     theme: {
         fontFamily: {
             sans: ['Raleway', 'sans-serif'],
-            body: ['Open Sans', 'Roboto']
+            body: ['Open Sans', 'Roboto'],
+            serif: ['Playfair Display', 'serif'],
+            mono: ['Roboto Mono', 'serif']
         },
         extend: {
             boxShadow: {

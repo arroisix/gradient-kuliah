@@ -240,6 +240,7 @@ type Book = {
     rating: number;
     book_cover_url?: string | null;
     authors: string;
+    slug: string;
 };
 
 interface CourseContentResponse {

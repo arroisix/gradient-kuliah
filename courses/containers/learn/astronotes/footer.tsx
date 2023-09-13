@@ -1,0 +1,427 @@
+import { useState, useRef, Dispatch, SetStateAction, useEffect } from 'react';
+import { BiMenu } from 'react-icons/bi';
+import { FaChevronRight } from 'react-icons/fa';
+import { MdClose } from 'react-icons/md';
+import {
+    Bookmark,
+    Content,
+    Highlight,
+    NavigationTypes,
+    Settings,
+    SidebarNav
+} from './sidebar';
+import {
+    useGetBookProgressQuery,
+    useGetBookmarksQuery,
+    useGetHighlightQuery,
+    useGetTableContentsQuery,
+    usePostBookProgressMutation
+} from 'courses/redux/api/astronotesApi';
+import { useRouter } from 'next/router';
+import Skeleton from 'commons/components/elements/Skeleton';
+
+export const AstronotesFooter = ({
+    fontStyle,
+    setFontStyle,
+    smallText,
+    setSmallText
+}: {
+    fontStyle: 'DEFAULT' | 'SERIF' | 'MONO';
+    setFontStyle: Dispatch<SetStateAction<'DEFAULT' | 'SERIF' | 'MONO'>>;
+    smallText: boolean;
+    setSmallText: Dispatch<SetStateAction<boolean>>;
+}): JSX.Element => {
+    return (
+        <div className="relative flex">
+            <div className="md:hidden pl-5">
+                <MobileSideBar
+                    fontStyle={fontStyle}
+                    setFontStyle={setFontStyle}
+                    smallText={smallText}
+                    setSmallText={setSmallText}
+                />
+            </div>
+            <div className="w-full px-5">
+                <Pagination />
+            </div>
+            {/* <div className="hidden md:flex items-center px-5 border-l-2 border-[#333333]">
+                <ZoomPercentage zoom={zoom} setZoom={setZoom} />
+            </div> */}
+        </div>
+    );
+};
+
+const MobileSideBar = ({
+    fontStyle,
+    setFontStyle,
+    smallText,
+    setSmallText
+}: {
+    fontStyle: 'DEFAULT' | 'SERIF' | 'MONO';
+    setFontStyle: Dispatch<SetStateAction<'DEFAULT' | 'SERIF' | 'MONO'>>;
+    smallText: boolean;
+    setSmallText: Dispatch<SetStateAction<boolean>>;
+}): JSX.Element => {
+    const [isShow, setIsShow] = useState(false);
+    const [navigation, setNavigation] = useState<NavigationTypes>('CLOSE');
+
+    return (
+        <div className="relative">
+            {isShow ? (
+                <MdClose size={24} onClick={() => setIsShow((prev) => !prev)} />
+            ) : (
+                <BiMenu size={24} onClick={() => setIsShow((prev) => !prev)} />
+            )}
+            {isShow && (
+                <SidebarNav
+                    navigation={navigation}
+                    setNavigation={setNavigation}
+                    className="absolute left-[-5px] bottom-[30px] z-[2]"
+                />
+            )}
+            {navigation === 'LIST_CONTENT' && (
+                <MobileListOfContent setNavigation={setNavigation} />
+            )}
+            {navigation === 'BOOKMARK' && (
+                <MobileBookmarkSidebar setNavigation={setNavigation} />
+            )}
+            {navigation === 'SETTING' && (
+                <MobileSetting
+                    fontStyle={fontStyle}
+                    setFontStyle={setFontStyle}
+                    setNavigation={setNavigation}
+                    smallText={smallText}
+                    setSmallText={setSmallText}
+                />
+            )}
+            {navigation !== 'CLOSE' ||
+                (isShow && (
+                    <div
+                        className="absolute left-[-20px] bottom-[-25px] w-screen h-screen bg-transparent z-[1]"
+                        onClick={() => {
+                            setIsShow(false);
+                            setNavigation('CLOSE');
+                        }}
+                        aria-hidden
+                    />
+                ))}
+        </div>
+    );
+};
+
+const MobileListOfContent = ({
+    setNavigation
+}: {
+    setNavigation: Dispatch<SetStateAction<NavigationTypes>>;
+}): JSX.Element => {
+    const router = useRouter();
+    const { slug } = router.query;
+    const { data, isLoading } = useGetTableContentsQuery(
+        { slug: slug as string },
+        { skip: !slug }
+    );
+
+    return (
+        <div className="absolute left-[-20px] bottom-[-24px] w-screen h-[calc(100vh-200px)] bg-[#F6F5F8] dark:bg-[#1D1D1D] z-10">
+            <div className="flex justify-between p-5">
+                <span className="inline-block font-extrabold text-base pt-[2px]">
+                    Daftar Isi
+                </span>
+                <MdClose
+                    size={24}
+                    className="text-black dark:text-white cursor-pointer"
+                    onClick={() => setNavigation('CLOSE')}
+                />
+            </div>
+            <div className="h-[calc(100vh-266px)] overflow-y-auto px-5 py-3 flex flex-col gap-2">
+                {isLoading && (
+                    <>
+                        <Skeleton className="h-[20px] p-0 mb-0" />
+                        <Skeleton className="h-[20px] p-0 mb-0" />
+                        <Skeleton className="h-[20px] p-0 mb-0" />
+                        <Skeleton className="h-[20px] p-0 mb-0" />
+                    </>
+                )}
+                {data?.contents?.map((value) => (
+                    <Content key={value.book_chapter_id} value={value} />
+                ))}
+            </div>
+        </div>
+    );
+};
+
+const MobileBookmarkSidebar = ({
+    setNavigation
+}: {
+    setNavigation: Dispatch<SetStateAction<NavigationTypes>>;
+}): JSX.Element => {
+    const [selected, setSelected] = useState<'HIGHLIGHT' | 'BOOKMARK'>(
+        'HIGHLIGHT'
+    );
+
+    const router = useRouter();
+    const { slug } = router.query;
+    const { data: highlightData, isLoading: isLoadingHighlight } =
+        useGetHighlightQuery({ slug: slug as string }, { skip: !slug });
+    const { data: bookmarkData, isLoading: isLoadingBookmark } =
+        useGetBookmarksQuery({ slug: slug as string }, { skip: !slug });
+
+    return (
+        <div className="absolute left-[-20px] bottom-[-24px] w-screen h-[calc(100vh-200px)] bg-[#F6F5F8] dark:bg-[#1D1D1D] z-10">
+            <div className="flex justify-between p-5">
+                <div className="flex gap-8">
+                    <span
+                        className={`inline-block font-extrabold text-base pb-[6px] cursor-pointer ${
+                            selected === 'HIGHLIGHT' &&
+                            'text-[#B6A6F3] border-b-2 border-[#C4B9FF]'
+                        }`}
+                        onClick={() => setSelected('HIGHLIGHT')}
+                        aria-hidden>
+                        Highlight
+                    </span>
+                    <span
+                        className={`inline-block font-extrabold text-base pb-[6px] cursor-pointer ${
+                            selected === 'BOOKMARK' &&
+                            'text-[#B6A6F3] border-b-2 border-[#C4B9FF]'
+                        }`}
+                        onClick={() => setSelected('BOOKMARK')}
+                        aria-hidden>
+                        Bookmark
+                    </span>
+                </div>
+                <MdClose
+                    size={24}
+                    className="text-black dark:text-white cursor-pointer"
+                    onClick={() => setNavigation('CLOSE')}
+                />
+            </div>
+            <div className="h-[calc(100vh-272px)] overflow-y-auto px-5 py-3 flex flex-col gap-2">
+                {((selected === 'HIGHLIGHT' && isLoadingHighlight) ||
+                    (selected === 'BOOKMARK' && isLoadingBookmark)) && (
+                    <>
+                        <Skeleton className="h-[20px] p-0 mb-0" />
+                        <Skeleton className="h-[20px] p-0 mb-0" />
+                        <Skeleton className="h-[20px] p-0 mb-0" />
+                        <Skeleton className="h-[20px] p-0 mb-0" />
+                    </>
+                )}
+                {selected === 'HIGHLIGHT' &&
+                    highlightData?.data?.map((value) => (
+                        <Highlight key={value.book_chapter_id} data={value} />
+                    ))}
+                {selected === 'BOOKMARK' &&
+                    bookmarkData?.bookmarks?.map((value, index) => (
+                        <Bookmark key={index} data={value} />
+                    ))}
+            </div>
+        </div>
+    );
+};
+
+const MobileSetting = ({
+    fontStyle,
+    setFontStyle,
+    setNavigation,
+    smallText,
+    setSmallText
+}: {
+    fontStyle: 'DEFAULT' | 'SERIF' | 'MONO';
+    setFontStyle: Dispatch<SetStateAction<'DEFAULT' | 'SERIF' | 'MONO'>>;
+    setNavigation: Dispatch<SetStateAction<NavigationTypes>>;
+    smallText: boolean;
+    setSmallText: Dispatch<SetStateAction<boolean>>;
+}): JSX.Element => {
+    return (
+        <div className="absolute left-[-20px] bottom-[-24px] w-screen h-[calc(100vh-200px)] bg-[#F6F5F8] dark:bg-[#1D1D1D] z-10">
+            <div className="flex justify-between p-5">
+                <span className="inline-block font-extrabold text-base pt-[2px]">
+                    Opsi Tampilan
+                </span>
+                <MdClose
+                    size={24}
+                    className="text-black dark:text-white cursor-pointer"
+                    onClick={() => setNavigation('CLOSE')}
+                />
+            </div>
+            <div className="px-5 py-3 flex flex-col gap-2">
+                <Settings
+                    fontStyle={fontStyle}
+                    setFontStyle={setFontStyle}
+                    smallText={smallText}
+                    setSmallText={setSmallText}
+                />
+            </div>
+        </div>
+    );
+};
+
+const Pagination = (): JSX.Element => {
+    const router = useRouter();
+    const { slug } = router.query;
+    const { data, isLoading } = useGetBookProgressQuery(
+        { slug: slug as string },
+        { skip: !slug }
+    );
+    const [postBookProgress] = usePostBookProgressMutation();
+
+    const MAX_VALUE = data?.total_page ?? 0;
+    const ref = useRef<HTMLDivElement>(null);
+    const [value, setValue] = useState(1);
+    const [percent, setPercent] = useState(0);
+    const [isHoldClick, setIsHoldClick] = useState(false);
+
+    function handleMouseDown(
+        event: React.MouseEvent<HTMLDivElement, MouseEvent>
+    ): void {
+        setIsHoldClick(true);
+        handleMouse(event);
+    }
+
+    function handleMouseUp(): void {
+        setIsHoldClick(false);
+    }
+
+    function handleMouseMove(
+        event: React.MouseEvent<HTMLDivElement, MouseEvent>
+    ): void {
+        if (isHoldClick) {
+            handleMouse(event);
+        }
+    }
+
+    function handleMouse(
+        event: React.MouseEvent<HTMLDivElement, MouseEvent>
+    ): void {
+        const clicked = event.pageX;
+        const left = ref.current?.getBoundingClientRect().left || 0;
+        const width = ref.current?.clientWidth || -1;
+        const percent = ((clicked - left) / width) * 100;
+        const multiple = MAX_VALUE / 100;
+        const barValue = (percent * multiple).toFixed(0);
+        const barPercent = ((percent * multiple) / MAX_VALUE) * 100;
+
+        setValue(
+            parseInt(barValue) < 1
+                ? 1
+                : parseInt(barValue) > MAX_VALUE
+                ? MAX_VALUE
+                : parseInt(barValue)
+        );
+
+        setPercent(barPercent < 0 ? 0 : barPercent > 100 ? 100 : barPercent);
+    }
+
+    function handlePrev(): void {
+        setValue((prev) => (prev - 1 < 1 ? 1 : prev - 1));
+        const multiple = MAX_VALUE / 100;
+        const barPercent = ((percent * multiple - 1) / MAX_VALUE) * 100;
+        setPercent(barPercent < 0 ? 0 : barPercent > 100 ? 100 : barPercent);
+    }
+
+    function handleNext(): void {
+        setValue((prev) => (prev + 1 > MAX_VALUE ? MAX_VALUE : prev + 1));
+        const multiple = MAX_VALUE / 100;
+        const barPercent = ((percent * multiple + 1) / MAX_VALUE) * 100;
+        setPercent(barPercent < 0 ? 0 : barPercent > 100 ? 100 : barPercent);
+    }
+
+    useEffect(() => {
+        let changePage: NodeJS.Timeout;
+
+        if (value) {
+            changePage = setTimeout(() => {
+                postBookProgress({
+                    slug: slug as string,
+                    next_page_order: value
+                });
+            }, 1000);
+        }
+
+        return () => clearTimeout(changePage);
+    }, [value, slug]);
+
+    useEffect(() => {
+        if (data?.current_page) {
+            setValue(data?.current_page);
+            setPercent((data.current_page / MAX_VALUE) * 100);
+        }
+    }, [data?.current_page]);
+
+    return (
+        <div className="flex gap-6">
+            <div
+                className="relative flex items-center w-full pt-6 px-2 cursor-pointer"
+                ref={ref}
+                onMouseDown={handleMouseDown}
+                onMouseUp={handleMouseUp}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseUp}
+                aria-hidden>
+                <div className="absolute top-[50%] left-0 translate-y-[-50%] w-full h-[3px] bg-[#999999]" />
+                <div
+                    style={{ width: `${percent}%` }}
+                    className="absolute top-[50%] left-0 translate-y-[-50%] w-full h-[3px] bg-accent-purple"
+                />
+                <div
+                    style={{ left: `${percent}%` }}
+                    className="absolute top-[50%] translate-y-[-50%] translate-x-[-50%] w-[10px] h-[10px] bg-accent-purple rounded-full"
+                />
+            </div>
+            <div className="flex items-center gap-[10px]">
+                <FaChevronRight
+                    size={12}
+                    className="text-[#666666] hover:text-black dark:hover:text-white rotate-180 cursor-pointer transition-all"
+                    onClick={handlePrev}
+                />
+                <span className="inline-block font-body text-xs select-none">
+                    {isLoading ? (
+                        <Skeleton className="h-5 w-6 p-0 !m-0" />
+                    ) : (
+                        `${value}/${MAX_VALUE}`
+                    )}
+                </span>
+                <FaChevronRight
+                    size={12}
+                    className="text-[#666666] hover:text-black dark:hover:text-white cursor-pointer transition-all"
+                    onClick={handleNext}
+                />
+            </div>
+        </div>
+    );
+};
+
+// Using export to prevent eslint error
+export const ZoomPercentage = ({
+    zoom,
+    setZoom
+}: {
+    zoom: number;
+    setZoom: Dispatch<SetStateAction<number>>;
+}): JSX.Element => {
+    function handleZoomIn(): void {
+        setZoom((prev) => (prev + 25 > 500 ? 500 : prev + 25));
+    }
+
+    function handleZoomOut(): void {
+        setZoom((prev) => (prev - 25 < 25 ? 25 : prev - 25));
+    }
+    return (
+        <div className="flex items-center gap-[10px]">
+            <div
+                className="w-[16px] h-[16px] pb-[2px] flex items-center justify-center font-body leading-[0] bg-neutral-200 dark:bg-[#666666] rounded-full cursor-pointer select-none"
+                onClick={handleZoomOut}
+                aria-hidden>
+                -
+            </div>
+            <span className="inline-block font-body text-xs select-none">
+                {zoom}%
+            </span>
+            <div
+                className="w-[16px] h-[16px] pb-[1px] flex items-center justify-center font-body leading-[0] bg-neutral-200 dark:bg-[#666666] rounded-full cursor-pointer select-none"
+                onClick={handleZoomIn}
+                aria-hidden>
+                +
+            </div>
+        </div>
+    );
+};

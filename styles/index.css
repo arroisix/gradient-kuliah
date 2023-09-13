@@ -1359,6 +1359,13 @@ sticky-3.animate {
     font-size: 14px;
 }
 
+.markdown-body-very-small p,
+.markdown-body-very-small ul,
+.markdown-body-very-small ol,
+.markdown-body-very-small li {
+    font-size: 10px;
+}
+
 .markdown-pre-code pre,
 .markdown-pre-code code {
     white-space: pre-line;
@@ -1379,4 +1386,19 @@ sticky-3.animate {
 
 .markdown-blue-link a:hover {
     text-decoration: underline;
+}
+
+.markdown-table table th,
+.markdown-table table td {
+    padding: 6px 13px;
+    border: 1px solid #999999;
+}
+
+.callout {
+    display: flex;
+    gap: 0.5rem;
+    background-color: rgba(128, 128, 128, 0.5);
+    padding: 0.75rem;
+    border-radius: 0.25rem;
+    font-size: 1rem;
 }

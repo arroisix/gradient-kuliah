@@ -27,6 +27,11 @@ import Image from 'next/image';
 import AuthContext from 'authentication/contexts/AuthProvider';
 import { HiOutlineUsers } from 'react-icons/hi';
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
+import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
+import {
+    useGetBookProgressQuery,
+    usePostBookmarksMutation
+} from 'courses/redux/api/astronotesApi';
 
 const Navbar = ({
     paymentPage,
@@ -51,12 +56,14 @@ const Navbar = ({
     const [isProfileHovered, setProfileHovered] = useState(false);
     const [openMobile, setOpenMobile] = useState(false);
     const [openSidebar, setOpenSidebar] = useState(false);
+    const [isBookmarked, setIsBookmarked] = useState(false);
     const pickedColorScheme = {
         bgColor: lightMode ? 'bg-white' : 'bg-black',
         color: lightMode ? 'text-black' : 'text-white'
     };
     const { height } = useWindowSize();
     const router = useRouter();
+    const { slug } = router?.query;
     const dispatch = useDispatch();
     const [scrollPosition, setScrollPosition] = useState(0);
     const handleScroll = (): void => {
@@ -64,6 +71,13 @@ const Navbar = ({
         setScrollPosition(position);
     };
     const { data: configData } = useGetConfigQuery();
+    const { data: bookProgressData, isLoading: isBookProgressLoading } =
+        useGetBookProgressQuery({ slug: slug as string }, { skip: !slug });
+    const [postBookmark] = usePostBookmarksMutation();
+
+    useEffect(() => {
+        setIsBookmarked(bookProgressData?.is_bookmarked as boolean);
+    }, [bookProgressData]);
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll, { passive: true });
@@ -98,6 +112,15 @@ const Navbar = ({
         }
 
         return lightMode ? 'bg-white text-black shadow-md' : 'bg-[#171717]';
+    };
+
+    const handleBookmark = (): void => {
+        postBookmark({
+            slug: slug as string,
+            page_order: bookProgressData?.current_page as number,
+            is_active: !isBookmarked
+        });
+        setIsBookmarked((prev) => !prev);
     };
 
     const isShowNavbarMenu = (): boolean => {
@@ -236,6 +259,24 @@ const Navbar = ({
                             {isAuthenticated ? (
                                 <nav
                                     className={`ml-12 flex gap-6 cursor-pointer relative`}>
+                                    {router.pathname.includes('astronotes') &&
+                                        !isBookProgressLoading && (
+                                            <div
+                                                onClick={handleBookmark}
+                                                aria-hidden>
+                                                {isBookmarked ? (
+                                                    <BsBookmarkFill
+                                                        size={18}
+                                                        className="text-[#999999]"
+                                                    />
+                                                ) : (
+                                                    <BsBookmark
+                                                        size={18}
+                                                        className="text-[#999999]"
+                                                    />
+                                                )}
+                                            </div>
+                                        )}
                                     {router.pathname === '/' && (
                                         <Link href="/kelas">
                                             <nav
