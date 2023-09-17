@@ -10,7 +10,7 @@ import {
     MdOutlinePersonOutline
 } from 'react-icons/md';
 import useWindowSize from 'commons/hooks/useWindowSize';
-import { renderName } from 'commons/utils';
+import { isNotNullAndUndefined, renderName } from 'commons/utils';
 import MobileNavbar from './mobile';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -63,7 +63,7 @@ const Navbar = ({
     };
     const { height } = useWindowSize();
     const router = useRouter();
-    const { slug } = router?.query;
+    const { slug, page } = router?.query;
     const dispatch = useDispatch();
     const [scrollPosition, setScrollPosition] = useState(0);
     const handleScroll = (): void => {
@@ -72,7 +72,13 @@ const Navbar = ({
     };
     const { data: configData } = useGetConfigQuery();
     const { data: bookProgressData, isLoading: isBookProgressLoading } =
-        useGetBookProgressQuery({ slug: slug as string }, { skip: !slug });
+        useGetBookProgressQuery(
+            { slug: slug as string, page: page as unknown as number },
+            {
+                skip:
+                    !isNotNullAndUndefined(slug) || !isNotNullAndUndefined(page)
+            }
+        );
     const [postBookmark] = usePostBookmarksMutation();
 
     useEffect(() => {

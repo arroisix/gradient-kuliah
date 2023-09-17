@@ -8,20 +8,29 @@ interface getBookProgressResponse {
     page_content: string;
 }
 
-interface tableContentInterface {
-    book_chapter_id: string;
+type BookChapter = {
+    id: string;
+    title: string;
+    notebook_url: string;
+    notion_id: string;
+    subsection: { sections: { key: string; title: string }[] };
+    order: number;
+    page_order: number;
+};
+
+type BookSubchapterSection = {
+    id: string;
     title: string;
     order: number;
     page_order: number;
-    blocks: {
-        block_id: string;
-        block_heading: string;
-        page_order: number;
-    }[];
-}
+};
 
-interface getTableContentsResponse {
-    contents: tableContentInterface[];
+type BookSubchapter = {
+    sections: BookSubchapterSection[];
+} & BookChapter;
+
+interface GetBookChapterResponse {
+    data: BookChapter[];
 }
 
 interface HighlightsInterface {

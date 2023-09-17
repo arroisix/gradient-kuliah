@@ -198,7 +198,9 @@ const SearchList = ({
                                     key={value.book_id}
                                     className="flex items-center gap-5 cursor-pointer"
                                     onClick={() =>
-                                        router.push(`/astronotes/${value.slug}`)
+                                        router.push(
+                                            `/astronotes/${value.slug}/1`
+                                        )
                                     }
                                     aria-hidden>
                                     <Image

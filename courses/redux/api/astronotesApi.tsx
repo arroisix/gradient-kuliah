@@ -6,10 +6,13 @@ export const astronotesApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getBookProgress: builder.query<
             getBookProgressResponse,
-            { slug: string }
+            { slug: string; page?: number }
         >({
-            query: ({ slug }) => ({
-                url: `${COURSE_BASE_URL}${slug}`
+            query: ({ slug, page }) => ({
+                url: `${COURSE_BASE_URL}${slug}`,
+                params: {
+                    page: page
+                }
             }),
             providesTags: [{ type: 'ASTRONOTES', id: 'ALL' }]
         }),
@@ -30,11 +33,19 @@ export const astronotesApi = baseApi.injectEndpoints({
             invalidatesTags: [{ type: 'ASTRONOTES', id: 'ALL' }]
         }),
         getTableContents: builder.query<
-            getTableContentsResponse,
+            GetBookChapterResponse,
             { slug: string }
         >({
             query: ({ slug }) => ({
-                url: `${COURSE_BASE_URL}${slug}/contents`
+                url: `${COURSE_BASE_URL}${slug}/chapters/`
+            })
+        }),
+        getTableContentSubchapters: builder.query<
+            ResponseData<BookSubchapter>,
+            { slug: string; chapter_id: string }
+        >({
+            query: ({ slug, chapter_id }) => ({
+                url: `${COURSE_BASE_URL}${slug}/chapters/${chapter_id}/subchapters/`
             })
         }),
         getHighlight: builder.query<getHighlightReponse, { slug: string }>({
@@ -125,8 +136,10 @@ export const astronotesApi = baseApi.injectEndpoints({
 
 export const {
     useGetBookProgressQuery,
+    useLazyGetBookProgressQuery,
     usePostBookProgressMutation,
     useGetTableContentsQuery,
+    useGetTableContentSubchaptersQuery,
     useGetHighlightQuery,
     usePostHighlightMutation,
     useDeleteHighlightMutation,

@@ -1422,6 +1422,8 @@ sticky-3.animate {
 
 .callout {
     display: flex;
+    flex-direction: column;
+    overflow-x: auto;
     gap: 0.5rem;
     background-color: rgba(128, 128, 128, 0.5);
     padding: 0.75rem;

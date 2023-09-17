@@ -80,7 +80,7 @@ export const ListBooks = ({
                     <div
                         className="flex items-center gap-5 cursor-pointer"
                         key={book_id}
-                        onClick={() => router.push(`/astronotes/${slug}`)}
+                        onClick={() => router.push(`/astronotes/${slug}/1`)}
                         aria-hidden>
                         <Image
                             src={

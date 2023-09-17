@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { useGetBookContentQuery } from 'courses/redux/api/courseApi';
 import { useRouter } from 'next/router';
 import { useAuth } from 'authentication/contexts/AuthProvider';
@@ -77,13 +79,15 @@ export const AstroNotesItem = ({
                         )}
                         {astro.title}
                     </button>
-                    {astro.subsection?.sections.map((value) => (
-                        <SubTitle
-                            key={value.key}
-                            value={value}
-                            extraCallback={extraCallback}
-                        />
-                    ))}
+                    {astro.subsection?.sections.map(
+                        (value: { key: any; title?: string }) => (
+                            <SubTitle
+                                key={value.key}
+                                value={value}
+                                extraCallback={extraCallback}
+                            />
+                        )
+                    )}
                 </div>
             </div>
         );

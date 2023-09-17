@@ -1,4 +1,4 @@
-import { useState, useRef, Dispatch, SetStateAction, useEffect } from 'react';
+import { useState, useRef, Dispatch, SetStateAction } from 'react';
 import { BiMenu } from 'react-icons/bi';
 import { FaChevronRight } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
@@ -14,11 +14,11 @@ import {
     useGetBookProgressQuery,
     useGetBookmarksQuery,
     useGetHighlightQuery,
-    useGetTableContentsQuery,
-    usePostBookProgressMutation
+    useGetTableContentsQuery
 } from 'courses/redux/api/astronotesApi';
 import { useRouter } from 'next/router';
 import Skeleton from 'commons/components/elements/Skeleton';
+import { isNotNullAndUndefined } from 'commons/utils';
 
 export const AstronotesFooter = ({
     fontStyle,
@@ -31,6 +31,13 @@ export const AstronotesFooter = ({
     smallText: boolean;
     setSmallText: Dispatch<SetStateAction<boolean>>;
 }): JSX.Element => {
+    const router = useRouter();
+    const { slug, page } = router.query;
+    const { data, isLoading } = useGetBookProgressQuery(
+        { slug: slug as string, page: page as unknown as number },
+        { skip: !isNotNullAndUndefined(slug) || !isNotNullAndUndefined(page) }
+    );
+
     return (
         <div className="relative flex">
             <div className="md:hidden pl-5">
@@ -41,9 +48,15 @@ export const AstronotesFooter = ({
                     setSmallText={setSmallText}
                 />
             </div>
-            <div className="w-full px-5">
-                <Pagination />
-            </div>
+            {data && (
+                <div className="w-full px-5">
+                    <Pagination
+                        currentPage={data.current_page}
+                        totalPage={data.total_page}
+                        isLoading={isLoading}
+                    />
+                </div>
+            )}
             {/* <div className="hidden md:flex items-center px-5 border-l-2 border-[#333333]">
                 <ZoomPercentage zoom={zoom} setZoom={setZoom} />
             </div> */}
@@ -142,8 +155,8 @@ const MobileListOfContent = ({
                         <Skeleton className="h-[20px] p-0 mb-0" />
                     </>
                 )}
-                {data?.contents?.map((value) => (
-                    <Content key={value.book_chapter_id} value={value} />
+                {data?.data?.map((value) => (
+                    <Content key={value.id} value={value} />
                 ))}
             </div>
         </div>
@@ -255,19 +268,18 @@ const MobileSetting = ({
     );
 };
 
-const Pagination = (): JSX.Element => {
+const Pagination = ({
+    totalPage,
+    isLoading
+}: {
+    currentPage: number;
+    totalPage: number;
+    isLoading: boolean;
+}): JSX.Element => {
     const router = useRouter();
-    const { slug } = router.query;
-    const { data, isLoading } = useGetBookProgressQuery(
-        { slug: slug as string },
-        { skip: !slug }
-    );
-    const [postBookProgress] = usePostBookProgressMutation();
-
-    const MAX_VALUE = data?.total_page ?? 0;
+    const { slug, page } = router.query;
+    const MAX_VALUE = totalPage;
     const ref = useRef<HTMLDivElement>(null);
-    const [value, setValue] = useState(1);
-    const [percent, setPercent] = useState(0);
     const [isHoldClick, setIsHoldClick] = useState(false);
 
     function handleMouseDown(
@@ -298,54 +310,45 @@ const Pagination = (): JSX.Element => {
         const percent = ((clicked - left) / width) * 100;
         const multiple = MAX_VALUE / 100;
         const barValue = (percent * multiple).toFixed(0);
-        const barPercent = ((percent * multiple) / MAX_VALUE) * 100;
 
-        setValue(
-            parseInt(barValue) < 1
-                ? 1
-                : parseInt(barValue) > MAX_VALUE
-                ? MAX_VALUE
-                : parseInt(barValue)
+        router.push(
+            `/astronotes/${slug}/${
+                parseInt(barValue) < 1
+                    ? 1
+                    : parseInt(barValue) > MAX_VALUE
+                    ? MAX_VALUE
+                    : parseInt(barValue)
+            }`
         );
-
-        setPercent(barPercent < 0 ? 0 : barPercent > 100 ? 100 : barPercent);
     }
 
     function handlePrev(): void {
-        setValue((prev) => (prev - 1 < 1 ? 1 : prev - 1));
-        const multiple = MAX_VALUE / 100;
-        const barPercent = ((percent * multiple - 1) / MAX_VALUE) * 100;
-        setPercent(barPercent < 0 ? 0 : barPercent > 100 ? 100 : barPercent);
+        // setValue((prev) => (prev - 1 < 1 ? 1 : prev - 1));
+        // const multiple = MAX_VALUE / 100;
+        // const barPercent = ((percent * multiple - 1) / MAX_VALUE) * 100;
+        // setPercent(barPercent < 0 ? 0 : barPercent > 100 ? 100 : barPercent);
+        router.push(`/astronotes/${slug}/${Number(page) - 1}`);
     }
 
     function handleNext(): void {
-        setValue((prev) => (prev + 1 > MAX_VALUE ? MAX_VALUE : prev + 1));
-        const multiple = MAX_VALUE / 100;
-        const barPercent = ((percent * multiple + 1) / MAX_VALUE) * 100;
-        setPercent(barPercent < 0 ? 0 : barPercent > 100 ? 100 : barPercent);
+        // setValue((prev) => (prev + 1 > MAX_VALUE ? MAX_VALUE : prev + 1));
+        // const multiple = MAX_VALUE / 100;
+        // const barPercent = ((percent * multiple + 1) / MAX_VALUE) * 100;
+        // setPercent(barPercent < 0 ? 0 : barPercent > 100 ? 100 : barPercent);
+        router.push(`/astronotes/${slug}/${Number(page) + 1}`);
     }
 
-    useEffect(() => {
-        let changePage: NodeJS.Timeout;
+    // useEffect(() => {
+    //     let changePage: NodeJS.Timeout;
 
-        if (value) {
-            changePage = setTimeout(() => {
-                postBookProgress({
-                    slug: slug as string,
-                    next_page_order: value
-                });
-            }, 1000);
-        }
+    //     if (value) {
+    //         changePage = setTimeout(() => {
+    //             router.push(`/astronotes/${slug}/${value}`);
+    //         }, 500);
+    //     }
 
-        return () => clearTimeout(changePage);
-    }, [value, slug]);
-
-    useEffect(() => {
-        if (data?.current_page) {
-            setValue(data?.current_page);
-            setPercent((data.current_page / MAX_VALUE) * 100);
-        }
-    }, [data?.current_page]);
+    //     return () => clearTimeout(changePage);
+    // }, [value, slug]);
 
     return (
         <div className="flex gap-6">
@@ -359,11 +362,11 @@ const Pagination = (): JSX.Element => {
                 aria-hidden>
                 <div className="absolute top-[50%] left-0 translate-y-[-50%] w-full h-[3px] bg-[#999999]" />
                 <div
-                    style={{ width: `${percent}%` }}
+                    style={{ width: `${(Number(page) / totalPage) * 100}%` }}
                     className="absolute top-[50%] left-0 translate-y-[-50%] w-full h-[3px] bg-accent-purple"
                 />
                 <div
-                    style={{ left: `${percent}%` }}
+                    style={{ left: `${(Number(page) / totalPage) * 100}%` }}
                     className="absolute top-[50%] translate-y-[-50%] translate-x-[-50%] w-[10px] h-[10px] bg-accent-purple rounded-full"
                 />
             </div>
@@ -377,7 +380,7 @@ const Pagination = (): JSX.Element => {
                     {isLoading ? (
                         <Skeleton className="h-5 w-6 p-0 !m-0" />
                     ) : (
-                        `${value}/${MAX_VALUE}`
+                        `${page}/${MAX_VALUE}`
                     )}
                 </span>
                 <FaChevronRight

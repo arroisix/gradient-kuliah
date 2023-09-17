@@ -7,6 +7,7 @@ import { useThemeContext } from 'commons/contexts/ThemeProvider';
 import {
     useGetBookmarksQuery,
     useGetHighlightQuery,
+    useGetTableContentSubchaptersQuery,
     useGetTableContentsQuery,
     usePostBookProgressMutation,
     usePostFeedbackMutation,
@@ -195,26 +196,59 @@ const ListOfContent = ({
                         <Skeleton className="h-[20px] p-0 mb-0" />
                     </>
                 )}
-                {data?.contents?.map((value) => (
-                    <Content key={value.book_chapter_id} value={value} />
+                {data?.data?.map((value) => (
+                    <Content key={value.id} value={value} />
                 ))}
             </div>
         </div>
     );
 };
 
-export const Content = ({
-    value
+export const SubChapterContent = ({
+    chapterId
 }: {
-    value: tableContentInterface;
+    chapterId: string;
 }): JSX.Element => {
     const router = useRouter();
     const { slug } = router.query;
-    const [isShow, setIsShow] = useState(false);
-    const [postBookProgress] = usePostBookProgressMutation();
+    const { data: subchapters } = useGetTableContentSubchaptersQuery(
+        {
+            slug: slug as string,
+            chapter_id: chapterId
+        },
+        { skip: !slug }
+    );
 
     return (
-        <div key={value.book_chapter_id}>
+        <>
+            {subchapters?.data.map((subchapter: BookSubchapter) => (
+                <span
+                    onClick={() =>
+                        router.push(
+                            `/astronotes/${slug}/${subchapter.page_order}/#${subchapter.id}`
+                        )
+                    }
+                    key={subchapter.id}
+                    className="text-black dark:text-[#CCCCCC] p-1 cursor-pointer hover:bg-neutral-300 dark:hover:bg-neutral-700 rounded"
+                    aria-hidden>
+                    <ReactMarkdown
+                        className="markdown-body-xs markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height"
+                        remarkPlugins={[remarkMath, remarkGfm]}
+                        rehypePlugins={[rehypeKatex, rehypeRaw]}
+                        linkTarget={'_blank'}>
+                        {subchapter.title}
+                    </ReactMarkdown>
+                </span>
+            ))}
+        </>
+    );
+};
+
+export const Content = ({ value }: { value: BookChapter }): JSX.Element => {
+    const [isShow, setIsShow] = useState(false);
+
+    return (
+        <div key={value.id}>
             <div
                 className="flex gap-[6px] cursor-pointer"
                 onClick={() => setIsShow((prev) => !prev)}
@@ -229,31 +263,11 @@ export const Content = ({
                     {value.title}
                 </span>
             </div>
-            <div
-                className={`flex flex-col gap-1 pt-2 pl-4 ${
-                    isShow ? '' : 'hidden'
-                }`}>
-                {value.blocks?.map((block) => (
-                    <span
-                        key={block.block_id}
-                        className="text-black dark:text-[#CCCCCC] p-1 cursor-pointer hover:bg-neutral-300 dark:hover:bg-neutral-700 rounded"
-                        onClick={() =>
-                            postBookProgress({
-                                slug: slug as string,
-                                next_page_order: block.page_order
-                            })
-                        }
-                        aria-hidden>
-                        <ReactMarkdown
-                            className="markdown-body-xs markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height"
-                            remarkPlugins={[remarkMath, remarkGfm]}
-                            rehypePlugins={[rehypeKatex, rehypeRaw]}
-                            linkTarget={'_blank'}>
-                            {block.block_heading}
-                        </ReactMarkdown>
-                    </span>
-                ))}
-            </div>
+            {isShow && (
+                <div className="flex flex-col gap-1 pt-2 pl-4">
+                    <SubChapterContent chapterId={value.id} />
+                </div>
+            )}
         </div>
     );
 };

@@ -17,6 +17,7 @@ import Skeleton from 'commons/components/elements/Skeleton';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import NeedSubscribe from 'courses/components/NeedSubscribe';
 import { AiFillDelete } from 'react-icons/ai';
+import { isNotNullAndUndefined } from 'commons/utils';
 
 export const customMapPageUrl =
     (rootPageId: string, notionId: string) => () => {
@@ -169,14 +170,14 @@ const RemoveHighlightContextMenu = ({
 
 const AstronoteDetail = (): JSX.Element => {
     const router = useRouter();
-    const { slug } = router.query;
+    const { slug, page } = router.query;
     const { width: notebookWidth, ref: notebookRef } =
         useElementSize<HTMLDivElement>();
     const { is_subscribed } = useCourseSubscription();
 
     const { data, isLoading, isFetching } = useGetBookProgressQuery(
-        { slug: slug as string },
-        { skip: !slug }
+        { slug: slug as string, page: page as unknown as number },
+        { skip: !isNotNullAndUndefined(slug) || !isNotNullAndUndefined(page) }
     );
 
     const [highlighted, setHighlighted] = useState(false);
