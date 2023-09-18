@@ -60,12 +60,7 @@ interface postHighlightBody {
     slug: string;
 }
 
-interface BookmarkInterface {
-    title: string;
+type Bookmark = {
+    page_chapters: string[];
     page_order: number;
-    block_headings: string[];
-}
-
-interface getBookmarksReponse {
-    bookmarks: BookmarkInterface[];
-}
+};

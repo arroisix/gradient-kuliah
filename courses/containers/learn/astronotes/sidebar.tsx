@@ -6,7 +6,6 @@ import rehypeRaw from 'rehype-raw';
 import { useThemeContext } from 'commons/contexts/ThemeProvider';
 import {
     useGetBookmarksQuery,
-    useGetHighlightQuery,
     useGetTableContentSubchaptersQuery,
     useGetTableContentsQuery,
     usePostBookProgressMutation,
@@ -278,21 +277,23 @@ const BookmarkSidebar = ({
     setNavigation: Dispatch<SetStateAction<NavigationTypes>>;
 }): JSX.Element => {
     const [selected, setSelected] = useState<'HIGHLIGHT' | 'BOOKMARK'>(
-        'HIGHLIGHT'
+        'BOOKMARK'
     );
 
     const router = useRouter();
     const { slug } = router.query;
-    const { data: highlightData, isLoading: isLoadingHighlight } =
-        useGetHighlightQuery({ slug: slug as string }, { skip: !slug });
+    // const { data: highlightData, isLoading: isLoadingHighlight } =
+    //     useGetHighlightQuery({ slug: slug as string }, { skip: !slug });
     const { data: bookmarkData, isLoading: isLoadingBookmark } =
         useGetBookmarksQuery({ slug: slug as string }, { skip: !slug });
+
+    console.log(bookmarkData);
 
     return (
         <div className="w-[230px] h-[calc(100vh-88px)] bg-[#F6F5F8] dark:bg-[#121212] rounded-lg text-black dark:text-white">
             <div className="flex justify-around pl-4 pr-2 pt-[10px] dark:border-b dark:border-[#2D2D2D]">
-                <div className="flex gap-4">
-                    <span
+                <div className="flex gap-4 w-full items-center justify-center">
+                    {/* <span
                         className={`inline-block font-body text-xs pb-[7px] cursor-pointer ${
                             selected === 'HIGHLIGHT' &&
                             'text-[#7264EB] dark:text-[#B6A6F3] border-b-2 border-[#7264EB] dark:border-[#C4B9FF]'
@@ -300,7 +301,7 @@ const BookmarkSidebar = ({
                         onClick={() => setSelected('HIGHLIGHT')}
                         aria-hidden>
                         HIGHLIGHT
-                    </span>
+                    </span> */}
                     <span
                         className={`inline-block font-body text-xs pb-[7px] cursor-pointer ${
                             selected === 'BOOKMARK' &&
@@ -318,8 +319,7 @@ const BookmarkSidebar = ({
                 />
             </div>
             <div className="h-[calc(100vh-126px)] overflow-y-auto px-2 py-[10px] flex flex-col gap-2">
-                {((selected === 'HIGHLIGHT' && isLoadingHighlight) ||
-                    (selected === 'BOOKMARK' && isLoadingBookmark)) && (
+                {selected === 'BOOKMARK' && isLoadingBookmark && (
                     <>
                         <Skeleton className="h-[20px] p-0 mb-0" />
                         <Skeleton className="h-[20px] p-0 mb-0" />
@@ -327,12 +327,12 @@ const BookmarkSidebar = ({
                         <Skeleton className="h-[20px] p-0 mb-0" />
                     </>
                 )}
-                {selected === 'HIGHLIGHT' &&
+                {/* {selected === 'HIGHLIGHT' &&
                     highlightData?.data?.map((value) => (
                         <Highlight key={value.book_chapter_id} data={value} />
-                    ))}
+                    ))} */}
                 {selected === 'BOOKMARK' &&
-                    bookmarkData?.bookmarks?.map((value, index) => (
+                    bookmarkData?.data?.map((value, index) => (
                         <Bookmark key={index} data={value} />
                     ))}
             </div>
@@ -398,12 +398,7 @@ export const Highlight = ({
     );
 };
 
-export const Bookmark = ({
-    data
-}: {
-    data: BookmarkInterface;
-}): JSX.Element => {
-    const [postBookProgress] = usePostBookProgressMutation();
+export const Bookmark = ({ data }: { data: Bookmark }): JSX.Element => {
     const router = useRouter();
     const { slug } = router.query;
 
@@ -422,34 +417,31 @@ export const Bookmark = ({
                     }`}
                 />
                 <span className="inline-block font-body text-xs text-black dark:text-[#CCCCCC]">
-                    {data.title}
+                    Halaman {data.page_order}
                 </span>
             </div>
-            <div
+            <button
+                onClick={() =>
+                    router.push(`/astronotes/${slug}/${data.page_order}`)
+                }
                 className={`flex flex-col gap-1 pt-2 pl-4 ${
                     isShow ? '' : 'hidden'
                 }`}>
-                {data.block_headings?.map((block, index) => (
+                {data.page_chapters?.map((chapter, index) => (
                     <span
                         key={index}
-                        className="text-[#666666] dark:text-[#999999] cursor-pointer"
-                        onClick={() =>
-                            postBookProgress({
-                                slug: slug as string,
-                                next_page_order: data.page_order
-                            })
-                        }
+                        className="text-[#666666] dark:text-[#999999] cursor-pointer text-left"
                         aria-hidden>
                         <ReactMarkdown
                             className="markdown-body-xs markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height"
                             remarkPlugins={[remarkMath, remarkGfm]}
                             rehypePlugins={[rehypeKatex, rehypeRaw]}
                             linkTarget={'_blank'}>
-                            {block}
+                            {chapter}
                         </ReactMarkdown>
                     </span>
                 ))}
-            </div>
+            </button>
         </div>
     );
 };
