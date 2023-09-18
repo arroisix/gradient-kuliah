@@ -8,7 +8,6 @@ import {
     useRef
 } from 'react';
 import Avatar from 'react-avatar';
-import useUploadFile from 'commons/hooks/useUploadFile';
 import TextareaAutosize from 'react-textarea-autosize';
 import AdvanceForm from './AdvanceForm';
 import AttachmentForm from './AttachmentForm';
@@ -49,8 +48,6 @@ const KomunitasForm = ({
     const { profile } = useContext(AuthContext);
 
     const formRef = useRef<HTMLTextAreaElement>(null);
-
-    const { uploadFile } = useUploadFile(bucketKey);
 
     function handleChange(event: ChangeEvent<HTMLTextAreaElement>): void {
         setFormContent(event.target.value);
