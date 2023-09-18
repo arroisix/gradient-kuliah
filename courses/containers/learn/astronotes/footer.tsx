@@ -5,7 +5,6 @@ import { MdClose } from 'react-icons/md';
 import {
     Bookmark,
     Content,
-    Highlight,
     NavigationTypes,
     Settings,
     SidebarNav
@@ -13,7 +12,6 @@ import {
 import {
     useGetBookProgressQuery,
     useGetBookmarksQuery,
-    useGetHighlightQuery,
     useGetTableContentsQuery
 } from 'courses/redux/api/astronotesApi';
 import { useRouter } from 'next/router';
@@ -169,13 +167,11 @@ const MobileBookmarkSidebar = ({
     setNavigation: Dispatch<SetStateAction<NavigationTypes>>;
 }): JSX.Element => {
     const [selected, setSelected] = useState<'HIGHLIGHT' | 'BOOKMARK'>(
-        'HIGHLIGHT'
+        'BOOKMARK'
     );
 
     const router = useRouter();
     const { slug } = router.query;
-    const { data: highlightData, isLoading: isLoadingHighlight } =
-        useGetHighlightQuery({ slug: slug as string }, { skip: !slug });
     const { data: bookmarkData, isLoading: isLoadingBookmark } =
         useGetBookmarksQuery({ slug: slug as string }, { skip: !slug });
 
@@ -209,8 +205,7 @@ const MobileBookmarkSidebar = ({
                 />
             </div>
             <div className="h-[calc(100vh-272px)] overflow-y-auto px-5 py-3 flex flex-col gap-2">
-                {((selected === 'HIGHLIGHT' && isLoadingHighlight) ||
-                    (selected === 'BOOKMARK' && isLoadingBookmark)) && (
+                {selected === 'BOOKMARK' && isLoadingBookmark && (
                     <>
                         <Skeleton className="h-[20px] p-0 mb-0" />
                         <Skeleton className="h-[20px] p-0 mb-0" />
@@ -218,12 +213,12 @@ const MobileBookmarkSidebar = ({
                         <Skeleton className="h-[20px] p-0 mb-0" />
                     </>
                 )}
-                {selected === 'HIGHLIGHT' &&
+                {/* {selected === 'HIGHLIGHT' &&
                     highlightData?.data?.map((value) => (
                         <Highlight key={value.book_chapter_id} data={value} />
-                    ))}
+                    ))} */}
                 {selected === 'BOOKMARK' &&
-                    bookmarkData?.bookmarks?.map((value, index) => (
+                    bookmarkData?.data?.map((value, index) => (
                         <Bookmark key={index} data={value} />
                     ))}
             </div>

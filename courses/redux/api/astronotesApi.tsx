@@ -85,7 +85,7 @@ export const astronotesApi = baseApi.injectEndpoints({
                 { type: 'ASTRONOTES', id: 'ALL' }
             ]
         }),
-        getBookmarks: builder.query<getBookmarksReponse, { slug: string }>({
+        getBookmarks: builder.query<ResponseData<Bookmark>, { slug: string }>({
             query: ({ slug }) => ({
                 url: `${COURSE_BASE_URL}${slug}/bookmark`
             }),
