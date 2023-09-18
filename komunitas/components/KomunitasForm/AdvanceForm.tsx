@@ -1,5 +1,6 @@
 import Button from 'commons/components/elements/Button';
 import { useState } from 'react';
+import { FiPaperclip } from 'react-icons/fi';
 import { ImOmega } from 'react-icons/im';
 import { TbSquareRoot2 } from 'react-icons/tb';
 import MathForm from './MathForm';
@@ -54,6 +55,15 @@ const AdvanceForm = ({
                             {value.icon}
                         </div>
                     ))}
+                    <label
+                        htmlFor={'inputFile'}
+                        className="block hover:bg-[#2C2C2C] px-[12px] py-[6px] rounded-[100px] cursor-pointer"
+                        onClick={() => {
+                            posthog.capture('Click Attachment Menu');
+                        }}
+                        aria-hidden>
+                        <FiPaperclip className="text-[18px] text-neutral-600" />
+                    </label>
                 </div>
                 {iconClicked === -1 && (
                     <div className="flex gap-2">
