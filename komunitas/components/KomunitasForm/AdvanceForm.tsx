@@ -5,12 +5,14 @@ import { TbSquareRoot2 } from 'react-icons/tb';
 import MathForm from './MathForm';
 import SymbolForm from './SymbolForm';
 import { posthog } from 'posthog-js';
+import { FiPaperclip } from 'react-icons/fi';
 
 type IconOption = {
     tag: keyof JSX.IntrinsicElements;
     icon: JSX.Element;
     tracker: string;
     disableClick?: boolean;
+    disabled?: boolean;
     props?: Record<string, any>;
 };
 
@@ -24,17 +26,17 @@ const ICON: IconOption[] = [
         tag: 'div',
         icon: <ImOmega className="text-[18px]" />,
         tracker: 'Click Symbol Menu'
+    },
+    {
+        disabled: true,
+        tag: 'label',
+        icon: <FiPaperclip className="text-[18px] text-neutral-600" />,
+        tracker: 'Click Attachment Menu',
+        disableClick: true,
+        props: {
+            htmlFor: 'inputFile'
+        }
     }
-    //,
-    //{
-    //    tag: 'label',
-    //    icon: <FiPaperclip className="text-[18px] text-neutral-600" />,
-    //    tracker: 'Click Attachment Menu',
-    //    disableClick: true,
-    //    props: {
-    //        htmlFor: 'inputFile'
-    //    }
-    //}
 ];
 
 const AdvanceForm = ({
@@ -56,7 +58,7 @@ const AdvanceForm = ({
         <div className="bg-[#242424] px-5 py-[10px] rounded-b-[20px]">
             <div className="flex justify-between items-center">
                 <div className="flex gap-2 items-center">
-                    {ICON.map(
+                    {ICON.filter((opt) => !opt.disabled).map(
                         (
                             {
                                 tag: Tag,
