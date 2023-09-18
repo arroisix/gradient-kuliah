@@ -8,7 +8,6 @@ import {
     useRef
 } from 'react';
 import Avatar from 'react-avatar';
-import useUploadFile from 'commons/hooks/useUploadFile';
 import TextareaAutosize from 'react-textarea-autosize';
 import AdvanceForm from './AdvanceForm';
 import { IoMdClose } from 'react-icons/io';
@@ -50,8 +49,6 @@ const KomunitasForm = ({
 
     const formRef = useRef<HTMLTextAreaElement>(null);
 
-    const { uploadFile } = useUploadFile(bucketKey);
-
     function handleChange(event: ChangeEvent<HTMLTextAreaElement>): void {
         setFormContent(event.target.value);
     }
@@ -62,35 +59,8 @@ const KomunitasForm = ({
         }
     }
 
-    async function handleInputFile(
-        event: ChangeEvent<HTMLInputElement>
-    ): Promise<void> {
-        const files: File[] = [];
-
-        if (event.target.files) {
-            for (let i = 0; i < event?.target?.files.length; ++i) {
-                const file = event?.target?.files[i];
-
-                files.push(file);
-                setAttachmentName([file.name, ...attachmentName]);
-            }
-        }
-        const res = await uploadFile(files);
-        if (res) {
-            setAttachmentUrl([...res, ...attachmentUrl]);
-        }
-    }
-
     return (
         <div>
-            <input
-                type="file"
-                id={'inputFile'}
-                hidden
-                multiple
-                accept={'image/png,image/gif,image/jpeg,image/jpg'}
-                onChange={handleInputFile}
-            />
             <div
                 className={`w-full bg-[#1D1D1D] p-[18px] md:p-5 rounded-t-[20px] ${className}`}>
                 <div className="flex flex-wrap justify-between gap-2">
