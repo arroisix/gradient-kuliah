@@ -312,7 +312,7 @@ const AstronoteDetail = (): JSX.Element => {
                                     remarkPlugins={[remarkMath, remarkGfm]}
                                     rehypePlugins={[rehypeKatex, rehypeRaw]}
                                     linkTarget={'_blank'}>
-                                    {data?.page_content?.replaceAll('\t', '')}
+                                    {data?.page_content}
                                 </ReactMarkdown>
                             </div>
                         )
