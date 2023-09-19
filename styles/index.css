@@ -6,6 +6,7 @@
     ul,
     ol {
         list-style: revert;
+        padding-left: 1rem;
     }
 }
 
@@ -613,29 +614,21 @@ sticky-3.animate {
 }
 
 .markdown-body ol,
-.markdown-body ul,
-.astronotes ol,
-.astronotes ul {
+.markdown-body ul {
     padding-left: 0;
     margin-top: 0;
     margin-bottom: 0;
 }
 
 .markdown-body ol ol,
-.markdown-body ul ol,
-.astronotes ol ol,
-.astronotes ul ol {
+.markdown-body ul ol {
     list-style-type: lower-roman;
 }
 
 .markdown-body ol ol ol,
 .markdown-body ol ul ol,
 .markdown-body ul ol ol,
-.markdown-body ul ul ol,
-.astronotes ol ol ol,
-.astronotes ol ul ol,
-.astronotes ul ol ol,
-.astronotes ul ul ol {
+.markdown-body ul ul ol {
     list-style-type: lower-alpha;
 }
 
@@ -1456,4 +1449,8 @@ hr {
 
 .astronotes details {
     cursor: pointer;
+}
+
+summary > p {
+    display: contents;
 }
