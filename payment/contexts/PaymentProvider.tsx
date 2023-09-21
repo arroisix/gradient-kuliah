@@ -8,8 +8,8 @@ import React, {
 import { useGetDetailPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
 
 interface PaymentContextType {
-    isModalCheckoutOpen: 1 | 0;
-    setModalCheckoutOpen: (status: 1 | 0) => void;
+    isModalCheckoutOpen: boolean;
+    setModalCheckoutOpen: (status: boolean) => void;
     packet?: PacketOffer;
     paymentMethod: PaymentMethod;
     setPaymentMethod: (method: PaymentMethod) => void;
@@ -26,7 +26,8 @@ export function PaymentProvider({
     children: ReactNode;
     packetId: string;
 }): JSX.Element {
-    const [isModalCheckoutOpen, setModalCheckoutOpen] = useState<1 | 0>(0);
+    const [isModalCheckoutOpen, setModalCheckoutOpen] =
+        useState<boolean>(false);
     const { data: packet } = useGetDetailPacketOfferQuery(packetId);
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('VA_BNI');
 

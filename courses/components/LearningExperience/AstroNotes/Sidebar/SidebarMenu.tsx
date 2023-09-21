@@ -21,8 +21,9 @@ const SidebarMenu = ({
     setNavigation,
     className
 }: SidebarMenuProps): JSX.Element => {
-    const [isModalRatingOpen, setIsModalRatingOpen] = useState<0 | 1>(0);
-    const [isModalFeedbackOpen, setIsModalFeedbackOpen] = useState<0 | 1>(0);
+    const [isModalRatingOpen, setIsModalRatingOpen] = useState<boolean>(false);
+    const [isModalFeedbackOpen, setIsModalFeedbackOpen] =
+        useState<boolean>(false);
 
     return (
         <div
@@ -87,7 +88,7 @@ const SidebarMenu = ({
                 className={`hover:bg-neutral-300 dark:hover:bg-neutral-700 cursor-pointer rounded-full p-1 text-[#999999]`}
                 onClick={() => {
                     setNavigation('CLOSE');
-                    setIsModalRatingOpen(1);
+                    setIsModalRatingOpen(true);
                 }}
                 aria-hidden>
                 <MdStarPurple500 size={18} />
@@ -96,7 +97,7 @@ const SidebarMenu = ({
                 className={`hover:bg-neutral-300 dark:hover:bg-neutral-700 cursor-pointer rounded-full p-1 text-[#999999]`}
                 onClick={() => {
                     setNavigation('CLOSE');
-                    setIsModalFeedbackOpen(1);
+                    setIsModalFeedbackOpen(true);
                 }}
                 aria-hidden>
                 <RiQuestionLine size={18} />

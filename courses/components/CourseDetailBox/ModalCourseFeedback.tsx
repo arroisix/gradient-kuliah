@@ -9,7 +9,7 @@ import Spinner from 'commons/components/elements/Spinner';
 const ModalCourseFeedback = ({
     setOpen
 }: {
-    setOpen: (status: 1 | 0) => void;
+    setOpen: (status: boolean) => void;
 }): JSX.Element => {
     const [starClicked, setStarClicked] = useState(0);
     const [content, setContent] = useState('');
@@ -29,7 +29,7 @@ const ModalCourseFeedback = ({
 
     useEffect(() => {
         if (isSuccess) {
-            setOpen(0);
+            setOpen(false);
         }
     }, [isSuccess, setOpen]);
 

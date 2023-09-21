@@ -27,7 +27,7 @@ const MethodBox = ({
             posthog.capture('Attempt to Pay with BCA');
         } else {
             setPaymentMethod(paymentMethod);
-            setModalCheckoutOpen(1);
+            setModalCheckoutOpen(true);
         }
     };
     return (

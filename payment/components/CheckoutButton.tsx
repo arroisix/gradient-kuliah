@@ -70,7 +70,7 @@ const CheckoutButton = ({
             }
         }
 
-        setModalCheckoutOpen(0);
+        setModalCheckoutOpen(false);
         setLoading(false);
     };
 

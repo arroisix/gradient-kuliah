@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 
 type FeedbackModalProps = {
-    setOpen: (status: 1 | 0) => void;
+    setOpen: (status: boolean) => void;
 };
 
 const FeedbackModal = ({ setOpen }: FeedbackModalProps): JSX.Element => {
@@ -22,7 +22,7 @@ const FeedbackModal = ({ setOpen }: FeedbackModalProps): JSX.Element => {
 
     useEffect(() => {
         if (isSuccess) {
-            setOpen(0);
+            setOpen(false);
         }
     }, [isSuccess, setOpen]);
 

@@ -5,7 +5,7 @@ import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 
 interface AiTutorProps {
     uniqueId: string;
-    setIsShowModal: Dispatch<SetStateAction<0 | 1>>;
+    setIsShowModal: Dispatch<SetStateAction<boolean>>;
     setFeedbackStatus: Dispatch<
         SetStateAction<{
             status: 'NOT_HELPING' | 'HELPING' | 'NOT_SELECTED';

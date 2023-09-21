@@ -23,7 +23,7 @@ import TextContent from './TextContent';
 interface ChatRoomProps {
     uniqueId: string;
     onClick: (event: boolean) => void | MouseEventHandler<HTMLDivElement>;
-    setIsShowModal: Dispatch<SetStateAction<0 | 1>>;
+    setIsShowModal: Dispatch<SetStateAction<boolean>>;
     setFeedbackStatus: Dispatch<
         SetStateAction<{
             status: 'NOT_HELPING' | 'HELPING' | 'NOT_SELECTED';
@@ -59,7 +59,7 @@ const TutorAnswerBubble = ({
     setFeedbackStatus,
     answer_id
 }: BubbleProps & {
-    setIsShowModal: Dispatch<SetStateAction<0 | 1>>;
+    setIsShowModal: Dispatch<SetStateAction<boolean>>;
     setFeedbackStatus: Dispatch<
         SetStateAction<{
             status: 'NOT_HELPING' | 'HELPING' | 'NOT_SELECTED';
@@ -98,7 +98,7 @@ const TutorAnswerBubble = ({
                 <MdThumbUpAlt
                     onClick={() => {
                         setFeedbackStatus({ status: 'HELPING', answer_id });
-                        setIsShowModal(1);
+                        setIsShowModal(true);
                     }}
                     size={16}
                     className="text-neutral-600 cursor-pointer hover:text-[#00DE09] transition-all"
@@ -106,7 +106,7 @@ const TutorAnswerBubble = ({
                 <MdThumbUpAlt
                     onClick={() => {
                         setFeedbackStatus({ status: 'NOT_HELPING', answer_id });
-                        setIsShowModal(1);
+                        setIsShowModal(true);
                     }}
                     size={16}
                     className="text-neutral-600 rotate-180 cursor-pointer hover:text-[#db1f1f] transition-all"

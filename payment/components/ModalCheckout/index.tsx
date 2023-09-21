@@ -63,8 +63,8 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
 
     return (
         <Modal
-            isOpen={isOpen ? 1 : 0}
-            setOpen={() => setOpen(0)}
+            isOpen={isOpen}
+            setOpen={() => setOpen(false)}
             variant="dark"
             className="!bg-[#1D1D1D]">
             <div className="w-full flex flex-col mb-4">

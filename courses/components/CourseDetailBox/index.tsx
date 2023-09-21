@@ -122,7 +122,8 @@ const CourseDetailBox = (): JSX.Element => {
     >('VIDEO');
     const [isSearch, setIsSearch] = useState(false);
     const [search, setSearch] = useState('');
-    const [isModalFeedbackOpen, setIsModalFeedbackOpen] = useState<0 | 1>(0);
+    const [isModalFeedbackOpen, setIsModalFeedbackOpen] =
+        useState<boolean>(false);
 
     const { checkCustomBreakpoints } = useWindowBreakpoints();
     const anchor = useRef<HTMLDivElement>({} as HTMLDivElement);
@@ -215,7 +216,7 @@ const CourseDetailBox = (): JSX.Element => {
                             <MdStarPurple500
                                 size={20}
                                 className="text-neutral-400 hover:text-white ml-auto mr-0 cursor-pointer"
-                                onClick={() => setIsModalFeedbackOpen(1)}
+                                onClick={() => setIsModalFeedbackOpen(true)}
                             />
                         </div>
                     </div>

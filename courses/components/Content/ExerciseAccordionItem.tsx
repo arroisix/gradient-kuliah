@@ -18,12 +18,12 @@ const ExerciseAccordionItem = ({
     chapterId
 }: ContentAccordionItemProps): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const [openWorksheetInfo, setOpenWorksheetInfo] = useState<1 | 0>(0);
+    const [openWorksheetInfo, setOpenWorksheetInfo] = useState<boolean>(false);
     const { push } = useRouter();
 
     const decideOnClickAction = (): void => {
         if (isAuthenticated) {
-            setOpenWorksheetInfo(1);
+            setOpenWorksheetInfo(true);
         } else {
             push(
                 `${AUTHENTICATION_ROUTE}?redirect=/kelas/${slug}/belajar/latihan/${chapterId}/${subchapter.id}`

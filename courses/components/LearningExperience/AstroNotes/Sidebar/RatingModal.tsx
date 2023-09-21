@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 type RatingModalProps = {
-    setOpen: (status: 1 | 0) => void;
+    setOpen: (status: boolean) => void;
 };
 
 const RatingModal = ({ setOpen }: RatingModalProps): JSX.Element => {
@@ -18,7 +18,7 @@ const RatingModal = ({ setOpen }: RatingModalProps): JSX.Element => {
 
     useEffect(() => {
         if (isSuccess) {
-            setOpen(0);
+            setOpen(false);
         }
     }, [isSuccess, setOpen]);
 
