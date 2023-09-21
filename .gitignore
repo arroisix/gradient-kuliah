@@ -17,6 +17,7 @@
 
 # misc
 .DS_Store
+.vscode
 
 # debug
 npm-debug.log*
@@ -31,5 +32,3 @@ yarn-error.log*
 .env.production.local
 tsconfig.tsbuildinfo
 .firebase
-
-pages/api/notion.ts

@@ -64,3 +64,13 @@ type Bookmark = {
     page_chapters: string[];
     page_order: number;
 };
+
+interface DataHighlightedInterface {
+    block_content_id: string;
+    text: string;
+    anchor_offset: number;
+    focus_offset: number;
+}
+
+type AstronotesFontStyle = 'DEFAULT' | 'SERIF' | 'MONO';
+type NavigationTypes = 'CLOSE' | 'LIST_CONTENT' | 'BOOKMARK' | 'SETTING';

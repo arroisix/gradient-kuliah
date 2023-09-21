@@ -1,15 +1,15 @@
 import { useThemeContext } from 'commons/contexts/ThemeProvider';
 import LearnLayout from 'commons/learnLayout';
-import AstronoteDetail from 'courses/containers/learn/astronotes/detail';
+import Astronotes from 'courses/containers/learn/astronotes';
 
-const AstroNotes = (): JSX.Element => {
+const AstroNotesPage = (): JSX.Element => {
     const { theme } = useThemeContext();
 
     return (
         <LearnLayout lightMode={theme === 'light'}>
-            <AstronoteDetail />
+            <Astronotes />
         </LearnLayout>
     );
 };
 
-export default AstroNotes;
+export default AstroNotesPage;
