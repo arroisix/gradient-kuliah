@@ -1,7 +1,8 @@
 import Skeleton from 'commons/components/elements/Skeleton';
+import { cn } from 'commons/utils';
 import { useRouter } from 'next/router';
 import React, { useRef, useState } from 'react';
-import { FaChevronRight } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 type PaginatorProps = {
     currentPage: number;
@@ -57,11 +58,15 @@ const Paginator = ({ totalPage, isLoading }: PaginatorProps): JSX.Element => {
     }
 
     function handlePrev(): void {
-        router.push(`/astronotes/${slug}/${Number(page) - 1}`);
+        const pageNumber = Number(page);
+        if (pageNumber > 1)
+            router.push(`/astronotes/${slug}/${pageNumber - 1}`);
     }
 
     function handleNext(): void {
-        router.push(`/astronotes/${slug}/${Number(page) + 1}`);
+        const pageNumber = Number(page);
+        if (pageNumber < MAX_VALUE)
+            router.push(`/astronotes/${slug}/${pageNumber + 1}`);
     }
 
     return (
@@ -85,9 +90,14 @@ const Paginator = ({ totalPage, isLoading }: PaginatorProps): JSX.Element => {
                 />
             </div>
             <div className="flex items-center gap-[10px]">
-                <FaChevronRight
+                <FaChevronLeft
                     size={12}
-                    className="text-[#666666] hover:text-black dark:hover:text-white rotate-180 cursor-pointer transition-all"
+                    className={cn(
+                        'text-[#666666] transition-all',
+                        Number(page) > 1
+                            ? 'hover:text-black dark:hover:text-white cursor-pointer'
+                            : 'opacity-50'
+                    )}
                     onClick={handlePrev}
                 />
                 <span className="inline-block text-xs select-none font-body">
@@ -99,7 +109,12 @@ const Paginator = ({ totalPage, isLoading }: PaginatorProps): JSX.Element => {
                 </span>
                 <FaChevronRight
                     size={12}
-                    className="text-[#666666] hover:text-black dark:hover:text-white cursor-pointer transition-all"
+                    className={cn(
+                        'text-[#666666] transition-all',
+                        Number(page) < MAX_VALUE
+                            ? 'hover:text-black dark:hover:text-white cursor-pointer'
+                            : 'opacity-50'
+                    )}
                     onClick={handleNext}
                 />
             </div>
