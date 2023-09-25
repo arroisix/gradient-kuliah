@@ -1,23 +1,11 @@
 import { isNotNullAndUndefined } from 'commons/utils';
 import { useGetBookProgressQuery } from 'courses/redux/api/astronotesApi';
 import { useRouter } from 'next/router';
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import MobileMenu from './Mobile/MobileMenu';
 import Paginator from './Paginator';
 
-type AstronotesNavigationProps = {
-    fontStyle: AstronotesFontStyle;
-    setFontStyle: Dispatch<SetStateAction<AstronotesFontStyle>>;
-    smallText: boolean;
-    setSmallText: Dispatch<SetStateAction<boolean>>;
-};
-
-const AstronotesNavigation = ({
-    fontStyle,
-    setFontStyle,
-    smallText,
-    setSmallText
-}: AstronotesNavigationProps): JSX.Element => {
+const AstronotesNavigation = (): JSX.Element => {
     const router = useRouter();
     const { slug, page } = router.query;
     const { data, isLoading } = useGetBookProgressQuery(
@@ -27,13 +15,8 @@ const AstronotesNavigation = ({
 
     return (
         <div className="relative flex">
-            <div className="md:hidden pl-5">
-                <MobileMenu
-                    fontStyle={fontStyle}
-                    setFontStyle={setFontStyle}
-                    smallText={smallText}
-                    setSmallText={setSmallText}
-                />
+            <div className="pl-5 md:hidden">
+                <MobileMenu />
             </div>
             {data && (
                 <div className="w-full px-5">

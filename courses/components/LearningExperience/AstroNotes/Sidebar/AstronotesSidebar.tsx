@@ -1,41 +1,22 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React from 'react';
 import SidebarMenu from './SidebarMenu';
 import ListOfContentsSidebar from '../ListOfContents/ListOfContentsSidebar';
 import BookmarkSidebar from '../Bookmarks/BookmarkSidebar';
 import AppearanceSettingSidebar from '../Appearance/AppearanceSettingSidebar';
 import { Transition } from '@headlessui/react';
 import { transitionClassesSlideRight } from '../constants';
-interface AstronotesSidebarProps extends Partial<HTMLDivElement> {
-    fontStyle: AstronotesFontStyle;
-    setFontStyle: Dispatch<SetStateAction<AstronotesFontStyle>>;
-    smallText: boolean;
-    setSmallText: Dispatch<SetStateAction<boolean>>;
-}
+import { useAstronotes } from 'courses/contexts/AstronotesProvider';
 
-export const AstronotesSidebar = ({
-    fontStyle,
-    setFontStyle,
-    smallText,
-    setSmallText
-}: AstronotesSidebarProps): JSX.Element => {
-    const [navigation, setNavigation] = useState<NavigationTypes>('CLOSE');
-
+export const AstronotesSidebar = (): JSX.Element => {
+    const { navigation } = useAstronotes();
     const renderSidebar = (): JSX.Element | null => {
         switch (navigation) {
             case 'LIST_CONTENT':
-                return <ListOfContentsSidebar setNavigation={setNavigation} />;
+                return <ListOfContentsSidebar />;
             case 'BOOKMARK':
-                return <BookmarkSidebar setNavigation={setNavigation} />;
+                return <BookmarkSidebar />;
             case 'SETTING':
-                return (
-                    <AppearanceSettingSidebar
-                        fontStyle={fontStyle}
-                        setFontStyle={setFontStyle}
-                        setNavigation={setNavigation}
-                        smallText={smallText}
-                        setSmallText={setSmallText}
-                    />
-                );
+                return <AppearanceSettingSidebar />;
             default:
                 return null;
         }
@@ -43,11 +24,7 @@ export const AstronotesSidebar = ({
 
     return (
         <>
-            <SidebarMenu
-                navigation={navigation}
-                setNavigation={setNavigation}
-                className="hidden md:flex"
-            />
+            <SidebarMenu className="hidden md:flex" />
             <Transition
                 className="hidden md:flex"
                 show={navigation !== 'CLOSE'}

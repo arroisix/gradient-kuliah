@@ -1,22 +1,10 @@
-import React, { type Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { MdClose } from 'react-icons/md';
 import AppearanceSettings from '../../Appearance/AppearanceSettings';
+import { useAstronotes } from 'courses/contexts/AstronotesProvider';
 
-type AppearanceMenuProps = {
-    fontStyle: AstronotesFontStyle;
-    setFontStyle: Dispatch<SetStateAction<AstronotesFontStyle>>;
-    setNavigation: Dispatch<SetStateAction<NavigationTypes>>;
-    smallText: boolean;
-    setSmallText: Dispatch<SetStateAction<boolean>>;
-};
-
-const AppearanceMenu = ({
-    fontStyle,
-    setFontStyle,
-    setNavigation,
-    smallText,
-    setSmallText
-}: AppearanceMenuProps): JSX.Element => {
+const AppearanceMenu = (): JSX.Element => {
+    const { setNavigation } = useAstronotes();
     return (
         <div className="absolute left-[-20px] bottom-[-24px] w-screen h-[calc(100vh-200px)] bg-[#F6F5F8] dark:bg-[#1D1D1D] z-10">
             <div className="flex justify-between p-5">
@@ -25,17 +13,12 @@ const AppearanceMenu = ({
                 </span>
                 <MdClose
                     size={24}
-                    className="text-black dark:text-white cursor-pointer"
+                    className="text-black cursor-pointer dark:text-white"
                     onClick={() => setNavigation('CLOSE')}
                 />
             </div>
-            <div className="px-5 py-3 flex flex-col gap-2">
-                <AppearanceSettings
-                    fontStyle={fontStyle}
-                    setFontStyle={setFontStyle}
-                    smallText={smallText}
-                    setSmallText={setSmallText}
-                />
+            <div className="flex flex-col gap-2 px-5 py-3">
+                <AppearanceSettings />
             </div>
         </div>
     );

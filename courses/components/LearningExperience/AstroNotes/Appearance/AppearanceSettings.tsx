@@ -1,21 +1,13 @@
 import Switch from 'commons/components/elements/Form/switch';
 import { useThemeContext } from 'commons/contexts/ThemeProvider';
 import { capitalize, cn } from 'commons/utils';
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
+import { fontClassName } from 'courses/components/LearningExperience/AstroNotes/constants';
+import { useAstronotes } from 'courses/contexts/AstronotesProvider';
 
-type AppearanceSettingsProps = {
-    fontStyle: AstronotesFontStyle;
-    setFontStyle: Dispatch<SetStateAction<AstronotesFontStyle>>;
-    smallText: boolean;
-    setSmallText: Dispatch<SetStateAction<boolean>>;
-};
-
-const AppearanceSettings = ({
-    fontStyle,
-    setFontStyle,
-    smallText,
-    setSmallText
-}: AppearanceSettingsProps): JSX.Element => {
+const AppearanceSettings = (): JSX.Element => {
+    const { fontStyle, setFontStyle, smallText, setSmallText } =
+        useAstronotes();
     const { theme, toggleTheme } = useThemeContext();
     const fontStyleOptions: AstronotesFontStyle[] = [
         'DEFAULT',
@@ -46,10 +38,7 @@ const AppearanceSettings = ({
                             )}
                             onClick={() => setFontStyle(btn)}>
                             <span
-                                className={cn({
-                                    'font-sans': btn === 'DEFAULT',
-                                    'font-mono': btn === 'MONO',
-                                    'font-serif': btn === 'SERIF',
+                                className={cn(fontClassName[btn], {
                                     'text-accent-purple dark:text-[#B6A6F3]':
                                         isActive
                                 })}>

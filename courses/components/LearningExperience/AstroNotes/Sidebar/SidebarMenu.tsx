@@ -1,21 +1,13 @@
 import Modal from 'commons/components/modules/Modal';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { useState } from 'react';
 import RatingModal from './RatingModal';
 import FeedbackModal from './FeedbackModal';
 import { ASTRONOTES_MENU } from '../constants';
 import { useThemeContext } from 'commons/contexts/ThemeProvider';
+import { useAstronotes } from 'courses/contexts/AstronotesProvider';
 
-type SidebarMenuProps = {
-    navigation: NavigationTypes;
-    setNavigation: Dispatch<SetStateAction<NavigationTypes>>;
-    className?: string;
-};
-
-const SidebarMenu = ({
-    navigation,
-    setNavigation,
-    className
-}: SidebarMenuProps): JSX.Element => {
+const SidebarMenu = ({ className }: PropsWithClassName): JSX.Element => {
+    const { navigation, setNavigation } = useAstronotes();
     const { theme } = useThemeContext();
     const [isModalRatingOpen, setIsModalRatingOpen] = useState<boolean>(false);
     const [isModalFeedbackOpen, setIsModalFeedbackOpen] =

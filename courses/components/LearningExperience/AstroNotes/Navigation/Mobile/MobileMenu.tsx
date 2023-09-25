@@ -1,26 +1,15 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { useState } from 'react';
 import { BiMenu } from 'react-icons/bi';
 import { MdClose } from 'react-icons/md';
 import ListOfContentsMenu from './ListOfContentsMenu';
 import BookmarksMenu from './BookmarksMenu';
 import AppearanceMenu from './AppearanceMenu';
 import SidebarMenu from '../../Sidebar/SidebarMenu';
+import { useAstronotes } from 'courses/contexts/AstronotesProvider';
 
-type MobileMenuProps = {
-    fontStyle: AstronotesFontStyle;
-    setFontStyle: Dispatch<SetStateAction<AstronotesFontStyle>>;
-    smallText: boolean;
-    setSmallText: Dispatch<SetStateAction<boolean>>;
-};
-
-const MobileMenu = ({
-    fontStyle,
-    setFontStyle,
-    smallText,
-    setSmallText
-}: MobileMenuProps): JSX.Element => {
+const MobileMenu = (): JSX.Element => {
     const [isShow, setIsShow] = useState(false);
-    const [navigation, setNavigation] = useState<NavigationTypes>('CLOSE');
+    const { navigation, setNavigation } = useAstronotes();
 
     return (
         <div className="relative">
@@ -30,27 +19,11 @@ const MobileMenu = ({
                 <BiMenu size={24} onClick={() => setIsShow((prev) => !prev)} />
             )}
             {isShow && (
-                <SidebarMenu
-                    navigation={navigation}
-                    setNavigation={setNavigation}
-                    className="absolute left-[-5px] bottom-[30px] z-[2]"
-                />
+                <SidebarMenu className="absolute left-[-5px] bottom-[30px] z-[2]" />
             )}
-            {navigation === 'LIST_CONTENT' && (
-                <ListOfContentsMenu setNavigation={setNavigation} />
-            )}
-            {navigation === 'BOOKMARK' && (
-                <BookmarksMenu setNavigation={setNavigation} />
-            )}
-            {navigation === 'SETTING' && (
-                <AppearanceMenu
-                    fontStyle={fontStyle}
-                    setFontStyle={setFontStyle}
-                    setNavigation={setNavigation}
-                    smallText={smallText}
-                    setSmallText={setSmallText}
-                />
-            )}
+            {navigation === 'LIST_CONTENT' && <ListOfContentsMenu />}
+            {navigation === 'BOOKMARK' && <BookmarksMenu />}
+            {navigation === 'SETTING' && <AppearanceMenu />}
             {navigation !== 'CLOSE' ||
                 (isShow && (
                     <div

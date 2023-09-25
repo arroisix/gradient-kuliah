@@ -86,3 +86,14 @@ type NavigationTypes =
     | 'SETTING'
     | 'RATING'
     | 'FEEDBACK';
+
+interface AstronotesState {
+    navigation: NavigationTypes;
+    highlighted: boolean;
+    removeHighlighted: boolean;
+    highlightId: string;
+    dataHighlighted: DataHighlightedInterface | null;
+    points: { x: number; y: number; width: number };
+    fontStyle: AstronotesFontStyle;
+    smallText: boolean;
+}

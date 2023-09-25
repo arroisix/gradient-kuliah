@@ -1,23 +1,19 @@
 import Skeleton from 'commons/components/elements/Skeleton';
 import { useGetTableContentsQuery } from 'courses/redux/api/astronotesApi';
 import { useRouter } from 'next/router';
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { IoMdClose } from 'react-icons/io';
 import ChapterContentItem from './ChapterContentItem';
+import { useAstronotes } from 'courses/contexts/AstronotesProvider';
 
-type ListOfContentsSidebarProps = {
-    setNavigation: Dispatch<SetStateAction<NavigationTypes>>;
-};
-
-const ListOfContentsSidebar = ({
-    setNavigation
-}: ListOfContentsSidebarProps): JSX.Element => {
+const ListOfContentsSidebar = (): JSX.Element => {
     const router = useRouter();
     const { slug } = router.query;
     const { data, isLoading } = useGetTableContentsQuery(
         { slug: slug as string },
         { skip: !slug }
     );
+    const { setNavigation } = useAstronotes();
 
     return (
         <div className="w-60 bg-[#F6F5F8] dark:bg-[#121212] rounded-box text-black dark:text-white">

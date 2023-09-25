@@ -1,17 +1,13 @@
 import Skeleton from 'commons/components/elements/Skeleton';
 import { useGetBookmarksQuery } from 'courses/redux/api/astronotesApi';
 import { useRouter } from 'next/router';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import BookmarkItem from './BookmarkItem';
+import { useAstronotes } from 'courses/contexts/AstronotesProvider';
 
-type BookmarkSidebarProps = {
-    setNavigation: Dispatch<SetStateAction<NavigationTypes>>;
-};
-
-const BookmarkSidebar = ({
-    setNavigation
-}: BookmarkSidebarProps): JSX.Element => {
+const BookmarkSidebar = (): JSX.Element => {
+    const { setNavigation } = useAstronotes();
     const [selected, setSelected] = useState<'HIGHLIGHT' | 'BOOKMARK'>(
         'BOOKMARK'
     );

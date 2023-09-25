@@ -51,3 +51,9 @@ export const transitionClassesSlideDown = {
     leaveFrom: 'opacity-100 scale-y-100',
     leaveTo: 'opacity-0 scale-y-0'
 };
+
+export const fontClassName = {
+    DEFAULT: 'font-sans',
+    MONO: 'font-mono',
+    SERIF: 'font-serif'
+};

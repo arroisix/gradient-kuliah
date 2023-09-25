@@ -1,17 +1,13 @@
 import Skeleton from 'commons/components/elements/Skeleton';
 import { useGetTableContentsQuery } from 'courses/redux/api/astronotesApi';
 import { useRouter } from 'next/router';
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { MdClose } from 'react-icons/md';
 import ChapterContentItem from '../../ListOfContents/ChapterContentItem';
+import { useAstronotes } from 'courses/contexts/AstronotesProvider';
 
-type ListOfContentsMenuProps = {
-    setNavigation: Dispatch<SetStateAction<NavigationTypes>>;
-};
-
-const ListOfContentsMenu = ({
-    setNavigation
-}: ListOfContentsMenuProps): JSX.Element => {
+const ListOfContentsMenu = (): JSX.Element => {
+    const { setNavigation } = useAstronotes();
     const router = useRouter();
     const { slug } = router.query;
     const { data, isLoading } = useGetTableContentsQuery(
@@ -27,7 +23,7 @@ const ListOfContentsMenu = ({
                 </span>
                 <MdClose
                     size={24}
-                    className="text-black dark:text-white cursor-pointer"
+                    className="text-black cursor-pointer dark:text-white"
                     onClick={() => setNavigation('CLOSE')}
                 />
             </div>
