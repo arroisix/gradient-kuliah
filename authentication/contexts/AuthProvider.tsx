@@ -4,8 +4,8 @@ import {
     getIsAuthenticated,
     getIsProfileComplete
 } from 'authentication/redux/selectors/userSelector';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useRouter } from 'next/router';
-import posthog from 'posthog-js';
 import React, {
     createContext,
     ReactNode,
@@ -14,6 +14,7 @@ import React, {
     useMemo
 } from 'react';
 import { useSelector } from 'react-redux';
+import { useTracker } from 'tracker/tracker';
 
 interface AuthContextType {
     isAuthenticated: boolean;
@@ -44,11 +45,14 @@ export function AuthProvider({
         }
     }, [isProfileComplete, router]);
 
+    const tracker = useTracker();
+    const { is_subscribed, isLoading: isLoadingSubscribed } =
+        useCourseSubscription();
     useEffect(() => {
-        if (user.email) {
-            posthog.identify(user.email);
+        if (user.email && !isLoadingSubscribed) {
+            tracker?.identify(user.email, is_subscribed);
         }
-    }, [user]);
+    }, [user, is_subscribed, isLoadingSubscribed]);
 
     const memoedValue = useMemo(
         () => ({

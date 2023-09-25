@@ -3,11 +3,16 @@ import { getCurrentUser } from 'authentication/redux/selectors/userSelector';
 import { removeUser } from 'authentication/redux/slices/userSlice';
 import withAuth from 'commons/withAuth';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTracker } from 'tracker/tracker';
 
 const Mulai = (): JSX.Element => {
     const dispatch = useDispatch();
     const user = useSelector(getCurrentUser);
-    const logout: () => void = () => dispatch(removeUser());
+    const tracker = useTracker();
+    const logout = () => {
+        dispatch(removeUser());
+        tracker?.reset();
+    };
 
     return (
         <section className="text-white h-screen overflow-hidden">
