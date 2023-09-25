@@ -44,18 +44,18 @@ const BookmarksMenu = ({ setNavigation }: BookmarksMenuProps): JSX.Element => {
                 </div>
                 <MdClose
                     size={24}
-                    className="text-black dark:text-white cursor-pointer"
+                    className="text-black cursor-pointer dark:text-white"
                     onClick={() => setNavigation('CLOSE')}
                 />
             </div>
             <div className="h-[calc(100vh-272px)] overflow-y-auto px-5 py-3 flex flex-col gap-2">
-                {selected === 'BOOKMARK' && isLoadingBookmark && (
-                    <Skeleton repeat={4} className="h-[20px] p-0 mb-0" />
-                )}
-                {selected === 'BOOKMARK' &&
+                {selected === 'BOOKMARK' && isLoadingBookmark ? (
+                    <Skeleton repeat={4} className="h-5" />
+                ) : (
                     bookmarkData?.data?.map((value, index) => (
                         <BookmarkItem key={index} data={value} />
-                    ))}
+                    ))
+                )}
             </div>
         </div>
     );

@@ -20,9 +20,9 @@ const ListOfContentsSidebar = ({
     );
 
     return (
-        <div className="relative w-[230px] h-[calc(100vh-88px)] bg-[#F6F5F8] dark:bg-[#121212] rounded-lg text-black dark:text-white">
-            <div className="flex justify-between p-2 border-b border-[#c0c0c0] dark:border-[#2D2D2D]">
-                <span className="inline-block font-body text-xs pt-[2px]">
+        <div className="w-60 bg-[#F6F5F8] dark:bg-[#121212] rounded-box text-black dark:text-white">
+            <div className="flex justify-between px-3 py-2">
+                <span className="inline-block uppercase font-body text-sm pt-[2px]">
                     Daftar Isi
                 </span>
                 <IoMdClose
@@ -31,10 +31,8 @@ const ListOfContentsSidebar = ({
                     onClick={() => setNavigation('CLOSE')}
                 />
             </div>
-            <div className="h-[calc(100vh-126px)] overflow-y-auto px-2 py-[10px] flex flex-col gap-2">
-                {isLoading && (
-                    <Skeleton repeat={4} className="h-[20px] p-0 mb-0" />
-                )}
+            <div className="overflow-y-auto max-h-[calc(100vh_-_10rem)] py-4 px-3 flex flex-col gap-2">
+                {isLoading && <Skeleton repeat={4} className="h-5 p-0 mb-0" />}
                 {data?.data?.map((value) => (
                     <ChapterContentItem key={value.id} value={value} />
                 ))}

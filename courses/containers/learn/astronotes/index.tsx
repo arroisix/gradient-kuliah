@@ -83,7 +83,7 @@ const Astronotes = (): JSX.Element => {
     };
 
     return (
-        <section className="pt-[65px] flex flex-col md:flex-row relative md:overflow-hidden md:h-[100vh] bg-white dark:bg-black text-black dark:text-white">
+        <section className="pt-20 pb-4 px-4 flex flex-col md:flex-row md:gap-2 md:items-stretch relative md:overflow-hidden md:h-[100vh] bg-white dark:bg-black text-black dark:text-white">
             {highlighted && (
                 <AstronotesContextMenu
                     points={points}
@@ -110,14 +110,12 @@ const Astronotes = (): JSX.Element => {
                     />
                 </AstronotesContextMenu>
             )}
-            <div className="hidden md:block h-[calc(100vh-88px)] my-auto pl-5">
-                <AstronotesSidebar
-                    fontStyle={fontStyle}
-                    setFontStyle={setFontStyle}
-                    smallText={smallText}
-                    setSmallText={setSmallText}
-                />
-            </div>
+            <AstronotesSidebar
+                fontStyle={fontStyle}
+                setFontStyle={setFontStyle}
+                smallText={smallText}
+                setSmallText={setSmallText}
+            />
             <div
                 className="w-full md:ml-7 mt-5 mb-[55px] overflow-y-auto"
                 ref={notebookRef}>
@@ -132,17 +130,10 @@ const Astronotes = (): JSX.Element => {
                     {!is_subscribed ? (
                         <NeedSubscribe />
                     ) : isLoading || isFetching ? (
-                        <>
-                            <Skeleton className="w-[30%] h-[26px] p-0 !mb-2" />
-                            <Skeleton className="h-[26px] p-0 !mb-2" />
-                            <Skeleton className="h-[26px] p-0 !mb-2" />
-                            <Skeleton className="h-[26px] p-0 !mb-2" />
-                            <Skeleton className="w-[30%] h-[26px] p-0 !mb-2" />
-                            <Skeleton className="h-[26px] p-0 !mb-2" />
-                            <Skeleton className="h-[26px] p-0 !mb-2" />
-                            <Skeleton className="h-[26px] p-0 !mb-2" />
-                            <Skeleton className="h-[26px] p-0 !mb-2" />
-                        </>
+                        <Skeleton
+                            repeat={8}
+                            className="h-6 [&:nth-child(4n+1)]:w-1/3"
+                        />
                     ) : (
                         data && (
                             <div

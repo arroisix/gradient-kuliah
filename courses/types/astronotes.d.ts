@@ -29,6 +29,12 @@ type BookSubchapter = {
     sections: BookSubchapterSection[];
 } & BookChapter;
 
+type AstronotesMenuItem = {
+    icon: JSX.Element;
+    label: string;
+    value: NavigationTypes;
+};
+
 interface GetBookChapterResponse {
     data: BookChapter[];
 }
@@ -73,4 +79,10 @@ interface DataHighlightedInterface {
 }
 
 type AstronotesFontStyle = 'DEFAULT' | 'SERIF' | 'MONO';
-type NavigationTypes = 'CLOSE' | 'LIST_CONTENT' | 'BOOKMARK' | 'SETTING';
+type NavigationTypes =
+    | 'CLOSE'
+    | 'LIST_CONTENT'
+    | 'BOOKMARK'
+    | 'SETTING'
+    | 'RATING'
+    | 'FEEDBACK';

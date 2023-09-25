@@ -21,7 +21,7 @@ const ChapterContentItem = ({
                         isShow && 'rotate-[-90deg]'
                     }`}
                 />
-                <span className="inline-block font-body text-xs text-black dark:text-[#CCCCCC] pb-[1px]">
+                <span className="inline-block font-body text-sm text-black dark:text-[#CCCCCC] pb-[1px]">
                     {value.title}
                 </span>
             </div>

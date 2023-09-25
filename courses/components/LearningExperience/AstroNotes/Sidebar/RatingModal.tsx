@@ -23,17 +23,19 @@ const RatingModal = ({ setOpen }: RatingModalProps): JSX.Element => {
     }, [isSuccess, setOpen]);
 
     return (
-        <div className="flex flex-col gap-8">
-            <span className="inline-block font-extrabold mr-5">
+        <div className="flex flex-col gap-6">
+            <span className="inline-block mr-5 font-extrabold">
                 Seberapa membantu buku ini dalam pelajaranmu?
             </span>
             <div className="flex flex-col gap-2">
-                <div className="flex justify-between gap-2">
+                <div className="flex justify-center gap-2 p-6 border dark:border-neutral-600 rounded-box">
                     {CONSTANT_RATING.map((value) => (
                         <span
                             key={value}
-                            className={`w-[22px] h-[22px] sm:w-[32px] sm:h-[32px] flex justify-center items-center hover:bg-white font-bold text-[#333333] rounded-full cursor-pointer ${
-                                rating === value ? 'bg-white' : 'bg-neutral-400'
+                            className={`w-[22px] h-[22px] sm:w-[32px] sm:h-[32px] flex justify-center items-center hover:opacity-90 transition font-bold rounded-full cursor-pointer ${
+                                rating === value
+                                    ? 'bg-accent-purple text-white dark:text-accent-purple dark:bg-white'
+                                    : 'bg-neutral-200 dark:bg-neutral-400 text-[#333333]'
                             }`}
                             onClick={() => setRating(value)}
                             aria-hidden>
@@ -51,8 +53,9 @@ const RatingModal = ({ setOpen }: RatingModalProps): JSX.Element => {
                 </div>
             </div>
             <Button
-                variant="custom"
-                className="bg-white text-black text-xs"
+                className="self-end px-12 text-sm"
+                size="small"
+                variant="primary"
                 onClick={() =>
                     postRating({ slug: slug as string, rate: rating / 2 })
                 }>

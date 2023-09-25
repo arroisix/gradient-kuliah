@@ -3,13 +3,14 @@ import SidebarMenu from './SidebarMenu';
 import ListOfContentsSidebar from '../ListOfContents/ListOfContentsSidebar';
 import BookmarkSidebar from '../Bookmarks/BookmarkSidebar';
 import AppearanceSettingSidebar from '../Appearance/AppearanceSettingSidebar';
-
-type AstronotesSidebarProps = {
+import { Transition } from '@headlessui/react';
+import { transitionClassesSlideRight } from '../constants';
+interface AstronotesSidebarProps extends Partial<HTMLDivElement> {
     fontStyle: AstronotesFontStyle;
     setFontStyle: Dispatch<SetStateAction<AstronotesFontStyle>>;
     smallText: boolean;
     setSmallText: Dispatch<SetStateAction<boolean>>;
-};
+}
 
 export const AstronotesSidebar = ({
     fontStyle,
@@ -18,29 +19,42 @@ export const AstronotesSidebar = ({
     setSmallText
 }: AstronotesSidebarProps): JSX.Element => {
     const [navigation, setNavigation] = useState<NavigationTypes>('CLOSE');
+
+    const renderSidebar = (): JSX.Element | null => {
+        switch (navigation) {
+            case 'LIST_CONTENT':
+                return <ListOfContentsSidebar setNavigation={setNavigation} />;
+            case 'BOOKMARK':
+                return <BookmarkSidebar setNavigation={setNavigation} />;
+            case 'SETTING':
+                return (
+                    <AppearanceSettingSidebar
+                        fontStyle={fontStyle}
+                        setFontStyle={setFontStyle}
+                        setNavigation={setNavigation}
+                        smallText={smallText}
+                        setSmallText={setSmallText}
+                    />
+                );
+            default:
+                return null;
+        }
+    };
+
     return (
-        <div className="flex gap-[10px]">
+        <>
             <SidebarMenu
                 navigation={navigation}
                 setNavigation={setNavigation}
-                className="h-[calc(100vh-88px)]"
+                className="hidden md:flex"
             />
-            {navigation === 'LIST_CONTENT' && (
-                <ListOfContentsSidebar setNavigation={setNavigation} />
-            )}
-            {navigation === 'BOOKMARK' && (
-                <BookmarkSidebar setNavigation={setNavigation} />
-            )}
-            {navigation === 'SETTING' && (
-                <AppearanceSettingSidebar
-                    fontStyle={fontStyle}
-                    setFontStyle={setFontStyle}
-                    setNavigation={setNavigation}
-                    smallText={smallText}
-                    setSmallText={setSmallText}
-                />
-            )}
-        </div>
+            <Transition
+                className="hidden md:flex"
+                show={navigation !== 'CLOSE'}
+                {...transitionClassesSlideRight}>
+                {renderSidebar()}
+            </Transition>
+        </>
     );
 };
 

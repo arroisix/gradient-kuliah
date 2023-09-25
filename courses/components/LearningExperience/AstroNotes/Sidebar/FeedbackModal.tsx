@@ -27,8 +27,8 @@ const FeedbackModal = ({ setOpen }: FeedbackModalProps): JSX.Element => {
     }, [isSuccess, setOpen]);
 
     return (
-        <div className="flex flex-col gap-8">
-            <span className="inline-block font-extrabold mr-5">
+        <div className="flex flex-col gap-6">
+            <span className="inline-block mr-5 font-extrabold">
                 Bantuan dan Masukan
             </span>
             <div>
@@ -37,12 +37,12 @@ const FeedbackModal = ({ setOpen }: FeedbackModalProps): JSX.Element => {
                     name="feedback"
                     onChange={handleChange}
                     placeholder="Kirim masukan ke Buku Gradient"
-                    className="w-full h-full min-h-[124px] p-[10px] font-body text-xs bg-[#242424] border-none rounded-[8px] focus:outline-none focus:ring-0 focus:appearance-none placeholder:text-neutral-400"
+                    className="w-full h-full min-h-[124px] p-[10px] font-body text-xs bg-neutral-100 dark:bg-neutral-700 border-none rounded-[8px] focus:outline-none focus:ring-0 focus:appearance-none placeholder:text-neutral-400"
                 />
             </div>
             <Button
-                variant="custom"
-                className="bg-white text-black text-xs"
+                variant="primary"
+                className="self-end px-12 text-sm"
                 onClick={() =>
                     postFeedback({ slug: slug as string, feedback: content })
                 }>
