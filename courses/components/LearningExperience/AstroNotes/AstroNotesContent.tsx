@@ -40,11 +40,11 @@ const AstroNotesContent = (): JSX.Element => {
                 aria-hidden>
                 <ReactMarkdown
                     className={cn(
-                        'markdown-table markdown-overflow-break-word markdown-blue-link markdown-img-max-height astronotes',
+                        'markdown-table markdown-overflow-break-word markdown-blue-link markdown-img-max-height markdown-body astronotes',
                         fontClassName[fontStyle],
                         smallText
-                            ? 'markdown-body-very-small'
-                            : 'markdown-body-xs'
+                            ? 'text-xs sm:text-sm'
+                            : 'text-sm sm:text-base'
                     )}
                     remarkPlugins={[remarkMath, remarkGfm]}
                     rehypePlugins={[rehypeKatex, rehypeRaw]}

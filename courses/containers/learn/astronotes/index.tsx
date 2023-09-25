@@ -41,7 +41,7 @@ const Astronotes = (): JSX.Element => {
                 )} */}
                 <AstronotesSidebar />
                 <div
-                    className="w-full mt-5 mb-12 overflow-y-auto md:ml-6"
+                    className="w-full mt-5 mb-12 sm:overflow-y-auto md:ml-6"
                     ref={notebookRef}>
                     <div className="w-full max-w-5xl mx-auto sm:px-4">
                         <AstroNotesContent />

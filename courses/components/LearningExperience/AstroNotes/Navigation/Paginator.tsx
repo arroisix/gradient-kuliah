@@ -67,7 +67,7 @@ const Paginator = ({ totalPage, isLoading }: PaginatorProps): JSX.Element => {
     return (
         <div className="flex gap-6">
             <div
-                className="relative flex items-center w-full pt-6 px-2 cursor-pointer"
+                className="relative flex items-center w-full px-2 pt-6 cursor-pointer"
                 ref={ref}
                 onMouseDown={handleMouseDown}
                 onMouseUp={handleMouseUp}
@@ -90,7 +90,7 @@ const Paginator = ({ totalPage, isLoading }: PaginatorProps): JSX.Element => {
                     className="text-[#666666] hover:text-black dark:hover:text-white rotate-180 cursor-pointer transition-all"
                     onClick={handlePrev}
                 />
-                <span className="inline-block font-body text-xs select-none">
+                <span className="inline-block text-xs select-none font-body">
                     {isLoading ? (
                         <Skeleton className="h-5 w-6 p-0 !m-0" />
                     ) : (
