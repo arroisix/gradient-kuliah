@@ -18,7 +18,7 @@ const BookmarkSidebar = (): JSX.Element => {
         useGetBookmarksQuery({ slug: slug as string }, { skip: !slug });
 
     return (
-        <div className="w-60 bg-[#F6F5F8] dark:bg-[#121212] rounded-box text-black dark:text-white">
+        <div className="w-60 h-full bg-[#F6F5F8] dark:bg-[#121212] rounded-box text-black dark:text-white">
             <div className="flex justify-around px-3 py-2">
                 <div className="flex items-center justify-center w-full gap-4">
                     <span

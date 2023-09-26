@@ -6,8 +6,11 @@ import AppearanceSettingSidebar from '../Appearance/AppearanceSettingSidebar';
 import { Transition } from '@headlessui/react';
 import { transitionClassesSlideRight } from '../constants';
 import { useAstronotes } from 'courses/contexts/AstronotesProvider';
+import { cn } from 'commons/utils';
 
-export const AstronotesSidebar = (): JSX.Element => {
+export const AstronotesSidebar = ({
+    className
+}: PropsWithClassName): JSX.Element => {
     const { navigation } = useAstronotes();
     const renderSidebar = (): JSX.Element | null => {
         switch (navigation) {
@@ -24,9 +27,9 @@ export const AstronotesSidebar = (): JSX.Element => {
 
     return (
         <>
-            <SidebarMenu className="hidden md:flex" />
+            <SidebarMenu className={cn(className)} />
             <Transition
-                className="hidden md:flex"
+                className={cn(className)}
                 show={navigation !== 'CLOSE'}
                 {...transitionClassesSlideRight}>
                 {renderSidebar()}

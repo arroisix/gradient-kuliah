@@ -16,7 +16,7 @@ const ListOfContentsSidebar = (): JSX.Element => {
     const { setNavigation } = useAstronotes();
 
     return (
-        <div className="w-60 bg-[#F6F5F8] dark:bg-[#121212] rounded-box text-black dark:text-white">
+        <div className="w-60 h-full bg-[#F6F5F8] dark:bg-[#121212] rounded-box text-black dark:text-white">
             <div className="flex justify-between px-3 py-2">
                 <span className="inline-block uppercase font-body text-sm pt-[2px]">
                     Daftar Isi

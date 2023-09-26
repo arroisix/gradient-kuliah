@@ -14,13 +14,12 @@ import remarkMath from 'remark-math';
 import { fontClassName } from './constants';
 
 const AstroNotesContent = (): JSX.Element => {
-    const { handleHighlight, handleHover, smallText, fontStyle } =
-        useAstronotes();
+    const { smallText, fontStyle } = useAstronotes();
     const router = useRouter();
     const { slug, page } = router.query;
     const { is_subscribed } = useCourseSubscription();
 
-    const { data, isLoading, isFetching } = useGetBookProgressQuery(
+    const { data, isLoading, isFetching, isError } = useGetBookProgressQuery(
         { slug: slug as string, page: page as unknown as number },
         { skip: !isNotNullAndUndefined(slug) || !isNotNullAndUndefined(page) }
     );
@@ -32,11 +31,17 @@ const AstroNotesContent = (): JSX.Element => {
             <Skeleton repeat={8} className="h-6 [&:nth-child(4n+1)]:w-1/3" />
         );
 
+    if (isError) {
+        router.push('/not-found');
+        return <></>;
+    }
+
     if (data)
         return (
             <div
-                onMouseUp={handleHighlight}
-                onMouseOverCapture={handleHover}
+                // TODO(angga): removed until higher in priority
+                // onMouseUp={handleHighlight}
+                // onMouseOverCapture={handleHover}
                 aria-hidden>
                 <ReactMarkdown
                     className={cn(

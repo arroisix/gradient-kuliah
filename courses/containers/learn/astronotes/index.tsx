@@ -3,6 +3,8 @@ import AstronotesNavigation from 'courses/components/LearningExperience/AstroNot
 import AstronotesSidebar from 'courses/components/LearningExperience/AstroNotes/Sidebar/AstronotesSidebar';
 import AstroNotesContent from 'courses/components/LearningExperience/AstroNotes/AstroNotesContent';
 import { AstronotesProvider } from 'courses/contexts/AstronotesProvider';
+import RatingModal from 'courses/components/LearningExperience/AstroNotes/Sidebar/RatingModal';
+import FeedbackModal from 'courses/components/LearningExperience/AstroNotes/Sidebar/FeedbackModal';
 
 const Astronotes = (): JSX.Element => {
     const { width: notebookWidth, ref: notebookRef } =
@@ -10,7 +12,7 @@ const Astronotes = (): JSX.Element => {
 
     return (
         <AstronotesProvider>
-            <section className="pt-20 pb-4 px-4 flex flex-col md:flex-row md:gap-2 md:items-stretch relative md:overflow-hidden md:h-[100vh] bg-white dark:bg-black text-black dark:text-white">
+            <section className="relative flex flex-col px-4 pb-4 text-black bg-white md:flex-row md:gap-2 dark:bg-black dark:text-white">
                 {/* TODO(angga): removed until higher in priority
                 
                 {highlighted && (
@@ -39,9 +41,11 @@ const Astronotes = (): JSX.Element => {
                         />
                     </AstronotesContextMenu>
                 )} */}
-                <AstronotesSidebar />
+                <aside className="items-stretch h-[calc(100vh_-_6rem)] hidden gap-2 sticky top-20 md:flex">
+                    <AstronotesSidebar />
+                </aside>
                 <div
-                    className="w-full mt-5 mb-12 sm:overflow-y-auto md:ml-6"
+                    className="w-full min-h-screen pt-20 mt-5 mb-12 md:ml-6 sm:overflow-auto"
                     ref={notebookRef}>
                     <div className="w-full max-w-5xl mx-auto sm:px-4">
                         <AstroNotesContent />
@@ -52,6 +56,8 @@ const Astronotes = (): JSX.Element => {
                     style={{ width: notebookWidth }}>
                     <AstronotesNavigation />
                 </div>
+                <RatingModal />
+                <FeedbackModal />
             </section>
         </AstronotesProvider>
     );
