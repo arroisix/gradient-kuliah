@@ -44,10 +44,10 @@ export const transitionClassesSlideRight = {
 };
 
 export const transitionClassesSlideDown = {
-    enter: 'transition transition-[height] ease-out duration-100',
+    enter: 'transition transition-[height] ease-out duration-500 sm:duration-100',
     enterFrom: 'opacity-0 scale-y-0',
     enterTo: 'opacity-100 scale-y-100 ',
-    leave: 'transition transition-[height] ease-in duration-100',
+    leave: 'transition transition-[height] ease-in duration-500 sm:duration-100',
     leaveFrom: 'opacity-100 scale-y-100',
     leaveTo: 'opacity-0 scale-y-0'
 };

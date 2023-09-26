@@ -6,13 +6,17 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { pageSliderClassNames } from '../constants';
 import { useDebounce } from 'commons/hooks/useDebounce';
 
-type PaginatorProps = {
+interface PaginatorProps extends PropsWithClassName {
     currentPage: number;
     totalPage: number;
     isLoading: boolean;
-};
+}
 
-const Paginator = ({ totalPage, isLoading }: PaginatorProps): JSX.Element => {
+const Paginator = ({
+    totalPage,
+    isLoading,
+    className
+}: PaginatorProps): JSX.Element => {
     const router = useRouter();
     const { slug, page } = router.query;
     const MAX_VALUE = totalPage;
@@ -38,7 +42,7 @@ const Paginator = ({ totalPage, isLoading }: PaginatorProps): JSX.Element => {
     }
 
     return (
-        <div className="flex items-center gap-6">
+        <div className={cn('flex items-center gap-6', className)}>
             <div className="relative w-full h-1 text-accent-purple">
                 <div
                     className="absolute inset-0 z-10 h-full bg-current rounded-l-full pointer-events-none"

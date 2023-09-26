@@ -15,17 +15,14 @@ const AstronotesNavigation = (): JSX.Element => {
 
     return (
         <div className="relative flex items-center gap-4 md:px-6">
-            <div className="md:hidden">
-                <MobileMenu />
-            </div>
+            <MobileMenu />
             {data && (
-                <div className="flex-1">
-                    <Paginator
-                        currentPage={data.current_page}
-                        totalPage={data.total_page}
-                        isLoading={isLoading}
-                    />
-                </div>
+                <Paginator
+                    currentPage={data.current_page}
+                    totalPage={data.total_page}
+                    isLoading={isLoading}
+                    className="flex-1"
+                />
             )}
         </div>
     );
