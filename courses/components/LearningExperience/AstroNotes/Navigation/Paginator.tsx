@@ -27,7 +27,7 @@ const Paginator = ({
         if (destinationPage !== Number(page)) {
             router.push(`/astronotes/${slug}/${destinationPage}`);
         }
-    }, [destinationPage, page, router, slug]);
+    }, [destinationPage]);
 
     function handlePrev(): void {
         const pageNumber = Number(page);
