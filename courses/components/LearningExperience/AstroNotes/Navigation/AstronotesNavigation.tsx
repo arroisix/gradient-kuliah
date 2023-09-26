@@ -14,12 +14,12 @@ const AstronotesNavigation = (): JSX.Element => {
     );
 
     return (
-        <div className="relative flex">
-            <div className="pl-5 md:hidden">
+        <div className="relative flex items-center gap-4 md:px-6">
+            <div className="md:hidden">
                 <MobileMenu />
             </div>
             {data && (
-                <div className="w-full px-5">
+                <div className="flex-1">
                     <Paginator
                         currentPage={data.current_page}
                         totalPage={data.total_page}

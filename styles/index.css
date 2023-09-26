@@ -16,6 +16,14 @@
     }
 }
 
+@layer components {
+    .range::-webkit-slider-runnable-track, .range::-moz-range-track {
+          @apply w-full h-2 rounded-box bg-base-content/10;
+    }
+
+    
+}
+
 html {
     overflow-x: hidden;
     scroll-behavior: smooth;

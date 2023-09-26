@@ -52,8 +52,8 @@ const Astronotes = (): JSX.Element => {
                     </div>
                 </div>
                 <div
-                    className="fixed bottom-0 md:right-[17px] pt-2 pb-6 bg-white dark:bg-black"
-                    style={{ width: notebookWidth }}>
+                    className="fixed inset-x-0 bottom-0 px-4 pt-2 pb-4 bg-white md:pb-6 md:pt-4 md:left-auto md:right-0 dark:bg-black"
+                    style={{ minWidth: notebookWidth }}>
                     <AstronotesNavigation />
                 </div>
                 <RatingModal />
