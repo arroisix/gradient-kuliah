@@ -6,10 +6,14 @@ import BookmarksMenu from './BookmarksMenu';
 import AppearanceMenu from './AppearanceMenu';
 import SidebarMenu from '../../Sidebar/SidebarMenu';
 import { useAstronotes } from 'courses/contexts/AstronotesProvider';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 
 const MobileMenu = (): JSX.Element => {
     const [isShow, setIsShow] = useState(false);
     const { navigation } = useAstronotes();
+    const { isMobileBreakpoints } = useWindowBreakpoints();
+
+    if (!isMobileBreakpoints) return <></>;
 
     return (
         <div className="relative md:hidden">

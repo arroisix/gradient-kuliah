@@ -12,7 +12,7 @@ const Astronotes = (): JSX.Element => {
 
     return (
         <AstronotesProvider>
-            <section className="relative flex flex-col px-4 pb-4 overflow-y-auto text-black bg-white md:flex-row md:gap-2 dark:bg-black dark:text-white">
+            <section className="relative flex flex-col px-4 pb-4 text-black bg-white md:flex-row md:gap-2 dark:bg-black dark:text-white">
                 {/* TODO(angga): removed until higher in priority
                 
                 {highlighted && (
@@ -45,7 +45,7 @@ const Astronotes = (): JSX.Element => {
                     <AstronotesSidebar />
                 </aside>
                 <div
-                    className="w-full min-h-screen pt-20 mt-5 mb-12 overflow-x-hidden md:overflow-y-auto md:ml-6"
+                    className="w-full min-h-screen pt-20 mt-5 mb-12 overflow-x-hidden md:ml-6"
                     ref={notebookRef}>
                     <div className="w-full max-w-5xl mx-auto sm:px-4">
                         <AstroNotesContent />
