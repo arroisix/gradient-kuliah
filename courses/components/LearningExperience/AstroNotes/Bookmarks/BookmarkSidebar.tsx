@@ -37,7 +37,7 @@ const BookmarkSidebar = (): JSX.Element => {
                     onClick={() => setNavigation('CLOSE')}
                 />
             </div>
-            <div className="overflow-y-auto max-h-[calc(100vh_-_10rem)] py-4 px-3 flex flex-col gap-2">
+            <div className="overflow-y-auto max-h-[calc(100vh_-_10rem)] py-4 px-3 flex flex-col gap-1">
                 {selected === 'BOOKMARK' && isLoadingBookmark ? (
                     <Skeleton repeat={4} className="h-4 mb-0" />
                 ) : (
