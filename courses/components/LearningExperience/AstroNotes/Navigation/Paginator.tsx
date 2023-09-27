@@ -24,6 +24,10 @@ const Paginator = ({
     const destinationPage = useDebounce(pageNumber, 500);
 
     useEffect(() => {
+        setPageNumber(Number(page));
+    }, [page]);
+
+    useEffect(() => {
         if (destinationPage !== Number(page)) {
             router.push(`/astronotes/${slug}/${destinationPage}`);
         }
