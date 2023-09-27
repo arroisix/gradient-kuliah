@@ -177,7 +177,7 @@ const Navbar = ({
             onMouseEnter={() => setNavbarHovered(true)}
             onMouseLeave={onMouseLeaveNavbar}>
             <div className="flex items-center justify-between w-full px-4 py-4 md:px-6">
-                <div className="flex gap-4 items-center">
+                <div className="flex items-center gap-4">
                     {isAuthenticated && (
                         <FiMenu
                             className="md:hidden"
@@ -267,9 +267,7 @@ const Navbar = ({
                                     className={`ml-12 flex gap-6 cursor-pointer relative`}>
                                     {router.pathname.includes('astronotes') &&
                                         !isBookProgressLoading && (
-                                            <div
-                                                onClick={handleBookmark}
-                                                aria-hidden>
+                                            <button onClick={handleBookmark}>
                                                 {isBookmarked ? (
                                                     <BsBookmarkFill
                                                         size={18}
@@ -281,7 +279,7 @@ const Navbar = ({
                                                         className="text-[#999999]"
                                                     />
                                                 )}
-                                            </div>
+                                            </button>
                                         )}
                                     {router.pathname === '/' && (
                                         <Link href="/kelas">
@@ -426,7 +424,7 @@ const Navbar = ({
                                     {router.pathname === '/' && (
                                         <Link href="/kelas">
                                             <nav
-                                                className="font-bold text-sm ml-12 cursor-pointer hover:text-accent-blue"
+                                                className="ml-12 text-sm font-bold cursor-pointer hover:text-accent-blue"
                                                 onMouseEnter={
                                                     onMouseEnterOther
                                                 }>
@@ -434,6 +432,22 @@ const Navbar = ({
                                             </nav>
                                         </Link>
                                     )}
+                                    {router.pathname.includes('astronotes') &&
+                                        !isBookProgressLoading && (
+                                            <button onClick={handleBookmark}>
+                                                {isBookmarked ? (
+                                                    <BsBookmarkFill
+                                                        size={18}
+                                                        className="text-[#999999]"
+                                                    />
+                                                ) : (
+                                                    <BsBookmark
+                                                        size={18}
+                                                        className="text-[#999999]"
+                                                    />
+                                                )}
+                                            </button>
+                                        )}
                                     <button
                                         className="flex items-center text-base font-bold"
                                         onClick={() =>
