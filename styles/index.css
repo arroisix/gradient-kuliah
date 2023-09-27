@@ -655,10 +655,6 @@ sticky-3.animate {
     border-color: #0366d6;
 }
 
-.markdown-body .border {
-    border: 1px solid #e1e4e8 !important;
-}
-
 .markdown-body .border-0 {
     border: 0 !important;
 }
@@ -1101,21 +1097,6 @@ sticky-3.animate {
     font-weight: 600;
 }
 
-.markdown-body table td,
-.markdown-body table th {
-    padding: 6px 13px;
-    border: 1px solid #dfe2e5;
-}
-
-.markdown-body table tr {
-    background-color: #fff;
-    border-top: 1px solid #c6cbd1;
-}
-
-.markdown-body table tr:nth-child(2n) {
-    background-color: #f6f8fa;
-}
-
 .markdown-body img {
     max-width: 100%;
     box-sizing: initial;
@@ -1392,10 +1373,22 @@ sticky-3.animate {
     text-decoration: underline;
 }
 
-.markdown-table table th,
-.markdown-table table td {
+.markdown-body table td,
+.markdown-body table th {
     padding: 6px 13px;
-    border: 1px solid #999999;
+    @apply border border-neutral-400 dark:border-neutral-700
+}
+
+.markdown-body table tr th {
+    @apply bg-accent-purple/10
+}
+
+.markdown-body table tr {
+    @apply bg-neutral-100 dark:bg-transparent
+}
+
+.markdown-body table tr:nth-child(2n) {
+    @apply bg-neutral-200 dark:bg-neutral-800/50
 }
 
 .markdown-body blockquote, .callout {
@@ -1405,9 +1398,8 @@ sticky-3.animate {
     gap: 0.5rem;
     background-color: rgba(128, 128, 128, 0.2);
     padding: 1rem;
-    border-left: 0.25em solid #dfe2e5;
     margin: 0.5rem 0;
-    @apply text-neutral-800 dark:text-neutral-300 rounded-md
+    @apply text-neutral-800 dark:text-neutral-300 rounded-md border-l-4 border-accent-purple/40
 }
 
 .callout h1,
