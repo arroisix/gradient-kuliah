@@ -5,8 +5,9 @@ import { useThemeContext } from 'commons/contexts/ThemeProvider';
 import { useAstronotes } from 'courses/contexts/AstronotesProvider';
 import { usePostFeedbackMutation } from 'courses/redux/api/astronotesApi';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
+import { toast } from 'react-toastify';
 
 const FeedbackModal = (): JSX.Element => {
     const { isModalFeedbackOpen, setIsModalFeedbackOpen } = useAstronotes();
@@ -21,9 +22,19 @@ const FeedbackModal = (): JSX.Element => {
         setContent(event.target.value);
     }
 
+    function handleSubmit(e: FormEvent<HTMLFormElement>): void {
+        e.preventDefault();
+        postFeedback({
+            slug: slug as string,
+            feedback: content
+        });
+    }
+
     useEffect(() => {
         if (isSuccess) {
+            toast.success('Pesan berhasil disimpan.');
             setIsModalFeedbackOpen(false);
+            setContent('');
         }
     }, [isSuccess, setIsModalFeedbackOpen]);
 
@@ -32,7 +43,7 @@ const FeedbackModal = (): JSX.Element => {
             isOpen={isModalFeedbackOpen}
             setOpen={setIsModalFeedbackOpen}
             variant={theme}>
-            <div className="flex flex-col gap-6">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                 <span className="inline-block mr-5 font-extrabold">
                     Bantuan dan Masukan
                 </span>
@@ -48,19 +59,14 @@ const FeedbackModal = (): JSX.Element => {
                 <Button
                     variant="primary"
                     className="self-end px-12 text-sm"
-                    onClick={() =>
-                        postFeedback({
-                            slug: slug as string,
-                            feedback: content
-                        })
-                    }>
+                    type="submit">
                     {isLoading ? (
                         <Spinner size="small" className="border-black" />
                     ) : (
                         'Kirim'
                     )}
                 </Button>
-            </div>
+            </form>
         </Modal>
     );
 };

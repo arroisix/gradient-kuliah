@@ -6,6 +6,7 @@ import { useAstronotes } from 'courses/contexts/AstronotesProvider';
 import { usePostRatingMutation } from 'courses/redux/api/astronotesApi';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 const RatingModal = (): JSX.Element => {
     const { isModalRatingOpen, setIsModalRatingOpen } = useAstronotes();
@@ -20,6 +21,7 @@ const RatingModal = (): JSX.Element => {
 
     useEffect(() => {
         if (isSuccess) {
+            toast.success('Rating berhasil disimpan');
             setIsModalRatingOpen(false);
         }
     }, [isSuccess, setIsModalRatingOpen]);
