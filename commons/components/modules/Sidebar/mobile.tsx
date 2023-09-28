@@ -3,7 +3,6 @@ import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useGetCommunityNotificationQuery } from 'komunitas/redux/api/komunitasApi';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { posthog } from 'posthog-js';
 import { Dispatch, SetStateAction } from 'react';
 import { BiBookReader } from 'react-icons/bi';
 import { FiHome } from 'react-icons/fi';
@@ -70,7 +69,7 @@ const MobileSidebar = ({
                                     : 'text-[#666666]'
                             }  hover:text-[#999999]`}
                             onClick={() => {
-                                posthog.capture('Visit Community Explore Page');
+                                //posthog.capture('Visit Community Explore Page');
                                 route.push('/komunitas');
                             }}
                             aria-hidden>

@@ -16,7 +16,9 @@ const Hero = (): JSX.Element => {
                 <Link href={'#pricing'}>
                     <Button
                         variant="primary"
-                        className="w-fit mx-auto z-10 mt-[14px] lg:mt-6 sm:px-[47px] sm:py-2 font-sans text-xs sm:text-sm lg:text-base">
+                        className="w-fit mx-auto z-10 mt-[14px] lg:mt-6 sm:px-[47px] sm:py-2 font-sans text-xs sm:text-sm lg:text-base"
+                        eventName="Landing Page CTA"
+                        eventPayload={{ 'Section Name': 'Hero' }}>
                         Gabung Kelas
                     </Button>
                 </Link>

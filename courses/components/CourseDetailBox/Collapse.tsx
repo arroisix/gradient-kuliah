@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { FaPlay } from 'react-icons/fa';
 import { HiCheck, HiOutlineChevronDown, HiPlay } from 'react-icons/hi';
 import { IoIosCheckmarkCircle } from 'react-icons/io';
+import { useTracker } from 'tracker/tracker';
 import WorksheetInfoModalContent from '../LearningExperience/ExamExercise/WorksheetInfoModal';
 
 const ExerciseItem = ({ value }: { value: SubChapter }): JSX.Element => {
@@ -54,6 +55,7 @@ const VideoItem = ({
     value: SubChapter;
     chapter_id: string;
 }): JSX.Element => {
+    const tracker = useTracker();
     const router = useRouter();
     const { id, sub } = router.query;
 
@@ -76,11 +78,16 @@ const VideoItem = ({
         <div
             key={value.id}
             className="flex justify-between px-3 py-[10px] cursor-pointer hover:bg-[#272727]"
-            onClick={() =>
+            onClick={() => {
+                tracker?.genericTrack('Click Video Item', {
+                    'Course Slug': id,
+                    'Video Title': value.subchapter_name,
+                    'Chapter ID': chapter_id
+                });
                 router.push(
                     `/kelas/${id}/belajar/video/${chapter_id}/${value.id}`
-                )
-            }
+                );
+            }}
             aria-hidden>
             <div
                 className={`flex items-center gap-[10px] ${

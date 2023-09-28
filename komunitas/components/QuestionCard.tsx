@@ -12,7 +12,7 @@ import { useState } from 'react';
 import KomunitasForm from './KomunitasForm';
 import { usePostQuestionAnswerMutation } from 'komunitas/redux/api/komunitasApi';
 import { toast } from 'react-toastify';
-import { posthog } from 'posthog-js';
+import { useTracker } from 'tracker/tracker';
 
 type Student = {
     id: string;
@@ -47,6 +47,7 @@ const QuestionCard = ({
 }): JSX.Element => {
     const [postCommunity, { isLoading }] = usePostQuestionAnswerMutation();
     const router = useRouter();
+    const tracker = useTracker();
 
     const [formContent, setFormContent] = useState('');
     const [attachmentUrl, setAttachmentUrl] = useState<string[]>([]);
@@ -78,8 +79,8 @@ const QuestionCard = ({
             attachment_urls: attachmentUrl
         });
 
-        posthog.capture('Submit Answer on Community', {
-            POST_SLUG: slug
+        tracker?.genericTrack('Submit Answer on Community', {
+            'Post Slug': slug
         });
 
         setFormContent('');
@@ -96,9 +97,6 @@ const QuestionCard = ({
                 onClick={
                     clickable
                         ? () => {
-                              posthog.capture('Visit Community Detail Page', {
-                                  POST_SLUG: slug
-                              });
                               router.push(`/komunitas/${slug}`);
                           }
                         : undefined
@@ -166,8 +164,8 @@ const QuestionCard = ({
                         <button
                             className="bg-neutral-800 px-[27px] py-[7.5px] rounded-[70px] font-extrabold text-xs hover:bg-accent-purple transition-all"
                             onClick={() => {
-                                posthog.capture('Click "Jawab" Button', {
-                                    POST_SLUG: slug
+                                tracker?.genericTrack('Click "Jawab" Button', {
+                                    'Post Slug': slug
                                 });
                                 setIsShowForm(true);
                             }}>

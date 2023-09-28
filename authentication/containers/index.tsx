@@ -57,7 +57,8 @@ export const AuthenticationContainer: React.FC = () => {
                             <Button
                                 variant="custom"
                                 className="text-white bg-[#7264EB] w-full"
-                                onClick={login}>
+                                onClick={() => login()}
+                                eventName="Attempts to Login with Google">
                                 <div className="flex items-center justify-center ">
                                     <AiOutlineGoogle className="mr-2 text-2xl" />
                                     <span>Lanjutkan Dengan Google</span>

@@ -6,11 +6,13 @@ import Input from 'commons/components/elements/Form/input';
 import { useLoginMutation } from 'authentication/redux/api/authApi';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useTracker } from 'tracker/tracker';
 
 export const LoginSection: React.FC = () => {
     const [reveal, setReveal] = useState(false);
     const [login, { isLoading }] = useLoginMutation();
     const router = useRouter();
+    const tracker = useTracker();
 
     return (
         <Formik
@@ -32,6 +34,8 @@ export const LoginSection: React.FC = () => {
                 return errors;
             }}
             onSubmit={async (values, { setSubmitting }) => {
+                const { password: _password, ...trackedValues } = values;
+                tracker?.trackAttemptFormSubmit('Basic Login', trackedValues);
                 await login(values);
                 setSubmitting(false);
             }}>
@@ -106,7 +110,13 @@ export const LoginSection: React.FC = () => {
                                     !!router.query.redirect
                                         ? `?redirect=${router.query.redirect}`
                                         : ''
-                                }`}>
+                                }`}
+                                onClick={() => {
+                                    tracker?.trackButtonClick(
+                                        'Register Button on Login Page',
+                                        'Buat Akun'
+                                    );
+                                }}>
                                 <span className="font-extrabold text-[#7264EB] cursor-pointer hover:text-[#7264EB]/75 transition-all duration-500">
                                     Buat Akun
                                 </span>

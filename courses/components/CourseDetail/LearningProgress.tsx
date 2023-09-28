@@ -97,14 +97,24 @@ const LearningProgress = ({
                             <Button
                                 className="md:w-fit text-center mt-4 min-w-[200px]"
                                 variant="primary"
-                                href={`/kelas/${slug}/belajar/video/${latest_watch_video?.chapter_id}/${latest_watch_video?.subchapter.id}`}>
+                                href={`/kelas/${slug}/belajar/video/${latest_watch_video?.chapter_id}/${latest_watch_video?.subchapter.id}`}
+                                eventName="Continue Learning Button on Course Landing Page"
+                                eventPayload={{
+                                    Position: 'HERO',
+                                    'Course Slug': slug
+                                }}>
                                 Lanjut Belajar
                             </Button>
                         ) : (
                             <Button
                                 className="md:w-fit text-center mt-4 min-w-[200px]"
                                 variant="primary"
-                                href={`/kelas/${slug}/belajar/video/${first_video_in_course?.chapter_id}/${first_video_in_course?.subchapter_id}`}>
+                                href={`/kelas/${slug}/belajar/video/${first_video_in_course?.chapter_id}/${first_video_in_course?.subchapter_id}`}
+                                eventName="Start Learning Button on Course Landing Page"
+                                eventPayload={{
+                                    Position: 'HERO',
+                                    'Course Slug': slug
+                                }}>
                                 Mulai Belajar
                             </Button>
                         )

@@ -15,6 +15,9 @@ module.exports = {
             'gradient-public-student-prod.s3.ap-southeast-1.amazonaws.com'
         ]
     },
+    experimental: {
+        newNextLinkBehavior: true
+    },
     redirects() {
         return [
             process.env.MAINTENANCE_MODE === '1'

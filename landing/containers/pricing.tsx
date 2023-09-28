@@ -8,9 +8,13 @@ import { SlCheck } from 'react-icons/sl';
 import { useSelector } from 'react-redux';
 
 const Pricing = ({
-    pricingData
+    pricingData,
+    ctaEventName,
+    ctaEventPayload
 }: {
     pricingData?: PacketOffer[];
+    ctaEventName?: string;
+    ctaEventPayload?: Record<string, any>;
 }): JSX.Element => {
     return (
         <section
@@ -33,6 +37,8 @@ const Pricing = ({
                         price={parseInt(price)}
                         price_before_discount={parseInt(price_before_discount)}
                         packetId={id}
+                        ctaEventName={ctaEventName}
+                        ctaEventPayload={ctaEventPayload}
                     />
                 )
             )}
@@ -55,7 +61,9 @@ const CardPrice = ({
     packet_name,
     price,
     price_before_discount,
-    packetId
+    packetId,
+    ctaEventName,
+    ctaEventPayload = {}
 }: {
     benefits: Benefits;
     order: number;
@@ -63,6 +71,8 @@ const CardPrice = ({
     price: number;
     price_before_discount: number;
     packetId: string;
+    ctaEventName?: string;
+    ctaEventPayload?: Record<string, any>;
 }): JSX.Element => {
     const { checkCustomBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -136,7 +146,12 @@ const CardPrice = ({
             <Button
                 variant={isHighlighted ? 'primary' : 'custom'}
                 className={`${isHighlighted ? '' : 'bg-[#212121]'}`}
-                onClick={handleClick}>
+                onClick={handleClick}
+                eventName={ctaEventName}
+                eventPayload={{
+                    'Packet Name': packet_name,
+                    ...ctaEventPayload
+                }}>
                 Akses Sekarang
             </Button>
         </div>

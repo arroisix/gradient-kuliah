@@ -4,6 +4,8 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import videojs from '@mux/videojs-kit';
 import { FaPlay } from 'react-icons/fa';
 import { useRouter } from 'next/router';
+import { useTracker } from 'tracker/tracker';
+import { useLearning } from 'courses/contexts/LearningProvider';
 
 // const buildSettingComponent = (element: HTMLDivElement): void => {
 //     element.innerHTML = '';
@@ -24,8 +26,12 @@ const VideoJS = ({
     ) => Promise<any>;
     next_subchapter_link?: string;
 }): JSX.Element => {
+    const tracker = useTracker();
+    const { subchapter } = useLearning();
     const router = useRouter();
+    const playerRef = useRef<any | null>(null);
     const videoRef = useRef<HTMLVideoElement | null>(null);
+    const videoContainerRef = useRef<HTMLDivElement | null>(null);
     const [isRendered, setIsRendered] = useState(false);
     const [isPlay, setIsPlay] = useState(false);
     const [isBuffering, setIsBuffering] = useState(false);
@@ -56,135 +62,169 @@ const VideoJS = ({
         }
     }
 
-    function handlePauseEvent(): void {
-        setIsPlay(false);
-        handleTrackProgress();
-        clearInterval(trackInterval);
-    }
-
-    function handleEndedEvent(): void {
-        setIsPlay(false);
-        handleTrackProgress(true);
-        handleNextVideo();
-        clearInterval(trackInterval);
-    }
-
     useLayoutEffect(() => {
-        if (!isRendered) {
-            setIsRendered(true);
+        function handlePauseEvent(): void {
+            tracker?.genericTrack('Pause Video', {
+                'Course Slug': router.query.id,
+                'Video Title': subchapter?.subchapter_name
+            });
+            setIsPlay(false);
+            handleTrackProgress();
+            clearInterval(trackInterval);
         }
 
-        videoRef.current?.addEventListener('playing', () => {
+        function handleEndedEvent(): void {
+            setIsPlay(false);
+            handleTrackProgress(true);
+            handleNextVideo();
+            clearInterval(trackInterval);
+        }
+
+        function handlePlayingEvent(): void {
+            tracker?.genericTrack('Play Video', {
+                'Course Slug': router.query.id,
+                'Video Title': subchapter?.subchapter_name
+            });
             setIsPlay(true);
             setIsBuffering(false);
             // eslint-disable-next-line react-hooks/exhaustive-deps
             trackInterval = setInterval(() => {
                 handleTrackProgress();
             }, 30000);
-        });
+        }
 
-        videoRef.current?.addEventListener('waiting', () => {
+        function handleWaitingEvent(): void {
             setIsBuffering(true);
-        });
+        }
 
-        videoRef.current?.addEventListener('canplay', () => setIsPlay(false));
+        function handleCanPlayEvent(): void {
+            setIsPlay(false);
+        }
 
-        videoRef.current?.addEventListener('pause', handlePauseEvent);
+        function handleFullscreenEvent(): void {
+            if (document.fullscreenElement) {
+                tracker?.genericTrack('Click Fullscreen', {
+                    'Course Slug': router.query.id,
+                    'Video Title': subchapter?.subchapter_name
+                });
+            }
+        }
 
-        videoRef.current?.addEventListener('ended', handleEndedEvent);
+        if (!isRendered) {
+            setIsRendered(true);
+        }
 
-        return function cleanUpListener() {
+        const videoContainerEl = videoContainerRef.current;
+        videoContainerEl?.addEventListener(
+            'fullscreenchange',
+            handleFullscreenEvent
+        );
+
+        const videoEl = videoRef.current;
+        videoEl?.addEventListener('playing', handlePlayingEvent);
+
+        videoEl?.addEventListener('waiting', handleWaitingEvent);
+
+        videoEl?.addEventListener('canplay', handleCanPlayEvent);
+
+        videoEl?.addEventListener('pause', handlePauseEvent);
+
+        videoEl?.addEventListener('ended', handleEndedEvent);
+
+        return () => {
             handleTrackProgress();
 
-            videoRef.current?.removeEventListener('pause', handlePauseEvent);
-
-            videoRef.current?.removeEventListener('ended', handleEndedEvent);
-
-            videoRef.current?.removeEventListener('playing', () => {
-                setIsPlay(true);
-                setIsBuffering(false);
-            });
-
-            videoRef.current?.removeEventListener('waiting', () => {
-                setIsBuffering(true);
-            });
-
-            videoRef.current?.removeEventListener('canplay', () =>
-                setIsPlay(false)
+            videoContainerEl?.removeEventListener(
+                'fullscreenchange',
+                handleFullscreenEvent
             );
+
+            videoEl?.removeEventListener('pause', handlePauseEvent);
+
+            videoEl?.removeEventListener('ended', handleEndedEvent);
+
+            videoEl?.removeEventListener('playing', handlePlayingEvent);
+
+            videoEl?.removeEventListener('waiting', handleWaitingEvent);
+
+            videoEl?.removeEventListener('canplay', handleCanPlayEvent);
 
             clearInterval(trackInterval);
         };
     }, [next_subchapter_link]);
 
     useEffect(() => {
-        const player = videojs(videoRef.current, {
-            userActions: {
-                hotkeys: function (event: any) {
-                    // eslint-disable-next-line @typescript-eslint/no-this-alias
-                    const thisPlayer: any = this;
+        let player = playerRef.current;
 
-                    // `f` key = toggle fullscreen
-                    if (event.which === 70) {
-                        if (thisPlayer.isFullscreen()) {
-                            thisPlayer.exitFullscreen();
-                        } else {
-                            thisPlayer.requestFullscreen();
-                        }
-                    }
-                    // `i` key = PIP
-                    if (event.which === 73) {
-                        thisPlayer.requestPictureInPicture();
-                    }
-                    // `m` key = mute
-                    if (event.which === 77) {
-                        if (videoRef.current) {
-                            if (videoRef.current?.muted) {
-                                videoRef.current.muted = false;
+        if (!player) {
+            player = playerRef.current = videojs(videoRef.current, {
+                userActions: {
+                    hotkeys: function (event: any) {
+                        // eslint-disable-next-line @typescript-eslint/no-this-alias
+                        const thisPlayer: any = this;
+
+                        // `f` key = toggle fullscreen
+                        if (event.which === 70) {
+                            if (thisPlayer.isFullscreen()) {
+                                thisPlayer.exitFullscreen();
                             } else {
-                                videoRef.current.muted = true;
+                                thisPlayer.requestFullscreen();
                             }
                         }
-                    }
-                    // `space` key = toggle play/pause
-                    if (event.which === 32) {
-                        if (videoRef.current?.paused) {
-                            videoRef.current?.play();
-                            setIsPlay(true);
-                        } else {
-                            videoRef.current?.pause();
-                            setIsPlay(false);
+                        // `i` key = PIP
+                        if (event.which === 73) {
+                            thisPlayer.requestPictureInPicture();
+                        }
+                        // `m` key = mute
+                        if (event.which === 77) {
+                            if (videoRef.current) {
+                                if (videoRef.current?.muted) {
+                                    videoRef.current.muted = false;
+                                } else {
+                                    videoRef.current.muted = true;
+                                }
+                            }
+                        }
+                        // `space` key = toggle play/pause
+                        if (event.which === 32) {
+                            if (videoRef.current?.paused) {
+                                videoRef.current?.play();
+                                setIsPlay(true);
+                            } else {
+                                videoRef.current?.pause();
+                                setIsPlay(false);
+                            }
+                        }
+                        // `right arrow` key = forward
+                        if (event.which === 39) {
+                            handleForward();
+                        }
+                        // `left arrow` key = backward
+                        if (event.which === 37) {
+                            handleBackward();
                         }
                     }
-                    // `right arrow` key = forward
-                    if (event.which === 39) {
-                        handleForward();
-                    }
-                    // `left arrow` key = backward
-                    if (event.which === 37) {
-                        handleBackward();
-                    }
-                }
-            },
-            playbackRates: [0.5, 0.75, 1, 1.5, 2],
-            controlBar: {
-                remainingTimeDisplay: false
-            },
-            plugins: {
-                mux: {
-                    data: {
-                        env_key: 'ENV_KEY',
-                        video_title: 'Example Title'
-                    }
                 },
-                httpSourceSelector: {
-                    default: 'auto'
+                playbackRates: [0.5, 0.75, 1, 1.5, 2],
+                controlBar: {
+                    remainingTimeDisplay: false
+                },
+                plugins: {
+                    mux: {
+                        data: {
+                            env_key: 'ENV_KEY',
+                            video_title: 'Example Title'
+                        }
+                    },
+                    httpSourceSelector: {
+                        default: 'auto'
+                    }
                 }
-            }
-        });
+            });
+        }
 
         if (!isRendered) {
-            player.controlBar.addChild(
+            player?.controlBar.addChild(
                 'button',
                 {
                     clickHandler: handleForward,
@@ -192,7 +232,7 @@ const VideoJS = ({
                 },
                 1
             );
-            player.controlBar.addChild(
+            player?.controlBar.addChild(
                 'button',
                 {
                     clickHandler: handleBackward,
@@ -207,7 +247,7 @@ const VideoJS = ({
             //     },
             //     15
             // );
-            player.controlBar.addChild(
+            player?.controlBar.addChild(
                 'menu',
                 {
                     className: 'control-spacer'
@@ -220,9 +260,9 @@ const VideoJS = ({
             // buttonSetting.el_.appendChild(element);
         }
 
-        player.httpSourceSelector();
+        player?.httpSourceSelector();
 
-        player.src({
+        player?.src({
             src: src,
             type: isMuxVideo ? 'video/mux' : ''
         });
@@ -237,7 +277,7 @@ const VideoJS = ({
     }, [isMuxVideo, src]);
 
     return (
-        <div className="relative">
+        <div className="relative" ref={videoContainerRef}>
             {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
             <video
                 id="my-player"

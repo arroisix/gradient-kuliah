@@ -19,6 +19,8 @@ import CopilotFill from 'commons/components/elements/Icons/CopilotFill';
 import { TbSend } from 'react-icons/tb';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import TextContent from './TextContent';
+import { useTracker } from 'tracker/tracker';
+import { useRouter } from 'next/router';
 
 interface ChatRoomProps {
     uniqueId: string;
@@ -122,6 +124,9 @@ const ChatRoom = ({
     setIsShowModal,
     setFeedbackStatus
 }: ChatRoomProps): JSX.Element => {
+    const tracker = useTracker();
+    const router = useRouter();
+
     const { video } = useLearning();
     const { data, isLoading } = useGetChatRoomQuery(video.id, {
         skip: video.id === undefined || video.id === null
@@ -226,6 +231,13 @@ const ChatRoom = ({
                     return errors;
                 }}
                 onSubmit={async (values, { resetForm }) => {
+                    tracker?.trackAttemptFormSubmit(
+                        'Question to Copilot',
+                        values,
+                        {
+                            'Course Slug': router.query.id
+                        }
+                    );
                     await askTutor({
                         ...values
                     });

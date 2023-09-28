@@ -8,9 +8,11 @@ import { useRouter } from 'next/router';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { AiFillStar } from 'react-icons/ai';
 import { HiOutlineChevronDown, HiPlay } from 'react-icons/hi';
+import { useTracker } from 'tracker/tracker';
 
 const ListSubchapter = ({
-    item
+    item,
+    onClick
 }: {
     item:
         | {
@@ -21,6 +23,7 @@ const ListSubchapter = ({
               last_duration: string;
           }
         | SubChapter;
+    onClick?: () => void;
 }): JSX.Element => {
     const router = useRouter();
     const { id, chapter } = router.query;
@@ -33,9 +36,10 @@ const ListSubchapter = ({
         <div
             key={item.id}
             className="flex justify-between px-3 py-[10px] cursor-pointer bg-[#1D1D1D] hover:bg-[#272727] rounded"
-            onClick={() =>
-                router.push(`/kelas/${id}/belajar/video/${chapter}/${item.id}`)
-            }
+            onClick={() => {
+                onClick?.();
+                router.push(`/kelas/${id}/belajar/video/${chapter}/${item.id}`);
+            }}
             aria-hidden>
             <div className={`w-[80%] flex items-center gap-[10px]`}>
                 <div className="w-[18px] h-[18px]">
@@ -101,11 +105,13 @@ const ChapterDetail = ({
 };
 
 const SearchList = ({
+    searchQuery,
     searchResult,
     handleSearch,
     isLoading,
     isFetching
 }: {
+    searchQuery: string;
     searchResult?: SearchCourseResponse;
     handleSearch: ({
         type,
@@ -118,12 +124,14 @@ const SearchList = ({
     isFetching: boolean;
 }): JSX.Element => {
     const router = useRouter();
+    const { id } = router.query;
     const [navigation, setNavigation] = useState<'SEARCH_LIST' | 'SUBCHAPTER'>(
         'SEARCH_LIST'
     );
     const [chapterDetail, setChapterDetail] = useState<CourseChapter>(
         {} as CourseChapter
     );
+    const tracker = useTracker();
 
     return (
         <>
@@ -159,6 +167,18 @@ const SearchList = ({
                                                 <ListSubchapter
                                                     key={item.id}
                                                     item={item}
+                                                    onClick={() => {
+                                                        tracker?.genericTrack(
+                                                            'Click Video Section Search Result',
+                                                            {
+                                                                Query: searchQuery,
+                                                                'Course Slug':
+                                                                    id,
+                                                                'Video Title':
+                                                                    item.subchapter_name
+                                                            }
+                                                        );
+                                                    }}
                                                 />
                                             ))}
                                         </div>
@@ -197,11 +217,19 @@ const SearchList = ({
                                 <div
                                     key={value.book_id}
                                     className="flex items-center gap-5 cursor-pointer"
-                                    onClick={() =>
+                                    onClick={() => {
+                                        tracker?.genericTrack(
+                                            'Click Book Section Search Result',
+                                            {
+                                                Query: searchQuery,
+                                                'Course Slug': id,
+                                                'Book Title': value.title
+                                            }
+                                        );
                                         router.push(
                                             `/astronotes/${value.slug}/1`
-                                        )
-                                    }
+                                        );
+                                    }}
                                     aria-hidden>
                                     <Image
                                         src={
@@ -269,6 +297,15 @@ const SearchList = ({
                                     key={value.chapter_id}
                                     className="bg-[#1D1D1D] hover:bg-[#272727] rounded"
                                     onClick={() => {
+                                        tracker?.genericTrack(
+                                            'Click Chapter Section Search Result',
+                                            {
+                                                Query: searchQuery,
+                                                'Course Slug': id,
+                                                'Chapter Title':
+                                                    value.chapter_name
+                                            }
+                                        );
                                         setChapterDetail(value);
                                         setNavigation('SUBCHAPTER');
                                     }}

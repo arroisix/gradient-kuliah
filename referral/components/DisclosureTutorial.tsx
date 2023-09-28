@@ -5,7 +5,13 @@ import { useState } from 'react';
 import { FiChevronDown } from 'react-icons/fi';
 import { RiQuestionLine } from 'react-icons/ri';
 
-const DisclosureTutorial = ({ content }: { content: string }): JSX.Element => {
+const DisclosureTutorial = ({
+    content,
+    onIsOpenChange
+}: {
+    content: string;
+    onIsOpenChange: (isOpen: boolean) => void;
+}): JSX.Element => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -14,7 +20,12 @@ const DisclosureTutorial = ({ content }: { content: string }): JSX.Element => {
                 className={`flex justify-between items-center gap-2 p-4 cursor-pointer ${
                     isOpen && 'border-b-[1px] border-[#2D2D2D]'
                 }`}
-                onClick={() => setIsOpen((prev) => !prev)}
+                onClick={() => {
+                    setIsOpen((prev) => {
+                        onIsOpenChange(!prev);
+                        return !prev;
+                    });
+                }}
                 aria-hidden>
                 <div className="flex items-center gap-[14px]">
                     <RiQuestionLine size={24} />

@@ -105,7 +105,13 @@ const LandingPageOrchestrator = ({
         <>
             <CourseDetail slug={id} />
             {((!is_subscribed && isDoneFetchingSubcription) ||
-                !isAuthenticated) && <Pricing pricingData={packetOffer} />}
+                !isAuthenticated) && (
+                <Pricing
+                    pricingData={packetOffer}
+                    ctaEventName="Pricing Button on Course Landing Page"
+                    ctaEventPayload={{ 'Course Slug': id }}
+                />
+            )}
         </>
     );
 };

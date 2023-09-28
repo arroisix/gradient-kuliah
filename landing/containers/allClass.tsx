@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useRef, useState } from 'react';
 import { FaChevronRight } from 'react-icons/fa';
+import { useTracker } from 'tracker/tracker';
 
 const LIST_CLASS = [
     {
@@ -145,11 +146,17 @@ const ClassCard = ({
     slug: string;
 }): JSX.Element => {
     const router = useRouter();
+    const tracker = useTracker();
 
     return (
         <div
             className="relative w-fit snap-center bg-[#5F2BCE33] rounded-3xl overflow-hidden cursor-pointer"
-            onClick={() => router.push(`/kelas/${slug}`)}
+            onClick={() => {
+                tracker?.genericTrack('Click Class Card', {
+                    'Course Slug': slug
+                });
+                router.push(`/kelas/${slug}`);
+            }}
             aria-hidden>
             <div className="relative w-[208px] h-[142px] md:h-[225px] md:w-[330px]">
                 <Image

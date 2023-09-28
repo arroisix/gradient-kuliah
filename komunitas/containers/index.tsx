@@ -21,12 +21,12 @@ import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { posthog } from 'posthog-js';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { CgSearch } from 'react-icons/cg';
 import { MdChevronRight } from 'react-icons/md';
 import { toast } from 'react-toastify';
+import { useTracker } from 'tracker/tracker';
 
 const KomunitasContainer = (): JSX.Element => {
     const { isMobileBreakpoints } = useWindowBreakpoints();
@@ -59,6 +59,7 @@ const KomunitasContainer = (): JSX.Element => {
     const [showSort, setShowSort] = useState(false);
     const [showForm, setShowForm] = useState(false);
     const isAnchorOnScreen = useOnScreen(anchor);
+    const tracker = useTracker();
 
     useEffect(() => {
         if (
@@ -104,7 +105,7 @@ const KomunitasContainer = (): JSX.Element => {
             attachment_urls: attachmentUrl
         });
 
-        posthog.capture('Submit Question on Community');
+        tracker?.genericTrack('Submit Question on Community');
 
         setFormContent('');
         setCategory('');
@@ -120,16 +121,17 @@ const KomunitasContainer = (): JSX.Element => {
     }
 
     function handleChangeFilter(e: React.ChangeEvent<HTMLSelectElement>): void {
-        posthog.capture('Filter Community Post', {
-            CATEGORY_NAME: e.target.options[e.target.options.selectedIndex].text
+        tracker?.genericTrack('Filter Community Post', {
+            'Category Name':
+                e.target.options[e.target.options.selectedIndex].text
         });
         setPage(1);
         setFilter(e.target.value);
     }
 
     function handleChangeSort(event: any): void {
-        posthog.capture('Sort Community Post', {
-            SORT_BY: event.target.textContent
+        tracker?.genericTrack('Sort Community Post', {
+            'Sort By': event.target.textContent
         });
         setPage(1);
         setSort(event.target.id);
@@ -184,10 +186,8 @@ const KomunitasContainer = (): JSX.Element => {
                             <Button
                                 variant="custom"
                                 className="font-extrabold text-xs px-6 bg-black w-full md:w-fit"
+                                eventName='"Tanya Sekarang" Button'
                                 onClick={() => {
-                                    posthog.capture(
-                                        'Click "Tanya Sekarang" Button'
-                                    );
                                     setShowForm((prev) => !prev);
                                 }}>
                                 Tanya Sekarang
@@ -363,11 +363,11 @@ const RightSidebar = (): JSX.Element => {
                     <button
                         className="bg-neutral-800 font-extrabold text-xs w-full py-2 rounded-[70px]"
                         onClick={() => {
-                            posthog.capture(
-                                pathname.includes('pertanyaan-ku')
-                                    ? 'Visit Community Explore Page'
-                                    : 'Visit Community Pertanyaanku Page'
-                            );
+                            //posthog.capture(
+                            //    pathname.includes('pertanyaan-ku')
+                            //        ? 'Visit Community Explore Page'
+                            //        : 'Visit Community Pertanyaanku Page'
+                            //);
                             router.push(
                                 pathname.includes('pertanyaan-ku')
                                     ? '/komunitas'

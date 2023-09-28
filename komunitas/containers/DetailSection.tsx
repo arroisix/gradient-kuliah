@@ -12,9 +12,9 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { posthog } from 'posthog-js';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { MdChevronRight } from 'react-icons/md';
+import { useTracker } from 'tracker/tracker';
 
 const DetailSection = (): JSX.Element => {
     const anchor = useRef({} as HTMLDivElement);
@@ -109,6 +109,7 @@ const RightSidebar = ({
     };
 }): JSX.Element => {
     const router = useRouter();
+    const tracker = useTracker();
     const { detailQuestion } = useKomunitas();
 
     const { data: similiars } = useGetExploreQuestionQuery(
@@ -155,8 +156,9 @@ const RightSidebar = ({
                     <button
                         className="bg-neutral-800 font-extrabold text-xs w-full py-2 rounded-[70px]"
                         onClick={() => {
-                            posthog.capture(
-                                'Click "Lihat di Komunitas" Button'
+                            tracker?.trackButtonClick(
+                                'Click "Lihat di Komunitas" Button',
+                                'Lihat di Komunitas'
                             );
                             router.push('/komunitas');
                         }}>

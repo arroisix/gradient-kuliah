@@ -45,14 +45,19 @@ export function AuthProvider({
         }
     }, [isProfileComplete, router]);
 
-    const tracker = useTracker();
     const { is_subscribed, isLoading: isLoadingSubscribed } =
         useCourseSubscription();
+    const tracker = useTracker();
     useEffect(() => {
-        if (user.email && !isLoadingSubscribed) {
-            tracker?.identify(user.email, is_subscribed);
+        if (user.email && profile && !isLoadingSubscribed) {
+            tracker?.identify({
+                email: user.email,
+                fullName: profile.full_name,
+                phoneNumber: profile.phone_number,
+                isSubscribed: is_subscribed
+            });
         }
-    }, [user, is_subscribed, isLoadingSubscribed]);
+    }, [user, profile, is_subscribed, isLoadingSubscribed]);
 
     const memoedValue = useMemo(
         () => ({

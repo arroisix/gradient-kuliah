@@ -14,8 +14,11 @@ import { FaCheckCircle, FaSpinner, FaTimesCircle } from 'react-icons/fa';
 import Avatar from 'react-avatar';
 import useUploadFile from 'commons/hooks/useUploadFile';
 import Image from 'next/image';
+import { useTracker } from 'tracker/tracker';
 
 export const GeneralProfileForm = (): JSX.Element => {
+    const tracker = useTracker();
+
     const [isValid, setIsValid] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
     const [previewImage, setPreviewImage] = useState<
@@ -88,6 +91,11 @@ export const GeneralProfileForm = (): JSX.Element => {
 
                     payload.photo_profile = fileUrls[0];
                 }
+
+                tracker?.trackAttemptFormSubmit(
+                    'General Profile Data',
+                    payload
+                );
 
                 const result = await updateUser(payload);
 

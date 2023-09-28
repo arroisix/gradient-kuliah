@@ -16,8 +16,8 @@ import {
     usePostQuestionAnswerMutation
 } from 'komunitas/redux/api/komunitasApi';
 import AuthContext from 'authentication/contexts/AuthProvider';
-import { posthog } from 'posthog-js';
 import Skeleton from 'commons/components/elements/Skeleton';
+import { useTracker } from 'tracker/tracker';
 
 type Student = {
     id: string;
@@ -64,6 +64,7 @@ const AnswerCard = ({
         setComment(event.target.value);
     }
 
+    const tracker = useTracker();
     async function handleSubmitComment(): Promise<void> {
         await postComment({
             post_id: id,
@@ -72,9 +73,9 @@ const AnswerCard = ({
             attachment_urls: []
         });
 
-        posthog.capture('Submit Answer Comment on Community', {
-            POST_ID: questionId,
-            ANSWER_ID: id
+        tracker?.genericTrack('Submit Answer Comment on Community', {
+            'Post ID': questionId,
+            'Answer ID': id
         });
 
         setComment('');

@@ -4,6 +4,7 @@ import ProgressBar from './ProgressBar';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useGetStudentLearningProgressQuery } from 'dashboard/redux/api/dashboardApi';
 import Button from 'commons/components/elements/Button';
+import { useTracker } from 'tracker/tracker';
 
 const ContinueLearning = ({
     className
@@ -42,6 +43,7 @@ const ListContinueLearning = ({
     learning_progress?: StudentLearningProgress[];
 }): JSX.Element => {
     const router = useRouter();
+    const tracker = useTracker();
 
     return (
         <div className="relative flex flex-col gap-[18px] lg:gap-6">
@@ -58,11 +60,18 @@ const ListContinueLearning = ({
                     <div
                         key={course_slug}
                         className="flex gap-[18px] md:gap-[30px] items-center justify-start md:justify-center cursor-pointer"
-                        onClick={() =>
+                        onClick={() => {
                             router.push(
                                 `/kelas/${course_slug}/belajar/video/${chapter_id}/${subchapter_id}`
-                            )
-                        }
+                            );
+                            tracker?.genericTrack(
+                                'Click Latest Watch Progress Card',
+                                {
+                                    'Course Name': course_name,
+                                    'Video Title': subchapter_name
+                                }
+                            );
+                        }}
                         aria-hidden>
                         <div className="relative min-w-[120px] sm:min-w-[160px] lg:min-w-[220px] w-1/2 min-h-[83px] sm:h-[120px] lg:h-[150px] max-w-[260px]">
                             <Image
@@ -112,7 +121,8 @@ const NoLearningProgress = (): JSX.Element => {
                         router.push(
                             `${is_subscribed ? '/kelas' : '/langganan'}`
                         )
-                    }>
+                    }
+                    eventName="Start Learning Button">
                     {is_subscribed ? 'Mulai Belajar' : 'Beli Kelas'}
                 </Button>
             </div>
