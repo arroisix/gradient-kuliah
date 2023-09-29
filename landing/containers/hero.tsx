@@ -13,10 +13,10 @@ const Hero = (): JSX.Element => {
                 <h1 className="text-2xl font-extrabold text-center whitespace-pre-line sm:text-4xl lg:text-5xl z-[1]">
                     {'Platform Belajar Kuliah \n No. 1 di Indonesia'}
                 </h1>
-                <Link href={'#pricing'}>
+                <Link href={'#pricing'} className="mx-auto z-10">
                     <Button
                         variant="primary"
-                        className="w-fit mx-auto z-10 mt-[14px] lg:mt-6 sm:px-[47px] sm:py-2 font-sans text-xs sm:text-sm lg:text-base"
+                        className="w-fit mt-[14px] lg:mt-6 sm:px-[47px] sm:py-2 font-sans text-xs sm:text-sm lg:text-base"
                         eventName="Landing Page CTA"
                         eventPayload={{ 'Section Name': 'Hero' }}>
                         Gabung Kelas
