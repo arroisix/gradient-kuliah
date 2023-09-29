@@ -1,9 +1,11 @@
+import { MouseEvent } from 'react';
+
 type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'custom';
 
 type ButtonSize = 'large' | 'normal' | 'small' | 'extraSmall';
 
 interface BaseButtonProps {
-    onClick?: () => void;
+    onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
     onMouseEnter?: () => void;
     onMouseLeave?: () => void;
     href?: string;
@@ -18,4 +20,6 @@ interface ButtonProps extends BaseButtonProps {
     variant: ButtonVariant;
     size?: ButtonSize;
     target?: string;
+    eventName?: string;
+    eventPayload?: Record<string, any>;
 }

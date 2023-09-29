@@ -12,8 +12,11 @@ import {
     useProfileContext
 } from 'profile/contexts/ProfileProvider';
 import { toast } from 'react-toastify';
+import { useTracker } from 'tracker/tracker';
 
 export const EducationLevelForm = (): JSX.Element => {
+    const tracker = useTracker();
+
     const { isLoading, updateUser, profile } = useProfileContext();
     return (
         <Formik
@@ -36,6 +39,11 @@ export const EducationLevelForm = (): JSX.Element => {
                 if (payload.profession !== 'employed') {
                     payload.profession_field = '';
                 }
+
+                tracker?.trackAttemptFormSubmit(
+                    'Education Profile Data',
+                    payload
+                );
 
                 const result = await updateUser(payload);
 

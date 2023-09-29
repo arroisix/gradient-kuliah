@@ -4,8 +4,8 @@ import { ImOmega } from 'react-icons/im';
 import { TbSquareRoot2 } from 'react-icons/tb';
 import MathForm from './MathForm';
 import SymbolForm from './SymbolForm';
-import { posthog } from 'posthog-js';
 import { FiPaperclip } from 'react-icons/fi';
+import { useTracker } from 'tracker/tracker';
 
 type IconOption = {
     tag: keyof JSX.IntrinsicElements;
@@ -53,6 +53,7 @@ const AdvanceForm = ({
     submitButtonText: JSX.Element | string;
 }): JSX.Element => {
     const [iconClicked, setIconClicked] = useState(-1);
+    const tracker = useTracker();
 
     return (
         <div className="bg-[#242424] px-5 py-[10px] rounded-b-[20px]">
@@ -62,7 +63,7 @@ const AdvanceForm = ({
                         (
                             {
                                 tag: Tag,
-                                tracker,
+                                tracker: trackerEvent,
                                 icon,
                                 disableClick,
                                 props = {}
@@ -77,7 +78,7 @@ const AdvanceForm = ({
                                         : 'text-neutral-600'
                                 }`}
                                 onClick={() => {
-                                    posthog.capture(tracker);
+                                    tracker?.genericTrack(trackerEvent);
                                     if (!disableClick) {
                                         setIconClicked((prev) =>
                                             prev === index ? -1 : index

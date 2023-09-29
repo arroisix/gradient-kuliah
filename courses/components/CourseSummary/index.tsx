@@ -2,8 +2,15 @@ import { useState } from 'react';
 import Description from './Description';
 import CourseDetailBox from '../CourseDetailBox';
 import QnaSection from '../LearningExperience/QnaSection';
+import { useTracker } from 'tracker/tracker';
+import { useRouter } from 'next/router';
+import { useLearning } from 'courses/contexts/LearningProvider';
 
 const CourseSummary = (): JSX.Element => {
+    const tracker = useTracker();
+    const router = useRouter();
+    const { subchapter } = useLearning();
+
     const [navigation, setNavigation] = useState<
         'DESCRIPTION' | 'DISCUSSION' | 'COURSE'
     >('DESCRIPTION');
@@ -17,7 +24,13 @@ const CourseSummary = (): JSX.Element => {
                             ? 'border-b-2 border-accent-purple'
                             : 'text-neutral-600 border-none hover:text-neutral-500'
                     }`}
-                    onClick={() => setNavigation('COURSE')}
+                    onClick={() => {
+                        tracker?.genericTrack('Click Material Tab', {
+                            'Course Slug': router.query.id,
+                            'Video Title': subchapter?.subchapter_name
+                        });
+                        setNavigation('COURSE');
+                    }}
                     aria-hidden>
                     PELAJARAN
                 </span>
@@ -27,7 +40,13 @@ const CourseSummary = (): JSX.Element => {
                             ? 'border-b-2 border-accent-purple'
                             : 'text-neutral-600 border-none hover:text-neutral-500'
                     }`}
-                    onClick={() => setNavigation('DESCRIPTION')}
+                    onClick={() => {
+                        tracker?.genericTrack('Click Description Tab', {
+                            'Course Slug': router.query.id,
+                            'Video Title': subchapter?.subchapter_name
+                        });
+                        setNavigation('DESCRIPTION');
+                    }}
                     aria-hidden>
                     DESKRIPSI
                 </span>
@@ -37,7 +56,13 @@ const CourseSummary = (): JSX.Element => {
                             ? 'border-b-2 border-accent-purple'
                             : 'text-neutral-600 border-none hover:text-neutral-500'
                     }`}
-                    onClick={() => setNavigation('DISCUSSION')}
+                    onClick={() => {
+                        tracker?.genericTrack('Click QnA Tab', {
+                            'Course Slug': router.query.id,
+                            'Video Title': subchapter?.subchapter_name
+                        });
+                        setNavigation('DISCUSSION');
+                    }}
                     aria-hidden>
                     DISKUSI
                 </span>

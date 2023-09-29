@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { addZeroBefore } from 'courses/utils';
 import { usePayment } from '../contexts/PaymentProvider';
-import { posthog } from 'posthog-js';
+import { useTracker } from 'tracker/tracker';
 
 const MethodBox = ({
     logoUrl,
@@ -13,9 +13,13 @@ const MethodBox = ({
     isManual?: boolean;
 }): JSX.Element => {
     const { setModalCheckoutOpen, setPaymentMethod } = usePayment();
+    const tracker = useTracker();
 
     const onClick = (): void => {
         if (isManual) {
+            tracker?.genericTrack('Click Manual Payment Method', {
+                'Method Name': paymentMethod
+            });
             const currentDate = new Date();
             window.open(
                 `https://api.whatsapp.com/send?phone=6285173430127&text=${encodeURIComponent(
@@ -24,8 +28,10 @@ const MethodBox = ({
                     )}${currentDate.getFullYear()}:BCA]`
                 )}`
             );
-            posthog.capture('Attempt to Pay with BCA');
         } else {
+            tracker?.genericTrack('Click Payment Method', {
+                'Method Name': paymentMethod
+            });
             setPaymentMethod(paymentMethod);
             setModalCheckoutOpen(true);
         }

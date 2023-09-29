@@ -4,6 +4,7 @@ import { useState } from 'react';
 import guide from '../contents/checkoutGuide.json';
 import { useGetTransactionQuery } from 'payment/redux/api/transactionApi';
 import { useRouter } from 'next/router';
+import { useTracker } from 'tracker/tracker';
 
 const Option = ({
     title,
@@ -109,6 +110,18 @@ const TransactionGuide = (): JSX.Element => {
         );
     }
 
+    const tabOptions = guide[transaction?.payment_method as PaymentMethod]
+        ?.method as string[];
+
+    const tracker = useTracker();
+    function handleTabChange(tabNumber: number): void {
+        setTab(tabNumber);
+        tracker?.genericTrack('Click Payment Guide Tab', {
+            'Payment Type': tabOptions[tabNumber],
+            'Transaction ID': id
+        });
+    }
+
     return (
         <div className="w-full mt-4">
             <div className="w-full flex justify-between">
@@ -129,11 +142,8 @@ const TransactionGuide = (): JSX.Element => {
             </div>
             <TabOption
                 tab={tab}
-                setTab={setTab}
-                options={
-                    guide[transaction?.payment_method as PaymentMethod]
-                        ?.method as string[]
-                }
+                setTab={handleTabChange}
+                options={tabOptions}
             />
             <TabContent tab={tab} />
         </div>

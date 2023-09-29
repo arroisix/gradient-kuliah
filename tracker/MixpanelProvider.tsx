@@ -26,13 +26,57 @@ class MixpanelTracker implements Tracker {
         this.mixpanelInstance.track_pageview();
     }
 
-    identify(email: string, isSubscribed: boolean): void {
+    identify({
+        email,
+        isSubscribed,
+        fullName,
+        phoneNumber
+    }: {
+        email: string;
+        fullName: string;
+        phoneNumber: string;
+        isSubscribed: boolean;
+    }): void {
         this.mixpanelInstance.identify(email);
-        this.mixpanelInstance.people.set({ Subscribed: isSubscribed });
+        this.mixpanelInstance.people.set({
+            $email: email,
+            $name: fullName,
+            $phone: phoneNumber,
+            Subscribed: isSubscribed
+        });
     }
 
     reset(): void {
         this.mixpanelInstance.reset();
+    }
+
+    genericTrack(
+        eventName: string,
+        payload?: Record<string, any> | undefined
+    ): void {
+        this.mixpanelInstance.track(eventName, payload);
+    }
+
+    trackButtonClick(
+        eventName: string,
+        buttonTextContent: string,
+        payload?: Record<string, any>
+    ): void {
+        this.genericTrack(`[BUTTON CLICK]: ${eventName}`, {
+            ...(payload ?? {}),
+            'Button Content': buttonTextContent
+        });
+    }
+
+    trackAttemptFormSubmit(
+        eventName: string,
+        formPayload: Record<string, any>,
+        payload: Record<string, any> = {}
+    ): void {
+        this.genericTrack(`[FORM SUBMIT ATTEMPT]: ${eventName}`, {
+            'Form Data': formPayload,
+            ...payload
+        });
     }
 }
 

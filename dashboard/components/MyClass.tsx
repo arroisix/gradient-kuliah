@@ -5,6 +5,7 @@ import { useGetStudentCourseQuery } from 'dashboard/redux/api/dashboardApi';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { HiChevronDown, HiOutlinePlusSm } from 'react-icons/hi';
+import { useTracker } from 'tracker/tracker';
 
 const MyClass = ({ className }: { className?: string }): JSX.Element => {
     const router = useRouter();
@@ -73,6 +74,7 @@ const ListMyClass = ({
     courses?: StudentCourse[];
 }): JSX.Element => {
     const router = useRouter();
+    const tracker = useTracker();
 
     return (
         <div className="flex flex-col gap-3">
@@ -80,7 +82,12 @@ const ListMyClass = ({
                 <div
                     key={course_slug}
                     className="w-full bg-[#121212] hover:bg-accent-purple py-2 px-4 rounded-[20px] cursor-pointer transition-all"
-                    onClick={() => router.push(`/kelas/${course_slug}`)}
+                    onClick={() => {
+                        router.push(`/kelas/${course_slug}`);
+                        tracker?.genericTrack('Click My Class Pill', {
+                            'Course Slug': course_slug
+                        });
+                    }}
                     aria-hidden={true}>
                     <span className="font-body text-sm">{course_name}</span>
                 </div>

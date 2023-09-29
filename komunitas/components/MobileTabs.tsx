@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-import { posthog } from 'posthog-js';
 
 const MobileTabs = (): JSX.Element => {
     const router = useRouter();
@@ -14,7 +13,7 @@ const MobileTabs = (): JSX.Element => {
                         : 'border-[#2D2D2D] font-medium text-neutral-600'
                 }`}
                 onClick={() => {
-                    posthog.capture('Visit Community Explore Page');
+                    //posthog.capture('Visit Community Explore Page');
                     router.push('/komunitas', undefined, { shallow: true });
                 }}
                 aria-hidden>
@@ -27,7 +26,7 @@ const MobileTabs = (): JSX.Element => {
                         : 'border-[#2D2D2D] font-medium text-neutral-600'
                 }`}
                 onClick={() => {
-                    posthog.capture('Visit Community Pertanyaanku Page');
+                    //posthog.capture('Visit Community Pertanyaanku Page');
                     router.push('/komunitas/pertanyaan-ku', undefined, {
                         shallow: true
                     });

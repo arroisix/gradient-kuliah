@@ -6,7 +6,6 @@ import {
     usePostQuestionAnswerMutation
 } from 'komunitas/redux/api/komunitasApi';
 import { useRouter } from 'next/router';
-import { posthog } from 'posthog-js';
 import {
     Dispatch,
     ReactNode,
@@ -18,6 +17,7 @@ import {
     useState
 } from 'react';
 import { toast } from 'react-toastify';
+import { useTracker } from 'tracker/tracker';
 
 interface KomunitasContextType {
     dataHome?: CommunityPostResponse & {
@@ -126,8 +126,9 @@ export function KomunitasProvider({
     const [postCommunity, { isLoading: isLoadingPost }] =
         usePostQuestionAnswerMutation();
 
+    const tracker = useTracker();
     function handleSearch(): void {
-        posthog.capture('Search Community Post', { QUERY: search });
+        tracker?.genericTrack('Search Community Post', { Query: search });
         setSearchState(search);
         setPage(1);
         router.push(pathname);

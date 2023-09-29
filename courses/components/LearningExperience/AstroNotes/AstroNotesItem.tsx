@@ -1,14 +1,12 @@
 import { useRouter } from 'next/router';
 import { useLearning } from 'courses/contexts/LearningProvider';
 import Link from 'next/link';
-import { posthog } from 'posthog-js';
 import { FaFilePdf, FaLock } from 'react-icons/fa';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import { AUTHENTICATION_ROUTE } from 'commons/constants';
 
 const MainTitle = ({
     sub,
-    astro,
     extraCallback
 }: {
     sub: SubChapter;
@@ -25,11 +23,11 @@ const MainTitle = ({
             return (
                 <button
                     onClick={() => {
-                        posthog.capture(`Click Astronotes Link`, {
-                            Subchapter: sub.subchapter_name,
-                            Chapter: astro.chapter_name,
-                            URL: sub?.notebook?.notebook_url
-                        });
+                        //posthog.capture(`Click Astronotes Link`, {
+                        //    Subchapter: sub.subchapter_name,
+                        //    Chapter: astro.chapter_name,
+                        //    URL: sub?.notebook?.notebook_url
+                        //});
                         extraCallback && extraCallback();
                     }}
                     key={sub.id}
@@ -56,13 +54,6 @@ const MainTitle = ({
 
         return (
             <a
-                onClick={() =>
-                    posthog.capture(`Click Astronotes Link`, {
-                        Subchapter: sub.subchapter_name,
-                        Chapter: astro.chapter_name,
-                        URL: sub?.notebook?.notebook_url
-                    })
-                }
                 className={`${
                     notionId === sub?.notebook?.notion_id &&
                     !router.asPath.includes('#')
@@ -94,11 +85,11 @@ const MainTitle = ({
             } hover:underline cursor-pointer flex items-center gap-2 text-left`}
             key={sub.id}
             onClick={() => {
-                posthog.capture(`Click Astronotes Link`, {
-                    Subchapter: sub.subchapter_name,
-                    Chapter: astro.chapter_name,
-                    URL: sub?.notebook?.notebook_url
-                });
+                //posthog.capture(`Click Astronotes Link`, {
+                //    Subchapter: sub.subchapter_name,
+                //    Chapter: astro.chapter_name,
+                //    URL: sub?.notebook?.notebook_url
+                //});
                 router.push(AUTHENTICATION_ROUTE);
             }}>
             <FaFilePdf />
@@ -128,11 +119,11 @@ const SubTitle = ({
             return (
                 <button
                     onClick={() => {
-                        posthog.capture(`Click Astronotes Link`, {
-                            Subchapter: sub.subchapter_name,
-                            Chapter: astro.chapter_name,
-                            URL: sub?.notebook?.notebook_url
-                        });
+                        //posthog.capture(`Click Astronotes Link`, {
+                        //    Subchapter: sub.subchapter_name,
+                        //    Chapter: astro.chapter_name,
+                        //    URL: sub?.notebook?.notebook_url
+                        //});
                         extraCallback && extraCallback();
                     }}
                     key={sub.id}
@@ -164,11 +155,11 @@ const SubTitle = ({
                 } hover:underline cursor-pointer flex items-center gap-2 text-left`}
                 key={sub.id}
                 onClick={() => {
-                    posthog.capture(`Click Astronotes Link`, {
-                        Subchapter: sub.subchapter_name,
-                        Chapter: astro.chapter_name,
-                        URL: sub?.notebook?.notebook_url
-                    });
+                    //posthog.capture(`Click Astronotes Link`, {
+                    //    Subchapter: sub.subchapter_name,
+                    //    Chapter: astro.chapter_name,
+                    //    URL: sub?.notebook?.notebook_url
+                    //});
                     router.push(AUTHENTICATION_ROUTE);
                 }}>
                 <FaFilePdf />

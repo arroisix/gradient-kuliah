@@ -32,6 +32,8 @@ import {
     useGetBookProgressQuery,
     usePostBookmarksMutation
 } from 'courses/redux/api/astronotesApi';
+import { useTracker } from 'tracker/tracker';
+import { useDebouncedCallback } from 'use-debounce';
 
 const Navbar = ({
     paymentPage,
@@ -47,6 +49,8 @@ const Navbar = ({
     showSidebar?: boolean;
     fullHeightSidebar?: boolean;
 }): JSX.Element => {
+    const tracker = useTracker();
+
     const { isMobileBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { profile } = useContext(AuthContext);
@@ -161,7 +165,13 @@ const Navbar = ({
         }
     };
 
+    const trackProfileNameClickOrHover = useDebouncedCallback(
+        () => tracker?.genericTrack('Click/Hover Profile Name'),
+        1000
+    );
+
     const onMouseEnterProfile = (): void => {
+        trackProfileNameClickOrHover();
         setHovered(false);
         setProfileHovered(true);
     };
@@ -169,6 +179,10 @@ const Navbar = ({
     const onMouseEnterOther = (): void => {
         setHovered(false);
         setProfileHovered(false);
+    };
+
+    const onClickLoginLink = (): void => {
+        tracker?.trackButtonClick('Login Button on Navbar', 'Masuk');
     };
 
     return (
@@ -245,7 +259,8 @@ const Navbar = ({
                     <Button
                         variant="primary"
                         target="__blank"
-                        href="https://www.instagram.com/gradient_idn/">
+                        href="https://www.instagram.com/gradient_idn/"
+                        eventName="Contact Us Button">
                         <span className="flex items-center">
                             <FaInstagram className="mr-2" /> Hubungi Kami
                         </span>
@@ -337,7 +352,13 @@ const Navbar = ({
                                                 ? 'block'
                                                 : 'hidden'
                                         }`}>
-                                        <Link href={'/profil'}>
+                                        <Link
+                                            href={'/profil'}
+                                            onClick={() => {
+                                                tracker?.genericTrack(
+                                                    'Click Profile'
+                                                );
+                                            }}>
                                             <div
                                                 className={`flex ${pickedColorScheme.color} hover:bg-[#1D1D1D] px-2 py-3 rounded-sm font-normal w-full items-center`}>
                                                 <div>
@@ -350,7 +371,13 @@ const Navbar = ({
                                                 </div>
                                             </div>
                                         </Link>
-                                        <Link href={'/transaksi'}>
+                                        <Link
+                                            href={'/transaksi'}
+                                            onClick={() => {
+                                                tracker?.genericTrack(
+                                                    'Click Transaction History Menu'
+                                                );
+                                            }}>
                                             <div
                                                 className={`flex ${pickedColorScheme.color} hover:bg-[#1D1D1D] px-2 py-3 rounded-sm font-normal w-full items-center`}>
                                                 <div>
@@ -366,7 +393,13 @@ const Navbar = ({
                                                 </div>
                                             </div>
                                         </Link>
-                                        <Link href={'/referral'}>
+                                        <Link
+                                            href={'/referral'}
+                                            onClick={() => {
+                                                tracker?.genericTrack(
+                                                    'Click Referral Menu'
+                                                );
+                                            }}>
                                             <div
                                                 className={`flex ${pickedColorScheme.color} hover:bg-[#1D1D1D] px-2 py-3 rounded-sm font-normal w-full items-center`}>
                                                 <div>
@@ -381,9 +414,12 @@ const Navbar = ({
                                         </Link>
                                         <div
                                             className="flex items-center w-full font-normal text-accent-orange hover:bg-[#1D1D1D] px-2 py-3 rounded-sm"
-                                            onClick={() =>
-                                                dispatch(removeUser())
-                                            }
+                                            onClick={() => {
+                                                tracker?.genericTrack(
+                                                    'Click Logout'
+                                                );
+                                                dispatch(removeUser());
+                                            }}
                                             aria-hidden>
                                             <div>
                                                 <MdLogout className="text-2xl" />
@@ -397,7 +433,9 @@ const Navbar = ({
                                     </div>
                                 </nav>
                             ) : (
-                                <Link href={AUTHENTICATION_ROUTE}>
+                                <Link
+                                    href={AUTHENTICATION_ROUTE}
+                                    onClick={onClickLoginLink}>
                                     <nav className="ml-12 cursor-pointer">
                                         Masuk
                                     </nav>
@@ -413,7 +451,9 @@ const Navbar = ({
                                             Kelas
                                         </nav>
                                     </Link>
-                                    <Link href={AUTHENTICATION_ROUTE}>
+                                    <Link
+                                        href={AUTHENTICATION_ROUTE}
+                                        onClick={onClickLoginLink}>
                                         <nav className="flex items-center text-base font-bold">
                                             Masuk
                                         </nav>

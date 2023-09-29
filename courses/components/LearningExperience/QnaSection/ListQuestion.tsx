@@ -9,6 +9,9 @@ import Image from 'next/image';
 import useQnaQuestionInfiniteScroll from 'courses/hooks/useQnaQuestionInfiniteScroll';
 import useQnaAnswerInfiniteScroll from 'courses/hooks/useQnaAnswerInfiniteScroll';
 import Button from 'commons/components/elements/Button';
+import { useTracker } from 'tracker/tracker';
+import { useRouter } from 'next/router';
+import { useLearning } from 'courses/contexts/LearningProvider';
 
 const TextContent = dynamic(import('./TextContent'), {
     ssr: false
@@ -82,6 +85,10 @@ const ListAnswerContainer = ({
 };
 
 const QuestionItem = ({ question }: { question: QnaQuestion }): JSX.Element => {
+    const tracker = useTracker();
+    const router = useRouter();
+    const { subchapter } = useLearning();
+
     const [showTextArea, setShowTextArea] = useState(false);
     const [showAnswer, setShowAnswer] = useState(false);
     const ref = useRef({} as HTMLDivElement);
@@ -135,6 +142,16 @@ const QuestionItem = ({ question }: { question: QnaQuestion }): JSX.Element => {
                         <div
                             className="flex gap-1 items-center text-accent-blue cursor-pointer"
                             onClick={() => {
+                                if (!showAnswer) {
+                                    tracker?.genericTrack(
+                                        'Click Answer Count Button',
+                                        {
+                                            'Course Slug': router.query.id,
+                                            'Video Name':
+                                                subchapter?.subchapter_name
+                                        }
+                                    );
+                                }
                                 setShowAnswer(!showAnswer);
                                 setShowTextArea(!showTextArea);
                             }}
@@ -152,6 +169,14 @@ const QuestionItem = ({ question }: { question: QnaQuestion }): JSX.Element => {
                             if (showTextArea) {
                                 setShowTextArea(false);
                             } else {
+                                tracker?.genericTrack(
+                                    'Click Answer Count Button',
+                                    {
+                                        'Course Slug': router.query.id,
+                                        'Video Name':
+                                            subchapter?.subchapter_name
+                                    }
+                                );
                                 setShowTextArea(true);
                                 setShowAnswer(true);
                             }

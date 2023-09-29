@@ -33,6 +33,9 @@ import { MixpanelProvider } from 'tracker/MixpanelProvider';
 const store = useStore();
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
+    //usePosthog('phc_QeqOZr67qAfgO3mWBQzRHUXbJeDIycKDu2a0NOuGYVj', {
+    //    api_host: 'https://app.posthog.com'
+    //});
     const loadClientSideOnlyLibrary = async (): Promise<void> => {
         const TagManager = await import('react-gtm-module');
         // @ts-ignore

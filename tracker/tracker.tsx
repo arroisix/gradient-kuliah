@@ -1,16 +1,52 @@
+import { useRouter } from 'next/router';
 import React, {
     createContext,
     PropsWithChildren,
     useContext,
+    useEffect,
     useState
 } from 'react';
-import useTrackPageView from './useTrackPageView';
 
 export interface Tracker {
     trackPageView(): void;
-    identify(email: string, isSubscribed: boolean): void;
+    identify(info: {
+        email: string;
+        fullName: string;
+        phoneNumber: string;
+        isSubscribed: boolean;
+    }): void;
     reset(): void;
+    genericTrack(eventName: string, payload?: Record<string, any>): void;
+    trackButtonClick(
+        eventName: string,
+        buttonTextContent: string,
+        payload?: Record<string, any>
+    ): void;
+    trackAttemptFormSubmit(
+        eventName: string,
+        formPayload: Record<string, any>,
+        payload?: Record<string, any>
+    ): void;
 }
+
+const useTrackPageView = (tracker: Tracker): void => {
+    const router = useRouter();
+
+    useEffect(() => {
+        // track initial page load
+        tracker.trackPageView();
+    }, [tracker]);
+
+    useEffect(() => {
+        // track subsequent page visit
+        const handleRouteChange = () => tracker.trackPageView();
+        router.events.on('routeChangeComplete', handleRouteChange);
+
+        return () => {
+            router.events.off('routeChangeComplete', handleRouteChange);
+        };
+    }, [tracker, router.events]);
+};
 
 const TrackerContext = createContext<Tracker | null>(null);
 

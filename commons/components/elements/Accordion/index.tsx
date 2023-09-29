@@ -5,6 +5,7 @@ interface AccordionItemProps {
     title: string;
     content?: string;
     jsxContent?: JSX.Element;
+    onClick?: () => void;
 }
 
 interface AccordionProps {
@@ -14,7 +15,8 @@ interface AccordionProps {
 export const AccordionItem = ({
     title,
     content,
-    jsxContent
+    jsxContent,
+    onClick
 }: AccordionItemProps): JSX.Element => {
     const [open, setOpen] = useState(false);
 
@@ -41,7 +43,10 @@ export const AccordionItem = ({
                     open ? 'rounded-t-lg' : 'rounded-lg'
                 }`}
                 role="alert"
-                onClick={() => setOpen(!open)}
+                onClick={() => {
+                    setOpen(!open);
+                    onClick?.();
+                }}
                 aria-hidden="true">
                 {title}
                 {open ? <FaChevronUp /> : <FaChevronDown />}
@@ -60,6 +65,7 @@ const Accordion = ({ item }: AccordionProps): JSX.Element => {
                     jsxContent={i.jsxContent}
                     title={i.title}
                     key={i.title}
+                    onClick={i.onClick}
                 />
             ))}
         </div>
