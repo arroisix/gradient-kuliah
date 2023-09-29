@@ -94,6 +94,7 @@ const TabContent = ({ tab }: { tab: number }) => {
 };
 
 const TransactionGuide = (): JSX.Element => {
+    const tracker = useTracker();
     const router = useRouter();
     const { id } = router.query;
     const { data: transaction, isLoading } = useGetTransactionQuery(
@@ -113,7 +114,6 @@ const TransactionGuide = (): JSX.Element => {
     const tabOptions = guide[transaction?.payment_method as PaymentMethod]
         ?.method as string[];
 
-    const tracker = useTracker();
     function handleTabChange(tabNumber: number): void {
         setTab(tabNumber);
         tracker?.genericTrack('Click Payment Guide Tab', {

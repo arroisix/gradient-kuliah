@@ -7,9 +7,12 @@ import { useSelector } from 'react-redux';
 import LoadingBackdrop from './components/elements/LoadingBackdrop';
 import { useRouter } from 'next/router';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { getDisplayName } from './utils';
 
 const withAuth = (WrappedComponent: React.ComponentType) => {
-    return (props: JSX.IntrinsicAttributes & { children?: JSX.Element }) => {
+    const WithAuth = (
+        props: JSX.IntrinsicAttributes & { children?: JSX.Element }
+    ): JSX.Element | undefined => {
         // checks whether we are on client / browser or server.
         if (typeof window !== 'undefined') {
             const { pathname } = useRouter();
@@ -85,6 +88,9 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
         }
         return <LoadingBackdrop />;
     };
+
+    WithAuth.displayName = getDisplayName(WrappedComponent);
+    return WithAuth;
 };
 
 export default withAuth;

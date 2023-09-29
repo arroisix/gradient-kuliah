@@ -22,8 +22,18 @@ class MixpanelTracker implements Tracker {
         this.mixpanelInstance = mixpanel;
     }
 
-    trackPageView(query?: Record<string, any>): void {
-        this.mixpanelInstance.track_pageview(query);
+    trackPageView(pageName: string, query?: Record<string, any>): void {
+        const mappedPageName = this.mapComponentNameWithPageName(pageName);
+        this.mixpanelInstance.track_pageview(
+            {
+                Page: mappedPageName,
+                'Page Query': query
+            },
+            // This feature is undocumented, so the type is missing
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            { event_name: `Visit ${mappedPageName} Page` }
+        );
     }
 
     identify({
@@ -78,13 +88,53 @@ class MixpanelTracker implements Tracker {
             ...payload
         });
     }
+
+    mapComponentNameWithPageName(componentName: string): string {
+        switch (componentName) {
+            case 'Home':
+                return 'Main Landing';
+            case 'ListClass':
+                return 'Classes';
+            case 'DetailKelas':
+                return 'Course Landing';
+            case 'Registration':
+                return 'Register';
+            case 'Payment':
+                return 'Payment Method';
+            case 'SuccessCheckout':
+                return 'Success Checkout';
+            case 'Transaction':
+                return 'Transaction History';
+            case 'Komunitas':
+                return 'Community Explore';
+            case 'PertanyaanKu':
+                return 'Community Pertanyaanku';
+            case 'Belajar':
+                return 'Watch Video';
+            case 'GeneralProfile':
+                return 'General Profile';
+            case 'EducationProfile':
+                return 'Education Profile';
+            case 'PersonalData':
+                return 'Biodata Profile';
+            case 'AstroNotesPage':
+                return 'Books Reader';
+            default:
+                return componentName;
+        }
+    }
 }
 
 const trackerInstance = new MixpanelTracker();
 
-export function MixpanelProvider({ children }: PropsWithChildren): JSX.Element {
+export function MixpanelProvider({
+    children,
+    pageComponentName
+}: PropsWithChildren<{ pageComponentName: string }>): JSX.Element {
     return (
-        <TrackerProvider initialTracker={trackerInstance}>
+        <TrackerProvider
+            initialTracker={trackerInstance}
+            pageComponentName={pageComponentName}>
             {children}
         </TrackerProvider>
     );

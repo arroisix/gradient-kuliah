@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-const Success = (): JSX.Element => {
+const SuccessCheckout = (): JSX.Element => {
     const router = useRouter();
     useEffect(() => {
         const timer1 = setTimeout(() => router.push('/dashboard'), 5000);
@@ -30,4 +30,4 @@ const Success = (): JSX.Element => {
     );
 };
 
-export default withAuth(Success);
+export default withAuth(SuccessCheckout);

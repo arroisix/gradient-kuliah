@@ -34,6 +34,7 @@ const DetailKelas = ({
     );
 };
 
+DetailKelas.displayName = 'DetailKelas';
 export default DetailKelas;
 
 export const getStaticPaths: GetStaticPaths = async () => {
