@@ -10,27 +10,43 @@ export const ASTRONOTES_MENU: AstronotesMenuItem[] = [
     {
         icon: <MdFormatListBulleted size={18} />,
         label: 'Daftar Isi',
-        value: 'LIST_CONTENT'
+        value: 'LIST_CONTENT',
+        eventNames: {
+            open: 'Open Books List of Content Menu',
+            close: 'Close Books List of Content Menu'
+        }
     },
     {
         icon: <MdLibraryBooks size={18} />,
         label: 'Bookmark',
-        value: 'BOOKMARK'
+        value: 'BOOKMARK',
+        eventNames: {
+            click: 'Click Bookmark Menu'
+        }
     },
     {
         icon: <AiOutlineFontColors size={18} />,
         label: 'Opsi Tampilan',
-        value: 'SETTING'
+        value: 'SETTING',
+        eventNames: {
+            click: 'Click UI Settings Menu'
+        }
     },
     {
         icon: <MdStarPurple500 size={18} />,
         label: 'Beri Penilaian',
-        value: 'RATING'
+        value: 'RATING',
+        eventNames: {
+            click: 'Click Rating Menu'
+        }
     },
     {
         icon: <RiQuestionLine size={18} />,
         label: 'Bantuan & Masukan',
-        value: 'FEEDBACK'
+        value: 'FEEDBACK',
+        eventNames: {
+            click: 'Click Feedback Menu'
+        }
     }
 ];
 

@@ -9,9 +9,15 @@ import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 
-type BookmarkItemProps = { data: Bookmark };
+type BookmarkItemProps = {
+    data: Bookmark;
+    onClick?: (show: boolean) => void;
+};
 
-export const BookmarkItem = ({ data }: BookmarkItemProps): JSX.Element => {
+export const BookmarkItem = ({
+    data,
+    onClick
+}: BookmarkItemProps): JSX.Element => {
     const router = useRouter();
     const { slug } = router.query;
 
@@ -28,7 +34,10 @@ export const BookmarkItem = ({ data }: BookmarkItemProps): JSX.Element => {
                     <input
                         type="checkbox"
                         checked={!isShow}
-                        onChange={() => setIsShow((prev) => !prev)}
+                        onChange={() => {
+                            onClick?.(!isShow);
+                            setIsShow((prev) => !prev);
+                        }}
                         className="hidden"
                     />
                     <FaChevronRight size={12} className="swap-on" />

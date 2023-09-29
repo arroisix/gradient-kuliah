@@ -7,8 +7,11 @@ import { usePostRatingMutation } from 'courses/redux/api/astronotesApi';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { useTracker } from 'tracker/tracker';
 
 const RatingModal = (): JSX.Element => {
+    const tracker = useTracker();
+
     const { isModalRatingOpen, setIsModalRatingOpen } = useAstronotes();
     const { theme } = useThemeContext();
 
@@ -16,7 +19,7 @@ const RatingModal = (): JSX.Element => {
     const CONSTANT_RATING = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
     const router = useRouter();
-    const { slug } = router.query;
+    const { slug, page } = router.query;
     const [postRating, { isLoading, isSuccess }] = usePostRatingMutation();
 
     useEffect(() => {
@@ -65,9 +68,18 @@ const RatingModal = (): JSX.Element => {
                     className="self-end px-12 text-sm"
                     size="small"
                     variant="primary"
-                    onClick={() =>
-                        postRating({ slug: slug as string, rate: rating / 2 })
-                    }>
+                    onClick={() => {
+                        const payload = {
+                            slug: slug as string,
+                            rate: rating / 2
+                        };
+                        tracker?.trackAttemptFormSubmit(
+                            'Book Rating',
+                            payload,
+                            { 'Book Slug': slug, 'Book Page Query': page }
+                        );
+                        postRating(payload);
+                    }}>
                     {isLoading ? (
                         <Spinner size="small" className="border-black" />
                     ) : (

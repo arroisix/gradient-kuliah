@@ -8,14 +8,17 @@ import { useRouter } from 'next/router';
 import React, { FormEvent, useEffect, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { toast } from 'react-toastify';
+import { useTracker } from 'tracker/tracker';
 
 const FeedbackModal = (): JSX.Element => {
+    const tracker = useTracker();
+
     const { isModalFeedbackOpen, setIsModalFeedbackOpen } = useAstronotes();
     const { theme } = useThemeContext();
     const [content, setContent] = useState('');
 
     const router = useRouter();
-    const { slug } = router.query;
+    const { slug, page } = router.query;
     const [postFeedback, { isLoading, isSuccess }] = usePostFeedbackMutation();
 
     function handleChange(event: React.ChangeEvent<HTMLTextAreaElement>): void {
@@ -24,10 +27,15 @@ const FeedbackModal = (): JSX.Element => {
 
     function handleSubmit(e: FormEvent<HTMLFormElement>): void {
         e.preventDefault();
-        postFeedback({
+        const payload = {
             slug: slug as string,
             feedback: content
+        };
+        tracker?.trackAttemptFormSubmit('Book Feedback', payload, {
+            'Book Slug': slug,
+            'Book Page Query': page
         });
+        postFeedback(payload);
     }
 
     useEffect(() => {

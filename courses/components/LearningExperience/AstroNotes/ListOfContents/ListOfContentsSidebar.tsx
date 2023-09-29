@@ -5,10 +5,12 @@ import React from 'react';
 import { IoMdClose } from 'react-icons/io';
 import ChapterContentItem from './ChapterContentItem';
 import { useAstronotes } from 'courses/contexts/AstronotesProvider';
+import { useTracker } from 'tracker/tracker';
 
 const ListOfContentsSidebar = (): JSX.Element => {
+    const tracker = useTracker();
     const router = useRouter();
-    const { slug } = router.query;
+    const { slug, page } = router.query;
     const { data, isLoading } = useGetTableContentsQuery(
         { slug: slug as string },
         { skip: !slug }
@@ -30,7 +32,22 @@ const ListOfContentsSidebar = (): JSX.Element => {
             <div className="overflow-y-auto max-h-[calc(100vh_-_10rem)] py-4 px-3 flex flex-col gap-2">
                 {isLoading && <Skeleton repeat={4} className="h-5 p-0 mb-0" />}
                 {data?.data?.map((value) => (
-                    <ChapterContentItem key={value.id} value={value} />
+                    <ChapterContentItem
+                        key={value.id}
+                        value={value}
+                        onClick={(show) => {
+                            if (show) {
+                                tracker?.genericTrack(
+                                    'Click Chapter List of Content',
+                                    {
+                                        'Book Slug': slug,
+                                        'Book Page Query': page,
+                                        'Chapter Name': value.title
+                                    }
+                                );
+                            }
+                        }}
+                    />
                 ))}
             </div>
         </div>

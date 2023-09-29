@@ -22,8 +22,8 @@ class MixpanelTracker implements Tracker {
         this.mixpanelInstance = mixpanel;
     }
 
-    trackPageView(): void {
-        this.mixpanelInstance.track_pageview();
+    trackPageView(query?: Record<string, any>): void {
+        this.mixpanelInstance.track_pageview(query);
     }
 
     identify({

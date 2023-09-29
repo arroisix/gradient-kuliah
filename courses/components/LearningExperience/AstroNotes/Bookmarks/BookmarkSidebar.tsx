@@ -5,15 +5,18 @@ import React, { useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import BookmarkItem from './BookmarkItem';
 import { useAstronotes } from 'courses/contexts/AstronotesProvider';
+import { useTracker } from 'tracker/tracker';
 
 const BookmarkSidebar = (): JSX.Element => {
+    const tracker = useTracker();
+
     const { setNavigation } = useAstronotes();
     const [selected, setSelected] = useState<'HIGHLIGHT' | 'BOOKMARK'>(
         'BOOKMARK'
     );
 
     const router = useRouter();
-    const { slug } = router.query;
+    const { slug, page } = router.query;
     const { data: bookmarkData, isLoading: isLoadingBookmark } =
         useGetBookmarksQuery({ slug: slug as string }, { skip: !slug });
 
@@ -42,7 +45,21 @@ const BookmarkSidebar = (): JSX.Element => {
                     <Skeleton repeat={4} className="h-4 mb-0" />
                 ) : (
                     bookmarkData?.data?.map((value, index) => (
-                        <BookmarkItem key={index} data={value} />
+                        <BookmarkItem
+                            key={index}
+                            data={value}
+                            onClick={(show) => {
+                                if (show) {
+                                    tracker?.genericTrack(
+                                        'Click Bookmark Item',
+                                        {
+                                            'Book Slug': slug,
+                                            'Book Page Query': page
+                                        }
+                                    );
+                                }
+                            }}
+                        />
                     ))
                 )}
             </div>

@@ -1,12 +1,22 @@
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { FaChevronRight, FaChevronUp } from 'react-icons/fa';
+import { useTracker } from 'tracker/tracker';
 import SubChapterContentItem from './SubChapterContentItem';
 
-type ChapterContentItemProps = { value: BookChapter };
+type ChapterContentItemProps = {
+    value: BookChapter;
+    onClick?: (show: boolean) => void;
+};
 
 const ChapterContentItem = ({
-    value
+    value,
+    onClick
 }: ChapterContentItemProps): JSX.Element => {
+    const tracker = useTracker();
+    const router = useRouter();
+    const { slug, page } = router.query;
+
     const [isShow, setIsShow] = useState(false);
 
     return (
@@ -16,7 +26,10 @@ const ChapterContentItem = ({
                     <input
                         type="checkbox"
                         checked={!isShow}
-                        onChange={() => setIsShow((prev) => !prev)}
+                        onChange={() => {
+                            onClick?.(!isShow);
+                            setIsShow((prev) => !prev);
+                        }}
                         className="hidden"
                     />
                     <FaChevronRight size={12} className="swap-on" />
@@ -28,7 +41,20 @@ const ChapterContentItem = ({
             </label>
             {isShow && (
                 <div className="flex flex-col gap-1 pt-2 pl-4">
-                    <SubChapterContentItem chapterId={value.id} />
+                    <SubChapterContentItem
+                        chapterId={value.id}
+                        onClick={(subchapter) => {
+                            tracker?.genericTrack(
+                                'Click Subchapter List of Content',
+                                {
+                                    'Book Slug': slug,
+                                    'Book Page Query': page,
+                                    'Chapter Name': value.title,
+                                    'SubChapter Name': subchapter.title
+                                }
+                            );
+                        }}
+                    />
                 </div>
             )}
         </div>

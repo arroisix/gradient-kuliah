@@ -125,6 +125,15 @@ const Navbar = ({
     };
 
     const handleBookmark = (): void => {
+        const payload = {
+            'Book Slug': slug,
+            'Book Page Query': page
+        };
+        if (isBookmarked) {
+            tracker?.genericTrack('Remove Bookmark', payload);
+        } else {
+            tracker?.genericTrack('Add Bookmark', payload);
+        }
         postBookmark({
             slug: slug as string,
             page_order: bookProgressData?.current_page as number,

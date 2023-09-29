@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 
 export interface Tracker {
-    trackPageView(): void;
+    trackPageView(query?: Record<string, any>): void;
     identify(info: {
         email: string;
         fullName: string;
@@ -33,19 +33,24 @@ const useTrackPageView = (tracker: Tracker): void => {
     const router = useRouter();
 
     useEffect(() => {
-        // track initial page load
-        tracker.trackPageView();
-    }, [tracker]);
+        if (router.isReady) {
+            tracker.trackPageView(router.query);
+        }
+    }, [tracker, router.isReady]);
 
     useEffect(() => {
         // track subsequent page visit
-        const handleRouteChange = () => tracker.trackPageView();
+        const handleRouteChange = () => {
+            if (router.isReady) {
+                tracker.trackPageView(router.query);
+            }
+        };
         router.events.on('routeChangeComplete', handleRouteChange);
 
         return () => {
             router.events.off('routeChangeComplete', handleRouteChange);
         };
-    }, [tracker, router.events]);
+    }, [tracker, router.events, router.isReady]);
 };
 
 const TrackerContext = createContext<Tracker | null>(null);

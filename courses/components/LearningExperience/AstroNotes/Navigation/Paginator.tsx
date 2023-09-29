@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { pageSliderClassNames } from '../constants';
 import { useDebounce } from 'commons/hooks/useDebounce';
+import { useTracker } from 'tracker/tracker';
 
 interface PaginatorProps extends PropsWithClassName {
     currentPage: number;
@@ -17,6 +18,7 @@ const Paginator = ({
     isLoading,
     className
 }: PaginatorProps): JSX.Element => {
+    const tracker = useTracker();
     const router = useRouter();
     const { slug, page } = router.query;
     const MAX_VALUE = totalPage;
@@ -35,14 +37,28 @@ const Paginator = ({
 
     function handlePrev(): void {
         const pageNumber = Number(page);
-        if (pageNumber > 1)
+        if (pageNumber > 1) {
+            tracker?.genericTrack('Click Book Pagination', {
+                'Book Slug': slug,
+                'Book Page Query': page,
+                'Current Page': pageNumber,
+                'Target Page': pageNumber - 1
+            });
             router.push(`/astronotes/${slug}/${pageNumber - 1}`);
+        }
     }
 
     function handleNext(): void {
         const pageNumber = Number(page);
-        if (pageNumber < MAX_VALUE)
+        if (pageNumber < MAX_VALUE) {
+            tracker?.genericTrack('Click Book Pagination', {
+                'Book Slug': slug,
+                'Book Page Query': page,
+                'Current Page': pageNumber,
+                'Target Page': pageNumber + 1
+            });
             router.push(`/astronotes/${slug}/${pageNumber + 1}`);
+        }
     }
 
     return (
@@ -60,7 +76,14 @@ const Paginator = ({
                     min={1}
                     max={MAX_VALUE}
                     className={pageSliderClassNames}
-                    onChange={(e) => setPageNumber(e.target.valueAsNumber)}
+                    onChange={(e) => {
+                        tracker?.genericTrack('Slide Book Pagination', {
+                            'Book Slug': slug,
+                            'Book Page Query': page,
+                            'Target Page': e.target.valueAsNumber
+                        });
+                        setPageNumber(e.target.valueAsNumber);
+                    }}
                     value={pageNumber}
                 />
             </div>

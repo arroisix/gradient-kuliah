@@ -33,6 +33,7 @@ type AstronotesMenuItem = {
     icon: JSX.Element;
     label: string;
     value: NavigationTypes;
+    eventNames?: Record<string, string>;
 };
 
 interface GetBookChapterResponse {

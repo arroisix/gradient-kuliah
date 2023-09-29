@@ -11,10 +11,12 @@ import remarkMath from 'remark-math';
 
 type SubChapterContentItemProps = {
     chapterId: string;
+    onClick?: (subchapter: BookSubchapter) => void;
 };
 
 export const SubChapterContentItem = ({
-    chapterId
+    chapterId,
+    onClick
 }: SubChapterContentItemProps): JSX.Element => {
     const router = useRouter();
     const { slug } = router.query;
@@ -32,10 +34,11 @@ export const SubChapterContentItem = ({
         <>
             {subchapters?.data.map((subchapter: BookSubchapter) => (
                 <Link
+                    className="p-1 transition cursor-pointer text-neutral-600 dark:text-neutral-400 btn-ghost rounded-btn"
                     href={`/astronotes/${slug}/${subchapter.page_order}#${subchapter.id}`}
                     scroll={false}
                     key={subchapter.id}
-                    className="p-1 transition cursor-pointer text-neutral-600 dark:text-neutral-400 btn-ghost rounded-btn">
+                    onClick={() => onClick?.(subchapter)}>
                     <ReactMarkdown
                         className="markdown-body-sm markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height"
                         remarkPlugins={[remarkMath, remarkGfm]}
