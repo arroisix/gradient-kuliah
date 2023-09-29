@@ -5,7 +5,7 @@ const FreeBox = (): JSX.Element => {
     const { setModalCheckoutOpen } = usePayment();
 
     const onClick = (): void => {
-        setModalCheckoutOpen(1);
+        setModalCheckoutOpen(true);
     };
 
     return (

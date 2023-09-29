@@ -20,6 +20,7 @@ import moment from 'moment';
 import Modal from 'commons/components/modules/Modal';
 import ModalCourseFeedback from './ModalCourseFeedback';
 import SearchList from './SearchList';
+import { useTracker } from 'tracker/tracker';
 
 const AccordionVideo = ({
     chapters,
@@ -64,7 +65,8 @@ export const ListBooks = ({
     isLoading: boolean;
 }): JSX.Element => {
     const router = useRouter();
-    const { id } = router.query;
+    const tracker = useTracker();
+    // const { id } = router.query;
 
     return (
         <div className="flex flex-col gap-[14px]">
@@ -76,17 +78,21 @@ export const ListBooks = ({
                 </>
             )}
             {books?.map(
-                ({ book_id, title, authors, rating, book_cover_url }) => (
+                ({ book_id, title, authors, rating, book_cover_url, slug }) => (
                     <div
                         className="flex items-center gap-5 cursor-pointer"
                         key={book_id}
-                        onClick={() =>
-                            router.push(`/astronotes/${id}/${book_id}`)
-                        }
+                        onClick={() => {
+                            tracker?.genericTrack('Click Book Item', {
+                                'Course Slug': slug,
+                                'Book Title': title
+                            });
+                            router.push(`/astronotes/${slug}/1`);
+                        }}
                         aria-hidden>
                         <Image
                             src={
-                                book_cover_url ??
+                                book_cover_url ||
                                 'https://assets.gradient.academy/assets/astronotes-kalkulus2-placeholder.jpg'
                             }
                             width={79}
@@ -119,12 +125,15 @@ export const ListBooks = ({
 };
 
 const CourseDetailBox = (): JSX.Element => {
+    const tracker = useTracker();
+
     const [navigation, setNavigation] = useState<
         'VIDEO' | 'BOOK' | 'ON_SEARCH'
     >('VIDEO');
     const [isSearch, setIsSearch] = useState(false);
     const [search, setSearch] = useState('');
-    const [isModalFeedbackOpen, setIsModalFeedbackOpen] = useState<0 | 1>(0);
+    const [isModalFeedbackOpen, setIsModalFeedbackOpen] =
+        useState<boolean>(false);
 
     const { checkCustomBreakpoints } = useWindowBreakpoints();
     const anchor = useRef<HTMLDivElement>({} as HTMLDivElement);
@@ -167,6 +176,10 @@ const CourseDetailBox = (): JSX.Element => {
         type?: 'BOOK' | 'CHAPTER' | 'SUBCHAPTER';
         page?: number;
     }): void {
+        tracker?.genericTrack('Search Class Material', {
+            'Course Slug': id,
+            Query: search
+        });
         setNavigation('ON_SEARCH');
         triggerSearch({
             slug: id as string,
@@ -217,7 +230,13 @@ const CourseDetailBox = (): JSX.Element => {
                             <MdStarPurple500
                                 size={20}
                                 className="text-neutral-400 hover:text-white ml-auto mr-0 cursor-pointer"
-                                onClick={() => setIsModalFeedbackOpen(1)}
+                                onClick={() => {
+                                    tracker?.genericTrack(
+                                        'Click Give Rating Button',
+                                        { 'Course Slug': id }
+                                    );
+                                    setIsModalFeedbackOpen(true);
+                                }}
                             />
                         </div>
                     </div>
@@ -280,7 +299,13 @@ const CourseDetailBox = (): JSX.Element => {
                                             ? 'border-b-2 border-accent-purple'
                                             : 'text-neutral-600 border-none hover:text-neutral-500'
                                     }`}
-                                    onClick={() => setNavigation('VIDEO')}
+                                    onClick={() => {
+                                        tracker?.genericTrack(
+                                            'Click Video Tab - LMS',
+                                            { 'Course Slug': id }
+                                        );
+                                        setNavigation('VIDEO');
+                                    }}
                                     aria-hidden>
                                     VIDEO
                                 </span>
@@ -291,7 +316,13 @@ const CourseDetailBox = (): JSX.Element => {
                                                 ? 'border-b-2 border-accent-purple'
                                                 : 'text-neutral-600 border-none hover:text-neutral-500'
                                         }`}
-                                        onClick={() => setNavigation('BOOK')}
+                                        onClick={() => {
+                                            tracker?.genericTrack(
+                                                'Click Book Tab - LMS',
+                                                { 'Course Slug': id }
+                                            );
+                                            setNavigation('BOOK');
+                                        }}
                                         aria-hidden>
                                         BUKU
                                     </span>
@@ -323,6 +354,7 @@ const CourseDetailBox = (): JSX.Element => {
                         )}
                         {navigation === 'ON_SEARCH' && (
                             <SearchList
+                                searchQuery={search}
                                 searchResult={searchResult}
                                 handleSearch={handleSearch}
                                 isLoading={isSearchingLoading}

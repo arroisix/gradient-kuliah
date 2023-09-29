@@ -13,6 +13,7 @@ import {
 } from 'courses/redux/api/courseApi';
 import SearchList from '../CourseDetailBox/SearchList';
 import { useRouter } from 'next/router';
+import { useTracker } from 'tracker/tracker';
 
 const SylabbusContent = ({
     id,
@@ -29,6 +30,7 @@ const SylabbusContent = ({
             })
         }
     );
+    const tracker = useTracker();
 
     return (
         <div className="flex flex-col gap-2">
@@ -67,7 +69,14 @@ const SylabbusContent = ({
             {subchapters?.map((subchapter: SubChapter) => (
                 <Link
                     key={subchapter.id}
-                    href={`/kelas/${slug}/belajar/video/${id}/${subchapter.id}`}>
+                    href={`/kelas/${slug}/belajar/video/${id}/${subchapter.id}`}
+                    onClick={() => {
+                        tracker?.genericTrack('Click SubChapter Video Item', {
+                            'Course Slug': slug,
+                            'Chapter Name': id,
+                            'Sub Chapter Name': subchapter.subchapter_name
+                        });
+                    }}>
                     <button className="flex items-center gap-4 w-full relative">
                         <div className="h-[98px] min-w-[163px]">
                             <img
@@ -118,6 +127,7 @@ const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
     const [navigation, setNavigation] = useState<
         'VIDEO' | 'BOOK' | 'EXAM' | 'ON_SEARCH'
     >('VIDEO');
+    const tracker = useTracker();
 
     function handleSearch({
         type,
@@ -138,6 +148,10 @@ const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
     function keyDown(): void {
         setIsSearch(true);
         handleSearch({});
+        tracker?.genericTrack('Search Class Material', {
+            'Course Slug': slug,
+            Query: search
+        });
     }
 
     return (
@@ -183,7 +197,10 @@ const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
                                     ? 'border-b-2 border-[#C4B9FF] font-extrabold text-[#C4B9FF]'
                                     : 'font-medium text-[#CCCCCC] border-b border-[#272727] hover:text-neutral-500'
                             }`}
-                            onClick={() => setNavigation('VIDEO')}
+                            onClick={() => {
+                                tracker?.genericTrack('Click Video Tab');
+                                setNavigation('VIDEO');
+                            }}
                             aria-hidden>
                             VIDEO
                         </span>
@@ -193,7 +210,10 @@ const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
                                     ? 'border-b-2 border-[#C4B9FF] font-extrabold text-[#C4B9FF]'
                                     : 'font-medium text-[#CCCCCC] border-b border-[#272727] hover:text-neutral-500'
                             }`}
-                            onClick={() => setNavigation('BOOK')}
+                            onClick={() => {
+                                tracker?.genericTrack('Click Book Tab');
+                                setNavigation('BOOK');
+                            }}
                             aria-hidden>
                             BUKU
                         </span>
@@ -211,7 +231,16 @@ const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
                                         id={value.chapter_id}
                                         slug={slug}
                                     />
-                                )
+                                ),
+                                onClick: () => {
+                                    tracker?.genericTrack(
+                                        'Click Chapter Accordion',
+                                        {
+                                            'Course Slug': id,
+                                            'Chapter Name': value.chapter_name
+                                        }
+                                    );
+                                }
                             })) ?? []
                         }
                     />
@@ -234,6 +263,7 @@ const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
             )}
             {navigation === 'ON_SEARCH' && (
                 <SearchList
+                    searchQuery={search}
                     searchResult={searchResult}
                     handleSearch={handleSearch}
                     isLoading={isSearchingLoading}

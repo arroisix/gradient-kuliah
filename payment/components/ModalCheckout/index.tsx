@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import Spinner from 'commons/components/elements/Spinner';
 import { useValidatePromoMutation } from 'referral/redux/referalApi';
+import { useTracker } from 'tracker/tracker';
 
 const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
     const [inputCode, setInputCode] = useState('');
@@ -24,6 +25,13 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
             ? activePacket.getDate() + packet?.active_duration
             : 0
     );
+
+    const tracker = useTracker();
+    useEffect(() => {
+        tracker?.genericTrack('Get Payment Confirmation Prompt', {
+            'Method Name': paymentMethod
+        });
+    }, []);
 
     useEffect(() => {
         let getData: NodeJS.Timeout;
@@ -42,6 +50,15 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
         validate({
             promo_code: inputCode,
             packet_id: packet?.id as string
+        }).then((res) => {
+            if ('error' in res) return;
+
+            if (res.data.is_valid) {
+                tracker?.genericTrack('Enter Promo Code', {
+                    'Method Name': paymentMethod,
+                    'Promo Code': inputCode
+                });
+            }
         });
 
         setLoadingValidate(false);
@@ -61,10 +78,17 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
         }
     }
 
+    function handleCloseModal(state: boolean): void {
+        tracker?.genericTrack('Close Payment Confirmation Prompt', {
+            'Method Name': paymentMethod
+        });
+        setOpen(state);
+    }
+
     return (
         <Modal
-            isOpen={isOpen ? 1 : 0}
-            setOpen={() => setOpen(0)}
+            isOpen={isOpen}
+            setOpen={handleCloseModal}
             variant="dark"
             className="!bg-[#1D1D1D]">
             <div className="w-full flex flex-col mb-4">

@@ -8,8 +8,11 @@ import {
     useProfileContext
 } from 'profile/contexts/ProfileProvider';
 import { toast } from 'react-toastify';
+import { useTracker } from 'tracker/tracker';
 
 export const PersonalDataForm = (): JSX.Element => {
+    const tracker = useTracker();
+
     const { isLoading, updateUser, profile } = useProfileContext();
     return (
         <Formik
@@ -39,6 +42,11 @@ export const PersonalDataForm = (): JSX.Element => {
                         ''
                     );
                 }
+
+                tracker?.trackAttemptFormSubmit(
+                    'Biodata Profile Data',
+                    payload
+                );
 
                 const result = await updateUser(payload);
 

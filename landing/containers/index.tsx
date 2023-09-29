@@ -17,7 +17,10 @@ export default function LandingContainer({
             <Feature />
             <Testimony />
             <Certificate />
-            <Pricing pricingData={pricingData} />
+            <Pricing
+                pricingData={pricingData}
+                ctaEventName="Pricing Button on Main Landing Page"
+            />
         </div>
     );
 }

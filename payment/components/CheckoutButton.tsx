@@ -70,7 +70,7 @@ const CheckoutButton = ({
             }
         }
 
-        setModalCheckoutOpen(0);
+        setModalCheckoutOpen(false);
         setLoading(false);
     };
 
@@ -96,7 +96,9 @@ const CheckoutButton = ({
             variant="primary"
             onClick={isFree ? onClickFree : onClick}
             className="w-full"
-            disabled={disabled}>
+            disabled={disabled}
+            eventName="Process Payment Button"
+            eventPayload={{ 'Method Name': paymentMethod }}>
             {loading ? 'Memproses Pembayaran...' : 'Proses Pembayaran'}
         </Button>
     );

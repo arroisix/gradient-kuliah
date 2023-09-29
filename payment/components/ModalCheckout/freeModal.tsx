@@ -11,10 +11,7 @@ const FreeModalCheckout = ({
     const { packet, paymentMethod } = usePayment();
 
     return (
-        <Modal
-            isOpen={isOpen ? 1 : 0}
-            setOpen={() => setOpen(0)}
-            variant="dark">
+        <Modal isOpen={isOpen} setOpen={() => setOpen(false)} variant="dark">
             <div className="w-full flex flex-col mb-4">
                 <h1 className="text-xl  font-bold">Konfirmasi Pembayaran</h1>
             </div>

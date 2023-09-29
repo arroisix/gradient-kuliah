@@ -7,20 +7,21 @@ import { useState } from 'react';
 import { FaPlay } from 'react-icons/fa';
 import { HiCheck, HiOutlineChevronDown, HiPlay } from 'react-icons/hi';
 import { IoIosCheckmarkCircle } from 'react-icons/io';
+import { useTracker } from 'tracker/tracker';
 import WorksheetInfoModalContent from '../LearningExperience/ExamExercise/WorksheetInfoModal';
 
 const ExerciseItem = ({ value }: { value: SubChapter }): JSX.Element => {
     const router = useRouter();
     const { sub } = router.query;
 
-    const [openWorksheetInfo, setOpenWorksheetInfo] = useState<0 | 1>(0);
+    const [openWorksheetInfo, setOpenWorksheetInfo] = useState<boolean>(false);
 
     return (
         <>
             <div
                 key={value.id}
                 className="flex justify-between px-3 py-[10px] cursor-pointer hover:bg-[#272727]"
-                onClick={() => setOpenWorksheetInfo(1)}
+                onClick={() => setOpenWorksheetInfo(true)}
                 aria-hidden>
                 <div
                     className={`flex items-center gap-[10px] ${
@@ -54,6 +55,7 @@ const VideoItem = ({
     value: SubChapter;
     chapter_id: string;
 }): JSX.Element => {
+    const tracker = useTracker();
     const router = useRouter();
     const { id, sub } = router.query;
 
@@ -76,11 +78,16 @@ const VideoItem = ({
         <div
             key={value.id}
             className="flex justify-between px-3 py-[10px] cursor-pointer hover:bg-[#272727]"
-            onClick={() =>
+            onClick={() => {
+                tracker?.genericTrack('Click Video Item', {
+                    'Course Slug': id,
+                    'Video Title': value.subchapter_name,
+                    'Chapter ID': chapter_id
+                });
                 router.push(
                     `/kelas/${id}/belajar/video/${chapter_id}/${value.id}`
-                )
-            }
+                );
+            }}
             aria-hidden>
             <div
                 className={`flex items-center gap-[10px] ${
@@ -223,9 +230,13 @@ const Collapse = ({
                 {!isLoading &&
                     data?.subchapters?.map((value) =>
                         value.type === 'video' ? (
-                            <VideoItem value={value} chapter_id={chapter_id} />
+                            <VideoItem
+                                key={value.id}
+                                value={value}
+                                chapter_id={chapter_id}
+                            />
                         ) : (
-                            <ExerciseItem value={value} />
+                            <ExerciseItem key={value.id} value={value} />
                         )
                     )}
             </div>

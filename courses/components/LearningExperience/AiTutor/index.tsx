@@ -2,10 +2,11 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import ChatRoom from './ChatRoom';
 import TutorButton from './TutorButton';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
+import { useTracker } from 'tracker/tracker';
 
 interface AiTutorProps {
     uniqueId: string;
-    setIsShowModal: Dispatch<SetStateAction<0 | 1>>;
+    setIsShowModal: Dispatch<SetStateAction<boolean>>;
     setFeedbackStatus: Dispatch<
         SetStateAction<{
             status: 'NOT_HELPING' | 'HELPING' | 'NOT_SELECTED';
@@ -19,6 +20,8 @@ const AiTutor = ({
     setIsShowModal,
     setFeedbackStatus
 }: AiTutorProps): JSX.Element => {
+    const tracker = useTracker();
+
     const [openChatRoom, setOpenChatRoom] = useState(false);
 
     const { isMobileBreakpoints } = useWindowBreakpoints();
@@ -39,7 +42,12 @@ const AiTutor = ({
                 />
             )}
             {!isMobileBreakpoints || (isMobileBreakpoints && !openChatRoom) ? (
-                <TutorButton onClick={() => setOpenChatRoom((prev) => !prev)} />
+                <TutorButton
+                    onClick={() => {
+                        tracker?.genericTrack('Click Ask Copilot Button');
+                        setOpenChatRoom((prev) => !prev);
+                    }}
+                />
             ) : (
                 <></>
             )}

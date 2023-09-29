@@ -33,7 +33,7 @@ const VideoLearnContainer = (): JSX.Element => {
     const { video, subchapter } = useLearning();
     const { height: videoHeight, ref: videoRef } =
         useElementSize<HTMLDivElement>();
-    const [isShowModal, setIsShowModal] = useState<0 | 1>(0);
+    const [isShowModal, setIsShowModal] = useState<boolean>(false);
     const [feedbackStatus, setFeedbackStatus] = useState<{
         status: 'NOT_HELPING' | 'HELPING' | 'NOT_SELECTED';
         answer_id: string;

@@ -4,24 +4,30 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useRef } from 'react';
 import { FaChevronRight } from 'react-icons/fa';
+import { useTracker } from 'tracker/tracker';
 
 const ClassCard = ({
     cover,
     title,
     description,
-    slug
+    slug,
+    onClick
 }: {
     cover: string;
     title: string;
     description: string;
     slug: string;
+    onClick?: () => void;
 }): JSX.Element => {
     const router = useRouter();
 
     return (
         <div
             className="relative w-fit snap-center bg-[#5F2BCE33] rounded-3xl overflow-hidden cursor-pointer"
-            onClick={() => router.push(`/kelas/${slug}`)}
+            onClick={() => {
+                onClick?.();
+                router.push(`/kelas/${slug}`);
+            }}
             aria-hidden>
             <div className="relative w-[208px] h-[142px] md:h-[225px] md:w-[330px]">
                 <Image
@@ -48,6 +54,8 @@ const ClassCard = ({
 };
 
 const AnotherClass = (): JSX.Element => {
+    const tracker = useTracker();
+
     const ref = useRef<HTMLDivElement>(null);
     const router = useRouter();
     const { id } = router.query;
@@ -114,6 +122,15 @@ const AnotherClass = (): JSX.Element => {
                                 title={course_name}
                                 description={short_description}
                                 slug={slug}
+                                onClick={() => {
+                                    tracker?.genericTrack(
+                                        'Click Other Class Card',
+                                        {
+                                            'Course Slug': id,
+                                            'Target Course Slug': slug
+                                        }
+                                    );
+                                }}
                             />
                         )
                     )}

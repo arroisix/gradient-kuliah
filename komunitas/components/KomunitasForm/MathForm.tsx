@@ -5,7 +5,6 @@ import TextareaAutosize from 'react-textarea-autosize';
 import { ChangeEvent, useRef, useState } from 'react';
 import Button from 'commons/components/elements/Button';
 import { MATH_NOTATION } from './constant';
-import { posthog } from 'posthog-js';
 
 const MathForm = ({
     setFormContent
@@ -27,8 +26,6 @@ const MathForm = ({
     }
 
     function handleAddMathContent(): void {
-        posthog.capture('Click "Sisipkan" Button');
-
         setFormContent(
             (prev) =>
                 prev +
@@ -104,7 +101,8 @@ const MathForm = ({
                     <Button
                         variant="custom"
                         className="!font-semibold text-xs px-[12px] py-[5px] bg-[#373737]"
-                        onClick={handleAddMathContent}>
+                        onClick={handleAddMathContent}
+                        eventName='"Sisipkan" Button'>
                         Sisipkan
                     </Button>
                 </div>

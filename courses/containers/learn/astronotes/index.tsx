@@ -1,71 +1,66 @@
-import AstroNotesItem from 'courses/components/LearningExperience/AstroNotes/AstroNotesItem';
-import usePublicCourseNotebook from 'courses/hooks/usePublicCourseNotebook';
-import { getAllNotebookChapter } from 'courses/utils';
-import { useRouter } from 'next/router';
+import useElementSize from 'commons/hooks/useElementSize';
+import AstronotesNavigation from 'courses/components/LearningExperience/AstroNotes/Navigation/AstronotesNavigation';
+import AstronotesSidebar from 'courses/components/LearningExperience/AstroNotes/Sidebar/AstronotesSidebar';
+import AstroNotesContent from 'courses/components/LearningExperience/AstroNotes/AstroNotesContent';
+import { AstronotesProvider } from 'courses/contexts/AstronotesProvider';
+import RatingModal from 'courses/components/LearningExperience/AstroNotes/Sidebar/RatingModal';
+import FeedbackModal from 'courses/components/LearningExperience/AstroNotes/Sidebar/FeedbackModal';
 
-const NotebookIndex = (): JSX.Element => {
-    const router = useRouter();
-    const { id } = router.query;
-    const { data, loading } = usePublicCourseNotebook(id as string);
-    const notebook = getAllNotebookChapter(data?.chapters as Chapter[]);
-
-    const renderNotebook = (): JSX.Element => {
-        if (loading) {
-            return (
-                <div className="w-full flex flex-col gap-4">
-                    <div className="w-full flex flex-col gap-2">
-                        <div className="p-4 w-72 bg-neutral-600 animate-pulse rounded-md" />
-                        <div className="p-2 w-64 bg-neutral-600 animate-pulse rounded-md" />
-                        <div className="p-2 w-64 bg-neutral-600 animate-pulse rounded-md" />
-                    </div>
-                    <div className="w-full flex flex-col gap-2">
-                        <div className="p-4 w-72 bg-neutral-600 animate-pulse rounded-md" />
-                        <div className="p-2 w-64 bg-neutral-600 animate-pulse rounded-md" />
-                        <div className="p-2 w-64 bg-neutral-600 animate-pulse rounded-md" />
-                    </div>
-                    <div className="w-full flex flex-col gap-2">
-                        <div className="p-4 w-72 bg-neutral-600 animate-pulse rounded-md" />
-                        <div className="p-2 w-64 bg-neutral-600 animate-pulse rounded-md" />
-                        <div className="p-2 w-64 bg-neutral-600 animate-pulse rounded-md" />
-                    </div>
-                </div>
-            );
-        }
-
-        if (!loading && notebook?.length === 0) {
-            return <span>AstroNotes belum tersedia :(</span>;
-        }
-
-        return (
-            <>
-                {notebook?.map((astro: Chapter) => (
-                    <AstroNotesItem astro={astro} key={astro.id} />
-                ))}
-            </>
-        );
-    };
+const Astronotes = (): JSX.Element => {
+    const { width: notebookWidth, ref: notebookRef } =
+        useElementSize<HTMLDivElement>();
 
     return (
-        <section className="pt-[65px] min-h-[100vh] flex flex-col md:flex-row relative md:overflow-x-hidden overflow-y-auto md:h-[100vh] bg-white text-black">
-            <div className="md:px-32 md:py-8 p-4 w-full">
-                <div className="flex flex-col gap-4 mb-4">
-                    <h1 className="text-2xl md:text-4xl font-bold break-word flex gap-1 items-center">
-                        AstroNotes:{' '}
-                        {loading ? (
-                            <div className="p-4 w-64 bg-neutral-600 animate-pulse rounded-lg" />
-                        ) : (
-                            data?.course_name
-                        )}
-                    </h1>
-                    <h3 className="text-neutral-400">Oleh Gradient</h3>
-                    <div className="w-full h-px bg-neutral-400" />
+        <AstronotesProvider>
+            <section className="relative flex flex-col px-4 pb-4 text-black bg-white overflow-x-clip md:flex-row md:gap-2 dark:bg-black dark:text-white">
+                {/* TODO(angga): removed until higher in priority
+                
+                {highlighted && (
+                    <AstronotesContextMenu
+                        points={points}
+                        setHighlighted={setHighlighted}
+                        transform={`translateX(${points.width / 2 - 92}px)`}>
+                        <HighlightContextMenu
+                            dataHighlighted={
+                                dataHighlighted as DataHighlightedInterface
+                            }
+                            setHighlighted={setHighlighted}
+                        />
+                    </AstronotesContextMenu>
+                )}
+                {removeHighlighted && (
+                    <AstronotesContextMenu
+                        points={points}
+                        setHighlighted={setRemoveHighlighted}
+                        transform={`translateY(-30px)`}>
+                        <RemoveHighlightContextMenu
+                            points={points}
+                            setRemoveHighlighted={setRemoveHighlighted}
+                            highlightId={highlightId}
+                            setHighlightId={setHighlightId}
+                        />
+                    </AstronotesContextMenu>
+                )} */}
+                <aside className="items-stretch h-[calc(100vh_-_6rem)] hidden gap-2 sticky top-20 md:flex">
+                    <AstronotesSidebar />
+                </aside>
+                <div
+                    className="w-full min-h-screen pt-20 mt-5 mb-12 md:ml-6"
+                    ref={notebookRef}>
+                    <div className="w-full max-w-5xl mx-auto sm:px-4">
+                        <AstroNotesContent />
+                    </div>
                 </div>
-                <div className="flex flex-col gap-4 pb-32">
-                    {renderNotebook()}
+                <div
+                    className="fixed inset-x-0 bottom-0 px-4 pt-2 pb-4 bg-white md:pb-6 md:pt-4 md:left-auto md:right-0 dark:bg-black"
+                    style={{ minWidth: notebookWidth }}>
+                    <AstronotesNavigation />
                 </div>
-            </div>
-        </section>
+                <RatingModal />
+                <FeedbackModal />
+            </section>
+        </AstronotesProvider>
     );
 };
 
-export default NotebookIndex;
+export default Astronotes;

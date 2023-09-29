@@ -3,7 +3,6 @@ import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useGetCommunityNotificationQuery } from 'komunitas/redux/api/komunitasApi';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { posthog } from 'posthog-js';
 import React from 'react';
 import { BiBookReader } from 'react-icons/bi';
 import { FiHome } from 'react-icons/fi';
@@ -12,6 +11,7 @@ import {
     // RiNotification3Line,
     // RiBookOpenLine
 } from 'react-icons/ri';
+import { useTracker } from 'tracker/tracker';
 
 const Sidebar = ({
     fullHeight,
@@ -26,6 +26,8 @@ const Sidebar = ({
 
     const { data: configData } = useGetConfigQuery();
     const { data: communityNotification } = useGetCommunityNotificationQuery();
+
+    const tracker = useTracker();
 
     return (
         <aside
@@ -44,7 +46,15 @@ const Sidebar = ({
                         Notifikasi
                     </span>
                 </Link> */}
-                <Link href={'/dashboard'}>
+                <Link
+                    href={'/dashboard'}
+                    onClick={() => {
+                        tracker?.genericTrack(
+                            `Click Home ${
+                                !fullHeight ? 'Course ' : ''
+                            }Navigation`
+                        );
+                    }}>
                     <span
                         className={`flex gap-4 cursor-pointer ${
                             pathname.includes('/dashboard')
@@ -64,13 +74,12 @@ const Sidebar = ({
                                     : 'text-[#666666]'
                             }  font-body text-sm hover:text-[#999999]`}
                             onClick={() => {
-                                posthog.capture(
-                                    'Visit Community Explore Page',
-                                    {
-                                        description: 'User visit Community Page'
-                                    }
-                                );
                                 route.push('/komunitas');
+                                tracker?.genericTrack(
+                                    `Click Community ${
+                                        !fullHeight ? 'Course ' : ''
+                                    }Navigation`
+                                );
                             }}
                             aria-hidden>
                             <RiQuestionnaireLine size={20} />
@@ -88,7 +97,15 @@ const Sidebar = ({
                             )}
                         </span>
                     )}
-                <Link href={'/kelas'}>
+                <Link
+                    href={'/kelas'}
+                    onClick={() => {
+                        tracker?.genericTrack(
+                            `Click Class ${
+                                !fullHeight ? 'Course ' : ''
+                            }Navigation`
+                        );
+                    }}>
                     <span
                         className={`flex gap-4 cursor-pointer ${
                             pathname.includes('/kelas')

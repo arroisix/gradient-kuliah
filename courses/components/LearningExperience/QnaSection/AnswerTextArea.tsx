@@ -1,5 +1,8 @@
+import { useLearning } from 'courses/contexts/LearningProvider';
 import { usePostAnswerMutation } from 'courses/redux/api/learningExperienceApi';
 import { Formik } from 'formik';
+import { useRouter } from 'next/router';
+import { useTracker } from 'tracker/tracker';
 
 import QnaTextArea from './TextArea';
 
@@ -16,6 +19,10 @@ const AnswerTextArea = ({
     questionId: string;
     onCancel: () => void;
 }): JSX.Element => {
+    const tracker = useTracker();
+    const router = useRouter();
+    const { subchapter } = useLearning();
+
     const [postAnswer, {}] = usePostAnswerMutation();
 
     return (
@@ -34,10 +41,19 @@ const AnswerTextArea = ({
                 return errors;
             }}
             onSubmit={async (values, { resetForm }) => {
-                await postAnswer({
+                const payload = {
                     ...values,
                     question_id: questionId
-                });
+                };
+                tracker?.trackAttemptFormSubmit(
+                    'Answer on Video QnA',
+                    payload,
+                    {
+                        'Course Slug': router.query.id,
+                        'Video Title': subchapter?.subchapter_name
+                    }
+                );
+                await postAnswer(payload);
 
                 resetForm({
                     values: {

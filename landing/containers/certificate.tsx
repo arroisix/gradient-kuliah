@@ -27,7 +27,9 @@ const Certificate = (): JSX.Element => {
                 <Link href={'#pricing'}>
                     <Button
                         variant="primary"
-                        className="w-fit mx-auto md:m-0 px-6 py-3 text-base">
+                        className="w-fit mx-auto md:m-0 px-6 py-3 text-base"
+                        eventName="Landing Page CTA"
+                        eventPayload={{ 'Section Name': 'Certificate' }}>
                         Gabung Sekarang
                     </Button>
                 </Link>

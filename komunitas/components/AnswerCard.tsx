@@ -16,9 +16,8 @@ import {
     usePostQuestionAnswerMutation
 } from 'komunitas/redux/api/komunitasApi';
 import AuthContext from 'authentication/contexts/AuthProvider';
-import { posthog } from 'posthog-js';
-import { isNotNullAndUndefined } from 'commons/utils';
 import Skeleton from 'commons/components/elements/Skeleton';
+import { useTracker } from 'tracker/tracker';
 
 type Student = {
     id: string;
@@ -65,6 +64,7 @@ const AnswerCard = ({
         setComment(event.target.value);
     }
 
+    const tracker = useTracker();
     async function handleSubmitComment(): Promise<void> {
         await postComment({
             post_id: id,
@@ -73,9 +73,9 @@ const AnswerCard = ({
             attachment_urls: []
         });
 
-        posthog.capture('Submit Answer Comment on Community', {
-            POST_ID: questionId,
-            ANSWER_ID: id
+        tracker?.genericTrack('Submit Answer Comment on Community', {
+            'Post ID': questionId,
+            'Answer ID': id
         });
 
         setComment('');
@@ -92,11 +92,12 @@ const AnswerCard = ({
             <div className="flex justify-between items-center gap-4">
                 <div className="flex items-center gap-3">
                     <div className="relative w-[24px] h-[24px]">
-                        {isNotNullAndUndefined(student?.photo_url) &&
+                        {student?.photo_url != null &&
+                        student.photo_url.length > 0 &&
                         !authorImageError ? (
                             <Image
-                                src={student?.photo_url ?? ''}
-                                alt={student?.username}
+                                src={student.photo_url}
+                                alt={student.username}
                                 layout="fill"
                                 className="rounded-full object-contain"
                                 onError={() => setAuthorImageError(true)}
@@ -155,11 +156,12 @@ const AnswerCard = ({
             <div className="flex flex-col gap-6 border-t-[1px] border-[#272727] pt-[18px]">
                 <div className="flex gap-3 items-center">
                     <div className="relative w-[24px] h-[24px]">
-                        {isNotNullAndUndefined(profile?.photo_profile) &&
+                        {profile?.photo_profile != null &&
+                        profile?.photo_profile.length > 0 &&
                         !myImageError ? (
                             <Image
-                                src={profile?.photo_profile as string}
-                                alt={profile?.username}
+                                src={profile.photo_profile}
+                                alt={profile.username}
                                 layout="fill"
                                 className="rounded-full object-contain"
                                 onError={() => setMyImageError(true)}

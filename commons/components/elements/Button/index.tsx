@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import { onlyText } from 'commons/utils';
 import Link from 'next/link';
+import { MouseEventHandler } from 'react';
+import { useTracker } from 'tracker/tracker';
+import { ButtonProps } from './button';
 
 const BUTTON_THEME: { [key: string]: string } = {
     primary: 'bg-accent-purple rounded-full text-white font-body',
@@ -28,8 +32,22 @@ const Button = ({
     type,
     target,
     disabled,
-    id
+    id,
+    eventName,
+    eventPayload
 }: ButtonProps): JSX.Element => {
+    const tracker = useTracker();
+    const handleClick: MouseEventHandler<any> = (e) => {
+        onClick?.(e);
+        if (eventName) {
+            tracker?.trackButtonClick(
+                eventName,
+                onlyText(children),
+                eventPayload
+            );
+        }
+    };
+
     const computeVariant = (): string => {
         let styling = 'font-bold cursor-pointer';
 
@@ -50,7 +68,7 @@ const Button = ({
 
     if (target) {
         return (
-            <a href={href} target={target} id={id}>
+            <a href={href} target={target} id={id} onClick={handleClick}>
                 <div
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
@@ -80,7 +98,7 @@ const Button = ({
             type={type}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
-            onClick={onClick}
+            onClick={handleClick}
             disabled={disabled}
             id={id}
             className={computeVariant()}>

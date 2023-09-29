@@ -29,8 +29,8 @@ const VideoPreview = ({
 }): JSX.Element => {
     return (
         <Modal
-            isOpen={isOpen ? 1 : 0}
-            setOpen={(status: number) => setOpen(status === 1)}
+            isOpen={isOpen}
+            setOpen={(status: boolean) => setOpen(status)}
             isPopup
             variant="dark"
             className="w-[100vw] lg:w-[60vw] flex justify-center items-center">

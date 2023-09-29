@@ -10,7 +10,7 @@ import {
     MdOutlinePersonOutline
 } from 'react-icons/md';
 import useWindowSize from 'commons/hooks/useWindowSize';
-import { renderName } from 'commons/utils';
+import { isNotNullAndUndefined, renderName } from 'commons/utils';
 import MobileNavbar from './mobile';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -27,6 +27,13 @@ import Image from 'next/image';
 import AuthContext from 'authentication/contexts/AuthProvider';
 import { HiOutlineUsers } from 'react-icons/hi';
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
+import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
+import {
+    useGetBookProgressQuery,
+    usePostBookmarksMutation
+} from 'courses/redux/api/astronotesApi';
+import { useTracker } from 'tracker/tracker';
+import { useDebouncedCallback } from 'use-debounce';
 
 const Navbar = ({
     paymentPage,
@@ -42,6 +49,8 @@ const Navbar = ({
     showSidebar?: boolean;
     fullHeightSidebar?: boolean;
 }): JSX.Element => {
+    const tracker = useTracker();
+
     const { isMobileBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { profile } = useContext(AuthContext);
@@ -51,12 +60,14 @@ const Navbar = ({
     const [isProfileHovered, setProfileHovered] = useState(false);
     const [openMobile, setOpenMobile] = useState(false);
     const [openSidebar, setOpenSidebar] = useState(false);
+    const [isBookmarked, setIsBookmarked] = useState(false);
     const pickedColorScheme = {
         bgColor: lightMode ? 'bg-white' : 'bg-black',
         color: lightMode ? 'text-black' : 'text-white'
     };
     const { height } = useWindowSize();
     const router = useRouter();
+    const { slug, page } = router?.query;
     const dispatch = useDispatch();
     const [scrollPosition, setScrollPosition] = useState(0);
     const handleScroll = (): void => {
@@ -64,6 +75,19 @@ const Navbar = ({
         setScrollPosition(position);
     };
     const { data: configData } = useGetConfigQuery();
+    const { data: bookProgressData, isLoading: isBookProgressLoading } =
+        useGetBookProgressQuery(
+            { slug: slug as string, page: page as unknown as number },
+            {
+                skip:
+                    !isNotNullAndUndefined(slug) || !isNotNullAndUndefined(page)
+            }
+        );
+    const [postBookmark] = usePostBookmarksMutation();
+
+    useEffect(() => {
+        setIsBookmarked(bookProgressData?.is_bookmarked as boolean);
+    }, [bookProgressData]);
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll, { passive: true });
@@ -100,6 +124,24 @@ const Navbar = ({
         return lightMode ? 'bg-white text-black shadow-md' : 'bg-[#171717]';
     };
 
+    const handleBookmark = (): void => {
+        const payload = {
+            'Book Slug': slug,
+            'Book Page Query': page
+        };
+        if (isBookmarked) {
+            tracker?.genericTrack('Remove Bookmark', payload);
+        } else {
+            tracker?.genericTrack('Add Bookmark', payload);
+        }
+        postBookmark({
+            slug: slug as string,
+            page_order: bookProgressData?.current_page as number,
+            is_active: !isBookmarked
+        });
+        setIsBookmarked((prev) => !prev);
+    };
+
     const isShowNavbarMenu = (): boolean => {
         if (
             router.pathname.includes('kelas/[id]/') ||
@@ -132,7 +174,13 @@ const Navbar = ({
         }
     };
 
+    const trackProfileNameClickOrHover = useDebouncedCallback(
+        () => tracker?.genericTrack('Click/Hover Profile Name'),
+        1000
+    );
+
     const onMouseEnterProfile = (): void => {
+        trackProfileNameClickOrHover();
         setHovered(false);
         setProfileHovered(true);
     };
@@ -142,13 +190,17 @@ const Navbar = ({
         setProfileHovered(false);
     };
 
+    const onClickLoginLink = (): void => {
+        tracker?.trackButtonClick('Login Button on Navbar', 'Masuk');
+    };
+
     return (
         <header
             className={`fixed top-0 left-0 w-full z-20 ${computeBgColor()} transition-all ease-in-out duration-200`}
             onMouseEnter={() => setNavbarHovered(true)}
             onMouseLeave={onMouseLeaveNavbar}>
             <div className="flex items-center justify-between w-full px-4 py-4 md:px-6">
-                <div className="flex gap-4 items-center">
+                <div className="flex items-center gap-4">
                     {isAuthenticated && (
                         <FiMenu
                             className="md:hidden"
@@ -216,7 +268,8 @@ const Navbar = ({
                     <Button
                         variant="primary"
                         target="__blank"
-                        href="https://www.instagram.com/gradient_idn/">
+                        href="https://www.instagram.com/gradient_idn/"
+                        eventName="Contact Us Button">
                         <span className="flex items-center">
                             <FaInstagram className="mr-2" /> Hubungi Kami
                         </span>
@@ -236,6 +289,22 @@ const Navbar = ({
                             {isAuthenticated ? (
                                 <nav
                                     className={`ml-12 flex gap-6 cursor-pointer relative`}>
+                                    {router.pathname.includes('astronotes') &&
+                                        !isBookProgressLoading && (
+                                            <button onClick={handleBookmark}>
+                                                {isBookmarked ? (
+                                                    <BsBookmarkFill
+                                                        size={18}
+                                                        className="text-[#999999]"
+                                                    />
+                                                ) : (
+                                                    <BsBookmark
+                                                        size={18}
+                                                        className="text-[#999999]"
+                                                    />
+                                                )}
+                                            </button>
+                                        )}
                                     {router.pathname === '/' && (
                                         <Link href="/kelas">
                                             <nav
@@ -292,7 +361,13 @@ const Navbar = ({
                                                 ? 'block'
                                                 : 'hidden'
                                         }`}>
-                                        <Link href={'/profil'}>
+                                        <Link
+                                            href={'/profil'}
+                                            onClick={() => {
+                                                tracker?.genericTrack(
+                                                    'Click Profile'
+                                                );
+                                            }}>
                                             <div
                                                 className={`flex ${pickedColorScheme.color} hover:bg-[#1D1D1D] px-2 py-3 rounded-sm font-normal w-full items-center`}>
                                                 <div>
@@ -305,7 +380,13 @@ const Navbar = ({
                                                 </div>
                                             </div>
                                         </Link>
-                                        <Link href={'/transaksi'}>
+                                        <Link
+                                            href={'/transaksi'}
+                                            onClick={() => {
+                                                tracker?.genericTrack(
+                                                    'Click Transaction History Menu'
+                                                );
+                                            }}>
                                             <div
                                                 className={`flex ${pickedColorScheme.color} hover:bg-[#1D1D1D] px-2 py-3 rounded-sm font-normal w-full items-center`}>
                                                 <div>
@@ -321,7 +402,13 @@ const Navbar = ({
                                                 </div>
                                             </div>
                                         </Link>
-                                        <Link href={'/referral'}>
+                                        <Link
+                                            href={'/referral'}
+                                            onClick={() => {
+                                                tracker?.genericTrack(
+                                                    'Click Referral Menu'
+                                                );
+                                            }}>
                                             <div
                                                 className={`flex ${pickedColorScheme.color} hover:bg-[#1D1D1D] px-2 py-3 rounded-sm font-normal w-full items-center`}>
                                                 <div>
@@ -336,9 +423,12 @@ const Navbar = ({
                                         </Link>
                                         <div
                                             className="flex items-center w-full font-normal text-accent-orange hover:bg-[#1D1D1D] px-2 py-3 rounded-sm"
-                                            onClick={() =>
-                                                dispatch(removeUser())
-                                            }
+                                            onClick={() => {
+                                                tracker?.genericTrack(
+                                                    'Click Logout'
+                                                );
+                                                dispatch(removeUser());
+                                            }}
                                             aria-hidden>
                                             <div>
                                                 <MdLogout className="text-2xl" />
@@ -352,7 +442,9 @@ const Navbar = ({
                                     </div>
                                 </nav>
                             ) : (
-                                <Link href={AUTHENTICATION_ROUTE}>
+                                <Link
+                                    href={AUTHENTICATION_ROUTE}
+                                    onClick={onClickLoginLink}>
                                     <nav className="ml-12 cursor-pointer">
                                         Masuk
                                     </nav>
@@ -368,7 +460,9 @@ const Navbar = ({
                                             Kelas
                                         </nav>
                                     </Link>
-                                    <Link href={AUTHENTICATION_ROUTE}>
+                                    <Link
+                                        href={AUTHENTICATION_ROUTE}
+                                        onClick={onClickLoginLink}>
                                         <nav className="flex items-center text-base font-bold">
                                             Masuk
                                         </nav>
@@ -379,7 +473,7 @@ const Navbar = ({
                                     {router.pathname === '/' && (
                                         <Link href="/kelas">
                                             <nav
-                                                className="font-bold text-sm ml-12 cursor-pointer hover:text-accent-blue"
+                                                className="ml-12 text-sm font-bold cursor-pointer hover:text-accent-blue"
                                                 onMouseEnter={
                                                     onMouseEnterOther
                                                 }>
@@ -387,6 +481,22 @@ const Navbar = ({
                                             </nav>
                                         </Link>
                                     )}
+                                    {router.pathname.includes('astronotes') &&
+                                        !isBookProgressLoading && (
+                                            <button onClick={handleBookmark}>
+                                                {isBookmarked ? (
+                                                    <BsBookmarkFill
+                                                        size={18}
+                                                        className="text-[#999999]"
+                                                    />
+                                                ) : (
+                                                    <BsBookmark
+                                                        size={18}
+                                                        className="text-[#999999]"
+                                                    />
+                                                )}
+                                            </button>
+                                        )}
                                     <button
                                         className="flex items-center text-base font-bold"
                                         onClick={() =>

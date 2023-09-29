@@ -13,7 +13,7 @@ const AiModalFeedback = ({
         status: 'NOT_HELPING' | 'HELPING' | 'NOT_SELECTED';
         answer_id: string;
     };
-    setOpen: Dispatch<SetStateAction<0 | 1>>;
+    setOpen: Dispatch<SetStateAction<boolean>>;
 }): JSX.Element => {
     const [content, setContent] = useState('');
 
@@ -34,7 +34,7 @@ const AiModalFeedback = ({
 
     useEffect(() => {
         if (isSuccess) {
-            setOpen(0);
+            setOpen(false);
         }
     }, [isSuccess, setOpen]);
 

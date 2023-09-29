@@ -20,12 +20,12 @@ const Modal = ({
     dialog = false,
     variant = 'light'
 }: ModalProps): JSX.Element => {
-    if (isOpen > 0) {
+    if (isOpen) {
         return (
             <div
                 aria-hidden={true}
-                className="fixed h-screen w-screen bg-black bg-opacity-75 flex items-center justify-center top-0 left-0 z-[100000] shadow-sm"
-                onClick={permanent ? undefined : () => setOpen(0)}>
+                className="fixed inset-0 z-50 flex items-center justify-center shadow-sm bg-black/75"
+                onClick={permanent ? undefined : () => setOpen(false)}>
                 <div
                     aria-hidden={true}
                     className={`relative p-4 rounded-md z-100 ${
@@ -41,7 +41,7 @@ const Modal = ({
                             className={`absolute top-4 right-4 cursor-pointer font-bold text-xl ${
                                 variant === 'dark' && 'text-white'
                             }`}
-                            onClick={() => setOpen(0)}
+                            onClick={() => setOpen(false)}
                         />
                     )}
                     {children}

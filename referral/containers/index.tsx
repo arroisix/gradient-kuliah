@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import DisclosureTutorial from 'referral/components/DisclosureTutorial';
 import Menu from 'referral/components/Menu';
 import { useGetReferralQuery } from 'referral/redux/referalApi';
+import { useTracker } from 'tracker/tracker';
 
 const ReferralContainer = (): JSX.Element => {
     const router = useRouter();
@@ -32,6 +33,8 @@ const ReferralContainer = (): JSX.Element => {
             theme: 'colored'
         });
     }
+
+    const tracker = useTracker();
 
     return (
         <section className="flex flex-col gap-6 w-full md:w-[70%] max-w-[725px] mx-auto pt-[96px] pb-5">
@@ -69,13 +72,21 @@ const ReferralContainer = (): JSX.Element => {
                         <Button
                             variant="custom"
                             className="relative w-[80px] md:w-[105px] !p-0 !py-[7.5px] font-bold text-xs bg-[#272727]"
-                            onClick={handleCopy}>
+                            onClick={handleCopy}
+                            eventName="Copy Referral Button"
+                            eventPayload={{
+                                'Referral Code': data?.referral_code
+                            }}>
                             Salin
                         </Button>
                         <Button
                             variant="primary"
                             className="w-[80px] md:w-[105px] !p-0 !py-[7.5px] font-bold text-xs"
-                            onClick={handleShare}>
+                            onClick={handleShare}
+                            eventName="Share Referral Button"
+                            eventPayload={{
+                                'Referral Code': data?.referral_code
+                            }}>
                             Bagikan
                         </Button>
                     </div>
@@ -96,6 +107,13 @@ const ReferralContainer = (): JSX.Element => {
                 />
                 <DisclosureTutorial
                     content={data?.config.referral_instruction as string}
+                    onIsOpenChange={(isOpen) => {
+                        if (isOpen) {
+                            tracker?.genericTrack(
+                                'Click How To User Referral Code Guide'
+                            );
+                        }
+                    }}
                 />
             </div>
         </section>

@@ -8,10 +8,9 @@ import {
     useRef
 } from 'react';
 import Avatar from 'react-avatar';
-import useUploadFile from 'commons/hooks/useUploadFile';
 import TextareaAutosize from 'react-textarea-autosize';
 import AdvanceForm from './AdvanceForm';
-import { IoMdClose } from 'react-icons/io';
+import AttachmentForm from './AttachmentForm';
 
 const KomunitasForm = ({
     formContent,
@@ -50,8 +49,6 @@ const KomunitasForm = ({
 
     const formRef = useRef<HTMLTextAreaElement>(null);
 
-    const { uploadFile } = useUploadFile(bucketKey);
-
     function handleChange(event: ChangeEvent<HTMLTextAreaElement>): void {
         setFormContent(event.target.value);
     }
@@ -61,36 +58,8 @@ const KomunitasForm = ({
             setCategory(event.target.value);
         }
     }
-
-    async function handleInputFile(
-        event: ChangeEvent<HTMLInputElement>
-    ): Promise<void> {
-        const files: File[] = [];
-
-        if (event.target.files) {
-            for (let i = 0; i < event?.target?.files.length; ++i) {
-                const file = event?.target?.files[i];
-
-                files.push(file);
-                setAttachmentName([file.name, ...attachmentName]);
-            }
-        }
-        const res = await uploadFile(files);
-        if (res) {
-            setAttachmentUrl([...res, ...attachmentUrl]);
-        }
-    }
-
     return (
         <div>
-            <input
-                type="file"
-                id={'inputFile'}
-                hidden
-                multiple
-                accept={'image/png,image/gif,image/jpeg,image/jpg'}
-                onChange={handleInputFile}
-            />
             <div
                 className={`w-full bg-[#1D1D1D] p-[18px] md:p-5 rounded-t-[20px] ${className}`}>
                 <div className="flex flex-wrap justify-between gap-2">
@@ -146,35 +115,13 @@ const KomunitasForm = ({
                         className="w-full h-full font-body text-xs bg-[#1D1D1D] border-none focus:outline-none focus:ring-0 focus:appearance-none placeholder:text-neutral-600"
                     />
                 </div>
-                <div className="flex gap-3 flex-wrap">
-                    {attachmentName.map((value, index) => (
-                        <div
-                            key={index}
-                            className="relative px-[10px] py-[6px] text-[10px] font-body bg-[#272727] rounded-[4px]">
-                            <span
-                                className="inline-block"
-                                onClick={() =>
-                                    window.open(attachmentUrl[index])
-                                }
-                                aria-hidden>
-                                {value}
-                            </span>
-                            <div
-                                className="absolute top-[-5px] right-[-5px] w-[15px] h-[15px] bg-[#373737] rounded-full flex justify-center items-center cursor-pointer"
-                                onClick={() => {
-                                    setAttachmentName((prev) =>
-                                        prev.filter((item, id) => id !== index)
-                                    );
-                                    setAttachmentUrl((prev) =>
-                                        prev.filter((item, id) => id !== index)
-                                    );
-                                }}
-                                aria-hidden>
-                                <IoMdClose className="text-neutral-400" />
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                <AttachmentForm
+                    attachmentName={attachmentName}
+                    attachmentUrl={attachmentUrl}
+                    setAttachmentName={setAttachmentName}
+                    setAttachmentUrl={setAttachmentUrl}
+                    bucketKey={bucketKey}
+                />
             </div>
             <AdvanceForm
                 setFormContent={setFormContent}

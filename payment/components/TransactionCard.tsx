@@ -11,6 +11,7 @@ import Button from 'commons/components/elements/Button';
 import { HiCheckCircle } from 'react-icons/hi';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { useTracker } from 'tracker/tracker';
 
 const STATUS_COLOR: { [key: string]: string } = {
     SUCCESS: 'bg-state-success',
@@ -62,11 +63,16 @@ const TransactionCard = ({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, copy] = useCopyToClipboard();
     const { expiryDay, subscription_id } = useCourseSubscription();
+    const tracker = useTracker();
 
     const copyVA = (): void => {
         if (transaction) {
-            copy(transaction?.va_number as string);
+            copy(transaction.va_number as string);
             toast.info('Virtual Account berhasil di copy');
+            tracker?.genericTrack('Copy VA Number', {
+                'Method Name': transaction.payment_method,
+                'VA Number': transaction.va_number
+            });
         }
     };
 

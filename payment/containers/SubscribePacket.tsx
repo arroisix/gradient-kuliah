@@ -57,8 +57,8 @@ const PacketCard = ({
                     PENAWARAN TERBAIK!
                 </div>
             )}
-            <div className="flex flex-col md:gap-1 text-center">
-                <h5 className="font-extrabold text-xl md:text-2xl">
+            <div className="flex flex-col text-center md:gap-1">
+                <h5 className="text-xl font-extrabold md:text-2xl">
                     {data.packet_name}
                 </h5>
                 <h4
@@ -82,15 +82,18 @@ const PacketCard = ({
                 </h6>
             </div>
             <div className="flex flex-col gap-[10px] md:gap-3 h-full">
+                <h5 className="text-xl font-extrabold">
+                    Akses Semua Kelas & Fitur
+                </h5>
                 {data?.benefits?.feature?.map(
                     ({ title, description }, index) => (
                         <div key={index} className="flex items-center gap-3">
                             <SlCheck className="text-accent-purple" size={32} />
                             <div className="flex flex-col">
-                                <span className="inline-block font-extrabold text-sm">
+                                <span className="inline-block text-sm font-extrabold">
                                     {title}
                                 </span>
-                                <span className="inline-block font-body text-xs">
+                                <span className="inline-block text-xs font-body">
                                     {description}
                                 </span>
                             </div>
@@ -148,11 +151,11 @@ const SubscribePacket = (): JSX.Element => {
 
     return (
         <section className="min-h-screen py-24 px-[18px] flex flex-col items-center justify-center gap-8 lg:gap-16">
-            <h4 className="flex flex-col lg:flex-row gap-3 items-center font-bold text-3xl text-center">
+            <h4 className="flex flex-col items-center gap-3 text-3xl font-bold text-center lg:flex-row">
                 <span>Promo akan berakhir dalam</span>
-                <div className="grid grid-flow-col gap-1 items-center text-center auto-cols-max">
+                <div className="grid items-center grid-flow-col gap-1 text-center auto-cols-max">
                     <div className="flex flex-col p-2 pb-3 bg-[#212121] rounded-box">
-                        <span className="countdown font-semibold text-3xl">
+                        <span className="text-3xl font-semibold countdown">
                             <span
                                 style={
                                     {
@@ -163,7 +166,7 @@ const SubscribePacket = (): JSX.Element => {
                     </div>
                     :
                     <div className="flex flex-col p-2 pb-3 bg-[#212121] rounded-box">
-                        <span className="countdown font-semibold text-3xl">
+                        <span className="text-3xl font-semibold countdown">
                             <span
                                 style={
                                     {
@@ -174,7 +177,7 @@ const SubscribePacket = (): JSX.Element => {
                     </div>
                     :
                     <div className="flex flex-col p-2 pb-3 bg-[#212121] rounded-box">
-                        <span className="countdown font-semibold text-3xl">
+                        <span className="text-3xl font-semibold countdown">
                             <span
                                 style={
                                     {
@@ -185,7 +188,7 @@ const SubscribePacket = (): JSX.Element => {
                     </div>
                 </div>
             </h4>
-            <div className="w-full flex gap-6 justify-center flex-wrap mt-14">
+            <div className="flex flex-wrap justify-center w-full gap-6 mt-14">
                 {isLoading && (
                     <>
                         <div className="h-[402px] w-full lg:w-[380px] bg-neutral-600 animate-pulse rounded-[20px]" />
