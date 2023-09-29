@@ -10,4 +10,5 @@ const Referral = (): JSX.Element => {
     );
 };
 
+Referral.displayName = 'Referral';
 export default withAuth(Referral);

@@ -30,4 +30,5 @@ const SuccessCheckout = (): JSX.Element => {
     );
 };
 
+SuccessCheckout.displayName = 'Success Checkout';
 export default withAuth(SuccessCheckout);

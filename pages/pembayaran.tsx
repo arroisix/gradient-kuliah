@@ -21,4 +21,5 @@ const Payment = (): JSX.Element => {
     );
 };
 
+Payment.displayName = 'Payment';
 export default withAuth(Payment);

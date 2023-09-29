@@ -13,4 +13,5 @@ const Komunitas = (): JSX.Element => {
     );
 };
 
+Komunitas.displayName = 'Community Explore';
 export default withAuth(Komunitas);

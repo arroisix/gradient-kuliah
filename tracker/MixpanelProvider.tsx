@@ -23,16 +23,15 @@ class MixpanelTracker implements Tracker {
     }
 
     trackPageView(pageName: string, query?: Record<string, any>): void {
-        const mappedPageName = this.mapComponentNameWithPageName(pageName);
         this.mixpanelInstance.track_pageview(
             {
-                Page: mappedPageName,
+                Page: pageName,
                 'Page Query': query
             },
             // This feature is undocumented, so the type is missing
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            { event_name: `Visit ${mappedPageName} Page` }
+            { event_name: `Visit ${pageName} Page` }
         );
     }
 
@@ -87,41 +86,6 @@ class MixpanelTracker implements Tracker {
             'Form Data': formPayload,
             ...payload
         });
-    }
-
-    mapComponentNameWithPageName(componentName: string): string {
-        switch (componentName) {
-            case 'Home':
-                return 'Main Landing';
-            case 'ListClass':
-                return 'Classes';
-            case 'DetailKelas':
-                return 'Course Landing';
-            case 'Registration':
-                return 'Register';
-            case 'Payment':
-                return 'Payment Method';
-            case 'SuccessCheckout':
-                return 'Success Checkout';
-            case 'Transaction':
-                return 'Transaction History';
-            case 'Komunitas':
-                return 'Community Explore';
-            case 'PertanyaanKu':
-                return 'Community Pertanyaanku';
-            case 'Belajar':
-                return 'Watch Video';
-            case 'GeneralProfile':
-                return 'General Profile';
-            case 'EducationProfile':
-                return 'Education Profile';
-            case 'PersonalData':
-                return 'Biodata Profile';
-            case 'AstroNotesPage':
-                return 'Books Reader';
-            default:
-                return componentName;
-        }
     }
 }
 

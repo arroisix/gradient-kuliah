@@ -9,4 +9,5 @@ const ListClass = (): JSX.Element => {
     );
 };
 
+ListClass.displayName = 'Classes';
 export default ListClass;

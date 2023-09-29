@@ -1,7 +1,7 @@
 import Button from 'commons/components/elements/Button';
 import Layout from 'commons/layout';
 
-export default function About(): JSX.Element {
+const About = (): JSX.Element => {
     return (
         <Layout>
             <section className="min-h-screen pt-24 px-4 md:px-[7.5rem] lg:px-[22rem]">
@@ -58,4 +58,7 @@ export default function About(): JSX.Element {
             </section>
         </Layout>
     );
-}
+};
+
+About.displayName = 'About';
+export default About;

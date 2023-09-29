@@ -12,4 +12,5 @@ const AstroNotes = (): JSX.Element => {
     );
 };
 
+AstroNotes.displayName = 'Class AstroNotes';
 export default AstroNotes;

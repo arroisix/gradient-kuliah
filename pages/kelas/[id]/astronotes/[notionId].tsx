@@ -76,4 +76,5 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
         }
 );
 
+AstroNotes.displayName = 'Class AstroNote';
 export default AstroNotes;
