@@ -1090,6 +1090,10 @@ sticky-3.animate {
 .markdown-body table {
     display: block;
     width: 100%;
+}
+
+.markdown-body .callout:not() table,
+.markdown-body blockquote:not() table {
     overflow: auto;
 }
 
@@ -1418,6 +1422,11 @@ sticky-3.animate {
     margin-bottom: 0.25rem;
 }
 
+.markdown-body .callout:not() .math.math-display,
+.markdown-body blockquote:not() .math.math-display {
+    overflow-x: auto;
+}
+
 hr {
     margin: 0.5rem 0;
 }
@@ -1436,7 +1445,7 @@ hr {
 
 .astronotes table {
     width: 100%;
-    margin: 0.5rem;
+    margin: 0.5rem 0;
     text-align: center;
 }
 

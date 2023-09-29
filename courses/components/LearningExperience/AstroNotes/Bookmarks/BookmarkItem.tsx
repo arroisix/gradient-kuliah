@@ -34,13 +34,17 @@ export const BookmarkItem = ({ data }: BookmarkItemProps): JSX.Element => {
                     <FaChevronRight size={12} className="swap-on" />
                     <FaChevronUp size={12} className="swap-off" />
                 </label>
-                <Link href={`/astronotes/${slug}/${data.page_order}`}>
-                    <a className="text-sm">Halaman {data.page_order}</a>
+                <Link
+                    href={`/astronotes/${slug}/${data.page_order}`}
+                    className="text-sm">
+                    Halaman {data.page_order}
                 </Link>
             </div>
             {isShow && (
-                <Link href={`/astronotes/${slug}/${data.page_order}`}>
-                    <a className="flex flex-col gap-1 py-2 pl-7 text-neutral-600 dark:text-neutral-400">
+                <Link
+                    href={`/astronotes/${slug}/${data.page_order}`}
+                    className="flex flex-col gap-1 py-2 pl-7 text-neutral-600 dark:text-neutral-400">
+                    <>
                         {data.page_chapters?.map((chapter, index) => (
                             <div key={index} className="text-left">
                                 <ReactMarkdown
@@ -52,7 +56,7 @@ export const BookmarkItem = ({ data }: BookmarkItemProps): JSX.Element => {
                                 </ReactMarkdown>
                             </div>
                         ))}
-                    </a>
+                    </>
                 </Link>
             )}
         </div>
