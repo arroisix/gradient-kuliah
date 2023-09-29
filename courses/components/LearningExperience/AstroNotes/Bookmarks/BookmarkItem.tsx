@@ -1,14 +1,13 @@
-import { Transition } from '@headlessui/react';
+import { cn } from 'commons/utils';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { FaChevronRight } from 'react-icons/fa';
+import { FaChevronRight, FaChevronUp } from 'react-icons/fa';
 import ReactMarkdown from 'react-markdown';
 import rehypeKatex from 'rehype-katex';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
-import { transitionClassesSlideDown } from '../constants';
 
 type BookmarkItemProps = { data: Bookmark };
 
@@ -20,42 +19,42 @@ export const BookmarkItem = ({ data }: BookmarkItemProps): JSX.Element => {
 
     return (
         <div>
-            <div
-                className="flex gap-[6px] cursor-pointer"
-                onClick={() => setIsShow((prev) => !prev)}
-                aria-hidden>
-                <FaChevronRight
-                    size={12}
-                    className={`text-black dark:text-[#CCCCCC] mt-[2px] ${
-                        isShow && 'rotate-[-90deg]'
-                    }`}
-                />
-                <span className="inline-block font-body text-sm text-black dark:text-[#CCCCCC]">
-                    Halaman {data.page_order}
-                </span>
-            </div>
-            <Transition
-                show={isShow}
-                className="flex flex-col gap-1 pt-2 pl-4"
-                {...transitionClassesSlideDown}>
+            <div className="flex items-center gap-1 cursor-pointer font-body">
+                <label
+                    className={cn(
+                        'btn btn-ghost btn-square btn-xs swap swap-rotate',
+                        data.page_chapters?.length < 1 && 'hidden'
+                    )}>
+                    <input
+                        type="checkbox"
+                        checked={!isShow}
+                        onChange={() => setIsShow((prev) => !prev)}
+                        className="hidden"
+                    />
+                    <FaChevronRight size={12} className="swap-on" />
+                    <FaChevronUp size={12} className="swap-off" />
+                </label>
                 <Link href={`/astronotes/${slug}/${data.page_order}`}>
-                    <>
+                    <a className="text-sm">Halaman {data.page_order}</a>
+                </Link>
+            </div>
+            {isShow && (
+                <Link href={`/astronotes/${slug}/${data.page_order}`}>
+                    <a className="flex flex-col gap-1 py-2 pl-7 text-neutral-600 dark:text-neutral-400">
                         {data.page_chapters?.map((chapter, index) => (
-                            <span
-                                key={index}
-                                className="text-[#666666] dark:text-[#999999]text-left">
+                            <div key={index} className="text-left">
                                 <ReactMarkdown
-                                    className="markdown-body-sm markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height"
+                                    className="markdown-body-sm markdown-overflow-break-word markdown-blue-link markdown-img-max-height"
                                     remarkPlugins={[remarkMath, remarkGfm]}
                                     rehypePlugins={[rehypeKatex, rehypeRaw]}
                                     linkTarget={'_blank'}>
                                     {chapter}
                                 </ReactMarkdown>
-                            </span>
+                            </div>
                         ))}
-                    </>
+                    </a>
                 </Link>
-            </Transition>
+            )}
         </div>
     );
 };

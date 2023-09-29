@@ -1,67 +1,39 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { useState } from 'react';
 import { BiMenu } from 'react-icons/bi';
 import { MdClose } from 'react-icons/md';
 import ListOfContentsMenu from './ListOfContentsMenu';
 import BookmarksMenu from './BookmarksMenu';
 import AppearanceMenu from './AppearanceMenu';
 import SidebarMenu from '../../Sidebar/SidebarMenu';
+import { useAstronotes } from 'courses/contexts/AstronotesProvider';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 
-type MobileMenuProps = {
-    fontStyle: AstronotesFontStyle;
-    setFontStyle: Dispatch<SetStateAction<AstronotesFontStyle>>;
-    smallText: boolean;
-    setSmallText: Dispatch<SetStateAction<boolean>>;
-};
-
-const MobileMenu = ({
-    fontStyle,
-    setFontStyle,
-    smallText,
-    setSmallText
-}: MobileMenuProps): JSX.Element => {
+const MobileMenu = (): JSX.Element => {
     const [isShow, setIsShow] = useState(false);
-    const [navigation, setNavigation] = useState<NavigationTypes>('CLOSE');
+    const { navigation } = useAstronotes();
+    const { isMobileBreakpoints } = useWindowBreakpoints();
+
+    if (!isMobileBreakpoints) return <></>;
 
     return (
-        <div className="relative">
-            {isShow ? (
-                <MdClose size={24} onClick={() => setIsShow((prev) => !prev)} />
-            ) : (
-                <BiMenu size={24} onClick={() => setIsShow((prev) => !prev)} />
-            )}
+        <div className="relative md:hidden">
+            <label className="btn btn-ghost btn-circle btn-sm swap swap-rotate">
+                <input
+                    type="checkbox"
+                    checked={!isShow}
+                    onChange={() => setIsShow((prev) => !prev)}
+                    className="hidden"
+                />
+                <BiMenu size={24} className="swap-on" />
+                <MdClose size={24} className="swap-off" />
+            </label>
             {isShow && (
-                <SidebarMenu
-                    navigation={navigation}
-                    setNavigation={setNavigation}
-                    className="absolute left-[-5px] bottom-[30px] z-[2]"
-                />
+                <SidebarMenu className="absolute z-10 bottom-8 -left-1" />
             )}
-            {navigation === 'LIST_CONTENT' && (
-                <ListOfContentsMenu setNavigation={setNavigation} />
-            )}
-            {navigation === 'BOOKMARK' && (
-                <BookmarksMenu setNavigation={setNavigation} />
-            )}
-            {navigation === 'SETTING' && (
-                <AppearanceMenu
-                    fontStyle={fontStyle}
-                    setFontStyle={setFontStyle}
-                    setNavigation={setNavigation}
-                    smallText={smallText}
-                    setSmallText={setSmallText}
-                />
-            )}
-            {navigation !== 'CLOSE' ||
-                (isShow && (
-                    <div
-                        className="absolute left-[-20px] bottom-[-25px] w-screen h-screen bg-transparent z-[1]"
-                        onClick={() => {
-                            setIsShow(false);
-                            setNavigation('CLOSE');
-                        }}
-                        aria-hidden
-                    />
-                ))}
+
+            {navigation === 'LIST_CONTENT' && <ListOfContentsMenu />}
+            {navigation === 'BOOKMARK' && <BookmarksMenu />}
+            {navigation === 'SETTING' && <AppearanceMenu />}
         </div>
     );
 };

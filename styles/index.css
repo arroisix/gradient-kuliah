@@ -16,6 +16,12 @@
     }
 }
 
+@layer components {
+    .range::-webkit-slider-runnable-track, .range::-moz-range-track {
+          @apply w-full h-2 rounded-box bg-base-content/10;
+    }
+}
+
 html {
     overflow-x: hidden;
     scroll-behavior: smooth;
@@ -406,11 +412,6 @@ sticky-3.animate {
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
     line-height: 1.5;
-    color: #fff;
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial,
-        sans-serif, Apple Color Emoji, Segoe UI Emoji;
-    font-size: 16px;
-    line-height: 1.5;
     word-wrap: break-word;
 }
 
@@ -542,16 +543,6 @@ sticky-3.animate {
 }
 
 .markdown-body h1,
-.markdown-body h2,
-.markdown-body h3,
-.markdown-body h4,
-.markdown-body h5,
-.markdown-body h6 {
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-.markdown-body h1,
 .astronotes h1 {
     font-size: 32px;
 }
@@ -662,10 +653,6 @@ sticky-3.animate {
     position: relative;
     z-index: 1;
     border-color: #0366d6;
-}
-
-.markdown-body .border {
-    border: 1px solid #e1e4e8 !important;
 }
 
 .markdown-body .border-0 {
@@ -1013,13 +1000,7 @@ sticky-3.animate {
     border: 0;
 }
 
-.markdown-body blockquote {
-    padding: 0 1em;
-    color: #6a737d;
-    border-left: 0.25em solid #dfe2e5;
-}
-
-.markdown-body blockquote > :first-child {
+.markdown-body blockquote > :first-child  {
     margin-top: 0;
 }
 
@@ -1114,21 +1095,6 @@ sticky-3.animate {
 
 .markdown-body table th {
     font-weight: 600;
-}
-
-.markdown-body table td,
-.markdown-body table th {
-    padding: 6px 13px;
-    border: 1px solid #dfe2e5;
-}
-
-.markdown-body table tr {
-    background-color: #fff;
-    border-top: 1px solid #c6cbd1;
-}
-
-.markdown-body table tr:nth-child(2n) {
-    background-color: #f6f8fa;
 }
 
 .markdown-body img {
@@ -1407,22 +1373,49 @@ sticky-3.animate {
     text-decoration: underline;
 }
 
-.markdown-table table th,
-.markdown-table table td {
+.markdown-body table td,
+.markdown-body table th {
     padding: 6px 13px;
-    border: 1px solid #999999;
+    @apply border border-neutral-400 dark:border-neutral-700
 }
 
-.callout {
+.markdown-body table tr th {
+    @apply bg-accent-purple/10
+}
+
+.markdown-body table tr {
+    @apply bg-neutral-100 dark:bg-transparent
+}
+
+.markdown-body table tr:nth-child(2n) {
+    @apply bg-neutral-200 dark:bg-neutral-800/50
+}
+
+.markdown-body blockquote, .callout {
     display: flex;
     flex-direction: column;
     overflow-x: auto;
     gap: 0.5rem;
-    background-color: rgba(128, 128, 128, 0.5);
-    padding: 0.75rem;
-    border-radius: 0.25rem;
-    font-size: 1rem;
+    background-color: rgba(128, 128, 128, 0.2);
+    padding: 1rem;
     margin: 0.5rem 0;
+    @apply text-neutral-800 dark:text-neutral-300 rounded-md border-l-4 border-accent-purple/40
+}
+
+.callout h1,
+.callout h2,
+.callout h3,
+.callout h4,
+.callout h5,
+.callout h6,
+.markdown-body blockquote h1,
+.markdown-body blockquote h2,
+.markdown-body blockquote h3,
+.markdown-body blockquote h4,
+.markdown-body blockquote h5,
+.markdown-body blockquote h6 {
+    margin-top: 0;
+    margin-bottom: 0.25rem;
 }
 
 hr {

@@ -86,3 +86,17 @@ type NavigationTypes =
     | 'SETTING'
     | 'RATING'
     | 'FEEDBACK';
+
+interface AstronotesState {
+    navigation: NavigationTypes;
+    fontStyle: AstronotesFontStyle;
+    smallText: boolean;
+    isModalRatingOpen: boolean;
+    isModalFeedbackOpen: boolean;
+    // TODO(angga): removed until higher in priority
+    // highlighted: boolean;
+    // removeHighlighted: boolean;
+    // highlightId: string;
+    // dataHighlighted: DataHighlightedInterface | null;
+    // points: { x: number; y: number; width: number };
+}
