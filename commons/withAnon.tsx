@@ -9,11 +9,14 @@ import { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 import LoadingBackdrop from './components/elements/LoadingBackdrop';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { getDisplayName } from './utils';
 
 const withAnon = <P extends object>(
     WrappedComponent: React.ComponentType<P>
 ) => {
-    return (props: JSX.IntrinsicAttributes & { children?: ReactNode }) => {
+    const WithAnon = (
+        props: JSX.IntrinsicAttributes & { children?: ReactNode }
+    ) => {
         // checks whether we are on client / browser or server.
         if (typeof window !== 'undefined') {
             const accessToken = useSelector(getToken);
@@ -67,6 +70,8 @@ const withAnon = <P extends object>(
         // If we are on server, return null
         return <LoadingBackdrop />;
     };
+    WithAnon.displayName = getDisplayName(WrappedComponent);
+    return WithAnon;
 };
 
 export default withAnon;

@@ -61,4 +61,5 @@ export async function getStaticProps(): Promise<{
     };
 }
 
+Home.displayName = 'Main Landing';
 export default withAnon(Home);

@@ -121,4 +121,5 @@ const Hasil = (): JSX.Element => {
     );
 };
 
+Hasil.displayName = 'Exercise Result';
 export default Hasil;

@@ -1,4 +1,4 @@
-import { isValidElement, ReactNode, ReactElement, Children } from 'react';
+import { isValidElement, Children } from 'react';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -68,12 +68,14 @@ export const isNotNullAndUndefined = <T>(data: T): boolean => {
 // https://github.com/fernandopasik/react-children-utilities/blob/main/src/lib/hasChildren.ts
 
 const hasChildren = (
-    element: ReactNode
-): element is ReactElement<{ children: ReactNode | ReactNode[] }> =>
-    isValidElement<{ children?: ReactNode[] }>(element) &&
+    element: React.ReactNode
+): element is React.ReactElement<{
+    children: React.ReactNode | React.ReactNode[];
+}> =>
+    isValidElement<{ children?: React.ReactNode[] }>(element) &&
     Boolean(element.props.children);
 
-const childToString = (child?: ReactNode): string => {
+const childToString = (child?: React.ReactNode): string => {
     if (
         typeof child === 'undefined' ||
         child === null ||
@@ -89,13 +91,15 @@ const childToString = (child?: ReactNode): string => {
     return (child as number | string).toString();
 };
 
-export const onlyText = (children: ReactNode | ReactNode[]): string => {
+export const onlyText = (
+    children: React.ReactNode | React.ReactNode[]
+): string => {
     if (!(children instanceof Array) && !isValidElement(children)) {
         return childToString(children);
     }
 
     return Children.toArray(children).reduce(
-        (text: string, child: ReactNode): string => {
+        (text: string, child: React.ReactNode): string => {
             let newText = '';
 
             if (isValidElement(child) && hasChildren(child)) {
@@ -111,3 +115,9 @@ export const onlyText = (children: ReactNode | ReactNode[]): string => {
         ''
     );
 };
+
+export function getDisplayName<P extends object>(
+    WrappedComponent: React.ComponentType<P>
+): string {
+    return WrappedComponent.displayName || WrappedComponent.name || 'Component';
+}

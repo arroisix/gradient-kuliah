@@ -10,4 +10,5 @@ const GeneralProfile = (): JSX.Element => {
     );
 };
 
+GeneralProfile.displayName = 'General Profile';
 export default withAuth(GeneralProfile);

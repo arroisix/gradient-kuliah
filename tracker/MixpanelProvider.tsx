@@ -22,8 +22,17 @@ class MixpanelTracker implements Tracker {
         this.mixpanelInstance = mixpanel;
     }
 
-    trackPageView(query?: Record<string, any>): void {
-        this.mixpanelInstance.track_pageview(query);
+    trackPageView(pageName: string, query?: Record<string, any>): void {
+        this.mixpanelInstance.track_pageview(
+            {
+                Page: pageName,
+                'Page Query': query
+            },
+            // This feature is undocumented, so the type is missing
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            { event_name: `Visit ${pageName} Page` }
+        );
     }
 
     identify({
@@ -82,9 +91,14 @@ class MixpanelTracker implements Tracker {
 
 const trackerInstance = new MixpanelTracker();
 
-export function MixpanelProvider({ children }: PropsWithChildren): JSX.Element {
+export function MixpanelProvider({
+    children,
+    pageComponentName
+}: PropsWithChildren<{ pageComponentName: string }>): JSX.Element {
     return (
-        <TrackerProvider initialTracker={trackerInstance}>
+        <TrackerProvider
+            initialTracker={trackerInstance}
+            pageComponentName={pageComponentName}>
             {children}
         </TrackerProvider>
     );

@@ -4,4 +4,5 @@ import { NextPage } from 'next';
 
 const Registration: NextPage = () => <AuthenticationContainer />;
 
+Registration.displayName = 'Register';
 export default withAnon(Registration);

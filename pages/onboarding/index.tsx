@@ -4,4 +4,5 @@ import { NextPage } from 'next';
 
 const Onboarding: NextPage = () => <AuthenticationContainer />;
 
+Onboarding.displayName = 'Onboarding';
 export default withAuth(Onboarding);

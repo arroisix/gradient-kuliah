@@ -27,4 +27,5 @@ const Belajar = (): JSX.Element => {
     );
 };
 
+Belajar.displayName = 'Exercise Learn';
 export default Belajar;

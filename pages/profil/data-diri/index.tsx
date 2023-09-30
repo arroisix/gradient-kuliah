@@ -10,4 +10,5 @@ const PersonalData = (): JSX.Element => {
     );
 };
 
+PersonalData.displayName = 'Biodata Profile';
 export default withAuth(PersonalData);

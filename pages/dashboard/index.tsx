@@ -10,4 +10,5 @@ const Dashboard = (): JSX.Element => {
     );
 };
 
+Dashboard.displayName = 'Dashboard';
 export default withAuth(Dashboard);

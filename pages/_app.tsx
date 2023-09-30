@@ -29,6 +29,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { ThemeContextProvider } from 'commons/contexts/ThemeProvider';
 import { NextSeo } from 'next-seo';
 import { MixpanelProvider } from 'tracker/MixpanelProvider';
+import { getDisplayName } from 'commons/utils';
 
 const store = useStore();
 
@@ -67,7 +68,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
                 /* @ts-ignore */
                 persistor={store.__persistor}
                 loading={<LoadingBackdrop />}>
-                <MixpanelProvider>
+                <MixpanelProvider pageComponentName={getDisplayName(Component)}>
                     <GoogleOAuthProvider clientId="3688986116-g7dlt8prm1gimh870k4h0trds8njq4rj.apps.googleusercontent.com">
                         <ThemeContextProvider>
                             <AuthProvider>

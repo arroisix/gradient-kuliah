@@ -34,6 +34,7 @@ const DetailKelas = ({
     );
 };
 
+DetailKelas.displayName = 'Course Landing';
 export default DetailKelas;
 
 export const getStaticPaths: GetStaticPaths = async () => {

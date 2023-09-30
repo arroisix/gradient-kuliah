@@ -12,4 +12,5 @@ const AstroNotesPage = (): JSX.Element => {
     );
 };
 
+AstroNotesPage.displayName = 'Books Reader';
 export default AstroNotesPage;

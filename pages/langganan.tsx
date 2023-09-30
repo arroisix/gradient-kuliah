@@ -10,4 +10,5 @@ const Subscribe = (): JSX.Element => {
     );
 };
 
+Subscribe.displayName = 'Subscribe';
 export default withAuth(Subscribe);
