@@ -10,4 +10,5 @@ const Transaction = (): JSX.Element => {
     );
 };
 
+Transaction.displayName = 'Transaction';
 export default withAuth(Transaction);

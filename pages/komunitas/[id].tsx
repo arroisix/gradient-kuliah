@@ -13,4 +13,5 @@ const DetailKomunitas = (): JSX.Element => {
     );
 };
 
+DetailKomunitas.displayName = 'Community Detail';
 export default withAuth(DetailKomunitas);

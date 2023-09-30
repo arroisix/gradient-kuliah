@@ -27,4 +27,5 @@ const Belajar = (): JSX.Element => {
     );
 };
 
+Belajar.displayName = 'Watch Video';
 export default Belajar;

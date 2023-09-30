@@ -10,4 +10,5 @@ const EducationLevel = (): JSX.Element => {
     );
 };
 
+EducationLevel.displayName = 'Education Profile';
 export default withAuth(EducationLevel);

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { FaWhatsapp } from 'react-icons/fa';
 import Layout from 'commons/layout';
 
-export default function Career(): JSX.Element {
+const Career = (): JSX.Element => {
     return (
         <Layout>
             <section className="min-h-screen pt-24 px-4 md:px-[7.5rem] lg:px-[22rem] mb-4">
@@ -56,4 +56,7 @@ export default function Career(): JSX.Element {
             </section>
         </Layout>
     );
-}
+};
+
+Career.displayName = 'Career';
+export default Career;

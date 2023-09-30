@@ -4,11 +4,12 @@ import React, {
     PropsWithChildren,
     useContext,
     useEffect,
+    useLayoutEffect,
     useState
 } from 'react';
 
 export interface Tracker {
-    trackPageView(query?: Record<string, any>): void;
+    trackPageView(pageName: string, query?: Record<string, any>): void;
     identify(info: {
         email: string;
         fullName: string;
@@ -29,20 +30,23 @@ export interface Tracker {
     ): void;
 }
 
-const useTrackPageView = (tracker: Tracker): void => {
+const useTrackPageView = (
+    tracker: Tracker,
+    pageComponentName: string
+): void => {
     const router = useRouter();
 
     useEffect(() => {
-        if (router.isReady) {
-            tracker.trackPageView(router.query);
+        if (router.isReady && pageComponentName) {
+            tracker.trackPageView(pageComponentName, router.query);
         }
-    }, [tracker, router.isReady]);
+    }, [tracker, router.isReady, router.query]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         // track subsequent page visit
         const handleRouteChange = () => {
-            if (router.isReady) {
-                tracker.trackPageView(router.query);
+            if (router.isReady && pageComponentName) {
+                tracker.trackPageView(pageComponentName, router.query);
             }
         };
         router.events.on('routeChangeComplete', handleRouteChange);
@@ -50,7 +54,13 @@ const useTrackPageView = (tracker: Tracker): void => {
         return () => {
             router.events.off('routeChangeComplete', handleRouteChange);
         };
-    }, [tracker, router.events, router.isReady]);
+    }, [
+        tracker,
+        router.events,
+        router.isReady,
+        pageComponentName,
+        router.query
+    ]);
 };
 
 const TrackerContext = createContext<Tracker | null>(null);
@@ -61,13 +71,15 @@ export function useTracker(): Tracker | null {
 
 export function TrackerProvider({
     children,
-    initialTracker
+    initialTracker,
+    pageComponentName
 }: PropsWithChildren<{
     initialTracker: Tracker;
+    pageComponentName: string;
 }>): JSX.Element {
     const [tracker] = useState(initialTracker);
 
-    useTrackPageView(tracker);
+    useTrackPageView(tracker, pageComponentName);
 
     return (
         <TrackerContext.Provider value={tracker}>

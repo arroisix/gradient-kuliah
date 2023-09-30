@@ -14,4 +14,5 @@ const PertanyaanKu = (): JSX.Element => {
     );
 };
 
+PertanyaanKu.displayName = 'Community Pertanyaanku';
 export default withAuth(PertanyaanKu);

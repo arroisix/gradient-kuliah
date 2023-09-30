@@ -28,10 +28,12 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
 
     const tracker = useTracker();
     useEffect(() => {
-        tracker?.genericTrack('Get Payment Confirmation Prompt', {
-            'Method Name': paymentMethod
-        });
-    }, []);
+        if (isOpen) {
+            tracker?.genericTrack('Get Payment Confirmation Prompt', {
+                'Method Name': paymentMethod
+            });
+        }
+    }, [isOpen]);
 
     useEffect(() => {
         let getData: NodeJS.Timeout;

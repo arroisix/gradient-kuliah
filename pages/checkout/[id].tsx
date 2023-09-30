@@ -10,4 +10,5 @@ const Checkout = (): JSX.Element => {
     );
 };
 
+Checkout.displayName = 'Checkout';
 export default withAuth(Checkout);
