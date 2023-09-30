@@ -40,7 +40,7 @@ const useTrackPageView = (
         if (router.isReady && pageComponentName) {
             tracker.trackPageView(pageComponentName, router.query);
         }
-    }, [tracker, router.isReady]);
+    }, [tracker, router.isReady, router.query]);
 
     useLayoutEffect(() => {
         // track subsequent page visit
@@ -54,7 +54,13 @@ const useTrackPageView = (
         return () => {
             router.events.off('routeChangeComplete', handleRouteChange);
         };
-    }, [tracker, router.events, router.isReady, pageComponentName]);
+    }, [
+        tracker,
+        router.events,
+        router.isReady,
+        pageComponentName,
+        router.query
+    ]);
 };
 
 const TrackerContext = createContext<Tracker | null>(null);
