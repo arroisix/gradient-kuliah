@@ -1,12 +1,19 @@
 import { Formik } from 'formik';
 import Button from 'commons/components/elements/Button';
 import Input from 'commons/components/elements/Form/input';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import RegistrationContext from 'authentication/contexts/RegistrationProvider';
 import Radio from 'commons/components/elements/Form/radio';
+import { useTracker } from 'tracker/tracker';
 
 export const PersonalDataStep = (): JSX.Element => {
     const { setStep, formData, setFormData } = useContext(RegistrationContext);
+
+    const tracker = useTracker();
+
+    useEffect(() => {
+        tracker?.genericTrack('Visit Onboarding Personal Data Step');
+    }, []);
 
     return (
         <div className="flex flex-col w-full">

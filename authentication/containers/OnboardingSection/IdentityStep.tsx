@@ -3,11 +3,12 @@ import Button from 'commons/components/elements/Button';
 import Input from 'commons/components/elements/Form/input';
 import { useSelector } from 'react-redux';
 import { getCurrentUser } from 'authentication/redux/selectors/userSelector';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import RegistrationContext from 'authentication/contexts/RegistrationProvider';
 import { useCheckUsernameAvailabilityMutation } from 'authentication/redux/api/authApi';
 import { FaCheckCircle, FaSpinner, FaTimesCircle } from 'react-icons/fa';
 import { useDebouncedCallback } from 'use-debounce';
+import { useTracker } from 'tracker/tracker';
 
 export const IdentityStep = (): JSX.Element => {
     const [isTyping, setIsTyping] = useState(false);
@@ -16,6 +17,11 @@ export const IdentityStep = (): JSX.Element => {
     const [checkUsernameAvailability, { isLoading: isCheckUsernameLoading }] =
         useCheckUsernameAvailabilityMutation();
     const { setStep, formData, setFormData } = useContext(RegistrationContext);
+
+    const tracker = useTracker();
+    useEffect(() => {
+        tracker?.genericTrack('Visit Onboarding Identity Step');
+    }, []);
 
     const debounced = useDebouncedCallback(
         async (
