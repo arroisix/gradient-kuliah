@@ -3,7 +3,6 @@ import React, {
     createContext,
     PropsWithChildren,
     useContext,
-    useEffect,
     useLayoutEffect,
     useState
 } from 'react';
@@ -34,15 +33,16 @@ const useTrackPageView = (
     tracker: Tracker,
     pageComponentName: string
 ): void => {
+    const [firstPageVisit, setFirstPageVisit] = useState(false);
     const router = useRouter();
 
-    useEffect(() => {
-        if (router.isReady && pageComponentName) {
-            tracker.trackPageView(pageComponentName, router.query);
-        }
-    }, [tracker, router.isReady, router.query]);
-
     useLayoutEffect(() => {
+        // track initial page visit
+        if (!firstPageVisit && router.isReady && pageComponentName) {
+            tracker.trackPageView(pageComponentName, router.query);
+            setFirstPageVisit(true);
+        }
+
         // track subsequent page visit
         const handleRouteChange = () => {
             if (router.isReady && pageComponentName) {
