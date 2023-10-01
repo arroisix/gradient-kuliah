@@ -3,6 +3,8 @@ import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 // import { addZeroBefore } from 'courses/utils';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { useTracker } from 'tracker/tracker';
 
 type HandleIsLastOnboardingStep = () => void;
 
@@ -24,6 +26,12 @@ export const OnboardingSuccess = (): JSX.Element => {
         //     )}`
         // );
     };
+
+    const tracker = useTracker();
+
+    useEffect(() => {
+        tracker?.genericTrack('Visit Onboarding Success Step');
+    }, []);
 
     return (
         <section className="relative w-full h-screen bg-gradient-purple overflow-hidden">

@@ -1,15 +1,22 @@
 import { Formik } from 'formik';
 import Button from 'commons/components/elements/Button';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import RegistrationContext from 'authentication/contexts/RegistrationProvider';
 import { useGetRegisterReferenceQuery } from 'authentication/redux/api/authApi';
 import Radio from 'commons/components/elements/Form/radio';
 import TextArea from 'commons/components/elements/Form/TextArea';
+import { useTracker } from 'tracker/tracker';
 
 export const ReferenceStep = (): JSX.Element => {
     const { formData, updateUser } = useContext(RegistrationContext);
     const { data: registerReferences, isLoading: isLoadingReferences } =
         useGetRegisterReferenceQuery({});
+
+    const tracker = useTracker();
+
+    useEffect(() => {
+        tracker?.genericTrack('Visit Onboarding Reference Step');
+    }, []);
 
     return (
         <div className="flex flex-col w-full">
