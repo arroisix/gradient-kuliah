@@ -70,7 +70,8 @@ const KomunitasForm = ({
                 className={`w-full bg-[#1D1D1D] p-[18px] md:p-5 rounded-t-[20px] ${className}`}>
                 <div className="flex flex-wrap justify-between gap-2">
                     <div className="flex items-center gap-3">
-                        {!!profile?.photo_profile ? (
+                        {profile?.photo_profile &&
+                        profile.photo_profile.length > 0 ? (
                             <div className="w-[24px] h-[24px] relative">
                                 <Image
                                     src={profile.photo_profile}

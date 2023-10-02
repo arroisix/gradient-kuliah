@@ -104,7 +104,9 @@ const QuestionCard = ({
                 aria-hidden>
                 <div className="relative flex items-center gap-3">
                     <div className="relative w-[24px] h-[24px]">
-                        {student?.photo_url && !imageError ? (
+                        {student?.photo_url &&
+                        student.photo_url.length > 0 &&
+                        !imageError ? (
                             <Image
                                 src={student?.photo_url}
                                 alt={student?.username}
@@ -136,7 +138,7 @@ const QuestionCard = ({
                 </div>
                 <article className="pt-[12px] pb-[18px] lg:pl-[36px]">
                     <ReactMarkdown
-                        className={`markdown-body-xs markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height ${
+                        className={`markdown-body-xs markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height overflow-auto ${
                             clickable ? 'pointer-events-none' : ''
                         }`}
                         remarkPlugins={[remarkMath, remarkGfm]}

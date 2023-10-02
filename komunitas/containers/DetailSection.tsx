@@ -128,7 +128,9 @@ const RightSidebar = ({
             <div className="flex flex-col gap-2 px-[10px] py-[10px] bg-[#1D1D1D] rounded">
                 {similiars ? (
                     similiars?.questions?.map(({ slug, content }) => (
-                        <Link key={slug} href={`/komunitas/${slug}`}>
+                        <Link
+                            key={slug}
+                            href={`/komunitas/${encodeURIComponent(slug)}`}>
                             <div className="flex justify-between items-center gap-2 py-1 cursor-pointer z-[1]">
                                 <span className="text-xs whitespace-nowrap text-ellipsis overflow-hidden">
                                     {content}
