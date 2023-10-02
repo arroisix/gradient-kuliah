@@ -172,6 +172,7 @@ const KomunitasContainer = (): JSX.Element => {
                                     'Tanyakan'
                                 )
                             }
+                            context="q"
                         />
                     ) : (
                         <div className="flex flex-col md:flex-row justify-between items-center gap-3 w-full px-5 py-[14px] bg-[#5F2BCE] rounded-lg">
