@@ -1,4 +1,3 @@
-import { isNotNullAndUndefined } from 'commons/utils';
 import Image from 'next/image';
 import { useState } from 'react';
 import Avatar from 'react-avatar';
