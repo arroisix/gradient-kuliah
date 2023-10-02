@@ -27,7 +27,8 @@ const KomunitasForm = ({
     isUsingCategories,
     subjectCategories,
     submitButtonText,
-    className
+    className,
+    context
 }: {
     formContent: string;
     setFormContent: Dispatch<SetStateAction<string>>;
@@ -44,6 +45,7 @@ const KomunitasForm = ({
     subjectCategories?: [{ id: string; name: string }];
     submitButtonText: JSX.Element | string;
     className?: string;
+    context: 'q' | 'a';
 }): JSX.Element => {
     const { profile } = useContext(AuthContext);
 
@@ -58,6 +60,10 @@ const KomunitasForm = ({
             setCategory(event.target.value);
         }
     }
+
+    const textInputPlaceholder =
+        context === 'q' ? 'Ketik pertanyaanmu...' : 'Ketik jawabanmu...';
+
     return (
         <div>
             <div
@@ -111,7 +117,7 @@ const KomunitasForm = ({
                         value={formContent}
                         name="form"
                         onChange={handleChange}
-                        placeholder="Ketik pertanyaanmu..."
+                        placeholder={textInputPlaceholder}
                         className="w-full h-full font-body text-xs bg-[#1D1D1D] border-none focus:outline-none focus:ring-0 focus:appearance-none placeholder:text-neutral-600"
                     />
                 </div>
@@ -129,6 +135,7 @@ const KomunitasForm = ({
                 handleSubmit={handleSubmit}
                 cancelButton={cancelButton}
                 submitButtonText={submitButtonText}
+                context={context}
             />
         </div>
     );

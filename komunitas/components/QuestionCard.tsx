@@ -194,6 +194,7 @@ const QuestionCard = ({
                         )
                     }
                     className="!rounded-t-none"
+                    context="a"
                 />
             )}
         </>

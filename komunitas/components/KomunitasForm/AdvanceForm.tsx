@@ -1,5 +1,5 @@
 import Button from 'commons/components/elements/Button';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ImOmega } from 'react-icons/im';
 import { TbSquareRoot2 } from 'react-icons/tb';
 import MathForm from './MathForm';
@@ -16,42 +16,47 @@ type IconOption = {
     props?: Record<string, any>;
 };
 
-const ICON: IconOption[] = [
-    {
-        tag: 'div',
-        icon: <TbSquareRoot2 className="text-[20px]" />,
-        tracker: 'Click Latex Menu'
-    },
-    {
-        tag: 'div',
-        icon: <ImOmega className="text-[18px]" />,
-        tracker: 'Click Symbol Menu'
-    },
-    {
-        disabled: true,
-        tag: 'label',
-        icon: <FiPaperclip className="text-[18px] text-neutral-600" />,
-        tracker: 'Click Attachment Menu',
-        disableClick: true,
-        props: {
-            htmlFor: 'inputFile'
-        }
-    }
-];
-
 const AdvanceForm = ({
     setFormContent,
     formRef,
     handleSubmit,
     cancelButton,
-    submitButtonText
+    submitButtonText,
+    context
 }: {
     setFormContent: React.Dispatch<React.SetStateAction<string>>;
     formRef: React.RefObject<HTMLTextAreaElement>;
     handleSubmit: () => Promise<void>;
     cancelButton?: () => void;
     submitButtonText: JSX.Element | string;
+    context: 'q' | 'a';
 }): JSX.Element => {
+    const ICON: IconOption[] = useMemo(
+        () => [
+            {
+                tag: 'div',
+                icon: <TbSquareRoot2 className="text-[20px]" />,
+                tracker: 'Click Latex Menu'
+            },
+            {
+                tag: 'div',
+                icon: <ImOmega className="text-[18px]" />,
+                tracker: 'Click Symbol Menu'
+            },
+            {
+                disabled: context === 'q',
+                tag: 'label',
+                icon: <FiPaperclip className="text-[18px] text-neutral-600" />,
+                tracker: 'Click Attachment Menu',
+                disableClick: true,
+                props: {
+                    htmlFor: 'inputFile'
+                }
+            }
+        ],
+        [context]
+    );
+
     const [iconClicked, setIconClicked] = useState(-1);
     const tracker = useTracker();
 
