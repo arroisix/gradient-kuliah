@@ -67,21 +67,20 @@ const Sidebar = ({
                 </Link>
                 {configData?.configs.is_community_config_enabled &&
                     is_subscribed && (
-                        <span
+                        <Link
+                            href="/komunitas"
                             className={`flex items-center gap-4 cursor-pointer ${
                                 pathname.includes('/komunitas')
                                     ? 'text-white'
                                     : 'text-[#666666]'
                             }  font-body text-sm hover:text-[#999999]`}
                             onClick={() => {
-                                route.push('/komunitas');
                                 tracker?.genericTrack(
                                     `Click Community ${
                                         !fullHeight ? 'Course ' : ''
                                     }Navigation`
                                 );
-                            }}
-                            aria-hidden>
+                            }}>
                             <RiQuestionnaireLine size={20} />
                             Komunitas
                             {communityNotification?.unseen_comment_counts ? (
@@ -95,7 +94,7 @@ const Sidebar = ({
                                     new
                                 </span>
                             )}
-                        </span>
+                        </Link>
                     )}
                 <Link
                     href={'/kelas'}

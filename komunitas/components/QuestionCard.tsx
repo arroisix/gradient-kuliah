@@ -4,7 +4,6 @@ import rehypeKatex from 'rehype-katex';
 import remarkGfm from 'remark-gfm';
 import moment from 'moment';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 import Avatar from 'react-avatar';
 import { AiOutlineEye, AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { FaCircle, FaRegComment } from 'react-icons/fa';
@@ -13,6 +12,7 @@ import KomunitasForm from './KomunitasForm';
 import { usePostQuestionAnswerMutation } from 'komunitas/redux/api/komunitasApi';
 import { toast } from 'react-toastify';
 import { useTracker } from 'tracker/tracker';
+import Link from 'next/link';
 
 type Student = {
     id: string;
@@ -46,7 +46,6 @@ const QuestionCard = ({
     setIsShowForm?: React.Dispatch<React.SetStateAction<boolean>>;
 }): JSX.Element => {
     const [postCommunity, { isLoading }] = usePostQuestionAnswerMutation();
-    const router = useRouter();
     const tracker = useTracker();
 
     const [formContent, setFormContent] = useState('');
@@ -88,20 +87,19 @@ const QuestionCard = ({
         setAttachmentName([]);
     }
 
+    const Wrapper = ({ children }: React.PropsWithChildren): JSX.Element =>
+        clickable ? (
+            <Link href={`/komunitas/${slug}`}>{children}</Link>
+        ) : (
+            <>{children}</>
+        );
+
     return (
-        <>
+        <Wrapper>
             <div
                 className={`w-full border-[1px] border-neutral-800 rounded-xl p-[18px] md:p-5 ${
-                    clickable ? 'cursor-pointer' : ''
-                } ${isShowForm ? '!rounded-b-none' : ''}`}
-                onClick={
-                    clickable
-                        ? () => {
-                              router.push(`/komunitas/${slug}`);
-                          }
-                        : undefined
-                }
-                aria-hidden>
+                    isShowForm ? '!rounded-b-none' : ''
+                }`}>
                 <div className="relative flex items-center gap-3">
                     <div className="relative w-[24px] h-[24px]">
                         {student?.photo_url &&
@@ -199,7 +197,7 @@ const QuestionCard = ({
                     context="a"
                 />
             )}
-        </>
+        </Wrapper>
     );
 };
 
