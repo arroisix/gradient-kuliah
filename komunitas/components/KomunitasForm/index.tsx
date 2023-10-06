@@ -1,28 +1,14 @@
 import AuthContext from 'authentication/contexts/AuthProvider';
 import Image from 'next/image';
-import {
-    ChangeEvent,
-    Dispatch,
-    SetStateAction,
-    useContext,
-    useRef
-} from 'react';
+import { ChangeEvent, useContext, useRef, useState } from 'react';
 import Avatar from 'react-avatar';
 import TextareaAutosize from 'react-textarea-autosize';
 import AdvanceForm from './AdvanceForm';
 import AttachmentForm from './AttachmentForm';
 
 const KomunitasForm = ({
-    formContent,
-    setFormContent,
-    category,
-    setCategory,
-    attachmentUrl,
-    setAttachmentUrl,
-    attachmentName,
-    setAttachmentName,
     bucketKey,
-    handleSubmit,
+    onSubmit,
     cancelButton,
     isUsingCategories,
     subjectCategories,
@@ -30,16 +16,13 @@ const KomunitasForm = ({
     className,
     context
 }: {
-    formContent: string;
-    setFormContent: Dispatch<SetStateAction<string>>;
-    category?: string;
-    setCategory?: Dispatch<SetStateAction<string>>;
-    attachmentUrl: string[];
-    setAttachmentUrl: Dispatch<SetStateAction<string[]>>;
-    attachmentName: string[];
-    setAttachmentName: Dispatch<SetStateAction<string[]>>;
     bucketKey?: string;
-    handleSubmit: () => Promise<void>;
+    onSubmit: (
+        formContent: string,
+        category: string,
+        attachmentUrl: string[],
+        attachmentName: string[]
+    ) => Promise<void>;
     cancelButton?: () => void;
     isUsingCategories: boolean;
     subjectCategories?: [{ id: string; name: string }];
@@ -47,6 +30,11 @@ const KomunitasForm = ({
     className?: string;
     context: 'q' | 'a';
 }): JSX.Element => {
+    const [formContent, setFormContent] = useState('');
+    const [category, setCategory] = useState('');
+    const [attachmentUrl, setAttachmentUrl] = useState<string[]>([]);
+    const [attachmentName, setAttachmentName] = useState<string[]>([]);
+
     const { profile } = useContext(AuthContext);
 
     const formRef = useRef<HTMLTextAreaElement>(null);
@@ -63,6 +51,23 @@ const KomunitasForm = ({
 
     const textInputPlaceholder =
         context === 'q' ? 'Ketik pertanyaanmu...' : 'Ketik jawabanmu...';
+
+    async function handleSubmit(): Promise<void> {
+        try {
+            await onSubmit(
+                formContent,
+                category,
+                attachmentUrl,
+                attachmentName
+            );
+            setFormContent('');
+            setCategory('');
+            setAttachmentUrl([]);
+            setAttachmentName([]);
+        } catch (e) {
+            console.error(e);
+        }
+    }
 
     return (
         <div>

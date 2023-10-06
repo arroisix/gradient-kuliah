@@ -20,6 +20,20 @@ type Student = {
     username: string;
 };
 
+const Wrapper = ({
+    children,
+    clickable,
+    slug
+}: React.PropsWithChildren<{
+    clickable: boolean;
+    slug?: string;
+}>): JSX.Element =>
+    clickable ? (
+        <Link href={`/komunitas/${slug}`}>{children}</Link>
+    ) : (
+        <>{children}</>
+    );
+
 const QuestionCard = ({
     clickable,
     id,
@@ -48,12 +62,13 @@ const QuestionCard = ({
     const [postCommunity, { isLoading }] = usePostQuestionAnswerMutation();
     const tracker = useTracker();
 
-    const [formContent, setFormContent] = useState('');
-    const [attachmentUrl, setAttachmentUrl] = useState<string[]>([]);
-    const [attachmentName, setAttachmentName] = useState<string[]>([]);
     const [imageError, setImageError] = useState(false);
 
-    async function handleSubmit(): Promise<void> {
+    async function handleSubmit(
+        formContent: string,
+        _category: string,
+        attachmentUrl: string[]
+    ): Promise<void> {
         const contentwithAttachments =
             attachmentUrl.length !== 0
                 ? `${formContent}${attachmentUrl.map(
@@ -68,7 +83,7 @@ const QuestionCard = ({
                 hideProgressBar: true,
                 toastId: 'KATEGORI_NULL'
             });
-            return;
+            throw new Error('KATEGORI_NULL');
         }
 
         await postCommunity({
@@ -82,20 +97,11 @@ const QuestionCard = ({
             'Post Slug': slug
         });
 
-        setFormContent('');
-        setAttachmentUrl([]);
-        setAttachmentName([]);
+        setIsShowForm?.(false);
     }
 
-    const Wrapper = ({ children }: React.PropsWithChildren): JSX.Element =>
-        clickable ? (
-            <Link href={`/komunitas/${slug}`}>{children}</Link>
-        ) : (
-            <>{children}</>
-        );
-
     return (
-        <Wrapper>
+        <Wrapper clickable={clickable} slug={slug}>
             <div
                 className={`w-full border-[1px] border-neutral-800 rounded-xl p-[18px] md:p-5 ${
                     isShowForm ? '!rounded-b-none' : ''
@@ -176,14 +182,8 @@ const QuestionCard = ({
             </div>
             {isShowForm && (
                 <KomunitasForm
-                    formContent={formContent}
-                    setFormContent={setFormContent}
-                    attachmentUrl={attachmentUrl}
-                    setAttachmentUrl={setAttachmentUrl}
-                    attachmentName={attachmentName}
-                    setAttachmentName={setAttachmentName}
                     bucketKey="qna"
-                    handleSubmit={handleSubmit}
+                    onSubmit={handleSubmit}
                     isUsingCategories={false}
                     cancelButton={() => setIsShowForm && setIsShowForm(false)}
                     submitButtonText={

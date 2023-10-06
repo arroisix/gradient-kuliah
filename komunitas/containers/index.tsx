@@ -25,8 +25,8 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { CgSearch } from 'react-icons/cg';
 import { MdChevronRight } from 'react-icons/md';
-import { toast } from 'react-toastify';
 import { useTracker } from 'tracker/tracker';
+import { toast } from 'react-toastify';
 
 const KomunitasContainer = (): JSX.Element => {
     const { isMobileBreakpoints } = useWindowBreakpoints();
@@ -52,10 +52,6 @@ const KomunitasContainer = (): JSX.Element => {
         setSort
     } = useKomunitas();
 
-    const [formContent, setFormContent] = useState('');
-    const [category, setCategory] = useState('');
-    const [attachmentUrl, setAttachmentUrl] = useState<string[]>([]);
-    const [attachmentName, setAttachmentName] = useState<string[]>([]);
     const [showSort, setShowSort] = useState(false);
     const [showForm, setShowForm] = useState(false);
     const isAnchorOnScreen = useOnScreen(anchor);
@@ -71,7 +67,11 @@ const KomunitasContainer = (): JSX.Element => {
         }
     }, [isAnchorOnScreen]);
 
-    async function handleSubmit(): Promise<void> {
+    async function handleSubmit(
+        formContent: string,
+        category: string,
+        attachmentUrl: string[]
+    ): Promise<void> {
         if (!category) {
             toast.error('Kategori tidak boleh kosong', {
                 position: 'top-center',
@@ -79,7 +79,7 @@ const KomunitasContainer = (): JSX.Element => {
                 hideProgressBar: true,
                 toastId: 'KATEGORI_NULL'
             });
-            return;
+            throw new Error('KATEGORI_NULL');
         }
 
         const contentwithAttachments =
@@ -107,10 +107,6 @@ const KomunitasContainer = (): JSX.Element => {
 
         tracker?.genericTrack('Submit Question on Community');
 
-        setFormContent('');
-        setCategory('');
-        setAttachmentUrl([]);
-        setAttachmentName([]);
         setShowForm(false);
     }
 
@@ -152,16 +148,8 @@ const KomunitasContainer = (): JSX.Element => {
                     />
                     {showForm ? (
                         <KomunitasForm
-                            formContent={formContent}
-                            setFormContent={setFormContent}
-                            category={category}
-                            setCategory={setCategory}
-                            attachmentUrl={attachmentUrl}
-                            setAttachmentUrl={setAttachmentUrl}
-                            attachmentName={attachmentName}
-                            setAttachmentName={setAttachmentName}
                             bucketKey="qna"
-                            handleSubmit={handleSubmit}
+                            onSubmit={handleSubmit}
                             cancelButton={() => setShowForm((prev) => !prev)}
                             isUsingCategories={true}
                             subjectCategories={subjects?.categories}

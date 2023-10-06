@@ -3,7 +3,7 @@ import mixpanel, { OverridedMixpanel } from 'mixpanel-browser';
 import { PropsWithChildren } from 'react';
 
 class MixpanelTracker implements Tracker {
-    mixpanelInstance: OverridedMixpanel;
+    mixpanelInstance?: OverridedMixpanel;
 
     constructor() {
         if (typeof window !== 'undefined') {
@@ -16,14 +16,13 @@ class MixpanelTracker implements Tracker {
                     track_pageview: false,
                     debug: process.env.NEXT_PUBLIC_ENV !== 'prod'
                 });
+                this.mixpanelInstance = mixpanel;
             }
         }
-
-        this.mixpanelInstance = mixpanel;
     }
 
     trackPageView(pageName: string, query?: Record<string, any>): void {
-        this.mixpanelInstance.track_pageview(
+        this.mixpanelInstance?.track_pageview(
             {
                 Page: pageName,
                 'Page Query': query
@@ -46,8 +45,8 @@ class MixpanelTracker implements Tracker {
         phoneNumber: string;
         isSubscribed: boolean;
     }): void {
-        this.mixpanelInstance.identify(email);
-        this.mixpanelInstance.people.set({
+        this.mixpanelInstance?.identify(email);
+        this.mixpanelInstance?.people.set({
             $email: email,
             $name: fullName,
             $phone: phoneNumber,
@@ -56,14 +55,14 @@ class MixpanelTracker implements Tracker {
     }
 
     reset(): void {
-        this.mixpanelInstance.reset();
+        this.mixpanelInstance?.reset();
     }
 
     genericTrack(
         eventName: string,
         payload?: Record<string, any> | undefined
     ): void {
-        this.mixpanelInstance.track(eventName, payload);
+        this.mixpanelInstance?.track(eventName, payload);
     }
 
     trackButtonClick(
