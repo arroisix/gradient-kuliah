@@ -77,7 +77,7 @@ const AdvanceForm = ({
                         ) => (
                             <Tag
                                 key={index}
-                                className={`hidden md:block hover:bg-[#2C2C2C] px-[12px] py-[6px] rounded-[100px] cursor-pointer ${
+                                className={`block hover:bg-[#2C2C2C] px-[12px] py-[6px] rounded-[100px] cursor-pointer ${
                                     iconClicked === index
                                         ? 'text-white bg-[#2C2C2C]'
                                         : 'text-neutral-600'

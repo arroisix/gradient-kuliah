@@ -4,7 +4,6 @@ import rehypeKatex from 'rehype-katex';
 import remarkGfm from 'remark-gfm';
 import moment from 'moment';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 import Avatar from 'react-avatar';
 import { AiOutlineEye, AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { FaCircle, FaRegComment } from 'react-icons/fa';
@@ -13,12 +12,27 @@ import KomunitasForm from './KomunitasForm';
 import { usePostQuestionAnswerMutation } from 'komunitas/redux/api/komunitasApi';
 import { toast } from 'react-toastify';
 import { useTracker } from 'tracker/tracker';
+import Link from 'next/link';
 
 type Student = {
     id: string;
     photo_url: string;
     username: string;
 };
+
+const Wrapper = ({
+    children,
+    clickable,
+    slug
+}: React.PropsWithChildren<{
+    clickable: boolean;
+    slug?: string;
+}>): JSX.Element =>
+    clickable ? (
+        <Link href={`/komunitas/${slug}`}>{children}</Link>
+    ) : (
+        <>{children}</>
+    );
 
 const QuestionCard = ({
     clickable,
@@ -46,15 +60,15 @@ const QuestionCard = ({
     setIsShowForm?: React.Dispatch<React.SetStateAction<boolean>>;
 }): JSX.Element => {
     const [postCommunity, { isLoading }] = usePostQuestionAnswerMutation();
-    const router = useRouter();
     const tracker = useTracker();
 
-    const [formContent, setFormContent] = useState('');
-    const [attachmentUrl, setAttachmentUrl] = useState<string[]>([]);
-    const [attachmentName, setAttachmentName] = useState<string[]>([]);
     const [imageError, setImageError] = useState(false);
 
-    async function handleSubmit(): Promise<void> {
+    async function handleSubmit(
+        formContent: string,
+        _category: string,
+        attachmentUrl: string[]
+    ): Promise<void> {
         const contentwithAttachments =
             attachmentUrl.length !== 0
                 ? `${formContent}${attachmentUrl.map(
@@ -69,7 +83,7 @@ const QuestionCard = ({
                 hideProgressBar: true,
                 toastId: 'KATEGORI_NULL'
             });
-            return;
+            throw new Error('KATEGORI_NULL');
         }
 
         await postCommunity({
@@ -83,28 +97,20 @@ const QuestionCard = ({
             'Post Slug': slug
         });
 
-        setFormContent('');
-        setAttachmentUrl([]);
-        setAttachmentName([]);
+        setIsShowForm?.(false);
     }
 
     return (
-        <>
+        <Wrapper clickable={clickable} slug={slug}>
             <div
                 className={`w-full border-[1px] border-neutral-800 rounded-xl p-[18px] md:p-5 ${
-                    clickable ? 'cursor-pointer' : ''
-                } ${isShowForm ? '!rounded-b-none' : ''}`}
-                onClick={
-                    clickable
-                        ? () => {
-                              router.push(`/komunitas/${slug}`);
-                          }
-                        : undefined
-                }
-                aria-hidden>
+                    isShowForm ? '!rounded-b-none' : ''
+                }`}>
                 <div className="relative flex items-center gap-3">
                     <div className="relative w-[24px] h-[24px]">
-                        {student?.photo_url && !imageError ? (
+                        {student?.photo_url &&
+                        student.photo_url.length > 0 &&
+                        !imageError ? (
                             <Image
                                 src={student?.photo_url}
                                 alt={student?.username}
@@ -136,7 +142,7 @@ const QuestionCard = ({
                 </div>
                 <article className="pt-[12px] pb-[18px] lg:pl-[36px]">
                     <ReactMarkdown
-                        className={`markdown-body-xs markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height ${
+                        className={`markdown-body-xs markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height overflow-auto ${
                             clickable ? 'pointer-events-none' : ''
                         }`}
                         remarkPlugins={[remarkMath, remarkGfm]}
@@ -176,14 +182,8 @@ const QuestionCard = ({
             </div>
             {isShowForm && (
                 <KomunitasForm
-                    formContent={formContent}
-                    setFormContent={setFormContent}
-                    attachmentUrl={attachmentUrl}
-                    setAttachmentUrl={setAttachmentUrl}
-                    attachmentName={attachmentName}
-                    setAttachmentName={setAttachmentName}
                     bucketKey="qna"
-                    handleSubmit={handleSubmit}
+                    onSubmit={handleSubmit}
                     isUsingCategories={false}
                     cancelButton={() => setIsShowForm && setIsShowForm(false)}
                     submitButtonText={
@@ -197,7 +197,7 @@ const QuestionCard = ({
                     context="a"
                 />
             )}
-        </>
+        </Wrapper>
     );
 };
 

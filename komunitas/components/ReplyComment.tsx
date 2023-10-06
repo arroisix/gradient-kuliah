@@ -1,4 +1,3 @@
-import { isNotNullAndUndefined } from 'commons/utils';
 import Image from 'next/image';
 import { useState } from 'react';
 import Avatar from 'react-avatar';
@@ -22,9 +21,11 @@ const ReplyComment = ({
     return (
         <div className="flex gap-3 items-center">
             <div className="relative w-[20px] h-[20px]">
-                {isNotNullAndUndefined(student?.photo_url) && !imageError ? (
+                {student?.photo_url &&
+                student.photo_url.length > 0 &&
+                !imageError ? (
                     <Image
-                        src={student?.photo_url ?? ''}
+                        src={student?.photo_url}
                         alt={student?.username}
                         layout="fill"
                         className="rounded-full object-contain"
