@@ -100,21 +100,21 @@ export const ListBooks = ({
                             className="object-contain rounded"
                         />
                         <div className="flex flex-col gap-[6px]">
-                            <span className="inline-block font-body text-lg text-neutral-200">
+                            <span className="inline-block text-lg font-body text-neutral-200">
                                 {title}
                             </span>
                             <div>
-                                <span className="inline-block font-body text-base text-neutral-600">
-                                    {`oleh ${authors}`}
-                                </span>
-                                <span className="flex items-center gap-[2px] font-body text-xs text-neutral-600">
-                                    {rating !== 0 && (
-                                        <>
-                                            <AiFillStar />
-                                            {+rating.toFixed(1)}
-                                        </>
-                                    )}
-                                </span>
+                                {authors && (
+                                    <span className="inline-block text-base font-body text-neutral-600">
+                                        {`oleh ${authors}`}
+                                    </span>
+                                )}
+                                {rating !== 0 && (
+                                    <span className="flex items-center gap-[2px] font-body text-xs text-neutral-600">
+                                        <AiFillStar />
+                                        {+rating.toFixed(1)}
+                                    </span>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -207,8 +207,8 @@ const CourseDetailBox = (): JSX.Element => {
                 <div
                     className="flex flex-col gap-[14px] px-5 md:px-16 lg:px-[18px] py-[18px] bg-[#1D1D1D]"
                     ref={headerBoxRef}>
-                    <div className="flex justify-between items-center">
-                        <h4 className="font-sans font-extrabold text-base xl:text-lg whitespace-nowrap text-ellipsis overflow-hidden">
+                    <div className="flex items-center justify-between">
+                        <h4 className="overflow-hidden font-sans text-base font-extrabold xl:text-lg whitespace-nowrap text-ellipsis">
                             {course?.course_name}
                         </h4>
                         <span className="min-w-[100px] font-body font-extrabold text-base xl:text-lg text-[#FFFFFF80] pl-1">
@@ -229,7 +229,7 @@ const CourseDetailBox = (): JSX.Element => {
                         <div className="w-[20px] grow">
                             <MdStarPurple500
                                 size={20}
-                                className="text-neutral-400 hover:text-white ml-auto mr-0 cursor-pointer"
+                                className="ml-auto mr-0 cursor-pointer text-neutral-400 hover:text-white"
                                 onClick={() => {
                                     tracker?.genericTrack(
                                         'Click Give Rating Button',
@@ -267,7 +267,7 @@ const CourseDetailBox = (): JSX.Element => {
                                 onClick={() => handleSearch({})}
                             />
                             <input
-                                className="w-full bg-transparent border-none font-body text-xs focus:outline-none focus:ring-0 focus:appearance-none"
+                                className="w-full text-xs bg-transparent border-none font-body focus:outline-none focus:ring-0 focus:appearance-none"
                                 type="text"
                                 value={search}
                                 name="search"
@@ -291,7 +291,7 @@ const CourseDetailBox = (): JSX.Element => {
                             />
                         </div>
                     ) : (
-                        <div className="flex justify-between items-center">
+                        <div className="flex items-center justify-between">
                             <div className="flex gap-4">
                                 <span
                                     className={`inline-block font-bold text-sm pb-[6px] cursor-pointer ${

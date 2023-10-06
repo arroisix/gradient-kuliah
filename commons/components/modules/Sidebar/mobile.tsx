@@ -1,4 +1,5 @@
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
+import { cn } from 'commons/utils';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useGetCommunityNotificationQuery } from 'komunitas/redux/api/komunitasApi';
 import Link from 'next/link';
@@ -8,10 +9,12 @@ import { BiBookReader } from 'react-icons/bi';
 import { FiHome } from 'react-icons/fi';
 import { MdOutlineClose } from 'react-icons/md';
 import {
+    RiBookOpenLine,
     // RiBookOpenLine,
     // RiNotification3Line,
     RiQuestionnaireLine
 } from 'react-icons/ri';
+import { useTracker } from 'tracker/tracker';
 
 const MobileSidebar = ({
     setOpenSidebar
@@ -19,6 +22,7 @@ const MobileSidebar = ({
     setOpenSidebar: Dispatch<SetStateAction<boolean>>;
 }): JSX.Element => {
     const route = useRouter();
+    const tracker = useTracker();
     const { pathname } = route;
     const { is_subscribed } = useCourseSubscription();
 
@@ -99,17 +103,22 @@ const MobileSidebar = ({
                         Kelas
                     </span>
                 </Link>
-                {/* <Link href={'/buku'}>
+                <Link
+                    href={'/astronotes'}
+                    onClick={() => {
+                        tracker?.genericTrack('Click Library Navigation');
+                    }}>
                     <span
-                        className={`flex gap-4 cursor-pointer ${
-                            pathname === '/buku'
+                        className={cn(
+                            'flex gap-4 cursor-pointer hover:text-[#999999]',
+                            pathname.includes('/astronotes')
                                 ? 'text-[#CCCCCC]'
                                 : 'text-[#666666]'
-                        } text-[#666666] hover:text-[#999999]`}>
+                        )}>
                         <RiBookOpenLine size={20} />
-                        Buku
+                        Perpustakaan
                     </span>
-                </Link> */}
+                </Link>
             </div>
         </div>
     );

@@ -145,7 +145,7 @@ const Navbar = ({
     const isShowNavbarMenu = (): boolean => {
         if (
             router.pathname.includes('kelas/[id]/') ||
-            router.pathname.includes('astronotes/') ||
+            router.pathname.includes('astronotes') ||
             router.pathname.includes('referral')
         ) {
             return true;
@@ -251,16 +251,16 @@ const Navbar = ({
                                 }`}>
                                 Kelas
                             </Button>
-                            {/* <Button
-                                    href="/perpustakaan"
-                                    variant="custom"
-                                    className={`!p-0 font-body font-normal text-xs text-neutral-400 ${
-                                        lightMode 
-                                            ? 'hover:text-black'
-                                            : 'hover:text-white'
-                                    }`}>
-                                    Perpustakaan
-                                </Button> */}
+                            <Button
+                                href="/astronotes"
+                                variant="custom"
+                                className={`!p-0 font-body font-normal text-xs text-neutral-400 ${
+                                    lightMode
+                                        ? 'hover:text-black'
+                                        : 'hover:text-white'
+                                }`}>
+                                Perpustakaan
+                            </Button>                            
                         </div>
                     )}
                 </div>
@@ -289,7 +289,7 @@ const Navbar = ({
                             {isAuthenticated ? (
                                 <nav
                                     className={`ml-12 flex gap-6 cursor-pointer relative`}>
-                                    {router.pathname.includes('astronotes') &&
+                                    {router.pathname.includes('astronotes/') &&
                                         !isBookProgressLoading && (
                                             <button onClick={handleBookmark}>
                                                 {isBookmarked ? (
@@ -481,7 +481,7 @@ const Navbar = ({
                                             </nav>
                                         </Link>
                                     )}
-                                    {router.pathname.includes('astronotes') &&
+                                    {router.pathname.includes('astronotes/') &&
                                         !isBookProgressLoading && (
                                             <button onClick={handleBookmark}>
                                                 {isBookmarked ? (

@@ -16,6 +16,20 @@ export const astronotesApi = baseApi.injectEndpoints({
             }),
             providesTags: [{ type: 'ASTRONOTES', id: 'ALL' }]
         }),
+        getEntrypointBooks: builder.query<
+            AstronoteBooksByCategory[],
+            BaseListQueryParams | undefined
+        >({
+            query: (params) => ({
+                url: `${COURSE_BASE_URL}entrypoint`,
+                params
+            }),
+            providesTags: [{ type: 'ASTRONOTES', id: 'ENTRYPOINT' }]
+        }),
+        getBookCategories: builder.query<AstronoteCategory[], void>({
+            query: () => ({ url: `${COURSE_BASE_URL}categories/` }),
+            providesTags: [{ type: 'ASTRONOTES', id: 'CATEGORIES' }]
+        }),
         postBookProgress: builder.mutation<
             {
                 message: string;
@@ -135,6 +149,8 @@ export const astronotesApi = baseApi.injectEndpoints({
 });
 
 export const {
+    useGetEntrypointBooksQuery,
+    useGetBookCategoriesQuery,
     useGetBookProgressQuery,
     useLazyGetBookProgressQuery,
     usePostBookProgressMutation,
