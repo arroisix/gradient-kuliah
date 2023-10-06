@@ -47,6 +47,7 @@ const QnaTextArea = ({
     const { uploadFile } = useUploadFile('qna');
     const [isTextAreaFocus, setOnTextAreaFocus] = useState(false);
     const [attachment, setAttachment] = useState<string[]>([]);
+    const [attachmentPreview, setAttachmentPreview] = useState<string[]>([]);
     const [isAnon, setIsAnon] = useState(false);
     const formId = makeid(10);
 
@@ -59,6 +60,10 @@ const QnaTextArea = ({
             for (let i = 0; i < event?.target?.files.length; ++i) {
                 const file = event?.target?.files[i];
 
+                setAttachmentPreview((prev) => [
+                    ...prev,
+                    URL.createObjectURL(file)
+                ]);
                 files.push(file);
             }
         }
@@ -86,13 +91,20 @@ const QnaTextArea = ({
         setOnTextAreaFocus(false);
     };
 
-    const removeAttachment = (url: string): void => {
-        setAttachment((current) =>
-            current.filter((data: string) => data !== url)
-        );
+    const removeAttachment = (index: number): void => {
+        URL.revokeObjectURL(attachmentPreview[index]);
+        setAttachmentPreview((current) => [
+            ...current.slice(0, index),
+            ...current.slice(index + 1)
+        ]);
+        setAttachment((current) => [
+            ...current.slice(0, index),
+            ...current.slice(index + 1)
+        ]);
     };
 
     const resetFormState = (): void => {
+        setAttachmentPreview([]);
         setAttachment([]);
         setIsAnon(false);
     };
@@ -129,10 +141,10 @@ const QnaTextArea = ({
                     placeholder={placeholder}
                     className="bg-transparent transition-all resize-none w-full border-transparent focus:border-transparent focus:ring-0 focus:ring-transparent"
                 />
-                {attachment.length > 0 && (
+                {attachmentPreview.length > 0 && (
                     <div className="py-2 overflow-x-auto w-full max-w-[70vw] lg:max-w-[50vw]">
                         <div className="flex gap-2 w-screen">
-                            {attachment.map((url: string) => (
+                            {attachmentPreview.map((url: string, index) => (
                                 <div
                                     className="rounded bg-neutral-800 h-32 w-32 relative flex items-center"
                                     key={url}>
@@ -145,7 +157,7 @@ const QnaTextArea = ({
                                     />
                                     <MdClose
                                         className="z-5 absolute right-1 top-1 cursor-pointer"
-                                        onClick={() => removeAttachment(url)}
+                                        onClick={() => removeAttachment(index)}
                                     />
                                 </div>
                             ))}
