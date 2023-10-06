@@ -1,4 +1,5 @@
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
+import { cn } from 'commons/utils';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useGetCommunityNotificationQuery } from 'komunitas/redux/api/komunitasApi';
 import Link from 'next/link';
@@ -6,11 +7,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { BiBookReader } from 'react-icons/bi';
 import { FiHome } from 'react-icons/fi';
-import {
-    RiQuestionnaireLine
-    // RiNotification3Line,
-    // RiBookOpenLine
-} from 'react-icons/ri';
+import { RiBookOpenLine, RiQuestionnaireLine } from 'react-icons/ri';
 import { useTracker } from 'tracker/tracker';
 
 const Sidebar = ({
@@ -115,17 +112,26 @@ const Sidebar = ({
                         Kelas
                     </span>
                 </Link>
-                {/* <Link href={'/buku'}>
+                <Link
+                    href={'/astronotes'}
+                    onClick={() => {
+                        tracker?.genericTrack(
+                            `Click Library ${
+                                !fullHeight ? 'Course ' : ''
+                            }Navigation`
+                        );
+                    }}>
                     <span
-                        className={`flex gap-4 cursor-pointer ${
-                            pathname.includes('/buku')
+                        className={cn(
+                            'flex gap-4 cursor-pointer  font-body text-sm hover:text-[#999999]',
+                            pathname.includes('/astronotes')
                                 ? 'text-white'
                                 : 'text-[#666666]'
-                        } font-body text-sm hover:text-[#999999]`}>
+                        )}>
                         <RiBookOpenLine size={20} />
-                        Buku
+                        Perpustakaan
                     </span>
-                </Link> */}
+                </Link>
             </div>
         </aside>
     );

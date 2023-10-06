@@ -101,3 +101,27 @@ interface AstronotesState {
     // dataHighlighted: DataHighlightedInterface | null;
     // points: { x: number; y: number; width: number };
 }
+
+interface Astronote {
+    id: string;
+    slug: string;
+    title: string;
+    rating: number;
+    book_cover_url: string;
+    authors?: string;
+    education_level?: string;
+    category_id: string;
+    category?: string;
+    in_progress?: boolean;
+    is_free: boolean;
+    is_public: boolean;
+}
+interface AstronoteBooksByCategory {
+    category_id: string;
+    books: Astronote[];
+}
+
+interface AstronoteCategory {
+    id: string;
+    name: string;
+}
