@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { onlyText } from 'commons/utils';
+import { cn, onlyText } from 'commons/utils';
 import Link from 'next/link';
 import { MouseEventHandler } from 'react';
 import { useTracker } from 'tracker/tracker';
@@ -49,32 +49,26 @@ const Button = ({
     };
 
     const computeVariant = (): string => {
-        let styling = 'font-bold cursor-pointer';
-
-        if (disabled) {
-            styling += ` ${BUTTON_THEME['disabled']}`;
-        } else {
-            styling += ` ${BUTTON_THEME[variant]}`;
-        }
-
-        if (size) {
-            styling += ` ${BUTTON_SIZE[size]}`;
-        } else {
-            styling += ` ${BUTTON_SIZE['normal']}`;
-        }
-
-        return `${styling} ${className}`;
+        const styling = 'font-bold cursor-pointer';
+        return cn(
+            styling,
+            className,
+            disabled ? BUTTON_THEME['disabled'] : BUTTON_THEME[variant],
+            size ? BUTTON_SIZE[size] : BUTTON_SIZE['normal']
+        );
     };
 
     if (target) {
         return (
-            <a href={href} target={target} id={id} onClick={handleClick}>
-                <div
-                    onMouseEnter={onMouseEnter}
-                    onMouseLeave={onMouseLeave}
-                    className={computeVariant()}>
-                    {children}
-                </div>
+            <a
+                href={href}
+                target={target}
+                id={id}
+                onClick={handleClick}
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+                className={cn('block', computeVariant())}>
+                {children}
             </a>
         );
     }
