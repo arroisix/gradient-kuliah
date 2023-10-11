@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
+import { useTracker } from 'tracker/tracker';
 import CourseCard from '../components/CourseCard';
 import CourseContainer from '../components/CourseContainer';
 import useCourses from '../hooks/useCourses';
 
 const PrivateCourses = ({ myClass }: { myClass: boolean }): JSX.Element => {
+    const tracker = useTracker();
+
     const { data, loading } = useCourses();
     const [courses, setCourses] = useState<Course[]>([]);
 
@@ -35,7 +38,18 @@ const PrivateCourses = ({ myClass }: { myClass: boolean }): JSX.Element => {
                 </>
             ) : (
                 courses.map((course: Course) => (
-                    <CourseCard course={course} key={course.id} />
+                    <CourseCard
+                        course={course}
+                        key={course.id}
+                        onClick={() => {
+                            tracker?.genericTrack(
+                                'Click Private Class Card On Class Page',
+                                {
+                                    'Course Slug': course.slug
+                                }
+                            );
+                        }}
+                    />
                 ))
             )}
         </CourseContainer>

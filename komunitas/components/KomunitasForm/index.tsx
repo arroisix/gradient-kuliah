@@ -68,7 +68,7 @@ const KomunitasForm = ({
             console.error(e);
         }
     }
-    
+
     return (
         <div>
             <div
