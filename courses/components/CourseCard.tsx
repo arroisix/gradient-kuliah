@@ -1,10 +1,17 @@
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import useTransition from 'commons/hooks/useTransition';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 
-const CourseCard = ({ course }: { course: Course }): JSX.Element => {
+const CourseCard = ({
+    course,
+    onClick
+}: {
+    course: Course;
+    onClick?: () => void;
+}): JSX.Element => {
     const router = useRouter();
     const loadingTransition = useTransition(router);
 
@@ -22,7 +29,17 @@ const CourseCard = ({ course }: { course: Course }): JSX.Element => {
     };
 
     return (
-        <>
+        <Link
+            href={course.is_coming_soon ? '' : decideUrl()}
+            onClick={() => {
+                onClick?.();
+                course.is_coming_soon &&
+                    toast.info('Segera hadir!', {
+                        position: 'top-center',
+                        theme: 'colored',
+                        hideProgressBar: true
+                    });
+            }}>
             <div
                 className="p-4 h-52 w-full bg-neutral-800 mr-2 rounded-lg cursor-pointer flex items-end relative overflow-hidden"
                 style={{
@@ -30,18 +47,7 @@ const CourseCard = ({ course }: { course: Course }): JSX.Element => {
                     backgroundColor: '#333333',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center'
-                }}
-                onClick={
-                    course.is_coming_soon
-                        ? () =>
-                              toast.info('Segera hadir!', {
-                                  position: 'top-center',
-                                  theme: 'colored',
-                                  hideProgressBar: true
-                              })
-                        : () => router.push(decideUrl())
-                }
-                aria-hidden={true}>
+                }}>
                 {course.course_name}
                 {course.is_coming_soon && (
                     <div
@@ -55,7 +61,7 @@ const CourseCard = ({ course }: { course: Course }): JSX.Element => {
                 )}
             </div>
             {loadingTransition && <LoadingBackdrop />}
-        </>
+        </Link>
     );
 };
 

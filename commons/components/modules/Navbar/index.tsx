@@ -260,7 +260,7 @@ const Navbar = ({
                                         : 'hover:text-white'
                                 }`}>
                                 Perpustakaan
-                            </Button>                            
+                            </Button>
                         </div>
                     )}
                 </div>
@@ -455,7 +455,13 @@ const Navbar = ({
                         <div className="flex gap-4 text-3xl md:hidden">
                             {!isAuthenticated ? (
                                 <>
-                                    <Link href="/kelas">
+                                    <Link
+                                        href="/kelas"
+                                        onClick={() =>
+                                            tracker?.genericTrack(
+                                                'Click Class Button On Top Navbar'
+                                            )
+                                        }>
                                         <nav className="flex items-center text-base font-bold">
                                             Kelas
                                         </nav>
@@ -471,7 +477,13 @@ const Navbar = ({
                             ) : (
                                 <div className="flex items-center gap-4">
                                     {router.pathname === '/' && (
-                                        <Link href="/kelas">
+                                        <Link
+                                            href="/kelas"
+                                            onClick={() =>
+                                                tracker?.genericTrack(
+                                                    'Click Class Button On Top Navbar'
+                                                )
+                                            }>
                                             <nav
                                                 className="ml-12 text-sm font-bold cursor-pointer hover:text-accent-blue"
                                                 onMouseEnter={
