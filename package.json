@@ -33,6 +33,7 @@
         "marked-katex-extension": "^1.0.2",
         "mixpanel-browser": "^2.47.0",
         "moment": "^2.29.4",
+        "moment-timezone": "^0.5.43",
         "next": "12.1.6",
         "next-redux-wrapper": "^7.0.5",
         "next-seo": "^6.1.0",
