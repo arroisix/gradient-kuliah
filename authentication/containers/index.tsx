@@ -61,7 +61,7 @@ export const AuthenticationContainer: React.FC = () => {
                                 className="text-white bg-[#7264EB] w-full"
                                 onClick={() => login()}
                                 eventName={`Attempts to ${
-                                    isLogin ? 'login' : 'register'
+                                    isLogin ? 'Login' : 'Register'
                                 } with Google`}>
                                 <div className="flex items-center justify-center ">
                                     <AiOutlineGoogle className="mr-2 text-2xl" />
