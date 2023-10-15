@@ -28,6 +28,8 @@ export const AuthenticationContainer: React.FC = () => {
 
     const logout: () => void = () => dispatch(removeUser());
 
+    const isLogin = pathname === '/masuk';
+
     return (
         <section className="flex items-center justify-center w-screen min-h-screen text-white bg-neutral-1000">
             {pathname === '/onboarding' && (
@@ -58,7 +60,9 @@ export const AuthenticationContainer: React.FC = () => {
                                 variant="custom"
                                 className="text-white bg-[#7264EB] w-full"
                                 onClick={() => login()}
-                                eventName="Attempts to Login with Google">
+                                eventName={`Attempts to ${
+                                    isLogin ? 'Login' : 'Register'
+                                } with Google`}>
                                 <div className="flex items-center justify-center ">
                                     <AiOutlineGoogle className="mr-2 text-2xl" />
                                     <span>Lanjutkan Dengan Google</span>
