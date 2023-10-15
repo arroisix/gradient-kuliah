@@ -4,7 +4,7 @@ import moment, { type Moment } from 'moment-timezone';
 import Image from 'next/image';
 import React from 'react';
 
-const TUTOR_LINK = 'https://bit.ly/sxdtcf345346vygubhnj1278fsduhqbjk';
+const TUTOR_LINK = 'https://linktr.ee/z4ex5rc6tvybhijno';
 const TUTOR_ASSET = `${CDN_URL}/assets/tutor-banner.png`;
 const USER_TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
