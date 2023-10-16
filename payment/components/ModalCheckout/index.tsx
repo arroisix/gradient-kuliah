@@ -11,8 +11,13 @@ import { useEffect, useState } from 'react';
 import Spinner from 'commons/components/elements/Spinner';
 import { useValidatePromoMutation } from 'referral/redux/referalApi';
 import { useTracker } from 'tracker/tracker';
+import { MdOutlineQrCodeScanner } from 'react-icons/md';
 
 const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
+    const [phoneNumber, setPhoneNumber] = useState<string>();
+    const [phoneNumberError, setPhoneNumberError] = useState<string | null>(
+        null
+    );
     const [inputCode, setInputCode] = useState('');
     const [loadingValidate, setLoadingValidate] = useState(false);
 
@@ -87,43 +92,90 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
         setOpen(state);
     }
 
+    function handleSetPhoneNumber(phoneNumber: string): void {
+        if (!phoneNumber.match(/^\d{1,14}$/)) {
+            setPhoneNumberError('Invalid phone number format');
+        } else {
+            setPhoneNumberError(null);
+        }
+        setPhoneNumber(phoneNumber);
+    }
+
     return (
         <Modal
             isOpen={isOpen}
             setOpen={handleCloseModal}
             variant="dark"
             className="!bg-[#1D1D1D]">
-            <div className="w-full flex flex-col mb-4">
+            <div className="flex flex-col w-full mb-4">
                 <h1 className="font-extrabold">Konfirmasi Pembayaran</h1>
             </div>
-            <div className="w-full flex flex-col mb-4">
-                <p className="font-body text-xs text-neutral-400">
-                    METODE PEMBAYARAN
+            <div className="flex flex-col w-full mb-4">
+                <p className="text-xs font-body text-neutral-400">
+                    Metode Pembayaran
                 </p>
                 <div className="flex justify-between items-center w-full mt-2 p-4 bg-[#242424] rounded-[6px]">
                     <p className="text-base font-bold">
                         {NAME_PAYMENT[paymentMethod]}
                     </p>
                     <div className="rounded-lg h-[50px] w-[100px] bg-white flex items-center justify-center">
-                        <div className="h-[20px] w-[65px] relative">
-                            <Image
-                                src={`https://d2uqn6ndx4ow3t.cloudfront.net/assets/payments/${LOGO_PAYMENT[paymentMethod]}`}
-                                layout="fill"
-                            />
-                        </div>
+                        {paymentMethod === 'QRIS' ? (
+                            <div className="flex flex-col items-center text-neutral-900">
+                                <MdOutlineQrCodeScanner
+                                    size={20}
+                                    className="text-accent-purple"
+                                />
+                                <div className="text-xs">Scan QRIS</div>
+                            </div>
+                        ) : (
+                            <div className="h-[20px] w-[65px] relative">
+                                <Image
+                                    src={`https://d2uqn6ndx4ow3t.cloudfront.net/assets/payments/${LOGO_PAYMENT[paymentMethod]}`}
+                                    layout="fill"
+                                />
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
-            <div className="w-full flex flex-col mb-4">
-                <p className="font-body text-xs text-neutral-400">
+            {paymentMethod === 'ID_OVO' && (
+                <div className="flex flex-col w-full mb-4">
+                    <p className="text-xs font-body text-neutral-400">
+                        Nomor Telepon Yang Terdaftar Pada OVO
+                    </p>
+                    <div className="flex justify-between items-center gap-3 w-full mt-2 px-4 bg-[#2D2D2D] rounded-[6px]">
+                        <div>
+                            <span className="text-neutral-400">+62</span>
+                        </div>
+                        <input
+                            type="tel"
+                            placeholder="8211234567"
+                            required={true}
+                            pattern="\+[1-9]\d{10,14}"
+                            onChange={(event) =>
+                                handleSetPhoneNumber(event.target.value)
+                            }
+                            className="w-full px-0 py-4 text-xs bg-transparent border-none placeholder:text-neutral-600 focus:outline-none focus:ring-0 focus:appearance-none"
+                        />
+                    </div>
+                    {phoneNumberError && (
+                        <div className="font-body text-xs px-2 pt-2 text-state-error">
+                            {phoneNumberError}
+                        </div>
+                    )}
+                </div>
+            )}
+
+            <div className="flex flex-col w-full mb-4">
+                <p className="text-xs font-body text-neutral-400">
                     Pilihan Paket
                 </p>
                 <div className="flex justify-between items-center gap-4 w-full mt-2 p-4 bg-[#242424] rounded-[6px]">
                     <div>
-                        <span className="inline-block font-extrabold text-sm">
+                        <span className="inline-block text-sm font-extrabold">
                             {packet?.packet_name}
                         </span>
-                        <span className="inline-block font-body text-neutral-400 text-xs">
+                        <span className="inline-block text-xs font-body text-neutral-400">
                             {`Langganan hingga `}
                             <span className="inline-block">
                                 {moment()
@@ -138,8 +190,8 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
                     </span>
                 </div>
             </div>
-            <div className="w-full flex flex-col mb-4">
-                <p className="font-body text-xs text-neutral-400">
+            <div className="flex flex-col w-full mb-4">
+                <p className="text-xs font-body text-neutral-400">
                     Kode Voucher
                 </p>
                 <div className="flex justify-between items-center gap-3 w-full mt-2 px-4 bg-[#2D2D2D] rounded-[6px]">
@@ -148,13 +200,13 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
                         placeholder="Masukan kode voucher"
                         value={inputCode}
                         onChange={(event) => setInputCode(event.target.value)}
-                        className="w-full text-xs px-0 py-4 bg-transparent border-none placeholder:text-neutral-600 focus:outline-none focus:ring-0 focus:appearance-none"
+                        className="w-full px-0 py-4 text-xs bg-transparent border-none placeholder:text-neutral-600 focus:outline-none focus:ring-0 focus:appearance-none"
                     />
                     {(loadingValidate || isLoadingValidate) && (
                         <Spinner size="small" />
                     )}
                     <span
-                        className="inline-block font-body text-accent-purple text-xs cursor-pointer"
+                        className="inline-block text-xs cursor-pointer font-body text-accent-purple"
                         onClick={handlePaste}
                         aria-hidden>
                         TEMPEL
@@ -174,34 +226,34 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
                         </div>
                     )}
             </div>
-            <div className="w-full flex flex-col gap-2 mb-4">
-                <p className="font-body text-xs">Ringkasan Belanja</p>
+            <div className="flex flex-col w-full gap-2 mb-4">
+                <p className="text-xs font-body">Ringkasan Belanja</p>
                 <div className="flex flex-col gap-1">
-                    <div className="flex justify-between items-center">
-                        <span className="inline-block font-body text-neutral-600 text-xs">
+                    <div className="flex items-center justify-between">
+                        <span className="inline-block text-xs font-body text-neutral-600">
                             Harga Paket
                         </span>
-                        <span className="inline-block font-body text-neutral-600 text-sm">
+                        <span className="inline-block text-sm font-body text-neutral-600">
                             {formatCurrency(packet?.price as string)}
                         </span>
                     </div>
                     {validateResult?.is_valid && (
-                        <div className="flex justify-between items-center">
-                            <span className="inline-block font-body text-neutral-600 text-xs">
+                        <div className="flex items-center justify-between">
+                            <span className="inline-block text-xs font-body text-neutral-600">
                                 Diskon Voucher
                             </span>
-                            <span className="inline-block font-body text-neutral-600 text-sm">
+                            <span className="inline-block text-sm font-body text-neutral-600">
                                 {formatCurrency(
                                     `${validateResult?.discount_amount}`
                                 )}
                             </span>
                         </div>
                     )}
-                    <div className="flex justify-between items-center">
-                        <span className="inline-block font-body text-neutral-600 text-xs">
+                    <div className="flex items-center justify-between">
+                        <span className="inline-block text-xs font-body text-neutral-600">
                             Subtotal
                         </span>
-                        <span className="inline-block font-extrabold text-sm">
+                        <span className="inline-block text-sm font-extrabold">
                             {validateResult?.is_valid
                                 ? formatCurrency(
                                       `${validateResult?.payment_amount}`
@@ -211,20 +263,25 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
                     </div>
                 </div>
             </div>
-            <div className="w-full flex flex-col justify-center items-center">
+            <div className="flex flex-col items-center justify-center w-full">
                 <CheckoutButton
                     packetId={packet?.id as string}
                     paymentMethod={paymentMethod}
                     promoCode={inputCode}
                     disabled={
-                        inputCode === ''
+                        (inputCode === ''
                             ? false
                             : validateResult || loadingValidate
                             ? !!!validateResult?.is_valid || loadingValidate
-                            : false
+                            : false) ||
+                        (paymentMethod === 'ID_OVO' &&
+                            (!phoneNumber ||
+                                phoneNumber === '+62' ||
+                                !!phoneNumberError))
                     }
+                    phoneNumber={phoneNumber}
                 />
-                <span className="flex items-center text-xs mt-2">
+                <span className="flex items-center mt-2 text-xs">
                     <BsShieldFillCheck className="mr-2" />
                     Secure Payment
                 </span>

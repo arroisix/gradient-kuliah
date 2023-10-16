@@ -1,12 +1,26 @@
 type PaymentMethod =
+    | PaymentMethodVirtualAccount
+    | PaymentMethodEwallet
+    | PaymentMethodOutlet
+    | 'QRIS'
+    | 'OTHER';
+
+type PaymentMethodVirtualAccount =
     | 'VA_BNI'
     | 'VA_MANDIRI'
     | 'VA_BCA'
     | 'VA_BRI'
     | 'VA_BSI'
     | 'VA_BJB'
-    | 'VA_PERMATA'
-    | 'QRIS';
+    | 'VA_PERMATA';
+
+type PaymentMethodEwallet =
+    | 'GOPAY'
+    | 'ID_DANA'
+    | 'ID_SHOPEEPAY'
+    | 'ID_OVO'
+    | 'ID_LINKAJA';
+type PaymentMethodOutlet = 'ALFAMART' | 'INDOMARET';
 
 type Subscription = {
     id: string;
@@ -61,6 +75,14 @@ type Transaction = {
     payment_amount: number;
     discount_amount: number;
     promo_code: string;
+    qr_string: string;
+    ewallet_actions: {
+        desktop_web_checkout_url: string | null;
+        mobile_web_checkout_url: string | null;
+        mobile_deeplink_checkout_url: string | null;
+        qr_checkout_string: string | null;
+    } | null;
+    payment_code: string;
 };
 
 interface CheckoutInputData {
@@ -74,3 +96,13 @@ interface OneCourseManyPacketQuery {
     course_id: string;
     add_to_cart?: boolean;
 }
+
+type GuideContent = {
+    [key: string]: {
+        method: string[];
+        step: {
+            asset: string;
+            description: string;
+        }[][];
+    };
+};

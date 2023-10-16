@@ -1,7 +1,7 @@
 import { LOGO_PAYMENT } from './constant';
 import Image from 'next/image';
 import { useState } from 'react';
-import guide from '../contents/checkoutGuide.json';
+import guideContent from '../contents/checkoutGuide.json';
 import { useGetTransactionQuery } from 'payment/redux/api/transactionApi';
 import { useRouter } from 'next/router';
 import { useTracker } from 'tracker/tracker';
@@ -42,7 +42,7 @@ const TabOption = ({
     options: string[];
 }): JSX.Element => {
     return (
-        <div className="w-full flex border-b-2 border-neutral-800">
+        <div className="flex w-full border-b-2 border-neutral-800">
             {options?.map((option, index) => (
                 <Option
                     title={option}
@@ -65,7 +65,7 @@ interface GuideStepProps {
 
 const GuideStep = ({ step, index }: GuideStepProps): JSX.Element => {
     return (
-        <div className="w-full flex mb-4">
+        <div className="flex w-full mb-4">
             {/* <div className="w-[250px] h-[150px] bg-neutral-400 rounded mr-2"></div> */}
             <div>
                 <p className="md:text-2xl">
@@ -76,15 +76,18 @@ const GuideStep = ({ step, index }: GuideStepProps): JSX.Element => {
     );
 };
 
-const TabContent = ({ tab }: { tab: number }) => {
+const TabContent = ({ tab }: { tab: number }): JSX.Element => {
     const router = useRouter();
     const { id } = router.query;
     const { data: transaction } = useGetTransactionQuery(id as string, {
         skip: id === undefined || id === null
     });
+
+    const guide = guideContent as GuideContent;
+
     return (
         <div className="py-8">
-            {guide[transaction?.payment_method as PaymentMethod]?.step[tab].map(
+            {guide?.[transaction?.payment_method ?? '']?.step[tab].map(
                 (s, index) => (
                     <GuideStep step={s} index={index} key={index + 'key'} />
                 )
@@ -111,6 +114,9 @@ const TransactionGuide = (): JSX.Element => {
         );
     }
 
+    const guide = guideContent as GuideContent;
+    if (transaction && !guide[transaction?.payment_method]) return <></>;
+
     const tabOptions = guide[transaction?.payment_method as PaymentMethod]
         ?.method as string[];
 
@@ -124,8 +130,8 @@ const TransactionGuide = (): JSX.Element => {
 
     return (
         <div className="w-full mt-4">
-            <div className="w-full flex justify-between">
-                <h5 className="font-bold text-2xl">Cara Bayar</h5>
+            <div className="flex justify-between w-full">
+                <h5 className="text-2xl font-bold">Cara Bayar</h5>
                 <div className="rounded-lg h-[50px] w-[150px] bg-white mr-2 flex items-center justify-center">
                     <div className="h-[35px] w-[100px] relative">
                         <Image

@@ -101,6 +101,9 @@ dependencies:
   react-copy-to-clipboard:
     specifier: ^5.1.0
     version: 5.1.0(react@18.1.0)
+  react-device-detect:
+    specifier: ^2.2.3
+    version: 2.2.3(react-dom@18.1.0)(react@18.1.0)
   react-dom:
     specifier: 18.1.0
     version: 18.1.0(react@18.1.0)
@@ -113,6 +116,9 @@ dependencies:
   react-intersection-observer:
     specifier: ^9.4.0
     version: 9.4.0(react@18.1.0)
+  react-jsbarcode:
+    specifier: ^0.4.2
+    version: 0.4.2(react@18.1.0)
   react-markdown:
     specifier: ^8.0.3
     version: 8.0.3(@types/react@18.0.23)(react@18.1.0)
@@ -122,6 +128,9 @@ dependencies:
   react-player:
     specifier: ^2.11.0
     version: 2.11.0(react@18.1.0)
+  react-qr-code:
+    specifier: ^2.0.12
+    version: 2.0.12(react@18.1.0)
   react-redux:
     specifier: ^8.0.7
     version: 8.0.7(@reduxjs/toolkit@1.9.5)(@types/react-dom@18.0.7)(@types/react@18.0.23)(react-dom@18.1.0)(react-native@0.72.4)(react@18.1.0)(redux@4.2.1)
@@ -6120,6 +6129,11 @@ packages:
       argparse: 2.0.1
     dev: true
 
+  /jsbarcode@3.11.5:
+    resolution: {integrity: sha512-zv3KsH51zD00I/LrFzFSM6dst7rDn0vIMzaiZFL7qusTjPZiPtxg3zxetp0RR7obmjTw4f6NyGgbdkBCgZUIrA==}
+    hasBin: true
+    dev: false
+
   /jsc-android@250231.0.0:
     resolution: {integrity: sha512-rS46PvsjYmdmuz1OAWXY/1kCYG7pnf1TBqeTiOJr1iDz7s5DLxxC9n/ZMknLDxzYzNVfI7R95MH10emSSG1Wuw==}
     dev: false
@@ -8169,6 +8183,10 @@ packages:
     resolution: {integrity: sha512-rRV+zQD8tVFys26lAGR9WUuS4iUAngJScM+ZRSKtvl5tKeZ2t5bvdNFdNHBW9FWR4guGHlgmsZ1G7BSm2wTbuA==}
     engines: {node: '>=6'}
 
+  /qr.js@0.0.0:
+    resolution: {integrity: sha512-c4iYnWb+k2E+vYpRimHqSu575b1/wKl4XFeJGpFmrJQz5I88v9aY2czh7s0w36srfCM1sXgC/xpoJz5dJfq+OQ==}
+    dev: false
+
   /querystringify@2.2.0:
     resolution: {integrity: sha512-FIqgj2EUvTa7R50u0rGsyTftzjYmv/a3hO345bZNrqabNqjtgiDMgmo4mkUjd+nzU5oF3dClKqFIPUKybUyqoQ==}
     dev: false
@@ -8221,6 +8239,17 @@ packages:
       copy-to-clipboard: 3.3.3
       prop-types: 15.8.1
       react: 18.1.0
+    dev: false
+
+  /react-device-detect@2.2.3(react-dom@18.1.0)(react@18.1.0):
+    resolution: {integrity: sha512-buYY3qrCnQVlIFHrC5UcUoAj7iANs/+srdkwsnNjI7anr3Tt7UY6MqNxtMLlr0tMBied0O49UZVK8XKs3ZIiPw==}
+    peerDependencies:
+      react: '>= 0.14.0'
+      react-dom: '>= 0.14.0'
+    dependencies:
+      react: 18.1.0
+      react-dom: 18.1.0(react@18.1.0)
+      ua-parser-js: 1.0.36
     dev: false
 
   /react-devtools-core@4.28.0:
@@ -8323,6 +8352,15 @@ packages:
 
   /react-is@18.2.0:
     resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
+    dev: false
+
+  /react-jsbarcode@0.4.2(react@18.1.0):
+    resolution: {integrity: sha512-0MLrre1bLKsiwB26h7/5Hh1fNli/2QpLtxhRn3FBgm1RgC8G65Chm3O9VitVYyHzcJkegp8U6xeog7DlDLrhNA==}
+    peerDependencies:
+      react: '>=17 <=18'
+    dependencies:
+      jsbarcode: 3.11.5
+      react: 18.1.0
     dev: false
 
   /react-konva@18.2.10(konva@9.2.0)(react-dom@18.1.0)(react@18.1.0):
@@ -8514,6 +8552,20 @@ packages:
       prop-types: 15.8.1
       react: 18.1.0
       react-fast-compare: 3.2.2
+    dev: false
+
+  /react-qr-code@2.0.12(react@18.1.0):
+    resolution: {integrity: sha512-k+pzP5CKLEGBRwZsDPp98/CAJeXlsYRHM2iZn1Sd5Th/HnKhIZCSg27PXO58zk8z02RaEryg+60xa4vyywMJwg==}
+    peerDependencies:
+      react: ^16.x || ^17.x || ^18.x
+      react-native-svg: '*'
+    peerDependenciesMeta:
+      react-native-svg:
+        optional: true
+    dependencies:
+      prop-types: 15.8.1
+      qr.js: 0.0.0
+      react: 18.1.0
     dev: false
 
   /react-reconciler@0.27.0(react@18.1.0):
@@ -9884,6 +9936,10 @@ packages:
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: true
+
+  /ua-parser-js@1.0.36:
+    resolution: {integrity: sha512-znuyCIXzl8ciS3+y3fHJI/2OhQIXbXw9MWC/o3qwyR+RGppjZHrM27CGFSKCJXi2Kctiz537iOu2KnXs1lMQhw==}
+    dev: false
 
   /uglify-es@3.3.9:
     resolution: {integrity: sha512-r+MU0rfv4L/0eeW3xZrd16t4NZfK8Ld4SWVglYBb7ez5uXFWHuVRs6xCTrf1yirs9a4j4Y27nn7SRfO6v67XsQ==}
