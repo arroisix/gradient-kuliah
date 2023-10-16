@@ -36,32 +36,32 @@ const SylabbusContent = ({
         <div className="flex flex-col gap-2">
             {isLoading && (
                 <>
-                    <div className='flex items-center gap-4 w-full relative"'>
+                    <div className='relative flex items-center w-full gap-4"'>
                         <Skeleton className="h-[98px] w-[240px]" />
                         <div className="w-full">
                             <Skeleton className="h-4" />
-                            <Skeleton className="h-4 w-1/4" />
+                            <Skeleton className="w-1/4 h-4" />
                         </div>
                     </div>
-                    <div className='flex items-center gap-4 w-full relative"'>
+                    <div className='relative flex items-center w-full gap-4"'>
                         <Skeleton className="h-[98px] w-[240px]" />
                         <div className="w-full">
                             <Skeleton className="h-4" />
-                            <Skeleton className="h-4 w-1/4" />
+                            <Skeleton className="w-1/4 h-4" />
                         </div>
                     </div>
-                    <div className='flex items-center gap-4 w-full relative"'>
+                    <div className='relative flex items-center w-full gap-4"'>
                         <Skeleton className="h-[98px] w-[240px]" />
                         <div className="w-full">
                             <Skeleton className="h-4" />
-                            <Skeleton className="h-4 w-1/4" />
+                            <Skeleton className="w-1/4 h-4" />
                         </div>
                     </div>
-                    <div className='flex items-center gap-4 w-full relative"'>
+                    <div className='relative flex items-center w-full gap-4"'>
                         <Skeleton className="h-[98px] w-[240px]" />
                         <div className="w-full">
                             <Skeleton className="h-4" />
-                            <Skeleton className="h-4 w-1/4" />
+                            <Skeleton className="w-1/4 h-4" />
                         </div>
                     </div>
                 </>
@@ -77,7 +77,7 @@ const SylabbusContent = ({
                             'Sub Chapter Name': subchapter.subchapter_name
                         });
                     }}>
-                    <button className="flex items-center gap-4 w-full relative">
+                    <button className="relative flex items-center w-full gap-4">
                         <div className="h-[98px] min-w-[163px]">
                             <img
                                 src={subchapter.thumbnail}
@@ -155,7 +155,7 @@ const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
     }
 
     return (
-        <div className="px-5 w-screen flex flex-col lg:w-5/12">
+        <div className="flex flex-col w-screen px-5 lg:w-5/12">
             <div className="flex items-center px-4 bg-[#212121] rounded-lg">
                 <input
                     className="w-full px-0 bg-transparent border-none font-body text-sm md:text-base focus:outline-none focus:ring-0 focus:appearance-none placeholder:text-[#666666]"
@@ -179,7 +179,7 @@ const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
                 {isSearch && (
                     <IoMdClose
                         size={16}
-                        className="text-white cursor-pointer ml-2"
+                        className="ml-2 text-white cursor-pointer"
                         onClick={() => {
                             setIsSearch(false);
                             setSearch('');
@@ -204,19 +204,21 @@ const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
                             aria-hidden>
                             VIDEO
                         </span>
-                        <span
-                            className={`inline-block w-full text-center text-sm pb-[6px] cursor-pointer ${
-                                navigation === 'BOOK'
-                                    ? 'border-b-2 border-[#C4B9FF] font-extrabold text-[#C4B9FF]'
-                                    : 'font-medium text-[#CCCCCC] border-b border-[#272727] hover:text-neutral-500'
-                            }`}
-                            onClick={() => {
-                                tracker?.genericTrack('Click Book Tab');
-                                setNavigation('BOOK');
-                            }}
-                            aria-hidden>
-                            BUKU
-                        </span>
+                        {(courseContent?.books.length ?? 0) > 0 && (
+                            <span
+                                className={`inline-block w-full text-center text-sm pb-[6px] cursor-pointer ${
+                                    navigation === 'BOOK'
+                                        ? 'border-b-2 border-[#C4B9FF] font-extrabold text-[#C4B9FF]'
+                                        : 'font-medium text-[#CCCCCC] border-b border-[#272727] hover:text-neutral-500'
+                                }`}
+                                onClick={() => {
+                                    tracker?.genericTrack('Click Book Tab');
+                                    setNavigation('BOOK');
+                                }}
+                                aria-hidden>
+                                BUKU
+                            </span>
+                        )}
                     </div>
                 )}
             </div>
@@ -245,7 +247,7 @@ const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
                         }
                     />
                     {isLoadingCourse && (
-                        <div className="flex flex-col gap-2 w-full">
+                        <div className="flex flex-col w-full gap-2">
                             <Skeleton className="h-14" />
                             <Skeleton className="h-14" />
                             <Skeleton className="h-14" />
