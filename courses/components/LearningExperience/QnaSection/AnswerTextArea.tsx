@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 import { useRouter } from 'next/router';
 import { useTracker } from 'tracker/tracker';
 
-import QnaTextArea from './TextArea';
+import QnaTextArea from './QnaTextArea';
 
 interface QnaFormInputData {
     content: string;

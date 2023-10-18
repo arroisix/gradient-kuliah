@@ -6,11 +6,12 @@ import { ChangeEvent, useRef, useState } from 'react';
 import Button from 'commons/components/elements/Button';
 import { MATH_NOTATION } from './constant';
 
-const MathForm = ({
-    setFormContent
-}: {
+type MathFormProps = {
     setFormContent: React.Dispatch<React.SetStateAction<string>>;
-}): JSX.Element => {
+    onCancel?: () => void;
+};
+
+const MathForm = ({ setFormContent, onCancel }: MathFormProps): JSX.Element => {
     const [mathContent, setMathContent] = useState('');
 
     const mathTextareaRef = useRef<HTMLTextAreaElement>(null);
@@ -68,7 +69,7 @@ const MathForm = ({
                     ? `$$\n${mathContent.replaceAll('\n', '\n\n')}\n$$`
                     : `$${mathContent.replaceAll('\n', '\n\n')}$`}
             </ReactMarkdown>
-            <div className="flex flex-wrap justify-around items-center">
+            <div className="flex flex-wrap items-center justify-around">
                 {MATH_NOTATION.map(({ display, latex }, index) => (
                     <div
                         key={index}
@@ -94,11 +95,14 @@ const MathForm = ({
                 />
                 <div className="flex gap-2 justify-end p-[10px] pt-0">
                     <Button
+                        type="button"
                         variant="custom"
+                        onClick={onCancel}
                         className="text-neutral-600 font-extrabold text-xs px-[10px] py-[5px]">
                         Batal
                     </Button>
                     <Button
+                        type="button"
                         variant="custom"
                         className="!font-semibold text-xs px-[12px] py-[5px] bg-[#373737]"
                         onClick={handleAddMathContent}

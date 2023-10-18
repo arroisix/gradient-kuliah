@@ -19,7 +19,7 @@ const TextContent = dynamic(import('./TextContent'), {
 
 const AnswerItem = ({ answer }: { answer: QnaAnswer }): JSX.Element => {
     return (
-        <div className="flex gap-2 w-full">
+        <div className="flex w-full gap-2">
             <div>
                 <div className="h-[45px] w-[45px] bg-neutral-800 rounded-full overflow-hidden flex justify-center items-center">
                     <span className="font-bold md:text-xl">
@@ -29,19 +29,19 @@ const AnswerItem = ({ answer }: { answer: QnaAnswer }): JSX.Element => {
                     </span>
                 </div>
             </div>
-            <div className="flex flex-col gap-1 w-full">
+            <div className="flex flex-col w-full gap-1">
                 <div className="flex w-full gap-2 md:gap-8">
-                    <p className="font-body font-bold text-xs md:text-base">
+                    <p className="text-xs font-bold font-body md:text-base">
                         {answer.author.full_name}
                     </p>
-                    <p className="font-body text-neutral-600 font-light text-xs md:text-base">
+                    <p className="text-xs font-light font-body text-neutral-600 md:text-base">
                         {moment(answer.created_at)
                             .utc()
                             .format('D MMM YYYY [-] hh:mm [WIB]')}
                     </p>
                 </div>
                 <TextContent content={answer.content} />
-                <div className="flex gap-2 flex-wrap my-4">
+                <div className="flex flex-wrap gap-2 my-4">
                     {answer.attachment?.map((url: string) => (
                         <Image
                             key={url}
@@ -74,7 +74,7 @@ const ListAnswerContainer = ({
             </div>
             <div ref={anchor} className="w-full h-0" />
             {hasMore && (
-                <div className="w-full flex justify-center items-center">
+                <div className="flex items-center justify-center w-full">
                     <Button variant="custom" onClick={loadMore}>
                         Muat Lebih
                     </Button>
@@ -103,7 +103,7 @@ const QuestionItem = ({ question }: { question: QnaQuestion }): JSX.Element => {
     }, [showTextArea]);
 
     return (
-        <div className="flex gap-2 w-full">
+        <div className="flex w-full gap-2">
             <div>
                 <div className="h-[60px] w-[60px] bg-neutral-800 rounded-full overflow-hidden flex justify-center items-center">
                     <span className="font-bold md:text-xl">
@@ -113,34 +113,36 @@ const QuestionItem = ({ question }: { question: QnaQuestion }): JSX.Element => {
                     </span>
                 </div>
             </div>
-            <div className="flex flex-col gap-1 w-full">
+            <div className="flex flex-col w-full gap-1">
                 <div className="flex w-full gap-2 md:gap-8">
-                    <p className="font-body font-bold text-xs md:text-base">
+                    <p className="text-xs font-bold font-body md:text-base">
                         {question.author.full_name}
                     </p>
-                    <p className="font-body text-neutral-600 font-light text-xs md:text-base">
+                    <p className="text-xs font-light font-body text-neutral-600 md:text-base">
                         {moment(question.created_at)
                             .utc()
                             .format('D MMM YYYY [-] hh:mm [WIB]')}
                     </p>
                 </div>
                 <TextContent content={question.content} />
-                <div className="flex gap-2 flex-wrap my-4">
-                    {question.attachment?.map((url: string) => (
-                        <Image
-                            key={url}
-                            height={200}
-                            width={200}
-                            className="object-contain cursor-pointer"
-                            src={url}
-                            alt={url}
-                        />
-                    ))}
-                </div>
-                <div className="flex gap-2 items-center mt-2">
+                {(question.attachment?.length ?? 0) > 0 && (
+                    <div className="flex flex-wrap gap-2 my-4">
+                        {question.attachment?.map((url: string) => (
+                            <Image
+                                key={url}
+                                height={200}
+                                width={200}
+                                className="object-contain cursor-pointer"
+                                src={url}
+                                alt={url}
+                            />
+                        ))}
+                    </div>
+                )}
+                <div className="flex items-center gap-2 mt-2">
                     {question.answer_count > 0 && (
                         <div
-                            className="flex gap-1 items-center text-accent-blue cursor-pointer"
+                            className="flex items-center gap-1 cursor-pointer text-accent-blue"
                             onClick={() => {
                                 if (!showAnswer) {
                                     tracker?.genericTrack(
@@ -163,7 +165,7 @@ const QuestionItem = ({ question }: { question: QnaQuestion }): JSX.Element => {
                         </div>
                     )}
                     <span
-                        className="text-sm font-bold font-body cursor-pointer"
+                        className="text-sm font-bold cursor-pointer font-body"
                         aria-hidden
                         onClick={() => {
                             if (showTextArea) {
@@ -200,11 +202,11 @@ const QuestionItem = ({ question }: { question: QnaQuestion }): JSX.Element => {
 };
 
 const QuestionSkeletonItem = (): JSX.Element => (
-    <div className="flex gap-2 w-full">
+    <div className="flex w-full gap-2">
         <div className="w-[60px] h-[60px] rounded-full bg-neutral-600 animate-pulse" />
-        <div className="flex flex-col gap-2 w-full">
-            <div className="p-4 w-1/4 bg-neutral-600 animate-pulse rounded-lg" />
-            <div className="p-4 w-3/4 bg-neutral-600 animate-pulse rounded-lg" />
+        <div className="flex flex-col w-full gap-2">
+            <div className="w-1/4 p-4 rounded-lg bg-neutral-600 animate-pulse" />
+            <div className="w-3/4 p-4 rounded-lg bg-neutral-600 animate-pulse" />
         </div>
     </div>
 );
@@ -214,7 +216,7 @@ const ListQuestion = (): JSX.Element => {
 
     if (isAllLoading) {
         return (
-            <div className="w-full flex flex-col gap-4 my-8">
+            <div className="flex flex-col w-full gap-4 my-8">
                 <QuestionSkeletonItem />
                 <QuestionSkeletonItem />
                 <QuestionSkeletonItem />
@@ -226,7 +228,7 @@ const ListQuestion = (): JSX.Element => {
     }
 
     return (
-        <div className="w-full flex flex-col gap-4 my-8">
+        <div className="flex flex-col w-full gap-4 my-8">
             {allData?.data.map((question: QnaQuestion) => (
                 <QuestionItem question={question} key={question.id} />
             ))}
