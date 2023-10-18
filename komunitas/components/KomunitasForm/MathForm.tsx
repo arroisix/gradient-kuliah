@@ -16,12 +16,6 @@ const MathForm = ({ setFormContent, onCancel }: MathFormProps): JSX.Element => {
 
     const mathTextareaRef = useRef<HTMLTextAreaElement>(null);
 
-    function handleClickTextArea(
-        event: React.MouseEvent<HTMLTextAreaElement, MouseEvent>
-    ): void {
-        console.log(event.currentTarget.selectionStart);
-    }
-
     function handleMathContent(event: ChangeEvent<HTMLTextAreaElement>): void {
         setMathContent(event.target.value);
     }
@@ -90,7 +84,6 @@ const MathForm = ({ setFormContent, onCancel }: MathFormProps): JSX.Element => {
                     value={mathContent}
                     name="form"
                     onChange={handleMathContent}
-                    onClick={handleClickTextArea}
                     className="w-full bg-transparent text-xs p-[10px] border-none focus:outline-none focus:ring-0 focus:appearance-none"
                 />
                 <div className="flex gap-2 justify-end p-[10px] pt-0">

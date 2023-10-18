@@ -17,6 +17,8 @@ const QrisComponent = ({ transaction }: QrisComponentProps): JSX.Element => {
     const showQris = ['QRIS', 'GOPAY', 'ID_SHOPEEPAY'];
     if (!showQris.includes(transaction.payment_method)) return <></>;
     const isShopeepay = transaction.payment_method === 'ID_SHOPEEPAY';
+    const isGopay = transaction.payment_method === 'GOPAY';
+    const isQris = transaction.payment_method === 'QRIS';
 
     const getQrCodeSize = (): number => {
         if (isMobileBreakpoints) return 226;
@@ -26,11 +28,11 @@ const QrisComponent = ({ transaction }: QrisComponentProps): JSX.Element => {
     };
 
     return (
-        <div className="flex flex-col items-center gap-1">
-            <div className=" font-body text-[#cccccc] text-xs sm:text-sm">
+        <div className="flex flex-col items-center">
+            <div className="font-body text-[#cccccc] text-xs sm:text-sm mb-0.5">
                 Scan QR untuk membayar
             </div>
-            <div className="text-lg font-bold">
+            <div className="mb-3 text-lg font-bold">
                 {formatCurrency(`${transaction.payment_amount}`)}
             </div>
             <div
@@ -64,7 +66,7 @@ const QrisComponent = ({ transaction }: QrisComponentProps): JSX.Element => {
                     }
                 />
                 {!isShopeepay && (
-                    <div className="flex items-center gap-2 text-xs text-neutral-800">
+                    <div className="flex items-center gap-2 mt-4 text-xs text-neutral-800">
                         Powered by{' '}
                         <Image
                             src={`${CDN_URL}/assets/payments/qris.png`}
@@ -74,6 +76,29 @@ const QrisComponent = ({ transaction }: QrisComponentProps): JSX.Element => {
                     </div>
                 )}
             </div>
+            {isMobileBreakpoints && (isQris || isGopay) && (
+                <div className="flex w-full gap-4 p-4 mt-4 rounded-lg bg-accent-purple/20">
+                    <Image
+                        src={`${CDN_URL}/assets/${
+                            isGopay ? 'screenshot_upload' : 'screenshot'
+                        }.png`}
+                        width={64}
+                        height={64}
+                        objectFit="contain"
+                        className="flex-none h-full aspect-square"
+                    />
+                    <div className="flex-1">
+                        <p className="mb-2 text-sm font-bold">
+                            Membuka dari HP?
+                        </p>
+                        <p className="text-xs">
+                            {isGopay
+                                ? 'Screenshot QR dan upload di halaman scan QR Gojek dengan menekan icon di samping'
+                                : 'Screenshot QR dan upload di app pembayaran pilihanmu'}
+                        </p>
+                    </div>
+                </div>
+            )}
             {isShopeepay && isMobileBreakpoints && (
                 <Button
                     href={

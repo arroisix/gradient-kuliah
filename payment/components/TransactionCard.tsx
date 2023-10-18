@@ -50,17 +50,23 @@ const STATUS: { [key: string]: JSX.Element } = {
 };
 
 function ActionComponent({
-    transaction
+    transaction,
+    isList
 }: {
     transaction: Transaction;
+    isList?: boolean;
 }): JSX.Element | null {
     const tracker = useTracker();
     const [_, copy] = useCopyToClipboard();
 
-    const [paymentTag, _paymentMerchant] =
-        transaction.payment_method.split('_');
-    switch (paymentTag) {
-        case 'VA':
+    switch (transaction.payment_method) {
+        case 'VA_BCA':
+        case 'VA_BJB':
+        case 'VA_BRI':
+        case 'VA_BNI':
+        case 'VA_BSI':
+        case 'VA_MANDIRI':
+        case 'VA_PERMATA':
             const copyVA = (): void => {
                 if (transaction) {
                     copy(transaction.va_number as string);
@@ -103,6 +109,17 @@ function ActionComponent({
                     </div>
                 </div>
             );
+        case 'GOPAY':
+        case 'ID_SHOPEEPAY':
+        case 'QRIS':
+            return isList ? (
+                <Button
+                    variant="custom"
+                    className="text-sm text-center text-black transition bg-white hover:opacity-90"
+                    href={`/checkout/${transaction.id}`}>
+                    Tampilkan QR
+                </Button>
+            ) : null;
         default:
             return null;
     }
@@ -171,12 +188,20 @@ const TransactionCard = ({
                 </div>
             );
         } else if (transaction.status === 'WAITING') {
+            const isPaymentWithQR: PaymentMethod[] = [
+                'ID_SHOPEEPAY',
+                'GOPAY',
+                'QRIS'
+            ];
+            const isShowLink = isPaymentWithQR.includes(
+                transaction.payment_method
+            );
             return (
                 <div className="flex justify-center items-center gap-[6px] mt-[18px] px-3 py-2 bg-[#F2C04C1A] border border-[#F2C04C1A] rounded font-body text-[#CCCCCC80] text-xs sm:text-sm">
                     {`Bayar sebelum ${moment(transaction.deadline)
                         .utc()
                         .format('D MMM YYYY HH:mm')} WIB. `}
-                    {isList && (
+                    {isList && !isShowLink && (
                         <Link
                             className="text-[#CCCCCC] cursor-pointer hover:underline flex items-center"
                             href={`/checkout/${transaction.id}`}>
@@ -293,7 +318,10 @@ const TransactionCard = ({
                             {NAME_PAYMENT[transaction.payment_method]}
                         </span>
                     </div>
-                    <ActionComponent transaction={transaction} />
+                    <ActionComponent
+                        transaction={transaction}
+                        isList={isList}
+                    />
                 </div>
             </div>
             {!isList && <QrisComponent transaction={transaction} />}

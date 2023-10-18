@@ -76,7 +76,7 @@ const Transaction = ({
     switch (transaction.payment_method) {
         case 'ID_DANA':
             return (
-                <div className="flex flex-col items-center justify-center flex-1 gap-6 text-center">
+                <div className="flex flex-col items-center justify-center h-[calc(100vh_-_10rem)] gap-6 text-center">
                     <Image
                         src={`${CDN_URL}/assets/redirect_asset.png`}
                         width={197}
@@ -89,7 +89,7 @@ const Transaction = ({
             );
         case 'ID_OVO':
             return (
-                <div className="flex flex-col items-center justify-center flex-1 gap-6">
+                <div className="flex flex-col text-center items-center justify-center h-[calc(100vh_-_10rem)] gap-6">
                     <Image
                         src={`${CDN_URL}/assets/waiting_asset.png`}
                         width={116}
@@ -106,13 +106,13 @@ const Transaction = ({
             );
         case 'ID_LINKAJA':
             return (
-                <div className="flex flex-col items-center justify-center flex-1 gap-6">
+                <div className="flex flex-col text-center  items-center justify-center h-[calc(100vh_-_10rem)] gap-6">
                     <Image
                         src={`${CDN_URL}/assets/waiting_asset.png`}
                         width={116}
                         height={116}
                     />
-                    <div className="space-y-2 text-center">
+                    <div className="space-y-2">
                         <p className="text-lg font-bold">
                             Pembayaran sedang diproses...
                         </p>

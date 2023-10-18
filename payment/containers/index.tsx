@@ -2,7 +2,7 @@ import FreeBox from 'payment/components/FreeBox';
 import FreeModalCheckout from 'payment/components/ModalCheckout/freeModal';
 import OtherPaymentBox from 'payment/components/OtherPayment';
 import ModalCheckout from '../components/ModalCheckout';
-import { AiFillBank, AiFillShop, AiOutlineMobile } from 'react-icons/ai';
+import { AiFillBank, AiOutlineMobile } from 'react-icons/ai';
 import { usePayment } from '../contexts/PaymentProvider';
 import { useEffect, useRef } from 'react';
 import MethodListBox from '../components/MethodListBox';
@@ -75,12 +75,13 @@ const SubscriptionContainer = (): JSX.Element => {
                                 </div>
                             </MethodBox>
                         </MethodListBox>
+                        {/* TODO(litha): hidden until paperwork ready
                         <MethodListBox
                             title="Pembayaran Tunai"
                             icon={<AiFillShop className="mr-2 text-base" />}>
                             <MethodBox paymentMethod="INDOMARET" />
                             <MethodBox paymentMethod="ALFAMART" />
-                        </MethodListBox>
+                        </MethodListBox> */}
                         <OtherPaymentBox ref={otherPaymentMethodRef} />
                     </>
                 )}
