@@ -99,8 +99,8 @@ const Transaction = ({
                         Menunggu konfirmasi dari aplikasi OVO
                     </p>
                     <p className="text-neutral-400">
-                        Klik notifikasi dari OVO di HP kamu dan konfirmasi
-                        pembayaran dalam 55 detik
+                        Buka aplikasi OVO di HP kamu dan konfirmasi pembayaran
+                        dalam 55 detik
                     </p>
                 </div>
             );
