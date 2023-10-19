@@ -2,20 +2,26 @@ import Image from 'next/image';
 import { addZeroBefore } from 'courses/utils';
 import { usePayment } from '../contexts/PaymentProvider';
 import { useTracker } from 'tracker/tracker';
+import { CDN_URL } from 'commons/constants';
+import { LOGO_PAYMENT, NAME_PAYMENT } from './constant';
+import { PropsWithChildren } from 'react';
 
-const MethodBox = ({
-    logoUrl,
-    paymentMethod,
-    isManual
-}: {
-    logoUrl: string;
+type MethodBoxProps = {
     paymentMethod: PaymentMethod;
     isManual?: boolean;
-}): JSX.Element => {
+    onClick?: () => void;
+} & PropsWithChildren;
+
+const MethodBox = ({
+    paymentMethod,
+    isManual,
+    onClick,
+    children
+}: MethodBoxProps): JSX.Element => {
     const { setModalCheckoutOpen, setPaymentMethod } = usePayment();
     const tracker = useTracker();
 
-    const onClick = (): void => {
+    const selectOption = (): void => {
         if (isManual) {
             tracker?.genericTrack('Click Manual Payment Method', {
                 'Method Name': paymentMethod
@@ -36,15 +42,22 @@ const MethodBox = ({
             setModalCheckoutOpen(true);
         }
     };
+
     return (
-        <div
-            aria-hidden
-            className="rounded-lg bg-white p-8 h-[150px] cursor-pointer flex items-center justify-center"
-            onClick={onClick}>
-            <div className="w-[170px] h-[50px] relative">
-                <Image src={logoUrl} layout="fill" className="object-contain" />
-            </div>
-        </div>
+        <button
+            data-tip={NAME_PAYMENT[paymentMethod]}
+            className="tooltip tooltip-bottom rounded-lg bg-white p-6 h-[69px] md:h-[81px] cursor-pointer flex items-center justify-center"
+            onClick={onClick ?? selectOption}>
+            {children || (
+                <div className="w-[94px] h-[28px] md:w-[110px] md:h-[33px] relative">
+                    <Image
+                        src={`${CDN_URL}/assets/payments/${LOGO_PAYMENT[paymentMethod]}`}
+                        layout="fill"
+                        className="object-contain"
+                    />
+                </div>
+            )}
+        </button>
     );
 };
 

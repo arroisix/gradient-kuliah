@@ -4,8 +4,7 @@ import React, {
     useState,
     type Dispatch,
     type SetStateAction,
-    type PropsWithChildren,
-    useEffect
+    type PropsWithChildren
 } from 'react';
 
 interface AstronotesContextType extends AstronotesState {
@@ -42,13 +41,6 @@ export function AstronotesProvider({
 
     const [fontStyle, setFontStyle] = useState<AstronotesFontStyle>('DEFAULT');
     const [smallText, setSmallText] = useState<boolean>(false);
-
-    useEffect(() => {
-        console.log(
-            '🚀 ~ file: AstronotesProvider.tsx:48 ~ useEffect ~ isModalRatingOpen:',
-            isModalRatingOpen
-        );
-    }, [isModalRatingOpen]);
 
     // TODO(angga): removed until higher in priority
     // const [highlighted, setHighlighted] = useState<boolean>(false);

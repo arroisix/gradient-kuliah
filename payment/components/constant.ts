@@ -7,6 +7,14 @@ export type PAYMENT_DICT = {
     VA_BJB: string;
     VA_BSI: string;
     QRIS: string;
+    GOPAY: string;
+    ID_DANA: string;
+    ID_OVO: string;
+    ID_SHOPEEPAY: string;
+    ID_LINKAJA: string;
+    ALFAMART: string;
+    INDOMARET: string;
+    OTHER: null;
 };
 
 export const LOGO_PAYMENT: PAYMENT_DICT = {
@@ -17,7 +25,15 @@ export const LOGO_PAYMENT: PAYMENT_DICT = {
     VA_PERMATA: 'permata.svg',
     VA_BJB: 'bjb.png',
     VA_BSI: 'bsi.png',
-    QRIS: ''
+    QRIS: '',
+    GOPAY: 'gopay.png',
+    ID_DANA: 'dana.png',
+    ID_OVO: 'ovo.png',
+    ID_SHOPEEPAY: 'shopeepay.png',
+    ID_LINKAJA: 'linkaja.png',
+    ALFAMART: 'alfamart.png',
+    INDOMARET: 'indomaret.png',
+    OTHER: null
 };
 
 export const NAME_PAYMENT: PAYMENT_DICT = {
@@ -28,5 +44,13 @@ export const NAME_PAYMENT: PAYMENT_DICT = {
     VA_PERMATA: 'Bank Permata',
     VA_BJB: 'Bank BJB',
     VA_BSI: 'Bank BSI',
-    QRIS: ''
+    QRIS: 'QRIS',
+    GOPAY: 'GoPay',
+    ID_DANA: 'DANA',
+    ID_OVO: 'OVO',
+    ID_SHOPEEPAY: 'ShopeePay',
+    ID_LINKAJA: 'LinkAja',
+    ALFAMART: 'Alfamart',
+    INDOMARET: 'Indomaret',
+    OTHER: null
 };

@@ -161,3 +161,17 @@ interface AITutorFeedbackInput {
     feedback_content: string;
     answer_id: string;
 }
+
+type IconOption = {
+    tag: keyof JSX.IntrinsicElements;
+    icon: JSX.Element;
+    tracker: string;
+    disableClick?: boolean;
+    disabled?: boolean;
+    props?: Record<string, any>;
+};
+
+interface QnaFormInputData {
+    content: string;
+    attachment?: string;
+}
