@@ -69,6 +69,7 @@ const QuestionCard = ({
         _category: string,
         attachmentUrl: string[]
     ): Promise<void> {
+        if (isLoading) return;
         const contentwithAttachments =
             attachmentUrl.length !== 0
                 ? `${formContent}${attachmentUrl.map(
@@ -186,6 +187,7 @@ const QuestionCard = ({
                     onSubmit={handleSubmit}
                     isUsingCategories={false}
                     cancelButton={() => setIsShowForm && setIsShowForm(false)}
+                    isLoading={isLoading}
                     submitButtonText={
                         isLoading ? (
                             <AiOutlineLoading3Quarters className="animate-spin" />

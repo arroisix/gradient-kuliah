@@ -16,21 +16,25 @@ type IconOption = {
     props?: Record<string, any>;
 };
 
+type AdvanceFormProps = {
+    setFormContent: React.Dispatch<React.SetStateAction<string>>;
+    formRef: React.RefObject<HTMLTextAreaElement>;
+    handleSubmit: () => Promise<void>;
+    cancelButton?: () => void;
+    submitButtonText: JSX.Element | string;
+    isLoading?: boolean;
+    context: 'q' | 'a';
+};
+
 const AdvanceForm = ({
     setFormContent,
     formRef,
     handleSubmit,
     cancelButton,
     submitButtonText,
+    isLoading,
     context
-}: {
-    setFormContent: React.Dispatch<React.SetStateAction<string>>;
-    formRef: React.RefObject<HTMLTextAreaElement>;
-    handleSubmit: () => Promise<void>;
-    cancelButton?: () => void;
-    submitButtonText: JSX.Element | string;
-    context: 'q' | 'a';
-}): JSX.Element => {
+}: AdvanceFormProps): JSX.Element => {
     const ICON: IconOption[] = useMemo(
         () => [
             {
@@ -62,8 +66,8 @@ const AdvanceForm = ({
 
     return (
         <div className="bg-[#242424] px-5 py-[10px] rounded-b-[20px]">
-            <div className="flex justify-between items-center">
-                <div className="flex gap-2 items-center">
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
                     {ICON.filter((opt) => !opt.disabled).map(
                         (
                             {
@@ -128,6 +132,7 @@ const AdvanceForm = ({
                     </Button>
                     <Button
                         variant="primary"
+                        disabled={isLoading}
                         className="font-extrabold text-xs px-[17px]"
                         onClick={handleSubmit}>
                         {submitButtonText}

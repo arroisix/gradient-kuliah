@@ -6,16 +6,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import AdvanceForm from './AdvanceForm';
 import AttachmentForm from './AttachmentForm';
 
-const KomunitasForm = ({
-    bucketKey,
-    onSubmit,
-    cancelButton,
-    isUsingCategories,
-    subjectCategories,
-    submitButtonText,
-    className,
-    context
-}: {
+type KomunitasFormProps = {
     bucketKey?: string;
     onSubmit: (
         formContent: string,
@@ -27,9 +18,22 @@ const KomunitasForm = ({
     isUsingCategories: boolean;
     subjectCategories?: [{ id: string; name: string }];
     submitButtonText: JSX.Element | string;
+    isLoading?: boolean;
     className?: string;
     context: 'q' | 'a';
-}): JSX.Element => {
+};
+
+const KomunitasForm = ({
+    bucketKey,
+    onSubmit,
+    cancelButton,
+    isUsingCategories,
+    subjectCategories,
+    submitButtonText,
+    className,
+    isLoading,
+    context
+}: KomunitasFormProps): JSX.Element => {
     const [formContent, setFormContent] = useState('');
     const [category, setCategory] = useState('');
     const [attachmentUrl, setAttachmentUrl] = useState<string[]>([]);
@@ -87,7 +91,7 @@ const KomunitasForm = ({
                         ) : (
                             <Avatar name={profile?.full_name} size="24" round />
                         )}
-                        <span className="font-bold text-xs">
+                        <span className="text-xs font-bold">
                             {profile?.username}
                         </span>
                     </div>
@@ -141,6 +145,7 @@ const KomunitasForm = ({
                 handleSubmit={handleSubmit}
                 cancelButton={cancelButton}
                 submitButtonText={submitButtonText}
+                isLoading={isLoading}
                 context={context}
             />
         </div>
