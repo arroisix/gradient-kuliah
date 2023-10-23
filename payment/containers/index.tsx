@@ -35,26 +35,6 @@ const SubscriptionContainer = (): JSX.Element => {
                 ) : (
                     <>
                         <MethodListBox
-                            title="E-Wallet / QRIS"
-                            icon={
-                                <AiOutlineMobile className="mr-2 text-base" />
-                            }>
-                            <MethodBox paymentMethod="QRIS">
-                                <div className="flex flex-col items-center text-neutral-900">
-                                    <MdOutlineQrCodeScanner
-                                        size={24}
-                                        className="text-accent-purple"
-                                    />
-                                    <div className="text-sm">Scan QRIS</div>
-                                </div>
-                            </MethodBox>
-                            <MethodBox paymentMethod="GOPAY" />
-                            <MethodBox paymentMethod="ID_DANA" />
-                            <MethodBox paymentMethod="ID_OVO" />
-                            <MethodBox paymentMethod="ID_SHOPEEPAY" />
-                            <MethodBox paymentMethod="ID_LINKAJA" />
-                        </MethodListBox>
-                        <MethodListBox
                             title="Transfer Bank via Virtual Account"
                             icon={<AiFillBank className="mr-2 text-base" />}>
                             <MethodBox paymentMethod="VA_BCA" isManual />
@@ -74,6 +54,26 @@ const SubscriptionContainer = (): JSX.Element => {
                                     <div className="text-sm">Bank lainnya</div>
                                 </div>
                             </MethodBox>
+                        </MethodListBox>
+                        <MethodListBox
+                            title="E-Wallet / QRIS"
+                            icon={
+                                <AiOutlineMobile className="mr-2 text-base" />
+                            }>
+                            <MethodBox paymentMethod="QRIS">
+                                <div className="flex flex-col items-center text-neutral-900">
+                                    <MdOutlineQrCodeScanner
+                                        size={24}
+                                        className="text-accent-purple"
+                                    />
+                                    <div className="text-sm">Scan QRIS</div>
+                                </div>
+                            </MethodBox>
+                            <MethodBox paymentMethod="GOPAY" />
+                            <MethodBox paymentMethod="ID_DANA" />
+                            <MethodBox paymentMethod="ID_OVO" />
+                            <MethodBox paymentMethod="ID_SHOPEEPAY" />
+                            <MethodBox paymentMethod="ID_LINKAJA" />
                         </MethodListBox>
                         {/* TODO(litha): hidden until paperwork ready
                         <MethodListBox
