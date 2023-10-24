@@ -85,11 +85,7 @@ const MobileSidebar = ({
                                         communityNotification?.unseen_comment_counts
                                     }
                                 </span>
-                            ) : (
-                                <span className="inline-block leading-none h-min py-[2px] pl-[3px] pr-[4px] font-body text-center text-white text-[10px] bg-[#B92011] rounded-full animate-pulse">
-                                    new
-                                </span>
-                            )}
+                            ) : null}
                         </span>
                     )}
                 <Link href={'/kelas'}>
