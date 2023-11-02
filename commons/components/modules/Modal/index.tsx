@@ -1,5 +1,6 @@
 import { MdClose } from 'react-icons/md';
 import { ReactNode } from 'react';
+import { cn } from 'commons/utils';
 
 interface ModalProps extends ModalBaseProps {
     children: ReactNode;
@@ -22,31 +23,44 @@ const Modal = ({
 }: ModalProps): JSX.Element => {
     if (isOpen) {
         return (
-            <div
-                aria-hidden={true}
-                className="fixed inset-0 z-50 flex items-center justify-center shadow-sm bg-black/75"
-                onClick={permanent ? undefined : () => setOpen(false)}>
+            <>
                 <div
                     aria-hidden={true}
-                    className={`relative p-4 rounded-md z-100 ${
-                        isPopup ? '' : 'w-[365px]'
-                    } min-h-[100px] ${
-                        dialog || variant == 'dark'
-                            ? 'bg-neutral-800 text-white'
-                            : 'bg-white text-black '
-                    } ${className}`}
+                    className="modal modal-open modal-bottom md:modal-middle min-h-[100px]"
                     onClick={(e) => e.stopPropagation()}>
-                    {!permanent && !dialog && (
-                        <MdClose
-                            className={`absolute top-4 right-4 cursor-pointer font-bold text-xl ${
-                                variant === 'dark' && 'text-white'
-                            }`}
-                            onClick={() => setOpen(false)}
-                        />
-                    )}
-                    {children}
+                    <div
+                        className={cn(
+                            'relative modal-box',
+                            dialog || variant == 'dark'
+                                ? 'bg-neutral-800 text-white'
+                                : 'bg-white text-black ',
+                            isPopup && 'md:max-w-[365px]',
+                            className
+                        )}>
+                        {!permanent && !dialog && (
+                            <div className="modal-action">
+                                <button className="absolute btn btn-sm btn-circle btn-ghost right-2 top-2">
+                                    <MdClose
+                                        className={cn(
+                                            'font-bold text-xl',
+                                            variant === 'dark' && 'text-white'
+                                        )}
+                                        onClick={() => setOpen(false)}
+                                    />
+                                </button>
+                            </div>
+                        )}
+
+                        {children}
+                    </div>
+                    <div
+                        className="modal-backdrop bg-black/75"
+                        aria-hidden={true}
+                        onClick={
+                            permanent ? undefined : () => setOpen(false)
+                        }></div>
                 </div>
-            </div>
+            </>
         );
     }
     return <></>;

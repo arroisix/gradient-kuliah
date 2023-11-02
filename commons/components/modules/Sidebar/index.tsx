@@ -1,7 +1,7 @@
+import CommunityNotificationBadge from 'commons/components/elements/CommunityNotificationBadge';
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
 import { cn } from 'commons/utils';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
-import { useGetCommunityNotificationQuery } from 'komunitas/redux/api/komunitasApi';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -22,7 +22,6 @@ const Sidebar = ({
     const { is_subscribed } = useCourseSubscription();
 
     const { data: configData } = useGetConfigQuery();
-    const { data: communityNotification } = useGetCommunityNotificationQuery();
 
     const tracker = useTracker();
 
@@ -80,13 +79,7 @@ const Sidebar = ({
                             }}>
                             <RiQuestionnaireLine size={20} />
                             Komunitas
-                            {communityNotification?.unseen_comment_counts ? (
-                                <span className="inline-block leading-none h-min py-[2px] pl-[3px] pr-[4px] font-body text-center text-white text-[10px] bg-[#B92011] rounded-full">
-                                    {
-                                        communityNotification?.unseen_comment_counts
-                                    }
-                                </span>
-                            ) : null}
+                            <CommunityNotificationBadge />
                         </Link>
                     )}
                 <Link
