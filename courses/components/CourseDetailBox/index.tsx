@@ -17,7 +17,6 @@ import {
 import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienceApi';
 import Skeleton from 'commons/components/elements/Skeleton';
 import moment from 'moment';
-import Modal from 'commons/components/modules/Modal';
 import ModalCourseFeedback from './ModalCourseFeedback';
 import SearchList from './SearchList';
 import { useTracker } from 'tracker/tracker';
@@ -191,13 +190,10 @@ const CourseDetailBox = (): JSX.Element => {
 
     return (
         <>
-            <Modal
+            <ModalCourseFeedback
                 isOpen={isModalFeedbackOpen}
                 setOpen={setIsModalFeedbackOpen}
-                variant="dark"
-                className="!bg-[#1D1D1D]">
-                <ModalCourseFeedback setOpen={setIsModalFeedbackOpen} />
-            </Modal>
+            />
             <div
                 className="relative w-full h-full bg-[#121212] lg:rounded-lg lg:overflow-hidden"
                 ref={boxRef}>

@@ -80,7 +80,9 @@ const QrisComponent = ({ transaction }: QrisComponentProps): JSX.Element => {
                 <div className="flex w-full gap-4 p-4 mt-4 rounded-lg bg-accent-purple/20">
                     <Image
                         src={`${CDN_URL}/assets/${
-                            isGopay ? 'screenshot_upload' : 'screenshot'
+                            isGopay
+                                ? 'screenshot_upload_asset'
+                                : 'screenshot_asset'
                         }.png`}
                         width={64}
                         height={64}

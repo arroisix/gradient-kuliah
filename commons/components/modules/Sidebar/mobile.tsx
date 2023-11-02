@@ -1,7 +1,6 @@
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
 import { cn } from 'commons/utils';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
-import { useGetCommunityNotificationQuery } from 'komunitas/redux/api/komunitasApi';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Dispatch, SetStateAction } from 'react';
@@ -15,10 +14,13 @@ import {
     RiQuestionnaireLine
 } from 'react-icons/ri';
 import { useTracker } from 'tracker/tracker';
+import CommunityNotificationBadge from '../../elements/CommunityNotificationBadge';
 
 const MobileSidebar = ({
+    openSidebar,
     setOpenSidebar
 }: {
+    openSidebar: boolean;
     setOpenSidebar: Dispatch<SetStateAction<boolean>>;
 }): JSX.Element => {
     const route = useRouter();
@@ -27,9 +29,8 @@ const MobileSidebar = ({
     const { is_subscribed } = useCourseSubscription();
 
     const { data: configData } = useGetConfigQuery();
-    const { data: communityNotification } = useGetCommunityNotificationQuery();
 
-    return (
+    return openSidebar ? (
         <div className="fixed z-[100] top-0 right-0 w-screen h-screen bg-[#121212]">
             <header className="flex items-center justify-between w-full px-6 py-4 md:px-8">
                 <span className="text-2xl font-bold cursor-pointer font-[Urbanist] text-neutral-50">
@@ -73,19 +74,12 @@ const MobileSidebar = ({
                                     : 'text-[#666666]'
                             }  hover:text-[#999999]`}
                             onClick={() => {
-                                //posthog.capture('Visit Community Explore Page');
                                 route.push('/komunitas');
                             }}
                             aria-hidden>
                             <RiQuestionnaireLine size={20} />
                             Komunitas
-                            {communityNotification?.unseen_comment_counts ? (
-                                <span className="inline-block leading-none h-min py-[2px] pl-[3px] pr-[4px] font-body text-center text-white text-[10px] bg-[#B92011] rounded-full">
-                                    {
-                                        communityNotification?.unseen_comment_counts
-                                    }
-                                </span>
-                            ) : null}
+                            <CommunityNotificationBadge />
                         </span>
                     )}
                 <Link href={'/kelas'}>
@@ -117,6 +111,8 @@ const MobileSidebar = ({
                 </Link>
             </div>
         </div>
+    ) : (
+        <></>
     );
 };
 

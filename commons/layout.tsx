@@ -4,6 +4,7 @@ import Navbar from './components/modules/Navbar';
 import Sidebar from './components/modules/Sidebar';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { cn } from './utils';
+import Appbar from './components/modules/Appbar';
 
 interface LayoutProps {
     children?: JSX.Element;
@@ -54,6 +55,7 @@ const Layout = ({
                 </div>
             </section>
             <Footer />
+            <Appbar />
         </div>
     );
 };

@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 import Navbar from './components/modules/Navbar';
 import Sidebar from './components/modules/Sidebar';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import Appbar from './components/modules/Appbar';
 
 interface LayoutProps {
     children: JSX.Element;
@@ -58,6 +59,7 @@ const LearnLayout = ({
                     {children}
                 </div>
             </section>
+            <Appbar />
         </div>
     );
 };

@@ -7,7 +7,10 @@ import { useRouter } from 'next/router';
 const SuccessCheckout = (): JSX.Element => {
     const router = useRouter();
     useEffect(() => {
-        const timer1 = setTimeout(() => router.push('/dashboard'), 5000);
+        const timer1 = setTimeout(
+            () => router.push('/dashboard?checkout=success'),
+            5000
+        );
         return () => {
             clearTimeout(timer1);
         };

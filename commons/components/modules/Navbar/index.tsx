@@ -3,37 +3,33 @@ import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { FaInstagram } from 'react-icons/fa';
 import { FiMenu } from 'react-icons/fi';
-import {
-    MdArrowDropDown,
-    MdHistory,
-    MdLogout,
-    MdOutlinePersonOutline
-} from 'react-icons/md';
+import { MdArrowDropDown } from 'react-icons/md';
 import useWindowSize from 'commons/hooks/useWindowSize';
-import { isNotNullAndUndefined, renderName } from 'commons/utils';
-import MobileNavbar from './mobile';
-import { useDispatch, useSelector } from 'react-redux';
+import { renderName } from 'commons/utils';
+import MobileNavbar from './components/MobileNavbar';
+import { useSelector } from 'react-redux';
 import {
     getCurrentUser,
     getIsAuthenticated
 } from 'authentication/redux/selectors/userSelector';
-import { removeUser } from 'authentication/redux/slices/userSlice';
 import Button from 'commons/components/elements/Button';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { AUTHENTICATION_ROUTE } from 'commons/constants';
 import MobileSidebar from '../Sidebar/mobile';
-import Avatar from 'react-avatar';
-import Image from 'next/image';
 import AuthContext from 'authentication/contexts/AuthProvider';
-import { HiOutlineUsers } from 'react-icons/hi';
-import { useGetConfigQuery } from 'commons/redux/api/commonApi';
-import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
-import {
-    useGetBookProgressQuery,
-    usePostBookmarksMutation
-} from 'courses/redux/api/astronotesApi';
 import { useTracker } from 'tracker/tracker';
 import { useDebouncedCallback } from 'use-debounce';
+import LeftNavbarMenu from './components/LeftNavbarMenu';
+import UserProfile from './components/UserProfile';
+import UserProfileDropdown from './components/UserProfileDropdown';
+import NavMenuIcons from './components/NavMenuIcons';
+
+const HIDE_HAMBURGER_MENU_ON = [
+    '/dashboard',
+    '/komunitas',
+    '/astronotes',
+    '/kelas'
+];
 
 const Navbar = ({
     paymentPage,
@@ -60,34 +56,13 @@ const Navbar = ({
     const [isProfileHovered, setProfileHovered] = useState(false);
     const [openMobile, setOpenMobile] = useState(false);
     const [openSidebar, setOpenSidebar] = useState(false);
-    const [isBookmarked, setIsBookmarked] = useState(false);
-    const pickedColorScheme = {
-        bgColor: lightMode ? 'bg-white' : 'bg-black',
-        color: lightMode ? 'text-black' : 'text-white'
-    };
     const { height } = useWindowSize();
     const router = useRouter();
-    const { slug, page } = router?.query;
-    const dispatch = useDispatch();
     const [scrollPosition, setScrollPosition] = useState(0);
     const handleScroll = (): void => {
         const position = window.pageYOffset;
         setScrollPosition(position);
     };
-    const { data: configData } = useGetConfigQuery();
-    const { data: bookProgressData, isLoading: isBookProgressLoading } =
-        useGetBookProgressQuery(
-            { slug: slug as string, page: page as unknown as number },
-            {
-                skip:
-                    !isNotNullAndUndefined(slug) || !isNotNullAndUndefined(page)
-            }
-        );
-    const [postBookmark] = usePostBookmarksMutation();
-
-    useEffect(() => {
-        setIsBookmarked(bookProgressData?.is_bookmarked as boolean);
-    }, [bookProgressData]);
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll, { passive: true });
@@ -124,54 +99,19 @@ const Navbar = ({
         return lightMode ? 'bg-white text-black shadow-md' : 'bg-[#171717]';
     };
 
-    const handleBookmark = (): void => {
-        const payload = {
-            'Book Slug': slug,
-            'Book Page Query': page
-        };
-        if (isBookmarked) {
-            tracker?.genericTrack('Remove Bookmark', payload);
-        } else {
-            tracker?.genericTrack('Add Bookmark', payload);
-        }
-        postBookmark({
-            slug: slug as string,
-            page_order: bookProgressData?.current_page as number,
-            is_active: !isBookmarked
-        });
-        setIsBookmarked((prev) => !prev);
-    };
-
-    const isShowNavbarMenu = (): boolean => {
-        if (
-            router.pathname.includes('kelas/[id]/') ||
-            router.pathname.includes('astronotes') ||
-            router.pathname.includes('referral')
-        ) {
-            return true;
-        }
-
-        return false;
-    };
+    const isShowHamburgerMenu = (): boolean =>
+        !HIDE_HAMBURGER_MENU_ON.includes(router.pathname);
 
     const onMouseLeaveNavbar = (): void => {
-        if (isHovered) {
-            setHovered(false);
-        }
-
-        if (isProfileHovered) {
-            setProfileHovered(false);
-        }
+        if (isHovered) setHovered(false);
+        if (isProfileHovered) setProfileHovered(false);
 
         setNavbarHovered(false);
     };
 
     const onMouseLeaveProfile = (): void => {
-        if (isNavbarHovered) {
-            setProfileHovered(true);
-        } else {
-            setProfileHovered(false);
-        }
+        if (isNavbarHovered) setProfileHovered(true);
+        else setProfileHovered(false);
     };
 
     const trackProfileNameClickOrHover = useDebouncedCallback(
@@ -201,7 +141,7 @@ const Navbar = ({
             onMouseLeave={onMouseLeaveNavbar}>
             <div className="flex items-center justify-between w-full px-4 py-4 md:px-6">
                 <div className="flex items-center gap-4">
-                    {isAuthenticated && (
+                    {isAuthenticated && isShowHamburgerMenu() && (
                         <FiMenu
                             className="md:hidden"
                             stroke="#666666"
@@ -216,53 +156,7 @@ const Navbar = ({
                     {showSidebar && fullHeightSidebar && isAuthenticated && (
                         <div className="hidden md:block w-[250px] h-[64px] fixed top-0 left-0 bg-[#121212] z-[-1]" />
                     )}
-                    {!isMobileBreakpoints && isShowNavbarMenu() && (
-                        <div className="flex gap-6 pl-4">
-                            <Button
-                                href="/"
-                                variant="custom"
-                                className={`!p-0 font-body font-normal text-xs text-neutral-400 ${
-                                    lightMode
-                                        ? 'hover:text-black'
-                                        : 'hover:text-white'
-                                }`}>
-                                Home
-                            </Button>
-                            {configData?.configs
-                                .is_community_config_enabled && (
-                                <Button
-                                    href="/komunitas"
-                                    variant="custom"
-                                    className={`!p-0 font-body font-normal text-xs text-neutral-400 ${
-                                        lightMode
-                                            ? 'hover:text-black'
-                                            : 'hover:text-white'
-                                    }`}>
-                                    Komunitas
-                                </Button>
-                            )}
-                            <Button
-                                href="/kelas"
-                                variant="custom"
-                                className={`!p-0 font-body font-normal text-xs text-neutral-400 ${
-                                    lightMode
-                                        ? 'hover:text-black'
-                                        : 'hover:text-white'
-                                }`}>
-                                Kelas
-                            </Button>
-                            <Button
-                                href="/astronotes"
-                                variant="custom"
-                                className={`!p-0 font-body font-normal text-xs text-neutral-400 ${
-                                    lightMode
-                                        ? 'hover:text-black'
-                                        : 'hover:text-white'
-                                }`}>
-                                Perpustakaan
-                            </Button>
-                        </div>
-                    )}
+                    <LeftNavbarMenu lightMode={lightMode} />
                 </div>
                 {paymentPage ? (
                     <Button
@@ -277,34 +171,9 @@ const Navbar = ({
                 ) : (
                     <>
                         <div className="hidden font-bold md:flex">
-                            {!isAuthenticated && (
-                                <Link href="/kelas">
-                                    <nav
-                                        className="ml-12 cursor-pointer hover:text-accent-blue"
-                                        onMouseEnter={onMouseEnterOther}>
-                                        Kelas
-                                    </nav>
-                                </Link>
-                            )}
                             {isAuthenticated ? (
                                 <nav
                                     className={`ml-12 flex gap-6 cursor-pointer relative`}>
-                                    {router.pathname.includes('astronotes/') &&
-                                        !isBookProgressLoading && (
-                                            <button onClick={handleBookmark}>
-                                                {isBookmarked ? (
-                                                    <BsBookmarkFill
-                                                        size={18}
-                                                        className="text-[#999999]"
-                                                    />
-                                                ) : (
-                                                    <BsBookmark
-                                                        size={18}
-                                                        className="text-[#999999]"
-                                                    />
-                                                )}
-                                            </button>
-                                        )}
                                     {router.pathname === '/' && (
                                         <Link href="/kelas">
                                             <nav
@@ -316,6 +185,7 @@ const Navbar = ({
                                             </nav>
                                         </Link>
                                     )}
+                                    <NavMenuIcons />
                                     <div
                                         className={`flex items-center gap-2 hover:text-accent-blue ${
                                             router.pathname === '/dashboard' &&
@@ -326,23 +196,7 @@ const Navbar = ({
                                         }`}
                                         onMouseEnter={onMouseEnterProfile}
                                         onMouseLeave={onMouseLeaveProfile}>
-                                        {!profile ? (
-                                            <div className="w-[23px] h-[23px] bg-neutral-600 animate-pulse rounded-full"></div>
-                                        ) : !!profile.photo_profile ? (
-                                            <div className="w-[23px] h-[23px] relative">
-                                                <Image
-                                                    src={profile.photo_profile}
-                                                    layout="fill"
-                                                    className="rounded-full"
-                                                />
-                                            </div>
-                                        ) : (
-                                            <Avatar
-                                                name={profile.full_name}
-                                                size="23"
-                                                round
-                                            />
-                                        )}
+                                        <UserProfile profile={profile} />
                                         <div className="flex items-center">
                                             <span>
                                                 {renderName(
@@ -353,102 +207,28 @@ const Navbar = ({
                                             <MdArrowDropDown />
                                         </div>
                                     </div>
-                                    <div
-                                        className={`p-4 min-w-[250px] top-10 right-0 absolute shadow-md rounded-md border border-[#2D2D2D] ${
-                                            pickedColorScheme.bgColor
-                                        } ${pickedColorScheme.color} ${
-                                            isProfileHovered
-                                                ? 'block'
-                                                : 'hidden'
-                                        }`}>
-                                        <Link
-                                            href={'/profil'}
-                                            onClick={() => {
-                                                tracker?.genericTrack(
-                                                    'Click Profile'
-                                                );
-                                            }}>
-                                            <div
-                                                className={`flex ${pickedColorScheme.color} hover:bg-[#1D1D1D] px-2 py-3 rounded-sm font-normal w-full items-center`}>
-                                                <div>
-                                                    <MdOutlinePersonOutline className="text-2xl" />
-                                                </div>
-                                                <div className="w-full ml-4">
-                                                    <p className="text-base">
-                                                        Profil
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </Link>
-                                        <Link
-                                            href={'/transaksi'}
-                                            onClick={() => {
-                                                tracker?.genericTrack(
-                                                    'Click Transaction History Menu'
-                                                );
-                                            }}>
-                                            <div
-                                                className={`flex ${pickedColorScheme.color} hover:bg-[#1D1D1D] px-2 py-3 rounded-sm font-normal w-full items-center`}>
-                                                <div>
-                                                    <MdHistory className="text-2xl" />
-                                                </div>
-                                                <div className="w-full ml-4">
-                                                    <p className="text-base">
-                                                        Riwayat Pembelian
-                                                    </p>
-                                                    {/* <p className="text-xs text-accent-yellow">
-                                                1 Menunggu pembayaran
-                                            </p> */}
-                                                </div>
-                                            </div>
-                                        </Link>
-                                        <Link
-                                            href={'/referral'}
-                                            onClick={() => {
-                                                tracker?.genericTrack(
-                                                    'Click Referral Menu'
-                                                );
-                                            }}>
-                                            <div
-                                                className={`flex ${pickedColorScheme.color} hover:bg-[#1D1D1D] px-2 py-3 rounded-sm font-normal w-full items-center`}>
-                                                <div>
-                                                    <HiOutlineUsers className="text-xl" />
-                                                </div>
-                                                <div className="w-full ml-4">
-                                                    <p className="text-base">
-                                                        Referral
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </Link>
-                                        <div
-                                            className="flex items-center w-full font-normal text-accent-orange hover:bg-[#1D1D1D] px-2 py-3 rounded-sm"
-                                            onClick={() => {
-                                                tracker?.genericTrack(
-                                                    'Click Logout'
-                                                );
-                                                dispatch(removeUser());
-                                            }}
-                                            aria-hidden>
-                                            <div>
-                                                <MdLogout className="text-2xl" />
-                                            </div>
-                                            <div className="w-full ml-4">
-                                                <p className="text-base">
-                                                    Logout
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <UserProfileDropdown
+                                        isProfileHovered={isProfileHovered}
+                                        lightMode={lightMode}
+                                    />
                                 </nav>
                             ) : (
-                                <Link
-                                    href={AUTHENTICATION_ROUTE}
-                                    onClick={onClickLoginLink}>
-                                    <nav className="ml-12 cursor-pointer">
-                                        Masuk
-                                    </nav>
-                                </Link>
+                                <>
+                                    <Link href="/kelas">
+                                        <nav
+                                            className="ml-12 cursor-pointer hover:text-accent-blue"
+                                            onMouseEnter={onMouseEnterOther}>
+                                            Kelas
+                                        </nav>
+                                    </Link>
+                                    <Link
+                                        href={AUTHENTICATION_ROUTE}
+                                        onClick={onClickLoginLink}>
+                                        <nav className="ml-12 cursor-pointer">
+                                            Masuk
+                                        </nav>
+                                    </Link>
+                                </>
                             )}
                         </div>
 
@@ -493,44 +273,14 @@ const Navbar = ({
                                             </nav>
                                         </Link>
                                     )}
-                                    {router.pathname.includes('astronotes/') &&
-                                        !isBookProgressLoading && (
-                                            <button onClick={handleBookmark}>
-                                                {isBookmarked ? (
-                                                    <BsBookmarkFill
-                                                        size={18}
-                                                        className="text-[#999999]"
-                                                    />
-                                                ) : (
-                                                    <BsBookmark
-                                                        size={18}
-                                                        className="text-[#999999]"
-                                                    />
-                                                )}
-                                            </button>
-                                        )}
+
+                                    <NavMenuIcons />
                                     <button
                                         className="flex items-center text-base font-bold"
                                         onClick={() =>
                                             setOpenMobile(!openMobile)
                                         }>
-                                        {!profile ? (
-                                            <div className="w-[23px] h-[23px] bg-neutral-600 animate-pulse rounded-full"></div>
-                                        ) : !!profile.photo_profile ? (
-                                            <div className="w-[23px] h-[23px] relative">
-                                                <Image
-                                                    src={profile.photo_profile}
-                                                    layout="fill"
-                                                    className="rounded-full"
-                                                />
-                                            </div>
-                                        ) : (
-                                            <Avatar
-                                                name={profile.full_name}
-                                                size="23"
-                                                round
-                                            />
-                                        )}
+                                        <UserProfile profile={profile} />
                                     </button>
                                 </div>
                             )}
@@ -538,13 +288,14 @@ const Navbar = ({
                     </>
                 )}
             </div>
-            {openMobile && (
-                <MobileNavbar
-                    closeMobile={setOpenMobile}
-                    lightMode={lightMode}
-                />
-            )}
-            {openSidebar && <MobileSidebar setOpenSidebar={setOpenSidebar} />}
+            <MobileNavbar
+                openMobile={openMobile}
+                setOpenMobile={setOpenMobile}
+            />
+            <MobileSidebar
+                openSidebar={openSidebar}
+                setOpenSidebar={setOpenSidebar}
+            />
         </header>
     );
 };

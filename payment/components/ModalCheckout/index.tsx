@@ -159,7 +159,7 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
                         />
                     </div>
                     {phoneNumberError && (
-                        <div className="font-body text-xs px-2 pt-2 text-state-error">
+                        <div className="px-2 pt-2 text-xs font-body text-state-error">
                             {phoneNumberError}
                         </div>
                     )}
@@ -172,10 +172,10 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
                 </p>
                 <div className="flex justify-between items-center gap-4 w-full mt-2 p-4 bg-[#242424] rounded-[6px]">
                     <div>
-                        <span className="inline-block text-sm font-extrabold">
+                        <p className="text-sm font-extrabold">
                             {packet?.packet_name}
-                        </span>
-                        <span className="inline-block text-xs font-body text-neutral-400">
+                        </p>
+                        <p className="text-xs font-body text-neutral-400">
                             {`Langganan hingga `}
                             <span className="inline-block">
                                 {moment()
@@ -183,7 +183,7 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
                                     .utc()
                                     .format('D-MM-YYYY')}
                             </span>
-                        </span>
+                        </p>
                     </div>
                     <span className="font-extrabold">
                         {formatCurrency(packet?.price as string)}
@@ -192,12 +192,12 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
             </div>
             <div className="flex flex-col w-full mb-4">
                 <p className="text-xs font-body text-neutral-400">
-                    Kode Voucher
+                    Kode Voucher/Referral
                 </p>
                 <div className="flex justify-between items-center gap-3 w-full mt-2 px-4 bg-[#2D2D2D] rounded-[6px]">
                     <input
                         type="text"
-                        placeholder="Masukan kode voucher"
+                        placeholder="Masukkan kode untuk dapat diskon"
                         value={inputCode}
                         onChange={(event) => setInputCode(event.target.value)}
                         className="w-full px-0 py-4 text-xs bg-transparent border-none placeholder:text-neutral-600 focus:outline-none focus:ring-0 focus:appearance-none"
