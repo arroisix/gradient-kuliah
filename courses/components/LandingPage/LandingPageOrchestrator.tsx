@@ -22,7 +22,7 @@ import PriceHighlightKalkulus2Section from './Kalkulus2/PriceHighlightKalkulus2S
 import PriceHighlightStatprobSection from './Statprob/PriceHighlightStaprobSection';
 import BenefitStatprobSection from './Statprob/BenefitStatprobSection';
 import CourseDetail from '../CourseDetail';
-import Pricing from 'landing/containers/pricing';
+import Pricing from 'landing/components/Sections/pricing';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
