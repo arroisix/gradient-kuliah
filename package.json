@@ -14,6 +14,7 @@
     },
     "dependencies": {
         "@apollo/client": "^3.7.0",
+        "@growthbook/growthbook-react": "^0.20.0",
         "@headlessui/react": "^1.7.3",
         "@mux/videojs-kit": "^0.12.0",
         "@notionhq/client": "^2.2.10",

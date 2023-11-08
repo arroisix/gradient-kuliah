@@ -8,6 +8,9 @@ dependencies:
   '@apollo/client':
     specifier: ^3.7.0
     version: 3.7.0(graphql@16.6.0)(react-dom@18.1.0)(react@18.1.0)
+  '@growthbook/growthbook-react':
+    specifier: ^0.20.0
+    version: 0.20.0(react@18.1.0)
   '@headlessui/react':
     specifier: ^1.7.3
     version: 1.7.3(react-dom@18.1.0)(react@18.1.0)
@@ -1815,6 +1818,23 @@ packages:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
       graphql: 16.6.0
+    dev: false
+
+  /@growthbook/growthbook-react@0.20.0(react@18.1.0):
+    resolution: {integrity: sha512-mFlp0z6oZv71uRcze7QMkr5xRqoWAFxXahY9DFa/mwHwLS1giqC7wE5DQUKz2ZaC8G3YZ7ORpXB9bOc9ucILZw==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: ^16.8.0-0 || ^17.0.0-0 || ^18.0.0-0
+    dependencies:
+      '@growthbook/growthbook': 0.30.0
+      react: 18.1.0
+    dev: false
+
+  /@growthbook/growthbook@0.30.0:
+    resolution: {integrity: sha512-ennMHKZIhAZokHHcnA9/tOTLFdBB4DQR0WHT8Lf1pD80jWVv8JBCAzsV1jzSjYUQhb8R8pLR2Kho0IfgjzIZGQ==}
+    engines: {node: '>=10'}
+    dependencies:
+      dom-mutator: 0.6.0
     dev: false
 
   /@hapi/hoek@9.3.0:
@@ -4375,6 +4395,11 @@ packages:
     dependencies:
       esutils: 2.0.3
     dev: true
+
+  /dom-mutator@0.6.0:
+    resolution: {integrity: sha512-iCt9o0aYfXMUkz/43ZOAUFQYotjGB+GNbYJiJdz4TgXkyToXbbRy5S6FbTp72lRBtfpUMwEc1KmpFEU4CZeoNg==}
+    engines: {node: '>=10'}
+    dev: false
 
   /dom-walk@0.1.2:
     resolution: {integrity: sha512-6QvTW9mrGeIegrFXdtQi9pk7O/nSK6lSdXW2eqUspN5LWD7UTji2Fqw5V2YLjBpHEoU9Xl/eUWNpDeZvoyOv2w==}

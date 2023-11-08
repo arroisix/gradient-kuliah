@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import Head from 'next/head';
 import { AppProps } from 'next/app';
+import Head from 'next/head';
 import 'styles/index.css';
 import 'styles/videojs.css';
 // core styles shared by all of react-notion-x (required)
@@ -10,8 +10,8 @@ import 'react-notion-x/src/styles.css';
 import 'prismjs/themes/prism-tomorrow.css';
 
 // style for video.js
-import 'video.js/dist/video-js.css';
 import '@mux/videojs-kit/dist/index.css';
+import 'video.js/dist/video-js.css';
 
 // used for rendering equations (optional)
 import 'katex/dist/katex.min.css';
@@ -20,20 +20,25 @@ import { ToastContainer } from 'react-toastify';
 import { PersistGate } from 'redux-persist/integration/react';
 import useStore, { wrapper } from 'redux/store';
 
-import 'react-toastify/dist/ReactToastify.css';
-import 'moment/locale/id';
-import { AuthProvider } from 'authentication/contexts/AuthProvider';
-import { useEffect } from 'react';
-import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
+import { GrowthBookProvider } from '@growthbook/growthbook-react';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { AuthProvider } from 'authentication/contexts/AuthProvider';
+import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import { ThemeContextProvider } from 'commons/contexts/ThemeProvider';
-import { NextSeo } from 'next-seo';
-import { MixpanelProvider } from 'tracker/MixpanelProvider';
+import { growthbook, updateGrowthBookURL } from 'library/growthbook';
 import { getDisplayName } from 'commons/utils';
+import 'moment/locale/id';
+import { NextSeo } from 'next-seo';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import 'react-toastify/dist/ReactToastify.css';
+import { MixpanelProvider } from 'tracker/MixpanelProvider';
 
 const store = useStore();
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
+    const router = useRouter();
+
     //usePosthog('phc_QeqOZr67qAfgO3mWBQzRHUXbJeDIycKDu2a0NOuGYVj', {
     //    api_host: 'https://app.posthog.com'
     //});
@@ -44,8 +49,19 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
             gtmId: 'GTM-T3KZ4FB'
         });
     };
+
     useEffect(() => {
         loadClientSideOnlyLibrary();
+    }, []);
+
+    useEffect(() => {
+        // Load features from the GrowthBook API and keep them up-to-date
+        growthbook.loadFeatures();
+
+        // Subscribe to route change events and update GrowthBook
+        router.events.on('routeChangeComplete', updateGrowthBookURL);
+        return () =>
+            router.events.off('routeChangeComplete', updateGrowthBookURL);
     }, []);
 
     return (
@@ -68,15 +84,18 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
                 /* @ts-ignore */
                 persistor={store.__persistor}
                 loading={<LoadingBackdrop />}>
-                <MixpanelProvider pageComponentName={getDisplayName(Component)}>
-                    <GoogleOAuthProvider clientId="3688986116-g7dlt8prm1gimh870k4h0trds8njq4rj.apps.googleusercontent.com">
-                        <ThemeContextProvider>
-                            <AuthProvider>
-                                <Component {...pageProps} />
-                            </AuthProvider>
-                        </ThemeContextProvider>
-                    </GoogleOAuthProvider>
-                </MixpanelProvider>
+                <GrowthBookProvider growthbook={growthbook}>
+                    <MixpanelProvider
+                        pageComponentName={getDisplayName(Component)}>
+                        <GoogleOAuthProvider clientId="3688986116-g7dlt8prm1gimh870k4h0trds8njq4rj.apps.googleusercontent.com">
+                            <ThemeContextProvider>
+                                <AuthProvider>
+                                    <Component {...pageProps} />
+                                </AuthProvider>
+                            </ThemeContextProvider>
+                        </GoogleOAuthProvider>
+                    </MixpanelProvider>
+                </GrowthBookProvider>
             </PersistGate>
             <ToastContainer />
         </>
