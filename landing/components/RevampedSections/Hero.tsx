@@ -34,14 +34,14 @@ const RevampedHero = (): JSX.Element => {
                         Cari Materi Gratis
                     </Button>
                 </div>
-                <div className="flex items-center justify-between px-4 py-3 mt-6 md:mt-8 md:px-5 md:py-4 rounded-btn bg-black/50">
-                    <p className="flex-1 text-xs">
+                <div className="flex items-center justify-between gap-5 px-4 py-3 mt-6 md:mt-8 md:px-5 md:py-4 rounded-btn bg-black/50">
+                    <p className="text-xs md:text-sm">
                         Beli paket belajar untuk{' '}
                         <strong>mengakses semua materi</strong> Gradient
                     </p>
                     <Button
-                        variant="custom"
-                        className="flex-none !px-0 text-sm normal-case md:!px-1 md:text-base btn btn-ghost text-accent-purple">
+                        variant="tertiary"
+                        className="flex-none !px-0 text-sm normal-case md:!px-1 md:text-base !text-accent-purple">
                         Beli Paket
                     </Button>
                 </div>

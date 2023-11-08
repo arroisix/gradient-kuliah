@@ -1,3 +1,4 @@
+import RevampedFeature from 'landing/components/RevampedSections/Feature';
 import RevampedHero from 'landing/components/RevampedSections/Hero';
 import Pricing from 'landing/components/Sections/pricing';
 import React from 'react';
@@ -10,8 +11,8 @@ const RevampedLandingContainer = ({
     return (
         <div>
             <RevampedHero />
+            <RevampedFeature />
             {/* <AllClass />
-            <Feature />
             <Testimony />
             <Certificate /> */}
             <Pricing
