@@ -54,7 +54,7 @@ export const RegistrationSection: React.FC = () => {
             }) => (
                 <form
                     onSubmit={handleSubmit}
-                    className="container flex flex-col gap-3">
+                    className="container flex flex-col gap-[14px] h-full">
                     <div className="flex flex-col gap-4">
                         <Input
                             type="email"
@@ -97,7 +97,7 @@ export const RegistrationSection: React.FC = () => {
                         />
                     </div>
 
-                    <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-[14px] flex-grow justify-start">
                         <Button
                             variant="custom"
                             className="w-full text-white bg-accent-purple"

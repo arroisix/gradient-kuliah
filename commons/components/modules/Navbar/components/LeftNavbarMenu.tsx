@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import NavMenuLink from './NavMenuLink';
 
-const DISPLAYED_ROUTES = ['kelas/[id]/', 'astronotes', 'referral'];
+const DISPLAYED_ROUTES = ['kelas/[id]/', '/astronotes/[slug]/', 'referral'];
 
 const LeftNavbarMenu = ({
     lightMode
