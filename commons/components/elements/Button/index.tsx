@@ -34,7 +34,8 @@ const Button = ({
     disabled,
     id,
     eventName,
-    eventPayload
+    eventPayload,
+    linkClass
 }: ButtonProps): JSX.Element => {
     const tracker = useTracker();
     const handleClick: MouseEventHandler<any> = (e) => {
@@ -75,7 +76,7 @@ const Button = ({
 
     if (href) {
         return (
-            <Link href={href}>
+            <Link href={href} className={linkClass}>
                 <div
                     id={id}
                     onMouseEnter={onMouseEnter}

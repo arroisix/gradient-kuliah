@@ -22,4 +22,5 @@ interface ButtonProps extends BaseButtonProps {
     target?: string;
     eventName?: string;
     eventPayload?: Record<string, any>;
+    linkClass?: string;
 }
