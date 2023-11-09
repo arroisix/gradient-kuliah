@@ -132,7 +132,7 @@ export const LoginSection: React.FC = () => {
                             </div>
                             <Link
                                 href="/lupa-password"
-                                className="text-xs self-end underline text-neutral-600">
+                                className="text-sm self-end underline text-neutral-600">
                                 Lupa kata sandi?
                             </Link>
                         </>
@@ -182,18 +182,18 @@ export const LoginSection: React.FC = () => {
                         </section>
                     )}
 
-                    <div className="flex flex-col gap-[14px] flex-grow justify-end lg:justify-start">
+                    <div className="flex flex-col gap-[14px] flex-grow justify-start">
                         {!showLastLogin && (
                             <Button
                                 variant="custom"
-                                className="w-full text-white bg-accent-purple text-sm !py-[10px]"
+                                className="w-full text-white bg-accent-purple"
                                 type="submit"
                                 disabled={isSubmitting}>
                                 {isLoading ? 'Tunggu Sebentar...' : 'Masuk'}
                             </Button>
                         )}
 
-                        <div className="flex justify-center w-full gap-2 text-xs lg:text-sm">
+                        <div className="flex justify-center w-full gap-2">
                             <span>Belum punya akun?</span>
                             <Link
                                 href={`/daftar${

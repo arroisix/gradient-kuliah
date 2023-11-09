@@ -53,13 +53,13 @@ export const AuthenticationContainer: React.FC = () => {
             {pathname !== '/onboarding' ? (
                 <div className="max-w-[360px] w-full px-[18px] py-12 flex flex-col gap-10 justify-center items-center">
                     <div className="flex flex-grow items-end">
-                        <h1 className="font-bold font-[Urbanist] text-[28px] lg:text-5xl">
+                        <h1 className="font-bold font-[Urbanist] text-[28px] text-5xl">
                             Gradient
                         </h1>
                     </div>
                     <div className="flex flex-grow flex-col items-center justify-start w-full gap-4">
                         <div className="flex flex-col w-full gap-[18px] text-center">
-                            <span className="text-base lg:text-2xl font-extrabold text-White">
+                            <span className="text-2xl font-extrabold text-white">
                                 {pathname === '/masuk' ? 'Log In' : 'Buat akun'}
                             </span>
                             <Button
@@ -70,14 +70,14 @@ export const AuthenticationContainer: React.FC = () => {
                                     isLogin ? 'Login' : 'Register'
                                 } with Google`}>
                                 <div className="flex items-center justify-center">
-                                    <AiOutlineGoogle className="mr-2 text-xl" />
-                                    <span className="font-bold text-sm">
+                                    <AiOutlineGoogle className="mr-2 text-2xl" />
+                                    <span className="font-bold">
                                         Lanjutkan Dengan Google
                                     </span>
                                 </div>
                             </Button>
                         </div>
-                        <span className="font-extrabold text-[#666666] text-xs">
+                        <span className="font-extrabold text-[#666666]">
                             ATAU
                         </span>
                         <div className="flex-grow w-full">
