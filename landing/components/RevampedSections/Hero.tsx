@@ -13,7 +13,7 @@ const RevampedHero = (): JSX.Element => {
                     <span className="text-[#7264EB]">dosen bermutu</span>,
                     bareng pelajar se-Indonesia
                 </h1>
-                <p className="mt-3 mb-8 text-sm text-center md:mt-6 md:mb-16 md:text-xl text-neutral-300 md:text-left">
+                <p className="mt-3 mb-8 text-sm text-center md:mt-6 md:mb-16 md:text-xl text-neutral-400 md:text-left">
                     Video, rangkuman, diskusi, latihan soal
                 </p>
                 <div className="flex flex-col items-center gap-4 md:flex-row">
