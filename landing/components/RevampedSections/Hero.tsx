@@ -40,6 +40,7 @@ const RevampedHero = (): JSX.Element => {
                         <strong>mengakses semua materi</strong> Gradient
                     </p>
                     <Button
+                        href="#pricing"
                         variant="tertiary"
                         className="flex-none !px-0 text-sm normal-case md:!px-1 md:text-base !text-accent-purple">
                         Beli Paket
@@ -49,7 +50,7 @@ const RevampedHero = (): JSX.Element => {
             <div className="-mx-4 -mb-8 md:mb-0">
                 <Image
                     src={`${CDN_URL}/assets/hero-asset.png`}
-                    loading="lazy"
+                    priority
                     width={1440}
                     height={1633}
                 />

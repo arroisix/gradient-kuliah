@@ -85,7 +85,7 @@ const RevampedFeature = (): JSX.Element => {
                 <Link
                     href="/komunitas"
                     className="flex flex-col px-6 pt-6 md:col-span-2 card bg-neutral-800 rounded-xl">
-                    <div className="flex justify-between">
+                    <div className="flex justify-between gap-4">
                         <div>
                             <h3 className="pb-2 text-xl font-extrabold">
                                 Diskusi Sesama Pelajar

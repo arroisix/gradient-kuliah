@@ -68,7 +68,7 @@ const ClassCard = ({ cover, title, slug }: ClassCardProps): JSX.Element => {
                     className="object-cover object-top"
                 />
             </div>
-            <div className="flex items-center justify-between gap-1 p-3">
+            <div className="flex items-center justify-between gap-4 p-3">
                 <p className="text-xs font-extrabold lg:overflow-hidden lg:whitespace-nowrap lg:text-ellipsis lg:text-base">
                     {title}
                 </p>

@@ -1,3 +1,4 @@
+import { cn } from 'commons/utils';
 import Image from 'next/image';
 
 const TESTIMONY_DATA = [
@@ -45,7 +46,7 @@ const TestimonyCard = ({
     return (
         <div className="w-[245px] md:w-[422px] p-6 bg-gradient-to-t from-[#FFFFFF00] to-[#FFFFFF0D] border-[1px] border-[#2D2D2D] rounded-[24px]">
             <div className="flex gap-4 items-center pb-6 border-b-[1px] border-[#2D2D2D]">
-                <div className="h-10 w-10 rounded-full overflow-hidden">
+                <div className="w-10 h-10 overflow-hidden rounded-full">
                     <Image
                         loading="lazy"
                         src={photo}
@@ -56,7 +57,7 @@ const TestimonyCard = ({
                     />
                 </div>
                 <div className="flex flex-col md:gap-[6px]">
-                    <span className="inline-block font-extrabold text-xs">
+                    <span className="inline-block text-xs font-extrabold">
                         {name}
                     </span>
                     <span className="inline-block font-body text-[10px] text-neutral-400">
@@ -65,16 +66,20 @@ const TestimonyCard = ({
                 </div>
             </div>
             <article>
-                <p className="pt-6 font-body text-xs md:text-sm">{testimony}</p>
+                <p className="pt-6 text-xs font-body md:text-sm">{testimony}</p>
             </article>
         </div>
     );
 };
 
-const Testimony = (): JSX.Element => {
+const Testimony = ({ revamped }: { revamped?: boolean }): JSX.Element => {
     return (
         <section className="">
-            <h3 className="font-extrabold text-center text-xl md:text-4xl">
+            <h3
+                className={cn(
+                    'font-extrabold text-center text-xl ',
+                    revamped ? 'md:text-3xl' : 'md:text-4xl'
+                )}>
                 Kata Mereka
             </h3>
             <div className="w-full h-full py-10 overflow-hidden">
