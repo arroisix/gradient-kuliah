@@ -5,21 +5,29 @@ import RevampedLandingContainer from 'landing/containers/revamped';
 import React from 'react';
 import config from 'redux/api/config';
 
+type LandingPageProps = {
+    pricingData?: ResponseData<PacketOffer>;
+    classesData?: ResponseData<Course>;
+};
+
 const RevampedLandingPage = ({
-    data
-}: {
-    data: { data: PacketOffer[] };
-}): JSX.Element => {
+    pricingData,
+    classesData
+}: LandingPageProps): JSX.Element => {
     return (
         <Layout shouldTransparent>
-            <RevampedLandingContainer pricingData={data.data} />
+            <RevampedLandingContainer
+                pricingData={pricingData?.data}
+                classData={classesData?.data}
+            />
         </Layout>
     );
 };
 
 export async function getStaticProps(): Promise<{
     props: {
-        data: PacketOffer[];
+        pricingData: ResponseData<PacketOffer>;
+        classesData: ResponseData<Course>;
         title: string;
         description: string;
         openGraph: {
@@ -37,13 +45,15 @@ export async function getStaticProps(): Promise<{
     };
     revalidate: number;
 }> {
-    const { data }: { data: PacketOffer[] } = await axios.get(
-        `${config.API_BASE_URL}subscriptions/packet-offer/`
-    );
+    const { data: pricingData }: { data: ResponseData<PacketOffer> } =
+        await axios.get(`${config.API_BASE_URL}subscriptions/packet-offer/`);
+    const { data: classesData }: { data: ResponseData<Course> } =
+        await axios.get(`${config.API_BASE_URL}courses/public/?limit=4`);
 
     return {
         props: {
-            data,
+            pricingData,
+            classesData,
             title: 'Platform Belajar Kuliah  No. 1 di Indonesia',
             description:
                 'Tempat belajar materi kuliah nomor 1 di Indonesia. Lengkap materi dan pembahasan soal',

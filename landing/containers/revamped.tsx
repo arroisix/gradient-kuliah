@@ -1,19 +1,24 @@
+import Classes from 'landing/components/RevampedSections/Classes';
 import RevampedFeature from 'landing/components/RevampedSections/Feature';
 import RevampedHero from 'landing/components/RevampedSections/Hero';
 import Pricing from 'landing/components/Sections/pricing';
 import React from 'react';
 
-const RevampedLandingContainer = ({
-    pricingData
-}: {
+type RevampedLandingContainerProps = {
     pricingData?: PacketOffer[];
-}): JSX.Element => {
+    classData?: Course[];
+};
+
+const RevampedLandingContainer = ({
+    pricingData,
+    classData
+}: RevampedLandingContainerProps): JSX.Element => {
     return (
         <div>
             <RevampedHero />
             <RevampedFeature />
-            {/* <AllClass />
-            <Testimony />
+            <Classes classData={classData} />
+            {/* <Testimony />
             <Certificate /> */}
             <Pricing
                 pricingData={pricingData}

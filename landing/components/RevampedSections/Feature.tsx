@@ -1,21 +1,23 @@
-import React from 'react';
-import Container from './Container';
-import Image from 'next/image';
-import { CDN_URL } from 'commons/constants';
-import { BiChevronRight } from 'react-icons/bi';
 import Button from 'commons/components/elements/Button';
+import { CDN_URL } from 'commons/constants';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
+import Image from 'next/image';
 import Link from 'next/link';
+import React from 'react';
+import { BiChevronRight } from 'react-icons/bi';
+import Container from './Container';
 
 const RevampedFeature = (): JSX.Element => {
+    const { isMobileBreakpoints } = useWindowBreakpoints();
     return (
-        <Container className="py-24 space-y-8">
+        <Container className="space-y-8 py-9 md:py-24">
             <h2 className="text-3xl font-extrabold leading-relaxed text-center ">
                 Pilih fitur yang sesuai dengan cara belajarmu
             </h2>
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-6 lg:gap-8">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-6 lg:gap-8">
                 <Link
                     href="/kelas"
-                    className="relative px-8 pt-6 lg:col-span-3 card bg-neutral-800 rounded-xl">
+                    className="relative px-8 pt-6 md:col-span-3 card bg-neutral-800 rounded-xl">
                     <div className="flex justify-between">
                         <div>
                             <h3 className="pb-2 text-2xl font-extrabold">
@@ -36,16 +38,20 @@ const RevampedFeature = (): JSX.Element => {
                 </Link>
                 <Link
                     href="/astronotes#bank-soal"
-                    className="flex flex-row p-4 py-6 lg:col-span-3 md:gap-4 xl:gap-8 xl:px-8 card bg-neutral-800 rounded-xl">
-                    <div className="aspect-[228/280] md:w-[342px] lg:w-full lg:my-2 xl:my-0">
+                    className="flex flex-col-reverse gap-6 p-4 pt-5 pb-0 sm:py-6 sm:flex-row md:col-span-3 md:gap-4 xl:gap-8 xl:px-8 card bg-neutral-800 rounded-xl">
+                    <div className="flex items-end justify-center sm:aspect-[228/280] w-full md:w-[342px] lg:w-full lg:my-2 xl:my-0">
                         <Image
-                            src={`${CDN_URL}/assets/feature-soal-revamp.png`}
+                            src={`${CDN_URL}/assets/feature-${
+                                isMobileBreakpoints
+                                    ? 'soal-revamp-mobile'
+                                    : 'soal-revamp'
+                            }.png`}
                             loading="lazy"
-                            width={228 * 2}
-                            height={280 * 2}
+                            width={isMobileBreakpoints ? 247 * 2 : 228 * 2}
+                            height={isMobileBreakpoints ? 205 * 2 : 280 * 2}
                         />
                     </div>
-                    <div className="flex flex-col items-end gap-4 md:gap-12">
+                    <div className="flex flex-row-reverse items-start gap-4 sm:items-end sm:flex-col md:gap-12">
                         <Chevron />
                         <div className="self-start">
                             <h3 className="pb-2 text-xl font-extrabold xl:text-2xl">
@@ -57,7 +63,7 @@ const RevampedFeature = (): JSX.Element => {
                 </Link>
                 <Link
                     href="/astronotes"
-                    className="flex flex-col px-6 pt-6 lg:col-span-2 card bg-neutral-800 rounded-xl">
+                    className="flex flex-col px-6 pt-6 md:col-span-2 card bg-neutral-800 rounded-xl">
                     <div className="flex justify-between">
                         <div>
                             <h3 className="pb-2 text-xl font-extrabold">
@@ -78,7 +84,7 @@ const RevampedFeature = (): JSX.Element => {
                 </Link>
                 <Link
                     href="/komunitas"
-                    className="flex flex-col px-6 pt-6 lg:col-span-2 card bg-neutral-800 rounded-xl">
+                    className="flex flex-col px-6 pt-6 md:col-span-2 card bg-neutral-800 rounded-xl">
                     <div className="flex justify-between">
                         <div>
                             <h3 className="pb-2 text-xl font-extrabold">
@@ -102,20 +108,11 @@ const RevampedFeature = (): JSX.Element => {
                         />
                     </div>
                 </Link>
-                <div className="px-6 pt-6 lg:col-span-2 card bg-neutral-800 rounded-xl">
-                    <div className="flex justify-between">
-                        <div>
-                            <h3 className="pb-2 text-xl font-extrabold">
-                                Bingung? Tanya Copilot!
-                            </h3>
-                            <p className="hidden xl:block">
-                                Asisten AI yang bisa jawab apapun, gak kalah
-                                sama Chat GPT!
-                            </p>
-                        </div>
-                        <Chevron />
-                    </div>
-                    <p className="xl:hidden">
+                <div className="px-6 pt-6 md:col-span-2 card bg-neutral-800 rounded-xl">
+                    <h3 className="pb-2 text-xl font-extrabold">
+                        Bingung? Tanya Copilot!
+                    </h3>
+                    <p>
                         Asisten AI yang bisa jawab apapun, gak kalah sama Chat
                         GPT!
                     </p>
