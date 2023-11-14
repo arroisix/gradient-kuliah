@@ -5,18 +5,18 @@ const COOKIE = 'visitor_id';
 const ACTIVE_AB_TESTING_PAGES = ['/']; // Add as needed
 
 export async function middleware(req: NextRequest): Promise<NextResponse> {
-    // We only want to run the A/B test on the homepage
-    const pathname = req.nextUrl.pathname;
-    if (!ACTIVE_AB_TESTING_PAGES.includes(pathname)) {
-        return NextResponse.next();
-    }
-
     // Get existing visitor cookie or create a new one
     const visitor_id = req.cookies[COOKIE] || crypto.randomUUID();
 
     // Setup GrowthBook instance
     growthbook.setFeatures((await getFeatures()) || {});
     growthbook.setAttributes({ id: visitor_id });
+
+    // We only want to run the A/B test on the homepage
+    const pathname = req.nextUrl.pathname;
+    if (!ACTIVE_AB_TESTING_PAGES.includes(pathname)) {
+        return NextResponse.next();
+    }
 
     // Pick which page to render depending on a feature flag
     let res = NextResponse.next();

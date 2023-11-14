@@ -25,7 +25,7 @@ const FEATURES_ENDPOINT = process.env
 let features: Context['features'];
 let lastFetch = 0;
 export async function getFeatures(): Promise<Context['features']> {
-    if (Date.now() - lastFetch > 1000) {
+    if (Date.now() - lastFetch > 100) {
         lastFetch = Date.now();
         const latest = fetch(FEATURES_ENDPOINT)
             .then((res) => res.json())

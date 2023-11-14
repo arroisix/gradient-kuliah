@@ -23,9 +23,7 @@ const RegisterBanner = (): JSX.Element => {
             <Button
                 variant="custom"
                 href={AUTHENTICATION_ROUTE}
-                target="blank"
-                className="font-sans text-xs font-bold text-black bg-white w-fit z-[1] mt-12 min-[375px]:mt-0"
-                eventName="Join Tutor Button">
+                className="font-sans text-xs font-bold text-black bg-white w-fit z-[1] mt-12 min-[375px]:mt-0">
                 Daftar Sekarang
             </Button>
         </div>

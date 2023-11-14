@@ -26,7 +26,7 @@ import { AuthProvider } from 'authentication/contexts/AuthProvider';
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import { ThemeContextProvider } from 'commons/contexts/ThemeProvider';
 import { growthbook, updateGrowthBookURL } from 'library/growthbook';
-import { getDisplayName } from 'commons/utils';
+import { getCookieValue, getDisplayName } from 'commons/utils';
 import 'moment/locale/id';
 import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
@@ -57,6 +57,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     useEffect(() => {
         // Load features from the GrowthBook API and keep them up-to-date
         growthbook.loadFeatures();
+        growthbook.setAttributes({ id: getCookieValue('visitor_id') });
 
         // Subscribe to route change events and update GrowthBook
         router.events.on('routeChangeComplete', updateGrowthBookURL);

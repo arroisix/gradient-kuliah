@@ -5,22 +5,28 @@ import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useGetStudentLearningProgressQuery } from 'dashboard/redux/api/dashboardApi';
 import Button from 'commons/components/elements/Button';
 import { useTracker } from 'tracker/tracker';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 
 const ContinueLearning = ({
     className
 }: {
     className?: string;
 }): JSX.Element => {
-    const { data, isLoading } = useGetStudentLearningProgressQuery();
+    const isAuthenticated = useSelector(getIsAuthenticated);
+    const { data, isLoading } = useGetStudentLearningProgressQuery(
+        !isAuthenticated ? skipToken : undefined
+    );
 
     return (
         <div className={`flex flex-col gap-3 md:gap-5 ${className}`}>
             <h3 className="text-lg font-extrabold">Lanjut Belajar</h3>
             {isLoading ? (
                 <div className="flex flex-col gap-4">
-                    <div className="p-4 h-44 w-full bg-neutral-800 animate-pulse rounded-lg" />
-                    <div className="p-4 h-44 w-full bg-neutral-800 animate-pulse rounded-lg" />
-                    <div className="p-4 h-44 w-full bg-neutral-800 animate-pulse rounded-lg" />
+                    <div className="w-full p-4 rounded-lg h-44 bg-neutral-800 animate-pulse" />
+                    <div className="w-full p-4 rounded-lg h-44 bg-neutral-800 animate-pulse" />
+                    <div className="w-full p-4 rounded-lg h-44 bg-neutral-800 animate-pulse" />
                 </div>
             ) : (
                 <>
@@ -78,14 +84,14 @@ const ListContinueLearning = ({
                                 src={subchapter_thumbnail}
                                 alt={subchapter_name}
                                 layout="fill"
-                                className="rounded-lg object-cover object-top"
+                                className="object-cover object-top rounded-lg"
                             />
                         </div>
                         <div className="flex flex-col gap-[2px] w-full overflow-hidden">
-                            <span className="inline-block font-body whitespace-nowrap text-ellipsis overflow-hidden">
+                            <span className="inline-block overflow-hidden font-body whitespace-nowrap text-ellipsis">
                                 {subchapter_name}
                             </span>
-                            <span className="inline-block pb-3 font-body text-xs text-neutral-200 whitespace-nowrap text-ellipsis overflow-hidden">
+                            <span className="inline-block pb-3 overflow-hidden text-xs font-body text-neutral-200 whitespace-nowrap text-ellipsis">
                                 {course_name}
                             </span>
                             <ProgressBar percent={progress_percentage} />
@@ -116,7 +122,7 @@ const NoLearningProgress = (): JSX.Element => {
             <div>
                 <Button
                     variant="custom"
-                    className="bg-white font-sans font-bold text-black text-xs"
+                    className="font-sans text-xs font-bold text-black bg-white"
                     onClick={() =>
                         router.push(
                             `${is_subscribed ? '/kelas' : '/langganan'}`

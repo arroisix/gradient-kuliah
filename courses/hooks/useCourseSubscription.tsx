@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienceApi';
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 
 const useCourseSubscription = (slug?: string) => {
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -11,9 +12,7 @@ const useCourseSubscription = (slug?: string) => {
         data,
         isLoading: isLoadingSubscription,
         isSuccess: isDoneFetching
-    } = useGetActiveSubscriptionQuery(undefined, {
-        skip: !isAuthenticated
-    });
+    } = useGetActiveSubscriptionQuery(!isAuthenticated ? skipToken : undefined);
     const { data: learningProgress, isLoading: isLoadingLearningProgress } =
         useGetLearningProgressQuery(slug as string, {
             skip: !isAuthenticated || slug === undefined,

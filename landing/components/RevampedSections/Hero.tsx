@@ -42,7 +42,7 @@ const RevampedHero = (): JSX.Element => {
                     <Button
                         href="#pricing"
                         variant="tertiary"
-                        className="flex-none !px-0 text-sm normal-case md:!px-1 md:text-base !text-accent-purple">
+                        className="flex-none whitespace-nowrap !px-0 text-sm normal-case md:!px-1 md:text-base !text-accent-purple">
                         Beli Paket
                     </Button>
                 </div>
