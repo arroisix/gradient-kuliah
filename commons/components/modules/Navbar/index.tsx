@@ -67,10 +67,6 @@ const Navbar = ({
     const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
         'landing-page-revamp'
     );
-    console.log(
-        '🚀 ~ file: index.tsx:70 ~ isLandingPageRevampOn:',
-        isLandingPageRevampOn
-    );
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll, { passive: true });
