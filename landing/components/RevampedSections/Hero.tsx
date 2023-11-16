@@ -1,6 +1,6 @@
 import Button from 'commons/components/elements/Button';
 import Image from 'next/image';
-import React from 'react';
+import React, { useState } from 'react';
 import Container from './Container';
 import { CDN_URL } from 'commons/constants';
 
@@ -9,6 +9,9 @@ const RevampedHero = ({
 }: {
     majorData?: MajorOptions[];
 }): JSX.Element => {
+    const [selectedMajor, setSelectedMajor] = useState<string>(
+        majorData?.[0].slug || ''
+    );
     return (
         <Container className="flex flex-col-reverse items-center py-4 md:pt-24 lg:py-16 md:gap-12 lg:gap-16 lg:h-screen md:flex-row">
             <div className="flex flex-col justify-center">
@@ -24,6 +27,8 @@ const RevampedHero = ({
                     <select
                         name="major"
                         id="major-select"
+                        value={selectedMajor}
+                        onChange={(e) => setSelectedMajor(e.target.value)}
                         className="w-full shadow-md md:w-min lg:w-64 select select-bordered bg-neutral-900">
                         {majorData?.map((major) => (
                             <option key={major.slug} value={major.slug}>
@@ -33,7 +38,7 @@ const RevampedHero = ({
                     </select>
                     <Button
                         variant="primary"
-                        href="#pricing"
+                        href={`/dashboard?recommendation=${selectedMajor}`}
                         className="flex items-center flex-none h-10 text-sm md:h-12 whitespace-nowrap lg:text-base"
                         eventName="Landing Page CTA"
                         eventPayload={{ 'Section Name': 'Hero' }}>

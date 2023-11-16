@@ -2,39 +2,33 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import ProgressBar from './ProgressBar';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
-import { useGetStudentLearningProgressQuery } from 'dashboard/redux/api/dashboardApi';
 import Button from 'commons/components/elements/Button';
 import { useTracker } from 'tracker/tracker';
-import { useSelector } from 'react-redux';
-import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
-import { skipToken } from '@reduxjs/toolkit/dist/query';
+import Skeleton from 'commons/components/elements/Skeleton';
 
 const ContinueLearning = ({
-    className
+    className,
+    isLoading,
+    learningProgress
 }: {
-    className?: string;
-}): JSX.Element => {
-    const isAuthenticated = useSelector(getIsAuthenticated);
-    const { data, isLoading } = useGetStudentLearningProgressQuery(
-        !isAuthenticated ? skipToken : undefined
-    );
-
+    isLoading: boolean;
+    learningProgress?: StudentLearningProgress[];
+} & PropsWithClassName): JSX.Element => {
     return (
         <div className={`flex flex-col gap-3 md:gap-5 ${className}`}>
             <h3 className="text-lg font-extrabold">Lanjut Belajar</h3>
-            {isLoading ? (
-                <div className="flex flex-col gap-4">
-                    <div className="w-full p-4 rounded-lg h-44 bg-neutral-800 animate-pulse" />
-                    <div className="w-full p-4 rounded-lg h-44 bg-neutral-800 animate-pulse" />
-                    <div className="w-full p-4 rounded-lg h-44 bg-neutral-800 animate-pulse" />
-                </div>
+            {!isLoading ? (
+                <Skeleton
+                    className="w-full rounded-lg h-44 bg-neutral-800 animate-pulse"
+                    repeat={3}
+                />
             ) : (
                 <>
-                    {data?.learning_progress.length === 0 ? (
+                    {learningProgress?.length === 0 ? (
                         <NoLearningProgress />
                     ) : (
                         <ListContinueLearning
-                            learning_progress={data?.learning_progress}
+                            learningProgress={learningProgress}
                         />
                     )}
                 </>
@@ -44,16 +38,16 @@ const ContinueLearning = ({
 };
 
 const ListContinueLearning = ({
-    learning_progress
+    learningProgress
 }: {
-    learning_progress?: StudentLearningProgress[];
+    learningProgress?: StudentLearningProgress[];
 }): JSX.Element => {
     const router = useRouter();
     const tracker = useTracker();
 
     return (
         <div className="relative flex flex-col gap-[18px] lg:gap-6">
-            {learning_progress?.map(
+            {learningProgress?.map(
                 ({
                     course_slug,
                     chapter_id,
