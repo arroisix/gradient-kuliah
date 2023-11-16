@@ -9,15 +9,17 @@ import React from 'react';
 type RevampedLandingContainerProps = {
     pricingData?: PacketOffer[];
     classData?: Course[];
+    majorData?: MajorOptions[];
 };
 
 const RevampedLandingContainer = ({
     pricingData,
-    classData
+    classData,
+    majorData
 }: RevampedLandingContainerProps): JSX.Element => {
     return (
         <>
-            <RevampedHero />
+            <RevampedHero majorData={majorData} />
             <RevampedFeature />
             <Classes classData={classData} />
             <Testimony revamped />

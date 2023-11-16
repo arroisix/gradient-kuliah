@@ -8,15 +8,18 @@ import config from 'redux/api/config';
 type LandingPageProps = {
     pricingData?: ResponseData<PacketOffer>;
     classesData?: ResponseData<Course>;
+    majorData?: ResponseData<MajorOptions>;
 };
 
 const RevampedLandingPage = ({
     pricingData,
-    classesData
+    classesData,
+    majorData
 }: LandingPageProps): JSX.Element => {
     return (
         <Layout shouldTransparent>
             <RevampedLandingContainer
+                majorData={majorData?.data}
                 pricingData={pricingData?.data}
                 classData={classesData?.data}
             />
@@ -28,6 +31,7 @@ export async function getStaticProps(): Promise<{
     props: {
         pricingData: ResponseData<PacketOffer>;
         classesData: ResponseData<Course>;
+        majorData: ResponseData<MajorOptions>;
         title: string;
         description: string;
         openGraph: {
@@ -49,11 +53,16 @@ export async function getStaticProps(): Promise<{
         await axios.get(`${config.API_BASE_URL}subscriptions/packet-offer/`);
     const { data: classesData }: { data: ResponseData<Course> } =
         await axios.get(`${config.API_BASE_URL}courses/public/?limit=4`);
+    const { data: majorData }: { data: ResponseData<MajorOptions> } =
+        await axios.get(
+            `${config.API_BASE_URL}courses/public/major-recommendations/`
+        );
 
     return {
         props: {
             pricingData,
             classesData,
+            majorData,
             title: 'Platform Belajar Kuliah  No. 1 di Indonesia',
             description:
                 'Tempat belajar materi kuliah nomor 1 di Indonesia. Lengkap materi dan pembahasan soal',

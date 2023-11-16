@@ -48,3 +48,8 @@ interface CourseLandingPageData {
     configuration: CourseLandingPageConfig;
     packets: Packet[];
 }
+
+interface MajorOptions {
+    label: string;
+    slug: string;
+}

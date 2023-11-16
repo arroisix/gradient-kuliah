@@ -4,7 +4,11 @@ import React from 'react';
 import Container from './Container';
 import { CDN_URL } from 'commons/constants';
 
-const RevampedHero = (): JSX.Element => {
+const RevampedHero = ({
+    majorData
+}: {
+    majorData?: MajorOptions[];
+}): JSX.Element => {
     return (
         <Container className="flex flex-col-reverse items-center py-4 md:pt-24 lg:py-16 md:gap-12 lg:gap-16 lg:h-screen md:flex-row">
             <div className="flex flex-col justify-center">
@@ -21,9 +25,11 @@ const RevampedHero = (): JSX.Element => {
                         name="major"
                         id="major-select"
                         className="w-full shadow-md md:w-min lg:w-64 select select-bordered bg-neutral-900">
-                        <option value="teknik">Teknik</option>
-                        <option value="informatika">Informatika/SI</option>
-                        <option value="mipa">MIPA</option>
+                        {majorData?.map((major) => (
+                            <option key={major.slug} value={major.slug}>
+                                {major.label}
+                            </option>
+                        ))}
                     </select>
                     <Button
                         variant="primary"
