@@ -5,6 +5,7 @@ interface FilterCourseQueryParams {
     limit?: int;
     is_subscribed?: boolean;
     keyword?: string;
+    major?: string;
 }
 
 interface TrackSubchapterProgressInputData {

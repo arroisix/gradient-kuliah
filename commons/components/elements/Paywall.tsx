@@ -9,12 +9,14 @@ import { cn } from 'commons/utils';
 
 type PaywallProps = {
     isCarousel?: boolean;
+    isCompact?: boolean;
     pricingData?: PacketOffer[];
     ctaEventName?: string;
 };
 
 const Paywall = ({
     isCarousel,
+    isCompact,
     pricingData,
     ctaEventName
 }: PaywallProps): JSX.Element => {
@@ -62,10 +64,15 @@ const Paywall = ({
         <div
             ref={carouselRef}
             className={cn(
-                'items-center gap-4',
+                'items-center justify-center gap-4',
                 isCarousel
                     ? 'carousel carousel-center px-4'
-                    : 'flex flex-col md:flex-row md:flex-wrap lg:flex-nowrap'
+                    : [
+                          'flex flex-col',
+                          isCompact
+                              ? 'xl:flex-row xl:flex-nowrap'
+                              : 'md:flex-row md:flex-wrap lg:flex-nowrap'
+                      ]
             )}>
             {pricingData?.map((pricing) => {
                 const isHighlighted = pricing.order === 1;
@@ -74,10 +81,16 @@ const Paywall = ({
                     <div
                         key={pricing.id}
                         className={cn(
-                            'relative max-w-sm w-full flex flex-col rounded-box',
+                            'relative w-full flex flex-col rounded-box',
+                            isCompact ? 'max-w-xs md:max-w-sm' : 'max-w-sm',
                             isCarousel && 'carousel-item',
                             isHighlighted
-                                ? 'order-first sm:order-none bg-gradient-purple-pricing border-2 border-accent-purple/80'
+                                ? [
+                                      'order-first bg-gradient-purple-pricing border-2 border-accent-purple/80',
+                                      isCompact
+                                          ? 'xl:order-none'
+                                          : 'sm:order-none'
+                                  ]
                                 : 'order-none bg-[#222222]'
                         )}>
                         {isHighlighted && (
@@ -109,7 +122,7 @@ const Paywall = ({
                                             key={index}
                                             className="flex items-center gap-3">
                                             <SlCheck
-                                                className="text-accent-purple"
+                                                className="flex-none text-accent-purple"
                                                 size={32}
                                             />
                                             <div>
