@@ -125,3 +125,9 @@ export function getDisplayName<P extends object>(
 // Taken from https://stackoverflow.com/questions/5639346/what-is-the-shortest-function-for-reading-a-cookie-by-name-in-javascript
 export const getCookieValue = (name: string): string =>
     document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || '';
+
+export const slugify = (str: string): string =>
+    str
+        .toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^\w-]+/g, '');

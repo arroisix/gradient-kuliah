@@ -1,13 +1,27 @@
+import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Skeleton from 'commons/components/elements/Skeleton';
 import CategoryBookList from 'courses/components/LearningExperience/AstroNotes/CategoryBookList';
-import { useGetEntrypointBooksQuery } from 'courses/redux/api/astronotesApi';
+import {
+    useGetEntrypointBooksQuery,
+    useGetPublicEntrypointBooksQuery
+} from 'courses/redux/api/astronotesApi';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const AstronotesEntrypoint = (): JSX.Element => {
     const [booksInProgress, setBooksInProgress] = useState<Astronote[]>([]);
-    const { data: astronotes, isLoading } = useGetEntrypointBooksQuery({
-        limit: 5
-    });
+    const isAuthenticated = useSelector(getIsAuthenticated);
+
+    const privateQueryResult = useGetEntrypointBooksQuery(
+        isAuthenticated ? { limit: 5 } : skipToken
+    );
+    const publicQueryResult = useGetPublicEntrypointBooksQuery(
+        isAuthenticated ? skipToken : { limit: 5 }
+    );
+    const { data: astronotes, isLoading } = isAuthenticated
+        ? privateQueryResult
+        : publicQueryResult;
 
     useEffect(() => {
         if (astronotes) {

@@ -12,12 +12,17 @@ type PaywallProps = {
     isCompact?: boolean;
     pricingData?: PacketOffer[];
     ctaEventName?: string;
-};
+    pricingClassName?: string;
+    highlightedClassName?: string;
+} & PropsWithClassName;
 
 const Paywall = ({
     isCarousel,
     isCompact,
     pricingData,
+    className,
+    pricingClassName,
+    highlightedClassName,
     ctaEventName
 }: PaywallProps): JSX.Element => {
     const carouselRef = useRef<HTMLDivElement>(null);
@@ -64,7 +69,8 @@ const Paywall = ({
         <div
             ref={carouselRef}
             className={cn(
-                'items-center justify-center gap-4',
+                'items-center gap-4',
+                className,
                 isCarousel
                     ? 'carousel carousel-center px-4'
                     : [
@@ -89,16 +95,24 @@ const Paywall = ({
                                       'order-first bg-gradient-purple-pricing border-2 border-accent-purple/80',
                                       isCompact
                                           ? 'xl:order-none'
-                                          : 'sm:order-none'
+                                          : 'sm:order-none',
+                                      highlightedClassName
                                   ]
-                                : 'order-none bg-[#222222]'
+                                : 'order-none bg-[#222222]',
+                            pricingClassName
                         )}>
                         {isHighlighted && (
                             <div className="w-full py-3 font-bold text-center rounded-t-box animate-pulse bg-accent-purple/50 ">
                                 PENAWARAN TERBAIK!
                             </div>
                         )}
-                        <div className="flex flex-col gap-4 p-6 md:gap-6 md:py-8">
+                        <div
+                            className={cn(
+                                'flex flex-col',
+                                isCompact
+                                    ? 'gap-4 p-4 md:py-6'
+                                    : 'gap-4 p-6 md:gap-6 md:py-8'
+                            )}>
                             <div className="flex flex-col text-center md:gap-1">
                                 <h4 className="font-extrabold">
                                     {pricing.packet_name}
