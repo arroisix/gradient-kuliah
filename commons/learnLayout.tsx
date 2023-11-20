@@ -44,7 +44,7 @@ const LearnLayout = ({
                 {showSidebar && <Sidebar fullHeight={fullHeightSidebar} />}
                 <div
                     className={cn(
-                        'min-h-full w-screen overflow-x-clip',
+                        'min-h-full w-screen ',
                         fullHeightSidebar && 'md:px-8 xl:px-12',
                         showSidebar && fullHeightSidebar && 'md:ml-[250px]'
                     )}>
