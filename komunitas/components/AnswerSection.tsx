@@ -13,7 +13,6 @@ import { useGetCommunityPostCommentDetailQuery } from 'komunitas/redux/api/komun
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { useKomunitas } from 'komunitas/contexts/KomunitasProvider';
-import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import CommunityPaywall from './CommunityPaywall';
 
 type AnswerSectionProps = {

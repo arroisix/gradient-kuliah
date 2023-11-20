@@ -14,6 +14,8 @@ import { toast } from 'react-toastify';
 import { useTracker } from 'tracker/tracker';
 import Link from 'next/link';
 import { cn } from 'commons/utils';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
 type Student = {
     id: string;
@@ -66,6 +68,7 @@ const QuestionCard = ({
     const tracker = useTracker();
 
     const [imageError, setImageError] = useState(false);
+    const isAuthenticated = useSelector(getIsAuthenticated);
 
     async function handleSubmit(
         formContent: string,
@@ -168,7 +171,7 @@ const QuestionCard = ({
                             </span>
                         </div>
                     </div>
-                    {!isShowForm && setIsShowForm && (
+                    {!isShowForm && setIsShowForm && isAuthenticated && (
                         <button
                             className="bg-neutral-800 px-[27px] py-[7.5px] rounded-[70px] font-extrabold text-xs hover:bg-accent-purple transition-all"
                             onClick={() => {
