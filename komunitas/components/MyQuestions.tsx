@@ -1,16 +1,21 @@
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
-import { CDN_URL } from 'commons/constants';
+import { AUTHENTICATION_ROUTE, CDN_URL } from 'commons/constants';
 import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { MdChevronRight } from 'react-icons/md';
+import { useSelector } from 'react-redux';
 
 type MyQuestionsProps = {
     questions?: MyQuestionListResponse['questions'];
+    askNow?: () => void;
 };
 
-const MyQuestions = ({ questions }: MyQuestionsProps): JSX.Element => {
+const MyQuestions = ({ questions, askNow }: MyQuestionsProps): JSX.Element => {
+    const isAuthenticated = useSelector(getIsAuthenticated);
+
     return questions?.length != 0 ? (
         <>
             {questions?.map((value) => (
@@ -48,7 +53,7 @@ const MyQuestions = ({ questions }: MyQuestionsProps): JSX.Element => {
             ))}
         </>
     ) : (
-        <div className="absolute flex flex-col items-center justify-center w-full px-5 text-center -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2">
+        <div className="absolute flex flex-col items-center justify-center w-full px-5 text-center -translate-x-1/2 -translate-y-1/2 z-[1] left-1/2 top-1/2">
             <Image
                 src={`${CDN_URL}/assets/komunitas-empty-asset.png`}
                 width={120}
@@ -61,7 +66,9 @@ const MyQuestions = ({ questions }: MyQuestionsProps): JSX.Element => {
             <Button
                 variant="custom"
                 size="small"
-                className="text-xs bg-neutral-800 whitespace-nowrap">
+                className="text-xs bg-neutral-800 whitespace-nowrap"
+                href={isAuthenticated ? undefined : AUTHENTICATION_ROUTE}
+                onClick={isAuthenticated ? askNow : undefined}>
                 Buat Pertanyaan Gratis
             </Button>
         </div>

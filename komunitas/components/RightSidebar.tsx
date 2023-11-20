@@ -9,18 +9,22 @@ import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 import { MdChevronRight } from 'react-icons/md';
 import MyQuestions from './MyQuestions';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
-const RightSidebar = (): JSX.Element => {
+const RightSidebar = ({ askNow }: { askNow?: () => void }): JSX.Element => {
     const router = useRouter();
     const { pathname } = router;
     const { profile } = useContext(AuthContext);
 
+    const isAuthenticated = useSelector(getIsAuthenticated);
     const { data: myQuestion, isLoading: isLoadingMyQuestion } =
         useGetMyQuestionListQuery(
+            { user_id: profile?.user_id as string },
             {
-                user_id: profile?.user_id as string
-            },
-            { skip: !profile?.user_id, refetchOnMountOrArgChange: true }
+                skip: !isAuthenticated || !profile?.user_id,
+                refetchOnMountOrArgChange: true
+            }
         );
 
     const { data: sideExploreData, isLoading: isLoadingSideExplore } =
@@ -63,13 +67,16 @@ const RightSidebar = (): JSX.Element => {
                             )}
                         </div>
                     )
-                ) : isLoadingMyQuestion || !profile ? (
+                ) : isLoadingMyQuestion ? (
                     <Skeleton repeat={3} className="h-3 !mb-0" />
                 ) : (
-                    <MyQuestions questions={myQuestion?.questions} />
+                    <MyQuestions
+                        questions={profile ? myQuestion?.questions : []}
+                        askNow={askNow}
+                    />
                 )}
             </div>
-            {myQuestion?.questions.length != 0 && (
+            {profile && myQuestion?.questions.length != 0 && (
                 <div className="absolute top-0 left-0 w-full h-full">
                     <div className="absolute bottom-0 left-0 w-full h-[150px] bg-gradient-to-b from-transparent via-[#121212] to-[#121212] z-[1]"></div>
                     <div className="absolute bottom-0 left-0 w-full px-[18px] z-[1]">

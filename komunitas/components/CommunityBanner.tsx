@@ -1,0 +1,36 @@
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import GradientIcon from 'commons/components/GradientIcon';
+import Button from 'commons/components/elements/Button';
+import { AUTHENTICATION_ROUTE } from 'commons/constants';
+import React from 'react';
+import { useSelector } from 'react-redux';
+
+type CommunityBannerProps = {
+    askNow?: () => void;
+};
+
+const CommunityBanner = ({ askNow }: CommunityBannerProps): JSX.Element => {
+    const isAuthenticated = useSelector(getIsAuthenticated);
+    return (
+        <div className="flex flex-col md:flex-row justify-between items-center gap-3 w-full px-5 py-[14px] bg-[#5F2BCE] rounded-lg">
+            <div className="flex items-center gap-3">
+                <GradientIcon />
+                <span className="inline-block text-xs font-body">
+                    {isAuthenticated
+                        ? 'Tidak menemukan jawaban di komunitas?'
+                        : 'Daftar sekarang untuk bertanya'}
+                </span>
+            </div>
+            <Button
+                variant="custom"
+                className="w-full px-6 text-xs font-extrabold bg-black md:w-fit whitespace-nowrap"
+                eventName='"Tanya Sekarang" Button'
+                href={isAuthenticated ? undefined : AUTHENTICATION_ROUTE}
+                onClick={isAuthenticated ? askNow : undefined}>
+                {isAuthenticated ? 'Buat Pertanyaan Gratis' : 'Tanya Sekarang'}
+            </Button>
+        </div>
+    );
+};
+
+export default CommunityBanner;
