@@ -50,7 +50,7 @@ const Recommendations = (): JSX.Element => {
                         href="/kelas"
                         variant="custom"
                         size={isMobileBreakpoints ? 'small' : 'normal'}
-                        className="text-black bg-white">
+                        className="text-black bg-white whitespace-nowrap">
                         Lihat Semua
                     </Button>
                 </div>
@@ -80,7 +80,7 @@ const Recommendations = (): JSX.Element => {
                         href="/astronotes#bank-soal"
                         variant="custom"
                         size={isMobileBreakpoints ? 'small' : 'normal'}
-                        className="text-black bg-white">
+                        className="text-black bg-white whitespace-nowrap">
                         Lihat Semua
                     </Button>
                 </div>
@@ -101,7 +101,7 @@ const Recommendations = (): JSX.Element => {
                         href="/astronotes"
                         variant="custom"
                         size={isMobileBreakpoints ? 'small' : 'normal'}
-                        className="text-black bg-white">
+                        className="text-black bg-white whitespace-nowrap">
                         Lihat Semua
                     </Button>
                 </div>
