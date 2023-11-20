@@ -25,7 +25,7 @@ const LearnLayout = ({
     lightMode
 }: LayoutProps): JSX.Element => {
     return (
-        <div className="relative w-screen min-h-screen text-white bg-neutral-1000">
+        <div className="relative w-screen min-h-screen text-white overflow-x-clip bg-neutral-1000">
             {!hideNavbar && (
                 <Navbar
                     lightMode={lightMode}
@@ -44,7 +44,7 @@ const LearnLayout = ({
                 {showSidebar && <Sidebar fullHeight={fullHeightSidebar} />}
                 <div
                     className={cn(
-                        'min-h-full md:h-[100vh_-_65px] w-full',
+                        'min-h-full w-screen overflow-x-clip',
                         fullHeightSidebar && 'md:px-8 xl:px-12',
                         showSidebar && fullHeightSidebar && 'md:ml-[250px]'
                     )}>

@@ -1099,7 +1099,8 @@ sticky-3.animate {
     overflow: auto;
 }
 
-.markdown-body .math-display {
+.markdown-body .math-display,
+.math-display-overflow .math-display {
     overflow-x: auto;
     max-width: 100%;
 }

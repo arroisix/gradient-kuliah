@@ -128,7 +128,7 @@ const KomunitasContainer = (): JSX.Element => {
     }
 
     return (
-        <section className="flex flex-col lg:grid lg:grid-cols-5 gap-[2rem]">
+        <section className="lg:grid lg:grid-cols-5 gap-[2rem] w-full">
             <div className="flex flex-col w-full gap-6 lg:col-span-3">
                 <div className="sticky top-16 flex flex-col gap-6 z-[2] bg-black py-4">
                     <KomunitasInput
@@ -198,7 +198,7 @@ const KomunitasContainer = (): JSX.Element => {
                         />
                     </div>
                 </div>
-                <div className="flex flex-col gap-[18px]">
+                <div className="flex flex-col items-stretch gap-[18px]">
                     {isLoadingDataHome ? (
                         <Skeleton repeat={3} className="!mb-0 h-40" />
                     ) : dataHome?.community_posts.length === 0 ? (
@@ -219,7 +219,6 @@ const KomunitasContainer = (): JSX.Element => {
                 </div>
             </div>
             <div className="relative lg:col-span-2">
-                {/* md:w-full lg:w-4/12 */}
                 <RightSidebar />
             </div>
             {loadingTransition && <LoadingBackdrop />}

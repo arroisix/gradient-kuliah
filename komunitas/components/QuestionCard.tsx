@@ -13,6 +13,7 @@ import { usePostQuestionAnswerMutation } from 'komunitas/redux/api/komunitasApi'
 import { toast } from 'react-toastify';
 import { useTracker } from 'tracker/tracker';
 import Link from 'next/link';
+import { cn } from 'commons/utils';
 
 type Student = {
     id: string;
@@ -29,7 +30,9 @@ const Wrapper = ({
     slug?: string;
 }>): JSX.Element =>
     clickable ? (
-        <Link href={`/komunitas/${slug}`}>{children}</Link>
+        <Link href={`/komunitas/${slug}`} className="w-full">
+            {children}
+        </Link>
     ) : (
         <>{children}</>
     );
@@ -104,31 +107,31 @@ const QuestionCard = ({
     return (
         <Wrapper clickable={clickable} slug={slug}>
             <div
-                className={`border-[1px] border-neutral-800 rounded-xl p-[18px] md:p-5 ${
-                    isShowForm ? '!rounded-b-none' : ''
-                }`}>
-                <div className="relative flex items-center gap-3">
-                    <div className="relative w-[24px] h-[24px]">
-                        {student?.photo_url &&
-                        student.photo_url.length > 0 &&
-                        !imageError ? (
-                            <Image
-                                src={student?.photo_url}
-                                alt={student?.username}
-                                layout="fill"
-                                className="object-contain rounded-full"
-                                onError={() => setImageError(true)}
-                            />
-                        ) : (
-                            <Avatar
-                                name={student?.username}
-                                size="24"
-                                round
-                                className="!block"
-                            />
-                        )}
-                    </div>
-                    <div className="flex flex-col md:flex-row md:gap-[6px] md:items-center">
+                className={cn(
+                    'border border-neutral-800 rounded-xl p-4 md:p-5 flex flex-col',
+                    isShowForm && '!rounded-b-none'
+                )}>
+                <div className="flex items-center gap-3">
+                    {student?.photo_url &&
+                    student.photo_url.length > 0 &&
+                    !imageError ? (
+                        <Image
+                            src={student?.photo_url}
+                            alt={student?.username}
+                            width={24}
+                            height={24}
+                            className="object-contain rounded-full"
+                            onError={() => setImageError(true)}
+                        />
+                    ) : (
+                        <Avatar
+                            name={student?.username}
+                            size="24"
+                            round
+                            className="!block"
+                        />
+                    )}
+                    <div className="flex flex-col md:flex-row md:gap-2 md:items-center">
                         <p className="text-xs font-extrabold">
                             {student?.username}
                         </p>
@@ -141,16 +144,16 @@ const QuestionCard = ({
                         </p>
                     </div>
                 </div>
-                <article className="pt-[12px] pb-[18px] lg:pl-[36px]">
+                <article className="pt-3 pb-5 lg:pl-8">
                     <ReactMarkdown
-                        className={`markdown-body-xs markdown-overflow-break-word markdown-blue-link font-body markdown-body markdown-img-max-height`}
+                        className={`markdown-body-xs markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height markdown-body math-display-overflow`}
                         remarkPlugins={[remarkMath, remarkGfm]}
                         rehypePlugins={[rehypeKatex]}
                         linkTarget={clickable ? '' : '_blank'}>
                         {content?.replaceAll('\n', '\n\n')}
                     </ReactMarkdown>
                 </article>
-                <div className="flex justify-between lg:pl-[36px]">
+                <div className="flex justify-between lg:pl-8">
                     <div className="flex items-center gap-6">
                         <div className="flex items-center gap-2">
                             <AiOutlineEye size={18} />
