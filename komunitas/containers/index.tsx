@@ -23,7 +23,7 @@ import EmptyState from 'komunitas/components/EmptyState';
 import GradientIcon from 'commons/components/GradientIcon';
 
 const KomunitasContainer = (): JSX.Element => {
-    const { isMobileBreakpoints } = useWindowBreakpoints();
+    const { isMobileBreakpoints, isTabletBreakpoints } = useWindowBreakpoints();
     const router = useRouter();
     const { pathname } = router;
     const loadingTransition = useTransition(router);
@@ -128,8 +128,8 @@ const KomunitasContainer = (): JSX.Element => {
     }
 
     return (
-        <section className="flex flex-col lg:grid md:grid-cols-5 xl:grid-cols-4 gap-[2rem]">
-            <div className="flex flex-col w-full gap-6 md:col-span-3">
+        <section className="flex flex-col lg:grid lg:grid-cols-5 gap-[2rem]">
+            <div className="flex flex-col w-full gap-6 lg:col-span-3">
                 <div className="sticky top-16 flex flex-col gap-6 z-[2] bg-black py-4">
                     <KomunitasInput
                         type="text"
@@ -177,7 +177,7 @@ const KomunitasContainer = (): JSX.Element => {
                     )}
                 </div>
 
-                {isMobileBreakpoints && <MobileTabs />}
+                {isMobileBreakpoints || (isTabletBreakpoints && <MobileTabs />)}
                 <div className="flex items-center justify-between">
                     <h2 className="hidden font-extrabold md:block">
                         {pathname.includes('pertanyaan-ku')
@@ -218,7 +218,7 @@ const KomunitasContainer = (): JSX.Element => {
                     <div ref={anchor} className="w-full h-0" />
                 </div>
             </div>
-            <div className="relative md:col-span-2 xl:col-span-1">
+            <div className="relative lg:col-span-2">
                 {/* md:w-full lg:w-4/12 */}
                 <RightSidebar />
             </div>

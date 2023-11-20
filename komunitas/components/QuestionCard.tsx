@@ -104,7 +104,7 @@ const QuestionCard = ({
     return (
         <Wrapper clickable={clickable} slug={slug}>
             <div
-                className={`w-full border-[1px] border-neutral-800 rounded-xl p-[18px] md:p-5 overflow-hidden ${
+                className={`border-[1px] border-neutral-800 rounded-xl p-[18px] md:p-5 ${
                     isShowForm ? '!rounded-b-none' : ''
                 }`}>
                 <div className="relative flex items-center gap-3">
@@ -129,23 +129,21 @@ const QuestionCard = ({
                         )}
                     </div>
                     <div className="flex flex-col md:flex-row md:gap-[6px] md:items-center">
-                        <span className="inline-block text-xs font-extrabold">
+                        <p className="text-xs font-extrabold">
                             {student?.username}
-                        </span>
+                        </p>
                         <FaCircle
                             className="hidden md:block text-neutral-600"
                             size={4}
                         />
-                        <span className="inline-block text-xs font-body text-neutral-600">
+                        <p className="text-xs font-body text-neutral-600">
                             {moment(created_at).utc().calendar()}
-                        </span>
+                        </p>
                     </div>
                 </div>
-                <article className="pt-[12px] pb-[18px] lg:pl-[36px] relative overflow-x-auto">
+                <article className="pt-[12px] pb-[18px] lg:pl-[36px]">
                     <ReactMarkdown
-                        className={`markdown-body-xs markdown-overflow-break-word markdown-blue-link font-body markdown-body markdown-img-max-height ${
-                            clickable ? 'pointer-events-none' : ''
-                        }`}
+                        className={`markdown-body-xs markdown-overflow-break-word markdown-blue-link font-body markdown-body markdown-img-max-height`}
                         remarkPlugins={[remarkMath, remarkGfm]}
                         rehypePlugins={[rehypeKatex]}
                         linkTarget={clickable ? '' : '_blank'}>
