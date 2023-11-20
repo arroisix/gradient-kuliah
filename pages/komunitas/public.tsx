@@ -1,17 +1,23 @@
+import { useFeatureIsOn } from '@growthbook/growthbook-react';
 import LearnLayout from 'commons/learnLayout';
-import withAuth from 'commons/withAuth';
+import withAnon from 'commons/withAnon';
 import KomunitasContainer from 'komunitas/containers';
 import { KomunitasProvider } from 'komunitas/contexts/KomunitasProvider';
 
 const Komunitas = (): JSX.Element => {
-    return (
+    const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
+        'landing-page-revamp'
+    );
+    return isLandingPageRevampOn ? (
         <KomunitasProvider>
             <LearnLayout showSidebar fullHeightSidebar>
                 <KomunitasContainer />
             </LearnLayout>
         </KomunitasProvider>
+    ) : (
+        <></>
     );
 };
 
 Komunitas.displayName = 'Community Explore';
-export default withAuth(Komunitas);
+export default withAnon(Komunitas);

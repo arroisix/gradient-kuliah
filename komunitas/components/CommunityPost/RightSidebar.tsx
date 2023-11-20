@@ -79,7 +79,7 @@ const RightSidebar = ({
                 <div className="absolute bottom-0 left-0 w-full px-[18px] z-[1]">
                     <Button
                         variant="custom"
-                        className="w-full text-xs font-extrabold bg-neutral-800"
+                        className="w-full text-xs font-extrabold text-center bg-neutral-800"
                         eventName='Click "Lihat di Komunitas" Button'
                         href="/komunitas">
                         Lihat di Komunitas

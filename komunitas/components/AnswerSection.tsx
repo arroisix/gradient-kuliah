@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { useKomunitas } from 'komunitas/contexts/KomunitasProvider';
 import CommunityPaywall from './CommunityPaywall';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 type AnswerSectionProps = {
     category?: {
@@ -32,6 +33,7 @@ const AnswerSection = ({
     const [page, setPage] = useState(1);
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { detailQuestion, isLoadingQuestion } = useKomunitas();
+    const { is_subscribed } = useCourseSubscription();
 
     const { data: comments, isLoading: isLoadingComment } =
         useGetCommunityPostCommentDetailQuery(
@@ -57,7 +59,9 @@ const AnswerSection = ({
         <div>
             <h3 className="pb-5 text-sm font-bold">Jawaban</h3>
             <div className="flex flex-col gap-[18px]">
-                {isLoadingQuestion || isLoadingComment ? (
+                {!is_subscribed ? (
+                    <CommunityPaywall />
+                ) : isLoadingQuestion || isLoadingComment ? (
                     <Skeleton repeat={2} className="!mb-0 h-40" />
                 ) : comments?.comments.length === 0 ? (
                     <EmptyState setIsShowForm={setIsShowForm} />
@@ -76,7 +80,6 @@ const AnswerSection = ({
                         />
                     ))
                 )}
-                <CommunityPaywall />
                 <div ref={anchor} className="w-full h-0" />
             </div>
         </div>

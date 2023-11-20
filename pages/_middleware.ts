@@ -2,7 +2,7 @@ import { getFeatures, growthbook } from 'library/growthbook';
 import { NextRequest, NextResponse } from 'next/server';
 
 const COOKIE = 'visitor_id';
-const ACTIVE_AB_TESTING_PAGES = ['/']; // Add as needed
+const ACTIVE_AB_TESTING_PAGES = ['/', '/komunitas']; // Add as needed
 
 export async function middleware(req: NextRequest): Promise<NextResponse> {
     // Get existing visitor cookie or create a new one
@@ -23,7 +23,14 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
     if (growthbook.isOn('landing-page-revamp')) {
         const url = req.nextUrl.clone();
         // Replace response with revamped variant
-        url.pathname = '/landing-revamp';
+        switch (url.pathname) {
+            case '/':
+                url.pathname = '/landing-revamp';
+                break;
+            case '/komunitas':
+                url.pathname = '/komunitas/public';
+                break;
+        }
         res = NextResponse.rewrite(url);
     }
 

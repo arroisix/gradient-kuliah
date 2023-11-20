@@ -84,11 +84,11 @@ const RightSidebar = ({ askNow }: { askNow?: () => void }): JSX.Element => {
                 )}
             </div>
             {profile && myQuestion?.questions.length != 0 && (
-                <div className="absolute top-0 left-0 w-full h-full">
+                <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
                     <div className="absolute bottom-0 left-0 w-full h-[150px] bg-gradient-to-b from-transparent via-[#121212] to-[#121212] z-[1]"></div>
                     <div className="absolute bottom-0 left-0 w-full px-[18px] z-[1]">
                         <button
-                            className="bg-neutral-800 font-extrabold text-xs w-full py-2 rounded-[70px]"
+                            className="bg-neutral-800 font-extrabold text-xs w-full py-2 rounded-[70px] pointer-events-auto"
                             onClick={() => {
                                 router.push(
                                     pathname.includes('pertanyaan-ku')

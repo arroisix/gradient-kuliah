@@ -5,14 +5,7 @@ export const growthbook = new GrowthBook({
     clientKey: process.env.NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY,
     decryptionKey: process.env.NEXT_PUBLIC_GROWTHBOOK_DECRYPTION_KEY,
     enableDevMode: process.env.NEXT_PUBLIC_ENV !== 'prod',
-    subscribeToChanges: true,
-    trackingCallback: (experiment, result) => {
-        // TODO: Use your real analytics tracking system
-        console.log('Viewed Experiment', {
-            experimentId: experiment.key,
-            variationId: result.key
-        });
-    }
+    subscribeToChanges: true
 });
 
 export function updateGrowthBookURL(): void {

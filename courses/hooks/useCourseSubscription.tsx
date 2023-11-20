@@ -11,7 +11,8 @@ const useCourseSubscription = (slug?: string) => {
     const {
         data,
         isLoading: isLoadingSubscription,
-        isSuccess: isDoneFetching
+        isSuccess: isDoneFetching,
+        isError: isErrorFetchingSubscription
     } = useGetActiveSubscriptionQuery(!isAuthenticated ? skipToken : undefined);
     const { data: learningProgress, isLoading: isLoadingLearningProgress } =
         useGetLearningProgressQuery(slug as string, {
@@ -42,6 +43,7 @@ const useCourseSubscription = (slug?: string) => {
         expiryDay,
         isLoading: isLoadingSubscription || isLoadingLearningProgress,
         isDoneFetchingSubcription: isDoneFetching,
+        isErrorFetchingSubscription,
         learning_progress_id: learningProgress?.id,
         ...learningProgress
     };
