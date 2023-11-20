@@ -4,11 +4,11 @@ import {
     useGetExploreQuestionQuery,
     useGetMyQuestionListQuery
 } from 'komunitas/redux/api/komunitasApi';
-import moment from 'moment';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 import { MdChevronRight } from 'react-icons/md';
+import MyQuestions from './MyQuestions';
 
 const RightSidebar = (): JSX.Element => {
     const router = useRouter();
@@ -36,7 +36,7 @@ const RightSidebar = (): JSX.Element => {
                     ? 'Eksplor'
                     : 'Pertanyaanku'}
             </h4>
-            <div className="flex flex-col gap-[18px]">
+            <div className="flex-1 flex flex-col gap-[18px]">
                 {pathname.includes('pertanyaan-ku') ? (
                     isLoadingSideExplore ? (
                         <Skeleton repeat={3} className="h-3 !mb-0" />
@@ -66,69 +66,30 @@ const RightSidebar = (): JSX.Element => {
                 ) : isLoadingMyQuestion || !profile ? (
                     <Skeleton repeat={3} className="h-3 !mb-0" />
                 ) : (
-                    myQuestion?.questions?.map((value) => (
-                        <div key={value.date} className="flex flex-col gap-2">
-                            <span className="text-xs font-body text-neutral-600">
-                                {moment(value.date).utc().format('MMM DD')}
-                            </span>
-                            <div className="flex flex-col gap-2 bg-[#1D1D1D] rounded">
-                                {value.items.map(
-                                    ({
-                                        slug,
-                                        content,
-                                        id,
-                                        unseen_comment_counts
-                                    }) => (
-                                        <Link
-                                            key={id}
-                                            href={`/komunitas/${slug}`}>
-                                            <div
-                                                key={id}
-                                                className="flex justify-between items-center gap-2 cursor-pointer z-[1] px-[10px] py-[10px] first:border-none border-t-[1px] border-t-[#2C2C2C]">
-                                                <span className="overflow-hidden text-xs whitespace-nowrap text-ellipsis">
-                                                    {content}
-                                                </span>
-                                                <div className="flex items-center">
-                                                    {unseen_comment_counts ? (
-                                                        <span className="inline-block leading-none py-[2px] pl-[3px] pr-[4px] font-body text-center text-[10px] bg-[#B92011] rounded-full">
-                                                            {
-                                                                unseen_comment_counts
-                                                            }
-                                                        </span>
-                                                    ) : null}
-                                                    <MdChevronRight
-                                                        className="text-neutral-600"
-                                                        size={18}
-                                                    />
-                                                </div>
-                                            </div>
-                                        </Link>
-                                    )
-                                )}
-                            </div>
-                        </div>
-                    ))
+                    <MyQuestions questions={myQuestion?.questions} />
                 )}
             </div>
-            <div className="absolute top-0 left-0 w-full h-full">
-                <div className="absolute bottom-0 left-0 w-full h-[150px] bg-gradient-to-b from-transparent via-[#121212] to-[#121212] z-[1]"></div>
-                <div className="absolute bottom-0 left-0 w-full px-[18px] z-[1]">
-                    <button
-                        className="bg-neutral-800 font-extrabold text-xs w-full py-2 rounded-[70px]"
-                        onClick={() => {
-                            router.push(
-                                pathname.includes('pertanyaan-ku')
-                                    ? '/komunitas'
-                                    : '/komunitas/pertanyaan-ku'
-                            );
-                        }}>
-                        {pathname.includes('pertanyaan-ku')
-                            ? 'Lihat di Komunitas'
-                            : 'Lihat Semua'}
-                    </button>
-                    <div className="w-full h-[48px] md:h-[20px] bg-[#121212]"></div>
+            {myQuestion?.questions.length != 0 && (
+                <div className="absolute top-0 left-0 w-full h-full">
+                    <div className="absolute bottom-0 left-0 w-full h-[150px] bg-gradient-to-b from-transparent via-[#121212] to-[#121212] z-[1]"></div>
+                    <div className="absolute bottom-0 left-0 w-full px-[18px] z-[1]">
+                        <button
+                            className="bg-neutral-800 font-extrabold text-xs w-full py-2 rounded-[70px]"
+                            onClick={() => {
+                                router.push(
+                                    pathname.includes('pertanyaan-ku')
+                                        ? '/komunitas'
+                                        : '/komunitas/pertanyaan-ku'
+                                );
+                            }}>
+                            {pathname.includes('pertanyaan-ku')
+                                ? 'Lihat di Komunitas'
+                                : 'Lihat Semua'}
+                        </button>
+                        <div className="w-full h-[48px] md:h-[20px] bg-[#121212]"></div>
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 };

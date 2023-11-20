@@ -67,20 +67,16 @@ interface CommunityPostResponse {
 }
 
 interface MyQuestionListResponse {
-    questions: [
-        {
-            date: string;
-            items: [
-                {
-                    id: string;
-                    content: string;
-                    slug: string;
-                    unseen_comment_counts: number;
-                    created_at: timestamp;
-                }
-            ];
-        }
-    ];
+    questions: {
+        date: string;
+        items: {
+            id: string;
+            content: string;
+            slug: string;
+            unseen_comment_counts: number;
+            created_at: timestamp;
+        }[];
+    }[];
 }
 
 interface ExploreQuestionResponse {
