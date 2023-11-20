@@ -34,7 +34,7 @@ const DashboardContent = (): JSX.Element => {
             data?.learning_progress.length === 0);
 
     return isShowRecommendedMaterials ? (
-        <div className="space-y-12">
+        <div className="pb-16 space-y-12">
             <Recommendations />
             <div className="flex flex-col items-stretch justify-between gap-3 p-4 text-white rounded-lg md:items-center md:gap-4 lg:flex-row md:p-6 bg-accent-purple">
                 <div className="flex flex-1 gap-3 text-left">
