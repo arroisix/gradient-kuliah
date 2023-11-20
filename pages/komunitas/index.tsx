@@ -1,5 +1,5 @@
 import LearnLayout from 'commons/learnLayout';
-import withAuth from 'commons/withAuth';
+import withAnon from 'commons/withAnon';
 import KomunitasContainer from 'komunitas/containers';
 import { KomunitasProvider } from 'komunitas/contexts/KomunitasProvider';
 
@@ -14,4 +14,4 @@ const Komunitas = (): JSX.Element => {
 };
 
 Komunitas.displayName = 'Community Explore';
-export default withAuth(Komunitas);
+export default withAnon(Komunitas);

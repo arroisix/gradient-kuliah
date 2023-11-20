@@ -1,6 +1,7 @@
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import GradientIcon from 'commons/components/GradientIcon';
 import Button from 'commons/components/elements/Button';
 import Paywall from 'commons/components/elements/Paywall';
 import Skeleton from 'commons/components/elements/Skeleton';
@@ -37,9 +38,7 @@ const DashboardContent = (): JSX.Element => {
             <Recommendations />
             <div className="flex flex-col items-stretch justify-between gap-3 p-4 text-white rounded-lg md:items-center md:gap-4 lg:flex-row md:p-6 bg-accent-purple">
                 <div className="flex flex-1 gap-3 text-left">
-                    <div className="flex-none text-2xl font-bold font-[Urbanist] bg-black btn-circle btn-sm grid place-items-center select-none">
-                        G
-                    </div>
+                    <GradientIcon />
                     <div>
                         <p className="text-xl font-extrabold">
                             Bingung sama materi/soal?

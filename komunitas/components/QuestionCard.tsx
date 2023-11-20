@@ -104,7 +104,7 @@ const QuestionCard = ({
     return (
         <Wrapper clickable={clickable} slug={slug}>
             <div
-                className={`w-full border-[1px] border-neutral-800 rounded-xl p-[18px] md:p-5 ${
+                className={`w-full border-[1px] border-neutral-800 rounded-xl p-[18px] md:p-5 overflow-hidden ${
                     isShowForm ? '!rounded-b-none' : ''
                 }`}>
                 <div className="relative flex items-center gap-3">
@@ -116,7 +116,7 @@ const QuestionCard = ({
                                 src={student?.photo_url}
                                 alt={student?.username}
                                 layout="fill"
-                                className="rounded-full object-contain"
+                                className="object-contain rounded-full"
                                 onError={() => setImageError(true)}
                             />
                         ) : (
@@ -129,21 +129,21 @@ const QuestionCard = ({
                         )}
                     </div>
                     <div className="flex flex-col md:flex-row md:gap-[6px] md:items-center">
-                        <span className="inline-block font-extrabold text-xs">
+                        <span className="inline-block text-xs font-extrabold">
                             {student?.username}
                         </span>
                         <FaCircle
                             className="hidden md:block text-neutral-600"
                             size={4}
                         />
-                        <span className="inline-block font-body text-xs text-neutral-600">
+                        <span className="inline-block text-xs font-body text-neutral-600">
                             {moment(created_at).utc().calendar()}
                         </span>
                     </div>
                 </div>
-                <article className="pt-[12px] pb-[18px] lg:pl-[36px]">
+                <article className="pt-[12px] pb-[18px] lg:pl-[36px] relative overflow-x-auto">
                     <ReactMarkdown
-                        className={`markdown-body-xs markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height overflow-auto ${
+                        className={`markdown-body-xs markdown-overflow-break-word markdown-blue-link font-body markdown-body markdown-img-max-height ${
                             clickable ? 'pointer-events-none' : ''
                         }`}
                         remarkPlugins={[remarkMath, remarkGfm]}
@@ -153,16 +153,16 @@ const QuestionCard = ({
                     </ReactMarkdown>
                 </article>
                 <div className="flex justify-between lg:pl-[36px]">
-                    <div className="flex gap-6 items-center">
+                    <div className="flex items-center gap-6">
                         <div className="flex items-center gap-2">
                             <AiOutlineEye size={18} />
-                            <span className="font-body text-xs">
+                            <span className="text-xs font-body">
                                 {viewer_counts}
                             </span>
                         </div>
                         <div className="flex items-center gap-2">
                             <FaRegComment className="scale-x-[-1]" size={18} />
-                            <span className="font-body text-xs">
+                            <span className="text-xs font-body">
                                 {comment_counts}
                             </span>
                         </div>
