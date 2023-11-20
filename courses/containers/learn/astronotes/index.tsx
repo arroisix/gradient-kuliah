@@ -41,7 +41,7 @@ const Astronotes = (): JSX.Element => {
                         />
                     </AstronotesContextMenu>
                 )} */}
-                <aside className="items-stretch h-[calc(100vh_-_6rem)] hidden gap-2 sticky top-20 md:flex">
+                <aside className="items-stretch h-[calc(100vh_-_6rem)] hidden gap-2 sticky top-20 md:flex z-[2]">
                     <AstronotesSidebar />
                 </aside>
                 <div

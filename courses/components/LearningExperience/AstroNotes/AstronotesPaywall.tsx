@@ -1,5 +1,6 @@
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
 import Paywall from 'commons/components/elements/Paywall';
+import { useThemeContext } from 'commons/contexts/ThemeProvider';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import useWindowSize from 'commons/hooks/useWindowSize';
 import { cn } from 'commons/utils';
@@ -19,15 +20,20 @@ const AstronotesPaywall = (): JSX.Element => {
     const [isShowPaywall, setIsShowPaywall] = useState(false);
     const { isTabletBreakpoints, isMobileBreakpoints } = useWindowBreakpoints();
     const { height } = useWindowSize();
+    const { theme, toggleTheme } = useThemeContext();
 
     useEffect(() => {
         if (!isLandingPageRevampOn || is_subscribed || Number(page) == 1)
             setIsShowPaywall(false);
-        else setIsShowPaywall(true);
+        else {
+            setIsShowPaywall(true);
+            if (theme === 'light') toggleTheme();
+        }
     }, [page, is_subscribed, isLandingPageRevampOn]);
 
     return isShowPaywall ? (
-        <div className="relative sm:absolute sm:-inset-2 bg-black/90 backdrop-blur-lg">
+        <div
+            className={cn('relative sm:absolute sm:-inset-2 backdrop-blur-lg')}>
             <div
                 className={cn(
                     'flex flex-col items-center justify-center w-screen -mx-4 sm:w-auto sm:mx-0 md:sticky ',
