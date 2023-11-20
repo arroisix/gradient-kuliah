@@ -25,6 +25,8 @@ import CourseDetail from '../CourseDetail';
 import Pricing from 'landing/components/Sections/pricing';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import Paywall from 'commons/components/elements/Paywall';
+import { useFeatureIsOn } from '@growthbook/growthbook-react';
 
 const COMPONENT_DICTIONARY: { [key in LandingPageSectionKey]: JSX.Element } = {
     hero: <HeroSection slug="dummy" />,
@@ -100,16 +102,28 @@ const LandingPageOrchestrator = ({
     const { is_subscribed, isDoneFetchingSubcription } =
         useCourseSubscription();
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
+        'landing-page-revamp'
+    );
 
     return (
         <>
             <CourseDetail slug={id} />
             {((!is_subscribed && isDoneFetchingSubcription) ||
-                !isAuthenticated) && (
+                !isAuthenticated) &&
+            isLandingPageRevampOn ? (
+                <div className="flex flex-wrap justify-center px-4 py-6">
+                    <Paywall
+                        pricingData={packetOffer}
+                        ctaEventName="Pricing Button on Course Landing Page"
+                        ctaEventPayload={{ 'Course Slug': id }}
+                    />
+                </div>
+            ) : (
                 <Pricing
                     pricingData={packetOffer}
                     ctaEventName="Pricing Button on Course Landing Page"
-                    ctaEventPayload={{ 'Course Slug': id }}
+                    ctaEventPayload={{ 'Course Slug': id, Variant: 'JUN 2023' }}
                 />
             )}
         </>

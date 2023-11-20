@@ -44,6 +44,7 @@ const AstroNotesContent = (): JSX.Element => {
         { slug: slug as string },
         {
             skip:
+                !isLandingPageRevampOn ||
                 (isAuthenticated && is_subscribed) ||
                 !isNotNullAndUndefined(slug)
         }

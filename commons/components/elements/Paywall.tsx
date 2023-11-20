@@ -12,6 +12,7 @@ type PaywallProps = {
     isCompact?: boolean;
     pricingData?: PacketOffer[];
     ctaEventName?: string;
+    ctaEventPayload?: Record<string, unknown>;
     pricingClassName?: string;
     highlightedClassName?: string;
 } & PropsWithClassName;
@@ -23,7 +24,8 @@ const Paywall = ({
     className,
     pricingClassName,
     highlightedClassName,
-    ctaEventName
+    ctaEventName,
+    ctaEventPayload
 }: PaywallProps): JSX.Element => {
     const carouselRef = useRef<HTMLDivElement>(null);
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -156,8 +158,9 @@ const Paywall = ({
                                 onClick={() => handleClick(pricing.id)}
                                 eventName={ctaEventName}
                                 eventPayload={{
-                                    'Packet Name': pricing.packet_name
-                                    // ...ctaEventPayload
+                                    'Packet Name': pricing.packet_name,
+                                    Variant: 'NOV 2023',
+                                    ...ctaEventPayload
                                 }}>
                                 Akses Sekarang
                             </Button>
