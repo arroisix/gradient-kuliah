@@ -97,7 +97,7 @@ const Navbar = ({
                 return 'bg-[#171717] md:bg-[#121212]';
             }
 
-            return '';
+            return shouldTransparent ? '' : 'bg-[#171717] md:bg-[#121212]';
         }
 
         return lightMode ? 'bg-white text-black shadow-md' : 'bg-[#171717]';

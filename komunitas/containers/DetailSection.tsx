@@ -1,4 +1,5 @@
 import AuthContext from 'authentication/contexts/AuthProvider';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
 import Skeleton from 'commons/components/elements/Skeleton';
 import useOnScreen from 'commons/hooks/useOnScreen';
@@ -7,13 +8,15 @@ import QuestionCard from 'komunitas/components/QuestionCard';
 import { useKomunitas } from 'komunitas/contexts/KomunitasProvider';
 import {
     useGetCommunityPostCommentDetailQuery,
-    useGetExploreQuestionQuery
+    useGetExploreQuestionQuery,
+    useGetPublicExploreQuestionQuery
 } from 'komunitas/redux/api/komunitasApi';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { MdChevronRight } from 'react-icons/md';
+import { useSelector } from 'react-redux';
 import { useTracker } from 'tracker/tracker';
 
 const DetailSection = (): JSX.Element => {
@@ -24,6 +27,7 @@ const DetailSection = (): JSX.Element => {
     const [page, setPage] = useState(1);
 
     const { detailQuestion, isLoadingQuestion, subjects } = useKomunitas();
+    const isAuthenticated = useSelector(getIsAuthenticated);
 
     const category = subjects?.categories.filter(
         (value) => value.name === detailQuestion?.category
@@ -35,7 +39,7 @@ const DetailSection = (): JSX.Element => {
                 post_id: detailQuestion?.id as string,
                 page: page
             },
-            { skip: !detailQuestion?.id }
+            { skip: !isAuthenticated || !detailQuestion?.id }
         );
 
     useEffect(() => {
@@ -51,9 +55,9 @@ const DetailSection = (): JSX.Element => {
 
     return (
         <section className="flex flex-col lg:flex-row gap-[2rem]">
-            <div className="w-full lg:w-8/12 flex flex-col gap-9">
+            <div className="flex flex-col w-full lg:w-8/12 gap-9">
                 <div>
-                    <h3 className="font-bold text-sm pb-5">Pertanyaan</h3>
+                    <h3 className="pb-5 text-sm font-bold">Pertanyaan</h3>
                     {isLoadingQuestion ? (
                         <Skeleton className="!mb-0 h-40" />
                     ) : (
@@ -67,7 +71,7 @@ const DetailSection = (): JSX.Element => {
                     )}
                 </div>
                 <div>
-                    <h3 className="font-bold text-sm pb-5">Jawaban</h3>
+                    <h3 className="pb-5 text-sm font-bold">Jawaban</h3>
                     <div className="flex flex-col gap-[18px]">
                         {isLoadingQuestion || isLoadingComment ? (
                             <>
@@ -112,15 +116,24 @@ const RightSidebar = ({
     const tracker = useTracker();
     const { detailQuestion } = useKomunitas();
 
-    const { data: similiars } = useGetExploreQuestionQuery(
+    const isAuthenticated = useSelector(getIsAuthenticated);
+    const privateExploreQuestionResult = useGetExploreQuestionQuery(
         {
             category_id: category?.id,
             current_post: detailQuestion?.id
         },
-        {
-            skip: !category?.id || !detailQuestion?.id
-        }
+        { skip: !isAuthenticated || !category?.id || !detailQuestion?.id }
     );
+    const publicExploreQuestionResult = useGetPublicExploreQuestionQuery(
+        {
+            category_id: category?.id,
+            current_post: detailQuestion?.id
+        },
+        { skip: isAuthenticated || !category?.id || !detailQuestion?.id }
+    );
+    const { data: similiars } = isAuthenticated
+        ? privateExploreQuestionResult
+        : publicExploreQuestionResult;
 
     return (
         <div className="relative w-screen md:w-full lg:w-4/12 h-[350px] bg-[#121212] ml-[-16px] mb-[-40px] md:m-0 px-[18px] py-5 md:rounded-lg overflow-hidden">
@@ -132,7 +145,7 @@ const RightSidebar = ({
                             key={slug}
                             href={`/komunitas/${encodeURIComponent(slug)}`}>
                             <div className="flex justify-between items-center gap-2 py-1 cursor-pointer z-[1]">
-                                <span className="text-xs whitespace-nowrap text-ellipsis overflow-hidden">
+                                <span className="overflow-hidden text-xs whitespace-nowrap text-ellipsis">
                                     {content}
                                 </span>
                                 <div>
@@ -152,7 +165,7 @@ const RightSidebar = ({
                     </>
                 )}
             </div>
-            <div className="absolute w-full h-full left-0 top-0">
+            <div className="absolute top-0 left-0 w-full h-full">
                 <div className="absolute bottom-0 left-0 w-full h-[150px] bg-gradient-to-b from-transparent via-[#121212] to-[#121212] z-[1]"></div>
                 <div className="absolute bottom-0 left-0 w-full px-[18px] z-[1]">
                     <button

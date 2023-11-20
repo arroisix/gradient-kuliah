@@ -2,7 +2,8 @@ import AuthContext from 'authentication/contexts/AuthProvider';
 import Skeleton from 'commons/components/elements/Skeleton';
 import {
     useGetExploreQuestionQuery,
-    useGetMyQuestionListQuery
+    useGetMyQuestionListQuery,
+    useGetPublicExploreQuestionQuery
 } from 'komunitas/redux/api/komunitasApi';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -11,6 +12,7 @@ import { MdChevronRight } from 'react-icons/md';
 import MyQuestions from './MyQuestions';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 
 const RightSidebar = ({ askNow }: { askNow?: () => void }): JSX.Element => {
     const router = useRouter();
@@ -27,11 +29,16 @@ const RightSidebar = ({ askNow }: { askNow?: () => void }): JSX.Element => {
             }
         );
 
+    const privateExploreQuestionResult = useGetExploreQuestionQuery(
+        !pathname.includes('pertanyaan-ku') || !isAuthenticated ? skipToken : {}
+    );
+    const publicExploreQuestionResult = useGetPublicExploreQuestionQuery(
+        !pathname.includes('pertanyaan-ku') || isAuthenticated ? skipToken : {}
+    );
     const { data: sideExploreData, isLoading: isLoadingSideExplore } =
-        useGetExploreQuestionQuery(
-            {},
-            { skip: !pathname.includes('pertanyaan-ku') }
-        );
+        isAuthenticated
+            ? privateExploreQuestionResult
+            : publicExploreQuestionResult;
 
     return (
         <div className="hidden md:block lg:sticky lg:top-20 w-full h-[85vh] bg-[#121212] ml-[-16px] mb-[-40px] md:m-0 px-[18px] py-5 md:rounded-lg overflow-hidden">

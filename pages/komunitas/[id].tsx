@@ -1,5 +1,5 @@
 import LearnLayout from 'commons/learnLayout';
-import withAuth from 'commons/withAuth';
+import withAnon from 'commons/withAnon';
 import DetailSection from 'komunitas/containers/DetailSection';
 import { KomunitasProvider } from 'komunitas/contexts/KomunitasProvider';
 
@@ -14,4 +14,4 @@ const DetailKomunitas = (): JSX.Element => {
 };
 
 DetailKomunitas.displayName = 'Community Detail';
-export default withAuth(DetailKomunitas);
+export default withAnon(DetailKomunitas);

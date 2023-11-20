@@ -1,4 +1,3 @@
-import Button from 'commons/components/elements/Button';
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import Skeleton from 'commons/components/elements/Skeleton';
 import useOnScreen from 'commons/hooks/useOnScreen';
@@ -11,7 +10,6 @@ import KomunitasInput from 'komunitas/components/KomunitasInput';
 import MobileTabs from 'komunitas/components/MobileTabs';
 import QuestionCard from 'komunitas/components/QuestionCard';
 import { useKomunitas } from 'komunitas/contexts/KomunitasProvider';
-import { useGetSubjectCategoriesQuery } from 'komunitas/redux/api/komunitasApi';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
@@ -20,7 +18,7 @@ import { useTracker } from 'tracker/tracker';
 import { toast } from 'react-toastify';
 import RightSidebar from 'komunitas/components/RightSidebar';
 import EmptyState from 'komunitas/components/EmptyState';
-import GradientIcon from 'commons/components/GradientIcon';
+import CommunityBanner from 'komunitas/components/CommunityBanner';
 
 const KomunitasContainer = (): JSX.Element => {
     const { isMobileBreakpoints, isTabletBreakpoints } = useWindowBreakpoints();
@@ -28,8 +26,6 @@ const KomunitasContainer = (): JSX.Element => {
     const { pathname } = router;
     const loadingTransition = useTransition(router);
     const anchor = useRef({} as HTMLDivElement);
-
-    const { data: subjects } = useGetSubjectCategoriesQuery();
 
     const {
         dataHome,
@@ -39,6 +35,7 @@ const KomunitasContainer = (): JSX.Element => {
         handleSubmitPost,
         sort,
         search,
+        subjects,
         searchState,
         setSearch,
         setPage,
@@ -157,23 +154,9 @@ const KomunitasContainer = (): JSX.Element => {
                             context="q"
                         />
                     ) : (
-                        <div className="flex flex-col md:flex-row justify-between items-center gap-3 w-full px-5 py-[14px] bg-[#5F2BCE] rounded-lg">
-                            <div className="flex items-center gap-3">
-                                <GradientIcon />
-                                <span className="inline-block text-xs font-body">
-                                    Tidak menemukan jawaban di komunitas?
-                                </span>
-                            </div>
-                            <Button
-                                variant="custom"
-                                className="w-full px-6 text-xs font-extrabold bg-black md:w-fit whitespace-nowrap"
-                                eventName='"Tanya Sekarang" Button'
-                                onClick={() => {
-                                    setShowForm((prev) => !prev);
-                                }}>
-                                Tanya Sekarang
-                            </Button>
-                        </div>
+                        <CommunityBanner
+                            askNow={() => setShowForm((prev) => !prev)}
+                        />
                     )}
                 </div>
 
@@ -219,7 +202,7 @@ const KomunitasContainer = (): JSX.Element => {
                 </div>
             </div>
             <div className="relative lg:col-span-2">
-                <RightSidebar />
+                <RightSidebar askNow={() => setShowForm((prev) => !prev)} />
             </div>
             {loadingTransition && <LoadingBackdrop />}
         </section>
