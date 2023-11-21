@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienceApi';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { useGetCoursePreviewQuery } from 'courses/redux/api/courseApi';
 
 const useCourseSubscription = (slug?: string) => {
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -19,6 +20,9 @@ const useCourseSubscription = (slug?: string) => {
             skip: !isAuthenticated || slug === undefined,
             refetchOnMountOrArgChange: true
         });
+    const { data: coursePreview } = useGetCoursePreviewQuery(
+        slug === undefined || isAuthenticated ? skipToken : { slug }
+    );
     const [expiryDay, setExpiryDay] = useState(30);
 
     useEffect(() => {
@@ -45,6 +49,7 @@ const useCourseSubscription = (slug?: string) => {
         isDoneFetchingSubcription: isDoneFetching,
         isErrorFetchingSubscription,
         learning_progress_id: learningProgress?.id,
+        coursePreview,
         ...learningProgress
     };
 };

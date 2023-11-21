@@ -3,7 +3,6 @@ import Button from 'commons/components/elements/Button';
 import { AUTHENTICATION_ROUTE } from 'commons/constants';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { addZeroBefore } from 'courses/utils';
-import Link from 'next/link';
 import { useGetDetailPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
 import { useSelector } from 'react-redux';
 
@@ -49,15 +48,14 @@ const SubscribeButton = ({
                 </Button>
             )}
             {!isAuthenticated && !is_subscribed && (
-                <Link href={`${AUTHENTICATION_ROUTE}?redirect=/langganan`}>
-                    <Button
-                        className={`text-center my-2 z-[5] ${
-                            className ?? 'md:w-fit min-w-[200px]'
-                        }`}
-                        variant="primary">
-                        {label}
-                    </Button>
-                </Link>
+                <Button
+                    href={`${AUTHENTICATION_ROUTE}?redirect=/langganan`}
+                    className={`text-center my-2 z-[5] ${
+                        className ?? 'md:w-fit min-w-[200px]'
+                    }`}
+                    variant="primary">
+                    {label}
+                </Button>
             )}
         </>
     );

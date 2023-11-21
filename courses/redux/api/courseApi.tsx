@@ -13,6 +13,11 @@ export const courseApi = baseApi.injectEndpoints({
         >({
             query: ({ slug }) => ({ url: `${COURSE_BASE_URL}${slug}/content/` })
         }),
+        getCoursePreview: builder.query<FirstVideoInCourse, { slug: string }>({
+            query: ({ slug }) => ({
+                url: `${COURSE_BASE_URL}public/${slug}/preview/`
+            })
+        }),
         getSubchapter: builder.query<SubchapterResponse, { chapterId: string }>(
             {
                 query: ({ chapterId }) => ({
@@ -133,6 +138,7 @@ export const courseApi = baseApi.injectEndpoints({
 export const {
     useGetCourseQuery,
     useGetCourseContentQuery,
+    useGetCoursePreviewQuery,
     useGetSubchapterQuery,
     useGetSearchCourseContentQuery,
     useGetCourseDetailQuery,

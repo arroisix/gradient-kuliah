@@ -11,7 +11,6 @@ export const config = {
 export async function middleware(req: NextRequest): Promise<NextResponse> {
     // We only want to run the A/B test on the homepage
     const pathname = req.nextUrl.pathname;
-    console.log('🚀 MIDDLEWARE CALLED', req.nextUrl.pathname);
     if (!ACTIVE_AB_TESTING_PAGES.includes(pathname)) {
         return NextResponse.next();
     }
