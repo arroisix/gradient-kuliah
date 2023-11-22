@@ -68,6 +68,7 @@ type SubChapter = {
     duration?: string;
     last_duration?: string | null;
     is_finished?: boolean | null;
+    is_free?: boolean | null;
     exercise_name?: string | null;
     is_on_progress?: boolean | null;
     type?: 'video' | 'exercise';

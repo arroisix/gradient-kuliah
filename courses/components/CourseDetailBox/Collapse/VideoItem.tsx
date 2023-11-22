@@ -1,6 +1,12 @@
+import { cn } from 'commons/utils';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { HiPlay } from 'react-icons/hi';
+import { AiFillLock } from 'react-icons/ai';
+import { BiLockAlt } from 'react-icons/bi';
+import { FaLock } from 'react-icons/fa';
+import { FiLock } from 'react-icons/fi';
+import { HiLockClosed, HiPlay } from 'react-icons/hi';
 import { IoIosCheckmarkCircle } from 'react-icons/io';
 import { useTracker } from 'tracker/tracker';
 
@@ -14,6 +20,7 @@ const VideoItem = ({
     const tracker = useTracker();
     const router = useRouter();
     const { id, sub } = router.query;
+    const { is_subscribed } = useCourseSubscription();
 
     const totalDuration = value?.duration
         ?.split(':')
@@ -81,11 +88,17 @@ const VideoItem = ({
                                     } as React.CSSProperties
                                 }></div>
                         </div>
-                    ) : (
+                    ) : is_subscribed || value.is_free ? (
                         <HiPlay size={18} />
+                    ) : (
+                        <HiLockClosed className="text-neutral-600" />
                     )}
                 </div>
-                <span className="inline-block overflow-hidden text-xs font-body whitespace-nowrap text-ellipsis">
+                <span
+                    className={cn(
+                        'inline-block overflow-hidden text-xs font-body whitespace-nowrap text-ellipsis',
+                        !is_subscribed && !value.is_free && 'text-neutral-600'
+                    )}>
                     {value.subchapter_name}
                 </span>
             </div>
