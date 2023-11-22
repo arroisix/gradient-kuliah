@@ -1,4 +1,3 @@
-import withAnon from 'commons/withAnon';
 import { NextPage } from 'next';
 import { FaChevronLeft } from 'react-icons/fa';
 import { HiOutlineInbox } from 'react-icons/hi2';
@@ -172,4 +171,4 @@ const LupaPassword: NextPage = () => {
 };
 
 LupaPassword.displayName = 'Lupa Password';
-export default withAnon(LupaPassword);
+export default LupaPassword;

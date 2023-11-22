@@ -1,4 +1,3 @@
-import withAnon from 'commons/withAnon';
 import { NextPage } from 'next';
 import { FaChevronLeft } from 'react-icons/fa';
 import { HiShieldCheck } from 'react-icons/hi';
@@ -183,4 +182,4 @@ const KonfirmasiGantiPassword: NextPage = () => {
 };
 
 KonfirmasiGantiPassword.displayName = 'Konfirmasi Ganti Password';
-export default withAnon(KonfirmasiGantiPassword);
+export default KonfirmasiGantiPassword;
