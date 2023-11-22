@@ -5,11 +5,14 @@ import QnaSection from '../LearningExperience/QnaSection';
 import { useTracker } from 'tracker/tracker';
 import { useRouter } from 'next/router';
 import { useLearning } from 'courses/contexts/LearningProvider';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
 const CourseSummary = (): JSX.Element => {
     const tracker = useTracker();
     const router = useRouter();
     const { subchapter } = useLearning();
+    const isAuthenticated = useSelector(getIsAuthenticated);
 
     const [navigation, setNavigation] = useState<
         'DESCRIPTION' | 'DISCUSSION' | 'COURSE'
@@ -17,7 +20,7 @@ const CourseSummary = (): JSX.Element => {
 
     return (
         <div className="flex flex-col gap-5 pt-8 pb-12 bg-[#121212]">
-            <div className="flex gap-5 lg:gap-8 px-5 md:px-16">
+            <div className="flex gap-5 px-5 lg:gap-8 md:px-16">
                 <span
                     className={`inline-block lg:hidden font-bold text-sm pb-[6px] cursor-pointer ${
                         navigation === 'COURSE'
@@ -50,27 +53,29 @@ const CourseSummary = (): JSX.Element => {
                     aria-hidden>
                     DESKRIPSI
                 </span>
-                <span
-                    className={`inline-block font-bold text-sm pb-[6px] cursor-pointer ${
-                        navigation === 'DISCUSSION'
-                            ? 'border-b-2 border-accent-purple'
-                            : 'text-neutral-600 border-none hover:text-neutral-500'
-                    }`}
-                    onClick={() => {
-                        tracker?.genericTrack('Click QnA Tab', {
-                            'Course Slug': router.query.id,
-                            'Video Title': subchapter?.subchapter_name
-                        });
-                        setNavigation('DISCUSSION');
-                    }}
-                    aria-hidden>
-                    DISKUSI
-                </span>
+                {isAuthenticated && (
+                    <span
+                        className={`inline-block font-bold text-sm pb-[6px] cursor-pointer ${
+                            navigation === 'DISCUSSION'
+                                ? 'border-b-2 border-accent-purple'
+                                : 'text-neutral-600 border-none hover:text-neutral-500'
+                        }`}
+                        onClick={() => {
+                            tracker?.genericTrack('Click QnA Tab', {
+                                'Course Slug': router.query.id,
+                                'Video Title': subchapter?.subchapter_name
+                            });
+                            setNavigation('DISCUSSION');
+                        }}
+                        aria-hidden>
+                        DISKUSI
+                    </span>
+                )}
             </div>
             <div>
                 {navigation === 'COURSE' && <CourseDetailBox />}
                 {navigation === 'DESCRIPTION' && <Description />}
-                {navigation === 'DISCUSSION' && (
+                {isAuthenticated && navigation === 'DISCUSSION' && (
                     <div className="md:px-16">
                         <QnaSection />
                     </div>

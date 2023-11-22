@@ -1,5 +1,6 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { useGetPublicSubchapterDetailQuery } from 'courses/redux/api/courseApi';
 import { useGetSubchapterDetailQuery } from 'courses/redux/api/privateCourseApi';
 import { useRouter } from 'next/router';
 import { createContext, ReactNode, useContext, useMemo } from 'react';
@@ -33,9 +34,17 @@ export function LearningProvider({
         latest_watch_video,
         watch_progress
     } = useCourseSubscription(id as string);
-    const { data } = useGetSubchapterDetailQuery(sub as string, {
-        skip: sub === null || sub === undefined || !isAuthenticated
-    });
+    const privateSubchapterDetails = useGetSubchapterDetailQuery(
+        sub as string,
+        { skip: !sub || !isAuthenticated }
+    );
+    const publicSubchapterDetails = useGetPublicSubchapterDetailQuery(
+        sub as string,
+        { skip: !sub || isAuthenticated }
+    );
+    const { data } = isAuthenticated
+        ? privateSubchapterDetails
+        : publicSubchapterDetails;
 
     const memoedValue = useMemo(
         () => ({

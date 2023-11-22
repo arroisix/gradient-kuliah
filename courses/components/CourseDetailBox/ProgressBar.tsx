@@ -13,7 +13,7 @@ const ProgressBar = ({
         (total_finished_video / total_video_count) *
         100
     ).toFixed(2);
-    return (
+    return total_finished_video && total_video_count ? (
         <div className="flex flex-col gap-[10px]">
             <div className="relative w-full h-[6px] rounded-[100px] overflow-hidden">
                 <div className="absolute w-full h-full bg-[#FFFFFF1A] rounded-[10px]"></div>
@@ -30,6 +30,8 @@ const ProgressBar = ({
                 </span>
             )}
         </div>
+    ) : (
+        <></>
     );
 };
 

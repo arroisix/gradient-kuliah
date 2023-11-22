@@ -1,0 +1,68 @@
+import Skeleton from 'commons/components/elements/Skeleton';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { AiFillStar } from 'react-icons/ai';
+import { useTracker } from 'tracker/tracker';
+
+export const ListBooks = ({
+    books,
+    isLoading
+}: {
+    books: Book[];
+    isLoading: boolean;
+}): JSX.Element => {
+    const router = useRouter();
+    const tracker = useTracker();
+
+    return (
+        <div className="flex flex-col gap-[14px]">
+            {isLoading && <Skeleton className="h-[60px] !m-0" repeat={3} />}
+            {books?.map(
+                ({ book_id, title, authors, rating, book_cover_url, slug }) => (
+                    <div
+                        className="flex items-center gap-5 cursor-pointer"
+                        key={book_id}
+                        onClick={() => {
+                            tracker?.genericTrack('Click Book Item', {
+                                'Course Slug': slug,
+                                'Book Title': title
+                            });
+                            router.push(`/astronotes/${slug}/1`);
+                        }}
+                        aria-hidden>
+                        <Image
+                            src={
+                                book_cover_url ||
+                                'https://assets.gradient.academy/assets/astronotes-kalkulus2-placeholder.jpg'
+                            }
+                            width={79}
+                            height={113}
+                            className="object-contain rounded"
+                        />
+                        <div className="flex flex-col gap-[6px]">
+                            <span className="inline-block text-lg font-body text-neutral-200">
+                                {title}
+                            </span>
+                            <div>
+                                {authors && (
+                                    <span className="inline-block text-base font-body text-neutral-600">
+                                        {`oleh ${authors}`}
+                                    </span>
+                                )}
+                                {rating !== 0 && (
+                                    <span className="flex items-center gap-[2px] font-body text-xs text-neutral-600">
+                                        <AiFillStar />
+                                        {+rating.toFixed(1)}
+                                    </span>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                )
+            )}
+        </div>
+    );
+};
+
+export default ListBooks;

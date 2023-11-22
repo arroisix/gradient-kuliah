@@ -34,6 +34,11 @@ export const courseApi = baseApi.injectEndpoints({
                         : [{ type: 'WATCH_PROGRESS', id: 'LIST' }]
             }
         ),
+        getPublicSubchapterDetail: builder.query<SubChapter, string>({
+            query: (id: string) => ({
+                url: `${COURSE_BASE_URL}public/subchapter/${id}/`
+            })
+        }),
         getSearchCourseContent: builder.query<
             SearchCourseResponse,
             {
@@ -114,6 +119,12 @@ export const courseApi = baseApi.injectEndpoints({
         getCourseDetail: builder.query<CourseDetailResponse, { slug: string }>({
             query: ({ slug }) => ({ url: `${COURSE_BASE_URL}${slug}/` })
         }),
+        getPublicCourseDetail: builder.query<
+            CourseDetailResponse,
+            { slug: string }
+        >({
+            query: ({ slug }) => ({ url: `${COURSE_BASE_URL}public/${slug}` })
+        }),
         postCourseFeedback: builder.mutation<
             CourseFeedback,
             CourseFeedback & { slug: string }
@@ -140,6 +151,7 @@ export const {
     useGetCourseContentQuery,
     useGetCoursePreviewQuery,
     useGetSubchapterQuery,
+    useGetPublicSubchapterDetailQuery,
     useGetSearchCourseContentQuery,
     useGetCourseDetailQuery,
     usePostCourseFeedbackMutation,
