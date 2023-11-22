@@ -1,8 +1,10 @@
+import { useFeatureIsOn } from '@growthbook/growthbook-react';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import VideoPlayer from 'commons/components/elements/Video';
 import { isNotNullAndUndefined } from 'commons/utils';
 import PopupQuestionContent from 'courses/components/Exercise/PopupQuestion';
 import NeedSubscribe from 'courses/components/NeedSubscribe';
+import VideoPaywall from 'courses/components/VideoPaywall';
 import { useLearning } from 'courses/contexts/LearningProvider';
 import { useTrackSubchapterProgressMutation } from 'courses/redux/api/learningExperienceApi';
 import { useSelector } from 'react-redux';
@@ -15,6 +17,9 @@ const LearnVideo = ({
     const [track] = useTrackSubchapterProgressMutation();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { is_subscribed, video } = useLearning();
+    const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
+        'landing-page-revamp'
+    );
 
     const renderVideoPlayer = (): JSX.Element => {
         if (is_subscribed || (video && video.is_free)) {
@@ -55,11 +60,11 @@ const LearnVideo = ({
             );
         }
 
-        return <NeedSubscribe />;
+        return isLandingPageRevampOn ? <VideoPaywall /> : <NeedSubscribe />;
     };
 
     return (
-        <div className="w-full h-full transition-all overflow-x-hidden relative">
+        <div className="relative w-full h-full overflow-x-hidden transition-all">
             {renderVideoPlayer()}
         </div>
     );

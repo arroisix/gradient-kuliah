@@ -1,0 +1,27 @@
+import Paywall from 'commons/components/elements/Paywall';
+import { cn } from 'commons/utils';
+import { useGetPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
+import React from 'react';
+
+const VideoPaywall = (): JSX.Element => {
+    const { data } = useGetPacketOfferQuery();
+    return (
+        <div
+            className={cn(
+                'flex flex-col items-center justify-center w-screen -mx-4 sm:w-auto sm:mx-0 md:sticky '
+            )}>
+            <h2 className="mb-4 text-xl font-extrabold leading-relaxed text-center">
+                Beli untuk melihat video ini
+            </h2>
+            <Paywall
+                pricingData={data?.data}
+                isCarousel
+                className={cn('w-screen sm:w-auto')}
+                highlightedClassName="!order-none"
+                pricingClassName="max-w-[18rem] sm:max-w-xs"
+            />
+        </div>
+    );
+};
+
+export default VideoPaywall;
