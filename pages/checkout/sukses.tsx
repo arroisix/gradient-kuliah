@@ -6,15 +6,24 @@ import { useRouter } from 'next/router';
 
 const SuccessCheckout = (): JSX.Element => {
     const router = useRouter();
+
     useEffect(() => {
-        const timer1 = setTimeout(
-            () => router.push('/dashboard?checkout=success'),
-            5000
-        );
+        const timer1 = setTimeout(() => {
+            const redirectUrl = (router.query.redirect ||
+                localStorage.getItem('redirect')) as string;
+
+            if (!!redirectUrl) {
+                const url = new URL(redirectUrl, window.location.href);
+                url.searchParams.append('checkout', 'success');
+                localStorage.removeItem('redirect');
+                router.push(url.toString());
+            } else router.push('/dashboard?checkout=success');
+        }, 5000);
         return () => {
             clearTimeout(timer1);
         };
     }, []);
+
     return (
         <Layout>
             <section className="min-h-[75vh] pt-24 px-[7.5rem] flex justify-center items-center flex-col">

@@ -5,13 +5,14 @@ import React, { useEffect, useRef } from 'react';
 import { SlCheck } from 'react-icons/sl';
 import { useSelector } from 'react-redux';
 import Button from './Button';
-import { cn } from 'commons/utils';
+import { cn, queryParamBuilder } from 'commons/utils';
 
 type PaywallProps = {
     isCarousel?: boolean;
     isCompact?: boolean;
     pricingData?: PacketOffer[];
     ctaEventName?: string;
+    redirect?: string;
     ctaEventPayload?: Record<string, unknown>;
     pricingClassName?: string;
     highlightedClassName?: string;
@@ -25,7 +26,8 @@ const Paywall = ({
     pricingClassName,
     highlightedClassName,
     ctaEventName,
-    ctaEventPayload
+    ctaEventPayload,
+    redirect
 }: PaywallProps): JSX.Element => {
     const carouselRef = useRef<HTMLDivElement>(null);
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -55,11 +57,18 @@ const Paywall = ({
     }, [isCarousel]);
 
     const handleClick = (packetId: string): void => {
+        if (redirect) localStorage.setItem('redirect', redirect as string);
+
         if (!isAuthenticated) {
             localStorage.setItem('packetId', packetId);
-            router.push('/daftar');
+            router.push(`/daftar?redirect=${redirect ?? '/langganan'}`);
         } else {
-            router.push(`/pembayaran?packetId=${packetId}`);
+            router.push(
+                `/pembayaran?${queryParamBuilder({
+                    packetId,
+                    redirect: redirect as string
+                })}`
+            );
         }
     };
 

@@ -8,10 +8,11 @@ import { isMobile } from 'react-device-detect';
 import Skeleton from 'commons/components/elements/Skeleton';
 import Image from 'next/image';
 import { CDN_URL } from 'commons/constants';
+import { queryParamBuilder } from 'commons/utils';
 
 const TransactionContainer = (): JSX.Element => {
     const router = useRouter();
-    const { id } = router.query;
+    const { id, redirect } = router.query;
     const { isLoading, data } = useGetTransactionQuery(id as string, {
         skip: id === undefined || id === null,
         pollingInterval: 3000
@@ -54,7 +55,11 @@ const TransactionContainer = (): JSX.Element => {
                 toast.success(`Pembayaran Sukses!`, {
                     position: toast.POSITION.TOP_CENTER
                 });
-                router.push('/checkout/sukses');
+                router.push(
+                    `/checkout/sukses?${queryParamBuilder({
+                        redirect: redirect as string
+                    })}`
+                );
             }
         }
     }, [data]);

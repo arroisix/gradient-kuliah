@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import Button from 'commons/components/elements/Button';
 import useCheckout from '../hooks/useCheckout';
 import { usePayment } from 'payment/contexts/PaymentProvider';
+import { queryParamBuilder } from 'commons/utils';
 
 const CheckoutButton = ({
     packetId,
@@ -24,7 +25,7 @@ const CheckoutButton = ({
     const { setModalCheckoutOpen } = usePayment();
     const [loading, setLoading] = useState(false);
     const router = useRouter();
-    const { subscriptionId } = router.query;
+    const { subscriptionId, redirect } = router.query;
 
     const onClick = async (): Promise<void> => {
         setLoading(true);
@@ -49,7 +50,11 @@ const CheckoutButton = ({
                     }
                 );
 
-                router.push(`/checkout/${transaction.id}`);
+                router.push(
+                    `/checkout/${transaction.id}?${queryParamBuilder({
+                        redirect: redirect as string
+                    })}`
+                );
             }
         } else {
             const data = (await checkout({
@@ -69,7 +74,11 @@ const CheckoutButton = ({
                     }
                 );
 
-                router.push(`/checkout/${transaction.id}`);
+                router.push(
+                    `/checkout/${transaction.id}?${queryParamBuilder({
+                        redirect: redirect as string
+                    })}`
+                );
             }
         }
 
@@ -85,7 +94,11 @@ const CheckoutButton = ({
             toast.success(`Pembayaran Sukses!`, {
                 position: toast.POSITION.TOP_CENTER
             });
-            router.push('/checkout/sukses');
+            router.push(
+                `/checkout/sukses${queryParamBuilder({
+                    redirect: router.query.redirect as string
+                })}`
+            );
         } catch {
             toast.error(`Pembayaran Gagal!`, {
                 position: toast.POSITION.TOP_CENTER

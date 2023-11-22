@@ -131,3 +131,14 @@ export const slugify = (str: string): string =>
         .toLowerCase()
         .replace(/\s+/g, '-')
         .replace(/[^\w-]+/g, '');
+
+export const queryParamBuilder = (
+    params: string | string[][] | Record<string, string> | URLSearchParams
+): string => {
+    // Create a new object with only non-empty properties
+    const params_ = Object.fromEntries(
+        Object.entries(params).filter(([_, value]) => !!value || value === 0)
+    );
+    const searchParam = new URLSearchParams(params_);
+    return searchParam.toString();
+};

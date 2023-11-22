@@ -3,6 +3,8 @@ import TransactionCard from '../components/TransactionCard';
 import useAllTransaction from '../hooks/useAllTransaction';
 import moment from 'moment';
 import Skeleton from 'commons/components/elements/Skeleton';
+import ReferralModal from 'referral/components/ReferralModal';
+import { useRouter } from 'next/router';
 
 const TransactionListContainer = (): JSX.Element => {
     const [activeTransaction, setActiveTransaction] = useState<Transaction>();
@@ -10,6 +12,14 @@ const TransactionListContainer = (): JSX.Element => {
         useState<Transaction[]>();
 
     const { data, loading } = useAllTransaction();
+
+    const router = useRouter();
+    const { checkout } = router.query;
+    const [isReferralModalOpen, setIsReferralModalOpen] = useState(false);
+
+    useEffect(() => {
+        if (checkout === 'success') setIsReferralModalOpen(true);
+    }, []);
 
     useEffect(() => {
         data?.data.forEach((value) => {
@@ -38,16 +48,10 @@ const TransactionListContainer = (): JSX.Element => {
 
     return (
         <section className="min-h-screen pt-24 px-4 md:px-[7.5rem]">
-            <h1 className="sm:text-2xl text-center font-bold mb-6 sm:mb-8">
+            <h1 className="mb-6 font-bold text-center sm:text-2xl sm:mb-8">
                 Riwayat Pembelian
             </h1>
-            {loading && (
-                <>
-                    <Skeleton className="h-[150px]" />
-                    <Skeleton className="h-[150px]" />
-                    <Skeleton className="h-[150px]" />
-                </>
-            )}
+            {loading && <Skeleton className="h-[150px]" repeat={3} />}
             {activeTransaction && (
                 <>
                     <span className="inline-block font-body text-sm mb-[18px]">
@@ -79,6 +83,10 @@ const TransactionListContainer = (): JSX.Element => {
                 </>
             )}
             <div className="mb-16" />
+            <ReferralModal
+                isOpen={isReferralModalOpen}
+                setOpen={setIsReferralModalOpen}
+            />
         </section>
     );
 };

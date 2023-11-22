@@ -46,6 +46,7 @@ const AstronotesPaywall = (): JSX.Element => {
                 </h2>
                 <Paywall
                     pricingData={data?.data}
+                    redirect={router.asPath}
                     isCarousel={isTabletBreakpoints || isMobileBreakpoints}
                     className={cn(
                         'lg:scale-[0.8] w-screen sm:w-full',

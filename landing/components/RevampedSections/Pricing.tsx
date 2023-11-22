@@ -24,6 +24,7 @@ const Pricing = ({ pricingData, ctaEventName }: PricingProps): JSX.Element => {
             <Paywall
                 pricingData={pricingData}
                 ctaEventName={ctaEventName}
+                redirect="/transaksi"
                 isCarousel={isTabletBreakpoints}
             />
         </Container>

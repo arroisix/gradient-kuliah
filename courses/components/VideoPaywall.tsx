@@ -1,9 +1,11 @@
 import Paywall from 'commons/components/elements/Paywall';
 import { cn } from 'commons/utils';
+import { useRouter } from 'next/router';
 import { useGetPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
 import React from 'react';
 
 const VideoPaywall = (): JSX.Element => {
+    const router = useRouter();
     const { data } = useGetPacketOfferQuery();
     return (
         <div
@@ -16,6 +18,7 @@ const VideoPaywall = (): JSX.Element => {
             <Paywall
                 pricingData={data?.data}
                 isCarousel
+                redirect={router.asPath}
                 className={cn('w-screen sm:w-auto')}
                 highlightedClassName="!order-none"
                 pricingClassName="max-w-[18rem] sm:max-w-xs"

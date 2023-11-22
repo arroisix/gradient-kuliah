@@ -2,10 +2,12 @@ import { useFeatureIsOn } from '@growthbook/growthbook-react';
 import Paywall from 'commons/components/elements/Paywall';
 import { cn } from 'commons/utils';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { useRouter } from 'next/router';
 import { useGetPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
 import React from 'react';
 
 const CommunityPaywall = (): JSX.Element => {
+    const router = useRouter();
     const { is_subscribed } = useCourseSubscription();
     const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
         'landing-page-revamp'
@@ -23,6 +25,7 @@ const CommunityPaywall = (): JSX.Element => {
             <Paywall
                 pricingData={data?.data}
                 isCarousel
+                redirect={router.asPath}
                 className="w-screen sm:w-full"
                 highlightedClassName="!order-none"
                 pricingClassName="max-w-[18rem] sm:max-w-xs lg:max-w-sm"
