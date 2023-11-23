@@ -16,7 +16,7 @@ const CourseSummary = (): JSX.Element => {
 
     const [navigation, setNavigation] = useState<
         'DESCRIPTION' | 'DISCUSSION' | 'COURSE'
-    >('DESCRIPTION');
+    >('COURSE');
 
     return (
         <div className="flex flex-col gap-5 pt-8 pb-12 bg-[#121212]">

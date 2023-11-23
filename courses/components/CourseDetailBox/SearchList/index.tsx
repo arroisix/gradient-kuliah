@@ -32,7 +32,7 @@ const SearchList = ({
     const router = useRouter();
     const { id } = router.query;
     const [navigation, setNavigation] = useState<'SEARCH_LIST' | 'SUBCHAPTER'>(
-        'SEARCH_LIST'
+        'SUBCHAPTER'
     );
     const [chapterDetail, setChapterDetail] = useState<CourseChapter>(
         {} as CourseChapter
