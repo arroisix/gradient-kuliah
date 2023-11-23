@@ -23,6 +23,10 @@ const Classes = ({ classData }: ClassesProps): JSX.Element => {
                         cover={course.thumbnail}
                         slug={course.slug}
                         title={course.course_name}
+                        eventPayload={{
+                            Variant: 'NOV 2023',
+                            'Accessed from': 'LANDING'
+                        }}
                     />
                 ))}
             </div>
@@ -30,6 +34,7 @@ const Classes = ({ classData }: ClassesProps): JSX.Element => {
                 <Button
                     variant="custom"
                     href="/kelas"
+                    eventName='Click "Lihat Semua" for Class'
                     className="bg-neutral-800">
                     Lihat Semua Kelas
                 </Button>

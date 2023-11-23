@@ -6,9 +6,16 @@ import Link from 'next/link';
 import React from 'react';
 import { BiChevronRight } from 'react-icons/bi';
 import Container from './Container';
+import { useTracker } from 'tracker/tracker';
 
 const RevampedFeature = (): JSX.Element => {
     const { isMobileBreakpoints } = useWindowBreakpoints();
+    const tracker = useTracker();
+
+    const track = (feature: string): void => {
+        tracker?.genericTrack('Click Feature Card', { Feature: feature });
+    };
+
     return (
         <Container className="space-y-8 py-9 md:py-24">
             <h2 className="text-3xl font-extrabold leading-relaxed text-center ">
@@ -17,6 +24,7 @@ const RevampedFeature = (): JSX.Element => {
             <div className="grid grid-cols-1 gap-6 md:grid-cols-6 lg:gap-8">
                 <Link
                     href="/kelas"
+                    onClick={() => track('Video')}
                     className="relative px-8 pt-6 md:col-span-3 card bg-neutral-800 rounded-xl">
                     <div className="flex justify-between">
                         <div>
@@ -38,6 +46,7 @@ const RevampedFeature = (): JSX.Element => {
                 </Link>
                 <Link
                     href="/astronotes#bank-soal"
+                    onClick={() => track('Bank Soal')}
                     className="flex flex-col-reverse gap-6 p-4 pt-5 pb-0 sm:py-6 sm:flex-row md:col-span-3 md:gap-4 xl:gap-8 xl:px-8 card bg-neutral-800 rounded-xl">
                     <div className="flex items-end justify-center sm:aspect-[228/280] w-full md:w-[342px] lg:w-full lg:my-2 xl:my-0">
                         <Image
@@ -63,6 +72,7 @@ const RevampedFeature = (): JSX.Element => {
                 </Link>
                 <Link
                     href="/astronotes"
+                    onClick={() => track('Rangkuman')}
                     className="flex flex-col px-6 pt-6 md:col-span-2 card bg-neutral-800 rounded-xl">
                     <div className="flex justify-between">
                         <div>
@@ -84,6 +94,7 @@ const RevampedFeature = (): JSX.Element => {
                 </Link>
                 <Link
                     href="/komunitas"
+                    onClick={() => track('Komunitas')}
                     className="flex flex-col px-6 pt-6 md:col-span-2 card bg-neutral-800 rounded-xl">
                     <div className="flex justify-between gap-4">
                         <div>

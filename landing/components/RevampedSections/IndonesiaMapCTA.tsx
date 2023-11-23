@@ -25,6 +25,7 @@ const IndonesiaMapCTA = (): JSX.Element => {
                 <Button
                     href={AUTHENTICATION_ROUTE}
                     className="mt-3 md:mt-4"
+                    eventName='Click "Daftar Sekarang" Button'
                     variant="primary">
                     Daftar Sekarang
                 </Button>

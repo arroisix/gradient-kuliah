@@ -7,8 +7,14 @@ type ClassCardProps = {
     cover: string;
     title: string;
     slug: string;
+    eventPayload?: Record<string, unknown>;
 };
-const ClassCard = ({ cover, title, slug }: ClassCardProps): JSX.Element => {
+const ClassCard = ({
+    cover,
+    title,
+    slug,
+    eventPayload
+}: ClassCardProps): JSX.Element => {
     const tracker = useTracker();
 
     return (
@@ -17,7 +23,8 @@ const ClassCard = ({ cover, title, slug }: ClassCardProps): JSX.Element => {
             href={`/kelas/${slug}`}
             onClick={() =>
                 tracker?.genericTrack('Click Class Card', {
-                    'Course Slug': slug
+                    'Course Slug': slug,
+                    ...eventPayload
                 })
             }
             aria-hidden>

@@ -65,6 +65,10 @@ const Recommendations = (): JSX.Element => {
                                     cover={course.thumbnail}
                                     slug={course.slug}
                                     title={course.course_name}
+                                    eventPayload={{
+                                        Variant: 'NOV 2023',
+                                        'Accessed from': 'DASHBOARD'
+                                    }}
                                 />
                             ))}
                         </>

@@ -40,7 +40,7 @@ const RevampedHero = ({
                         variant="primary"
                         href={`/dashboard?recommendation=${selectedMajor}`}
                         className="flex items-center flex-none h-10 text-sm md:h-12 whitespace-nowrap lg:text-base"
-                        eventName="Landing Page CTA"
+                        eventName='Click "Cari Materi Gratis" Button'
                         eventPayload={{ 'Section Name': 'Hero' }}>
                         Cari Materi Gratis
                     </Button>
@@ -53,6 +53,7 @@ const RevampedHero = ({
                     <Button
                         href="#pricing"
                         variant="tertiary"
+                        eventName='Click "Beli Paket" Button'
                         className="flex-none whitespace-nowrap !px-0 text-sm normal-case md:!px-1 md:text-base !text-accent-purple">
                         Beli Paket
                     </Button>
