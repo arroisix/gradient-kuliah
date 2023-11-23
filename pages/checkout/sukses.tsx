@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 
 const SuccessCheckout = (): JSX.Element => {
     const router = useRouter();
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<any>();
 
     useEffect(() => {
         const timer1 = setTimeout(() => {
