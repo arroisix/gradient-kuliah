@@ -52,6 +52,7 @@ const DashboardContent = (): JSX.Element => {
                 <Button
                     href="/kelas"
                     variant="custom"
+                    eventName="Click Community Card"
                     className="text-center text-white bg-black whitespace-nowrap">
                     Buat Pertanyaan GRATIS
                 </Button>
@@ -68,7 +69,11 @@ const DashboardContent = (): JSX.Element => {
                         />
                     </div>
                 ) : (
-                    <Paywall isCompact pricingData={pricingData?.data} />
+                    <Paywall
+                        isCompact
+                        pricingData={pricingData?.data}
+                        ctaEventName="Click Pricing Button on Dashboard"
+                    />
                 )}
             </div>
         </div>

@@ -30,10 +30,17 @@ const Recommendations = (): JSX.Element => {
         const bookList = bookData?.find(
             (category) => category.category_name === categoryName
         );
+        const eventName = `Click ${
+            categoryName === 'Textbook' ? 'Rangkuman' : categoryName
+        } Card`;
         return (
             <>
                 {bookList?.books.map((book) => (
-                    <AstronoteBook key={book.id} {...book} />
+                    <AstronoteBook
+                        key={book.id}
+                        eventName={eventName}
+                        {...book}
+                    />
                 ))}
             </>
         );
@@ -50,6 +57,7 @@ const Recommendations = (): JSX.Element => {
                         href="/kelas"
                         variant="custom"
                         size={isMobileBreakpoints ? 'small' : 'normal'}
+                        eventName="Click 'Lihat Semua' in Video Section"
                         className="text-black bg-white whitespace-nowrap">
                         Lihat Semua
                     </Button>
@@ -84,6 +92,7 @@ const Recommendations = (): JSX.Element => {
                         href="/astronotes#bank-soal"
                         variant="custom"
                         size={isMobileBreakpoints ? 'small' : 'normal'}
+                        eventName="Click 'Lihat Semua' in Bank Soal Section"
                         className="text-black bg-white whitespace-nowrap">
                         Lihat Semua
                     </Button>
@@ -105,6 +114,7 @@ const Recommendations = (): JSX.Element => {
                         href="/astronotes"
                         variant="custom"
                         size={isMobileBreakpoints ? 'small' : 'normal'}
+                        eventName="Click 'Lihat Semua' in Rangkuman Section"
                         className="text-black bg-white whitespace-nowrap">
                         Lihat Semua
                     </Button>
