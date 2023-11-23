@@ -29,7 +29,7 @@ const CommunityBanner = ({ askNow }: CommunityBannerProps): JSX.Element => {
                 variant="custom"
                 className="w-full px-6 text-xs font-extrabold bg-black md:w-fit whitespace-nowrap"
                 eventName={
-                    isAuthenticated
+                    !isAuthenticated
                         ? 'Click "Buat Pertanyaan Gratis" Button'
                         : 'Click "Tanya Sekarang" Button'
                 }
@@ -38,7 +38,7 @@ const CommunityBanner = ({ askNow }: CommunityBannerProps): JSX.Element => {
                 }
                 href={isAuthenticated ? undefined : AUTHENTICATION_ROUTE}
                 onClick={isAuthenticated ? askNow : undefined}>
-                {isAuthenticated ? 'Buat Pertanyaan Gratis' : 'Tanya Sekarang'}
+                {!isAuthenticated ? 'Buat Pertanyaan Gratis' : 'Tanya Sekarang'}
             </Button>
         </div>
     );
