@@ -1,7 +1,6 @@
 import CommunityNotificationBadge from 'commons/components/elements/CommunityNotificationBadge';
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
 import { cn } from 'commons/utils';
-import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
