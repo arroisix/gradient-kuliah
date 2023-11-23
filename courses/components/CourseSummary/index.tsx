@@ -7,16 +7,18 @@ import { useRouter } from 'next/router';
 import { useLearning } from 'courses/contexts/LearningProvider';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 
 const CourseSummary = (): JSX.Element => {
     const tracker = useTracker();
     const router = useRouter();
     const { subchapter } = useLearning();
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const { isMobileBreakpoints } = useWindowBreakpoints();
 
     const [navigation, setNavigation] = useState<
         'DESCRIPTION' | 'DISCUSSION' | 'COURSE'
-    >('COURSE');
+    >(isMobileBreakpoints ? 'COURSE' : 'DESCRIPTION');
 
     return (
         <div className="flex flex-col gap-5 pt-8 pb-12 bg-[#121212]">
