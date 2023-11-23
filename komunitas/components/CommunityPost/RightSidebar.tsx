@@ -74,9 +74,9 @@ const RightSidebar = ({
                     <Skeleton repeat={3} className="h-3 !mb-0" />
                 )}
             </div>
-            <div className="absolute top-0 left-0 w-full h-full">
+            <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
                 <div className="absolute bottom-0 left-0 w-full h-[150px] bg-gradient-to-b from-transparent via-[#121212] to-[#121212] z-[1]"></div>
-                <div className="absolute bottom-0 left-0 w-full px-[18px] z-[1]">
+                <div className="pointer-events-auto point absolute bottom-0 left-0 w-full px-[18px] z-[1]">
                     <Button
                         variant="custom"
                         className="w-full text-xs font-extrabold text-center bg-neutral-800"

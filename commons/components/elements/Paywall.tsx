@@ -33,8 +33,8 @@ const Paywall = ({
     const isAuthenticated = useSelector(getIsAuthenticated);
     const router = useRouter();
 
-    const centerScroll = (): void => {
-        const container = carouselRef.current;
+    const centerScroll = (container: HTMLDivElement): void => {
+        // const container = carouselRef.current;
         const element = container?.querySelector(
             '.carousel-item:nth-child(2)'
         ) as HTMLDivElement;
@@ -45,16 +45,16 @@ const Paywall = ({
         }
     };
 
-    useEffect(() => {
-        const handleResize = (): void => centerScroll();
-        if (isCarousel) {
-            centerScroll();
-            window.addEventListener('resize', handleResize);
-        }
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, [isCarousel]);
+    // useEffect(() => {
+    //     const handleResize = (): void => centerScroll();
+    //     if (isCarousel) {
+    //         centerScroll();
+    //         window.addEventListener('resize', handleResize);
+    //     }
+    //     return () => {
+    //         window.removeEventListener('resize', handleResize);
+    //     };
+    // }, [isCarousel]);
 
     const handleClick = (packetId: string): void => {
         if (redirect) localStorage.setItem('redirect', redirect as string);
@@ -78,7 +78,13 @@ const Paywall = ({
 
     return (
         <div
-            ref={carouselRef}
+            ref={(container) => {
+                console.log(
+                    '🚀 ~ file: Paywall.tsx:82 ~ container:',
+                    container
+                );
+                if (isCarousel && container) centerScroll(container);
+            }}
             className={cn(
                 'items-center gap-4',
                 className,
