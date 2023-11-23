@@ -3,9 +3,12 @@ import Layout from 'commons/layout';
 import Image from 'next/image';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { subscriptionApi } from 'payment/redux/api/subscriptionApi';
+import { useDispatch } from 'react-redux';
 
 const SuccessCheckout = (): JSX.Element => {
     const router = useRouter();
+    const dispatch = useDispatch<any>();
 
     useEffect(() => {
         const timer1 = setTimeout(() => {
@@ -18,6 +21,10 @@ const SuccessCheckout = (): JSX.Element => {
                 localStorage.removeItem('redirect');
                 router.push(url.toString());
             } else router.push('/dashboard?checkout=success');
+            const getActiveSubscription = dispatch(
+                subscriptionApi.endpoints.getActiveSubscription.initiate()
+            );
+            getActiveSubscription.refetch();
         }, 5000);
         return () => {
             clearTimeout(timer1);
