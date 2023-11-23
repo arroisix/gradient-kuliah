@@ -38,11 +38,19 @@ const VideoItem = ({
             key={value.id}
             className="flex justify-between px-3 py-[10px] cursor-pointer hover:bg-[#272727]"
             onClick={() => {
-                tracker?.genericTrack('Click Video Item', {
-                    'Course Slug': id,
-                    'Video Title': value.subchapter_name,
-                    'Chapter ID': chapter_id
-                });
+                if (is_subscribed || value.is_free) {
+                    tracker?.genericTrack('Click Video Item', {
+                        'Course Slug': id,
+                        'Video Title': value.subchapter_name,
+                        'Chapter ID': chapter_id
+                    });
+                } else {
+                    tracker?.genericTrack('Click Locked Video Item', {
+                        'Course Slug': id,
+                        'Video Title': value.subchapter_name,
+                        'Chapter ID': chapter_id
+                    });
+                }
                 router.push(
                     `/kelas/${id}/belajar/video/${chapter_id}/${value.id}`
                 );

@@ -1,3 +1,4 @@
+import { useFeatureIsOn } from '@growthbook/growthbook-react';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import GradientIcon from 'commons/components/GradientIcon';
 import Button from 'commons/components/elements/Button';
@@ -11,6 +12,9 @@ type CommunityBannerProps = {
 
 const CommunityBanner = ({ askNow }: CommunityBannerProps): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
+        'landing-page-revamp'
+    );
     return (
         <div className="flex flex-col md:flex-row justify-between items-center gap-3 w-full px-5 py-[14px] bg-[#5F2BCE] rounded-lg">
             <div className="flex items-center gap-3">
@@ -24,7 +28,14 @@ const CommunityBanner = ({ askNow }: CommunityBannerProps): JSX.Element => {
             <Button
                 variant="custom"
                 className="w-full px-6 text-xs font-extrabold bg-black md:w-fit whitespace-nowrap"
-                eventName='"Tanya Sekarang" Button'
+                eventName={
+                    isAuthenticated
+                        ? 'Click "Buat Pertanyaan Gratis" Button'
+                        : 'Click "Tanya Sekarang" Button'
+                }
+                eventPayload={
+                    isLandingPageRevampOn ? { Variant: 'NOV 2023' } : {}
+                }
                 href={isAuthenticated ? undefined : AUTHENTICATION_ROUTE}
                 onClick={isAuthenticated ? askNow : undefined}>
                 {isAuthenticated ? 'Buat Pertanyaan Gratis' : 'Tanya Sekarang'}

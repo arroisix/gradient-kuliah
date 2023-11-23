@@ -22,6 +22,7 @@ const VideoPaywall = (): JSX.Element => {
                 className={cn('w-screen sm:w-auto')}
                 highlightedClassName="!order-none"
                 pricingClassName="max-w-[18rem] sm:max-w-xs"
+                ctaEventName="Click Pricing Button on Video"
             />
         </div>
     );

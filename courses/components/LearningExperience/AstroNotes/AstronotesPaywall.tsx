@@ -11,7 +11,7 @@ import React, { useEffect, useState } from 'react';
 
 const AstronotesPaywall = (): JSX.Element => {
     const router = useRouter();
-    const { page } = router.query;
+    const { slug, page } = router.query;
     const { is_subscribed } = useCourseSubscription();
     const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
         'landing-page-revamp'
@@ -52,6 +52,8 @@ const AstronotesPaywall = (): JSX.Element => {
                         'lg:scale-[0.8] w-screen sm:w-full',
                         isTabletBreakpoints && height < 700 && 'scale-90'
                     )}
+                    ctaEventName="Click Pricing Button on Astronotes"
+                    ctaEventPayload={{ 'Book Slug': slug }}
                     highlightedClassName="!order-none"
                     pricingClassName="max-w-[18rem] sm:max-w-xs lg:max-w-sm"
                 />

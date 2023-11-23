@@ -138,6 +138,11 @@ const LearningProgress = ({
                                     'whitespace-nowrap',
                                     isLandingPageRevampOn && '!my-0 w-auto'
                                 )}
+                                eventName={
+                                    isLandingPageRevampOn
+                                        ? 'Click "Akses Sekarang" Button'
+                                        : undefined
+                                }
                                 label={`${
                                     isLandingPageRevampOn ? 'Akses' : 'Gabung'
                                 } Sekarang`}
@@ -146,6 +151,7 @@ const LearningProgress = ({
                                 <Button
                                     href={`/kelas/${slug}/belajar/video/${coursePreview?.chapter_id}/${coursePreview?.subchapter_id}`}
                                     variant="custom"
+                                    eventName='Click "Tonton Preview" Button'
                                     className="text-center bg-neutral-800 whitespace-nowrap">
                                     Tonton Preview
                                 </Button>
