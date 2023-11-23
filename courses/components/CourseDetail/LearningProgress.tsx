@@ -134,10 +134,13 @@ const LearningProgress = ({
                         <div className="flex flex-col gap-2 sm:items-center sm:gap-4 sm:flex-row">
                             <SubscribeButton
                                 slug={slug}
-                                className={cn('whitespace-nowrap',
+                                className={cn(
+                                    'whitespace-nowrap',
                                     isLandingPageRevampOn && '!my-0 w-auto'
                                 )}
-                                label={`${isLandingPageRevampOn ? 'Akses' : 'Gabung'} Sekarang`}
+                                label={`${
+                                    isLandingPageRevampOn ? 'Akses' : 'Gabung'
+                                } Sekarang`}
                             />
                             {isLandingPageRevampOn && (
                                 <Button

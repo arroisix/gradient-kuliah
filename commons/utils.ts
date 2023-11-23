@@ -137,7 +137,7 @@ export const queryParamBuilder = (
 ): string => {
     // Create a new object with only non-empty properties
     const params_ = Object.fromEntries(
-        Object.entries(params).filter(([_, value]) => !!value || value === 0)
+        Object.entries(params).filter((entry) => !!entry[1] || entry[1] === 0)
     );
     const searchParam = new URLSearchParams(params_);
     return searchParam.toString();
