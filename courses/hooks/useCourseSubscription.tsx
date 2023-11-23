@@ -20,9 +20,6 @@ const useCourseSubscription = (slug?: string) => {
             skip: !isAuthenticated || slug === undefined,
             refetchOnMountOrArgChange: true
         });
-    const { data: coursePreview } = useGetCoursePreviewQuery(
-        slug === undefined || isAuthenticated ? skipToken : { slug }
-    );
     const [expiryDay, setExpiryDay] = useState(30);
 
     useEffect(() => {
@@ -39,6 +36,10 @@ const useCourseSubscription = (slug?: string) => {
 
         return false;
     };
+
+    const { data: coursePreview } = useGetCoursePreviewQuery(
+        slug === undefined || checkIsSubscribed() ? skipToken : { slug }
+    );
 
     return {
         subscription_id: data?.subscription_id,
