@@ -5,7 +5,7 @@ import React from 'react';
 
 const REGISITER_ASSET = `${CDN_URL}/assets/dashboard-register.png`;
 
-const RegisterBanner = (): JSX.Element => 
+const RegisterBanner = (): JSX.Element => {
     return (
         <div className="relative z-0 flex flex-col w-full gap-3 p-4 overflow-hidden md:gap-4 rounded-xl md:p-6 bg-accent-purple">
             <div className="absolute z-0 object-contain h-32 -right-4 sm:right-0 -bottom-2 lg:w-auto">
@@ -23,7 +23,7 @@ const RegisterBanner = (): JSX.Element =>
             <Button
                 variant="custom"
                 href={AUTHENTICATION_ROUTE}
-                eventName='Click Hero Banner (Unregistered)'
+                eventName="Click Hero Banner (Unregistered)"
                 className="font-sans text-xs font-bold text-black bg-white w-fit z-[1] mt-12 min-[375px]:mt-0">
                 Daftar Sekarang
             </Button>
