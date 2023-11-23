@@ -1,20 +1,33 @@
 import Skeleton from 'commons/components/elements/Skeleton';
-import { useGetTableContentsQuery } from 'courses/redux/api/astronotesApi';
+import {
+    useGetPublicTableContentsQuery,
+    useGetTableContentsQuery
+} from 'courses/redux/api/astronotesApi';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { IoMdClose } from 'react-icons/io';
 import ChapterContentItem from './ChapterContentItem';
 import { useAstronotes } from 'courses/contexts/AstronotesProvider';
 import { useTracker } from 'tracker/tracker';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { useSelector } from 'react-redux';
 
 const ListOfContentsSidebar = (): JSX.Element => {
     const tracker = useTracker();
     const router = useRouter();
     const { slug, page } = router.query;
-    const { data, isLoading } = useGetTableContentsQuery(
+    const isAuthenticated = useSelector(getIsAuthenticated);
+    const privateQueryResult = useGetTableContentsQuery(
         { slug: slug as string },
-        { skip: !slug }
+        { skip: !isAuthenticated || !slug }
     );
+    const publicQueryResult = useGetPublicTableContentsQuery(
+        { slug: slug as string },
+        { skip: isAuthenticated || !slug }
+    );
+    const { data, isLoading } = isAuthenticated
+        ? privateQueryResult
+        : publicQueryResult;
     const { setNavigation } = useAstronotes();
 
     return (

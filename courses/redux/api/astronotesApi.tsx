@@ -81,6 +81,22 @@ export const astronotesApi = baseApi.injectEndpoints({
                 url: `${COURSE_BASE_URL}${slug}/chapters/${chapter_id}/subchapters/`
             })
         }),
+        getPublicTableContents: builder.query<
+            GetBookChapterResponse,
+            { slug: string }
+        >({
+            query: ({ slug }) => ({
+                url: `${COURSE_BASE_URL}public/${slug}/chapters/`
+            })
+        }),
+        getPublicTableContentSubchapters: builder.query<
+            ResponseData<BookSubchapter>,
+            { slug: string; chapter_id: string }
+        >({
+            query: ({ slug, chapter_id }) => ({
+                url: `${COURSE_BASE_URL}public/${slug}/chapters/${chapter_id}/subchapters/`
+            })
+        }),
         getHighlight: builder.query<getHighlightReponse, { slug: string }>({
             query: ({ slug }) => ({
                 url: `${COURSE_BASE_URL}${slug}/highlight`
@@ -177,6 +193,8 @@ export const {
     usePostBookProgressMutation,
     useGetTableContentsQuery,
     useGetTableContentSubchaptersQuery,
+    useGetPublicTableContentsQuery,
+    useGetPublicTableContentSubchaptersQuery,
     useGetHighlightQuery,
     usePostHighlightMutation,
     useDeleteHighlightMutation,

@@ -1,9 +1,14 @@
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Skeleton from 'commons/components/elements/Skeleton';
-import { useGetTableContentSubchaptersQuery } from 'courses/redux/api/astronotesApi';
+import {
+    useGetPublicTableContentSubchaptersQuery,
+    useGetTableContentSubchaptersQuery
+} from 'courses/redux/api/astronotesApi';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
+import { useSelector } from 'react-redux';
 import rehypeKatex from 'rehype-katex';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
@@ -20,13 +25,24 @@ export const SubChapterContentItem = ({
 }: SubChapterContentItemProps): JSX.Element => {
     const router = useRouter();
     const { slug } = router.query;
-    const { isLoading, data: subchapters } = useGetTableContentSubchaptersQuery(
+    const isAuthenticated = useSelector(getIsAuthenticated);
+    const privateQueryResult = useGetTableContentSubchaptersQuery(
         {
             slug: slug as string,
             chapter_id: chapterId
         },
-        { skip: !slug }
+        { skip: !isAuthenticated || !slug }
     );
+    const publicQueryResult = useGetPublicTableContentSubchaptersQuery(
+        {
+            slug: slug as string,
+            chapter_id: chapterId
+        },
+        { skip: isAuthenticated || !slug }
+    );
+    const { isLoading, data: subchapters } = isAuthenticated
+        ? privateQueryResult
+        : publicQueryResult;
 
     if (isLoading) return <Skeleton repeat={4} className="h-5 p-0 mb-0" />;
 
