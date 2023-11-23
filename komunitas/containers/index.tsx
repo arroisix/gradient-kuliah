@@ -125,7 +125,7 @@ const KomunitasContainer = (): JSX.Element => {
     }
 
     return (
-        <section className="lg:grid lg:grid-cols-5 gap-[2rem] w-full">
+        <section className="grid grid-cols-1 lg:grid-cols-5 gap-[2rem] w-full">
             <div className="flex flex-col w-full gap-6 lg:col-span-3">
                 <div className="sticky top-16 flex flex-col gap-6 z-[2] bg-black py-4">
                     <KomunitasInput

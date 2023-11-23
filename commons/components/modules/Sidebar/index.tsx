@@ -19,7 +19,6 @@ const Sidebar = ({
 }): JSX.Element => {
     const route = useRouter();
     const { pathname } = route;
-    const { is_subscribed } = useCourseSubscription();
 
     const { data: configData } = useGetConfigQuery();
 

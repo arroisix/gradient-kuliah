@@ -1,7 +1,7 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { formatter } from 'courses/utils';
 import { useRouter } from 'next/router';
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { SlCheck } from 'react-icons/sl';
 import { useSelector } from 'react-redux';
 import Button from './Button';
@@ -29,12 +29,10 @@ const Paywall = ({
     ctaEventPayload,
     redirect
 }: PaywallProps): JSX.Element => {
-    const carouselRef = useRef<HTMLDivElement>(null);
     const isAuthenticated = useSelector(getIsAuthenticated);
     const router = useRouter();
 
     const centerScroll = (container: HTMLDivElement): void => {
-        // const container = carouselRef.current;
         const element = container?.querySelector(
             '.carousel-item:nth-child(2)'
         ) as HTMLDivElement;
@@ -44,17 +42,6 @@ const Paywall = ({
                 (container.offsetWidth - element.offsetWidth) / 2;
         }
     };
-
-    // useEffect(() => {
-    //     const handleResize = (): void => centerScroll();
-    //     if (isCarousel) {
-    //         centerScroll();
-    //         window.addEventListener('resize', handleResize);
-    //     }
-    //     return () => {
-    //         window.removeEventListener('resize', handleResize);
-    //     };
-    // }, [isCarousel]);
 
     const handleClick = (packetId: string): void => {
         if (redirect) localStorage.setItem('redirect', redirect as string);
@@ -79,10 +66,6 @@ const Paywall = ({
     return (
         <div
             ref={(container) => {
-                console.log(
-                    '🚀 ~ file: Paywall.tsx:82 ~ container:',
-                    container
-                );
                 if (isCarousel && container) centerScroll(container);
             }}
             className={cn(
