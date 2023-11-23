@@ -26,7 +26,12 @@ const ListOfContentsSidebar = (): JSX.Element => {
                 <IoMdClose
                     size={18}
                     className="text-[#333333] hover:text-black dark:hover:text-white cursor-pointer"
-                    onClick={() => setNavigation('CLOSE')}
+                    onClick={() => {
+                        setNavigation('CLOSE');
+                        tracker?.genericTrack(
+                            'Close Books List of Content Menu'
+                        );
+                    }}
                 />
             </div>
             <div className="overflow-y-auto max-h-[calc(100vh_-_10rem)] py-4 px-3 flex flex-col gap-2">
