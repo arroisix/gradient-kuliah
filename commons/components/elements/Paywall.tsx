@@ -81,7 +81,7 @@ const Paywall = ({
                       ]
             )}>
             {pricingData?.map((pricing) => {
-                const isHighlighted = pricing.order === 1;
+                const isHighlighted: boolean = pricing.order === 1;
 
                 return (
                     <div
@@ -106,13 +106,7 @@ const Paywall = ({
                                 PENAWARAN TERBAIK!
                             </div>
                         )}
-                        <div
-                            className={cn(
-                                'flex flex-col',
-                                isCompact
-                                    ? 'gap-4 p-4 md:py-6'
-                                    : 'gap-4 p-6 md:gap-6 md:py-8'
-                            )}>
+                        <div className={cn('flex flex-col gap-4 pt-4')}>
                             <div className="flex flex-col text-center md:gap-1">
                                 <h4 className="font-extrabold">
                                     {pricing.packet_name}
@@ -129,7 +123,7 @@ const Paywall = ({
                                     {formatPrice(pricing.price_before_discount)}
                                 </h6>
                             </div>
-                            <div className="flex flex-col h-full gap-3">
+                            <div className="flex flex-col h-full gap-2 px-5">
                                 {pricing.benefits?.feature?.map(
                                     ({ title, description }, index) => (
                                         <div
@@ -137,7 +131,7 @@ const Paywall = ({
                                             className="flex items-center gap-3">
                                             <SlCheck
                                                 className="flex-none text-accent-purple"
-                                                size={32}
+                                                size={24}
                                             />
                                             <div>
                                                 <p className="text-sm font-extrabold">
@@ -154,6 +148,7 @@ const Paywall = ({
                             <Button
                                 variant="primary"
                                 onClick={() => handleClick(pricing.id)}
+                                className="mx-5 mb-5"
                                 eventName={ctaEventName}
                                 eventPayload={{
                                     'Packet Name': pricing.packet_name,

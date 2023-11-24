@@ -9,6 +9,8 @@ import { useState } from 'react';
 import WorksheetInfoModalContent from '../LearningExperience/ExamExercise/WorksheetInfoModal';
 import { useRouter } from 'next/router';
 import { AUTHENTICATION_ROUTE } from 'commons/constants';
+import { useFeatureIsOn } from '@growthbook/growthbook-react';
+import Paywall from 'commons/components/elements/Paywall';
 
 const ExerciseAccordionItem = ({
     subchapter,
@@ -20,15 +22,42 @@ const ExerciseAccordionItem = ({
     const isAuthenticated = useSelector(getIsAuthenticated);
     const [openWorksheetInfo, setOpenWorksheetInfo] = useState<boolean>(false);
     const { push } = useRouter();
+    const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
+        'landing-page-revamp'
+    );
 
     const decideOnClickAction = (): void => {
-        if (isAuthenticated) {
-            setOpenWorksheetInfo(true);
-        } else {
+        if (!isAuthenticated) {
             push(
                 `${AUTHENTICATION_ROUTE}?redirect=/kelas/${slug}/belajar/latihan/${chapterId}/${subchapter.id}`
             );
+        } else {
+            setOpenWorksheetInfo(true);
         }
+    };
+
+    const renderExerciseContent = (): JSX.Element => {
+        console.log(
+            '🚀 ~ file: ExerciseAccordionItem.tsx:41 ~ renderExerciseContent ~ props:',
+            {
+                isFree: subchapter?.exercise?.is_free,
+                isSubscribed,
+                isAuthenticated
+            }
+        );
+        if (isLandingPageRevampOn) {
+            if (!isSubscribed) {
+                if (!isAuthenticated) return <>register dulu</>;
+                else if (!subchapter?.exercise?.is_free) return <Paywall />;
+            }
+        }
+
+        return (
+            <WorksheetInfoModalContent
+                exercise_id={subchapter.exercise?.id as string}
+                packet_id={subchapter.exercise?.packet_id as string}
+            />
+        );
     };
 
     return (
@@ -54,10 +83,7 @@ const ExerciseAccordionItem = ({
                 isOpen={openWorksheetInfo}
                 setOpen={setOpenWorksheetInfo}
                 variant="dark">
-                <WorksheetInfoModalContent
-                    exercise_id={subchapter.exercise?.id as string}
-                    packet_id={subchapter.exercise?.packet_id as string}
-                />
+                {renderExerciseContent()}
             </Modal>
         </>
     );

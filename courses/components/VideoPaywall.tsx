@@ -4,7 +4,11 @@ import { useRouter } from 'next/router';
 import { useGetPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
 import React from 'react';
 
-const VideoPaywall = (): JSX.Element => {
+const VideoPaywall = ({
+    header = 'Beli untuk melihat video ini'
+}: {
+    header?: string;
+}): JSX.Element => {
     const router = useRouter();
     const { data } = useGetPacketOfferQuery();
     return (
@@ -13,7 +17,7 @@ const VideoPaywall = (): JSX.Element => {
                 'flex flex-col items-center justify-center w-screen -mx-4 sm:w-auto sm:mx-0 md:sticky '
             )}>
             <h2 className="mb-4 text-xl font-extrabold leading-relaxed text-center">
-                Beli untuk melihat video ini
+                {header}
             </h2>
             <Paywall
                 pricingData={data?.data}
