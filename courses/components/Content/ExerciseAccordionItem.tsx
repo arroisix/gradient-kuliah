@@ -10,7 +10,8 @@ import WorksheetInfoModalContent from '../LearningExperience/ExamExercise/Worksh
 import { useRouter } from 'next/router';
 import { AUTHENTICATION_ROUTE } from 'commons/constants';
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
-import Paywall from 'commons/components/elements/Paywall';
+import VideoPaywall from '../VideoPaywall';
+import { cn } from 'commons/utils';
 
 const ExerciseAccordionItem = ({
     subchapter,
@@ -37,11 +38,10 @@ const ExerciseAccordionItem = ({
     };
 
     const renderExerciseContent = (): JSX.Element => {
-        if (isLandingPageRevampOn) {
-            if (!isSubscribed) {
-                if (!isAuthenticated) return <>register dulu</>;
-                else if (!subchapter?.exercise?.is_free) return <Paywall />;
-            }
+        if (isLandingPageRevampOn && !isSubscribed) {
+            return (
+                <VideoPaywall header="Beli untuk mengakses latihan soal ini" />
+            );
         }
 
         return (
@@ -74,6 +74,11 @@ const ExerciseAccordionItem = ({
             <Modal
                 isOpen={openWorksheetInfo}
                 setOpen={setOpenWorksheetInfo}
+                className={cn(
+                    isLandingPageRevampOn &&
+                        !isSubscribed &&
+                        'max-w-screen-md xl:max-w-screen-lg'
+                )}
                 variant="dark">
                 {renderExerciseContent()}
             </Modal>

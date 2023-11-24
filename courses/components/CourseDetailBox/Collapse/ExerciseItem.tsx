@@ -1,5 +1,4 @@
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
-import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Pen from 'commons/components/elements/Icons/Pen';
 import Modal from 'commons/components/modules/Modal';
 import { cn } from 'commons/utils';
@@ -9,12 +8,10 @@ import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { HiLockClosed } from 'react-icons/hi';
-import { useSelector } from 'react-redux';
 
 const ExerciseItem = ({ value }: { value: SubChapter }): JSX.Element => {
     const router = useRouter();
     const { is_subscribed } = useCourseSubscription();
-    const isAuthenticated = useSelector(getIsAuthenticated);
     const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
         'landing-page-revamp'
     );
@@ -22,14 +19,10 @@ const ExerciseItem = ({ value }: { value: SubChapter }): JSX.Element => {
 
     const [openWorksheetInfo, setOpenWorksheetInfo] = useState<boolean>(false);
     const renderExerciseContent = (): JSX.Element => {
-        if (isLandingPageRevampOn) {
-            if (!is_subscribed) {
-                if (!isAuthenticated) return <>register dulu</>;
-                else if (!value.is_free)
-                    return (
-                        <VideoPaywall header="Beli untuk mengakses latihan soal ini" />
-                    );
-            }
+        if (isLandingPageRevampOn && !is_subscribed) {
+            return (
+                <VideoPaywall header="Beli untuk mengakses latihan soal ini" />
+            );
         }
 
         return (
@@ -75,8 +68,6 @@ const ExerciseItem = ({ value }: { value: SubChapter }): JSX.Element => {
                 className={cn(
                     isLandingPageRevampOn &&
                         !is_subscribed &&
-                        isAuthenticated &&
-                        !value.is_free &&
                         'max-w-screen-md xl:max-w-screen-lg'
                 )}
                 variant="dark">
