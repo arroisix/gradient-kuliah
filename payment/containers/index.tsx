@@ -7,7 +7,7 @@ import { usePayment } from '../contexts/PaymentProvider';
 import { useEffect, useRef } from 'react';
 import MethodListBox from '../components/MethodListBox';
 import MethodBox from 'payment/components/MethodBox';
-import { MdOutlineQrCodeScanner } from 'react-icons/md';
+// import { MdOutlineQrCodeScanner } from 'react-icons/md';
 
 const SubscriptionContainer = (): JSX.Element => {
     const otherPaymentMethodRef = useRef<HTMLDivElement>(null);
@@ -56,11 +56,13 @@ const SubscriptionContainer = (): JSX.Element => {
                             </MethodBox>
                         </MethodListBox>
                         <MethodListBox
-                            title="E-Wallet / QRIS"
+                            // TODO (angga)
+                            // title="E-Wallet / QRIS"
+                            title="E-Wallet"
                             icon={
                                 <AiOutlineMobile className="mr-2 text-base" />
                             }>
-                            <MethodBox paymentMethod="QRIS">
+                            {/* <MethodBox paymentMethod="QRIS">
                                 <div className="flex flex-col items-center text-neutral-900">
                                     <MdOutlineQrCodeScanner
                                         size={24}
@@ -68,8 +70,8 @@ const SubscriptionContainer = (): JSX.Element => {
                                     />
                                     <div className="text-sm">Scan QRIS</div>
                                 </div>
-                            </MethodBox>
-                            <MethodBox paymentMethod="GOPAY" />
+                            </MethodBox> */}
+                            {/* <MethodBox paymentMethod="GOPAY" /> */}
                             <MethodBox paymentMethod="ID_DANA" />
                             <MethodBox paymentMethod="ID_OVO" />
                             <MethodBox paymentMethod="ID_SHOPEEPAY" />
