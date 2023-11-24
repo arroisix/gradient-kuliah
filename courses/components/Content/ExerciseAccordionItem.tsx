@@ -37,14 +37,6 @@ const ExerciseAccordionItem = ({
     };
 
     const renderExerciseContent = (): JSX.Element => {
-        console.log(
-            '🚀 ~ file: ExerciseAccordionItem.tsx:41 ~ renderExerciseContent ~ props:',
-            {
-                isFree: subchapter?.exercise?.is_free,
-                isSubscribed,
-                isAuthenticated
-            }
-        );
         if (isLandingPageRevampOn) {
             if (!isSubscribed) {
                 if (!isAuthenticated) return <>register dulu</>;

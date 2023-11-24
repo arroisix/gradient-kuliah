@@ -25,7 +25,7 @@ const DashboardContent = (): JSX.Element => {
         !isAuthenticated ? skipToken : undefined
     );
     const { data: pricingData, isLoading: isLoadingPricingData } =
-        useGetPacketOfferQuery();
+        useGetPacketOfferQuery(is_subscribed ? skipToken : undefined);
 
     const isShowRecommendedMaterials =
         isLandingPageRevampOn &&
