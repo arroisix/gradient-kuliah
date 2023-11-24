@@ -15,6 +15,7 @@ interface InputProps {
     disabled?: boolean;
     error?: string;
     required?: boolean;
+    autoComplete?: string;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -30,7 +31,8 @@ const Input: React.FC<InputProps> = ({
     endAddorment,
     disabled,
     error,
-    required
+    required,
+    autoComplete
 }) => (
     <div className="flex flex-col w-full gap-1 font-body">
         {label && <span className="text-[#999999] text-sm">{label}</span>}
@@ -50,6 +52,7 @@ const Input: React.FC<InputProps> = ({
                 name={name}
                 disabled={disabled}
                 required={required}
+                autoComplete={autoComplete}
             />
             <div>{endAddorment}</div>
         </div>

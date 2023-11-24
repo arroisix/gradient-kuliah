@@ -63,6 +63,33 @@ export const authApi = baseApi.injectEndpoints({
                 method: 'POST',
                 body: data
             })
+        }),
+        passwordResetValidateToken: builder.mutation<
+            { status: string },
+            { token: string }
+        >({
+            query: (body) => ({
+                url: `${AUTH_BASE_URL}password-reset/validate-token/`,
+                method: 'POST',
+                body
+            })
+        }),
+        passwordResetConfirm: builder.mutation<
+            { status: string },
+            { token: string; password: string }
+        >({
+            query: (body) => ({
+                url: `${AUTH_BASE_URL}password-reset/confirm/`,
+                method: 'POST',
+                body
+            })
+        }),
+        passwordReset: builder.mutation<{ status: string }, { email: string }>({
+            query: (body) => ({
+                url: `${AUTH_BASE_URL}password-reset/`,
+                method: 'POST',
+                body
+            })
         })
     })
 });
@@ -74,5 +101,8 @@ export const {
     useUpdateUserMutation,
     useGetRegisterReferenceQuery,
     useGetProfileQuery,
-    useCheckUsernameAvailabilityMutation
+    useCheckUsernameAvailabilityMutation,
+    usePasswordResetValidateTokenMutation,
+    usePasswordResetConfirmMutation,
+    usePasswordResetMutation
 } = authApi;
