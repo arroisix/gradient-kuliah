@@ -129,10 +129,10 @@ const RevampedFeature = (): JSX.Element => {
                     </p>
                     <div className="mx-auto mt-6 mb-2">
                         <Image
-                            src={`${CDN_URL}/assets/feature-chatbot-revamp.png`}
+                            src={`${CDN_URL}/assets/feature-chatbot.png`}
                             loading="lazy"
-                            width={303}
-                            height={198}
+                            width={276}
+                            height={181}
                         />
                     </div>
                 </div>
