@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Description from './Description';
 import CourseDetailBox from '../CourseDetailBox';
 import QnaSection from '../LearningExperience/QnaSection';
@@ -14,11 +14,16 @@ const CourseSummary = (): JSX.Element => {
     const router = useRouter();
     const { subchapter } = useLearning();
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { isMobileBreakpoints } = useWindowBreakpoints();
+    const { isDesktopBreakpoints } = useWindowBreakpoints();
 
     const [navigation, setNavigation] = useState<
         'DESCRIPTION' | 'DISCUSSION' | 'COURSE'
-    >(isMobileBreakpoints ? 'COURSE' : 'DESCRIPTION');
+    >('DESCRIPTION');
+
+    useEffect(() => {
+        if (!isDesktopBreakpoints) setNavigation('COURSE');
+        else setNavigation('DESCRIPTION');
+    }, [isDesktopBreakpoints]);
 
     return (
         <div className="flex flex-col gap-5 pt-8 pb-12 bg-[#121212]">
