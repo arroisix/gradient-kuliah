@@ -50,11 +50,11 @@ const DashboardContent = (): JSX.Element => {
                     </div>
                 </div>
                 <Button
-                    href="/kelas"
+                    href="/komunitas"
                     variant="custom"
                     eventName="Click Community Card"
                     className="text-center text-white bg-black whitespace-nowrap">
-                    Buat Pertanyaan GRATIS
+                    Buat Pertanyaan Gratis
                 </Button>
             </div>
             <div className="w-full space-y-6">
