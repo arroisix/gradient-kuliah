@@ -41,9 +41,6 @@ const ListOfContentsSidebar = (): JSX.Element => {
                     className="text-[#333333] hover:text-black dark:hover:text-white cursor-pointer"
                     onClick={() => {
                         setNavigation('CLOSE');
-                        tracker?.genericTrack(
-                            'Close Books List of Content Menu'
-                        );
                     }}
                 />
             </div>
