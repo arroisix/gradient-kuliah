@@ -9,9 +9,9 @@ const IndonesiaMapCTA = (): JSX.Element => {
         <Container className="flex flex-col items-center gap-6 md:gap-12 md:flex-row py-9 md:py-24">
             <div>
                 <Image
-                    src={`${CDN_URL}/assets/indonesia_asset.png`}
-                    width={676}
-                    height={263}
+                    src={`${CDN_URL}/assets/indonesia-asset.png`}
+                    width={870}
+                    height={339}
                 />
             </div>
             <div className="flex flex-col items-center gap-3 text-center md:py-4 md:gap-5 md:text-left md:items-start">
