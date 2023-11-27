@@ -113,26 +113,32 @@ const LandingPageOrchestrator = ({
     return (
         <>
             <CourseDetail slug={id} />
-            {((!is_subscribed && isDoneFetchingSubcription) ||
-                !isAuthenticated) &&
-            isLandingPageRevampOn ? (
-                <div className="flex flex-col items-center justify-center w-screen sm:w-auto ">
-                    <Paywall
+            {(!is_subscribed && isDoneFetchingSubcription) ||
+            !isAuthenticated ? (
+                isLandingPageRevampOn ? (
+                    <div className="flex flex-col items-center justify-center w-screen sm:w-auto ">
+                        <Paywall
+                            pricingData={packetOffer}
+                            isCarousel={!isDesktopBreakpoints}
+                            redirect={router.asPath}
+                            className="w-screen sm:w-auto"
+                            highlightedClassName="!order-none"
+                            pricingClassName="max-w-[18rem] sm:max-w-xs"
+                            ctaEventName="Pricing Button on Course Landing Page"
+                        />
+                    </div>
+                ) : (
+                    <Pricing
                         pricingData={packetOffer}
-                        isCarousel={!isDesktopBreakpoints}
-                        redirect={router.asPath}
-                        className="w-screen sm:w-auto"
-                        highlightedClassName="!order-none"
-                        pricingClassName="max-w-[18rem] sm:max-w-xs"
                         ctaEventName="Pricing Button on Course Landing Page"
+                        ctaEventPayload={{
+                            'Course Slug': id,
+                            Variant: 'JUN 2023'
+                        }}
                     />
-                </div>
+                )
             ) : (
-                <Pricing
-                    pricingData={packetOffer}
-                    ctaEventName="Pricing Button on Course Landing Page"
-                    ctaEventPayload={{ 'Course Slug': id, Variant: 'JUN 2023' }}
-                />
+                <></>
             )}
         </>
     );
