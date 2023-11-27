@@ -15,7 +15,7 @@ const LANDING_PAGE_REVAMP_NOV_2023 = [
 ];
 
 export interface Tracker {
-    trackPageView(pageName: string, query?: Record<string, any>): void;
+    trackPageView(pageName: string, query?: Record<string, unknown>): void;
     identify(info: {
         email: string;
         fullName: string;
@@ -23,16 +23,16 @@ export interface Tracker {
         isSubscribed: boolean;
     }): void;
     reset(): void;
-    genericTrack(eventName: string, payload?: Record<string, any>): void;
+    genericTrack(eventName: string, payload?: Record<string, unknown>): void;
     trackButtonClick(
         eventName: string,
         buttonTextContent: string,
-        payload?: Record<string, any>
+        payload?: Record<string, unknown>
     ): void;
     trackAttemptFormSubmit(
         eventName: string,
-        formPayload: Record<string, any>,
-        payload?: Record<string, any>
+        formPayload: Record<string, unknown>,
+        payload?: Record<string, unknown>
     ): void;
 }
 
