@@ -67,7 +67,7 @@ const QuestionTextArea = (): JSX.Element => {
                 values
             }) => (
                 <form
-                    className="flex justify-start gap-2"
+                    className="flex flex-col justify-start gap-2 sm:flex-row"
                     onSubmit={handleSubmit}>
                     <QnaTextArea
                         placeholder="Punya pertanyaan terkait materi?"
