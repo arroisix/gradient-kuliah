@@ -145,13 +145,15 @@ const Navbar = ({
             onMouseLeave={onMouseLeaveNavbar}>
             <div className="flex items-center justify-between w-full px-4 py-4 md:px-6">
                 <div className="flex items-center gap-4">
-                    {isAuthenticated && isShowHamburgerMenu() && (
-                        <FiMenu
-                            className="md:hidden"
-                            stroke="#666666"
-                            onClick={() => setOpenSidebar(true)}
-                        />
-                    )}
+                    {(isLandingPageRevampOn ||
+                        (!isLandingPageRevampOn && isAuthenticated)) &&
+                        isShowHamburgerMenu() && (
+                            <FiMenu
+                                className="md:hidden"
+                                stroke="#666666"
+                                onClick={() => setOpenSidebar(true)}
+                            />
+                        )}
                     <Link href={'/'}>
                         <span className="text-2xl font-bold cursor-pointer font-[Urbanist]">
                             {isMobileBreakpoints ? 'G' : 'Gradient'}

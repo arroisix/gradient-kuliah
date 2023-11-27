@@ -11,7 +11,8 @@ const MobileTabs = (): JSX.Element => {
         <div className="relative flex justify-between w-full overflow-hidden">
             <span
                 className={`text-center text-sm w-1/2 py-[6px] border-b-2 ${
-                    pathname === '/komunitas'
+                    pathname === '/komunitas' ||
+                    pathname === '/komunitas/public'
                         ? 'border-accent-purple font-bold'
                         : 'border-[#2D2D2D] font-medium text-neutral-600'
                 }`}

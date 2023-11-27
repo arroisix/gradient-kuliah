@@ -24,6 +24,7 @@ const KomunitasContainer = (): JSX.Element => {
     const { isMobileBreakpoints, isTabletBreakpoints } = useWindowBreakpoints();
     const router = useRouter();
     const { pathname } = router;
+    const { ask } = router.query;
     const loadingTransition = useTransition(router);
     const anchor = useRef({} as HTMLDivElement);
 
@@ -57,6 +58,10 @@ const KomunitasContainer = (): JSX.Element => {
             setPage(dataHome?.next_page as number);
         }
     }, [isAnchorOnScreen]);
+
+    useEffect(() => {
+        if (ask === 'true') setShowForm(true);
+    }, [ask]);
 
     async function handleSubmit(
         formContent: string,
@@ -160,7 +165,7 @@ const KomunitasContainer = (): JSX.Element => {
                     )}
                 </div>
 
-                {isMobileBreakpoints || (isTabletBreakpoints && <MobileTabs />)}
+                {(isMobileBreakpoints || isTabletBreakpoints) && <MobileTabs />}
                 <div className="flex items-center justify-between">
                     <h2 className="hidden font-extrabold md:block">
                         {pathname.includes('pertanyaan-ku')

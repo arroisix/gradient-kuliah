@@ -3,6 +3,8 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import GradientIcon from 'commons/components/GradientIcon';
 import Button from 'commons/components/elements/Button';
 import { AUTHENTICATION_ROUTE } from 'commons/constants';
+import { queryParamBuilder } from 'commons/utils';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
@@ -11,6 +13,7 @@ type CommunityBannerProps = {
 };
 
 const CommunityBanner = ({ askNow }: CommunityBannerProps): JSX.Element => {
+    const router = useRouter();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
         'landing-page-revamp'
@@ -36,7 +39,13 @@ const CommunityBanner = ({ askNow }: CommunityBannerProps): JSX.Element => {
                 eventPayload={
                     isLandingPageRevampOn ? { Variant: 'NOV 2023' } : {}
                 }
-                href={isAuthenticated ? undefined : AUTHENTICATION_ROUTE}
+                href={
+                    isAuthenticated
+                        ? undefined
+                        : `${AUTHENTICATION_ROUTE}?${queryParamBuilder({
+                              redirect: router.asPath + '?ask=true'
+                          })}`
+                }
                 onClick={isAuthenticated ? askNow : undefined}>
                 {!isAuthenticated ? 'Buat Pertanyaan Gratis' : 'Tanya Sekarang'}
             </Button>

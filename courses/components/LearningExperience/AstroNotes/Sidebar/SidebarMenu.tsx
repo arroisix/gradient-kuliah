@@ -6,11 +6,13 @@ import { useTracker } from 'tracker/tracker';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 const SidebarMenu = ({ className }: PropsWithClassName): JSX.Element => {
     const tracker = useTracker();
     const router = useRouter();
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const { is_subscribed } = useCourseSubscription();
 
     const {
         navigation,
@@ -37,10 +39,18 @@ const SidebarMenu = ({ className }: PropsWithClassName): JSX.Element => {
                         <a
                             className={cn(
                                 'tooltip tooltip-right p-1.5 rounded-btn',
-                                navigation === menu.value && 'active'
+                                navigation === menu.value && 'active',
+                                !is_subscribed &&
+                                    !PUBLIC_ASTRONOTES_MENU.includes(menu) &&
+                                    '[&_svg]:opacity-20'
                             )}
                             data-tip={menu.label}
                             onClick={() => {
+                                if (
+                                    !is_subscribed &&
+                                    !PUBLIC_ASTRONOTES_MENU.includes(menu)
+                                )
+                                    return;
                                 if (menu.eventNames) {
                                     switch (menu.value) {
                                         case 'LIST_CONTENT':
