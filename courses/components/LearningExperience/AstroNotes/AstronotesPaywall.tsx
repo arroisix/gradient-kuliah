@@ -33,13 +33,15 @@ const AstronotesPaywall = (): JSX.Element => {
 
     return isShowPaywall ? (
         <div
-            className={cn('relative sm:absolute sm:-inset-2 backdrop-blur-lg')}>
+            className={cn(
+                'relative sm:absolute sm:-inset-2 backdrop-blur-lg lg:inset-0'
+            )}>
             <div
                 className={cn(
-                    'flex flex-col items-center justify-center w-screen -mx-4 sm:w-auto sm:mx-0 md:sticky ',
+                    'flex flex-col items-center justify-center w-screen -mx-4 sm:w-auto sm:mx-0 md:sticky',
                     isTabletBreakpoints && height < 700
                         ? 'md:top-20'
-                        : 'md:top-1/2 md:py-24 md:-translate-y-1/2'
+                        : 'md:top-1/2 md:py-24 md:-translate-y-1/2 lg:top-auto lg:transform-none'
                 )}>
                 <h2 className="mb-4 text-xl font-extrabold leading-relaxed text-center">
                     Beli untuk melihat rangkuman ini

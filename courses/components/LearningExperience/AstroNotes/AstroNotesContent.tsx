@@ -68,34 +68,35 @@ const AstroNotesContent = (): JSX.Element => {
 
     if (data)
         return (
-            <div
-                // TODO(angga): removed until higher in priority
-                // onMouseUp={handleHighlight}
-                // onMouseOverCapture={handleHover}
-                className="relative"
-                aria-hidden>
-                <ReactMarkdown
-                    className={cn(
-                        'markdown-table markdown-overflow-break-word markdown-blue-link markdown-img-max-height markdown-body astronotes',
-                        fontClassName[fontStyle],
-                        {
-                            'hidden md:block': !(
-                                !isLandingPageRevampOn ||
-                                is_subscribed ||
-                                Number(page) == 1
-                            )
-                        },
-                        smallText
-                            ? 'text-xs sm:text-sm'
-                            : 'text-sm sm:text-base'
-                    )}
-                    remarkPlugins={[remarkMath, remarkGfm]}
-                    rehypePlugins={[rehypeKatex, rehypeRaw]}
-                    linkTarget={'_blank'}>
-                    {data?.page_content}
-                </ReactMarkdown>
+            <>
+                <div
+                    // TODO(angga): removed until higher in priority
+                    // onMouseUp={handleHighlight}
+                    // onMouseOverCapture={handleHover}
+                    aria-hidden>
+                    <ReactMarkdown
+                        className={cn(
+                            'markdown-table markdown-overflow-break-word markdown-blue-link markdown-img-max-height markdown-body astronotes',
+                            fontClassName[fontStyle],
+                            {
+                                'hidden md:block': !(
+                                    !isLandingPageRevampOn ||
+                                    is_subscribed ||
+                                    Number(page) == 1
+                                )
+                            },
+                            smallText
+                                ? 'text-xs sm:text-sm'
+                                : 'text-sm sm:text-base'
+                        )}
+                        remarkPlugins={[remarkMath, remarkGfm]}
+                        rehypePlugins={[rehypeKatex, rehypeRaw]}
+                        linkTarget={'_blank'}>
+                        {data?.page_content}
+                    </ReactMarkdown>
+                </div>
                 <AstronotesPaywall />
-            </div>
+            </>
         );
 
     return <></>;
