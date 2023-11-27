@@ -3,6 +3,7 @@ import { MdHistory, MdLogout, MdOutlinePersonOutline } from 'react-icons/md';
 import { removeUser } from 'authentication/redux/slices/userSlice';
 import { useDispatch } from 'react-redux';
 import { HiOutlineUsers } from 'react-icons/hi';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 interface MobileNavbarProps {
     openMobile: boolean;
@@ -16,6 +17,7 @@ const MobileNavbar = ({
     lightMode
 }: MobileNavbarProps): JSX.Element => {
     const dispatch = useDispatch();
+    const { is_subscribed } = useCourseSubscription();
 
     return openMobile ? (
         <>
@@ -53,19 +55,21 @@ const MobileNavbar = ({
                                 </div>
                             </div>
                         </Link>
-                        <Link href={'/referral'}>
-                            <div
-                                className={`flex ${
-                                    lightMode ? 'text-black' : 'text-white'
-                                } hover:text-accent-blue font-normal w-full items-center mb-4`}>
-                                <div>
-                                    <HiOutlineUsers className="text-xl" />
+                        {is_subscribed && (
+                            <Link href={'/referral'}>
+                                <div
+                                    className={`flex ${
+                                        lightMode ? 'text-black' : 'text-white'
+                                    } hover:text-accent-blue font-normal w-full items-center mb-4`}>
+                                    <div>
+                                        <HiOutlineUsers className="text-xl" />
+                                    </div>
+                                    <div className="w-full ml-4">
+                                        <p className="text-base">Referral</p>
+                                    </div>
                                 </div>
-                                <div className="w-full ml-4">
-                                    <p className="text-base">Referral</p>
-                                </div>
-                            </div>
-                        </Link>
+                            </Link>
+                        )}
                         <div
                             className="flex items-center w-full font-normal text-accent-orange hover:text-state-error"
                             onClick={() => dispatch(removeUser())}
