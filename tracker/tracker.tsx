@@ -7,6 +7,13 @@ import React, {
     useState
 } from 'react';
 
+const LANDING_PAGE_REVAMP_NOV_2023 = [
+    '/landing-revamp',
+    '/komunitas/public',
+    '/komunitas/[id]',
+    '/dashboard'
+];
+
 export interface Tracker {
     trackPageView(pageName: string, query?: Record<string, any>): void;
     identify(info: {
@@ -37,16 +44,20 @@ const useTrackPageView = (
     const router = useRouter();
 
     useLayoutEffect(() => {
+        let eventPayload = router.query;
+        if (LANDING_PAGE_REVAMP_NOV_2023.includes(router.pathname))
+            eventPayload = { ...eventPayload, Variant: 'NOV 2023' };
+
         // track initial page visit
         if (!firstPageVisit && router.isReady && pageComponentName) {
-            tracker.trackPageView(pageComponentName, router.query);
+            tracker.trackPageView(pageComponentName, eventPayload);
             setFirstPageVisit(true);
         }
 
         // track subsequent page visit
-        const handleRouteChange = () => {
+        const handleRouteChange = (): void => {
             if (router.isReady && pageComponentName) {
-                tracker.trackPageView(pageComponentName, router.query);
+                tracker.trackPageView(pageComponentName, eventPayload);
             }
         };
         router.events.on('routeChangeComplete', handleRouteChange);
