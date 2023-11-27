@@ -1,6 +1,5 @@
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
 import { cn } from 'commons/utils';
-import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Dispatch, SetStateAction } from 'react';
@@ -26,8 +25,6 @@ const MobileSidebar = ({
     const route = useRouter();
     const tracker = useTracker();
     const { pathname } = route;
-    const { is_subscribed } = useCourseSubscription();
-
     const { data: configData } = useGetConfigQuery();
 
     return openSidebar ? (
@@ -65,23 +62,22 @@ const MobileSidebar = ({
                         Home
                     </span>
                 </Link>
-                {configData?.configs.is_community_config_enabled &&
-                    is_subscribed && (
-                        <span
-                            className={`flex items-center gap-4 cursor-pointer ${
-                                pathname === '/komunitas'
-                                    ? 'text-[#CCCCCC]'
-                                    : 'text-[#666666]'
-                            }  hover:text-[#999999]`}
-                            onClick={() => {
-                                route.push('/komunitas');
-                            }}
-                            aria-hidden>
-                            <RiQuestionnaireLine size={20} />
-                            Komunitas
-                            <CommunityNotificationBadge />
-                        </span>
-                    )}
+                {configData?.configs.is_community_config_enabled && (
+                    <span
+                        className={`flex items-center gap-4 cursor-pointer ${
+                            pathname === '/komunitas'
+                                ? 'text-[#CCCCCC]'
+                                : 'text-[#666666]'
+                        }  hover:text-[#999999]`}
+                        onClick={() => {
+                            route.push('/komunitas');
+                        }}
+                        aria-hidden>
+                        <RiQuestionnaireLine size={20} />
+                        Komunitas
+                        <CommunityNotificationBadge />
+                    </span>
+                )}
                 <Link href={'/kelas'}>
                     <span
                         className={`flex gap-4 cursor-pointer ${
