@@ -165,7 +165,7 @@ const KomunitasContainer = (): JSX.Element => {
                     )}
                 </div>
 
-                {isMobileBreakpoints || (isTabletBreakpoints && <MobileTabs />)}
+                {(isMobileBreakpoints || isTabletBreakpoints) && <MobileTabs />}
                 <div className="flex items-center justify-between">
                     <h2 className="hidden font-extrabold md:block">
                         {pathname.includes('pertanyaan-ku')
