@@ -72,7 +72,9 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
                 }
 
                 if (pathname !== '/mulai' && !is_subscribed) {
-                    window.location.href = '/';
+                    if (pathname === '/komunitas')
+                        window.location.href = '/langganan';
+                    else window.location.href = '/';
                     return;
                 }
 
