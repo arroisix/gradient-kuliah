@@ -56,9 +56,8 @@ const Recommendations = (): JSX.Element => {
                     <Button
                         href="/kelas"
                         variant="custom"
-                        size={isMobileBreakpoints ? 'small' : 'normal'}
                         eventName="Click 'Lihat Semua' in Video Section"
-                        className="text-black bg-white whitespace-nowrap">
+                        className="text-xs text-black bg-white whitespace-nowrap">
                         Lihat Semua
                     </Button>
                 </div>
@@ -91,9 +90,8 @@ const Recommendations = (): JSX.Element => {
                     <Button
                         href="/astronotes#bank-soal"
                         variant="custom"
-                        size={isMobileBreakpoints ? 'small' : 'normal'}
                         eventName="Click 'Lihat Semua' in Bank Soal Section"
-                        className="text-black bg-white whitespace-nowrap">
+                        className="text-xs text-black bg-white whitespace-nowrap">
                         Lihat Semua
                     </Button>
                 </div>
@@ -113,9 +111,8 @@ const Recommendations = (): JSX.Element => {
                     <Button
                         href="/astronotes"
                         variant="custom"
-                        size={isMobileBreakpoints ? 'small' : 'normal'}
                         eventName="Click 'Lihat Semua' in Rangkuman Section"
-                        className="text-black bg-white whitespace-nowrap">
+                        className="text-xs text-black bg-white whitespace-nowrap">
                         Lihat Semua
                     </Button>
                 </div>
