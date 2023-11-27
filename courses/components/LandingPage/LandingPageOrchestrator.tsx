@@ -23,8 +23,13 @@ import PriceHighlightStatprobSection from './Statprob/PriceHighlightStaprobSecti
 import BenefitStatprobSection from './Statprob/BenefitStatprobSection';
 import CourseDetail from '../CourseDetail';
 import Pricing from 'landing/components/Sections/pricing';
+import Pricing from 'landing/components/Sections/pricing';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { useFeatureIsOn } from '@growthbook/growthbook-react';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
+import Paywall from 'commons/components/elements/Paywall';
+import { useRouter } from 'next/router';
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import Paywall from 'commons/components/elements/Paywall';
@@ -102,10 +107,15 @@ const LandingPageOrchestrator = ({
     packetOffer: PacketOffer[];
 }): JSX.Element => {
     const router = useRouter();
+    const router = useRouter();
     const { is_subscribed, isDoneFetchingSubcription } =
         useCourseSubscription();
     const { isDesktopBreakpoints } = useWindowBreakpoints();
+    const { isDesktopBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
+        'landing-page-revamp'
+    );
     const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
         'landing-page-revamp'
     );
