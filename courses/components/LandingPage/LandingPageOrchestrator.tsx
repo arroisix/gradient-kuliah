@@ -26,8 +26,8 @@ import Pricing from 'landing/components/Sections/pricing';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
-import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import Paywall from 'commons/components/elements/Paywall';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { useRouter } from 'next/router';
 
 const COMPONENT_DICTIONARY: { [key in LandingPageSectionKey]: JSX.Element } = {
@@ -113,26 +113,32 @@ const LandingPageOrchestrator = ({
     return (
         <>
             <CourseDetail slug={id} />
-            {((!is_subscribed && isDoneFetchingSubcription) ||
-                !isAuthenticated) &&
-            isLandingPageRevampOn ? (
-                <div className="flex flex-col items-center justify-center w-screen sm:w-auto ">
-                    <Paywall
+            {(!is_subscribed && isDoneFetchingSubcription) ||
+            !isAuthenticated ? (
+                isLandingPageRevampOn ? (
+                    <div className="flex flex-col items-center justify-center w-screen sm:w-auto ">
+                        <Paywall
+                            pricingData={packetOffer}
+                            isCarousel={!isDesktopBreakpoints}
+                            redirect={router.asPath}
+                            className="w-screen sm:w-auto"
+                            highlightedClassName="!order-none"
+                            pricingClassName="max-w-[18rem] sm:max-w-xs"
+                            ctaEventName="Pricing Button on Course Landing Page"
+                        />
+                    </div>
+                ) : (
+                    <Pricing
                         pricingData={packetOffer}
-                        isCarousel={!isDesktopBreakpoints}
-                        redirect={router.asPath}
-                        className="w-screen sm:w-auto"
-                        highlightedClassName="!order-none"
-                        pricingClassName="max-w-[18rem] sm:max-w-xs"
                         ctaEventName="Pricing Button on Course Landing Page"
+                        ctaEventPayload={{
+                            'Course Slug': id,
+                            Variant: 'JUN 2023'
+                        }}
                     />
-                </div>
+                )
             ) : (
-                <Pricing
-                    pricingData={packetOffer}
-                    ctaEventName="Pricing Button on Course Landing Page"
-                    ctaEventPayload={{ 'Course Slug': id, Variant: 'JUN 2023' }}
-                />
+                <></>
             )}
         </>
     );

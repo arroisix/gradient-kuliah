@@ -32,7 +32,8 @@ const APPBAR_NAV: AppbarNav[] = [
 const Appbar = (): JSX.Element | null => {
     const router = useRouter();
     const isShowAppbar = (): boolean =>
-        DISPLAYED_ROUTES.includes(router.asPath);
+        DISPLAYED_ROUTES.includes(router.asPath) ||
+        DISPLAYED_ROUTES.includes(router.pathname);
 
     return isShowAppbar() ? (
         <div className="btm-nav bg-[#121212] md:hidden">
