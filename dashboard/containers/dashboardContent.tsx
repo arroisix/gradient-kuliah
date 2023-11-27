@@ -57,25 +57,27 @@ const DashboardContent = (): JSX.Element => {
                     Buat Pertanyaan Gratis
                 </Button>
             </div>
-            <div className="w-full space-y-6">
-                <h2 className="text-xl font-extrabold leading-relaxed text-center">
-                    Tertarik? Beli sekarang untuk mengakses seluruh materi
-                </h2>
-                {isLoadingPricingData && !pricingData ? (
-                    <div className="flex flex-col items-center justify-center gap-4 xl:flex-row xl:flex-nowrap">
-                        <Skeleton
-                            repeat={3}
-                            className="w-full max-w-xs md:max-w-sm h-96 !mb-0"
+            {!is_subscribed && (
+                <div className="w-full space-y-6">
+                    <h2 className="text-xl font-extrabold leading-relaxed text-center">
+                        Tertarik? Beli sekarang untuk mengakses seluruh materi
+                    </h2>
+                    {isLoadingPricingData && !pricingData ? (
+                        <div className="flex flex-col items-center justify-center gap-4 xl:flex-row xl:flex-nowrap">
+                            <Skeleton
+                                repeat={3}
+                                className="w-full max-w-xs md:max-w-sm h-96 !mb-0"
+                            />
+                        </div>
+                    ) : (
+                        <Paywall
+                            isCompact
+                            pricingData={pricingData?.data}
+                            ctaEventName="Click Pricing Button on Dashboard"
                         />
-                    </div>
-                ) : (
-                    <Paywall
-                        isCompact
-                        pricingData={pricingData?.data}
-                        ctaEventName="Click Pricing Button on Dashboard"
-                    />
-                )}
-            </div>
+                    )}
+                </div>
+            )}
         </div>
     ) : (
         <div className="flex flex-col lg:flex-row-reverse gap-[2rem]">
