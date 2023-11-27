@@ -11,8 +11,13 @@ const AstronoteBook = ({
     title,
     authors,
     rating,
-    education_level
-}: Astronote): JSX.Element => {
+    education_level,
+    eventName = 'Click Book Item on Library Page',
+    eventPayload
+}: Astronote & {
+    eventName?: string;
+    eventPayload?: Record<string, unknown>;
+}): JSX.Element => {
     const tracker = useTracker();
     const router = useRouter();
 
@@ -20,8 +25,9 @@ const AstronoteBook = ({
         <div
             className="flex flex-col h-full cursor-pointer"
             onClick={() => {
-                tracker?.genericTrack('Click Book Item on Library Page', {
-                    'Book Slug': slug
+                tracker?.genericTrack(eventName, {
+                    'Book Slug': slug,
+                    ...eventPayload
                 });
                 router.push(`/astronotes/${slug}/1`);
             }}

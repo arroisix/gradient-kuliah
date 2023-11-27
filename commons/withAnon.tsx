@@ -53,15 +53,13 @@ const withAnon = <P extends object>(
                                 }
                             }
                         }
-                    } else if (router.pathname === '/') {
-                        if (is_subscribed) {
-                            router.replace('/dashboard');
-                        } else {
-                            return <WrappedComponent {...(props as P)} />;
-                        }
+                    } else if (
+                        ['/', '/landing-revamp'].includes(router.pathname)
+                    ) {
+                        if (is_subscribed) router.replace('/dashboard');
                     }
+                    return <WrappedComponent {...(props as P)} />;
                 }
-
                 return <LoadingBackdrop />;
             }
             return <WrappedComponent {...(props as P)} />;

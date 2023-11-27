@@ -9,6 +9,9 @@ import { useState } from 'react';
 import WorksheetInfoModalContent from '../LearningExperience/ExamExercise/WorksheetInfoModal';
 import { useRouter } from 'next/router';
 import { AUTHENTICATION_ROUTE } from 'commons/constants';
+import { useFeatureIsOn } from '@growthbook/growthbook-react';
+import VideoPaywall from '../VideoPaywall';
+import { cn } from 'commons/utils';
 
 const ExerciseAccordionItem = ({
     subchapter,
@@ -20,15 +23,33 @@ const ExerciseAccordionItem = ({
     const isAuthenticated = useSelector(getIsAuthenticated);
     const [openWorksheetInfo, setOpenWorksheetInfo] = useState<boolean>(false);
     const { push } = useRouter();
+    const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
+        'landing-page-revamp'
+    );
 
     const decideOnClickAction = (): void => {
-        if (isAuthenticated) {
-            setOpenWorksheetInfo(true);
-        } else {
+        if (!isAuthenticated) {
             push(
                 `${AUTHENTICATION_ROUTE}?redirect=/kelas/${slug}/belajar/latihan/${chapterId}/${subchapter.id}`
             );
+        } else {
+            setOpenWorksheetInfo(true);
         }
+    };
+
+    const renderExerciseContent = (): JSX.Element => {
+        if (isLandingPageRevampOn && !isSubscribed) {
+            return (
+                <VideoPaywall header="Beli untuk mengakses latihan soal ini" />
+            );
+        }
+
+        return (
+            <WorksheetInfoModalContent
+                exercise_id={subchapter.exercise?.id as string}
+                packet_id={subchapter.exercise?.packet_id as string}
+            />
+        );
     };
 
     return (
@@ -53,11 +74,13 @@ const ExerciseAccordionItem = ({
             <Modal
                 isOpen={openWorksheetInfo}
                 setOpen={setOpenWorksheetInfo}
+                className={cn(
+                    isLandingPageRevampOn &&
+                        !isSubscribed &&
+                        'max-w-screen-md xl:max-w-screen-lg'
+                )}
                 variant="dark">
-                <WorksheetInfoModalContent
-                    exercise_id={subchapter.exercise?.id as string}
-                    packet_id={subchapter.exercise?.packet_id as string}
-                />
+                {renderExerciseContent()}
             </Modal>
         </>
     );

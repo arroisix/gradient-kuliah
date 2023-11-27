@@ -5,6 +5,8 @@ import ListOfContent from './Content/ListOfContent';
 import useWindowSize from 'commons/hooks/useWindowSize';
 import { useTrackSubchapterProgressMutation } from 'courses/redux/api/learningExperienceApi';
 import { getAllVideoChapter, isContentChapterExist } from 'courses/utils';
+import VideoPaywall from './VideoPaywall';
+import { useFeatureIsOn } from '@growthbook/growthbook-react';
 
 interface ContentBoxProps {
     slug: string;
@@ -28,6 +30,9 @@ const ContentBox = ({
     const isVideoContentExist = isContentChapterExist(chapters, 'video');
     const { width } = useWindowSize();
     const [track] = useTrackSubchapterProgressMutation();
+    const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
+        'landing-page-revamp'
+    );
 
     useEffect(() => {
         if (chapters) {
@@ -47,10 +52,10 @@ const ContentBox = ({
                 !isVideoContentExist && 'justify-center'
             }`}>
             {isVideoContentExist && (
-                <div className="w-full lg:w-2/3 h-full" id="video-section">
+                <div className="w-full h-full lg:w-2/3" id="video-section">
                     {videoPicked?.is_free || isSubscribed ? (
                         <div
-                            className="w-full bg-neutral-900 rounded"
+                            className="w-full rounded bg-neutral-900"
                             id="video">
                             <VideoPlayer
                                 height={width <= 768 ? '28vh' : undefined}
@@ -75,6 +80,8 @@ const ContentBox = ({
                                 }
                             />
                         </div>
+                    ) : isLandingPageRevampOn ? (
+                        <VideoPaywall />
                     ) : (
                         <NeedSubscribe thumbnail={thumbnail} />
                     )}

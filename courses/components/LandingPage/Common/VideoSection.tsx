@@ -8,6 +8,8 @@ import { useGetLandingCourseListContentQuery } from 'courses/redux/api/publicCou
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import SubscribeButton from './SubscribeButton';
 import useWindowSize from 'commons/hooks/useWindowSize';
+import VideoPaywall from 'courses/components/VideoPaywall';
+import { useFeatureIsOn } from '@growthbook/growthbook-react';
 
 interface VideoSectionProps {
     slug: string;
@@ -25,7 +27,9 @@ const VideoSection = ({ slug }: VideoSectionProps): JSX.Element => {
     );
     const [track] = useTrackSubchapterProgressMutation();
     const { width } = useWindowSize();
-
+    const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
+        'landing-page-revamp'
+    );
     useEffect(() => {
         if (content?.data) {
             const videoChapters = getAllVideoChapter(content?.data);
@@ -41,15 +45,15 @@ const VideoSection = ({ slug }: VideoSectionProps): JSX.Element => {
     if (isLoading || isLoadingContent) {
         return (
             <div className="w-screen py-16 flex-col px-4 md:px-[7.5rem] mb-16 h-[70vh] flex lg:flex-row gap-4">
-                <div className="w-full lg:w-2/3 h-1/2 lg:h-full bg-neutral-600 animate-pulse rounded-lg" />
-                <div className="w-full lg:w-1/3 h-full bg-neutral-600 animate-pulse rounded-lg" />
+                <div className="w-full rounded-lg lg:w-2/3 h-1/2 lg:h-full bg-neutral-600 animate-pulse" />
+                <div className="w-full h-full rounded-lg lg:w-1/3 bg-neutral-600 animate-pulse" />
             </div>
         );
     }
 
     return (
         <div className="w-screen py-16 flex-col px-4 md:px-[7.5rem] mb-16">
-            <h1 className="md:text-center text-2xl md:text-4xl font-bold text-center mb-4">
+            <h1 className="mb-4 text-2xl font-bold text-center md:text-center md:text-4xl">
                 Coba Gratis Video Belajar
             </h1>
             <div
@@ -58,7 +62,7 @@ const VideoSection = ({ slug }: VideoSectionProps): JSX.Element => {
                 }`}>
                 {isVideoContentExist && (
                     <div
-                        className="w-full lg:w-2/3 h-full flex items-center lg:rounded-l-xl overflow-hidden"
+                        className="flex items-center w-full h-full overflow-hidden lg:w-2/3 lg:rounded-l-xl"
                         id="video-section">
                         {videoPicked && videoPicked?.is_free ? (
                             <VideoPlayer
@@ -90,6 +94,8 @@ const VideoSection = ({ slug }: VideoSectionProps): JSX.Element => {
                                         : undefined
                                 }
                             />
+                        ) : isLandingPageRevampOn ? (
+                            <VideoPaywall />
                         ) : (
                             <NeedSubscribe thumbnail={'https://google.com'} />
                         )}
@@ -107,7 +113,7 @@ const VideoSection = ({ slug }: VideoSectionProps): JSX.Element => {
                     )}
                 </div>
             </div>
-            <div className="w-full flex justify-center items-center pt-8">
+            <div className="flex items-center justify-center w-full pt-8">
                 <SubscribeButton slug={slug} label="Akses Semua Video" />
             </div>
         </div>

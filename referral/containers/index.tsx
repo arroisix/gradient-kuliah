@@ -1,9 +1,12 @@
+import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
 import Coin from 'commons/components/elements/Icons/Coin';
 import Ticket from 'commons/components/elements/Icons/Ticket';
 import Skeleton from 'commons/components/elements/Skeleton';
 import { useRouter } from 'next/router';
 import { FaUserPlus } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import DisclosureTutorial from 'referral/components/DisclosureTutorial';
 import Menu from 'referral/components/Menu';
@@ -12,8 +15,10 @@ import { useTracker } from 'tracker/tracker';
 
 const ReferralContainer = (): JSX.Element => {
     const router = useRouter();
-
-    const { data, isLoading } = useGetReferralQuery();
+    const isAuthenticated = useSelector(getIsAuthenticated);
+    const { data, isLoading } = useGetReferralQuery(
+        !isAuthenticated ? skipToken : undefined
+    );
 
     function handleCopy(): void {
         navigator.clipboard.writeText(data?.referral_code ?? '');

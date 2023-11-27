@@ -1,108 +1,14 @@
 import Button from 'commons/components/elements/Button';
 import Skeleton from 'commons/components/elements/Skeleton';
 import Spinner from 'commons/components/elements/Spinner';
-import { useGetSubchapterQuery } from 'courses/redux/api/courseApi';
-import moment from 'moment';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { useState } from 'react';
 import { AiFillStar } from 'react-icons/ai';
-import { HiOutlineChevronDown, HiPlay } from 'react-icons/hi';
+import { HiOutlineChevronDown } from 'react-icons/hi';
 import { useTracker } from 'tracker/tracker';
-
-const ListSubchapter = ({
-    item,
-    onClick
-}: {
-    item:
-        | {
-              id: string;
-              subchapter_name: string;
-              order: string;
-              duration: string;
-              last_duration: string;
-          }
-        | SubChapter;
-    onClick?: () => void;
-}): JSX.Element => {
-    const router = useRouter();
-    const { id, chapter } = router.query;
-    const totalDuration = item?.duration
-        ?.split(':')
-        ?.reverse()
-        ?.reduce((prev, curr, i) => +prev + +curr * +Math.pow(60, i), 0);
-
-    return (
-        <div
-            key={item.id}
-            className="flex justify-between px-3 py-[10px] cursor-pointer bg-[#1D1D1D] hover:bg-[#272727] rounded"
-            onClick={() => {
-                onClick?.();
-                router.push(`/kelas/${id}/belajar/video/${chapter}/${item.id}`);
-            }}
-            aria-hidden>
-            <div className={`w-[80%] flex items-center gap-[10px]`}>
-                <div className="w-[18px] h-[18px]">
-                    <HiPlay size={18} className="text-[#FFFFFF33]" />
-                </div>
-                <span className="inline-block font-body text-xs whitespace-nowrap text-ellipsis overflow-hidden">
-                    {item.subchapter_name}
-                </span>
-            </div>
-            <div className="flex gap-1 font-body text-xs">
-                {item.duration && (
-                    <span className="inline-block text-[#FFFFFF80]">
-                        {moment
-                            .utc((totalDuration as number) * 1000)
-                            .format('mm:ss')}
-                    </span>
-                )}
-            </div>
-        </div>
-    );
-};
-
-const ChapterDetail = ({
-    chapterDetail,
-    setNavigation
-}: {
-    chapterDetail: CourseChapter;
-    setNavigation: Dispatch<SetStateAction<'SUBCHAPTER' | 'SEARCH_LIST'>>;
-}): JSX.Element => {
-    const { data, isLoading } = useGetSubchapterQuery(
-        {
-            chapterId: chapterDetail.chapter_id
-        },
-        { skip: !chapterDetail.chapter_id }
-    );
-
-    return (
-        <div className="flex flex-col gap-6">
-            <div className="flex items-center gap-3">
-                <HiOutlineChevronDown
-                    onClick={() => setNavigation('SEARCH_LIST')}
-                    size={18}
-                    className={`w-[18px] h-[18px] text-white rotate-90 cursor-pointer transition-all`}
-                />
-                <span className="inline-block font-extrabold text-sm">{`${chapterDetail.chapter_name} (${chapterDetail.subchapter_counts})`}</span>
-            </div>
-            {isLoading && (
-                <div className="flex flex-col gap-2 p-2">
-                    <Skeleton className="h-[30px] !m-0" />
-                    <Skeleton className="h-[30px] !m-0" />
-                    <Skeleton className="h-[30px] !m-0" />
-                </div>
-            )}
-            {!isLoading && (
-                <div className="flex flex-col gap-[14px] pb-[18px]">
-                    {data?.subchapters.map((item) => (
-                        <ListSubchapter key={item.id} item={item} />
-                    ))}
-                </div>
-            )}
-        </div>
-    );
-};
+import ChapterDetail from './ChapterDetail';
+import ListSubchapter from './ListSubchapter';
 
 const SearchList = ({
     searchQuery,
@@ -136,13 +42,7 @@ const SearchList = ({
     return (
         <>
             {isFetching && !isLoading && <Spinner size="small" />}
-            {isLoading && (
-                <>
-                    <Skeleton className="h-[30px]" />
-                    <Skeleton className="h-[30px]" />
-                    <Skeleton className="h-[30px]" />
-                </>
-            )}
+            {isLoading && <Skeleton className="h-[30px]" repeat={3} />}
             {!isLoading && navigation === 'SEARCH_LIST' && (
                 <>
                     <div className="pb-6 border-b border-[#2D2D2D]">
@@ -152,14 +52,14 @@ const SearchList = ({
                         <div className="flex flex-col gap-[10px]">
                             {searchResult?.subchapters.contents.length ===
                                 0 && (
-                                <span className="inline-block font-body text-xs">
+                                <span className="inline-block text-xs font-body">
                                     Video tidak ditemukan
                                 </span>
                             )}
                             {searchResult?.subchapters?.contents?.map(
                                 (value) => (
                                     <>
-                                        <span className="inline-block font-extrabold text-xs text-neutral-400">
+                                        <span className="inline-block text-xs font-extrabold text-neutral-400">
                                             {value.chapter}
                                         </span>
                                         <div className="flex flex-col gap-[14px]">
@@ -209,7 +109,7 @@ const SearchList = ({
                         </span>
                         <div className="flex flex-col gap-[14px]">
                             {searchResult?.books.contents.length === 0 && (
-                                <span className="inline-block font-body text-xs">
+                                <span className="inline-block text-xs font-body">
                                     Buku tidak ditemukan
                                 </span>
                             )}
@@ -241,11 +141,11 @@ const SearchList = ({
                                         className="object-contain rounded"
                                     />
                                     <div className="flex flex-col gap-[6px]">
-                                        <span className="inline-block font-body text-lg text-neutral-200">
+                                        <span className="inline-block text-lg font-body text-neutral-200">
                                             {value.title}
                                         </span>
                                         <div>
-                                            <span className="inline-block font-body text-base text-neutral-600">
+                                            <span className="inline-block text-base font-body text-neutral-600">
                                                 {`oleh ${value.authors}`}
                                             </span>
                                             <span className="flex items-center gap-[2px] font-body text-xs text-neutral-600">
@@ -288,7 +188,7 @@ const SearchList = ({
                         </span>
                         <div className="flex flex-col gap-[14px]">
                             {searchResult?.chapters.contents.length === 0 && (
-                                <span className="inline-block font-body text-xs">
+                                <span className="inline-block text-xs font-body">
                                     Bab tidak ditemukan
                                 </span>
                             )}
@@ -315,7 +215,7 @@ const SearchList = ({
                                         onClick={() => null}
                                         aria-hidden>
                                         <div className="w-[85%] flex items-center gap-2">
-                                            <span className="inline-block font-extrabold text-sm whitespace-nowrap text-ellipsis overflow-hidden">
+                                            <span className="inline-block overflow-hidden text-sm font-extrabold whitespace-nowrap text-ellipsis">
                                                 {value.chapter_name}
                                             </span>
                                         </div>

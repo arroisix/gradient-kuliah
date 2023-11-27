@@ -3,18 +3,34 @@ import Layout from 'commons/layout';
 import Image from 'next/image';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { subscriptionApi } from 'payment/redux/api/subscriptionApi';
+import { useDispatch } from 'react-redux';
 
 const SuccessCheckout = (): JSX.Element => {
     const router = useRouter();
+    const dispatch = useDispatch<any>();
+
     useEffect(() => {
-        const timer1 = setTimeout(
-            () => router.push('/dashboard?checkout=success'),
-            5000
-        );
+        const timer1 = setTimeout(() => {
+            const redirectUrl = (router.query.redirect ||
+                localStorage.getItem('redirect')) as string;
+
+            if (!!redirectUrl) {
+                const url = new URL(redirectUrl, window.location.href);
+                url.searchParams.append('checkout', 'success');
+                localStorage.removeItem('redirect');
+                router.push(url.toString());
+            } else router.push('/dashboard?checkout=success');
+            const getActiveSubscription = dispatch(
+                subscriptionApi.endpoints.getActiveSubscription.initiate()
+            );
+            getActiveSubscription.refetch();
+        }, 5000);
         return () => {
             clearTimeout(timer1);
         };
     }, []);
+
     return (
         <Layout>
             <section className="min-h-[75vh] pt-24 px-[7.5rem] flex justify-center items-center flex-col">

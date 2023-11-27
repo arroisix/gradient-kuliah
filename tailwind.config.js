@@ -55,7 +55,9 @@ module.exports = {
                 'gradient-purple-thin':
                     'radial-gradient(60% 60% at 50% 50%, rgba(95, 43, 206, 0.5) 0%, rgba(0, 0, 0, 0) 70%)',
                 'gradient-purple-pricing':
-                    'radial-gradient(146.27% 146.27% at 50% 50%, rgba(95, 43, 206, 0.3) 0%, rgba(0, 0, 0, 0) 100%)'
+                    'radial-gradient(146.27% 146.27% at 50% 50%, rgba(95, 43, 206, 0.3) 0%, rgba(0, 0, 0, 0) 100%)',
+                'gradient-highlighted-price':
+                    'linear-gradient(43.82deg, #cac7e4 0%, #ab8eec 28.4%, #dd837a 65.1%, #ecd0cd 100%)'
             },
             keyframes: {
                 slideLeft: {

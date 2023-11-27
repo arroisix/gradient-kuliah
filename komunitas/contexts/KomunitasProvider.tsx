@@ -1,7 +1,12 @@
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 import AuthContext from 'authentication/contexts/AuthProvider';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import {
     useGetCommunityPostDetailQuery,
     useGetCommunityPostQuery,
+    useGetPublicCommunityPostDetailQuery,
+    useGetPublicCommunityPostQuery,
+    useGetPublicSubjectCategoriesQuery,
     useGetSubjectCategoriesQuery,
     usePostQuestionAnswerMutation
 } from 'komunitas/redux/api/komunitasApi';
@@ -16,6 +21,7 @@ import {
     useMemo,
     useState
 } from 'react';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useTracker } from 'tracker/tracker';
 
@@ -88,15 +94,20 @@ export function KomunitasProvider({
         'LATEST' | 'POPULAR' | 'ANSWERED' | 'NOT_ANSWERED'
     >('LATEST');
 
-    const { data: subjects } = useGetSubjectCategoriesQuery(undefined, {
-        refetchOnMountOrArgChange: true
-    });
+    const isAuthenticated = useSelector(getIsAuthenticated);
+    const privateCategoryResult = useGetSubjectCategoriesQuery(
+        isAuthenticated ? undefined : skipToken,
+        { refetchOnMountOrArgChange: true }
+    );
+    const publicCategoryResult = useGetPublicSubjectCategoriesQuery(
+        isAuthenticated ? skipToken : undefined,
+        { refetchOnMountOrArgChange: true }
+    );
+    const { data: subjects } = isAuthenticated
+        ? privateCategoryResult
+        : publicCategoryResult;
 
-    const {
-        data,
-        isLoading: isLoadingDataHome,
-        refetch: refetchCommunity
-    } = useGetCommunityPostQuery(
+    const privateCommunityPostResult = useGetCommunityPostQuery(
         {
             sort_by: sort,
             category_id: filter,
@@ -108,20 +119,48 @@ export function KomunitasProvider({
         },
         {
             skip:
-                pathname !== '/komunitas' || pathname.includes('pertanyaan-ku')
+                !isAuthenticated ||
+                (pathname !== '/komunitas' || pathname.includes('pertanyaan-ku')
                     ? !profile?.user_id
-                    : false,
+                    : false),
             refetchOnMountOrArgChange: true
         }
     );
+    const publicCommunityPostResult = useGetPublicCommunityPostQuery(
+        {
+            sort_by: sort,
+            category_id: filter,
+            user_id: pathname.includes('pertanyaan-ku')
+                ? profile?.user_id
+                : undefined,
+            page: page,
+            search: searchState
+        },
+        {
+            skip: isAuthenticated || pathname.includes('pertanyaan-ku'),
+            refetchOnMountOrArgChange: true
+        }
+    );
+    const {
+        data,
+        isLoading: isLoadingDataHome,
+        refetch: refetchCommunity
+    } = isAuthenticated
+        ? privateCommunityPostResult
+        : publicCommunityPostResult;
 
-    const { data: question, isLoading: isLoadingQuestion } =
-        useGetCommunityPostDetailQuery(
-            {
-                slug: router.query.id as string
-            },
-            { skip: !router.query.id }
+    const privateCommunityPostDetailResult = useGetCommunityPostDetailQuery(
+        { slug: router.query.id as string },
+        { skip: !router.query.id || !isAuthenticated }
+    );
+    const publicCommunityPostDetailResult =
+        useGetPublicCommunityPostDetailQuery(
+            { slug: router.query.id as string },
+            { skip: !router.query.id || isAuthenticated }
         );
+    const { data: question, isLoading: isLoadingQuestion } = isAuthenticated
+        ? privateCommunityPostDetailResult
+        : publicCommunityPostDetailResult;
 
     const [postCommunity, { isLoading: isLoadingPost }] =
         usePostQuestionAnswerMutation();

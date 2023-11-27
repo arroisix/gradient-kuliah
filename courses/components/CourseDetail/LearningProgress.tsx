@@ -5,14 +5,16 @@ import SubscribeButton from '../LandingPage/Common/SubscribeButton';
 import { MdInfoOutline } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { useFeatureIsOn } from '@growthbook/growthbook-react';
+import { cn } from 'commons/utils';
 
 export const PercentageProgess = ({
     slug
 }: GradientBaseComponentWithSlug): JSX.Element => {
     const { completion_percentage } = useCourseSubscription(slug);
     return (
-        <div className="flex flex-col gap-2 w-full">
-            <div className="h-2 bg-gray-500 rounded-full w-full relative overflow-hidden">
+        <div className="flex flex-col w-full gap-2">
+            <div className="relative w-full h-2 overflow-hidden bg-gray-500 rounded-full">
                 <div
                     style={{
                         width: `${
@@ -26,7 +28,7 @@ export const PercentageProgess = ({
             </div>
             <div>
                 Progress Belajar:
-                <span className="font-semibold text-green-500 ml-2">
+                <span className="ml-2 font-semibold text-green-500">
                     {Math.round(
                         (completion_percentage?.total_finished_video /
                             completion_percentage?.total_video_count) *
@@ -48,19 +50,29 @@ const LearningProgress = ({
         expiryDay,
         latest_watch_video,
         isLoading,
-        first_video_in_course
+        first_video_in_course,
+        coursePreview
     } = useCourseSubscription(slug);
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
+        'landing-page-revamp'
+    );
 
     return (
-        <div className="flex flex-col gap-2 h-[70vh] justify-center relative">
-            <div className="flex absolute bottom-0 h-full w-screen">
+        <div
+            className={cn(
+                'flex flex-col gap-2 h-[70vh] relative',
+                isLandingPageRevampOn
+                    ? 'justify-end sm:justify-center'
+                    : 'justify-center'
+            )}>
+            <div className="absolute bottom-0 flex w-screen h-full">
                 <img
                     src={data?.cover}
                     className="object-cover object-top w-screen"
                     alt="Cover"
                 />
-                <div className="absolute h-20 w-screen self-end border-hidden outline-none mix-blend-multiply bg-gradient-to-b from-transparent to-black lg:h-40" />
+                <div className="absolute self-end w-screen h-20 outline-none border-hidden bg-gradient-to-b from-transparent to-[#101010] lg:h-32" />
             </div>
             <div className="px-4 md:px-[7.5rem] py-4 z-10 lg:max-w-[60vw] flex flex-col gap-2">
                 <div className="flex flex-col gap-2">
@@ -72,7 +84,7 @@ const LearningProgress = ({
                         }`}>
                         {data?.course_name}
                     </h1>
-                    <div className="h-px bg-gray-500 w-full lg:ml-3 lg:w-9/12" />
+                    <div className="w-full h-px bg-gray-500 lg:ml-3 lg:w-9/12" />
                     {isAuthenticated && (
                         <>
                             <div className="text-xs text-gray-500 lg:ml-3">
@@ -119,13 +131,38 @@ const LearningProgress = ({
                             </Button>
                         )
                     ) : (
-                        <SubscribeButton slug={slug} />
+                        <div className="flex flex-col gap-2 sm:items-center sm:gap-4 sm:flex-row">
+                            <SubscribeButton
+                                slug={slug}
+                                className={cn(
+                                    'whitespace-nowrap',
+                                    isLandingPageRevampOn && '!my-0 w-auto'
+                                )}
+                                eventName={
+                                    isLandingPageRevampOn
+                                        ? 'Click "Akses Sekarang" Button'
+                                        : undefined
+                                }
+                                label={`${
+                                    isLandingPageRevampOn ? 'Akses' : 'Gabung'
+                                } Sekarang`}
+                            />
+                            {isLandingPageRevampOn && (
+                                <Button
+                                    href={`/kelas/${slug}/belajar/video/${coursePreview?.chapter_id}/${coursePreview?.subchapter_id}`}
+                                    variant="custom"
+                                    eventName='Click "Tonton Preview" Button'
+                                    className="text-center bg-neutral-800 whitespace-nowrap">
+                                    Tonton Preview
+                                </Button>
+                            )}
+                        </div>
                     )}
                 </div>
                 {is_subscribed &&
                     (expiryDay <= 7 || new Date() <= new Date('2022-10-14')) &&
                     expiryDay < 30 && (
-                        <div className="flex mt-2 items-center gap-2">
+                        <div className="flex items-center gap-2 mt-2">
                             <MdInfoOutline className="text-xl" />
                             <h4 className="font-body">
                                 Waktu berlanggangan kamu akan segera habis dalam{' '}

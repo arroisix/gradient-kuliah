@@ -3,34 +3,46 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import Skeleton from 'commons/components/elements/Skeleton';
 import useOnScreen from 'commons/hooks/useOnScreen';
-import { useGetCourseDetailQuery } from 'courses/redux/api/courseApi';
+import {
+    useGetCourseDetailQuery,
+    useGetPublicSubchapterDetailQuery
+} from 'courses/redux/api/courseApi';
 import { useGetSubchapterDetailQuery } from 'courses/redux/api/privateCourseApi';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
 const Description = (): JSX.Element => {
     const router = useRouter();
     const { id, sub } = router.query;
     const anchor = useRef<HTMLDivElement>({} as HTMLDivElement);
     const isOnScreen = useOnScreen(anchor);
+    const isAuthenticated = useSelector(getIsAuthenticated);
 
     const { data: courseDetail } = useGetCourseDetailQuery(
         { slug: id as string },
         { skip: !id }
     );
-    const { data: subchapterDetail, isLoading } = useGetSubchapterDetailQuery(
+
+    const privateSubchapterDetails = useGetSubchapterDetailQuery(
         sub as string,
-        {
-            skip: !sub
-        }
+        { skip: !isAuthenticated || !sub }
     );
+    const publicSubchapterDetails = useGetPublicSubchapterDetailQuery(
+        sub as string,
+        { skip: !sub }
+    );
+    const { data: subchapterDetail, isLoading } = isAuthenticated
+        ? privateSubchapterDetails
+        : publicSubchapterDetails;
 
     return (
         <div className="flex flex-col lg:flex-row justify-between gap-4 lg:gap-[150px] px-5 md:px-16">
             <article>
                 {isLoading && <Skeleton className="!w-[200px] !h-[20px]" />}
-                <p className="font-body text-xs md:text-base">
+                <p className="text-xs font-body md:text-base">
                     {subchapterDetail?.video?.description !== '-' ? (
                         <ReactMarkdown
                             remarkPlugins={[remarkMath]}
@@ -108,7 +120,7 @@ const Description = (): JSX.Element => {
                     {!isOnScreen && (
                         <div className="w-full h-[40px] absolute left-0 bottom-[-1px] bg-gradient-to-b from-transparent to-[#121212] z-[1]"></div>
                     )}
-                    <span className="inline-block font-body text-neutral-600 text-xs md:text-base">
+                    <span className="inline-block text-xs font-body text-neutral-600 md:text-base">
                         PENGAJAR
                     </span>
                     <div className="flex flex-col gap-3 max-h-[200px] overflow-hidden">
@@ -117,7 +129,7 @@ const Description = (): JSX.Element => {
                                 (value) => (
                                     <div
                                         key={value.photo}
-                                        className="flex gap-3 items-center">
+                                        className="flex items-center gap-3">
                                         <Image
                                             src={value.photo}
                                             width={48}
@@ -128,7 +140,7 @@ const Description = (): JSX.Element => {
                                             <span className="inline-block font-body text-[#CCCCCC] text-xs md:text-base">
                                                 {value.name}
                                             </span>
-                                            <span className="inline-block font-extrabold text-xs md:text-base">
+                                            <span className="inline-block text-xs font-extrabold md:text-base">
                                                 {value.role}
                                             </span>
                                         </div>

@@ -1,4 +1,5 @@
 import { isNotNullAndUndefined } from 'commons/utils';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import {
     useGetBookProgressQuery,
     usePostBookmarksMutation
@@ -12,12 +13,15 @@ const BookmarkAstronotes = (): JSX.Element | null => {
     const router = useRouter();
     const { slug, page } = router?.query;
     const [isBookmarked, setIsBookmarked] = useState(false);
+    const { is_subscribed } = useCourseSubscription();
     const { data: bookProgressData, isLoading: isBookProgressLoading } =
         useGetBookProgressQuery(
             { slug: slug as string, page: page as unknown as number },
             {
                 skip:
-                    !isNotNullAndUndefined(slug) || !isNotNullAndUndefined(page)
+                    !is_subscribed ||
+                    !isNotNullAndUndefined(slug) ||
+                    !isNotNullAndUndefined(page)
             }
         );
 
@@ -27,6 +31,8 @@ const BookmarkAstronotes = (): JSX.Element | null => {
 
     const tracker = useTracker();
     const [postBookmark] = usePostBookmarksMutation();
+
+    if (!is_subscribed) return <></>;
 
     const handleBookmark = (): void => {
         const payload = {

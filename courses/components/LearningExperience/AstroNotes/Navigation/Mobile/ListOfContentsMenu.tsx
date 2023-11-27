@@ -1,19 +1,32 @@
 import Skeleton from 'commons/components/elements/Skeleton';
-import { useGetTableContentsQuery } from 'courses/redux/api/astronotesApi';
+import {
+    useGetPublicTableContentsQuery,
+    useGetTableContentsQuery
+} from 'courses/redux/api/astronotesApi';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { MdClose } from 'react-icons/md';
 import ChapterContentItem from '../../ListOfContents/ChapterContentItem';
 import { useAstronotes } from 'courses/contexts/AstronotesProvider';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
 const ListOfContentsMenu = (): JSX.Element => {
     const { setNavigation } = useAstronotes();
     const router = useRouter();
     const { slug } = router.query;
-    const { data, isLoading } = useGetTableContentsQuery(
+    const isAuthenticated = useSelector(getIsAuthenticated);
+    const privateQueryResult = useGetTableContentsQuery(
         { slug: slug as string },
-        { skip: !slug }
+        { skip: !isAuthenticated || !slug }
     );
+    const publicQueryResult = useGetPublicTableContentsQuery(
+        { slug: slug as string },
+        { skip: isAuthenticated || !slug }
+    );
+    const { data, isLoading } = isAuthenticated
+        ? privateQueryResult
+        : publicQueryResult;
 
     return (
         <dialog className="modal modal-bottom modal-open">

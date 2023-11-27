@@ -1,18 +1,27 @@
+import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Skeleton from 'commons/components/elements/Skeleton';
 import CategoryBookList from 'courses/components/LearningExperience/AstroNotes/CategoryBookList';
 import {
-    useGetBookCategoriesQuery,
-    useGetEntrypointBooksQuery
+    useGetEntrypointBooksQuery,
+    useGetPublicEntrypointBooksQuery
 } from 'courses/redux/api/astronotesApi';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const AstronotesEntrypoint = (): JSX.Element => {
     const [booksInProgress, setBooksInProgress] = useState<Astronote[]>([]);
-    const { data: astronotes, isLoading } = useGetEntrypointBooksQuery({
-        limit: 5
-    });
-    const { data: categories, isLoading: isLoadingCategories } =
-        useGetBookCategoriesQuery();
+    const isAuthenticated = useSelector(getIsAuthenticated);
+
+    const privateQueryResult = useGetEntrypointBooksQuery(
+        isAuthenticated ? { limit: 5 } : skipToken
+    );
+    const publicQueryResult = useGetPublicEntrypointBooksQuery(
+        isAuthenticated ? skipToken : { limit: 5 }
+    );
+    const { data: astronotes, isLoading } = isAuthenticated
+        ? privateQueryResult
+        : publicQueryResult;
 
     useEffect(() => {
         if (astronotes) {
@@ -31,7 +40,7 @@ const AstronotesEntrypoint = (): JSX.Element => {
         <div className="px-4 mx-auto space-y-10 md:px-0 max-w-screen-2xl">
             <h1 className="text-4xl font-bold md:text-5xl">Perpustakaan</h1>
             <div className="space-y-4 divide-y divide-neutral-500/30">
-                {isLoading || isLoadingCategories ? (
+                {isLoading ? (
                     <div className="py-4 space-y-6">
                         <Skeleton className="w-1/2" />
                         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 lg:gap-6">
@@ -51,14 +60,10 @@ const AstronotesEntrypoint = (): JSX.Element => {
                         )}
                         {astronotes?.map(
                             (category: AstronoteBooksByCategory) => {
-                                const categoryName =
-                                    categories?.find(
-                                        (c) => c.id === category.category_id
-                                    )?.name ?? '';
                                 return (
                                     <CategoryBookList
                                         key={category.category_id}
-                                        name={categoryName}
+                                        name={category.category_name}
                                         books={category.books}
                                     />
                                 );

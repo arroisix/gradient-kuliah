@@ -5,6 +5,7 @@ import Sidebar from './components/modules/Sidebar';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { cn } from './utils';
 import Appbar from './components/modules/Appbar';
+import { useFeatureIsOn } from '@growthbook/growthbook-react';
 
 interface LayoutProps {
     children?: JSX.Element;
@@ -24,11 +25,15 @@ const Layout = ({
     fullHeightSidebar
 }: LayoutProps): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
+        'landing-page-revamp'
+    );
 
     return (
         <div
             className={cn(
-                'relative w-screen min-h-screen text-white bg-neutral-1000',
+                'relative w-screen min-h-screen text-white',
+                isLandingPageRevampOn ? 'bg-[#101010]' : 'bg-neutral-1000',
                 paymentPage && 'flex flex-col'
             )}>
             <Navbar

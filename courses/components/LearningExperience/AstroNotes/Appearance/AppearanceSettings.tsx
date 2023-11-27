@@ -6,10 +6,17 @@ import { fontClassName } from 'courses/components/LearningExperience/AstroNotes/
 import { useAstronotes } from 'courses/contexts/AstronotesProvider';
 import { useTracker } from 'tracker/tracker';
 import { useRouter } from 'next/router';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { useFeatureIsOn } from '@growthbook/growthbook-react';
 
 const AppearanceSettings = (): JSX.Element => {
     const tracker = useTracker();
     const router = useRouter();
+    const { page } = router.query;
+    const { is_subscribed } = useCourseSubscription();
+    const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
+        'landing-page-revamp'
+    );
     const { fontStyle, setFontStyle, smallText, setSmallText } =
         useAstronotes();
     const { theme, toggleTheme } = useThemeContext();
@@ -21,22 +28,27 @@ const AppearanceSettings = (): JSX.Element => {
 
     return (
         <>
-            <div className="flex items-center justify-between">
-                <span className="inline-block font-body text-sm text-black dark:text-[#CCCCCC]">
-                    Tampilan Gelap
-                </span>
-                <Switch
-                    checked={theme === 'dark'}
-                    setChecked={(checked) => {
-                        tracker?.genericTrack('Toggle Color Theme Settings', {
-                            'Book Slug': router.query.slug,
-                            'Book Page Query': router.query.page,
-                            Theme: checked ? 'dark' : 'light'
-                        });
-                        toggleTheme();
-                    }}
-                />
-            </div>
+            {(!isLandingPageRevampOn || is_subscribed || Number(page) == 1) && (
+                <div className="flex items-center justify-between">
+                    <span className="inline-block font-body text-sm text-black dark:text-[#CCCCCC]">
+                        Tampilan Gelap
+                    </span>
+                    <Switch
+                        checked={theme === 'dark'}
+                        setChecked={(checked) => {
+                            tracker?.genericTrack(
+                                'Toggle Color Theme Settings',
+                                {
+                                    'Book Slug': router.query.slug,
+                                    'Book Page Query': router.query.page,
+                                    Theme: checked ? 'dark' : 'light'
+                                }
+                            );
+                            toggleTheme();
+                        }}
+                    />
+                </div>
+            )}
             <div className="inline-block font-body text-sm text-black dark:text-[#CCCCCC]">
                 Style
             </div>

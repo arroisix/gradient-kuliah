@@ -1,19 +1,19 @@
 import Button from 'commons/components/elements/Button';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
-import Container from 'landing/components/Container';
+import Container from 'landing/components/Sections/Container';
 import Image from 'next/image';
 import Link from 'next/link';
 
 const Hero = (): JSX.Element => {
     const { isMobileBreakpoints } = useWindowBreakpoints();
     return (
-        <Container className="relative flex flex-col gap-12 bg-gradient-purple pt-28 pb-16 md:pb-28 overflow-hidden">
+        <Container className="relative flex flex-col gap-12 pb-16 overflow-hidden bg-gradient-purple pt-28 md:pb-28">
             <div className="absolute w-screen h-[30%] bottom-0 left-[50%] translate-x-[-50%] bg-gradient-to-b from-transparent to-black z-[19]"></div>
-            <div className="w-full mx-auto flex flex-col">
+            <div className="flex flex-col w-full mx-auto">
                 <h1 className="text-2xl font-extrabold text-center whitespace-pre-line sm:text-4xl lg:text-5xl z-[1]">
                     {'Platform Belajar Kuliah \n No. 1 di Indonesia'}
                 </h1>
-                <Link href={'#pricing'} className="mx-auto z-10">
+                <Link href={'#pricing'} className="z-10 mx-auto">
                     <Button
                         variant="primary"
                         className="w-fit mt-[14px] lg:mt-6 sm:px-[47px] sm:py-2 font-sans text-xs sm:text-sm lg:text-base"

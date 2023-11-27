@@ -121,3 +121,24 @@ export function getDisplayName<P extends object>(
 ): string {
     return WrappedComponent.displayName || WrappedComponent.name || 'Component';
 }
+
+// Taken from https://stackoverflow.com/questions/5639346/what-is-the-shortest-function-for-reading-a-cookie-by-name-in-javascript
+export const getCookieValue = (name: string): string =>
+    document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || '';
+
+export const slugify = (str: string): string =>
+    str
+        .toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^\w-]+/g, '');
+
+export const queryParamBuilder = (
+    params: string | string[][] | Record<string, string> | URLSearchParams
+): string => {
+    // Create a new object with only non-empty properties
+    const params_ = Object.fromEntries(
+        Object.entries(params).filter((entry) => !!entry[1] || entry[1] === 0)
+    );
+    const searchParam = new URLSearchParams(params_);
+    return searchParam.toString();
+};

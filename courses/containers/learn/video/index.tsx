@@ -16,14 +16,26 @@ import AiModalFeedback from 'courses/components/LearningExperience/AiTutor/AiMod
 import { useTrackSubchapterProgressMutation } from 'courses/redux/api/learningExperienceApi';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import NeedSubscribe from 'courses/components/NeedSubscribe';
+import { useGetPublicSubchapterDetailQuery } from 'courses/redux/api/courseApi';
+import VideoPaywall from 'courses/components/VideoPaywall';
+import { useFeatureIsOn } from '@growthbook/growthbook-react';
 
 const VideoLearnContainer = (): JSX.Element => {
     const router = useRouter();
     const { sub, id } = router.query;
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { data, isLoading } = useGetSubchapterDetailQuery(sub as string, {
-        skip: sub === null || sub === undefined || !isAuthenticated
-    });
+    const privateSubchapterDetails = useGetSubchapterDetailQuery(
+        sub as string,
+        { skip: !sub || !isAuthenticated }
+    );
+    const publicSubchapterDetails = useGetPublicSubchapterDetailQuery(
+        sub as string,
+        { skip: !sub || isAuthenticated }
+    );
+    const { data, isLoading } = isAuthenticated
+        ? privateSubchapterDetails
+        : publicSubchapterDetails;
+
     const {
         learning_progress_id,
         isLoading: isLoadingSubscription,
@@ -38,10 +50,13 @@ const VideoLearnContainer = (): JSX.Element => {
         status: 'NOT_HELPING' | 'HELPING' | 'NOT_SELECTED';
         answer_id: string;
     }>({ status: 'NOT_SELECTED', answer_id: '' });
+    const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
+        'landing-page-revamp'
+    );
 
     return (
         <section className="relative pt-[64px] md:pt-[97px] pb-16 min-h-[100vh] flex flex-col gap-8">
-            <div className="w-full h-full flex gap-5 lg:gap-8 px-0 md:px-16">
+            <div className="flex w-full h-full gap-5 px-0 lg:gap-8 md:px-16">
                 <div
                     className="w-full lg:w-[70%] h-max md:rounded-lg md:overflow-hidden"
                     ref={videoRef}>
@@ -100,6 +115,8 @@ const VideoLearnContainer = (): JSX.Element => {
                                     }
                                 />
                             </div>
+                        ) : isLandingPageRevampOn ? (
+                            <VideoPaywall />
                         ) : (
                             <NeedSubscribe />
                         ))}
@@ -114,7 +131,7 @@ const VideoLearnContainer = (): JSX.Element => {
                     <div className="w-[30%] hidden lg:block h-[300px] bg-neutral-600 rounded-lg animate-pulse" />
                 )}
             </div>
-            <h2 className="font-extrabold text-base md:text-2xl px-5 md:px-16">
+            <h2 className="px-5 text-base font-extrabold md:text-2xl md:px-16">
                 {data?.subchapter_name}
             </h2>
             <CourseSummary />

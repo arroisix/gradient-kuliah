@@ -6,12 +6,17 @@ import PrivateCourses from './privateCourses';
 import PublicCourses from './publicCourses';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { useFeatureIsOn } from '@growthbook/growthbook-react';
+import { cn } from 'commons/utils';
 
 const ClassContainer = (): JSX.Element => {
     const router = useRouter();
     const { flag } = router.query;
     const [myClass, setMyClass] = useState(false);
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
+        'landing-page-revamp'
+    );
 
     useEffect(() => {
         if (flag && flag === 'kelasku') {
@@ -21,16 +26,19 @@ const ClassContainer = (): JSX.Element => {
 
     return (
         <section
-            className={`min-h-screen ${
-                !isAuthenticated ? 'px-4 md:px-[7.5rem]' : ''
-            }`}>
-            <h1 className="text-4xl md:text-5xl font-bold">Kelas</h1>
-            <div className="w-full flex flex-col md:flex-row mt-6 justify-end">
-                {/* <div className="md:w-1/3 w-full">
+            className={cn(
+                'min-h-screen',
+                !isAuthenticated &&
+                    !isLandingPageRevampOn &&
+                    'px-4 md:px-[7.5rem]'
+            )}>
+            <h1 className="text-4xl font-bold md:text-5xl">Kelas</h1>
+            <div className="flex flex-col justify-end w-full mt-6 md:flex-row">
+                {/* <div className="w-full md:w-1/3">
                     <Input
                     type="text"
                     placeholder="cari kelas"
-                    className="bg-neutral-900 border-neutral-900 border-none"
+                    className="border-none bg-neutral-900 border-neutral-900"
                     name="password"
                     endAddorment={
                         <FaSearch className="text-gray-500 cursor-pointer" />
