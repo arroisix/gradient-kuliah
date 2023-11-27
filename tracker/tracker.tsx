@@ -27,7 +27,7 @@ export interface Tracker {
     trackButtonClick(
         eventName: string,
         buttonTextContent: string,
-        payload?: Record<string, unknown>
+        payload?: Record<string, unknown> | unknown
     ): void;
     trackAttemptFormSubmit(
         eventName: string,
