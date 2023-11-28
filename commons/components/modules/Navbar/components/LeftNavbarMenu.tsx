@@ -8,6 +8,8 @@ import { useFeatureIsOn } from '@growthbook/growthbook-react';
 const DISPLAYED_ROUTES = [
     'kelas/[id]',
     'kelas/[id]/',
+    'kebijakan-privasi',
+    'syarat-dan-ketentuan',
     'astronotes',
     'referral'
 ];
