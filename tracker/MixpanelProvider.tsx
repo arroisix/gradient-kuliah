@@ -21,11 +21,14 @@ class MixpanelTracker implements Tracker {
         }
     }
 
-    trackPageView(pageName: string, query?: Record<string, unknown>): void {
+    trackPageView(
+        pageName: string,
+        eventPayload?: Record<string, unknown>
+    ): void {
         this.mixpanelInstance?.track_pageview(
             {
                 Page: pageName,
-                'Page Query': query
+                ...eventPayload
             },
             // This feature is undocumented, so the type is missing
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
