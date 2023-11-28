@@ -22,9 +22,13 @@ import PriceHighlightKalkulus2Section from './Kalkulus2/PriceHighlightKalkulus2S
 import PriceHighlightStatprobSection from './Statprob/PriceHighlightStaprobSection';
 import BenefitStatprobSection from './Statprob/BenefitStatprobSection';
 import CourseDetail from '../CourseDetail';
-import Pricing from 'landing/containers/pricing';
+import Pricing from 'landing/components/Sections/pricing';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { useFeatureIsOn } from '@growthbook/growthbook-react';
+import Paywall from 'commons/components/elements/Paywall';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
+import { useRouter } from 'next/router';
 
 const COMPONENT_DICTIONARY: { [key in LandingPageSectionKey]: JSX.Element } = {
     hero: <HeroSection slug="dummy" />,
@@ -97,20 +101,44 @@ const LandingPageOrchestrator = ({
     id: string;
     packetOffer: PacketOffer[];
 }): JSX.Element => {
+    const router = useRouter();
     const { is_subscribed, isDoneFetchingSubcription } =
         useCourseSubscription();
+    const { isDesktopBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
+        'landing-page-revamp'
+    );
 
     return (
         <>
             <CourseDetail slug={id} />
-            {((!is_subscribed && isDoneFetchingSubcription) ||
-                !isAuthenticated) && (
-                <Pricing
-                    pricingData={packetOffer}
-                    ctaEventName="Pricing Button on Course Landing Page"
-                    ctaEventPayload={{ 'Course Slug': id }}
-                />
+            {(!is_subscribed && isDoneFetchingSubcription) ||
+            !isAuthenticated ? (
+                isLandingPageRevampOn ? (
+                    <div className="flex flex-col items-center justify-center w-screen sm:w-auto ">
+                        <Paywall
+                            pricingData={packetOffer}
+                            isCarousel={!isDesktopBreakpoints}
+                            redirect={router.asPath}
+                            className="w-screen sm:w-auto"
+                            highlightedClassName="!order-none"
+                            pricingClassName="max-w-[18rem] sm:max-w-xs"
+                            ctaEventName="Pricing Button on Course Landing Page"
+                        />
+                    </div>
+                ) : (
+                    <Pricing
+                        pricingData={packetOffer}
+                        ctaEventName="Pricing Button on Course Landing Page"
+                        ctaEventPayload={{
+                            'Course Slug': id,
+                            Variant: 'JUN 2023'
+                        }}
+                    />
+                )
+            ) : (
+                <></>
             )}
         </>
     );

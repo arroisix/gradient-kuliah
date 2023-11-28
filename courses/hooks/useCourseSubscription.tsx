@@ -4,16 +4,17 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienceApi';
+import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { useGetCoursePreviewQuery } from 'courses/redux/api/courseApi';
 
 const useCourseSubscription = (slug?: string) => {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const {
         data,
         isLoading: isLoadingSubscription,
-        isSuccess: isDoneFetching
-    } = useGetActiveSubscriptionQuery(undefined, {
-        skip: !isAuthenticated
-    });
+        isSuccess: isDoneFetching,
+        isError: isErrorFetchingSubscription
+    } = useGetActiveSubscriptionQuery(!isAuthenticated ? skipToken : undefined);
     const { data: learningProgress, isLoading: isLoadingLearningProgress } =
         useGetLearningProgressQuery(slug as string, {
             skip: !isAuthenticated || slug === undefined,
@@ -36,6 +37,10 @@ const useCourseSubscription = (slug?: string) => {
         return false;
     };
 
+    const { data: coursePreview } = useGetCoursePreviewQuery(
+        slug === undefined || checkIsSubscribed() ? skipToken : { slug }
+    );
+
     return {
         subscription_id: data?.subscription_id,
         packet_id: data?.packet_id,
@@ -43,7 +48,9 @@ const useCourseSubscription = (slug?: string) => {
         expiryDay,
         isLoading: isLoadingSubscription || isLoadingLearningProgress,
         isDoneFetchingSubcription: isDoneFetching,
+        isErrorFetchingSubscription,
         learning_progress_id: learningProgress?.id,
+        coursePreview,
         ...learningProgress
     };
 };

@@ -1,7 +1,6 @@
 import CommunityNotificationBadge from 'commons/components/elements/CommunityNotificationBadge';
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
 import { cn } from 'commons/utils';
-import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -19,7 +18,6 @@ const Sidebar = ({
 }): JSX.Element => {
     const route = useRouter();
     const { pathname } = route;
-    const { is_subscribed } = useCourseSubscription();
 
     const { data: configData } = useGetConfigQuery();
 
@@ -61,27 +59,26 @@ const Sidebar = ({
                         Home
                     </span>
                 </Link>
-                {configData?.configs.is_community_config_enabled &&
-                    is_subscribed && (
-                        <Link
-                            href="/komunitas"
-                            className={`flex items-center gap-4 cursor-pointer ${
-                                pathname.includes('/komunitas')
-                                    ? 'text-white'
-                                    : 'text-[#666666]'
-                            }  font-body text-sm hover:text-[#999999]`}
-                            onClick={() => {
-                                tracker?.genericTrack(
-                                    `Click Community ${
-                                        !fullHeight ? 'Course ' : ''
-                                    }Navigation`
-                                );
-                            }}>
-                            <RiQuestionnaireLine size={20} />
-                            Komunitas
-                            <CommunityNotificationBadge />
-                        </Link>
-                    )}
+                {configData?.configs.is_community_config_enabled && (
+                    <Link
+                        href="/komunitas"
+                        className={`flex items-center gap-4 cursor-pointer ${
+                            pathname.includes('/komunitas')
+                                ? 'text-white'
+                                : 'text-[#666666]'
+                        }  font-body text-sm hover:text-[#999999]`}
+                        onClick={() => {
+                            tracker?.genericTrack(
+                                `Click Community ${
+                                    !fullHeight ? 'Course ' : ''
+                                }Navigation`
+                            );
+                        }}>
+                        <RiQuestionnaireLine size={20} />
+                        Komunitas
+                        <CommunityNotificationBadge />
+                    </Link>
+                )}
                 <Link
                     href={'/kelas'}
                     onClick={() => {

@@ -23,6 +23,7 @@ import LeftNavbarMenu from './components/LeftNavbarMenu';
 import UserProfile from './components/UserProfile';
 import UserProfileDropdown from './components/UserProfileDropdown';
 import NavMenuIcons from './components/NavMenuIcons';
+import { useFeatureIsOn } from '@growthbook/growthbook-react';
 
 const HIDE_HAMBURGER_MENU_ON = [
     '/dashboard',
@@ -63,6 +64,9 @@ const Navbar = ({
         const position = window.pageYOffset;
         setScrollPosition(position);
     };
+    const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
+        'landing-page-revamp'
+    );
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll, { passive: true });
@@ -93,7 +97,7 @@ const Navbar = ({
                 return 'bg-[#171717] md:bg-[#121212]';
             }
 
-            return '';
+            return shouldTransparent ? '' : 'bg-[#171717] md:bg-[#121212]';
         }
 
         return lightMode ? 'bg-white text-black shadow-md' : 'bg-[#171717]';
@@ -141,13 +145,15 @@ const Navbar = ({
             onMouseLeave={onMouseLeaveNavbar}>
             <div className="flex items-center justify-between w-full px-4 py-4 md:px-6">
                 <div className="flex items-center gap-4">
-                    {isAuthenticated && isShowHamburgerMenu() && (
-                        <FiMenu
-                            className="md:hidden"
-                            stroke="#666666"
-                            onClick={() => setOpenSidebar(true)}
-                        />
-                    )}
+                    {(isLandingPageRevampOn ||
+                        (!isLandingPageRevampOn && isAuthenticated)) &&
+                        isShowHamburgerMenu() && (
+                            <FiMenu
+                                className="md:hidden"
+                                stroke="#666666"
+                                onClick={() => setOpenSidebar(true)}
+                            />
+                        )}
                     <Link href={'/'}>
                         <span className="text-2xl font-bold cursor-pointer font-[Urbanist]">
                             {isMobileBreakpoints ? 'G' : 'Gradient'}
@@ -214,46 +220,69 @@ const Navbar = ({
                                 </nav>
                             ) : (
                                 <>
-                                    <Link href="/kelas">
-                                        <nav
-                                            className="ml-12 cursor-pointer hover:text-accent-blue"
-                                            onMouseEnter={onMouseEnterOther}>
-                                            Kelas
-                                        </nav>
-                                    </Link>
-                                    <Link
-                                        href={AUTHENTICATION_ROUTE}
-                                        onClick={onClickLoginLink}>
-                                        <nav className="ml-12 cursor-pointer">
+                                    {isLandingPageRevampOn ? (
+                                        <Button
+                                            variant="primary"
+                                            href={AUTHENTICATION_ROUTE}
+                                            eventName="Login Button on Navbar">
                                             Masuk
-                                        </nav>
-                                    </Link>
+                                        </Button>
+                                    ) : (
+                                        <>
+                                            <Link href="/kelas">
+                                                <nav
+                                                    className="ml-12 cursor-pointer hover:text-accent-blue"
+                                                    onMouseEnter={
+                                                        onMouseEnterOther
+                                                    }>
+                                                    Kelas
+                                                </nav>
+                                            </Link>
+                                            <Link
+                                                href={AUTHENTICATION_ROUTE}
+                                                onClick={onClickLoginLink}>
+                                                <nav className="ml-12 cursor-pointer">
+                                                    Masuk
+                                                </nav>
+                                            </Link>
+                                        </>
+                                    )}
                                 </>
                             )}
                         </div>
 
                         <div className="flex gap-4 text-3xl md:hidden">
                             {!isAuthenticated ? (
-                                <>
-                                    <Link
-                                        href="/kelas"
-                                        onClick={() =>
-                                            tracker?.genericTrack(
-                                                'Click Class Button On Top Navbar'
-                                            )
-                                        }>
-                                        <nav className="flex items-center text-base font-bold">
-                                            Kelas
-                                        </nav>
-                                    </Link>
-                                    <Link
+                                isLandingPageRevampOn ? (
+                                    <Button
+                                        variant="primary"
+                                        className="text-xs"
                                         href={AUTHENTICATION_ROUTE}
-                                        onClick={onClickLoginLink}>
-                                        <nav className="flex items-center text-base font-bold">
-                                            Masuk
-                                        </nav>
-                                    </Link>
-                                </>
+                                        eventName="Login Button on Navbar">
+                                        Masuk
+                                    </Button>
+                                ) : (
+                                    <>
+                                        <Link
+                                            href="/kelas"
+                                            onClick={() =>
+                                                tracker?.genericTrack(
+                                                    'Click Class Button On Top Navbar'
+                                                )
+                                            }>
+                                            <nav className="flex items-center text-base font-bold">
+                                                Kelas
+                                            </nav>
+                                        </Link>
+                                        <Link
+                                            href={AUTHENTICATION_ROUTE}
+                                            onClick={onClickLoginLink}>
+                                            <nav className="flex items-center text-base font-bold">
+                                                Masuk
+                                            </nav>
+                                        </Link>
+                                    </>
+                                )
                             ) : (
                                 <div className="flex items-center gap-4">
                                     {router.pathname === '/' && (

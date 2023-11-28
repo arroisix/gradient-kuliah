@@ -9,6 +9,7 @@ import React, {
 } from 'react';
 import { toast } from 'react-toastify';
 import useTransaction from '../hooks/useTransaction';
+import { queryParamBuilder } from 'commons/utils';
 
 interface TransactionContextType {
     transaction: Transaction;
@@ -37,7 +38,11 @@ export function TransactionProvider({
                 toast.success(`Pembayaran Sukses!`, {
                     position: toast.POSITION.TOP_CENTER
                 });
-                router.push('/checkout/sukses');
+                router.push(
+                    `/checkout/sukses?${queryParamBuilder({
+                        redirect: router.query.redirect as string
+                    })}`
+                );
             }
 
             setTransaction(data);

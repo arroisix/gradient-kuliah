@@ -1,9 +1,9 @@
-import AllClass from './allClass';
-import Certificate from './certificate';
-import Feature from './feature';
-import Hero from './hero';
-import Pricing from './pricing';
-import Testimony from './testimony';
+import AllClass from '../components/Sections/allClass';
+import Certificate from '../components/Sections/certificate';
+import Feature from '../components/Sections/feature';
+import Hero from '../components/Sections/hero';
+import Pricing from '../components/Sections/pricing';
+import Testimony from '../components/Sections/testimony';
 
 export default function LandingContainer({
     pricingData

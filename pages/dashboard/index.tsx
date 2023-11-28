@@ -1,5 +1,5 @@
 import LearnLayout from 'commons/learnLayout';
-import withAuth from 'commons/withAuth';
+import withAnon from 'commons/withAnon';
 import DashboardContainer from 'dashboard/containers';
 
 const Dashboard = (): JSX.Element => {
@@ -11,4 +11,4 @@ const Dashboard = (): JSX.Element => {
 };
 
 Dashboard.displayName = 'Dashboard';
-export default withAuth(Dashboard);
+export default withAnon(Dashboard);

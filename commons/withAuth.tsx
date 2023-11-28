@@ -15,7 +15,7 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
     ): JSX.Element | undefined => {
         // checks whether we are on client / browser or server.
         if (typeof window !== 'undefined') {
-            const { pathname } = useRouter();
+            const { pathname, query } = useRouter();
             const accessToken = useSelector(getToken);
             const rawToken = window.localStorage.getItem('token');
 
@@ -51,6 +51,8 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
                     const packetId = localStorage.getItem('packetId');
                     if (packetId) {
                         window.location.href = `/pembayaran?packetId=${packetId}`;
+                    } else if (query.redirect) {
+                        window.location.href = query.redirect as string;
                     } else {
                         window.location.href = '/';
                     }
@@ -72,7 +74,9 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
                 }
 
                 if (pathname !== '/mulai' && !is_subscribed) {
-                    window.location.href = '/';
+                    if (pathname === '/komunitas')
+                        window.location.href = '/langganan';
+                    else window.location.href = '/';
                     return;
                 }
 

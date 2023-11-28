@@ -1,16 +1,22 @@
+import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
 import Modal from 'commons/components/modules/Modal';
 import { CDN_URL } from 'commons/constants';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import Image from 'next/image';
 import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useGetReferralQuery } from 'referral/redux/referalApi';
 import { useTracker } from 'tracker/tracker';
 
 const ReferralModal = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
     const tracker = useTracker();
     const { isMobileBreakpoints } = useWindowBreakpoints();
-    const { data } = useGetReferralQuery();
+    const isAuthenticated = useSelector(getIsAuthenticated);
+    const { data } = useGetReferralQuery(
+        !isAuthenticated ? skipToken : undefined
+    );
 
     function formatCashbackAmount(amount: string): string {
         return `${Number(amount) / 1000}K`.replace('.', ',');
@@ -34,7 +40,7 @@ const ReferralModal = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
                 alt="Referral"
             />
             <h5 className="mt-10 mb-3 text-2xl font-bold">
-                Undang teman, dapatkan cashback $
+                Undang teman, dapatkan cashback
                 {formatCashbackAmount(
                     data?.config.voucher_cashback_amount ?? ''
                 )}

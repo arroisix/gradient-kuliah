@@ -118,10 +118,15 @@ interface Astronote {
 }
 interface AstronoteBooksByCategory {
     category_id: string;
+    category_name: string;
     books: Astronote[];
 }
 
 interface AstronoteCategory {
     id: string;
     name: string;
+}
+
+interface AstronotesBooksQueryParams extends BaseListQueryParams {
+    major?: string;
 }

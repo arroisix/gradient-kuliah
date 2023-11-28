@@ -7,6 +7,14 @@ export const komunitasApi = baseApi.injectEndpoints({
         getSubjectCategories: builder.query<SubjectCategoriesResponse, void>({
             query: () => ({ url: `${KOMUNITAS_BASE_URL}subject-category/` })
         }),
+        getPublicSubjectCategories: builder.query<
+            SubjectCategoriesResponse,
+            void
+        >({
+            query: () => ({
+                url: `${KOMUNITAS_BASE_URL}public/subject-category/`
+            })
+        }),
         getCommunityNotification: builder.query<CommunityNotification, void>({
             query: () => ({ url: `${KOMUNITAS_BASE_URL}notification/` })
         }),
@@ -48,6 +56,29 @@ export const komunitasApi = baseApi.injectEndpoints({
                       ]
                     : [{ type: 'COMMUNITIES', id: 'LIST' }]
         }),
+        getPublicCommunityPost: builder.query<
+            CommunityPostResponse & {
+                count_items: number;
+                next_page?: number;
+                previous_page?: number;
+            },
+            BaseListQueryParams & CommunityPostQuery
+        >({
+            query: ({ sort_by = 'LATEST', ...params }) => ({
+                url: `${KOMUNITAS_BASE_URL}public/post/`,
+                params: { sort_by, ...params }
+            }),
+            providesTags: (result) =>
+                result
+                    ? [
+                          ...result.community_posts.map(
+                              ({ id }) => ({ type: 'COMMUNITIES', id } as const)
+                          ),
+                          { type: 'COMMUNITIES', id: 'PUBLIC_LIST' },
+                          'COMMUNITIES'
+                      ]
+                    : [{ type: 'COMMUNITIES', id: 'PUBLIC_LIST' }]
+        }),
         getMyQuestionList: builder.query<
             MyQuestionListResponse,
             { user_id: string }
@@ -67,12 +98,34 @@ export const komunitasApi = baseApi.injectEndpoints({
             }),
             providesTags: [{ type: 'COMMUNITIES', id: 'LIST' }]
         }),
+        getPublicExploreQuestion: builder.query<
+            ExploreQuestionResponse,
+            { category_id?: string; current_post?: string }
+        >({
+            query: ({ category_id, current_post }) => ({
+                url: `${KOMUNITAS_BASE_URL}public/post/list/`,
+                params: { category_id, current_post }
+            }),
+            providesTags: [{ type: 'COMMUNITIES', id: 'PUBLIC_LIST' }]
+        }),
         getCommunityPostDetail: builder.query<
             CommunityPostDetailResponse,
             { slug: string }
         >({
             query: ({ slug }) => ({
                 url: `${KOMUNITAS_BASE_URL}post/${slug}/`
+            }),
+            providesTags: (result) => [
+                { type: 'COMMUNITIES', id: result?.id } as const,
+                'COMMUNITIES'
+            ]
+        }),
+        getPublicCommunityPostDetail: builder.query<
+            CommunityPostDetailResponse,
+            { slug: string }
+        >({
+            query: ({ slug }) => ({
+                url: `${KOMUNITAS_BASE_URL}public/post/${slug}/`
             }),
             providesTags: (result) => [
                 { type: 'COMMUNITIES', id: result?.id } as const,
@@ -141,12 +194,16 @@ export const komunitasApi = baseApi.injectEndpoints({
 
 export const {
     useGetSubjectCategoriesQuery,
+    useGetPublicSubjectCategoriesQuery,
     useGetCommunityNotificationQuery,
     usePostQuestionAnswerMutation,
     useGetCommunityPostQuery,
+    useGetPublicCommunityPostQuery,
     useGetMyQuestionListQuery,
     useGetExploreQuestionQuery,
+    useGetPublicExploreQuestionQuery,
     useGetCommunityPostDetailQuery,
+    useGetPublicCommunityPostDetailQuery,
     useGetCommunityPostCommentDetailQuery,
     useLazyGetCommunityPostQuery
 } = komunitasApi;

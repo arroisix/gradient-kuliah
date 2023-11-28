@@ -31,7 +31,7 @@ export const RegistrationProvider: React.FC<Props> = ({ children }) => {
             updateUser: async (data: UpdateUserInputData) => {
                 tracker?.trackAttemptFormSubmit(
                     'Submit Onboarding Data',
-                    data,
+                    { ...data },
                     { Step: step }
                 );
                 setFormData(data);

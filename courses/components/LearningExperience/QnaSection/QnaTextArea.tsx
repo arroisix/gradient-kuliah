@@ -149,15 +149,13 @@ const QnaTextArea = ({
 
     return (
         <>
-            <div>
-                <div
-                    className={`${
-                        avatarSize ?? 'h-[60px] w-[60px]'
-                    } bg-neutral-800 rounded-full overflow-hidden flex justify-center items-center`}>
-                    <span className="font-bold md:text-xl">
-                        {generateInitial(user.full_name)}
-                    </span>
-                </div>
+            <div
+                className={`${
+                    avatarSize ?? 'h-[60px] w-[60px]'
+                } self-center sm:self-auto bg-neutral-800 rounded-full overflow-hidden flex justify-center items-center`}>
+                <span className="font-bold md:text-xl">
+                    {generateInitial(user.full_name)}
+                </span>
             </div>
             <div
                 className="flex flex-col w-full gap-2"
@@ -208,7 +206,7 @@ const QnaTextArea = ({
                         isTextAreaFocus ? 'bg-white' : 'bg-neutral-600'
                     } w-full`}
                 />
-                <div className="flex items-center w-full gap-1">
+                <div className="flex flex-wrap items-center w-full gap-1 sm:flex-nowrap">
                     {ICON.filter((opt) => !opt.disabled).map(
                         ({ tag: Tag, icon, props = {} }, index) => (
                             <Tag
@@ -253,7 +251,8 @@ const QnaTextArea = ({
                         disabled={disabled}
                         variant="primary"
                         size="extraSmall"
-                        type="submit">
+                        type="submit"
+                        className="w-full sm:w-auto">
                         Kirim
                     </Button>
                 </div>

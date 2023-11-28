@@ -18,13 +18,32 @@ export const astronotesApi = baseApi.injectEndpoints({
         }),
         getEntrypointBooks: builder.query<
             AstronoteBooksByCategory[],
-            BaseListQueryParams | undefined
+            AstronotesBooksQueryParams | undefined
         >({
             query: (params) => ({
                 url: `${COURSE_BASE_URL}entrypoint`,
                 params
             }),
             providesTags: [{ type: 'ASTRONOTES', id: 'ENTRYPOINT' }]
+        }),
+        getPublicEntrypointBooks: builder.query<
+            AstronoteBooksByCategory[],
+            AstronotesBooksQueryParams | undefined
+        >({
+            query: (params) => ({
+                url: `${COURSE_BASE_URL}public/entrypoint/`,
+                params
+            }),
+            providesTags: [{ type: 'ASTRONOTES', id: 'PUBLIC_ENTRYPOINT' }]
+        }),
+        getPublicBookPreview: builder.query<
+            getBookProgressResponse,
+            { slug: string }
+        >({
+            query: ({ slug }) => ({
+                url: `${COURSE_BASE_URL}public/${slug}/preview/`
+            }),
+            providesTags: [{ type: 'ASTRONOTES', id: 'PUBLIC_PREVIEW' }]
         }),
         getBookCategories: builder.query<AstronoteCategory[], void>({
             query: () => ({ url: `${COURSE_BASE_URL}categories/` }),
@@ -60,6 +79,22 @@ export const astronotesApi = baseApi.injectEndpoints({
         >({
             query: ({ slug, chapter_id }) => ({
                 url: `${COURSE_BASE_URL}${slug}/chapters/${chapter_id}/subchapters/`
+            })
+        }),
+        getPublicTableContents: builder.query<
+            GetBookChapterResponse,
+            { slug: string }
+        >({
+            query: ({ slug }) => ({
+                url: `${COURSE_BASE_URL}public/${slug}/chapters/`
+            })
+        }),
+        getPublicTableContentSubchapters: builder.query<
+            ResponseData<BookSubchapter>,
+            { slug: string; chapter_id: string }
+        >({
+            query: ({ slug, chapter_id }) => ({
+                url: `${COURSE_BASE_URL}public/${slug}/chapters/${chapter_id}/subchapters/`
             })
         }),
         getHighlight: builder.query<getHighlightReponse, { slug: string }>({
@@ -150,12 +185,16 @@ export const astronotesApi = baseApi.injectEndpoints({
 
 export const {
     useGetEntrypointBooksQuery,
+    useGetPublicEntrypointBooksQuery,
+    useGetPublicBookPreviewQuery,
     useGetBookCategoriesQuery,
     useGetBookProgressQuery,
     useLazyGetBookProgressQuery,
     usePostBookProgressMutation,
     useGetTableContentsQuery,
     useGetTableContentSubchaptersQuery,
+    useGetPublicTableContentsQuery,
+    useGetPublicTableContentSubchaptersQuery,
     useGetHighlightQuery,
     usePostHighlightMutation,
     useDeleteHighlightMutation,

@@ -3,8 +3,14 @@ import { useGetConfigQuery } from 'commons/redux/api/commonApi';
 import { useRouter } from 'next/router';
 import React from 'react';
 import NavMenuLink from './NavMenuLink';
+import { useFeatureIsOn } from '@growthbook/growthbook-react';
 
-const DISPLAYED_ROUTES = ['kelas/[id]/', '/astronotes/[slug]/', 'referral'];
+const DISPLAYED_ROUTES = [
+    'kelas/[id]',
+    'kelas/[id]/',
+    'astronotes',
+    'referral'
+];
 
 const LeftNavbarMenu = ({
     lightMode
@@ -14,9 +20,14 @@ const LeftNavbarMenu = ({
     const router = useRouter();
     const { data: configData } = useGetConfigQuery();
     const { isMobileBreakpoints } = useWindowBreakpoints();
+    const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
+        'landing-page-revamp'
+    );
 
     const isShowNavbarMenu = (): boolean =>
-        DISPLAYED_ROUTES.some((route) => router.pathname.includes(route));
+        DISPLAYED_ROUTES.slice(isLandingPageRevampOn ? 0 : 1).some((route) =>
+            router.pathname.includes(route)
+        );
 
     const NAV_MENUS: NavLink[] = [
         { href: '/', label: 'Home' },

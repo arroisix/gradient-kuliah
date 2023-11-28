@@ -49,6 +49,7 @@ export const ASTRONOTES_MENU: AstronotesMenuItem[] = [
         }
     }
 ];
+export const PUBLIC_ASTRONOTES_MENU = [ASTRONOTES_MENU[0], ASTRONOTES_MENU[2]];
 
 export const transitionClassesSlideRight = {
     enter: 'transition transition-[width] ease-out duration-100',

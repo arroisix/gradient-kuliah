@@ -1,3 +1,5 @@
+import { skipToken } from '@reduxjs/toolkit/dist/query';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import useTransition from 'commons/hooks/useTransition';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
@@ -5,6 +7,7 @@ import { useGetStudentCourseQuery } from 'dashboard/redux/api/dashboardApi';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { HiChevronDown, HiOutlinePlusSm } from 'react-icons/hi';
+import { useSelector } from 'react-redux';
 import { useTracker } from 'tracker/tracker';
 
 const MyClass = ({ className }: { className?: string }): JSX.Element => {
@@ -12,7 +15,10 @@ const MyClass = ({ className }: { className?: string }): JSX.Element => {
     const loadingTransition = useTransition(router);
     const { isMobileBreakpoints, isTabletBreakpoints } = useWindowBreakpoints();
 
-    const { data, isLoading } = useGetStudentCourseQuery();
+    const isAuthenticated = useSelector(getIsAuthenticated);
+    const { data, isLoading } = useGetStudentCourseQuery(
+        !isAuthenticated ? skipToken : undefined
+    );
 
     const [isShow, setIsShow] = useState(false);
 
@@ -89,7 +95,7 @@ const ListMyClass = ({
                         });
                     }}
                     aria-hidden={true}>
-                    <span className="font-body text-sm">{course_name}</span>
+                    <span className="text-sm font-body">{course_name}</span>
                 </div>
             ))}
         </div>

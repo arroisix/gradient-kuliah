@@ -2,9 +2,6 @@ import { useRef, useState } from 'react';
 import ProgressBar from './ProgressBar';
 import { MdStarPurple500 } from 'react-icons/md';
 import { IoIosSearch, IoMdClose } from 'react-icons/io';
-import Collapse from './Collapse';
-import Image from 'next/image';
-import { AiFillStar } from 'react-icons/ai';
 import useElementSize from 'commons/hooks/useElementSize';
 import useOnScreen from 'commons/hooks/useOnScreen';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
@@ -20,108 +17,10 @@ import moment from 'moment';
 import ModalCourseFeedback from './ModalCourseFeedback';
 import SearchList from './SearchList';
 import { useTracker } from 'tracker/tracker';
-
-const AccordionVideo = ({
-    chapters,
-    isLoading
-}: {
-    chapters: CourseChapter[];
-    isLoading: boolean;
-}): JSX.Element => {
-    return (
-        <div className="flex flex-col gap-3 lg:pb-[18px]">
-            {isLoading && (
-                <>
-                    <Skeleton className="h-[40px] !m-0" />
-                    <Skeleton className="h-[40px] !m-0" />
-                    <Skeleton className="h-[40px] !m-0" />
-                </>
-            )}
-            {chapters?.map(
-                ({
-                    chapter_id,
-                    chapter_name,
-                    is_finished,
-                    subchapter_counts
-                }) => (
-                    <Collapse
-                        key={chapter_id}
-                        title={`${chapter_name} (${subchapter_counts})`}
-                        chapter_id={chapter_id}
-                        is_finished={is_finished ?? false}
-                    />
-                )
-            )}
-        </div>
-    );
-};
-
-export const ListBooks = ({
-    books,
-    isLoading
-}: {
-    books: Book[];
-    isLoading: boolean;
-}): JSX.Element => {
-    const router = useRouter();
-    const tracker = useTracker();
-    // const { id } = router.query;
-
-    return (
-        <div className="flex flex-col gap-[14px]">
-            {isLoading && (
-                <>
-                    <Skeleton className="h-[60px] !m-0" />
-                    <Skeleton className="h-[60px] !m-0" />
-                    <Skeleton className="h-[60px] !m-0" />
-                </>
-            )}
-            {books?.map(
-                ({ book_id, title, authors, rating, book_cover_url, slug }) => (
-                    <div
-                        className="flex items-center gap-5 cursor-pointer"
-                        key={book_id}
-                        onClick={() => {
-                            tracker?.genericTrack('Click Book Item', {
-                                'Course Slug': slug,
-                                'Book Title': title
-                            });
-                            router.push(`/astronotes/${slug}/1`);
-                        }}
-                        aria-hidden>
-                        <Image
-                            src={
-                                book_cover_url ||
-                                'https://assets.gradient.academy/assets/astronotes-kalkulus2-placeholder.jpg'
-                            }
-                            width={79}
-                            height={113}
-                            className="object-contain rounded"
-                        />
-                        <div className="flex flex-col gap-[6px]">
-                            <span className="inline-block text-lg font-body text-neutral-200">
-                                {title}
-                            </span>
-                            <div>
-                                {authors && (
-                                    <span className="inline-block text-base font-body text-neutral-600">
-                                        {`oleh ${authors}`}
-                                    </span>
-                                )}
-                                {rating !== 0 && (
-                                    <span className="flex items-center gap-[2px] font-body text-xs text-neutral-600">
-                                        <AiFillStar />
-                                        {+rating.toFixed(1)}
-                                    </span>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                )
-            )}
-        </div>
-    );
-};
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import AccordionVideo from './AccordionVideo';
+import ListBooks from './ListBooks';
 
 const CourseDetailBox = (): JSX.Element => {
     const tracker = useTracker();
@@ -144,15 +43,13 @@ const CourseDetailBox = (): JSX.Element => {
     const router = useRouter();
     const { id } = router.query;
 
+    const isAuthenticated = useSelector(getIsAuthenticated);
     const { data: courseContent, isLoading: isLoadingCourse } =
-        useGetCourseContentQuery(
-            {
-                slug: id as string
-            },
-            { skip: !id }
-        );
+        useGetCourseContentQuery({ slug: id as string }, { skip: !id });
     const { data: learningProgress, isLoading: isLoadingLearning } =
-        useGetLearningProgressQuery(id as string, { skip: !id });
+        useGetLearningProgressQuery(id as string, {
+            skip: !id || !isAuthenticated
+        });
     const { data: course } = useGetCourseQuery(undefined, {
         selectFromResult: ({ data, isLoading }) => ({
             data: data?.courses.find(({ slug }) => slug === id),
@@ -222,19 +119,21 @@ const CourseDetailBox = (): JSX.Element => {
                                     .format('mm')}m)`
                             )}
                         </span>
-                        <div className="w-[20px] grow">
-                            <MdStarPurple500
-                                size={20}
-                                className="ml-auto mr-0 cursor-pointer text-neutral-400 hover:text-white"
-                                onClick={() => {
-                                    tracker?.genericTrack(
-                                        'Click Give Rating Button',
-                                        { 'Course Slug': id }
-                                    );
-                                    setIsModalFeedbackOpen(true);
-                                }}
-                            />
-                        </div>
+                        {isAuthenticated && (
+                            <div className="w-[20px] grow">
+                                <MdStarPurple500
+                                    size={20}
+                                    className="ml-auto mr-0 cursor-pointer text-neutral-400 hover:text-white"
+                                    onClick={() => {
+                                        tracker?.genericTrack(
+                                            'Click Give Rating Button',
+                                            { 'Course Slug': id }
+                                        );
+                                        setIsModalFeedbackOpen(true);
+                                    }}
+                                />
+                            </div>
+                        )}
                     </div>
                     <ProgressBar
                         total_finished_video={

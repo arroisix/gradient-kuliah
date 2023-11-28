@@ -13,6 +13,9 @@ import { usePostQuestionAnswerMutation } from 'komunitas/redux/api/komunitasApi'
 import { toast } from 'react-toastify';
 import { useTracker } from 'tracker/tracker';
 import Link from 'next/link';
+import { cn } from 'commons/utils';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
 type Student = {
     id: string;
@@ -29,7 +32,9 @@ const Wrapper = ({
     slug?: string;
 }>): JSX.Element =>
     clickable ? (
-        <Link href={`/komunitas/${slug}`}>{children}</Link>
+        <Link href={`/komunitas/${slug}`} className="w-full">
+            {children}
+        </Link>
     ) : (
         <>{children}</>
     );
@@ -63,6 +68,7 @@ const QuestionCard = ({
     const tracker = useTracker();
 
     const [imageError, setImageError] = useState(false);
+    const isAuthenticated = useSelector(getIsAuthenticated);
 
     async function handleSubmit(
         formContent: string,
@@ -104,70 +110,68 @@ const QuestionCard = ({
     return (
         <Wrapper clickable={clickable} slug={slug}>
             <div
-                className={`w-full border-[1px] border-neutral-800 rounded-xl p-[18px] md:p-5 ${
-                    isShowForm ? '!rounded-b-none' : ''
-                }`}>
-                <div className="relative flex items-center gap-3">
-                    <div className="relative w-[24px] h-[24px]">
-                        {student?.photo_url &&
-                        student.photo_url.length > 0 &&
-                        !imageError ? (
-                            <Image
-                                src={student?.photo_url}
-                                alt={student?.username}
-                                layout="fill"
-                                className="rounded-full object-contain"
-                                onError={() => setImageError(true)}
-                            />
-                        ) : (
-                            <Avatar
-                                name={student?.username}
-                                size="24"
-                                round
-                                className="!block"
-                            />
-                        )}
-                    </div>
-                    <div className="flex flex-col md:flex-row md:gap-[6px] md:items-center">
-                        <span className="inline-block font-extrabold text-xs">
+                className={cn(
+                    'border border-neutral-800 rounded-xl p-4 md:p-5 flex flex-col',
+                    isShowForm && '!rounded-b-none'
+                )}>
+                <div className="flex items-center gap-3">
+                    {student?.photo_url &&
+                    student.photo_url.length > 0 &&
+                    !imageError ? (
+                        <Image
+                            src={student?.photo_url}
+                            alt={student?.username}
+                            width={24}
+                            height={24}
+                            className="object-contain rounded-full"
+                            onError={() => setImageError(true)}
+                        />
+                    ) : (
+                        <Avatar
+                            name={student?.username}
+                            size="24"
+                            round
+                            className="!block"
+                        />
+                    )}
+                    <div className="flex flex-col md:flex-row md:gap-2 md:items-center">
+                        <p className="text-xs font-extrabold">
                             {student?.username}
-                        </span>
+                        </p>
                         <FaCircle
                             className="hidden md:block text-neutral-600"
                             size={4}
                         />
-                        <span className="inline-block font-body text-xs text-neutral-600">
+                        <p className="text-xs font-body text-neutral-600">
                             {moment(created_at).utc().calendar()}
-                        </span>
+                        </p>
                     </div>
                 </div>
-                <article className="pt-[12px] pb-[18px] lg:pl-[36px]">
+                <article className="pt-3 pb-5 lg:pl-8">
                     <ReactMarkdown
-                        className={`markdown-body-xs markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height overflow-auto ${
-                            clickable ? 'pointer-events-none' : ''
-                        }`}
+                        className={`markdown-body-xs markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height markdown-body math-display-overflow`}
                         remarkPlugins={[remarkMath, remarkGfm]}
                         rehypePlugins={[rehypeKatex]}
                         linkTarget={clickable ? '' : '_blank'}>
                         {content?.replaceAll('\n', '\n\n')}
                     </ReactMarkdown>
                 </article>
-                <div className="flex justify-between lg:pl-[36px]">
-                    <div className="flex gap-6 items-center">
+                <div className="flex justify-between lg:pl-8">
+                    <div className="flex items-center gap-6">
                         <div className="flex items-center gap-2">
                             <AiOutlineEye size={18} />
-                            <span className="font-body text-xs">
+                            <span className="text-xs font-body">
                                 {viewer_counts}
                             </span>
                         </div>
                         <div className="flex items-center gap-2">
                             <FaRegComment className="scale-x-[-1]" size={18} />
-                            <span className="font-body text-xs">
+                            <span className="text-xs font-body">
                                 {comment_counts}
                             </span>
                         </div>
                     </div>
-                    {!isShowForm && setIsShowForm && (
+                    {!isShowForm && setIsShowForm && isAuthenticated && (
                         <button
                             className="bg-neutral-800 px-[27px] py-[7.5px] rounded-[70px] font-extrabold text-xs hover:bg-accent-purple transition-all"
                             onClick={() => {

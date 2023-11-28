@@ -3,7 +3,6 @@ import Button from 'commons/components/elements/Button';
 import { AUTHENTICATION_ROUTE } from 'commons/constants';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { addZeroBefore } from 'courses/utils';
-import Link from 'next/link';
 import { useGetDetailPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
 import { useSelector } from 'react-redux';
 
@@ -11,12 +10,16 @@ const SubscribeButton = ({
     slug,
     packetId,
     className,
-    label = 'Gabung Sekarang'
+    label = 'Gabung Sekarang',
+    eventName,
+    eventPayload
 }: {
     slug?: string;
     packetId?: string;
     className?: string;
     label?: string;
+    eventName?: string;
+    eventPayload?: Record<string, unknown>;
 }): JSX.Element => {
     const { is_subscribed } = useCourseSubscription(slug);
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -34,6 +37,8 @@ const SubscribeButton = ({
                     }`}
                     variant="primary"
                     target={packetId ? '__blank' : undefined}
+                    eventName={eventName}
+                    eventPayload={eventPayload}
                     href={
                         packetId
                             ? `https://api.whatsapp.com/send?phone=6285173430127&text=${encodeURIComponent(
@@ -49,15 +54,16 @@ const SubscribeButton = ({
                 </Button>
             )}
             {!isAuthenticated && !is_subscribed && (
-                <Link href={`${AUTHENTICATION_ROUTE}?redirect=/langganan`}>
-                    <Button
-                        className={`text-center my-2 z-[5] ${
-                            className ?? 'md:w-fit min-w-[200px]'
-                        }`}
-                        variant="primary">
-                        {label}
-                    </Button>
-                </Link>
+                <Button
+                    href={`${AUTHENTICATION_ROUTE}?redirect=/langganan`}
+                    className={`text-center my-2 z-[5] ${
+                        className ?? 'md:w-fit min-w-[200px]'
+                    }`}
+                    eventName={eventName}
+                    eventPayload={eventPayload}
+                    variant="primary">
+                    {label}
+                </Button>
             )}
         </>
     );

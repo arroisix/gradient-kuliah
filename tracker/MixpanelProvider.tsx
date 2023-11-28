@@ -21,11 +21,14 @@ class MixpanelTracker implements Tracker {
         }
     }
 
-    trackPageView(pageName: string, query?: Record<string, any>): void {
+    trackPageView(
+        pageName: string,
+        eventPayload?: Record<string, unknown>
+    ): void {
         this.mixpanelInstance?.track_pageview(
             {
                 Page: pageName,
-                'Page Query': query
+                ...eventPayload
             },
             // This feature is undocumented, so the type is missing
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -60,7 +63,7 @@ class MixpanelTracker implements Tracker {
 
     genericTrack(
         eventName: string,
-        payload?: Record<string, any> | undefined
+        payload?: Record<string, unknown> | undefined
     ): void {
         this.mixpanelInstance?.track(eventName, payload);
     }
@@ -68,7 +71,7 @@ class MixpanelTracker implements Tracker {
     trackButtonClick(
         eventName: string,
         buttonTextContent: string,
-        payload?: Record<string, any>
+        payload?: Record<string, unknown>
     ): void {
         this.genericTrack(`[BUTTON CLICK]: ${eventName}`, {
             ...(payload ?? {}),
@@ -78,8 +81,8 @@ class MixpanelTracker implements Tracker {
 
     trackAttemptFormSubmit(
         eventName: string,
-        formPayload: Record<string, any>,
-        payload: Record<string, any> = {}
+        formPayload: Record<string, unknown>,
+        payload: Record<string, unknown> = {}
     ): void {
         this.genericTrack(`[FORM SUBMIT ATTEMPT]: ${eventName}`, {
             'Form Data': formPayload,
