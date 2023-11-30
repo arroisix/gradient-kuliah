@@ -1,6 +1,6 @@
 import { Context, GrowthBook } from '@growthbook/growthbook-react';
 
-export const growthbook = new GrowthBook({
+export const growthbook = new GrowthBook<GrowthbookFeatures>({
     apiHost: process.env.NEXT_PUBLIC_GROWTHBOOK_API_HOST,
     clientKey: process.env.NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY,
     decryptionKey: process.env.NEXT_PUBLIC_GROWTHBOOK_DECRYPTION_KEY,

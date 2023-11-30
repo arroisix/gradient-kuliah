@@ -72,6 +72,9 @@ const SylabbusContent = ({
                     </div>
                 </>
             )}
+            {(subchapters?.length ?? 0) == 0 && (
+                <p>Sabar ya, materi ini akan segera hadir untukmu.</p>
+            )}
             {subchapters?.map((subchapter: SubChapter) => (
                 <Link
                     key={subchapter.id}

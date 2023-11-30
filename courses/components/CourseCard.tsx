@@ -3,7 +3,6 @@ import useTransition from 'commons/hooks/useTransition';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { toast } from 'react-toastify';
 
 const CourseCard = ({
     course,
@@ -29,19 +28,9 @@ const CourseCard = ({
     };
 
     return (
-        <Link
-            href={course.is_coming_soon ? '' : decideUrl()}
-            onClick={() => {
-                onClick?.();
-                course.is_coming_soon &&
-                    toast.info('Segera hadir!', {
-                        position: 'top-center',
-                        theme: 'colored',
-                        hideProgressBar: true
-                    });
-            }}>
+        <Link href={decideUrl()} onClick={() => onClick?.()}>
             <div
-                className="p-4 h-52 w-full bg-neutral-800 mr-2 rounded-lg cursor-pointer flex items-end relative overflow-hidden"
+                className="relative flex items-end w-full p-4 mr-2 overflow-hidden rounded-lg cursor-pointer h-52 bg-neutral-800"
                 style={{
                     background: `url(${course.thumbnail})`,
                     backgroundColor: '#333333',

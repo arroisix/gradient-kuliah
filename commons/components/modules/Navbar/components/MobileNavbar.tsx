@@ -4,8 +4,6 @@ import { removeUser } from 'authentication/redux/slices/userSlice';
 import { useDispatch } from 'react-redux';
 import { HiOutlineUsers } from 'react-icons/hi';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
-import PrivacyIcon from 'commons/components/elements/Icons/PrivacyPolicy';
-import TnCIcon from 'commons/components/elements/Icons/TnC';
 import { useLogoutMutation } from 'authentication/redux/api/authApi';
 
 interface MobileNavbarProps {
@@ -74,26 +72,6 @@ const MobileNavbar = ({
                                 </div>
                             </Link>
                         )}
-                        <Link
-                            href={'/kebijakan-privasi'}
-                            className={`flex ${
-                                lightMode ? 'text-black' : 'text-white'
-                            } hover:text-accent-blue font-normal w-full items-center mb-4`}>
-                            <PrivacyIcon />
-                            <div className="w-full ml-4 text-base">
-                                Kebijakan Privasi
-                            </div>
-                        </Link>
-                        <Link
-                            href={'/syarat-dan-ketentuan'}
-                            className={`flex ${
-                                lightMode ? 'text-black' : 'text-white'
-                            } hover:text-accent-blue font-normal w-full items-center mb-4`}>
-                            <TnCIcon />
-                            <div className="w-full ml-4 text-base">
-                                Syarat &amp; Ketentuan
-                            </div>
-                        </Link>
                         <div
                             className="flex items-center w-full font-normal text-accent-orange hover:text-state-error"
                             onClick={async () => {

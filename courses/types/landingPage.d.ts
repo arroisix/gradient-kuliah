@@ -47,6 +47,7 @@ interface CourseLandingPageData {
     lecturers: Lecturer[];
     configuration: CourseLandingPageConfig;
     packets: Packet[];
+    is_coming_soon: boolean;
 }
 
 interface MajorOptions {

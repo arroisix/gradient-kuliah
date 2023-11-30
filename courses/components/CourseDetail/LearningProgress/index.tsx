@@ -1,0 +1,90 @@
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { useGetLandingCourseDataQuery } from 'courses/redux/api/publicCourseApi';
+import { MdInfoOutline } from 'react-icons/md';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { useFeatureIsOn } from '@growthbook/growthbook-react';
+import { cn } from 'commons/utils';
+import CourseCTA from './CourseCTA';
+
+const CENTERED_HERO = [
+    'kimdas1',
+    'persamaan-diferensial',
+    'kalkulus2',
+    'probstat'
+];
+
+const LearningProgress = ({
+    slug
+}: GradientBaseComponentWithSlug): JSX.Element => {
+    const { data } = useGetLandingCourseDataQuery(slug);
+    const { is_subscribed, expiryDay, latest_watch_video } =
+        useCourseSubscription(slug);
+    const isAuthenticated = useSelector(getIsAuthenticated);
+    const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
+        'landing-page-revamp'
+    );
+
+    return (
+        <div
+            className={cn(
+                'flex flex-col gap-2 h-[70vh] relative',
+                isLandingPageRevampOn
+                    ? 'justify-end sm:justify-center'
+                    : 'justify-center'
+            )}>
+            <div className="absolute bottom-0 flex w-screen h-full">
+                <img
+                    src={data?.cover}
+                    className={cn(
+                        'object-cover w-screen',
+                        CENTERED_HERO.includes(slug)
+                            ? 'object-top'
+                            : 'object-right md:object-top'
+                    )}
+                    alt="Cover"
+                />
+                <div className="absolute self-end w-screen h-20 outline-none border-hidden bg-gradient-to-b from-transparent to-[#101010] lg:h-32" />
+            </div>
+            <div className="px-4 md:px-[7.5rem] py-4 z-10 lg:max-w-[60vw] flex flex-col gap-2">
+                <div className="flex flex-col gap-2">
+                    <h1
+                        className={`font-bold ${
+                            isAuthenticated
+                                ? 'text-sm lg:text-base'
+                                : 'text-4xl'
+                        }`}>
+                        {data?.course_name}
+                    </h1>
+                    <div className="w-full h-px bg-gray-500 lg:ml-3 lg:w-9/12" />
+                    {isAuthenticated && !data?.is_coming_soon && (
+                        <>
+                            <div className="text-xs text-gray-500 lg:ml-3">
+                                TERAKHIR DIPELAJARI
+                            </div>
+                            <h1 className="text-xl font-bold lg:ml-3 lg:text-2xl">
+                                {latest_watch_video?.subchapter
+                                    .subchapter_name ??
+                                    'Belum ada progress belajar'}
+                            </h1>
+                        </>
+                    )}
+                </div>
+                <CourseCTA slug={slug} />
+                {is_subscribed &&
+                    (expiryDay <= 7 || new Date() <= new Date('2022-10-14')) &&
+                    expiryDay < 30 && (
+                        <div className="flex items-center gap-2 mt-2">
+                            <MdInfoOutline className="text-xl" />
+                            <h4 className="font-body">
+                                Waktu berlanggangan kamu akan segera habis dalam{' '}
+                                {expiryDay} hari
+                            </h4>
+                        </div>
+                    )}
+            </div>
+        </div>
+    );
+};
+
+export default LearningProgress;

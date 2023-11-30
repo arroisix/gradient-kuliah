@@ -1,10 +1,10 @@
 import Button from 'commons/components/elements/Button';
 import { useGetLandingCourseDataQuery } from 'courses/redux/api/publicCourseApi';
 import SubscribeButton from '../LandingPage/Common/SubscribeButton';
-import { PercentageProgess } from './LearningProgress';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useSelector } from 'react-redux';
+import { PercentageProgess } from './LearningProgress/PercentageProgress';
 
 const CourseDescription = ({
     slug
@@ -19,22 +19,22 @@ const CourseDescription = ({
     const isAuthenticated = useSelector(getIsAuthenticated);
 
     return (
-        <div className="px-5 w-screen lg:w-3/12">
-            <div className="bg-zinc-900 p-4 rounded-xl flex flex-col gap-2">
+        <div className="w-screen px-5 lg:w-3/12">
+            <div className="flex flex-col gap-2 p-4 bg-zinc-900 rounded-xl">
                 <h1 className="font-semibold text-gray-500">
                     Tentang Kelas Ini
                 </h1>
-                <div className="h-px bg-gray-500 w-full" />
+                <div className="w-full h-px bg-gray-500" />
                 <div className="text-sm">{data?.description}</div>
 
                 <div className="text-sm text-gray-500">PENGAJAR</div>
                 <div className="flex flex-col gap-2">
                     {data?.lecturers.map((lecturer: Lecturer) => (
                         <div
-                            className="flex gap-2 items-center"
+                            className="flex items-center gap-2"
                             key={lecturer.name}>
                             <div>
-                                <div className="h-11 w-11 bg-neutral-200 rounded-full overflow-hidden flex justify-center items-center">
+                                <div className="flex items-center justify-center overflow-hidden rounded-full h-11 w-11 bg-neutral-200">
                                     <img
                                         src={lecturer.photo}
                                         className="object-contain object-bottom w-full"
