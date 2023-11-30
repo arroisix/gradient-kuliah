@@ -1,5 +1,5 @@
 import { Formik } from 'formik';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FaEyeSlash, FaEye } from 'react-icons/fa';
 import Button from 'commons/components/elements/Button';
 import Input from 'commons/components/elements/Form/input';
