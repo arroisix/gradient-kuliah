@@ -54,3 +54,8 @@ interface MajorOptions {
     label: string;
     slug: string;
 }
+
+interface MajorOptions {
+    label: string;
+    slug: string;
+}
