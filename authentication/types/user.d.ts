@@ -42,6 +42,7 @@ interface UpdateUserResponseData {
     profession_field: string;
     photo_profile: string;
     is_profile_complete: boolean;
+    device_type_id: number;
 }
 
 interface UpdateGeneralProfileInputData extends UpdateUserResponseData {
@@ -63,4 +64,17 @@ interface CheckUsernameAvailabilityResponseData {
 
 interface CheckUsernameAvailabilityResponse {
     data: CheckUsernameAvailabilityResponseData;
+}
+
+interface DeviceTypeResponse {
+    id: number;
+    name: string;
+    max_count: number;
+}
+
+interface UserDeviceResponse {
+    id: number;
+    ip_address: string;
+    last_login: string;
+    device_type: number;
 }

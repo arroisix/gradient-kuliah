@@ -1,12 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { authApi } from 'authentication/redux/api/authApi';
 import { toast } from 'react-toastify';
+import Router from 'next/router';
 
 type UserSliceState = {
     user: User;
     token: string | null;
     is_profile_complete: boolean;
     photo_profile: string | null;
+    device_type_id?: number;
 };
 
 const userSlice = createSlice({
@@ -20,7 +22,7 @@ const userSlice = createSlice({
     reducers: {
         removeUser: () => {
             window.localStorage.removeItem('token');
-            window.location.href = '/';
+            Router.replace('/');
             return {
                 token: null,
                 user: {} as User,
@@ -101,6 +103,15 @@ const userSlice = createSlice({
                 state.user = { id, ...payload };
                 state.is_profile_complete = is_profile_complete as boolean;
 
+                return state;
+            }
+        );
+        builder.addMatcher(
+            authApi.endpoints.getProfile.matchFulfilled,
+            (state, { payload }) => {
+                if (payload.device_type_id) {
+                    state.device_type_id = payload.device_type_id;
+                }
                 return state;
             }
         );

@@ -7,3 +7,5 @@ export const getIsProfileComplete = (state: RootState): boolean =>
 export const getIsAuthenticated = (state: RootState): boolean =>
     state.authentication.user.token !== undefined &&
     state.authentication.user.token !== null;
+export const getCurrentDeviceTypeId = (state: RootState): number | undefined =>
+    state.authentication?.user?.device_type_id;
