@@ -42,28 +42,28 @@ const SylabbusContent = ({
         <div className="flex flex-col gap-2">
             {isLoading && (
                 <>
-                    <div className='relative flex items-center w-full gap-4"'>
+                    <div className='relative flex items-center w-full gap-4'>
                         <Skeleton className="h-[98px] w-[240px]" />
                         <div className="w-full">
                             <Skeleton className="h-4" />
                             <Skeleton className="w-1/4 h-4" />
                         </div>
                     </div>
-                    <div className='relative flex items-center w-full gap-4"'>
+                    <div className='relative flex items-center w-full gap-4'>
                         <Skeleton className="h-[98px] w-[240px]" />
                         <div className="w-full">
                             <Skeleton className="h-4" />
                             <Skeleton className="w-1/4 h-4" />
                         </div>
                     </div>
-                    <div className='relative flex items-center w-full gap-4"'>
+                    <div className='relative flex items-center w-full gap-4'>
                         <Skeleton className="h-[98px] w-[240px]" />
                         <div className="w-full">
                             <Skeleton className="h-4" />
                             <Skeleton className="w-1/4 h-4" />
                         </div>
                     </div>
-                    <div className='relative flex items-center w-full gap-4"'>
+                    <div className='relative flex items-center w-full gap-4'>
                         <Skeleton className="h-[98px] w-[240px]" />
                         <div className="w-full">
                             <Skeleton className="h-4" />
