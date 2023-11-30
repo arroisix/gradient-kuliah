@@ -32,7 +32,7 @@ const Layout = ({
     return (
         <div
             className={cn(
-                'relative w-screen min-h-screen text-white',
+                'relative w-screen overflow-x-clip min-h-screen text-white',
                 isLandingPageRevampOn ? 'bg-[#101010]' : 'bg-neutral-1000',
                 paymentPage && 'flex flex-col'
             )}>

@@ -1,9 +1,11 @@
+import { useFeatureIsOn } from '@growthbook/growthbook-react';
 import Link from 'next/link';
 import { FaLine, FaInstagram } from 'react-icons/fa';
 import { MdCopyright, MdMailOutline } from 'react-icons/md';
 
 const Footer = (): JSX.Element => {
     const thisYear = new Date().getFullYear();
+    const isLegalPagesOn = useFeatureIsOn<GrowthbookFeatures>('legal-pages');
 
     return (
         <footer className="w-full flex flex-col bg-[#121212] px-4 md:px-[7.5rem] py-8">
@@ -18,21 +20,27 @@ const Footer = (): JSX.Element => {
                             className="cursor-pointer text-neutral-400">
                             Tentang Kami
                         </Link>
-                        <Link
-                            href="/syarat-dan-ketentuan"
-                            className="cursor-pointer text-neutral-400">
-                            Syarat &amp; Ketentuan
-                        </Link>
+                        {isLegalPagesOn ? (
+                            <Link
+                                href="/syarat-dan-ketentuan"
+                                className="cursor-pointer text-neutral-400">
+                                Syarat &amp; Ketentuan
+                            </Link>
+                        ) : (
+                            <div />
+                        )}
                         <Link
                             href="/karir"
                             className="cursor-pointer text-neutral-400">
                             Karir
                         </Link>
-                        <Link
-                            href="/kebijakan-privasi"
-                            className="cursor-pointer text-neutral-400">
-                            Privasi
-                        </Link>
+                        {isLegalPagesOn && (
+                            <Link
+                                href="/kebijakan-privasi"
+                                className="cursor-pointer text-neutral-400">
+                                Privasi
+                            </Link>
+                        )}
                     </div>
                 </div>
                 <div className="flex-col items-center justify-center w-full lg:w-1/4">
