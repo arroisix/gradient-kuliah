@@ -36,12 +36,6 @@ export const LoginSection: React.FC = () => {
         }
     });
 
-    useEffect(() => {
-        if (lastLogin.email) {
-            setShowLastLogin(true);
-        }
-    }, [lastLogin]);
-
     return (
         <Formik
             initialValues={{ email: '', password: '' }}
