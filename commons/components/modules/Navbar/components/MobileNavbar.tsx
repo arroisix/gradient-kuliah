@@ -6,6 +6,7 @@ import { HiOutlineUsers } from 'react-icons/hi';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import PrivacyIcon from 'commons/components/elements/Icons/PrivacyPolicy';
 import TnCIcon from 'commons/components/elements/Icons/TnC';
+import { useLogoutMutation } from 'authentication/redux/api/authApi';
 
 interface MobileNavbarProps {
     openMobile: boolean;
@@ -20,6 +21,7 @@ const MobileNavbar = ({
 }: MobileNavbarProps): JSX.Element => {
     const dispatch = useDispatch();
     const { is_subscribed } = useCourseSubscription();
+    const [logout] = useLogoutMutation();
 
     return openMobile ? (
         <>
@@ -94,7 +96,10 @@ const MobileNavbar = ({
                         </Link>
                         <div
                             className="flex items-center w-full font-normal text-accent-orange hover:text-state-error"
-                            onClick={() => dispatch(removeUser())}
+                            onClick={async () => {
+                                await logout();
+                                dispatch(removeUser());
+                            }}
                             aria-hidden>
                             <div>
                                 <MdLogout className="text-2xl" />
