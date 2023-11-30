@@ -1,3 +1,5 @@
+import PrivacyIcon from 'commons/components/elements/Icons/PrivacyPolicy';
+import TnCIcon from 'commons/components/elements/Icons/TnC';
 import { EducationLevelForm } from 'profile/components/EducationLevelForm';
 import { GeneralProfileForm } from 'profile/components/GeneralProfileForm';
 import { PersonalDataForm } from 'profile/components/PersonalDataForm';
@@ -20,6 +22,18 @@ export const PROFILE_MENUS = [
         label: 'Pendidikan',
         Icon: HiOutlineAcademicCap,
         url: 'profil/pendidikan'
+    },
+    {
+        featureFlag: 'legal-pages',
+        label: 'Syarat & Ketentuan',
+        Icon: TnCIcon,
+        url: 'syarat-dan-ketentuan'
+    },
+    {
+        featureFlag: 'legal-pages',
+        label: 'Kebijakan Privasi',
+        Icon: PrivacyIcon,
+        url: 'kebijakan-privasi'
     }
 ];
 
