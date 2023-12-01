@@ -76,7 +76,10 @@ const Button = ({
 
     if (href) {
         return (
-            <Link href={disabled ? "#" : href} className={linkClass} onClick={disabled ? undefined : onClick}>
+            <Link
+                href={disabled ? '#' : href}
+                className={linkClass}
+                onClick={disabled ? undefined : onClick}>
                 <div
                     id={id}
                     onMouseEnter={onMouseEnter}

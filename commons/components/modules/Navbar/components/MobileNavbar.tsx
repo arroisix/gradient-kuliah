@@ -1,7 +1,5 @@
 import Link from 'next/link';
 import { MdHistory, MdLogout, MdOutlinePersonOutline } from 'react-icons/md';
-import { removeUser } from 'authentication/redux/slices/userSlice';
-import { useDispatch } from 'react-redux';
 import { HiOutlineUsers } from 'react-icons/hi';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useLogoutMutation } from 'authentication/redux/api/authApi';
@@ -17,7 +15,6 @@ const MobileNavbar = ({
     setOpenMobile,
     lightMode
 }: MobileNavbarProps): JSX.Element => {
-    const dispatch = useDispatch();
     const { is_subscribed } = useCourseSubscription();
     const [logout] = useLogoutMutation();
 

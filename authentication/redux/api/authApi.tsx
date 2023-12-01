@@ -119,7 +119,7 @@ export const authApi = baseApi.injectEndpoints({
             query: () => ({
                 url: `${AUTH_BASE_URL}connected-devices/current/`
             }),
-            providesTags: (result, error, arg) => [
+            providesTags: (result) => [
                 { type: 'CONNECTED_DEVICES', id: result?.id }
             ]
         })

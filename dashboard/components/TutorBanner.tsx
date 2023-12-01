@@ -28,7 +28,7 @@ const TutorBanner = (): JSX.Element => {
                 Tutor Gradient hadir!
             </h5>
             <div className="text-sm md:text-base z-[1]">
-                <p className='font-bold'>Jadwal Tutor</p>
+                <p className="font-bold">Jadwal Tutor</p>
                 <ul className="p-0 list-none">
                     <li>Fisika 1: Setiap Jumat {displaySchedule('fisika')}</li>
                     <li>Kimia 1: Setiap Minggu {displaySchedule('kimia')}</li>

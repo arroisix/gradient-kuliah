@@ -9,7 +9,7 @@ import {
     REGISTER,
     persistStore
 } from 'redux-persist';
-import Router from "next/router"
+import Router from 'next/router';
 
 import rootReducer from './reducers';
 
@@ -126,11 +126,11 @@ export const rtkQueryErrorLogger: Middleware = () => (next) => (action) => {
             }
 
             if (status === 401) {
-                next(removeUser())
+                next(removeUser());
             }
 
             if (status === 403 && action.payload.data?.device_allowed) {
-                Router.replace('/keluar-perangkat')
+                Router.replace('/keluar-perangkat');
             }
         } catch (e) {
             toast.error(

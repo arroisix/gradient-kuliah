@@ -43,7 +43,6 @@ const ListContinueLearning = ({
 }: {
     learningProgress?: StudentLearningProgress[];
 }): JSX.Element => {
-    const router = useRouter();
     const tracker = useTracker();
 
     return (

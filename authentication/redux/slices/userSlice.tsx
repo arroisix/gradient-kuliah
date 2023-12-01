@@ -26,7 +26,7 @@ const userSlice = createSlice({
                 token: null,
                 user: {} as User,
                 is_profile_complete: true,
-                photo_profile: null,
+                photo_profile: null
             };
         },
         setNewUserFlag: (

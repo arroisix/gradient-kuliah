@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTracker } from 'tracker/tracker';
-import { useDispatch } from 'react-redux';
 import Link from 'next/link';
 import { MdLogout, MdOutlinePersonOutline } from 'react-icons/md';
 import { cn } from 'commons/utils';
