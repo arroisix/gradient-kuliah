@@ -25,7 +25,8 @@ export const baseApi = createApi({
         'WATCH_PROGRESS',
         'PROFILE',
         'COMMUNITIES',
-        'ASTRONOTES'
+        'ASTRONOTES',
+        'CONNECTED_DEVICES'
     ],
     baseQuery: fetchBaseQuery({
         baseUrl: config.API_BASE_URL,
