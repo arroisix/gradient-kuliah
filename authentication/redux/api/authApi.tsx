@@ -102,7 +102,7 @@ export const authApi = baseApi.injectEndpoints({
                 url: `${AUTH_BASE_URL}remove-other-devices/`,
                 method: 'POST'
             }),
-            invalidatesTags: ['PROFILE']
+            invalidatesTags: ['PROFILE', 'CONNECTED_DEVICES']
         }),
         getDeviceTypes: builder.query<DeviceTypeResponse[], void>({
             query: () => ({
@@ -114,8 +114,9 @@ export const authApi = baseApi.injectEndpoints({
             void
         >({
             query: () => ({
-                url: `${AUTH_BASE_URL}connected-devices/`
-            })
+                url: `${AUTH_BASE_URL}connected-devices/`,
+            }),
+            providesTags: ['CONNECTED_DEVICES']
         })
     })
 });
