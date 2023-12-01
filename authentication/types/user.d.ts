@@ -43,6 +43,7 @@ interface UpdateUserResponseData {
     photo_profile: string;
     is_profile_complete: boolean;
     device_type_id: number;
+    device_allowed: boolean;
 }
 
 interface UpdateGeneralProfileInputData extends UpdateUserResponseData {

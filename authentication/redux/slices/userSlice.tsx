@@ -8,7 +8,8 @@ type UserSliceState = {
     token: string | null;
     is_profile_complete: boolean;
     photo_profile: string | null;
-    device_type_id?: number;
+    device_type_id: number | null;
+    device_allowed: boolean | null;
 };
 
 const userSlice = createSlice({
@@ -27,7 +28,9 @@ const userSlice = createSlice({
                 token: null,
                 user: {} as User,
                 is_profile_complete: true,
-                photo_profile: null
+                photo_profile: null,
+                device_allowed: null,
+                device_type_id: null
             };
         },
         setNewUserFlag: (
@@ -109,12 +112,29 @@ const userSlice = createSlice({
         builder.addMatcher(
             authApi.endpoints.getProfile.matchFulfilled,
             (state, { payload }) => {
-                if (payload.device_type_id) {
-                    state.device_type_id = payload.device_type_id;
-                }
+                state.device_type_id = payload.device_type_id;
+                state.device_allowed = payload.device_allowed;
                 return state;
             }
         );
+        builder.addMatcher(authApi.endpoints.logout.matchFulfilled, (state) => {
+            window.localStorage.removeItem('token');
+
+            Router.push('/');
+
+            toast.success('Logout berhasil', {
+                position: 'top-center',
+                theme: 'colored',
+                hideProgressBar: true
+            });
+
+            state.token = null;
+            state.user = {} as User;
+            state.is_profile_complete = true;
+            state.photo_profile = null;
+
+            return state;
+        });
     }
 });
 

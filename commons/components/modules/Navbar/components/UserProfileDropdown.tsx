@@ -1,10 +1,10 @@
 import React from 'react';
 import { useTracker } from 'tracker/tracker';
-import { removeUser } from 'authentication/redux/slices/userSlice';
 import { useDispatch } from 'react-redux';
 import Link from 'next/link';
 import { MdLogout, MdOutlinePersonOutline } from 'react-icons/md';
 import { cn } from 'commons/utils';
+import { useLogoutMutation } from 'authentication/redux/api/authApi';
 
 const UserProfileDropdown = ({
     lightMode,
@@ -14,7 +14,7 @@ const UserProfileDropdown = ({
     isProfileHovered: boolean;
 }): JSX.Element => {
     const tracker = useTracker();
-    const dispatch = useDispatch();
+    const [logout] = useLogoutMutation();
 
     return (
         <div
@@ -39,9 +39,9 @@ const UserProfileDropdown = ({
             </Link>
             <div
                 className="flex items-center w-full font-normal text-accent-orange hover:bg-[#1D1D1D] px-2 py-3 rounded-sm"
-                onClick={() => {
+                onClick={async () => {
                     tracker?.genericTrack('Click Logout');
-                    dispatch(removeUser());
+                    await logout();
                 }}
                 aria-hidden>
                 <div>

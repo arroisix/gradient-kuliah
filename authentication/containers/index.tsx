@@ -35,7 +35,6 @@ export const AuthenticationContainer: React.FC = () => {
 
     const handleLogout = async () => {
         await logout();
-        dispatch(removeUser());
     };
 
     const isLogin = pathname === '/masuk';

@@ -76,7 +76,6 @@ const MobileNavbar = ({
                             className="flex items-center w-full font-normal text-accent-orange hover:text-state-error"
                             onClick={async () => {
                                 await logout();
-                                dispatch(removeUser());
                             }}
                             aria-hidden>
                             <div>
