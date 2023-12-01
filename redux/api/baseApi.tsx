@@ -14,7 +14,13 @@ global.AbortController = AbortController;
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import config from './config';
 import { HYDRATE } from 'next-redux-wrapper';
-import { getCurrentBrowserFingerPrint } from '@rajesh896/broprint.js';
+import FingerPrintJS from '@fingerprintjs/fingerprintjs';
+
+async function getBrowserFingerPrint() {
+    const fp = await FingerPrintJS.load();
+    const { visitorId } = await fp.get();
+    return visitorId;
+}
 
 export const baseApi = createApi({
     tagTypes: [
@@ -42,7 +48,7 @@ export const baseApi = createApi({
             }
 
             if (endpoint === 'login') {
-                const did = await getCurrentBrowserFingerPrint();
+                const did = await getBrowserFingerPrint();
                 headers.set('did', did);
             }
             return headers;
