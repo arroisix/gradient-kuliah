@@ -1,4 +1,4 @@
-import { MouseEvent } from 'react';
+import { MouseEvent, ReactNode } from 'react';
 
 type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'custom';
 
@@ -10,7 +10,7 @@ interface BaseButtonProps {
     onMouseLeave?: () => void;
     href?: string;
     disabled?: boolean;
-    children: JSX.Element | string;
+    children?: ReactNode;
     type?: 'button' | 'submit';
     className?: string;
     id?: string;
