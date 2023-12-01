@@ -16,7 +16,10 @@ const TutorBanner = (): JSX.Element => {
     };
 
     const displaySchedule = (course: string): string => {
-        return schedule[course].clone().tz(USER_TIMEZONE).format('HH:mm z');
+        return (
+            schedule[course]?.clone()?.tz(USER_TIMEZONE)?.format('HH:mm z') ??
+            ''
+        );
     };
 
     return (
