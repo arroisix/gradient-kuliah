@@ -109,14 +109,19 @@ export const authApi = baseApi.injectEndpoints({
                 url: `${AUTH_BASE_URL}device-types/`
             })
         }),
-        getConnectedDevices: builder.query<
-            UserDeviceResponse[],
-            void
-        >({
+        getConnectedDevices: builder.query<UserDeviceResponse[], void>({
             query: () => ({
-                url: `${AUTH_BASE_URL}connected-devices/`,
+                url: `${AUTH_BASE_URL}connected-devices/`
             }),
             providesTags: ['CONNECTED_DEVICES']
+        }),
+        getCurrentConnectedDevice: builder.query<UserDeviceResponse, void>({
+            query: () => ({
+                url: `${AUTH_BASE_URL}connected-devices/current/`
+            }),
+            providesTags: (result, error, arg) => [
+                { type: 'CONNECTED_DEVICES', id: result?.id }
+            ]
         })
     })
 });
@@ -135,5 +140,6 @@ export const {
     useRemoveOtherDeviceMutation,
     useLogoutMutation,
     useGetConnectedDevicesQuery,
-    useGetDeviceTypesQuery
+    useGetDeviceTypesQuery,
+    useGetCurrentConnectedDeviceQuery
 } = authApi;
