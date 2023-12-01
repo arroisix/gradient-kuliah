@@ -76,7 +76,7 @@ const Button = ({
 
     if (href) {
         return (
-            <Link href={href} className={linkClass}>
+            <Link href={href} className={linkClass} onClick={handleClick}>
                 <div
                     id={id}
                     onMouseEnter={onMouseEnter}
