@@ -14,6 +14,7 @@ global.AbortController = AbortController;
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import config from './config';
 import { HYDRATE } from 'next-redux-wrapper';
+import { getCurrentBrowserFingerPrint } from '@rajesh896/broprint.js';
 
 export const baseApi = createApi({
     tagTypes: [
@@ -24,11 +25,12 @@ export const baseApi = createApi({
         'WATCH_PROGRESS',
         'PROFILE',
         'COMMUNITIES',
-        'ASTRONOTES'
+        'ASTRONOTES',
+        'CONNECTED_DEVICES'
     ],
     baseQuery: fetchBaseQuery({
         baseUrl: config.API_BASE_URL,
-        prepareHeaders: (headers, { getState }) => {
+        prepareHeaders: async (headers, { getState, endpoint }) => {
             const token = (getState() as RootState).authentication.user.token;
             const rawToken =
                 typeof window !== 'undefined'
@@ -37,6 +39,11 @@ export const baseApi = createApi({
 
             if (token || rawToken) {
                 headers.set('Authorization', `Token ${token ?? rawToken}`);
+            }
+
+            if (endpoint === 'login') {
+                const did = await getCurrentBrowserFingerPrint();
+                headers.set('did', did);
             }
             return headers;
         }

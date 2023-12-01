@@ -26,6 +26,12 @@ export const authApi = baseApi.injectEndpoints({
                 body: data
             })
         }),
+        logout: builder.mutation<void, void>({
+            query: () => ({
+                url: `${AUTH_BASE_URL}logout/`,
+                method: 'POST'
+            })
+        }),
         updateUser: builder.mutation<
             UpdateUserResponseData,
             UpdateUserInputData
@@ -90,6 +96,32 @@ export const authApi = baseApi.injectEndpoints({
                 method: 'POST',
                 body
             })
+        }),
+        removeOtherDevice: builder.mutation<void, void>({
+            query: () => ({
+                url: `${AUTH_BASE_URL}remove-other-devices/`,
+                method: 'POST'
+            }),
+            invalidatesTags: ['PROFILE', 'CONNECTED_DEVICES']
+        }),
+        getDeviceTypes: builder.query<DeviceTypeResponse[], void>({
+            query: () => ({
+                url: `${AUTH_BASE_URL}device-types/`
+            })
+        }),
+        getConnectedDevices: builder.query<UserDeviceResponse[], void>({
+            query: () => ({
+                url: `${AUTH_BASE_URL}connected-devices/`
+            }),
+            providesTags: ['CONNECTED_DEVICES']
+        }),
+        getCurrentConnectedDevice: builder.query<UserDeviceResponse, void>({
+            query: () => ({
+                url: `${AUTH_BASE_URL}connected-devices/current/`
+            }),
+            providesTags: (result) => [
+                { type: 'CONNECTED_DEVICES', id: result?.id }
+            ]
         })
     })
 });
@@ -104,5 +136,10 @@ export const {
     useCheckUsernameAvailabilityMutation,
     usePasswordResetValidateTokenMutation,
     usePasswordResetConfirmMutation,
-    usePasswordResetMutation
+    usePasswordResetMutation,
+    useRemoveOtherDeviceMutation,
+    useLogoutMutation,
+    useGetConnectedDevicesQuery,
+    useGetDeviceTypesQuery,
+    useGetCurrentConnectedDeviceQuery
 } = authApi;

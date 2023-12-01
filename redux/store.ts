@@ -9,6 +9,7 @@ import {
     REGISTER,
     persistStore
 } from 'redux-persist';
+import Router from 'next/router';
 
 import rootReducer from './reducers';
 
@@ -19,7 +20,7 @@ import logger from 'redux-logger';
 import { isRejectedWithValue, Middleware } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 
-import { clearCache } from 'authentication/redux/slices/userSlice';
+import { clearCache, removeUser } from 'authentication/redux/slices/userSlice';
 import { authApi } from 'authentication/redux/api/authApi';
 
 /**
@@ -125,8 +126,11 @@ export const rtkQueryErrorLogger: Middleware = () => (next) => (action) => {
             }
 
             if (status === 401) {
-                window.localStorage.clear();
-                window.location.href = '/';
+                next(removeUser());
+            }
+
+            if (status === 403 && action.payload.data?.device_allowed) {
+                Router.replace('/keluar-perangkat');
             }
         } catch (e) {
             toast.error(

@@ -15,7 +15,7 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
     ): JSX.Element | undefined => {
         // checks whether we are on client / browser or server.
         if (typeof window !== 'undefined') {
-            const { pathname, query } = useRouter();
+            const router = useRouter();
             const accessToken = useSelector(getToken);
             const rawToken = window.localStorage.getItem('token');
 
@@ -29,32 +29,32 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
             // Also clear token from cookie and localstorage
             if (isDoneFetchingSubcription) {
                 if (
-                    pathname === '/onboarding' &&
+                    router.pathname === '/onboarding' &&
                     isProfileComplete &&
                     !(isLastOnboardingStep === 'true') &&
                     is_subscribed
                 ) {
-                    window.location.href = '/dashboard';
+                    router.push('/dashboard');
                     return;
                 }
 
-                if (pathname === '/onboarding' && !isProfileComplete) {
+                if (router.pathname === '/onboarding' && !isProfileComplete) {
                     return <WrappedComponent {...props} />;
                 }
 
                 if (
-                    pathname === '/onboarding' &&
+                    router.pathname === '/onboarding' &&
                     isProfileComplete &&
                     isLastOnboardingStep === 'true' &&
                     !is_subscribed
                 ) {
                     const packetId = localStorage.getItem('packetId');
                     if (packetId) {
-                        window.location.href = `/pembayaran?packetId=${packetId}`;
-                    } else if (query.redirect) {
-                        window.location.href = query.redirect as string;
+                        router.push(`/pembayaran?packetId=${packetId}`);
+                    } else if (router.query.redirect) {
+                        router.push(router.query.redirect as string);
                     } else {
-                        window.location.href = '/';
+                        router.push('/');
                     }
                     return;
                 }
@@ -67,21 +67,21 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
                         '/pembayaran',
                         '/checkout',
                         '/referral'
-                    ].some((value) => pathname.includes(value)) &&
+                    ].some((value) => router.pathname.includes(value)) &&
                     !is_subscribed
                 ) {
                     return <WrappedComponent {...props} />;
                 }
 
-                if (pathname !== '/mulai' && !is_subscribed) {
-                    if (pathname === '/komunitas')
-                        window.location.href = '/langganan';
-                    else window.location.href = '/';
+                if (router.pathname !== '/mulai' && !is_subscribed) {
+                    if (router.pathname === '/komunitas')
+                        router.push('/langganan');
+                    else router.push('/');
                     return;
                 }
 
                 if (!accessToken && !rawToken) {
-                    window.location.href = '/';
+                    router.push('/');
                     return;
                 }
 
