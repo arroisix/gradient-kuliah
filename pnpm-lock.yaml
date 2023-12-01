@@ -8,6 +8,9 @@ dependencies:
   '@apollo/client':
     specifier: ^3.7.0
     version: 3.7.0(graphql@16.6.0)(react-dom@18.1.0)(react@18.1.0)
+  '@fingerprintjs/fingerprintjs':
+    specifier: ^4.2.1
+    version: 4.2.1
   '@growthbook/growthbook-react':
     specifier: ^0.20.0
     version: 0.20.0(react@18.1.0)
@@ -20,9 +23,6 @@ dependencies:
   '@notionhq/client':
     specifier: ^2.2.10
     version: 2.2.10
-  '@rajesh896/broprint.js':
-    specifier: ^2.1.1
-    version: 2.1.1
   '@react-oauth/google':
     specifier: ^0.5.1
     version: 0.5.1(react-dom@18.1.0)(react@18.1.0)
@@ -1820,6 +1820,12 @@ packages:
       - supports-color
     dev: true
 
+  /@fingerprintjs/fingerprintjs@4.2.1:
+    resolution: {integrity: sha512-uW+GVUNTgCXbVPEbgnbf5Aor22e1dyYR0JRwdUiZBaikfxr7KlhV9y0aahA1FB99fEeQVvhCEvTcPIFSYTy9Pw==}
+    dependencies:
+      tslib: 2.6.2
+    dev: false
+
   /@fisch0920/medium-zoom@1.0.7:
     resolution: {integrity: sha512-hPUrgVM/QvsZdZzDTPyL1C1mOtEw03RqTLmK7ZlJ8S/64u4O4O5BvPvjB/9kyLtE6iVaS9UDRAMSwmM9uh2JIw==}
     dev: false
@@ -2218,11 +2224,6 @@ packages:
       node-fetch: 2.7.0
     transitivePeerDependencies:
       - encoding
-    dev: false
-
-  /@rajesh896/broprint.js@2.1.1:
-    resolution: {integrity: sha512-34L0SFrOLHWAhF4ZU7QS32zItGOKdu3BY0DmMwoW6zekLuJWSuCIK07Xzgyy2AqCCUByd2VHMr2wbHousid+qg==}
-    hasBin: true
     dev: false
 
   /@react-native-community/cli-clean@11.3.6:
