@@ -11,7 +11,8 @@ const DISPLAYED_ROUTES = [
     'kebijakan-privasi',
     'syarat-dan-ketentuan',
     'astronotes',
-    'referral'
+    'referral',
+    'transaksi'
 ];
 
 const LeftNavbarMenu = ({

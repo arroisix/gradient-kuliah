@@ -6,6 +6,7 @@ import { useTracker } from 'tracker/tracker';
 import { useRouter } from 'next/router';
 import ReferralEntrypoint from './ReferralEntrypoint';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { cn } from 'commons/utils';
 
 const HIDE_HISTORY_ICON_ON = ['kelas/[id]/', 'astronotes/'];
 
@@ -29,7 +30,11 @@ const NavMenuIcons = (): JSX.Element => {
                     }>
                     <MdHistory
                         size={24}
-                        className="text-[#999999]"
+                        className={cn(
+                            router.pathname === '/transaksi'
+                                ? 'text-[#999999]'
+                                : 'text-white'
+                        )}
                         title="Riwayat Pembelian"
                     />
                 </Link>
