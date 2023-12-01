@@ -8,8 +8,6 @@ type UserSliceState = {
     token: string | null;
     is_profile_complete: boolean;
     photo_profile: string | null;
-    device_type_id: number | null;
-    device_allowed: boolean | null;
 };
 
 const userSlice = createSlice({
@@ -29,8 +27,6 @@ const userSlice = createSlice({
                 user: {} as User,
                 is_profile_complete: true,
                 photo_profile: null,
-                device_allowed: null,
-                device_type_id: null
             };
         },
         setNewUserFlag: (
@@ -106,14 +102,6 @@ const userSlice = createSlice({
                 state.user = { id, ...payload };
                 state.is_profile_complete = is_profile_complete as boolean;
 
-                return state;
-            }
-        );
-        builder.addMatcher(
-            authApi.endpoints.getProfile.matchFulfilled,
-            (state, { payload }) => {
-                state.device_type_id = payload.device_type_id;
-                state.device_allowed = payload.device_allowed;
                 return state;
             }
         );
