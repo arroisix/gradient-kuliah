@@ -77,5 +77,6 @@ interface UserDeviceResponse {
     id: number;
     ip_address: string;
     last_login: string;
-    device_type: number;
+    device_type_id: number;
+    device_allowed: boolean;
 }
