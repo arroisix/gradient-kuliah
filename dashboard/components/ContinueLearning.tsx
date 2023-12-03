@@ -5,6 +5,7 @@ import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import Button from 'commons/components/elements/Button';
 import { useTracker } from 'tracker/tracker';
 import Skeleton from 'commons/components/elements/Skeleton';
+import Link from 'next/link';
 
 const ContinueLearning = ({
     className,
@@ -42,7 +43,6 @@ const ListContinueLearning = ({
 }: {
     learningProgress?: StudentLearningProgress[];
 }): JSX.Element => {
-    const router = useRouter();
     const tracker = useTracker();
 
     return (
@@ -57,13 +57,9 @@ const ListContinueLearning = ({
                     course_name,
                     progress_percentage
                 }) => (
-                    <div
-                        key={course_slug}
-                        className="flex gap-[18px] md:gap-[30px] items-center justify-start md:justify-center cursor-pointer"
+                    <Link
+                        href={`/kelas/${course_slug}/belajar/video/${chapter_id}/${subchapter_id}`}
                         onClick={() => {
-                            router.push(
-                                `/kelas/${course_slug}/belajar/video/${chapter_id}/${subchapter_id}`
-                            );
                             tracker?.genericTrack(
                                 'Click Latest Watch Progress Card',
                                 {
@@ -72,25 +68,27 @@ const ListContinueLearning = ({
                                 }
                             );
                         }}
-                        aria-hidden>
-                        <div className="relative min-w-[120px] sm:min-w-[160px] lg:min-w-[220px] w-1/2 min-h-[83px] sm:h-[120px] lg:h-[150px] max-w-[260px]">
-                            <Image
-                                src={subchapter_thumbnail}
-                                alt={subchapter_name}
-                                layout="fill"
-                                className="object-cover object-top rounded-lg"
-                            />
+                        key={`${course_slug}-${chapter_id}-${subchapter_id}`}>
+                        <div className="flex gap-[18px] md:gap-[30px] items-center justify-start md:justify-center cursor-pointer">
+                            <div className="relative min-w-[120px] sm:min-w-[160px] lg:min-w-[220px] w-1/2 min-h-[83px] sm:h-[120px] lg:h-[150px] max-w-[260px]">
+                                <Image
+                                    src={subchapter_thumbnail}
+                                    alt={subchapter_name}
+                                    layout="fill"
+                                    className="object-cover object-top rounded-lg"
+                                />
+                            </div>
+                            <div className="flex flex-col gap-[2px] w-full overflow-hidden">
+                                <span className="inline-block overflow-hidden font-body whitespace-nowrap text-ellipsis">
+                                    {subchapter_name}
+                                </span>
+                                <span className="inline-block pb-3 overflow-hidden text-xs font-body text-neutral-200 whitespace-nowrap text-ellipsis">
+                                    {course_name}
+                                </span>
+                                <ProgressBar percent={progress_percentage} />
+                            </div>
                         </div>
-                        <div className="flex flex-col gap-[2px] w-full overflow-hidden">
-                            <span className="inline-block overflow-hidden font-body whitespace-nowrap text-ellipsis">
-                                {subchapter_name}
-                            </span>
-                            <span className="inline-block pb-3 overflow-hidden text-xs font-body text-neutral-200 whitespace-nowrap text-ellipsis">
-                                {course_name}
-                            </span>
-                            <ProgressBar percent={progress_percentage} />
-                        </div>
-                    </div>
+                    </Link>
                 )
             )}
         </div>

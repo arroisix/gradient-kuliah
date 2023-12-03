@@ -1,13 +1,12 @@
 import { OnboardingSuccess } from 'authentication/containers/OnboardingSection/OnboardingSuccess';
+import { useLogoutMutation } from 'authentication/redux/api/authApi';
 import { getCurrentUser } from 'authentication/redux/selectors/userSelector';
-import { removeUser } from 'authentication/redux/slices/userSlice';
 import withAuth from 'commons/withAuth';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const Mulai = (): JSX.Element => {
-    const dispatch = useDispatch();
     const user = useSelector(getCurrentUser);
-    const logout: () => void = () => dispatch(removeUser());
+    const [logout] = useLogoutMutation();
 
     return (
         <section className="text-white h-screen overflow-hidden">
@@ -16,7 +15,9 @@ const Mulai = (): JSX.Element => {
                     Terdaftar sebagai {user.email}
                 </span>{' '}
                 <button
-                    onClick={logout}
+                    onClick={async () => {
+                        await logout();
+                    }}
                     className="text-[#999999] hover:text-red-400 transition-all duration-500">
                     Sign Out
                 </button>

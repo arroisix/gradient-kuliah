@@ -3,20 +3,20 @@ import { AUTH_SECTION } from 'authentication/constants';
 import { RegistrationProvider } from 'authentication/contexts/RegistrationProvider';
 import { useLastLogin } from 'authentication/hooks/useLastLogin';
 import useSocialLogin from 'authentication/hooks/useSocialLogin';
+import { useLogoutMutation } from 'authentication/redux/api/authApi';
 import { getCurrentUser } from 'authentication/redux/selectors/userSelector';
-import { removeUser } from 'authentication/redux/slices/userSlice';
 import Button from 'commons/components/elements/Button';
 import { useRouter } from 'next/router';
 import { AiOutlineGoogle } from 'react-icons/ai';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 export const AuthenticationContainer: React.FC = () => {
     const { pathname } = useRouter();
     const AuthSection = AUTH_SECTION[pathname];
     const { googleLogin } = useSocialLogin();
+    const [logout] = useLogoutMutation();
     const user = useSelector(getCurrentUser);
-    const dispatch = useDispatch();
     const { setLastLogin } = useLastLogin();
 
     const login = useGoogleLogin({
@@ -31,7 +31,9 @@ export const AuthenticationContainer: React.FC = () => {
         }
     });
 
-    const logout: () => void = () => dispatch(removeUser());
+    const handleLogout = async () => {
+        await logout();
+    };
 
     const isLogin = pathname === '/masuk';
 
@@ -43,7 +45,7 @@ export const AuthenticationContainer: React.FC = () => {
                         Terdaftar sebagai {user.email}
                     </span>{' '}
                     <button
-                        onClick={logout}
+                        onClick={handleLogout}
                         className="text-[#999999] hover:text-red-400 transition-all duration-500">
                         Sign Out
                     </button>

@@ -1,5 +1,5 @@
 import { Formik } from 'formik';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FaEyeSlash, FaEye } from 'react-icons/fa';
 import Button from 'commons/components/elements/Button';
 import Input from 'commons/components/elements/Form/input';
@@ -35,12 +35,6 @@ export const LoginSection: React.FC = () => {
             toast.error('Gagal login, coba beberapa saat lagi');
         }
     });
-
-    useEffect(() => {
-        if (lastLogin.email) {
-            setShowLastLogin(true);
-        }
-    }, [lastLogin]);
 
     return (
         <Formik

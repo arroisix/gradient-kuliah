@@ -14,6 +14,7 @@
     },
     "dependencies": {
         "@apollo/client": "^3.7.0",
+        "@fingerprintjs/fingerprintjs": "^4.2.1",
         "@growthbook/growthbook-react": "^0.20.0",
         "@headlessui/react": "^1.7.3",
         "@mux/videojs-kit": "^0.12.0",
@@ -30,6 +31,7 @@
         "graphql": "^16.6.0",
         "hls.js": "^1.2.4",
         "katex": "^0.16.4",
+        "lodash.groupby": "^4.6.0",
         "marked": "^4.2.5",
         "marked-katex-extension": "^1.0.2",
         "mixpanel-browser": "^2.47.0",
@@ -83,6 +85,7 @@
         "videojs-mux": "^4.15.3"
     },
     "devDependencies": {
+        "@types/lodash.groupby": "^4.6.9",
         "@types/marked": "^4.0.8",
         "@types/mixpanel-browser": "^2.47.2",
         "@types/node": "^17.0.45",

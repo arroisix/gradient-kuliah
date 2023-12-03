@@ -1,8 +1,6 @@
 import Layout from 'commons/layout';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { wrapper } from 'redux/store';
-import { getLandingCourseData } from 'courses/redux/api/publicCourseApi';
-import { getRunningQueriesThunk } from 'redux/api/baseApi';
 import config from 'redux/api/config';
 import LandingPageOrchestrator from 'courses/components/LandingPage/LandingPageOrchestrator';
 import axios from 'axios';
@@ -51,16 +49,16 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
-    ({ dispatch }) =>
+    () =>
         async ({ params }) => {
-            const { data: courseData } = await dispatch<any>(
-                getLandingCourseData.initiate(params?.id as string)
+            const { data: courseData } = await axios.get<CourseLandingPageData>(
+                `${config.API_BASE_URL}courses/public/landing/${params?.id}`
             );
-            const { data }: { data: { data: PacketOffer[] } } = await axios.get(
+            const {
+                data: { data: packetOfferData }
+            } = await axios.get<ResponseData<PacketOffer>>(
                 `${config.API_BASE_URL}subscriptions/packet-offer/`
             );
-
-            await Promise.all([getRunningQueriesThunk()]);
 
             return {
                 props: {
@@ -82,7 +80,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                             }
                         ]
                     },
-                    packetOffer: data.data
+                    packetOffer: packetOfferData
                 },
                 revalidate: 300
             };

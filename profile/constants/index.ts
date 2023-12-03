@@ -2,10 +2,12 @@ import PrivacyIcon from 'commons/components/elements/Icons/PrivacyPolicy';
 import TnCIcon from 'commons/components/elements/Icons/TnC';
 import { EducationLevelForm } from 'profile/components/EducationLevelForm';
 import { GeneralProfileForm } from 'profile/components/GeneralProfileForm';
+import { PerangkatTerhubungForm } from 'profile/components/PerangkatTerhubungForm';
 import { PersonalDataForm } from 'profile/components/PersonalDataForm';
 import { CgBell } from 'react-icons/cg';
 import { GoHome } from 'react-icons/go';
 import { HiOutlineAcademicCap } from 'react-icons/hi';
+import { MdOutlinePhoneAndroid } from 'react-icons/md';
 
 export const PROFILE_MENUS = [
     {
@@ -22,6 +24,11 @@ export const PROFILE_MENUS = [
         label: 'Pendidikan',
         Icon: HiOutlineAcademicCap,
         url: 'profil/pendidikan'
+    },
+    {
+        label: 'Perangkat Terhubung',
+        Icon: MdOutlinePhoneAndroid,
+        url: 'profil/perangkat-terhubung'
     },
     {
         featureFlag: 'legal-pages',
@@ -44,5 +51,6 @@ interface ProfileManagementFormsInterface {
 export const PROFILE_MANAGEMENT_FORMS: ProfileManagementFormsInterface = {
     '/profil/profil-umum': GeneralProfileForm,
     '/profil/data-diri': PersonalDataForm,
-    '/profil/pendidikan': EducationLevelForm
+    '/profil/pendidikan': EducationLevelForm,
+    '/profil/perangkat-terhubung': PerangkatTerhubungForm
 };
