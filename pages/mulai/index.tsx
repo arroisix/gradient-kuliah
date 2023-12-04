@@ -2,9 +2,11 @@ import { OnboardingSuccess } from 'authentication/containers/OnboardingSection/O
 import { useLogoutMutation } from 'authentication/redux/api/authApi';
 import { getCurrentUser } from 'authentication/redux/selectors/userSelector';
 import withAuth from 'commons/withAuth';
+import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
 const Mulai = (): JSX.Element => {
+    const router = useRouter();
     const user = useSelector(getCurrentUser);
     const [logout] = useLogoutMutation();
 
@@ -17,6 +19,7 @@ const Mulai = (): JSX.Element => {
                 <button
                     onClick={async () => {
                         await logout();
+                        router.push('/');
                     }}
                     className="text-[#999999] hover:text-red-400 transition-all duration-500">
                     Sign Out

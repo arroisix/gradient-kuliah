@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { MdLogout, MdOutlinePersonOutline } from 'react-icons/md';
 import { cn } from 'commons/utils';
 import { useLogoutMutation } from 'authentication/redux/api/authApi';
+import { useRouter } from 'next/router';
 
 const UserProfileDropdown = ({
     lightMode,
@@ -13,6 +14,7 @@ const UserProfileDropdown = ({
     isProfileHovered: boolean;
 }): JSX.Element => {
     const tracker = useTracker();
+    const router = useRouter();
     const [logout] = useLogoutMutation();
 
     return (
@@ -41,6 +43,7 @@ const UserProfileDropdown = ({
                 onClick={async () => {
                     tracker?.genericTrack('Click Logout');
                     await logout();
+                    router.push('/');
                 }}
                 aria-hidden>
                 <div>

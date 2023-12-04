@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { authApi } from 'authentication/redux/api/authApi';
 import { toast } from 'react-toastify';
-import Router from 'next/router';
 
 type UserSliceState = {
     user: User;
@@ -21,7 +20,6 @@ const userSlice = createSlice({
     reducers: {
         removeUser: () => {
             window.localStorage.removeItem('token');
-            Router.replace('/');
             return {
                 token: null,
                 user: {} as User,
@@ -107,8 +105,6 @@ const userSlice = createSlice({
         );
         builder.addMatcher(authApi.endpoints.logout.matchFulfilled, (state) => {
             window.localStorage.removeItem('token');
-
-            Router.push('/');
 
             toast.success('Logout berhasil', {
                 position: 'top-center',

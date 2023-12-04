@@ -114,6 +114,7 @@ const KeluarPerangkat = (): JSX.Element => {
                         className="!py-3 text-base !font-sans bg-[#212121] text-center"
                         onClick={async () => {
                             await logout();
+                            router.replace('/');
                         }}>
                         Kembali ke Halaman Utama
                     </Button>
