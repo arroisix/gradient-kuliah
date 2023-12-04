@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { authApi } from 'authentication/redux/api/authApi';
 import { toast } from 'react-toastify';
-import Router from 'next/router';
 
 type UserSliceState = {
     user: User;

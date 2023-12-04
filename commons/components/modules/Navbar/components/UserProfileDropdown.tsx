@@ -43,7 +43,7 @@ const UserProfileDropdown = ({
                 onClick={async () => {
                     tracker?.genericTrack('Click Logout');
                     await logout();
-                    router.push('/')
+                    router.push('/');
                 }}
                 aria-hidden>
                 <div>

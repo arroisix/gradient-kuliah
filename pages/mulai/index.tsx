@@ -19,7 +19,7 @@ const Mulai = (): JSX.Element => {
                 <button
                     onClick={async () => {
                         await logout();
-                        router.push('/')
+                        router.push('/');
                     }}
                     className="text-[#999999] hover:text-red-400 transition-all duration-500">
                     Sign Out
