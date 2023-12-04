@@ -113,8 +113,10 @@ const KeluarPerangkat = (): JSX.Element => {
                         className="!py-3 text-base !font-sans bg-[#212121] text-center"
                         disabled={isLoadingLogout}
                         onClick={async () => {
-                            router.replace('/');
                             await logout();
+                            setTimeout(() => {
+                                router.push('/');
+                            }, 500);
                         }}>
                         {isLoadingLogout
                             ? 'Tuggu Sebentar...'
