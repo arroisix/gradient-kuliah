@@ -107,8 +107,6 @@ const userSlice = createSlice({
         builder.addMatcher(authApi.endpoints.logout.matchFulfilled, (state) => {
             window.localStorage.removeItem('token');
 
-            Router.push('/');
-
             toast.success('Logout berhasil', {
                 position: 'top-center',
                 theme: 'colored',
