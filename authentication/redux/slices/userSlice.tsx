@@ -21,7 +21,7 @@ const userSlice = createSlice({
     reducers: {
         removeUser: () => {
             window.localStorage.removeItem('token');
-            Router.replace('/');
+            Router.replace('/masuk');
             return {
                 token: null,
                 user: {} as User,
