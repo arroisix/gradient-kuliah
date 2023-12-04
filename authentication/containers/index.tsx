@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 export const AuthenticationContainer: React.FC = () => {
-    const { pathname } = useRouter();
+    const { pathname, push } = useRouter();
     const AuthSection = AUTH_SECTION[pathname];
     const { googleLogin } = useSocialLogin();
     const [logout] = useLogoutMutation();
@@ -33,6 +33,7 @@ export const AuthenticationContainer: React.FC = () => {
 
     const handleLogout = async () => {
         await logout();
+        push('/');
     };
 
     const isLogin = pathname === '/masuk';

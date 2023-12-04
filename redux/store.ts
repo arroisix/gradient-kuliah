@@ -127,6 +127,7 @@ export const rtkQueryErrorLogger: Middleware = () => (next) => (action) => {
 
             if (status === 401) {
                 next(removeUser());
+                Router.push('/masuk')
             }
 
             if (status === 403 && action.payload.data?.device_allowed) {

@@ -3,6 +3,7 @@ import { MdHistory, MdLogout, MdOutlinePersonOutline } from 'react-icons/md';
 import { HiOutlineUsers } from 'react-icons/hi';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useLogoutMutation } from 'authentication/redux/api/authApi';
+import { useRouter } from 'next/router';
 
 interface MobileNavbarProps {
     openMobile: boolean;
@@ -15,6 +16,7 @@ const MobileNavbar = ({
     setOpenMobile,
     lightMode
 }: MobileNavbarProps): JSX.Element => {
+    const router = useRouter();
     const { is_subscribed } = useCourseSubscription();
     const [logout] = useLogoutMutation();
 
@@ -73,6 +75,7 @@ const MobileNavbar = ({
                             className="flex items-center w-full font-normal text-accent-orange hover:text-state-error"
                             onClick={async () => {
                                 await logout();
+                                router.push('/')
                             }}
                             aria-hidden>
                             <div>
