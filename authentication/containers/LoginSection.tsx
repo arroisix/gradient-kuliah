@@ -126,7 +126,7 @@ export const LoginSection: React.FC = () => {
                             </div>
                             <Link
                                 href="/lupa-password"
-                                className="text-sm self-end underline text-neutral-600">
+                                className="text-sm self-end underline text-neutral-400">
                                 Lupa kata sandi?
                             </Link>
                         </>
