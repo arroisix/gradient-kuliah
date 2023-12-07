@@ -57,7 +57,7 @@ const KeluarPerangkat = (): JSX.Element => {
 
     const [disableLogin, setDisableLogin] = useState(true);
 
-    const [logout] = useLogoutMutation();
+    const [logout, { isLoading: isLoadingLogout }] = useLogoutMutation();
 
     const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
     const [removeOtherDevice] = useRemoveOtherDeviceMutation();
@@ -109,14 +109,18 @@ const KeluarPerangkat = (): JSX.Element => {
                         Masuk dari {currentDeviceType.name.toLowerCase()} ini
                     </Button>
                     <Button
-                        href="/"
                         variant="custom"
                         className="!py-3 text-base !font-sans bg-[#212121] text-center"
+                        disabled={isLoadingLogout}
                         onClick={async () => {
                             await logout();
-                            router.replace('/');
+                            setTimeout(() => {
+                                router.push('/');
+                            }, 500);
                         }}>
-                        Kembali ke Halaman Utama
+                        {isLoadingLogout
+                            ? 'Tuggu Sebentar...'
+                            : 'Kembali ke Halaman Utama'}
                     </Button>
                 </section>
             </div>

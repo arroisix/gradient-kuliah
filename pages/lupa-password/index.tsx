@@ -62,7 +62,7 @@ const Form = ({ setIsSuccess }: { setIsSuccess: (value: boolean) => void }) => {
                 <form
                     onSubmit={handleSubmit}
                     className="h-full flex flex-col justify-center">
-                    <div className="flex flex-col gap-6 mb-10">
+                    <div className="flex flex-col gap-6 mb-10 min-h-[450px]">
                         <Link
                             href="/masuk"
                             className="flex items-center gap-2 text-[#666666] text-sm font-body">
@@ -93,7 +93,7 @@ const Form = ({ setIsSuccess }: { setIsSuccess: (value: boolean) => void }) => {
                             }
                         />
                     </div>
-                    <div className="flex flex-grow md:flex-grow-0 items-end md:items-start">
+                    <div className="flex items-end md:items-start">
                         <div className="flex flex-col w-full gap-5 md:gap-8">
                             <Button
                                 variant="custom"
@@ -147,7 +147,7 @@ const Waiting = () => (
                 kamu.
             </p>
         </div>
-        <div className="flex flex-grow md:flex-grow-0 items-end md:items-start">
+        <div className="flex items-end md:items-start">
             <Button
                 variant="custom"
                 className="text-center !py-[10px] md:!py-[14px] text-sm md:text-base bg-accent-purple rounded-full text-white md:leading-5"
