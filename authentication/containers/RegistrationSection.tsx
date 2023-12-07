@@ -106,7 +106,23 @@ export const RegistrationSection: React.FC = () => {
                             {isLoading ? 'Tunggu Sebentar...' : 'Buat Akun'}
                         </Button>
 
-                        <div className="flex justify-center w-full gap-2">
+                        <p className="text-xs text-center">
+                            Dengan membuat akun, Anda menyetujui{' '}
+                            <Link
+                                className="font-bold text-[#7264EB] underline cursor-pointer hover:text-[#7264EB]/75 transition-all duration-500"
+                                href={'/syarat-dan-ketentuan'}>
+                                Syarat &amp; Ketentuan
+                            </Link>{' '}
+                            dan{' '}
+                            <Link
+                                className="font-bold text-[#7264EB] underline cursor-pointer hover:text-[#7264EB]/75 transition-all duration-500"
+                                href={'/kebijakan-privasi'}>
+                                Kebijakan Privasi
+                            </Link>{' '}
+                            Gradient
+                        </p>
+
+                        <div className="flex justify-center w-full gap-2 mt-8">
                             <span>Sudah punya akun?</span>
                             <Link
                                 href={`/masuk${
