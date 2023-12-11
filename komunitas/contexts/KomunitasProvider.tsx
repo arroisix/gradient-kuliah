@@ -67,9 +67,17 @@ const KomunitasContext = createContext<KomunitasContextType>(
 );
 
 export function KomunitasProvider({
-    children
+    children,
+    initialData,
+    initialDetailData
 }: {
     children: ReactNode;
+    initialData?: CommunityPostResponse & {
+        count_items: number;
+        next_page?: number;
+        previous_page?: number;
+    };
+    initialDetailData?: CommunityPostDetailResponse;
 }): JSX.Element {
     const { profile } = useContext(AuthContext);
     const router = useRouter();
@@ -142,7 +150,7 @@ export function KomunitasProvider({
         }
     );
     const {
-        data,
+        data = initialData,
         isLoading: isLoadingDataHome,
         refetch: refetchCommunity
     } = isAuthenticated
@@ -158,9 +166,10 @@ export function KomunitasProvider({
             { slug: router.query.id as string },
             { skip: !router.query.id || isAuthenticated }
         );
-    const { data: question, isLoading: isLoadingQuestion } = isAuthenticated
-        ? privateCommunityPostDetailResult
-        : publicCommunityPostDetailResult;
+    const { data: question = initialDetailData, isLoading: isLoadingQuestion } =
+        isAuthenticated
+            ? privateCommunityPostDetailResult
+            : publicCommunityPostDetailResult;
 
     const [postCommunity, { isLoading: isLoadingPost }] =
         usePostQuestionAnswerMutation();

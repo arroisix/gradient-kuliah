@@ -1,5 +1,4 @@
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
-import Skeleton from 'commons/components/elements/Skeleton';
 import useOnScreen from 'commons/hooks/useOnScreen';
 import useTransition from 'commons/hooks/useTransition';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
@@ -22,7 +21,15 @@ import CommunityBanner from 'komunitas/components/CommunityBanner';
 import Button from 'commons/components/elements/Button';
 import { FaRegComment } from 'react-icons/fa';
 
-const KomunitasContainer = (): JSX.Element => {
+const KomunitasContainer = ({
+    initialData
+}: {
+    initialData?: CommunityPostResponse & {
+        count_items: number;
+        next_page?: number;
+        previous_page?: number;
+    };
+}): JSX.Element => {
     const { isMobileBreakpoints, isTabletBreakpoints } = useWindowBreakpoints();
     const router = useRouter();
     const { pathname } = router;
@@ -31,7 +38,7 @@ const KomunitasContainer = (): JSX.Element => {
     const anchor = useRef({} as HTMLDivElement);
 
     const {
-        dataHome,
+        dataHome = initialData,
         isLoadingDataHome,
         isLoadingPost,
         handleSearch,
@@ -189,9 +196,7 @@ const KomunitasContainer = (): JSX.Element => {
                     </div>
                 </div>
                 <div className="flex flex-col items-stretch gap-[18px]">
-                    {isLoadingDataHome ? (
-                        <Skeleton repeat={3} className="!mb-0 h-40" />
-                    ) : dataHome?.community_posts.length === 0 ? (
+                    {dataHome?.community_posts.length === 0 ? (
                         <EmptyState
                             setShowForm={setShowForm}
                             isOnSearch={searchState !== ''}
