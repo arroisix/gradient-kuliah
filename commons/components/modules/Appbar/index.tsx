@@ -6,7 +6,13 @@ import { BiBookReader } from 'react-icons/bi';
 import { FiHome } from 'react-icons/fi';
 import { RiBookOpenLine, RiQuestionnaireLine } from 'react-icons/ri';
 
-const DISPLAYED_ROUTES = ['/dashboard', '/komunitas', '/astronotes', '/kelas'];
+const DISPLAYED_ROUTES = [
+    '/dashboard',
+    '/komunitas',
+    '/komunitas/public',
+    '/astronotes',
+    '/kelas'
+];
 const APPBAR_NAV: AppbarNav[] = [
     {
         icon: <FiHome size={20} />,

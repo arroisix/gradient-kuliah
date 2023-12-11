@@ -19,6 +19,8 @@ import { toast } from 'react-toastify';
 import RightSidebar from 'komunitas/components/RightSidebar';
 import EmptyState from 'komunitas/components/EmptyState';
 import CommunityBanner from 'komunitas/components/CommunityBanner';
+import Button from 'commons/components/elements/Button';
+import { FaRegComment } from 'react-icons/fa';
 
 const KomunitasContainer = (): JSX.Element => {
     const { isMobileBreakpoints, isTabletBreakpoints } = useWindowBreakpoints();
@@ -210,6 +212,12 @@ const KomunitasContainer = (): JSX.Element => {
                 <RightSidebar askNow={() => setShowForm((prev) => !prev)} />
             </div>
             {loadingTransition && <LoadingBackdrop />}
+            <Button
+                variant="primary"
+                className="fixed flex items-center gap-2 text-sm md:hidden right-4 bottom-20 md:bottom-8">
+                <FaRegComment size={16} />
+                Tanya
+            </Button>
         </section>
     );
 };
