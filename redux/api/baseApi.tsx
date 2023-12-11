@@ -47,7 +47,11 @@ export const baseApi = createApi({
                 headers.set('Authorization', `Token ${token ?? rawToken}`);
             }
 
-            if (endpoint === 'login' || endpoint === 'register' || endpoint === 'socialLogin') {
+            if (
+                endpoint === 'login' ||
+                endpoint === 'register' ||
+                endpoint === 'socialLogin'
+            ) {
                 const did = await getBrowserFingerPrint();
                 headers.set('did', did);
             }

@@ -1,6 +1,6 @@
 import Skeleton from 'commons/components/elements/Skeleton';
 import AnswerSection from 'komunitas/components/AnswerSection';
-import RightSidebar from 'komunitas/components/CommunityPost/RightSidebar';
+import RightSidebar from 'komunitas/components/CommunityPost/SimilarQuestionSidebar';
 import QuestionCard from 'komunitas/components/QuestionCard';
 import { useKomunitas } from 'komunitas/contexts/KomunitasProvider';
 import { useState } from 'react';
