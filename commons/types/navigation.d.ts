@@ -8,4 +8,5 @@ interface AppbarNav {
     icon: JSX.Element;
     label: string;
     href: string;
+    alias?: string[];
 }

@@ -20,6 +20,8 @@ import EmptyState from 'komunitas/components/EmptyState';
 import CommunityBanner from 'komunitas/components/CommunityBanner';
 import Button from 'commons/components/elements/Button';
 import { FaRegComment } from 'react-icons/fa';
+import { cn } from 'commons/utils';
+import Skeleton from 'commons/components/elements/Skeleton';
 
 const KomunitasContainer = ({
     initialData
@@ -196,6 +198,9 @@ const KomunitasContainer = ({
                     </div>
                 </div>
                 <div className="flex flex-col items-stretch gap-[18px]">
+                    {isLoadingDataHome && (
+                        <Skeleton repeat={3} className="h-32 !mb-0" />
+                    )}
                     {dataHome?.community_posts.length === 0 ? (
                         <EmptyState
                             setShowForm={setShowForm}
@@ -219,7 +224,13 @@ const KomunitasContainer = ({
             {loadingTransition && <LoadingBackdrop />}
             <Button
                 variant="primary"
-                className="fixed flex items-center gap-2 text-sm md:hidden right-4 bottom-20 md:bottom-8">
+                className={cn(
+                    'transition duration-500 fixed flex items-center gap-2 text-sm md:hidden right-4 bottom-20 md:bottom-8',
+                    !showForm
+                        ? 'opacity-100 pointer-events-auto'
+                        : 'opacity-0 pointer-events-none'
+                )}
+                onClick={() => setShowForm(true)}>
                 <FaRegComment size={16} />
                 Tanya
             </Button>
