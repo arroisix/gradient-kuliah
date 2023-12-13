@@ -14,7 +14,6 @@ import {
 } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
-import { AUTHENTICATION_ROUTE } from 'commons/constants';
 import MobileSidebar from '../Sidebar/mobile';
 import AuthContext from 'authentication/contexts/AuthProvider';
 import { useTracker } from 'tracker/tracker';
@@ -223,7 +222,7 @@ const Navbar = ({
                                     {isLandingPageRevampOn ? (
                                         <Button
                                             variant="primary"
-                                            href={AUTHENTICATION_ROUTE}
+                                            href="/masuk"
                                             eventName="Login Button on Navbar">
                                             Masuk
                                         </Button>
@@ -239,7 +238,7 @@ const Navbar = ({
                                                 </nav>
                                             </Link>
                                             <Link
-                                                href={AUTHENTICATION_ROUTE}
+                                                href="/masuk"
                                                 onClick={onClickLoginLink}>
                                                 <nav className="ml-12 cursor-pointer">
                                                     Masuk
@@ -257,7 +256,7 @@ const Navbar = ({
                                     <Button
                                         variant="primary"
                                         className="text-xs"
-                                        href={AUTHENTICATION_ROUTE}
+                                        href="/masuk"
                                         eventName="Login Button on Navbar">
                                         Masuk
                                     </Button>
@@ -275,7 +274,7 @@ const Navbar = ({
                                             </nav>
                                         </Link>
                                         <Link
-                                            href={AUTHENTICATION_ROUTE}
+                                            href="/masuk"
                                             onClick={onClickLoginLink}>
                                             <nav className="flex items-center text-base font-bold">
                                                 Masuk
