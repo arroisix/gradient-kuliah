@@ -80,7 +80,7 @@ const DashboardContent = (): JSX.Element => {
             )}
         </div>
     ) : (
-        <div className="flex flex-col lg:flex-row-reverse gap-[2rem]">
+        <div className="flex flex-col lg:flex-row-reverse gap-[2rem] pb-16">
             <MyClass className="w-full lg:w-3/12" />
             <ContinueLearning
                 isLoading={isLoading}

@@ -138,12 +138,15 @@ export const komunitasApi = baseApi.injectEndpoints({
                 next_page?: number;
                 previous_page?: number;
             },
-            BaseListQueryParams & { post_id: string }
+            BaseListQueryParams & { post_id: string; isAuthenticated?: boolean }
         >({
-            query: ({ post_id, ...params }) => ({
-                url: `${KOMUNITAS_BASE_URL}post/${post_id}/comment/`,
-                params
-            }),
+            query: (args) => {
+                const { post_id, isAuthenticated: _, ...params } = args;
+                return {
+                    url: `${KOMUNITAS_BASE_URL}post/${post_id}/comment/`,
+                    params
+                };
+            },
             serializeQueryArgs: ({ queryArgs, endpointName }) => {
                 return endpointName + queryArgs.post_id;
             },
@@ -161,11 +164,13 @@ export const komunitasApi = baseApi.injectEndpoints({
             },
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 try {
-                    await queryFulfilled;
-                    const getCommunityNotification = dispatch(
-                        komunitasApi.endpoints.getCommunityNotification.initiate()
-                    );
-                    getCommunityNotification.refetch();
+                    if (arg.isAuthenticated) {
+                        await queryFulfilled;
+                        const getCommunityNotification = dispatch(
+                            komunitasApi.endpoints.getCommunityNotification.initiate()
+                        );
+                        getCommunityNotification.refetch();
+                    }
                 } catch {}
             },
             providesTags: (result, error, arg) =>

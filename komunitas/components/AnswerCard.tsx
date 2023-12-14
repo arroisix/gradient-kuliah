@@ -18,6 +18,8 @@ import {
 import AuthContext from 'authentication/contexts/AuthProvider';
 import Skeleton from 'commons/components/elements/Skeleton';
 import { useTracker } from 'tracker/tracker';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
 type Student = {
     id: string;
@@ -54,8 +56,10 @@ const AnswerCard = ({
     const { profile } = useContext(AuthContext);
 
     const [postComment] = usePostQuestionAnswerMutation();
+    const isAuthenticated = useSelector(getIsAuthenticated);
     const { data: replies, isLoading } = useGetCommunityPostCommentDetailQuery({
-        post_id: id
+        post_id: id,
+        isAuthenticated: isAuthenticated
     });
 
     function handleChangeComment(
@@ -89,7 +93,7 @@ const AnswerCard = ({
                     ? 'border-[#00880080] bg-[#0088001A]'
                     : 'border-neutral-800'
             }`}>
-            <div className="flex justify-between items-center gap-4">
+            <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
                     <div className="relative w-[24px] h-[24px]">
                         {student?.photo_url != null &&
@@ -99,7 +103,7 @@ const AnswerCard = ({
                                 src={student.photo_url}
                                 alt={student.username}
                                 layout="fill"
-                                className="rounded-full object-contain"
+                                className="object-contain rounded-full"
                                 onError={() => setAuthorImageError(true)}
                             />
                         ) : (
@@ -107,14 +111,14 @@ const AnswerCard = ({
                         )}
                     </div>
                     <div className="flex flex-col md:flex-row md:gap-[6px] md:items-center">
-                        <span className="inline-block font-extrabold text-xs">
+                        <span className="inline-block text-xs font-extrabold">
                             {student?.username}
                         </span>
                         <FaCircle
                             className="hidden md:block text-neutral-600"
                             size={4}
                         />
-                        <span className="inline-block font-body text-xs text-neutral-600">
+                        <span className="inline-block text-xs font-body text-neutral-600">
                             {moment(created_at).utc().calendar()}
                         </span>
                     </div>
@@ -138,7 +142,7 @@ const AnswerCard = ({
             <div className="flex flex-col gap-[18px] lg:pl-[36px]">
                 <article>
                     <ReactMarkdown
-                        className="markdown-body-xs markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height overflow-auto"
+                        className="overflow-auto markdown-body-xs markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height"
                         remarkPlugins={[remarkMath, remarkGfm]}
                         rehypePlugins={[rehypeKatex]}
                         linkTarget={'_blank'}>
@@ -146,15 +150,15 @@ const AnswerCard = ({
                     </ReactMarkdown>
                 </article>
                 <div
-                    className="flex items-center gap-2 w-fit cursor-pointer"
+                    className="flex items-center gap-2 cursor-pointer w-fit"
                     onClick={() => setShowComment((prev) => !prev)}
                     aria-hidden>
                     <FaRegComment className="scale-x-[-1]" size={18} />
-                    <span className="font-body text-xs">{comment_counts}</span>
+                    <span className="text-xs font-body">{comment_counts}</span>
                 </div>
             </div>
             <div className="flex flex-col gap-6 border-t-[1px] border-[#272727] pt-[18px]">
-                <div className="flex gap-3 items-center">
+                <div className="flex items-center gap-3">
                     <div className="relative w-[24px] h-[24px]">
                         {profile?.photo_profile != null &&
                         profile?.photo_profile.length > 0 &&
@@ -163,7 +167,7 @@ const AnswerCard = ({
                                 src={profile.photo_profile}
                                 alt={profile.username}
                                 layout="fill"
-                                className="rounded-full object-contain"
+                                className="object-contain rounded-full"
                                 onError={() => setMyImageError(true)}
                             />
                         ) : (

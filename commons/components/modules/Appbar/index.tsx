@@ -6,7 +6,14 @@ import { BiBookReader } from 'react-icons/bi';
 import { FiHome } from 'react-icons/fi';
 import { RiBookOpenLine, RiQuestionnaireLine } from 'react-icons/ri';
 
-const DISPLAYED_ROUTES = ['/dashboard', '/komunitas', '/astronotes', '/kelas'];
+const DISPLAYED_ROUTES = [
+    '/dashboard',
+    '/komunitas',
+    '/komunitas/public',
+    '/komunitas/pertanyaan-ku',
+    '/astronotes',
+    '/kelas'
+];
 const APPBAR_NAV: AppbarNav[] = [
     {
         icon: <FiHome size={20} />,
@@ -16,6 +23,7 @@ const APPBAR_NAV: AppbarNav[] = [
     {
         icon: <RiQuestionnaireLine size={20} />,
         href: '/komunitas',
+        alias: ['/komunitas', '/komunitas/public', '/komunitas/pertanyaan-ku'],
         label: 'Komunitas'
     },
     {
@@ -42,7 +50,8 @@ const Appbar = (): JSX.Element | null => {
                     key={menu.label}
                     href={menu.href}
                     className={cn(
-                        router.pathname === menu.href
+                        router.pathname === menu.href ||
+                            menu.alias?.includes(router.pathname)
                             ? 'text-white'
                             : 'text-[#666]'
                     )}>

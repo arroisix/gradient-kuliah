@@ -80,13 +80,16 @@ interface MyQuestionListResponse {
 }
 
 interface ExploreQuestionResponse {
-    questions: [
-        {
-            id: string;
-            slug: string;
-            content: string;
-        }
-    ];
+    questions: ExploreQuestion[];
+}
+
+interface ExploreQuestion {
+    id: string;
+    slug: string;
+    content: string;
+    comment_count: number;
+    viewer_count: number;
+    category_name: string;
 }
 
 interface CommunityPostDetailResponse {

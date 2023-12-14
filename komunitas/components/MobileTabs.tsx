@@ -1,42 +1,42 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { cn } from 'commons/utils';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
+enum TabStyle {
+    active = 'border-accent-purple font-bold',
+    default = 'border-[#2D2D2D] font-medium text-neutral-600'
+}
 const MobileTabs = (): JSX.Element => {
     const router = useRouter();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { pathname } = router;
 
+    const tabStyle = (activePath: string | string[]): string => {
+        let isActive;
+        if (typeof activePath === 'string') isActive = pathname === activePath;
+        else isActive = activePath.includes(pathname);
+
+        return cn(
+            'text-center text-sm w-1/2 py-[6px] border-b-2',
+            isActive ? TabStyle.active : TabStyle.default
+        );
+    };
+
     return (
         <div className="relative flex justify-between w-full overflow-hidden">
-            <span
-                className={`text-center text-sm w-1/2 py-[6px] border-b-2 ${
-                    pathname === '/komunitas' ||
-                    pathname === '/komunitas/public'
-                        ? 'border-accent-purple font-bold'
-                        : 'border-[#2D2D2D] font-medium text-neutral-600'
-                }`}
-                onClick={() => {
-                    router.push('/komunitas', undefined, { shallow: true });
-                }}
-                aria-hidden>
+            <Link
+                className={tabStyle(['/komunitas', '/komunitas/public'])}
+                href="/komunitas">
                 Eksplor
-            </span>
+            </Link>
             {isAuthenticated && (
-                <span
-                    className={`text-center text-sm w-1/2 py-[6px] border-b-2 ${
-                        pathname === '/komunitas/pertanyaan-ku'
-                            ? 'border-accent-purple font-bold'
-                            : 'border-[#2D2D2D] font-medium text-neutral-600'
-                    }`}
-                    onClick={() => {
-                        router.push('/komunitas/pertanyaan-ku', undefined, {
-                            shallow: true
-                        });
-                    }}
-                    aria-hidden>
+                <Link
+                    href="/komunitas/pertanyaan-ku"
+                    className={tabStyle('/komunitas/pertanyaan-ku')}>
                     Pertanyaanku
-                </span>
+                </Link>
             )}
         </div>
     );

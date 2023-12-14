@@ -5,6 +5,7 @@ import AstroNotesContent from 'courses/components/LearningExperience/AstroNotes/
 import { AstronotesProvider } from 'courses/contexts/AstronotesProvider';
 import RatingModal from 'courses/components/LearningExperience/AstroNotes/Sidebar/RatingModal';
 import FeedbackModal from 'courses/components/LearningExperience/AstroNotes/Sidebar/FeedbackModal';
+import CommunityDrawer from 'courses/components/LearningExperience/AstroNotes/Navigation/CommunityDrawer';
 
 const Astronotes = (): JSX.Element => {
     const { width: notebookWidth, ref: notebookRef } =
@@ -51,6 +52,7 @@ const Astronotes = (): JSX.Element => {
                         <AstroNotesContent />
                     </div>
                 </div>
+                <CommunityDrawer />
                 <div
                     className="fixed inset-x-0 bottom-0 px-4 pt-2 pb-4 bg-white md:pb-6 md:pt-4 md:left-auto md:right-0 dark:bg-black"
                     style={{ minWidth: notebookWidth }}>

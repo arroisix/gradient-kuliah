@@ -1,5 +1,4 @@
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
-import Skeleton from 'commons/components/elements/Skeleton';
 import useOnScreen from 'commons/hooks/useOnScreen';
 import useTransition from 'commons/hooks/useTransition';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
@@ -19,8 +18,20 @@ import { toast } from 'react-toastify';
 import RightSidebar from 'komunitas/components/RightSidebar';
 import EmptyState from 'komunitas/components/EmptyState';
 import CommunityBanner from 'komunitas/components/CommunityBanner';
+import Button from 'commons/components/elements/Button';
+import { FaRegComment } from 'react-icons/fa';
+import { cn } from 'commons/utils';
+import Skeleton from 'commons/components/elements/Skeleton';
 
-const KomunitasContainer = (): JSX.Element => {
+const KomunitasContainer = ({
+    initialData
+}: {
+    initialData?: CommunityPostResponse & {
+        count_items: number;
+        next_page?: number;
+        previous_page?: number;
+    };
+}): JSX.Element => {
     const { isMobileBreakpoints, isTabletBreakpoints } = useWindowBreakpoints();
     const router = useRouter();
     const { pathname } = router;
@@ -29,7 +40,7 @@ const KomunitasContainer = (): JSX.Element => {
     const anchor = useRef({} as HTMLDivElement);
 
     const {
-        dataHome,
+        dataHome = initialData,
         isLoadingDataHome,
         isLoadingPost,
         handleSearch,
@@ -187,9 +198,10 @@ const KomunitasContainer = (): JSX.Element => {
                     </div>
                 </div>
                 <div className="flex flex-col items-stretch gap-[18px]">
-                    {isLoadingDataHome ? (
-                        <Skeleton repeat={3} className="!mb-0 h-40" />
-                    ) : dataHome?.community_posts.length === 0 ? (
+                    {isLoadingDataHome && (
+                        <Skeleton repeat={3} className="h-32 !mb-0" />
+                    )}
+                    {dataHome?.community_posts.length === 0 ? (
                         <EmptyState
                             setShowForm={setShowForm}
                             isOnSearch={searchState !== ''}
@@ -210,6 +222,18 @@ const KomunitasContainer = (): JSX.Element => {
                 <RightSidebar askNow={() => setShowForm((prev) => !prev)} />
             </div>
             {loadingTransition && <LoadingBackdrop />}
+            <Button
+                variant="primary"
+                className={cn(
+                    'transition duration-500 fixed flex items-center gap-2 text-sm md:hidden right-4 bottom-20 md:bottom-8',
+                    !showForm
+                        ? 'opacity-100 pointer-events-auto'
+                        : 'opacity-0 pointer-events-none'
+                )}
+                onClick={() => setShowForm(true)}>
+                <FaRegComment size={16} />
+                Tanya
+            </Button>
         </section>
     );
 };
