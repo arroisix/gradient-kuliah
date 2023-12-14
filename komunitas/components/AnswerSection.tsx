@@ -24,6 +24,12 @@ type AnswerSectionProps = {
     setIsShowForm: Dispatch<SetStateAction<boolean>>;
 };
 
+type Comments = CommunityPostCommentDetailResponse & {
+    count_items: number;
+    next_page?: number | undefined;
+    previous_page?: number | undefined;
+};
+
 const AnswerSection = ({
     category,
     setIsShowForm
@@ -32,16 +38,16 @@ const AnswerSection = ({
     const isAnchorOnScreen = useOnScreen(anchor);
     const [page, setPage] = useState(1);
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { detailQuestion, isLoadingQuestion } = useKomunitas();
-    const { is_subscribed } = useCourseSubscription();
+    const { detailQuestion } = useKomunitas();
 
     const { data: comments, isLoading: isLoadingComment } =
         useGetCommunityPostCommentDetailQuery(
             {
                 post_id: detailQuestion?.id as string,
-                page: page
+                page: page,
+                isAuthenticated: isAuthenticated
             },
-            { skip: !isAuthenticated || !detailQuestion?.id }
+            { skip: !detailQuestion?.id }
         );
 
     useEffect(() => {
@@ -59,30 +65,53 @@ const AnswerSection = ({
         <div>
             <h3 className="pb-5 text-sm font-bold">Jawaban</h3>
             <div className="flex flex-col gap-[18px]">
-                {!is_subscribed ? (
-                    <CommunityPaywall />
-                ) : isLoadingQuestion || isLoadingComment ? (
-                    <Skeleton repeat={2} className="!mb-0 h-40" />
-                ) : comments?.comments.length === 0 ? (
-                    <EmptyState setIsShowForm={setIsShowForm} />
-                ) : (
-                    comments?.comments?.map((value) => (
-                        <AnswerCard
-                            key={value.id}
-                            {...value}
-                            category={category?.id as string}
-                            isExpert={
-                                detailQuestion?.student.username !==
-                                    value.student.username &&
-                                value.student.is_expert
-                            }
-                            questionId={detailQuestion?.id as string}
-                        />
-                    ))
-                )}
+                <AnswerSectionContent
+                    comments={comments}
+                    isLoadingComment={isLoadingComment}
+                    setIsShowForm={setIsShowForm}
+                    category={category}
+                />
                 <div ref={anchor} className="w-full h-0" />
             </div>
         </div>
+    );
+};
+
+const AnswerSectionContent = ({
+    comments,
+    isLoadingComment,
+    category,
+    setIsShowForm
+}: {
+    comments?: Comments;
+    isLoadingComment: boolean;
+} & AnswerSectionProps): JSX.Element => {
+    const { detailQuestion, isLoadingQuestion } = useKomunitas();
+    const { is_subscribed } = useCourseSubscription();
+
+    if (isLoadingQuestion || isLoadingComment)
+        return <Skeleton repeat={2} className="!mb-0 h-40" />;
+
+    if (!is_subscribed)
+        return <CommunityPaywall topComment={comments?.comments?.[0]} />;
+
+    return comments?.comments.length === 0 ? (
+        <EmptyState setIsShowForm={setIsShowForm} />
+    ) : (
+        <>
+            {comments?.comments?.map((value) => (
+                <AnswerCard
+                    key={value.id}
+                    {...value}
+                    category={category?.id as string}
+                    isExpert={
+                        detailQuestion?.student.username !==
+                            value.student.username && value.student.is_expert
+                    }
+                    questionId={detailQuestion?.id as string}
+                />
+            ))}
+        </>
     );
 };
 
