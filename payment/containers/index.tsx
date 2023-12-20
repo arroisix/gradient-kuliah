@@ -7,6 +7,7 @@ import { usePayment } from '../contexts/PaymentProvider';
 import { useEffect, useRef } from 'react';
 import MethodListBox from '../components/MethodListBox';
 import MethodBox from 'payment/components/MethodBox';
+import { MdOutlineQrCodeScanner } from 'react-icons/md';
 // import { MdOutlineQrCodeScanner } from 'react-icons/md';
 
 const SubscriptionContainer = (): JSX.Element => {
@@ -37,7 +38,7 @@ const SubscriptionContainer = (): JSX.Element => {
                         <MethodListBox
                             title="Transfer Bank via Virtual Account"
                             icon={<AiFillBank className="mr-2 text-base" />}>
-                            <MethodBox paymentMethod="VA_BCA" isManual />
+                            <MethodBox paymentMethod="VA_BCA" />
                             <MethodBox paymentMethod="VA_BNI" />
                             {/* <MethodBox paymentMethod="VA_MANDIRI" /> */}
                             <MethodBox paymentMethod="VA_BRI" />
@@ -57,12 +58,12 @@ const SubscriptionContainer = (): JSX.Element => {
                         </MethodListBox>
                         <MethodListBox
                             // TODO (angga)
-                            // title="E-Wallet / QRIS"
-                            title="E-Wallet"
+                            title="E-Wallet / QRIS"
+                            // title="E-Wallet"
                             icon={
                                 <AiOutlineMobile className="mr-2 text-base" />
                             }>
-                            {/* <MethodBox paymentMethod="QRIS">
+                            <MethodBox paymentMethod="QRIS">
                                 <div className="flex flex-col items-center text-neutral-900">
                                     <MdOutlineQrCodeScanner
                                         size={24}
@@ -70,8 +71,8 @@ const SubscriptionContainer = (): JSX.Element => {
                                     />
                                     <div className="text-sm">Scan QRIS</div>
                                 </div>
-                            </MethodBox> */}
-                            {/* <MethodBox paymentMethod="GOPAY" /> */}
+                            </MethodBox>
+                            <MethodBox paymentMethod="GOPAY" />
                             <MethodBox paymentMethod="ID_DANA" />
                             <MethodBox paymentMethod="ID_OVO" />
                             <MethodBox paymentMethod="ID_SHOPEEPAY" />
