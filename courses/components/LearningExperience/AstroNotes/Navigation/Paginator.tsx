@@ -89,7 +89,7 @@ const Paginator = ({
             </div>
             <div className="flex items-center gap-[10px]">
                 <FaChevronLeft
-                    size={12}
+                    size={24}
                     className={cn(
                         'text-[#666666] transition-all',
                         Number(page) > 1
@@ -98,7 +98,7 @@ const Paginator = ({
                     )}
                     onClick={handlePrev}
                 />
-                <span className="inline-block text-xs select-none font-body">
+                <span className="inline-block text-sm select-none font-body">
                     {isLoading ? (
                         <Skeleton className="h-5 w-6 p-0 !m-0" />
                     ) : (
@@ -106,7 +106,7 @@ const Paginator = ({
                     )}
                 </span>
                 <FaChevronRight
-                    size={12}
+                    size={24}
                     className={cn(
                         'text-[#666666] transition-all',
                         Number(page) < MAX_VALUE
