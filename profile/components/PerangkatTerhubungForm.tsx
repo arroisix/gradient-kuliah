@@ -25,7 +25,7 @@ export const PerangkatTerhubungForm = (): JSX.Element => {
     });
 
     return (
-        <main className='mt-8'>
+        <main className="mt-8">
             <p className="text-neutral-400 font-body text-sm text-center mb-4">
                 Maksimal 1 untuk setiap jenis perangkat
             </p>

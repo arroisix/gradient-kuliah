@@ -11,8 +11,13 @@ import MyClass from 'dashboard/components/MyClass';
 import Recommendations from 'dashboard/components/Recommendations';
 import { useGetStudentLearningProgressQuery } from 'dashboard/redux/api/dashboardApi';
 import { useGetPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
-import React from 'react';
+import React, { useCallback } from 'react';
+import { renderToString } from 'react-dom/server';
 import { useSelector } from 'react-redux';
+import { useLocalStorage } from 'usehooks-ts';
+import useDriver from 'library/driver.js/useDriver';
+import 'driver.js/dist/driver.css';
+import { FiChevronRight } from 'react-icons/fi';
 
 const DashboardContent = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -33,10 +38,113 @@ const DashboardContent = (): JSX.Element => {
             !is_subscribed ||
             data?.learning_progress.length === 0);
 
+    const [tourViewed, setTourViewed] = useLocalStorage('tourViewed', false);
+    const driver = useDriver({
+        popoverClass: 'dashboard-tour',
+        showProgress: true,
+        showButtons: ['next'],
+        steps: [
+            {
+                element: '[data-tour="step-1"]',
+                popover: {
+                    description:
+                        'Selamat datang! Mulai kelas pertamamu di sini',
+                    side: 'top',
+                    align: 'center'
+                }
+            },
+            {
+                element: '[data-tour="step-2"]',
+                popover: {
+                    description:
+                        'Kerjain latihan soal, lengkap sama jawabannya',
+                    side: 'top',
+                    align: 'center'
+                }
+            },
+            {
+                element: '[data-tour="step-3"]',
+                popover: {
+                    description: 'Males nyatet? Baca rangkuman aja!',
+                    side: 'top',
+                    align: 'center'
+                }
+            },
+            {
+                element: '[data-tour="step-4"]',
+                popover: {
+                    description:
+                        'Bingung? Tanya di Gradient, pasti dapet jawaban',
+                    side: 'top',
+                    align: 'end'
+                }
+            }
+        ],
+        onPopoverRender: (popover, { config, state }) => {
+            if (state.activeIndex == 0) {
+                const skipButton = document.createElement('button');
+                skipButton.innerText = 'Lewati';
+                skipButton.classList.add('secondary');
+                popover.footerButtons.prepend(skipButton);
+
+                skipButton.addEventListener('click', () => {
+                    driver.current?.destroy();
+                });
+            }
+
+            if (config.steps && state.activeIndex == config.steps.length - 1) {
+                popover.nextButton.innerText = 'Selesai';
+            } else {
+                popover.nextButton.innerHTML = `Lanjut ${renderToString(
+                    <FiChevronRight size={16} className="ml-[2px] -mr-[5px]" />
+                )}`;
+            }
+
+            const buttons = [];
+            for (let i = 0; i < (config.steps?.length ?? 0); i++) {
+                const button = document.createElement('button');
+
+                button.className = 'step-button';
+                if (i == state.activeIndex) {
+                    button.classList.add('active');
+                }
+                if (state.activeIndex != null && i <= state.activeIndex) {
+                    button.classList.add('visited');
+                }
+
+                button.addEventListener('click', () => {
+                    driver.current?.drive(i);
+                });
+
+                buttons.push(button);
+            }
+
+            if (popover.nextButton.style.display !== 'none') {
+                popover.nextButton.style.removeProperty('display');
+            }
+            if (popover.previousButton.style.display !== 'none') {
+                popover.previousButton.style.removeProperty('display');
+            }
+
+            popover.progress.replaceChildren(...buttons);
+        },
+        onDestroyed() {
+            setTourViewed(true);
+        }
+    });
+
+    const showTutorial = useCallback(() => {
+        if (isShowRecommendedMaterials && !tourViewed && isAuthenticated) {
+            driver.current?.drive();
+        }
+    }, [tourViewed, isAuthenticated, isShowRecommendedMaterials, driver]);
+
     return isShowRecommendedMaterials ? (
         <div className="pb-16 space-y-12">
-            <Recommendations />
-            <div className="flex flex-col items-stretch justify-between gap-3 p-4 text-white rounded-lg md:items-center md:gap-4 lg:flex-row md:p-6 bg-accent-purple">
+            <Recommendations onFinishLoading={showTutorial} />
+            <div
+                className="flex flex-col items-stretch justify-between gap-3 p-4 text-white rounded-lg md:items-center md:gap-4 lg:flex-row md:p-6 bg-accent-purple"
+                data-tour="step-4">
                 <div className="flex flex-1 gap-3 text-left">
                     <GradientIcon />
                     <div>
@@ -90,4 +198,5 @@ const DashboardContent = (): JSX.Element => {
         </div>
     );
 };
+
 export default DashboardContent;

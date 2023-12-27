@@ -1473,3 +1473,126 @@ hr {
 summary > p {
     display: contents;
 }
+
+.dashboard-tour.driver-popover {
+    padding: 16px 20px;
+    border-radius: 8px;
+    background-color: #272727;
+    color: white;
+}
+
+.dashboard-tour .driver-popover-arrow {
+    border: 15px solid #272727;
+}
+
+.dashboard-tour .driver-popover-arrow-side-left{
+    left:100%;
+    border-right-color:transparent;
+    border-bottom-color:transparent;
+    border-top-color:transparent
+}
+
+.dashboard-tour .driver-popover-arrow-side-right{
+    right:100%;
+    border-left-color:transparent;
+    border-bottom-color:transparent;
+    border-top-color:transparent
+}
+
+.dashboard-tour .driver-popover-arrow-side-top{
+    top:100%;
+    border-right-color:transparent;
+    border-bottom-color:transparent;
+    border-left-color:transparent
+}
+
+.dashboard-tour .driver-popover-arrow-side-bottom{
+    bottom:100%;
+    border-left-color:transparent;
+    border-top-color:transparent;
+    border-right-color:transparent
+}
+
+.dashboard-tour .driver-popover-arrow-side-left.driver-popover-arrow-align-center,.driver-popover-arrow-side-right.driver-popover-arrow-align-center{
+    top:50%;
+    margin-top:-15px;
+}
+
+.dashboard-tour .driver-popover-arrow-side-top.driver-popover-arrow-align-center,.driver-popover-arrow-side-bottom.driver-popover-arrow-align-center{
+    left:50%;
+    margin-left:-15px;
+}
+
+.dashboard-tour .driver-popover-arrow-side-left.driver-popover-arrow-align-start,.driver-popover-arrow-side-right.driver-popover-arrow-align-start{
+    top: 20px;
+}
+
+.dashboard-tour .driver-popover-arrow-side-top.driver-popover-arrow-align-start,.driver-popover-arrow-side-bottom.driver-popover-arrow-align-start{
+    left: 20px;
+}
+
+.dashboard-tour .driver-popover-arrow-align-end.driver-popover-arrow-side-left,.driver-popover-arrow-align-end.driver-popover-arrow-side-right{
+    bottom: 20px;
+}
+
+.dashboard-tour .driver-popover-arrow-side-top.driver-popover-arrow-align-end,.driver-popover-arrow-side-bottom.driver-popover-arrow-align-end{
+    right: 20px;
+}
+
+.dashboard-tour .driver-popover-progress-text {
+    display: flex !important;
+    gap: 8px;
+}
+
+.dashboard-tour .driver-popover-progress-text .step-button {
+    width: 8px;
+    height: 8px;
+    background-color: #666666;
+    border: none;
+    border-radius: 100%;
+    padding: 0;
+}
+
+.dashboard-tour .driver-popover-progress-text .step-button.visited {
+    background-color: #7264EB;
+}
+
+.dashboard-tour .driver-popover-progress-text .step-button.active {
+    width: 24px;
+    border-radius: 20px;
+}
+
+.dashboard-tour .driver-popover-description {
+    font-family: 'Open Sans', 'Roboto';
+    font-size: 16px;
+    line-height: 23px;
+}
+
+.dashboard-tour .driver-popover-footer {
+    margin-top: 16px;
+}
+
+.dashboard-tour .driver-popover-footer .driver-popover-navigation-btns {
+    display: flex;
+    gap: 8px;
+}
+
+.dashboard-tour .driver-popover-footer .driver-popover-navigation-btns button:not(.driver-popover-btn-disabled) {
+    all:unset;
+    padding: 6px 16px;
+    background-color:#5F2BCE;
+    display: flex;
+    color:#fff;
+    cursor:pointer;
+    outline:0;
+    zoom:1;
+    font-size: 12px;
+    font-family: 'Raleway', 'sans-serif';
+    font-weight: bold;
+    line-height: 15px;
+    border-radius: 70px;
+}
+
+.dashboard-tour .driver-popover-footer .driver-popover-navigation-btns button.secondary {
+    background-color: #404040;
+}
