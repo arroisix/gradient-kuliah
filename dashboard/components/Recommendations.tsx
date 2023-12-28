@@ -6,9 +6,13 @@ import { useGetPublicEntrypointBooksQuery } from 'courses/redux/api/astronotesAp
 import { useGetPublicListCoursesQuery } from 'courses/redux/api/publicCourseApi';
 import ClassCard from 'landing/components/RevampedSections/ClassCard';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 
-const Recommendations = (): JSX.Element => {
+const Recommendations = ({
+    onFinishLoading
+}: {
+    onFinishLoading?: () => void;
+}): JSX.Element => {
     const router = useRouter();
     const { isMobileBreakpoints } = useWindowBreakpoints();
     const { recommendation } = router.query;
@@ -46,9 +50,15 @@ const Recommendations = (): JSX.Element => {
         );
     };
 
+    useEffect(() => {
+        if (!isLoadingBook && !isLoadingCourse) {
+            onFinishLoading?.();
+        }
+    }, [isLoadingCourse, isLoadingBook, onFinishLoading]);
+
     return (
         <>
-            <div className="space-y-4">
+            <div className="space-y-4" data-tour="step-1">
                 <div className="flex items-center justify-between">
                     <h4 className="text-lg font-extrabold md:text-xl">
                         Rekomendasi Video
@@ -82,7 +92,7 @@ const Recommendations = (): JSX.Element => {
                     )}
                 </div>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-4" data-tour="step-2">
                 <div className="flex items-center justify-between">
                     <h4 className="text-lg font-extrabold md:text-xl">
                         Rekomendasi Latihan Soal
@@ -103,7 +113,7 @@ const Recommendations = (): JSX.Element => {
                     )}
                 </div>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-4" data-tour="step-3">
                 <div className="flex items-center justify-between">
                     <h4 className="text-lg font-extrabold md:text-xl">
                         Rekomendasi Rangkuman

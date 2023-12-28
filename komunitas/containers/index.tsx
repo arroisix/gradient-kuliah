@@ -22,6 +22,9 @@ import Button from 'commons/components/elements/Button';
 import { FaRegComment } from 'react-icons/fa';
 import { cn } from 'commons/utils';
 import Skeleton from 'commons/components/elements/Skeleton';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import Spinner from 'commons/components/elements/Spinner';
 
 const KomunitasContainer = ({
     initialData
@@ -54,6 +57,7 @@ const KomunitasContainer = ({
         setFilter,
         setSort
     } = useKomunitas();
+    const isAuthenticated = useSelector(getIsAuthenticated);
 
     const [showSort, setShowSort] = useState(false);
     const [showForm, setShowForm] = useState(false);
@@ -141,9 +145,9 @@ const KomunitasContainer = ({
     }
 
     return (
-        <section className="grid grid-cols-1 lg:grid-cols-5 gap-[2rem] w-full">
-            <div className="flex flex-col w-full gap-6 lg:col-span-3">
-                <div className="sticky top-16 flex flex-col gap-6 z-[2] bg-black py-4">
+        <section className="grid w-full grid-cols-1 gap-8 lg:grid-cols-5">
+            <div className="flex flex-col w-full gap-5 lg:col-span-3">
+                <div className="sticky top-16 flex flex-col gap-5 z-[2] bg-black py-4">
                     <KomunitasInput
                         type="text"
                         name="search"
@@ -198,7 +202,7 @@ const KomunitasContainer = ({
                     </div>
                 </div>
                 <div className="flex flex-col items-stretch gap-[18px]">
-                    {isLoadingDataHome && (
+                    {isLoadingDataHome && !dataHome?.community_posts && (
                         <Skeleton repeat={3} className="h-32 !mb-0" />
                     )}
                     {dataHome?.community_posts.length === 0 ? (
@@ -214,6 +218,12 @@ const KomunitasContainer = ({
                                 clickable={true}
                             />
                         ))
+                    )}
+                    {dataHome?.community_posts.length !== 0 && (
+                        <Spinner
+                            size="medium"
+                            className="border-b-accent-purple border-l-accent-purple"
+                        />
                     )}
                     <div ref={anchor} className="w-full h-0" />
                 </div>
@@ -232,7 +242,7 @@ const KomunitasContainer = ({
                 )}
                 onClick={() => setShowForm(true)}>
                 <FaRegComment size={16} />
-                Tanya
+                Tanya {!isAuthenticated && ' Gratis'}
             </Button>
         </section>
     );

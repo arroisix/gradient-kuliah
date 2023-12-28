@@ -32,8 +32,8 @@ const NavMenuIcons = (): JSX.Element => {
                         size={24}
                         className={cn(
                             router.pathname === '/transaksi'
-                                ? 'text-[#999999]'
-                                : 'text-white'
+                                ? 'text-white'
+                                : 'text-[#999999]'
                         )}
                         title="Riwayat Pembelian"
                     />

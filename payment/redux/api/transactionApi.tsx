@@ -7,12 +7,14 @@ export const transactionApi = baseApi.injectEndpoints({
         getAllTransaction: builder.query<ResponseData<Transaction>, void>({
             query: () => ({
                 url: `${TRANSACTION_BASE_URL}transaction/`
-            })
+            }),
+            providesTags: [{ type: 'TRANSACTION', id: 'LIST' }]
         }),
         getTransaction: builder.query<Transaction, string>({
             query: (id: string) => ({
                 url: `${TRANSACTION_BASE_URL}transaction/${id}`
-            })
+            }),
+            providesTags: [{ type: 'TRANSACTION', id: 'DETAIL' }]
         })
     })
 });

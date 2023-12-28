@@ -19,7 +19,7 @@ const CommunityBanner = ({ askNow }: CommunityBannerProps): JSX.Element => {
         'landing-page-revamp'
     );
     return (
-        <div className="flex flex-col md:flex-row justify-between items-center gap-3 w-full px-5 py-[14px] bg-[#5F2BCE] rounded-lg">
+        <div className="hidden md:flex flex-col md:flex-row justify-between items-center gap-3 w-full px-5 py-[14px] bg-[#5F2BCE] rounded-lg">
             <div className="flex items-center gap-3">
                 <GradientIcon />
                 <span className="inline-block text-xs font-body">

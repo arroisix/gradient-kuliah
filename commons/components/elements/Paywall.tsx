@@ -69,7 +69,7 @@ const Paywall = ({
                 if (isCarousel && container) centerScroll(container);
             }}
             className={cn(
-                'items-center gap-4',
+                'items-center gap-4 justify-center',
                 className,
                 isCarousel
                     ? 'carousel carousel-center px-4'

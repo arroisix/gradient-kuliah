@@ -19,7 +19,7 @@ const ReplyComment = ({
     const [imageError, setImageError] = useState(false);
 
     return (
-        <div className="flex gap-3 items-center">
+        <div className="flex items-start gap-3">
             <div className="relative w-[20px] h-[20px]">
                 {student?.photo_url &&
                 student.photo_url.length > 0 &&
@@ -28,7 +28,7 @@ const ReplyComment = ({
                         src={student?.photo_url}
                         alt={student?.username}
                         layout="fill"
-                        className="rounded-full object-contain"
+                        className="object-contain rounded-full"
                         onError={() => setImageError(true)}
                     />
                 ) : (
@@ -40,8 +40,10 @@ const ReplyComment = ({
                     />
                 )}
             </div>
-            <article className="w-full">
-                <p className="text-xs font-body">{content}</p>
+            <article className="self-center w-full">
+                <p className="text-xs whitespace-pre-line font-body">
+                    {content}
+                </p>
             </article>
         </div>
     );

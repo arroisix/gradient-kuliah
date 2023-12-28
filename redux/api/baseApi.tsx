@@ -32,7 +32,8 @@ export const baseApi = createApi({
         'PROFILE',
         'COMMUNITIES',
         'ASTRONOTES',
-        'CONNECTED_DEVICES'
+        'CONNECTED_DEVICES',
+        'TRANSACTION'
     ],
     baseQuery: fetchBaseQuery({
         baseUrl: config.API_BASE_URL,

@@ -22,7 +22,7 @@ export const DeviceLogoutSelection = ({
                 <div className="w-12 h-12 flex justify-center items-center">
                     <DeviceIcon />
                 </div>
-                <section className='font-body'>
+                <section className="font-body">
                     <p className="text-sm font-semibold mb-1">{deviceName}</p>
                     <p className="text-neutral-400 text-xs">
                         {connectedDeviceCount} perangkat

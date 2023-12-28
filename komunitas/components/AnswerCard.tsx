@@ -20,6 +20,7 @@ import Skeleton from 'commons/components/elements/Skeleton';
 import { useTracker } from 'tracker/tracker';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { IoMdSend } from 'react-icons/io';
 
 type Student = {
     id: string;
@@ -185,8 +186,15 @@ const AnswerCard = ({
                         value={comment}
                         onChange={handleChangeComment}
                         placeholder="Tambahkan komentar"
+                        isSubmitOnEnter={false}
                         handleSubmit={handleSubmitComment}
                     />
+                    <button
+                        type="submit"
+                        onClick={handleSubmitComment}
+                        className="self-end btn btn-circle btn-primary btn-sm">
+                        <IoMdSend />
+                    </button>
                 </div>
                 {showComment && comment_counts !== 0 && (
                     <div className="flex flex-col gap-[18px]">
