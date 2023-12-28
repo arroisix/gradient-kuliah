@@ -1,17 +1,23 @@
 import { useEffect, useState } from 'react';
 import TransactionCard from '../components/TransactionCard';
-import useAllTransaction from '../hooks/useAllTransaction';
 import moment from 'moment';
 import Skeleton from 'commons/components/elements/Skeleton';
 import ReferralModal from 'referral/components/ReferralModal';
 import { useRouter } from 'next/router';
+import { useGetAllTransactionQuery } from 'payment/redux/api/transactionApi';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { useSelector } from 'react-redux';
 
 const TransactionListContainer = (): JSX.Element => {
-    const [activeTransaction, setActiveTransaction] = useState<Transaction>();
+    const [activeTransaction, setActiveTransaction] = useState<Transaction[]>();
     const [inactiveTransaction, setInactiveTransaction] =
         useState<Transaction[]>();
 
-    const { data, loading } = useAllTransaction();
+    const isAuthenticated = useSelector(getIsAuthenticated);
+    const { isLoading: loading, data } = useGetAllTransactionQuery(undefined, {
+        refetchOnMountOrArgChange: true,
+        skip: !isAuthenticated
+    });
 
     const router = useRouter();
     const { checkout } = router.query;
@@ -19,31 +25,26 @@ const TransactionListContainer = (): JSX.Element => {
 
     useEffect(() => {
         if (checkout === 'success') setIsReferralModalOpen(true);
-    }, []);
+    }, [checkout]);
 
     useEffect(() => {
-        data?.data.forEach((value) => {
-            if (value.status === 'SUCCESS') {
-                if (
-                    moment(moment(value.created_at).startOf('day'))
-                        .add(
-                            value.subscriber.subscribed_packet?.active_duration,
-                            'd'
-                        )
-                        .unix() > moment().unix()
-                ) {
-                    setActiveTransaction(value);
-                } else {
-                    setInactiveTransaction((prev) =>
-                        prev ? [...prev, value] : [value]
-                    );
-                }
-            } else {
-                setInactiveTransaction((prev) =>
-                    prev ? [...prev, value] : [value]
-                );
+        if (data) {
+            // saves transaction with latest activation date before today
+            const activeTransaction_ = [];
+            const inactiveTransactions_ = [];
+            for (const transaction of data.data) {
+                const isSuccess = transaction.status === 'SUCCESS';
+                const isSubscriptionActive =
+                    moment(transaction.subscriber.deactivate_after)
+                        .endOf('day')
+                        .unix() > moment().unix();
+                if (isSuccess && isSubscriptionActive)
+                    activeTransaction_.push(transaction);
+                else inactiveTransactions_.push(transaction);
             }
-        });
+            setActiveTransaction(activeTransaction_);
+            setInactiveTransaction(inactiveTransactions_);
+        }
     }, [data]);
 
     return (
@@ -52,16 +53,21 @@ const TransactionListContainer = (): JSX.Element => {
                 Riwayat Pembelian
             </h1>
             {loading && <Skeleton className="h-[150px]" repeat={3} />}
-            {activeTransaction && (
+            {activeTransaction && activeTransaction.length !== 0 && (
                 <>
                     <span className="inline-block font-body text-sm mb-[18px]">
                         Aktif
                     </span>
-                    <TransactionCard
-                        active
-                        isList
-                        transaction={activeTransaction as Transaction}
-                    />
+                    <div className="space-y-4 md:space-y-6">
+                        {activeTransaction?.map((transaction: Transaction) => (
+                            <TransactionCard
+                                active
+                                isList
+                                transaction={transaction}
+                                key={transaction.id}
+                            />
+                        ))}
+                    </div>
                 </>
             )}
             {inactiveTransaction && inactiveTransaction.length !== 0 && (
@@ -69,8 +75,8 @@ const TransactionListContainer = (): JSX.Element => {
                     <span className="inline-block font-body text-sm mb-[18px] mt-6 sm:mt-10">
                         Tidak Aktif
                     </span>
-                    <div className="flex flex-col gap-[18px]">
-                        {(inactiveTransaction as [Transaction])?.map(
+                    <div className="space-y-4 md:space-y-6">
+                        {inactiveTransaction?.map(
                             (transaction: Transaction) => (
                                 <TransactionCard
                                     isList
