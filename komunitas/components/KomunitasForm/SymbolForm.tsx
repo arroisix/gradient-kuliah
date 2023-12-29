@@ -19,11 +19,9 @@ type SymbolOption =
     | 'other';
 
 const SymbolForm = ({
-    setFormContent,
-    formRef
+    onClickSymbol
 }: {
-    setFormContent: React.Dispatch<React.SetStateAction<string>>;
-    formRef: React.RefObject<HTMLTextAreaElement>;
+    onClickSymbol: (symbol: string) => void;
 }): JSX.Element => {
     const [symbolType, setSymbolType] = useState<SymbolOption>('math');
 
@@ -31,21 +29,6 @@ const SymbolForm = ({
         event: React.ChangeEvent<HTMLSelectElement>
     ): void {
         setSymbolType(event.target.value as SymbolOption);
-    }
-
-    function handleInsertSymbol(symbol: string): void {
-        const cursorPosition = formRef.current?.selectionStart as number;
-        const textBeforeCursorPosition = formRef.current?.value.substring(
-            0,
-            cursorPosition
-        );
-        const textAfterCursorPosition = formRef.current?.value.substring(
-            cursorPosition,
-            formRef.current?.value.length
-        );
-        setFormContent(
-            `${textBeforeCursorPosition} ${symbol} ${textAfterCursorPosition}`
-        );
     }
 
     return (
@@ -66,7 +49,7 @@ const SymbolForm = ({
                     <div
                         key={index}
                         className="hover:bg-[#2C2C2C] cursor-pointer py-2 px-4 rounded-lg text-lg"
-                        onClick={() => handleInsertSymbol(value)}
+                        onClick={() => onClickSymbol(value)}
                         aria-hidden>
                         {display}
                     </div>

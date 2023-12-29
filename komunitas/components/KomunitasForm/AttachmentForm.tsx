@@ -1,20 +1,21 @@
+import clsx from 'clsx';
 import useUploadFile from 'commons/hooks/useUploadFile';
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { IoMdClose } from 'react-icons/io';
 
 const AttachmentForm = ({
-    attachmentName,
-    attachmentUrl,
-    setAttachmentName,
-    setAttachmentUrl,
+    attachmentNames: attachmentName,
+    attachmentUrl: attachmentUrls,
+    setAttachmentNames: setAttachmentName,
+    setAttachmentUrl: setAttachmentUrls,
     bucketKey
 }: {
     attachmentUrl: string[];
     setAttachmentUrl: Dispatch<SetStateAction<string[]>>;
-    attachmentName: string[];
-    setAttachmentName: Dispatch<SetStateAction<string[]>>;
+    attachmentNames: string[];
+    setAttachmentNames: Dispatch<SetStateAction<string[]>>;
     bucketKey?: string;
-}): JSX.Element => {
+}): JSX.Element | null => {
     const { uploadFile } = useUploadFile(bucketKey);
 
     async function handleInputFile(
@@ -32,12 +33,16 @@ const AttachmentForm = ({
         }
         const res = await uploadFile(files);
         if (res) {
-            setAttachmentUrl([...res, ...attachmentUrl]);
+            setAttachmentUrls([...res, ...attachmentUrls]);
         }
     }
 
     return (
-        <div className="flex gap-3 flex-wrap">
+        <div
+            className={clsx(
+                'flex gap-3 flex-wrap',
+                attachmentUrls.length == 0 && 'hidden'
+            )}>
             <input
                 type="file"
                 id={'inputFile'}
@@ -52,7 +57,7 @@ const AttachmentForm = ({
                     className="relative px-[10px] py-[6px] text-[10px] font-body bg-[#272727] rounded-[4px]">
                     <span
                         className="inline-block"
-                        onClick={() => window.open(attachmentUrl[index])}
+                        onClick={() => window.open(attachmentUrls[index])}
                         aria-hidden>
                         {value}
                     </span>
@@ -62,7 +67,7 @@ const AttachmentForm = ({
                             setAttachmentName((prev) =>
                                 prev.filter((item, id) => id !== index)
                             );
-                            setAttachmentUrl((prev) =>
+                            setAttachmentUrls((prev) =>
                                 prev.filter((item, id) => id !== index)
                             );
                         }}

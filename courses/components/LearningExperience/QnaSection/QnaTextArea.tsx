@@ -259,14 +259,12 @@ const QnaTextArea = ({
                 {(iconClicked === 0 || iconClicked === 1) && (
                     <div className="p-4 bg-neutral-900 rounded-box md:p-6">
                         {iconClicked === 0 ? (
-                            <MathForm
-                                setFormContent={setFormContent}
-                                onCancel={() => setIconClicked(-1)}
-                            />
+                            <MathForm />
                         ) : (
                             <SymbolForm
-                                setFormContent={setFormContent}
-                                formRef={formRef}
+                                onClickSymbol={(value) =>
+                                    setFormContent((content) => content + value)
+                                }
                             />
                         )}
                     </div>

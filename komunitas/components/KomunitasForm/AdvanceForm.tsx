@@ -6,6 +6,7 @@ import MathForm from './MathForm';
 import SymbolForm from './SymbolForm';
 import { FiPaperclip } from 'react-icons/fi';
 import { useTracker } from 'tracker/tracker';
+import { useCurrentEditor } from '@tiptap/react';
 
 type IconOption = {
     tag: keyof JSX.IntrinsicElements;
@@ -17,8 +18,6 @@ type IconOption = {
 };
 
 type AdvanceFormProps = {
-    setFormContent: React.Dispatch<React.SetStateAction<string>>;
-    formRef: React.RefObject<HTMLTextAreaElement>;
     handleSubmit: () => Promise<void>;
     cancelButton?: () => void;
     submitButtonText: JSX.Element | string;
@@ -27,8 +26,6 @@ type AdvanceFormProps = {
 };
 
 const AdvanceForm = ({
-    setFormContent,
-    formRef,
     handleSubmit,
     cancelButton,
     submitButtonText,
@@ -44,7 +41,7 @@ const AdvanceForm = ({
             },
             {
                 tag: 'div',
-                icon: <ImOmega className="text-[18px]" />,
+                icon: <ImOmega className="text-[16px]" />,
                 tracker: 'Click Symbol Menu'
             },
             {
@@ -61,13 +58,18 @@ const AdvanceForm = ({
         [context]
     );
 
+    const { editor } = useCurrentEditor();
+    const handleAddSymbol = (symbol: string) => {
+        editor?.commands.insertContent(symbol);
+    };
+
     const [iconClicked, setIconClicked] = useState(-1);
     const tracker = useTracker();
 
     return (
-        <div className="bg-[#242424] px-5 py-[10px] rounded-b-[20px]">
+        <div className="bg-[#242424] p-3 rounded-b-[20px]">
             <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-[2px]">
                     {ICON.filter((opt) => !opt.disabled).map(
                         (
                             {
@@ -81,7 +83,7 @@ const AdvanceForm = ({
                         ) => (
                             <Tag
                                 key={index}
-                                className={`block hover:bg-[#2C2C2C] px-[12px] py-[6px] rounded-[100px] cursor-pointer ${
+                                className={`h-[30px] hover:bg-[#2C2C2C] px-[12px] py-[6px] rounded-[100px] cursor-pointer flex items-center ${
                                     iconClicked === index
                                         ? 'text-white bg-[#2C2C2C]'
                                         : 'text-neutral-600'
@@ -105,35 +107,35 @@ const AdvanceForm = ({
                     <div className="flex gap-2">
                         <Button
                             variant="custom"
-                            className="text-neutral-600 font-extrabold text-xs px-[10px]"
+                            className="text-neutral-600 font-extrabold text-xs !py-2 !px-4 !font-sans"
                             onClick={cancelButton}>
                             Batal
                         </Button>
                         <Button
                             variant="primary"
-                            className="font-extrabold text-xs px-[17px]"
+                            className="font-extrabold text-xs !py-2 !px-4 !font-sans"
                             onClick={handleSubmit}>
                             {submitButtonText}
                         </Button>
                     </div>
                 )}
             </div>
-            {iconClicked === 0 && <MathForm setFormContent={setFormContent} />}
+            {iconClicked === 0 && <MathForm />}
             {iconClicked === 1 && (
-                <SymbolForm setFormContent={setFormContent} formRef={formRef} />
+                <SymbolForm onClickSymbol={handleAddSymbol} />
             )}
             {iconClicked !== -1 && (
                 <div className="flex gap-2 justify-end pb-[10px]">
                     <Button
                         variant="custom"
-                        className="text-neutral-600 font-extrabold text-xs px-[10px]"
+                        className="text-neutral-600 font-extrabold text-xs !py-2 !px-4 !font-sans"
                         onClick={cancelButton}>
                         Batal
                     </Button>
                     <Button
                         variant="primary"
                         disabled={isLoading}
-                        className="font-extrabold text-xs px-[17px]"
+                        className="font-extrabold text-xs !py-2 !px-4 !font-sans"
                         onClick={handleSubmit}>
                         {submitButtonText}
                     </Button>
