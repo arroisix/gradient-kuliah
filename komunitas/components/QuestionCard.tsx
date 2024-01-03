@@ -153,7 +153,7 @@ const QuestionCard = ({
                         remarkPlugins={[remarkMath, remarkGfm]}
                         rehypePlugins={[rehypeKatex]}
                         linkTarget={clickable ? '' : '_blank'}>
-                        {content?.replaceAll('\n', '\n\n')}
+                        {content}
                     </ReactMarkdown>
                 </article>
                 <div className="flex justify-between lg:pl-8">
