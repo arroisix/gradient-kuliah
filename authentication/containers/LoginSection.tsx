@@ -122,11 +122,12 @@ export const LoginSection: React.FC = () => {
                                             />
                                         )
                                     }
+                                    className="highlight-ignore"
                                 />
                             </div>
                             <Link
                                 href="/lupa-password"
-                                className="text-sm self-end underline text-neutral-400">
+                                className="self-end text-sm underline text-neutral-400">
                                 Lupa kata sandi?
                             </Link>
                         </>
@@ -235,12 +236,12 @@ function SelectAccountItem({
             type="button"
             onClick={onClick}
             className="py-3 flex justify-between items-center border-solid border-b-[1px] border-b-neutral-800 min-h-[60px]">
-            <div className="flex gap-2 items-center">
+            <div className="flex items-center gap-2">
                 {!!icon && icon()}
                 <p className="flex flex-col gap-[2px] font-body text-sm text-white items-start leading-4 font-semibold">
                     {emailOrText}{' '}
                     {!!methodMessage && (
-                        <span className="text-neutral-400 font-normal">
+                        <span className="font-normal text-neutral-400">
                             {methodMessage}
                         </span>
                     )}

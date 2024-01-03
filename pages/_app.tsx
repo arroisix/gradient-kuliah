@@ -33,6 +33,8 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import { MixpanelProvider } from 'tracker/MixpanelProvider';
+import { HighlightInit } from '@highlight-run/next/client';
+import { HIGHLIGHT_PROJECT_ID } from 'commons/constants';
 
 const store = useStore();
 
@@ -41,7 +43,8 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
 
     const loadClientSideOnlyLibrary = async (): Promise<void> => {
         const TagManager = await import('react-gtm-module');
-        // @ts-ignore
+        // @ts-ignoreimport { HighlightInit } from '@highlight-run/next/client';
+
         TagManager.initialize({
             gtmId: 'GTM-T3KZ4FB'
         });
@@ -96,6 +99,16 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
                 </GrowthBookProvider>
             </PersistGate>
             <ToastContainer />
+            <HighlightInit
+                projectId={HIGHLIGHT_PROJECT_ID}
+                serviceName="gradient-web"
+                tracingOrigins
+                networkRecording={{
+                    enabled: true,
+                    recordHeadersAndBody: true,
+                    urlBlocklist: []
+                }}
+            />
         </>
     );
 }

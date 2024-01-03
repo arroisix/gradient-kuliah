@@ -94,6 +94,7 @@ export const RegistrationSection: React.FC = () => {
                                     />
                                 )
                             }
+                            className="highlight-ignore"
                         />
                     </div>
 

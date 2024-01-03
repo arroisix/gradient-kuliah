@@ -18,6 +18,7 @@
         "@fingerprintjs/fingerprintjs": "^4.2.1",
         "@growthbook/growthbook-react": "^0.20.0",
         "@headlessui/react": "^1.7.3",
+        "@highlight-run/next": "^7.3.1",
         "@mux/videojs-kit": "^0.12.0",
         "@notionhq/client": "^2.2.10",
         "@react-oauth/google": "^0.5.1",
