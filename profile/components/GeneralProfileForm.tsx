@@ -148,7 +148,7 @@ export const GeneralProfileForm = (): JSX.Element => {
                                     </div>
                                 ) : (
                                     <Avatar
-                                        name={profile?.full_name}
+                                        name={profile?.username}
                                         size="43"
                                         round
                                     />

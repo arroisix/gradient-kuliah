@@ -1,23 +1,23 @@
 export const MATH_NOTATION = [
     {
         display: '\\Box^{2}',
-        latex: 'x^{2}'
+        latex: '\\placeholder{}^{2}'
     },
     {
         display: '\\sqrt{\\Box}',
-        latex: '\\sqrt{x}'
+        latex: '\\sqrt{\\placeholder{}}'
     },
     {
         display: '\\sqrt[\\Box]{\\Box}',
-        latex: '\\sqrt[n]{x}'
+        latex: '\\sqrt[\\placeholder{}]{\\placeholder{}}'
     },
     {
         display: '\\frac{\\Box}{\\Box}',
-        latex: '\\frac{x}{y}'
+        latex: '\\frac{\\placeholder{}}{\\placeholder{}}'
     },
     {
         display: '\\Box_{123}',
-        latex: 'x_{123}'
+        latex: '\\placeholder{}_{123}'
     },
     {
         display: '\\leq',
@@ -45,20 +45,23 @@ export const MATH_NOTATION = [
     },
     {
         display: '\\left \\{ {{\\Box=2} \\atop {\\Box=2}} \\right.',
-        latex: '\\left \\{ {{y=2} \\atop {x=2}} \\right.'
+        latex: '\\left \\{ {{\\placeholder{}=2} \\atop {\\placeholder{}=2}} \\right.'
     },
     {
         display: '\\int\\limits^\\Box_\\Box {x} \\, dx',
-        latex: '\\int\\limits^a_b {x} \\, dx'
+        latex: '\\int\\limits^\\placeholder{}_\\placeholder{} {x} \\, dx'
     },
     {
         display: '\\lim_{\\Box \\to \\infty} a_\\Box',
-        latex: '\\lim_{n \\to \\infty} a_n'
+        latex: '\\lim_{\\placeholder{} \\to \\infty} a_\\placeholder{}'
     },
     {
-        display:
-            '\\left[\\begin{array}{ccc}\\Box&\\Box&\\Box\\\\\\Box&\\Box&\\Box\\\\\\Box&\\Box&\\Box\\end{array}\\right]',
-        latex: '\\left[\\begin{array}{ccc}1&2&3\\\\4&5&6\\\\7&8&9\\end{array}\\right]'
+        text: 'Matrix 2x2',
+        latex: '\\begin{bmatrix}\\placeholder{}&\\placeholder{}\\\\\\placeholder{}&\\placeholder{}\\end{bmatrix}'
+    },
+    {
+        text: 'Matrix 3x3',
+        latex: '\\begin{bmatrix}\\placeholder{}&\\placeholder{}&\\placeholder{}\\\\\\placeholder{}&\\placeholder{}&\\placeholder{}\\\\\\placeholder{}&\\placeholder{}&\\placeholder{}\\end{bmatrix}'
     }
 ];
 

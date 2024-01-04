@@ -1,3 +1,4 @@
+import { H } from '@highlight-run/next/client';
 import { useGetProfileQuery } from 'authentication/redux/api/authApi';
 import {
     getCurrentUser,
@@ -52,6 +53,11 @@ export function AuthProvider({
         if (user.email && profile && !isLoadingSubscribed) {
             tracker?.identify({
                 email: user.email,
+                fullName: profile.full_name,
+                phoneNumber: profile.phone_number,
+                isSubscribed: is_subscribed
+            });
+            H.identify(user.email, {
                 fullName: profile.full_name,
                 phoneNumber: profile.phone_number,
                 isSubscribed: is_subscribed

@@ -18,7 +18,7 @@ const UserProfile = ({
             />
         </div>
     ) : (
-        <Avatar name={profile.full_name} size="23" round />
+        <Avatar name={profile.username} size="23" round />
     );
 };
 

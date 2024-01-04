@@ -195,16 +195,8 @@ input[type='number']::-webkit-outer-spin-button {
 
 .sticky-1.animate,
 .sticky-2.animate,
-sticky-3.animate {
+.sticky-3.animate {
     transition: background 0.25s ease-out;
-}
-
-.box {
-    position: fixed;
-    top: 64px;
-    right: 0;
-    width: 50vw;
-    height: calc(100vh - 64px);
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -1472,6 +1464,99 @@ hr {
 
 summary > p {
     display: contents;
+}
+
+math-field#tanya-mathfield {
+  --contains-highlight-background-color: #263e59;
+  flex-grow: 1;
+  border: 1px solid #373737;
+  border-radius: 4px 0px 0px 4px;
+  background: transparent;
+  padding: 10px;
+}
+
+math-field#tanya-mathfield:focus {
+    outline: none;
+}
+
+math-field#tanya-mathfield::part(menu-toggle) {
+    display: none;
+}
+
+math-field#tanya-mathfield::part(virtual-keyboard-toggle) {
+    display: none;
+}
+
+.tiptap p {
+    font-size: 16px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.tiptap h1 { font-size: 2em; }
+.tiptap h2 { font-size: 1.5em; }
+.tiptap h3 { font-size: 1.17em; }
+.tiptap h4 { font-size: 1em; }
+.tiptap h5 { font-size: .83em; }
+.tiptap h6 { font-size: .67; }
+
+.tiptap .ProseMirror-focused,
+.tiptap.ProseMirror-focused {
+    outline: none;
+}
+
+.tiptap > * + * {
+	margin-top: 0.75em;
+}
+ .tiptap ul, .tiptap ol {
+	padding: 0 1rem;
+}
+ .tiptap h1, .tiptap h2, .tiptap h3, .tiptap h4, .tiptap h5, .tiptap h6 {
+    font-weight: bold;
+	line-height: 1.1;
+}
+ .tiptap code {
+	background-color: rgba(97, 97, 97, 0.1);
+	color: #616161;
+}
+ .tiptap pre {
+	background: #0d0d0d;
+	color: #fff;
+	font-family: 'JetBrainsMono', monospace;
+	padding: 0.75rem 1rem;
+	border-radius: 0.5rem;
+}
+ .tiptap pre code {
+	color: inherit;
+	padding: 0;
+	background: none;
+	font-size: 0.8rem;
+}
+ .tiptap img {
+	max-width: 100%;
+	height: auto;
+}
+ .tiptap hr {
+	margin: 1rem 0;
+}
+ .tiptap blockquote {
+	padding-left: 1rem;
+	border-left: 2px solid rgba(255, 255, 255, 0.5);
+}
+.tiptap p.is-editor-empty:first-child::before {
+  color: #666;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+.tiptap math-display.ProseMirror-selectednode {
+    background-color: #121212;
+}
+.tiptap math-display .math-src .ProseMirror {
+    color: white;
+}
+.tiptap math-inline .math-src .ProseMirror {
+    color: white;
 }
 
 .dashboard-tour.driver-popover {
