@@ -33,8 +33,8 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import { MixpanelProvider } from 'tracker/MixpanelProvider';
-import { HighlightInit } from '@highlight-run/next/client';
-import { HIGHLIGHT_PROJECT_ID } from 'commons/constants';
+// import { HighlightInit } from '@highlight-run/next/client';
+// import { HIGHLIGHT_PROJECT_ID } from 'commons/constants';
 
 const store = useStore();
 
@@ -99,7 +99,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
                 </GrowthBookProvider>
             </PersistGate>
             <ToastContainer />
-            <HighlightInit
+            {/* <HighlightInit
                 projectId={HIGHLIGHT_PROJECT_ID}
                 serviceName="gradient-web"
                 tracingOrigins
@@ -108,7 +108,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
                     recordHeadersAndBody: true,
                     urlBlocklist: []
                 }}
-            />
+            /> */}
         </>
     );
 }
