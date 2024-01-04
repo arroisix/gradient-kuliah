@@ -41,6 +41,7 @@ const Button = ({
     const handleClick: MouseEventHandler<any> = (e) => {
         onClick?.(e);
         if (eventName) {
+            console.log('track');
             tracker?.trackButtonClick(
                 eventName,
                 onlyText(children),
@@ -79,7 +80,7 @@ const Button = ({
             <Link
                 href={disabled ? '#' : href}
                 className={linkClass}
-                onClick={disabled ? undefined : onClick}>
+                onClick={disabled ? undefined : handleClick}>
                 <div
                     id={id}
                     onMouseEnter={onMouseEnter}
