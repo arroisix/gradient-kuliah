@@ -381,59 +381,107 @@
             [
                 {
                     "asset": "",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                    "description": "Masukkan Kartu ATM BCA"
                 },
                 {
                     "asset": "",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                    "description": "Masukkan PIN"
                 },
                 {
                     "asset": "",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                    "description": "Pilih menu 'Transaksi Lainnya'"
+                },
+                {
+                    "asset": "",
+                    "description": "Pilih menu 'Transfer'"
+                },
+                {
+                    "asset": "",
+                    "description": "Pilih menu 'ke Rekening BCA Virtual Account'"
+                },
+                {
+                    "asset": "",
+                    "description": "Masukkan Nomor Virtual Account Anda lalu Tekan 'Benar' untuk melanjutkan"
+                },
+                {
+                    "asset": "",
+                    "description": "Di halaman konfirmasi, pastikan detil pembayaran sudah sesuai seperti No VA, Nama, Perus/Produk dan Total Tagihan, tekan 'Benar' untuk melanjutkan"
+                },
+                {
+                    "asset": "",
+                    "description": "Pastikan nama kamu dan Total Tagihannya benar"
+                },
+                {
+                    "asset": "",
+                    "description": "Tekan 'Ya' jika sudah benar"
+                },
+                {
+                    "asset": "",
+                    "description": "Transaksi Anda telah selesai"
                 }
             ],
             [
                 {
                     "asset": "",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                    "description": "Lakukan log in pada aplikasi KlikBCA Individual (https://ibank.klikbca.com)"
                 },
                 {
                     "asset": "",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                    "description": "Pilih 'Transfer Dana', kemudian pilih 'Transfer ke BCA Virtual Account'"
                 },
                 {
                     "asset": "",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                    "description": "Masukkan Nomor Virtual Account anda"
                 },
                 {
                     "asset": "",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                    "description": "Pilih 'Lanjutkan'"
                 },
                 {
                     "asset": "",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                    "description": "Masukkan 'RESPON KEYBCA APPLI 1' yang muncul pada Token BCA anda, kemudian tekan tombol 'Kirim'"
+                },
+                {
+                    "asset": "",
+                    "description": "Masukkan kode autentikasi"
+                },
+                {
+                    "asset": "",
+                    "description": "Transaksi Anda telah selesai"
                 }
             ],
             [
                 {
                     "asset": "",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                    "description": "Buka aplikasi BCA Mobile"
                 },
                 {
                     "asset": "",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                    "description": "Pilih menu 'm-BCA', kemudian masukkan kode akses m-BCA"
                 },
                 {
                     "asset": "",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                    "description": "Pilih 'm-Transfer', kemudian pilih 'BCA Virtual Account'"
                 },
                 {
                     "asset": "",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                    "description": "Masukkan Nomor Virtual Account anda, kemudian tekan 'OK'"
                 },
                 {
                     "asset": "",
-                    "description": "Pada menu utama, pilih Transaksi Lainnya"
+                    "description": "Tekan tombol 'Kirim' yang berada di sudut kanan atas aplikasi untuk melakukan transfer"
+                },
+                {
+                    "asset": "",
+                    "description": "Tekan 'OK' untuk melanjutkan pembayaran"
+                },
+                {
+                    "asset": "",
+                    "description": "Masukkan PIN Anda untuk meng-otorisasi transaksi"
+                },
+                {
+                    "asset": "",
+                    "description": "Transaksi Anda telah selesai"
                 }
             ]
         ]
