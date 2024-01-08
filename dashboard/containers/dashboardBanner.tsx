@@ -8,22 +8,23 @@ import TutorBanner from 'dashboard/components/TutorBanner';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-const DashboardBanner = (): JSX.Element => {
+const DashboardBanner = (): JSX.Element | null => {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { is_subscribed, isLoading } = useCourseSubscription();
     const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
         'landing-page-revamp'
     );
+    const showTutorBanner = false;
 
     if (!isAuthenticated) return <RegisterBanner />;
 
-    return !isLoading && is_subscribed ? (
+    return !isLoading && is_subscribed && showTutorBanner ? (
         <TutorBanner />
-    ) : isLandingPageRevampOn ? (
+    ) : isLandingPageRevampOn && !is_subscribed ? (
         <SubscribeBanner />
-    ) : (
+    ) : !is_subscribed ? (
         <OfferNotification />
-    );
+    ) : null;
 };
 
 export default DashboardBanner;
