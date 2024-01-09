@@ -1152,7 +1152,7 @@ input[type='number']::-webkit-outer-spin-button {
     overflow: auto;
     font-size: 85%;
     line-height: 1.45;
-    background-color: #f6f8fa;
+    background-color: #949494;
     border-radius: 3px;
 }
 
@@ -1467,12 +1467,12 @@ summary > p {
 }
 
 math-field#tanya-mathfield {
-  --contains-highlight-background-color: #263e59;
-  flex-grow: 1;
-  border: 1px solid #373737;
-  border-radius: 4px 0px 0px 4px;
-  background: transparent;
-  padding: 10px;
+    --contains-highlight-background-color: #263e59;
+    flex-grow: 1;
+    border: 1px solid #373737;
+    border-radius: 4px 0px 0px 4px;
+    background: transparent;
+    padding: 10px;
 }
 
 math-field#tanya-mathfield:focus {
@@ -1492,12 +1492,24 @@ math-field#tanya-mathfield::part(virtual-keyboard-toggle) {
     font-family: 'Open Sans', sans-serif;
 }
 
-.tiptap h1 { font-size: 2em; }
-.tiptap h2 { font-size: 1.5em; }
-.tiptap h3 { font-size: 1.17em; }
-.tiptap h4 { font-size: 1em; }
-.tiptap h5 { font-size: .83em; }
-.tiptap h6 { font-size: .67; }
+.tiptap h1 {
+    font-size: 2em;
+}
+.tiptap h2 {
+    font-size: 1.5em;
+}
+.tiptap h3 {
+    font-size: 1.17em;
+}
+.tiptap h4 {
+    font-size: 1em;
+}
+.tiptap h5 {
+    font-size: 0.83em;
+}
+.tiptap h6 {
+    font-size: 0.67;
+}
 
 .tiptap .ProseMirror-focused,
 .tiptap.ProseMirror-focused {
@@ -1505,49 +1517,55 @@ math-field#tanya-mathfield::part(virtual-keyboard-toggle) {
 }
 
 .tiptap > * + * {
-	margin-top: 0.75em;
+    margin-top: 0.75em;
 }
- .tiptap ul, .tiptap ol {
-	padding: 0 1rem;
+.tiptap ul,
+.tiptap ol {
+    padding: 0 1rem;
 }
- .tiptap h1, .tiptap h2, .tiptap h3, .tiptap h4, .tiptap h5, .tiptap h6 {
+.tiptap h1,
+.tiptap h2,
+.tiptap h3,
+.tiptap h4,
+.tiptap h5,
+.tiptap h6 {
     font-weight: bold;
-	line-height: 1.1;
+    line-height: 1.1;
 }
- .tiptap code {
-	background-color: rgba(97, 97, 97, 0.1);
-	color: #616161;
+.tiptap code {
+    background-color: rgba(97, 97, 97, 0.1);
+    color: #616161;
 }
- .tiptap pre {
-	background: #0d0d0d;
-	color: #fff;
-	font-family: 'JetBrainsMono', monospace;
-	padding: 0.75rem 1rem;
-	border-radius: 0.5rem;
+.tiptap pre {
+    background: #0d0d0d;
+    color: #fff;
+    font-family: 'JetBrainsMono', monospace;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
 }
- .tiptap pre code {
-	color: inherit;
-	padding: 0;
-	background: none;
-	font-size: 0.8rem;
+.tiptap pre code {
+    color: inherit;
+    padding: 0;
+    background: none;
+    font-size: 0.8rem;
 }
- .tiptap img {
-	max-width: 100%;
-	height: auto;
+.tiptap img {
+    max-width: 100%;
+    height: auto;
 }
- .tiptap hr {
-	margin: 1rem 0;
+.tiptap hr {
+    margin: 1rem 0;
 }
- .tiptap blockquote {
-	padding-left: 1rem;
-	border-left: 2px solid rgba(255, 255, 255, 0.5);
+.tiptap blockquote {
+    padding-left: 1rem;
+    border-left: 2px solid rgba(255, 255, 255, 0.5);
 }
 .tiptap p.is-editor-empty:first-child::before {
-  color: #666;
-  content: attr(data-placeholder);
-  float: left;
-  height: 0;
-  pointer-events: none;
+    color: #666;
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
 }
 .tiptap math-display.ProseMirror-selectednode {
     background-color: #121212;
@@ -1570,57 +1588,66 @@ math-field#tanya-mathfield::part(virtual-keyboard-toggle) {
     border: 15px solid #272727;
 }
 
-.dashboard-tour .driver-popover-arrow-side-left{
-    left:100%;
-    border-right-color:transparent;
-    border-bottom-color:transparent;
-    border-top-color:transparent
+.dashboard-tour .driver-popover-arrow-side-left {
+    left: 100%;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-top-color: transparent;
 }
 
-.dashboard-tour .driver-popover-arrow-side-right{
-    right:100%;
-    border-left-color:transparent;
-    border-bottom-color:transparent;
-    border-top-color:transparent
+.dashboard-tour .driver-popover-arrow-side-right {
+    right: 100%;
+    border-left-color: transparent;
+    border-bottom-color: transparent;
+    border-top-color: transparent;
 }
 
-.dashboard-tour .driver-popover-arrow-side-top{
-    top:100%;
-    border-right-color:transparent;
-    border-bottom-color:transparent;
-    border-left-color:transparent
+.dashboard-tour .driver-popover-arrow-side-top {
+    top: 100%;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
 }
 
-.dashboard-tour .driver-popover-arrow-side-bottom{
-    bottom:100%;
-    border-left-color:transparent;
-    border-top-color:transparent;
-    border-right-color:transparent
+.dashboard-tour .driver-popover-arrow-side-bottom {
+    bottom: 100%;
+    border-left-color: transparent;
+    border-top-color: transparent;
+    border-right-color: transparent;
 }
 
-.dashboard-tour .driver-popover-arrow-side-left.driver-popover-arrow-align-center,.driver-popover-arrow-side-right.driver-popover-arrow-align-center{
-    top:50%;
-    margin-top:-15px;
+.dashboard-tour
+    .driver-popover-arrow-side-left.driver-popover-arrow-align-center,
+.driver-popover-arrow-side-right.driver-popover-arrow-align-center {
+    top: 50%;
+    margin-top: -15px;
 }
 
-.dashboard-tour .driver-popover-arrow-side-top.driver-popover-arrow-align-center,.driver-popover-arrow-side-bottom.driver-popover-arrow-align-center{
-    left:50%;
-    margin-left:-15px;
+.dashboard-tour
+    .driver-popover-arrow-side-top.driver-popover-arrow-align-center,
+.driver-popover-arrow-side-bottom.driver-popover-arrow-align-center {
+    left: 50%;
+    margin-left: -15px;
 }
 
-.dashboard-tour .driver-popover-arrow-side-left.driver-popover-arrow-align-start,.driver-popover-arrow-side-right.driver-popover-arrow-align-start{
+.dashboard-tour
+    .driver-popover-arrow-side-left.driver-popover-arrow-align-start,
+.driver-popover-arrow-side-right.driver-popover-arrow-align-start {
     top: 20px;
 }
 
-.dashboard-tour .driver-popover-arrow-side-top.driver-popover-arrow-align-start,.driver-popover-arrow-side-bottom.driver-popover-arrow-align-start{
+.dashboard-tour .driver-popover-arrow-side-top.driver-popover-arrow-align-start,
+.driver-popover-arrow-side-bottom.driver-popover-arrow-align-start {
     left: 20px;
 }
 
-.dashboard-tour .driver-popover-arrow-align-end.driver-popover-arrow-side-left,.driver-popover-arrow-align-end.driver-popover-arrow-side-right{
+.dashboard-tour .driver-popover-arrow-align-end.driver-popover-arrow-side-left,
+.driver-popover-arrow-align-end.driver-popover-arrow-side-right {
     bottom: 20px;
 }
 
-.dashboard-tour .driver-popover-arrow-side-top.driver-popover-arrow-align-end,.driver-popover-arrow-side-bottom.driver-popover-arrow-align-end{
+.dashboard-tour .driver-popover-arrow-side-top.driver-popover-arrow-align-end,
+.driver-popover-arrow-side-bottom.driver-popover-arrow-align-end {
     right: 20px;
 }
 
@@ -1639,7 +1666,7 @@ math-field#tanya-mathfield::part(virtual-keyboard-toggle) {
 }
 
 .dashboard-tour .driver-popover-progress-text .step-button.visited {
-    background-color: #7264EB;
+    background-color: #7264eb;
 }
 
 .dashboard-tour .driver-popover-progress-text .step-button.active {
@@ -1662,15 +1689,18 @@ math-field#tanya-mathfield::part(virtual-keyboard-toggle) {
     gap: 8px;
 }
 
-.dashboard-tour .driver-popover-footer .driver-popover-navigation-btns button:not(.driver-popover-btn-disabled) {
-    all:unset;
+.dashboard-tour
+    .driver-popover-footer
+    .driver-popover-navigation-btns
+    button:not(.driver-popover-btn-disabled) {
+    all: unset;
     padding: 6px 16px;
-    background-color:#5F2BCE;
+    background-color: #5f2bce;
     display: flex;
-    color:#fff;
-    cursor:pointer;
-    outline:0;
-    zoom:1;
+    color: #fff;
+    cursor: pointer;
+    outline: 0;
+    zoom: 1;
     font-size: 12px;
     font-family: 'Raleway', 'sans-serif';
     font-weight: bold;
@@ -1678,6 +1708,9 @@ math-field#tanya-mathfield::part(virtual-keyboard-toggle) {
     border-radius: 70px;
 }
 
-.dashboard-tour .driver-popover-footer .driver-popover-navigation-btns button.secondary {
+.dashboard-tour
+    .driver-popover-footer
+    .driver-popover-navigation-btns
+    button.secondary {
     background-color: #404040;
 }
