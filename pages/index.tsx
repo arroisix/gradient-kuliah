@@ -1,20 +1,37 @@
-import Layout from 'commons/layout';
-import LandingContainer from 'landing/containers';
-import withAnon from 'commons/withAnon';
 import axios from 'axios';
+import Layout from 'commons/layout';
+import withAnon from 'commons/withAnon';
+import RevampedLandingContainer from 'landing/containers/revamped';
+import React from 'react';
 import config from 'redux/api/config';
 
-const Home = ({ data }: { data: { data: PacketOffer[] } }): JSX.Element => {
+type LandingPageProps = {
+    pricingData?: ResponseData<PacketOffer>;
+    classesData?: ResponseData<Course>;
+    majorData?: ResponseData<MajorOptions>;
+};
+
+const RevampedLandingPage = ({
+    pricingData,
+    classesData,
+    majorData
+}: LandingPageProps): JSX.Element => {
     return (
         <Layout shouldTransparent>
-            <LandingContainer pricingData={data.data} />
+            <RevampedLandingContainer
+                majorData={majorData?.data}
+                pricingData={pricingData?.data}
+                classData={classesData?.data}
+            />
         </Layout>
     );
 };
 
 export async function getStaticProps(): Promise<{
     props: {
-        data: PacketOffer[];
+        pricingData: ResponseData<PacketOffer>;
+        classesData: ResponseData<Course>;
+        majorData: ResponseData<MajorOptions>;
         title: string;
         description: string;
         openGraph: {
@@ -32,13 +49,20 @@ export async function getStaticProps(): Promise<{
     };
     revalidate: number;
 }> {
-    const { data }: { data: PacketOffer[] } = await axios.get(
-        `${config.API_BASE_URL}subscriptions/packet-offer/`
-    );
+    const { data: pricingData }: { data: ResponseData<PacketOffer> } =
+        await axios.get(`${config.API_BASE_URL}subscriptions/packet-offer/`);
+    const { data: classesData }: { data: ResponseData<Course> } =
+        await axios.get(`${config.API_BASE_URL}courses/public/?limit=4`);
+    const { data: majorData }: { data: ResponseData<MajorOptions> } =
+        await axios.get(
+            `${config.API_BASE_URL}courses/public/major-recommendations/`
+        );
 
     return {
         props: {
-            data,
+            pricingData,
+            classesData,
+            majorData,
             title: 'Platform Belajar Kuliah  No. 1 di Indonesia',
             description:
                 'Belajar dari dosen bermutu, bareng pelajar se-Indonesia. Materi kuliah dan pembahasan soal lengkap',
@@ -62,5 +86,5 @@ export async function getStaticProps(): Promise<{
     };
 }
 
-Home.displayName = 'Main Landing';
-export default withAnon(Home);
+RevampedLandingPage.displayName = 'Main Landing';
+export default withAnon(RevampedLandingPage);
