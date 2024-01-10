@@ -11,9 +11,9 @@ const Footer = (): JSX.Element => {
         <footer className="w-full flex flex-col bg-[#121212] px-4 md:px-[7.5rem] py-8">
             <div className="flex flex-col w-full lg:flex-row">
                 <div className="flex flex-col items-center justify-center w-full lg:items-start lg:justify-start">
-                    <h1 className="font-bold text-3xl mb-4 font-[Urbanist]">
+                    <span className="font-bold text-3xl mb-4 font-[Urbanist]">
                         Gradient
-                    </h1>
+                    </span>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-3">
                         <Link
                             href="/tentang-kami"

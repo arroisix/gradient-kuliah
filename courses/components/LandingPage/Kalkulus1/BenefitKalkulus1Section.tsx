@@ -15,9 +15,9 @@ const BenefitItems = ({
         <div className="flex my-4 gap-2">
             <div className="text-4xl md:text-2xl mt-2">{icons}</div>
             <div>
-                <h1 className="md:text-left text-xl md:text-2xl font-bold">
+                <h2 className="md:text-left text-xl md:text-2xl font-bold">
                     {title}
-                </h1>
+                </h2>
                 <p className="md:text-left text-neutral-400 text-base mt-2">
                     {subtitle}
                 </p>

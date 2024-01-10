@@ -53,9 +53,9 @@ const VideoSection = ({ slug }: VideoSectionProps): JSX.Element => {
 
     return (
         <div className="w-screen py-16 flex-col px-4 md:px-[7.5rem] mb-16">
-            <h1 className="mb-4 text-2xl font-bold text-center md:text-center md:text-4xl">
+            <h2 className="mb-4 text-2xl font-bold text-center md:text-center md:text-4xl">
                 Coba Gratis Video Belajar
-            </h1>
+            </h2>
             <div
                 className={`flex flex-col lg:flex-row lg:h-[425px] 2xl:h-[600px] ${
                     !isVideoContentExist && 'justify-center'
