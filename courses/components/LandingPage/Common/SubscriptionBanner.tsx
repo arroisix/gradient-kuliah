@@ -41,20 +41,20 @@ const Card = ({
                     }
                 </h3>
                 <div className="relative">
-                    <h1 className="absolute text-3xl font-bold text-center blur sm:text-2xl 2xl:text-4xl">
+                    <h3 className="absolute text-3xl font-bold text-center blur sm:text-2xl 2xl:text-4xl">
                         {
                             formatter
                                 .format(price as unknown as number)
                                 .split(',')[0]
                         }
-                    </h1>
-                    <h1 className="relative text-3xl font-bold text-center sm:text-2xl 2xl:text-4xl">
+                    </h3>
+                    <h4 className="relative text-3xl font-bold text-center sm:text-2xl 2xl:text-4xl">
                         {is_free
                             ? 'GRATIS'
                             : formatter
                                   .format(price as unknown as number)
                                   .split(',')[0]}
-                    </h1>
+                    </h4>
                 </div>
             </div>
             <ul className="grid grid-cols-1 content-center pt-4 px-12">
@@ -89,9 +89,9 @@ const SubscriptionBanner = ({
 
                 {/* Cards */}
                 <div className="relative">
-                    <h1 className="md:text-center text-2xl md:text-4xl font-bold text-center">
+                    <h2 className="md:text-center text-2xl md:text-4xl font-bold text-center">
                         {title ?? 'Akses Instan Semuanya Sekarang!'}
-                    </h1>
+                    </h2>
                     <div className="flex gap-2 flex-wrap mt-8 justify-center items-center">
                         {cardNumber?.map((cardData: Packet) => (
                             <Card

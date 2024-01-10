@@ -21,9 +21,9 @@ const CourseDescription = ({
     return (
         <div className="w-screen px-5 lg:w-3/12">
             <div className="flex flex-col gap-2 p-4 bg-zinc-900 rounded-xl">
-                <h1 className="font-semibold text-gray-500">
+                <h3 className="font-semibold text-gray-500">
                     Tentang Kelas Ini
-                </h1>
+                </h3>
                 <div className="w-full h-px bg-gray-500" />
                 <div className="text-sm">{data?.description}</div>
 

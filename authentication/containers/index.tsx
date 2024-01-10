@@ -56,9 +56,9 @@ export const AuthenticationContainer: React.FC = () => {
             {pathname !== '/onboarding' ? (
                 <div className="max-w-[360px] w-full px-[18px] py-12 flex flex-col gap-10 justify-center items-center">
                     <div className="flex flex-grow items-end">
-                        <h1 className="font-bold font-[Urbanist] text-[28px] text-5xl">
+                        <span className="font-bold font-[Urbanist] text-[28px] text-5xl">
                             Gradient
-                        </h1>
+                        </span>
                     </div>
                     <div className="flex flex-grow flex-col items-center justify-start w-full gap-4">
                         <div className="flex flex-col w-full gap-[18px] text-center">

@@ -16,7 +16,7 @@ const BenefitItems = ({
         <div className="flex items-center my-4">
             <div className="mr-2 text-xl">{icons}</div>
             <div>
-                <h1 className="text-xl">{title}</h1>
+                <h3 className="text-xl">{title}</h3>
             </div>
         </div>
     );

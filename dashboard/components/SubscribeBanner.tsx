@@ -26,7 +26,7 @@ const SubscribeBanner = (): JSX.Element => {
                 variant="custom"
                 eventName="Click Hero Banner (Registered)"
                 className="font-sans text-xs font-bold text-black bg-white w-fit z-[1] mt-12 min-[375px]:mt-0"
-                href='/langganan'>
+                href="/langganan">
                 Beli Paket
             </Button>
         </div>

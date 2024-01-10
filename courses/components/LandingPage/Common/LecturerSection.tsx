@@ -6,9 +6,9 @@ const Lecturer = ({ slug }: { slug: string }): JSX.Element => {
     if (course && course?.lecturers?.length > 0) {
         return (
             <div className="px-4 md:px-[7.5rem] my-16">
-                <h1 className="md:text-center text-2xl md:text-4xl font-bold text-center">
+                <h2 className="md:text-center text-2xl md:text-4xl font-bold text-center">
                     Pengajar Terbaik Bangsa
-                </h1>
+                </h2>
                 <div
                     className={
                         course?.lecturers?.length > 1

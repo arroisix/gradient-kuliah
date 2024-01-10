@@ -5,7 +5,7 @@ const COOKIE = 'visitor_id';
 const ACTIVE_AB_TESTING_PAGES = ['/', '/komunitas']; // Add as needed
 
 export const config = {
-    matcher: ['/', '/komunitas']
+    matcher: ['/komunitas']
 };
 
 export async function middleware(req: NextRequest): Promise<NextResponse> {
@@ -28,9 +28,9 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
         const url = req.nextUrl.clone();
         // Replace response with revamped variant
         switch (url.pathname) {
-            case '/':
-                url.pathname = '/landing-revamp';
-                break;
+            // case '/':
+            //     url.pathname = '/landing-revamp';
+            //     break;
             case '/komunitas':
                 url.pathname = '/komunitas/public';
                 break;
