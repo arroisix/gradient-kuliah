@@ -35,7 +35,7 @@ const DetailKelas = ({
                 hasCourseInstance={[
                     {
                         '@type': 'CourseInstance',
-                        courseMode: 'asynchronous',
+                        courseMode: 'Online',
                         courseSchedule: {
                             '@type': 'Schedule',
                             repeatCount: 18,
