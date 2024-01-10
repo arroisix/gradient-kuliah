@@ -44,9 +44,9 @@ const Footer = (): JSX.Element => {
                     </div>
                 </div>
                 <div className="flex-col items-center justify-center w-full lg:w-1/4">
-                    <h1 className="mt-2 mb-2 text-xl font-bold text-center lg:mb-4 lg:mt-0 text-neutral-400 lg:text-left">
+                    <h4 className="mt-2 mb-2 text-xl font-bold text-center lg:mb-4 lg:mt-0 text-neutral-400 lg:text-left">
                         Punya pertanyaan
-                    </h1>
+                    </h4>
                     <a
                         href="https://www.instagram.com/gradient_idn/"
                         target="_blank"
