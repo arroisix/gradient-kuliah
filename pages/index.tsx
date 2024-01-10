@@ -41,11 +41,12 @@ export async function getStaticProps(): Promise<{
             data,
             title: 'Platform Belajar Kuliah  No. 1 di Indonesia',
             description:
-                'Tempat belajar materi kuliah nomor 1 di Indonesia. Lengkap materi dan pembahasan soal',
+                'Belajar dari dosen bermutu, bareng pelajar se-Indonesia. Materi kuliah dan pembahasan soal lengkap',
             openGraph: {
                 type: 'website',
                 title: `Platform Belajar Kuliah  No. 1 di Indonesia`,
-                description: `Tempat belajar materi kuliah nomor 1 di Indonesia. Lengkap materi dan pembahasan soal`,
+                description:
+                    'Belajar dari dosen bermutu, bareng pelajar se-Indonesia. Materi kuliah dan pembahasan soal lengkap',
                 url: `https://gradient.academy`,
                 images: [
                     {
