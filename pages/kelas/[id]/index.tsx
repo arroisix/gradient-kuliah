@@ -24,6 +24,20 @@ const DetailKelas = ({
                     name: 'Gradient Academy',
                     url: `https://gradient.academy`
                 }}
+                hasCourseInstance={[
+                    {
+                        '@type': 'CourseInstance',
+                        courseMode: 'asynchronous',
+                        instructor: [
+                            courseData.lecturers.map((lecturer: Lecturer) => ({
+                                '@type': 'Person',
+                                name: lecturer.name,
+                                description: lecturer.role,
+                                image: lecturer.photo
+                            }))
+                        ]
+                    }
+                ]}
             />
             <Layout shouldTransparent>
                 <LandingPageOrchestrator id={id} packetOffer={packetOffer} />
