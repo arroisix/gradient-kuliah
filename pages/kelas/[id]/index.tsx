@@ -28,6 +28,11 @@ const DetailKelas = ({
                     {
                         '@type': 'CourseInstance',
                         courseMode: 'asynchronous',
+                        courseSchedule: {
+                            '@type': 'Schedule',
+                            repeatCount: 18,
+                            repeatFrequency: 'Weekly'
+                        },
                         instructor: [
                             courseData.lecturers.map((lecturer: Lecturer) => ({
                                 '@type': 'Person',
