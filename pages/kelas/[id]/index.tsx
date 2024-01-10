@@ -24,6 +24,14 @@ const DetailKelas = ({
                     name: 'Gradient Academy',
                     url: `https://gradient.academy`
                 }}
+                offers={[
+                    {
+                        '@type': 'Offer',
+                        category: 'Subscription',
+                        priceCurrency: 'IDR',
+                        price: 125000
+                    }
+                ]}
                 hasCourseInstance={[
                     {
                         '@type': 'CourseInstance',
