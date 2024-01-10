@@ -24,6 +24,33 @@ const DetailKelas = ({
                     name: 'Gradient Academy',
                     url: `https://gradient.academy`
                 }}
+                offers={[
+                    {
+                        '@type': 'Offer',
+                        category: 'Subscription',
+                        priceCurrency: 'IDR',
+                        price: 125000
+                    }
+                ]}
+                hasCourseInstance={[
+                    {
+                        '@type': 'CourseInstance',
+                        courseMode: 'Online',
+                        courseSchedule: {
+                            '@type': 'Schedule',
+                            repeatCount: 18,
+                            repeatFrequency: 'Weekly'
+                        },
+                        instructor: [
+                            courseData.lecturers.map((lecturer: Lecturer) => ({
+                                '@type': 'Person',
+                                name: lecturer.name,
+                                description: lecturer.role,
+                                image: lecturer.photo
+                            }))
+                        ]
+                    }
+                ]}
             />
             <Layout shouldTransparent>
                 <LandingPageOrchestrator id={id} packetOffer={packetOffer} />
