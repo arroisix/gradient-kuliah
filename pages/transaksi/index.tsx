@@ -4,7 +4,7 @@ import TransactionListContainer from 'payment/containers/TransactionListContaine
 
 const Transaction = (): JSX.Element => {
     return (
-        <Layout>
+        <Layout isFullBlackBackground>
             <TransactionListContainer />
         </Layout>
     );

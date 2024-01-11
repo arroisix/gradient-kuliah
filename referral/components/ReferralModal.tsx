@@ -40,7 +40,7 @@ const ReferralModal = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
                 alt="Referral"
             />
             <h5 className="mt-10 mb-3 text-2xl font-bold">
-                Undang teman, dapatkan cashback
+                Undang teman, dapatkan cashback{' '}
                 {formatCashbackAmount(
                     data?.config.voucher_cashback_amount ?? ''
                 )}

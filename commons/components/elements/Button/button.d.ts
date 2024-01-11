@@ -1,6 +1,6 @@
 import { MouseEvent, ReactNode } from 'react';
 
-type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'custom';
+type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'neutral' | 'custom';
 
 type ButtonSize = 'large' | 'normal' | 'small' | 'extraSmall';
 

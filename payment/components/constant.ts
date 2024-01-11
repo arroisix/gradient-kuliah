@@ -14,6 +14,7 @@ export type PAYMENT_DICT = {
     ID_LINKAJA: string;
     ALFAMART: string;
     INDOMARET: string;
+    MANUAL?: string;
     OTHER: null;
 };
 
@@ -52,5 +53,6 @@ export const NAME_PAYMENT: PAYMENT_DICT = {
     ID_LINKAJA: 'LinkAja',
     ALFAMART: 'Alfamart',
     INDOMARET: 'Indomaret',
+    MANUAL: 'Manual',
     OTHER: null
 };
