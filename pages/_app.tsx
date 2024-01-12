@@ -84,7 +84,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
             <PersistGate
                 /* @ts-ignore */
                 persistor={store.__persistor}
-                loading={<LoadingBackdrop />}>
+                loading={<Component {...pageProps} />}>
                 <GrowthBookProvider growthbook={growthbook}>
                     <MixpanelProvider
                         pageComponentName={getDisplayName(Component)}>

@@ -7,7 +7,6 @@ import {
 import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
-import LoadingBackdrop from './components/elements/LoadingBackdrop';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { getDisplayName } from './utils';
 
@@ -60,13 +59,13 @@ const withAnon = <P extends object>(
                     }
                     return <WrappedComponent {...(props as P)} />;
                 }
-                return <LoadingBackdrop />;
+                return <WrappedComponent {...(props as P)} />;
             }
             return <WrappedComponent {...(props as P)} />;
         }
 
         // If we are on server, return null
-        return <LoadingBackdrop />;
+        return <WrappedComponent {...(props as P)} />;
     };
     WithAnon.displayName = getDisplayName(WrappedComponent);
     return WithAnon;
