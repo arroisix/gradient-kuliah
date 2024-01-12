@@ -24,17 +24,22 @@ export const LoginSection: React.FC = () => {
     const tracker = useTracker();
 
     const { googleLogin } = useSocialLogin();
-    const gLogin = useGoogleLogin({
-        onSuccess: async (tokenResponse) => {
-            const res = await googleLogin(tokenResponse.access_token);
-            if ('data' in res) {
-                setLastLogin({ email: res.data.user.email, method: 'google' });
+    const gLogin =
+        typeof window !== 'undefined' &&
+        useGoogleLogin({
+            onSuccess: async (tokenResponse) => {
+                const res = await googleLogin(tokenResponse.access_token);
+                if ('data' in res) {
+                    setLastLogin({
+                        email: res.data.user.email,
+                        method: 'google'
+                    });
+                }
+            },
+            onError: () => {
+                toast.error('Gagal login, coba beberapa saat lagi');
             }
-        },
-        onError: () => {
-            toast.error('Gagal login, coba beberapa saat lagi');
-        }
-    });
+        });
 
     return (
         <Formik
@@ -156,7 +161,10 @@ export const LoginSection: React.FC = () => {
                                             email: lastLogin.email,
                                             password: ''
                                         });
-                                    } else if (lastLogin.method == 'google') {
+                                    } else if (
+                                        lastLogin.method == 'google' &&
+                                        gLogin
+                                    ) {
                                         gLogin();
                                     }
                                 }}

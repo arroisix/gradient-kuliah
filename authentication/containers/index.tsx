@@ -19,17 +19,22 @@ export const AuthenticationContainer: React.FC = () => {
     const user = useSelector(getCurrentUser);
     const { setLastLogin } = useLastLogin();
 
-    const login = useGoogleLogin({
-        onSuccess: async (tokenResponse) => {
-            const res = await googleLogin(tokenResponse.access_token);
-            if ('data' in res) {
-                setLastLogin({ email: res.data.user.email, method: 'google' });
+    const login =
+        typeof window !== 'undefined' &&
+        useGoogleLogin({
+            onSuccess: async (tokenResponse) => {
+                const res = await googleLogin(tokenResponse.access_token);
+                if ('data' in res) {
+                    setLastLogin({
+                        email: res.data.user.email,
+                        method: 'google'
+                    });
+                }
+            },
+            onError: () => {
+                toast.error('Gagal login, coba beberapa saat lagi');
             }
-        },
-        onError: () => {
-            toast.error('Gagal login, coba beberapa saat lagi');
-        }
-    });
+        });
 
     const handleLogout = async () => {
         await logout();
@@ -68,7 +73,7 @@ export const AuthenticationContainer: React.FC = () => {
                             <Button
                                 variant="custom"
                                 className="text-white bg-[#7264EB] w-full"
-                                onClick={() => login()}
+                                onClick={() => (login ? login() : undefined)}
                                 eventName={`Attempts to ${
                                     isLogin ? 'Login' : 'Register'
                                 } with Google`}>
