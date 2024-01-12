@@ -47,7 +47,7 @@ export async function getStaticProps(): Promise<{
             }[];
         };
     };
-    revalidate: number;
+    revalidate?: number;
 }> {
     const { data: pricingData }: { data: ResponseData<PacketOffer> } =
         await axios.get(`${config.API_BASE_URL}subscriptions/packet-offer/`);
@@ -81,8 +81,7 @@ export async function getStaticProps(): Promise<{
                     }
                 ]
             }
-        },
-        revalidate: 60
+        }
     };
 }
 

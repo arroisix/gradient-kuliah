@@ -8,15 +8,16 @@ type SubscriptionDateProps = {
 const SubscriptionDate = ({
     transaction
 }: SubscriptionDateProps): JSX.Element => {
-    const startDate = moment(
-        transaction.subscriber.active_from || transaction.created_at
-    );
-    const endDate =
-        moment(transaction.subscriber.deactivate_after) ||
-        startDate.add(
-            transaction.subscriber.subscribed_packet.active_duration,
-            'day'
-        );
+    const { created_at: transactionDate, subscriber } = transaction;
+    const {
+        active_from: subscriptionStart,
+        deactivate_after: subscriptionEnd,
+        subscribed_packet: subscriptionPackage
+    } = subscriber;
+    const startDate = moment(subscriptionStart || transactionDate);
+    const endDate = subscriptionEnd
+        ? moment(subscriptionEnd)
+        : startDate.clone().add(subscriptionPackage.active_duration, 'day');
     const formatDate = (date: Moment): string => {
         return moment(date).utc().format('D MMM YYYY');
     };

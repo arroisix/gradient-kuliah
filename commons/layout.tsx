@@ -14,6 +14,7 @@ interface LayoutProps {
     courses?: Course[];
     showSidebar?: boolean;
     fullHeightSidebar?: boolean;
+    isFullBlackBackground?: boolean;
 }
 
 const Layout = ({
@@ -22,7 +23,8 @@ const Layout = ({
     shouldTransparent,
     courses,
     showSidebar,
-    fullHeightSidebar
+    fullHeightSidebar,
+    isFullBlackBackground
 }: LayoutProps): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
@@ -33,7 +35,11 @@ const Layout = ({
         <div
             className={cn(
                 'relative w-screen overflow-x-clip min-h-screen text-white',
-                isLandingPageRevampOn ? 'bg-[#101010]' : 'bg-neutral-1000',
+                isFullBlackBackground
+                    ? 'bg-neutral-1000'
+                    : isLandingPageRevampOn
+                    ? 'bg-[#101010]'
+                    : 'bg-neutral-1000',
                 paymentPage && 'flex flex-col'
             )}>
             <Navbar

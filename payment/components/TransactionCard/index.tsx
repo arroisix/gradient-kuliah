@@ -20,21 +20,23 @@ const STATUS_COLOR: { [key: string]: string } = {
 const TransactionCard = ({
     transaction,
     isList,
-    active = false
+    active = false,
+    hasUpcoming
 }: {
     transaction: Transaction;
     isList?: boolean;
     active?: boolean;
+    hasUpcoming?: boolean;
 }): JSX.Element => {
     const { subscribed_packet } =
         transaction.subscriber || ({} as Subscription);
     const router = useRouter();
-    const isExpiry = checkExpiry(transaction.deadline as string);
+    const isExpired = checkExpiry(transaction.deadline as string);
     const { expiryDay, subscription_id } = useCourseSubscription();
 
     const statusColor = (): string =>
         STATUS_COLOR[
-            isExpiry && transaction.status !== 'SUCCESS'
+            isExpired && transaction.status !== 'SUCCESS'
                 ? 'EXPIRY'
                 : transaction.status
         ];
@@ -43,12 +45,13 @@ const TransactionCard = ({
         if (transaction.status === 'SUCCESS') {
             if (
                 !active &&
+                !hasUpcoming &&
                 moment(transaction.subscriber.deactivate_after)
                     .startOf('day')
                     .unix() < moment().unix()
             ) {
                 return 'Perbarui';
-            } else if (active && expiryDay <= 14) {
+            } else if (active && expiryDay <= 7) {
                 return 'Perpanjang';
             }
         }
@@ -63,15 +66,21 @@ const TransactionCard = ({
                     className={`w-[8px] h-[65px] absolute top-6 left-0 rounded-r ${statusColor()}`}
                 />
                 <div className="flex justify-between flex-wrap gap-6 pb-[18px] border-b border-[#242424]">
-                    <div className="flex flex-col gap-1">
+                    <div className="flex flex-col items-start gap-1">
                         <p className="text-sm font-extrabold font-body md:text-base">
                             {subscribed_packet?.packet_name}
                         </p>
                         <SubscriptionDate transaction={transaction} />
+                        <p
+                            className="text-sm tooltip tooltip-right font-body"
+                            data-tip={transaction.id}>
+                            Nomor Pembelian:{' '}
+                            {transaction.id.substring(0, 8).toUpperCase()}
+                        </p>
                     </div>
                     <div className="flex flex-col w-full gap-3 sm:w-max sm:items-end">
                         <TransactionStatus
-                            isExpiry={isExpiry}
+                            isExpiry={isExpired}
                             status={transaction.status}
                         />
                         {transaction.status === 'SUCCESS' &&
@@ -98,30 +107,31 @@ const TransactionCard = ({
                     </div>
                 </div>
                 <StatusInfo
-                    isExpiry={isExpiry}
+                    isExpiry={isExpired}
                     isList={isList}
                     packetId={subscribed_packet.id}
                     {...transaction}
                 />
                 <div className="flex flex-col sm:flex-row justify-between flex-wrap gap-3 pt-[18px]">
                     <div className="flex flex-col gap-1">
-                        <span className="inline-block font-body text-[#CCCCCC] text-xs sm:text-sm">
+                        <p className="font-body text-[#CCCCCC] text-xs sm:text-sm">
                             Total Pembayaran
-                        </span>
-                        <span className="inline-block text-sm font-extrabold font-body sm:text-lg">
+                        </p>
+                        <p className="text-sm font-extrabold font-body sm:text-lg">
                             {formatCurrency(`${transaction.payment_amount}`)}
-                        </span>
+                        </p>
                     </div>
                     <div className="flex flex-col gap-1">
-                        <span className="inline-block font-body text-[#CCCCCC] text-xs sm:text-sm">
+                        <p className="font-body text-[#CCCCCC] text-xs sm:text-sm">
                             Metode Pembayaran
-                        </span>
-                        <span className="inline-block text-sm font-extrabold sm:text-lg">
+                        </p>
+                        <p className="text-sm font-extrabold sm:text-lg">
                             {NAME_PAYMENT[transaction.payment_method]}
-                        </span>
+                        </p>
                     </div>
                     <ActionComponent
                         transaction={transaction}
+                        isExpired={isExpired}
                         isList={isList}
                     />
                 </div>
