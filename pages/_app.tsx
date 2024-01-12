@@ -23,7 +23,6 @@ import useStore, { wrapper } from 'redux/store';
 import { GrowthBookProvider } from '@growthbook/growthbook-react';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { AuthProvider } from 'authentication/contexts/AuthProvider';
-import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import { ThemeContextProvider } from 'commons/contexts/ThemeProvider';
 import { growthbook, updateGrowthBookURL } from 'library/growthbook';
 import { getCookieValue, getDisplayName } from 'commons/utils';
