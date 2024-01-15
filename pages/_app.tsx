@@ -83,7 +83,13 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
             <PersistGate
                 /* @ts-ignore */
                 persistor={store.__persistor}
-                loading={<Component {...pageProps} />}>
+                loading={
+                    <GoogleOAuthProvider clientId="3688986116-g7dlt8prm1gimh870k4h0trds8njq4rj.apps.googleusercontent.com">
+                        <ThemeContextProvider>
+                            <Component {...pageProps} />
+                        </ThemeContextProvider>
+                    </GoogleOAuthProvider>
+                }>
                 <GrowthBookProvider growthbook={growthbook}>
                     <MixpanelProvider
                         pageComponentName={getDisplayName(Component)}>
