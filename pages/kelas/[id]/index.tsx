@@ -42,7 +42,7 @@ const DetailKelas = ({
                             repeatFrequency: 'Weekly'
                         },
                         instructor: [
-                            courseData.lecturers.map((lecturer: Lecturer) => ({
+                            courseData?.lecturers.map((lecturer: Lecturer) => ({
                                 '@type': 'Person',
                                 name: lecturer.name,
                                 description: lecturer.role,
