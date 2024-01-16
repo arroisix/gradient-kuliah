@@ -6,6 +6,7 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienceApi';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { useGetCoursePreviewQuery } from 'courses/redux/api/courseApi';
+import { useGetAllTransactionQuery } from 'payment/redux/api/transactionApi';
 
 const useCourseSubscription = (slug?: string) => {
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -20,10 +21,10 @@ const useCourseSubscription = (slug?: string) => {
             skip: !isAuthenticated || slug === undefined,
             refetchOnMountOrArgChange: true
         });
-    const [expiryDay, setExpiryDay] = useState(30);
+    const [expiryDay, setExpiryDay] = useState(0);
 
     useEffect(() => {
-        if (data) {
+        if (data?.deactivate_after) {
             setExpiryDay(countTheDay(data.deactivate_after as string) + 1);
         }
     }, [data]);
@@ -37,20 +38,35 @@ const useCourseSubscription = (slug?: string) => {
         return false;
     };
 
+    const is_subscribed = checkIsSubscribed();
     const { data: coursePreview } = useGetCoursePreviewQuery(
         slug === undefined || checkIsSubscribed() ? skipToken : { slug }
     );
 
+    const { data: allTransaction } = useGetAllTransactionQuery(
+        is_subscribed || !isAuthenticated ? skipToken : undefined
+    );
+    const everSubscribed =
+        is_subscribed ||
+        allTransaction?.data.some(
+            (transaction) => transaction.status === 'SUCCESS'
+        );
+    const lastPacketId = everSubscribed
+        ? allTransaction?.data[0].subscriber.subscribed_packet.id
+        : undefined;
+
     return {
         subscription_id: data?.subscription_id,
         packet_id: data?.packet_id,
-        is_subscribed: checkIsSubscribed(),
+        is_subscribed,
+        everSubscribed,
         expiryDay,
         isLoading: isLoadingSubscription || isLoadingLearningProgress,
         isDoneFetchingSubcription: isDoneFetching,
         isErrorFetchingSubscription,
         learning_progress_id: learningProgress?.id,
         coursePreview,
+        lastPacketId,
         ...learningProgress
     };
 };

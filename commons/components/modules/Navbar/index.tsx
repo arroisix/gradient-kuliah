@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { FaInstagram } from 'react-icons/fa';
 import { FiMenu } from 'react-icons/fi';
-import { MdArrowDropDown } from 'react-icons/md';
+import { MdArrowDropDown, MdClose } from 'react-icons/md';
 import useWindowSize from 'commons/hooks/useWindowSize';
 import { renderName } from 'commons/utils';
 import MobileNavbar from './components/MobileNavbar';
@@ -23,6 +23,10 @@ import UserProfile from './components/UserProfile';
 import UserProfileDropdown from './components/UserProfileDropdown';
 import NavMenuIcons from './components/NavMenuIcons';
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
+import { useGetDetailPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
+import { skipToken } from '@reduxjs/toolkit/dist/query';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import clsx from 'clsx';
 
 const HIDE_HAMBURGER_MENU_ON = [
     '/dashboard',
@@ -36,7 +40,9 @@ const Navbar = ({
     shouldTransparent,
     lightMode,
     showSidebar,
-    fullHeightSidebar
+    fullHeightSidebar,
+    showSubscriptionReminder,
+    setCloseReminder
 }: {
     paymentPage: boolean;
     shouldTransparent: boolean;
@@ -44,6 +50,8 @@ const Navbar = ({
     lightMode?: boolean;
     showSidebar?: boolean;
     fullHeightSidebar?: boolean;
+    showSubscriptionReminder?: boolean;
+    setCloseReminder?: (value: boolean) => void;
 }): JSX.Element => {
     const tracker = useTracker();
 
@@ -77,29 +85,29 @@ const Navbar = ({
 
     const computeBgColor = (): string => {
         if (openMobile) {
-            return lightMode ? 'bg-white shadow-md text-black' : 'bg-[#171717]';
+            return lightMode ? 'bg-white shadow-md text-black' : 'bg-black';
         }
 
         if (shouldTransparent) {
             if (scrollPosition >= height / 2) {
-                return 'bg-[#171717]';
+                return 'bg-black';
             }
-            return 'bg-transparent hover:bg-[#171717]';
+            return 'bg-transparent hover:bg-black';
         }
 
         if (paymentPage) {
-            return lightMode ? 'bg-white shadow-md' : 'bg-[#171717]';
+            return lightMode ? 'bg-white shadow-md' : 'bg-black';
         }
 
         if (showSidebar && fullHeightSidebar) {
             if (scrollPosition >= 60) {
-                return 'bg-[#171717] md:bg-[#121212]';
+                return 'bg-black';
             }
 
-            return shouldTransparent ? '' : 'bg-[#171717] md:bg-[#121212]';
+            return shouldTransparent ? '' : 'bg-black';
         }
 
-        return lightMode ? 'bg-white text-black shadow-md' : 'bg-[#171717]';
+        return lightMode ? 'bg-white text-black shadow-md' : 'bg-black';
     };
 
     const isShowHamburgerMenu = (): boolean =>
@@ -137,9 +145,26 @@ const Navbar = ({
         tracker?.trackButtonClick('Login Button on Navbar', 'Masuk');
     };
 
+    const halamanPembayaran = router.pathname === '/pembayaran';
+    const { data: packet } = useGetDetailPacketOfferQuery(
+        halamanPembayaran ? (router.query.packetId as string) : skipToken
+    );
+
+    const { expiryDay, packet_id, subscription_id, is_subscribed } =
+        useCourseSubscription();
+    const [closeSubscriptionReminder, setCloseSubscriptionReminder] =
+        useState(true);
+    useEffect(() => {
+        setCloseSubscriptionReminder(expiryDay > 7);
+    }, [expiryDay]);
+
+    useEffect(() => {
+        setCloseReminder?.(closeSubscriptionReminder);
+    }, [closeSubscriptionReminder, setCloseReminder]);
+
     return (
         <header
-            className={`fixed top-0 left-0 w-full z-20 ${computeBgColor()} transition-all ease-in-out duration-200`}
+            className={`fixed top-0 left-0 w-full z-20 ${computeBgColor()} transition-all ease-in-out duration-200 flex flex-col`}
             onMouseEnter={() => setNavbarHovered(true)}
             onMouseLeave={onMouseLeaveNavbar}>
             <div className="flex items-center justify-between w-full px-4 py-4 md:px-6">
@@ -161,7 +186,10 @@ const Navbar = ({
                     {showSidebar && fullHeightSidebar && isAuthenticated && (
                         <div className="hidden md:block w-[250px] h-[64px] fixed top-0 left-0 bg-[#121212] z-[-1]" />
                     )}
-                    <LeftNavbarMenu lightMode={lightMode} />
+                    <LeftNavbarMenu
+                        lightMode={lightMode}
+                        showSidebar={showSidebar}
+                    />
                 </div>
                 {paymentPage ? (
                     <Button
@@ -316,6 +344,69 @@ const Navbar = ({
                     </>
                 )}
             </div>
+
+            {halamanPembayaran && (
+                <section className="px-4 py-4 md:px-6 bg-[#121212] flex justify-between items-center w-full">
+                    <p className="font-body flex items-center gap-2">
+                        <span className="uppercase text-sm">
+                            {packet?.packet_name.replace('Paket', '')}
+                        </span>
+                        <span className="w-[1px] h-[18px] bg-neutral-600"></span>
+                        <span className="font-bold text-base">
+                            Rp{Number(packet?.price).toLocaleString('id')}
+                        </span>
+                    </p>
+
+                    <Link
+                        href={{
+                            pathname: '/pembayaran/ubah-paket',
+                            query: router.query
+                        }}
+                        className="text-[#7264EB] font-sans font-bold text-sm">
+                        Ubah Paket
+                    </Link>
+                </section>
+            )}
+
+            {showSubscriptionReminder &&
+                is_subscribed &&
+                !closeSubscriptionReminder && (
+                    <section
+                        className={clsx(
+                            showSidebar &&
+                                'md:max-w-[calc(100%-250px)] absolute right-0 top-[64px]',
+                            'px-4 py-4 md:px-6 bg-[#121212] flex justify-between items-center w-full'
+                        )}>
+                        <p className="font-body text-sm flex items-center gap-2">
+                            Langganan habis dalam {expiryDay} hari
+                        </p>
+
+                        <div className="flex gap-6 items-center">
+                            <Link
+                                href={{
+                                    pathname: '/pembayaran',
+                                    query: {
+                                        packetId: packet_id,
+                                        subscriptionId: subscription_id
+                                    }
+                                }}
+                                className="text-[#7264EB] font-sans font-bold text-sm">
+                                Perbarui
+                            </Link>
+                            <button
+                                type="button"
+                                onClick={() =>
+                                    setCloseSubscriptionReminder(true)
+                                }>
+                                <MdClose
+                                    className="text-neutral-600"
+                                    size={20}
+                                />
+                            </button>
+                        </div>
+                    </section>
+                )}
+
             <MobileNavbar
                 openMobile={openMobile}
                 setOpenMobile={setOpenMobile}

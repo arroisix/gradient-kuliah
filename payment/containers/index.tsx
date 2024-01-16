@@ -26,11 +26,12 @@ const SubscriptionContainer = (): JSX.Element => {
     };
 
     return (
-        <section className="min-h-screen pt-24 px-4 md:px-[7.5rem]">
-            <h1 className="text-3xl font-bold md:text-5xl">
+        <section className="min-h-screen pt-40 px-4 md:px-[7.5rem] relative">
+            <h1 className="text-base font-bold lg:text-2xl">
                 Pilih metode pembayaran
             </h1>
-            <div className="flex flex-col gap-4 mt-6 md:gap-6">
+
+            <div className="flex flex-col gap-4 mt-5 lg:mt-6 md:gap-6">
                 {packet?.is_free ? (
                     <FreeBox />
                 ) : (

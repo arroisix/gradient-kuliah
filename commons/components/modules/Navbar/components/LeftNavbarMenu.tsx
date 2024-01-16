@@ -16,9 +16,11 @@ const DISPLAYED_ROUTES = [
 ];
 
 const LeftNavbarMenu = ({
-    lightMode
+    lightMode,
+    showSidebar
 }: {
     lightMode?: boolean;
+    showSidebar?: boolean;
 }): JSX.Element | null => {
     const router = useRouter();
     const { data: configData } = useGetConfigQuery();
@@ -28,6 +30,7 @@ const LeftNavbarMenu = ({
     );
 
     const isShowNavbarMenu = (): boolean =>
+        !showSidebar &&
         DISPLAYED_ROUTES.slice(isLandingPageRevampOn ? 0 : 1).some((route) =>
             router.pathname.includes(route)
         );

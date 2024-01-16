@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import ReferralModal from 'referral/components/ReferralModal';
 import DashboardBanner from './dashboardBanner';
 import DashboardContent from './dashboardContent';
+import RenewalCard from 'payment/components/RenewalCard';
 
 const DashboardContainer = (): JSX.Element => {
     const router = useRouter();
@@ -15,6 +16,7 @@ const DashboardContainer = (): JSX.Element => {
 
     return (
         <section className="flex flex-col gap-6">
+            <RenewalCard />
             <DashboardBanner />
             <DashboardContent />
             <ReferralModal

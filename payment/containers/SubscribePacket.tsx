@@ -9,9 +9,14 @@ import { useEffect, useMemo, useState } from 'react';
 import { SlCheck } from 'react-icons/sl';
 import { useSelector } from 'react-redux';
 
-const PacketCard = ({
-    data
-}: GradientBaseComponentWithData<PacketOffer>): JSX.Element => {
+export const PacketCard = ({
+    data,
+    ctaText = 'Akses Sekarang',
+    blackBg
+}: GradientBaseComponentWithData<PacketOffer> & {
+    ctaText?: string;
+    blackBg?: boolean;
+}): JSX.Element => {
     const { checkCustomBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const isHighlighted = useMemo(() => data.order === 1, [data.order]);
@@ -23,7 +28,10 @@ const PacketCard = ({
             router.push('/daftar');
         } else {
             // redirect to pembayaran page
-            router.push(`/pembayaran?packetId=${data.id}`);
+            router.push({
+                pathname: '/pembayaran',
+                query: { ...router.query, packetId: data.id }
+            });
 
             // redirect to WhatsApp
             // window.open(
@@ -43,6 +51,8 @@ const PacketCard = ({
             className={`relative w-[324px] flex flex-col gap-4 md:gap-6 px-6 py-6 md:py-8 rounded-[16px] md:rouded-[20px] ${
                 isHighlighted
                     ? 'bg-gradient-purple-pricing border-2 border-[#5F2BCE80] rounded-t-none border-t-0 mt-[50px] sm:mt-0'
+                    : blackBg
+                    ? 'bg-[#222222]'
                     : 'bg-[#121212]'
             }`}
             style={{
@@ -102,10 +112,10 @@ const PacketCard = ({
                 )}
             </div>
             <Button
-                variant={isHighlighted ? 'primary' : 'custom'}
-                className={`${isHighlighted ? '' : 'bg-[#212121]'}`}
+                variant={isHighlighted || blackBg ? 'primary' : 'custom'}
+                className={`${isHighlighted || blackBg ? '' : 'bg-[#212121]'}`}
                 onClick={handleClick}>
-                Akses Sekarang
+                {ctaText}
             </Button>
         </div>
     );
