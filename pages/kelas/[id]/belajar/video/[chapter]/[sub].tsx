@@ -6,7 +6,7 @@ import withAnon from 'commons/withAnon';
 const Belajar = (): JSX.Element => {
     return (
         <LearningProvider>
-            <LearnLayout>
+            <LearnLayout showSubscriptionReminder>
                 <VideoLearnContainer />
             </LearnLayout>
         </LearningProvider>

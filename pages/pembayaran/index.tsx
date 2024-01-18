@@ -9,7 +9,7 @@ const Payment = (): JSX.Element => {
     const { packetId } = router.query;
 
     return (
-        <Layout paymentPage>
+        <Layout paymentPage isFullBlackBackground>
             {packetId ? (
                 <PaymentProvider packetId={packetId as string}>
                     <SubscriptionContainer />

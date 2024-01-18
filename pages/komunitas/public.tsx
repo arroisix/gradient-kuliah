@@ -20,7 +20,7 @@ const Komunitas = ({ data }: KomunitasProps): JSX.Element => {
     );
     return isLandingPageRevampOn ? (
         <KomunitasProvider initialData={data}>
-            <LearnLayout showSidebar fullHeightSidebar>
+            <LearnLayout showSidebar fullHeightSidebar showSubscriptionReminder>
                 <KomunitasContainer initialData={data} />
             </LearnLayout>
         </KomunitasProvider>

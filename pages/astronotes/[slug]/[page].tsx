@@ -6,7 +6,7 @@ const AstroNotesPage = (): JSX.Element => {
     const { theme } = useThemeContext();
 
     return (
-        <LearnLayout lightMode={theme === 'light'}>
+        <LearnLayout lightMode={theme === 'light'} showSubscriptionReminder>
             <Astronotes />
         </LearnLayout>
     );

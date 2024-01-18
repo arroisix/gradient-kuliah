@@ -10,7 +10,8 @@ import { useSelector } from 'react-redux';
 
 const DashboardBanner = (): JSX.Element | null => {
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { is_subscribed, isLoading } = useCourseSubscription();
+    const { is_subscribed, isLoading, everSubscribed } =
+        useCourseSubscription();
     const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
         'landing-page-revamp'
     );
@@ -20,9 +21,9 @@ const DashboardBanner = (): JSX.Element | null => {
 
     return !isLoading && is_subscribed && showTutorBanner ? (
         <TutorBanner />
-    ) : isLandingPageRevampOn && !is_subscribed ? (
+    ) : isLandingPageRevampOn && !everSubscribed ? (
         <SubscribeBanner />
-    ) : !is_subscribed ? (
+    ) : !everSubscribed ? (
         <OfferNotification />
     ) : null;
 };
