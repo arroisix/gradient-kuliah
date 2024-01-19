@@ -1,5 +1,6 @@
 import Button from 'commons/components/elements/Button';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
+// import { getCSChatRoom } from 'commons/utils';
 // import { addZeroBefore } from 'courses/utils';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -19,11 +20,7 @@ export const OnboardingSuccess = (): JSX.Element => {
 
         // redirect to WhatsApp
         // window.open(
-        //     `https://api.whatsapp.com/send?phone=6285173430127&text=${encodeURIComponent(
-        //         `Halo, Saya tertarik untuk berlangganan\n\n[ID:${currentDate.getDate()}${addZeroBefore(
-        //             currentDate.getMonth() + 1
-        //         )}${currentDate.getFullYear()}]`
-        //     )}`
+        //     getCSChatRoom("WA")
         // );
     };
 
