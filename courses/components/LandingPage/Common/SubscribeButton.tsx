@@ -1,6 +1,7 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
 import { AUTHENTICATION_ROUTE } from 'commons/constants';
+import { getCSChatRoom } from 'commons/utils';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { addZeroBefore } from 'courses/utils';
 import { useGetDetailPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
@@ -41,13 +42,16 @@ const SubscribeButton = ({
                     eventPayload={eventPayload}
                     href={
                         packetId
-                            ? `https://api.whatsapp.com/send?phone=6285173430127&text=${encodeURIComponent(
-                                  `Halo,saya tertarik untuk berlangganan ${
-                                      packet?.packet_name
-                                  }\n\n[ID:${currentDate.getDate()}${addZeroBefore(
-                                      currentDate.getMonth() + 1
-                                  )}${currentDate.getFullYear()}]`
-                              )}`
+                            ? getCSChatRoom(
+                                  'LINE',
+                                  encodeURIComponent(
+                                      `Halo,saya tertarik untuk berlangganan ${
+                                          packet?.packet_name
+                                      }\n\n[ID:${currentDate.getDate()}${addZeroBefore(
+                                          currentDate.getMonth() + 1
+                                      )}${currentDate.getFullYear()}]`
+                                  )
+                              )
                             : `/langganan`
                     }>
                     Akses Sekarang

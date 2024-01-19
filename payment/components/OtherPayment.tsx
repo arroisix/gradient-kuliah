@@ -1,4 +1,5 @@
 import Button from 'commons/components/elements/Button';
+import { getCSChatRoom } from 'commons/utils';
 import { addZeroBefore } from 'courses/utils';
 import { forwardRef } from 'react';
 import { AiFillBank } from 'react-icons/ai';
@@ -28,11 +29,14 @@ const OtherPaymentBox = forwardRef<HTMLDivElement>(function OtherPaymentBox(
                     className="!bg-[#0F460F] w-full md:w-fit"
                     onClick={() =>
                         window.open(
-                            `https://api.whatsapp.com/send?phone=6285173430127&text=${encodeURIComponent(
-                                `Halo, Saya tertarik untuk berlangganan\n\n[ID:${currentDate.getDate()}${addZeroBefore(
-                                    currentDate.getMonth() + 1
-                                )}${currentDate.getFullYear()}]`
-                            )}`
+                            getCSChatRoom(
+                                'LINE',
+                                encodeURIComponent(
+                                    `Halo, Saya tertarik untuk berlangganan\n\n[ID:${currentDate.getDate()}${addZeroBefore(
+                                        currentDate.getMonth() + 1
+                                    )}${currentDate.getFullYear()}]`
+                                )
+                            )
                         )
                     }>
                     <span className="flex items-center justify-center text-base font-bold">

@@ -142,3 +142,30 @@ export const queryParamBuilder = (
     const searchParam = new URLSearchParams(params_);
     return searchParam.toString();
 };
+
+export const addZeroBefore = (data: number): string => {
+    return `${data < 10 ? '0' : ''}${data}`;
+};
+
+export const getCSChatRoom = (
+    method: 'WA' | 'LINE' | 'IG',
+    msg?: string
+): string => {
+    const currentDate = new Date();
+
+    if (method === 'WA') {
+        if (msg) {
+            return `https://api.whatsapp.com/send?phone=6285173430127&text=${msg}`;
+        }
+
+        return `https://api.whatsapp.com/send?phone=6285173430127&text=${encodeURIComponent(
+            `Halo, Saya tertarik untuk berlangganan\n\n[ID:${currentDate.getDate()}${addZeroBefore(
+                currentDate.getMonth() + 1
+            )}${currentDate.getFullYear()}]`
+        )}`;
+    } else if (method === 'LINE') {
+        return 'https://lin.ee/43ORGst';
+    }
+
+    return 'https://ig.me/m/gradient_idn';
+};
