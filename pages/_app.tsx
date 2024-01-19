@@ -108,11 +108,11 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
                 projectId={HIGHLIGHT_PROJECT_ID}
                 serviceName="gradient-web"
                 tracingOrigins
-				networkRecording={{
-					enabled: true,
-					recordHeadersAndBody: true,
-					urlBlocklist: [],
-				}}
+                networkRecording={{
+                    enabled: true,
+                    recordHeadersAndBody: true,
+                    urlBlocklist: []
+                }}
             />
         </>
     );

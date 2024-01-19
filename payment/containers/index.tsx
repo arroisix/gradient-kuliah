@@ -19,8 +19,13 @@ const SubscriptionContainer = (): JSX.Element => {
     }, []);
 
     const scrollToOtherPayment = (): void => {
-        otherPaymentMethodRef.current?.scrollIntoView({
-            inline: 'center',
+        const offset = 150;
+        const elementPosition =
+            otherPaymentMethodRef.current?.getBoundingClientRect().top ?? 0;
+        const offsetPosition = elementPosition + window.scrollY - offset;
+        console.log(offsetPosition);
+        window.scrollTo({
+            top: offsetPosition,
             behavior: 'smooth'
         });
     };
