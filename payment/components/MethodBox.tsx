@@ -5,6 +5,7 @@ import { useTracker } from 'tracker/tracker';
 import { CDN_URL } from 'commons/constants';
 import { LOGO_PAYMENT, NAME_PAYMENT } from './constant';
 import { PropsWithChildren } from 'react';
+import { getCSChatRoom } from 'commons/utils';
 
 type MethodBoxProps = {
     paymentMethod: PaymentMethod;
@@ -28,11 +29,14 @@ const MethodBox = ({
             });
             const currentDate = new Date();
             window.open(
-                `https://api.whatsapp.com/send?phone=6285173430127&text=${encodeURIComponent(
-                    `Halo, Saya tertarik untuk berlangganan dan membayar via transfer BCA\n\n[ID:${currentDate.getDate()}${addZeroBefore(
-                        currentDate.getMonth() + 1
-                    )}${currentDate.getFullYear()}:BCA]`
-                )}`
+                getCSChatRoom(
+                    'LINE',
+                    encodeURIComponent(
+                        `Halo, Saya tertarik untuk berlangganan dan membayar via transfer BCA\n\n[ID:${currentDate.getDate()}${addZeroBefore(
+                            currentDate.getMonth() + 1
+                        )}${currentDate.getFullYear()}:BCA]`
+                    )
+                )
             );
         } else {
             tracker?.genericTrack('Click Payment Method', {

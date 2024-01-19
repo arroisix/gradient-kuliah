@@ -1,6 +1,7 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
+// import { getCSChatRoom } from 'commons/utils';
 import { formatter } from 'courses/utils';
 // import { addZeroBefore, formatter } from 'courses/utils';
 import { useRouter } from 'next/router';
@@ -34,15 +35,7 @@ export const PacketCard = ({
             });
 
             // redirect to WhatsApp
-            // window.open(
-            //     `https://api.whatsapp.com/send?phone=6285173430127&text=${encodeURIComponent(
-            //         `Halo, Saya tertarik untuk berlangganan ${
-            //             data.packet_name
-            //         }\n\n[ID:${currentDate.getDate()}${addZeroBefore(
-            //             currentDate.getMonth() + 1
-            //         )}${currentDate.getFullYear()}]`
-            //     )}`
-            // );
+            // window.open(getCSChatRoom('LINE'));
         }
     }
 
