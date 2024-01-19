@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
-import { FaInstagram } from 'react-icons/fa';
+import { FaWhatsapp } from 'react-icons/fa';
 import { FiMenu } from 'react-icons/fi';
 import { MdArrowDropDown, MdClose } from 'react-icons/md';
 import useWindowSize from 'commons/hooks/useWindowSize';
@@ -27,6 +27,7 @@ import { useGetDetailPacketOfferQuery } from 'payment/redux/api/subscriptionApi'
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import clsx from 'clsx';
+import { addZeroBefore } from 'courses/utils';
 
 const HIDE_HAMBURGER_MENU_ON = [
     '/dashboard',
@@ -162,6 +163,8 @@ const Navbar = ({
         setCloseReminder?.(closeSubscriptionReminder);
     }, [closeSubscriptionReminder, setCloseReminder]);
 
+    const currentDate = new Date();
+
     return (
         <header
             className={`fixed top-0 left-0 w-full z-20 ${computeBgColor()} transition-all ease-in-out duration-200 flex flex-col`}
@@ -194,11 +197,19 @@ const Navbar = ({
                 {paymentPage ? (
                     <Button
                         variant="primary"
-                        target="__blank"
-                        href="https://www.instagram.com/gradient_idn/"
-                        eventName="Contact Us Button">
-                        <span className="flex items-center">
-                            <FaInstagram className="mr-2" /> Hubungi Kami
+                        className="!bg-[#0F460F] w-full md:w-fit"
+                        onClick={() =>
+                            window.open(
+                                `https://api.whatsapp.com/send?phone=6285173430127&text=${encodeURIComponent(
+                                    `Halo, Saya tertarik untuk berlangganan\n\n[ID:${currentDate.getDate()}${addZeroBefore(
+                                        currentDate.getMonth() + 1
+                                    )}${currentDate.getFullYear()}]`
+                                )}`
+                            )
+                        }>
+                        <span className="flex items-center justify-center text-base font-bold">
+                            <FaWhatsapp className="mr-2 text-xl" />
+                            Hubungi Kami
                         </span>
                     </Button>
                 ) : (
