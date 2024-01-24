@@ -31,7 +31,7 @@ const Payment = (): JSX.Element => {
             }`;
 
             router.push(
-                `https://api.whatsapp.com/send?phone=6285173430127&text=${message}`
+                `https://api.whatsapp.com/send?phone=6285179870127&text=${message}`
             );
         }
     }, [isSubscribeViaWhatsapp, isAuthenticated, packet, subscriptionId]);

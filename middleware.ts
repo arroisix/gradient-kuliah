@@ -2,10 +2,10 @@ import { getFeatures, growthbook } from 'library/growthbook';
 import { NextRequest, NextResponse } from 'next/server';
 
 const COOKIE = 'visitor_id';
-const ACTIVE_AB_TESTING_PAGES = ['/komunitas']; // Add as needed
+const ACTIVE_AB_TESTING_PAGES = ['/', '/komunitas']; // Add as needed
 
 export const config = {
-    matcher: ['/komunitas']
+    matcher: ['/', '/komunitas']
 };
 
 export async function middleware(req: NextRequest): Promise<NextResponse> {
