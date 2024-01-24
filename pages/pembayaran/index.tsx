@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Image from 'next/image';
 import { CDN_URL } from 'commons/constants';
+import { useTracker } from 'tracker/tracker';
 
 const Payment = (): JSX.Element => {
     const router = useRouter();
@@ -17,6 +18,7 @@ const Payment = (): JSX.Element => {
     const isSubscribeViaWhatsapp = useFeatureIsOn('subscribe-via-wa');
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { data: packet } = useGetDetailPacketOfferQuery(packetId as string);
+    const tracker = useTracker();
 
     useEffect(() => {
         if (
@@ -29,6 +31,8 @@ const Payment = (): JSX.Element => {
             const message = `Halo, saya tertarik untuk berlangganan ${
                 packet?.packet_name ?? ''
             }`;
+
+            tracker?.genericTrack('A/B Test: Redirect to WA');
 
             router.push(
                 `https://api.whatsapp.com/send?phone=6285179870127&text=${message}`
