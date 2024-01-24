@@ -2421,10 +2421,10 @@ packages:
             - supports-color
         dev: false
 
-    /@highlight-run/node@3.7.1:
+    /@highlight-run/node@3.7.2:
         resolution:
             {
-                integrity: sha512-nNOIiMAYEaTYv23QV4L3dU+To1jUPphXt5zbWKs/7PvOHAzYVkAu9U2x5UIYT/KGybR8/sMn4djL+FFQ5/fuBg==
+                integrity: sha512-jjjULwY4zSn9oT4c2rFGYsjp5AQLUa4aTTiRH6FD0keZq80vItIWgkVIlKYykFN/lFuuot8+/eJnDlJJoti1Ow==
             }
         dev: false
 
@@ -8593,7 +8593,6 @@ packages:
                 integrity: sha512-3psEgrM+wyRbq8uvLBXo2FXGMn5ahWyQUXZPUZd5cMkCNvmFaCnBlzOabw77YVClJM6ZdN0C/X/YIzssGotFcA==
             }
         dev: false
-
     /highlight.run@8.4.0:
         resolution:
             {
