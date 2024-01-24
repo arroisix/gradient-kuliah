@@ -45,7 +45,6 @@ const TransactionCard = ({
         if (transaction.status === 'SUCCESS') {
             if (
                 !active &&
-                !hasUpcoming &&
                 moment(transaction.subscriber.deactivate_after)
                     .startOf('day')
                     .unix() < moment().unix()
@@ -84,6 +83,7 @@ const TransactionCard = ({
                             status={transaction.status}
                         />
                         {transaction.status === 'SUCCESS' &&
+                            !hasUpcoming &&
                             isList &&
                             activeTransaction() && (
                                 <Button
@@ -110,6 +110,7 @@ const TransactionCard = ({
                     isExpiry={isExpired}
                     isList={isList}
                     packetId={subscribed_packet.id}
+                    hasUpcoming={hasUpcoming}
                     {...transaction}
                 />
                 <div className="flex flex-col sm:flex-row justify-between flex-wrap gap-3 pt-[18px]">

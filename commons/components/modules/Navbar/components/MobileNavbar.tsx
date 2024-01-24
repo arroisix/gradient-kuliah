@@ -4,6 +4,7 @@ import { HiOutlineUsers } from 'react-icons/hi';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useLogoutMutation } from 'authentication/redux/api/authApi';
 import { useRouter } from 'next/router';
+import { cn } from 'commons/utils';
 
 interface MobileNavbarProps {
     openMobile: boolean;
@@ -23,16 +24,18 @@ const MobileNavbar = ({
     return openMobile ? (
         <>
             <div
-                className={`w-full p-4 ${
+                className={cn(
+                    'w-full p-4 flex justify-between md:hidden z-50',
                     lightMode ? 'bg-white' : 'bg-[#171717]'
-                } flex justify-between md:hidden`}>
+                )}>
                 <div className="w-full">
                     <div className="pb-4">
                         <Link href={'/profil'}>
                             <div
-                                className={`flex ${
+                                className={cn(
+                                    'flex hover:text-accent-blue font-normal w-full items-center mb-4',
                                     lightMode ? 'text-black' : 'text-white'
-                                } hover:text-accent-blue font-normal w-full items-center mb-4`}>
+                                )}>
                                 <div>
                                     <MdOutlinePersonOutline className="text-2xl" />
                                 </div>
@@ -43,9 +46,10 @@ const MobileNavbar = ({
                         </Link>
                         <Link href={'/transaksi'}>
                             <div
-                                className={`flex ${
+                                className={cn(
+                                    'flex hover:text-accent-blue font-normal w-full items-center mb-4',
                                     lightMode ? 'text-black' : 'text-white'
-                                } hover:text-accent-blue font-normal w-full items-center mb-4`}>
+                                )}>
                                 <div>
                                     <MdHistory className="text-2xl" />
                                 </div>
@@ -59,9 +63,10 @@ const MobileNavbar = ({
                         {is_subscribed && (
                             <Link href={'/referral'}>
                                 <div
-                                    className={`flex ${
+                                    className={cn(
+                                        'flex hover:text-accent-blue font-normal w-full items-center mb-4',
                                         lightMode ? 'text-black' : 'text-white'
-                                    } hover:text-accent-blue font-normal w-full items-center mb-4`}>
+                                    )}>
                                     <div>
                                         <HiOutlineUsers className="text-xl" />
                                     </div>

@@ -155,10 +155,10 @@ export const getCSChatRoom = (
 
     if (method === 'WA') {
         if (msg) {
-            return `https://api.whatsapp.com/send?phone=6285173430127&text=${msg}`;
+            return `https://api.whatsapp.com/send?phone=6285179870127&text=${msg}`;
         }
 
-        return `https://api.whatsapp.com/send?phone=6285173430127&text=${encodeURIComponent(
+        return `https://api.whatsapp.com/send?phone=6285179870127&text=${encodeURIComponent(
             `Halo, Saya tertarik untuk berlangganan\n\n[ID:${currentDate.getDate()}${addZeroBefore(
                 currentDate.getMonth() + 1
             )}${currentDate.getFullYear()}]`
