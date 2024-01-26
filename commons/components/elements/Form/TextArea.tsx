@@ -33,7 +33,7 @@ const TextArea: React.FC<InputProps> = ({
     <div className="flex flex-col w-full gap-1 font-body">
         {label && <span className="text-[#999999] text-sm">{label}</span>}
         <div
-            className={`flex w-full items-center rounded-lg p-2 border ${
+            className={`flex w-full items-center rounded-lg p-2 border bg-[#242424] ${
                 error ? 'border-red-500' : 'border-[#242424]'
             } ${className}`}>
             <div>{startAddorment}</div>

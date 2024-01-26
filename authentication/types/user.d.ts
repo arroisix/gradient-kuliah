@@ -80,3 +80,13 @@ interface UserDeviceResponse {
     device_type_id: number;
     device_allowed: boolean;
 }
+
+interface Institution {
+    name: string;
+    abbreviation: string;
+}
+
+interface Major {
+    name: string;
+    abbreviation: string;
+}

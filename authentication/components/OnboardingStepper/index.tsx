@@ -13,22 +13,24 @@ export const OnboardingStepper = (): JSX.Element => {
     };
 
     return (
-        <ul className="flex w-full gap-2 list-none">
+        <div className="flex w-full gap-2">
             {ONBOARDING_STEP.map((_, index) => (
-                <li
+                <div
                     key={index}
                     className="h-1"
                     style={{
                         width: `${(1 / ONBOARDING_STEP.length) * 100}%`
-                    }}>
+                    }}
+                >
                     <button
                         onClick={() => handleStepperClick(index)}
                         type="button"
                         className={`h-1 rounded-2xl w-full ${
                             step === index ? 'bg-[#333333]' : 'bg-[#1D1D1D]'
-                        }`}></button>
-                </li>
+                        }`}
+                    ></button>
+                </div>
             ))}
-        </ul>
+        </div>
     );
 };

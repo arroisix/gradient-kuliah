@@ -76,13 +76,15 @@ export const ReferenceStep = (): JSX.Element => {
                                     required={true}
                                 />
                             </div>
-                            <Button
-                                variant="custom"
-                                className="w-full mt-4 text-white bg-accent-purple"
-                                type="submit"
-                                disabled={isSubmitting}>
-                                {isSubmitting ? 'Menyimpan...' : 'Simpan'}
-                            </Button>
+                            <div className="fixed left-0 md:left-auto bottom-16 px-[16px] md:px-0 w-full md:w-[400px]">
+                                <Button
+                                    variant="custom"
+                                    className="w-full mt-4 text-white bg-accent-purple"
+                                    type="submit"
+                                    disabled={isSubmitting}>
+                                    {isSubmitting ? 'Menyimpan...' : 'Simpan'}
+                                </Button>
+                            </div>
                         </form>
                     )}
                 </Formik>
