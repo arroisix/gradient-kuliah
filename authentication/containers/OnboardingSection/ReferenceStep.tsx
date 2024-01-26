@@ -45,7 +45,7 @@ export const ReferenceStep = (): JSX.Element => {
                         handleSubmit,
                         isSubmitting
                     }) => (
-                        <form onSubmit={handleSubmit} className="container">
+                        <form onSubmit={handleSubmit}>
                             <div className="flex flex-col gap-4">
                                 <Radio
                                     onChange={handleChange}

@@ -67,7 +67,8 @@ export const PersonalDataStep = (): JSX.Element => {
                     }
 
                     return errors;
-                }}>
+                }}
+            >
                 {({
                     values,
                     errors,
@@ -76,7 +77,7 @@ export const PersonalDataStep = (): JSX.Element => {
                     handleBlur,
                     handleSubmit
                 }) => (
-                    <form onSubmit={handleSubmit} className="container">
+                    <form onSubmit={handleSubmit}>
                         <div className="flex flex-col gap-4">
                             <Input
                                 type="date"

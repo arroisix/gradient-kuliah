@@ -166,7 +166,7 @@ export const EducationStep = (): JSX.Element => {
                     setFieldValue,
                 }) => {
                     return (
-                        <form onSubmit={handleSubmit} className="container">
+                        <form onSubmit={handleSubmit}>
                             <div className="flex flex-col gap-4">
                                 <Select
                                     onChange={getHandleSelectChange('education_level', setFieldValue)}
