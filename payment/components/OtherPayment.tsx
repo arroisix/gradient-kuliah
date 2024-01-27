@@ -30,7 +30,7 @@ const OtherPaymentBox = forwardRef<HTMLDivElement>(function OtherPaymentBox(
                     onClick={() =>
                         window.open(
                             getCSChatRoom(
-                                'WA',
+                                'LINE',
                                 encodeURIComponent(
                                     `Halo, Saya tertarik untuk berlangganan\n\n[ID:${currentDate.getDate()}${addZeroBefore(
                                         currentDate.getMonth() + 1
