@@ -43,7 +43,7 @@ const SubscribeButton = ({
                     href={
                         packetId
                             ? getCSChatRoom(
-                                  'LINE',
+                                  'WA',
                                   encodeURIComponent(
                                       `Halo,saya tertarik untuk berlangganan ${
                                           packet?.packet_name
