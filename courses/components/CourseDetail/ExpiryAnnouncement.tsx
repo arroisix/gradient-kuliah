@@ -1,5 +1,7 @@
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import Link from 'next/link';
+import { useSelector } from 'react-redux';
 
 const ExpiryAnnouncement = ({
     slug
@@ -12,13 +14,14 @@ const ExpiryAnnouncement = ({
         everSubscribed,
         lastPacketId
     } = useCourseSubscription(slug);
+    const isAuthenticated = useSelector(getIsAuthenticated);
 
     const subscriptionExpired = !is_subscribed && everSubscribed;
-    if (expiryDay <= 7 || subscriptionExpired) {
+    if (isAuthenticated && (expiryDay <= 7 || subscriptionExpired)) {
         return (
             <div className="flex items-center justify-center my-16 mx-5">
                 <div className="border rounded-lg border-accent-yellow p-4 flex flex-col md:flex-row items-center justify-center gap-2">
-                    <span className='text-center md:text-left'>
+                    <span className="text-center md:text-left">
                         {subscriptionExpired
                             ? 'Waktu berlangganan kamu sudah habis. Beli lagi untuk terus mengakses layanan Gradient.'
                             : `Waktu berlanggangan kamu akan segera habis dalam ${expiryDay} hari. Perpanjang langganan untuk terus mengakses layanan Gradient.`}
