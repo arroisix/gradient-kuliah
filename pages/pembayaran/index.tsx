@@ -35,7 +35,7 @@ const Payment = (): JSX.Element => {
             tracker?.genericTrack('A/B Test: Redirect to WA');
 
             router.push(
-                `https://api.whatsapp.com/send?phone=6285179870127&text=${message}`
+                `https://api.whatsapp.com/send?phone=6285179880127&text=${message}`
             );
         }
     }, [isSubscribeViaWhatsapp, isAuthenticated, packet, subscriptionId]);
