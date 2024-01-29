@@ -175,3 +175,18 @@ interface QnaFormInputData {
     content: string;
     attachment?: string;
 }
+
+type CodingProgress = {
+    id: string;
+    latest_code: string;
+};
+
+interface GetCodingProgressInputData {
+    watch_progress_id: string;
+    code_editor_id: string;
+}
+
+interface TrackCodingProgressInputData {
+    coding_progress_id: string;
+    latest_code: string;
+}
