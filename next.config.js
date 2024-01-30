@@ -20,13 +20,12 @@ module.exports = {
     },
     redirects() {
         return [
-            process.env.MAINTENANCE_MODE === '1'
-                ? {
-                      source: '/((?!maintenance).*)',
-                      destination: '/maintenance.html',
-                      permanent: false
-                  }
-                : null
-        ].filter(Boolean);
+            {
+                source: '/beasiswa',
+                destination: 'https://forms.gle/GriFeGSMkRwG7djn6',
+                permanent: true,
+                basePath: false
+            }
+        ];
     }
 };
