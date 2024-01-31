@@ -55,7 +55,7 @@ const Select: React.FC<SelectProps> = ({
         setChosen(val);
     };
 
-    let SelectComponent = (
+    const SelectComponent = (
         isCreatable && isAsync ? AsyncCreatableSelect :
         isCreatable ? CreatableSelect :
         isAsync ? AsyncSelect :
