@@ -75,10 +75,12 @@ const TransactionListContainer = (): JSX.Element => {
                 isActive
                 header="Mendatang"
                 transactions={upcomingSubscription}
+                hasUpcoming={upcomingSubscription?.length != 0}
             />
             <TransactionList
                 header="Tidak Aktif"
                 transactions={inactiveTransaction}
+                hasUpcoming={upcomingSubscription?.length != 0}
             />
             {isEmpty && <EmptyState />}
             <ReferralModal

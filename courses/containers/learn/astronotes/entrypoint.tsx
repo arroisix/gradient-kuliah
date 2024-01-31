@@ -14,10 +14,10 @@ const AstronotesEntrypoint = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
 
     const privateQueryResult = useGetEntrypointBooksQuery(
-        isAuthenticated ? { limit: 5 } : skipToken
+        isAuthenticated ? { limit: 10 } : skipToken
     );
     const publicQueryResult = useGetPublicEntrypointBooksQuery(
-        isAuthenticated ? skipToken : { limit: 5 }
+        isAuthenticated ? skipToken : { limit: 10 }
     );
     const { data: astronotes, isLoading } = isAuthenticated
         ? privateQueryResult

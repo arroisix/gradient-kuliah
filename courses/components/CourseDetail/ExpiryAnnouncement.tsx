@@ -1,30 +1,45 @@
-import Button from 'commons/components/elements/Button';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import Link from 'next/link';
 
 const ExpiryAnnouncement = ({
     slug
 }: GradientBaseComponentWithSlug): JSX.Element => {
-    const { expiryDay, subscription_id, packet_id } =
-        useCourseSubscription(slug);
+    const {
+        expiryDay,
+        subscription_id,
+        packet_id,
+        is_subscribed,
+        everSubscribed,
+        lastPacketId
+    } = useCourseSubscription(slug);
 
-    if (expiryDay <= 7)
+    const subscriptionExpired = !is_subscribed && everSubscribed;
+    if ((is_subscribed && expiryDay <= 7) || subscriptionExpired) {
         return (
-            <div className="w-full flex items-center justify-center my-16">
+            <div className="flex items-center justify-center my-16 mx-5">
                 <div className="border rounded-lg border-accent-yellow p-4 flex flex-col md:flex-row items-center justify-center gap-2">
-                    <span>
-                        Waktu berlanggangan Anda akan segera habis dalam{' '}
-                        {expiryDay} hari. Perpanjang langganan untuk terus
-                        mengakses layanan Gradient.
+                    <span className="text-center md:text-left">
+                        {subscriptionExpired
+                            ? 'Waktu berlangganan kamu sudah habis. Beli lagi untuk terus mengakses layanan Gradient.'
+                            : `Waktu berlanggangan kamu akan segera habis dalam ${expiryDay} hari. Perpanjang langganan untuk terus mengakses layanan Gradient.`}
                     </span>
-                    <Button
-                        href={`/pembayaran?packetId=${packet_id}&subscriptionId=${subscription_id}`}
-                        variant="custom"
-                        className="bg-accent-yellow text-black w-full md:w-[250px] font-body text-center">
-                        Perpanjang
-                    </Button>
+                    <Link
+                        href={{
+                            pathname: '/pembayaran',
+                            query: subscriptionExpired
+                                ? { packetId: lastPacketId }
+                                : {
+                                      packetId: packet_id,
+                                      subscriptionId: subscription_id
+                                  }
+                        }}
+                        className="bg-accent-yellow text-black md:w-[250px] font-body text-center px-6 py-2 rounded-full font-semibold">
+                        {subscriptionExpired ? 'Beli Lagi' : 'Perpanjang'}
+                    </Link>
                 </div>
             </div>
         );
+    }
 
     return <></>;
 };

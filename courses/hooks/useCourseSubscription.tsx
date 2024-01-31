@@ -43,9 +43,10 @@ const useCourseSubscription = (slug?: string) => {
         slug === undefined || checkIsSubscribed() ? skipToken : { slug }
     );
 
-    const { data: allTransaction } = useGetAllTransactionQuery(
-        is_subscribed || !isAuthenticated ? skipToken : undefined
-    );
+    const { data: allTransaction, isLoading: isTransactionLoading } =
+        useGetAllTransactionQuery(
+            is_subscribed || !isAuthenticated ? skipToken : undefined
+        );
     const everSubscribed =
         is_subscribed ||
         allTransaction?.data.some(
@@ -61,7 +62,10 @@ const useCourseSubscription = (slug?: string) => {
         is_subscribed,
         everSubscribed,
         expiryDay,
-        isLoading: isLoadingSubscription || isLoadingLearningProgress,
+        isLoading:
+            isLoadingSubscription ||
+            isLoadingLearningProgress ||
+            isTransactionLoading,
         isDoneFetchingSubcription: isDoneFetching,
         isErrorFetchingSubscription,
         learning_progress_id: learningProgress?.id,

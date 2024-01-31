@@ -8,17 +8,18 @@ export default function RenewalCard(): JSX.Element | null {
         everSubscribed,
         lastPacketId,
         subscription_id,
-        packet_id
+        packet_id,
+        isLoading
     } = useCourseSubscription();
     const { isDesktopBreakpoints } = useWindowBreakpoints();
 
-    if (expiryDay > 7 || !everSubscribed) {
+    if (isLoading || expiryDay > 7 || !everSubscribed) {
         return null;
     }
 
     if (everSubscribed && expiryDay == 0) {
         return (
-            <section className="bg-accent-orange flex gap-3 justify-between rounded-lg">
+            <section className="bg-accent-orange flex gap-3 justify-between rounded-lg overflow-hidden">
                 <div className="self-stretch p-4 lg:p-6 pr-0 flex flex-col justify-between items-start">
                     <p className="m-0 font-sans font-bold text-sm lg:text-2xl">
                         Masa langganan habis, beli lagi untuk lanjut belajar

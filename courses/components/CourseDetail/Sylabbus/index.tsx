@@ -2,29 +2,20 @@ import Accordion from 'commons/components/elements/Accordion';
 import Skeleton from 'commons/components/elements/Skeleton';
 import { useState } from 'react';
 import { IoIosSearch, IoMdClose } from 'react-icons/io';
-import {
-    useGetCourseContentQuery,
-    useLazyGetSearchCourseContentQuery
-} from 'courses/redux/api/courseApi';
+import { useGetCourseContentQuery } from 'courses/redux/api/courseApi';
 import SearchList from '../../CourseDetailBox/SearchList';
 import { useRouter } from 'next/router';
 import { useTracker } from 'tracker/tracker';
 import SylabbusContent from './SylabbusContent';
 import ListBooks from 'courses/components/CourseDetailBox/ListBooks';
+import { useSearchSubchapter } from 'courses/hooks/useSearchSubchapter';
 
 const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
     const { data: courseContent, isLoading: isLoadingCourse } =
         useGetCourseContentQuery({
             slug: slug as string
         });
-    const [
-        triggerSearch,
-        {
-            data: searchResult,
-            isLoading: isSearchingLoading,
-            isFetching: isSearchingFetching
-        }
-    ] = useLazyGetSearchCourseContentQuery();
+    const { handleSearch } = useSearchSubchapter();
 
     const router = useRouter();
     const { id } = router.query;
@@ -35,25 +26,14 @@ const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
     >('VIDEO');
     const tracker = useTracker();
 
-    function handleSearch({
-        type,
-        page = 1
-    }: {
-        type?: 'BOOK' | 'CHAPTER' | 'SUBCHAPTER';
-        page?: number;
-    }): void {
+    const onSubmitSearch: UseSearchSubchapter['handleSearch'] = (params) => {
+        handleSearch(params);
         setNavigation('ON_SEARCH');
-        triggerSearch({
-            slug: id as string,
-            content: search,
-            type,
-            page
-        });
-    }
+    };
 
     function keyDown(): void {
         setIsSearch(true);
-        handleSearch({});
+        onSubmitSearch({});
         tracker?.genericTrack('Search Class Material', {
             'Course Slug': slug,
             Query: search
@@ -78,7 +58,7 @@ const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
                     size={20}
                     className="text-[#DADADA] cursor-pointer"
                     onClick={() => {
-                        handleSearch({});
+                        onSubmitSearch({});
                         setIsSearch(true);
                     }}
                 />
@@ -165,15 +145,7 @@ const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
                     isLoading={isLoadingCourse}
                 />
             )}
-            {navigation === 'ON_SEARCH' && (
-                <SearchList
-                    searchQuery={search}
-                    searchResult={searchResult}
-                    handleSearch={handleSearch}
-                    isLoading={isSearchingLoading}
-                    isFetching={isSearchingFetching}
-                />
-            )}
+            {navigation === 'ON_SEARCH' && <SearchList />}
         </div>
     );
 };

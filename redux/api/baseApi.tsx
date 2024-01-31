@@ -29,6 +29,7 @@ export const baseApi = createApi({
         'EXAM_QUESTION',
         'AI_TUTOR',
         'WATCH_PROGRESS',
+        'CODING_PROGRESS',
         'PROFILE',
         'COMMUNITIES',
         'ASTRONOTES',

@@ -138,6 +138,31 @@ export const learningExperienceApi = baseApi.injectEndpoints({
                 method: 'POST'
             }),
             invalidatesTags: ['EXAM_QUESTION']
+        }),
+        getCodingProgress: builder.query<
+            CodingProgress,
+            GetCodingProgressInputData
+        >({
+            query: ({
+                watch_progress_id,
+                code_editor_id
+            }: GetCodingProgressInputData) => ({
+                url: `${LEARNING_EXPERIENCE_BASE_URL}coding-progress/${watch_progress_id}/${code_editor_id}/`
+            }),
+            providesTags: ['CODING_PROGRESS']
+        }),
+        trackCodingProgress: builder.mutation<
+            string,
+            TrackCodingProgressInputData
+        >({
+            query: (data: TrackCodingProgressInputData) => ({
+                url: `${LEARNING_EXPERIENCE_BASE_URL}coding-progress/`,
+                method: 'POST',
+                body: {
+                    ...data
+                }
+            }),
+            invalidatesTags: ['CODING_PROGRESS']
         })
     }),
     overrideExisting: false
@@ -156,5 +181,7 @@ export const {
     useGetExamQuestionQuery,
     useGetExamListQuestionSequenceQuery,
     useSubmitExamAnswerMutation,
-    useFinishExamMutation
+    useFinishExamMutation,
+    useGetCodingProgressQuery,
+    useTrackCodingProgressMutation
 } = learningExperienceApi;

@@ -1,24 +1,27 @@
+import { useFeatureIsOn } from '@growthbook/growthbook-react';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
-import AiTutor from 'courses/components/LearningExperience/AiTutor';
-import { useLearning } from 'courses/contexts/LearningProvider';
-import { useGetSubchapterDetailQuery } from 'courses/redux/api/privateCourseApi';
-import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
-import CourseDetailBox from 'courses/components/CourseDetailBox';
-import CourseSummary from 'courses/components/CourseSummary';
-import AnotherClass from 'courses/components/AnotherClass';
-import useElementSize from 'commons/hooks/useElementSize';
-import { isNotNullAndUndefined } from 'commons/utils';
 import VideoJS from 'commons/components/elements/Video/VideoJS';
 import Modal from 'commons/components/modules/Modal';
-import { useState } from 'react';
+import useElementSize from 'commons/hooks/useElementSize';
+import { isNotNullAndUndefined } from 'commons/utils';
+import AnotherClass from 'courses/components/AnotherClass';
+import CourseDetailBox from 'courses/components/CourseDetailBox';
+import CourseSummary from 'courses/components/CourseSummary';
+import AiTutor from 'courses/components/LearningExperience/AiTutor';
 import AiModalFeedback from 'courses/components/LearningExperience/AiTutor/AiModalFeedback';
-import { useTrackSubchapterProgressMutation } from 'courses/redux/api/learningExperienceApi';
-import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import NeedSubscribe from 'courses/components/NeedSubscribe';
-import { useGetPublicSubchapterDetailQuery } from 'courses/redux/api/courseApi';
 import VideoPaywall from 'courses/components/VideoPaywall';
-import { useFeatureIsOn } from '@growthbook/growthbook-react';
+import { useLearning } from 'courses/contexts/LearningProvider';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import {
+    useGetCourseQuery,
+    useGetPublicSubchapterDetailQuery
+} from 'courses/redux/api/courseApi';
+import { useTrackSubchapterProgressMutation } from 'courses/redux/api/learningExperienceApi';
+import { useGetSubchapterDetailQuery } from 'courses/redux/api/privateCourseApi';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const VideoLearnContainer = (): JSX.Element => {
     const router = useRouter();
@@ -50,15 +53,21 @@ const VideoLearnContainer = (): JSX.Element => {
         status: 'NOT_HELPING' | 'HELPING' | 'NOT_SELECTED';
         answer_id: string;
     }>({ status: 'NOT_SELECTED', answer_id: '' });
+    const { data: course } = useGetCourseQuery(undefined, {
+        selectFromResult: ({ data, isLoading }) => ({
+            data: data?.courses.find(({ slug }) => slug === id),
+            isLoading: isLoading
+        })
+    });
     const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
         'landing-page-revamp'
     );
 
     return (
         <section className="relative pt-[64px] md:pt-[97px] pb-16 min-h-[100vh] flex flex-col gap-8">
-            <div className="flex w-full h-full gap-5 px-0 lg:gap-8 md:px-16">
+            <div className="grid grid-cols-1 gap-5 lg:px-6 lg:grid-cols-3">
                 <div
-                    className="w-full lg:w-[70%] h-max md:rounded-lg md:overflow-hidden"
+                    className="w-full lg:col-span-2 h-max lg:pl-8"
                     ref={videoRef}>
                     {(isLoading || isLoadingSubscription) && (
                         <div className="w-full h-[300px] bg-neutral-600 animate-pulse" />
@@ -66,7 +75,7 @@ const VideoLearnContainer = (): JSX.Element => {
                     {!isLoading &&
                         !isLoadingSubscription &&
                         (is_subscribed || data?.video?.is_free ? (
-                            <div>
+                            <div className="md:rounded-lg md:overflow-hidden">
                                 <VideoJS
                                     key={data?.video?.video_url}
                                     src={
@@ -120,20 +129,25 @@ const VideoLearnContainer = (): JSX.Element => {
                         ) : (
                             <NeedSubscribe />
                         ))}
+                    <div className="px-4 pt-4 space-y-1 lg:pt-6 sm:px-0 md:px-12 lg:px-0">
+                        <h3 className="text-sm lg:text-xl text-neutral-400">
+                            {course?.course_name}
+                        </h3>
+                        <h2 className="text-base font-extrabold md:text-2xl">
+                            {data?.subchapter_name}
+                        </h2>
+                    </div>
                 </div>
                 {!isLoading ? (
                     <div
-                        className="w-[30%] hidden lg:block"
-                        style={{ height: videoHeight }}>
+                        className="hidden col-span-1 lg:block"
+                        style={{ maxHeight: videoHeight }}>
                         <CourseDetailBox />
                     </div>
                 ) : (
-                    <div className="w-[30%] hidden lg:block h-[300px] bg-neutral-600 rounded-lg animate-pulse" />
+                    <div className="col-span-1 hidden lg:block h-[300px] bg-neutral-600 rounded-lg animate-pulse" />
                 )}
             </div>
-            <h2 className="px-5 text-base font-extrabold md:text-2xl md:px-16">
-                {data?.subchapter_name}
-            </h2>
             <CourseSummary />
             <AnotherClass />
             {video?.ai_unique_id && (

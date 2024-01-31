@@ -17,9 +17,13 @@ const DashboardBanner = (): JSX.Element | null => {
     );
     const showTutorBanner = false;
 
+    if (isLoading) {
+        return null;
+    }
+
     if (!isAuthenticated) return <RegisterBanner />;
 
-    return !isLoading && is_subscribed && showTutorBanner ? (
+    return is_subscribed && showTutorBanner ? (
         <TutorBanner />
     ) : isLandingPageRevampOn && !everSubscribed ? (
         <SubscribeBanner />

@@ -8,6 +8,7 @@ import { MdChevronRight } from 'react-icons/md';
 type StatusInfoProps = {
     isExpiry: boolean;
     isList?: boolean;
+    hasUpcoming?: boolean;
     packetId: Subscription['id'];
 } & Pick<Transaction, 'status' | 'id' | 'payment_method' | 'deadline'>;
 
@@ -18,7 +19,8 @@ const StatusInfo = ({
     id: transactionId,
     packetId,
     deadline,
-    payment_method
+    payment_method,
+    hasUpcoming
 }: StatusInfoProps): JSX.Element => {
     const { isMobileBreakpoints } = useWindowBreakpoints();
     const router = useRouter();
@@ -33,20 +35,19 @@ const StatusInfo = ({
                         : null
                 }
                 aria-hidden>
-                <span className="inline-block font-body text-[#CCCCCC80] text-xs sm:text-sm">
-                    Masa waktu bayar habis.{' '}
-                    <span
-                        className="text-[#CCCCCC] cursor-pointer hover:underline"
-                        onClick={() =>
-                            router.push(`/pembayaran?packetId=${packetId}`)
-                        }
-                        aria-hidden>
-                        Beli lagi
-                    </span>
-                </span>
-                <div className="w-[18px] h-[18px] cursor-pointer">
-                    <MdChevronRight size={18} />
-                </div>
+                {!hasUpcoming && (
+                    <p className="font-body text-[#CCCCCC80] text-xs sm:text-sm">
+                        Masa waktu bayar habis.{' '}
+                        <Link
+                            href={`/pembayaran?packetId=${packetId}`}
+                            className="flex gap-2 items-center text-[#CCCCCC] cursor-pointer hover:underline">
+                            Beli lagi{' '}
+                            <div className="w-[18px] h-[18px] cursor-pointer">
+                                <MdChevronRight size={18} />
+                            </div>
+                        </Link>
+                    </p>
+                )}
             </div>
         );
     } else if (status === 'WAITING') {

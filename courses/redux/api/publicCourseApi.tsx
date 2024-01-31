@@ -48,6 +48,11 @@ export const publicCourseApi = baseApi.injectEndpoints({
             query: (id: string) => ({
                 url: `${PUBLIC_COURSE_BASE_URL}list-subchapter/${id}/`
             })
+        }),
+        getPublicCodeEditorTemplate: builder.query<CodeEditorTemplate, string>({
+            query: (id: string) => ({
+                url: `${PUBLIC_COURSE_BASE_URL}code-editor/${id}/`
+            })
         })
     })
 });
@@ -59,7 +64,8 @@ export const {
     useGetLandingCourseListContentQuery,
     useGetPublicCourseNotebookQuery,
     useGetListCourseChapterQuery,
-    useGetListCourseSubChapterQuery
+    useGetListCourseSubChapterQuery,
+    useGetPublicCodeEditorTemplateQuery
 } = publicCourseApi;
 
 export const { getPublicListCourses, getPublicCourse, getLandingCourseData } =

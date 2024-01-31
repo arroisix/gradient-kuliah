@@ -1,6 +1,7 @@
 import Button from 'commons/components/elements/Button';
 import Skeleton from 'commons/components/elements/Skeleton';
 import Spinner from 'commons/components/elements/Spinner';
+import { useSearchSubchapter } from 'courses/hooks/useSearchSubchapter';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -10,25 +11,7 @@ import { useTracker } from 'tracker/tracker';
 import ChapterDetail from './ChapterDetail';
 import ListSubchapter from './ListSubchapter';
 
-const SearchList = ({
-    searchQuery,
-    searchResult,
-    handleSearch,
-    isLoading,
-    isFetching
-}: {
-    searchQuery: string;
-    searchResult?: SearchCourseResponse;
-    handleSearch: ({
-        type,
-        page
-    }: {
-        type?: 'BOOK' | 'CHAPTER' | 'SUBCHAPTER' | undefined;
-        page?: number | undefined;
-    }) => void;
-    isLoading: boolean;
-    isFetching: boolean;
-}): JSX.Element => {
+const SearchList = (): JSX.Element => {
     const router = useRouter();
     const { id } = router.query;
     const [navigation, setNavigation] = useState<'SEARCH_LIST' | 'SUBCHAPTER'>(
@@ -38,12 +21,21 @@ const SearchList = ({
         {} as CourseChapter
     );
     const tracker = useTracker();
+    const {
+        searchResult,
+        searchKeyword,
+        isSearchingLoading,
+        isSearchingFetching,
+        handleSearch
+    } = useSearchSubchapter();
 
     return (
         <>
-            {isFetching && !isLoading && <Spinner size="small" />}
-            {isLoading && <Skeleton className="h-[30px]" repeat={3} />}
-            {!isLoading && navigation === 'SEARCH_LIST' && (
+            {isSearchingFetching && !isSearchingLoading && (
+                <Spinner size="small" />
+            )}
+            {isSearchingLoading && <Skeleton className="h-[30px]" repeat={3} />}
+            {!isSearchingLoading && navigation === 'SEARCH_LIST' && (
                 <>
                     <div className="pb-6 border-b border-[#2D2D2D]">
                         <span className="inline-block font-extrabold text-sm pb-[18px]">
@@ -71,7 +63,7 @@ const SearchList = ({
                                                         tracker?.genericTrack(
                                                             'Click Video Section Search Result',
                                                             {
-                                                                Query: searchQuery,
+                                                                Query: searchKeyword,
                                                                 'Course Slug':
                                                                     id,
                                                                 'Video Title':
@@ -121,7 +113,7 @@ const SearchList = ({
                                         tracker?.genericTrack(
                                             'Click Book Section Search Result',
                                             {
-                                                Query: searchQuery,
+                                                Query: searchKeyword,
                                                 'Course Slug': id,
                                                 'Book Title': value.title
                                             }
@@ -200,7 +192,7 @@ const SearchList = ({
                                         tracker?.genericTrack(
                                             'Click Chapter Section Search Result',
                                             {
-                                                Query: searchQuery,
+                                                Query: searchKeyword,
                                                 'Course Slug': id,
                                                 'Chapter Title':
                                                     value.chapter_name
