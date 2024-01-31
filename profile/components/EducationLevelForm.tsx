@@ -2,8 +2,8 @@ import {
     EDUCATION_OPTIONS,
     PROFESSION_OPTIONS
 } from 'authentication/constants';
+import { useOptionLoader } from 'authentication/hooks/useOptionLoader';
 import Button from 'commons/components/elements/Button';
-import Input from 'commons/components/elements/Form/input';
 import Select from 'commons/components/elements/Form/select';
 import Spinner from 'commons/components/elements/Spinner';
 import { Formik } from 'formik';
@@ -11,6 +11,7 @@ import {
     ReduxHTTPError,
     useProfileContext
 } from 'profile/contexts/ProfileProvider';
+import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useTracker } from 'tracker/tracker';
 
@@ -18,6 +19,43 @@ export const EducationLevelForm = (): JSX.Element => {
     const tracker = useTracker();
 
     const { isLoading, updateUser, profile } = useProfileContext();
+
+    const {
+        options: institutionOption,
+        setOptions: setInstitutionOption,
+        loadOptions: loadInstitutionOption
+    } = useOptionLoader('institute');
+    const {
+        options: majorOption,
+        setOptions: setMajorOption,
+        loadOptions: loadMajorOption
+    } = useOptionLoader('major');
+    const {
+        options: professionFieldOption,
+        loadOptions: loadProfessionFieldOption
+    } = useOptionLoader('industry');
+
+    const getHandleSelectChange = (
+        fieldName: string,
+        setFieldValue: (arg1: string, arg2: any) => void
+    ) => {
+        return (newValue: string) => {
+            setFieldValue(fieldName, newValue);
+        };
+    };
+
+    useEffect(() => {
+        tracker?.genericTrack('Visit Onboarding Education Step');
+
+        loadInstitutionOption('');
+        loadMajorOption('');
+
+        return () => {
+            setInstitutionOption([]);
+            setMajorOption([]);
+        };
+    }, []);
+
     return (
         <Formik
             initialValues={
@@ -81,26 +119,21 @@ export const EducationLevelForm = (): JSX.Element => {
                 errors,
                 touched,
                 initialValues,
-                handleChange,
-                handleBlur,
-                handleSubmit
+                handleSubmit,
+                setFieldValue
             }) => (
                 <form onSubmit={handleSubmit} className="container">
                     <div className="flex flex-col gap-4">
                         <Select
-                            onChange={(e) =>
-                                handleChange({
-                                    target: {
-                                        value: e.target.value,
-                                        name: 'education_level'
-                                    }
-                                })
-                            }
-                            onBlur={handleBlur}
+                            onChange={getHandleSelectChange(
+                                'education_level',
+                                setFieldValue
+                            )}
                             label="Tingkat Pendidikan"
-                            value={values.education_level}
                             name="educationLevel"
                             option={EDUCATION_OPTIONS}
+                            placeholder="Pilih pendidikan"
+                            initialValue={values.education_level}
                             error={
                                 touched.education_level &&
                                 errors.education_level
@@ -108,50 +141,66 @@ export const EducationLevelForm = (): JSX.Element => {
                                     : undefined
                             }
                         />
-                        <Input
-                            type="text"
-                            label="Asal Sekolah/Universitas"
+                        <Select
+                            onChange={getHandleSelectChange(
+                                'institution',
+                                setFieldValue
+                            )}
+                            isAsync
+                            loadOption={loadInstitutionOption}
+                            isCreatable
                             name="institution"
-                            placeholder="Nama sekolah atau universitas"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.institution}
+                            option={institutionOption}
+                            label={
+                                values.education_level === 'SMP' ||
+                                values.education_level === 'SMA'
+                                    ? 'Asal Sekolah'
+                                    : 'Asal Universitas/Institusi'
+                            }
+                            placeholder={
+                                values.education_level === 'SMP' ||
+                                values.education_level === 'SMA'
+                                    ? 'Pilih asal sekolah'
+                                    : 'Pilih asal universitas/institusi'
+                            }
+                            initialValue={values.institution}
                             error={
                                 touched.institution && errors.institution
                                     ? errors.institution
                                     : undefined
                             }
-                            required={true}
                         />
-                        <Input
-                            type="text"
-                            label="Jurusan"
-                            name="major"
-                            placeholder="Nama jurusan"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.major}
-                            error={
-                                touched.major && errors.major
-                                    ? errors.major
-                                    : undefined
-                            }
-                            required={true}
-                        />
+                        {values.education_level !== 'SMP' && (
+                            <Select
+                                onChange={getHandleSelectChange(
+                                    'major',
+                                    setFieldValue
+                                )}
+                                isAsync
+                                loadOption={loadMajorOption}
+                                isCreatable
+                                label="Jurusan"
+                                name="major"
+                                option={majorOption}
+                                placeholder="Pilih jurusan"
+                                initialValue={values.major}
+                                error={
+                                    touched.major && errors.major
+                                        ? errors.major
+                                        : undefined
+                                }
+                            />
+                        )}
                         <Select
-                            onChange={(e) =>
-                                handleChange({
-                                    target: {
-                                        value: e.target.value,
-                                        name: 'profession'
-                                    }
-                                })
-                            }
-                            onBlur={handleBlur}
+                            onChange={getHandleSelectChange(
+                                'profession',
+                                setFieldValue
+                            )}
                             label="Pekerjaan"
-                            value={values.profession}
                             name="profession"
                             option={PROFESSION_OPTIONS}
+                            placeholder="Pilih pekerjaan"
+                            initialValue={values.profession}
                             error={
                                 touched.profession && errors.profession
                                     ? errors.profession
@@ -159,21 +208,24 @@ export const EducationLevelForm = (): JSX.Element => {
                             }
                         />
                         {values.profession === 'employed' && (
-                            <Input
-                                type="text"
+                            <Select
+                                onChange={getHandleSelectChange(
+                                    'profession_field',
+                                    setFieldValue
+                                )}
+                                isAsync
+                                loadOption={loadProfessionFieldOption}
+                                name="institution"
+                                option={professionFieldOption}
                                 label="Bidang Pekerjaan"
-                                name="profession_field"
-                                placeholder="Nama bidang"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.profession_field}
+                                placeholder="Pilih bidang pekerjaan"
+                                initialValue={values.profession_field}
                                 error={
                                     touched.profession_field &&
                                     errors.profession_field
                                         ? errors.profession_field
                                         : undefined
                                 }
-                                required={values.profession === 'employed'}
                             />
                         )}
                     </div>
