@@ -18,8 +18,8 @@ export const OnboardingSection = (): JSX.Element => {
             isProfileComplete ? (
                 <OnboardingSuccess />
             ) : (
-                <div className={`px-[16px] md:px-0 w-full md:w-[400px] flex flex-col justify-center items-center`}>
-                    
+                <div
+                    className={`px-[16px] md:px-0 w-full md:w-[400px] flex flex-col justify-center items-center`}>
                     <div id="form" className="w-full flex flex-col gap-8">
                         <h1 className="w-full text-3xl font-extrabold">
                             Lengkapi akunmu

@@ -1,6 +1,6 @@
 import { Formik } from 'formik';
 import Button from 'commons/components/elements/Button';
-import { Dispatch, SetStateAction, useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import RegistrationContext from 'authentication/contexts/RegistrationProvider';
 import Select from 'commons/components/elements/Form/select';
 import {
@@ -16,12 +16,12 @@ export const EducationStep = (): JSX.Element => {
     const tracker = useTracker();
 
     const {
-        options: institutionOption, 
+        options: institutionOption,
         setOptions: setInstitutionOption,
         loadOptions: loadInstitutionOption
     } = useOptionLoader('institute');
     const {
-        options: majorOption, 
+        options: majorOption,
         setOptions: setMajorOption,
         loadOptions: loadMajorOption
     } = useOptionLoader('major');
@@ -29,31 +29,26 @@ export const EducationStep = (): JSX.Element => {
         options: professionFieldOption,
         loadOptions: loadProfessionFieldOption
     } = useOptionLoader('industry');
-    
-    const getHandleCreate = (setOption: Dispatch<SetStateAction<Option[]>>) => {
-        return (input: string) => {
-            const newOption = { value: input, label: input };
-            setOption((prev: any) => [...prev, newOption]);
-        }
-    }
 
-    const getHandleSelectChange = (fieldName: string, setFieldValue: (arg1: string, arg2: any) => void) => {
+    const getHandleSelectChange = (
+        fieldName: string,
+        setFieldValue: (arg1: string, arg2: any) => void
+    ) => {
         return (newValue: string) => {
             setFieldValue(fieldName, newValue);
-        }
-    }
+        };
+    };
 
     useEffect(() => {
         tracker?.genericTrack('Visit Onboarding Education Step');
 
-        loadInstitutionOption('')
-        loadMajorOption('')
+        loadInstitutionOption('');
+        loadMajorOption('');
 
         return () => {
             setInstitutionOption([]);
             setMajorOption([]);
-        }
-
+        };
     }, []);
 
     return (
@@ -96,20 +91,16 @@ export const EducationStep = (): JSX.Element => {
                             'Bidang pekerjaan tidak boleh kosong';
 
                     return errors;
-                }}
-            >
-                {({
-                    values,
-                    errors,
-                    touched,
-                    handleSubmit,
-                    setFieldValue,
-                }) => {
+                }}>
+                {({ values, errors, touched, handleSubmit, setFieldValue }) => {
                     return (
                         <form onSubmit={handleSubmit}>
                             <div className="flex flex-col gap-4">
                                 <Select
-                                    onChange={getHandleSelectChange('education_level', setFieldValue)}
+                                    onChange={getHandleSelectChange(
+                                        'education_level',
+                                        setFieldValue
+                                    )}
                                     label="Tingkat Pendidikan"
                                     name="educationLevel"
                                     option={EDUCATION_OPTIONS}
@@ -122,31 +113,40 @@ export const EducationStep = (): JSX.Element => {
                                     }
                                 />
                                 <Select
-                                    onChange={getHandleSelectChange('institution', setFieldValue)}
+                                    onChange={getHandleSelectChange(
+                                        'institution',
+                                        setFieldValue
+                                    )}
                                     isAsync
                                     loadOption={loadInstitutionOption}
                                     isCreatable
                                     name="institution"
                                     option={institutionOption}
                                     label={
-                                        (values.education_level === "SMP" || values.education_level === "SMA") ? 
-                                        "Asal Sekolah" :
-                                        "Asal Universitas/Institusi"
+                                        values.education_level === 'SMP' ||
+                                        values.education_level === 'SMA'
+                                            ? 'Asal Sekolah'
+                                            : 'Asal Universitas/Institusi'
                                     }
                                     placeholder={
-                                        (values.education_level === "SMP" || values.education_level === "SMA") ? 
-                                            "Pilih asal sekolah" :
-                                            "Pilih asal universitas/institusi"
+                                        values.education_level === 'SMP' ||
+                                        values.education_level === 'SMA'
+                                            ? 'Pilih asal sekolah'
+                                            : 'Pilih asal universitas/institusi'
                                     }
                                     error={
-                                        touched.institution && errors.institution
+                                        touched.institution &&
+                                        errors.institution
                                             ? errors.institution
                                             : undefined
                                     }
                                 />
-                                {(values.education_level !== "SMP") && 
+                                {values.education_level !== 'SMP' && (
                                     <Select
-                                        onChange={getHandleSelectChange('major', setFieldValue)}
+                                        onChange={getHandleSelectChange(
+                                            'major',
+                                            setFieldValue
+                                        )}
                                         isAsync
                                         loadOption={loadMajorOption}
                                         isCreatable
@@ -160,9 +160,12 @@ export const EducationStep = (): JSX.Element => {
                                                 : undefined
                                         }
                                     />
-                                }
+                                )}
                                 <Select
-                                    onChange={getHandleSelectChange('profession', setFieldValue)}
+                                    onChange={getHandleSelectChange(
+                                        'profession',
+                                        setFieldValue
+                                    )}
                                     label="Pekerjaan"
                                     name="profession"
                                     option={PROFESSION_OPTIONS}
@@ -175,7 +178,10 @@ export const EducationStep = (): JSX.Element => {
                                 />
                                 {values.profession === 'employed' && (
                                     <Select
-                                        onChange={getHandleSelectChange('profession_field', setFieldValue)}
+                                        onChange={getHandleSelectChange(
+                                            'profession_field',
+                                            setFieldValue
+                                        )}
                                         isAsync
                                         loadOption={loadProfessionFieldOption}
                                         name="institution"
@@ -200,7 +206,7 @@ export const EducationStep = (): JSX.Element => {
                                 </Button>
                             </div>
                         </form>
-                    )
+                    );
                 }}
             </Formik>
         </div>

@@ -3,7 +3,6 @@ import { AUTH_SECTION } from 'authentication/constants';
 import { RegistrationProvider } from 'authentication/contexts/RegistrationProvider';
 import { useLastLogin } from 'authentication/hooks/useLastLogin';
 import useSocialLogin from 'authentication/hooks/useSocialLogin';
-import { useLogoutMutation } from 'authentication/redux/api/authApi';
 import { getCurrentUser } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
 import { useRouter } from 'next/router';

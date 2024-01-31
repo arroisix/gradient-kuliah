@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {default as ReactSelect} from 'react-select';
+import { default as ReactSelect } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import AsyncCreatableSelect from 'react-select/async-creatable';
 import AsyncSelect from 'react-select/async';
@@ -27,21 +27,21 @@ const Select: React.FC<SelectProps> = ({
     placeholder,
     isCreatable,
     isAsync,
-    loadOption,
+    loadOption
 }) => {
-    const [chosen, setChosen] = useState(null)
+    const [chosen, setChosen] = useState(null);
     const onOptionChange = (val: any) => {
         onChange && onChange(val ? val.value : null);
         setChosen(val);
-    }
+    };
 
     return (
         <div className="flex flex-col w-full gap-1 font-body">
             {label && <span className="text-[#999999] text-sm">{label}</span>}
             {isCreatable ? (
-                <>  
+                <>
                     {isAsync ? (
-                        <AsyncCreatableSelect 
+                        <AsyncCreatableSelect
                             isClearable
                             options={option}
                             placeholder={placeholder && placeholder}
@@ -58,7 +58,7 @@ const Select: React.FC<SelectProps> = ({
                                     borderWidth: '1px',
                                     borderColor: '#242424',
                                     boxShadow: 'none',
-                                    "&:hover": {
+                                    '&:hover': {
                                         borderColor: '#242424'
                                     }
                                 }),
@@ -67,16 +67,18 @@ const Select: React.FC<SelectProps> = ({
                                     background: '#121212',
                                     borderRadius: '0.5rem',
                                     marginTop: 0,
-                                    zIndex: 100,
+                                    zIndex: 100
                                 }),
                                 option: (base, { isFocused }) => ({
                                     ...base,
-                                    background: isFocused ? '#242424' : undefined,
+                                    background: isFocused
+                                        ? '#242424'
+                                        : undefined,
                                     color: 'white'
                                 }),
                                 singleValue: (base) => ({
                                     ...base,
-                                    color: 'white',
+                                    color: 'white'
                                 }),
                                 clearIndicator: (base) => ({
                                     ...base,
@@ -84,17 +86,17 @@ const Select: React.FC<SelectProps> = ({
                                 }),
                                 dropdownIndicator: (base) => ({
                                     ...base,
-                                    color: '#666666',
+                                    color: '#666666'
                                 }),
                                 input: (base) => ({
                                     ...base,
                                     color: 'white'
-                                }),
+                                })
                             }}
-                            components={{IndicatorSeparator: () => null}}
+                            components={{ IndicatorSeparator: () => null }}
                         />
                     ) : (
-                        <CreatableSelect 
+                        <CreatableSelect
                             isClearable
                             options={option}
                             placeholder={placeholder && placeholder}
@@ -110,7 +112,7 @@ const Select: React.FC<SelectProps> = ({
                                     borderWidth: '1px',
                                     borderColor: '#242424',
                                     boxShadow: 'none',
-                                    "&:hover": {
+                                    '&:hover': {
                                         borderColor: '#242424'
                                     }
                                 }),
@@ -119,16 +121,18 @@ const Select: React.FC<SelectProps> = ({
                                     background: '#121212',
                                     borderRadius: '0.5rem',
                                     marginTop: 0,
-                                    zIndex: 100,
+                                    zIndex: 100
                                 }),
                                 option: (base, { isFocused }) => ({
                                     ...base,
-                                    background: isFocused ? '#242424' : undefined,
+                                    background: isFocused
+                                        ? '#242424'
+                                        : undefined,
                                     color: 'white'
                                 }),
                                 singleValue: (base) => ({
                                     ...base,
-                                    color: 'white',
+                                    color: 'white'
                                 }),
                                 clearIndicator: (base) => ({
                                     ...base,
@@ -136,21 +140,21 @@ const Select: React.FC<SelectProps> = ({
                                 }),
                                 dropdownIndicator: (base) => ({
                                     ...base,
-                                    color: '#666666',
+                                    color: '#666666'
                                 }),
                                 input: (base) => ({
                                     ...base,
                                     color: 'white'
-                                }),
+                                })
                             }}
-                            components={{IndicatorSeparator: () => null}}
+                            components={{ IndicatorSeparator: () => null }}
                         />
                     )}
                 </>
             ) : (
                 <>
                     {isAsync ? (
-                        <AsyncSelect 
+                        <AsyncSelect
                             isClearable
                             options={option}
                             placeholder={placeholder && placeholder}
@@ -167,7 +171,7 @@ const Select: React.FC<SelectProps> = ({
                                     borderWidth: '1px',
                                     borderColor: '#242424',
                                     boxShadow: 'none',
-                                    "&:hover": {
+                                    '&:hover': {
                                         borderColor: '#242424'
                                     }
                                 }),
@@ -176,16 +180,18 @@ const Select: React.FC<SelectProps> = ({
                                     background: '#121212',
                                     borderRadius: '0.5rem',
                                     marginTop: 0,
-                                    zIndex: 100,
+                                    zIndex: 100
                                 }),
                                 option: (base, { isFocused }) => ({
                                     ...base,
-                                    background: isFocused ? '#242424' : undefined,
+                                    background: isFocused
+                                        ? '#242424'
+                                        : undefined,
                                     color: 'white'
                                 }),
                                 singleValue: (base) => ({
                                     ...base,
-                                    color: 'white',
+                                    color: 'white'
                                 }),
                                 clearIndicator: (base) => ({
                                     ...base,
@@ -193,17 +199,17 @@ const Select: React.FC<SelectProps> = ({
                                 }),
                                 dropdownIndicator: (base) => ({
                                     ...base,
-                                    color: '#666666',
+                                    color: '#666666'
                                 }),
                                 input: (base) => ({
                                     ...base,
                                     color: 'white'
-                                }),
+                                })
                             }}
-                            components={{IndicatorSeparator: () => null}}
+                            components={{ IndicatorSeparator: () => null }}
                         />
-                        ) : (
-                        <ReactSelect 
+                    ) : (
+                        <ReactSelect
                             isClearable
                             options={option}
                             placeholder={placeholder && placeholder}
@@ -219,7 +225,7 @@ const Select: React.FC<SelectProps> = ({
                                     borderWidth: '1px',
                                     borderColor: '#242424',
                                     boxShadow: 'none',
-                                    "&:hover": {
+                                    '&:hover': {
                                         borderColor: '#242424'
                                     }
                                 }),
@@ -228,16 +234,18 @@ const Select: React.FC<SelectProps> = ({
                                     background: '#121212',
                                     borderRadius: '0.5rem',
                                     marginTop: 0,
-                                    zIndex: 100,
+                                    zIndex: 100
                                 }),
                                 option: (base, { isFocused }) => ({
                                     ...base,
-                                    background: isFocused ? '#242424' : undefined,
+                                    background: isFocused
+                                        ? '#242424'
+                                        : undefined,
                                     color: 'white'
                                 }),
                                 singleValue: (base) => ({
                                     ...base,
-                                    color: 'white',
+                                    color: 'white'
                                 }),
                                 clearIndicator: (base) => ({
                                     ...base,
@@ -245,14 +253,14 @@ const Select: React.FC<SelectProps> = ({
                                 }),
                                 dropdownIndicator: (base) => ({
                                     ...base,
-                                    color: '#666666',
+                                    color: '#666666'
                                 }),
                                 input: (base) => ({
                                     ...base,
                                     color: 'white'
-                                }),
+                                })
                             }}
-                            components={{IndicatorSeparator: () => null}}
+                            components={{ IndicatorSeparator: () => null }}
                         />
                     )}
                 </>

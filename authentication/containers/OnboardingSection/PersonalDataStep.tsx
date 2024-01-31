@@ -67,8 +67,7 @@ export const PersonalDataStep = (): JSX.Element => {
                     }
 
                     return errors;
-                }}
-            >
+                }}>
                 {({
                     values,
                     errors,
