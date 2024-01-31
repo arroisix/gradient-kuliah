@@ -58,7 +58,7 @@ const CourseDetailBox = (): JSX.Element => {
                 setOpen={setIsModalFeedbackOpen}
             />
             <div
-                className="relative w-full h-full bg-[#121212] lg:rounded-lg lg:overflow-hidden"
+                className="relative w-full h-full bg-[#121212] lg:overflow-hidden"
                 ref={boxRef}>
                 {!isOnScreen && !checkCustomBreakpoints(1024) && (
                     <div className="w-full h-[40px] absolute bottom-0 bg-gradient-to-b from-transparent to-[#121212] z-[1]"></div>
