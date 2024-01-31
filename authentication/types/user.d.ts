@@ -85,8 +85,3 @@ interface RecommendationResponse {
     name: string;
     abbreviation: string;
 }
-
-interface Option {
-    value: string;
-    label: string;
-}
