@@ -73,7 +73,6 @@ export const EducationStep = (): JSX.Element => {
                     setStep(3);
                 }}
                 validate={(values) => {
-                    console.log(values)
                     const errors: { [key: string]: string } = {};
 
                     if (!values.education_level)
