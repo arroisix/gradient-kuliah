@@ -123,7 +123,14 @@ export const authApi = baseApi.injectEndpoints({
             providesTags: (result) => [
                 { type: 'CONNECTED_DEVICES', id: result?.id }
             ]
-        })
+        }),
+        getStudentRecommendation: builder.query<RecommendationResponse[], { fieldName: string, input: string }>({
+            query: ({ fieldName, input }) => ({
+                url: `students/recommendation/${fieldName}`,
+                params: { name: input },
+            }),
+            transformResponse: (resp: { data: RecommendationResponse[] }) => resp.data
+        }),
     })
 });
 
@@ -142,5 +149,6 @@ export const {
     useLogoutMutation,
     useGetConnectedDevicesQuery,
     useGetDeviceTypesQuery,
-    useGetCurrentConnectedDeviceQuery
+    useGetCurrentConnectedDeviceQuery,
+    useGetStudentRecommendationQuery,
 } = authApi;

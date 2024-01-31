@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { Formik } from 'formik';
 import Button from 'commons/components/elements/Button';
 import Input from 'commons/components/elements/Form/input';
@@ -10,82 +9,24 @@ import {
     PROFESSION_OPTIONS
 } from 'authentication/constants';
 import { useTracker } from 'tracker/tracker';
-import config from 'redux/api/config';
+import { useOptionLoader } from 'authentication/hooks/useOptionLoader';
 
 export const EducationStep = (): JSX.Element => {
     const { setStep, formData, setFormData } = useContext(RegistrationContext);
 
     const tracker = useTracker();
 
-    const [institutionOption, setInstitutionOption] = useState<Option[]>([]);
-    const [majorOption, setMajorOption] = useState<Option[]>([]);
-    const [professionFieldOption, setProfessionFieldOption] = useState<Option[]>([]);
-
-    // const loadInstitutionOption = async () => {
-    //     // TODO: use this instead
-    //     // const { data: institutionData }: { data: Institution[] } =
-    //     //     await axios.get(`${config.API_BASE_URL}students/recommendation/institute/`);
-    //     const institutionData = [
-    //         {name: "UI", abbreviation: "UI"},
-    //         {name: "UI", abbreviation: "UI"},
-    //         {name: "UI", abbreviation: "UI"},
-    //     ];
-    //     const option = institutionData.map((institution) => ({
-    //         value: institution.name,
-    //         label: institution.name,
-    //     }));
-    //     setInstitutionOption(option);
-    //     return option;
-    // }
+    const {
+        options: institutionOption, 
+        setOptions: setInstitutionOption,
+        loadOptions: loadInstitutionOption
+    } = useOptionLoader('institute');
+    const {
+        options: majorOption, 
+        setOptions: setMajorOption,
+        loadOptions: loadMajorOption
+    } = useOptionLoader('major');
     
-    // const loadMajorOption = async () => {
-    //     // TODO: use this instead
-    //     // const { data: institutionData }: { data: Institution[] } =
-    //     //     await axios.get(`${config.API_BASE_URL}students/recommendation/institute/`);
-    //     const majorData = [
-    //         {name: "IK", abbreviation: "IK"},
-    //         {name: "IK", abbreviation: "IK"},
-    //         {name: "IK", abbreviation: "IK"},
-    //     ];
-    //     const option = majorData.map((major) => ({
-    //         value: major.name,
-    //         label: major.name
-    //     }));
-    //     setMajorOption(option);
-    //     return option;
-    // }
-
-    
-
-    // const handleCreateInstitution = (inputValue: string) => {
-    //     const newOption = { value: inputValue, label: inputValue };
-    //     setInstitutionOption((prev: any) => [...prev, newOption]);
-    // };
-    
-    // const handleCreateMajor = (inputValue: string) => {
-    //     const newOption = { value: inputValue, label: inputValue };
-    //     setMajorOption((prev: any) => [...prev, newOption]);
-    // };
-
-    const getLoadOption = (fieldName: string, setOption: Dispatch<SetStateAction<Option[]>>) => {
-        return async () => {
-            // TODO: use this instead
-            // const { data } =
-            //     await axios.get(`${config.API_BASE_URL}students/recommendation/${fieldName}/`);
-            const data = [
-                {name: "IK", abbreviation: "IK"},
-                {name: "IK", abbreviation: "IK"},
-                {name: "IK", abbreviation: "IK"},
-            ];
-            const option = data.map((item) => ({
-                value: item.name,
-                label: item.name
-            }));
-            setOption(option);
-            return option;
-        }
-    }
-
     const getHandleCreate = (setOption: Dispatch<SetStateAction<Option[]>>) => {
         return (input: string) => {
             const newOption = { value: input, label: input };
@@ -95,7 +36,6 @@ export const EducationStep = (): JSX.Element => {
 
     const getHandleSelectChange = (fieldName: string, setFieldValue: (arg1: string, arg2: any) => void) => {
         return (newValue: string) => {
-            // FIXME: formik needs to maintain string as value, however react-select need to mainatin Option as value
             setFieldValue(fieldName, newValue);
         }
     }
@@ -103,8 +43,8 @@ export const EducationStep = (): JSX.Element => {
     useEffect(() => {
         tracker?.genericTrack('Visit Onboarding Education Step');
 
-        getLoadOption('institute', setInstitutionOption)();
-        getLoadOption('major', setMajorOption)();
+        loadInstitutionOption('')
+        loadMajorOption('')
 
         return () => {
             setInstitutionOption([]);
@@ -186,7 +126,7 @@ export const EducationStep = (): JSX.Element => {
                                 <Select
                                     onChange={getHandleSelectChange('institution', setFieldValue)}
                                     isAsync
-                                    loadOption={getLoadOption('institute', setInstitutionOption)}
+                                    loadOption={loadInstitutionOption}
                                     isCreatable
                                     handleCreate={getHandleCreate(setInstitutionOption)}
                                     onBlur={handleBlur}
@@ -213,7 +153,7 @@ export const EducationStep = (): JSX.Element => {
                                     <Select
                                         onChange={getHandleSelectChange('major', setFieldValue)}
                                         isAsync
-                                        loadOption={getLoadOption('major', setInstitutionOption)}
+                                        loadOption={loadMajorOption}
                                         isCreatable
                                         handleCreate={getHandleCreate(setMajorOption)}
                                         onBlur={handleBlur}
@@ -246,14 +186,10 @@ export const EducationStep = (): JSX.Element => {
                                 {values.profession === 'employed' && (
                                     <Select
                                         onChange={getHandleSelectChange('profession_field', setFieldValue)}
-                                        isAsync
-                                        loadOption={getLoadOption('profession_field', setInstitutionOption)}
-                                        isCreatable
-                                        handleCreate={getHandleCreate(setProfessionFieldOption)}
                                         onBlur={handleBlur}
                                         value={values.profession_field}
                                         name="institution"
-                                        option={professionFieldOption}
+                                        option={PROFESSION_OPTIONS}
                                         label="Bidang Pekerjaan"
                                         placeholder="Pilih bidang pekerjaan"
                                         error={

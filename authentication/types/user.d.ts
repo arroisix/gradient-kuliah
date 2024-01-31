@@ -81,12 +81,12 @@ interface UserDeviceResponse {
     device_allowed: boolean;
 }
 
-interface Institution {
+interface RecommendationResponse {
     name: string;
     abbreviation: string;
 }
 
-interface Major {
-    name: string;
-    abbreviation: string;
+interface Option {
+    value: string;
+    label: string;
 }
