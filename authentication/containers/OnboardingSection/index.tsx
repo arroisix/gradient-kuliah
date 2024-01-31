@@ -5,14 +5,12 @@ import { OnboardingStepper } from 'authentication/components/OnboardingStepper';
 import { OnboardingSuccess } from './OnboardingSuccess';
 import { useSelector } from 'react-redux';
 import { getIsProfileComplete, getCurrentUser } from 'authentication/redux/selectors/userSelector';
-import Button from 'commons/components/elements/Button';
 
 export const OnboardingSection = (): JSX.Element => {
     const isProfileComplete = useSelector(getIsProfileComplete);
     const { step, isUserUpdateLoading, isUserUpdateSuccess } =
         useContext(RegistrationContext);
     const FormStep = ONBOARDING_STEP[step];
-    const user = useSelector(getCurrentUser);
 
     return (
         <>

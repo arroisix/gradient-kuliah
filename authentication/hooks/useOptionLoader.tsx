@@ -28,11 +28,10 @@ export const useOptionLoader = (fieldName: 'major' | 'institute' | 'industry') =
     }
   }, [data, isFetching, error]);
 
-  const loadOptions = (inputValue: string = '') => {
+  const loadOptions = (inputValue = '') => {
     setInput(inputValue);
     setTriggerFetch(t => !t);
 
-    // Return a promise that resolves with the new options once they're available
     return new Promise<Option[]>((resolve) => {
       resolveOptionsPromise.current = resolve;
     });

@@ -1,6 +1,6 @@
 import { Formik } from 'formik';
 import Button from 'commons/components/elements/Button';
-import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useContext, useEffect } from 'react';
 import RegistrationContext from 'authentication/contexts/RegistrationProvider';
 import Select from 'commons/components/elements/Form/select';
 import {
@@ -102,7 +102,6 @@ export const EducationStep = (): JSX.Element => {
                     values,
                     errors,
                     touched,
-                    handleChange,
                     handleBlur,
                     handleSubmit,
                     setFieldValue,
@@ -112,9 +111,7 @@ export const EducationStep = (): JSX.Element => {
                             <div className="flex flex-col gap-4">
                                 <Select
                                     onChange={getHandleSelectChange('education_level', setFieldValue)}
-                                    onBlur={handleBlur}
                                     label="Tingkat Pendidikan"
-                                    value={values.education_level}
                                     name="educationLevel"
                                     option={EDUCATION_OPTIONS}
                                     placeholder="Pilih pendidikan"
@@ -131,8 +128,6 @@ export const EducationStep = (): JSX.Element => {
                                     loadOption={loadInstitutionOption}
                                     isCreatable
                                     handleCreate={getHandleCreate(setInstitutionOption)}
-                                    onBlur={handleBlur}
-                                    value={values.institution}
                                     name="institution"
                                     option={institutionOption}
                                     label={
@@ -158,9 +153,7 @@ export const EducationStep = (): JSX.Element => {
                                         loadOption={loadMajorOption}
                                         isCreatable
                                         handleCreate={getHandleCreate(setMajorOption)}
-                                        onBlur={handleBlur}
                                         label="Jurusan"
-                                        value={values.major}
                                         name="major"
                                         option={majorOption}
                                         placeholder="Pilih jurusan"
@@ -173,9 +166,7 @@ export const EducationStep = (): JSX.Element => {
                                 }
                                 <Select
                                     onChange={getHandleSelectChange('profession', setFieldValue)}
-                                    onBlur={handleBlur}
                                     label="Pekerjaan"
-                                    value={values.profession}
                                     name="profession"
                                     option={PROFESSION_OPTIONS}
                                     placeholder="Pilih pekerjaan"
@@ -190,8 +181,6 @@ export const EducationStep = (): JSX.Element => {
                                         onChange={getHandleSelectChange('profession_field', setFieldValue)}
                                         isAsync
                                         loadOption={loadProfessionFieldOption}
-                                        onBlur={handleBlur}
-                                        value={values.profession_field}
                                         name="institution"
                                         option={professionFieldOption}
                                         label="Bidang Pekerjaan"

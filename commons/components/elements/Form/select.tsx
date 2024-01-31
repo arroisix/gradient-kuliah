@@ -8,17 +8,12 @@ interface SelectProps {
     option: Option[];
     label?: string;
     onChange?: (res: any) => void;
-    onBlur?: (res: any) => void;
-    value?: string;
     name: string;
-    required?: boolean;
     error?: string;
     placeholder?: string;
-    
     // For creatable select
     isCreatable?: boolean;
     handleCreate?: (value: any) => void;
-    
     // For async select
     isAsync?: boolean;
     loadOption?: (res: any) => void;
@@ -28,16 +23,11 @@ const Select: React.FC<SelectProps> = ({
     option,
     label,
     onChange,
-    onBlur,
-    value,
     name,
-    required,
     error,
     placeholder,
-    
     isCreatable,
     handleCreate,
-    
     isAsync,
     loadOption,
 }) => {
@@ -62,7 +52,7 @@ const Select: React.FC<SelectProps> = ({
                             value={chosen}
                             onChange={onOptionChange}
                             styles={{
-                                control: (base, state) => ({
+                                control: (base) => ({
                                     ...base,
                                     minHeight: '48px',
                                     background: '#121212',
@@ -94,7 +84,7 @@ const Select: React.FC<SelectProps> = ({
                                     ...base,
                                     color: 'white'
                                 }),
-                                dropdownIndicator: (base, state) => ({
+                                dropdownIndicator: (base) => ({
                                     ...base,
                                     color: '#666666',
                                 }),
@@ -114,7 +104,7 @@ const Select: React.FC<SelectProps> = ({
                             value={chosen}
                             onChange={onOptionChange}
                             styles={{
-                                control: (base, state) => ({
+                                control: (base) => ({
                                     ...base,
                                     minHeight: '48px',
                                     background: '#121212',
@@ -146,7 +136,7 @@ const Select: React.FC<SelectProps> = ({
                                     ...base,
                                     color: 'white'
                                 }),
-                                dropdownIndicator: (base, state) => ({
+                                dropdownIndicator: (base) => ({
                                     ...base,
                                     color: '#666666',
                                 }),
@@ -171,7 +161,7 @@ const Select: React.FC<SelectProps> = ({
                             value={chosen}
                             onChange={onOptionChange}
                             styles={{
-                                control: (base, state) => ({
+                                control: (base) => ({
                                     ...base,
                                     minHeight: '48px',
                                     background: '#121212',
@@ -203,7 +193,7 @@ const Select: React.FC<SelectProps> = ({
                                     ...base,
                                     color: 'white'
                                 }),
-                                dropdownIndicator: (base, state) => ({
+                                dropdownIndicator: (base) => ({
                                     ...base,
                                     color: '#666666',
                                 }),
@@ -223,7 +213,7 @@ const Select: React.FC<SelectProps> = ({
                             value={chosen}
                             onChange={onOptionChange}
                             styles={{
-                                control: (base, state) => ({
+                                control: (base) => ({
                                     ...base,
                                     minHeight: '48px',
                                     background: '#121212',
@@ -255,7 +245,7 @@ const Select: React.FC<SelectProps> = ({
                                     ...base,
                                     color: 'white'
                                 }),
-                                dropdownIndicator: (base, state) => ({
+                                dropdownIndicator: (base) => ({
                                     ...base,
                                     color: '#666666',
                                 }),

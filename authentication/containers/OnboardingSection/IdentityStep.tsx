@@ -9,7 +9,6 @@ import { useCheckUsernameAvailabilityMutation } from 'authentication/redux/api/a
 import { FaCheckCircle, FaSpinner, FaTimesCircle } from 'react-icons/fa';
 import { useDebouncedCallback } from 'use-debounce';
 import { useTracker } from 'tracker/tracker';
-import { EDUCATION_OPTIONS } from 'authentication/constants';
 
 export const IdentityStep = (): JSX.Element => {
     const [isTyping, setIsTyping] = useState(false);
