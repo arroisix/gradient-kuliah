@@ -6,7 +6,6 @@ import { PersonalDataStep } from 'authentication/containers/OnboardingSection/Pe
 import { ReferenceStep } from 'authentication/containers/OnboardingSection/ReferenceStep';
 import { RegistrationSection } from 'authentication/containers/RegistrationSection';
 import React from 'react';
-import { GroupBase } from 'react-select';
 
 interface AuthSectionInterface {
     [path: string]: React.FC;

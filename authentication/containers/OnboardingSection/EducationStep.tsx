@@ -1,6 +1,5 @@
 import { Formik } from 'formik';
 import Button from 'commons/components/elements/Button';
-import Input from 'commons/components/elements/Form/input';
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
 import RegistrationContext from 'authentication/contexts/RegistrationProvider';
 import Select from 'commons/components/elements/Form/select';
@@ -26,6 +25,10 @@ export const EducationStep = (): JSX.Element => {
         setOptions: setMajorOption,
         loadOptions: loadMajorOption
     } = useOptionLoader('major');
+    const {
+        options: professionFieldOption,
+        loadOptions: loadProfessionFieldOption
+    } = useOptionLoader('industry');
     
     const getHandleCreate = (setOption: Dispatch<SetStateAction<Option[]>>) => {
         return (input: string) => {
@@ -185,10 +188,12 @@ export const EducationStep = (): JSX.Element => {
                                 {values.profession === 'employed' && (
                                     <Select
                                         onChange={getHandleSelectChange('profession_field', setFieldValue)}
+                                        isAsync
+                                        loadOption={loadProfessionFieldOption}
                                         onBlur={handleBlur}
                                         value={values.profession_field}
                                         name="institution"
-                                        option={PROFESSION_OPTIONS}
+                                        option={professionFieldOption}
                                         label="Bidang Pekerjaan"
                                         placeholder="Pilih bidang pekerjaan"
                                         error={

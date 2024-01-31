@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useGetStudentRecommendationQuery } from "authentication/redux/api/authApi";
 
-export const useOptionLoader = (fieldName: 'major' | 'institute') => {
+export const useOptionLoader = (fieldName: 'major' | 'institute' | 'industry') => {
   const [input, setInput] = useState('');
   const [options, setOptions] = useState<Option[]>([]);
   const [triggerFetch, setTriggerFetch] = useState(false);

@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import {default as ReactSelect} from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import AsyncCreatableSelect from 'react-select/async-creatable';
-import { useState } from 'react';
+import AsyncSelect from 'react-select/async';
 
 interface SelectProps {
     option: Option[];
@@ -159,57 +160,114 @@ const Select: React.FC<SelectProps> = ({
                     )}
                 </>
             ) : (
-                <ReactSelect 
-                    isClearable
-                    options={option}
-                    placeholder={placeholder && placeholder}
-                    name={name}
-                    value={chosen}
-                    onChange={onOptionChange}
-                    styles={{
-                        control: (base, state) => ({
-                            ...base,
-                            minHeight: '48px',
-                            background: '#121212',
-                            borderRadius: '0.5rem',
-                            borderWidth: '1px',
-                            borderColor: '#242424',
-                            boxShadow: 'none',
-                            "&:hover": {
-                                borderColor: '#242424'
-                            }
-                        }),
-                        menu: (base) => ({
-                            ...base,
-                            background: '#121212',
-                            borderRadius: '0.5rem',
-                            marginTop: 0,
-                            zIndex: 100,
-                        }),
-                        option: (base, { isFocused }) => ({
-                            ...base,
-                            background: isFocused ? '#242424' : undefined,
-                            color: 'white'
-                        }),
-                        singleValue: (base) => ({
-                            ...base,
-                            color: 'white',
-                        }),
-                        clearIndicator: (base) => ({
-                            ...base,
-                            color: 'white'
-                        }),
-                        dropdownIndicator: (base, state) => ({
-                            ...base,
-                            color: '#666666',
-                        }),
-                        input: (base) => ({
-                            ...base,
-                            color: 'white'
-                        }),
-                    }}
-                    components={{IndicatorSeparator: () => null}}
-                />
+                <>
+                    {isAsync ? (
+                        <AsyncSelect 
+                            isClearable
+                            options={option}
+                            placeholder={placeholder && placeholder}
+                            loadOptions={loadOption}
+                            name={name}
+                            value={chosen}
+                            onChange={onOptionChange}
+                            styles={{
+                                control: (base, state) => ({
+                                    ...base,
+                                    minHeight: '48px',
+                                    background: '#121212',
+                                    borderRadius: '0.5rem',
+                                    borderWidth: '1px',
+                                    borderColor: '#242424',
+                                    boxShadow: 'none',
+                                    "&:hover": {
+                                        borderColor: '#242424'
+                                    }
+                                }),
+                                menu: (base) => ({
+                                    ...base,
+                                    background: '#121212',
+                                    borderRadius: '0.5rem',
+                                    marginTop: 0,
+                                    zIndex: 100,
+                                }),
+                                option: (base, { isFocused }) => ({
+                                    ...base,
+                                    background: isFocused ? '#242424' : undefined,
+                                    color: 'white'
+                                }),
+                                singleValue: (base) => ({
+                                    ...base,
+                                    color: 'white',
+                                }),
+                                clearIndicator: (base) => ({
+                                    ...base,
+                                    color: 'white'
+                                }),
+                                dropdownIndicator: (base, state) => ({
+                                    ...base,
+                                    color: '#666666',
+                                }),
+                                input: (base) => ({
+                                    ...base,
+                                    color: 'white'
+                                }),
+                            }}
+                            components={{IndicatorSeparator: () => null}}
+                        />
+                        ) : (
+                        <ReactSelect 
+                            isClearable
+                            options={option}
+                            placeholder={placeholder && placeholder}
+                            name={name}
+                            value={chosen}
+                            onChange={onOptionChange}
+                            styles={{
+                                control: (base, state) => ({
+                                    ...base,
+                                    minHeight: '48px',
+                                    background: '#121212',
+                                    borderRadius: '0.5rem',
+                                    borderWidth: '1px',
+                                    borderColor: '#242424',
+                                    boxShadow: 'none',
+                                    "&:hover": {
+                                        borderColor: '#242424'
+                                    }
+                                }),
+                                menu: (base) => ({
+                                    ...base,
+                                    background: '#121212',
+                                    borderRadius: '0.5rem',
+                                    marginTop: 0,
+                                    zIndex: 100,
+                                }),
+                                option: (base, { isFocused }) => ({
+                                    ...base,
+                                    background: isFocused ? '#242424' : undefined,
+                                    color: 'white'
+                                }),
+                                singleValue: (base) => ({
+                                    ...base,
+                                    color: 'white',
+                                }),
+                                clearIndicator: (base) => ({
+                                    ...base,
+                                    color: 'white'
+                                }),
+                                dropdownIndicator: (base, state) => ({
+                                    ...base,
+                                    color: '#666666',
+                                }),
+                                input: (base) => ({
+                                    ...base,
+                                    color: 'white'
+                                }),
+                            }}
+                            components={{IndicatorSeparator: () => null}}
+                        />
+                    )}
+                </>
             )}
             {error && (
                 <span className="mt-2 text-sm text-red-500">{error}</span>
