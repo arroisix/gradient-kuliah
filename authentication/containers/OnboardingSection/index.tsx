@@ -4,7 +4,7 @@ import { ONBOARDING_STEP } from 'authentication/constants';
 import { OnboardingStepper } from 'authentication/components/OnboardingStepper';
 import { OnboardingSuccess } from './OnboardingSuccess';
 import { useSelector } from 'react-redux';
-import { getIsProfileComplete, getCurrentUser } from 'authentication/redux/selectors/userSelector';
+import { getIsProfileComplete } from 'authentication/redux/selectors/userSelector';
 
 export const OnboardingSection = (): JSX.Element => {
     const isProfileComplete = useSelector(getIsProfileComplete);

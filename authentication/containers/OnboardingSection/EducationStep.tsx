@@ -102,7 +102,6 @@ export const EducationStep = (): JSX.Element => {
                     values,
                     errors,
                     touched,
-                    handleBlur,
                     handleSubmit,
                     setFieldValue,
                 }) => {
@@ -127,7 +126,6 @@ export const EducationStep = (): JSX.Element => {
                                     isAsync
                                     loadOption={loadInstitutionOption}
                                     isCreatable
-                                    handleCreate={getHandleCreate(setInstitutionOption)}
                                     name="institution"
                                     option={institutionOption}
                                     label={
@@ -152,7 +150,6 @@ export const EducationStep = (): JSX.Element => {
                                         isAsync
                                         loadOption={loadMajorOption}
                                         isCreatable
-                                        handleCreate={getHandleCreate(setMajorOption)}
                                         label="Jurusan"
                                         name="major"
                                         option={majorOption}

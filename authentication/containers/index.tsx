@@ -12,10 +12,9 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 export const AuthenticationContainer: React.FC = () => {
-    const { pathname, push } = useRouter();
+    const { pathname } = useRouter();
     const AuthSection = AUTH_SECTION[pathname];
     const { googleLogin } = useSocialLogin();
-    const [logout] = useLogoutMutation();
     const user = useSelector(getCurrentUser);
     const { setLastLogin } = useLastLogin();
 

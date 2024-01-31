@@ -13,7 +13,6 @@ interface SelectProps {
     placeholder?: string;
     // For creatable select
     isCreatable?: boolean;
-    handleCreate?: (value: any) => void;
     // For async select
     isAsync?: boolean;
     loadOption?: (res: any) => void;
@@ -27,7 +26,6 @@ const Select: React.FC<SelectProps> = ({
     error,
     placeholder,
     isCreatable,
-    handleCreate,
     isAsync,
     loadOption,
 }) => {
