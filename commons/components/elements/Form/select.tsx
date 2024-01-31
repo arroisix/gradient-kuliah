@@ -4,7 +4,7 @@ import AsyncCreatableSelect from 'react-select/async-creatable';
 import { useState } from 'react';
 
 interface SelectProps {
-    option: any;
+    option: Option[];
     label?: string;
     onChange?: (res: any) => void;
     onBlur?: (res: any) => void;
