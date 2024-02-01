@@ -153,5 +153,6 @@ export const {
     useGetConnectedDevicesQuery,
     useGetDeviceTypesQuery,
     useGetCurrentConnectedDeviceQuery,
-    useGetStudentRecommendationQuery
+    useGetStudentRecommendationQuery,
+    useLazyGetStudentRecommendationQuery
 } = authApi;

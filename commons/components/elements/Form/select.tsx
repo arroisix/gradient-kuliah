@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { default as ReactSelect } from 'react-select';
+import { GroupBase, default as ReactSelect } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import AsyncCreatableSelect from 'react-select/async-creatable';
-import AsyncSelect from 'react-select/async';
+import AsyncSelect, { AsyncProps } from 'react-select/async';
 
-interface SelectProps {
+export interface SelectProps {
     option: Option[];
     label?: string;
     onChange?: (res: any) => void;
@@ -16,7 +16,7 @@ interface SelectProps {
     isCreatable?: boolean;
     // For async select
     isAsync?: boolean;
-    loadOption?: (res: any) => void;
+    loadOption?: AsyncProps<Option, false, GroupBase<Option>>['loadOptions'];
 }
 
 const Select: React.FC<SelectProps> = ({
@@ -36,16 +36,17 @@ const Select: React.FC<SelectProps> = ({
     useEffect(() => {
         if (initialValue) {
             if (!isAsync) {
-                const matchingOption = option.find(item => item.value === initialValue);
+                const matchingOption = option.find(
+                    (item) => item.value === initialValue
+                );
                 if (matchingOption) {
                     setChosen(matchingOption);
                 }
-            }
-            else {
+            } else {
                 setChosen({
                     value: initialValue,
-                    label: initialValue,
-                })
+                    label: initialValue
+                });
             }
         }
     }, [initialValue, option]);
@@ -55,12 +56,14 @@ const Select: React.FC<SelectProps> = ({
         setChosen(val);
     };
 
-    const SelectComponent = (
-        isCreatable && isAsync ? AsyncCreatableSelect :
-        isCreatable ? CreatableSelect :
-        isAsync ? AsyncSelect :
-        ReactSelect
-    );
+    const SelectComponent =
+        isCreatable && isAsync
+            ? AsyncCreatableSelect
+            : isCreatable
+            ? CreatableSelect
+            : isAsync
+            ? AsyncSelect
+            : ReactSelect;
 
     return (
         <div className="flex flex-col w-full gap-1 font-body">
@@ -95,9 +98,7 @@ const Select: React.FC<SelectProps> = ({
                     }),
                     option: (base, { isFocused }) => ({
                         ...base,
-                        background: isFocused
-                            ? '#242424'
-                            : undefined,
+                        background: isFocused ? '#242424' : undefined,
                         color: 'white'
                     }),
                     singleValue: (base) => ({
