@@ -42,8 +42,8 @@ export const EducationStep = (): JSX.Element => {
     useEffect(() => {
         tracker?.genericTrack('Visit Onboarding Education Step');
 
-        loadInstitutionOption('');
-        loadMajorOption('');
+        //loadInstitutionOption('');
+        //loadMajorOption('');
 
         return () => {
             setInstitutionOption([]);
