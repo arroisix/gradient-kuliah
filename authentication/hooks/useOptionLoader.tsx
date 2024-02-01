@@ -9,11 +9,14 @@ export const useOptionLoader = (
     const [fetchRecommendation] = useLazyGetStudentRecommendationQuery();
 
     const loadOptions: SelectProps['loadOption'] = (input, callback) => {
-        fetchRecommendation({
-            fieldName,
-            input
-        }).then((query) => {
-            let options =
+        fetchRecommendation(
+            {
+                fieldName,
+                input
+            },
+            true
+        ).then((query) => {
+            const options =
                 query.data?.map((item) => ({
                     value: item.name,
                     label: item.name
