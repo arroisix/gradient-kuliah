@@ -121,10 +121,12 @@ const CourseDetailBox = (): JSX.Element => {
                                 ? boxHeight - headerBoxHeight
                                 : '100%'
                         }}>
-                        <CourseDetailTabs
-                            navigation={navigation}
-                            setNavigation={setNavigation}
-                        />
+                        {!isLoadingLearning && 
+                            <CourseDetailTabs
+                                navigation={navigation}
+                                setNavigation={setNavigation}
+                            />
+                        }
 
                         <CodeEditorProvider>
                             <div

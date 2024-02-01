@@ -22,8 +22,10 @@ import { useGetSubchapterDetailQuery } from 'courses/redux/api/privateCourseApi'
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 
 const VideoLearnContainer = (): JSX.Element => {
+    const { isDesktopBreakpoints } = useWindowBreakpoints();
     const router = useRouter();
     const { sub, id } = router.query;
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -138,9 +140,9 @@ const VideoLearnContainer = (): JSX.Element => {
                         </h2>
                     </div>
                 </div>
-                {!isLoading ? (
+                {!isLoading && isDesktopBreakpoints? (
                     <div
-                        className="hidden col-span-1 lg:block"
+                        className="col-span-1"
                         style={{ maxHeight: videoHeight }}>
                         <CourseDetailBox />
                     </div>
