@@ -2,10 +2,14 @@ import { PythonProvider } from 'library/pyodide/providers/PythonProvider';
 import React, { useEffect, useRef } from 'react';
 import Controls from './Controls';
 import { useCodeEditor } from 'courses/hooks/useCodeEditor';
+import CtaOverlay from './CtaOverlay';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
 const CodeEditor = (): JSX.Element => {
     const editor = useRef<HTMLDivElement | null>(null);
     const { setContainer, isShowOutput, output } = useCodeEditor();
+    const isAuthenticated = useSelector(getIsAuthenticated);
 
     useEffect(() => {
         if (editor.current) {
@@ -15,7 +19,7 @@ const CodeEditor = (): JSX.Element => {
 
     return (
         <PythonProvider>
-            <div className="flex flex-col">
+            <div className="flex flex-col relative">
                 <div ref={editor} />
                 <Controls />
                 {isShowOutput && (
@@ -24,6 +28,8 @@ const CodeEditor = (): JSX.Element => {
                         <code className="text-error">{output.stderr}</code>
                     </pre>
                 )}
+                
+                {!isAuthenticated && <CtaOverlay />}
             </div>
         </PythonProvider>
     );
