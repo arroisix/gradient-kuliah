@@ -39,10 +39,14 @@ export const ReferenceStep = (): JSX.Element => {
                     validate={(values) => {
                         const errors: { [key: string]: string } = {};
 
-                        if (!values.join_reasoning || values.join_reasoning === '')
-                            errors.join_reasoning = 'Alasan bergabung tidak boleh kosong';
-    
-                        console.log(errors)
+                        if (
+                            !values.join_reasoning ||
+                            values.join_reasoning === ''
+                        )
+                            errors.join_reasoning =
+                                'Alasan bergabung tidak boleh kosong';
+
+                        console.log(errors);
                         return errors;
                     }}>
                     {({
@@ -53,7 +57,7 @@ export const ReferenceStep = (): JSX.Element => {
                         handleBlur,
                         handleSubmit,
                         isSubmitting,
-                        isValid: isFormValid,
+                        isValid: isFormValid
                     }) => (
                         <form onSubmit={handleSubmit}>
                             <div className="flex flex-col gap-4">
@@ -88,14 +92,16 @@ export const ReferenceStep = (): JSX.Element => {
                             </div>
                             <div className="fixed left-0 md:left-auto bottom-16 px-[16px] md:px-0 w-full md:w-[400px]">
                                 <Button
-                                    disabled={(
+                                    disabled={
                                         !values.register_reference_id ||
-                                        !values.join_reasoning || values.join_reasoning === ''
-                                    ) || !isFormValid || isSubmitting}
+                                        !values.join_reasoning ||
+                                        values.join_reasoning === '' ||
+                                        !isFormValid ||
+                                        isSubmitting
+                                    }
                                     variant="custom"
                                     className="w-full mt-4 text-white bg-accent-purple"
-                                    type="submit"
-                                >
+                                    type="submit">
                                     {isSubmitting ? 'Menyimpan...' : 'Simpan'}
                                 </Button>
                             </div>

@@ -52,7 +52,7 @@ export const PersonalDataStep = (): JSX.Element => {
                     setStep(2);
                 }}
                 validate={(values) => {
-                    console.log(values)
+                    console.log(values);
                     const errors: { [key: string]: string } = {};
 
                     if (!values.gender)
@@ -134,11 +134,13 @@ export const PersonalDataStep = (): JSX.Element => {
                         </div>
                         <div className="fixed left-0 md:left-auto bottom-16 px-[16px] md:px-0 w-full md:w-[400px]">
                             <Button
-                                disabled={(
+                                disabled={
                                     !values.birthdate ||
                                     !values.gender ||
-                                    !values.phone_number || values.phone_number === ''
-                                ) || !isFormValid}
+                                    !values.phone_number ||
+                                    values.phone_number === '' ||
+                                    !isFormValid
+                                }
                                 variant="custom"
                                 className="w-full mt-4 text-white bg-accent-purple"
                                 type="submit">

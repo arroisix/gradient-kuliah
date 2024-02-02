@@ -92,13 +92,13 @@ export const EducationStep = (): JSX.Element => {
 
                     return errors;
                 }}>
-                {({ 
-                    values, 
-                    errors, 
-                    touched, 
-                    handleSubmit, 
+                {({
+                    values,
+                    errors,
+                    touched,
+                    handleSubmit,
                     setFieldValue,
-                    isValid: isFormValid,
+                    isValid: isFormValid
                 }) => {
                     return (
                         <form onSubmit={handleSubmit}>
@@ -133,7 +133,7 @@ export const EducationStep = (): JSX.Element => {
                                     initialValue={values.institution}
                                     label={
                                         values.education_level === 'SMP' ||
-                                        values.education_level === 'SMA' || 
+                                        values.education_level === 'SMA' ||
                                         values.education_level === 'SMK'
                                             ? 'Asal Sekolah'
                                             : 'Asal Universitas/Institusi'
@@ -213,13 +213,15 @@ export const EducationStep = (): JSX.Element => {
                             </div>
                             <div className="fixed left-0 md:left-auto bottom-16 px-[16px] md:px-0 w-full md:w-[400px]">
                                 <Button
-                                    disabled={(
+                                    disabled={
                                         !values.education_level ||
                                         !values.institution ||
                                         !values.major ||
                                         !values.profession ||
-                                        (values.profession === 'employed' && !values.profession_field)
-                                    ) || !isFormValid}
+                                        (values.profession === 'employed' &&
+                                            !values.profession_field) ||
+                                        !isFormValid
+                                    }
                                     variant="custom"
                                     className="w-full mt-4 text-white bg-accent-purple"
                                     type="submit">
