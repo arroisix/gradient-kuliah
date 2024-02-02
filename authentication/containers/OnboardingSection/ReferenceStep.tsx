@@ -35,6 +35,15 @@ export const ReferenceStep = (): JSX.Element => {
 
                         await updateUser({ ...formData, ...values });
                         setSubmitting(false);
+                    }}
+                    validate={(values) => {
+                        const errors: { [key: string]: string } = {};
+
+                        if (!values.join_reasoning || values.join_reasoning === '')
+                            errors.join_reasoning = 'Alasan bergabung tidak boleh kosong';
+    
+                        console.log(errors)
+                        return errors;
                     }}>
                     {({
                         values,
@@ -43,7 +52,8 @@ export const ReferenceStep = (): JSX.Element => {
                         handleChange,
                         handleBlur,
                         handleSubmit,
-                        isSubmitting
+                        isSubmitting,
+                        isValid: isFormValid,
                     }) => (
                         <form onSubmit={handleSubmit}>
                             <div className="flex flex-col gap-4">
@@ -78,10 +88,14 @@ export const ReferenceStep = (): JSX.Element => {
                             </div>
                             <div className="fixed left-0 md:left-auto bottom-16 px-[16px] md:px-0 w-full md:w-[400px]">
                                 <Button
+                                    disabled={(
+                                        !values.register_reference_id ||
+                                        !values.join_reasoning || values.join_reasoning === ''
+                                    ) || !isFormValid || isSubmitting}
                                     variant="custom"
                                     className="w-full mt-4 text-white bg-accent-purple"
                                     type="submit"
-                                    disabled={isSubmitting}>
+                                >
                                     {isSubmitting ? 'Menyimpan...' : 'Simpan'}
                                 </Button>
                             </div>

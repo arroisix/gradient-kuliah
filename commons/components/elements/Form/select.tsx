@@ -12,6 +12,7 @@ export interface SelectProps {
     error?: string;
     placeholder?: string;
     initialValue?: string;
+    required?: boolean;
     // For creatable select
     isCreatable?: boolean;
     // For async select
@@ -27,6 +28,7 @@ const Select: React.FC<SelectProps> = ({
     error,
     placeholder,
     initialValue,
+    required,
     isCreatable,
     isAsync,
     loadOption
@@ -83,10 +85,10 @@ const Select: React.FC<SelectProps> = ({
                         background: '#121212',
                         borderRadius: '0.5rem',
                         borderWidth: '1px',
-                        borderColor: '#242424',
+                        borderColor: error ? '#ef4444' : '#242424',
                         boxShadow: 'none',
                         '&:hover': {
-                            borderColor: '#242424'
+                            borderColor: error ? '#ef4444' : '#242424'
                         }
                     }),
                     menu: (base) => ({
