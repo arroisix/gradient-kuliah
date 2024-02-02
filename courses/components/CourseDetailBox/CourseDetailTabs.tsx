@@ -1,3 +1,4 @@
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { cn } from 'commons/utils';
 import { useLearning } from 'courses/contexts/LearningProvider';
 import { useSearchSubchapter } from 'courses/hooks/useSearchSubchapter';
@@ -19,6 +20,7 @@ const CourseDetailTabs = ({
     navigation,
     setNavigation
 }: CourseDetailTabsProps): JSX.Element => {
+    const { checkCustomBreakpoints } = useWindowBreakpoints();
     const tracker = useTracker();
     const router = useRouter();
     const { id } = router.query;
@@ -56,8 +58,8 @@ const CourseDetailTabs = ({
                 element: '[data-tour="code-editor-tab"]',
                 popover: {
                     description: 'Coba buat program Python di sini!',
-                    side: 'bottom',
-                    align: 'center'
+                    side: checkCustomBreakpoints(395)? 'bottom':'bottom',
+                    align: checkCustomBreakpoints(395)? 'start' : 'start'
                 }
             }
         ],
