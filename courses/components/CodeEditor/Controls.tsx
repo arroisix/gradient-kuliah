@@ -1,7 +1,7 @@
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { cn } from 'commons/utils';
 import { useCodeEditor } from 'courses/hooks/useCodeEditor';
-import React from 'react';
+import React, { useRef } from 'react';
 import { BsPlayFill, BsStop } from 'react-icons/bs';
 import { MdCloudDone } from 'react-icons/md';
 import { SlRefresh } from 'react-icons/sl';
@@ -13,7 +13,8 @@ const SYMBOLS = ['(', ')', ':', '"', "'", '=', '<', '>'];
 export default function Controls(): JSX.Element {
     const { checkCustomBreakpoints } = useWindowBreakpoints();
     const { isLoading, isRunning, isAutoSaving, controls } = useCodeEditor();
-
+    const symbolButtonRef = useRef<HTMLButtonElement>(null)
+    
     if (isLoading)
         return (
             <div className="flex items-center gap-2 px-4 py-3 overflow-x-auto bg-neutral-900 no-scrollbar">
@@ -41,7 +42,11 @@ export default function Controls(): JSX.Element {
             <div className="mx-1 divider divider-horizontal"></div>
             <div className="flex flex-1 w-full gap-2 overflow-x-auto no-scrollbar">
                 <button
-                    onClick={() => controls.insertCharacter('\t')}
+                    ref={symbolButtonRef}
+                    onClick={() => {
+                        controls.insertCharacter('\t');
+                        if (symbolButtonRef.current) symbolButtonRef.current.focus();
+                    }}
                     title="Insert tab"
                     className="font-medium text-white btn btn-sm bg-neutral-700 hover:bg-neutral-500">
                     tab
