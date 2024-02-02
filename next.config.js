@@ -22,7 +22,8 @@ module.exports = {
         return [
             {
                 source: '/beasiswa',
-                destination: 'https://forms.gle/GriFeGSMkRwG7djn6',
+                destination:
+                    'https://docs.google.com/forms/d/e/1FAIpQLSd5DjQIJMwwpxhIf8O4-auzAWyyBhFmL685dksUNxT7JDDFQA/viewform?pli=1',
                 permanent: true,
                 basePath: false
             }
