@@ -12,7 +12,6 @@ export interface SelectProps {
     error?: string;
     placeholder?: string;
     initialValue?: string;
-    required?: boolean;
     // For creatable select
     isCreatable?: boolean;
     // For async select
@@ -28,7 +27,6 @@ const Select: React.FC<SelectProps> = ({
     error,
     placeholder,
     initialValue,
-    required,
     isCreatable,
     isAsync,
     loadOption
