@@ -1,7 +1,12 @@
 import GradientIcon from "commons/components/GradientIcon";
 import Button from "commons/components/elements/Button";
+import { AUTHENTICATION_ROUTE } from "commons/constants";
+import { queryParamBuilder } from "commons/utils";
+import { useRouter } from "next/router";
 
-const CtaOverlay = (): JSX.Element => {
+const CTAOverlay = (): JSX.Element => {
+    const router = useRouter();
+    
     return (
         <div aria-hidden={true} className="absolute w-full h-full bg-[#000000]/[0.75] px-7">
             <div className="w-full bg-[#5F2BCE] mt-14 rounded-lg px-6 py-5">
@@ -13,7 +18,9 @@ const CtaOverlay = (): JSX.Element => {
                     <Button 
                         variant='custom'
                         className="text-white bg-black text-center"
-                        href="/"
+                        href={`${AUTHENTICATION_ROUTE}?${queryParamBuilder({
+                            redirect: router.asPath + '?ask=true'
+                        })}`}
                     >
                         Buat Program Gratis
                     </Button>
@@ -23,4 +30,4 @@ const CtaOverlay = (): JSX.Element => {
     );
 };
 
-export default CtaOverlay;
+export default CTAOverlay;
