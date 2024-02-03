@@ -106,7 +106,7 @@ export const CodeEditorProvider = ({
         trackUserCodingProgress(autosavedCode);
     }, [autosavedCode]);
 
-    const { view, setContainer } = useCodeMirror({
+    const { view, setContainer, container } = useCodeMirror({
         value: code,
         onChange: setCode,
         theme: THEME,
@@ -160,6 +160,7 @@ export const CodeEditorProvider = ({
         <CodeEditorContext.Provider
             value={{
                 setContainer,
+                container,
                 controls: {
                     run,
                     stop,

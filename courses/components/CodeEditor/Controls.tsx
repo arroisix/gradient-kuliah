@@ -12,7 +12,7 @@ const SYMBOLS = ['(', ')', ':', '"', "'", '=', '<', '>'];
 
 export default function Controls(): JSX.Element {
     const { checkCustomBreakpoints } = useWindowBreakpoints();
-    const { isLoading, isRunning, isAutoSaving, controls } = useCodeEditor();
+    const { isLoading, isRunning, isAutoSaving, controls, container } = useCodeEditor();
     const symbolButtonRef = useRef<HTMLButtonElement>(null)
     
     if (isLoading)
@@ -45,6 +45,8 @@ export default function Controls(): JSX.Element {
                     ref={symbolButtonRef}
                     onClick={() => {
                         controls.insertCharacter('\t');
+                        
+                        if (container) container.blur();
                         if (symbolButtonRef.current) symbolButtonRef.current.focus();
                     }}
                     title="Insert tab"
@@ -55,7 +57,12 @@ export default function Controls(): JSX.Element {
                     <button
                         key={`symbol-${symbol}`}
                         title={`Insert ${symbol}`}
-                        onClick={() => controls.insertCharacter(symbol)}
+                        onClick={() => {
+                            controls.insertCharacter(symbol);
+
+                            if (container) container.blur();
+                            if (symbolButtonRef.current) symbolButtonRef.current.focus();
+                        }}
                         className="font-medium text-white btn btn-sm bg-neutral-700 hover:bg-neutral-500 w-7">
                         {symbol}
                     </button>
