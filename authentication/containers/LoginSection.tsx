@@ -24,22 +24,20 @@ export const LoginSection: React.FC = () => {
     const tracker = useTracker();
 
     const { googleLogin } = useSocialLogin();
-    const gLogin =
-        typeof window !== 'undefined' &&
-        useGoogleLogin({
-            onSuccess: async (tokenResponse) => {
-                const res = await googleLogin(tokenResponse.access_token);
-                if ('data' in res) {
-                    setLastLogin({
-                        email: res.data.user.email,
-                        method: 'google'
-                    });
-                }
-            },
-            onError: () => {
-                toast.error('Gagal login, coba beberapa saat lagi');
+    const gLogin = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
+            const res = await googleLogin(tokenResponse.access_token);
+            if ('data' in res) {
+                setLastLogin({
+                    email: res.data.user.email,
+                    method: 'google'
+                });
             }
-        });
+        },
+        onError: () => {
+            toast.error('Gagal login, coba beberapa saat lagi');
+        }
+    });
 
     return (
         <Formik

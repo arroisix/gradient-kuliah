@@ -84,7 +84,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
                 /* @ts-ignore */
                 persistor={store.__persistor}
                 loading={
-                    <GoogleOAuthProvider clientId="3688986116-g7dlt8prm1gimh870k4h0trds8njq4rj.apps.googleusercontent.com">
+                    <GoogleOAuthProvider clientId="734268158155-omc5qdjjl5kdrbute446h18i5rvjauiv.apps.googleusercontent.com">
                         <ThemeContextProvider>
                             <Component {...pageProps} />
                         </ThemeContextProvider>
@@ -93,7 +93,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
                 <GrowthBookProvider growthbook={growthbook}>
                     <MixpanelProvider
                         pageComponentName={getDisplayName(Component)}>
-                        <GoogleOAuthProvider clientId="3688986116-g7dlt8prm1gimh870k4h0trds8njq4rj.apps.googleusercontent.com">
+                        <GoogleOAuthProvider clientId="734268158155-omc5qdjjl5kdrbute446h18i5rvjauiv.apps.googleusercontent.com">
                             <ThemeContextProvider>
                                 <AuthProvider>
                                     <Component {...pageProps} />
