@@ -46,8 +46,8 @@ export default function Controls(): JSX.Element {
                     onClick={() => {
                         controls.insertCharacter('\t');
                         
-                        if (container) container.blur();
-                        if (symbolButtonRef.current) symbolButtonRef.current.focus();
+                        if (container) console.log(container.focus());
+                        if (symbolButtonRef.current) console.log(symbolButtonRef.current.blur());
                     }}
                     title="Insert tab"
                     className="font-medium text-white btn btn-sm bg-neutral-700 hover:bg-neutral-500">
