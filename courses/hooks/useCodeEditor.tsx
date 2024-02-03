@@ -154,6 +154,8 @@ export const CodeEditorProvider = ({
             },
             selection: { anchor: range?.from + 1 }
         });
+        
+        if (container) container.focus()
     };
 
     return (
