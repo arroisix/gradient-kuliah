@@ -8,19 +8,24 @@ import CTAOverlay from './CtaOverlay';
 
 const CodeEditor = (): JSX.Element => {
     const editor = useRef<HTMLDivElement | null>(null);
-    const { setContainer, isShowOutput, output } = useCodeEditor();
+    const { setContainer, isShowOutput, output, container } = useCodeEditor();
     const isAuthenticated = useSelector(getIsAuthenticated);
 
     useEffect(() => {
         if (editor.current) {
             setContainer(editor.current);
+            editor.current.focus()
         }
     }, [editor.current]);
+
+    const focusedEditor = () => {
+        if (container) container.focus()
+    }
 
     return (
         <PythonProvider>
             <div className="flex flex-col relative">
-                <div ref={editor} />
+                <div ref={editor} onBlur={focusedEditor} />
                 <Controls />
                 {isShowOutput && (
                     <pre className="w-full p-4 text-left whitespace-pre text-wrap overflow-x-auto">
