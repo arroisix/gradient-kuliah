@@ -14,12 +14,13 @@ const CodeEditor = (): JSX.Element => {
     useEffect(() => {
         if (editor.current) {
             setContainer(editor.current);
-            editor.current.focus()
+            editor.current.focus();
         }
     }, [editor.current]);
 
     const focusedEditor = () => {
-        if (container) container.focus()
+        if (container) container.focus();
+        if (editor.current) editor.current.focus();
     }
 
     return (

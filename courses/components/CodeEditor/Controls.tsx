@@ -57,12 +57,7 @@ export default function Controls(): JSX.Element {
                     <button
                         key={`symbol-${symbol}`}
                         title={`Insert ${symbol}`}
-                        onClick={() => {
-                            controls.insertCharacter(symbol);
-
-                            if (container) container.blur();
-                            if (symbolButtonRef.current) symbolButtonRef.current.focus();
-                        }}
+                        onClick={() => controls.insertCharacter(symbol)}
                         className="font-medium text-white btn btn-sm bg-neutral-700 hover:bg-neutral-500 w-7">
                         {symbol}
                     </button>
