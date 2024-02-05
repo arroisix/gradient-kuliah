@@ -13,7 +13,7 @@ const SYMBOLS = ['(', ')', ':', '"', "'", '=', '<', '>'];
 export default function Controls(): JSX.Element {
     const { checkCustomBreakpoints } = useWindowBreakpoints();
     const { isLoading, isRunning, isAutoSaving, controls } = useCodeEditor();
-    
+
     if (isLoading)
         return (
             <div className="flex items-center gap-2 px-4 py-3 overflow-x-auto bg-neutral-900 no-scrollbar">
@@ -40,15 +40,13 @@ export default function Controls(): JSX.Element {
             </button>
             <div className="mx-1 divider divider-horizontal"></div>
             <div className="flex flex-1 w-full gap-2 overflow-x-auto no-scrollbar">
-                <CodeEditorSymbolButton
-                    symbol={`\t`}
-                    text='tab'
-                />
+                <CodeEditorSymbolButton symbol={`\t`} text="tab" />
                 {SYMBOLS.map((symbol) => (
                     <CodeEditorSymbolButton
+                        key={`symbol-${symbol}`}
                         symbol={symbol}
                         text={symbol}
-                        className='w-7'
+                        className="w-7"
                     />
                 ))}
             </div>
@@ -69,10 +67,10 @@ export default function Controls(): JSX.Element {
 }
 
 interface CodeEditorSymbolButtonProps {
-    symbol: string
-    text: string
-    className?: string
-};
+    symbol: string;
+    text: string;
+    className?: string;
+}
 
 const CodeEditorSymbolButton = ({
     symbol,
@@ -92,7 +90,6 @@ const CodeEditorSymbolButton = ({
     return (
         <button
             ref={symbolButtonRef}
-            key={`symbol-${text}`}
             title={`Insert ${text}`}
             onClick={handleSymbolButton}
             className={`font-medium text-white btn btn-sm bg-neutral-700 hover:bg-neutral-500 ${className}`}>

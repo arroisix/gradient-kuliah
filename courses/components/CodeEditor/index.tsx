@@ -21,7 +21,7 @@ const CodeEditor = (): JSX.Element => {
     const focusedEditor = () => {
         if (container) container.focus();
         if (editor.current) editor.current.focus();
-    }
+    };
 
     return (
         <PythonProvider>
@@ -34,7 +34,7 @@ const CodeEditor = (): JSX.Element => {
                         <code className="text-error">{output.stderr}</code>
                     </pre>
                 )}
-                
+
                 {!isAuthenticated && <CTAOverlay />}
             </div>
         </PythonProvider>

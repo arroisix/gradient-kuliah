@@ -73,8 +73,10 @@ export const CodeEditorProvider = ({
     const { data: codeEditorTemplate } = isAuthenticated
         ? privateCodeEditorTemplate
         : publicCodeEditorTemplate;
-    
-    const this_video_watch_progress = watch_progress?.find((subchapterProgress) => subchapterProgress.video.video.id === video?.id)
+
+    const this_video_watch_progress = watch_progress?.find(
+        (subchapterProgress) => subchapterProgress.video.video.id === video?.id
+    );
     const skipGetCodingProgress =
         !codeEditorTemplate ||
         !video?.has_code_editor ||
@@ -154,8 +156,8 @@ export const CodeEditorProvider = ({
             },
             selection: { anchor: range?.from + 1 }
         });
-        
-        if (container) container.focus()
+
+        if (container) container.focus();
     };
 
     return (

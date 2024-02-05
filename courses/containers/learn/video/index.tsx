@@ -140,7 +140,7 @@ const VideoLearnContainer = (): JSX.Element => {
                         </h2>
                     </div>
                 </div>
-                {!isLoading && isDesktopBreakpoints? (
+                {!isLoading && isDesktopBreakpoints ? (
                     <div
                         className="col-span-1"
                         style={{ maxHeight: videoHeight }}>
