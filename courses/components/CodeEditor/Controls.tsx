@@ -12,8 +12,7 @@ const SYMBOLS = ['(', ')', ':', '"', "'", '=', '<', '>'];
 
 export default function Controls(): JSX.Element {
     const { checkCustomBreakpoints } = useWindowBreakpoints();
-    const { isLoading, isRunning, isAutoSaving, controls, container } = useCodeEditor();
-    const symbolButtonRef = useRef<HTMLButtonElement>(null)
+    const { isLoading, isRunning, isAutoSaving, controls } = useCodeEditor();
     
     if (isLoading)
         return (
@@ -41,26 +40,16 @@ export default function Controls(): JSX.Element {
             </button>
             <div className="mx-1 divider divider-horizontal"></div>
             <div className="flex flex-1 w-full gap-2 overflow-x-auto no-scrollbar">
-                <button
-                    ref={symbolButtonRef}
-                    onClick={() => {
-                        controls.insertCharacter('\t');
-                        
-                        if (container) container.focus();
-                        if (symbolButtonRef.current) symbolButtonRef.current.blur();
-                    }}
-                    title="Insert tab"
-                    className="font-medium text-white btn btn-sm bg-neutral-700 hover:bg-neutral-500">
-                    tab
-                </button>
+                <CodeEditorSymbolButton
+                    symbol={`\t`}
+                    text='tab'
+                />
                 {SYMBOLS.map((symbol) => (
-                    <button
-                        key={`symbol-${symbol}`}
-                        title={`Insert ${symbol}`}
-                        onClick={() => controls.insertCharacter(symbol)}
-                        className="font-medium text-white btn btn-sm bg-neutral-700 hover:bg-neutral-500 w-7">
-                        {symbol}
-                    </button>
+                    <CodeEditorSymbolButton
+                        symbol={symbol}
+                        text={symbol}
+                        className='w-7'
+                    />
                 ))}
             </div>
             <div className="mx-1 divider divider-horizontal"></div>
@@ -78,3 +67,36 @@ export default function Controls(): JSX.Element {
         </div>
     );
 }
+
+interface CodeEditorSymbolButtonProps {
+    symbol: string
+    text: string
+    className?: string
+};
+
+const CodeEditorSymbolButton = ({
+    symbol,
+    text,
+    className
+}: CodeEditorSymbolButtonProps): JSX.Element => {
+    const { controls, container } = useCodeEditor();
+    const symbolButtonRef = useRef<HTMLButtonElement>(null);
+
+    const handleSymbolButton = () => {
+        controls.insertCharacter(symbol);
+
+        if (container) container.focus();
+        if (symbolButtonRef.current) symbolButtonRef.current.blur();
+    };
+
+    return (
+        <button
+            ref={symbolButtonRef}
+            key={`symbol-${text}`}
+            title={`Insert ${text}`}
+            onClick={handleSymbolButton}
+            className={`font-medium text-white btn btn-sm bg-neutral-700 hover:bg-neutral-500 ${className}`}>
+            {text}
+        </button>
+    );
+};
