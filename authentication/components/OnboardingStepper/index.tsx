@@ -17,16 +17,17 @@ export const OnboardingStepper = (): JSX.Element => {
             {ONBOARDING_STEP.map((_, index) => (
                 <div
                     key={index}
-                    className="h-1"
+                    className="h-[4px]"
                     style={{
                         width: `${(1 / ONBOARDING_STEP.length) * 100}%`
                     }}>
                     <button
                         onClick={() => handleStepperClick(index)}
                         type="button"
-                        className={`h-1 rounded-2xl w-full ${
+                        className={`h-[4px] rounded-2xl w-full ${
                             step === index ? 'bg-[#333333]' : 'bg-[#1D1D1D]'
-                        }`}></button>
+                        }`}
+                    ></button>
                 </div>
             ))}
         </div>

@@ -92,7 +92,14 @@ export const EducationStep = (): JSX.Element => {
 
                     return errors;
                 }}>
-                {({ values, errors, touched, handleSubmit, setFieldValue }) => {
+                {({
+                    values,
+                    errors,
+                    touched,
+                    handleSubmit,
+                    setFieldValue,
+                    isValid: isFormValid
+                }) => {
                     return (
                         <form onSubmit={handleSubmit}>
                             <div className="flex flex-col gap-4">
@@ -104,7 +111,8 @@ export const EducationStep = (): JSX.Element => {
                                     label="Tingkat Pendidikan"
                                     name="educationLevel"
                                     option={EDUCATION_OPTIONS}
-                                    placeholder="Pilih pendidikan"
+                                    initialValue={values.education_level}
+                                    placeholder="Tuliskan pendidikan"
                                     error={
                                         touched.education_level &&
                                         errors.education_level
@@ -122,17 +130,20 @@ export const EducationStep = (): JSX.Element => {
                                     isCreatable
                                     name="institution"
                                     option={institutionOption}
+                                    initialValue={values.institution}
                                     label={
                                         values.education_level === 'SMP' ||
-                                        values.education_level === 'SMA'
+                                        values.education_level === 'SMA' ||
+                                        values.education_level === 'SMK'
                                             ? 'Asal Sekolah'
                                             : 'Asal Universitas/Institusi'
                                     }
                                     placeholder={
                                         values.education_level === 'SMP' ||
-                                        values.education_level === 'SMA'
-                                            ? 'Pilih asal sekolah'
-                                            : 'Pilih asal universitas/institusi'
+                                        values.education_level === 'SMA' ||
+                                        values.education_level === 'SMK'
+                                            ? 'Tuliskan asal sekolah'
+                                            : 'Tuliskan asal universitas/institusi'
                                     }
                                     error={
                                         touched.institution &&
@@ -153,7 +164,8 @@ export const EducationStep = (): JSX.Element => {
                                         label="Jurusan"
                                         name="major"
                                         option={majorOption}
-                                        placeholder="Pilih jurusan"
+                                        initialValue={values.major}
+                                        placeholder="Tuliskan jurusan"
                                         error={
                                             touched.major && errors.major
                                                 ? errors.major
@@ -169,7 +181,8 @@ export const EducationStep = (): JSX.Element => {
                                     label="Pekerjaan"
                                     name="profession"
                                     option={PROFESSION_OPTIONS}
-                                    placeholder="Pilih pekerjaan"
+                                    initialValue={values.profession}
+                                    placeholder="Tuliskan pekerjaan"
                                     error={
                                         touched.profession && errors.profession
                                             ? errors.profession
@@ -187,7 +200,8 @@ export const EducationStep = (): JSX.Element => {
                                         name="institution"
                                         option={professionFieldOption}
                                         label="Bidang Pekerjaan"
-                                        placeholder="Pilih bidang pekerjaan"
+                                        initialValue={values.profession_field}
+                                        placeholder="Tuliskan bidang pekerjaan"
                                         error={
                                             touched.profession_field &&
                                             errors.profession_field
@@ -197,8 +211,17 @@ export const EducationStep = (): JSX.Element => {
                                     />
                                 )}
                             </div>
-                            <div className="fixed left-0 md:left-auto bottom-16 px-[16px] md:px-0 w-full md:w-[400px]">
+                            <div className="fixed left-0 md:left-auto bottom-[52px] px-[16px] md:px-0 w-full md:w-[400px]">
                                 <Button
+                                    disabled={
+                                        !values.education_level ||
+                                        !values.institution ||
+                                        !values.major ||
+                                        !values.profession ||
+                                        (values.profession === 'employed' &&
+                                            !values.profession_field) ||
+                                        !isFormValid
+                                    }
                                     variant="custom"
                                     className="w-full mt-4 text-white bg-accent-purple"
                                     type="submit">

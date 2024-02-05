@@ -83,10 +83,10 @@ const Select: React.FC<SelectProps> = ({
                         background: '#121212',
                         borderRadius: '0.5rem',
                         borderWidth: '1px',
-                        borderColor: '#242424',
+                        borderColor: error ? '#ef4444' : '#242424',
                         boxShadow: 'none',
                         '&:hover': {
-                            borderColor: '#242424'
+                            borderColor: error ? '#ef4444' : '#242424'
                         }
                     }),
                     menu: (base) => ({

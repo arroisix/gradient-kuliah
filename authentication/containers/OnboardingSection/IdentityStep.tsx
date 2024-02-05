@@ -178,13 +178,13 @@ export const IdentityStep = (): JSX.Element => {
                                 }
                             />
                         </div>
-                        <div className="fixed left-0 md:left-auto bottom-16 px-[16px] md:px-0 w-full md:w-[400px]">
+                        <div className="fixed left-0 md:left-auto bottom-[52px] px-[16px] md:px-0 w-full md:w-[400px]">
                             <Button
                                 disabled={
-                                    (initialValues.full_name ===
-                                        values.full_name &&
-                                        initialValues.username ===
-                                            values.username) ||
+                                    !values.full_name ||
+                                    values.full_name === '' ||
+                                    !values.username ||
+                                    values.username === '' ||
                                     isTyping ||
                                     !isFormValid
                                 }
