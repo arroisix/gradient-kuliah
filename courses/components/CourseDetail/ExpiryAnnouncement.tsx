@@ -3,7 +3,6 @@ import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 
-
 const ExpiryAnnouncement = ({
     slug
 }: GradientBaseComponentWithSlug): JSX.Element => {

@@ -34,7 +34,7 @@ const useWindowBreakpoints = (): GradientWindowBreakpoints => {
     const mediumMobileBreakpints = 450;
     const smallMobileBreakpoints = 350;
 
-    const isDesktopBreakpoints = width > desktopBreakpoints;
+    const isDesktopBreakpoints = width >= desktopBreakpoints;
     const isTabletBreakpoints =
         width >= tabletBreakpoints && width < desktopBreakpoints;
     const isMobileBreakpoints = width < tabletBreakpoints;

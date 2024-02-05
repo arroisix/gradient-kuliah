@@ -66,7 +66,7 @@ const VideoLearnContainer = (): JSX.Element => {
     );
 
     return (
-        <section className="relative pt-[64px] md:pt-[30px] pb-16 min-h-[100vh] flex flex-col">
+        <section className="relative py-16 min-h-[100vh] flex flex-col">
             <div className="grid grid-cols-1 gap-5 lg:pl-6 lg:pr-[15px] lg:grid-cols-3 pb-1">
                 <div
                     className="w-full lg:col-span-2 h-max lg:pl-8"
