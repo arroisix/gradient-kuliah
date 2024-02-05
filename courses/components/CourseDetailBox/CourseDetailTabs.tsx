@@ -57,7 +57,7 @@ const CourseDetailTabs = ({
                 popover: {
                     description: 'Coba buat program Python di sini!',
                     side: 'bottom',
-                    align: 'center'
+                    align: 'start'
                 }
             }
         ],

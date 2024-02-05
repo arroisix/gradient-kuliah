@@ -22,8 +22,10 @@ import { useGetSubchapterDetailQuery } from 'courses/redux/api/privateCourseApi'
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 
 const VideoLearnContainer = (): JSX.Element => {
+    const { isDesktopBreakpoints } = useWindowBreakpoints();
     const router = useRouter();
     const { sub, id } = router.query;
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -64,8 +66,8 @@ const VideoLearnContainer = (): JSX.Element => {
     );
 
     return (
-        <section className="relative pt-[64px] md:pt-[97px] pb-16 min-h-[100vh] flex flex-col gap-8">
-            <div className="grid grid-cols-1 gap-5 lg:px-6 lg:grid-cols-3">
+        <section className="relative pt-[64px] md:pt-[30px] pb-16 min-h-[100vh] flex flex-col">
+            <div className="grid grid-cols-1 gap-5 lg:pl-6 lg:pr-[15px] lg:grid-cols-3 pb-1">
                 <div
                     className="w-full lg:col-span-2 h-max lg:pl-8"
                     ref={videoRef}>
@@ -138,9 +140,9 @@ const VideoLearnContainer = (): JSX.Element => {
                         </h2>
                     </div>
                 </div>
-                {!isLoading ? (
+                {!isLoading && isDesktopBreakpoints ? (
                     <div
-                        className="hidden col-span-1 lg:block"
+                        className="col-span-1"
                         style={{ maxHeight: videoHeight }}>
                         <CourseDetailBox />
                     </div>

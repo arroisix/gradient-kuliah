@@ -52,7 +52,7 @@ export const CodeEditorProvider = ({
     const [track, { isLoading: isAutoSaving }] =
         useTrackCodingProgressMutation();
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { video, latest_watch_video, is_subscribed } = useLearning();
+    const { video, is_subscribed, watch_progress } = useLearning();
     const {
         runPython,
         stdout,
@@ -74,22 +74,25 @@ export const CodeEditorProvider = ({
         ? privateCodeEditorTemplate
         : publicCodeEditorTemplate;
 
+    const this_video_watch_progress = watch_progress?.find(
+        (subchapterProgress) => subchapterProgress.video.video.id === video?.id
+    );
     const skipGetCodingProgress =
         !codeEditorTemplate ||
         !video?.has_code_editor ||
-        !latest_watch_video?.video.id ||
+        !this_video_watch_progress ||
         !sub ||
         !isAuthenticated;
     const { data: codingProgress } = useGetCodingProgressQuery(
         {
-            watch_progress_id: latest_watch_video?.video.id as string,
+            watch_progress_id: this_video_watch_progress?.video?.id as string,
             code_editor_id: codeEditorTemplate?.id as string
         },
         { skip: skipGetCodingProgress }
     );
 
     useEffect(() => {
-        if (!codingProgress && isAuthenticated) {
+        if (!codingProgress && isAuthenticated && this_video_watch_progress) {
             return;
         }
 
@@ -105,7 +108,7 @@ export const CodeEditorProvider = ({
         trackUserCodingProgress(autosavedCode);
     }, [autosavedCode]);
 
-    const { view, setContainer } = useCodeMirror({
+    const { view, setContainer, container } = useCodeMirror({
         value: code,
         onChange: setCode,
         theme: THEME,
@@ -153,12 +156,15 @@ export const CodeEditorProvider = ({
             },
             selection: { anchor: range?.from + 1 }
         });
+
+        if (container) container.focus();
     };
 
     return (
         <CodeEditorContext.Provider
             value={{
                 setContainer,
+                container,
                 controls: {
                     run,
                     stop,

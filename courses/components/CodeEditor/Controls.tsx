@@ -1,7 +1,7 @@
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { cn } from 'commons/utils';
 import { useCodeEditor } from 'courses/hooks/useCodeEditor';
-import React from 'react';
+import React, { useRef } from 'react';
 import { BsPlayFill, BsStop } from 'react-icons/bs';
 import { MdCloudDone } from 'react-icons/md';
 import { SlRefresh } from 'react-icons/sl';
@@ -40,20 +40,14 @@ export default function Controls(): JSX.Element {
             </button>
             <div className="mx-1 divider divider-horizontal"></div>
             <div className="flex flex-1 w-full gap-2 overflow-x-auto no-scrollbar">
-                <button
-                    onClick={() => controls.insertCharacter('\t')}
-                    title="Insert tab"
-                    className="font-medium text-white btn btn-sm bg-neutral-700 hover:bg-neutral-500">
-                    tab
-                </button>
+                <CodeEditorSymbolButton symbol={`\t`} text="tab" />
                 {SYMBOLS.map((symbol) => (
-                    <button
+                    <CodeEditorSymbolButton
                         key={`symbol-${symbol}`}
-                        title={`Insert ${symbol}`}
-                        onClick={() => controls.insertCharacter(symbol)}
-                        className="font-medium text-white btn btn-sm bg-neutral-700 hover:bg-neutral-500 w-7">
-                        {symbol}
-                    </button>
+                        symbol={symbol}
+                        text={symbol}
+                        className="w-7"
+                    />
                 ))}
             </div>
             <div className="mx-1 divider divider-horizontal"></div>
@@ -71,3 +65,35 @@ export default function Controls(): JSX.Element {
         </div>
     );
 }
+
+interface CodeEditorSymbolButtonProps {
+    symbol: string;
+    text: string;
+    className?: string;
+}
+
+const CodeEditorSymbolButton = ({
+    symbol,
+    text,
+    className
+}: CodeEditorSymbolButtonProps): JSX.Element => {
+    const { controls, container } = useCodeEditor();
+    const symbolButtonRef = useRef<HTMLButtonElement>(null);
+
+    const handleSymbolButton = () => {
+        controls.insertCharacter(symbol);
+
+        if (container) container.focus();
+        if (symbolButtonRef.current) symbolButtonRef.current.blur();
+    };
+
+    return (
+        <button
+            ref={symbolButtonRef}
+            title={`Insert ${text}`}
+            onClick={handleSymbolButton}
+            className={`font-medium text-white btn btn-sm bg-neutral-700 hover:bg-neutral-500 ${className}`}>
+            {text}
+        </button>
+    );
+};
