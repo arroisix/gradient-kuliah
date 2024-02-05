@@ -126,6 +126,12 @@ type Video = {
     ai_unique_id?: string;
     mux_playback_id?: string;
     token?: string;
+    has_code_editor?: boolean;
+};
+
+type CodeEditorTemplate = {
+    id: string;
+    code_template: string;
 };
 
 type CourseExercise = {
@@ -319,4 +325,19 @@ interface BookContent {
 
 interface BookResponse {
     book: BookContent;
+}
+
+type CourseDetailNavigation = 'VIDEO' | 'BOOK' | 'ON_SEARCH' | 'CODE EDITOR';
+interface UseSearchSubchapter {
+    searchKeyword: string;
+    searchResult?: SearchCourseResponse;
+    isSearch: boolean;
+    isSearchingLoading: boolean;
+    isSearchingFetching: boolean;
+    handleSearch: (params: {
+        type?: 'BOOK' | 'CHAPTER' | 'SUBCHAPTER';
+        page?: number;
+    }) => void;
+    setIsSearch: Dispatch<SetStateAction<boolean>>;
+    setSearchKeyword: Dispatch<SetStateAction<string>>;
 }

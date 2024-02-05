@@ -14,7 +14,9 @@ export const transactionApi = baseApi.injectEndpoints({
             query: (id: string) => ({
                 url: `${TRANSACTION_BASE_URL}transaction/${id}`
             }),
-            providesTags: [{ type: 'TRANSACTION', id: 'DETAIL' }]
+            providesTags: (transaction) => [
+                { type: 'TRANSACTION', id: transaction?.id }
+            ]
         })
     })
 });

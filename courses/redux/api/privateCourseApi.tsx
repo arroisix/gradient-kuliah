@@ -37,7 +37,14 @@ export const privateCourseApi = baseApi.injectEndpoints({
                 method: 'POST',
                 body: data
             })
-        })
+        }),
+        getPrivateCodeEditorTemplate: builder.query<CodeEditorTemplate, string>(
+            {
+                query: (id: string) => ({
+                    url: `${PRIVATE_COURSE_BASE_URL}code-editor/${id}/`
+                })
+            }
+        )
     })
 });
 
@@ -46,5 +53,6 @@ export const {
     useGetPrivateListCoursesQuery,
     useSubmitPopupQuizAnswerMutation,
     useGetSubchapterDetailQuery,
-    useGetCourseNotebookQuery
+    useGetCourseNotebookQuery,
+    useGetPrivateCodeEditorTemplateQuery
 } = privateCourseApi;

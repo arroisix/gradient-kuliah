@@ -230,7 +230,7 @@ function SelectAccountItem({
     emailOrText: string | null;
     method: string | null;
     icon?: () => JSX.Element;
-}) {
+}): JSX.Element {
     const methodMessage =
         method == null
             ? null

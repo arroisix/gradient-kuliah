@@ -52,6 +52,7 @@ export const PersonalDataStep = (): JSX.Element => {
                     setStep(2);
                 }}
                 validate={(values) => {
+                    console.log(values);
                     const errors: { [key: string]: string } = {};
 
                     if (!values.gender)
@@ -74,9 +75,10 @@ export const PersonalDataStep = (): JSX.Element => {
                     touched,
                     handleChange,
                     handleBlur,
-                    handleSubmit
+                    handleSubmit,
+                    isValid: isFormValid
                 }) => (
-                    <form onSubmit={handleSubmit} className="container">
+                    <form onSubmit={handleSubmit}>
                         <div className="flex flex-col gap-4">
                             <Input
                                 type="date"
@@ -130,12 +132,21 @@ export const PersonalDataStep = (): JSX.Element => {
                                 required={true}
                             />
                         </div>
-                        <Button
-                            variant="custom"
-                            className="w-full mt-4 text-white bg-accent-purple"
-                            type="submit">
-                            Selanjutnya
-                        </Button>
+                        <div className="fixed left-0 md:left-auto bottom-[52px] px-[16px] md:px-0 w-full md:w-[400px]">
+                            <Button
+                                disabled={
+                                    !values.birthdate ||
+                                    !values.gender ||
+                                    !values.phone_number ||
+                                    values.phone_number === '' ||
+                                    !isFormValid
+                                }
+                                variant="custom"
+                                className="w-full mt-4 text-white bg-accent-purple"
+                                type="submit">
+                                Selanjutnya
+                            </Button>
+                        </div>
                     </form>
                 )}
             </Formik>

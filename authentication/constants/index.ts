@@ -26,54 +26,46 @@ export const ONBOARDING_STEP = [
 
 export const EDUCATION_OPTIONS = [
     {
-        key: '',
-        value: 'Pilih pendidikan'
+        value: 'SMP',
+        label: 'SMP'
     },
     {
-        key: 'SMP',
-        value: 'SMP'
+        value: 'SMA',
+        label: 'SMA'
     },
     {
-        key: 'SMA',
-        value: 'SMA'
+        value: 'SMK',
+        label: 'SMK'
     },
     {
-        key: 'SMK',
-        value: 'SMK'
+        value: 'S1',
+        label: 'Sarjana'
     },
     {
-        key: 'S1',
-        value: 'Sarjana'
+        value: 'S2',
+        label: 'Magister'
     },
     {
-        key: 'S2',
-        value: 'Magister'
-    },
-    {
-        key: 'S3',
-        value: 'Doktor'
+        value: 'S3',
+        label: 'Doktor'
     }
 ];
 
 export const PROFESSION_OPTIONS = [
     {
-        key: '',
-        value: 'Pilih pekerjaan'
+        value: 'student',
+        label: 'Pelajar/Mahasiswa'
     },
     {
-        key: 'student',
-        value: 'Pelajar/Mahasiswa'
+        value: 'employed',
+        label: 'Bekerja'
     },
     {
-        key: 'employed',
-        value: 'Bekerja'
+        value: 'fresh_grad',
+        label: 'Fresh Graduate'
     },
     {
-        key: 'fresh_grad',
-        value: 'Fresh Graduate'
-    },
-    {
-        key: 'unemployed',
-        value: 'Tidak Bekerja'
+        value: 'unemployed',
+        label: 'Tidak Bekerja'
     }
 ];

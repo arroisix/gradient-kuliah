@@ -3,7 +3,6 @@ import { AUTH_SECTION } from 'authentication/constants';
 import { RegistrationProvider } from 'authentication/contexts/RegistrationProvider';
 import { useLastLogin } from 'authentication/hooks/useLastLogin';
 import useSocialLogin from 'authentication/hooks/useSocialLogin';
-import { useLogoutMutation } from 'authentication/redux/api/authApi';
 import { getCurrentUser } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
 import { useRouter } from 'next/router';
@@ -12,10 +11,9 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 export const AuthenticationContainer: React.FC = () => {
-    const { pathname, push } = useRouter();
+    const { pathname } = useRouter();
     const AuthSection = AUTH_SECTION[pathname];
     const { googleLogin } = useSocialLogin();
-    const [logout] = useLogoutMutation();
     const user = useSelector(getCurrentUser);
     const { setLastLogin } = useLastLogin();
 
@@ -34,25 +32,15 @@ export const AuthenticationContainer: React.FC = () => {
         }
     });
 
-    const handleLogout = async () => {
-        await logout();
-        push('/');
-    };
-
     const isLogin = pathname === '/masuk';
 
     return (
         <section className="flex items-stretch justify-center w-screen min-h-screen text-white bg-neutral-1000">
             {pathname === '/onboarding' && (
-                <div className="fixed top-0 left-0 hidden gap-2 px-6 py-3 md:flex font-body z-[2]">
-                    <span className="text-[#666666]">
+                <div className="fixed top-[16px] flex justify-center px-[16px] md:px-0 w-full md:w-[400px]">
+                    <p className="text-[#666666]">
                         Terdaftar sebagai {user.email}
-                    </span>{' '}
-                    <button
-                        onClick={handleLogout}
-                        className="text-[#999999] hover:text-red-400 transition-all duration-500">
-                        Sign Out
-                    </button>
+                    </p>
                 </div>
             )}
 

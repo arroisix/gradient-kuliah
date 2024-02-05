@@ -14,6 +14,7 @@ const ExpiryAnnouncement = ({
         everSubscribed,
         lastPacketId
     } = useCourseSubscription(slug);
+
     const isAuthenticated = useSelector(getIsAuthenticated);
 
     const subscriptionExpired = !is_subscribed && everSubscribed;

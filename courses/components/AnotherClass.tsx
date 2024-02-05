@@ -82,7 +82,7 @@ const AnotherClass = (): JSX.Element => {
     }
 
     return (
-        <div className="flex flex-col gap-5 md:gap-6">
+        <div className="flex flex-col gap-5 md:gap-6 pt-8">
             <div className="flex justify-between items-center px-5 md:px-16">
                 <span className="inline-block font-extrabold text-sm md:text-lg">
                     Kelas Lainnya

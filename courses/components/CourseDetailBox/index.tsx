@@ -1,35 +1,30 @@
-import { useRef, useState } from 'react';
-import ProgressBar from './ProgressBar';
-import { MdStarPurple500 } from 'react-icons/md';
-import { IoIosSearch, IoMdClose } from 'react-icons/io';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import Skeleton from 'commons/components/elements/Skeleton';
 import useElementSize from 'commons/hooks/useElementSize';
 import useOnScreen from 'commons/hooks/useOnScreen';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
-import { useRouter } from 'next/router';
-import {
-    useGetCourseContentQuery,
-    useGetCourseQuery,
-    useLazyGetSearchCourseContentQuery
-} from 'courses/redux/api/courseApi';
+import { useGetCourseQuery } from 'courses/redux/api/courseApi';
 import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienceApi';
-import Skeleton from 'commons/components/elements/Skeleton';
 import moment from 'moment';
-import ModalCourseFeedback from './ModalCourseFeedback';
-import SearchList from './SearchList';
-import { useTracker } from 'tracker/tracker';
+import { useRouter } from 'next/router';
+import { useRef, useState } from 'react';
+import { MdStarPurple500 } from 'react-icons/md';
 import { useSelector } from 'react-redux';
-import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
-import AccordionVideo from './AccordionVideo';
-import ListBooks from './ListBooks';
+import { useTracker } from 'tracker/tracker';
+import CourseDetailContent from './CourseDetailContent';
+import CourseDetailTabs from './CourseDetailTabs';
+import ModalCourseFeedback from './ModalCourseFeedback';
+import ProgressBar from './ProgressBar';
+import { CourseSubchapterSearchProvider } from 'courses/hooks/useSearchSubchapter';
+import { cn } from 'commons/utils';
+import { CodeEditorProvider } from 'courses/hooks/useCodeEditor';
 
 const CourseDetailBox = (): JSX.Element => {
     const tracker = useTracker();
 
-    const [navigation, setNavigation] = useState<
-        'VIDEO' | 'BOOK' | 'ON_SEARCH'
-    >('VIDEO');
-    const [isSearch, setIsSearch] = useState(false);
-    const [search, setSearch] = useState('');
+    const [navigation, setNavigation] =
+        useState<CourseDetailNavigation>('VIDEO');
+
     const [isModalFeedbackOpen, setIsModalFeedbackOpen] =
         useState<boolean>(false);
 
@@ -44,8 +39,7 @@ const CourseDetailBox = (): JSX.Element => {
     const { id } = router.query;
 
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { data: courseContent, isLoading: isLoadingCourse } =
-        useGetCourseContentQuery({ slug: id as string }, { skip: !id });
+
     const { data: learningProgress, isLoading: isLoadingLearning } =
         useGetLearningProgressQuery(id as string, {
             skip: !id || !isAuthenticated
@@ -56,34 +50,6 @@ const CourseDetailBox = (): JSX.Element => {
             isLoading: isLoading
         })
     });
-    const [
-        triggerSearch,
-        {
-            data: searchResult,
-            isLoading: isSearchingLoading,
-            isFetching: isSearchingFetching
-        }
-    ] = useLazyGetSearchCourseContentQuery();
-
-    function handleSearch({
-        type,
-        page = 1
-    }: {
-        type?: 'BOOK' | 'CHAPTER' | 'SUBCHAPTER';
-        page?: number;
-    }): void {
-        tracker?.genericTrack('Search Class Material', {
-            'Course Slug': id,
-            Query: search
-        });
-        setNavigation('ON_SEARCH');
-        triggerSearch({
-            slug: id as string,
-            content: search,
-            type,
-            page
-        });
-    }
 
     return (
         <>
@@ -92,7 +58,7 @@ const CourseDetailBox = (): JSX.Element => {
                 setOpen={setIsModalFeedbackOpen}
             />
             <div
-                className="relative w-full h-full bg-[#121212] lg:rounded-lg lg:overflow-hidden"
+                className="relative w-full h-full bg-[#121212] lg:overflow-hidden"
                 ref={boxRef}>
                 {!isOnScreen && !checkCustomBreakpoints(1024) && (
                     <div className="w-full h-[40px] absolute bottom-0 bg-gradient-to-b from-transparent to-[#121212] z-[1]"></div>
@@ -147,118 +113,34 @@ const CourseDetailBox = (): JSX.Element => {
                         isLoading={isLoadingLearning}
                     />
                 </div>
-                <div
-                    className="flex flex-col gap-[18px] px-5 md:px-16 lg:px-[14px] pt-[14px]"
-                    style={{
-                        height: !checkCustomBreakpoints(1024)
-                            ? boxHeight - headerBoxHeight
-                            : '100%'
-                    }}>
-                    {isSearch ? (
-                        <div className="flex items-center px-3 bg-[#212121] rounded-[100px] border-[1px] border-neutral-400">
-                            <IoIosSearch
-                                size={20}
-                                className="text-[#DADADA] cursor-pointer"
-                                onClick={() => handleSearch({})}
+                <CourseSubchapterSearchProvider>
+                    <div
+                        className="flex flex-col"
+                        style={{
+                            height: !checkCustomBreakpoints(1024)
+                                ? boxHeight - headerBoxHeight
+                                : '100%'
+                        }}>
+                        {!isLoadingLearning && (
+                            <CourseDetailTabs
+                                navigation={navigation}
+                                setNavigation={setNavigation}
                             />
-                            <input
-                                className="w-full text-xs bg-transparent border-none font-body focus:outline-none focus:ring-0 focus:appearance-none"
-                                type="text"
-                                value={search}
-                                name="search"
-                                onChange={(event) =>
-                                    setSearch(event.target.value)
-                                }
-                                onKeyDown={(event) => {
-                                    event.key === 'Enter'
-                                        ? handleSearch({})
-                                        : null;
-                                }}
-                            />
-                            <IoMdClose
-                                size={16}
-                                className="text-white cursor-pointer"
-                                onClick={() => {
-                                    setIsSearch(false);
-                                    setSearch('');
-                                    setNavigation('VIDEO');
-                                }}
-                            />
-                        </div>
-                    ) : (
-                        <div className="flex items-center justify-between">
-                            <div className="flex gap-4">
-                                <span
-                                    className={`inline-block font-bold text-sm pb-[6px] cursor-pointer ${
-                                        navigation === 'VIDEO'
-                                            ? 'border-b-2 border-accent-purple'
-                                            : 'text-neutral-600 border-none hover:text-neutral-500'
-                                    }`}
-                                    onClick={() => {
-                                        tracker?.genericTrack(
-                                            'Click Video Tab - LMS',
-                                            { 'Course Slug': id }
-                                        );
-                                        setNavigation('VIDEO');
-                                    }}
-                                    aria-hidden>
-                                    VIDEO
-                                </span>
-                                {courseContent?.books.length !== 0 ? (
-                                    <span
-                                        className={`inline-block font-bold text-sm pb-[6px] cursor-pointer ${
-                                            navigation === 'BOOK'
-                                                ? 'border-b-2 border-accent-purple'
-                                                : 'text-neutral-600 border-none hover:text-neutral-500'
-                                        }`}
-                                        onClick={() => {
-                                            tracker?.genericTrack(
-                                                'Click Book Tab - LMS',
-                                                { 'Course Slug': id }
-                                            );
-                                            setNavigation('BOOK');
-                                        }}
-                                        aria-hidden>
-                                        BUKU
-                                    </span>
-                                ) : (
-                                    <></>
-                                )}
+                        )}
+
+                        <CodeEditorProvider>
+                            <div
+                                className={cn(
+                                    'h-full lg:overflow-y-auto',
+                                    navigation != 'CODE EDITOR' &&
+                                        'px-5 md:px-16 lg:px-[14px] pt-[18px]'
+                                )}>
+                                <CourseDetailContent navigation={navigation} />
+                                <div ref={anchor}></div>
                             </div>
-                            <IoIosSearch
-                                size={20}
-                                className="text-[#DADADA] hover:text-white cursor-pointer"
-                                onClick={() => setIsSearch(true)}
-                            />
-                        </div>
-                    )}
-                    <div className="h-full lg:overflow-y-auto">
-                        {navigation === 'VIDEO' && (
-                            <AccordionVideo
-                                chapters={
-                                    courseContent?.chapters as CourseChapter[]
-                                }
-                                isLoading={isLoadingCourse}
-                            />
-                        )}
-                        {navigation === 'BOOK' && (
-                            <ListBooks
-                                books={courseContent?.books as Book[]}
-                                isLoading={isLoadingCourse}
-                            />
-                        )}
-                        {navigation === 'ON_SEARCH' && (
-                            <SearchList
-                                searchQuery={search}
-                                searchResult={searchResult}
-                                handleSearch={handleSearch}
-                                isLoading={isSearchingLoading}
-                                isFetching={isSearchingFetching}
-                            />
-                        )}
-                        <div ref={anchor}></div>
+                        </CodeEditorProvider>
                     </div>
-                </div>
+                </CourseSubchapterSearchProvider>
             </div>
         </>
     );

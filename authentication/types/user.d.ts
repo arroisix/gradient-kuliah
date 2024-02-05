@@ -80,3 +80,8 @@ interface UserDeviceResponse {
     device_type_id: number;
     device_allowed: boolean;
 }
+
+interface RecommendationResponse {
+    name: string;
+    abbreviation: string;
+}
