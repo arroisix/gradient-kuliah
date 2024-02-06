@@ -1,7 +1,7 @@
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { cn } from 'commons/utils';
 import { useCodeEditor } from 'courses/hooks/useCodeEditor';
-import React, { useRef } from 'react';
+import React, { MouseEventHandler, useRef } from 'react';
 import { BsPlayFill, BsStop } from 'react-icons/bs';
 import { MdCloudDone } from 'react-icons/md';
 import { SlRefresh } from 'react-icons/sl';
@@ -80,7 +80,8 @@ const CodeEditorSymbolButton = ({
     const { controls, container } = useCodeEditor();
     const symbolButtonRef = useRef<HTMLButtonElement>(null);
 
-    const handleSymbolButton = () => {
+    const handleSymbolButton: MouseEventHandler<HTMLButtonElement> = (e) => {
+        e.preventDefault();
         controls.insertCharacter(symbol);
 
         if (container) container.focus();
@@ -92,6 +93,7 @@ const CodeEditorSymbolButton = ({
             ref={symbolButtonRef}
             title={`Insert ${text}`}
             onClick={handleSymbolButton}
+            onMouseDown={(e) => e.preventDefault()}
             className={`font-medium text-white btn btn-sm bg-neutral-700 hover:bg-neutral-500 ${className}`}>
             {text}
         </button>
