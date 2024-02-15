@@ -26,8 +26,7 @@ export const OnboardingStepper = (): JSX.Element => {
                         type="button"
                         className={`h-[4px] rounded-2xl w-full ${
                             step === index ? 'bg-[#333333]' : 'bg-[#1D1D1D]'
-                        }`}
-                    ></button>
+                        }`}></button>
                 </div>
             ))}
         </div>
