@@ -94,6 +94,7 @@
         "remark-math": "^5.1.1",
         "remark-parse": "^10.0.1",
         "remark-rehype": "^10.1.0",
+        "styled-components": "^6.1.8",
         "tailwind-merge": "^1.14.0",
         "tiptap-markdown": "^0.8.8",
         "use-debounce": "^9.0.4",

@@ -25,9 +25,10 @@ const PublicCourses = ({
                     <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
                 </>
             ) : (
-                courses?.data.map((course: Course) => (
+                courses?.data.map((course: Course, index: number) => (
                     <CourseCard
                         isInGrid
+                        isFirstInGrid={index === 1}
                         course={course}
                         key={course.id}
                         onClick={() => {

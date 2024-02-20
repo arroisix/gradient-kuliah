@@ -75,7 +75,7 @@ const ClassContainer = (): JSX.Element => {
         <>
             <section
                 className={cn(
-                    'min-h-screen',
+                    'min-h-screen w-full',
                     !isAuthenticated &&
                         !isLandingPageRevampOn &&
                         'px-4 md:px-[7.5rem]'

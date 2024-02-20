@@ -3,13 +3,15 @@ import useTransition from 'commons/hooks/useTransition';
 import { useGrid } from 'courses/contexts/GridProvider';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { forwardRef, useEffect, useLayoutEffect, useState } from 'react';
+import { forwardRef, useEffect } from 'react';
+// import styled from 'styled-components';
 
 type CourseCardProps = {
     course: Course;
     latestSubChapter?: SubChapter;
     latestWatchProgress?: WatchProgress;
     isInGrid?: boolean;
+    isFirstInGrid?: boolean;
     onClick?: () => void;
 };
 
@@ -17,7 +19,8 @@ const CourseCard = forwardRef<HTMLDivElement, CourseCardProps>(({
     course,
     latestSubChapter,
     latestWatchProgress,
-    isInGrid = false,
+    isInGrid,
+    isFirstInGrid,
     onClick,
 }, ref): JSX.Element => {
     const router = useRouter();
@@ -38,26 +41,26 @@ const CourseCard = forwardRef<HTMLDivElement, CourseCardProps>(({
 
     const {cellRef, cellWidth} = useGrid();
 
-
-    const [forceUpdate, setForceUpdate] = useState(0); // Dummy state to force re-render
-
-    useEffect(() => {
-        if (!isInGrid) return
-        console.log(cellWidth)
-        setForceUpdate((prev) => prev + 1);
-    }, [cellWidth])
-
-    console.log(cellWidth)
+    // const StyledCourseCard = styled.div`
+    //     width: ${({ isInGrid: boolean }) => isInGrid ? '100%' : 'auto'};
+    //     background: center / cover no-repeat #333333;
+        
+    //     /* Media query */
+    //     @media (max-width: 640px) {
+    //         width: ${({ isInGrid: boolean }) => isInGrid ? '100%' : '60vw'};
+    //     }
+    // `;
 
     return (
         <Link href={decideUrl()} onClick={() => onClick?.()}>
             <div
-                ref={cellRef}
-                className={`relative flex items-end w-full mr-2 overflow-hidden rounded-lg cursor-pointer h-[300px] bg-neutral-800`}
+                className={`relative flex items-end overflow-hidden rounded-lg cursor-pointer h-[300px] bg-neutral-800`}
                 style={{
-                    width: !isInGrid ? `${cellWidth}px` : 'auto',
+                    width: !isInGrid ? `${cellWidth}px` : 'auto', // TODO: Make this 60vw if less than sm
                     background: `url(${course.thumbnail}) center / cover no-repeat, #333333`,
-                }}>
+                }}
+                {...(isInGrid && isFirstInGrid ? {ref: cellRef} : {})}
+            >
                 <div className="bg-[#121212] w-full p-4">
                     {latestWatchProgress && (
                         !latestWatchProgress.is_finished ? (

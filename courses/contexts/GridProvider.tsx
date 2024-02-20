@@ -1,4 +1,4 @@
-import { ReactNode, RefObject, createContext, useContext, useEffect, useRef, useState } from 'react';
+import { ReactNode, RefObject, createContext, useContext, useLayoutEffect, useRef, useState } from 'react';
 
 interface GridContextType {
   cellWidth?: number;
@@ -14,16 +14,21 @@ export function GridProvider({
 }): JSX.Element {
 
   const [cellWidth, setCellWidth] = useState<number>();
-
   const cellRef = useRef<HTMLDivElement>(null);
+  const [firstRender, setFirstRender] = useState(true);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const updateCellWidth = () => {
       if (cellRef.current) {
         setCellWidth(cellRef.current.offsetWidth);
+        clearInterval(firstRenderInterval);
       }
     };
-    updateCellWidth();
+
+    const firstRenderInterval = setInterval(() => {
+      updateCellWidth();
+    }, 100)
+
     window.addEventListener('resize', updateCellWidth);
 
     return () => window.removeEventListener('resize', updateCellWidth);
