@@ -27,7 +27,9 @@ const Sidebar = ({
         <aside
             className={`hidden md:block top-[64px] ${
                 fullHeight ? 'fixed h-full' : 'h-fit sticky'
-            } bg-[#121212] w-[250px] pl-6 pr-3 py-4 ${className}`}>
+            } bg-[#121212] w-[250px] pl-6 pr-3 py-4 ${className}`}
+            style={{zIndex: 100}}
+        >
             <div className="flex flex-col gap-[18px]">
                 {/* <Link href={'/notifikasi'}>
                     <span

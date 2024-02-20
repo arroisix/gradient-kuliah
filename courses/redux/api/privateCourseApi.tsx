@@ -44,7 +44,7 @@ export const privateCourseApi = baseApi.injectEndpoints({
                     url: `${PRIVATE_COURSE_BASE_URL}code-editor/${id}/`
                 })
             }
-        )
+        ),
     })
 });
 

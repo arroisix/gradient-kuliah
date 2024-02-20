@@ -3,6 +3,7 @@ import Sidebar from './components/modules/Sidebar';
 import Appbar from './components/modules/Appbar';
 import { cn } from './utils';
 import { useState } from 'react';
+import CourseProgress from 'courses/containers/courseProgress';
 
 interface LayoutProps {
     children: JSX.Element;
@@ -46,22 +47,36 @@ const LearnLayout = ({
             <section
                 className={cn(
                     showSidebar &&
-                        'pt-24 pb-10 px-4 md:px-0 flex gap-[2rem] lg:gap-[6rem]',
+                        'pt-16 pb-10 px-4 md:px-0 flex gap-[2rem] lg:gap-[6rem]',
                     !closeReminder && showSubscriptionReminder && showSidebar
                         ? 'pt-36'
                         : !closeReminder && showSubscriptionReminder
                         ? 'pt-11'
                         : undefined
-                )}>
+                )}
+            >
                 {showSidebar && <Sidebar fullHeight={fullHeightSidebar} />}
-                <div
-                    className={cn(
-                        'min-h-full w-screen ',
-                        fullHeightSidebar && 'md:px-8 xl:px-12',
+                {/* <div className="w-screen">
+                    <CourseProgress /> */}
+                    <div className={cn(
+                        'min-h-full w-screen',
                         showSidebar && fullHeightSidebar && 'md:ml-[250px]'
                     )}>
-                    {children}
-                </div>
+                        <div className={cn(
+                            "bg-[#1D1D1D] text-white py-8",
+                            fullHeightSidebar && 'md:px-8 xl:px-12',
+                        )}>
+                            <CourseProgress />
+                        </div>
+                        <div className={cn(
+                            'pt-12',
+                            fullHeightSidebar && 'md:px-8 xl:px-12',
+                        )}>
+
+                            {children}
+                        </div>
+                    </div>
+                {/* </div> */}
             </section>
             <Appbar />
         </div>

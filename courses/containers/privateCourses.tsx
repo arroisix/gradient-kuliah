@@ -4,10 +4,19 @@ import CourseCard from '../components/CourseCard';
 import CourseContainer from '../components/CourseContainer';
 import useCourses from '../hooks/useCourses';
 
-const PrivateCourses = ({ myClass }: { myClass: boolean }): JSX.Element => {
+const PrivateCourses = ({ 
+    myClass,
+    section,
+    sort,
+}: { 
+    myClass: boolean;
+    section: 'all' | 'newly-released' | 'coming-soon';
+    sort: 'latest' | 'popularity' | 'lexicography';
+}): JSX.Element => {
+
     const tracker = useTracker();
 
-    const { data, loading } = useCourses();
+    const { data, loading } = useCourses(section, sort);
     const [courses, setCourses] = useState<Course[]>([]);
 
     useEffect(() => {
@@ -37,8 +46,9 @@ const PrivateCourses = ({ myClass }: { myClass: boolean }): JSX.Element => {
                     <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
                 </>
             ) : (
-                courses.map((course: Course) => (
+                courses.map((course: Course, index: number) => (
                     <CourseCard
+                        isInGrid
                         course={course}
                         key={course.id}
                         onClick={() => {

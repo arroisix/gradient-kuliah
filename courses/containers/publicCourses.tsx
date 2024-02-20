@@ -1,12 +1,19 @@
-import { useGetPublicListCoursesQuery } from 'courses/redux/api/publicCourseApi';
+import { useGetPublicListCoursesV2Query } from 'courses/redux/api/publicCourseV2Api';
 import { useTracker } from 'tracker/tracker';
 import CourseCard from '../components/CourseCard';
 import CourseContainer from '../components/CourseContainer';
 
-const PublicCourses = (): JSX.Element => {
+const PublicCourses = ({
+    section,
+    sort,
+}: {
+    section: 'all' | 'newly-released' | 'coming-soon';
+    sort: 'latest' | 'popularity' | 'lexicography';
+}): JSX.Element => {
+
     const tracker = useTracker();
 
-    const { data: courses, isLoading } = useGetPublicListCoursesQuery({});
+    const { data: courses, isLoading } = useGetPublicListCoursesV2Query({section, sort});
     return (
         <CourseContainer>
             {isLoading ? (
@@ -20,6 +27,7 @@ const PublicCourses = (): JSX.Element => {
             ) : (
                 courses?.data.map((course: Course) => (
                     <CourseCard
+                        isInGrid
                         course={course}
                         key={course.id}
                         onClick={() => {
