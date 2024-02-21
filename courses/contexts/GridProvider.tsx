@@ -2,7 +2,9 @@ import { ReactNode, RefObject, createContext, useContext, useLayoutEffect, useRe
 
 interface GridContextType {
   cellWidth?: number;
+  gapWidth?: number;
   cellRef?: RefObject<HTMLDivElement>;
+  gridContainerRef?: RefObject<HTMLDivElement>;
 }
 
 const GridContext = createContext<GridContextType>({} as GridContextType);
@@ -14,29 +16,41 @@ export function GridProvider({
 }): JSX.Element {
 
   const [cellWidth, setCellWidth] = useState<number>();
+  const [gapWidth, setGapWidth] = useState<number>();
   const cellRef = useRef<HTMLDivElement>(null);
-  const [firstRender, setFirstRender] = useState(true);
 
   useLayoutEffect(() => {
-    const updateCellWidth = () => {
+    const updateCellAndGapWidth = () => {
       if (cellRef.current) {
         setCellWidth(cellRef.current.offsetWidth);
+        
+        const screenWidth = window.innerWidth;
+        let gapWidthInRem = (
+          screenWidth >= 1024 ? 1 :
+          screenWidth >= 768 ? 0.25 :
+          1
+        );
+        const gapWidthInPixels = gapWidthInRem * 16;
+        setGapWidth(gapWidthInPixels)
+
         clearInterval(firstRenderInterval);
       }
+      
     };
 
     const firstRenderInterval = setInterval(() => {
-      updateCellWidth();
+      updateCellAndGapWidth();
     }, 100)
 
-    window.addEventListener('resize', updateCellWidth);
+    window.addEventListener('resize', updateCellAndGapWidth);
 
-    return () => window.removeEventListener('resize', updateCellWidth);
+    return () => window.removeEventListener('resize', updateCellAndGapWidth);
   }, []); 
 
   return (
     <GridContext.Provider value={{
       cellWidth: cellWidth,
+      gapWidth: gapWidth,
       cellRef: cellRef,
     }}>
       {children}

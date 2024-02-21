@@ -3,8 +3,7 @@ import useTransition from 'commons/hooks/useTransition';
 import { useGrid } from 'courses/contexts/GridProvider';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { forwardRef, useEffect } from 'react';
-// import styled from 'styled-components';
+import { forwardRef, useEffect, useState } from 'react';
 
 type CourseCardProps = {
     course: Course;
@@ -40,23 +39,25 @@ const CourseCard = forwardRef<HTMLDivElement, CourseCardProps>(({
     };
 
     const {cellRef, cellWidth} = useGrid();
+    const [isSmallScreen, setIsSmallScreen] = useState(false);
 
-    // const StyledCourseCard = styled.div`
-    //     width: ${({ isInGrid: boolean }) => isInGrid ? '100%' : 'auto'};
-    //     background: center / cover no-repeat #333333;
-        
-    //     /* Media query */
-    //     @media (max-width: 640px) {
-    //         width: ${({ isInGrid: boolean }) => isInGrid ? '100%' : '60vw'};
-    //     }
-    // `;
+    useEffect(() => {
+        const handleResize = () => {
+            setIsSmallScreen(window.innerWidth < 768);
+        };
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, [])
 
     return (
         <Link href={decideUrl()} onClick={() => onClick?.()}>
             <div
                 className={`relative flex items-end overflow-hidden rounded-lg cursor-pointer h-[300px] bg-neutral-800`}
                 style={{
-                    width: !isInGrid ? `${cellWidth}px` : 'auto', // TODO: Make this 60vw if less than sm
+                    width: !isInGrid ? `${isSmallScreen ? cellWidth!-150 : cellWidth}px` : 'auto', // TODO: decrease 70px when it is less than sm
                     background: `url(${course.thumbnail}) center / cover no-repeat, #333333`,
                 }}
                 {...(isInGrid && isFirstInGrid ? {ref: cellRef} : {})}
@@ -92,7 +93,7 @@ const CourseCard = forwardRef<HTMLDivElement, CourseCardProps>(({
                         </p>
                     )}
                 </div>
-                {course.is_coming_soon && (
+                {/* {course.is_coming_soon && (
                     <div
                         className="px-4 rounded-full py-1 absolute top-4 left-4 font-bold"
                         style={{
@@ -101,7 +102,7 @@ const CourseCard = forwardRef<HTMLDivElement, CourseCardProps>(({
                     >
                         Segera hadir
                     </div>
-                )}
+                )} */}
                 {course.is_new && (
                     <div className="bg-[#E9202A] px-4 rounded-full py-1 absolute top-4 left-4 font-bold">
                         Baru

@@ -14,15 +14,16 @@ const PublicCourses = ({
     const tracker = useTracker();
 
     const { data: courses, isLoading } = useGetPublicListCoursesV2Query({section, sort});
+    console.log(courses)
     return (
         <CourseContainer>
             {isLoading ? (
                 <>
-                    <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
-                    <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
-                    <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
-                    <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
-                    <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
+                    <div className="p-4 h-[300px] w-full bg-neutral-600 animate-pulse rounded-lg" />
+                    <div className="p-4 h-[300px] w-full bg-neutral-600 animate-pulse rounded-lg" />
+                    <div className="p-4 h-[300px] w-full bg-neutral-600 animate-pulse rounded-lg" />
+                    <div className="p-4 h-[300px] w-full bg-neutral-600 animate-pulse rounded-lg" />
+                    <div className="p-4 h-[300px] w-full bg-neutral-600 animate-pulse rounded-lg" />
                 </>
             ) : (
                 courses?.data.map((course: Course, index: number) => (

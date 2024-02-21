@@ -50,7 +50,7 @@ const LearnLayout = ({
             <section
                 className={cn(
                     showSidebar &&
-                        'pt-16 pb-10 px-4 md:px-0 flex gap-[2rem] lg:gap-[6rem] w-full',
+                        'pt-16 pb-10 flex gap-[2rem] lg:gap-[6rem] w-full',
                     !closeReminder && showSubscriptionReminder && showSidebar
                         ? 'pt-36'
                         : !closeReminder && showSubscriptionReminder
@@ -61,23 +61,23 @@ const LearnLayout = ({
                 {showSidebar && <Sidebar fullHeight={fullHeightSidebar} />}
                 {/* <div className="w-screen">
                     <CourseProgress /> */}
+                <div className={cn(
+                    'min-h-full w-full overflow-x-hidden',
+                    showSidebar && fullHeightSidebar && 'md:ml-[250px]'
+                )}>
                     <div className={cn(
-                        'min-h-full w-full overflow-x-hidden',
-                        showSidebar && fullHeightSidebar && 'md:ml-[250px]'
+                        "px-4 md:px-0 bg-[#1D1D1D] text-white py-8",
+                        fullHeightSidebar && 'md:pl-8 xl:pl-12',
                     )}>
-                        <div className={cn(
-                            "bg-[#1D1D1D] text-white py-8",
-                            fullHeightSidebar && 'md:px-8 xl:px-12',
-                        )}>
-                            {isCoursePage && <CourseProgress />}
-                        </div>
-                        <div className={cn(
-                            'pt-12 w-full',
-                            fullHeightSidebar && 'md:px-8 xl:px-12',
-                        )}>
-                            {children}
-                        </div>
+                        {isCoursePage && <CourseProgress />}
                     </div>
+                    <div className={cn(
+                        'px-4 md:px-0 pt-12 w-full',
+                        fullHeightSidebar && 'md:px-8 xl:px-12',
+                    )}>
+                        {children}
+                    </div>
+                </div>
                 {/* </div> */}
             </section>
             <Appbar />

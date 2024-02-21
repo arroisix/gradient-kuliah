@@ -39,11 +39,11 @@ const PrivateCourses = ({
         <CourseContainer>
             {loading ? (
                 <>
-                    <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
-                    <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
-                    <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
-                    <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
-                    <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
+                    <div className="p-4 h-[300px] w-full bg-neutral-600 animate-pulse rounded-lg" />
+                    <div className="p-4 h-[300px] w-full bg-neutral-600 animate-pulse rounded-lg" />
+                    <div className="p-4 h-[300px] w-full bg-neutral-600 animate-pulse rounded-lg" />
+                    <div className="p-4 h-[300px] w-full bg-neutral-600 animate-pulse rounded-lg" />
+                    <div className="p-4 h-[300px] w-full bg-neutral-600 animate-pulse rounded-lg" />
                 </>
             ) : (
                 courses.map((course: Course, index: number) => (
