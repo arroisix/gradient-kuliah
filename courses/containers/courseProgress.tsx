@@ -23,7 +23,7 @@ export default function CourseProgress(): JSX.Element {
 
   return (
     <section className="relative w-full overflow-x-scroll">
-      <div className="flex justify-between w-full md:pr-8 xl:pr-12">
+      <div className="flex justify-between w-full md:px-8 xl:px-12">
         <h1 className="text-4xl font-bold md:text-4xl">
           Kelasku
         </h1>
@@ -46,7 +46,14 @@ export default function CourseProgress(): JSX.Element {
           </button>
         </div>
       </div>
-      <div ref={scrollContainerRef} className="overflow-x-scroll w-full flex gap-4 md:gap-1 lg:gap-4 mt-6 md:pr-8 xl:pr-12">
+      <div 
+        ref={scrollContainerRef} 
+        className="overflow-x-scroll w-full flex gap-4 md:gap-1 lg:gap-4 mt-6 md:px-8 xl:px-12"
+        style={{
+          msOverflowStyle: 'none',
+          scrollbarWidth: 'none',
+        }}
+      >
         {isLoading || !cellWidth ? (
           <>
             <div className={`p-4 h-[300px] bg-neutral-600 animate-pulse rounded-lg`} />
