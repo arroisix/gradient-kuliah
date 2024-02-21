@@ -4,7 +4,7 @@ import VideoPlayer from 'commons/components/elements/Video';
 import { isNotNullAndUndefined } from 'commons/utils';
 import PopupQuestionContent from 'courses/components/Exercise/PopupQuestion';
 import NeedSubscribe from 'courses/components/NeedSubscribe';
-import VideoPaywall from 'courses/components/VideoPaywall';
+import VideoPaywall from 'courses/components/VideoPlayerContainer/VideoPaywall';
 import { useLearning } from 'courses/contexts/LearningProvider';
 import { useTrackSubchapterProgressMutation } from 'courses/redux/api/learningExperienceApi';
 import { useSelector } from 'react-redux';

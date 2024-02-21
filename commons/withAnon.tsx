@@ -20,7 +20,7 @@ const withAnon = <P extends object>(
         if (typeof window !== 'undefined') {
             const accessToken = useSelector(getToken);
             const isProfileComplete = useSelector(getIsProfileComplete);
-            const { is_subscribed, isLoading: isLoadingSubscribed } =
+            const { is_subscribed, isLoading: isLoadingSubscribed, everSubscribed } =
                 useCourseSubscription();
             const router = useRouter();
 
@@ -47,6 +47,8 @@ const withAnon = <P extends object>(
                                     router.replace(
                                         `/pembayaran?packetId=${packetId}`
                                     );
+                                } else if (everSubscribed) {
+                                    router.replace('/dashboard');
                                 } else {
                                     router.replace('/');
                                 }
@@ -55,7 +57,7 @@ const withAnon = <P extends object>(
                     } else if (
                         ['/', '/landing-revamp'].includes(router.pathname)
                     ) {
-                        if (is_subscribed) router.replace('/dashboard');
+                        if (everSubscribed) router.replace('/dashboard');
                     }
                     return <WrappedComponent {...(props as P)} />;
                 }

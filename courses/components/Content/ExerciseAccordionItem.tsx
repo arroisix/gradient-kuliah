@@ -10,7 +10,7 @@ import WorksheetInfoModalContent from '../LearningExperience/ExamExercise/Worksh
 import { useRouter } from 'next/router';
 import { AUTHENTICATION_ROUTE } from 'commons/constants';
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
-import VideoPaywall from '../VideoPaywall';
+import VideoPaywall from '../VideoPlayerContainer/VideoPaywall';
 import { cn } from 'commons/utils';
 
 const ExerciseAccordionItem = ({

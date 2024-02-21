@@ -5,7 +5,7 @@ import ListOfContent from './Content/ListOfContent';
 import useWindowSize from 'commons/hooks/useWindowSize';
 import { useTrackSubchapterProgressMutation } from 'courses/redux/api/learningExperienceApi';
 import { getAllVideoChapter, isContentChapterExist } from 'courses/utils';
-import VideoPaywall from './VideoPaywall';
+import VideoPaywall from './VideoPlayerContainer/VideoPaywall';
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
 
 interface ContentBoxProps {

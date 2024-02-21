@@ -18,6 +18,7 @@ import ProgressBar from './ProgressBar';
 import { CourseSubchapterSearchProvider } from 'courses/hooks/useSearchSubchapter';
 import { cn } from 'commons/utils';
 import { CodeEditorProvider } from 'courses/hooks/useCodeEditor';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 const CourseDetailBox = (): JSX.Element => {
     const tracker = useTracker();
@@ -50,6 +51,7 @@ const CourseDetailBox = (): JSX.Element => {
             isLoading: isLoading
         })
     });
+    const { is_subscribed } = useCourseSubscription();
 
     return (
         <>
@@ -85,7 +87,7 @@ const CourseDetailBox = (): JSX.Element => {
                                     .format('mm')}m)`
                             )}
                         </span>
-                        {isAuthenticated && (
+                        {is_subscribed && (
                             <div className="w-[20px] grow">
                                 <MdStarPurple500
                                     size={20}
