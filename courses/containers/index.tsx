@@ -75,7 +75,7 @@ const ClassContainer = (): JSX.Element => {
         <>
             <section
                 className={cn(
-                    'min-h-screen w-full',
+                    'w-full',
                     !isAuthenticated &&
                         !isLandingPageRevampOn &&
                         'px-4 md:px-[7.5rem]'
@@ -101,15 +101,23 @@ const ClassContainer = (): JSX.Element => {
                     defaultFocus={false}
                     className="mt-2"
                 >
-                    <TabList style={{
-                        borderBottom: '1px solid #222222',
+                    <div 
+                        className="bg-red-500"
+                    style={{
+                        position: 'sticky',
+                        top: 0,
+                        zIndex: 200,
                     }}>
-                        {sectionOptions.map((section: {key: string, label: string}, index: number)  => (
-                            <Tab style={tabIndex === index ? activeTabStyle : tabStyle}>
-                                {section.label}
-                            </Tab>
-                        ))}
-                    </TabList>
+                        <TabList style={{
+                            borderBottom: '1px solid #222222',
+                        }}>
+                            {sectionOptions.map((section: {key: string, label: string}, index: number)  => (
+                                <Tab key={section.key} style={tabIndex === index ? activeTabStyle : tabStyle}>
+                                    {section.label}
+                                </Tab>
+                            ))}
+                        </TabList>
+                    </div>
                     <div className="mt-6 relative">
                         <button 
                             onClick={() => setIsSortMenuVisible((prev) => !prev)}
@@ -131,7 +139,8 @@ const ClassContainer = (): JSX.Element => {
                             {sortOptions.map((sort: {key: any, label: string}, index: number) => (
                                 <>
                                     {index !== 0 && <div className="w-full h-[1px] bg-[rgba(153,153,153,0.5)]"></div>}
-                                    <button 
+                                    <button
+                                        key={sort.key} 
                                         className="w-full py-2 hover:bg-[#373737] rounded-lg duration-200"
                                         onClick={() => {
                                             setSort(sort);

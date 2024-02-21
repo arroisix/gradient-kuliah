@@ -67,7 +67,6 @@ const LearnLayout = ({
                 )}>
                     <div className={cn(
                         "px-4 md:px-0 bg-[#1D1D1D] text-white py-8",
-                        fullHeightSidebar && 'md:pl-8 xl:pl-12',
                     )}>
                         {isCoursePage && <CourseProgress />}
                     </div>
