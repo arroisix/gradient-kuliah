@@ -103,11 +103,12 @@ const ClassContainer = (): JSX.Element => {
                 >
                     <div 
                         className="bg-red-500"
-                    style={{
-                        position: 'sticky',
-                        top: 0,
-                        zIndex: 200,
-                    }}>
+                        style={{
+                            position: 'sticky',
+                            top: 0,
+                            zIndex: 200,
+                        }}
+                    >
                         <TabList style={{
                             borderBottom: '1px solid #222222',
                         }}>
