@@ -14,15 +14,15 @@ const AstronotesDetail = (): JSX.Element => {
     const tracker = useTracker();
 
     return (
-        <div className="mx-auto max-w-[90%] lg:max-w-[80%] xl:max-w-[65%] flex flex-col">
-            <div className="flex flex-row gap-2.5 items-center pb-8">
+        <div className="mx-auto w-full lg:w-[75%] xl:w-[60%] flex flex-col">
+            <div className="flex flex-row gap-2.5 items-center pb-7 text-xs md:text-sm lg:text-base">
                 <h3 className="text-[#666666] font-bold">Perpustakaan</h3>
-                <FaChevronRight size={16} className="text-[#666666]" />
+                <FaChevronRight className="text-[#666666] h-3 md:h-3.5 lg:h-4" />
                 <h1 className="text-white font-bold">{ASTRONOTES.title}</h1>
             </div>
 
-            <div className="flex flex-row gap-8 pb-7">
-                <div className="aspect-[256/364] relative min-w-[150px] w-[35%] border rounded border-neutral-700">
+            <div className="flex flex-row gap-4 md:gap-6 lg:gap-8 pb-4 md:pb-6">
+                <div className="aspect-[256/364] relative min-w-[100px] md:min-w-[150px] max-w-[150px] md:max-w-[175px] w-[50%] border rounded border-neutral-700">
                     <Image
                         src={
                             ASTRONOTES.cover_url ||
@@ -32,12 +32,12 @@ const AstronotesDetail = (): JSX.Element => {
                         className="rounded"
                     />
                 </div>
-                <div className="flex flex-col gap-5">
-                    <h1 className="text-white font-extrabold text-xl">
+                <div className="flex flex-col gap-4 lg:gap-5">
+                    <h1 className="text-white font-extrabold text-base md:text-lg lg:text-xl">
                         {ASTRONOTES.title}
                     </h1>
 
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-2 text-sm lg:text-base">
                         {ASTRONOTES.category === 'Textbook' ? (
                             <>
                                 <h2 className="font-sans">
@@ -47,7 +47,7 @@ const AstronotesDetail = (): JSX.Element => {
                             </>
                         ) : (
                             <div className="flex gap-1 items-center">
-                                <GrStar size={20} className="text-[#999999]" />
+                                <GrStar className="text-[#999999] w-4 lg:w-5 h-4 lg:h-5" />
 
                                 <span className="font-sans text-[#999999]">
                                     {`${ASTRONOTES.rating.toFixed(1)} dari ${
@@ -60,12 +60,18 @@ const AstronotesDetail = (): JSX.Element => {
                         )}
                     </div>
 
-                    <div className="flex flex-wrap gap-2.5 pt-4">
+                    <div className="hidden md:flex flex-wrap gap-2.5 pt-3 lg:pt-4">
                         {ASTRONOTES.keywords.split(',').map((value) => (
                             <AstronotesKeyword keyword={value} key={value} />
                         ))}
                     </div>
                 </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2.5 pb-6 md:hidden">
+                {ASTRONOTES.keywords.split(',').map((value) => (
+                    <AstronotesKeyword keyword={value} key={value} />
+                ))}
             </div>
 
             <Accordion

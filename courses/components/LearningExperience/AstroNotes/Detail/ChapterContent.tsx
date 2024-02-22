@@ -23,16 +23,16 @@ const ChapterContent = ({
         <div className="flex flex-col gap-2">
             {isLoading ? (
                 <>
-                    <Skeleton className="h-[50px]" />
-                    <Skeleton className="h-[50px]" />
-                    <Skeleton className="h-[50px]" />
-                    <Skeleton className="h-[50px]" />
+                    <Skeleton className="h-[40px] md:h-[50px]" />
+                    <Skeleton className="h-[40px] md:h-[50px]" />
+                    <Skeleton className="h-[40px] md:h-[50px]" />
+                    <Skeleton className="h-[40px] md:h-[50px]" />
                 </>
             ) : (subchapters?.data?.length ?? 0) == 0 ? (
                 <p>Sabar ya, materi ini akan segera hadir untukmu.</p>
             ) : (
                 <div className="flex flex-row">
-                    <div className="flex flex-col w-full max-h-[250px] overflow-y-auto pr-7">
+                    <div className="flex flex-col w-full max-h-[250px] overflow-y-auto pr-3 md:pr-7">
                         {subchapters?.data?.map(
                             (subchapter: BookSubchapter) => (
                                 <SubchapterButton
@@ -51,7 +51,7 @@ const ChapterContent = ({
                     <div
                         className={`w-[60%] ${
                             subchapterSections.length === 0 && 'hidden'
-                        } flex flex-col max-h-[250px] overflow-y-auto px-7`}>
+                        } flex flex-col max-h-[250px] overflow-y-auto px-3 md:px-7`}>
                         {subchapterSections.map(
                             (subchapterSection: BookSubchapterSection) => (
                                 <Link
@@ -68,7 +68,7 @@ const ChapterContent = ({
                                             }
                                         );
                                     }}>
-                                    <button className="w-full text-left p-4 rounded-lg hover:bg-[#5F2BCE40]/[0.25] font-sans hover:font-bold hover:text-white">
+                                    <button className="w-full text-sm md:text-base text-left p-4 rounded-lg hover:bg-[#5F2BCE40]/[0.25] font-sans hover:font-bold hover:text-white">
                                         {subchapterSection.title}
                                     </button>
                                 </Link>
@@ -116,7 +116,7 @@ const SubchapterButton = ({
     return (
         <button
             onClick={handleSubchapterButton}
-            className="w-full text-left p-4 rounded-lg hover:bg-[#5F2BCE40]/[0.25] font-sans hover:font-bold hover:text-white">
+            className="w-full text-sm md:text-base text-left p-4 rounded-lg hover:bg-[#5F2BCE40]/[0.25] font-sans hover:font-bold hover:text-white">
             {subchapter.title}
         </button>
     );
