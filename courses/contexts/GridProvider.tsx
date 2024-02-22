@@ -1,70 +1,75 @@
-import { ReactNode, RefObject, createContext, useContext, useLayoutEffect, useRef, useState } from 'react';
+import {
+    ReactNode,
+    RefObject,
+    createContext,
+    useContext,
+    useLayoutEffect,
+    useRef,
+    useState
+} from 'react';
 
 interface GridContextType {
-  cellWidth?: number;
-  gapWidth?: number;
-  screenWidth?: number;
-  cellRef?: RefObject<HTMLDivElement>;
-  gridContainerRef?: RefObject<HTMLDivElement>;
+    cellWidth?: number;
+    gapWidth?: number;
+    screenWidth?: number;
+    cellRef?: RefObject<HTMLDivElement>;
+    gridContainerRef?: RefObject<HTMLDivElement>;
 }
 
 const GridContext = createContext<GridContextType>({} as GridContextType);
 
 export function GridProvider({
-  children
+    children
 }: {
-  children: ReactNode
+    children: ReactNode;
 }): JSX.Element {
+    const [screenWidth, setScreenWidth] = useState<number>();
+    const [cellWidth, setCellWidth] = useState<number>();
+    const [gapWidth, setGapWidth] = useState<number>();
+    const cellRef = useRef<HTMLDivElement>(null);
 
-  const [screenWidth, setScreenWidth] = useState<number>();
-  const [cellWidth, setCellWidth] = useState<number>();
-  const [gapWidth, setGapWidth] = useState<number>();
-  const cellRef = useRef<HTMLDivElement>(null);
+    useLayoutEffect(() => {
+        const updateCellAndGapWidth = () => {
+            if (cellRef.current) {
+                setCellWidth(cellRef.current.offsetWidth);
 
-  useLayoutEffect(() => {
-    const updateCellAndGapWidth = () => {
-      if (cellRef.current) {
-        setCellWidth(cellRef.current.offsetWidth);
-        
-        const screenWidth = window.innerWidth;
-        setScreenWidth(screenWidth);
+                const screenWidth = window.innerWidth;
+                setScreenWidth(screenWidth);
 
-        let gapWidthInRem = (
-          screenWidth >= 1024 ? 1 :
-          screenWidth >= 768 ? 0.25 :
-          1
-        );
-        const gapWidthInPixels = gapWidthInRem * 16;
-        setGapWidth(gapWidthInPixels);
+                const gapWidthInRem =
+                    screenWidth >= 1024 ? 1 : screenWidth >= 768 ? 0.25 : 1;
+                const gapWidthInPixels = gapWidthInRem * 16;
+                setGapWidth(gapWidthInPixels);
 
-        clearInterval(firstRenderInterval);
-      }
-      
-    };
+                clearInterval(firstRenderInterval);
+            }
+        };
 
-    const firstRenderInterval = setInterval(() => {
-      updateCellAndGapWidth();
-    }, 100)
+        const firstRenderInterval = setInterval(() => {
+            updateCellAndGapWidth();
+        }, 100);
 
-    window.addEventListener('resize', updateCellAndGapWidth);
+        window.addEventListener('resize', updateCellAndGapWidth);
 
-    return () => window.removeEventListener('resize', updateCellAndGapWidth);
-  }, []); 
+        return () =>
+            window.removeEventListener('resize', updateCellAndGapWidth);
+    }, []);
 
-  return (
-    <GridContext.Provider value={{
-      cellWidth: cellWidth,
-      gapWidth: gapWidth,
-      screenWidth: screenWidth,
-      cellRef: cellRef,
-    }}>
-      {children}
-    </GridContext.Provider>
-  );
+    return (
+        <GridContext.Provider
+            value={{
+                cellWidth: cellWidth,
+                gapWidth: gapWidth,
+                screenWidth: screenWidth,
+                cellRef: cellRef
+            }}>
+            {children}
+        </GridContext.Provider>
+    );
 }
 
 export const useGrid = (): GridContextType => {
-  return useContext(GridContext);
-}
+    return useContext(GridContext);
+};
 
 export default GridContext;

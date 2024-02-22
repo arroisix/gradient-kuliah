@@ -4,16 +4,15 @@ import CourseCard from '../components/CourseCard';
 import CourseContainer from '../components/CourseContainer';
 import useCourses from '../hooks/useCourses';
 
-const PrivateCourses = ({ 
+const PrivateCourses = ({
     myClass,
     section,
-    sort,
-}: { 
+    sort
+}: {
     myClass: boolean;
     section: 'all' | 'newly-released' | 'coming-soon';
     sort: 'latest' | 'popularity' | 'lexicography';
 }): JSX.Element => {
-
     const tracker = useTracker();
 
     const { data, loading } = useCourses(section, sort);

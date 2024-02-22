@@ -12,13 +12,10 @@ export const publicCourseV2Api = baseApi.injectEndpoints({
                 url: `${PUBLIC_COURSE_V2_BASE_URL}`,
                 params
             })
-        }),
+        })
     })
 });
 
-export const {
-    useGetPublicListCoursesV2Query,
-} = publicCourseV2Api;
+export const { useGetPublicListCoursesV2Query } = publicCourseV2Api;
 
-export const { getPublicListCoursesV2 } =
-    publicCourseV2Api.endpoints;
+export const { getPublicListCoursesV2 } = publicCourseV2Api.endpoints;

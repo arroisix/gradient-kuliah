@@ -65,7 +65,7 @@ type WatchProgress = {
     last_duration: number;
     total_watch_duration: number;
     is_finished: boolean;
-}
+};
 
 type Lecturer = {
     name: string;
@@ -224,7 +224,7 @@ type CourseProgress = {
     course: Course;
     latest_subchapter: SubChapter;
     latest_watch_progress: WatchProgress;
-}
+};
 
 type Packet = {
     id: string;

@@ -12,10 +12,8 @@ export const privateCourseV2Api = baseApi.injectEndpoints({
                 url: `${PRIVATE_COURSE_V2_BASE_URL}`,
                 params
             })
-        }),
+        })
     })
 });
 
-export const {
-    useGetPrivateListCoursesV2Query,
-} = privateCourseV2Api;
+export const { useGetPrivateListCoursesV2Query } = privateCourseV2Api;

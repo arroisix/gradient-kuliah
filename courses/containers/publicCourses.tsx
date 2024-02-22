@@ -5,16 +5,18 @@ import CourseContainer from '../components/CourseContainer';
 
 const PublicCourses = ({
     section,
-    sort,
+    sort
 }: {
     section: 'all' | 'newly-released' | 'coming-soon';
     sort: 'latest' | 'popularity' | 'lexicography';
 }): JSX.Element => {
-
     const tracker = useTracker();
 
-    const { data: courses, isLoading } = useGetPublicListCoursesV2Query({section, sort});
-    
+    const { data: courses, isLoading } = useGetPublicListCoursesV2Query({
+        section,
+        sort
+    });
+
     return (
         <CourseContainer>
             {isLoading ? (
