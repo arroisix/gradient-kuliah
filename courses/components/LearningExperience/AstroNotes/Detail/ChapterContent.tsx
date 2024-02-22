@@ -68,7 +68,7 @@ const ChapterContent = ({
                                             }
                                         );
                                     }}>
-                                    <button className="w-full text-sm md:text-base text-left p-4 rounded-lg hover:bg-[#5F2BCE40]/[0.25] font-sans hover:font-bold hover:text-white">
+                                    <button className="w-full text-sm md:text-base text-left p-3 rounded-md hover:bg-[#5F2BCE40]/[0.25] font-sans hover:font-bold hover:text-white duration-100 transition-all ease-in-out">
                                         {subchapterSection.title}
                                     </button>
                                 </Link>
@@ -116,7 +116,7 @@ const SubchapterButton = ({
     return (
         <button
             onClick={handleSubchapterButton}
-            className="w-full text-sm md:text-base text-left p-4 rounded-lg hover:bg-[#5F2BCE40]/[0.25] font-sans hover:font-bold hover:text-white duration-100 transition-all ease-in-out">
+            className="w-full text-sm md:text-base text-left p-3 rounded-md hover:bg-[#5F2BCE40]/[0.25] font-sans hover:font-bold hover:text-white duration-100 transition-all ease-in-out">
             {subchapter.title}
         </button>
     );
