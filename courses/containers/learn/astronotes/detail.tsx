@@ -19,15 +19,17 @@ const AstronotesDetail = ({
     return (
         <div className="mx-auto w-full lg:w-[75%] xl:w-[60%] flex flex-col">
             <div className="flex flex-row gap-2.5 items-center pb-7 text-xs md:text-sm">
-                <Link href={'/astronotes'} className='cursor-pointer'>
-                    <h3 className="text-[#666666] hover:text-[#666666]/[0.75] duration-100 transition-all ease-in-out">Perpustakaan</h3>
+                <Link href={'/astronotes'} className="cursor-pointer">
+                    <h3 className="text-[#666666] hover:text-[#666666]/[0.75] duration-100 transition-all ease-in-out">
+                        Perpustakaan
+                    </h3>
                 </Link>
                 <FaChevronRight className="text-[#666666] h-3 md:h-3.5" />
                 <h1 className="text-white">{astronotes.title}</h1>
             </div>
 
             <div className="flex flex-row gap-4 md:gap-6 lg:gap-8 pb-4 md:pb-6">
-                <div className="aspect-[256/364] relative min-w-[100px] md:min-w-[150px] max-w-[150px] md:max-w-[175px] w-[50%] border rounded border-neutral-700">
+                <div className="aspect-[256/364] relative min-w-[100px] md:min-w-[150px] max-w-[132px] md:max-w-[164px] h-auto w-[50%] border rounded border-neutral-700">
                     <Image
                         src={
                             astronotes.cover_url ||
@@ -37,7 +39,7 @@ const AstronotesDetail = ({
                         className="rounded"
                     />
                 </div>
-                <div className="flex flex-col gap-4 lg:gap-5">
+                <div className="flex flex-col gap-4">
                     <h1 className="text-white font-extrabold text-base md:text-lg lg:text-xl">
                         {astronotes.title}
                     </h1>
