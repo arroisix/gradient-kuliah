@@ -89,7 +89,7 @@ const ClassContainer = (): JSX.Element => {
                     onSelect={(index: number) => setTabIndex(index)}
                     focusTabOnClick={false}
                     defaultFocus={false}
-                    className="mt-2">
+                    className="mt-6">
                     <div
                         className="sticky top-[60px] bg-neutral-1000"
                         style={{
