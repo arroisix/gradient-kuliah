@@ -1,12 +1,17 @@
 import CourseCard from "courses/components/CourseCard";
 import { useGrid } from "courses/contexts/GridProvider"
-import { useGetCourseProgressV2Query } from "courses/redux/api/courseV2Api";
 import { useRef } from "react";
 import { useTracker } from "tracker/tracker";
 
-export default function CourseProgress(): JSX.Element {
+export default function CourseProgress({
+  courseProgresses,
+  isLoading,
+}: {
+  courseProgresses: CourseProgress[];
+  isLoading: boolean;
+}): JSX.Element {
+
   const tracker = useTracker();
-  const {data: courseProgresses, isLoading} = useGetCourseProgressV2Query();
   const {cellWidth, gapWidth, screenWidth} = useGrid();
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);

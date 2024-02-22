@@ -2,9 +2,13 @@ import Navbar from './components/modules/Navbar';
 import Sidebar from './components/modules/Sidebar';
 import Appbar from './components/modules/Appbar';
 import { cn } from './utils';
-import { useState } from 'react';
+import { Children, cloneElement, isValidElement, useEffect, useState } from 'react';
 import CourseProgress from 'courses/containers/courseProgress';
 import { useRouter } from 'next/router';
+import { getCurrentUser } from 'authentication/redux/selectors/userSelector';
+import { useSelector } from 'react-redux';
+import { useGetCourseProgressV2Query } from 'courses/redux/api/courseV2Api';
+import { useGetActiveSubscriptionQuery } from 'payment/redux/api/subscriptionApi';
 
 interface LayoutProps {
     children: JSX.Element;
@@ -27,11 +31,15 @@ const LearnLayout = ({
     showSidebar,
     fullHeightSidebar,
     lightMode,
-    showSubscriptionReminder
+    showSubscriptionReminder,
 }: LayoutProps): JSX.Element => {
     const [closeReminder, setCloseReminder] = useState(true);
     const router = useRouter();
     const isCoursePage = (router.pathname === '/kelas');
+    const user = useSelector(getCurrentUser);
+    const {data: courseProgresses, isLoading} = useGetCourseProgressV2Query();
+    const {data: activePacket} = useGetActiveSubscriptionQuery();
+    console.log(activePacket)
 
     return (
         <div className="w-screen text-white bg-neutral-1000">
@@ -62,11 +70,15 @@ const LearnLayout = ({
                     'w-full',
                     showSidebar && fullHeightSidebar && 'md:ml-[250px]'
                 )}>
-                    <div className={cn(
-                        "px-4 md:px-0 text-white py-8 overflow-x-hidden",
-                    )}>
-                        {isCoursePage && <CourseProgress />}
-                    </div>
+                    {(user && 
+                        isCoursePage && 
+                        activePacket && activePacket.subscription_id && 
+                        courseProgresses && courseProgresses.length > 0
+                    ) && (
+                        <div className="px-4 md:px-0 bg-[#1D1D1D] text-white py-8 overflow-x-hidden">
+                            <CourseProgress courseProgresses={courseProgresses} isLoading={isLoading} />
+                        </div>
+                    )}
                     <div className={cn(
                         'px-4 md:px-0 pt-12 w-full',
                         fullHeightSidebar && 'md:px-8 xl:px-12',
