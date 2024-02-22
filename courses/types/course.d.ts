@@ -75,7 +75,7 @@ type Lecturer = {
 
 type SubChapter = {
     id: string;
-    chapter_id: string;
+    chapter_id?: string;
     subchapter_name?: string;
     thumbnail?: string;
     order: number;

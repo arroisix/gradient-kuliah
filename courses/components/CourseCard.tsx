@@ -38,7 +38,6 @@ const CourseCard = ({
         if (latestSubChapter) {
             return `/kelas/${course.slug}/belajar/video/${latestSubChapter.chapter_id}/${latestSubChapter.id}`;
         }
-
         return `/kelas/${course.slug}`;
     };
 
