@@ -6,10 +6,10 @@ import { getBookDetail } from '../../../courses/redux/api/astronotesApi';
 import { getRunningQueriesThunk } from '../../../redux/api/baseApi';
 import { ThunkDispatch } from 'redux-thunk';
 
-const AstronotesDetailPage = (): JSX.Element => {
+const AstronotesDetailPage = ({slug, astronotes}: {slug: string, astronotes: BookDetailInterface}): JSX.Element => {
     return (
         <LearnLayout showSidebar fullHeightSidebar>
-            <AstronotesDetail />
+            <AstronotesDetail slug={slug} astronotes={astronotes} />
         </LearnLayout>
     );
 };
@@ -35,7 +35,28 @@ export const getServerSideProps: GetServerSideProps =
             };
         }
 
+        const data = payload[0].data as GetBookDetailResponse
+
         return {
-            props: {}
+            props: {
+                slug: params?.slug,
+                astronotes: data.book,
+                title: `${data.book.title}`,
+                description: `Perkaya ilmu mu dengan ${data.book.title}`,
+                openGraph: {
+                    type: 'website',
+                    title: `${data.book.title}`,
+                    description: `Perkaya ilmu mu dengan ${data.book.title}`,
+                    url: `https://gradient.academy/astronotes/${params?.slug}`,
+                    images: [
+                        {
+                            url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
+                            width: 48,
+                            height: 48,
+                            alt: 'Gradient Logo'
+                        }
+                    ]
+                },
+            }
         };
     });
