@@ -72,19 +72,13 @@ const AstronotesDetail = (): JSX.Element => {
                 item={ASTRONOTES.chapters.map((value) => ({
                     title: value.title,
                     jsxContent: (
-                        <ChapterContent
-                            id={value.id}
-                            slug={slug as string}
-                        />
+                        <ChapterContent id={value.id} slug={slug as string} />
                     ),
                     onClick: () => {
-                        tracker?.genericTrack(
-                            'Click Book Chapter Accordion',
-                            {
-                                'Book Slug': slug,
-                                'Chapter Name': value.title
-                            }
-                        )
+                        tracker?.genericTrack('Click Book Chapter Accordion', {
+                            'Book Slug': slug,
+                            'Chapter Name': value.title
+                        });
                     }
                 }))}
             />

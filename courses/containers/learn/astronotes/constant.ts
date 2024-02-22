@@ -29,6 +29,6 @@ export const ASTRONOTES: BookDetailInterface = {
         {
             id: 'dc554ae1-0cd3-4235-a6e2-cd1beddda7b4',
             title: 'Energi dan Perubahannya'
-        },
+        }
     ]
 };
