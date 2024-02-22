@@ -3,6 +3,7 @@ import { ReactNode, RefObject, createContext, useContext, useLayoutEffect, useRe
 interface GridContextType {
   cellWidth?: number;
   gapWidth?: number;
+  screenWidth?: number;
   cellRef?: RefObject<HTMLDivElement>;
   gridContainerRef?: RefObject<HTMLDivElement>;
 }
@@ -15,6 +16,7 @@ export function GridProvider({
   children: ReactNode
 }): JSX.Element {
 
+  const [screenWidth, setScreenWidth] = useState<number>();
   const [cellWidth, setCellWidth] = useState<number>();
   const [gapWidth, setGapWidth] = useState<number>();
   const cellRef = useRef<HTMLDivElement>(null);
@@ -25,13 +27,15 @@ export function GridProvider({
         setCellWidth(cellRef.current.offsetWidth);
         
         const screenWidth = window.innerWidth;
+        setScreenWidth(screenWidth);
+
         let gapWidthInRem = (
           screenWidth >= 1024 ? 1 :
           screenWidth >= 768 ? 0.25 :
           1
         );
         const gapWidthInPixels = gapWidthInRem * 16;
-        setGapWidth(gapWidthInPixels)
+        setGapWidth(gapWidthInPixels);
 
         clearInterval(firstRenderInterval);
       }
@@ -51,6 +55,7 @@ export function GridProvider({
     <GridContext.Provider value={{
       cellWidth: cellWidth,
       gapWidth: gapWidth,
+      screenWidth: screenWidth,
       cellRef: cellRef,
     }}>
       {children}

@@ -34,7 +34,7 @@ const LearnLayout = ({
     const isCoursePage = (router.pathname === '/kelas');
 
     return (
-        <div className="relative w-screen min-h-screen text-white overflow-x-hidden bg-neutral-1000">
+        <div className="w-screen text-white bg-neutral-1000">
             {!hideNavbar && (
                 <Navbar
                     lightMode={lightMode}
@@ -47,26 +47,23 @@ const LearnLayout = ({
                     setCloseReminder={setCloseReminder}
                 />
             )}
-            <section
+            <div
                 className={cn(
-                    showSidebar &&
-                        'pt-16 pb-10 flex gap-[2rem] lg:gap-[6rem] w-full',
-                    !closeReminder && showSubscriptionReminder && showSidebar
-                        ? 'pt-36'
+                    showSidebar && 'pt-16 pb-10 flex gap-[2rem] lg:gap-[6rem] w-full',
+                    !closeReminder && showSubscriptionReminder && showSidebar ? 
+                        'pt-36'
                         : !closeReminder && showSubscriptionReminder
                         ? 'pt-11'
                         : undefined
                 )}
             >
                 {showSidebar && <Sidebar fullHeight={fullHeightSidebar} />}
-                {/* <div className="w-screen">
-                    <CourseProgress /> */}
                 <div className={cn(
-                    'min-h-full w-full overflow-x-hidden',
+                    'w-full',
                     showSidebar && fullHeightSidebar && 'md:ml-[250px]'
                 )}>
                     <div className={cn(
-                        "px-4 md:px-0 bg-[#1D1D1D] text-white py-8",
+                        "px-4 md:px-0 text-white py-8 overflow-x-hidden",
                     )}>
                         {isCoursePage && <CourseProgress />}
                     </div>
@@ -77,8 +74,7 @@ const LearnLayout = ({
                         {children}
                     </div>
                 </div>
-                {/* </div> */}
-            </section>
+            </div>
             <Appbar />
         </div>
     );

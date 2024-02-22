@@ -7,6 +7,10 @@ const ListClass = (): JSX.Element => {
         <GridProvider>
             <LearnLayout showSidebar fullHeightSidebar>
                 <ClassContainer />
+                {/* <div className="h-[200vh]">
+                    <div className="bg-blue-500 h-[500px]"></div>
+                    <div className="bg-red-500 h-[100px] w-[100px] sticky top-0"></div>
+                </div> */}
             </LearnLayout>
         </GridProvider>
     );

@@ -73,7 +73,7 @@ const ClassContainer = (): JSX.Element => {
 
     return (
         <>
-            <section
+            <div
                 className={cn(
                     'w-full',
                     !isAuthenticated &&
@@ -102,11 +102,9 @@ const ClassContainer = (): JSX.Element => {
                     className="mt-2"
                 >
                     <div 
-                        className="bg-red-500"
+                        className="sticky top-[60px] bg-neutral-1000"
                         style={{
-                            position: 'sticky',
-                            top: 0,
-                            zIndex: 200,
+                            zIndex: 100,
                         }}
                     >
                         <TabList style={{
@@ -118,45 +116,48 @@ const ClassContainer = (): JSX.Element => {
                                 </Tab>
                             ))}
                         </TabList>
-                    </div>
-                    <div className="mt-6 relative">
-                        <button 
-                            onClick={() => setIsSortMenuVisible((prev) => !prev)}
-                            className="bg-[#2C2C2C] border-0 rounded-full w-full md:w-[230px] py-[10px] px-[20px] flex justify-between items-center hover:bg-[#373737] duration-200"
-                        >
-                            <p className="text-start">
-                                {sort.label}
-                            </p>
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M17.5 5H2.5V6.66667H17.5V5Z" fill="white"/>
-                                <path d="M15 9.16602H5V10.8327H15V9.16602Z" fill="white"/>
-                                <path d="M12.5 13.334H7.5V15.0007H12.5V13.334Z" fill="white"/>
-                            </svg>
-                        </button>
-                        <div 
-                            className={`absolute ${!isSortMenuVisible && 'hidden'} mt-2 w-[230px] bg-[#2C2C2C] rounded-lg`} 
-                            style={{zIndex: 100}}
-                        >
-                            {sortOptions.map((sort: {key: any, label: string}, index: number) => (
-                                <>
-                                    {index !== 0 && <div className="w-full h-[1px] bg-[rgba(153,153,153,0.5)]"></div>}
-                                    <button
-                                        key={sort.key} 
-                                        className="w-full py-2 hover:bg-[#373737] rounded-lg duration-200"
-                                        onClick={() => {
-                                            setSort(sort);
-                                            setIsSortMenuVisible(false);
-                                        }}
-                                    >
+                        <div className="pt-2"></div>
+                        {tabIndex === 0 && (
+                            <div className="pb-4">
+                                <button 
+                                    onClick={() => setIsSortMenuVisible((prev) => !prev)}
+                                    className="bg-[#2C2C2C] border-0 rounded-full w-full md:w-[230px] py-[10px] px-[20px] flex justify-between items-center hover:bg-[#373737] duration-200"
+                                >
+                                    <p className="text-start">
                                         {sort.label}
-                                    </button>
-                                </>
-                            ))}
-                        </div>
+                                    </p>
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M17.5 5H2.5V6.66667H17.5V5Z" fill="white"/>
+                                        <path d="M15 9.16602H5V10.8327H15V9.16602Z" fill="white"/>
+                                        <path d="M12.5 13.334H7.5V15.0007H12.5V13.334Z" fill="white"/>
+                                    </svg>
+                                </button>
+                                <div 
+                                    className={`absolute ${!isSortMenuVisible && 'hidden'} mt-2 w-[230px] bg-[#2C2C2C] rounded-lg`} 
+                                    style={{zIndex: 100}}
+                                >
+                                    {sortOptions.map((sort: {key: any, label: string}, index: number) => (
+                                        <>
+                                            {index !== 0 && <div className="w-full h-[1px] bg-[rgba(153,153,153,0.5)]"></div>}
+                                            <button
+                                                key={sort.key} 
+                                                className="w-full py-2 hover:bg-[#373737] rounded-lg duration-200"
+                                                onClick={() => {
+                                                    setSort(sort);
+                                                    setIsSortMenuVisible(false);
+                                                }}
+                                            >
+                                                {sort.label}
+                                            </button>
+                                        </>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                     {sectionOptions.map((section: {key: any, label: string}, index: number) => (
                         <TabPanel>
-                            <div className="my-4 mt-6">
+                            <div className="">
                                 {isAuthenticated ? (
                                     <PrivateCourses myClass={myClass} section={section.key} sort={sort.key} />
                                 ) : (
@@ -166,7 +167,7 @@ const ClassContainer = (): JSX.Element => {
                         </TabPanel>
                     ))}
                 </Tabs>
-            </section>
+            </div>
         </>
     );
 };
