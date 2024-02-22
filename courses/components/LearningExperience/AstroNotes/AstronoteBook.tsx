@@ -30,7 +30,7 @@ const AstronoteBook = ({
                     'Book Slug': slug,
                     ...eventPayload
                 });
-                
+
                 if (in_progress) router.push(`/astronotes/${slug}/1`);
                 else router.push(`/astronotes/${slug}`);
             }}
