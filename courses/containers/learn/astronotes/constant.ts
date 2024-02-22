@@ -11,8 +11,24 @@ export const ASTRONOTES: BookDetailInterface = {
         'Aplikasi Integral,Integral,Aplikasi Turunan,Integral Tak Hingga,Limit,Turunan',
     chapters: [
         {
-            id: 'asdafasfag',
-            title: 'Bab 0: Preliminaries'
-        }
+            id: 'a447ff12-407b-4349-bfef-863e3c0eb381',
+            title: 'Vektor'
+        },
+        {
+            id: '28fb38ad-8d92-4451-a15d-2ef77980e226',
+            title: 'Konsep Mol dan Stoikiometri'
+        },
+        {
+            id: 'd9fc6f11-5c81-4516-80f9-fd4e05fe774d',
+            title: 'Stoikiometri untuk Reaksi Kimia'
+        },
+        {
+            id: 'e5494235-0472-4060-b8c0-67da87a95e09',
+            title: 'Stoikiometri untuk Reaksi Redoks'
+        },
+        {
+            id: 'dc554ae1-0cd3-4235-a6e2-cd1beddda7b4',
+            title: 'Energi dan Perubahannya'
+        },
     ]
 };

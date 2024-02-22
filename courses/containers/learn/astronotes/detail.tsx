@@ -1,19 +1,27 @@
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { FaChevronRight } from 'react-icons/fa';
 import { GrStar } from 'react-icons/gr';
 import { ASTRONOTES } from './constant';
+import { useTracker } from 'tracker/tracker';
 import AstronotesKeyword from 'courses/components/LearningExperience/AstroNotes/Detail/AstronotesKeyword';
+import Accordion from 'commons/components/elements/Accordion';
+import ChapterContent from 'courses/components/LearningExperience/AstroNotes/Detail/ChapterContent';
 
 const AstronotesDetail = (): JSX.Element => {
+    const router = useRouter();
+    const { slug } = router.query;
+    const tracker = useTracker();
+
     return (
-        <div className="mx-auto max-w-[65%] flex flex-col">
+        <div className="mx-auto max-w-[90%] lg:max-w-[80%] xl:max-w-[65%] flex flex-col">
             <div className="flex flex-row gap-2.5 items-center pb-8">
                 <h3 className="text-[#666666] font-bold">Perpustakaan</h3>
                 <FaChevronRight size={16} className="text-[#666666]" />
                 <h1 className="text-white font-bold">{ASTRONOTES.title}</h1>
             </div>
 
-            <div className="flex flex-row gap-8 pb-6">
+            <div className="flex flex-row gap-8 pb-7">
                 <div className="aspect-[256/364] relative min-w-[150px] w-[35%] border rounded border-neutral-700">
                     <Image
                         src={
@@ -60,9 +68,26 @@ const AstronotesDetail = (): JSX.Element => {
                 </div>
             </div>
 
-            <div className="w-full bg-[#1D1D1D] rounded">
-                <div className="p-3 flex flex-col gap-4"></div>
-            </div>
+            <Accordion
+                item={ASTRONOTES.chapters.map((value) => ({
+                    title: value.title,
+                    jsxContent: (
+                        <ChapterContent
+                            id={value.id}
+                            slug={slug as string}
+                        />
+                    ),
+                    onClick: () => {
+                        tracker?.genericTrack(
+                            'Click Book Chapter Accordion',
+                            {
+                                'Book Slug': slug,
+                                'Chapter Name': value.title
+                            }
+                        )
+                    }
+                }))}
+            />
         </div>
     );
 };
