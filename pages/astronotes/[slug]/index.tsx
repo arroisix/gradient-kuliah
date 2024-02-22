@@ -23,11 +23,17 @@ export const getServerSideProps: GetServerSideProps =
             getBookDetail.initiate({ slug: params?.slug as string })
         );
 
-        await Promise.all(
+        const payload = await Promise.all(
             (store.dispatch as ThunkDispatch<RootState, any, any>)(
                 getRunningQueriesThunk()
             )
         );
+
+        if (payload[0].error) {
+            return {
+                notFound: true
+            }
+        }
 
         return {
             props: {}
