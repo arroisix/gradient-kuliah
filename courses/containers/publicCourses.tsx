@@ -14,7 +14,7 @@ const PublicCourses = ({
     const tracker = useTracker();
 
     const { data: courses, isLoading } = useGetPublicListCoursesV2Query({section, sort});
-    console.log(courses)
+    
     return (
         <CourseContainer>
             {isLoading ? (
