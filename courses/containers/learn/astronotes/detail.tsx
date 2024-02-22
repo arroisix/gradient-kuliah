@@ -11,7 +11,9 @@ import { useGetBookDetailQuery } from 'courses/redux/api/astronotesApi';
 const AstronotesDetail = (): JSX.Element => {
     const router = useRouter();
     const { slug } = router.query;
-    const { data: astronotes } = useGetBookDetailQuery({ slug: slug as string })
+    const { data: astronotes } = useGetBookDetailQuery({
+        slug: slug as string
+    });
     const tracker = useTracker();
 
     return (
@@ -19,7 +21,9 @@ const AstronotesDetail = (): JSX.Element => {
             <div className="flex flex-row gap-2.5 items-center pb-7 text-xs md:text-sm lg:text-base">
                 <h3 className="text-[#666666] font-bold">Perpustakaan</h3>
                 <FaChevronRight className="text-[#666666] h-3 md:h-3.5 lg:h-4" />
-                <h1 className="text-white font-bold">{astronotes?.book?.title}</h1>
+                <h1 className="text-white font-bold">
+                    {astronotes?.book?.title}
+                </h1>
             </div>
 
             <div className="flex flex-row gap-4 md:gap-6 lg:gap-8 pb-4 md:pb-6">
@@ -53,8 +57,11 @@ const AstronotesDetail = (): JSX.Element => {
                                 <GrStar className="text-[#999999] w-4 lg:w-5 h-4 lg:h-5" />
 
                                 <span className="font-sans text-[#999999]">
-                                    {`${astronotes?.book?.rating.toFixed(1)} dari ${
-                                        (astronotes?.book?.feedback_total ?? 0) <= 10000
+                                    {`${astronotes?.book?.rating.toFixed(
+                                        1
+                                    )} dari ${
+                                        (astronotes?.book?.feedback_total ??
+                                            0) <= 10000
                                             ? astronotes?.book?.feedback_total
                                             : '10000+'
                                     } penilaian`}
@@ -76,19 +83,25 @@ const AstronotesDetail = (): JSX.Element => {
                     <AstronotesKeyword keyword={value} key={value} />
                 ))}
             </div>
-            
+
             {astronotes?.book?.chapters && (
                 <Accordion
                     item={astronotes.book.chapters.map((value) => ({
                         title: value.title,
                         jsxContent: (
-                            <ChapterContent id={value.id} slug={slug as string} />
+                            <ChapterContent
+                                id={value.id}
+                                slug={slug as string}
+                            />
                         ),
                         onClick: () => {
-                            tracker?.genericTrack('Click Book Chapter Accordion', {
-                                'Book Slug': slug,
-                                'Chapter Name': value.title
-                            });
+                            tracker?.genericTrack(
+                                'Click Book Chapter Accordion',
+                                {
+                                    'Book Slug': slug,
+                                    'Chapter Name': value.title
+                                }
+                            );
                         }
                     }))}
                 />

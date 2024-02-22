@@ -65,12 +65,9 @@ export const astronotesApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: [{ type: 'ASTRONOTES', id: 'ALL' }]
         }),
-        getBookDetail: builder.query<
-            GetBookDetailResponse, 
-            { slug: string }
-        >({
-            query: ({ slug }) => ({ 
-                url: `${COURSE_BASE_URL}${slug}/detail/` 
+        getBookDetail: builder.query<GetBookDetailResponse, { slug: string }>({
+            query: ({ slug }) => ({
+                url: `${COURSE_BASE_URL}${slug}/detail/`
             })
         }),
         getTableContents: builder.query<

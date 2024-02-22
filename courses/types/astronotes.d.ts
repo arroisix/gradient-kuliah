@@ -147,5 +147,5 @@ interface BookDetailInterface {
 }
 
 interface GetBookDetailResponse {
-    book: BookDetailInterface
+    book: BookDetailInterface;
 }
