@@ -33,6 +33,7 @@ const ClassContainer = (): JSX.Element => {
     const tabStyle = {
         color: '#666666',
         padding: '0px',
+        paddingTop: '2px',
         marginRight: '50px',
         cursor: 'pointer',
         borderBottom: '0px',
