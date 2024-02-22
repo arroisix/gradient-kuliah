@@ -59,7 +59,7 @@ const ChapterContent = ({
                                     href={`/astronotes/${slug}/${subchapterSection.page_order}#${subchapterSection.id}`}
                                     onClick={() => {
                                         tracker?.genericTrack(
-                                            'Click Subchapter Section Book Item',
+                                            'Click Book Subsection Item',
                                             {
                                                 'Book Slug': slug,
                                                 'Chapter Name': id,
@@ -102,7 +102,7 @@ const SubchapterButton = ({
             setSubchapterSections(subchapter.sections);
         } else {
             setSubchapterSections([]);
-            tracker?.genericTrack('Click Subchapter Book Item', {
+            tracker?.genericTrack('Click Book Section Item', {
                 'Book Slug': slug,
                 'Chapter Name': id,
                 'Subchapter Name': subchapter.title
