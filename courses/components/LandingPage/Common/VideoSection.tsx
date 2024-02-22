@@ -8,7 +8,7 @@ import { useGetLandingCourseListContentQuery } from 'courses/redux/api/publicCou
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import SubscribeButton from './SubscribeButton';
 import useWindowSize from 'commons/hooks/useWindowSize';
-import VideoPaywall from 'courses/components/VideoPaywall';
+import VideoPaywall from 'courses/components/VideoPlayerContainer/VideoPaywall';
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
 
 interface VideoSectionProps {

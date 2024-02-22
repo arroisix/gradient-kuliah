@@ -12,3 +12,13 @@ type VideoPlayerProps<T> = {
     isMuxVideo?: boolean;
     token?: string;
 };
+
+interface VideoJsProps {
+    src: string;
+    isMuxVideo: boolean;
+    trackProgress?: (
+        last_duration: string,
+        isFinished?: boolean
+    ) => Promise<any>;
+    next_subchapter_link?: string;
+}

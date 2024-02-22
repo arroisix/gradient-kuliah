@@ -3,7 +3,7 @@ import Pen from 'commons/components/elements/Icons/Pen';
 import Modal from 'commons/components/modules/Modal';
 import { cn } from 'commons/utils';
 import WorksheetInfoModalContent from 'courses/components/LearningExperience/ExamExercise/WorksheetInfoModal';
-import VideoPaywall from 'courses/components/VideoPaywall';
+import VideoPaywall from 'courses/components/VideoPlayerContainer/VideoPaywall';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';

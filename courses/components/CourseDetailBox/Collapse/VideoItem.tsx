@@ -1,5 +1,6 @@
 import { cn } from 'commons/utils';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { HiLockClosed, HiPlay } from 'react-icons/hi';
@@ -18,48 +19,56 @@ const VideoItem = ({
     const { id, sub } = router.query;
     const { is_subscribed } = useCourseSubscription();
 
-    const totalDuration = value?.duration
-        ?.split(':')
-        ?.reverse()
-        ?.reduce((prev, curr, i) => +prev + +curr * +Math.pow(60, i), 0);
+    const { duration, last_duration: lastDuration } = value;
 
-    const totalLastDuration = value?.last_duration
-        ?.split(':')
-        ?.reverse()
-        ?.reduce((prev, curr, i) => +prev + +curr * +Math.pow(60, i), 0);
+    const convertToSeconds = (timeString?: string | null): number => {
+        if (!timeString) return 0;
+        const [_, minutes, seconds] = timeString.split(':').map(Number);
+        return minutes * 60 + seconds;
+    };
 
-    const totalDurationSecond = (totalDuration as number) % 60;
-    const totalDurationMinute = Math.floor((totalDuration as number) / 60);
-    const lastDurationSecond = (totalLastDuration as number) % 60;
-    const lastDurationMinute = Math.floor((totalLastDuration as number) / 60);
+    const totalDuration = convertToSeconds(duration);
+    const totalLastDuration = convertToSeconds(lastDuration);
+
+    const formatTime = (totalSeconds: number): string => {
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(
+            2,
+            '0'
+        )}`;
+    };
+
+    const lastDurationDisplay = formatTime(totalLastDuration);
+    const durationDisplay = formatTime(totalDuration);
+
+    const track = (): void => {
+        if (is_subscribed || value.is_free) {
+            tracker?.genericTrack('Click Video Item', {
+                'Course Slug': id,
+                'Video Title': value.subchapter_name,
+                'Chapter ID': chapter_id
+            });
+        } else {
+            tracker?.genericTrack('Click Locked Video Item', {
+                'Course Slug': id,
+                'Video Title': value.subchapter_name,
+                'Chapter ID': chapter_id
+            });
+        }
+    };
 
     return (
-        <div
+        <Link
             key={value.id}
+            href={`/kelas/${id}/belajar/video/${chapter_id}/${value.id}`}
             className="flex justify-between px-3 py-[10px] cursor-pointer hover:bg-[#272727]"
-            onClick={() => {
-                if (is_subscribed || value.is_free) {
-                    tracker?.genericTrack('Click Video Item', {
-                        'Course Slug': id,
-                        'Video Title': value.subchapter_name,
-                        'Chapter ID': chapter_id
-                    });
-                } else {
-                    tracker?.genericTrack('Click Locked Video Item', {
-                        'Course Slug': id,
-                        'Video Title': value.subchapter_name,
-                        'Chapter ID': chapter_id
-                    });
-                }
-                router.push(
-                    `/kelas/${id}/belajar/video/${chapter_id}/${value.id}`
-                );
-            }}
-            aria-hidden>
+            onClick={track}>
             <div
-                className={`flex items-center gap-[10px] ${
+                className={cn(
+                    'flex items-center gap-[10px]',
                     sub === value.id ? 'w-[65%]' : 'w-[80%]'
-                }`}>
+                )}>
                 <div className="w-[18px] h-[18px]">
                     {value.is_finished ? (
                         <IoIosCheckmarkCircle
@@ -107,20 +116,12 @@ const VideoItem = ({
                 </span>
             </div>
             <div className="flex gap-1 text-xs font-body">
-                {value.duration && (
+                {duration && (
                     <>
                         {sub === value.id && (
                             <>
                                 <span className="inline-block">
-                                    {value.last_duration
-                                        ? `${`${lastDurationMinute}`.padStart(
-                                              2,
-                                              '0'
-                                          )}:${`${lastDurationSecond}`.padStart(
-                                              2,
-                                              '0'
-                                          )}`
-                                        : '00:00'}
+                                    {lastDurationDisplay}
                                 </span>
                                 <span className="inline-block text-[#FFFFFF80]">
                                     /
@@ -128,20 +129,12 @@ const VideoItem = ({
                             </>
                         )}
                         <span className="inline-block text-[#FFFFFF80]">
-                            {value.duration
-                                ? `${`${totalDurationMinute}`.padStart(
-                                      2,
-                                      '0'
-                                  )}:${`${totalDurationSecond}`.padStart(
-                                      2,
-                                      '0'
-                                  )}`
-                                : '00:00'}
+                            {durationDisplay}
                         </span>
                     </>
                 )}
             </div>
-        </div>
+        </Link>
     );
 };
 

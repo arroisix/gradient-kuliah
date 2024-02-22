@@ -310,6 +310,8 @@ interface SearchCourseResponse {
 }
 
 type CourseDetail = {
+    course_id: string;
+    course_name: string;
     level: string;
     rating: number;
     total_books: number;
@@ -366,3 +368,9 @@ interface UseSearchSubchapter {
     setIsSearch: Dispatch<SetStateAction<boolean>>;
     setSearchKeyword: Dispatch<SetStateAction<string>>;
 }
+
+type SubchapterPathResponse = {
+    course_slug: string;
+    chapter_id: string;
+    subchapter_id: string;
+};
