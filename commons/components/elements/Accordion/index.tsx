@@ -49,7 +49,11 @@ export const AccordionItem = ({
                 }}
                 aria-hidden="true">
                 {title}
-                {open ? <FaChevronUp className='w-4 h-4' /> : <FaChevronDown className='w-4 h-4' />}
+                {open ? (
+                    <FaChevronUp className="w-4 h-4" />
+                ) : (
+                    <FaChevronDown className="w-4 h-4" />
+                )}
             </div>
             {open && renderContent()}
         </>

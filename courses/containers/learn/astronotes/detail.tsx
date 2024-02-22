@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { FaChevronRight } from 'react-icons/fa';
 import { GrStar } from 'react-icons/gr';
 import { useTracker } from 'tracker/tracker';
@@ -17,10 +18,12 @@ const AstronotesDetail = ({
 
     return (
         <div className="mx-auto w-full lg:w-[75%] xl:w-[60%] flex flex-col">
-            <div className="flex flex-row gap-2.5 items-center pb-7 text-xs md:text-sm lg:text-base">
-                <h3 className="text-[#666666] font-bold">Perpustakaan</h3>
-                <FaChevronRight className="text-[#666666] h-3 md:h-3.5 lg:h-4" />
-                <h1 className="text-white font-bold">{astronotes.title}</h1>
+            <div className="flex flex-row gap-2.5 items-center pb-7 text-xs md:text-sm">
+                <Link href={'/astronotes'} className='cursor-pointer'>
+                    <h3 className="text-[#666666] hover:text-[#666666]/[0.75] duration-100 transition-all ease-in-out">Perpustakaan</h3>
+                </Link>
+                <FaChevronRight className="text-[#666666] h-3 md:h-3.5" />
+                <h1 className="text-white">{astronotes.title}</h1>
             </div>
 
             <div className="flex flex-row gap-4 md:gap-6 lg:gap-8 pb-4 md:pb-6">
