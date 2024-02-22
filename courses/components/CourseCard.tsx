@@ -3,7 +3,7 @@ import useTransition from 'commons/hooks/useTransition';
 import { useGrid } from 'courses/contexts/GridProvider';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { IoCheckmarkCircle, IoTime } from 'react-icons/io5';
 
 type CourseCardProps = {
@@ -47,7 +47,9 @@ const CourseCard = ({
                 className={`relative flex items-end overflow-hidden rounded-lg cursor-pointer h-[300px] bg-neutral-800`}
                 style={{
                     width: !isInGrid
-                        ? `${screenWidth! < 768 ? cellWidth! - 150 : cellWidth}px`
+                        ? `${
+                              screenWidth! < 768 ? cellWidth! - 150 : cellWidth
+                          }px`
                         : 'auto',
                     background: `url(${course.thumbnail}) center / cover no-repeat, #333333`
                 }}

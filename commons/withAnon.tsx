@@ -20,8 +20,11 @@ const withAnon = <P extends object>(
         if (typeof window !== 'undefined') {
             const accessToken = useSelector(getToken);
             const isProfileComplete = useSelector(getIsProfileComplete);
-            const { is_subscribed, isLoading: isLoadingSubscribed, everSubscribed } =
-                useCourseSubscription();
+            const {
+                is_subscribed,
+                isLoading: isLoadingSubscribed,
+                everSubscribed
+            } = useCourseSubscription();
             const router = useRouter();
 
             if (!!accessToken) {

@@ -2,7 +2,7 @@ import CourseCard from 'courses/components/CourseCard';
 import { useGrid } from 'courses/contexts/GridProvider';
 import { useRef } from 'react';
 import { useTracker } from 'tracker/tracker';
-import { MdOutlineChevronLeft, MdOutlineChevronRight } from "react-icons/md";
+import { MdOutlineChevronLeft, MdOutlineChevronRight } from 'react-icons/md';
 
 export default function CourseProgress({
     courseProgresses,
@@ -33,14 +33,12 @@ export default function CourseProgress({
                 <div className="hidden md:flex gap-4 text-black">
                     <button
                         className="bg-white hover:bg-[#F8F8F8] duration-200 w-[40px] h-[40px] rounded-full flex justify-center items-center text-2xl"
-                        onClick={() => scrollTo('left')}
-                    >
+                        onClick={() => scrollTo('left')}>
                         <MdOutlineChevronLeft />
                     </button>
                     <button
                         className="bg-white hover:bg-[#F8F8F8] duration-200 w-[40px] h-[40px] rounded-full flex justify-center items-center text-2xl"
-                        onClick={() => scrollTo('right')}
-                    >
+                        onClick={() => scrollTo('right')}>
                         <MdOutlineChevronRight />
                     </button>
                 </div>
@@ -49,7 +47,9 @@ export default function CourseProgress({
                 ref={scrollContainerRef}
                 className="overflow-x-scroll flex gap-4 md:gap-1 lg:gap-4 mt-6 px-4 md:px-8 xl:px-12"
                 style={{
-                    maxWidth: `${screenWidth! >= 768 ? screenWidth! - 250 : screenWidth}px`,
+                    maxWidth: `${
+                        screenWidth! >= 768 ? screenWidth! - 250 : screenWidth
+                    }px`,
                     msOverflowStyle: 'none',
                     scrollbarWidth: 'none'
                 }}>

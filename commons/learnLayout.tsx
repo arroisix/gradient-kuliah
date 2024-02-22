@@ -37,8 +37,13 @@ const LearnLayout = ({
     const router = useRouter();
     const isCoursePage = router.pathname === '/kelas';
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { data: courseProgresses, isLoading } = useGetCourseProgressV2Query(undefined, {skip: !isAuthenticated});
-    const { data: activePacket } = useGetActiveSubscriptionQuery(undefined, {skip: !isAuthenticated});
+    const { data: courseProgresses, isLoading } = useGetCourseProgressV2Query(
+        undefined,
+        { skip: !isAuthenticated }
+    );
+    const { data: activePacket } = useGetActiveSubscriptionQuery(undefined, {
+        skip: !isAuthenticated
+    });
 
     return (
         <div className="w-screen text-white bg-neutral-1000">
@@ -65,27 +70,29 @@ const LearnLayout = ({
                         : undefined
                 )}>
                 {showSidebar && <Sidebar fullHeight={fullHeightSidebar} />}
-                <div className={cn(
-                    'w-full',
-                    showSidebar && fullHeightSidebar && 'md:ml-[250px]'
-                )}>
-                    {isAuthenticated &&
-                    isCoursePage &&
-                    activePacket &&
-                    activePacket.subscription_id &&
-                    courseProgresses &&
-                    courseProgresses.length > 0 && (
-                        <div className="px-0 bg-[#1D1D1D] text-white py-8 overflow-x-hidden">
-                            <CourseProgress
-                                courseProgresses={courseProgresses}
-                                isLoading={isLoading}
-                            />
-                        </div>
-                    )}
-                    <div className={cn(
-                        'px-4 md:px-0 pt-12 w-full',
-                        fullHeightSidebar && 'md:px-8 xl:px-12'
+                <div
+                    className={cn(
+                        'w-full',
+                        showSidebar && fullHeightSidebar && 'md:ml-[250px]'
                     )}>
+                    {isAuthenticated &&
+                        isCoursePage &&
+                        activePacket &&
+                        activePacket.subscription_id &&
+                        courseProgresses &&
+                        courseProgresses.length > 0 && (
+                            <div className="px-0 bg-[#1D1D1D] text-white py-8 overflow-x-hidden">
+                                <CourseProgress
+                                    courseProgresses={courseProgresses}
+                                    isLoading={isLoading}
+                                />
+                            </div>
+                        )}
+                    <div
+                        className={cn(
+                            'px-4 md:px-0 pt-12 w-full',
+                            fullHeightSidebar && 'md:px-8 xl:px-12'
+                        )}>
                         {children}
                     </div>
                 </div>

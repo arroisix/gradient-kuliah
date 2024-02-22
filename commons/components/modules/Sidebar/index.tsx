@@ -26,7 +26,7 @@ const Sidebar = ({
     return (
         <aside
             className={cn(
-                "hidden md:block top-[64px] bg-[#121212] w-[250px] pl-6 pr-3 py-4",
+                'hidden md:block top-[64px] bg-[#121212] w-[250px] pl-6 pr-3 py-4',
                 fullHeight ? 'fixed h-full' : 'h-fit sticky',
                 className
             )}
