@@ -84,19 +84,6 @@ const ClassContainer = (): JSX.Element => {
                         'px-4 md:px-[7.5rem]'
                 )}>
                 <h1 className="text-4xl font-bold md:text-5xl">Kelas</h1>
-                <div className="flex flex-col justify-end w-full mt-6 md:flex-row">
-                    {/* <div className="w-full md:w-1/3">
-                        <Input
-                        type="text"
-                        placeholder="cari kelas"
-                        className="border-none bg-neutral-900 border-neutral-900"
-                        name="password"
-                        endAddorment={
-                            <FaSearch className="text-gray-500 cursor-pointer" />
-                        }
-                        />
-                    </div> */}
-                </div>
                 <Tabs
                     selectedIndex={tabIndex}
                     onSelect={(index: number) => setTabIndex(index)}

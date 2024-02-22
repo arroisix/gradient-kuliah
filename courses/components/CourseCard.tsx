@@ -39,19 +39,7 @@ const CourseCard = ({
         return `/kelas/${course.slug}`;
     };
 
-    const { cellRef, cellWidth } = useGrid();
-    const [isSmallScreen, setIsSmallScreen] = useState(false);
-
-    useEffect(() => {
-        const handleResize = () => {
-            setIsSmallScreen(window.innerWidth < 768);
-        };
-
-        handleResize();
-        window.addEventListener('resize', handleResize);
-
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
+    const { cellRef, cellWidth, screenWidth } = useGrid();
 
     return (
         <Link href={decideUrl()} onClick={() => onClick?.()}>
@@ -59,8 +47,8 @@ const CourseCard = ({
                 className={`relative flex items-end overflow-hidden rounded-lg cursor-pointer h-[300px] bg-neutral-800`}
                 style={{
                     width: !isInGrid
-                        ? `${isSmallScreen ? cellWidth! - 150 : cellWidth}px`
-                        : 'auto', // TODO: decrease 70px when it is less than sm
+                        ? `${screenWidth! < 768 ? cellWidth! - 150 : cellWidth}px`
+                        : 'auto',
                     background: `url(${course.thumbnail}) center / cover no-repeat, #333333`
                 }}
                 {...(isInGrid && isFirstInGrid ? { ref: cellRef } : {})}>
