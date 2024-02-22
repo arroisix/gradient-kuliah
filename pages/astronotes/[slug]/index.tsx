@@ -6,7 +6,13 @@ import { getBookDetail } from '../../../courses/redux/api/astronotesApi';
 import { getRunningQueriesThunk } from '../../../redux/api/baseApi';
 import { ThunkDispatch } from 'redux-thunk';
 
-const AstronotesDetailPage = ({slug, astronotes}: {slug: string, astronotes: BookDetailInterface}): JSX.Element => {
+const AstronotesDetailPage = ({
+    slug,
+    astronotes
+}: {
+    slug: string;
+    astronotes: BookDetailInterface;
+}): JSX.Element => {
     return (
         <LearnLayout showSidebar fullHeightSidebar>
             <AstronotesDetail slug={slug} astronotes={astronotes} />
@@ -35,7 +41,7 @@ export const getServerSideProps: GetServerSideProps =
             };
         }
 
-        const data = payload[0].data as GetBookDetailResponse
+        const data = payload[0].data as GetBookDetailResponse;
 
         return {
             props: {
@@ -56,7 +62,7 @@ export const getServerSideProps: GetServerSideProps =
                             alt: 'Gradient Logo'
                         }
                     ]
-                },
+                }
             }
         };
     });

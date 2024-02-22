@@ -6,7 +6,13 @@ import AstronotesKeyword from 'courses/components/LearningExperience/AstroNotes/
 import Accordion from 'commons/components/elements/Accordion';
 import ChapterContent from 'courses/components/LearningExperience/AstroNotes/Detail/ChapterContent';
 
-const AstronotesDetail = ({slug, astronotes}: {slug: string, astronotes: BookDetailInterface}): JSX.Element => {
+const AstronotesDetail = ({
+    slug,
+    astronotes
+}: {
+    slug: string;
+    astronotes: BookDetailInterface;
+}): JSX.Element => {
     const tracker = useTracker();
 
     return (
@@ -14,9 +20,7 @@ const AstronotesDetail = ({slug, astronotes}: {slug: string, astronotes: BookDet
             <div className="flex flex-row gap-2.5 items-center pb-7 text-xs md:text-sm lg:text-base">
                 <h3 className="text-[#666666] font-bold">Perpustakaan</h3>
                 <FaChevronRight className="text-[#666666] h-3 md:h-3.5 lg:h-4" />
-                <h1 className="text-white font-bold">
-                    {astronotes.title}
-                </h1>
+                <h1 className="text-white font-bold">{astronotes.title}</h1>
             </div>
 
             <div className="flex flex-row gap-4 md:gap-6 lg:gap-8 pb-4 md:pb-6">
@@ -50,9 +54,8 @@ const AstronotesDetail = ({slug, astronotes}: {slug: string, astronotes: BookDet
                                 <GrStar className="text-[#999999] w-4 lg:w-5 h-4 lg:h-5" />
 
                                 <span className="font-sans text-[#999999]">
-                                    {`${astronotes.rating.toFixed(
-                                        1
-                                    )} dari ${astronotes.feedback_total <= 10000
+                                    {`${astronotes.rating.toFixed(1)} dari ${
+                                        astronotes.feedback_total <= 10000
                                             ? astronotes.feedback_total
                                             : '10000+'
                                     } penilaian`}
@@ -64,7 +67,10 @@ const AstronotesDetail = ({slug, astronotes}: {slug: string, astronotes: BookDet
                     {astronotes.keywords && (
                         <div className="hidden md:flex flex-wrap gap-2.5 pt-3 lg:pt-4">
                             {astronotes.keywords.split(',').map((value) => (
-                                <AstronotesKeyword keyword={value} key={value} />
+                                <AstronotesKeyword
+                                    keyword={value}
+                                    key={value}
+                                />
                             ))}
                         </div>
                     )}
@@ -83,22 +89,16 @@ const AstronotesDetail = ({slug, astronotes}: {slug: string, astronotes: BookDet
                 item={astronotes.chapters.map((value) => ({
                     title: value.title,
                     jsxContent: (
-                        <ChapterContent
-                            id={value.id}
-                            slug={slug as string}
-                        />
+                        <ChapterContent id={value.id} slug={slug as string} />
                     ),
                     onClick: () => {
-                        tracker?.genericTrack(
-                            'Click Book Chapter Accordion',
-                            {
-                                'Book Slug': slug,
-                                'Chapter Name': value.title
-                            }
-                        );
+                        tracker?.genericTrack('Click Book Chapter Accordion', {
+                            'Book Slug': slug,
+                            'Chapter Name': value.title
+                        });
                     }
                 }))}
-             />
+            />
         </div>
     );
 };
