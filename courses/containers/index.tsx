@@ -72,7 +72,7 @@ const ClassContainer = (): JSX.Element => {
     });
 
     const [isSortMenuVisible, setIsSortMenuVisible] = useState(false);
-    const { data: activePacket } = useGetActiveSubscriptionQuery();
+    const { data: activePacket } = useGetActiveSubscriptionQuery(undefined, {skip: !isAuthenticated});
 
     return (
         <>
