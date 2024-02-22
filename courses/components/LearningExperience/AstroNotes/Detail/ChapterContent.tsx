@@ -49,7 +49,7 @@ const ChapterContent = ({
                     </div>
 
                     <div
-                        className={`w-[60%] ${
+                        className={`w-[60%] duration-100 transition-all ease-in-out ${
                             subchapterSections.length === 0 && 'hidden'
                         } flex flex-col max-h-[250px] overflow-y-auto px-3 md:px-7`}>
                         {subchapterSections.map(
@@ -116,7 +116,7 @@ const SubchapterButton = ({
     return (
         <button
             onClick={handleSubchapterButton}
-            className="w-full text-sm md:text-base text-left p-4 rounded-lg hover:bg-[#5F2BCE40]/[0.25] font-sans hover:font-bold hover:text-white">
+            className="w-full text-sm md:text-base text-left p-4 rounded-lg hover:bg-[#5F2BCE40]/[0.25] font-sans hover:font-bold hover:text-white duration-100 transition-all ease-in-out">
             {subchapter.title}
         </button>
     );

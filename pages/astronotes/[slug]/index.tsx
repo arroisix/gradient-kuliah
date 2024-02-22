@@ -32,7 +32,7 @@ export const getServerSideProps: GetServerSideProps =
         if (payload[0].error) {
             return {
                 notFound: true
-            }
+            };
         }
 
         return {
