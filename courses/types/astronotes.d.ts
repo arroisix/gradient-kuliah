@@ -145,3 +145,7 @@ interface BookDetailInterface {
         title: string;
     }[];
 }
+
+interface GetBookDetailResponse {
+    book: BookDetailInterface
+}

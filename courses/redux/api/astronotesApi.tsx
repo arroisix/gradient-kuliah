@@ -65,6 +65,14 @@ export const astronotesApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: [{ type: 'ASTRONOTES', id: 'ALL' }]
         }),
+        getBookDetail: builder.query<
+            GetBookDetailResponse, 
+            { slug: string }
+        >({
+            query: ({ slug }) => ({ 
+                url: `${COURSE_BASE_URL}${slug}/detail/` 
+            })
+        }),
         getTableContents: builder.query<
             GetBookChapterResponse,
             { slug: string }
@@ -191,6 +199,7 @@ export const {
     useGetBookProgressQuery,
     useLazyGetBookProgressQuery,
     usePostBookProgressMutation,
+    useGetBookDetailQuery,
     useGetTableContentsQuery,
     useGetTableContentSubchaptersQuery,
     useGetPublicTableContentsQuery,
@@ -203,3 +212,5 @@ export const {
     usePostRatingMutation,
     usePostFeedbackMutation
 } = astronotesApi;
+
+export const { getBookDetail } = astronotesApi.endpoints;
