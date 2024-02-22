@@ -2,7 +2,7 @@ import Navbar from './components/modules/Navbar';
 import Sidebar from './components/modules/Sidebar';
 import Appbar from './components/modules/Appbar';
 import { cn } from './utils';
-import { Children, cloneElement, isValidElement, useEffect, useState } from 'react';
+import { useState } from 'react';
 import CourseProgress from 'courses/containers/courseProgress';
 import { useRouter } from 'next/router';
 import { getCurrentUser } from 'authentication/redux/selectors/userSelector';
