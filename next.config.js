@@ -1,3 +1,5 @@
+const env = process.env.NODE_ENV;
+
 module.exports = {
     images: {
         domains: [
@@ -9,8 +11,9 @@ module.exports = {
             's3.ap-southeast-1.amazonaws.com',
             'storage.googleapis.com',
             'gradient-asset.storage.googleapis.com',
-            'gradient-asset-dev.storage.googleapis.com',
+            'gradient-asset-dev.storage.g oogleapis.com',
             'notion.so',
+            'gradient-sitemap.s3.ap-southeast-1.amazonaws.com',
             'gradient-public-student-dev.s3.ap-southeast-1.amazonaws.com',
             'gradient-public-student-prod.s3.ap-southeast-1.amazonaws.com'
         ]
@@ -25,6 +28,14 @@ module.exports = {
                 destination:
                     'https://docs.google.com/forms/d/e/1FAIpQLSd5DjQIJMwwpxhIf8O4-auzAWyyBhFmL685dksUNxT7JDDFQA/viewform?pli=1',
                 permanent: true,
+                basePath: false
+            },
+            {
+                source: '/sitemaps/:file(.+-sitemap(?:-\\d{1,3})?\\.xml)',
+                destination: `https://gradient-sitemap.s3.ap-southeast-1.amazonaws.com/${
+                    env === 'production' ? 'prod' : 'dev'
+                }/:file`,
+                permanent: false,
                 basePath: false
             }
         ];

@@ -374,4 +374,8 @@ type SubchapterPathResponse = {
     course_slug: string;
     chapter_id: string;
     subchapter_id: string;
+    subchapter_name: string;
+    subchapter_thumbnail: string;
+    video_is_free: boolean;
+    video_duration: string;
 };
