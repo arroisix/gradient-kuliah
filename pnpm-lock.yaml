@@ -193,7 +193,7 @@ dependencies:
     version: 2.0.12(react@18.1.0)
   react-redux:
     specifier: ^8.0.7
-    version: 8.0.7(@reduxjs/toolkit@1.9.5)(@types/react-dom@18.0.7)(@types/react@18.0.23)(react-dom@18.1.0)(react-native@0.72.4)(react@18.1.0)(redux@4.2.1)
+    version: 8.0.7(@reduxjs/toolkit@1.9.5)(@types/react-dom@18.0.7)(@types/react@18.0.23)(react-dom@18.1.0)(react-native@0.72.4)(react@18.1.0)(redux@5.0.1)
   react-scroll-parallax:
     specifier: ^3.3.1
     version: 3.3.1(react-dom@18.1.0)(react@18.1.0)
@@ -217,7 +217,10 @@ dependencies:
     version: 3.0.6
   redux-persist:
     specifier: ^6.0.0
-    version: 6.0.0(react@18.1.0)(redux@4.2.1)
+    version: 6.0.0(react@18.1.0)(redux@5.0.1)
+  redux-thunk:
+    specifier: ^3.1.0
+    version: 3.1.0(redux@5.0.1)
   rehype-highlight:
     specifier: ^5.0.2
     version: 5.0.2
@@ -3346,7 +3349,7 @@ packages:
     dependencies:
       immer: 9.0.21
       react: 18.1.0
-      react-redux: 8.0.7(@reduxjs/toolkit@1.9.5)(@types/react-dom@18.0.7)(@types/react@18.0.23)(react-dom@18.1.0)(react-native@0.72.4)(react@18.1.0)(redux@4.2.1)
+      react-redux: 8.0.7(@reduxjs/toolkit@1.9.5)(@types/react-dom@18.0.7)(@types/react@18.0.23)(react-dom@18.1.0)(react-native@0.72.4)(react@18.1.0)(redux@5.0.1)
       redux: 4.2.1
       redux-thunk: 2.4.2(redux@4.2.1)
       reselect: 4.1.8
@@ -8906,7 +8909,7 @@ packages:
     dependencies:
       next: 12.2.6(@babel/core@7.22.17)(react-dom@18.1.0)(react@18.1.0)(sass@1.55.0)
       react: 18.1.0
-      react-redux: 8.0.7(@reduxjs/toolkit@1.9.5)(@types/react-dom@18.0.7)(@types/react@18.0.23)(react-dom@18.1.0)(react-native@0.72.4)(react@18.1.0)(redux@4.2.1)
+      react-redux: 8.0.7(@reduxjs/toolkit@1.9.5)(@types/react-dom@18.0.7)(@types/react@18.0.23)(react-dom@18.1.0)(react-native@0.72.4)(react@18.1.0)(redux@5.0.1)
     dev: false
 
   /next-seo@6.1.0(next@12.2.6)(react-dom@18.1.0)(react@18.1.0):
@@ -10219,7 +10222,7 @@ packages:
       scheduler: 0.23.0
     dev: false
 
-  /react-redux@8.0.7(@reduxjs/toolkit@1.9.5)(@types/react-dom@18.0.7)(@types/react@18.0.23)(react-dom@18.1.0)(react-native@0.72.4)(react@18.1.0)(redux@4.2.1):
+  /react-redux@8.0.7(@reduxjs/toolkit@1.9.5)(@types/react-dom@18.0.7)(@types/react@18.0.23)(react-dom@18.1.0)(react-native@0.72.4)(react@18.1.0)(redux@5.0.1):
     resolution: {integrity: sha512-1vRQuCQI5Y2uNmrMXg81RXKiBHY3jBzvCvNmZF437O/Z9/pZ+ba2uYHbemYXb3g8rjsacBGo+/wmfrQKzMhJsg==}
     peerDependencies:
       '@reduxjs/toolkit': ^1 || ^2.0.0-beta.0
@@ -10254,7 +10257,7 @@ packages:
       react-dom: 18.1.0(react@18.1.0)
       react-is: 18.2.0
       react-native: 0.72.4(@babel/core@7.22.17)(@babel/preset-env@7.22.15)(react@18.1.0)
-      redux: 4.2.1
+      redux: 5.0.1
       use-sync-external-store: 1.2.0(react@18.1.0)
     dev: false
 
@@ -10514,7 +10517,7 @@ packages:
       deep-diff: 0.3.8
     dev: false
 
-  /redux-persist@6.0.0(react@18.1.0)(redux@4.2.1):
+  /redux-persist@6.0.0(react@18.1.0)(redux@5.0.1):
     resolution: {integrity: sha512-71LLMbUq2r02ng2We9S215LtPu3fY0KgaGE0k8WRgl6RkqxtGfl7HUozz1Dftwsb0D/5mZ8dwAaPbtnzfvbEwQ==}
     peerDependencies:
       react: '>=16'
@@ -10524,7 +10527,7 @@ packages:
         optional: true
     dependencies:
       react: 18.1.0
-      redux: 4.2.1
+      redux: 5.0.1
     dev: false
 
   /redux-thunk@2.4.2(redux@4.2.1):
@@ -10535,41 +10538,29 @@ packages:
       redux: 4.2.1
     dev: false
 
-    /redux-thunk@3.1.0(redux@5.0.1):
-        resolution:
-            {
-                integrity: sha512-NW2r5T6ksUKXCabzhL9z+h206HQw/NJkcLm1GPImRQ8IzfXwRGqjVhKJGauHirT0DAuyy6hjdnMZaRoAcy0Klw==
-            }
-        peerDependencies:
-            redux: ^5.0.0
-        dependencies:
-            redux: 5.0.1
-        dev: false
+  /redux-thunk@3.1.0(redux@5.0.1):
+    resolution: {integrity: sha512-NW2r5T6ksUKXCabzhL9z+h206HQw/NJkcLm1GPImRQ8IzfXwRGqjVhKJGauHirT0DAuyy6hjdnMZaRoAcy0Klw==}
+    peerDependencies:
+      redux: ^5.0.0
+    dependencies:
+      redux: 5.0.1
+    dev: false
 
-    /redux@4.2.1:
-        resolution:
-            {
-                integrity: sha512-LAUYz4lc+Do8/g7aeRa8JkyDErK6ekstQaqWQrNRW//MY1TvCEpMtpTWvlQ+FPbWCx+Xixu/6SHt5N0HR+SB4w==
-            }
-        dependencies:
-            '@babel/runtime': 7.22.15
+  /redux@4.2.1:
+    resolution: {integrity: sha512-LAUYz4lc+Do8/g7aeRa8JkyDErK6ekstQaqWQrNRW//MY1TvCEpMtpTWvlQ+FPbWCx+Xixu/6SHt5N0HR+SB4w==}
+    dependencies:
+      '@babel/runtime': 7.22.15
 
-    /redux@5.0.1:
-        resolution:
-            {
-                integrity: sha512-M9/ELqF6fy8FwmkpnF0S3YKOqMyoWJ4+CS5Efg2ct3oY9daQvd/Pc71FpGZsVsbl3Cpb+IIcjBDUnnyBdQbq4w==
-            }
-        dev: false
+  /redux@5.0.1:
+    resolution: {integrity: sha512-M9/ELqF6fy8FwmkpnF0S3YKOqMyoWJ4+CS5Efg2ct3oY9daQvd/Pc71FpGZsVsbl3Cpb+IIcjBDUnnyBdQbq4w==}
+    dev: false
 
-    /regenerate-unicode-properties@10.1.0:
-        resolution:
-            {
-                integrity: sha512-d1VudCLoIGitcU/hEg2QqvyGZQmdC0Lf8BqdOMXGFSvJP4bNV1+XqbPQeHHLD51Jh4QJJ225dlIFvY4Ly6MXmQ==
-            }
-        engines: { node: '>=4' }
-        dependencies:
-            regenerate: 1.4.2
-        dev: false
+  /regenerate-unicode-properties@10.1.1:
+    resolution: {integrity: sha512-X007RyZLsCJVVrjgEFVpLUTZwyOZk3oiL75ZcuYjlIWd6rNJtOjkBwQc5AsRrpbKVkxN6sklw/k/9m2jJYOf8Q==}
+    engines: {node: '>=4'}
+    dependencies:
+      regenerate: 1.4.2
+    dev: false
 
   /regenerate@1.4.2:
     resolution: {integrity: sha512-zrceR/XhGYU/d/opr2EKO7aRHUeiBI8qjtfHqADTwZd6Szfy16la6kqD0MIUs5z5hx6AaKa+PixpPrR289+I0A==}
@@ -10608,7 +10599,7 @@ packages:
     dependencies:
       '@babel/regjsgen': 0.8.0
       regenerate: 1.4.2
-      regenerate-unicode-properties: 10.1.0
+      regenerate-unicode-properties: 10.1.1
       regjsparser: 0.9.1
       unicode-match-property-ecmascript: 2.0.0
       unicode-match-property-value-ecmascript: 2.1.0
