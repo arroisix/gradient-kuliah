@@ -32,6 +32,9 @@ const CourseCard = ({
     }, [course]);
 
     const decideUrl = (): string => {
+        if (course.is_coming_soon) {
+            return "";
+        }
         if (course.is_only_notebook) {
             return `/kelas/${course.slug}/astronotes`;
         }
@@ -40,11 +43,13 @@ const CourseCard = ({
         }
         return `/kelas/${course.slug}`;
     };
-
+    
+    const url = decideUrl();
+    
     const { cellRef, cellWidth, screenWidth } = useGrid();
 
     return (
-        <Link href={decideUrl()} onClick={() => onClick?.()}>
+        <Link href={url} onClick={() => onClick?.()}>
             <div
                 className={`relative flex items-end overflow-hidden rounded-lg cursor-pointer h-[224px] bg-neutral-800 border-[0.5px] border-[#666666]`}
                 style={{
