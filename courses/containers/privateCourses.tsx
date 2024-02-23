@@ -45,27 +45,25 @@ const PrivateCourses = ({
                     <div className="p-4 h-[224px] w-full bg-neutral-600 animate-pulse rounded-lg" />
                     <div className="p-4 h-[224px] w-full bg-neutral-600 animate-pulse rounded-lg" />
                 </>
+            ) : courses && courses.length > 0 ? (
+                courses.map((course: Course, index: number) => (
+                    <CourseCard
+                        isInGrid
+                        isFirstInGrid={index === 1}
+                        course={course}
+                        key={course.id}
+                        onClick={() => {
+                            tracker?.genericTrack(
+                                'Click Private Class Card On Class Page',
+                                {
+                                    'Course Slug': course.slug
+                                }
+                            );
+                        }}
+                    />
+                ))
             ) : (
-                courses && courses.length > 0 ? (
-                    courses.map((course: Course, index: number) => (
-                        <CourseCard
-                            isInGrid
-                            isFirstInGrid={index === 1}
-                            course={course}
-                            key={course.id}
-                            onClick={() => {
-                                tracker?.genericTrack(
-                                    'Click Private Class Card On Class Page',
-                                    {
-                                        'Course Slug': course.slug
-                                    }
-                                );
-                            }}
-                        />
-                    ))
-                ) : (
-                    <EmptyCourse />
-                )
+                <EmptyCourse />
             )}
         </CourseContainer>
     );

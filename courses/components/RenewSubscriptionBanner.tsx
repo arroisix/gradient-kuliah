@@ -16,7 +16,8 @@ export default function RenewSubscriptionBanner() {
                 <button
                     className="py-2 px-6 bg-white font-semibold text-black rounded-full"
                     onClick={() => {
-                        if (isAuthenticated) window.location.href = '/langganan';
+                        if (isAuthenticated)
+                            window.location.href = '/langganan';
                         else window.location.href = '/masuk';
                     }}>
                     <p className="hidden md:block">Beli Paket</p>

@@ -19,7 +19,10 @@ const PublicCourses = ({
     });
 
     return (
-        <CourseContainer isGrid={!isLoading ? (courses?.data && courses?.data.length > 0) : true}>
+        <CourseContainer
+            isGrid={
+                !isLoading ? courses?.data && courses?.data.length > 0 : true
+            }>
             {isLoading ? (
                 <>
                     <div className="p-4 h-[224px] w-full bg-neutral-600 animate-pulse rounded-lg" />
@@ -28,27 +31,25 @@ const PublicCourses = ({
                     <div className="p-4 h-[224px] w-full bg-neutral-600 animate-pulse rounded-lg" />
                     <div className="p-4 h-[224px] w-full bg-neutral-600 animate-pulse rounded-lg" />
                 </>
+            ) : courses?.data && courses?.data.length > 0 ? (
+                courses?.data.map((course: Course, index: number) => (
+                    <CourseCard
+                        isInGrid
+                        isFirstInGrid={index === 1}
+                        course={course}
+                        key={course.id}
+                        onClick={() => {
+                            tracker?.genericTrack(
+                                'Click Public Class Card On Class Page',
+                                {
+                                    'Course Slug': course.slug
+                                }
+                            );
+                        }}
+                    />
+                ))
             ) : (
-                courses?.data && courses?.data.length > 0 ? (
-                    courses?.data.map((course: Course, index: number) => (
-                        <CourseCard
-                            isInGrid
-                            isFirstInGrid={index === 1}
-                            course={course}
-                            key={course.id}
-                            onClick={() => {
-                                tracker?.genericTrack(
-                                    'Click Public Class Card On Class Page',
-                                    {
-                                        'Course Slug': course.slug
-                                    }
-                                );
-                            }}
-                        />
-                    ))
-                ) : (
-                    <EmptyCourse />
-                )
+                <EmptyCourse />
             )}
         </CourseContainer>
     );
