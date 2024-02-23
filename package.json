@@ -85,6 +85,7 @@
         "react-toastify": "^8.2.0",
         "redux-logger": "^3.0.6",
         "redux-persist": "^6.0.0",
+        "redux-thunk": "^3.1.0",
         "rehype-highlight": "^5.0.2",
         "rehype-katex": "^6.0.2",
         "rehype-mathjax": "^4.0.2",

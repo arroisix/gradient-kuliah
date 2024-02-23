@@ -39,7 +39,7 @@ export const AccordionItem = ({
     return (
         <>
             <div
-                className={`text-xl font-bold p-4 flex justify-between items-center cursor-pointer bg-neutral-900 first:mt-0 mt-4 ${
+                className={`text-sm md:text-base font-semibold px-4 py-3 flex justify-between items-center cursor-pointer bg-neutral-900 first:mt-0 mt-4 ${
                     open ? 'rounded-t-lg' : 'rounded-lg'
                 }`}
                 role="alert"
@@ -49,7 +49,11 @@ export const AccordionItem = ({
                 }}
                 aria-hidden="true">
                 {title}
-                {open ? <FaChevronUp /> : <FaChevronDown />}
+                {open ? (
+                    <FaChevronUp className="w-4 h-4" />
+                ) : (
+                    <FaChevronDown className="w-4 h-4" />
+                )}
             </div>
             {open && renderContent()}
         </>

@@ -216,7 +216,8 @@ export const EducationStep = (): JSX.Element => {
                                     disabled={
                                         !values.education_level ||
                                         !values.institution ||
-                                        (values.education_level !== 'SMP' && !values.major) ||
+                                        (values.education_level !== 'SMP' &&
+                                            !values.major) ||
                                         !values.profession ||
                                         (values.profession === 'employed' &&
                                             !values.profession_field) ||

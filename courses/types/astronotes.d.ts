@@ -130,3 +130,22 @@ interface AstronoteCategory {
 interface AstronotesBooksQueryParams extends BaseListQueryParams {
     major?: string;
 }
+
+interface BookDetailInterface {
+    title: string;
+    cover_url: string;
+    category: string;
+    rating: number;
+    feedback_total: number;
+    authors: string[];
+    isbn: string;
+    keywords: string;
+    chapters: {
+        id: string;
+        title: string;
+    }[];
+}
+
+interface GetBookDetailResponse {
+    book: BookDetailInterface;
+}
