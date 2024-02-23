@@ -24,7 +24,7 @@ const VideoItem = ({
     const convertToSeconds = (timeString?: string | null): number => {
         if (!timeString) return 0;
         const duration = timeString.split(':').map(Number);
-        const [seconds, minutes, hours] = duration.reverse()
+        const [seconds, minutes, hours] = duration.reverse();
         return (hours ?? 0) * 60 * 60 + minutes * 60 + seconds;
     };
 
