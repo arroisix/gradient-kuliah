@@ -82,12 +82,13 @@ const ClassContainer = (): JSX.Element => {
 
     return (
         <>
-            <div className={cn(
-                'w-full min-h-screen',
-                !isAuthenticated &&
-                    !isLandingPageRevampOn &&
-                    'px-4 md:px-[7.5rem]'
-            )}>
+            <div
+                className={cn(
+                    'w-full min-h-screen',
+                    !isAuthenticated &&
+                        !isLandingPageRevampOn &&
+                        'px-4 md:px-[7.5rem]'
+                )}>
                 <h1 className="md:text-2xl text-xl font-bold">Kelas</h1>
                 <Tabs
                     selectedIndex={tabIndex}
@@ -113,8 +114,8 @@ const ClassContainer = (): JSX.Element => {
                                         key={section.key}
                                         style={
                                             tabIndex === index
-                                            ? activeTabStyle
-                                            : tabStyle
+                                                ? activeTabStyle
+                                                : tabStyle
                                         }>
                                         <p className="text-[14px]">
                                             {section.label}
@@ -131,7 +132,9 @@ const ClassContainer = (): JSX.Element => {
                                         setIsSortMenuVisible((prev) => !prev)
                                     }
                                     className="bg-[#2C2C2C] border-0 rounded-full w-full md:w-[230px] py-[10px] px-[20px] flex justify-between items-center hover:bg-[#373737] duration-200">
-                                    <p className="text-[14px] text-start">{sort.label}</p>
+                                    <p className="text-[14px] text-start">
+                                        {sort.label}
+                                    </p>
                                     <svg
                                         width="20"
                                         height="20"
