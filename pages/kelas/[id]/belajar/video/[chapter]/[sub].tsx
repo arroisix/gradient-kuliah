@@ -23,7 +23,7 @@ const Belajar = ({ subchapter, course }: BelajarPageProps): JSX.Element => {
 
 export const getStaticPaths: GetStaticPaths = async () => {
     const { data: response } = await axios.get<
-        ResponseData<SubchapterPathResponse>
+        ListResponseData<SubchapterPathResponse>
     >(
         `${config.API_BASE_URL}courses/subchapter/list-subchapter-with-video/?limit=10`
     );
