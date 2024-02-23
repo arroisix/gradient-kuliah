@@ -78,9 +78,11 @@ const CourseCard = ({
                                 <p className="ml-2 text-xs">Completed</p>
                             </div>
                         ))}
-                    <p className="mt-1 font-semibold">{course.course_name}</p>
+                    <p className="mt-1 font-semibold line-clamp-2 text-ellipsis">
+                        {course.course_name}
+                    </p>
                     {latestSubChapter && (
-                        <p className="text-sm text-[#999999] mt-1">
+                        <p className="text-sm text-[#999999] mt-1 line-clamp-2 text-ellipsis">
                             Bab: {latestSubChapter.subchapter_name}
                         </p>
                     )}
