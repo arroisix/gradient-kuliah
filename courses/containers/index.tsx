@@ -12,6 +12,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import RenewSubscriptionBanner from 'courses/components/RenewSubscriptionBanner';
 import { useGetActiveSubscriptionQuery } from 'payment/redux/api/subscriptionApi';
+import { useGrid } from 'courses/contexts/GridProvider';
 
 const ClassContainer = (): JSX.Element => {
     const router = useRouter();
@@ -30,11 +31,13 @@ const ClassContainer = (): JSX.Element => {
 
     const [tabIndex, setTabIndex] = useState(0);
 
+    const {screenWidth} = useGrid();
+
     const tabStyle = {
         color: '#666666',
         padding: '0px',
         paddingTop: '2px',
-        marginRight: '50px',
+        marginRight: screenWidth! > 640 ? '50px' : '30px',
         cursor: 'pointer',
         borderBottom: '0px',
         borderTop: 'none',
