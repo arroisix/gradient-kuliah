@@ -4972,9 +4972,11 @@ packages:
       '@opentelemetry/sdk-trace-base': 1.19.0(@opentelemetry/api@1.7.0)
       '@opentelemetry/semantic-conventions': 1.19.0
       protobufjs: 7.2.5
+
     transitivePeerDependencies:
       - supports-color
     dev: false
+
 
   /@highlight-run/react@3.2.1(react-dom@18.1.0)(react@18.1.0):
     resolution: {integrity: sha512-jjnXsr0T4pXX4D6Etrw081J45ruBrxi2378cVKAqtevgBGu2mQV51/bq14nwi10hrCU/qVr1IhXLHB2y8PY2ug==}
@@ -6767,6 +6769,7 @@ packages:
     resolution: {integrity: sha512-HQVfix4+RL5YRWZboMD1pUfFN8MpRH4laziWkkAzyO1fvNOY/uinZcvo3QiFJVS/siNHupV8E5+xSwQZrl6PZA==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
+
       eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
       typescript: '*'
     peerDependenciesMeta:
@@ -11920,7 +11923,12 @@ packages:
         engines: { node: ^8.16.0 || ^10.6.0 || >=11.0.0 }
         os: [darwin]
         requiresBuild: true
+
         optional: true
+    dependencies:
+      react: 18.1.0
+    dev: false
+
 
     /function-bind@1.1.1:
         resolution:
