@@ -31,7 +31,7 @@ const ClassContainer = (): JSX.Element => {
 
     const [tabIndex, setTabIndex] = useState(0);
 
-    const {screenWidth} = useGrid();
+    const { screenWidth } = useGrid();
 
     const tabStyle = {
         color: '#666666',
