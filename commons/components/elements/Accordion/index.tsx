@@ -39,7 +39,7 @@ export const AccordionItem = ({
     return (
         <>
             <div
-                className={`text-base md:text-lg font-semibold px-4 py-3 flex justify-between items-center cursor-pointer bg-neutral-900 first:mt-0 mt-4 ${
+                className={`text-sm md:text-base font-semibold px-4 py-3 flex justify-between items-center cursor-pointer bg-neutral-900 first:mt-0 mt-4 ${
                     open ? 'rounded-t-lg' : 'rounded-lg'
                 }`}
                 role="alert"
