@@ -33,7 +33,7 @@ const CourseCard = ({
 
     const decideUrl = (): string => {
         if (course.is_coming_soon) {
-            return "";
+            return '';
         }
         if (course.is_only_notebook) {
             return `/kelas/${course.slug}/astronotes`;
@@ -43,9 +43,9 @@ const CourseCard = ({
         }
         return `/kelas/${course.slug}`;
     };
-    
+
     const url = decideUrl();
-    
+
     const { cellRef, cellWidth, screenWidth } = useGrid();
 
     return (
