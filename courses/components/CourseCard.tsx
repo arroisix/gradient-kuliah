@@ -53,7 +53,11 @@ const CourseCard = ({
                               screenWidth! < 768 ? cellWidth! - 150 : cellWidth
                           }px`
                         : 'auto',
-                    background: `url(${!latestSubChapter ? course.thumbnail : latestSubChapter.thumbnail}) center / cover no-repeat, #333333`
+                    background: `url(${
+                        !latestSubChapter
+                            ? course.thumbnail
+                            : latestSubChapter.thumbnail
+                    }) center / cover no-repeat, #333333`
                 }}
                 {...(isInGrid && isFirstInGrid ? { ref: cellRef } : {})}>
                 <div className="bg-[#121212] w-full md:px-[16px] px-[12px] pt-[8px] pb-[12px]">
