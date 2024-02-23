@@ -37,7 +37,7 @@ const ClassContainer = (): JSX.Element => {
         color: '#666666',
         padding: '0px',
         paddingTop: '2px',
-        marginRight: screenWidth! > 640 ? '50px' : '30px',
+        marginRight: screenWidth! > 640 ? '40px' : '24px',
         cursor: 'pointer',
         borderBottom: '0px',
         borderTop: 'none',
@@ -82,14 +82,13 @@ const ClassContainer = (): JSX.Element => {
 
     return (
         <>
-            <div
-                className={cn(
-                    'w-full min-h-screen',
-                    !isAuthenticated &&
-                        !isLandingPageRevampOn &&
-                        'px-4 md:px-[7.5rem]'
-                )}>
-                <h1 className="text-4xl font-bold md:text-5xl">Kelas</h1>
+            <div className={cn(
+                'w-full min-h-screen',
+                !isAuthenticated &&
+                    !isLandingPageRevampOn &&
+                    'px-4 md:px-[7.5rem]'
+            )}>
+                <h1 className="md:text-2xl text-xl font-bold">Kelas</h1>
                 <Tabs
                     selectedIndex={tabIndex}
                     onSelect={(index: number) => setTabIndex(index)}
@@ -114,10 +113,12 @@ const ClassContainer = (): JSX.Element => {
                                         key={section.key}
                                         style={
                                             tabIndex === index
-                                                ? activeTabStyle
-                                                : tabStyle
+                                            ? activeTabStyle
+                                            : tabStyle
                                         }>
-                                        {section.label}
+                                        <p className="text-[14px]">
+                                            {section.label}
+                                        </p>
                                     </Tab>
                                 )
                             )}
@@ -130,7 +131,7 @@ const ClassContainer = (): JSX.Element => {
                                         setIsSortMenuVisible((prev) => !prev)
                                     }
                                     className="bg-[#2C2C2C] border-0 rounded-full w-full md:w-[230px] py-[10px] px-[20px] flex justify-between items-center hover:bg-[#373737] duration-200">
-                                    <p className="text-start">{sort.label}</p>
+                                    <p className="text-[14px] text-start">{sort.label}</p>
                                     <svg
                                         width="20"
                                         height="20"
