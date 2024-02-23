@@ -55,18 +55,9 @@ export default function CourseProgress({
                 }}>
                 {isLoading || !cellWidth ? (
                     <>
-                        <div
-                            className={`p-4 h-[300px] bg-neutral-600 animate-pulse rounded-lg`}
-                        />
-                        <div
-                            className={`p-4 h-[300px] bg-neutral-600 animate-pulse rounded-lg`}
-                        />
-                        <div
-                            className={`p-4 h-[300px] bg-neutral-600 animate-pulse rounded-lg`}
-                        />
-                        <div
-                            className={`p-4 h-[300px] bg-neutral-600 animate-pulse rounded-lg`}
-                        />
+                        <div className="p-4 h-[224px] w-[300px] bg-neutral-600 animate-pulse rounded-lg" />
+                        <div className="p-4 h-[224px] w-[300px] bg-neutral-600 animate-pulse rounded-lg" />
+                        <div className="p-4 h-[224px] w-[300px] bg-neutral-600 animate-pulse rounded-lg" />
                     </>
                 ) : (
                     courseProgresses?.map((courseProgress: CourseProgress) => (

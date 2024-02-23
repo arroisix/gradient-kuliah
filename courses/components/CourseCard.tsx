@@ -46,7 +46,7 @@ const CourseCard = ({
     return (
         <Link href={decideUrl()} onClick={() => onClick?.()}>
             <div
-                className={`relative flex items-end overflow-hidden rounded-lg cursor-pointer h-[300px] bg-neutral-800`}
+                className={`relative flex items-end overflow-hidden rounded-lg cursor-pointer h-[224px] bg-neutral-800 border-[0.5px] border-[#666666]`}
                 style={{
                     width: !isInGrid
                         ? `${
@@ -56,7 +56,7 @@ const CourseCard = ({
                     background: `url(${course.thumbnail}) center / cover no-repeat, #333333`
                 }}
                 {...(isInGrid && isFirstInGrid ? { ref: cellRef } : {})}>
-                <div className="bg-[#121212] w-full p-4">
+                <div className="bg-[#121212] w-full md:px-[16px] px-[12px] pt-[8px] pb-[12px]">
                     {latestWatchProgress &&
                         (!latestWatchProgress.is_finished ? (
                             <div className="flex items-center text-[#F2C04C]">

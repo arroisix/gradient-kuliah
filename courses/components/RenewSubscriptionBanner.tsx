@@ -1,8 +1,8 @@
-import { getCurrentUser } from 'authentication/redux/selectors/userSelector';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { useSelector } from 'react-redux';
 
 export default function RenewSubscriptionBanner() {
-    const user = useSelector(getCurrentUser);
+    const isAuthenticated = useSelector(getIsAuthenticated);
 
     return (
         <div className="fixed bottom-[85px] md:bottom-[32px] left-[12px] md:left-[286px] right-[12px] md:right-[36px] bg-[#B73E32] px-6 py-4 rounded-xl">
@@ -16,10 +16,11 @@ export default function RenewSubscriptionBanner() {
                 <button
                     className="py-2 px-6 bg-white font-semibold text-black rounded-full"
                     onClick={() => {
-                        if (user) window.location.href = '/langganan';
+                        if (isAuthenticated) window.location.href = '/langganan';
                         else window.location.href = '/masuk';
                     }}>
-                    Beli Paket
+                    <p className="hidden md:block">Beli Paket</p>
+                    <p className="md:hidden">Beli</p>
                 </button>
             </div>
         </div>

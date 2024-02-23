@@ -81,7 +81,7 @@ const ClassContainer = (): JSX.Element => {
         <>
             <div
                 className={cn(
-                    'w-full',
+                    'w-full min-h-screen',
                     !isAuthenticated &&
                         !isLandingPageRevampOn &&
                         'px-4 md:px-[7.5rem]'
@@ -128,25 +128,7 @@ const ClassContainer = (): JSX.Element => {
                                     }
                                     className="bg-[#2C2C2C] border-0 rounded-full w-full md:w-[230px] py-[10px] px-[20px] flex justify-between items-center hover:bg-[#373737] duration-200">
                                     <p className="text-start">{sort.label}</p>
-                                    <svg
-                                        width="20"
-                                        height="20"
-                                        viewBox="0 0 20 20"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M17.5 5H2.5V6.66667H17.5V5Z"
-                                            fill="white"
-                                        />
-                                        <path
-                                            d="M15 9.16602H5V10.8327H15V9.16602Z"
-                                            fill="white"
-                                        />
-                                        <path
-                                            d="M12.5 13.334H7.5V15.0007H12.5V13.334Z"
-                                            fill="white"
-                                        />
-                                    </svg>
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 5H2.5V6.66667H17.5V5Z" fill="white" /> <path d="M15 9.16602H5V10.8327H15V9.16602Z" fill="white" /> <path d="M12.5 13.334H7.5V15.0007H12.5V13.334Z" fill="white" /> </svg>
                                 </button>
                                 <div
                                     className={`absolute ${
