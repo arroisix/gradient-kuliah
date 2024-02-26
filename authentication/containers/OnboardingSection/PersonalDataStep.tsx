@@ -52,7 +52,6 @@ export const PersonalDataStep = (): JSX.Element => {
                     setStep(2);
                 }}
                 validate={(values) => {
-                    console.log(values);
                     const errors: { [key: string]: string } = {};
 
                     if (!values.gender)

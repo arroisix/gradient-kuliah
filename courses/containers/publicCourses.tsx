@@ -1,25 +1,41 @@
-import { useGetPublicListCoursesQuery } from 'courses/redux/api/publicCourseApi';
+import { useGetPublicListCoursesV2Query } from 'courses/redux/api/publicCourseV2Api';
 import { useTracker } from 'tracker/tracker';
 import CourseCard from '../components/CourseCard';
 import CourseContainer from '../components/CourseContainer';
+import EmptyCourse from 'courses/components/EmptyCourse';
 
-const PublicCourses = (): JSX.Element => {
+const PublicCourses = ({
+    section,
+    sort
+}: {
+    section: 'all' | 'newly-released' | 'coming-soon';
+    sort: 'latest' | 'popularity' | 'lexicography';
+}): JSX.Element => {
     const tracker = useTracker();
 
-    const { data: courses, isLoading } = useGetPublicListCoursesQuery({});
+    const { data: courses, isLoading } = useGetPublicListCoursesV2Query({
+        section,
+        sort
+    });
+
     return (
-        <CourseContainer>
+        <CourseContainer
+            isGrid={
+                !isLoading ? courses?.data && courses?.data.length > 0 : true
+            }>
             {isLoading ? (
                 <>
-                    <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
-                    <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
-                    <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
-                    <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
-                    <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
+                    <div className="p-4 h-[224px] w-full bg-neutral-600 animate-pulse rounded-lg" />
+                    <div className="p-4 h-[224px] w-full bg-neutral-600 animate-pulse rounded-lg" />
+                    <div className="p-4 h-[224px] w-full bg-neutral-600 animate-pulse rounded-lg" />
+                    <div className="p-4 h-[224px] w-full bg-neutral-600 animate-pulse rounded-lg" />
+                    <div className="p-4 h-[224px] w-full bg-neutral-600 animate-pulse rounded-lg" />
                 </>
-            ) : (
-                courses?.data.map((course: Course) => (
+            ) : courses?.data && courses?.data.length > 0 ? (
+                courses?.data.map((course: Course, index: number) => (
                     <CourseCard
+                        isInGrid
+                        isFirstInGrid={index === 1}
                         course={course}
                         key={course.id}
                         onClick={() => {
@@ -32,6 +48,8 @@ const PublicCourses = (): JSX.Element => {
                         }}
                     />
                 ))
+            ) : (
+                <EmptyCourse />
             )}
         </CourseContainer>
     );

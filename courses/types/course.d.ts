@@ -6,6 +6,8 @@ interface FilterCourseQueryParams {
     is_subscribed?: boolean;
     keyword?: string;
     major?: string;
+    section?: string;
+    sort?: string;
 }
 
 interface TrackSubchapterProgressInputData {
@@ -46,7 +48,23 @@ type Course = {
     price?: number;
     discount?: number;
     is_coming_soon?: boolean;
+    is_new?: boolean;
     is_only_notebook?: boolean;
+};
+
+// type SubChapter = {
+//     id: string;
+//     subchapter_name: string;
+//     type_name: string;
+//     thumbnail: string;
+//     order: number;
+// }
+
+type WatchProgress = {
+    id: string;
+    last_duration: number;
+    total_watch_duration: number;
+    is_finished: boolean;
 };
 
 type Lecturer = {
@@ -57,6 +75,7 @@ type Lecturer = {
 
 type SubChapter = {
     id: string;
+    chapter_id?: string;
     subchapter_name?: string;
     thumbnail?: string;
     order: number;
@@ -199,6 +218,13 @@ type LearningProgress = {
     watch_progress: SubchapterProgress[];
     completion_percentage?: CompletionPercentage;
     total_duration?: number;
+};
+
+type CourseProgress = {
+    id: string;
+    course: Course;
+    latest_subchapter: SubChapter;
+    latest_watch_progress: WatchProgress;
 };
 
 type Packet = {

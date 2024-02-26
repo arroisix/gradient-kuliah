@@ -31,6 +31,7 @@ module.exports = {
         'react/prop-types': 'off',
         'react/jsx-fragments': 'off',
         'jsx-a11y/anchor-is-valid': 'off',
+        'jsx-a11y/label-has-associated-control': 'off',
         'react-hooks/rules-of-hooks': 'off',
         'react/jsx-props-no-spreading': 'off',
         '@typescript-eslint/explicit-function-return-type': [
