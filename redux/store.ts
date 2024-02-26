@@ -169,7 +169,7 @@ const middleware = (getDefaultMiddleware: CurriedGetDefaultMiddleware) => {
     middlewareArray.push(rtkQueryErrorLogger);
 
     if (process.env.NODE_ENV === 'development') {
-        middlewareArray.push(logger);
+        middlewareArray.push(logger as any);
     }
     return middlewareArray;
 };

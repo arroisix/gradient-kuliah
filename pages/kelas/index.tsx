@@ -1,11 +1,14 @@
 import LearnLayout from 'commons/learnLayout';
 import ClassContainer from 'courses/containers';
+import { GridProvider } from 'courses/contexts/GridProvider';
 
 const ListClass = (): JSX.Element => {
     return (
-        <LearnLayout showSidebar fullHeightSidebar>
-            <ClassContainer />
-        </LearnLayout>
+        <GridProvider>
+            <LearnLayout showSidebar fullHeightSidebar>
+                <ClassContainer />
+            </LearnLayout>
+        </GridProvider>
     );
 };
 

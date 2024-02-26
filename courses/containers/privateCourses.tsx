@@ -3,11 +3,20 @@ import { useTracker } from 'tracker/tracker';
 import CourseCard from '../components/CourseCard';
 import CourseContainer from '../components/CourseContainer';
 import useCourses from '../hooks/useCourses';
+import EmptyCourse from 'courses/components/EmptyCourse';
 
-const PrivateCourses = ({ myClass }: { myClass: boolean }): JSX.Element => {
+const PrivateCourses = ({
+    myClass,
+    section,
+    sort
+}: {
+    myClass: boolean;
+    section: 'all' | 'newly-released' | 'coming-soon';
+    sort: 'latest' | 'popularity' | 'lexicography';
+}): JSX.Element => {
     const tracker = useTracker();
 
-    const { data, loading } = useCourses();
+    const { data, loading } = useCourses(section, sort);
     const [courses, setCourses] = useState<Course[]>([]);
 
     useEffect(() => {
@@ -27,18 +36,20 @@ const PrivateCourses = ({ myClass }: { myClass: boolean }): JSX.Element => {
     }, [myClass, data]);
 
     return (
-        <CourseContainer>
+        <CourseContainer isGrid={!loading ? courses.length > 0 : true}>
             {loading ? (
                 <>
-                    <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
-                    <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
-                    <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
-                    <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
-                    <div className="p-4 h-52 w-full bg-neutral-600 animate-pulse rounded-lg" />
+                    <div className="p-4 h-[224px] w-full bg-neutral-600 animate-pulse rounded-lg" />
+                    <div className="p-4 h-[224px] w-full bg-neutral-600 animate-pulse rounded-lg" />
+                    <div className="p-4 h-[224px] w-full bg-neutral-600 animate-pulse rounded-lg" />
+                    <div className="p-4 h-[224px] w-full bg-neutral-600 animate-pulse rounded-lg" />
+                    <div className="p-4 h-[224px] w-full bg-neutral-600 animate-pulse rounded-lg" />
                 </>
-            ) : (
-                courses.map((course: Course) => (
+            ) : courses && courses.length > 0 ? (
+                courses.map((course: Course, index: number) => (
                     <CourseCard
+                        isInGrid
+                        isFirstInGrid={index === 1}
                         course={course}
                         key={course.id}
                         onClick={() => {
@@ -51,6 +62,8 @@ const PrivateCourses = ({ myClass }: { myClass: boolean }): JSX.Element => {
                         }}
                     />
                 ))
+            ) : (
+                <EmptyCourse />
             )}
         </CourseContainer>
     );

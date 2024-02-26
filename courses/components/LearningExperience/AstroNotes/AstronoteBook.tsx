@@ -12,6 +12,7 @@ const AstronoteBook = ({
     authors,
     rating,
     education_level,
+    in_progress,
     eventName = 'Click Book Item on Library Page',
     eventPayload
 }: Astronote & {
@@ -29,7 +30,9 @@ const AstronoteBook = ({
                     'Book Slug': slug,
                     ...eventPayload
                 });
-                router.push(`/astronotes/${slug}/1`);
+
+                if (in_progress) router.push(`/astronotes/${slug}/1`);
+                else router.push(`/astronotes/${slug}`);
             }}
             aria-hidden>
             <div className="aspect-[256/364] relative w-full border rounded border-neutral-700">

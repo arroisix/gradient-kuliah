@@ -1,16 +1,28 @@
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import useTransition from 'commons/hooks/useTransition';
+import { useGrid } from 'courses/contexts/GridProvider';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import { IoCheckmarkCircle, IoTime } from 'react-icons/io5';
+
+type CourseCardProps = {
+    course: Course;
+    latestSubChapter?: SubChapter;
+    latestWatchProgress?: WatchProgress;
+    isInGrid?: boolean;
+    isFirstInGrid?: boolean;
+    onClick?: () => void;
+};
 
 const CourseCard = ({
     course,
+    latestSubChapter,
+    latestWatchProgress,
+    isInGrid,
+    isFirstInGrid,
     onClick
-}: {
-    course: Course;
-    onClick?: () => void;
-}): JSX.Element => {
+}: CourseCardProps): JSX.Element => {
     const router = useRouter();
     const loadingTransition = useTransition(router);
 
@@ -20,32 +32,74 @@ const CourseCard = ({
     }, [course]);
 
     const decideUrl = (): string => {
+        if (course.is_coming_soon) {
+            return '';
+        }
         if (course.is_only_notebook) {
             return `/kelas/${course.slug}/astronotes`;
         }
-
+        if (latestSubChapter) {
+            return `/kelas/${course.slug}/belajar/video/${latestSubChapter.chapter_id}/${latestSubChapter.id}`;
+        }
         return `/kelas/${course.slug}`;
     };
 
+    const url = decideUrl();
+
+    const { cellRef, cellWidth, screenWidth } = useGrid();
+
     return (
-        <Link href={decideUrl()} onClick={() => onClick?.()}>
+        <Link href={url} onClick={() => onClick?.()}>
             <div
-                className="relative flex items-end w-full p-4 mr-2 overflow-hidden rounded-lg cursor-pointer h-52 bg-neutral-800"
+                className={`relative flex items-end overflow-hidden rounded-lg cursor-pointer h-[224px] bg-neutral-800 border-[0.5px] border-[#666666]`}
                 style={{
-                    background: `url(${course.thumbnail})`,
-                    backgroundColor: '#333333',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center'
-                }}>
-                {course.course_name}
+                    width: !isInGrid
+                        ? `${
+                              screenWidth! < 768 ? cellWidth! - 150 : cellWidth
+                          }px`
+                        : 'auto',
+                    background: `url(${
+                        !latestSubChapter
+                            ? course.thumbnail
+                            : latestSubChapter.thumbnail
+                    }) center / cover no-repeat, #333333`
+                }}
+                {...(isInGrid && isFirstInGrid ? { ref: cellRef } : {})}>
+                <div className="bg-[#121212] w-full md:px-[16px] px-[12px] pt-[8px] pb-[12px]">
+                    {latestWatchProgress &&
+                        (!latestWatchProgress.is_finished ? (
+                            <div className="flex items-center text-[#F2C04C]">
+                                <IoTime />
+                                <p className="ml-2 text-xs">In Progress</p>
+                            </div>
+                        ) : (
+                            <div className="flex items-center text-[#43B75D]">
+                                <IoCheckmarkCircle />
+                                <p className="ml-2 text-xs">Completed</p>
+                            </div>
+                        ))}
+                    <p className="mt-1 font-semibold line-clamp-2 text-ellipsis">
+                        {course.course_name}
+                    </p>
+                    {latestSubChapter && (
+                        <p className="text-sm text-[#999999] mt-1 line-clamp-2 text-ellipsis">
+                            Bab: {latestSubChapter.subchapter_name}
+                        </p>
+                    )}
+                </div>
                 {course.is_coming_soon && (
                     <div
-                        className="bg-[#ECD402] px-4 rounded-bl-lg py-1 absolute top-0 right-0 font-bold"
+                        className="px-4 rounded-full py-1 absolute top-4 left-4 font-bold"
                         style={{
                             background:
-                                'linear-gradient(51.63deg, #ECD402 0%, #F03C15 96.9%)'
+                                'linear-gradient(90deg, #F2B04C 0%, #E4B50D 68.5%, #E48E0D 100%)'
                         }}>
                         Segera hadir
+                    </div>
+                )}
+                {!course.is_coming_soon && course.is_new && (
+                    <div className="bg-[#E9202A] px-4 rounded-full py-1 absolute top-4 left-4 font-bold">
+                        Baru
                     </div>
                 )}
             </div>
