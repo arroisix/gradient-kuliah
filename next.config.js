@@ -1,4 +1,4 @@
-const env = process.env.NODE_ENV;
+const env = process.env.ENVIRONMENT;
 
 module.exports = {
     images: {
@@ -13,6 +13,7 @@ module.exports = {
             'gradient-asset.storage.googleapis.com',
             'gradient-asset-dev.storage.g oogleapis.com',
             'notion.so',
+            'gradient-sitemap.s3.ap-southeast-1.amazonaws.com',
             'gradient-sitemap.s3.ap-southeast-1.amazonaws.com',
             'gradient-public-student-dev.s3.ap-southeast-1.amazonaws.com',
             'gradient-public-student-prod.s3.ap-southeast-1.amazonaws.com'
@@ -32,9 +33,7 @@ module.exports = {
             },
             {
                 source: '/sitemaps/:file(.+-sitemap(?:-\\d{1,3})?\\.xml)',
-                destination: `https://gradient-sitemap.s3.ap-southeast-1.amazonaws.com/${
-                    env === 'production' ? 'prod' : 'dev'
-                }/:file`,
+                destination: `https://gradient-sitemap.s3.ap-southeast-1.amazonaws.com/${env}/:file`,
                 permanent: false,
                 basePath: false
             }
