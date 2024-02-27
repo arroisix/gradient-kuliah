@@ -18,7 +18,6 @@ module.exports = {
         additionalSitemaps: [
             `${URL}/sitemaps/courses-sitemap.xml`,
             `${URL}/sitemaps/astronotes-sitemap.xml`,
-            `${URL}/sitemaps/community-sitemap.xml`,
             `${URL}/sitemaps/videos-sitemap.xml`
         ]
     }
