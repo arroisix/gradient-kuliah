@@ -1,3 +1,13 @@
-# Allow all crawlers
+# *
 User-agent: *
 Allow: /
+
+# Host
+Host: https://gradient.academy
+
+# Sitemaps
+Sitemap: https://gradient.academy/sitemap.xml
+Sitemap: https://gradient.academy/sitemaps/courses-sitemap.xml
+Sitemap: https://gradient.academy/sitemaps/astronotes-sitemap.xml
+Sitemap: https://gradient.academy/sitemaps/community-sitemap.xml
+Sitemap: https://gradient.academy/sitemaps/videos-sitemap.xml
