@@ -12,7 +12,7 @@ export default function RenewSubscriptionBanner() {
                         Beli & akses seluruh video kelas
                     </p>
                     <p className="md:text-md text-xs">
-                        Mulai dari Rp108.000/bulan
+                        Mulai dari Rp125.000/bulan
                     </p>
                 </div>
                 <button
