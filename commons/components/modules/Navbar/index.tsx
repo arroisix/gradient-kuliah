@@ -183,9 +183,11 @@ const Navbar = ({
                             {isMobileBreakpoints ? 'G' : 'Gradient'}
                         </span>
                     </Link>
-                    {showSidebar && fullHeightSidebar && isAuthenticated && (
-                        <div className="hidden md:block w-[250px] h-[64px] fixed top-0 left-0 bg-[#121212] z-[-1]" />
-                    )}
+                    {showSidebar &&
+                        fullHeightSidebar &&
+                        (isAuthenticated || isLandingPageRevampOn) && (
+                            <div className="hidden md:block w-[250px] h-[64px] fixed top-0 left-0 bg-[#121212] z-[-1]" />
+                        )}
                     <LeftNavbarMenu
                         lightMode={lightMode}
                         showSidebar={showSidebar}
@@ -347,12 +349,12 @@ const Navbar = ({
 
             {halamanPembayaran && (
                 <section className="px-4 py-4 md:px-6 bg-[#121212] flex justify-between items-center w-full">
-                    <p className="font-body flex items-center gap-2">
-                        <span className="uppercase text-sm">
+                    <p className="flex items-center gap-2 font-body">
+                        <span className="text-sm uppercase">
                             {packet?.packet_name.replace('Paket', '')}
                         </span>
                         <span className="w-[1px] h-[18px] bg-neutral-600"></span>
-                        <span className="font-bold text-base">
+                        <span className="text-base font-bold">
                             Rp{Number(packet?.price).toLocaleString('id')}
                         </span>
                     </p>
@@ -377,11 +379,11 @@ const Navbar = ({
                                 'md:max-w-[calc(100%-250px)] absolute right-0 top-[64px]',
                             'px-4 py-4 md:px-6 bg-[#121212] flex justify-between items-center w-full'
                         )}>
-                        <p className="font-body text-sm flex items-center gap-2">
+                        <p className="flex items-center gap-2 text-sm font-body">
                             Langganan habis dalam {expiryDay} hari
                         </p>
 
-                        <div className="flex gap-6 items-center">
+                        <div className="flex items-center gap-6">
                             <Link
                                 href={{
                                     pathname: '/pembayaran',
