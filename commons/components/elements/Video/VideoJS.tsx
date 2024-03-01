@@ -62,7 +62,10 @@ const VideoJS = ({
             );
         }
     }
-    const debouncedHandleTrackProgress = useDebounceCallback(handleTrackProgress, 2000);
+    const debouncedHandleTrackProgress = useDebounceCallback(
+        handleTrackProgress,
+        2000
+    );
 
     useLayoutEffect(() => {
         function handlePauseEvent(): void {
