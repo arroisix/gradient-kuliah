@@ -6,6 +6,7 @@ import { FaPlay } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import { useTracker } from 'tracker/tracker';
 import { useLearning } from 'courses/contexts/LearningProvider';
+import { useDebounceCallback } from 'usehooks-ts';
 
 // const buildSettingComponent = (element: HTMLDivElement): void => {
 //     element.innerHTML = '';
@@ -61,6 +62,7 @@ const VideoJS = ({
             );
         }
     }
+    const debouncedHandleTrackProgress = useDebounceCallback(handleTrackProgress, 2000);
 
     useLayoutEffect(() => {
         function handlePauseEvent(): void {
@@ -69,13 +71,13 @@ const VideoJS = ({
                 'Video Title': subchapter?.subchapter_name
             });
             setIsPlay(false);
-            handleTrackProgress();
+            debouncedHandleTrackProgress();
             clearInterval(trackInterval);
         }
 
         function handleEndedEvent(): void {
             setIsPlay(false);
-            handleTrackProgress(true);
+            debouncedHandleTrackProgress(true);
             handleNextVideo();
             clearInterval(trackInterval);
         }
@@ -85,11 +87,12 @@ const VideoJS = ({
                 'Course Slug': router.query.id,
                 'Video Title': subchapter?.subchapter_name
             });
+            debouncedHandleTrackProgress();
             setIsPlay(true);
             setIsBuffering(false);
             // eslint-disable-next-line react-hooks/exhaustive-deps
             trackInterval = setInterval(() => {
-                handleTrackProgress();
+                debouncedHandleTrackProgress();
             }, 30000);
         }
 
@@ -132,7 +135,7 @@ const VideoJS = ({
         videoEl?.addEventListener('ended', handleEndedEvent);
 
         return () => {
-            handleTrackProgress();
+            debouncedHandleTrackProgress();
 
             videoContainerEl?.removeEventListener(
                 'fullscreenchange',
