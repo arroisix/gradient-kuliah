@@ -81,7 +81,7 @@ const LearnLayout = ({
                         activePacket.subscription_id &&
                         courseProgresses &&
                         courseProgresses.length > 0 && (
-                            <div className="px-0 bg-[#1D1D1D] text-white py-8 overflow-x-hidden">
+                            <div className="course-progress px-0 bg-[#1D1D1D] text-white py-8 overflow-x-hidden">
                                 <CourseProgress
                                     courseProgresses={courseProgresses}
                                     isLoading={isLoading}
