@@ -27,7 +27,7 @@ export default function CourseProgress({
     };
 
     return (
-        <section className="relative w-full overflow-x-auto">
+        <section className="relative w-full">
             <div className="flex justify-between items-center w-full px-4 md:px-8 xl:px-12">
                 <h1 className="text-4xl font-bold md:text-4xl">Kelasku</h1>
                 <div className="hidden md:flex gap-4 text-black">
@@ -45,7 +45,7 @@ export default function CourseProgress({
             </div>
             <div
                 ref={scrollContainerRef}
-                className="overflow-x-scroll flex gap-4 md:gap-1 lg:gap-4 mt-6 px-4 md:px-8 xl:px-12"
+                className="overflow-x-auto flex gap-4 md:gap-1 lg:gap-4 mt-6 px-4 md:px-8 xl:px-12"
                 style={{
                     maxWidth: `${
                         screenWidth! >= 768 ? screenWidth! - 250 : screenWidth
