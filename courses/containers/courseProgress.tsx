@@ -27,7 +27,7 @@ export default function CourseProgress({
     };
 
     return (
-        <section className="relative w-full overflow-x-scroll">
+        <section className="relative w-full">
             <div className="flex justify-between items-center w-full px-4 md:px-8 xl:px-12">
                 <h1 className="text-4xl font-bold md:text-4xl">Kelasku</h1>
                 <div className="hidden md:flex gap-4 text-black">
