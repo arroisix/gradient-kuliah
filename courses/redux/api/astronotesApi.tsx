@@ -210,4 +210,4 @@ export const {
     usePostFeedbackMutation
 } = astronotesApi;
 
-export const { getBookDetail } = astronotesApi.endpoints;
+export const { getBookDetail, getPublicBookPreview } = astronotesApi.endpoints;

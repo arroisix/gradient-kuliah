@@ -2,6 +2,7 @@ import axios from 'axios';
 import Layout from 'commons/layout';
 import withAnon from 'commons/withAnon';
 import RevampedLandingContainer from 'landing/containers/revamped';
+import { NextSeo } from 'next-seo';
 import React from 'react';
 import config from 'redux/api/config';
 
@@ -17,13 +18,17 @@ const RevampedLandingPage = ({
     majorData
 }: LandingPageProps): JSX.Element => {
     return (
-        <Layout shouldTransparent>
-            <RevampedLandingContainer
-                majorData={majorData?.data}
-                pricingData={pricingData?.data}
-                classData={classesData?.data}
-            />
-        </Layout>
+        <>
+            <NextSeo canonical="https://gradient.academy/" />
+
+            <Layout shouldTransparent>
+                <RevampedLandingContainer
+                    majorData={majorData?.data}
+                    pricingData={pricingData?.data}
+                    classData={classesData?.data}
+                />
+            </Layout>
+        </>
     );
 };
 
@@ -32,6 +37,7 @@ export async function getStaticProps(): Promise<{
         pricingData: ResponseData<PacketOffer>;
         classesData: ResponseData<Course>;
         majorData: ResponseData<MajorOptions>;
+        canonical: string;
         title: string;
         description: string;
         openGraph: {
@@ -63,6 +69,7 @@ export async function getStaticProps(): Promise<{
             pricingData,
             classesData,
             majorData,
+            canonical: 'https://gradient.academy/',
             title: 'Platform Belajar Kuliah  No. 1 di Indonesia',
             description:
                 'Belajar dari dosen bermutu, bareng pelajar se-Indonesia. Materi kuliah dan pembahasan soal lengkap',

@@ -70,6 +70,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
                 defaultTitle="Gradient Academy"
                 title={pageProps?.title}
                 description={pageProps?.description}
+                canonical={pageProps?.canonical}
                 openGraph={pageProps?.openGraph}
             />
             <Head>

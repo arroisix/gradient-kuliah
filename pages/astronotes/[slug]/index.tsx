@@ -47,6 +47,7 @@ export const getServerSideProps: GetServerSideProps =
             props: {
                 slug: params?.slug,
                 astronotes: data.book,
+                canonical: `https://gradient.academy/astronotes/${params?.slug}`,
                 title: `${data.book.title}`,
                 description: `Perkaya ilmu mu dengan ${data.book.title}`,
                 openGraph: {
