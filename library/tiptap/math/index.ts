@@ -116,11 +116,13 @@ export const MathInline = Node.create({
     addInputRules() {
         return [makeInlineMathInputRule(REGEX_INLINE_MATH_DOLLARS, this.type)];
     },
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     addCommands() {
         return {
             mathBackspaceCmd:
                 () =>
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 ({ state, dispatch }) => {
                     return mathBackspaceCmd(state, dispatch);
@@ -136,6 +138,7 @@ export const MathInline = Node.create({
                     editor
                         .chain()
                         .deleteSelection()
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                         // @ts-ignore
                         .mathBackspaceCmd()
                         .joinBackward()

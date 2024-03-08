@@ -19,11 +19,13 @@ export const Details = Node.create({
             }
         };
     },
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     addCommands() {
         return {
             unsetDetails:
                 () =>
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 ({ editor, chain, state }) => {
                     if (!isNodeActive(state, 'details')) return false;
@@ -62,6 +64,7 @@ export const Details = Node.create({
                 },
             setDetails:
                 () =>
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 ({ editor, chain, state }) => {
                     const { anchor } = state.selection;
@@ -193,6 +196,7 @@ export const Summary = Node.create({
                 return (
                     editor
                         .chain()
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                         // @ts-ignore
                         .unsetDetails()
                         .setTextSelection(from - 1)

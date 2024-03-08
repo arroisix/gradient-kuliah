@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 /*---------------------------------------------------------
  *  Author: Benjamin R. Bray
@@ -42,14 +43,14 @@ export function createMathView(displayMode: boolean) {
          * Docs says that for any function proprs, the current plugin instance
          * will be bound to `this`.  However, the typings don't reflect this.
          */
-        let pluginState = MATH_PLUGIN_KEY.getState(view.state);
+        const pluginState = MATH_PLUGIN_KEY.getState(view.state);
         if (!pluginState) {
             throw new Error('no math plugin!');
         }
-        let nodeViews = pluginState.activeNodeViews;
+        const nodeViews = pluginState.activeNodeViews;
 
         // set up NodeView
-        let nodeView = new MathView(
+        const nodeView = new MathView(
             node,
             view,
             getPos as () => number,
@@ -65,17 +66,17 @@ export function createMathView(displayMode: boolean) {
     };
 }
 
-let mathPluginSpec: PluginSpec<IMathPluginState> = {
+const mathPluginSpec: PluginSpec<IMathPluginState> = {
     key: MATH_PLUGIN_KEY,
     state: {
-        init(config, instance) {
+        init() {
             return {
                 macros: {},
                 activeNodeViews: [],
                 prevCursorPos: 0
             };
         },
-        apply(tr, value, oldState, newState) {
+        apply(tr, value, oldState) {
             // produce updated state field for this plugin
             return {
                 // these values are left unchanged

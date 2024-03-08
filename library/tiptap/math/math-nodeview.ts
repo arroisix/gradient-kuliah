@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 /*---------------------------------------------------------
  *  Author: Benjamin R. Bray
@@ -12,12 +13,7 @@ import {
     TextSelection,
     PluginKey
 } from '@tiptap/pm/state';
-import {
-    NodeView,
-    EditorView,
-    Decoration,
-    DecorationSource
-} from '@tiptap/pm/view';
+import { NodeView, EditorView } from '@tiptap/pm/view';
 import { StepMap } from '@tiptap/pm/transform';
 import { keymap } from '@tiptap/pm/keymap';
 import {
@@ -154,23 +150,19 @@ export class MathView implements NodeView, ICursorPosObserver {
 
     // == Updates ======================================= //
 
-    update(
-        node: ProseNode,
-        _decorations: readonly Decoration[],
-        _innerDecorations: DecorationSource
-    ) {
+    update(node: ProseNode) {
         if (!node.sameMarkup(this._node)) return false;
         this._node = node;
 
         if (this._innerView) {
-            let state = this._innerView.state;
+            const state = this._innerView.state;
 
-            let start = node.content.findDiffStart(state.doc.content);
+            const start = node.content.findDiffStart(state.doc.content);
             if (start != null) {
-                let diff = node.content.findDiffEnd(state.doc.content as any);
+                const diff = node.content.findDiffEnd(state.doc.content as any);
                 if (diff) {
                     let { a: endA, b: endB } = diff;
-                    let overlap = start - Math.min(endA, endB);
+                    const overlap = start - Math.min(endA, endB);
                     if (overlap > 0) {
                         endA += overlap;
                         endB += overlap;
@@ -241,7 +233,7 @@ export class MathView implements NodeView, ICursorPosObserver {
         }
 
         // get tex string to render
-        let content = this._node.content.content;
+        const content = this._node.content.content;
         let texString = '';
         if (content.length > 0 && content[0].textContent !== null) {
             texString = content[0].textContent.trim();
@@ -282,17 +274,17 @@ export class MathView implements NodeView, ICursorPosObserver {
         if (!this._innerView) {
             return;
         }
-        let { state, transactions } =
+        const { state, transactions } =
             this._innerView.state.applyTransaction(tr);
         this._innerView.updateState(state);
 
         if (!tr.getMeta('fromOutside')) {
-            let outerTr = this._outerView.state.tr,
+            const outerTr = this._outerView.state.tr,
                 offsetMap = StepMap.offset(this._getPos() + 1);
             for (let i = 0; i < transactions.length; i++) {
-                let steps = transactions[i].steps;
+                const steps = transactions[i].steps;
                 for (let j = 0; j < steps.length; j++) {
-                    let mapped = steps[j].map(offsetMap);
+                    const mapped = steps[j].map(offsetMap);
                     if (!mapped) {
                         throw Error('step discarded!');
                     }
@@ -320,25 +312,22 @@ export class MathView implements NodeView, ICursorPosObserver {
                             }
                             return true;
                         },
-                        Backspace: chainCommands(
-                            deleteSelection,
-                            (state, dispatch, tr_inner) => {
-                                // default backspace behavior for non-empty selections
-                                if (!state.selection.empty) {
-                                    return false;
-                                }
-                                // default backspace behavior when math node is non-empty
-                                if (this._node.textContent.length > 0) {
-                                    return false;
-                                }
-                                // otherwise, we want to delete the empty math node and focus the outer view
-                                this._outerView.dispatch(
-                                    this._outerView.state.tr.insertText('')
-                                );
-                                this._outerView.focus();
-                                return true;
+                        Backspace: chainCommands(deleteSelection, (state) => {
+                            // default backspace behavior for non-empty selections
+                            if (!state.selection.empty) {
+                                return false;
                             }
-                        ),
+                            // default backspace behavior when math node is non-empty
+                            if (this._node.textContent.length > 0) {
+                                return false;
+                            }
+                            // otherwise, we want to delete the empty math node and focus the outer view
+                            this._outerView.dispatch(
+                                this._outerView.state.tr.insertText('')
+                            );
+                            this._outerView.focus();
+                            return true;
+                        }),
                         Enter: chainCommands(
                             newlineInCode,
                             collapseMathCmd(this._outerView, +1, false)
@@ -361,20 +350,20 @@ export class MathView implements NodeView, ICursorPosObserver {
         const outerState = this._mathPluginKey.getState(this._outerView.state);
 
         // focus element
-        let innerState = this._innerView.state;
+        const innerState = this._innerView.state;
         this._innerView.focus();
 
         // request outer cursor position before math node was selected
-        let maybePos = outerState?.prevCursorPos;
+        const maybePos = outerState?.prevCursorPos;
         if (maybePos === null || maybePos === undefined) {
             console.error(
                 '[prosemirror-math] Error:  Unable to fetch math plugin state from key.'
             );
         }
-        let prevCursorPos: number = maybePos ?? 0;
+        const prevCursorPos: number = maybePos ?? 0;
 
         // compute position that cursor should appear within the expanded math node
-        let innerPos =
+        const innerPos =
             prevCursorPos <= this._getPos() ? 0 : this._node.nodeSize - 2;
         this._innerView.dispatch(
             innerState.tr.setSelection(
@@ -391,7 +380,7 @@ export class MathView implements NodeView, ICursorPosObserver {
      * @param render Optionally update the rendered math after closing. (which
      *    is generally what we want to do, since the user is done editing!)
      */
-    closeEditor(render: boolean = true) {
+    closeEditor(render = true) {
         if (this._innerView) {
             this._innerView.destroy();
             this._innerView = undefined;
