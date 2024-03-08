@@ -163,7 +163,7 @@ const KomunitasForm = ({
                             {({ editor: currentEditor }) => (
                                 <EditorContent
                                     editor={currentEditor}
-                                    className="md:pl-9 max-h-60 overflow-auto"
+                                    className="md:pl-9 max-h-60 overflow-auto komunitas-editor"
                                 />
                             )}
                         </EditorConsumer>
