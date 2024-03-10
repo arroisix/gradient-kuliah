@@ -4,6 +4,7 @@ import LearnLayout from 'commons/learnLayout';
 import withAnon from 'commons/withAnon';
 import KomunitasContainer from 'komunitas/containers';
 import { KomunitasProvider } from 'komunitas/contexts/KomunitasProvider';
+import { GetStaticProps } from 'next';
 import config from 'redux/api/config';
 
 type KomunitasProps = {
@@ -29,26 +30,7 @@ const Komunitas = ({ data }: KomunitasProps): JSX.Element => {
     );
 };
 
-export async function getStaticProps(): Promise<{
-    props: {
-        data: KomunitasProps['data'];
-        title: string;
-        description: string;
-        openGraph: {
-            type: string;
-            title: string;
-            description: string;
-            url: string;
-            images: {
-                url: string;
-                width: number;
-                height: number;
-                alt: string;
-            }[];
-        };
-    };
-    revalidate: number;
-}> {
+export const getStaticProps: GetStaticProps = async () => {
     const { data }: { data: KomunitasProps['data'] } = await axios.get(
         `${config.API_BASE_URL}communities/public/post/`
     );
@@ -56,6 +38,7 @@ export async function getStaticProps(): Promise<{
     return {
         props: {
             data,
+            canonical: 'https://gradient.academy/komunitas',
             title: 'Tanya Jawab, Diskusi Materi Kuliah di Gradient',
             description:
                 'Tempat belajar materi kuliah nomor 1 di Indonesia. Lengkap materi dan pembahasan soal',
@@ -76,7 +59,7 @@ export async function getStaticProps(): Promise<{
         },
         revalidate: 60
     };
-}
+};
 
 Komunitas.displayName = 'Community Explore';
 export default withAnon(Komunitas);

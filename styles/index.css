@@ -1486,6 +1486,10 @@ summary > p {
     display: contents;
 }
 
+.astronotes img.ProseMirror-separator {
+    background-color: transparent;
+}
+
 math-field#tanya-mathfield {
     --contains-highlight-background-color: #263e59;
     flex-grow: 1;
@@ -1507,93 +1511,93 @@ math-field#tanya-mathfield::part(virtual-keyboard-toggle) {
     display: none;
 }
 
-.tiptap p {
+.komunitas-editor p {
     font-size: 16px;
     font-family: 'Open Sans', sans-serif;
 }
 
-.tiptap h1 {
+.komunitas-editor h1 {
     font-size: 2em;
 }
-.tiptap h2 {
+.komunitas-editor h2 {
     font-size: 1.5em;
 }
-.tiptap h3 {
+.komunitas-editor h3 {
     font-size: 1.17em;
 }
-.tiptap h4 {
+.komunitas-editor h4 {
     font-size: 1em;
 }
-.tiptap h5 {
+.komunitas-editor h5 {
     font-size: 0.83em;
 }
-.tiptap h6 {
+.komunitas-editor h6 {
     font-size: 0.67;
 }
 
-.tiptap .ProseMirror-focused,
-.tiptap.ProseMirror-focused {
+.komunitas-editor .ProseMirror-focused,
+.komunitas-editor.ProseMirror-focused {
     outline: none;
 }
 
-.tiptap > * + * {
+.komunitas-editor > * + * {
     margin-top: 0.75em;
 }
-.tiptap ul,
-.tiptap ol {
+.komunitas-editor ul,
+.komunitas-editor ol {
     padding: 0 1rem;
 }
-.tiptap h1,
-.tiptap h2,
-.tiptap h3,
-.tiptap h4,
-.tiptap h5,
-.tiptap h6 {
+.komunitas-editor h1,
+.komunitas-editor h2,
+.komunitas-editor h3,
+.komunitas-editor h4,
+.komunitas-editor h5,
+.komunitas-editor h6 {
     font-weight: bold;
     line-height: 1.1;
 }
-.tiptap code {
+.komunitas-editor code {
     background-color: rgba(97, 97, 97, 0.1);
     color: #616161;
 }
-.tiptap pre {
+.komunitas-editor pre {
     background: #0d0d0d;
     color: #fff;
     font-family: 'JetBrainsMono', monospace;
     padding: 0.75rem 1rem;
     border-radius: 0.5rem;
 }
-.tiptap pre code {
+.komunitas-editor pre code {
     color: inherit;
     padding: 0;
     background: none;
     font-size: 0.8rem;
 }
-.tiptap img {
+.komunitas-editor img {
     max-width: 100%;
     height: auto;
 }
-.tiptap hr {
+.komunitas-editor hr {
     margin: 1rem 0;
 }
-.tiptap blockquote {
+.komunitas-editor blockquote {
     padding-left: 1rem;
     border-left: 2px solid rgba(255, 255, 255, 0.5);
 }
-.tiptap p.is-editor-empty:first-child::before {
+.komunitas-editor p.is-editor-empty:first-child::before {
     color: #666;
     content: attr(data-placeholder);
     float: left;
     height: 0;
     pointer-events: none;
 }
-.tiptap math-display.ProseMirror-selectednode {
+.komunitas-editor math-display.ProseMirror-selectednode {
     background-color: #121212;
 }
-.tiptap math-display .math-src .ProseMirror {
+.komunitas-editor math-display .math-src .ProseMirror {
     color: white;
 }
-.tiptap math-inline .math-src .ProseMirror {
+.komunitas-editor math-inline .math-src .ProseMirror {
     color: white;
 }
 

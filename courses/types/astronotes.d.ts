@@ -1,6 +1,7 @@
 interface getBookProgressResponse {
     page_id: string;
     is_bookmarked: boolean;
+    is_tiptap: boolean;
     slug: string;
     chapter_title: string;
     total_page: number;

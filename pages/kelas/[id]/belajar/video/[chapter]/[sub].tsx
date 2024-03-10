@@ -5,6 +5,7 @@ import withAnon from 'commons/withAnon';
 import { GetStaticPaths, GetStaticPropsResult } from 'next';
 import axios from 'axios';
 import config from 'redux/api/config';
+import { VideoJsonLd } from 'next-seo';
 
 interface BelajarPageProps {
     subchapter: SubChapter;
@@ -13,11 +14,21 @@ interface BelajarPageProps {
 
 const Belajar = ({ subchapter, course }: BelajarPageProps): JSX.Element => {
     return (
-        <LearningProvider>
-            <LearnLayout showSubscriptionReminder>
-                <VideoLearnContainer subchapter={subchapter} course={course} />
-            </LearnLayout>
-        </LearningProvider>
+        <>
+            <VideoJsonLd
+                name={`${course?.course_name}: ${subchapter?.subchapter_name}`}
+                description={`Nonton Video ${subchapter?.subchapter_name} kelas ${course?.course_name} hanya di Gradient`}
+                thumbnailUrls={[subchapter?.thumbnail]}
+            />
+            <LearningProvider>
+                <LearnLayout showSubscriptionReminder>
+                    <VideoLearnContainer
+                        subchapter={subchapter}
+                        course={course}
+                    />
+                </LearnLayout>
+            </LearningProvider>
+        </>
     );
 };
 
@@ -67,7 +78,7 @@ export const getStaticProps = async ({
     return {
         props: {
             subchapter,
-            course: course,
+            course,
             title: `${course.course_name}: ${subchapter.subchapter_name}`,
             description: `Nonton Video ${subchapter.subchapter_name} kelas ${course.course_name} hanya di Gradient`,
             openGraph: {

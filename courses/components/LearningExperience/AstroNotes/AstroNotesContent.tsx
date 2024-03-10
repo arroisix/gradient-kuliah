@@ -19,6 +19,7 @@ import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
 import AstronotesPaywall from './AstronotesPaywall';
+import AstroNotesContentJSON from './AstroNotesContentJSON';
 
 const AstroNotesContent = (): JSX.Element => {
     const { smallText, fontStyle } = useAstronotes();
@@ -74,26 +75,33 @@ const AstroNotesContent = (): JSX.Element => {
                     // onMouseUp={handleHighlight}
                     // onMouseOverCapture={handleHover}
                     aria-hidden>
-                    <ReactMarkdown
-                        className={cn(
-                            'markdown-table markdown-overflow-break-word markdown-blue-link markdown-img-max-height markdown-body astronotes',
-                            fontClassName[fontStyle],
-                            {
-                                'hidden md:block': !(
-                                    !isLandingPageRevampOn ||
-                                    is_subscribed ||
-                                    Number(page) == 1
-                                )
-                            },
-                            smallText
-                                ? 'text-xs sm:text-sm'
-                                : 'text-sm sm:text-base'
-                        )}
-                        remarkPlugins={[remarkMath, remarkGfm]}
-                        rehypePlugins={[rehypeKatex, rehypeRaw]}
-                        linkTarget={'_blank'}>
-                        {data?.page_content}
-                    </ReactMarkdown>
+                    {data?.is_tiptap ? (
+                        <AstroNotesContentJSON
+                            content={data?.page_content}
+                            key={Number(page) as unknown as string}
+                        />
+                    ) : (
+                        <ReactMarkdown
+                            className={cn(
+                                'markdown-table markdown-overflow-break-word markdown-blue-link markdown-img-max-height markdown-body astronotes',
+                                fontClassName[fontStyle],
+                                {
+                                    'hidden md:block': !(
+                                        !isLandingPageRevampOn ||
+                                        is_subscribed ||
+                                        Number(page) == 1
+                                    )
+                                },
+                                smallText
+                                    ? 'text-xs sm:text-sm'
+                                    : 'text-sm sm:text-base'
+                            )}
+                            remarkPlugins={[remarkMath, remarkGfm]}
+                            rehypePlugins={[rehypeKatex, rehypeRaw]}
+                            linkTarget={'_blank'}>
+                            {data?.page_content}
+                        </ReactMarkdown>
+                    )}
                 </div>
                 <AstronotesPaywall />
             </>

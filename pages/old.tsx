@@ -3,18 +3,23 @@ import LandingContainer from 'landing/containers';
 import withAnon from 'commons/withAnon';
 import axios from 'axios';
 import config from 'redux/api/config';
+import { NextSeo } from 'next-seo';
 
 const Home = ({ data }: { data: { data: PacketOffer[] } }): JSX.Element => {
     return (
-        <Layout shouldTransparent>
-            <LandingContainer pricingData={data.data} />
-        </Layout>
+        <>
+            <NextSeo canonical="https://gradient.academy/" />
+            <Layout shouldTransparent>
+                <LandingContainer pricingData={data.data} />
+            </Layout>
+        </>
     );
 };
 
 export async function getStaticProps(): Promise<{
     props: {
         data: PacketOffer[];
+        canonical: string;
         title: string;
         description: string;
         openGraph: {
@@ -39,6 +44,7 @@ export async function getStaticProps(): Promise<{
     return {
         props: {
             data,
+            canonical: 'https://gradient.academy/',
             title: 'Platform Belajar Kuliah  No. 1 di Indonesia',
             description:
                 'Belajar dari dosen bermutu, bareng pelajar se-Indonesia. Materi kuliah dan pembahasan soal lengkap',

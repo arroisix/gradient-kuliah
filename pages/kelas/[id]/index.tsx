@@ -91,6 +91,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                 props: {
                     id: params?.id,
                     courseData,
+                    canonical: `https://gradient.academy/kelas/${courseData.course_slug}`,
                     title: `Belajar ${courseData?.course_name} | Materi dan Latihan Soal`,
                     description: `Belajar materi ${courseData?.course_name} dari video lengkap dan latihan soal serta pembahasan di Gradient`,
                     openGraph: {
