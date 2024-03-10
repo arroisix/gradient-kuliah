@@ -2,9 +2,11 @@ import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import TextAlign from '@tiptap/extension-text-align';
 import TextStyle from '@tiptap/extension-text-style';
+import Text from '@tiptap/extension-text';
 import Color from '@tiptap/extension-color';
+import Document from '@tiptap/extension-document';
+import Paragraph from '@tiptap/extension-paragraph';
 import { Details, Summary } from 'library/tiptap/DetailsSummary';
-import UniqueID from 'library/tiptap/UniqueID';
 import Video from 'library/tiptap/Video';
 import { MathDisplay, MathInline } from 'library/tiptap/math';
 import Table from '@tiptap/extension-table';
@@ -20,7 +22,6 @@ const extensions = [
     Summary,
     MathInline,
     MathDisplay,
-    UniqueID,
     Video,
     Image.configure({ inline: true }),
     Placeholder.configure({
@@ -35,6 +36,9 @@ const extensions = [
     TextAlign.configure({
         types: ['heading', 'paragraph']
     }),
+    Document,
+    Paragraph,
+    Text,
     TextStyle,
     Color.configure({
         types: ['textStyle']
