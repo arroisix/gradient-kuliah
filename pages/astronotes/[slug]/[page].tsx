@@ -69,7 +69,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
     return {
         paths,
-        fallback: true
+        fallback: 'blocking'
     };
 };
 
@@ -99,6 +99,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
             const book = (payload[1].data as GetBookDetailResponse).book;
 
             return {
+                revalidate: 300,
                 props: {
                     book,
                     slug,
