@@ -76,7 +76,7 @@ const AstroNotesContent = (): JSX.Element => {
                     // onMouseOverCapture={handleHover}
                     aria-hidden>
                     {data?.is_tiptap ? (
-                        <AstroNotesContentJSON content={data?.page_content} />
+                        <AstroNotesContentJSON content={data?.page_content} key={Number(page) as unknown as string} />
                     ) : (
                         <ReactMarkdown
                             className={cn(
