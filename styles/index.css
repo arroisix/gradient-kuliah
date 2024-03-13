@@ -363,6 +363,10 @@ input[type='number']::-webkit-outer-spin-button {
     list-style-type: decimal;
 }
 
+.markdown-body img {
+    display: inline;
+}
+
 .markdown-body .octicon {
     display: inline-block;
     fill: currentColor;
