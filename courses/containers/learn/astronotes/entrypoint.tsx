@@ -38,7 +38,7 @@ const AstronotesEntrypoint = (): JSX.Element => {
 
     return (
         <div className="px-4 mx-auto space-y-10 md:px-0 max-w-screen-2xl">
-            <h1 className="text-4xl font-bold md:text-5xl">Perpustakaan</h1>
+            <h1 className="text-4xl font-bold md:text-2xl">Perpustakaan</h1>
             <div className="space-y-4 divide-y divide-neutral-500/30">
                 {isLoading ? (
                     <div className="py-4 space-y-6">
