@@ -167,7 +167,7 @@ const Navbar = ({
             className={`fixed top-0 left-0 w-full z-20 ${computeBgColor()} transition-all ease-in-out duration-200 flex flex-col`}
             onMouseEnter={() => setNavbarHovered(true)}
             onMouseLeave={onMouseLeaveNavbar}>
-            <div className="flex items-center justify-between w-full px-4 py-4 md:px-6">
+            <div className="flex items-center justify-between w-full px-4 py-3 md:px-6">
                 <div className="flex items-center gap-4">
                     {(isLandingPageRevampOn ||
                         (!isLandingPageRevampOn && isAuthenticated)) &&

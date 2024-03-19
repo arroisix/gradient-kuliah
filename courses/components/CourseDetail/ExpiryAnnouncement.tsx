@@ -18,7 +18,10 @@ const ExpiryAnnouncement = ({
     const isAuthenticated = useSelector(getIsAuthenticated);
 
     const subscriptionExpired = !is_subscribed && everSubscribed;
-    if (isAuthenticated && (expiryDay <= 7 || subscriptionExpired)) {
+    if (
+        isAuthenticated &&
+        ((is_subscribed && expiryDay <= 7) || subscriptionExpired)
+    ) {
         return (
             <div className="flex items-center justify-center my-16 mx-5">
                 <div className="border rounded-lg border-accent-yellow p-4 flex flex-col md:flex-row items-center justify-center gap-2">

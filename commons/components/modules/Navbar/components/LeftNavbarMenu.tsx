@@ -36,7 +36,7 @@ const LeftNavbarMenu = ({
         );
 
     const NAV_MENUS: NavLink[] = [
-        { href: '/', label: 'Home' },
+        { href: '/dashboard', label: 'Home' },
         {
             href: '/komunitas',
             label: 'Komunitas',

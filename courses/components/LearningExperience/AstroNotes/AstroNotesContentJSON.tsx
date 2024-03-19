@@ -15,6 +15,7 @@ import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import Placeholder from '@tiptap/extension-placeholder';
 import { EditorContent, useEditor } from '@tiptap/react';
+import { cn } from 'commons/utils';
 
 const extensions = [
     StarterKit,
@@ -50,9 +51,11 @@ const extensions = [
 ];
 
 export default function AstroNotesContentJSON({
-    content
+    content,
+    className
 }: {
     content: any;
+    className?: string;
 }): JSX.Element {
     const editor = useEditor({
         content,
@@ -63,7 +66,10 @@ export default function AstroNotesContentJSON({
     return (
         <EditorContent
             editor={editor}
-            className="markdown-table markdown-overflow-break-word markdown-blue-link markdown-img-max-height markdown-body astronotes max-w-[992px] self-center w-full"
+            className={cn(
+                'markdown-table markdown-overflow-break-word markdown-blue-link markdown-img-max-height markdown-body astronotes max-w-[992px] self-center w-full',
+                className
+            )}
             spellCheck="false"
         />
     );

@@ -57,7 +57,7 @@ const VideoLearnContainer = ({
     const subchapter = subchapterResponse ?? ssrSubchapterData;
 
     return (
-        <section className="relative py-16 min-h-[100vh] flex flex-col">
+        <section className="relative pt-4 pb-16 min-h-[100vh] flex flex-col">
             <div className="grid grid-cols-1 gap-5 lg:pl-6 lg:pr-[15px] lg:grid-cols-3 pb-1">
                 <div
                     className="w-full lg:col-span-2 h-max lg:pl-8"
@@ -68,7 +68,7 @@ const VideoLearnContainer = ({
                         video={subchapter?.video}
                         next_subchapter={subchapter?.next_subchapter}
                     />
-                    <div className="px-4 pt-4 space-y-1 lg:pt-6 sm:px-0 md:px-12 lg:px-0">
+                    <div className="px-4 py-4 space-y-1 lg:pt-6 sm:px-0 md:px-12 lg:px-0">
                         <h3 className="text-sm lg:text-xl text-neutral-400">
                             {course?.course_name}
                         </h3>

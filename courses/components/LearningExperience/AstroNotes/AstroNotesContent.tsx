@@ -79,6 +79,19 @@ const AstroNotesContent = (): JSX.Element => {
                         <AstroNotesContentJSON
                             content={data?.page_content}
                             key={Number(page) as unknown as string}
+                            className={cn(
+                                fontClassName[fontStyle],
+                                {
+                                    'hidden md:block': !(
+                                        !isLandingPageRevampOn ||
+                                        is_subscribed ||
+                                        Number(page) == 1
+                                    )
+                                },
+                                smallText
+                                    ? 'text-xs sm:text-sm'
+                                    : 'text-sm sm:text-base'
+                            )}
                         />
                     ) : (
                         <ReactMarkdown
