@@ -14,7 +14,7 @@ import TableRow from '@tiptap/extension-table-row';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import Placeholder from '@tiptap/extension-placeholder';
-import { EditorContent, useEditor } from '@tiptap/react';
+import { type Content, EditorContent, useEditor } from '@tiptap/react';
 import { cn } from 'commons/utils';
 
 const extensions = [
@@ -54,9 +54,8 @@ export default function AstroNotesContentJSON({
     content,
     className
 }: {
-    content: any;
-    className?: string;
-}): JSX.Element {
+    content: Content;
+} & PropsWithClassName): JSX.Element {
     const editor = useEditor({
         content,
         extensions,

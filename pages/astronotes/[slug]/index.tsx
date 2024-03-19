@@ -1,10 +1,12 @@
-import { GetServerSideProps } from 'next';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import LearnLayout from 'commons/learnLayout';
 import AstronotesDetail from 'courses/containers/learn/astronotes/detail';
 import { wrapper } from 'redux/store';
 import { getBookDetail } from '../../../courses/redux/api/astronotesApi';
 import { getRunningQueriesThunk } from '../../../redux/api/baseApi';
 import { ThunkDispatch } from 'redux-thunk';
+import axios from 'axios';
+import config from 'redux/api/config';
 
 const AstronotesDetailPage = ({
     slug,
@@ -23,47 +25,62 @@ const AstronotesDetailPage = ({
 AstronotesDetailPage.displayName = 'Book Detail';
 export default AstronotesDetailPage;
 
-export const getServerSideProps: GetServerSideProps =
-    wrapper.getServerSideProps((store) => async ({ params }) => {
-        (store.dispatch as ThunkDispatch<RootState, any, any>)(
-            getBookDetail.initiate({ slug: params?.slug as string })
-        );
+export const getStaticPaths: GetStaticPaths = async () => {
+    const { data: response } = await axios.get<ListResponseData<string>>(
+        `${config.API_BASE_URL}books/list-slug/`
+    );
 
-        const payload = await Promise.all(
-            (store.dispatch as ThunkDispatch<RootState, any, any>)(
-                getRunningQueriesThunk()
-            )
-        );
+    const paths = response.data.flatMap((slug) => ({ params: { slug } }));
 
-        if (payload[0].error) {
+    return {
+        paths,
+        fallback: 'blocking'
+    };
+};
+
+export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
+    (store) =>
+        async ({ params }) => {
+            (store.dispatch as ThunkDispatch<RootState, never, never>)(
+                getBookDetail.initiate({ slug: params?.slug as string })
+            );
+
+            const payload = await Promise.all(
+                (store.dispatch as ThunkDispatch<RootState, never, never>)(
+                    getRunningQueriesThunk()
+                )
+            );
+
+            if (payload[0].error) {
+                return {
+                    notFound: true
+                };
+            }
+
+            const data = payload[0].data as GetBookDetailResponse;
+
             return {
-                notFound: true
-            };
-        }
-
-        const data = payload[0].data as GetBookDetailResponse;
-
-        return {
-            props: {
-                slug: params?.slug,
-                astronotes: data.book,
-                canonical: `https://gradient.academy/astronotes/${params?.slug}`,
-                title: `${data.book.title}`,
-                description: `Perkaya ilmu mu dengan ${data.book.title}`,
-                openGraph: {
-                    type: 'website',
+                props: {
+                    slug: params?.slug,
+                    astronotes: data.book,
+                    canonical: `https://gradient.academy/astronotes/${params?.slug}`,
                     title: `${data.book.title}`,
                     description: `Perkaya ilmu mu dengan ${data.book.title}`,
-                    url: `https://gradient.academy/astronotes/${params?.slug}`,
-                    images: [
-                        {
-                            url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
-                            width: 48,
-                            height: 48,
-                            alt: 'Gradient Logo'
-                        }
-                    ]
+                    openGraph: {
+                        type: 'website',
+                        title: `${data.book.title}`,
+                        description: `Perkaya ilmu mu dengan ${data.book.title}`,
+                        url: `https://gradient.academy/astronotes/${params?.slug}`,
+                        images: [
+                            {
+                                url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
+                                width: 48,
+                                height: 48,
+                                alt: 'Gradient Logo'
+                            }
+                        ]
+                    }
                 }
-            }
-        };
-    });
+            };
+        }
+);
