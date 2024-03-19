@@ -1419,7 +1419,7 @@ input[type='number']::-webkit-outer-spin-button {
     @apply bg-neutral-200 dark:bg-neutral-800/50;
 }
 
-.markdown-body table thead th {
+.markdown-body table thead th, .markdown-body table tr th {
     @apply [&:first-child]:rounded-tl-md [&:last-child]:rounded-tr-md border-t;
 }
 
@@ -1480,6 +1480,7 @@ hr {
     width: 100%;
     margin: 0.5rem 0;
     text-align: center;
+    overflow: auto;
 }
 
 .astronotes details {
