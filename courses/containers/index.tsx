@@ -89,7 +89,7 @@ const ClassContainer = (): JSX.Element => {
                         !isLandingPageRevampOn &&
                         'px-4 md:px-[7.5rem]'
                 )}>
-                <h1 className="md:text-2xl text-xl font-bold">Kelas</h1>
+                <h1 className="md:text-2xl text-xl font-bold mt-10">Kelas</h1>
                 <Tabs
                     selectedIndex={tabIndex}
                     onSelect={(index: number) => setTabIndex(index)}
@@ -97,9 +97,9 @@ const ClassContainer = (): JSX.Element => {
                     defaultFocus={false}
                     className="mt-6">
                     <div
-                        className="sticky top-[60px] bg-neutral-1000"
+                        className="sticky top-[55px] bg-neutral-1000"
                         style={{
-                            zIndex: 100
+                            zIndex: 10
                         }}>
                         <TabList
                             style={{
