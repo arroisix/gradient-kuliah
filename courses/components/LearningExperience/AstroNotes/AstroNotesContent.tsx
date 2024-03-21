@@ -1,14 +1,12 @@
 import Skeleton from 'commons/components/elements/Skeleton';
-import { cn, isNotNullAndUndefined } from 'commons/utils';
-import NeedSubscribe from 'courses/components/NeedSubscribe';
+import { cn, getCookieValue, isNotNullAndUndefined } from 'commons/utils';
 import { useAstronotes } from 'courses/contexts/AstronotesProvider';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import {
-    useGetBookProgressQuery,
+    useGetAstronotesContentQuery,
     useGetPublicBookPreviewQuery
 } from 'courses/redux/api/astronotesApi';
-import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import rehypeKatex from 'rehype-katex';
 import rehypeRaw from 'rehype-raw';
@@ -17,110 +15,139 @@ import remarkMath from 'remark-math';
 import { fontClassName } from './constants';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
-import { useFeatureIsOn } from '@growthbook/growthbook-react';
 import AstronotesPaywall from './AstronotesPaywall';
 import AstroNotesContentJSON from './AstroNotesContentJSON';
+import { useRouter } from 'next/router';
+import { IS_BOT } from 'commons/constants';
+import CryptoJS from 'crypto-js';
 
-const AstroNotesContent = (): JSX.Element => {
-    const { smallText, fontStyle } = useAstronotes();
-    const router = useRouter();
-    const { slug, page } = router.query;
-    const { is_subscribed } = useCourseSubscription();
-    const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
-        'landing-page-revamp'
-    );
+const AstroNotesContent = ({ content }: { content: string }): JSX.Element => {
+    const [crawlerBot, setCrawlerBot] = useState('');
 
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const privateQueryResult = useGetBookProgressQuery(
-        { slug: slug as string, page: page as unknown as number },
-        {
-            skip:
-                !isAuthenticated ||
-                !is_subscribed ||
-                !isNotNullAndUndefined(slug) ||
-                !isNotNullAndUndefined(page)
-        }
+    const { is_subscribed } = useCourseSubscription();
+
+    useEffect(() => {
+        setCrawlerBot(getCookieValue(IS_BOT));
+    }, []);
+
+    const showPrivate = (isAuthenticated && is_subscribed) || !!crawlerBot;
+
+    return (
+        <>
+            {showPrivate ? (
+                <AstronotesPrivate crawlerBot={crawlerBot} content={content} />
+            ) : (
+                <AstronotesPreview content={content} />
+            )}
+            <AstronotesPaywall showPaywall={!!!crawlerBot} />
+        </>
     );
-    const publicQueryResult = useGetPublicBookPreviewQuery(
+};
+
+const AstronotesPreview = ({ content }: { content: string }): JSX.Element => {
+    const router = useRouter();
+    const { slug } = router.query;
+    const { data, isLoading, isFetching } = useGetPublicBookPreviewQuery(
         { slug: slug as string },
-        {
-            skip:
-                !isLandingPageRevampOn ||
-                (isAuthenticated && is_subscribed) ||
-                !isNotNullAndUndefined(slug)
-        }
+        { skip: !isNotNullAndUndefined(slug) }
     );
-    const { data, isLoading, isFetching, isError } =
-        isAuthenticated && is_subscribed
-            ? privateQueryResult
-            : publicQueryResult;
 
-    if (!is_subscribed && !isLandingPageRevampOn) return <NeedSubscribe />;
+    return (
+        <AstronotesMarkdown
+            isLoading={isLoading || isFetching}
+            astronotes={data}
+            initialContent={content}
+        />
+    );
+};
 
-    if (isLoading || isFetching)
+const AstronotesPrivate = ({
+    crawlerBot,
+    content
+}: {
+    crawlerBot: string;
+    content: string;
+}): JSX.Element => {
+    const router = useRouter();
+    const { page, slug } = router.query as { page: string; slug: string };
+    const { data, isLoading, isFetching } = useGetAstronotesContentQuery(
+        { slug: slug, page: parseInt(page), specialToken: crawlerBot },
+        { skip: !isNotNullAndUndefined(slug) || !isNotNullAndUndefined(page) }
+    );
+
+    return (
+        <AstronotesMarkdown
+            isLoading={isLoading || isFetching}
+            astronotes={data}
+            initialContent={content}
+        />
+    );
+};
+
+const AstronotesMarkdown = ({
+    isLoading,
+    astronotes,
+    initialContent
+}: {
+    isLoading: boolean;
+    initialContent: string;
+    astronotes?: GetAstronotesContentResponse;
+}): JSX.Element => {
+    const router = useRouter();
+    const { page } = router.query as { page: string };
+    const { smallText, fontStyle } = useAstronotes();
+    const { is_subscribed } = useCourseSubscription();
+    const [content, setContent] = useState<
+        GetAstronotesContentResponse | undefined
+    >(undefined);
+    const isPreview = Number(page) == 1;
+
+    useEffect(() => {
+        const key = getCookieValue(IS_BOT);
+        const decrypted =
+            !!key && !isPreview
+                ? CryptoJS.AES.decrypt(initialContent, key).toString(
+                      CryptoJS.enc.Utf8
+                  )
+                : '{}';
+        setContent(
+            JSON.parse(
+                isPreview ? initialContent : decrypted
+            ) as GetAstronotesContentResponse
+        );
+    }, [initialContent, isPreview, is_subscribed]);
+
+    const className = cn(
+        fontClassName[fontStyle],
+        !(is_subscribed || isPreview) && 'hidden md:block',
+        smallText ? 'text-xs sm:text-sm' : 'text-sm sm:text-base'
+    );
+
+    if (isLoading && !astronotes && !content) {
         return (
             <Skeleton repeat={8} className="h-6 [&:nth-child(4n+1)]:w-1/3" />
         );
-
-    if (isError) {
-        router.push('/not-found');
-        return <></>;
     }
 
-    if (data)
-        return (
-            <>
-                <div
-                    // TODO(angga): removed until higher in priority
-                    // onMouseUp={handleHighlight}
-                    // onMouseOverCapture={handleHover}
-                    aria-hidden>
-                    {data?.is_tiptap ? (
-                        <AstroNotesContentJSON
-                            content={data?.page_content}
-                            key={Number(page) as unknown as string}
-                            className={cn(
-                                fontClassName[fontStyle],
-                                {
-                                    'hidden md:block': !(
-                                        !isLandingPageRevampOn ||
-                                        is_subscribed ||
-                                        Number(page) == 1
-                                    )
-                                },
-                                smallText
-                                    ? 'text-xs sm:text-sm'
-                                    : 'text-sm sm:text-base'
-                            )}
-                        />
-                    ) : (
-                        <ReactMarkdown
-                            className={cn(
-                                'markdown-table markdown-overflow-break-word markdown-blue-link markdown-img-max-height markdown-body astronotes',
-                                fontClassName[fontStyle],
-                                {
-                                    'hidden md:block': !(
-                                        !isLandingPageRevampOn ||
-                                        is_subscribed ||
-                                        Number(page) == 1
-                                    )
-                                },
-                                smallText
-                                    ? 'text-xs sm:text-sm'
-                                    : 'text-sm sm:text-base'
-                            )}
-                            remarkPlugins={[remarkMath, remarkGfm]}
-                            rehypePlugins={[rehypeKatex, rehypeRaw]}
-                            linkTarget={'_blank'}>
-                            {data?.page_content}
-                        </ReactMarkdown>
-                    )}
-                </div>
-                <AstronotesPaywall />
-            </>
-        );
-
-    return <></>;
+    return astronotes?.is_tiptap || content?.is_tiptap ? (
+        <AstroNotesContentJSON
+            content={(astronotes?.page_content || content?.page_content) ?? ''}
+            className={className}
+            key={Number(page) as unknown as string}
+        />
+    ) : (
+        <ReactMarkdown
+            className={cn(
+                'markdown-table markdown-overflow-break-word markdown-blue-link markdown-img-max-height markdown-body astronotes',
+                className
+            )}
+            remarkPlugins={[remarkMath, remarkGfm]}
+            rehypePlugins={[rehypeKatex, rehypeRaw]}
+            linkTarget={'_blank'}>
+            {(astronotes?.page_content || content?.page_content) ?? ''}
+        </ReactMarkdown>
+    );
 };
 
 export default AstroNotesContent;

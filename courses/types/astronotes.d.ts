@@ -1,4 +1,4 @@
-interface getBookProgressResponse {
+interface GetAstronotesContentResponse {
     page_id: string;
     is_bookmarked: boolean;
     is_tiptap: boolean;

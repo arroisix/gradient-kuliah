@@ -4,15 +4,9 @@ import Astronotes from 'courses/containers/learn/astronotes';
 import type { GetStaticPaths, GetStaticProps } from 'next/types';
 import config from 'redux/api/config';
 import axios from 'axios';
-import { wrapper } from 'redux/store';
-import { ThunkDispatch } from '@reduxjs/toolkit/dist';
-import { getRunningQueriesThunk } from 'redux/api/baseApi';
-import {
-    getBookDetail,
-    getPublicBookPreview
-} from 'courses/redux/api/astronotesApi';
 import { ArticleJsonLd } from 'next-seo';
 import moment from 'moment';
+import CryptoJS from 'crypto-js';
 
 const DUMMY_DATE = moment().startOf('year').format();
 
@@ -20,12 +14,14 @@ interface AstronotesPageProps {
     slug: string;
     page: number;
     book: GetBookDetailResponse['book'];
+    content: string;
 }
 
 const AstroNotesPage = ({
     book,
     slug,
-    page
+    page,
+    content
 }: AstronotesPageProps): JSX.Element => {
     const { theme } = useThemeContext();
 
@@ -49,7 +45,7 @@ const AstroNotesPage = ({
                 isAccessibleForFree={page == 1}
             />
             <LearnLayout lightMode={theme === 'light'} showSubscriptionReminder>
-                <Astronotes />
+                <Astronotes content={content} />
             </LearnLayout>
         </>
     );
@@ -63,9 +59,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
         `${config.API_BASE_URL}books/list-slug/`
     );
 
-    const paths = response.data.map((slug) => ({
-        params: { slug, page: '1' }
-    }));
+    const paths = response.data.flatMap((slug) => [
+        { params: { slug, page: '1' } },
+        { params: { slug, page: '2' } },
+        { params: { slug, page: '3' } }
+    ]);
 
     return {
         paths,
@@ -73,55 +71,80 @@ export const getStaticPaths: GetStaticPaths = async () => {
     };
 };
 
-export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
-    (store) =>
-        async ({ params }) => {
-            const { slug, page } = params as { slug: string; page: string };
-            (store.dispatch as ThunkDispatch<RootState, any, any>)(
-                getPublicBookPreview.initiate({ slug })
-            );
-            (store.dispatch as ThunkDispatch<RootState, any, any>)(
-                getBookDetail.initiate({ slug })
-            );
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+    const { slug, page } = params as { slug: string; page: string };
+    let isError = false;
+    const [getBookContent, getBookDetail] = await Promise.all([
+        parseInt(page) == 1
+            ? axios
+                  .get<GetAstronotesContentResponse>(
+                      `${config.API_BASE_URL}books/public/${slug}/preview/`
+                  )
+                  .catch(() => {
+                      isError = true;
+                  })
+            : axios
+                  .get<GetAstronotesContentResponse>(
+                      `${config.API_BASE_URL}books/${slug}`,
+                      {
+                          headers: {
+                              'X-Special-Request':
+                                  process.env.FRONTEND_ACCESS_TOKEN
+                          }
+                      }
+                  )
+                  .catch(() => {
+                      isError = true;
+                  }),
+        axios
+            .get<GetBookDetailResponse>(
+                `${config.API_BASE_URL}books/${slug}/detail/`
+            )
+            .catch(() => {
+                isError = true;
+            })
+    ]);
 
-            const payload = await Promise.all(
-                (store.dispatch as ThunkDispatch<RootState, any, any>)(
-                    getRunningQueriesThunk()
-                )
-            );
+    if (isError || !getBookContent || !getBookDetail) {
+        return {
+            notFound: true
+        };
+    }
 
-            if (payload[0].error || payload[1].error) {
-                return {
-                    notFound: true
-                };
-            }
+    const key = process.env.FRONTEND_ACCESS_TOKEN as string;
+    const encryptedContent = CryptoJS.AES.encrypt(
+        JSON.stringify(getBookContent.data),
+        key
+    );
+    const book = getBookDetail.data.book;
 
-            const book = (payload[1].data as GetBookDetailResponse).book;
-
-            return {
-                revalidate: 300,
-                props: {
-                    book,
-                    slug,
-                    page: parseInt(page),
-                    canonical: `https://gradient.academy/astronotes/${slug}/${page}`,
-                    title: book.title,
-                    description: `Perkaya ilmu mu dengan ${book.title}`,
-                    openGraph: {
-                        type: 'website',
-                        title: book.title,
-                        description: `Perkaya ilmu mu dengan ${book.title}`,
-                        url: `https://gradient.academy/astronotes/${slug}/${page}`,
-                        images: [
-                            {
-                                url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
-                                width: 48,
-                                height: 48,
-                                alt: 'Gradient Logo'
-                            }
-                        ]
+    return {
+        revalidate: 300,
+        props: {
+            book,
+            slug,
+            page: parseInt(page),
+            content:
+                parseInt(page) == 1
+                    ? JSON.stringify(getBookContent.data)
+                    : encryptedContent.toString(),
+            canonical: `https://gradient.academy/astronotes/${slug}/${page}`,
+            title: book.title,
+            description: `Perkaya ilmu mu dengan ${book.title}`,
+            openGraph: {
+                type: 'website',
+                title: book.title,
+                description: `Perkaya ilmu mu dengan ${book.title}`,
+                url: `https://gradient.academy/astronotes/${slug}/${page}`,
+                images: [
+                    {
+                        url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
+                        width: 48,
+                        height: 48,
+                        alt: 'Gradient Logo'
                     }
-                }
-            };
+                ]
+            }
         }
-);
+    };
+};

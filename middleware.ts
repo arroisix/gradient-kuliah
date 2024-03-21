@@ -1,18 +1,32 @@
+import { IS_BOT } from 'commons/constants';
 import { getFeatures, growthbook } from 'library/growthbook';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, userAgent } from 'next/server';
 
 const COOKIE = 'visitor_id';
 const ACTIVE_AB_TESTING_PAGES = ['/', '/komunitas']; // Add as needed
 
 export const config = {
-    matcher: ['/', '/komunitas']
+    matcher: ['/', '/komunitas', '/astronotes/:slug*']
 };
 
 export async function middleware(req: NextRequest): Promise<NextResponse> {
     // We only want to run the A/B test on the homepage
     const pathname = req.nextUrl.pathname;
-    if (!ACTIVE_AB_TESTING_PAGES.includes(pathname)) {
-        return NextResponse.next();
+    let res = NextResponse.next();
+
+    if (
+        !ACTIVE_AB_TESTING_PAGES.includes(pathname) &&
+        !pathname.startsWith('/astronotes/')
+    ) {
+        return res;
+    }
+
+    if (pathname.startsWith('/astronotes/')) {
+        const { isBot } = userAgent(req);
+        if (isBot) {
+            res.cookies.set(IS_BOT, process.env.FRONTEND_ACCESS_TOKEN);
+        }
+        return res;
     }
 
     // Get existing visitor cookie or create a new one
@@ -23,7 +37,6 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
     growthbook.setAttributes({ id: visitor_id });
 
     // Pick which page to render depending on a feature flag
-    let res = NextResponse.next();
     if (growthbook.isOn('landing-page-revamp')) {
         const url = req.nextUrl.clone();
         // Replace response with revamped variant

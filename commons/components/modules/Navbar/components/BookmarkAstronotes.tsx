@@ -1,7 +1,7 @@
 import { isNotNullAndUndefined } from 'commons/utils';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import {
-    useGetBookProgressQuery,
+    useGetAstronotesContentQuery,
     usePostBookmarksMutation
 } from 'courses/redux/api/astronotesApi';
 import { useRouter } from 'next/router';
@@ -15,7 +15,7 @@ const BookmarkAstronotes = (): JSX.Element | null => {
     const [isBookmarked, setIsBookmarked] = useState(false);
     const { is_subscribed } = useCourseSubscription();
     const { data: bookProgressData, isLoading: isBookProgressLoading } =
-        useGetBookProgressQuery(
+        useGetAstronotesContentQuery(
             { slug: slug as string, page: page as unknown as number },
             {
                 skip:

@@ -4,14 +4,17 @@ const COURSE_BASE_URL = 'books/';
 
 export const astronotesApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        getBookProgress: builder.query<
-            getBookProgressResponse,
-            { slug: string; page?: number }
+        getAstronotesContent: builder.query<
+            GetAstronotesContentResponse,
+            { slug: string; page?: number; specialToken?: string }
         >({
-            query: ({ slug, page }) => ({
+            query: ({ slug, page, specialToken }) => ({
                 url: `${COURSE_BASE_URL}${slug}`,
                 params: {
                     page: page
+                },
+                headers: {
+                    'X-Special-Request': specialToken
                 }
             }),
             providesTags: [{ type: 'ASTRONOTES', id: 'ALL' }]
@@ -37,7 +40,7 @@ export const astronotesApi = baseApi.injectEndpoints({
             providesTags: [{ type: 'ASTRONOTES', id: 'PUBLIC_ENTRYPOINT' }]
         }),
         getPublicBookPreview: builder.query<
-            getBookProgressResponse,
+            GetAstronotesContentResponse,
             { slug: string }
         >({
             query: ({ slug }) => ({
@@ -68,7 +71,8 @@ export const astronotesApi = baseApi.injectEndpoints({
         getBookDetail: builder.query<GetBookDetailResponse, { slug: string }>({
             query: ({ slug }) => ({
                 url: `${COURSE_BASE_URL}${slug}/detail/`
-            })
+            }),
+            providesTags: [{ type: 'ASTRONOTES', id: 'DETAILS' }]
         }),
         getTableContents: builder.query<
             GetBookChapterResponse,
@@ -193,8 +197,8 @@ export const {
     useGetPublicEntrypointBooksQuery,
     useGetPublicBookPreviewQuery,
     useGetBookCategoriesQuery,
-    useGetBookProgressQuery,
-    useLazyGetBookProgressQuery,
+    useGetAstronotesContentQuery,
+    useLazyGetAstronotesContentQuery,
     usePostBookProgressMutation,
     useGetBookDetailQuery,
     useGetTableContentsQuery,
@@ -210,4 +214,5 @@ export const {
     usePostFeedbackMutation
 } = astronotesApi;
 
-export const { getBookDetail, getPublicBookPreview } = astronotesApi.endpoints;
+export const { getBookDetail, getAstronotesContent, getPublicBookPreview } =
+    astronotesApi.endpoints;

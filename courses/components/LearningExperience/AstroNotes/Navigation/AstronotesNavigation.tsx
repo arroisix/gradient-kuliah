@@ -1,6 +1,6 @@
 import { isNotNullAndUndefined } from 'commons/utils';
 import {
-    useGetBookProgressQuery,
+    useGetAstronotesContentQuery,
     useGetPublicBookPreviewQuery
 } from 'courses/redux/api/astronotesApi';
 import { useRouter } from 'next/router';
@@ -16,7 +16,7 @@ const AstronotesNavigation = (): JSX.Element => {
     const { slug, page } = router.query;
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { is_subscribed } = useCourseSubscription();
-    const privateQueryResult = useGetBookProgressQuery(
+    const privateQueryResult = useGetAstronotesContentQuery(
         { slug: slug as string, page: page as unknown as number },
         {
             skip:

@@ -18,7 +18,7 @@ const Belajar = ({ subchapter, course }: BelajarPageProps): JSX.Element => {
             <VideoJsonLd
                 name={`${course?.course_name}: ${subchapter?.subchapter_name}`}
                 description={`Nonton Video ${subchapter?.subchapter_name} kelas ${course?.course_name} hanya di Gradient`}
-                thumbnailUrls={[subchapter?.thumbnail]}
+                thumbnailUrl={subchapter?.thumbnail}
             />
             <LearningProvider>
                 <LearnLayout showSubscriptionReminder>

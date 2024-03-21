@@ -9,21 +9,32 @@ import { useRouter } from 'next/router';
 import { useGetPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
 import React, { useEffect, useState } from 'react';
 
-const AstronotesPaywall = (): JSX.Element => {
+const AstronotesPaywall = ({
+    showPaywall
+}: {
+    showPaywall: boolean;
+}): JSX.Element => {
     const router = useRouter();
-    const { slug, page } = router.query;
+    const { slug, page } = router.query as { slug: string; page: string };
     const { is_subscribed } = useCourseSubscription();
     const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
         'landing-page-revamp'
     );
     const { data } = useGetPacketOfferQuery();
-    const [isShowPaywall, setIsShowPaywall] = useState(false);
+    const [isShowPaywall, setIsShowPaywall] = useState(
+        Number(page) == 1 ? false : showPaywall
+    );
     const { isTabletBreakpoints, isMobileBreakpoints } = useWindowBreakpoints();
     const { height } = useWindowSize();
     const { theme, toggleTheme } = useThemeContext();
 
     useEffect(() => {
-        if (!isLandingPageRevampOn || is_subscribed || Number(page) == 1)
+        if (
+            !isLandingPageRevampOn ||
+            !showPaywall ||
+            is_subscribed ||
+            Number(page) == 1
+        )
             setIsShowPaywall(false);
         else {
             setIsShowPaywall(true);
@@ -41,7 +52,7 @@ const AstronotesPaywall = (): JSX.Element => {
                     'flex flex-col items-center justify-center w-screen -mx-4 sm:w-auto sm:mx-0 md:sticky',
                     isTabletBreakpoints && height < 700
                         ? 'md:top-20'
-                        : 'md:top-1/2 md:py-24 md:-translate-y-1/2 lg:top-auto lg:transform-none'
+                        : 'md:top-1/2 md:py-24 md:-translate-y-1/2'
                 )}>
                 <h2 className="mb-4 text-xl font-extrabold leading-relaxed text-center">
                     Beli untuk melihat rangkuman ini
