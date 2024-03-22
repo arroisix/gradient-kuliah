@@ -44,7 +44,7 @@ const Appbar = (): JSX.Element | null => {
         DISPLAYED_ROUTES.includes(router.pathname);
 
     return isShowAppbar() ? (
-        <div className="btm-nav bg-[#121212] md:hidden" style={{zIndex: 11}}>
+        <div className="btm-nav bg-[#121212] md:hidden" style={{ zIndex: 11 }}>
             {APPBAR_NAV.map((menu) => (
                 <Link
                     key={menu.label}
