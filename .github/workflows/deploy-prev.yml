@@ -34,7 +34,7 @@ jobs:
               id: get-url
               run: |
                   deployment_url=$(curl -X GET \
-                    -H "Authorization: Bearer {{ secrets.VERCEL_TOKEN }}" \
+                    -H "Authorization: Bearer {{ secrets.VERCEL_TEST_TOKEN }}" \
                     -H "Content-Type: application/json" \
                     "https://api.vercel.com/v6/deployments?app=gradient-web-dev&limit=1&projectId={{ secrets.VERCEL_DEV_PROJECT_ID }}&rollbackCandidate=true&target=production&teamId={{ secrets.VERCEL_ORG_ID }}" | jq -r '.deployments[0].url')
                   echo "url=${deployment_url}" >> "$GITHUB_ENV"
