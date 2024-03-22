@@ -28,7 +28,7 @@ const MobileSidebar = ({
     const { data: configData } = useGetConfigQuery();
 
     return openSidebar ? (
-        <div className="fixed z-[100] top-0 right-0 w-screen h-screen bg-[#121212]">
+        <div className="fixed z-[110] top-0 right-0 w-screen h-screen bg-[#121212]">
             <header className="flex items-center justify-between w-full px-6 py-4 md:px-8">
                 <span className="text-2xl font-bold cursor-pointer font-[Urbanist] text-neutral-50">
                     Gradient
