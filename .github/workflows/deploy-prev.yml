@@ -33,11 +33,10 @@ jobs:
             - name: Extract deployment URL
               id: get-url
               run: |
-                  response=$(curl -s -X GET \
-                    -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
-                    "https://api.vercel.com/v5/now/deployments?projectId=${{ secrets.VERCEL_DEV_PROJECT_ID }}")
-                  echo "$response" | jq
-                  deployment_url=$(echo "$response" | jq -r '.deployments[0].url')
+                  deployment_url=$(curl -X GET \
+                    -H "Authorization: Bearer lYpxVRY17exGhlsyWnSLpoWZ" \
+                    -H "Content-Type: application/json" \
+                    "httpso://api.vercel.com/v6/deployments?app=gradient-web-dev&limit=1&projectId={{ secrets.VERCEL_DEV_PROJECT_ID }}&rollbackCandidate=true&target=production&teamId={{ secrets.VERCEL_ORG_ID }}" | jq -r '.deployments[0].url')
                   echo "url=${deployment_url}" >> "$GITHUB_ENV"
 
             - name: Comment deployment URL
