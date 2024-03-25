@@ -33,6 +33,7 @@ const ClassCard = ({
                     src={cover}
                     loading="lazy"
                     layout="fill"
+                    unoptimized
                     className="object-cover object-top"
                 />
             </div>

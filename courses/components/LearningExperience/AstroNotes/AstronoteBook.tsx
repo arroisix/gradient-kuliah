@@ -48,6 +48,8 @@ const AstronoteBook = ({
                     }
                     layout="fill"
                     className="rounded"
+                    loading="lazy"
+                    unoptimized
                 />
             </div>
             <div className="flex flex-col flex-1 mt-4 mb-2">
