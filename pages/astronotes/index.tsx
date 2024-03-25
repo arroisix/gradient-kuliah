@@ -17,14 +17,14 @@ export const getStaticProps: GetStaticProps = () => {
     return {
         props: {
             canonical: 'https://gradient.academy/astronotes',
-            title: 'Catatan dan Bank Soal dari Gradient',
+            title: 'Catatan, Rangkuman dan Bank Soal dari Gradient',
             description:
-                'Catatan dan Bank Soal yang disusun oleh Gradient, demi kemudahan mahasiswa dalam mempelajari materi perkuliahan',
+                'Catatan, Rangkuman dan Bank Soal yang disusun oleh Gradient, demi kemudahan mahasiswa dalam mempelajari materi perkuliahan',
             openGraph: {
                 type: 'website',
-                title: 'Catatan dan Bank Soal dari Gradient',
+                title: 'Catatan, Rangkuman dan Bank Soal dari Gradient',
                 description:
-                    'Catatan dan Bank Soal yang disusun oleh Gradient, demi kemudahan mahasiswa dalam mempelajari materi perkuliahan',
+                    'Catatan, Rangkuman dan Bank Soal yang disusun oleh Gradient, demi kemudahan mahasiswa dalam mempelajari materi perkuliahan',
                 url: `https://gradient.academy`,
                 images: [
                     {
