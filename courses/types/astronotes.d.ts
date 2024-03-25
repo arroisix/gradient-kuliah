@@ -109,27 +109,26 @@ interface Astronote {
     title: string;
     rating: number;
     book_cover_url: string;
-    authors?: string;
+    authors?: string[];
     education_level?: string;
+    isbn?: string;
     category_id: string;
+    category_name: string;
     category?: string;
     in_progress?: boolean;
     is_free: boolean;
     is_public: boolean;
+    is_tiptap?: boolean;
+    percentage_progress?: number;
+    last_chapter_read?: string;
 }
-interface AstronoteBooksByCategory {
-    category_id: string;
-    category_name: string;
+interface AstronoteBooksResponse {
     books: Astronote[];
 }
-
-interface AstronoteCategory {
-    id: string;
-    name: string;
-}
-
 interface AstronotesBooksQueryParams extends BaseListQueryParams {
     major?: string;
+    type?: string;
+    status?: string;
 }
 
 interface BookDetailInterface {
