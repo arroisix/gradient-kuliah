@@ -67,7 +67,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     return (
         <>
             <NextSeo
-                defaultTitle="Gradient Academy"
+                defaultTitle="Platform Belajar Kuliah No.1 di Indonesia"
                 title={pageProps?.title}
                 description={pageProps?.description}
                 canonical={pageProps?.canonical}
