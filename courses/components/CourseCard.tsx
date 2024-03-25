@@ -1,5 +1,3 @@
-import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
-import useTransition from 'commons/hooks/useTransition';
 import { useGrid } from 'courses/contexts/GridProvider';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -24,7 +22,6 @@ const CourseCard = ({
     onClick
 }: CourseCardProps): JSX.Element => {
     const router = useRouter();
-    const loadingTransition = useTransition(router);
 
     useEffect(() => {
         if (course && !course.is_only_notebook)
@@ -89,7 +86,7 @@ const CourseCard = ({
                 </div>
                 {course.is_coming_soon && (
                     <div
-                        className="px-4 rounded-full py-1 absolute top-4 left-4 font-bold"
+                        className="absolute px-4 py-1 font-bold rounded-full top-4 left-4"
                         style={{
                             background:
                                 'linear-gradient(90deg, #F2B04C 0%, #E4B50D 68.5%, #E48E0D 100%)'
@@ -103,7 +100,6 @@ const CourseCard = ({
                     </div>
                 )}
             </div>
-            {loadingTransition && <LoadingBackdrop />}
         </Link>
     );
 };
