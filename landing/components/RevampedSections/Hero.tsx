@@ -16,9 +16,7 @@ const RevampedHero = ({
         <Container className="flex flex-col-reverse items-center py-4 md:pt-24 lg:py-16 md:gap-12 lg:gap-16 lg:h-screen md:flex-row">
             <div className="flex flex-col justify-center">
                 <h1 className="text-2xl font-extrabold whitespace-pre-line  md:text-4xl z-[1] leading-tight text-center md:text-left">
-                    Belajar dari{' '}
-                    <span className="text-[#7264EB]">dosen bermutu</span>,
-                    bareng pelajar se-Indonesia
+                    Platform Belajar Kuliah No.1 di Indonesia
                 </h1>
                 <p className="mt-3 mb-8 text-sm text-center md:mt-6 md:mb-16 md:text-xl text-neutral-400 md:text-left">
                     Video, rangkuman, diskusi, latihan soal

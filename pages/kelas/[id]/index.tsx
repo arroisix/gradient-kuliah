@@ -101,6 +101,20 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                         url: `https://gradient.academy/kelas/${params?.id}`,
                         images: [
                             {
+                                url: courseData.cover,
+                                width: 400,
+                                height: 250,
+                                alt: courseData?.course_name
+                            },
+                            ...courseData.lecturers.map(
+                                (lecturer: Lecturer) => ({
+                                    url: lecturer.photo,
+                                    width: 200,
+                                    heigth: 300,
+                                    alt: lecturer.name
+                                })
+                            ),
+                            {
                                 url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
                                 width: 48,
                                 height: 48,
