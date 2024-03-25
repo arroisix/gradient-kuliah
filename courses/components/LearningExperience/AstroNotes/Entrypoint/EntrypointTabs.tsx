@@ -17,7 +17,7 @@ const EntrypointTabs = (): JSX.Element => {
         );
 
     return (
-        <div className="sticky z-50 flex items-end w-full pt-5 pb-2 overflow-x-auto bg-black md:pt-6 top-14 no-scrollbar">
+        <div className="sticky z-10 flex items-end w-full pt-5 pb-2 overflow-x-auto bg-black md:pt-6 top-14 no-scrollbar">
             <Link
                 className={tabStyle(Tab.all)}
                 href={{ query: { tab: Tab.all } }}>
