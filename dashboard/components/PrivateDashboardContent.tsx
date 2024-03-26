@@ -4,6 +4,7 @@ import { useGetDashboardContentQuery } from 'dashboard/redux/api/dashboardApi';
 import React from 'react';
 import DashboardCard from './DashboardCard';
 import { cn } from 'commons/utils';
+import MyClassesAccordion from './MyClassesAccordion';
 
 /** Styling assumptions
  * Sidebar width: 250px
@@ -12,7 +13,7 @@ import { cn } from 'commons/utils';
 const CAROUSEL =
     'w-screen relative md:w-[calc(100vw-250px)] gap-4 carousel carousel-center right-4 md:right-8 lg:w-full lg:grid lg:grid-cols-4 xl:gap-6 lg:px-8';
 const CAROUSEL_ITEM =
-    'carousel-item flex-none first:ml-4 !w-[150px] lg:w-full last:mr-4 md:first:ml-8 md:last:mr-8 lg:!m-0';
+    'carousel-item flex-none first:ml-4 w-[150px] lg:w-full last:mr-4 md:first:ml-8 md:last:mr-8 lg:!m-0';
 
 const PrivateDashboardContent = (): JSX.Element => {
     const { data: _, isLoading } = useGetDashboardContentQuery();
@@ -112,6 +113,16 @@ const PrivateDashboardContent = (): JSX.Element => {
                 course_slug: 'Braun',
                 course_name: '',
                 name: 'Ruthe'
+            },
+            {
+                course_slug: 'dreowniohsetn',
+                course_name: '',
+                name: 'dreowniohsetn'
+            },
+            {
+                course_slug: 'siaoehtn',
+                course_name: '',
+                name: 'siaoehtn'
             }
         ]
     };
@@ -147,7 +158,10 @@ const PrivateDashboardContent = (): JSX.Element => {
                     {isLoading ? (
                         <Skeleton
                             repeat={4}
-                            className={cn(CAROUSEL_ITEM, '!px-0 h-[150px]')}
+                            className={cn(
+                                CAROUSEL_ITEM,
+                                '!px-0 h-60 !w-[150px] lg:!w-full'
+                            )}
                         />
                     ) : (
                         <>
@@ -166,7 +180,10 @@ const PrivateDashboardContent = (): JSX.Element => {
     return (
         <>
             <Section header="Baru Rilis" items={data?.just_released} />
-            <h4 className="text-lg font-extrabold md:text-xl">Kelasku</h4>
+            <MyClassesAccordion
+                isLoading={isLoading}
+                courses={data?.my_class}
+            />
             <Section
                 header="Bacaan Untukmu"
                 items={data?.book_recommendation}

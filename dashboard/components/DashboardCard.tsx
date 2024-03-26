@@ -29,6 +29,7 @@ const DashboardCard = (item: LearningMaterial): JSX.Element => {
                                 ? 'object-cover object-center'
                                 : 'rounded object-contain'
                         }
+                        crossOrigin="anonymous"
                         unoptimized
                     />
                 </div>
