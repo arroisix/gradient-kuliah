@@ -6,8 +6,6 @@ import Button from 'commons/components/elements/Button';
 import Paywall from 'commons/components/elements/Paywall';
 import Skeleton from 'commons/components/elements/Skeleton';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
-import ContinueLearning from 'dashboard/components/ContinueLearning';
-import MyClass from 'dashboard/components/MyClass';
 import Recommendations from 'dashboard/components/Recommendations';
 import { useGetStudentLearningProgressQuery } from 'dashboard/redux/api/dashboardApi';
 import { useGetPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
@@ -28,17 +26,11 @@ const DashboardContent = (): JSX.Element => {
     );
 
     const { is_subscribed } = useCourseSubscription();
-    const { data, isLoading } = useGetStudentLearningProgressQuery(
-        !isAuthenticated ? skipToken : undefined
-    );
     const { data: pricingData, isLoading: isLoadingPricingData } =
         useGetPacketOfferQuery(is_subscribed ? skipToken : undefined);
 
     const isShowRecommendedMaterials =
-        isLandingPageRevampOn &&
-        (!isAuthenticated ||
-            !is_subscribed ||
-            data?.learning_progress.length === 0);
+        isLandingPageRevampOn && (!isAuthenticated || !is_subscribed);
 
     const [tourViewed, setTourViewed] = useLocalStorage('tourViewed', false);
     const driver = useDriver({
