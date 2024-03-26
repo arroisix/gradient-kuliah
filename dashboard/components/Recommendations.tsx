@@ -29,7 +29,7 @@ const Recommendations = ({
         });
 
     const renderBooks = (
-        categoryName: 'Bank Soal' | 'Textbook'
+        categoryName: 'Bank Soal' | 'Textbook' | 'Catatan'
     ): JSX.Element => {
         const bookList = bookData?.books.filter(
             (category) => category.category_name === categoryName
@@ -130,7 +130,7 @@ const Recommendations = ({
                     {isLoadingBook ? (
                         <Skeleton repeat={isMobileBreakpoints ? 2 : 5} />
                     ) : (
-                        renderBooks('Textbook')
+                        renderBooks('Catatan')
                     )}
                 </div>
             </div>
