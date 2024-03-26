@@ -6,6 +6,7 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { pageSliderClassNames } from '../constants';
 import { useDebounce } from 'commons/hooks/useDebounce';
 import { useTracker } from 'tracker/tracker';
+import Link from 'next/link';
 
 interface PaginatorProps extends PropsWithClassName {
     currentPage: number;
@@ -35,32 +36,6 @@ const Paginator = ({
         }
     }, [destinationPage]);
 
-    function handlePrev(): void {
-        const pageNumber = Number(page);
-        if (pageNumber > 1) {
-            tracker?.genericTrack('Click Book Pagination', {
-                'Book Slug': slug,
-                'Book Page Query': page,
-                'Current Page': pageNumber,
-                'Target Page': pageNumber - 1
-            });
-            router.push(`/astronotes/${slug}/${pageNumber - 1}`);
-        }
-    }
-
-    function handleNext(): void {
-        const pageNumber = Number(page);
-        if (pageNumber < MAX_VALUE) {
-            tracker?.genericTrack('Click Book Pagination', {
-                'Book Slug': slug,
-                'Book Page Query': page,
-                'Current Page': pageNumber,
-                'Target Page': pageNumber + 1
-            });
-            router.push(`/astronotes/${slug}/${pageNumber + 1}`);
-        }
-    }
-
     return (
         <div className={cn('flex items-center gap-6', className)}>
             <div className="relative w-full h-1 text-accent-purple">
@@ -88,16 +63,32 @@ const Paginator = ({
                 />
             </div>
             <div className="flex items-center gap-[10px]">
-                <FaChevronLeft
-                    size={24}
-                    className={cn(
-                        'text-[#666666] transition-all',
-                        Number(page) > 1
-                            ? 'hover:text-black dark:hover:text-white cursor-pointer'
-                            : 'opacity-50'
-                    )}
-                    onClick={handlePrev}
-                />
+                <Link
+                    href={
+                        pageNumber > 1
+                            ? `/astronotes/${slug}/${pageNumber - 1}`
+                            : '#'
+                    }
+                    onClick={() => {
+                        if (pageNumber > 1) {
+                            tracker?.genericTrack('Click Book Pagination', {
+                                'Book Slug': slug,
+                                'Book Page Query': page,
+                                'Current Page': pageNumber,
+                                'Target Page': pageNumber - 1
+                            });
+                        }
+                    }}>
+                    <FaChevronLeft
+                        size={24}
+                        className={cn(
+                            'text-[#666666] transition-all',
+                            pageNumber > 1
+                                ? 'hover:text-black dark:hover:text-white cursor-pointer'
+                                : 'opacity-50'
+                        )}
+                    />
+                </Link>
                 <span className="inline-block text-sm select-none font-body">
                     {isLoading ? (
                         <Skeleton className="h-5 w-6 p-0 !m-0" />
@@ -105,16 +96,32 @@ const Paginator = ({
                         `${page}/${MAX_VALUE}`
                     )}
                 </span>
-                <FaChevronRight
-                    size={24}
-                    className={cn(
-                        'text-[#666666] transition-all',
-                        Number(page) < MAX_VALUE
-                            ? 'hover:text-black dark:hover:text-white cursor-pointer'
-                            : 'opacity-50'
-                    )}
-                    onClick={handleNext}
-                />
+                <Link
+                    href={
+                        pageNumber < MAX_VALUE
+                            ? `/astronotes/${slug}/${pageNumber + 1}`
+                            : '#'
+                    }
+                    onClick={() => {
+                        if (pageNumber < MAX_VALUE) {
+                            tracker?.genericTrack('Click Book Pagination', {
+                                'Book Slug': slug,
+                                'Book Page Query': page,
+                                'Current Page': pageNumber,
+                                'Target Page': pageNumber + 1
+                            });
+                        }
+                    }}>
+                    <FaChevronRight
+                        size={24}
+                        className={cn(
+                            'text-[#666666] transition-all',
+                            pageNumber < MAX_VALUE
+                                ? 'hover:text-black dark:hover:text-white cursor-pointer'
+                                : 'opacity-50'
+                        )}
+                    />
+                </Link>
             </div>
         </div>
     );

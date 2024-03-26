@@ -64,14 +64,20 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                     slug: params?.slug,
                     astronotes: data.book,
                     canonical: `https://gradient.academy/astronotes/${params?.slug}`,
-                    title: `${data.book.title}`,
-                    description: `Perkaya ilmu mu dengan ${data.book.title}`,
+                    title: `${data.book.category} ${data.book.title} | Catatan, Rangkuman dan Bank Soal`,
+                    description: `Belajar dan Paham dengan baca ${data.book.category} ${data.book.title} hanya di Gradient`,
                     openGraph: {
                         type: 'website',
-                        title: `${data.book.title}`,
-                        description: `Perkaya ilmu mu dengan ${data.book.title}`,
+                        title: `${data.book.category} ${data.book.title} | Catatan, Rangkuman dan Bank Soal`,
+                        description: `Belajar dan Paham dengan baca ${data.book.category} ${data.book.title} hanya di Gradient`,
                         url: `https://gradient.academy/astronotes/${params?.slug}`,
                         images: [
+                            {
+                                url: data.book.cover_url,
+                                width: 162,
+                                height: 232,
+                                alt: `${data.book.category} ${data.book.title}`
+                            },
                             {
                                 url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
                                 width: 48,

@@ -28,11 +28,11 @@ const AstroNotesPage = ({
     return (
         <>
             <ArticleJsonLd
-                title={book?.title}
-                description={`Perkaya ilmu mu dengan ${book?.title}`}
+                title={`Halaman ${page} | ${book.category} ${book.title} | Catatan, Rangkuman dan Bank Soal`}
+                description={`Belajar dan Paham dengan baca ${book.category} ${book.title} hanya di Gradient`}
                 authorName={[
                     {
-                        name: 'Gradient Academy',
+                        name: 'Tutor Gradient',
                         url: 'https://gradient.academy'
                     }
                 ]}
@@ -129,14 +129,20 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
                     ? JSON.stringify(getBookContent.data)
                     : encryptedContent.toString(),
             canonical: `https://gradient.academy/astronotes/${slug}/${page}`,
-            title: book.title,
-            description: `Perkaya ilmu mu dengan ${book.title}`,
+            title: `Halaman ${page} | ${book.category} ${book.title} | Catatan, Rangkuman dan Bank Soal`,
+            description: `Belajar dan Paham dengan baca ${book.category} ${book.title} hanya di Gradient`,
             openGraph: {
                 type: 'website',
-                title: book.title,
-                description: `Perkaya ilmu mu dengan ${book.title}`,
+                title: `Halaman ${page} | ${book.category} ${book.title} | Catatan, Rangkuman dan Bank Soal`,
+                description: `Belajar dan Paham dengan baca ${book.category} ${book.title} hanya di Gradient`,
                 url: `https://gradient.academy/astronotes/${slug}/${page}`,
                 images: [
+                    {
+                        url: book.cover_url,
+                        width: 162,
+                        height: 232,
+                        alt: `${book.category} ${book.title}`
+                    },
                     {
                         url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
                         width: 48,

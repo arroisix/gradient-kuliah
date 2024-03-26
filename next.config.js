@@ -16,7 +16,9 @@ module.exports = {
             'gradient-sitemap.s3.ap-southeast-1.amazonaws.com',
             'gradient-sitemap.s3.ap-southeast-1.amazonaws.com',
             'gradient-public-student-dev.s3.ap-southeast-1.amazonaws.com',
-            'gradient-public-student-prod.s3.ap-southeast-1.amazonaws.com'
+            'gradient-public-student-prod.s3.ap-southeast-1.amazonaws.com',
+            'gradient-editor-dev.s3.ap-southeast-1.amazonaws.com',
+            'gradient-editor-prod.s3.ap-southeast-1.amazonaws.com'
         ]
     },
     experimental: {

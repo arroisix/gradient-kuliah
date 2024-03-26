@@ -69,6 +69,17 @@ module.exports = {
             animation: {
                 'slide-left': 'slideLeft 40s linear infinite'
             }
+        },
+        daisyui: {
+            themes: [
+                {
+                    gradient: {
+                        // eslint-disable-next-line @typescript-eslint/no-var-requires
+                        ...require('daisyui/src/theming/themes')['dark'],
+                        primary: '#5F2BCE'
+                    }
+                }
+            ]
         }
     },
     variants: {},

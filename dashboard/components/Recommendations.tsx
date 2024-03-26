@@ -31,7 +31,7 @@ const Recommendations = ({
     const renderBooks = (
         categoryName: 'Bank Soal' | 'Textbook'
     ): JSX.Element => {
-        const bookList = bookData?.find(
+        const bookList = bookData?.books.filter(
             (category) => category.category_name === categoryName
         );
         const eventName = `Click ${
@@ -39,7 +39,7 @@ const Recommendations = ({
         } Card`;
         return (
             <>
-                {bookList?.books.map((book) => (
+                {bookList?.map((book) => (
                     <AstronoteBook
                         key={book.id}
                         eventName={eventName}
