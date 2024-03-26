@@ -18,9 +18,11 @@ const AstronoteBook = ({
     rating,
     education_level,
     in_progress,
+    latest_page,
     eventName = 'Click Book Item on Library Page',
     eventPayload
 }: Astronote & {
+    latest_page?: number;
     eventName?: string;
     eventPayload?: Record<string, unknown>;
 }): JSX.Element => {
@@ -36,7 +38,8 @@ const AstronoteBook = ({
                     ...eventPayload
                 });
 
-                if (in_progress) router.push(`/astronotes/${slug}/1`);
+                if (in_progress)
+                    router.push(`/astronotes/${slug}/${latest_page ?? 1}`);
                 else router.push(`/astronotes/${slug}`);
             }}
             aria-hidden>

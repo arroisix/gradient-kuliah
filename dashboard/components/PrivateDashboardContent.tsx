@@ -28,7 +28,7 @@ const PrivateDashboardContent = (): JSX.Element => {
         items?: LearningMaterial[];
         showButton?: boolean;
         btnHref?: string;
-        type?: string;
+        type?: LearningMaterial['type'];
     }): JSX.Element => {
         return (
             <div className="relative space-y-4" data-tour="step-1">

@@ -21,7 +21,7 @@ const DashboardCard = (item: LearningMaterial): JSX.Element => {
     return (
         <Link
             href={getLink()}
-            className="flex flex-col w-full border rounded-md border-neutral-700 bg-neutral-950 overflow-clip">
+            className="flex flex-col w-full border rounded-md border-[#242424] bg-neutral-950 overflow-clip">
             <div className="bg-[#242424] sm:h-[160px] h-[150px] object-contain">
                 <div
                     className={cn(
