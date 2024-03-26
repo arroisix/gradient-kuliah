@@ -34,6 +34,13 @@ module.exports = {
                 basePath: false
             },
             {
+                source: '/karir',
+                destination:
+                    'https://www.notion.so/astronotes/Bertumbuh-Bersama-Gradient-f398f551b9f9455c88ff6e6d24d81338',
+                permanent: true,
+                basePath: false
+            },
+            {
                 source: '/sitemaps/:file(.+-sitemap(?:-\\d{1,3})?\\.xml)',
                 destination: `https://gradient-sitemap.s3.ap-southeast-1.amazonaws.com/${env}/:file`,
                 permanent: false,
