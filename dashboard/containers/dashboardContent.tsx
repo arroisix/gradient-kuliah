@@ -19,6 +19,7 @@ import useDriver from 'library/driver.js/useDriver';
 import 'driver.js/dist/driver.css';
 import { FiChevronRight } from 'react-icons/fi';
 import { dashboardTourConfig } from './../constants/dashboard-tour';
+import PrivateDashboardContent from 'dashboard/components/PrivateDashboardContent';
 
 const DashboardContent = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -150,14 +151,7 @@ const DashboardContent = (): JSX.Element => {
             )}
         </div>
     ) : (
-        <div className="flex flex-col lg:flex-row-reverse gap-[2rem] pb-16">
-            <MyClass className="w-full lg:w-3/12" />
-            <ContinueLearning
-                isLoading={isLoading}
-                learningProgress={data?.learning_progress}
-                className="w-full lg:w-9/12"
-            />
-        </div>
+        <PrivateDashboardContent />
     );
 };
 
