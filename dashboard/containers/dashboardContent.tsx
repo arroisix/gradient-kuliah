@@ -7,7 +7,6 @@ import Paywall from 'commons/components/elements/Paywall';
 import Skeleton from 'commons/components/elements/Skeleton';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import Recommendations from 'dashboard/components/Recommendations';
-import { useGetStudentLearningProgressQuery } from 'dashboard/redux/api/dashboardApi';
 import { useGetPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
 import React, { useCallback } from 'react';
 import { renderToString } from 'react-dom/server';

@@ -9,8 +9,10 @@ import { cn } from 'commons/utils';
  * Sidebar width: 250px
  * Screen XL: 1536px
  */
+const CAROUSEL =
+    'w-screen relative md:w-[calc(100vw-250px)] gap-4 carousel carousel-center right-4 md:right-8 lg:w-full lg:grid lg:grid-cols-4 xl:gap-6 lg:px-8';
 const CAROUSEL_ITEM =
-    'carousel-item first:ml-4 lg:w-full last:mr-4 md:first:ml-8 md:last:mr-8 xl:first:ml-12 xl:last:mr-12 2xl:first:ml-[calc((100vw-250px-1536px)/2)] 2xl:last:mr-[calc((100vw-250px-1536px)/2)]';
+    'carousel-item flex-none first:ml-4 !w-[150px] lg:w-full last:mr-4 md:first:ml-8 md:last:mr-8 lg:!m-0';
 
 const PrivateDashboardContent = (): JSX.Element => {
     const { data: _, isLoading } = useGetDashboardContentQuery();
@@ -141,20 +143,16 @@ const PrivateDashboardContent = (): JSX.Element => {
                         Lihat Semua
                     </Button>
                 </div>
-                <div
-                    className={
-                        'w-screen relative md:w-[calc(100vw-250px)] gap-4 carousel carousel-center right-4 md:right-8 lg:w-full lg:grid lg:grid-cols-4 xl:gap-6 lg:px-8'
-                    }>
+                <div className={CAROUSEL}>
                     {isLoading ? (
-                        <Skeleton repeat={4} className={CAROUSEL_ITEM} />
+                        <Skeleton
+                            repeat={4}
+                            className={cn(CAROUSEL_ITEM, '!px-0 h-[150px]')}
+                        />
                     ) : (
                         <>
                             {items?.map((item) => (
-                                <div
-                                    key={item.id}
-                                    className={
-                                        'carousel-item flex-none first:ml-4 w-[150px] lg:w-full last:mr-4 md:first:ml-8 md:last:mr-8 lg:!m-0'
-                                    }>
+                                <div key={item.id} className={CAROUSEL_ITEM}>
                                     <DashboardCard {...item} />
                                 </div>
                             ))}

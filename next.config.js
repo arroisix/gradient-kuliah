@@ -24,6 +24,7 @@ module.exports = {
     experimental: {
         newNextLinkBehavior: true
     },
+    crossOrigin: 'anonymous',
     redirects() {
         return [
             {

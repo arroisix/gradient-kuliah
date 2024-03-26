@@ -6,7 +6,7 @@ import React from 'react';
 const DashboardCard = (item: LearningMaterial): JSX.Element => {
     const isVideo = item.type.toLowerCase() === 'video';
     return (
-        <div className="flex flex-col w-full border rounded-md border-neutral-600">
+        <div className="flex flex-col w-full border rounded-md border-neutral-600 bg-neutral-900">
             <div className="bg-[#242424] sm:h-[160px] h-[150px] object-contain">
                 <div
                     className={cn(
@@ -33,7 +33,7 @@ const DashboardCard = (item: LearningMaterial): JSX.Element => {
                     />
                 </div>
             </div>
-            <div className="flex flex-col gap-1 p-2 bg-neutral-900">
+            <div className="flex flex-col gap-1 p-2">
                 <p className="text-xs text-neutral-400">{item.type}</p>
                 <p className="text-sm font-bold text-white">{item.title}</p>
             </div>
