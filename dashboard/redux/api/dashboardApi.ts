@@ -28,7 +28,7 @@ export const dashboardApi = baseApi.injectEndpoints({
             { slug: string }
         >({
             query: ({ slug }) => ({
-                url: `${LEARNING_BASE_URL}class-progress/${slug}`
+                url: `${LEARNING_BASE_URL}class-progress/${slug}/`
             })
         })
     })

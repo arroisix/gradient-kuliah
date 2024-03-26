@@ -1,4 +1,6 @@
+import Button from 'commons/components/elements/Button';
 import Skeleton from 'commons/components/elements/Skeleton';
+import { useGetClassProgressQuery } from 'dashboard/redux/api/dashboardApi';
 import React, { useState } from 'react';
 
 const MyClassesAccordion = ({
@@ -6,9 +8,13 @@ const MyClassesAccordion = ({
     courses
 }: {
     isLoading: boolean;
-    courses: GetDashboardContentResponse['my_class'];
+    courses?: GetDashboardContentResponse['my_class'];
 }): JSX.Element => {
     const [course, setCourse] = useState('');
+    const { data } = useGetClassProgressQuery(
+        { slug: course },
+        { skip: !course }
+    );
 
     return (
         <div className="space-y-4 md:pr-16">
@@ -34,6 +40,11 @@ const MyClassesAccordion = ({
                         </div>
                         <div className="collapse-content">
                             <p>hello</p>
+                            <Button
+                                variant="custom"
+                                className="w-full text-xs text-black bg-white">
+                                Lihat Kelas
+                            </Button>
                         </div>
                     </label>
                 ))
