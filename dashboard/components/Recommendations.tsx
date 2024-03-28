@@ -38,11 +38,11 @@ const Recommendations = ({
     const renderBooks = (
         categoryName: 'Bank Soal' | 'Textbook' | 'Catatan'
     ): JSX.Element => {
-        const bookData =
+        const books =
             categoryName === 'Bank Soal'
                 ? questionBankBookData?.books
                 : notebookData?.books;
-        const bookList = bookData?.filter(
+        const bookList = books?.filter(
             (category) => category.category_name === categoryName
         );
         const eventName = `Click ${
