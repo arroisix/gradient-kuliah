@@ -6,6 +6,7 @@ import { AstronoteBookCard } from 'courses/components/LearningExperience/AstroNo
 import { useGetClassProgressQuery } from 'dashboard/redux/api/dashboardApi';
 import Image from 'next/image';
 import React, { useState } from 'react';
+import { useTracker } from 'tracker/tracker';
 const EMPTY_ASSET = `${CDN_URL}/assets/dashboard-subscribe.png`;
 
 const MyClassesAccordion = ({
@@ -16,6 +17,7 @@ const MyClassesAccordion = ({
     courses?: GetDashboardContentResponse['my_class'];
 }): JSX.Element => {
     const [course, setCourse] = useState('');
+    const tracker = useTracker();
     const { data, isFetching } = useGetClassProgressQuery(
         { slug: course },
         { skip: !course }
@@ -33,9 +35,14 @@ const MyClassesAccordion = ({
                         <input
                             type="checkbox"
                             name="kelasku"
-                            onChange={() =>
-                                setCourse((prev) => (prev == slug ? '' : slug))
-                            }
+                            onChange={() => {
+                                if (course !== slug)
+                                    tracker?.genericTrack(
+                                        'User click "Kelasku" Accordion',
+                                        { Course: name }
+                                    );
+                                setCourse((prev) => (prev == slug ? '' : slug));
+                            }}
                             checked={slug == course}
                             className="min-h-0"
                         />
@@ -58,12 +65,19 @@ const MyClassesAccordion = ({
                                             last_chapter_read={
                                                 progress.latest_chapter
                                             }
+                                            type={progress.type}
                                             id={progress.id}
                                             rating={0}
                                             category_id=""
                                             is_free
                                             is_public
                                             in_progress
+                                            eventName='User click item on "Kelasku" Accordion'
+                                            eventPayload={{
+                                                Course: name,
+                                                Title: progress.title,
+                                                Type: progress.type
+                                            }}
                                         />
                                     ))}
                                 {isFetching && (
@@ -76,6 +90,8 @@ const MyClassesAccordion = ({
                             <Button
                                 variant="custom"
                                 href={`/kelas/${slug}`}
+                                eventName='User click "Lihat Kelas" Button on Accordion'
+                                eventPayload={{ Course: name }}
                                 className="w-full text-xs text-center text-black bg-white">
                                 Lihat Kelas
                             </Button>
@@ -108,8 +124,8 @@ const EmptyState = (): JSX.Element => {
             </div>
             <Button
                 variant="custom"
-                eventName="Click Hero Banner (Registered)"
                 className="font-sans text-xs font-bold text-black bg-white w-fit z-[1] mt-12 min-[375px]:mt-0"
+                eventName={`User click "Telusuri Kelas" Button when user don't have any Class Progress yet`}
                 href="/kelas">
                 Telusuri Kelas
             </Button>

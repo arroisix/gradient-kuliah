@@ -84,10 +84,12 @@ export const AstronoteBookCard = ({
     eventName = 'Click Book Item on Library Page',
     eventPayload,
     orientation = 'horizontal',
+    type = 'book',
     className,
     ...book
 }: Astronote &
     PropsWithClassName & {
+        type?: 'video' | 'book';
         orientation?: 'horizontal' | 'vertical';
         eventName?: string;
         eventPayload?: Record<string, unknown>;
@@ -174,8 +176,9 @@ export const AstronoteBookCard = ({
             )}>
             <div
                 className={cn(
-                    'relative aspect-[256/364] flex-none border rounded-md border-neutral-700',
-                    orientation == 'vertical' ? 'w-24' : 'w-20'
+                    'relative flex-none border rounded-md border-neutral-700',
+                    orientation == 'vertical' ? 'w-24' : 'min-w-20 min-h-24',
+                    type == 'book' && 'aspect-[256/364]'
                 )}>
                 <Image
                     src={
@@ -184,6 +187,7 @@ export const AstronoteBookCard = ({
                     }
                     alt={book.title}
                     layout="fill"
+                    objectFit={type == 'book' ? 'contain' : 'cover'}
                     className="rounded"
                 />
             </div>

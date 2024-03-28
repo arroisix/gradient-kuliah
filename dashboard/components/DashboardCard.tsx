@@ -3,13 +3,22 @@ import { cn } from 'commons/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
+import { useTracker } from 'tracker/tracker';
 
-const DashboardCard = (item: LearningMaterial): JSX.Element => {
+const DashboardCard = ({
+    eventName,
+    eventPayload = {},
+    ...item
+}: LearningMaterial & {
+    eventName?: string;
+    eventPayload?: Record<string, unknown>;
+}): JSX.Element => {
     const isVideo = item.type?.toLowerCase() === 'video';
+    const tracker = useTracker();
     const getLink = (): string => {
         if (isVideo) {
             if (item?.chapter_id && item.subchapter_id)
-                return `/kelas/${item.course_slug}/${item.chapter_id}/${item.subchapter_id}`;
+                return `/kelas/${item.course_slug}/belajar/video/${item.chapter_id}/${item.subchapter_id}`;
             return `/kelas/${item.course_slug}`;
         } else {
             if (item.in_progress && item.latest_page > 0)
@@ -21,8 +30,14 @@ const DashboardCard = (item: LearningMaterial): JSX.Element => {
     return (
         <Link
             href={getLink()}
+            onClick={() => {
+                if (eventName) tracker?.genericTrack(eventName, eventPayload);
+            }}
             className="flex flex-col w-full border rounded-md border-[#242424] bg-neutral-950 overflow-clip">
-            <div className="bg-[#242424] sm:h-[160px] h-[150px] object-contain">
+            <div
+                className={cn(
+                    'bg-[#242424] sm:h-[160px] h-[150px] object-contain'
+                )}>
                 <div
                     className={cn(
                         'relative rounded-t-md',
@@ -39,11 +54,11 @@ const DashboardCard = (item: LearningMaterial): JSX.Element => {
                         width={!isVideo ? 256 : undefined}
                         height={!isVideo ? 364 : undefined}
                         layout={isVideo ? 'fill' : 'responsive'}
-                        className={
+                        className={cn(
                             isVideo
                                 ? 'object-cover object-center'
                                 : 'rounded object-contain'
-                        }
+                        )}
                         // crossOrigin="anonymous"
                         // unoptimized
                     />
