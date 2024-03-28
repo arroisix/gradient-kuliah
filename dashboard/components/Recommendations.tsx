@@ -26,19 +26,22 @@ const Recommendations = ({
         useGetPublicEntrypointBooksQuery({
             major: recommendation as string,
             limit: isMobileBreakpoints ? 2 : 5,
-            type: 'bank-soal',
+            type: 'bank-soal'
         });
     const { data: notebookData, isLoading: isLoadingNotebook } =
         useGetPublicEntrypointBooksQuery({
             major: recommendation as string,
             limit: isMobileBreakpoints ? 2 : 5,
-            type: 'astronotes',
+            type: 'astronotes'
         });
 
     const renderBooks = (
         categoryName: 'Bank Soal' | 'Textbook' | 'Catatan'
     ): JSX.Element => {
-        const bookData = (categoryName === 'Bank Soal')? questionBankBookData?.books : notebookData?.books;
+        const bookData =
+            categoryName === 'Bank Soal'
+                ? questionBankBookData?.books
+                : notebookData?.books;
         const bookList = bookData?.filter(
             (category) => category.category_name === categoryName
         );
@@ -59,10 +62,19 @@ const Recommendations = ({
     };
 
     useEffect(() => {
-        if (!isLoadingQuestionBankBook && isLoadingNotebook && !isLoadingCourse) {
+        if (
+            !isLoadingQuestionBankBook &&
+            isLoadingNotebook &&
+            !isLoadingCourse
+        ) {
             onFinishLoading?.();
         }
-    }, [isLoadingCourse, isLoadingQuestionBankBook, isLoadingNotebook, onFinishLoading]);
+    }, [
+        isLoadingCourse,
+        isLoadingQuestionBankBook,
+        isLoadingNotebook,
+        onFinishLoading
+    ]);
 
     return (
         <>
