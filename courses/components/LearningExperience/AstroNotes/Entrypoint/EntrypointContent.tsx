@@ -66,7 +66,7 @@ export const EntrypointPrivate = (): JSX.Element => {
         isLoading,
         isFetching
     } = useGetEntrypointBooksQuery(
-        { limit: 10, type: tab, status: sort },
+        { limit: 100, type: tab, status: sort },
         { skip: !isAuthenticated || skip }
     );
 
@@ -93,7 +93,7 @@ export const EntrypointPublic = (): JSX.Element => {
         isLoading,
         isFetching
     } = useGetPublicEntrypointBooksQuery(
-        { limit: 10, type: tab, status: sort },
+        { limit: 100, type: tab, status: sort },
         { skip: isAuthenticated || skip }
     );
 
