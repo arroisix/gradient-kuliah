@@ -1,15 +1,21 @@
+import { skipToken } from '@reduxjs/toolkit/query';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { cn } from 'commons/utils';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { FaGift } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 import { useGetReferralQuery } from 'referral/redux/referalApi';
 import { useTracker } from 'tracker/tracker';
 
 const ReferralEntrypoint = (): JSX.Element => {
     const router = useRouter();
     const tracker = useTracker();
-    const { data } = useGetReferralQuery();
+    const isAuthenticated = useSelector(getIsAuthenticated);
+    const { data } = useGetReferralQuery(
+        !isAuthenticated ? skipToken : undefined
+    );
 
     function formatCashbackAmount(amount: string): string {
         return `${Number(amount) / 1000}K`.replace('.', ',');
