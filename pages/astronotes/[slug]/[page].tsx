@@ -42,10 +42,10 @@ const AstroNotesPage = ({
                     book?.cover_url,
                     'https://assets.gradient.academy/assets/gradient-G-icon.png'
                 ]}
-                isAccessibleForFree={page == 1}
+                isAccessibleForFree={page == 1 || book.is_free}
             />
             <LearnLayout lightMode={theme === 'light'} showSubscriptionReminder>
-                <Astronotes content={content} />
+                <Astronotes content={content} book={book} key={page} />
             </LearnLayout>
         </>
     );

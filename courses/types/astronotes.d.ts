@@ -144,6 +144,8 @@ interface BookDetailInterface {
         id: string;
         title: string;
     }[];
+    is_free: boolean;
+    is_public: boolean;
 }
 
 interface GetBookDetailResponse {
