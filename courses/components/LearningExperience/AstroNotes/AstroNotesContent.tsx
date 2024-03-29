@@ -20,8 +20,15 @@ import AstroNotesContentJSON from './AstroNotesContentJSON';
 import { useRouter } from 'next/router';
 import { IS_BOT } from 'commons/constants';
 import CryptoJS from 'crypto-js';
+import AstronotesRegisterwall from './AstronotesRegisterWall';
 
-const AstroNotesContent = ({ content }: { content: string }): JSX.Element => {
+const AstroNotesContent = ({
+    content,
+    book
+}: {
+    content: string;
+    book: BookDetailInterface;
+}): JSX.Element => {
     const [crawlerBot, setCrawlerBot] = useState('');
 
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -31,21 +38,41 @@ const AstroNotesContent = ({ content }: { content: string }): JSX.Element => {
         setCrawlerBot(getCookieValue(IS_BOT));
     }, []);
 
-    const showPrivate = (isAuthenticated && is_subscribed) || !!crawlerBot;
+    const showPrivate =
+        ((isAuthenticated || book.is_public) &&
+            (is_subscribed || book.is_free)) ||
+        !!crawlerBot;
 
     return (
         <>
             {showPrivate ? (
-                <AstronotesPrivate crawlerBot={crawlerBot} content={content} />
+                <AstronotesPrivate
+                    crawlerBot={crawlerBot}
+                    content={content}
+                    book={book}
+                />
             ) : (
-                <AstronotesPreview content={content} />
+                <AstronotesPreview content={content} book={book} />
             )}
-            <AstronotesPaywall showPaywall={!!!crawlerBot} />
+            {book.is_free ? (
+                <AstronotesRegisterwall
+                    showRegisterwall={!!!crawlerBot}
+                    book={book}
+                />
+            ) : (
+                <AstronotesPaywall showPaywall={!!!crawlerBot} book={book} />
+            )}
         </>
     );
 };
 
-const AstronotesPreview = ({ content }: { content: string }): JSX.Element => {
+const AstronotesPreview = ({
+    content,
+    book
+}: {
+    content: string;
+    book: BookDetailInterface;
+}): JSX.Element => {
     const router = useRouter();
     const { slug } = router.query;
     const { data, isLoading, isFetching } = useGetPublicBookPreviewQuery(
@@ -58,16 +85,19 @@ const AstronotesPreview = ({ content }: { content: string }): JSX.Element => {
             isLoading={isLoading || isFetching}
             astronotes={data}
             initialContent={content}
+            book={book}
         />
     );
 };
 
 const AstronotesPrivate = ({
     crawlerBot,
-    content
+    content,
+    book
 }: {
     crawlerBot: string;
     content: string;
+    book: BookDetailInterface;
 }): JSX.Element => {
     const router = useRouter();
     const { page, slug } = router.query as { page: string; slug: string };
@@ -78,9 +108,11 @@ const AstronotesPrivate = ({
 
     return (
         <AstronotesMarkdown
+            key={page}
             isLoading={isLoading || isFetching}
             astronotes={data}
             initialContent={content}
+            book={book}
         />
     );
 };
@@ -88,16 +120,19 @@ const AstronotesPrivate = ({
 const AstronotesMarkdown = ({
     isLoading,
     astronotes,
-    initialContent
+    initialContent,
+    book
 }: {
     isLoading: boolean;
     initialContent: string;
+    book: BookDetailInterface;
     astronotes?: GetAstronotesContentResponse;
 }): JSX.Element => {
     const router = useRouter();
     const { page } = router.query as { page: string };
     const { smallText, fontStyle } = useAstronotes();
     const { is_subscribed } = useCourseSubscription();
+    const isAuthenticated = useSelector(getIsAuthenticated);
     const [content, setContent] = useState<
         GetAstronotesContentResponse | undefined
     >(undefined);
@@ -120,7 +155,12 @@ const AstronotesMarkdown = ({
 
     const className = cn(
         fontClassName[fontStyle],
-        !(is_subscribed || isPreview) && 'hidden md:block',
+        !(
+            is_subscribed ||
+            isPreview ||
+            book.is_public ||
+            (isAuthenticated && book.is_free)
+        ) && 'hidden md:block',
         smallText ? 'text-xs sm:text-sm' : 'text-sm sm:text-base'
     );
 
