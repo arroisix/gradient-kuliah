@@ -72,7 +72,9 @@ const Webinar = (): JSX.Element => {
                             yakin dengan pilihan kamu!
                         </p>
                         <div className="flex flex-wrap gap-2">
-                            <Button variant="primary" href="">
+                            <Button
+                                variant="primary"
+                                href="https://forms.gle/9EmFiFZfSDnKNyar9">
                                 Daftar Sekarang
                             </Button>
                             <Button variant="neutral" onClick={handleCopy}>
