@@ -43,17 +43,19 @@ const Webinar = (): JSX.Element => {
                 }}
             />
             <Layout>
-                <div className="flex flex-col md:flex-row md:h-screen items-center md:item-start md:justify-center gap-4 pt-14 md:pt-16">
-                    <div className="w-full h-full">
-                        <div className="w-full h-full min-w-[300px] min-h-[500px] relative">
+                <div className="flex flex-col md:flex-row items-center md:item-start md:justify-center gap-4 pt-14 md:pt-16">
+                    <div className="md:aspect-[1080/1350] overflow-hidden h-full w-full">
+                        <div className="aspect-[1080/1350] relative">
                             <Image
                                 src="https://assets.gradient.academy/assets/banner-bedah-jurusan.jpg"
-                                layout="fill"
+                                layout="responsive"
+                                height={1350}
+                                width={1080}
                                 alt="Bedah Jurusan"
                             />
                         </div>
                     </div>
-                    <div className="flex flex-col items-start justify-start h-full gap-4 w-full p-4 md:p-16">
+                    <div className="flex flex-col items-start justify-start gap-4 w-full p-4 md:p-16 md:h-screen overflow-y-auto">
                         <h1 className="md:text-5xl text-xl font-bold">
                             Webinar Gradient: Bedah Jurusan #EP01
                         </h1>
@@ -69,7 +71,7 @@ const Webinar = (): JSX.Element => {
                             Siapkan pertanyaan terbaikmu supaya kamu semakin
                             yakin dengan pilihan kamu!
                         </p>
-                        <div className="flex gap-2">
+                        <div className="flex flex-wrap gap-2">
                             <Button variant="primary" href="">
                                 Daftar Sekarang
                             </Button>
