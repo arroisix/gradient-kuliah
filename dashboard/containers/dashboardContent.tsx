@@ -6,10 +6,7 @@ import Button from 'commons/components/elements/Button';
 import Paywall from 'commons/components/elements/Paywall';
 import Skeleton from 'commons/components/elements/Skeleton';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
-import ContinueLearning from 'dashboard/components/ContinueLearning';
-import MyClass from 'dashboard/components/MyClass';
 import Recommendations from 'dashboard/components/Recommendations';
-import { useGetStudentLearningProgressQuery } from 'dashboard/redux/api/dashboardApi';
 import { useGetPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
 import React, { useCallback } from 'react';
 import { renderToString } from 'react-dom/server';
@@ -18,6 +15,8 @@ import { useLocalStorage } from 'usehooks-ts';
 import useDriver from 'library/driver.js/useDriver';
 import 'driver.js/dist/driver.css';
 import { FiChevronRight } from 'react-icons/fi';
+import { dashboardTourConfig } from './../constants/dashboard-tour';
+import PrivateDashboardContent from 'dashboard/components/PrivateDashboardContent';
 
 const DashboardContent = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -26,60 +25,15 @@ const DashboardContent = (): JSX.Element => {
     );
 
     const { is_subscribed } = useCourseSubscription();
-    const { data, isLoading } = useGetStudentLearningProgressQuery(
-        !isAuthenticated ? skipToken : undefined
-    );
     const { data: pricingData, isLoading: isLoadingPricingData } =
         useGetPacketOfferQuery(is_subscribed ? skipToken : undefined);
 
     const isShowRecommendedMaterials =
-        isLandingPageRevampOn &&
-        (!isAuthenticated ||
-            !is_subscribed ||
-            data?.learning_progress.length === 0);
+        isLandingPageRevampOn && (!isAuthenticated || !is_subscribed);
 
     const [tourViewed, setTourViewed] = useLocalStorage('tourViewed', false);
     const driver = useDriver({
-        popoverClass: 'dashboard-tour',
-        showProgress: true,
-        showButtons: ['next'],
-        steps: [
-            {
-                element: '[data-tour="step-1"]',
-                popover: {
-                    description:
-                        'Selamat datang! Mulai kelas pertamamu di sini',
-                    side: 'top',
-                    align: 'center'
-                }
-            },
-            {
-                element: '[data-tour="step-2"]',
-                popover: {
-                    description:
-                        'Kerjain latihan soal, lengkap sama jawabannya',
-                    side: 'top',
-                    align: 'center'
-                }
-            },
-            {
-                element: '[data-tour="step-3"]',
-                popover: {
-                    description: 'Males nyatet? Baca rangkuman aja!',
-                    side: 'top',
-                    align: 'center'
-                }
-            },
-            {
-                element: '[data-tour="step-4"]',
-                popover: {
-                    description:
-                        'Bingung? Tanya di Gradient, pasti dapet jawaban',
-                    side: 'top',
-                    align: 'end'
-                }
-            }
-        ],
+        ...dashboardTourConfig,
         onPopoverRender: (popover, { config, state }) => {
             if (state.activeIndex == 0) {
                 const skipButton = document.createElement('button');
@@ -188,14 +142,7 @@ const DashboardContent = (): JSX.Element => {
             )}
         </div>
     ) : (
-        <div className="flex flex-col lg:flex-row-reverse gap-[2rem] pb-16">
-            <MyClass className="w-full lg:w-3/12" />
-            <ContinueLearning
-                isLoading={isLoading}
-                learningProgress={data?.learning_progress}
-                className="w-full lg:w-9/12"
-            />
-        </div>
+        <PrivateDashboardContent />
     );
 };
 
