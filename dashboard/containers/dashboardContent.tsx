@@ -24,12 +24,14 @@ const DashboardContent = (): JSX.Element => {
         'landing-page-revamp'
     );
 
-    const { is_subscribed } = useCourseSubscription();
+    const { is_subscribed, everSubscribed } = useCourseSubscription();
     const { data: pricingData, isLoading: isLoadingPricingData } =
         useGetPacketOfferQuery(is_subscribed ? skipToken : undefined);
 
     const isShowRecommendedMaterials =
-        isLandingPageRevampOn && (!isAuthenticated || !is_subscribed);
+        isLandingPageRevampOn &&
+        (!isAuthenticated || !is_subscribed) &&
+        !everSubscribed;
 
     const [tourViewed, setTourViewed] = useLocalStorage('tourViewed', false);
     const driver = useDriver({

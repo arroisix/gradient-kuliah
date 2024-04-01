@@ -2,6 +2,7 @@ import Button from 'commons/components/elements/Button';
 import Skeleton from 'commons/components/elements/Skeleton';
 import { CDN_URL } from 'commons/constants';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
+import { cn } from 'commons/utils';
 import { AstronoteBookCard } from 'courses/components/LearningExperience/AstroNotes/AstronoteBook';
 import { useGetClassProgressQuery } from 'dashboard/redux/api/dashboardApi';
 import Image from 'next/image';
@@ -23,6 +24,14 @@ const MyClassesAccordion = ({
         { skip: !course }
     );
 
+    const toggleAccordion = (slug: string, name: string): void => {
+        if (course !== slug)
+            tracker?.genericTrack('User click "Kelasku" Accordion', {
+                Course: name
+            });
+        setCourse((prev) => (prev == slug ? '' : slug));
+    };
+
     return (
         <div className="space-y-4 md:pr-16">
             <h4 className="text-lg font-extrabold md:text-xl">Kelasku</h4>
@@ -35,14 +44,7 @@ const MyClassesAccordion = ({
                         <input
                             type="checkbox"
                             name="kelasku"
-                            onChange={() => {
-                                if (course !== slug)
-                                    tracker?.genericTrack(
-                                        'User click "Kelasku" Accordion',
-                                        { Course: name }
-                                    );
-                                setCourse((prev) => (prev == slug ? '' : slug));
-                            }}
+                            onChange={() => toggleAccordion(slug, name)}
                             checked={slug == course}
                             className="min-h-0"
                         />
@@ -50,37 +52,25 @@ const MyClassesAccordion = ({
                             {name}
                         </div>
                         <div className="collapse-content">
-                            <div className="grid grid-cols-1 gap-4 mb-6 lg:grid-cols-3">
-                                {!isFetching &&
+                            <div
+                                className={cn(
+                                    'grid grid-cols-1 gap-4 mb-6 lg:grid-cols-3 lg:grid-rows-1',
+                                    {
+                                        'grid-rows-2':
+                                            data?.class_progress.length == 2,
+                                        'grid-rows-3':
+                                            data?.class_progress.length == 3
+                                    }
+                                )}>
+                                {!isFetching ? (
                                     data?.class_progress.map((progress) => (
-                                        <AstronoteBookCard
+                                        <ProgressItem
                                             key={progress.id}
-                                            slug={progress.book_slug}
-                                            book_cover_url={progress.thumbnail}
-                                            category_name=""
-                                            title={progress.title}
-                                            percentage_progress={
-                                                progress.percentage_progress
-                                            }
-                                            last_chapter_read={
-                                                progress.latest_chapter
-                                            }
-                                            type={progress.type}
-                                            id={progress.id}
-                                            rating={0}
-                                            category_id=""
-                                            is_free
-                                            is_public
-                                            in_progress
-                                            eventName='User click item on "Kelasku" Accordion'
-                                            eventPayload={{
-                                                Course: name,
-                                                Title: progress.title,
-                                                Type: progress.type
-                                            }}
+                                            progress={progress}
+                                            courseName={name}
                                         />
-                                    ))}
-                                {isFetching && (
+                                    ))
+                                ) : (
                                     <Skeleton
                                         repeat={3}
                                         className="h-36 !mb-0"
@@ -102,6 +92,45 @@ const MyClassesAccordion = ({
                 <EmptyState />
             )}
         </div>
+    );
+};
+
+const ProgressItem = ({
+    progress,
+    courseName
+}: {
+    progress: ClassProgress;
+    courseName: string;
+}): JSX.Element => {
+    const href =
+        progress.type == 'book'
+            ? `/astronotes/${progress.book_slug}/${progress.latest_page}`
+            : `/kelas/${progress.course_slug}/belajar/video/${progress.chapter_id}/${progress.subchapter_id}`;
+    return (
+        <AstronoteBookCard
+            key={progress.id}
+            slug={progress.book_slug}
+            book_cover_url={progress.thumbnail}
+            category_name=""
+            title={progress.title}
+            percentage_progress={progress.percentage_progress}
+            last_chapter_read={progress.latest_chapter}
+            type={progress.type}
+            id={progress.id}
+            rating={0}
+            category_id=""
+            is_free
+            is_public
+            in_progress
+            href={href}
+            imageClassname="min-h-24 lg:min-h-16"
+            eventName='User click item on "Kelasku" Accordion'
+            eventPayload={{
+                Course: courseName,
+                Title: progress.title,
+                Type: progress.type
+            }}
+        />
     );
 };
 

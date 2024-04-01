@@ -43,7 +43,14 @@ export const EntrypointContent = ({
             {!!astronotes && !isLoading && (
                 <>
                     {astronotes?.map((book) => (
-                        <AstronoteBookCard key={book.id} {...book} />
+                        <AstronoteBookCard
+                            key={book.id}
+                            href={`/astronotes/${book.slug}`}
+                            eventName="Click Book Item on Library Page"
+                            eventPayload={{ 'Book Slug': book.slug }}
+                            imageClassname="min-w-20 min-h-24"
+                            {...book}
+                        />
                     ))}
                 </>
             )}

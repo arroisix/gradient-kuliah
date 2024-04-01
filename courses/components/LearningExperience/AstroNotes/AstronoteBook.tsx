@@ -85,12 +85,16 @@ export const AstronoteBookCard = ({
     eventPayload,
     orientation = 'horizontal',
     type = 'book',
+    href,
     className,
+    imageClassname,
     ...book
 }: Astronote &
     PropsWithClassName & {
         type?: 'video' | 'book';
         orientation?: 'horizontal' | 'vertical';
+        href: string;
+        imageClassname?: string;
         eventName?: string;
         eventPayload?: Record<string, unknown>;
     }): JSX.Element => {
@@ -161,13 +165,8 @@ export const AstronoteBookCard = ({
 
     return (
         <Link
-            href={`/astronotes/${book.slug}`}
-            onClick={() =>
-                tracker?.genericTrack(eventName, {
-                    'Book Slug': book.slug,
-                    ...eventPayload
-                })
-            }
+            href={href}
+            onClick={() => tracker?.genericTrack(eventName, eventPayload)}
             className={cn(
                 'flex gap-4 p-3 bg-black border rounded-lg border-neutral-700 shadow-md shadow-black/25',
                 orientation == 'vertical' &&
@@ -177,8 +176,9 @@ export const AstronoteBookCard = ({
             <div
                 className={cn(
                     'relative flex-none border rounded-md border-neutral-700',
-                    orientation == 'vertical' ? 'w-24' : 'min-w-20 min-h-24',
-                    type == 'book' && 'aspect-[256/364]'
+                    orientation == 'vertical' && 'w-24',
+                    type == 'book' ? 'aspect-[256/364]' : 'aspect-[7/8]',
+                    imageClassname
                 )}>
                 <Image
                     src={
