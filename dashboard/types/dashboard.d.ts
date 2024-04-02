@@ -14,9 +14,41 @@ interface StudentLearningProgressResponse {
 
 interface StudentCourse {
     course_slug: string;
+
+    /* deprecated */
     course_name: string;
+    name: string;
 }
 
 interface StudentCourseResponse {
     courses: StudentCourse[];
+}
+
+interface LearningMaterial {
+    id: string;
+    type: 'Video' | 'Textbook' | 'Astronotes' | 'Bank Soal';
+    thumbnail: string;
+    title: string;
+    in_progress: boolean;
+    course_slug: string;
+    chapter_id: string;
+    subchapter_id: string;
+    book_slug: string;
+    latest_page: number;
+}
+
+interface GetDashboardContentResponse {
+    just_released: LearningMaterial[];
+    book_recommendation: LearningMaterial[];
+    class_recommendation: LearningMaterial[];
+    my_class: StudentCourse[];
+}
+
+interface ClassProgress extends Omit<LearningMaterial, 'in_progress' | 'type'> {
+    type: 'book' | 'video';
+    latest_chapter: string;
+    percentage_progress: number;
+}
+interface GetClassProgressResponse {
+    class_progress: ClassProgress[];
 }
