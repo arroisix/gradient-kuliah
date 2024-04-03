@@ -20,11 +20,13 @@ const PrivateDashboardContent = (): JSX.Element => {
 
     return (
         <>
-            <Section
-                isLoading={isLoading}
-                header="Baru Rilis"
-                items={data?.just_released}
-            />
+            {data?.just_released.length !== 0 && (
+                <Section
+                    isLoading={isLoading}
+                    header="Baru Rilis"
+                    items={data?.just_released}
+                />
+            )}
             <MyClassesAccordion
                 isLoading={isLoading}
                 courses={data?.my_class}
