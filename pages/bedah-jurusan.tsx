@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 const Webinar = (): JSX.Element => {
     const handleCopy = (): void => {
         navigator.clipboard.writeText(
-            `Yuk join webinar bedah kampus dari Gradient, GRATIS!, bisa langsung cek di https://gradient.academy/bedah-kampus`
+            `Yuk join webinar bedah jurusan dari Gradient, GRATIS!, bisa langsung cek di https://gradient.academy/bedah-jurusan`
         ),
             toast.success(
                 'Link berhasil di-copy, silahkan bagikan ke teman teman kamu!',
@@ -72,7 +72,9 @@ const Webinar = (): JSX.Element => {
                             yakin dengan pilihan kamu!
                         </p>
                         <div className="flex flex-wrap gap-2">
-                            <Button variant="primary" href="">
+                            <Button
+                                variant="primary"
+                                href="https://forms.gle/9EmFiFZfSDnKNyar9">
                                 Daftar Sekarang
                             </Button>
                             <Button variant="neutral" onClick={handleCopy}>
