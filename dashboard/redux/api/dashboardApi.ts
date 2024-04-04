@@ -2,7 +2,6 @@ import { baseApi } from 'redux/api/baseApi';
 
 const STUDENT_BASE_URL = 'students/';
 const LEARNING_BASE_URL = 'learning-experiences/';
-const LEARNING_BASE_URL = 'learning-experiences/';
 
 export const dashboardApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
