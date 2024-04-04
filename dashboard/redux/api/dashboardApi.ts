@@ -21,7 +21,8 @@ export const dashboardApi = baseApi.injectEndpoints({
         getDashboardContent: builder.query<GetDashboardContentResponse, void>({
             query: () => ({
                 url: `${LEARNING_BASE_URL}dashboard/`
-            })
+            }),
+            providesTags: [{ type: 'PROFILE', id: 'DASHBOARD' }]
         }),
         getClassProgress: builder.query<
             GetClassProgressResponse,
@@ -30,6 +31,17 @@ export const dashboardApi = baseApi.injectEndpoints({
             query: ({ slug }) => ({
                 url: `${LEARNING_BASE_URL}class-progress/${slug}/`
             })
+        }),
+        updateMyClasses: builder.mutation<
+            Pick<GetDashboardContentResponse, 'my_class'>,
+            { deleted_course_slug: string[] }
+        >({
+            query: (body) => ({
+                url: `${LEARNING_BASE_URL}class-status/`,
+                method: 'PUT',
+                body
+            }),
+            invalidatesTags: [{ type: 'PROFILE', id: 'DASHBOARD' }]
         })
     })
 });
@@ -38,5 +50,6 @@ export const {
     useGetStudentLearningProgressQuery,
     useGetStudentCourseQuery,
     useGetClassProgressQuery,
-    useGetDashboardContentQuery
+    useGetDashboardContentQuery,
+    useUpdateMyClassesMutation
 } = dashboardApi;
