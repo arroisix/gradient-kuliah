@@ -4,7 +4,7 @@ import { useGetDashboardContentQuery } from 'dashboard/redux/api/dashboardApi';
 import React from 'react';
 import DashboardCard from './DashboardCard';
 import { cn } from 'commons/utils';
-import MyClassesAccordion from './MyClassesAccordion';
+import MyClassesAccordion from './MyClassesSection';
 
 /** Styling assumptions
  * Sidebar width: 250px
@@ -16,7 +16,7 @@ const CAROUSEL_ITEM =
     'carousel-item flex-none first:ml-4 w-[150px] lg:w-full last:mr-4 md:first:ml-8 md:last:mr-8 lg:!m-0';
 
 const PrivateDashboardContent = (): JSX.Element => {
-    const { data, isLoading } = useGetDashboardContentQuery();
+    const { data, isLoading, isFetching } = useGetDashboardContentQuery();
 
     return (
         <>
@@ -28,7 +28,7 @@ const PrivateDashboardContent = (): JSX.Element => {
                 />
             )}
             <MyClassesAccordion
-                isLoading={isLoading}
+                isLoading={isLoading || isFetching}
                 courses={data?.my_class}
             />
             <Section
