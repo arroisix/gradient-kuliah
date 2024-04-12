@@ -14,6 +14,8 @@ import TableRow from '@tiptap/extension-table-row';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import Placeholder from '@tiptap/extension-placeholder';
+import { Link } from '@tiptap/extension-link';
+import Underline from '@tiptap/extension-underline';
 import { type Content, EditorContent, useEditor } from '@tiptap/react';
 import { cn } from 'commons/utils';
 
@@ -47,7 +49,11 @@ const extensions = [
     Table,
     TableCell,
     TableRow,
-    TableHeader
+    TableHeader,
+    Underline,
+    Link.configure({
+        validate: (href) => /^https?:\/\//.test(href)
+    })
 ];
 
 export default function AstroNotesContentJSON({
