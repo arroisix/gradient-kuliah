@@ -140,6 +140,7 @@ interface BookDetailInterface {
     authors: string[];
     isbn: string;
     keywords: string;
+    description: string;
     chapters: {
         id: string;
         title: string;
