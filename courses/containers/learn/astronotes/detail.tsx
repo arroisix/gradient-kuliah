@@ -17,7 +17,7 @@ const AstronotesDetail = ({
     const tracker = useTracker();
 
     return (
-        <div className="mx-auto w-full lg:w-[75%] xl:w-[60%] flex flex-col">
+        <div className="mx-auto w-full lg:w-[75%] xl:w-[60%] flex flex-col gap-4 md:gap-6">
             <div className="flex flex-row gap-2.5 items-center pb-7 text-xs md:text-sm">
                 <Link href={'/astronotes'} className="cursor-pointer">
                     <h3 className="text-[#666666] hover:text-[#666666]/[0.75] duration-100 transition-all ease-in-out">
@@ -28,7 +28,7 @@ const AstronotesDetail = ({
                 <h1 className="text-white">{astronotes?.title}</h1>
             </div>
 
-            <div className="flex flex-row gap-4 pb-4 md:gap-6 lg:gap-8 md:pb-6">
+            <div className="flex flex-row gap-4 md:gap-6 lg:gap-8">
                 <div className="aspect-[256/364] relative min-w-[100px] md:min-w-[150px] max-w-[132px] md:max-w-[164px] h-auto w-[50%] border rounded border-neutral-700">
                     <Image
                         src={
@@ -91,27 +91,38 @@ const AstronotesDetail = ({
                 </div>
             )}
 
+            {astronotes?.description && (
+                <p className="text-xs lg:text-sm text-justify">
+                    {astronotes.description}
+                </p>
+            )}
+
             {!!astronotes && (
-                <Accordion
-                    item={astronotes.chapters.map((value) => ({
-                        title: value.title,
-                        jsxContent: (
-                            <ChapterContent
-                                id={value.id}
-                                slug={slug as string}
-                            />
-                        ),
-                        onClick: () => {
-                            tracker?.genericTrack(
-                                'Click Book Chapter Accordion',
-                                {
-                                    'Book Slug': slug,
-                                    'Chapter Name': value.title
-                                }
-                            );
-                        }
-                    }))}
-                />
+                <div className="flex flex-col gap-2 md:gap-3">
+                    <span className="font-body font-bold text-sm lg:text-base">
+                        Daftar Isi
+                    </span>
+                    <Accordion
+                        item={astronotes.chapters.map((value) => ({
+                            title: value.title,
+                            jsxContent: (
+                                <ChapterContent
+                                    id={value.id}
+                                    slug={slug as string}
+                                />
+                            ),
+                            onClick: () => {
+                                tracker?.genericTrack(
+                                    'Click Book Chapter Accordion',
+                                    {
+                                        'Book Slug': slug,
+                                        'Chapter Name': value.title
+                                    }
+                                );
+                            }
+                        }))}
+                    />
+                </div>
             )}
         </div>
     );
