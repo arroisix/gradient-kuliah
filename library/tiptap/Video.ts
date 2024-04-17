@@ -13,7 +13,7 @@ export default Node.create({
                 default: null
             },
             width: {
-                default: '50vw',
+                default: '100%',
             },
             height: {
                 default: 'auto',
@@ -30,7 +30,7 @@ export default Node.create({
                     if (node instanceof HTMLElement) {
                         return {
                             src: node.getAttribute('src'),
-                            width: node.getAttribute('width') || '50vw',
+                            width: node.getAttribute('width') || '100%',
                             height: node.getAttribute('height') || 'auto'
                         };
                     }
