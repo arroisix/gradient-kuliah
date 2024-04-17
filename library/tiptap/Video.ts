@@ -11,17 +11,42 @@ export default Node.create({
         return {
             src: {
                 default: null
-            }
+            },
+            width: {
+                default: '50vw',
+            },
+            height: {
+                default: 'auto',
+            },
+        
         };
     },
     parseHTML() {
         return [
             {
-                tag: 'video'
+                tag: 'video',
+                getAttrs: (node: string | HTMLElement) => {
+                    // Ensure the node is an HTMLElement before trying to access attributes
+                    if (node instanceof HTMLElement) {
+                        return {
+                            src: node.getAttribute('src'),
+                            width: node.getAttribute('width') || '50vw',
+                            height: node.getAttribute('height') || 'auto'
+                        };
+                    }
+                    return null; // Return null if it's not an HTMLElement
+                }
             }
         ];
     },
+
     renderHTML({ HTMLAttributes }) {
-        return ['video', mergeAttributes(HTMLAttributes, { controls: true })];
+        return [
+            'video', 
+            mergeAttributes(HTMLAttributes, { 
+                controls: true, 
+                style: `width: ${HTMLAttributes.width}; height: ${HTMLAttributes.height};` 
+            })
+        ];
     }
 });
