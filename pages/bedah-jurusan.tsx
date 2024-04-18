@@ -20,7 +20,7 @@ const Webinar = (): JSX.Element => {
     return (
         <>
             <NextSeo
-                title="Webinar Gradient: Bedah Jurusan #EP01"
+                title="Webinar Gradient: Bedah Jurusan #EP02"
                 description="Bagi kamu yang masih bingung dalam memilih jurusan,
                             jangan ragu untuk join webinar perdana dari Gradient
                             GRATIS!. dalam
@@ -28,13 +28,13 @@ const Webinar = (): JSX.Element => {
                             seluk beluk dari 4 jurusan berbeda bersama pembicara
                             dari beberapa universitas ternama di Indonesia."
                 openGraph={{
-                    title: 'Webinar Gradient: Bedah Jurusan #EP01',
+                    title: 'Webinar Gradient: Bedah Jurusan #EP02',
                     description:
                         'Bagi kamu yang masih bingung dalam memilih jurusan,jangan ragu untuk join webinar perdana dari GradientGRATIS!. dalam episode pertama kali ini, kita akan bersama membahas seluk beluk dari 4 jurusan berbeda bersama pembicara dari beberapa universitas ternama di Indonesia.',
                     url: `https://gradient.academy/bedah-kampus`,
                     images: [
                         {
-                            url: 'https://assets.gradient.academy/assets/banner-bedah-jurusan.jpg',
+                            url: 'https://assets.gradient.academy/assets/banner-bedah-jurusan-ep2.jpg',
                             width: 300,
                             height: 500,
                             alt: 'Gradient Bedah Jurusan'
@@ -47,7 +47,7 @@ const Webinar = (): JSX.Element => {
                     <div className="md:aspect-[1080/1350] overflow-hidden h-full w-full">
                         <div className="aspect-[1080/1350] relative">
                             <Image
-                                src="https://assets.gradient.academy/assets/banner-bedah-jurusan.jpg"
+                                src="https://assets.gradient.academy/assets/banner-bedah-jurusan-ep2.jpg"
                                 layout="responsive"
                                 height={1350}
                                 width={1080}
@@ -57,13 +57,13 @@ const Webinar = (): JSX.Element => {
                     </div>
                     <div className="flex flex-col items-start justify-start gap-4 w-full p-4 md:p-16 md:h-screen overflow-y-auto">
                         <h1 className="md:text-5xl text-xl font-bold">
-                            Webinar Gradient: Bedah Jurusan #EP01
+                            Webinar Gradient: Bedah Jurusan #EP02
                         </h1>
                         <p className="text-neutral-300">
                             Bagi kamu yang masih bingung dalam memilih jurusan,
-                            jangan ragu untuk join webinar perdana dari Gradient{' '}
+                            jangan ragu untuk join webinar kedua dari Gradient{' '}
                             <span className="font-bold">GRATIS!</span>. dalam
-                            episode pertama kali ini, kita akan bersama membahas
+                            episode kedua kali ini, kita akan bersama membahas
                             seluk beluk dari 4 jurusan berbeda bersama pembicara
                             dari beberapa universitas ternama di Indonesia.
                         </p>
