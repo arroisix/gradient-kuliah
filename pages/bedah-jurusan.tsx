@@ -34,7 +34,7 @@ const Webinar = (): JSX.Element => {
                     url: `https://gradient.academy/bedah-kampus`,
                     images: [
                         {
-                            url: 'https://assets.gradient.academy/assets/banner-bedah-jurusan-2.jpg',
+                            url: 'https://assets.gradient.academy/assets/banner-bedah-jurusan-ep2.jpg',
                             width: 300,
                             height: 500,
                             alt: 'Gradient Bedah Jurusan'
@@ -47,7 +47,7 @@ const Webinar = (): JSX.Element => {
                     <div className="md:aspect-[1080/1350] overflow-hidden h-full w-full">
                         <div className="aspect-[1080/1350] relative">
                             <Image
-                                src="https://assets.gradient.academy/assets/banner-bedah-jurusan-2.jpg"
+                                src="https://assets.gradient.academy/assets/banner-bedah-jurusan-ep2.jpg"
                                 layout="responsive"
                                 height={1350}
                                 width={1080}
