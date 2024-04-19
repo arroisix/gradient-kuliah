@@ -54,7 +54,7 @@ const Astronotes = ({
                 <div
                     className="relative w-full min-h-screen mt-5 mb-12 md:ml-6"
                     ref={notebookRef}>
-                    <div className="w-full max-w-5xl mx-auto sm:px-4">
+                    <div className="pt-4 w-full max-w-5xl mx-auto sm:px-4">
                         <AstroNotesContent content={content} book={book} />
                     </div>
                 </div>
