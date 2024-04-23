@@ -14,7 +14,7 @@ interface BelajarPageProps {
 
 const Belajar = ({ subchapter, course }: BelajarPageProps): JSX.Element => {
     return (
-        <>
+        <main className="pt-6">
             <VideoJsonLd
                 name={`${course?.course_name}: ${subchapter?.subchapter_name}`}
                 description={`Nonton Video ${subchapter?.subchapter_name} kelas ${course?.course_name} hanya di Gradient`}
@@ -28,7 +28,7 @@ const Belajar = ({ subchapter, course }: BelajarPageProps): JSX.Element => {
                     />
                 </LearnLayout>
             </LearningProvider>
-        </>
+        </main>
     );
 };
 
