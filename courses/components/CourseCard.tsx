@@ -29,7 +29,7 @@ const CourseCard = ({
     }, [course]);
 
     const decideUrl = (): string => {
-        if (course.is_coming_soon && !course.slug) {
+        if (course.is_coming_soon) {
             return '';
         }
         if (course.is_only_notebook) {

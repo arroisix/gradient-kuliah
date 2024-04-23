@@ -24,7 +24,6 @@ const LearningProgress = ({
     const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
         'landing-page-revamp'
     );
-    /* Frame 3423 */
 
     return (
         <div
@@ -45,21 +44,14 @@ const LearningProgress = ({
                     )}
                     alt="Cover"
                 />
-                <div className="absolute self-end w-screen h-40 outline-none border-hidden bg-gradient-to-b from-transparent to-[#101010] lg:h-32" />
+                <div className="absolute self-end w-screen h-20 outline-none border-hidden bg-gradient-to-b from-transparent to-[#101010] lg:h-32" />
             </div>
             <div className="px-4 md:px-[7.5rem] py-4 z-10 lg:max-w-[60vw] flex flex-col gap-2">
                 <div className="flex flex-col gap-2">
-                    <div
-                        className={cn(
-                            'rounded-full px-3 py-1 w-max font-body bg-gradient-to-r from-[#F2C04C] via-[#E48E0D] to-[#E4B50D] font-bold text-white text-xs',
-                            !data?.is_coming_soon && 'hidden'
-                        )}>
-                        Segera Hadir
-                    </div>
                     <h1
                         className={`font-bold ${
                             isAuthenticated
-                                ? 'text-xl lg:text-base'
+                                ? 'text-sm lg:text-base'
                                 : 'text-4xl'
                         }`}>
                         {data?.course_name}
