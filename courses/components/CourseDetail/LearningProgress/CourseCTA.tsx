@@ -3,11 +3,13 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import Button from 'commons/components/elements/Button';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useGetLandingCourseDataQuery } from 'courses/redux/api/publicCourseApi';
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { PercentageProgess } from './PercentageProgress';
 import SubscribeButton from 'courses/components/LandingPage/Common/SubscribeButton';
 import { cn } from 'commons/utils';
+import { BsFillBellFill } from 'react-icons/bs';
+import { toast } from 'react-toastify';
 
 const CourseCTA = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
     const { data } = useGetLandingCourseDataQuery(slug);
@@ -23,12 +25,36 @@ const CourseCTA = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
         'landing-page-revamp'
     );
 
+    const [isWaitingList, setIsWaitingList] = useState<boolean>(false); // data?.is_waiting_list
+
+    const addToWaitingList = (e: MouseEvent): void => {
+        e.preventDefault();
+        // TODO: integrate with BE
+
+        setIsWaitingList(true);
+        toast.success('Berhasil masuk waiting list kelas');
+    };
+
     return data?.is_coming_soon ? (
-        <Button
-            variant="custom"
-            className="w-full md:w-fit lg:px-12 bg-neutral-700 lg:ml-3">
-            Segera Hadir
-        </Button>
+        <div className="flex p-3 gap-4 bg-[#F3C531]/25 rounded-lg items-center mt-8">
+            <p className="text-sm grow">
+                {isWaitingList
+                    ? 'Kamu akan menerima notifikasi saat kelas tersedia'
+                    : 'Dapatkan notifikasi saat kelas tersedia!'}
+            </p>
+            <Button
+                variant="custom"
+                href={isAuthenticated ? '/login' : '?'}
+                onClick={addToWaitingList}
+                className={cn(
+                    isWaitingList
+                        ? 'hidden'
+                        : 'bg-[#EA9A2C] flex items-center gap-2 hover:brightness-90 transition'
+                )}>
+                <BsFillBellFill size={16} /> Ingatkan{' '}
+                <span className="hidden lg:inline">Saya</span>
+            </Button>
+        </div>
     ) : (
         <div className="flex flex-col gap-3 lg:flex-row-reverse lg:justify-end lg:items-center lg:ml-3">
             {isAuthenticated &&
