@@ -48,6 +48,7 @@ interface CourseLandingPageData {
     configuration: CourseLandingPageConfig;
     packets: Packet[];
     is_coming_soon: boolean;
+    is_waiting_list: boolean;
 }
 
 interface MajorOptions {
