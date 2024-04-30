@@ -5,21 +5,16 @@ import withAnon from 'commons/withAnon';
 import { GetStaticPaths, GetStaticPropsResult } from 'next';
 import axios from 'axios';
 import config from 'redux/api/config';
-import { VideoJsonLd } from 'next-seo';
 
 interface BelajarPageProps {
     subchapter: SubChapter;
     course: CourseDetail;
+    canonical: string;
 }
 
 const Belajar = ({ subchapter, course }: BelajarPageProps): JSX.Element => {
     return (
-        <main className="pt-6">
-            <VideoJsonLd
-                name={`${course?.course_name}: ${subchapter?.subchapter_name}`}
-                description={`Nonton Video ${subchapter?.subchapter_name} kelas ${course?.course_name} hanya di Gradient`}
-                thumbnailUrl={subchapter?.thumbnail}
-            />
+        <>
             <LearningProvider>
                 <LearnLayout showSubscriptionReminder>
                     <VideoLearnContainer
@@ -28,7 +23,7 @@ const Belajar = ({ subchapter, course }: BelajarPageProps): JSX.Element => {
                     />
                 </LearnLayout>
             </LearningProvider>
-        </main>
+        </>
     );
 };
 
@@ -60,6 +55,7 @@ export const getStaticProps = async ({
         BelajarPageProps & {
             title: string;
             description: string;
+            canonical: string;
             openGraph: { [key: string]: unknown };
         }
     >
@@ -79,6 +75,7 @@ export const getStaticProps = async ({
         props: {
             subchapter,
             course,
+            canonical: `https://gradient.academy/kelas/${id}/belajar/video/${chapter}/${sub}`,
             title: `${course.course_name}: ${subchapter.subchapter_name}`,
             description: `Nonton Video ${subchapter.subchapter_name} kelas ${course.course_name} hanya di Gradient`,
             openGraph: {
