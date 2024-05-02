@@ -9,6 +9,7 @@ import { isNotNullAndUndefined, queryParamBuilder } from 'commons/utils';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Spinner from 'commons/components/elements/Spinner';
+import YoutubeVideo from 'commons/components/elements/Video/YoutubeVideo';
 
 interface VideoPlayerContainerProps
     extends Pick<SubChapter, 'video' | 'next_subchapter' | 'subchapter_name'> {
@@ -79,15 +80,19 @@ const VideoPlayerContainer = ({
         <div>
             {!isShowPaywall ? (
                 <div className="md:rounded-lg md:overflow-hidden">
-                    <VideoJS
-                        key={video?.video_url}
-                        src={videoSrc}
-                        isMuxVideo={isNotNullAndUndefined(
-                            video?.mux_playback_id
-                        )}
-                        trackProgress={trackProgress}
-                        next_subchapter_link={nextSubchapter}
-                    />
+                    {video?.is_embed_youtube ? (
+                        <YoutubeVideo key={video?.video_url} src={videoSrc} />
+                    ) : (
+                        <VideoJS
+                            key={video?.video_url}
+                            src={videoSrc}
+                            isMuxVideo={isNotNullAndUndefined(
+                                video?.mux_playback_id
+                            )}
+                            trackProgress={trackProgress}
+                            next_subchapter_link={nextSubchapter}
+                        />
+                    )}
                 </div>
             ) : (
                 <VideoPaywall />

@@ -61,7 +61,7 @@ const VideoLearnContainer = ({
     const subchapter = subchapterResponse ?? ssrSubchapterData;
 
     return (
-        <section className="relative pt-4 pb-16 min-h-[100vh] flex flex-col">
+        <section className="relative pt-16 pb-16 min-h-[100vh] flex flex-col">
             <div className="grid grid-cols-1 gap-5 lg:pl-6 lg:pr-[15px] lg:grid-cols-3 pb-1">
                 <div
                     className="w-full lg:col-span-2 h-max lg:pl-8"
