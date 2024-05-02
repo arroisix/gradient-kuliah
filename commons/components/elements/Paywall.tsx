@@ -46,16 +46,15 @@ const Paywall = ({
     const handleClick = (packetId: string): void => {
         if (redirect) localStorage.setItem('redirect', redirect as string);
 
+        const pembayaranPage = `/pembayaran?${queryParamBuilder({
+            packetId,
+            redirect: redirect as string
+        })}`
+
         if (!isAuthenticated) {
-            localStorage.setItem('packetId', packetId);
-            router.push(`/daftar?redirect=${redirect ?? '/langganan'}`);
+            router.push(`/daftar?redirect=${pembayaranPage}`);
         } else {
-            router.push(
-                `/pembayaran?${queryParamBuilder({
-                    packetId,
-                    redirect: redirect as string
-                })}`
-            );
+            router.push(pembayaranPage);
         }
     };
 
