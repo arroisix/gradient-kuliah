@@ -28,7 +28,7 @@ const ReferralEntrypoint = (): JSX.Element => {
                 tracker?.genericTrack('Click Referral Cashback Menu')
             }>
             <div
-                className="tooltip tooltip-open tooltip-right tooltip-primary [--tooltip-tail:0.45rem] [--tooltip-color:#321465] before:animate-pulse after:animate-pulse mr-28"
+                className="tooltip tooltip-open tooltip-right tooltip-primary [--tooltip-tail:0.45rem] [--tooltip-color:#321465] [--tooltip-text-color:white] before:animate-pulse after:animate-pulse mr-28"
                 data-tip={`Cashback ${formatCashbackAmount(
                     data?.config.voucher_cashback_amount ?? ''
                 )}`}>

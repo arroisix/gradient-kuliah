@@ -17,6 +17,10 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import VideoPlayerContainer from 'courses/components/VideoPlayerContainer';
+import { VideoJsonLd } from 'next-seo';
+import moment from 'moment';
+
+const DUMMY_DATE = moment().startOf('year').format();
 
 const VideoLearnContainer = ({
     subchapter: ssrSubchapterData,
@@ -27,7 +31,7 @@ const VideoLearnContainer = ({
 }): JSX.Element => {
     const { isDesktopBreakpoints } = useWindowBreakpoints();
     const router = useRouter();
-    const { sub, id } = router.query;
+    const { sub, chapter, id } = router.query;
     const isAuthenticated = useSelector(getIsAuthenticated);
     const privateSubchapterDetails = useGetSubchapterDetailQuery(
         sub as string,
@@ -57,11 +61,21 @@ const VideoLearnContainer = ({
     const subchapter = subchapterResponse ?? ssrSubchapterData;
 
     return (
-        <section className="relative pt-4 pb-16 min-h-[100vh] flex flex-col">
+        <section className="relative pt-16 pb-16 min-h-[100vh] flex flex-col">
             <div className="grid grid-cols-1 gap-5 lg:pl-6 lg:pr-[15px] lg:grid-cols-3 pb-1">
                 <div
                     className="w-full lg:col-span-2 h-max lg:pl-8"
                     ref={videoRef}>
+                    <VideoJsonLd
+                        name={`${course?.course_name}: ${subchapter?.subchapter_name}`}
+                        description={`Nonton Video ${subchapter?.subchapter_name} kelas ${course?.course_name} hanya di Gradient`}
+                        thumbnailUrls={[
+                            subchapter?.thumbnail ??
+                                'https://assets.gradient.academy/assets/gradient-G-icon.png'
+                        ]}
+                        uploadDate={DUMMY_DATE}
+                        contentUrl={`https://gradient.academy/kelas/${id}/belajar/video/${chapter}/${sub}`}
+                    />
                     <VideoPlayerContainer
                         isLoadingData={isLoading}
                         subchapter_name={subchapter?.subchapter_name}

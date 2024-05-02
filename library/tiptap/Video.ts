@@ -13,12 +13,11 @@ export default Node.create({
                 default: null
             },
             width: {
-                default: '100%',
+                default: '100%'
             },
             height: {
-                default: 'auto',
-            },
-        
+                default: 'auto'
+            }
         };
     },
     parseHTML() {
@@ -42,10 +41,10 @@ export default Node.create({
 
     renderHTML({ HTMLAttributes }) {
         return [
-            'video', 
-            mergeAttributes(HTMLAttributes, { 
-                controls: true, 
-                style: `width: ${HTMLAttributes.width}; height: ${HTMLAttributes.height};` 
+            'video',
+            mergeAttributes(HTMLAttributes, {
+                controls: true,
+                style: `width: ${HTMLAttributes.width}; height: ${HTMLAttributes.height};`
             })
         ];
     }
