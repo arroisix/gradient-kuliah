@@ -10,7 +10,10 @@ export const publicCourseV2Api = baseApi.injectEndpoints({
         >({
             query: (params: FilterCourseQueryParams) => ({
                 url: `${PUBLIC_COURSE_V2_BASE_URL}`,
-                params
+                params: {
+                    ...params,
+                    limit: 20,
+                }
             })
         })
     })
