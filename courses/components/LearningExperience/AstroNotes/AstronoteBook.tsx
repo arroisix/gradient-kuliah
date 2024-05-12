@@ -18,9 +18,11 @@ const AstronoteBook = ({
     rating,
     education_level,
     in_progress,
+    latest_page,
     eventName = 'Click Book Item on Library Page',
     eventPayload
 }: Astronote & {
+    latest_page?: number;
     eventName?: string;
     eventPayload?: Record<string, unknown>;
 }): JSX.Element => {
@@ -36,7 +38,8 @@ const AstronoteBook = ({
                     ...eventPayload
                 });
 
-                if (in_progress) router.push(`/astronotes/${slug}/1`);
+                if (in_progress)
+                    router.push(`/astronotes/${slug}/${latest_page ?? 1}`);
                 else router.push(`/astronotes/${slug}`);
             }}
             aria-hidden>
@@ -48,6 +51,8 @@ const AstronoteBook = ({
                     }
                     layout="fill"
                     className="rounded"
+                    loading="lazy"
+                    unoptimized
                 />
             </div>
             <div className="flex flex-col flex-1 mt-4 mb-2">
@@ -79,11 +84,17 @@ export const AstronoteBookCard = ({
     eventName = 'Click Book Item on Library Page',
     eventPayload,
     orientation = 'horizontal',
+    type = 'book',
+    href,
     className,
+    imageClassname,
     ...book
 }: Astronote &
     PropsWithClassName & {
+        type?: 'video' | 'book';
         orientation?: 'horizontal' | 'vertical';
+        href: string;
+        imageClassname?: string;
         eventName?: string;
         eventPayload?: Record<string, unknown>;
     }): JSX.Element => {
@@ -154,13 +165,8 @@ export const AstronoteBookCard = ({
 
     return (
         <Link
-            href={`/astronotes/${book.slug}`}
-            onClick={() =>
-                tracker?.genericTrack(eventName, {
-                    'Book Slug': book.slug,
-                    ...eventPayload
-                })
-            }
+            href={href}
+            onClick={() => tracker?.genericTrack(eventName, eventPayload)}
             className={cn(
                 'flex gap-4 p-3 bg-black border rounded-lg border-neutral-700 shadow-md shadow-black/25',
                 orientation == 'vertical' &&
@@ -169,8 +175,10 @@ export const AstronoteBookCard = ({
             )}>
             <div
                 className={cn(
-                    'relative aspect-[256/364] flex-none border rounded-md border-neutral-700',
-                    orientation == 'vertical' ? 'w-24' : 'w-20'
+                    'relative flex-none border rounded-md border-neutral-700',
+                    orientation == 'vertical' && 'w-24',
+                    type == 'book' ? 'aspect-[256/364]' : 'aspect-[7/8]',
+                    imageClassname
                 )}>
                 <Image
                     src={
@@ -179,6 +187,7 @@ export const AstronoteBookCard = ({
                     }
                     alt={book.title}
                     layout="fill"
+                    objectFit={type == 'book' ? 'contain' : 'cover'}
                     className="rounded"
                 />
             </div>

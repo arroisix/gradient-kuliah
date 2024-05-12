@@ -135,6 +135,7 @@ type Video = {
     video_url: string;
     is_free: boolean;
     is_animation?: boolean;
+    is_embed_youtube?: boolean;
     duration: string;
     thumbnail: string;
     description: string;

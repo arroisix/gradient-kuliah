@@ -135,6 +135,18 @@ export const courseApi = baseApi.injectEndpoints({
                 body
             })
         }),
+        addToWaitingList: builder.mutation<
+            { student_id: string; course_slug: string },
+            { slug: string }
+        >({
+            query: ({ slug }) => ({
+                url: `${COURSE_BASE_URL}waiting-list/`,
+                method: 'POST',
+                body: {
+                    course_slug: slug
+                }
+            })
+        }),
         getBookContent: builder.query<
             BookResponse,
             { slug: string; book_id: string }
@@ -155,6 +167,7 @@ export const {
     useGetSearchCourseContentQuery,
     useGetCourseDetailQuery,
     usePostCourseFeedbackMutation,
+    useAddToWaitingListMutation,
     useGetBookContentQuery,
     useLazyGetSearchCourseContentQuery
 } = courseApi;

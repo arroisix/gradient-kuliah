@@ -43,7 +43,14 @@ export const EntrypointContent = ({
             {!!astronotes && !isLoading && (
                 <>
                     {astronotes?.map((book) => (
-                        <AstronoteBookCard key={book.id} {...book} />
+                        <AstronoteBookCard
+                            key={book.id}
+                            href={`/astronotes/${book.slug}`}
+                            eventName="Click Book Item on Library Page"
+                            eventPayload={{ 'Book Slug': book.slug }}
+                            imageClassname="min-w-20 min-h-24"
+                            {...book}
+                        />
                     ))}
                 </>
             )}
@@ -66,7 +73,7 @@ export const EntrypointPrivate = (): JSX.Element => {
         isLoading,
         isFetching
     } = useGetEntrypointBooksQuery(
-        { limit: 10, type: tab, status: sort },
+        { limit: 100, type: tab, status: sort },
         { skip: !isAuthenticated || skip }
     );
 
@@ -93,7 +100,7 @@ export const EntrypointPublic = (): JSX.Element => {
         isLoading,
         isFetching
     } = useGetPublicEntrypointBooksQuery(
-        { limit: 10, type: tab, status: sort },
+        { limit: 100, type: tab, status: sort },
         { skip: isAuthenticated || skip }
     );
 

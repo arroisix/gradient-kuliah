@@ -24,12 +24,20 @@ module.exports = {
     experimental: {
         newNextLinkBehavior: true
     },
+    crossOrigin: 'anonymous',
     redirects() {
         return [
             {
                 source: '/beasiswa',
                 destination:
                     'https://docs.google.com/forms/d/e/1FAIpQLSd5DjQIJMwwpxhIf8O4-auzAWyyBhFmL685dksUNxT7JDDFQA/viewform?pli=1',
+                permanent: true,
+                basePath: false
+            },
+            {
+                source: '/karir',
+                destination:
+                    'https://www.notion.so/astronotes/Bertumbuh-Bersama-Gradient-f398f551b9f9455c88ff6e6d24d81338',
                 permanent: true,
                 basePath: false
             },

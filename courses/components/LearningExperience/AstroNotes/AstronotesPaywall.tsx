@@ -10,9 +10,11 @@ import { useGetPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
 import React, { useEffect, useState } from 'react';
 
 const AstronotesPaywall = ({
-    showPaywall
+    showPaywall,
+    book
 }: {
     showPaywall: boolean;
+    book: BookDetailInterface;
 }): JSX.Element => {
     const router = useRouter();
     const { slug, page } = router.query as { slug: string; page: string };
@@ -22,7 +24,7 @@ const AstronotesPaywall = ({
     );
     const { data } = useGetPacketOfferQuery();
     const [isShowPaywall, setIsShowPaywall] = useState(
-        Number(page) == 1 ? false : showPaywall
+        book.is_free ? false : Number(page) == 1 ? false : showPaywall
     );
     const { isTabletBreakpoints, isMobileBreakpoints } = useWindowBreakpoints();
     const { height } = useWindowSize();
@@ -32,6 +34,7 @@ const AstronotesPaywall = ({
         if (
             !isLandingPageRevampOn ||
             !showPaywall ||
+            book.is_free ||
             is_subscribed ||
             Number(page) == 1
         )
@@ -49,7 +52,7 @@ const AstronotesPaywall = ({
             )}>
             <div
                 className={cn(
-                    'flex flex-col items-center justify-center w-screen -mx-4 sm:w-auto sm:mx-0 md:sticky',
+                    'flex flex-col items-center justify-center w-screen -mx-8 sm:w-auto sm:mx-0 md:sticky',
                     isTabletBreakpoints && height < 700
                         ? 'md:top-20'
                         : 'md:top-1/2 md:py-24 md:-translate-y-1/2'

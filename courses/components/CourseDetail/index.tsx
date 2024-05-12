@@ -10,7 +10,7 @@ const CourseDetail = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
     const { isAuthenticated } = useAuth();
 
     return (
-        <main className="flex flex-col gap-16 mb-16">
+        <main className="flex flex-col gap-8 mb-16">
             <LearningProgress slug={slug} />
             <ExpiryAnnouncement slug={slug} />
             <div className="flex flex-col gap-8 lg:items-start lg:flex-row-reverse lg:justify-center lg:gap-0">

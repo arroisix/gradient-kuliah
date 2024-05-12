@@ -7,7 +7,13 @@ import RatingModal from 'courses/components/LearningExperience/AstroNotes/Sideba
 import FeedbackModal from 'courses/components/LearningExperience/AstroNotes/Sidebar/FeedbackModal';
 import CommunityDrawer from 'courses/components/LearningExperience/AstroNotes/Navigation/CommunityDrawer';
 
-const Astronotes = ({ content }: { content: string }): JSX.Element => {
+const Astronotes = ({
+    content,
+    book
+}: {
+    content: string;
+    book: BookDetailInterface;
+}): JSX.Element => {
     const { width: notebookWidth, ref: notebookRef } =
         useElementSize<HTMLDivElement>();
 
@@ -48,8 +54,8 @@ const Astronotes = ({ content }: { content: string }): JSX.Element => {
                 <div
                     className="relative w-full min-h-screen mt-5 mb-12 md:ml-6"
                     ref={notebookRef}>
-                    <div className="w-full max-w-5xl mx-auto sm:px-4">
-                        <AstroNotesContent content={content} />
+                    <div className="pt-4 w-full max-w-5xl mx-auto sm:px-4">
+                        <AstroNotesContent content={content} book={book} />
                     </div>
                 </div>
                 <CommunityDrawer />

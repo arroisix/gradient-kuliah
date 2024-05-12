@@ -41,6 +41,8 @@ const ContinueReadingSection = (): JSX.Element => {
                                     !isMobileBreakpoints &&
                                         'flex-none w-[348px]'
                                 )}
+                                imageClassname="min-w-20 min-h-24"
+                                href={`/astronotes/${book.slug}`}
                                 key={book.id}
                                 {...book}
                             />

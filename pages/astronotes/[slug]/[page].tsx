@@ -42,10 +42,10 @@ const AstroNotesPage = ({
                     book?.cover_url,
                     'https://assets.gradient.academy/assets/gradient-G-icon.png'
                 ]}
-                isAccessibleForFree={page == 1}
+                isAccessibleForFree={page == 1 || book.is_free}
             />
             <LearnLayout lightMode={theme === 'light'} showSubscriptionReminder>
-                <Astronotes content={content} />
+                <Astronotes content={content} book={book} key={page} />
             </LearnLayout>
         </>
     );
@@ -129,19 +129,19 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
                     ? JSON.stringify(getBookContent.data)
                     : encryptedContent.toString(),
             canonical: `https://gradient.academy/astronotes/${slug}/${page}`,
-            title: `Halaman ${page} | ${book.category} ${book.title} | Catatan, Rangkuman dan Bank Soal`,
-            description: `Belajar dan Paham dengan baca ${book.category} ${book.title} hanya di Gradient`,
+            title: `Halaman ${page} | ${book?.category} ${book?.title} | Catatan, Rangkuman dan Bank Soal`,
+            description: `Belajar dan Paham dengan baca ${book?.category} ${book?.title} hanya di Gradient`,
             openGraph: {
                 type: 'website',
-                title: `Halaman ${page} | ${book.category} ${book.title} | Catatan, Rangkuman dan Bank Soal`,
-                description: `Belajar dan Paham dengan baca ${book.category} ${book.title} hanya di Gradient`,
+                title: `Halaman ${page} | ${book?.category} ${book?.title} | Catatan, Rangkuman dan Bank Soal`,
+                description: `Belajar dan Paham dengan baca ${book?.category} ${book?.title} hanya di Gradient`,
                 url: `https://gradient.academy/astronotes/${slug}/${page}`,
                 images: [
                     {
                         url: book.cover_url,
                         width: 162,
                         height: 232,
-                        alt: `${book.category} ${book.title}`
+                        alt: `${book?.category} ${book?.title}`
                     },
                     {
                         url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',

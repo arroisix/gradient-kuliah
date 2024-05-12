@@ -22,16 +22,27 @@ const Recommendations = ({
             major: recommendation as string,
             limit: isMobileBreakpoints ? 2 : 4
         });
-    const { data: bookData, isLoading: isLoadingBook } =
+    const { data: questionBankBookData, isLoading: isLoadingQuestionBankBook } =
         useGetPublicEntrypointBooksQuery({
             major: recommendation as string,
-            limit: isMobileBreakpoints ? 2 : 5
+            limit: isMobileBreakpoints ? 2 : 5,
+            type: 'bank-soal'
+        });
+    const { data: notebookData, isLoading: isLoadingNotebook } =
+        useGetPublicEntrypointBooksQuery({
+            major: recommendation as string,
+            limit: isMobileBreakpoints ? 2 : 5,
+            type: 'astronotes'
         });
 
     const renderBooks = (
-        categoryName: 'Bank Soal' | 'Textbook'
+        categoryName: 'Bank Soal' | 'Textbook' | 'Catatan'
     ): JSX.Element => {
-        const bookList = bookData?.books.filter(
+        const books =
+            categoryName === 'Bank Soal'
+                ? questionBankBookData?.books
+                : notebookData?.books;
+        const bookList = books?.filter(
             (category) => category.category_name === categoryName
         );
         const eventName = `Click ${
@@ -51,10 +62,19 @@ const Recommendations = ({
     };
 
     useEffect(() => {
-        if (!isLoadingBook && !isLoadingCourse) {
+        if (
+            !isLoadingQuestionBankBook &&
+            isLoadingNotebook &&
+            !isLoadingCourse
+        ) {
             onFinishLoading?.();
         }
-    }, [isLoadingCourse, isLoadingBook, onFinishLoading]);
+    }, [
+        isLoadingCourse,
+        isLoadingQuestionBankBook,
+        isLoadingNotebook,
+        onFinishLoading
+    ]);
 
     return (
         <>
@@ -106,7 +126,7 @@ const Recommendations = ({
                     </Button>
                 </div>
                 <div className="grid grid-cols-2 gap-4 lg:grid-cols-5 xl:gap-6">
-                    {isLoadingBook ? (
+                    {isLoadingQuestionBankBook ? (
                         <Skeleton repeat={isMobileBreakpoints ? 2 : 5} />
                     ) : (
                         renderBooks('Bank Soal')
@@ -127,10 +147,10 @@ const Recommendations = ({
                     </Button>
                 </div>
                 <div className="grid grid-cols-2 gap-4 lg:grid-cols-5 xl:gap-6">
-                    {isLoadingBook ? (
+                    {isLoadingNotebook ? (
                         <Skeleton repeat={isMobileBreakpoints ? 2 : 5} />
                     ) : (
-                        renderBooks('Textbook')
+                        renderBooks('Catatan')
                     )}
                 </div>
             </div>

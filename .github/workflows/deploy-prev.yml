@@ -17,7 +17,7 @@ jobs:
               run: npm install -g pnpm
 
             - name: Install dependencies
-              run: pnpm install
+              run: pnpm install --frozen-lockfile
 
             - name: Check lint and format
               run: pnpm test-all
@@ -36,7 +36,7 @@ jobs:
                   deployment_url=$(curl -X GET \
                     -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
                     -H "Content-Type: application/json" \
-                    "https://api.vercel.com/v6/deployments?app=gradient-web-dev&limit=1&projectId=${{ secrets.VERCEL_DEV_PROJECT_ID }}&rollbackCandidate=true&target=production&teamId=${{ secrets.VERCEL_ORG_ID }}" | jq -r '.deployments[0].url')
+                    "https://api.vercel.com/v6/deployments?app=gradient-web-dev&limit=1&projectId=${{ secrets.VERCEL_DEV_PROJECT_ID }}&target=preview&teamId=${{ secrets.VERCEL_ORG_ID }}" | jq -r '.deployments[0].url')
                   echo ${deployment_url}
                   echo "url=${deployment_url}" >> "$GITHUB_ENV"
 
@@ -53,4 +53,3 @@ jobs:
                         issue_number: pullRequestNumber,
                         body: `Preview URL: ${url}`
                       });
-

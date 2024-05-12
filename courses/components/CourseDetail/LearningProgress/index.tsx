@@ -6,6 +6,8 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
 import { cn } from 'commons/utils';
 import CourseCTA from './CourseCTA';
+import { CDN_URL } from 'commons/constants';
+import Image from 'next/image';
 
 const CENTERED_HERO = [
     'kimdas1',
@@ -24,16 +26,24 @@ const LearningProgress = ({
     const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
         'landing-page-revamp'
     );
+    /* Frame 3423 */
 
     return (
         <div
             className={cn(
-                'flex flex-col gap-2 h-[70vh] relative',
+                'flex flex-col gap-2 relative',
                 isLandingPageRevampOn
                     ? 'justify-end sm:justify-center'
-                    : 'justify-center'
+                    : 'justify-center',
+                data?.is_coming_soon && !data.cover
+                    ? 'mx-5 lg:w-10/12 lg:mx-auto bg-zinc-900 rounded-xl mt-20'
+                    : 'h-[70vh]'
             )}>
-            <div className="absolute bottom-0 flex w-screen h-full">
+            <div
+                className={cn(
+                    'absolute bottom-0 flex w-screen h-full',
+                    !data?.cover && 'hidden'
+                )}>
                 <img
                     src={data?.cover}
                     className={cn(
@@ -44,14 +54,38 @@ const LearningProgress = ({
                     )}
                     alt="Cover"
                 />
-                <div className="absolute self-end w-screen h-20 outline-none border-hidden bg-gradient-to-b from-transparent to-[#101010] lg:h-32" />
+                <div className="absolute self-end w-screen h-40 outline-none border-hidden bg-gradient-to-b from-transparent to-[#101010] lg:h-32" />
             </div>
-            <div className="px-4 md:px-[7.5rem] py-4 z-10 lg:max-w-[60vw] flex flex-col gap-2">
+            {!data?.cover && (
+                <div className="flex items-center justify-center mt-6 md:justify-end md:absolute md:w-full md:pr-5">
+                    <Image
+                        src={`${CDN_URL}/assets/dashboard-subscribe.png`}
+                        alt="Kelas segera hadir"
+                        width={198}
+                        height={183}
+                        className="object-contain saturate-0 opacity-20"
+                    />
+                </div>
+            )}
+            <div
+                className={cn(
+                    data?.is_coming_soon && !data.cover
+                        ? 'md:px-5 md:max-w-[50vw]'
+                        : 'md:px-[7.5rem] lg:max-w-[60vw]',
+                    'px-4 py-4 z-10  flex flex-col gap-2'
+                )}>
                 <div className="flex flex-col gap-2">
+                    <div
+                        className={cn(
+                            'rounded-full px-3 py-1 w-max font-body bg-gradient-to-r from-[#F2C04C] via-[#E48E0D] to-[#E4B50D] font-bold text-white text-xs',
+                            !data?.is_coming_soon && 'hidden'
+                        )}>
+                        Segera Hadir
+                    </div>
                     <h1
                         className={`font-bold ${
                             isAuthenticated
-                                ? 'text-sm lg:text-base'
+                                ? 'text-xl lg:text-base'
                                 : 'text-4xl'
                         }`}>
                         {data?.course_name}

@@ -15,7 +15,7 @@ const DashboardContainer = (): JSX.Element => {
     }, []);
 
     return (
-        <section className="flex flex-col gap-6">
+        <section className="flex flex-col w-full gap-6 pb-4 mx-auto sm:overflow-x-clip 2xl:overflow-x-visible max-w-screen-2xl">
             <RenewalCard />
             <DashboardBanner />
             <DashboardContent />

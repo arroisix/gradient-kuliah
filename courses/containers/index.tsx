@@ -36,11 +36,11 @@ const ClassContainer = (): JSX.Element => {
 
     const tabStyle = {
         color: '#666666',
-        padding: '0px',
+        padding: '10px',
         paddingTop: '2px',
         marginRight: screenWidth! > 640 ? '40px' : '24px',
         cursor: 'pointer',
-        borderBottom: '0px',
+        borderBottom: 'none',
         borderTop: 'none',
         borderLeft: 'none',
         borderRight: 'none',
@@ -50,7 +50,8 @@ const ClassContainer = (): JSX.Element => {
     const activeTabStyle = {
         ...tabStyle,
         color: 'white',
-        borderBottom: '3px solid #7264EB'
+        fontWeight: 'bold',
+        borderBottom: '2px solid #5f2bce'
     };
 
     const sectionOptions: {

@@ -89,6 +89,7 @@ export const pageSliderClassNames =
 
 export enum TabStyle {
     active = 'border-accent-purple font-bold px-4 sm:px-6 md:px-8',
+    activeNeutral = 'border-[#C4B9FF] font-bold px-4 sm:px-6 md:px-8',
     default = 'border-[#2D2D2D] font-medium text-neutral-500 px-2 sm:px-4 md:px-6'
 }
 export enum Tab {

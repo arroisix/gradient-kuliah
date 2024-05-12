@@ -1,15 +1,21 @@
+import { skipToken } from '@reduxjs/toolkit/query';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { cn } from 'commons/utils';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { FaGift } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 import { useGetReferralQuery } from 'referral/redux/referalApi';
 import { useTracker } from 'tracker/tracker';
 
 const ReferralEntrypoint = (): JSX.Element => {
     const router = useRouter();
     const tracker = useTracker();
-    const { data } = useGetReferralQuery();
+    const isAuthenticated = useSelector(getIsAuthenticated);
+    const { data } = useGetReferralQuery(
+        !isAuthenticated ? skipToken : undefined
+    );
 
     function formatCashbackAmount(amount: string): string {
         return `${Number(amount) / 1000}K`.replace('.', ',');
@@ -22,7 +28,7 @@ const ReferralEntrypoint = (): JSX.Element => {
                 tracker?.genericTrack('Click Referral Cashback Menu')
             }>
             <div
-                className="tooltip tooltip-open tooltip-right tooltip-primary [--tooltip-tail:0.45rem] [--tooltip-color:#321465] before:animate-pulse after:animate-pulse mr-28"
+                className="tooltip tooltip-open tooltip-right tooltip-primary [--tooltip-tail:0.45rem] [--tooltip-color:#321465] [--tooltip-text-color:white] before:animate-pulse after:animate-pulse mr-28"
                 data-tip={`Cashback ${formatCashbackAmount(
                     data?.config.voucher_cashback_amount ?? ''
                 )}`}>
