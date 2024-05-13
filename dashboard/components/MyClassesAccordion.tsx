@@ -102,10 +102,17 @@ const ProgressItem = ({
     progress: ClassProgress;
     courseName: string;
 }): JSX.Element => {
-    const href =
-        progress.type == 'book'
-            ? `/astronotes/${progress.book_slug}/${progress.latest_page}`
-            : `/kelas/${progress.course_slug}/belajar/video/${progress.chapter_id}/${progress.subchapter_id}`;
+    const getHref = (): string => {
+        switch (progress.type) {
+            case 'book':
+                return `/astronotes/${progress.book_slug}/${progress.latest_page}`;
+            case 'video':
+                return `/kelas/${progress.course_slug}/belajar/video/${progress.chapter_id}/${progress.subchapter_id}`;
+            default:
+                return '?';
+        }
+    };
+
     return (
         <AstronoteBookCard
             key={progress.id}
@@ -122,7 +129,7 @@ const ProgressItem = ({
             is_free
             is_public
             in_progress
-            href={href}
+            href={getHref()}
             imageClassname="min-h-24 lg:min-h-16"
             eventName='User click item on "Kelasku" Accordion'
             eventPayload={{

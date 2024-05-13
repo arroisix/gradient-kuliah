@@ -45,7 +45,7 @@ interface GetDashboardContentResponse {
 }
 
 interface ClassProgress extends Omit<LearningMaterial, 'in_progress' | 'type'> {
-    type: 'book' | 'video';
+    type: 'book' | 'textbook' | 'video';
     latest_chapter: string;
     percentage_progress: number;
 }

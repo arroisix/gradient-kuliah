@@ -23,11 +23,11 @@ const EntrypointTabs = (): JSX.Element => {
                 href={{ query: { tab: Tab.all } }}>
                 Semua
             </Link>
-            {/* <Link
+            <Link
                 className={tabStyle(Tab.textbook)}
                 href={{ query: { tab: Tab.textbook } }}>
                 Textbook
-            </Link> */}
+            </Link>
             <Link
                 className={tabStyle(Tab.astronotes)}
                 href={{ query: { tab: Tab.astronotes } }}>

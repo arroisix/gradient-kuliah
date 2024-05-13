@@ -50,7 +50,9 @@ const BookmarkAstronotes = (): JSX.Element | null => {
         setIsBookmarked((prev) => !prev);
     };
 
-    return router.pathname.includes('astronotes/') && !isBookProgressLoading ? (
+    return router.pathname.includes('astronotes/') &&
+        !router.pathname.includes('astronotes/textbook/') &&
+        !isBookProgressLoading ? (
         <button onClick={handleBookmark}>
             {isBookmarked ? (
                 <BsBookmarkFill size={18} className="text-[#999999]" />

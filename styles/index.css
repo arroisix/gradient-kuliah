@@ -1116,9 +1116,11 @@ input[type='number']::-webkit-outer-spin-button {
 }
 
 .markdown-body .math-display,
+.markdown-body .katex-display,
 .math-display-overflow .math-display {
     overflow-x: auto;
     max-width: 100%;
+    overflow-y: clip;
 }
 
 .markdown-body table th {

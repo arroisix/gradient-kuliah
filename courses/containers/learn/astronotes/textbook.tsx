@@ -1,0 +1,72 @@
+import React, { useEffect, useState } from 'react';
+import { TableOfContentMenu } from 'courses/components/Textbook/TableOfContentMenu';
+import { QuestionMetadata } from 'courses/components/Textbook/QuestionMetadata';
+import { ShortAnswerSection } from 'courses/components/Textbook/ShortAnswerSection';
+import { LongAnswerSection } from 'courses/components/Textbook/LongAnswerSection';
+import { FeedbackCard } from 'courses/components/Textbook/FeedbackCard';
+import { PageNavigation } from 'courses/components/Textbook/PageNavigation';
+import { useGetTextbookSolutionQuery } from 'courses/redux/api/astronotesApi';
+import { useRouter } from 'next/router';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import TextbookPaywall from './../../../components/Textbook/TextbookPaywall';
+import { IS_BOT } from 'commons/constants';
+import { getCookieValue } from 'commons/utils';
+
+type TextbookSolutionProps = {
+    data?: TextbookSolution;
+};
+
+const TextbookSolution = ({
+    data: initialData
+}: TextbookSolutionProps): JSX.Element => {
+    const router = useRouter();
+    const [isCrawler, setIsCrawler] = useState<string>();
+    const { is_subscribed } = useCourseSubscription();
+    const { slug, problemId } = router.query as {
+        slug: string;
+        problemId: string;
+    };
+    const { data: textbookData, isFetching } = useGetTextbookSolutionQuery(
+        { slug, problemId, specialToken: isCrawler },
+        { skip: !slug || !problemId }
+    );
+    const data = textbookData ?? initialData;
+    useEffect(() => {
+        setIsCrawler(getCookieValue(IS_BOT));
+    }, []);
+
+    return (
+        <div className="drawer drawer-end lg:drawer-open">
+            <TableOfContentMenu problem={data?.problem} />
+            <div className="pt-40 pb-24 space-y-4 md:pb-12 drawer-content md:max-w-screen-lg md:px-8 lg:px-12 lg:pt-20 lg:mx-auto">
+                <div className="flex items-start justify-between">
+                    <QuestionMetadata problem={data?.problem} />
+                    <PageNavigation
+                        next={data?.next_problem_id}
+                        prev={data?.prev_problem_id}
+                    />
+                </div>
+                {is_subscribed || isCrawler ? (
+                    <>
+                        <ShortAnswerSection
+                            problem={data?.problem}
+                            isLoading={isFetching}
+                        />
+                        <LongAnswerSection
+                            problem={data?.problem}
+                            isLoading={isFetching}
+                        />
+                        <FeedbackCard
+                            review={data?.problem.review}
+                            isLoading={isFetching}
+                        />
+                    </>
+                ) : (
+                    <TextbookPaywall problem={data?.problem} />
+                )}
+            </div>
+        </div>
+    );
+};
+
+export default TextbookSolution;
