@@ -70,6 +70,18 @@ export const astronotesApi = baseApi.injectEndpoints({
             }),
             providesTags: [{ type: 'ASTRONOTES', id: 'DETAILS' }]
         }),
+        getTextbookSolution: builder.query<
+            TextbookSolution,
+            { slug: string; problemId: string; specialToken?: string }
+        >({
+            query: ({ slug, problemId, specialToken }) => ({
+                url: `${COURSE_BASE_URL}${slug}/problems/${problemId}/`,
+                headers: {
+                    'X-Special-Request': specialToken
+                }
+            }),
+            providesTags: [{ type: 'ASTRONOTES', id: 'TEXTBOOK-SOLUTION' }]
+        }),
         getTableContents: builder.query<
             GetBookChapterResponse,
             { slug: string }
@@ -184,6 +196,17 @@ export const astronotesApi = baseApi.injectEndpoints({
                 method: 'POST',
                 body
             })
+        }),
+        postTextbookFeedback: builder.mutation<
+            void,
+            { slug: string; problemId: string; rating: number; comment: string }
+        >({
+            query: ({ slug, problemId, ...body }) => ({
+                url: `${COURSE_BASE_URL}${slug}/problems/${problemId}/rating/`,
+                method: 'PUT',
+                body
+            }),
+            invalidatesTags: [{ type: 'ASTRONOTES', id: 'TEXTBOOK-SOLUTION' }]
         })
     })
 });
@@ -206,8 +229,14 @@ export const {
     useGetBookmarksQuery,
     usePostBookmarksMutation,
     usePostRatingMutation,
-    usePostFeedbackMutation
+    usePostFeedbackMutation,
+    usePostTextbookFeedbackMutation,
+    useGetTextbookSolutionQuery
 } = astronotesApi;
 
-export const { getBookDetail, getAstronotesContent, getPublicBookPreview } =
-    astronotesApi.endpoints;
+export const {
+    getBookDetail,
+    getTextbookSolution,
+    getAstronotesContent,
+    getPublicBookPreview
+} = astronotesApi.endpoints;

@@ -22,8 +22,11 @@ const DashboardCard = ({
                 return `/kelas/${item.course_slug}/belajar/video/${item.chapter_id}/${item.subchapter_id}`;
             return `/kelas/${item.course_slug}`;
         } else {
-            if (item.in_progress && item.latest_page > 0)
-                return `/astronotes/${item.book_slug}/${item.latest_page}`;
+            if (item.in_progress && !!item.latest_page) {
+                return item.type?.toLowerCase() === 'textbook'
+                    ? `/astronotes/textbook/${item.book_slug}/${item.latest_page}`
+                    : `/astronotes/${item.book_slug}/${item.latest_page}`;
+            }
             return `/astronotes/${item.book_slug}`;
         }
     };

@@ -34,7 +34,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
     return {
         paths,
-        fallback: 'blocking'
+        fallback: true
     };
 };
 
@@ -58,18 +58,26 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
             }
 
             const data = payload[0].data as GetBookDetailResponse;
+            const isTextbook = data.book.category.toLowerCase() == 'textbook';
+            const titleSEO = isTextbook
+                ? `Pembahasan Soal ${data.book.title}`
+                : `${data.book.category} ${data.book.title} | Catatan, Rangkuman dan Bank Soal`;
+            const descriptionSEO = isTextbook
+                ? titleSEO
+                : `Belajar dan Paham dengan baca ${data.book.category} ${data.book.title} hanya di Gradient`;
 
             return {
+                revalidate: 300,
                 props: {
                     slug: params?.slug,
                     astronotes: data.book,
                     canonical: `https://gradient.academy/astronotes/${params?.slug}`,
-                    title: `${data.book.category} ${data.book.title} | Catatan, Rangkuman dan Bank Soal`,
-                    description: `Belajar dan Paham dengan baca ${data.book.category} ${data.book.title} hanya di Gradient`,
+                    title: titleSEO,
+                    description: descriptionSEO,
                     openGraph: {
                         type: 'website',
-                        title: `${data.book.category} ${data.book.title} | Catatan, Rangkuman dan Bank Soal`,
-                        description: `Belajar dan Paham dengan baca ${data.book.category} ${data.book.title} hanya di Gradient`,
+                        title: titleSEO,
+                        description: descriptionSEO,
                         url: `https://gradient.academy/astronotes/${params?.slug}`,
                         images: [
                             {

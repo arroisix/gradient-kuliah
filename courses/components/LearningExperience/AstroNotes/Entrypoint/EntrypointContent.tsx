@@ -38,6 +38,19 @@ export const EntrypointContent = ({
             </div>
         );
 
+    const getLink = (
+        slug: string,
+        category: string,
+        latestPage: string
+    ): string => {
+        if (latestPage) {
+            return category.toLowerCase() === 'textbook'
+                ? `/astronotes/textbook/${slug}/${latestPage}`
+                : `/astronotes/${slug}/${latestPage}`;
+        }
+        return `/astronotes/${slug}`;
+    };
+
     return (
         <div className="grid grid-cols-1 gap-4 pt-3 pb-24 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 xl:gap-6">
             {!!astronotes && !isLoading && (
@@ -45,7 +58,11 @@ export const EntrypointContent = ({
                     {astronotes?.map((book) => (
                         <AstronoteBookCard
                             key={book.id}
-                            href={`/astronotes/${book.slug}`}
+                            href={getLink(
+                                book.slug,
+                                book.category_name ?? '',
+                                book.latest_page ?? ''
+                            )}
                             eventName="Click Book Item on Library Page"
                             eventPayload={{ 'Book Slug': book.slug }}
                             imageClassname="min-w-20 min-h-24"

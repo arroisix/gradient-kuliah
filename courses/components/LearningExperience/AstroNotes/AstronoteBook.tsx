@@ -22,7 +22,6 @@ const AstronoteBook = ({
     eventName = 'Click Book Item on Library Page',
     eventPayload
 }: Astronote & {
-    latest_page?: number;
     eventName?: string;
     eventPayload?: Record<string, unknown>;
 }): JSX.Element => {
@@ -39,7 +38,7 @@ const AstronoteBook = ({
                 });
 
                 if (in_progress)
-                    router.push(`/astronotes/${slug}/${latest_page ?? 1}`);
+                    router.push(`/astronotes/${slug}/${latest_page || 1}`);
                 else router.push(`/astronotes/${slug}`);
             }}
             aria-hidden>
@@ -91,7 +90,7 @@ export const AstronoteBookCard = ({
     ...book
 }: Astronote &
     PropsWithClassName & {
-        type?: 'video' | 'book';
+        type?: 'video' | 'book' | 'textbook';
         orientation?: 'horizontal' | 'vertical';
         href: string;
         imageClassname?: string;
@@ -177,7 +176,7 @@ export const AstronoteBookCard = ({
                 className={cn(
                     'relative flex-none border rounded-md border-neutral-700',
                     orientation == 'vertical' && 'w-24',
-                    type == 'book' ? 'aspect-[256/364]' : 'aspect-[7/8]',
+                    type !== 'video' ? 'aspect-[256/364]' : 'aspect-[7/8]',
                     imageClassname
                 )}>
                 <Image
@@ -187,7 +186,7 @@ export const AstronoteBookCard = ({
                     }
                     alt={book.title}
                     layout="fill"
-                    objectFit={type == 'book' ? 'contain' : 'cover'}
+                    objectFit="cover"
                     className="rounded"
                 />
             </div>

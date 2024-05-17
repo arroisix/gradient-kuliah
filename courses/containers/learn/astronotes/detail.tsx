@@ -14,14 +14,23 @@ import { useRef } from 'react';
 import useOnScreen from 'commons/hooks/useOnScreen';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import Skeleton from 'commons/components/elements/Skeleton';
+import { useGetBookDetailQuery } from 'courses/redux/api/astronotesApi';
 
 const AstronotesDetail = ({
-    slug,
-    astronotes
+    slug: serverSlug,
+    astronotes: initialData
 }: {
     slug: string;
-    astronotes?: BookDetailInterface;
+    astronotes: BookDetailInterface;
 }): JSX.Element => {
+    const { query } = useRouter();
+    const { slug } = query as { slug: string };
+    const { data } = useGetBookDetailQuery(
+        { slug },
+        { skip: !slug && !serverSlug, refetchOnMountOrArgChange: true }
+    );
+    const astronotes = data?.book ?? initialData;
     const tracker = useTracker();
 
     return (
@@ -39,51 +48,82 @@ const AstronotesDetail = ({
                             'https://assets.gradient.academy/assets/astronotes-kalkulus2-placeholder.jpg'
                         }
                         layout="fill"
+                        objectFit="cover"
                         className="rounded"
                     />
                 </div>
                 <div className="flex flex-col items-center gap-4 md:items-start">
                     <h1 className="text-base font-extrabold text-white md:text-lg lg:text-xl">
-                        {astronotes?.title}
+                        {astronotes?.title ? (
+                            astronotes.title
+                        ) : (
+                            <Skeleton
+                                isCustomSize
+                                className="w-32 h-4 md:h-5"
+                            />
+                        )}
                     </h1>
 
                     <div className="flex flex-col gap-2 text-sm lg:text-base">
-                        {astronotes?.category === 'Textbook' ? (
+                        {astronotes?.category === 'Textbook' && (
                             <>
-                                <h2 className="font-sans">
+                                <h2 className={'font-sans'}>
                                     {astronotes?.authors.join(', ')}
                                 </h2>
                                 {astronotes?.isbn && (
                                     <h2 className="font-sans text-[#999999]">{`ISBN: ${astronotes?.isbn}`}</h2>
                                 )}
                             </>
-                        ) : (
-                            <div className="flex items-center gap-1">
-                                <GrStar className="text-[#999999] w-4 lg:w-5 h-4 lg:h-5" />
+                        )}
+                        {astronotes ? (
+                            <>
+                                <div className="flex items-center gap-1">
+                                    <GrStar className="text-[#999999] w-4 lg:w-5 h-4 lg:h-5" />
 
-                                <span className="font-sans text-[#999999]">
-                                    {`${astronotes?.rating.toFixed(1)} dari ${
-                                        (astronotes?.feedback_total ?? 0) >
+                                    <span className="font-sans text-[#999999]">
+                                        {astronotes?.rating.toFixed(1)} dari{' '}
+                                        {(astronotes?.feedback_total ?? 0) >
                                         10000
                                             ? '10000+'
-                                            : astronotes?.feedback_total
-                                    } penilaian`}
-                                </span>
-                            </div>
+                                            : astronotes?.feedback_total}{' '}
+                                        penilaian
+                                    </span>
+                                </div>
+                            </>
+                        ) : (
+                            <Skeleton
+                                isCustomSize
+                                repeat={4}
+                                className="w-32 h-4 first:w-48"
+                            />
                         )}
                     </div>
 
-                    {astronotes?.keywords && (
+                    {astronotes ? (
+                        astronotes?.keywords && (
+                            <div className="flex justify-center md:justify-start flex-wrap gap-2.5 pt-3 lg:pt-4">
+                                {astronotes?.keywords
+                                    .split(',')
+                                    .map((value) => (
+                                        <AstronotesKeyword
+                                            keyword={value}
+                                            key={value}
+                                        />
+                                    ))}
+                            </div>
+                        )
+                    ) : (
                         <div className="flex justify-center md:justify-start flex-wrap gap-2.5 pt-3 lg:pt-4">
-                            {astronotes?.keywords.split(',').map((value) => (
-                                <AstronotesKeyword
-                                    keyword={value}
-                                    key={value}
-                                />
-                            ))}
+                            <Skeleton
+                                repeat={4}
+                                isCustomSize
+                                className="w-16 h-6 rounded-full"
+                            />
                         </div>
                     )}
-                    <StartReadingButton />
+                    <StartReadingButton
+                        first_problem_id={astronotes?.first_problem_id}
+                    />
                 </div>
             </div>
 
@@ -93,20 +133,21 @@ const AstronotesDetail = ({
                 </p>
             )}
 
-            {!!astronotes && (
-                <div
-                    id="contents"
-                    className="flex flex-col gap-2 scroll-mt-32 md:gap-3">
-                    <span className="text-sm font-bold font-body lg:text-base">
-                        Daftar Isi
-                    </span>
+            <div
+                id="contents"
+                className="flex flex-col gap-2 scroll-mt-32 md:gap-3">
+                <span className="text-sm font-bold font-body lg:text-base">
+                    Daftar Isi
+                </span>
+                {astronotes ? (
                     <Accordion
                         item={astronotes.chapters.map((value) => ({
                             title: value.title,
                             jsxContent: (
                                 <ChapterContent
                                     id={value.id}
-                                    slug={slug as string}
+                                    slug={slug ?? serverSlug}
+                                    category={astronotes.category}
                                 />
                             ),
                             onClick: () => {
@@ -120,8 +161,12 @@ const AstronotesDetail = ({
                             }
                         }))}
                     />
-                </div>
-            )}
+                ) : (
+                    <div className="p-4 space-y-4">
+                        <Skeleton repeat={4} isCustomSize className="h-12" />
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
@@ -164,34 +209,53 @@ const Breadcrumbs = ({ title }: { title?: string }): JSX.Element => {
                 </h3>
             </Link>
             <FaChevronRight className="text-[#666666] h-3 md:h-3.5" />
-            <h1 className="text-white">{title}</h1>
+            {title ? (
+                <h1 className="text-white">{title}</h1>
+            ) : (
+                <Skeleton isCustomSize className="w-24 h-4" />
+            )}
         </div>
     );
 };
 
-const StartReadingButton = (): JSX.Element => {
+const StartReadingButton = ({
+    first_problem_id
+}: Pick<BookDetailInterface, 'first_problem_id'>): JSX.Element => {
     const router = useRouter();
     const { slug } = router.query as { slug: string };
     const buttonRef = useRef<HTMLDivElement | null>(null);
     const onScreen = useOnScreen(buttonRef, '-128px 0px 0px 0px');
 
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const getLink = (): string => {
+        if (!first_problem_id) return '?';
+        if (!isAuthenticated) return '/daftar';
+        if (!!first_problem_id)
+            return `/astronotes/textbook/${slug}/${first_problem_id}`;
+        return `/astronotes/${slug}/1`;
+    };
 
     return (
         <>
             <div ref={buttonRef} className="w-full">
                 <Button
-                    href={isAuthenticated ? `/astronotes/${slug}/1` : '/daftar'}
+                    href={getLink()}
                     variant="primary"
-                    className="w-full my-2 text-center md:w-max">
+                    disabled={!first_problem_id}
+                    className={cn(
+                        !first_problem_id && 'btn-disabled',
+                        'w-full my-2 text-center md:w-max'
+                    )}>
                     Mulai Membaca
                 </Button>
             </div>
             <Button
-                href={isAuthenticated ? `/astronotes/${slug}/1` : '/daftar'}
+                href={getLink()}
                 variant="primary"
+                disabled={!first_problem_id}
                 className={cn(
                     'transition fixed inset-x-4 md:hidden bottom-8 text-center',
+                    !first_problem_id && 'btn-disabled',
                     !onScreen
                         ? 'opacity-100 pointer-events-auto'
                         : 'opacity-0 pointer-events-none'

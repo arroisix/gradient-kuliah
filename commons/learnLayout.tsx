@@ -46,7 +46,11 @@ const LearnLayout = ({
     });
 
     return (
-        <div className="w-screen min-h-screen text-white overflow-clip bg-neutral-1000">
+        <div
+            className={cn(
+                'w-screen min-h-screen text-white overflow-clip',
+                lightMode ? 'bg-white' : 'bg-neutral-1000'
+            )}>
             {!hideNavbar && (
                 <Navbar
                     lightMode={lightMode}
@@ -63,9 +67,7 @@ const LearnLayout = ({
                 className={cn(
                     showSidebar &&
                         'pt-16 pb-16 flex gap-[2rem] lg:gap-[6rem] w-full',
-                    !closeReminder && showSubscriptionReminder
-                        ? 'pt-11'
-                        : undefined
+                    !closeReminder && showSubscriptionReminder && 'pt-11'
                 )}>
                 {showSidebar && <Sidebar fullHeight={fullHeightSidebar} />}
                 <div

@@ -1,3 +1,4 @@
+import { cn } from 'commons/utils';
 import { useState } from 'react';
 import { FaChevronUp, FaChevronDown } from 'react-icons/fa';
 
@@ -5,32 +6,44 @@ interface AccordionItemProps {
     title: string;
     content?: string;
     jsxContent?: JSX.Element;
+    className?: string;
+    isOpen?: boolean;
     onClick?: () => void;
 }
 
 interface AccordionProps {
     item: AccordionItemProps[];
+    className?: string;
 }
 
 export const AccordionItem = ({
     title,
     content,
     jsxContent,
-    onClick
+    onClick,
+    className,
+    isOpen
 }: AccordionItemProps): JSX.Element => {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(isOpen ?? false);
 
     const renderContent = (): JSX.Element => {
         if (jsxContent) {
             return (
-                <div className="p-4 pt-1 bg-neutral-900 text-neutral-400 rounded-b-lg font-body">
+                <div
+                    className={cn(
+                        'p-4 pt-1 rounded-b-lg bg-neutral-900 text-neutral-400 font-body',
+                        className
+                    )}>
                     {jsxContent}
                 </div>
             );
         }
         return (
             <div
-                className="p-4 pt-1 bg-neutral-900 text-neutral-400 rounded-b-lg font-body"
+                className={cn(
+                    'p-4 pt-1 rounded-b-lg bg-neutral-900 text-neutral-400 font-body',
+                    className
+                )}
                 dangerouslySetInnerHTML={{ __html: content as string }}
             />
         );
@@ -60,17 +73,11 @@ export const AccordionItem = ({
     );
 };
 
-const Accordion = ({ item }: AccordionProps): JSX.Element => {
+const Accordion = ({ item, className }: AccordionProps): JSX.Element => {
     return (
-        <div>
-            {item.map((i: AccordionItemProps) => (
-                <AccordionItem
-                    content={i.content}
-                    jsxContent={i.jsxContent}
-                    title={i.title}
-                    key={i.title}
-                    onClick={i.onClick}
-                />
+        <div className={cn(className)}>
+            {item.map((props: AccordionItemProps) => (
+                <AccordionItem key={props.title} {...props} />
             ))}
         </div>
     );
