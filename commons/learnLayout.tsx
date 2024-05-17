@@ -46,7 +46,11 @@ const LearnLayout = ({
     });
 
     return (
-        <div className="w-screen min-h-screen text-white overflow-clip bg-neutral-1000">
+        <div
+            className={cn(
+                'w-screen min-h-screen text-white overflow-clip',
+                lightMode ? 'bg-white' : 'bg-neutral-1000'
+            )}>
             {!hideNavbar && (
                 <Navbar
                     lightMode={lightMode}

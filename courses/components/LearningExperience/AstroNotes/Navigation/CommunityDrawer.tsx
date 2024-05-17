@@ -40,7 +40,7 @@ const CommunityDrawer = (): JSX.Element => {
                         {...transitionClassesOpacity}>
                         <Popover.Panel
                             static
-                            className="absolute flex items-start w-48 gap-1 p-2 text-xs rounded-lg bottom-14 right-2 bg-neutral-800">
+                            className="absolute flex items-start w-48 gap-1 p-2 text-xs text-white rounded-lg bottom-14 right-2 bg-neutral-800">
                             Bingung sama pembahasan ini? Tanya aja di diskusi
                             <Popover.Button
                                 className="text-neutral-500"

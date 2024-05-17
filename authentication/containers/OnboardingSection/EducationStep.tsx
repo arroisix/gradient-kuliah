@@ -79,7 +79,7 @@ export const EducationStep = (): JSX.Element => {
                     if (!values.institution)
                         errors.institution =
                             'Asal sekolah/universitas tidak boleh kosong';
-                    if (!values.major)
+                    if (values.education_level !== 'SMP' && !values.major)
                         errors.major = 'Jurusan tidak boleh kosong';
                     if (!values.profession)
                         errors.profession = 'Pekerjaan tidak boleh kosong';
