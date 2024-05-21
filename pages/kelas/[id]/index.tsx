@@ -87,17 +87,26 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                 `${config.API_BASE_URL}subscriptions/packet-offer/`
             );
 
+            const metaTitle =
+                params?.id === 'bedah-jurusan'
+                    ? 'Program Webinar Bedah Jurusan Kuliah Bersama Expert | Gradient'
+                    : `Kelas Online ${courseData?.course_name}, Materi Belajar Super Interaktif | Gradient`;
+            const metaDescription =
+                params?.id === 'bedah-jurusan'
+                    ? 'Program webinar gratis! Temukan wawasan mendalam tentang jurusan kuliah favorit Kamu dari para ahli yang telah berpengalaman dan sukses berkarir dibidangnya.'
+                    : `Ikuti kelas interaktif ${courseData?.course_name} bersama dosen ternama di Indonesia. Belajar jadi mudah dengan materi video & latihan soal beserta pembahasannya.`;
+
             return {
                 props: {
                     id: params?.id,
                     courseData,
                     canonical: `https://gradient.academy/kelas/${courseData.course_slug}`,
-                    title: `Belajar ${courseData?.course_name} | Materi dan Latihan Soal`,
-                    description: `Belajar materi ${courseData?.course_name} dari video lengkap dan latihan soal serta pembahasan di Gradient`,
+                    title: metaTitle,
+                    description: metaDescription,
                     openGraph: {
                         type: 'website',
-                        title: `Belajar ${courseData?.course_name} | Materi dan Latihan Soal`,
-                        description: `Belajar materi ${courseData?.course_name} dari video lengkap dan latihan soal serta pembahasan di Gradient`,
+                        title: metaTitle,
+                        description: metaDescription,
                         url: `https://gradient.academy/kelas/${params?.id}`,
                         images: [
                             {

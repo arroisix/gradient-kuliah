@@ -64,20 +64,23 @@ export async function getStaticProps(): Promise<{
             `${config.API_BASE_URL}courses/public/major-recommendations/`
         );
 
+    const META_TITLE =
+        'Platform Belajar Materi Kuliah Online #1 di Indonesia | Gradient';
+    const META_DESCRIPTION =
+        'Situs belajar online membantu Kamu meningkatkan pengetahuan dan keterampilan dalam memahami setiap materi perkuliahan melalui kelas & latihan soal yang interaktif.';
+
     return {
         props: {
             pricingData,
             classesData,
             majorData,
             canonical: 'https://gradient.academy/',
-            title: 'Platform Belajar Kuliah  No. 1 di Indonesia',
-            description:
-                'Belajar dari dosen bermutu, bareng pelajar se-Indonesia. Materi kuliah dan pembahasan soal lengkap',
+            title: META_TITLE,
+            description: META_DESCRIPTION,
             openGraph: {
                 type: 'website',
-                title: `Platform Belajar Kuliah  No. 1 di Indonesia`,
-                description:
-                    'Belajar dari dosen bermutu, bareng pelajar se-Indonesia. Materi kuliah dan pembahasan soal lengkap',
+                title: META_TITLE,
+                description: META_DESCRIPTION,
                 url: `https://gradient.academy`,
                 images: [
                     {

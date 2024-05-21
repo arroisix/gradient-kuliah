@@ -35,17 +35,21 @@ export const getStaticProps: GetStaticProps = async () => {
         `${config.API_BASE_URL}communities/public/post/`
     );
 
+    const metaTitle =
+        'Forum Diskusi Mahasiswa Tanya Jawab Pesoalan Kuliah | Gradient';
+    const metaDescription =
+        'Temukan jawaban atas pertanyaan-pertanyaan dari materi kuliah serta saling bertukar informasi agar dapat meningkatkan pemahaman secara bersama-sama.';
+
     return {
         props: {
             data,
             canonical: 'https://gradient.academy/komunitas',
-            title: 'Tanya Jawab, Diskusi Materi Kuliah di Gradient',
-            description:
-                'Tempat belajar materi kuliah nomor 1 di Indonesia. Lengkap materi dan pembahasan soal',
+            title: metaTitle,
+            description: metaDescription,
             openGraph: {
                 type: 'website',
-                title: `Tanya Jawab, Diskusi Materi Kuliah di Gradient`,
-                description: `Tempat belajar materi kuliah nomor 1 di Indonesia. Lengkap materi dan pembahasan soal`,
+                title: metaTitle,
+                description: metaDescription,
                 url: `https://gradient.academy`,
                 images: [
                     {

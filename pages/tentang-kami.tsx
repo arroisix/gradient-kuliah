@@ -1,5 +1,6 @@
 import Button from 'commons/components/elements/Button';
 import Layout from 'commons/layout';
+import { GetStaticProps } from 'next';
 
 const About = (): JSX.Element => {
     return (
@@ -58,6 +59,34 @@ const About = (): JSX.Element => {
             </section>
         </Layout>
     );
+};
+
+export const getStaticProps: GetStaticProps = () => {
+    const META_TITLE = 'Tentang Gradient Academy (Sejarah, Visi, Misi)';
+    const META_DESCRIPTION =
+        'Kami memiliki visi misi untuk meningkatan taraf pendidikan ke jenjang yang lebih tinggi dengan menyajikan metode pembelajaran yang lebih menarik dan mudah dipahami.';
+
+    return {
+        props: {
+            canonical: 'https://gradient.academy/tentang-kami',
+            title: META_TITLE,
+            description: META_DESCRIPTION,
+            openGraph: {
+                type: 'website',
+                title: META_TITLE,
+                description: META_DESCRIPTION,
+                url: `https://gradient.academy`,
+                images: [
+                    {
+                        url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
+                        width: 48,
+                        height: 48,
+                        alt: 'Gradient Logo'
+                    }
+                ]
+            }
+        }
+    };
 };
 
 About.displayName = 'About';

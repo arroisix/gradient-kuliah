@@ -58,13 +58,30 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
             }
 
             const data = payload[0].data as GetBookDetailResponse;
-            const isTextbook = data.book.category.toLowerCase() == 'textbook';
+            const isTextbook = data.book.category.toLowerCase() === 'textbook';
+            const isAstronotes = data.book.category.toLowerCase() === 'catatan';
             const titleSEO = isTextbook
                 ? `Pembahasan Soal ${data.book.title}`
-                : `${data.book.category} ${data.book.title} | Catatan, Rangkuman dan Bank Soal`;
+                : isAstronotes
+                ? `${data.book.category} ${data.book.title.replace(
+                      'Astronotes: ',
+                      ''
+                  )} Sumber Literatur Terlengkap | Gradient`
+                : `${data.book.category} ${data.book.title.replace(
+                      'Bank Soal: ',
+                      ''
+                  )} Beserta Pembahasan | Gradient`;
             const descriptionSEO = isTextbook
                 ? titleSEO
-                : `Belajar dan Paham dengan baca ${data.book.category} ${data.book.title} hanya di Gradient`;
+                : isAstronotes
+                ? `Baca rangkuman e-book ${data.book.title.replace(
+                      'Astronotes: ',
+                      ''
+                  )} untuk menghemat waktu belajar, dan meningkatkan performa akademik. Mulai belajar lebih praktis & terstruktur sekarang.`
+                : `Raih prestasi akademis lebih tinggi melalui soal-soal ${data.book.title.replace(
+                      'Bank Soal: ',
+                      ''
+                  )} berserta solusi lengkap untuk setiap pertanyaan yang akan mudah untuk Kamu pahami.`;
 
             return {
                 revalidate: 300,
