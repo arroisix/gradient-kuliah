@@ -63,7 +63,7 @@ const AstronoteBook = ({
                         </span>
                     )}
                     {rating > 0 && (
-                        <span className="flex items-center gap-[2px] font-body text-xs text-neutral-600 leading-2">
+                        <span className="flex items-center gap-1 text-xs font-body text-neutral-600 leading-2">
                             <AiFillStar />
                             {rating.toFixed(1)}
                         </span>
@@ -71,7 +71,7 @@ const AstronoteBook = ({
                 </div>
             </div>
             {education_level && (
-                <div className="h-auto gap-1 py-1 text-sm font-medium font-body badge badge-primary bg-accent-purple">
+                <div className="flex items-center h-auto gap-1 px-3 py-1 text-sm font-medium rounded-full font-body w-min bg-accent-purple">
                     <HiOutlineAcademicCap size={20} /> {education_level}
                 </div>
             )}

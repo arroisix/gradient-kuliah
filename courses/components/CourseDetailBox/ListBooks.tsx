@@ -1,6 +1,7 @@
 import Skeleton from 'commons/components/elements/Skeleton';
+import { CDN_URL } from 'commons/constants';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 import React from 'react';
 import { AiFillStar } from 'react-icons/ai';
 import { useTracker } from 'tracker/tracker';
@@ -12,15 +13,27 @@ export const ListBooks = ({
     books: Book[];
     isLoading: boolean;
 }): JSX.Element => {
-    const router = useRouter();
     const tracker = useTracker();
 
     return (
         <div className="flex flex-col gap-[14px]">
             {isLoading && <Skeleton className="h-[60px] !m-0" repeat={3} />}
             {books?.map(
-                ({ book_id, title, authors, rating, book_cover_url, slug }) => (
-                    <div
+                ({
+                    book_id,
+                    title,
+                    authors,
+                    rating,
+                    book_cover_url,
+                    slug,
+                    category
+                }) => (
+                    <Link
+                        href={
+                            category == 'Textbook'
+                                ? `/astronotes/textbook/${slug}`
+                                : `/astronotes/${slug}`
+                        }
                         className="flex items-center gap-5 cursor-pointer"
                         key={book_id}
                         onClick={() => {
@@ -28,18 +41,23 @@ export const ListBooks = ({
                                 'Course Slug': slug,
                                 'Book Title': title
                             });
-                            router.push(`/astronotes/${slug}/1`);
                         }}
                         aria-hidden>
-                        <Image
-                            src={
-                                book_cover_url ||
-                                'https://assets.gradient.academy/assets/astronotes-kalkulus2-placeholder.jpg'
-                            }
-                            width={79}
-                            height={113}
-                            className="object-contain rounded"
-                        />
+                        <div
+                            className={
+                                'relative flex-none border rounded-md border-neutral-700 aspect-[256/364] w-20'
+                            }>
+                            <Image
+                                src={
+                                    book_cover_url ||
+                                    `${CDN_URL}/assets/astronotes-kalkulus2-placeholder.jpg`
+                                }
+                                alt={title}
+                                layout="fill"
+                                objectFit="cover"
+                                className="rounded"
+                            />
+                        </div>
                         <div className="flex flex-col gap-[6px]">
                             <span className="inline-block text-lg font-body text-neutral-200">
                                 {title}
@@ -58,7 +76,7 @@ export const ListBooks = ({
                                 )}
                             </div>
                         </div>
-                    </div>
+                    </Link>
                 )
             )}
         </div>
