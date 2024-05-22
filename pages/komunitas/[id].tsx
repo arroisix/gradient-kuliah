@@ -63,11 +63,11 @@ export const getStaticProps: GetStaticProps = async ({
     );
 
     const META_TITLE =
-        data.content.length > 60 ? data.content.substring(0, 60) : data.content;
+        data.content.length > 60 ? `${data.content.substring(0, 60)} ...` : `${data.content} ...`;
     const META_DESCRIPTION =
         data.content.length > 155
-            ? data.content.substring(0, 155)
-            : data.content;
+            ? `${data.content.substring(0, 155)} ...`
+            : `${data.content} ...`;
 
     return {
         props: {
@@ -84,7 +84,7 @@ export const getStaticProps: GetStaticProps = async ({
                         url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
                         width: 48,
                         height: 48,
-                        alt: 'Gradient Logo'
+                        alt: 'Gradient Academy'
                     }
                 ]
             }

@@ -87,7 +87,7 @@ export async function getStaticProps(): Promise<{
                         url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
                         width: 48,
                         height: 48,
-                        alt: 'Gradient Logo'
+                        alt: 'Gradient Academy'
                     }
                 ]
             }
