@@ -62,22 +62,31 @@ export const getStaticProps: GetStaticProps = async ({
         `${config.API_BASE_URL}communities/public/post/${params?.id}/`
     );
 
+    const META_TITLE =
+        data.content.length > 60
+            ? `${data.content.substring(0, 60)} ...`
+            : `${data.content} ...`;
+    const META_DESCRIPTION =
+        data.content.length > 155
+            ? `${data.content.substring(0, 155)} ...`
+            : `${data.content} ...`;
+
     return {
         props: {
             data,
-            title: `${data.category}: ${data.content}`,
-            description: data.content,
+            title: META_TITLE,
+            description: META_DESCRIPTION,
             openGraph: {
                 type: 'website',
-                title: `${data.category}: ${data.content}`,
-                description: data.content,
+                title: META_TITLE,
+                description: META_DESCRIPTION,
                 url: `https://gradient.academy`,
                 images: [
                     {
                         url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
                         width: 48,
                         height: 48,
-                        alt: 'Gradient Logo'
+                        alt: 'Gradient Academy'
                     }
                 ]
             }

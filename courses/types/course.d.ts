@@ -276,6 +276,7 @@ type Book = {
     book_cover_url?: string | null;
     authors: string;
     slug: string;
+    category: string;
 };
 
 interface CourseContentResponse {

@@ -49,7 +49,7 @@ const Paywall = ({
         const pembayaranPage = `/pembayaran?${queryParamBuilder({
             packetId,
             redirect: redirect as string
-        })}`
+        })}`;
 
         if (!isAuthenticated) {
             router.push(`/daftar?redirect=${pembayaranPage}`);

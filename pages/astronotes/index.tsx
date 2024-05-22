@@ -14,24 +14,27 @@ const AstronotesEntrypointPage = (): JSX.Element => {
 };
 
 export const getStaticProps: GetStaticProps = () => {
+    const META_TITLE =
+        'Kumpulan Rangkuman, Catatan & Buku Materi Kuliah | Gradient';
+    const META_DESCRIPTION =
+        'Tingkatkan hasil belajar dari rangkuman & catatan berkualitas yang dirancang khusus agar lebih praktis serta mempercepat waktu Kamu dalam proses belajar.';
+
     return {
         props: {
             canonical: 'https://gradient.academy/astronotes',
-            title: 'Catatan, Rangkuman dan Bank Soal dari Gradient',
-            description:
-                'Catatan, Rangkuman dan Bank Soal yang disusun oleh Gradient, demi kemudahan mahasiswa dalam mempelajari materi perkuliahan',
+            title: META_TITLE,
+            description: META_DESCRIPTION,
             openGraph: {
                 type: 'website',
-                title: 'Catatan, Rangkuman dan Bank Soal dari Gradient',
-                description:
-                    'Catatan, Rangkuman dan Bank Soal yang disusun oleh Gradient, demi kemudahan mahasiswa dalam mempelajari materi perkuliahan',
+                title: META_TITLE,
+                description: META_DESCRIPTION,
                 url: `https://gradient.academy`,
                 images: [
                     {
                         url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
                         width: 48,
                         height: 48,
-                        alt: 'Gradient Logo'
+                        alt: 'Gradient Academy'
                     }
                 ]
             }
