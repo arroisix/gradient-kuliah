@@ -63,7 +63,9 @@ export const getStaticProps: GetStaticProps = async ({
     );
 
     const META_TITLE =
-        data.content.length > 60 ? `${data.content.substring(0, 60)} ...` : `${data.content} ...`;
+        data.content.length > 60
+            ? `${data.content.substring(0, 60)} ...`
+            : `${data.content} ...`;
     const META_DESCRIPTION =
         data.content.length > 155
             ? `${data.content.substring(0, 155)} ...`
