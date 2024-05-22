@@ -14,23 +14,26 @@ const ListClass = (): JSX.Element => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
+    const META_TITLE =
+        'Kursus & Kelas Online Bersama Dosen Terbaik Indonesia | Gradient';
+    const META_DESCRIPTION =
+        'Kursus online yang dirancang khusus untuk membantu kesuksesan akademik mahasiswa dalam proses belajar dan akan diajari langsung oleh dosen-dosen terbaik di Indonesia';
+
     return {
         props: {
-            title: 'Kelas di Gradient',
-            description:
-                'Kelas yang disusun bersama dosen terbaik, demi kemudahan mahasiswa dalam mempelajari materi perkuliahan',
+            title: META_TITLE,
+            description: META_DESCRIPTION,
             openGraph: {
                 type: 'website',
-                title: 'Kelas di Gradient',
-                description:
-                    'Kelas yang disusun bersama dosen terbaik, demi kemudahan mahasiswa dalam mempelajari materi perkuliahan',
+                title: META_TITLE,
+                description: META_DESCRIPTION,
                 url: `https://gradient.academy`,
                 images: [
                     {
                         url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
                         width: 48,
                         height: 48,
-                        alt: 'Gradient Logo'
+                        alt: 'Gradient Academy'
                     }
                 ]
             }

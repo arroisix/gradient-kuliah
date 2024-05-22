@@ -12,7 +12,7 @@ export const publicCourseV2Api = baseApi.injectEndpoints({
                 url: `${PUBLIC_COURSE_V2_BASE_URL}`,
                 params: {
                     ...params,
-                    limit: 20,
+                    limit: 20
                 }
             })
         })
