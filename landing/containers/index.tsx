@@ -6,7 +6,9 @@ type LandingContainerProps = {
     pricingData?: PacketOffer[];
 };
 
-const LandingContainer = ({ pricingData }: LandingContainerProps): JSX.Element => {
+const LandingContainer = ({
+    pricingData
+}: LandingContainerProps): JSX.Element => {
     return (
         <div className="bg-black min-h-screen">
             <Hero />

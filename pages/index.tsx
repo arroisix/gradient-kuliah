@@ -12,7 +12,9 @@ type LandingPageProps = {
     majorData?: ResponseData<MajorOptions>;
 };
 
-const RevampedLandingPage = ({ pricingData }: LandingPageProps): JSX.Element => {
+const RevampedLandingPage = ({
+    pricingData
+}: LandingPageProps): JSX.Element => {
     return (
         <>
             <NextSeo canonical="https://gradient.academy/" />
