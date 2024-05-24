@@ -1,5 +1,5 @@
 import Layout from 'commons/layout';
-import LandingContainer from 'landing/containers';
+import LandingContainer from 'landing/containers/old';
 import withAnon from 'commons/withAnon';
 import axios from 'axios';
 import config from 'redux/api/config';
