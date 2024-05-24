@@ -3,7 +3,7 @@ import RevampedFeature from 'landing/components/RevampedSections/Feature';
 import RevampedHero from 'landing/components/RevampedSections/Hero';
 import IndonesiaMapCTA from 'landing/components/RevampedSections/IndonesiaMapCTA';
 import Pricing from 'landing/components/RevampedSections/Pricing';
-import Testimony from 'landing/components/Sections/testimony';
+import Testimony from 'landing/components/OldSections/testimony';
 import React from 'react';
 
 type RevampedLandingContainerProps = {

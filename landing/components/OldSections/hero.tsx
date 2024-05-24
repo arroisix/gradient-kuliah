@@ -1,6 +1,6 @@
 import Button from 'commons/components/elements/Button';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
-import Container from 'landing/components/Sections/Container';
+import Container from 'landing/components/OldSections/Container';
 import Image from 'next/image';
 import Link from 'next/link';
 

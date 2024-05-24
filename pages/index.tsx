@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Layout from 'commons/layout';
 import withAnon from 'commons/withAnon';
-import RevampedLandingContainer from 'landing/containers/revamped';
+import LandingContainer from 'landing/containers';
 import { NextSeo } from 'next-seo';
 import React from 'react';
 import config from 'redux/api/config';
@@ -12,21 +12,13 @@ type LandingPageProps = {
     majorData?: ResponseData<MajorOptions>;
 };
 
-const RevampedLandingPage = ({
-    pricingData,
-    classesData,
-    majorData
-}: LandingPageProps): JSX.Element => {
+const RevampedLandingPage = ({}: LandingPageProps): JSX.Element => {
     return (
         <>
             <NextSeo canonical="https://gradient.academy/" />
 
             <Layout shouldTransparent>
-                <RevampedLandingContainer
-                    majorData={majorData?.data}
-                    pricingData={pricingData?.data}
-                    classData={classesData?.data}
-                />
+                <LandingContainer />
             </Layout>
         </>
     );
