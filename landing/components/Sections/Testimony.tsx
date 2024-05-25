@@ -15,7 +15,9 @@ const Testimony = (): JSX.Element => {
             </h2>
             <div className="overflow-hidden flex group">
                 {temporaryArray.map((idx) => (
-                    <div key={`testimony-layout-${idx+1}`} className="flex gap-5 md:gap-6 px-[10px] md:px-3 animate-slide-left group-hover:animate-pause">
+                    <div
+                        key={`testimony-layout-${idx + 1}`}
+                        className="flex gap-5 md:gap-6 px-[10px] md:px-3 animate-slide-left group-hover:animate-pause">
                         {TESTIMONY_DATA.map((data) => (
                             <TestimonyCard
                                 testimony={data.testimony}
