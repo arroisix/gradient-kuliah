@@ -50,7 +50,9 @@ const Features = (): JSX.Element => {
                 {FEATURES.map(
                     ({ link, title, description, photoName, photoSize }) => (
                         <FeatureCard
-                            key={`feature-${title.toLowerCase().replace(' ', '-')}`}
+                            key={`feature-${title
+                                .toLowerCase()
+                                .replace(' ', '-')}`}
                             link={link}
                             title={title}
                             description={description}
