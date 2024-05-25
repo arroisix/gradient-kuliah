@@ -30,3 +30,10 @@ type LandingHeroCopywritingInterface = {
         authenticated: string;
     };
 };
+
+type LandingTestimonyInterface = {
+    testimony: string;
+    name: string;
+    role: string;
+    photo: string;
+};
