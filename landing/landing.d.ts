@@ -1,0 +1,32 @@
+type LandingContainerProps = {
+    pricingData?: PacketOffer[];
+};
+
+type LandingFeatureCardProps = {
+    link: string;
+    title: string;
+    description: string;
+    photoName: string;
+    photoSize: 'sm' | 'md';
+};
+
+type LandingPricingProps = {
+    pricingData?: PacketOffer[];
+    ctaEventName?: string;
+};
+
+type LandingHeroCopywritingInterface = {
+    title: {
+        authenticated: string;
+        unauthenticated: JSX.Element;
+    };
+    description: string;
+    primaryButton: {
+        authenticated: string;
+        unauthenticated: string;
+    };
+    secondaryButton: {
+        unauthenticated: string;
+        authenticated: string;
+    };
+};

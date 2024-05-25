@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Layout from 'commons/layout';
 import withAnon from 'commons/withAnon';
+import { GridProvider } from 'courses/contexts/GridProvider';
 import LandingContainer from 'landing/containers';
 import { NextSeo } from 'next-seo';
 import React from 'react';
@@ -19,9 +20,11 @@ const RevampedLandingPage = ({
         <>
             <NextSeo canonical="https://gradient.academy/" />
 
-            <Layout shouldTransparent>
-                <LandingContainer pricingData={pricingData?.data} />
-            </Layout>
+            <GridProvider>
+                <Layout shouldTransparent>
+                    <LandingContainer pricingData={pricingData?.data} />
+                </Layout>
+            </GridProvider>
         </>
     );
 };
