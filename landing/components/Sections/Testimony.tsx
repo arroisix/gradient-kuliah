@@ -14,7 +14,7 @@ const Testimony = (): JSX.Element => {
                 Kata mereka yang belajar bersama Gradient
             </h2>
             <div className="overflow-hidden flex group">
-                {temporaryArray.map((idx) => (
+                {temporaryArray.map((_, idx) => (
                     <div
                         key={`testimony-layout-${idx + 1}`}
                         className="flex gap-5 md:gap-6 px-[10px] md:px-3 animate-slide-left group-hover:animate-pause">
