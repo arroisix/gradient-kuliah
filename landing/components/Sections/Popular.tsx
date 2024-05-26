@@ -46,7 +46,9 @@ const Popular = ({
                               book_cover_url,
                               category_name
                           }) => (
-                              <div key={id} className="min-w-[47%] md:min-w-[28%] lg:min-w-[18%] max-w-[47%] md:max-w-[28%] lg:max-w-[18%]">
+                              <div
+                                  key={id}
+                                  className="min-w-[47%] md:min-w-[28%] lg:min-w-[18%] max-w-[47%] md:max-w-[28%] lg:max-w-[18%]">
                                   <DashboardCard
                                       id={id}
                                       type={category_name}
@@ -65,7 +67,9 @@ const Popular = ({
                           )
                       )
                     : classes?.map(({ id, thumbnail, course_name, slug }) => (
-                          <div key={id} className="min-w-[47%] md:min-w-[28%] lg:min-w-[23%] max-w-[47%] md:max-w-[28%] lg:max-w-[23%]">
+                          <div
+                              key={id}
+                              className="min-w-[47%] md:min-w-[28%] lg:min-w-[23%] max-w-[47%] md:max-w-[28%] lg:max-w-[23%]">
                               <DashboardCard
                                   id={id}
                                   type="Video"
