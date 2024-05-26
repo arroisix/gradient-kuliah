@@ -8,12 +8,16 @@ import React from 'react';
 import config from 'redux/api/config';
 
 type LandingPageProps = {
+    majorData?: ResponseData<MajorOptions>;
     pricingData?: ResponseData<PacketOffer>;
     classesData?: ResponseData<Course>;
-    majorData?: ResponseData<MajorOptions>;
+    popularBooksData?: GetLandingPopularBooksResponseData;
 };
 
 const RevampedLandingPage = ({
+    majorData,
+    classesData,
+    popularBooksData,
     pricingData
 }: LandingPageProps): JSX.Element => {
     return (
@@ -22,7 +26,12 @@ const RevampedLandingPage = ({
 
             <GridProvider>
                 <Layout shouldTransparent>
-                    <LandingContainer pricingData={pricingData?.data} />
+                    <LandingContainer
+                        majorData={majorData?.data}
+                        classesData={classesData?.data}
+                        popularBooksData={popularBooksData?.books}
+                        pricingData={pricingData?.data}
+                    />
                 </Layout>
             </GridProvider>
         </>
@@ -33,6 +42,7 @@ export async function getStaticProps(): Promise<{
     props: {
         pricingData: ResponseData<PacketOffer>;
         classesData: ResponseData<Course>;
+        popularBooksData: GetLandingPopularBooksResponseData;
         majorData: ResponseData<MajorOptions>;
         canonical: string;
         title: string;
@@ -52,14 +62,19 @@ export async function getStaticProps(): Promise<{
     };
     revalidate?: number;
 }> {
-    const { data: pricingData }: { data: ResponseData<PacketOffer> } =
-        await axios.get(`${config.API_BASE_URL}subscriptions/packet-offer/`);
-    const { data: classesData }: { data: ResponseData<Course> } =
-        await axios.get(`${config.API_BASE_URL}courses/public/?limit=4`);
     const { data: majorData }: { data: ResponseData<MajorOptions> } =
         await axios.get(
             `${config.API_BASE_URL}courses/public/major-recommendations/`
         );
+    const { data: classesData }: { data: ResponseData<Course> } =
+        await axios.get(`${config.API_BASE_URL}courses/v2/public/?major=all`);
+    const {
+        data: popularBooksData
+    }: { data: GetLandingPopularBooksResponseData } = await axios.get(
+        `${config.API_BASE_URL}books/landing/popular/?major=all`
+    );
+    const { data: pricingData }: { data: ResponseData<PacketOffer> } =
+        await axios.get(`${config.API_BASE_URL}subscriptions/packet-offer/`);
 
     const META_TITLE =
         'Platform Belajar Materi Kuliah Online #1 di Indonesia | Gradient';
@@ -70,6 +85,7 @@ export async function getStaticProps(): Promise<{
         props: {
             pricingData,
             classesData,
+            popularBooksData,
             majorData,
             canonical: 'https://gradient.academy/',
             title: META_TITLE,

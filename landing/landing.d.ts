@@ -1,5 +1,8 @@
 type LandingContainerProps = {
     pricingData?: PacketOffer[];
+    majorData?: MajorOptions[];
+    classesData?: Course[];
+    popularBooksData?: LandingPopularBook[];
 };
 
 type LandingFeatureCardProps = {
@@ -37,3 +40,24 @@ type LandingTestimonyInterface = {
     role: string;
     photo: string;
 };
+
+type LandingPopularProps = {
+    type: 'book' | 'course';
+    majorData?: MajorOptions[];
+    classes?: Course[];
+    popularBooks?: LandingPopularBook[];
+    selectedMajor: string;
+    setSelectedMajor: Dispatch<SetStateAction<string>>;
+};
+
+type LandingPopularBook = {
+    id: string;
+    title: string;
+    slug: string;
+    book_cover_url: string;
+    category_name: 'Textbook' | 'Astronotes' | 'Bank Soal';
+};
+
+interface GetLandingPopularBooksResponseData {
+    books: LandingPopularBook[];
+}
