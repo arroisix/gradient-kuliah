@@ -48,16 +48,5 @@ type LandingPopularProps = {
     popularBooks?: LandingPopularBook[];
     selectedMajor: string;
     setSelectedMajor: Dispatch<SetStateAction<string>>;
+    isLoading: boolean
 };
-
-type LandingPopularBook = {
-    id: string;
-    title: string;
-    slug: string;
-    book_cover_url: string;
-    category_name: 'Textbook' | 'Astronotes' | 'Bank Soal';
-};
-
-interface GetLandingPopularBooksResponseData {
-    books: LandingPopularBook[];
-}

@@ -4,8 +4,9 @@ import IndonesiaMapCTA from 'landing/components/Sections/IndonesiaMapCTA';
 import Pricing from 'landing/components/Sections/Pricing';
 import Testimony from 'landing/components/Sections/Testimony';
 import Popular from 'landing/components/Sections/Popular';
-import { useState } from 'react';
-// import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
+import { useGetPublicListCoursesV2Query } from 'courses/redux/api/publicCourseV2Api';
+import { useGetLandingPopularBooksQuery } from 'courses/redux/api/astronotesApi';
 
 const LandingContainer = ({
     majorData,
@@ -13,33 +14,38 @@ const LandingContainer = ({
     popularBooksData,
     pricingData
 }: LandingContainerProps): JSX.Element => {
-    // const router = useRouter();
-    // const { 'book-major': bookMajor, 'class-major': classMajor } =
-    //     router.query as { 'book-major'?: string; 'class-major'?: string };
     const [selectedBookMajor, setSelectedBookMajor] = useState<string>(
-        majorData?.[0].slug ?? ''
+        majorData?.[0].slug ?? 'all'
     );
     const [selectedCourseMajor, setSelectedCourseMajors] = useState<string>(
-        majorData?.[0].slug ?? ''
+        majorData?.[0].slug ?? 'all'
     );
-    const [classes, _setClasses] = useState<Course[]>(classesData ?? []);
-    const [popularBooks, _setPopularBooks] = useState<LandingPopularBook[]>(
+    const { data: booksData, isFetching: isLoadingBooksData, refetch: refetchBooksData } = useGetLandingPopularBooksQuery({ major: selectedBookMajor })
+    const { data: coursesData, isFetching: isLoadingCoursesData, refetch: refetchCoursesData } = useGetPublicListCoursesV2Query({ major: selectedCourseMajor });
+    const [popularBooks, setPopularBooks] = useState<LandingPopularBook[]>(
         popularBooksData ?? []
     );
+    const [classes, setClasses] = useState<Course[]>(classesData ?? []);
 
-    // useEffect(() => {
-    //     router.replace({
-    //         pathname: '/#books-recommendation',
-    //         query: { 'book-major': selectedBookMajor, 'class-major': selectedCourseMajor }
-    //     })
-    // }, [selectedBookMajor])
+    useEffect(() => {
+        if (selectedBookMajor !== 'all') {
+            refetchBooksData()
+        }
+    }, [selectedBookMajor])
 
-    // useEffect(() => {
-    //     router.replace({
-    //         pathname: '/#courses-recommendation',
-    //         query: { 'book-major': selectedBookMajor, 'class-major': selectedCourseMajor }
-    //     })
-    // }, [selectedCourseMajor])
+    useEffect(() => {
+        setPopularBooks(booksData?.books ?? [])
+    }, [booksData])
+
+    useEffect(() => {
+        if (selectedCourseMajor !== 'all') {
+            refetchCoursesData()
+        }
+    }, [selectedCourseMajor])
+
+    useEffect(() => {
+        setClasses(coursesData?.data ?? [])
+    }, [coursesData])
 
     return (
         <div className="bg-black min-h-screen">
@@ -51,6 +57,7 @@ const LandingContainer = ({
                 popularBooks={popularBooks}
                 selectedMajor={selectedBookMajor}
                 setSelectedMajor={setSelectedBookMajor}
+                isLoading={isLoadingBooksData}
             />
             <Popular
                 type="course"
@@ -58,6 +65,7 @@ const LandingContainer = ({
                 classes={classes}
                 selectedMajor={selectedCourseMajor}
                 setSelectedMajor={setSelectedCourseMajors}
+                isLoading={isLoadingCoursesData}
             />
             <Testimony />
             <Pricing
