@@ -27,6 +27,10 @@ import { useGetDetailPacketOfferQuery } from 'payment/redux/api/subscriptionApi'
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import clsx from 'clsx';
+import { BiBookReader } from 'react-icons/bi';
+import { RiBookOpenLine, RiQuestionnaireLine } from 'react-icons/ri';
+import { cn } from 'commons/utils';
+import { useGetConfigQuery } from 'commons/redux/api/commonApi';
 
 const HIDE_HAMBURGER_MENU_ON = [
     '/dashboard',
@@ -55,7 +59,7 @@ const Navbar = ({
 }): JSX.Element => {
     const tracker = useTracker();
 
-    const { isMobileBreakpoints } = useWindowBreakpoints();
+    const { isDesktopBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { profile } = useContext(AuthContext);
     const user = useSelector(getCurrentUser);
@@ -66,6 +70,7 @@ const Navbar = ({
     const [openSidebar, setOpenSidebar] = useState(false);
     const { height } = useWindowSize();
     const router = useRouter();
+    const { pathname } = router;
     const [scrollPosition, setScrollPosition] = useState(0);
     const handleScroll = (): void => {
         const position = window.pageYOffset;
@@ -85,18 +90,18 @@ const Navbar = ({
 
     const computeBgColor = (): string => {
         if (openMobile) {
-            return lightMode ? 'bg-white shadow-md text-black' : 'bg-black';
+            return lightMode ? 'bg-white shadow-md text-black' : 'bg-[#222222]';
         }
 
         if (shouldTransparent) {
             if (scrollPosition >= height / 2) {
-                return 'bg-black';
+                return 'bg-[#222222]';
             }
-            return 'bg-transparent hover:bg-black';
+            return 'bg-transparent hover:bg-[#222222]';
         }
 
         if (paymentPage) {
-            return lightMode ? 'bg-white shadow-md' : 'bg-black';
+            return lightMode ? 'bg-white shadow-md' : 'bg-[#222222]';
         }
 
         if (showSidebar && fullHeightSidebar) {
@@ -104,10 +109,10 @@ const Navbar = ({
                 return 'bg-black';
             }
 
-            return shouldTransparent ? '' : 'bg-black';
+            return shouldTransparent ? '' : 'bg-[#222222]';
         }
 
-        return lightMode ? 'bg-white text-black shadow-md' : 'bg-black';
+        return lightMode ? 'bg-white text-black shadow-md' : 'bg-[#222222]';
     };
 
     const isShowHamburgerMenu = (): boolean =>
@@ -150,6 +155,8 @@ const Navbar = ({
         halamanPembayaran ? (router.query.packetId as string) : skipToken
     );
 
+    const { data: configData } = useGetConfigQuery();
+
     const { expiryDay, packet_id, subscription_id, is_subscribed } =
         useCourseSubscription();
     const [closeSubscriptionReminder, setCloseSubscriptionReminder] =
@@ -167,22 +174,82 @@ const Navbar = ({
             className={`fixed top-0 left-0 w-full z-20 ${computeBgColor()} transition-all ease-in-out duration-200 flex flex-col`}
             onMouseEnter={() => setNavbarHovered(true)}
             onMouseLeave={onMouseLeaveNavbar}>
-            <div className="flex items-center justify-between w-full px-4 py-3 md:px-6">
+            <div className="flex items-center justify-between w-full px-4 py-3 md:px-8 lg:px-20">
                 <div className="flex items-center gap-4">
                     {(isLandingPageRevampOn ||
                         (!isLandingPageRevampOn && isAuthenticated)) &&
                         isShowHamburgerMenu() && (
                             <FiMenu
-                                className="md:hidden"
+                                className="lg:hidden"
                                 stroke="#666666"
                                 onClick={() => setOpenSidebar(true)}
                             />
                         )}
                     <Link href={'/'}>
                         <span className="text-2xl font-bold cursor-pointer font-[Urbanist]">
-                            {isMobileBreakpoints ? 'G' : 'Gradient'}
+                            {isDesktopBreakpoints ? 'Gradient' : 'G'}
                         </span>
                     </Link>
+                    {!showSidebar && isDesktopBreakpoints && (
+                        <div className="flex items-center ml-7 gap-6">
+                            <Link
+                                href={'/kelas'}
+                                onClick={() => {
+                                    tracker?.genericTrack(
+                                        'Click Class Navigation'
+                                    );
+                                }}>
+                                <span
+                                    className={`flex gap-4 cursor-pointer ${
+                                        pathname === '/kelas'
+                                            ? 'text-[#CCCCCC]'
+                                            : 'text-[#999999]'
+                                    }  hover:text-[#666666]`}>
+                                    <BiBookReader size={20} />
+                                    Kelas
+                                </span>
+                            </Link>
+                            <Link
+                                href={'/astronotes'}
+                                onClick={() => {
+                                    tracker?.genericTrack(
+                                        'Click Library Navigation'
+                                    );
+                                }}>
+                                <span
+                                    className={cn(
+                                        'flex gap-4 cursor-pointer hover:text-[#666666]',
+                                        pathname.includes('/astronotes')
+                                            ? 'text-[#CCCCCC]'
+                                            : 'text-[#999999]'
+                                    )}>
+                                    <RiBookOpenLine size={20} />
+                                    Perpustakaan
+                                </span>
+                            </Link>
+                            {configData?.configs
+                                .is_community_config_enabled && (
+                                <Link
+                                    href={'/komunitas'}
+                                    onClick={() => {
+                                        tracker?.genericTrack(
+                                            'Click Community Navigation'
+                                        );
+                                    }}>
+                                    <span
+                                        className={cn(
+                                            'flex gap-4 cursor-pointer hover:text-[#666666]',
+                                            pathname.includes('/komunitas')
+                                                ? 'text-[#CCCCCC]'
+                                                : 'text-[#999999]'
+                                        )}>
+                                        <RiQuestionnaireLine size={20} />
+                                        Komunitas
+                                    </span>
+                                </Link>
+                            )}
+                        </div>
+                    )}
                     {showSidebar &&
                         fullHeightSidebar &&
                         (isAuthenticated || isLandingPageRevampOn) && (
@@ -250,12 +317,22 @@ const Navbar = ({
                             ) : (
                                 <>
                                     {isLandingPageRevampOn ? (
-                                        <Button
-                                            variant="primary"
-                                            href="/masuk"
-                                            eventName="Login Button on Navbar">
-                                            Masuk
-                                        </Button>
+                                        <div className="flex gap-2">
+                                            <Button
+                                                variant="tertiary"
+                                                className="text-sm lg:text-base"
+                                                href="/masuk"
+                                                eventName="Login Button on Navbar">
+                                                Masuk
+                                            </Button>
+                                            <Button
+                                                variant="primary"
+                                                className="text-sm lg:text-base"
+                                                href="/daftar"
+                                                eventName="Register Button on Navbar">
+                                                Daftar
+                                            </Button>
+                                        </div>
                                     ) : (
                                         <>
                                             <Link href="/kelas">
@@ -283,13 +360,22 @@ const Navbar = ({
                         <div className="flex gap-4 text-3xl md:hidden">
                             {!isAuthenticated ? (
                                 isLandingPageRevampOn ? (
-                                    <Button
-                                        variant="primary"
-                                        className="text-xs"
-                                        href="/masuk"
-                                        eventName="Login Button on Navbar">
-                                        Masuk
-                                    </Button>
+                                    <div className="flex gap-2">
+                                        <Button
+                                            variant="tertiary"
+                                            className="text-xs"
+                                            href="/masuk"
+                                            eventName="Login Button on Navbar">
+                                            Masuk
+                                        </Button>
+                                        <Button
+                                            variant="primary"
+                                            className="text-xs"
+                                            href="/daftar"
+                                            eventName="Register Button on Navbar">
+                                            Daftar
+                                        </Button>
+                                    </div>
                                 ) : (
                                     <>
                                         <Link
