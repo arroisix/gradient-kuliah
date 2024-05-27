@@ -59,7 +59,7 @@ const Hero = (): JSX.Element => {
                         <Link
                             href={
                                 isAuthenticated
-                                    ? 'https://wa.me/0812123456'
+                                    ? 'https://wa.me/085179765182'
                                     : '#hero'
                             }
                             className="bg-neutral-700 rounded-full text-white py-2.5 px-12 text-sm lg:text-base text-center w-full"
