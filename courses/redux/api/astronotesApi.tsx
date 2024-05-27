@@ -214,7 +214,7 @@ export const astronotesApi = baseApi.injectEndpoints({
         >({
             query: (params: GetLandingPopularBooksQueryParam) => ({
                 url: `${COURSE_BASE_URL}landing/popular/`,
-                params: {...params}
+                params: { ...params }
             })
         })
     })

@@ -48,5 +48,5 @@ type LandingPopularProps = {
     popularBooks?: LandingPopularBook[];
     selectedMajor: string;
     setSelectedMajor: Dispatch<SetStateAction<string>>;
-    isLoading: boolean
+    isLoading: boolean;
 };

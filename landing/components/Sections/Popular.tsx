@@ -38,61 +38,66 @@ const Popular = ({
                     ))}
                 </select>
             </div>
-            {isLoading? (
+            {isLoading ? (
                 <div className="w-full flex gap-4 md:gap-5 xl:gap-8 lg:grid lg:grid-cols-4 carousel carousel-center">
-                    <Skeleton repeat={4} className='w-[150px] lg:w-full h-60 carousel-item flex-none lg:!px-0 !mb-0 !py-0' />
+                    <Skeleton
+                        repeat={4}
+                        className="w-[150px] lg:w-full h-60 carousel-item flex-none lg:!px-0 !mb-0 !py-0"
+                    />
                 </div>
-            ): (
+            ) : (
                 <div className="w-full flex flex-1 gap-4 md:gap-5 xl:gap-6 overflow-x-auto no-scrollbar lg:justify-center">
                     {type === 'book'
                         ? popularBooks?.map(
-                            ({
-                                id,
-                                title,
-                                slug,
-                                book_cover_url,
-                                category_name
-                            }) => (
-                                <div
-                                    key={id}
-                                    className="min-w-[47%] md:min-w-[28%] lg:min-w-[18%] max-w-[47%] md:max-w-[28%] lg:max-w-[18%]">
-                                    <DashboardCard
-                                        id={id}
-                                        type={category_name}
-                                        thumbnail={book_cover_url}
-                                        title={title}
-                                        in_progress={false}
-                                        course_slug={slug}
-                                        chapter_id=""
-                                        subchapter_id=""
-                                        book_slug=""
-                                        latest_page={0}
-                                        eventName='User click Class Items on "Bacaan Terpopuler di Perpustakaan" Section'
-                                        eventPayload={{ Title: title }}
-                                    />
-                                </div>
-                            )
-                        )
-                        : classes?.map(({ id, thumbnail, course_name, slug }) => (
-                            <div
-                                key={id}
-                                className="min-w-[47%] md:min-w-[28%] lg:min-w-[23%] max-w-[47%] md:max-w-[28%] lg:max-w-[23%]">
-                                <DashboardCard
-                                    id={id}
-                                    type="Video"
-                                    thumbnail={thumbnail}
-                                    title={course_name}
-                                    in_progress={false}
-                                    course_slug={slug}
-                                    chapter_id=""
-                                    subchapter_id=""
-                                    book_slug=""
-                                    latest_page={0}
-                                    eventName='User click Class Items on "Kelas Terpopuler" Section'
-                                    eventPayload={{ Course: course_name }}
-                                />
-                            </div>
-                        ))}
+                              ({
+                                  id,
+                                  title,
+                                  slug,
+                                  book_cover_url,
+                                  category_name
+                              }) => (
+                                  <div
+                                      key={id}
+                                      className="min-w-[47%] md:min-w-[28%] lg:min-w-[18%] max-w-[47%] md:max-w-[28%] lg:max-w-[18%]">
+                                      <DashboardCard
+                                          id={id}
+                                          type={category_name}
+                                          thumbnail={book_cover_url}
+                                          title={title}
+                                          in_progress={false}
+                                          course_slug={slug}
+                                          chapter_id=""
+                                          subchapter_id=""
+                                          book_slug=""
+                                          latest_page={0}
+                                          eventName='User click Class Items on "Bacaan Terpopuler di Perpustakaan" Section'
+                                          eventPayload={{ Title: title }}
+                                      />
+                                  </div>
+                              )
+                          )
+                        : classes?.map(
+                              ({ id, thumbnail, course_name, slug }) => (
+                                  <div
+                                      key={id}
+                                      className="min-w-[47%] md:min-w-[28%] lg:min-w-[23%] max-w-[47%] md:max-w-[28%] lg:max-w-[23%]">
+                                      <DashboardCard
+                                          id={id}
+                                          type="Video"
+                                          thumbnail={thumbnail}
+                                          title={course_name}
+                                          in_progress={false}
+                                          course_slug={slug}
+                                          chapter_id=""
+                                          subchapter_id=""
+                                          book_slug=""
+                                          latest_page={0}
+                                          eventName='User click Class Items on "Kelas Terpopuler" Section'
+                                          eventPayload={{ Course: course_name }}
+                                      />
+                                  </div>
+                              )
+                          )}
                 </div>
             )}
             <Link

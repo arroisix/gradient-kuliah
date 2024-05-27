@@ -20,8 +20,16 @@ const LandingContainer = ({
     const [selectedCourseMajor, setSelectedCourseMajors] = useState<string>(
         majorData?.[0].slug ?? 'all'
     );
-    const { data: booksData, isFetching: isLoadingBooksData, refetch: refetchBooksData } = useGetLandingPopularBooksQuery({ major: selectedBookMajor })
-    const { data: coursesData, isFetching: isLoadingCoursesData, refetch: refetchCoursesData } = useGetPublicListCoursesV2Query({ major: selectedCourseMajor });
+    const {
+        data: booksData,
+        isFetching: isLoadingBooksData,
+        refetch: refetchBooksData
+    } = useGetLandingPopularBooksQuery({ major: selectedBookMajor });
+    const {
+        data: coursesData,
+        isFetching: isLoadingCoursesData,
+        refetch: refetchCoursesData
+    } = useGetPublicListCoursesV2Query({ major: selectedCourseMajor });
     const [popularBooks, setPopularBooks] = useState<LandingPopularBook[]>(
         popularBooksData ?? []
     );
@@ -29,23 +37,23 @@ const LandingContainer = ({
 
     useEffect(() => {
         if (selectedBookMajor !== 'all') {
-            refetchBooksData()
+            refetchBooksData();
         }
-    }, [selectedBookMajor])
+    }, [selectedBookMajor]);
 
     useEffect(() => {
-        setPopularBooks(booksData?.books ?? [])
-    }, [booksData])
+        setPopularBooks(booksData?.books ?? []);
+    }, [booksData]);
 
     useEffect(() => {
         if (selectedCourseMajor !== 'all') {
-            refetchCoursesData()
+            refetchCoursesData();
         }
-    }, [selectedCourseMajor])
+    }, [selectedCourseMajor]);
 
     useEffect(() => {
-        setClasses(coursesData?.data ?? [])
-    }, [coursesData])
+        setClasses(coursesData?.data ?? []);
+    }, [coursesData]);
 
     return (
         <div className="bg-black min-h-screen">
