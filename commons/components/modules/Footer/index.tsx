@@ -123,12 +123,18 @@ const Footer = (): JSX.Element => {
             <div className="flex flex-col-reverse lg:flex-row gap-8 lg:gap-0 w-full">
                 <div className="w-full flex flex-col lg:flex-row gap-7 xl:gap-12">
                     {ITEMS.map((item) => (
-                        <div key={item.title} className={`flex flex-col gap-${TITLE_BODY_GAP}`}>
+                        <div
+                            key={item.title}
+                            className={`flex flex-col gap-${TITLE_BODY_GAP}`}>
                             <Title title={item.title} />
                             <div
                                 className={`flex flex-col gap-${PRODUCT_BODY_GAP}`}>
                                 {item.bodies.map((body) => (
-                                    <Body key={body.title} body={body.title} url={body.url} />
+                                    <Body
+                                        key={body.title}
+                                        body={body.title}
+                                        url={body.url}
+                                    />
                                 ))}
                             </div>
                         </div>
@@ -191,7 +197,7 @@ const Footer = (): JSX.Element => {
                     <div className="flex flex-row gap-4">
                         {SOCIAL_MEDIAS.map(({ Icon, url, className }, idx) => (
                             <SocialMedia
-                                key={`social-media-${idx+1}`}
+                                key={`social-media-${idx + 1}`}
                                 Icon={Icon}
                                 url={url}
                                 className={className}
