@@ -40,7 +40,7 @@ const APPBAR_NAV: AppbarNav[] = [
 ];
 const Appbar = (): JSX.Element | null => {
     const router = useRouter();
-    const { is_subscribed } = useCourseSubscription()
+    const { is_subscribed } = useCourseSubscription();
     const isShowAppbar = (): boolean =>
         DISPLAYED_ROUTES.includes(router.asPath) ||
         DISPLAYED_ROUTES.includes(router.pathname);

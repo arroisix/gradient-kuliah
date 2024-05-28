@@ -95,28 +95,43 @@ const Navbar = ({
 
         if (shouldTransparent) {
             if (scrollPosition >= height / 2) {
-                return is_subscribed? 'bg-black' : 'bg-[#222222]';
+                return is_subscribed ? 'bg-black' : 'bg-[#222222]';
             }
             return 'bg-transparent hover:bg-[#222222]';
         }
 
         if (paymentPage) {
-            return lightMode ? 'bg-white shadow-md' : is_subscribed? 'bg-black' : 'bg-[#222222]';
+            return lightMode
+                ? 'bg-white shadow-md'
+                : is_subscribed
+                ? 'bg-black'
+                : 'bg-[#222222]';
         }
 
         if (showSidebar && fullHeightSidebar) {
             if (scrollPosition >= 60) {
-                return is_subscribed? 'bg-black' : 'bg-[#222222]';
+                return is_subscribed ? 'bg-black' : 'bg-[#222222]';
             }
 
-            return shouldTransparent ? '' : is_subscribed? 'bg-black' : 'bg-[#222222]';
+            return shouldTransparent
+                ? ''
+                : is_subscribed
+                ? 'bg-black'
+                : 'bg-[#222222]';
         }
 
-        return lightMode ? 'bg-white text-black shadow-md' : is_subscribed? 'bg-black' : 'bg-[#222222]';
+        return lightMode
+            ? 'bg-white text-black shadow-md'
+            : is_subscribed
+            ? 'bg-black'
+            : 'bg-[#222222]';
     };
 
     const isShowHamburgerMenu = (): boolean =>
-        !LEARNING_PAGES.some(path => router.asPath.includes(path)) || (LEARNING_PAGES.some(path => router.asPath.includes(path)) && !is_subscribed && !isDesktopBreakpoints);
+        !LEARNING_PAGES.some((path) => router.asPath.includes(path)) ||
+        (LEARNING_PAGES.some((path) => router.asPath.includes(path)) &&
+            !is_subscribed &&
+            !isDesktopBreakpoints);
     const onMouseLeaveNavbar = (): void => {
         if (isHovered) setHovered(false);
         if (isProfileHovered) setProfileHovered(false);
@@ -251,7 +266,8 @@ const Navbar = ({
                     )}
                     {showSidebar &&
                         fullHeightSidebar &&
-                        (isAuthenticated || isLandingPageRevampOn) && is_subscribed && (
+                        (isAuthenticated || isLandingPageRevampOn) &&
+                        is_subscribed && (
                             <div className="hidden md:block w-[250px] h-[64px] fixed top-0 left-0 bg-[#121212] z-[-1]" />
                         )}
                     <LeftNavbarMenu

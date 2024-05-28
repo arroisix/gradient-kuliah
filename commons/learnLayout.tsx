@@ -46,7 +46,7 @@ const LearnLayout = ({
     const { data: activePacket } = useGetActiveSubscriptionQuery(undefined, {
         skip: !isAuthenticated
     });
-    const { is_subscribed } = useCourseSubscription()
+    const { is_subscribed } = useCourseSubscription();
 
     return (
         <>
@@ -73,11 +73,16 @@ const LearnLayout = ({
                             'pt-16 pb-16 flex gap-[2rem] lg:gap-[6rem] w-full',
                         !closeReminder && showSubscriptionReminder && 'pt-11'
                     )}>
-                    {showSidebar && is_subscribed && <Sidebar fullHeight={fullHeightSidebar} />}
+                    {showSidebar && is_subscribed && (
+                        <Sidebar fullHeight={fullHeightSidebar} />
+                    )}
                     <div
                         className={cn(
                             'w-full',
-                            showSidebar && fullHeightSidebar && is_subscribed && 'md:ml-[250px]'
+                            showSidebar &&
+                                fullHeightSidebar &&
+                                is_subscribed &&
+                                'md:ml-[250px]'
                         )}>
                         {isAuthenticated &&
                             isCoursePage &&

@@ -1,10 +1,6 @@
 import { cn } from 'commons/utils';
 import Link from 'next/link';
-import {
-    AiFillInstagram,
-    AiFillLinkedin,
-    AiFillYoutube,
-} from 'react-icons/ai';
+import { AiFillInstagram, AiFillLinkedin, AiFillYoutube } from 'react-icons/ai';
 import { BsTwitterX, BsWhatsapp } from 'react-icons/bs';
 import { FaInstagram } from 'react-icons/fa';
 import { IconType } from 'react-icons/lib';
