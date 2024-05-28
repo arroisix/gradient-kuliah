@@ -9,7 +9,7 @@ const Testimony = (): JSX.Element => {
     );
 
     return (
-        <section className="flex flex-col gap-5 py-9 md:py-16">
+        <section className="flex flex-col gap-5 py-9 md:py-16" id='testimony'>
             <h2 className="font-sans text-xl font-extrabold text-center">
                 Kata mereka yang belajar bersama Gradient
             </h2>

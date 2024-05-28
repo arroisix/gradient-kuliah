@@ -6,7 +6,7 @@ import Button from 'commons/components/elements/Button';
 
 const IndonesiaMapCTA = (): JSX.Element => {
     return (
-        <Container className="flex flex-col items-center gap-6 md:gap-12 md:flex-row py-9 md:py-16">
+        <Container className="flex flex-col items-center gap-6 md:gap-12 md:flex-row py-9 md:py-16" id='gradient-users'>
             <div>
                 <Image
                     src={`${CDN_URL}/assets/indonesia-asset.png`}

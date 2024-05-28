@@ -20,7 +20,7 @@ const Hero = (): JSX.Element => {
     };
 
     return (
-        <div className="bg-[#222222] md:bg-[#101010]">
+        <div className="bg-[#222222] md:bg-[#101010]" id='hero'>
             <Container
                 className="flex flex-col-reverse md:flex-row items-center py-7 lg:py-16 pt-20 md:pt-24 lg:pt-24 gap-6 md:gap-12 lg:gap-16"
                 id="hero">
