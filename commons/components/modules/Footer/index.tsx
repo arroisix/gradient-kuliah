@@ -1,13 +1,11 @@
 import { cn } from 'commons/utils';
 import Link from 'next/link';
 import {
-    AiFillFacebook,
     AiFillInstagram,
     AiFillLinkedin,
     AiFillYoutube,
-    AiOutlineTwitter
 } from 'react-icons/ai';
-import { BsWhatsapp } from 'react-icons/bs';
+import { BsTwitterX, BsWhatsapp } from 'react-icons/bs';
 import { FaInstagram } from 'react-icons/fa';
 import { IconType } from 'react-icons/lib';
 import { MdMailOutline } from 'react-icons/md';
@@ -82,19 +80,19 @@ type FooterSocialMediaProps = {
 };
 
 const SOCIAL_MEDIAS: FooterSocialMediaProps[] = [
+    // {
+    //     Icon: AiFillFacebook,
+    //     url: '/',
+    //     className: 'text-[#4A9CEC]'
+    // },
     {
-        Icon: AiFillFacebook,
-        url: '/',
-        className: 'text-[#4A9CEC]'
-    },
-    {
-        Icon: AiOutlineTwitter,
-        url: '/',
-        className: 'text-[#4A9CEC]'
+        Icon: BsTwitterX,
+        url: 'https://x.com/gradient_idn?lang=en',
+        className: 'text-white'
     },
     {
         Icon: AiFillYoutube,
-        url: '/',
+        url: 'https://www.youtube.com/@gradient3012',
         className: 'text-[#F50000]'
     },
     {
@@ -104,12 +102,12 @@ const SOCIAL_MEDIAS: FooterSocialMediaProps[] = [
     },
     {
         Icon: AiFillLinkedin,
-        url: '/',
+        url: 'https://www.linkedin.com/company/gradient-idn/',
         className: 'text-[#1364A8]'
     },
     {
         Icon: RiTiktokFill,
-        url: '/'
+        url: 'https://www.tiktok.com/@gradientacademy'
     }
 ];
 

@@ -32,7 +32,7 @@ import { RiBookOpenLine, RiQuestionnaireLine } from 'react-icons/ri';
 import { cn } from 'commons/utils';
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
 
-const HIDE_HAMBURGER_MENU_ON = [
+export const LEARNING_PAGES = [
     '/dashboard',
     '/komunitas',
     '/astronotes',
@@ -95,29 +95,28 @@ const Navbar = ({
 
         if (shouldTransparent) {
             if (scrollPosition >= height / 2) {
-                return 'bg-[#222222]';
+                return is_subscribed? 'bg-black' : 'bg-[#222222]';
             }
             return 'bg-transparent hover:bg-[#222222]';
         }
 
         if (paymentPage) {
-            return lightMode ? 'bg-white shadow-md' : 'bg-[#222222]';
+            return lightMode ? 'bg-white shadow-md' : is_subscribed? 'bg-black' : 'bg-[#222222]';
         }
 
         if (showSidebar && fullHeightSidebar) {
             if (scrollPosition >= 60) {
-                return 'bg-black';
+                return is_subscribed? 'bg-black' : 'bg-[#222222]';
             }
 
-            return shouldTransparent ? '' : 'bg-[#222222]';
+            return shouldTransparent ? '' : is_subscribed? 'bg-black' : 'bg-[#222222]';
         }
 
-        return lightMode ? 'bg-white text-black shadow-md' : 'bg-[#222222]';
+        return lightMode ? 'bg-white text-black shadow-md' : is_subscribed? 'bg-black' : 'bg-[#222222]';
     };
 
     const isShowHamburgerMenu = (): boolean =>
-        !HIDE_HAMBURGER_MENU_ON.includes(router.pathname);
-
+        !LEARNING_PAGES.some(path => router.asPath.includes(path)) || (LEARNING_PAGES.some(path => router.asPath.includes(path)) && !is_subscribed && !isDesktopBreakpoints);
     const onMouseLeaveNavbar = (): void => {
         if (isHovered) setHovered(false);
         if (isProfileHovered) setProfileHovered(false);
@@ -190,7 +189,7 @@ const Navbar = ({
                             {isDesktopBreakpoints ? 'Gradient' : 'G'}
                         </span>
                     </Link>
-                    {!showSidebar && isDesktopBreakpoints && (
+                    {isDesktopBreakpoints && !is_subscribed && (
                         <div className="flex items-center ml-7 gap-6">
                             <Link
                                 href={'/kelas'}
@@ -252,7 +251,7 @@ const Navbar = ({
                     )}
                     {showSidebar &&
                         fullHeightSidebar &&
-                        (isAuthenticated || isLandingPageRevampOn) && (
+                        (isAuthenticated || isLandingPageRevampOn) && is_subscribed && (
                             <div className="hidden md:block w-[250px] h-[64px] fixed top-0 left-0 bg-[#121212] z-[-1]" />
                         )}
                     <LeftNavbarMenu
@@ -319,8 +318,8 @@ const Navbar = ({
                                     {isLandingPageRevampOn ? (
                                         <div className="flex gap-2">
                                             <Button
-                                                variant="tertiary"
-                                                className="text-sm lg:text-base"
+                                                variant="custom"
+                                                className="text-sm lg:text-base text-[#B6A6F3]"
                                                 href="/masuk"
                                                 eventName="Login Button on Navbar">
                                                 Masuk
@@ -362,8 +361,8 @@ const Navbar = ({
                                 isLandingPageRevampOn ? (
                                     <div className="flex gap-2">
                                         <Button
-                                            variant="tertiary"
-                                            className="text-xs"
+                                            variant="custom"
+                                            className="text-sm lg:text-base text-[#B6A6F3]"
                                             href="/masuk"
                                             eventName="Login Button on Navbar">
                                             Masuk
@@ -502,6 +501,7 @@ const Navbar = ({
             <MobileSidebar
                 openSidebar={openSidebar}
                 setOpenSidebar={setOpenSidebar}
+                configData={configData}
             />
         </header>
     );

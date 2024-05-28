@@ -1,4 +1,5 @@
 import { cn } from 'commons/utils';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -39,11 +40,12 @@ const APPBAR_NAV: AppbarNav[] = [
 ];
 const Appbar = (): JSX.Element | null => {
     const router = useRouter();
+    const { is_subscribed } = useCourseSubscription()
     const isShowAppbar = (): boolean =>
         DISPLAYED_ROUTES.includes(router.asPath) ||
         DISPLAYED_ROUTES.includes(router.pathname);
 
-    return isShowAppbar() ? (
+    return isShowAppbar() && is_subscribed ? (
         <div className="btm-nav bg-[#121212] md:hidden" style={{ zIndex: 11 }}>
             {APPBAR_NAV.map((menu) => (
                 <Link
