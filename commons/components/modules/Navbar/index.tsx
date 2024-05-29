@@ -195,7 +195,8 @@ const Navbar = ({
                         isShowHamburgerMenu() && (
                             <FiMenu
                                 className="lg:hidden"
-                                stroke="#666666"
+                                stroke="#ffffff"
+                                size={20}
                                 onClick={() => setOpenSidebar(true)}
                             />
                         )}

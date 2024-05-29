@@ -1,13 +1,59 @@
 import { cn } from 'commons/utils';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Dispatch, SetStateAction } from 'react';
-import { BiBookReader } from 'react-icons/bi';
+import { Dispatch, ReactNode, SetStateAction } from 'react';
+import { BiBookReader, BiSolidBookReader } from 'react-icons/bi';
 import { MdOutlineClose } from 'react-icons/md';
-import { RiBookOpenLine, RiQuestionnaireLine } from 'react-icons/ri';
+import {
+    RiBookOpenLine,
+    RiBookOpenFill,
+    RiQuestionnaireLine,
+    RiQuestionnaireFill
+} from 'react-icons/ri';
 import { useTracker } from 'tracker/tracker';
 import CommunityNotificationBadge from '../../elements/CommunityNotificationBadge';
 import { AnimatePresence, motion } from 'framer-motion';
+import { IconType } from 'react-icons/lib';
+
+const MOBILE_SIDEBAR_BUTTONS: MobileSidebarButtonProps[] = [
+    {
+        name: 'Class',
+        title: 'Kelas',
+        url: '/kelas',
+        IconActive: BiSolidBookReader,
+        IconUnactive: BiBookReader
+    },
+    {
+        name: 'Library',
+        title: 'Perpustakaan',
+        url: '/astronotes',
+        IconActive: RiBookOpenFill,
+        IconUnactive: RiBookOpenLine,
+        className: 'mt-4',
+        subMenus: [
+            {
+                name: 'All Books',
+                title: 'Semua',
+                url: '/astronotes?tab=all'
+            },
+            {
+                name: 'Textbook Solution',
+                title: 'Textbook Solution',
+                url: '/astronotes?tab=text-book'
+            },
+            {
+                name: 'Question Bank',
+                title: 'Bank Soal',
+                url: '/astronotes?tab=bank-soal'
+            },
+            {
+                name: 'Astronotes',
+                title: 'Astronotes',
+                url: '/astronotes?tab=astronotes'
+            }
+        ]
+    }
+];
 
 const MobileSidebar = ({
     openSidebar,
@@ -18,10 +64,6 @@ const MobileSidebar = ({
     setOpenSidebar: Dispatch<SetStateAction<boolean>>;
     configData?: ConfigResponse;
 }): JSX.Element => {
-    const route = useRouter();
-    const tracker = useTracker();
-    const { pathname } = route;
-
     return (
         <AnimatePresence>
             {openSidebar && (
@@ -42,104 +84,109 @@ const MobileSidebar = ({
                         />
                     </header>
                     <div className="flex flex-col gap-[1rem] px-6 py-4">
-                        <Link
-                            href={'/kelas'}
-                            onClick={() => {
-                                tracker?.genericTrack('Click Class Navigation');
-                            }}>
-                            <span
-                                className={`flex gap-4 cursor-pointer ${
-                                    pathname === '/kelas'
-                                        ? 'text-[#CCCCCC]'
-                                        : 'text-[#999999]'
-                                }  hover:text-[#666666]`}>
-                                <BiBookReader size={20} />
-                                Kelas
-                            </span>
-                        </Link>
-                        <Link
-                            href={'/astronotes'}
-                            onClick={() => {
-                                tracker?.genericTrack(
-                                    'Click Library Navigation'
-                                );
-                            }}>
-                            <span
-                                className={cn(
-                                    'flex gap-4 cursor-pointer hover:text-[#666666] mt-4',
-                                    pathname.includes('/astronotes')
-                                        ? 'text-[#CCCCCC]'
-                                        : 'text-[#999999]'
-                                )}>
-                                <RiBookOpenLine size={20} />
-                                Perpustakaan
-                            </span>
-                        </Link>
-                        <Link
-                            href={'/astronotes?tab=text-book'}
-                            onClick={() => {
-                                tracker?.genericTrack(
-                                    'Click Astronotes Navigation'
-                                );
-                            }}
-                            className={cn(
-                                'flex cursor-pointer hover:text-[#666666] ml-9',
-                                pathname.includes('/astronotes?tab=text-book')
-                                    ? 'text-[#CCCCCC]'
-                                    : 'text-[#999999]'
-                            )}>
-                            Textbook Solution
-                        </Link>
-                        <Link
-                            href={'/astronotes?tab=bank-soal'}
-                            onClick={() => {
-                                tracker?.genericTrack(
-                                    'Click Astronotes Navigation'
-                                );
-                            }}
-                            className={cn(
-                                'flex cursor-pointer hover:text-[#666666] ml-9',
-                                pathname.includes('/astronotes?tab=bank-soal')
-                                    ? 'text-[#CCCCCC]'
-                                    : 'text-[#999999]'
-                            )}>
-                            Bank Soal
-                        </Link>
-                        <Link
-                            href={'/astronotes?tab=astronotes'}
-                            onClick={() => {
-                                tracker?.genericTrack(
-                                    'Click Astronotes Navigation'
-                                );
-                            }}
-                            className={cn(
-                                'flex cursor-pointer hover:text-[#666666] ml-9',
-                                pathname.includes('/astronotes?tab=astronotes')
-                                    ? 'text-[#CCCCCC]'
-                                    : 'text-[#999999]'
-                            )}>
-                            Astronotes
-                        </Link>
+                        {MOBILE_SIDEBAR_BUTTONS.map(
+                            ({
+                                name,
+                                title,
+                                url,
+                                IconActive,
+                                IconUnactive,
+                                className,
+                                subMenus
+                            }) => (
+                                <MobileSidebarButton
+                                    key={name}
+                                    name={name}
+                                    title={title}
+                                    url={url}
+                                    IconActive={IconActive}
+                                    IconUnactive={IconUnactive}
+                                    className={className}
+                                    subMenus={subMenus}
+                                />
+                            )
+                        )}
                         {configData?.configs.is_community_config_enabled && (
-                            <span
-                                className={`flex items-center gap-4 cursor-pointer mt-4 ${
-                                    pathname === '/komunitas'
-                                        ? 'text-[#CCCCCC]'
-                                        : 'text-[#999999]'
-                                }  hover:text-[#666666]`}
-                                onClick={() => {
-                                    route.push('/komunitas');
-                                }}
-                                aria-hidden>
-                                <RiQuestionnaireLine size={20} />
-                                Komunitas
+                            <MobileSidebarButton
+                                name="Komunitas"
+                                title="Komunitas"
+                                url="/komunitas"
+                                IconActive={RiQuestionnaireFill}
+                                IconUnactive={RiQuestionnaireLine}
+                                className="mt-4"
+                            >
                                 <CommunityNotificationBadge />
-                            </span>
+                            </MobileSidebarButton>
                         )}
                     </div>
                 </motion.div>
             )}
         </AnimatePresence>
+    );
+};
+
+type MobileSidebarButtonProps = {
+    name: string;
+    title: string;
+    url: string;
+    IconActive?: IconType;
+    IconUnactive?: IconType;
+    className?: string;
+    subMenus?: MobileSidebarButtonProps[];
+    children?: ReactNode;
+};
+
+const MobileSidebarButton = ({
+    name,
+    title,
+    url,
+    IconActive,
+    IconUnactive,
+    className,
+    subMenus,
+    children
+}: MobileSidebarButtonProps): JSX.Element => {
+    const ACTIVE_STATE = 'text-white font-bold';
+    const UNACTIVE_STATE = 'text-[#CCCCCC] font-medium';
+    const tracker = useTracker();
+    const route = useRouter();
+    const { asPath } = route;
+
+    return (
+        <>
+            <Link
+                href={url}
+                className={className}
+                onClick={() => {
+                    tracker?.genericTrack(`Click${name} Navigation`);
+                }}>
+                <span
+                    className={cn(
+                        'flex gap-4 cursor-pointer hover:text-[#666666] items-center',
+                        asPath.includes(url) ||
+                            asPath === url ||
+                            (name === 'All Books' && asPath === '/astronotes')
+                            ? ACTIVE_STATE
+                            : UNACTIVE_STATE
+                    )}>
+                    {asPath.includes(url)
+                        ? IconActive && <IconActive size={20} />
+                        : IconUnactive && <IconUnactive size={20} />}
+                    {title}
+                    {children}
+                </span>
+            </Link>
+            {subMenus?.map(({ name, title, url, className, subMenus }) => (
+                <MobileSidebarButton
+                    key={name}
+                    name={name}
+                    title={title}
+                    url={url}
+                    className={`ml-9 ${className}`}
+                    subMenus={subMenus}
+                />
+            ))}
+        </>
     );
 };
 
