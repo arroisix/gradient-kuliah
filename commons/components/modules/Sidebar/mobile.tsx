@@ -149,7 +149,6 @@ const MobileSidebarButton = ({
     const UNACTIVE_STATE = 'text-[#CCCCCC] font-medium';
     const tracker = useTracker();
     const route = useRouter();
-    const { asPath } = route;
 
     return (
         <>
@@ -162,13 +161,13 @@ const MobileSidebarButton = ({
                 <span
                     className={cn(
                         'flex gap-4 cursor-pointer hover:text-[#666666] items-center',
-                        asPath.includes(url) ||
-                            asPath === url ||
-                            (name === 'All Books' && asPath === '/astronotes')
+                        route.asPath.includes(url) ||
+                            route.asPath === url ||
+                            (name === 'All Books' && route.asPath === '/astronotes')
                             ? ACTIVE_STATE
                             : UNACTIVE_STATE
                     )}>
-                    {asPath.includes(url)
+                    {route.asPath.includes(url)
                         ? IconActive && <IconActive size={20} />
                         : IconUnactive && <IconUnactive size={20} />}
                     {title}

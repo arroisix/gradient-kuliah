@@ -1,11 +1,15 @@
+import Instagram from 'commons/components/elements/Icons/Instagram';
+import LinkedIn from 'commons/components/elements/Icons/LinkedIn';
+import TikTok from 'commons/components/elements/Icons/TikTok';
+import Twitter from 'commons/components/elements/Icons/Twitter';
+import Youtube from 'commons/components/elements/Icons/Youtube';
 import { cn } from 'commons/utils';
 import Link from 'next/link';
-import { AiFillInstagram, AiFillLinkedin, AiFillYoutube } from 'react-icons/ai';
-import { BsTwitterX, BsWhatsapp } from 'react-icons/bs';
+import { useRouter } from 'next/router';
+import { BsWhatsapp } from 'react-icons/bs';
 import { FaInstagram } from 'react-icons/fa';
 import { IconType } from 'react-icons/lib';
 import { MdMailOutline } from 'react-icons/md';
-import { RiTiktokFill } from 'react-icons/ri';
 
 type FooterItemProps = {
     title: string;
@@ -70,9 +74,8 @@ const ITEMS: FooterItemProps[] = [
 ];
 
 type FooterSocialMediaProps = {
-    Icon: IconType;
+    Icon: () => JSX.Element;
     url: string;
-    className?: string;
 };
 
 const SOCIAL_MEDIAS: FooterSocialMediaProps[] = [
@@ -82,27 +85,23 @@ const SOCIAL_MEDIAS: FooterSocialMediaProps[] = [
     //     className: 'text-[#4A9CEC]'
     // },
     {
-        Icon: BsTwitterX,
-        url: 'https://x.com/gradient_idn?lang=en',
-        className: 'text-white'
+        Icon: Twitter,
+        url: 'https://x.com/gradient_idn?lang=en'
     },
     {
-        Icon: AiFillYoutube,
-        url: 'https://www.youtube.com/@gradient3012',
-        className: 'text-[#F50000]'
+        Icon: Youtube,
+        url: 'https://www.youtube.com/@gradient3012'
     },
     {
-        Icon: AiFillInstagram,
-        url: 'https://www.instagram.com/gradient_idn/',
-        className: 'text-[#C81762]'
+        Icon: Instagram,
+        url: 'https://www.instagram.com/gradient_idn/'
     },
     {
-        Icon: AiFillLinkedin,
-        url: 'https://www.linkedin.com/company/gradient-idn/',
-        className: 'text-[#1364A8]'
+        Icon: LinkedIn,
+        url: 'https://www.linkedin.com/company/gradient-idn/'
     },
     {
-        Icon: RiTiktokFill,
+        Icon: TikTok,
         url: 'https://www.tiktok.com/@gradientacademy'
     }
 ];
@@ -113,7 +112,7 @@ const Footer = (): JSX.Element => {
     const CONTACT_BODY_GAP = 2;
 
     return (
-        <footer className="w-full flex flex-col bg-[#121212] gap-8 lg:gap-12 px-6 md:px-12 xl:px-24 pt-6 md:pt-8 pb-5 md:pb-6">
+        <footer id='footer' className="w-full flex flex-col bg-[#121212] gap-8 lg:gap-12 px-6 md:px-12 xl:px-24 pt-6 md:pt-8 pb-5 md:pb-6">
             <div className="flex flex-col-reverse lg:flex-row gap-8 lg:gap-0 w-full">
                 <div className="w-full flex flex-col lg:flex-row gap-7 xl:gap-12">
                     {ITEMS.map((item) => (
@@ -188,13 +187,12 @@ const Footer = (): JSX.Element => {
                     <span className="font-body text-sm text-[#BBBBBB] text-center lg:text-left">
                         © 2023-2024 Gradient Academy. All rights reserved.
                     </span>
-                    <div className="flex flex-row gap-4">
-                        {SOCIAL_MEDIAS.map(({ Icon, url, className }, idx) => (
+                    <div className="flex flex-row gap-4 items-center">
+                        {SOCIAL_MEDIAS.map(({ Icon, url }, idx) => (
                             <SocialMedia
                                 key={`social-media-${idx + 1}`}
                                 Icon={Icon}
                                 url={url}
-                                className={className}
                             />
                         ))}
                     </div>
@@ -217,10 +215,12 @@ const Body = ({
     url: string;
     Icon?: IconType;
 }): JSX.Element => {
+    const router = useRouter()
+
     return (
         <Link
             href={url}
-            className="flex items-center gap-2 font-body text-sm text-[#BBBBBB]"
+            className={cn('flex items-center gap-2 font-body text-sm', router.asPath === url? 'text-[#FFFFFF]' : 'text-[#BBBBBB]')}
             target={Icon ? '_blank' : '_self'}>
             {Icon && <Icon className="w-[18px] h-[18px] text-[#7264EB]" />}
             {body}
@@ -230,12 +230,11 @@ const Body = ({
 
 const SocialMedia = ({
     Icon,
-    url,
-    className
+    url
 }: FooterSocialMediaProps): JSX.Element => {
     return (
         <Link href={url}>
-            <Icon className={cn('w-6 h-6', className)} />
+            <Icon />
         </Link>
     );
 };
