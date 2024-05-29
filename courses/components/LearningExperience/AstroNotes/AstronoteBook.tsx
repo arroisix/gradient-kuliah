@@ -135,7 +135,7 @@ export const AstronoteBookCard = ({
                         'bg-[#4B93E8]': book.category_name === 'Bank Soal'
                     }
                 )}>
-                {book.category_name}
+                {book.category_name === 'Textbook'? 'Textbook Solution' : book.category_name}
             </div>
         </>
     );
