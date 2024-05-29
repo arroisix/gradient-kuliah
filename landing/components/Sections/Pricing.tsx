@@ -17,7 +17,7 @@ const Pricing = ({
                 isTabletBreakpoints && '!px-0'
             )}>
             <h2 className="text-xl font-extrabold leading-relaxed text-center">
-                Tertarik? Beli sekarang untuk mengakses seluruh materi
+                Tertarik? Langganan untuk mengakses seluruh materi
             </h2>
             <Paywall
                 pricingData={pricingData}

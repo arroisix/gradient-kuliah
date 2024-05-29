@@ -10,7 +10,6 @@ const Popular = ({
     majorData,
     classes,
     popularBooks,
-    selectedMajor,
     setSelectedMajor,
     isLoading
 }: LandingPopularProps): JSX.Element => {
@@ -39,14 +38,14 @@ const Popular = ({
                 </select>
             </div>
             {isLoading ? (
-                <div className="w-full flex gap-4 md:gap-5 xl:gap-8 lg:grid lg:grid-cols-4 carousel carousel-center">
+                <div className="w-full flex gap-5 xl:gap-8 lg:grid lg:grid-cols-4 carousel carousel-center">
                     <Skeleton
                         repeat={4}
                         className="w-[150px] lg:w-full h-60 carousel-item flex-none lg:!px-0 !mb-0 !py-0"
                     />
                 </div>
             ) : (
-                <div className="w-full flex flex-1 gap-4 md:gap-5 xl:gap-6 overflow-x-auto no-scrollbar lg:justify-center">
+                <div className="w-full flex flex-1 gap-5 xl:gap-6 overflow-x-auto no-scrollbar lg:justify-center">
                     {type === 'book'
                         ? popularBooks?.map(
                               ({
@@ -58,7 +57,7 @@ const Popular = ({
                               }) => (
                                   <div
                                       key={id}
-                                      className="min-w-[47%] md:min-w-[28%] lg:min-w-[18%] max-w-[47%] md:max-w-[28%] lg:max-w-[18%]">
+                                      className="min-w-[57%] md:min-w-[30%] lg:min-w-[18%] max-w-[57%] md:max-w-[30%] lg:max-w-[18%]">
                                       <DashboardCard
                                           id={id}
                                           type={category_name}
@@ -80,7 +79,7 @@ const Popular = ({
                               ({ id, thumbnail, course_name, slug }) => (
                                   <div
                                       key={id}
-                                      className="min-w-[47%] md:min-w-[28%] lg:min-w-[23%] max-w-[47%] md:max-w-[28%] lg:max-w-[23%]">
+                                      className="min-w-[57%] md:min-w-[30%] lg:min-w-[23%] max-w-[57%] md:max-w-[30%] lg:max-w-[23%]">
                                       <DashboardCard
                                           id={id}
                                           type="Video"
@@ -101,7 +100,7 @@ const Popular = ({
                 </div>
             )}
             <Link
-                href={`/dashboard?recommendation=${selectedMajor}`}
+                href={type === 'book' ? '/astronotes' : '/kelas'}
                 onClick={() => {
                     const sectionType =
                         type.charAt(0).toUpperCase() + type.slice(1);

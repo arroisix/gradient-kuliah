@@ -46,7 +46,6 @@ type LandingPopularProps = {
     majorData?: MajorOptions[];
     classes?: Course[];
     popularBooks?: LandingPopularBook[];
-    selectedMajor: string;
     setSelectedMajor: Dispatch<SetStateAction<string>>;
     isLoading: boolean;
 };

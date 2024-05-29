@@ -80,7 +80,7 @@ const MobileSidebar = ({
                         <MdOutlineClose
                             size={24}
                             onClick={() => setOpenSidebar(false)}
-                            className="text-[#666666]"
+                            className="text-[#ffffff]"
                         />
                     </header>
                     <div className="flex flex-col gap-[1rem] px-6 py-4">

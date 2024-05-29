@@ -42,7 +42,7 @@ const Hero = (): JSX.Element => {
                         )}>
                         <Link
                             href={isAuthenticated ? '/langganan' : '/daftar'}
-                            className="bg-accent-purple rounded-full text-white font-body py-2.5 px-12 text-sm lg:text-base w-full text-center w-full"
+                            className="bg-accent-purple rounded-full text-white font-body font-bold py-2.5 px-12 text-sm lg:text-base w-full text-center w-full"
                             onClick={() =>
                                 handleClick(
                                     isAuthenticated
@@ -59,10 +59,10 @@ const Hero = (): JSX.Element => {
                         <Link
                             href={
                                 isAuthenticated
-                                    ? 'https://wa.me/085179765182'
+                                    ? 'https://wa.me/+6285179893859'
                                     : '#features'
                             }
-                            className="bg-neutral-700 rounded-full text-white py-2.5 px-12 text-sm lg:text-base text-center w-full"
+                            className="bg-neutral-700 rounded-full text-white font-bold py-2.5 px-12 text-sm lg:text-base text-center w-full"
                             onClick={() =>
                                 handleClick(
                                     isAuthenticated

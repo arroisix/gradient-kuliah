@@ -63,7 +63,6 @@ const LandingContainer = ({
                 type="book"
                 majorData={majorData}
                 popularBooks={popularBooks}
-                selectedMajor={selectedBookMajor}
                 setSelectedMajor={setSelectedBookMajor}
                 isLoading={isLoadingBooksData}
             />
@@ -71,7 +70,6 @@ const LandingContainer = ({
                 type="course"
                 majorData={majorData}
                 classes={classes}
-                selectedMajor={selectedCourseMajor}
                 setSelectedMajor={setSelectedCourseMajors}
                 isLoading={isLoadingCoursesData}
             />

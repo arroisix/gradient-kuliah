@@ -150,8 +150,8 @@ const Footer = (): JSX.Element => {
                                 Icon={MdMailOutline}
                             />
                             <Body
-                                body="085179765182"
-                                url="https://wa.me/085179765182"
+                                body="+6285179893859"
+                                url="https://wa.me/+6285179893859"
                                 Icon={BsWhatsapp}
                             />
                         </div>
