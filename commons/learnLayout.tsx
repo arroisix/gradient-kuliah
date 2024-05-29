@@ -79,11 +79,9 @@ const LearnLayout = ({
                     <div
                         className={cn(
                             'w-full',
-                            showSidebar &&
-                                fullHeightSidebar &&
-                                is_subscribed ?
-                                    'md:ml-[250px]' :
-                                    'lg:px-16 xl:px-12'
+                            showSidebar && fullHeightSidebar && is_subscribed
+                                ? 'md:ml-[250px]'
+                                : 'lg:px-16 xl:px-12'
                         )}>
                         {isAuthenticated &&
                             isCoursePage &&
