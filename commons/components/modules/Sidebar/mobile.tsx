@@ -1,7 +1,4 @@
-import { cn } from 'commons/utils';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { Dispatch, ReactNode, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { BiBookReader, BiSolidBookReader } from 'react-icons/bi';
 import { MdOutlineClose } from 'react-icons/md';
 import {
@@ -10,12 +7,11 @@ import {
     RiQuestionnaireLine,
     RiQuestionnaireFill
 } from 'react-icons/ri';
-import { useTracker } from 'tracker/tracker';
 import CommunityNotificationBadge from '../../elements/CommunityNotificationBadge';
 import { AnimatePresence, motion } from 'framer-motion';
-import { IconType } from 'react-icons/lib';
+import NavigationButton from 'commons/components/elements/NavigationButton';
 
-const MOBILE_SIDEBAR_BUTTONS: MobileSidebarButtonInterface[] = [
+const MOBILE_SIDEBAR_BUTTONS: NavigationButtonInterface[] = [
     {
         name: 'Class',
         title: 'Kelas',
@@ -94,7 +90,7 @@ const MobileSidebar = ({
                                 className,
                                 subMenus
                             }) => (
-                                <MobileSidebarButton
+                                <NavigationButton
                                     key={name}
                                     name={name}
                                     title={title}
@@ -108,8 +104,8 @@ const MobileSidebar = ({
                             )
                         )}
                         {configData?.configs.is_community_config_enabled && (
-                            <MobileSidebarButton
-                                name="Komunitas"
+                            <NavigationButton
+                                name="Community"
                                 title="Komunitas"
                                 url="/komunitas"
                                 IconActive={RiQuestionnaireFill}
@@ -117,84 +113,12 @@ const MobileSidebar = ({
                                 setOpenSidebar={setOpenSidebar}
                                 className="mt-4">
                                 <CommunityNotificationBadge />
-                            </MobileSidebarButton>
+                            </NavigationButton>
                         )}
                     </div>
                 </motion.div>
             )}
         </AnimatePresence>
-    );
-};
-
-interface MobileSidebarButtonInterface {
-    name: string;
-    title: string;
-    url: string;
-    IconActive?: IconType;
-    IconUnactive?: IconType;
-    className?: string;
-    subMenus?: MobileSidebarButtonInterface[];
-    children?: ReactNode;
-}
-
-interface MobileSidebarButtonProps extends MobileSidebarButtonInterface {
-    setOpenSidebar: Dispatch<SetStateAction<boolean>>;
-}
-
-const MobileSidebarButton = ({
-    name,
-    title,
-    url,
-    IconActive,
-    IconUnactive,
-    className,
-    subMenus,
-    children,
-    setOpenSidebar
-}: MobileSidebarButtonProps): JSX.Element => {
-    const ACTIVE_STATE = 'text-white font-bold';
-    const UNACTIVE_STATE = 'text-[#CCCCCC] font-medium';
-    const tracker = useTracker();
-    const route = useRouter();
-
-    return (
-        <>
-            <Link
-                href={url}
-                className={className}
-                onClick={() => {
-                    tracker?.genericTrack(`Click${name} Navigation`);
-                    setOpenSidebar(false);
-                }}>
-                <span
-                    className={cn(
-                        'flex gap-4 cursor-pointer hover:text-[#666666] items-center',
-                        route.asPath.includes(url) ||
-                            route.asPath === url ||
-                            (name === 'All Books' &&
-                                route.asPath === '/astronotes')
-                            ? ACTIVE_STATE
-                            : UNACTIVE_STATE
-                    )}>
-                    {route.asPath.includes(url)
-                        ? IconActive && <IconActive size={20} />
-                        : IconUnactive && <IconUnactive size={20} />}
-                    {title}
-                    {children}
-                </span>
-            </Link>
-            {subMenus?.map(({ name, title, url, className, subMenus }) => (
-                <MobileSidebarButton
-                    key={name}
-                    name={name}
-                    title={title}
-                    url={url}
-                    className={`ml-9 ${className}`}
-                    subMenus={subMenus}
-                    setOpenSidebar={setOpenSidebar}
-                />
-            ))}
-        </>
     );
 };
 

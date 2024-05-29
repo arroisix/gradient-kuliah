@@ -27,16 +27,39 @@ import { useGetDetailPacketOfferQuery } from 'payment/redux/api/subscriptionApi'
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import clsx from 'clsx';
-import { BiBookReader } from 'react-icons/bi';
-import { RiBookOpenLine, RiQuestionnaireLine } from 'react-icons/ri';
+import { BiBookReader, BiSolidBookReader } from 'react-icons/bi';
+import {
+    RiBookOpenLine,
+    RiQuestionnaireLine,
+    RiBookOpenFill,
+    RiQuestionnaireFill
+} from 'react-icons/ri';
 import { cn } from 'commons/utils';
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
+import NavigationButton from 'commons/components/elements/NavigationButton';
 
 export const LEARNING_PAGES = [
     '/dashboard',
     '/komunitas',
     '/astronotes',
     '/kelas'
+];
+
+const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
+    {
+        name: 'Class',
+        title: 'Kelas',
+        url: '/kelas',
+        IconActive: BiSolidBookReader,
+        IconUnactive: BiBookReader
+    },
+    {
+        name: 'Library',
+        title: 'Perpustakaan',
+        url: '/astronotes',
+        IconActive: RiBookOpenFill,
+        IconUnactive: RiBookOpenLine
+    }
 ];
 
 const Navbar = ({
@@ -70,7 +93,6 @@ const Navbar = ({
     const [openSidebar, setOpenSidebar] = useState(false);
     const { height } = useWindowSize();
     const router = useRouter();
-    const { pathname } = router;
     const [scrollPosition, setScrollPosition] = useState(0);
     const handleScroll = (): void => {
         const position = window.pageYOffset;
@@ -209,66 +231,39 @@ const Navbar = ({
                             {isDesktopBreakpoints ? 'Gradient' : 'G'}
                         </span>
                     </Link>
-                    {isDesktopBreakpoints && !is_subscribed && (
-                        <div className="flex items-center ml-7 gap-6">
-                            <Link
-                                href={'/kelas'}
-                                onClick={() => {
-                                    tracker?.genericTrack(
-                                        'Click Class Navigation'
-                                    );
-                                }}>
-                                <span
-                                    className={`flex gap-4 cursor-pointer ${
-                                        pathname === '/kelas'
-                                            ? 'text-[#CCCCCC]'
-                                            : 'text-[#999999]'
-                                    }  hover:text-[#666666]`}>
-                                    <BiBookReader size={20} />
-                                    Kelas
-                                </span>
-                            </Link>
-                            <Link
-                                href={'/astronotes'}
-                                onClick={() => {
-                                    tracker?.genericTrack(
-                                        'Click Library Navigation'
-                                    );
-                                }}>
-                                <span
-                                    className={cn(
-                                        'flex gap-4 cursor-pointer hover:text-[#666666]',
-                                        pathname.includes('/astronotes')
-                                            ? 'text-[#CCCCCC]'
-                                            : 'text-[#999999]'
-                                    )}>
-                                    <RiBookOpenLine size={20} />
-                                    Perpustakaan
-                                </span>
-                            </Link>
-                            {configData?.configs
-                                .is_community_config_enabled && (
-                                <Link
-                                    href={'/komunitas'}
-                                    onClick={() => {
-                                        tracker?.genericTrack(
-                                            'Click Community Navigation'
-                                        );
-                                    }}>
-                                    <span
-                                        className={cn(
-                                            'flex gap-4 cursor-pointer hover:text-[#666666]',
-                                            pathname.includes('/komunitas')
-                                                ? 'text-[#CCCCCC]'
-                                                : 'text-[#999999]'
-                                        )}>
-                                        <RiQuestionnaireLine size={20} />
-                                        Komunitas
-                                    </span>
-                                </Link>
-                            )}
-                        </div>
-                    )}
+                    <div
+                        className={cn(
+                            'flex items-center ml-7 gap-6',
+                            (!isDesktopBreakpoints || is_subscribed) && 'hide'
+                        )}>
+                        {UNAUTHENTICATED_NAVBAR_BUTTONS.map(
+                            ({
+                                name,
+                                title,
+                                url,
+                                IconActive,
+                                IconUnactive
+                            }) => (
+                                <NavigationButton
+                                    key={name}
+                                    name={name}
+                                    title={title}
+                                    url={url}
+                                    IconActive={IconActive}
+                                    IconUnactive={IconUnactive}
+                                />
+                            )
+                        )}
+                        {configData?.configs.is_community_config_enabled && (
+                            <NavigationButton
+                                name="Community"
+                                title="Komunitas"
+                                url="/komunitas"
+                                IconActive={RiQuestionnaireFill}
+                                IconUnactive={RiQuestionnaireLine}
+                            />
+                        )}
+                    </div>
                     {showSidebar &&
                         fullHeightSidebar &&
                         (isAuthenticated || isLandingPageRevampOn) &&
