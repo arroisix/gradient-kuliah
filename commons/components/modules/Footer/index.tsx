@@ -112,7 +112,9 @@ const Footer = (): JSX.Element => {
     const CONTACT_BODY_GAP = 2;
 
     return (
-        <footer id='footer' className="w-full flex flex-col bg-[#121212] gap-8 lg:gap-12 px-6 md:px-12 xl:px-24 pt-6 md:pt-8 pb-5 md:pb-6">
+        <footer
+            id="footer"
+            className="w-full flex flex-col bg-[#121212] gap-8 lg:gap-12 px-6 md:px-12 xl:px-24 pt-6 md:pt-8 pb-5 md:pb-6">
             <div className="flex flex-col-reverse lg:flex-row gap-8 lg:gap-0 w-full">
                 <div className="w-full flex flex-col lg:flex-row gap-7 xl:gap-12">
                     {ITEMS.map((item) => (
@@ -215,12 +217,15 @@ const Body = ({
     url: string;
     Icon?: IconType;
 }): JSX.Element => {
-    const router = useRouter()
+    const router = useRouter();
 
     return (
         <Link
             href={url}
-            className={cn('flex items-center gap-2 font-body text-sm', router.asPath === url? 'text-[#FFFFFF]' : 'text-[#BBBBBB]')}
+            className={cn(
+                'flex items-center gap-2 font-body text-sm',
+                router.asPath === url ? 'text-[#FFFFFF]' : 'text-[#BBBBBB]'
+            )}
             target={Icon ? '_blank' : '_self'}>
             {Icon && <Icon className="w-[18px] h-[18px] text-[#7264EB]" />}
             {body}
@@ -228,10 +233,7 @@ const Body = ({
     );
 };
 
-const SocialMedia = ({
-    Icon,
-    url
-}: FooterSocialMediaProps): JSX.Element => {
+const SocialMedia = ({ Icon, url }: FooterSocialMediaProps): JSX.Element => {
     return (
         <Link href={url}>
             <Icon />

@@ -163,7 +163,8 @@ const MobileSidebarButton = ({
                         'flex gap-4 cursor-pointer hover:text-[#666666] items-center',
                         route.asPath.includes(url) ||
                             route.asPath === url ||
-                            (name === 'All Books' && route.asPath === '/astronotes')
+                            (name === 'All Books' &&
+                                route.asPath === '/astronotes')
                             ? ACTIVE_STATE
                             : UNACTIVE_STATE
                     )}>
