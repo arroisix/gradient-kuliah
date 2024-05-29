@@ -135,7 +135,7 @@ interface MobileSidebarButtonInterface {
     className?: string;
     subMenus?: MobileSidebarButtonInterface[];
     children?: ReactNode;
-};
+}
 
 interface MobileSidebarButtonProps extends MobileSidebarButtonInterface {
     setOpenSidebar: Dispatch<SetStateAction<boolean>>;
@@ -164,7 +164,7 @@ const MobileSidebarButton = ({
                 className={className}
                 onClick={() => {
                     tracker?.genericTrack(`Click${name} Navigation`);
-                    setOpenSidebar(false)
+                    setOpenSidebar(false);
                 }}>
                 <span
                     className={cn(
