@@ -15,7 +15,7 @@ import CommunityNotificationBadge from '../../elements/CommunityNotificationBadg
 import { AnimatePresence, motion } from 'framer-motion';
 import { IconType } from 'react-icons/lib';
 
-const MOBILE_SIDEBAR_BUTTONS: MobileSidebarButtonProps[] = [
+const MOBILE_SIDEBAR_BUTTONS: MobileSidebarButtonInterface[] = [
     {
         name: 'Class',
         title: 'Kelas',
@@ -103,6 +103,7 @@ const MobileSidebar = ({
                                     IconUnactive={IconUnactive}
                                     className={className}
                                     subMenus={subMenus}
+                                    setOpenSidebar={setOpenSidebar}
                                 />
                             )
                         )}
@@ -113,6 +114,7 @@ const MobileSidebar = ({
                                 url="/komunitas"
                                 IconActive={RiQuestionnaireFill}
                                 IconUnactive={RiQuestionnaireLine}
+                                setOpenSidebar={setOpenSidebar}
                                 className="mt-4">
                                 <CommunityNotificationBadge />
                             </MobileSidebarButton>
@@ -124,16 +126,20 @@ const MobileSidebar = ({
     );
 };
 
-type MobileSidebarButtonProps = {
+interface MobileSidebarButtonInterface {
     name: string;
     title: string;
     url: string;
     IconActive?: IconType;
     IconUnactive?: IconType;
     className?: string;
-    subMenus?: MobileSidebarButtonProps[];
+    subMenus?: MobileSidebarButtonInterface[];
     children?: ReactNode;
 };
+
+interface MobileSidebarButtonProps extends MobileSidebarButtonInterface {
+    setOpenSidebar: Dispatch<SetStateAction<boolean>>;
+}
 
 const MobileSidebarButton = ({
     name,
@@ -143,7 +149,8 @@ const MobileSidebarButton = ({
     IconUnactive,
     className,
     subMenus,
-    children
+    children,
+    setOpenSidebar
 }: MobileSidebarButtonProps): JSX.Element => {
     const ACTIVE_STATE = 'text-white font-bold';
     const UNACTIVE_STATE = 'text-[#CCCCCC] font-medium';
@@ -157,6 +164,7 @@ const MobileSidebarButton = ({
                 className={className}
                 onClick={() => {
                     tracker?.genericTrack(`Click${name} Navigation`);
+                    setOpenSidebar(false)
                 }}>
                 <span
                     className={cn(
@@ -183,6 +191,7 @@ const MobileSidebarButton = ({
                     url={url}
                     className={`ml-9 ${className}`}
                     subMenus={subMenus}
+                    setOpenSidebar={setOpenSidebar}
                 />
             ))}
         </>
