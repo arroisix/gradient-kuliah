@@ -188,7 +188,7 @@ const Navbar = ({
             className={`fixed top-0 left-0 w-full z-20 ${computeBgColor()} transition-all ease-in-out duration-200 flex flex-col`}
             onMouseEnter={() => setNavbarHovered(true)}
             onMouseLeave={onMouseLeaveNavbar}>
-            <div className="flex items-center justify-between w-full px-4 py-3 md:px-8 lg:px-24">
+            <div className={cn('flex items-center justify-between w-full px-4 py-3 md:px-8', is_subscribed? 'lg:pl-6 lg:pr-24' : 'lg:px-24')}>
                 <div className="flex items-center gap-4">
                     {(isLandingPageRevampOn ||
                         (!isLandingPageRevampOn && isAuthenticated)) &&
@@ -478,7 +478,7 @@ const Navbar = ({
                     <section
                         className={clsx(
                             showSidebar &&
-                                'md:max-w-[calc(100%-250px)] absolute right-0 top-[64px]',
+                                'md:max-w-[calc(100%-250px)] absolute right-0 top-[56px]',
                             'px-4 py-4 md:px-6 bg-[#121212] flex justify-between items-center w-full'
                         )}>
                         <p className="flex items-center gap-2 text-sm font-body">
