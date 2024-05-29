@@ -113,8 +113,7 @@ const MobileSidebar = ({
                                 url="/komunitas"
                                 IconActive={RiQuestionnaireFill}
                                 IconUnactive={RiQuestionnaireLine}
-                                className="mt-4"
-                            >
+                                className="mt-4">
                                 <CommunityNotificationBadge />
                             </MobileSidebarButton>
                         )}
