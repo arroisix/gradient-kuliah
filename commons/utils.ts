@@ -155,7 +155,7 @@ export const getCSChatRoom = (
 
     if (method === 'WA') {
         if (msg) {
-            return `https://api.whatsapp.com/send?phone=6285179765182&text=${msg}`;
+            return `https://api.whatsapp.com/send?phone=6285179893859&text=${msg}`;
         }
 
         return `https://api.whatsapp.com/send?phone=6285179765182&text=${encodeURIComponent(
