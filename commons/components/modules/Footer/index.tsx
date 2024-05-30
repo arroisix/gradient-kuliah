@@ -4,7 +4,7 @@ import TikTok from 'commons/components/elements/Icons/TikTok';
 import Twitter from 'commons/components/elements/Icons/Twitter';
 import Youtube from 'commons/components/elements/Icons/Youtube';
 import Link from 'next/link';
-import { getYear } from 'date-fns'
+import { getYear } from 'date-fns';
 import { BsWhatsapp } from 'react-icons/bs';
 import { FaInstagram } from 'react-icons/fa';
 import { IconType } from 'react-icons/lib';
@@ -109,7 +109,7 @@ const Footer = (): JSX.Element => {
     const TITLE_BODY_GAP = 4;
     const PRODUCT_BODY_GAP = 3;
     const CONTACT_BODY_GAP = 2;
-    const CURRENT_YEAR = getYear(new Date())
+    const CURRENT_YEAR = getYear(new Date());
 
     return (
         <footer
@@ -220,7 +220,7 @@ const Body = ({
     return (
         <Link
             href={url}
-            className='flex items-center gap-2 font-body text-sm text-[#BBBBBB]'
+            className="flex items-center gap-2 font-body text-sm text-[#BBBBBB]"
             target={Icon ? '_blank' : '_self'}>
             {Icon && <Icon className="w-[18px] h-[18px] text-[#7264EB]" />}
             {body}
