@@ -18,7 +18,6 @@ import MobileSidebar from '../Sidebar/mobile';
 import AuthContext from 'authentication/contexts/AuthProvider';
 import { useTracker } from 'tracker/tracker';
 import { useDebouncedCallback } from 'use-debounce';
-import LeftNavbarMenu from './components/LeftNavbarMenu';
 import UserProfile from './components/UserProfile';
 import UserProfileDropdown from './components/UserProfileDropdown';
 import NavMenuIcons from './components/NavMenuIcons';
@@ -116,7 +115,7 @@ const Navbar = ({
         }
 
         if (shouldTransparent) {
-            if (scrollPosition >= height / 2) {
+            if (height && scrollPosition >= height / 2) {
                 return is_subscribed ? 'bg-black' : 'bg-[#222222]';
             }
             return 'bg-transparent hover:bg-[#222222]';
@@ -150,8 +149,8 @@ const Navbar = ({
     };
 
     const isShowHamburgerMenu = (): boolean =>
-        !LEARNING_PAGES.some((path) => router.asPath.includes(path)) ||
-        (LEARNING_PAGES.some((path) => router.asPath.includes(path)) &&
+        !LEARNING_PAGES.some((page) => router.asPath === page) ||
+        (LEARNING_PAGES.some((page) => router.asPath === page) &&
             !is_subscribed &&
             !isDesktopBreakpoints);
     const onMouseLeaveNavbar = (): void => {
@@ -213,7 +212,7 @@ const Navbar = ({
             <div
                 className={cn(
                     'flex items-center justify-between w-full px-4 py-3 md:px-8',
-                    is_subscribed ? 'lg:pl-6 lg:pr-24' : 'lg:px-24'
+                    is_subscribed ? 'lg:pl-6 lg:pr-28' : 'lg:px-24'
                 )}>
                 <div className="flex items-center gap-4">
                     {(isLandingPageRevampOn ||
@@ -226,15 +225,22 @@ const Navbar = ({
                                 onClick={() => setOpenSidebar(true)}
                             />
                         )}
-                    <Link href={'/'}>
-                        <span className="text-2xl font-bold cursor-pointer font-[Urbanist]">
-                            {isDesktopBreakpoints ? 'Gradient' : 'G'}
+                    <Link href={is_subscribed ? '/dashboard' : '/'}>
+                        <span className="text-2xl font-bold cursor-pointer font-[Urbanist] lg:hidden">
+                            G
+                        </span>
+                        <span className="text-2xl font-bold cursor-pointer font-[Urbanist] hidden lg:flex">
+                            Gradient
                         </span>
                     </Link>
                     <div
                         className={cn(
-                            'flex items-center ml-7 gap-6',
-                            (!isDesktopBreakpoints || is_subscribed) && 'hide'
+                            'flex items-center ml-7 gap-6 hidden lg:flex',
+                            is_subscribed &&
+                                LEARNING_PAGES.some(
+                                    (page) => router.asPath === page
+                                ) &&
+                                '!hidden'
                         )}>
                         {UNAUTHENTICATED_NAVBAR_BUTTONS.map(
                             ({
@@ -270,10 +276,6 @@ const Navbar = ({
                         is_subscribed && (
                             <div className="hidden md:block w-[250px] h-[64px] fixed top-0 left-0 bg-[#121212] z-[-1]" />
                         )}
-                    <LeftNavbarMenu
-                        lightMode={lightMode}
-                        showSidebar={showSidebar}
-                    />
                 </div>
                 {paymentPage ? (
                     <Button
