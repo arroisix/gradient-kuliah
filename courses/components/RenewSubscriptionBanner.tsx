@@ -12,19 +12,21 @@ export default function RenewSubscriptionBanner({
 }): JSX.Element {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { is_subscribed } = useCourseSubscription();
-    const footerRef = useRef<HTMLElement | null>(null)
-    const { isMobileBreakpoints } = useWindowBreakpoints()
-    const [fixedBottom, setFixedBottom] = useState<number>(!isMobileBreakpoints? 32 : is_subscribed? 85 : 16)
-    const [bannerBottom, setBannerBottom] = useState<number>(fixedBottom)
+    const footerRef = useRef<HTMLElement | null>(null);
+    const { isMobileBreakpoints } = useWindowBreakpoints();
+    const [fixedBottom, setFixedBottom] = useState<number>(
+        !isMobileBreakpoints ? 32 : is_subscribed ? 85 : 16
+    );
+    const [bannerBottom, setBannerBottom] = useState<number>(fixedBottom);
 
     useEffect(() => {
-        setFixedBottom(!isMobileBreakpoints? 32 : is_subscribed? 85 : 16)
-        console.log(isMobileBreakpoints)
-    }, [isMobileBreakpoints, is_subscribed])
-    console.log(`fixedBottom: ${fixedBottom}`)
-    console.log(`bannerBottom: ${bannerBottom}`)
+        setFixedBottom(!isMobileBreakpoints ? 32 : is_subscribed ? 85 : 16);
+        console.log(isMobileBreakpoints);
+    }, [isMobileBreakpoints, is_subscribed]);
+    console.log(`fixedBottom: ${fixedBottom}`);
+    console.log(`bannerBottom: ${bannerBottom}`);
     useEffect(() => {
-        const footer = document.querySelector('footer')
+        const footer = document.querySelector('footer');
         footerRef.current = footer as HTMLElement;
 
         const adjustBannerPosition = () => {
@@ -40,7 +42,7 @@ export default function RenewSubscriptionBanner({
             } else {
                 setBannerBottom(0);
             }
-        }
+        };
 
         adjustBannerPosition();
         window.addEventListener('scroll', adjustBannerPosition);
@@ -48,15 +50,13 @@ export default function RenewSubscriptionBanner({
         return () => {
             window.removeEventListener('scroll', adjustBannerPosition);
         };
-    }, [is_subscribed])
+    }, [is_subscribed]);
 
     return (
         <div
             className={cn(
                 'fixed z-[15] left-[12px] right-[12px] md:right-[36px] bg-[#B73E32] px-4 md:px-6 py-3 md:py-4 rounded-lg',
-                is_subscribed
-                    ? 'md:left-[286px]'
-                    : 'md:left-[36px]'
+                is_subscribed ? 'md:left-[286px]' : 'md:left-[36px]'
             )}
             style={{ bottom: `${bannerBottom + fixedBottom}px` }}>
             <div className="flex items-center justify-between w-full">
