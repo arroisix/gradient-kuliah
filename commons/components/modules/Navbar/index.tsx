@@ -36,13 +36,7 @@ import {
 import { cn } from 'commons/utils';
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
 import NavigationButton from 'commons/components/elements/NavigationButton';
-
-export const LEARNING_PAGES = [
-    '/dashboard',
-    '/komunitas',
-    '/astronotes',
-    '/kelas'
-];
+import { LEARNING_PAGES } from 'commons/constants';
 
 const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
     {

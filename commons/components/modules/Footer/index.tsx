@@ -3,9 +3,8 @@ import LinkedIn from 'commons/components/elements/Icons/LinkedIn';
 import TikTok from 'commons/components/elements/Icons/TikTok';
 import Twitter from 'commons/components/elements/Icons/Twitter';
 import Youtube from 'commons/components/elements/Icons/Youtube';
-import { cn } from 'commons/utils';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { getYear } from 'date-fns'
 import { BsWhatsapp } from 'react-icons/bs';
 import { FaInstagram } from 'react-icons/fa';
 import { IconType } from 'react-icons/lib';
@@ -110,6 +109,7 @@ const Footer = (): JSX.Element => {
     const TITLE_BODY_GAP = 4;
     const PRODUCT_BODY_GAP = 3;
     const CONTACT_BODY_GAP = 2;
+    const CURRENT_YEAR = getYear(new Date())
 
     return (
         <footer
@@ -160,12 +160,12 @@ const Footer = (): JSX.Element => {
 
                     <div
                         className={`flex flex-col gap-${TITLE_BODY_GAP} lg:max-w-[45%] xl:max-w-[50%]`}>
-                        <span className="font-extrabold text-2xl">
+                        <span className="font-extrabold text-2xl text-white">
                             Gradient
                         </span>
                         <div
                             className={`flex flex-col gap-${CONTACT_BODY_GAP}`}>
-                            <h4 className="font-sans font-bold text-sm">
+                            <h4 className="font-sans font-bold text-sm text-white">
                                 Kantor Kami
                             </h4>
                             <div className="flex flex-col gap-1">
@@ -187,7 +187,7 @@ const Footer = (): JSX.Element => {
                 <hr className="border-[#666666]" />
                 <div className="flex flex-col-reverse lg:flex-row justify-between items-center gap-4 lg:gap-0">
                     <span className="font-body text-sm text-[#BBBBBB] text-center lg:text-left">
-                        © 2023-2024 Gradient Academy. All rights reserved.
+                        {`© ${CURRENT_YEAR} Gradient Academy. All rights reserved.`}
                     </span>
                     <div className="flex flex-row gap-4 items-center">
                         {SOCIAL_MEDIAS.map(({ Icon, url }, idx) => (
@@ -205,7 +205,7 @@ const Footer = (): JSX.Element => {
 };
 
 const Title = ({ title }: { title: string }): JSX.Element => {
-    return <h4 className="font-sans font-bold">{title}</h4>;
+    return <h4 className="font-sans font-bold text-white">{title}</h4>;
 };
 
 const Body = ({
@@ -217,15 +217,10 @@ const Body = ({
     url: string;
     Icon?: IconType;
 }): JSX.Element => {
-    const router = useRouter();
-
     return (
         <Link
             href={url}
-            className={cn(
-                'flex items-center gap-2 font-body text-sm',
-                router.asPath === url ? 'text-[#FFFFFF]' : 'text-[#BBBBBB]'
-            )}
+            className='flex items-center gap-2 font-body text-sm text-[#BBBBBB]'
             target={Icon ? '_blank' : '_self'}>
             {Icon && <Icon className="w-[18px] h-[18px] text-[#7264EB]" />}
             {body}

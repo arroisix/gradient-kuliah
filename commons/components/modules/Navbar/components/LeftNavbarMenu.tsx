@@ -4,8 +4,8 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import NavMenuLink from './NavMenuLink';
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
-import { LEARNING_PAGES } from '..';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { LEARNING_PAGES } from 'commons/constants';
 
 const LeftNavbarMenu = ({
     lightMode,

@@ -21,10 +21,7 @@ export default function RenewSubscriptionBanner({
 
     useEffect(() => {
         setFixedBottom(!isMobileBreakpoints ? 32 : is_subscribed ? 85 : 16);
-        console.log(isMobileBreakpoints);
     }, [isMobileBreakpoints, is_subscribed]);
-    console.log(`fixedBottom: ${fixedBottom}`);
-    console.log(`bannerBottom: ${bannerBottom}`);
     useEffect(() => {
         const footer = document.querySelector('footer');
         footerRef.current = footer as HTMLElement;
