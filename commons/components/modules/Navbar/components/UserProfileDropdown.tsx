@@ -18,7 +18,7 @@ const UserProfileDropdown = ({
     const tracker = useTracker();
     const router = useRouter();
     const [logout] = useLogoutMutation();
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     return (
         <div
@@ -46,7 +46,7 @@ const UserProfileDropdown = ({
                 onClick={async () => {
                     tracker?.genericTrack('Click Logout');
                     await logout();
-                    dispatch(clearCache())
+                    dispatch(clearCache());
                     router.push('/');
                 }}
                 aria-hidden>

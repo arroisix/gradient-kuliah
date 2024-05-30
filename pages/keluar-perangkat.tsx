@@ -21,7 +21,7 @@ import { clearCache } from 'authentication/redux/slices/userSlice';
 
 const KeluarPerangkat = (): JSX.Element => {
     const router = useRouter();
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const { deviceTypes } = useGetDeviceTypesQuery(undefined, {
         selectFromResult: ({ data }) => ({
             deviceTypes:
@@ -117,7 +117,7 @@ const KeluarPerangkat = (): JSX.Element => {
                         disabled={isLoadingLogout}
                         onClick={async () => {
                             await logout();
-                            dispatch(clearCache())
+                            dispatch(clearCache());
                             setTimeout(() => {
                                 router.push('/');
                             }, 500);

@@ -22,7 +22,7 @@ const MobileNavbar = ({
     const router = useRouter();
     const { is_subscribed } = useCourseSubscription();
     const [logout] = useLogoutMutation();
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     return openMobile ? (
         <>
@@ -83,7 +83,7 @@ const MobileNavbar = ({
                             className="flex items-center w-full font-normal text-accent-orange hover:text-state-error"
                             onClick={async () => {
                                 await logout();
-                                dispatch(clearCache())
+                                dispatch(clearCache());
                                 router.push('/');
                             }}
                             aria-hidden>

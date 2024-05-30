@@ -10,7 +10,7 @@ const Mulai = (): JSX.Element => {
     const router = useRouter();
     const user = useSelector(getCurrentUser);
     const [logout] = useLogoutMutation();
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     return (
         <section className="text-white h-screen overflow-hidden">
@@ -21,7 +21,7 @@ const Mulai = (): JSX.Element => {
                 <button
                     onClick={async () => {
                         await logout();
-                        dispatch(clearCache())
+                        dispatch(clearCache());
                         router.push('/');
                     }}
                     className="text-[#999999] hover:text-red-400 transition-all duration-500">
