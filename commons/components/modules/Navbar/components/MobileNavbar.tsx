@@ -5,6 +5,8 @@ import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useLogoutMutation } from 'authentication/redux/api/authApi';
 import { useRouter } from 'next/router';
 import { cn } from 'commons/utils';
+import { useDispatch } from 'react-redux';
+import { clearCache } from 'authentication/redux/slices/userSlice';
 
 interface MobileNavbarProps {
     openMobile: boolean;
@@ -20,6 +22,7 @@ const MobileNavbar = ({
     const router = useRouter();
     const { is_subscribed } = useCourseSubscription();
     const [logout] = useLogoutMutation();
+    const dispatch = useDispatch()
 
     return openMobile ? (
         <>
@@ -80,6 +83,7 @@ const MobileNavbar = ({
                             className="flex items-center w-full font-normal text-accent-orange hover:text-state-error"
                             onClick={async () => {
                                 await logout();
+                                dispatch(clearCache())
                                 router.push('/');
                             }}
                             aria-hidden>

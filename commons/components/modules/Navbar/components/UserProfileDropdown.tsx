@@ -5,6 +5,8 @@ import { MdLogout, MdOutlinePersonOutline } from 'react-icons/md';
 import { cn } from 'commons/utils';
 import { useLogoutMutation } from 'authentication/redux/api/authApi';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
+import { clearCache } from 'authentication/redux/slices/userSlice';
 
 const UserProfileDropdown = ({
     lightMode,
@@ -16,6 +18,7 @@ const UserProfileDropdown = ({
     const tracker = useTracker();
     const router = useRouter();
     const [logout] = useLogoutMutation();
+    const dispatch = useDispatch()
 
     return (
         <div
@@ -43,6 +46,7 @@ const UserProfileDropdown = ({
                 onClick={async () => {
                     tracker?.genericTrack('Click Logout');
                     await logout();
+                    dispatch(clearCache())
                     router.push('/');
                 }}
                 aria-hidden>
