@@ -28,7 +28,7 @@ const Breadcrumb = ({ className }: { className?: string }): JSX.Element => {
 const Item = ({ name, url, nextItem }: BreadcrumbItemProps): JSX.Element => {
     return (
         <>
-            {nextItem? (
+            {nextItem ? (
                 <>
                     <Link href={url} className="cursor-pointer">
                         <h3 className="font-body text-xs lg:text-sm duration-100 transition-all ease-in-out text-[#999999] hover:text-[#999999]/[0.75]">
