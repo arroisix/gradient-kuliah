@@ -11,6 +11,7 @@ import { useGetCourseProgressV2Query } from 'courses/redux/api/courseV2Api';
 import { useGetActiveSubscriptionQuery } from 'payment/redux/api/subscriptionApi';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import Footer from './components/modules/Footer';
+import Breadcrumb from './components/modules/Breadcrumb';
 
 interface LayoutProps {
     children: JSX.Element;
@@ -84,6 +85,16 @@ const LearnLayout = ({
                                 ? 'md:ml-[250px]'
                                 : 'lg:px-16 xl:px-12'
                         )}>
+                        <Breadcrumb
+                            className={cn(
+                                'px-4 md:px-0 w-full',
+                                fullHeightSidebar && 'md:px-8 xl:px-12',
+                                is_subscribed ? 'pb-5' : 'pt-5',
+                                router.pathname === '/komunitas/public' &&
+                                    !is_subscribed &&
+                                    'pt-10'
+                            )}
+                        />
                         {isAuthenticated &&
                             isCoursePage &&
                             activePacket &&
