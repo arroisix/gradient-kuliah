@@ -92,7 +92,7 @@ const FeatureCard = ({
                 <p className="font-body text-sm">{description}</p>
                 <div
                     className={cn(
-                        'absolute top-28 shadow-[2px_2px_4px_0_rgba(0,0,0,0.25)]',
+                        'absolute top-28',
                         photoSize === 'sm'
                             ? 'left-7 w-[219px]'
                             : 'left-4 w-[243px]'

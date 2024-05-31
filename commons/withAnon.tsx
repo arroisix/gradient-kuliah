@@ -62,6 +62,9 @@ const withAnon = <P extends object>(
                     ) {
                         if (is_subscribed || everSubscribed)
                             router.replace('/dashboard');
+                    } else if (router.pathname === '/dashboard') {
+                        if (!is_subscribed && !everSubscribed)
+                            router.replace('/')
                     }
                     return <WrappedComponent {...(props as P)} />;
                 }

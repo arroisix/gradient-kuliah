@@ -1,8 +1,6 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
-import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { cn } from 'commons/utils';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
-import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 export default function RenewSubscriptionBanner({
@@ -12,50 +10,13 @@ export default function RenewSubscriptionBanner({
 }): JSX.Element {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { is_subscribed } = useCourseSubscription();
-    const footerRef = useRef<HTMLElement | null>(null);
-    const { isMobileBreakpoints } = useWindowBreakpoints();
-    const [fixedBottom, setFixedBottom] = useState<number>(
-        !isMobileBreakpoints ? 32 : is_subscribed ? 85 : 16
-    );
-    const [bannerBottom, setBannerBottom] = useState<number>(fixedBottom);
-
-    useEffect(() => {
-        setFixedBottom(!isMobileBreakpoints ? 32 : is_subscribed ? 85 : 16);
-    }, [isMobileBreakpoints, is_subscribed]);
-    useEffect(() => {
-        const footer = document.querySelector('footer');
-        footerRef.current = footer as HTMLElement;
-
-        const adjustBannerPosition = () => {
-            if (footerRef.current) {
-                const footerRect = footerRef.current.getBoundingClientRect();
-                const windowHeight = window.innerHeight;
-
-                if (footerRect.top < windowHeight) {
-                    setBannerBottom(windowHeight - footerRect.top);
-                } else {
-                    setBannerBottom(0);
-                }
-            } else {
-                setBannerBottom(0);
-            }
-        };
-
-        adjustBannerPosition();
-        window.addEventListener('scroll', adjustBannerPosition);
-
-        return () => {
-            window.removeEventListener('scroll', adjustBannerPosition);
-        };
-    }, [is_subscribed]);
 
     return (
         <div
             className={cn(
-                'fixed z-[15] left-[12px] right-[12px] md:right-[36px] bg-[#B73E32] px-4 md:px-6 py-3 md:py-4 rounded-lg',
-                is_subscribed ? 'md:left-[286px]' : 'md:left-[36px]'
-            )}
-            style={{ bottom: `${bannerBottom + fixedBottom}px` }}>
+                'sticky md:!bottom-[32px] z-[15] left-[12px] right-[12px] md:right-[36px] bg-[#B73E32] px-4 md:px-6 py-3 md:py-4 rounded-lg',
+                is_subscribed ? 'bottom-[85px] md:left-[286px]' : 'bottom-[16px] md:left-[36px]'
+            )}>
             <div className="flex items-center justify-between w-full">
                 <div className="text-white">
                     <p className="md:text-lg text-sm font-semibold pb-[2px]">

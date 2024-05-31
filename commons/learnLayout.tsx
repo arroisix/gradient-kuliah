@@ -71,9 +71,9 @@ const LearnLayout = ({
                 <div
                     className={cn(
                         showSidebar &&
-                            'pt-16 md:pb-16 flex gap-[2rem] lg:gap-[6rem] w-full',
+                            'pt-16 flex gap-[2rem] lg:gap-[6rem] w-full',
                         !closeReminder && showSubscriptionReminder && 'pt-11',
-                        is_subscribed && 'pb-16'
+                        is_subscribed? 'pb-16' : 'pb-8'
                     )}>
                     {showSidebar && is_subscribed && (
                         <Sidebar fullHeight={fullHeightSidebar} />
