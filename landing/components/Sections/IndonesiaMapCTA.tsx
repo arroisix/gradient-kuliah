@@ -16,6 +16,7 @@ const IndonesiaMapCTA = (): JSX.Element => {
                     src={`${CDN_URL}/assets/indonesia-asset.png`}
                     width={870}
                     height={339}
+                    alt='indonesia-map'
                 />
             </div>
             <div className="flex flex-col items-center gap-3 text-center md:py-4 md:gap-5 md:text-left md:items-start">
