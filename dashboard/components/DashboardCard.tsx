@@ -37,7 +37,7 @@ const DashboardCard = ({
             onClick={() => {
                 if (eventName) tracker?.genericTrack(eventName, eventPayload);
             }}
-            className="flex flex-col w-full border rounded-md border-[#242424] bg-neutral-950 overflow-clip">
+            className="flex h-full flex-col w-full border rounded-md border-[#242424] bg-neutral-950 overflow-clip">
             <div
                 className={cn(
                     'bg-[#242424] sm:h-[160px] h-[150px] object-contain'
@@ -69,7 +69,9 @@ const DashboardCard = ({
                 </div>
             </div>
             <div className="flex flex-col gap-1 p-2">
-                <p className="text-xs text-neutral-400">{item.type}</p>
+                <p className="text-xs text-neutral-400">
+                    {item.type === 'Video' ? 'Kelas' : item.type}
+                </p>
                 <p className="text-sm font-bold text-white">{item.title}</p>
             </div>
         </Link>

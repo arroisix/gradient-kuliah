@@ -10,3 +10,18 @@ interface AppbarNav {
     href: string;
     alias?: string[];
 }
+
+interface NavigationButtonInterface {
+    name: string;
+    title: string;
+    url: string;
+    IconActive?: IconType;
+    IconUnactive?: IconType;
+    className?: string;
+    subMenus?: NavigationButtonInterface[];
+    children?: ReactNode;
+}
+
+interface NavigationButtonProps extends NavigationButtonInterface {
+    setOpenSidebar?: Dispatch<SetStateAction<boolean>>;
+}

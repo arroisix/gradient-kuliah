@@ -1,33 +1,39 @@
 import axios from 'axios';
 import Layout from 'commons/layout';
 import withAnon from 'commons/withAnon';
-import RevampedLandingContainer from 'landing/containers/revamped';
+import { GridProvider } from 'courses/contexts/GridProvider';
+import LandingContainer from 'landing/containers';
 import { NextSeo } from 'next-seo';
 import React from 'react';
 import config from 'redux/api/config';
 
 type LandingPageProps = {
+    majorData?: ResponseData<MajorOptions>;
     pricingData?: ResponseData<PacketOffer>;
     classesData?: ResponseData<Course>;
-    majorData?: ResponseData<MajorOptions>;
+    popularBooksData?: GetLandingPopularBooksResponseData;
 };
 
 const RevampedLandingPage = ({
-    pricingData,
+    majorData,
     classesData,
-    majorData
+    popularBooksData,
+    pricingData
 }: LandingPageProps): JSX.Element => {
     return (
         <>
             <NextSeo canonical="https://gradient.academy/" />
 
-            <Layout shouldTransparent>
-                <RevampedLandingContainer
-                    majorData={majorData?.data}
-                    pricingData={pricingData?.data}
-                    classData={classesData?.data}
-                />
-            </Layout>
+            <GridProvider>
+                <Layout shouldTransparent>
+                    <LandingContainer
+                        majorData={majorData?.data}
+                        classesData={classesData?.data}
+                        popularBooksData={popularBooksData?.books}
+                        pricingData={pricingData?.data}
+                    />
+                </Layout>
+            </GridProvider>
         </>
     );
 };
@@ -36,6 +42,7 @@ export async function getStaticProps(): Promise<{
     props: {
         pricingData: ResponseData<PacketOffer>;
         classesData: ResponseData<Course>;
+        popularBooksData: GetLandingPopularBooksResponseData;
         majorData: ResponseData<MajorOptions>;
         canonical: string;
         title: string;
@@ -55,14 +62,19 @@ export async function getStaticProps(): Promise<{
     };
     revalidate?: number;
 }> {
-    const { data: pricingData }: { data: ResponseData<PacketOffer> } =
-        await axios.get(`${config.API_BASE_URL}subscriptions/packet-offer/`);
-    const { data: classesData }: { data: ResponseData<Course> } =
-        await axios.get(`${config.API_BASE_URL}courses/public/?limit=4`);
     const { data: majorData }: { data: ResponseData<MajorOptions> } =
         await axios.get(
             `${config.API_BASE_URL}courses/public/major-recommendations/`
         );
+    const { data: classesData }: { data: ResponseData<Course> } =
+        await axios.get(`${config.API_BASE_URL}courses/v2/public/?major=all`);
+    const {
+        data: popularBooksData
+    }: { data: GetLandingPopularBooksResponseData } = await axios.get(
+        `${config.API_BASE_URL}books/landing/popular/?major=all`
+    );
+    const { data: pricingData }: { data: ResponseData<PacketOffer> } =
+        await axios.get(`${config.API_BASE_URL}subscriptions/packet-offer/`);
 
     const META_TITLE =
         'Platform Belajar Materi Kuliah Online #1 di Indonesia | Gradient';
@@ -73,6 +85,7 @@ export async function getStaticProps(): Promise<{
         props: {
             pricingData,
             classesData,
+            popularBooksData,
             majorData,
             canonical: 'https://gradient.academy/',
             title: META_TITLE,

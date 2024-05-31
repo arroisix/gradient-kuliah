@@ -207,6 +207,15 @@ export const astronotesApi = baseApi.injectEndpoints({
                 body
             }),
             invalidatesTags: [{ type: 'ASTRONOTES', id: 'TEXTBOOK-SOLUTION' }]
+        }),
+        getLandingPopularBooks: builder.query<
+            GetLandingPopularBooksResponseData,
+            GetLandingPopularBooksQueryParam
+        >({
+            query: (params: GetLandingPopularBooksQueryParam) => ({
+                url: `${COURSE_BASE_URL}landing/popular/`,
+                params: { ...params }
+            })
         })
     })
 });
@@ -231,7 +240,8 @@ export const {
     usePostRatingMutation,
     usePostFeedbackMutation,
     usePostTextbookFeedbackMutation,
-    useGetTextbookSolutionQuery
+    useGetTextbookSolutionQuery,
+    useGetLandingPopularBooksQuery
 } = astronotesApi;
 
 export const {

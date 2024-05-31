@@ -26,7 +26,7 @@ const EntrypointTabs = (): JSX.Element => {
             <Link
                 className={tabStyle(Tab.textbook)}
                 href={{ query: { tab: Tab.textbook } }}>
-                Textbook
+                Textbook Solution
             </Link>
             <Link
                 className={tabStyle(Tab.astronotes)}

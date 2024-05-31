@@ -1,89 +1,238 @@
-import { useFeatureIsOn } from '@growthbook/growthbook-react';
+import Instagram from 'commons/components/elements/Icons/Instagram';
+import LinkedIn from 'commons/components/elements/Icons/LinkedIn';
+import TikTok from 'commons/components/elements/Icons/TikTok';
+import Twitter from 'commons/components/elements/Icons/Twitter';
+import Youtube from 'commons/components/elements/Icons/Youtube';
 import Link from 'next/link';
-import { FaLine, FaInstagram } from 'react-icons/fa';
-import { MdCopyright, MdMailOutline } from 'react-icons/md';
+import { getYear } from 'date-fns';
+import { BsWhatsapp } from 'react-icons/bs';
+import { FaInstagram } from 'react-icons/fa';
+import { IconType } from 'react-icons/lib';
+import { MdMailOutline } from 'react-icons/md';
+
+type FooterItemProps = {
+    title: string;
+    bodies: {
+        title: string;
+        url: string;
+    }[];
+};
+
+const ITEMS: FooterItemProps[] = [
+    {
+        title: 'Tentang Kami',
+        bodies: [
+            {
+                title: 'Tentang Gradient',
+                url: '/tentang-kami'
+            },
+            {
+                title: 'Karier',
+                url: '/karir'
+            }
+        ]
+    },
+    {
+        title: 'Panduan',
+        bodies: [
+            {
+                title: 'Syarat & Ketentuan',
+                url: '/syarat-dan-ketentuan'
+            },
+            {
+                title: 'Kebijakan Privasi',
+                url: '/kebijakan-privasi'
+            }
+        ]
+    },
+    {
+        title: 'Produk Gradient',
+        bodies: [
+            {
+                title: 'Kelas',
+                url: '/kelas'
+            },
+            {
+                title: 'Textbook Solution',
+                url: '/astronotes?tab=text-book'
+            },
+            {
+                title: 'Astronotes',
+                url: '/astronotes?tab=astronotes'
+            },
+            {
+                title: 'Bank Soal',
+                url: '/astronotes?tab=bank-soal'
+            },
+            {
+                title: 'Komunitas',
+                url: '/komunitas'
+            }
+        ]
+    }
+];
+
+type FooterSocialMediaProps = {
+    Icon: () => JSX.Element;
+    url: string;
+};
+
+const SOCIAL_MEDIAS: FooterSocialMediaProps[] = [
+    // {
+    //     Icon: AiFillFacebook,
+    //     url: '/',
+    //     className: 'text-[#4A9CEC]'
+    // },
+    {
+        Icon: Twitter,
+        url: 'https://x.com/gradient_idn?lang=en'
+    },
+    {
+        Icon: Youtube,
+        url: 'https://www.youtube.com/@gradient3012'
+    },
+    {
+        Icon: Instagram,
+        url: 'https://www.instagram.com/gradient_idn/'
+    },
+    {
+        Icon: LinkedIn,
+        url: 'https://www.linkedin.com/company/gradient-idn/'
+    },
+    {
+        Icon: TikTok,
+        url: 'https://www.tiktok.com/@gradientacademy'
+    }
+];
 
 const Footer = (): JSX.Element => {
-    const thisYear = new Date().getFullYear();
-    const isLegalPagesOn = useFeatureIsOn<GrowthbookFeatures>('legal-pages');
+    const TITLE_BODY_GAP = 4;
+    const PRODUCT_BODY_GAP = 3;
+    const CONTACT_BODY_GAP = 2;
+    const CURRENT_YEAR = getYear(new Date());
 
     return (
-        <footer className="w-full flex flex-col bg-[#121212] px-4 md:px-[7.5rem] py-8">
-            <div className="flex flex-col w-full lg:flex-row">
-                <div className="flex flex-col items-center justify-center w-full lg:items-start lg:justify-start">
-                    <span className="font-bold text-3xl mb-4 font-[Urbanist]">
-                        Gradient
-                    </span>
-                    <div className="grid grid-cols-2 gap-x-4 gap-y-3">
-                        <Link
-                            href="/tentang-kami"
-                            className="cursor-pointer text-neutral-400">
-                            Tentang Kami
-                        </Link>
-                        {isLegalPagesOn ? (
-                            <Link
-                                href="/syarat-dan-ketentuan"
-                                className="cursor-pointer text-neutral-400">
-                                Syarat &amp; Ketentuan
-                            </Link>
-                        ) : (
-                            <div />
-                        )}
-                        <Link
-                            href="/karir"
-                            className="cursor-pointer text-neutral-400">
-                            Karir
-                        </Link>
-                        {isLegalPagesOn && (
-                            <Link
-                                href="/kebijakan-privasi"
-                                className="cursor-pointer text-neutral-400">
-                                Privasi
-                            </Link>
-                        )}
+        <footer
+            id="footer"
+            className="w-full flex flex-col bg-[#121212] gap-8 lg:gap-12 px-6 md:px-12 xl:px-24 pt-6 md:pt-8 pb-5 md:pb-6">
+            <div className="flex flex-col-reverse lg:flex-row gap-8 lg:gap-0 w-full">
+                <div className="w-full flex flex-col lg:flex-row gap-7 xl:gap-12">
+                    {ITEMS.map((item) => (
+                        <div
+                            key={item.title}
+                            className={`flex flex-col gap-${TITLE_BODY_GAP}`}>
+                            <Title title={item.title} />
+                            <div
+                                className={`flex flex-col gap-${PRODUCT_BODY_GAP}`}>
+                                {item.bodies.map((body) => (
+                                    <Body
+                                        key={body.title}
+                                        body={body.title}
+                                        url={body.url}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                <div className="flex flex-col-reverse lg:flex-row gap-7 xl:gap-12 lg:justify-end w-full">
+                    <div className={`flex flex-col gap-${TITLE_BODY_GAP}`}>
+                        <Title title="Punya Pertanyaan?" />
+                        <div
+                            className={`flex flex-col gap-${CONTACT_BODY_GAP}`}>
+                            <Body
+                                body="@gradient_idn"
+                                url="https://www.instagram.com/gradient_idn/"
+                                Icon={FaInstagram}
+                            />
+                            <Body
+                                body="business@gradient.academy"
+                                url="mailto:business@gradient.academy"
+                                Icon={MdMailOutline}
+                            />
+                            <Body
+                                body="+6285179893859"
+                                url="https://wa.me/+6285179893859"
+                                Icon={BsWhatsapp}
+                            />
+                        </div>
+                    </div>
+
+                    <div
+                        className={`flex flex-col gap-${TITLE_BODY_GAP} lg:max-w-[45%] xl:max-w-[50%]`}>
+                        <span className="font-extrabold text-2xl text-white">
+                            Gradient
+                        </span>
+                        <div
+                            className={`flex flex-col gap-${CONTACT_BODY_GAP}`}>
+                            <h4 className="font-sans font-bold text-sm text-white">
+                                Kantor Kami
+                            </h4>
+                            <div className="flex flex-col gap-1">
+                                <span className="font-body text-sm text-[#BBBBBB]">
+                                    Gedung Smesco SME Tower Kontrak Hukum Office
+                                    Space Lt. 6
+                                </span>
+                                <span className="font-body text-sm text-[#BBBBBB]">
+                                    Jl. Gatot Subroto Kav. 94, RT.11/RW.3, Kel.
+                                    Pancoran, Kec. Pancoran, Kota Jakarta
+                                    Selatan, Daerah Khusus Ibukota Jakarta 12780
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div className="flex-col items-center justify-center w-full lg:w-1/4">
-                    <h4 className="mt-2 mb-2 text-xl font-bold text-center lg:mb-4 lg:mt-0 text-neutral-400 lg:text-left">
-                        Punya pertanyaan
-                    </h4>
-                    <a
-                        href="https://www.instagram.com/gradient_idn/"
-                        target="_blank"
-                        rel="noreferrer">
-                        <div className="flex items-center justify-center cursor-pointer lg:justify-start text-neutral-400">
-                            <FaInstagram className="mr-2" />
-                            <span>gradient_idn</span>
-                        </div>
-                    </a>
-                    <a
-                        href="https://lin.ee/rroxNIp"
-                        target="_blank"
-                        rel="noreferrer">
-                        <div className="flex items-center justify-center cursor-pointer lg:justify-start text-neutral-400">
-                            <FaLine className="mr-2" />
-                            <span>@875dxoje</span>
-                        </div>
-                    </a>
-                    <a
-                        href="mailto:business@gradient.academy"
-                        target="_blank"
-                        rel="noreferrer">
-                        <div className="flex items-center justify-center cursor-pointer lg:justify-start text-neutral-400">
-                            <MdMailOutline className="mr-2" />
-                            <span>business@gradient.academy</span>
-                        </div>
-                    </a>
+            </div>
+            <div className="flex flex-col gap-4">
+                <hr className="border-[#666666]" />
+                <div className="flex flex-col-reverse lg:flex-row justify-between items-center gap-4 lg:gap-0">
+                    <span className="font-body text-sm text-[#BBBBBB] text-center lg:text-left">
+                        {`© ${CURRENT_YEAR} Gradient Academy. All rights reserved.`}
+                    </span>
+                    <div className="flex flex-row gap-4 items-center">
+                        {SOCIAL_MEDIAS.map(({ Icon, url }, idx) => (
+                            <SocialMedia
+                                key={`social-media-${idx + 1}`}
+                                Icon={Icon}
+                                url={url}
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
-            <div className="flex items-center justify-center w-full mt-8 text-neutral-400">
-                <span className="mr-1 text-accent-violet">
-                    Gradient Academy
-                </span>
-                <MdCopyright className="text-accent-violet" />
-                <span className="ml-1 text-accent-violet">{thisYear}</span>
-            </div>
         </footer>
+    );
+};
+
+const Title = ({ title }: { title: string }): JSX.Element => {
+    return <h4 className="font-sans font-bold text-white">{title}</h4>;
+};
+
+const Body = ({
+    body,
+    url,
+    Icon
+}: {
+    body: string;
+    url: string;
+    Icon?: IconType;
+}): JSX.Element => {
+    return (
+        <Link
+            href={url}
+            className="flex items-center gap-2 font-body text-sm text-[#BBBBBB]"
+            target={Icon ? '_blank' : '_self'}>
+            {Icon && <Icon className="w-[18px] h-[18px] text-[#7264EB]" />}
+            {body}
+        </Link>
+    );
+};
+
+const SocialMedia = ({ Icon, url }: FooterSocialMediaProps): JSX.Element => {
+    return (
+        <Link href={url}>
+            <Icon />
+        </Link>
     );
 };
 

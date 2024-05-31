@@ -1,13 +1,18 @@
+import { cn } from 'commons/utils';
+import React, { HtmlHTMLAttributes } from 'react';
+
 const Container = ({
+    id,
     children,
     className
-}: {
-    children: React.ReactNode;
-    className?: string;
-}): JSX.Element => {
+}: HtmlHTMLAttributes<HTMLDivElement>): JSX.Element => {
     return (
         <section
-            className={`w-full px-4 md:px-[7.5rem] py-4 flex ${className}`}>
+            id={id}
+            className={cn(
+                'w-full max-w-screen-xl mx-auto px-4 md:px-8 lg:px-20',
+                className
+            )}>
             {children}
         </section>
     );
