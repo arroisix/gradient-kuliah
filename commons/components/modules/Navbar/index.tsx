@@ -287,7 +287,7 @@ const Navbar = ({
                             {isAuthenticated ? (
                                 <nav
                                     className={`ml-12 flex gap-6 cursor-pointer relative`}>
-                                    {router.pathname === '/' && (
+                                    {/* {router.pathname === '/' && (
                                         <Link href="/kelas">
                                             <nav
                                                 className="ml-12 cursor-pointer hover:text-accent-blue"
@@ -297,7 +297,7 @@ const Navbar = ({
                                                 Kelas
                                             </nav>
                                         </Link>
-                                    )}
+                                    )} */}
                                     <NavMenuIcons />
                                     <div
                                         className={`flex items-center gap-2 hover:text-accent-blue ${
@@ -411,7 +411,7 @@ const Navbar = ({
                                 )
                             ) : (
                                 <div className="flex items-center gap-4">
-                                    {router.pathname === '/' && (
+                                    {/* {router.pathname === '/' && (
                                         <Link
                                             href="/kelas"
                                             onClick={() =>
@@ -427,7 +427,7 @@ const Navbar = ({
                                                 Kelas
                                             </nav>
                                         </Link>
-                                    )}
+                                    )} */}
 
                                     <NavMenuIcons />
                                     <button
