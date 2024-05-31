@@ -154,7 +154,7 @@ const Paywall = ({
                                     Variant: 'NOV 2023',
                                     ...ctaEventPayload
                                 }}>
-                                Akses Sekarang
+                                Langganan Sekarang
                             </Button>
                         </div>
                     </div>

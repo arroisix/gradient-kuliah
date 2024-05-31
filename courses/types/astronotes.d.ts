@@ -189,3 +189,19 @@ interface TextbookProblem {
         multiple_steps_solution: boolean;
     };
 }
+
+interface GetLandingPopularBooksQueryParam {
+    major?: string;
+}
+
+interface GetLandingPopularBooksResponseData {
+    books: LandingPopularBook[];
+}
+
+type LandingPopularBook = {
+    id: string;
+    title: string;
+    slug: string;
+    book_cover_url: string;
+    category_name: 'Textbook' | 'Astronotes' | 'Bank Soal';
+};

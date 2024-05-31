@@ -4,16 +4,8 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import NavMenuLink from './NavMenuLink';
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
-
-const DISPLAYED_ROUTES = [
-    'kelas/[id]',
-    'kelas/[id]/',
-    'kebijakan-privasi',
-    'syarat-dan-ketentuan',
-    'astronotes',
-    'referral',
-    'transaksi'
-];
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { LEARNING_PAGES } from 'commons/constants';
 
 const LeftNavbarMenu = ({
     lightMode,
@@ -24,6 +16,7 @@ const LeftNavbarMenu = ({
 }): JSX.Element | null => {
     const router = useRouter();
     const { data: configData } = useGetConfigQuery();
+    const { is_subscribed } = useCourseSubscription();
     const { isMobileBreakpoints } = useWindowBreakpoints();
     const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
         'landing-page-revamp'
@@ -31,7 +24,8 @@ const LeftNavbarMenu = ({
 
     const isShowNavbarMenu = (): boolean =>
         !showSidebar &&
-        DISPLAYED_ROUTES.slice(isLandingPageRevampOn ? 0 : 1).some((route) =>
+        is_subscribed &&
+        LEARNING_PAGES.slice(isLandingPageRevampOn ? 0 : 1).some((route) =>
             router.pathname.includes(route)
         );
 

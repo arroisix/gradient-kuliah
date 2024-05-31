@@ -79,3 +79,21 @@ interface ConfigResponse {
         [key: string]: object;
     };
 }
+
+type BreadcrumbPathnames =
+    | '/kelas'
+    | '/komunitas/public'
+    | '/astronotes'
+    | '/tentang-kami'
+    | '/kebijakan-privasi'
+    | '/syarat-dan-ketentuan';
+
+type BreadcrumbProps = {
+    [key in BreadcrumbPathnames]: BreadcrumbItemProps;
+};
+
+type BreadcrumbItemProps = {
+    name: string;
+    url: string;
+    nextItem?: BreadcrumbItemProps;
+};

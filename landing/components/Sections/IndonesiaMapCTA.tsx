@@ -3,15 +3,20 @@ import Image from 'next/image';
 import React from 'react';
 import Container from './Container';
 import Button from 'commons/components/elements/Button';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 const IndonesiaMapCTA = (): JSX.Element => {
+    const { isAuthenticated } = useAuth();
     return (
-        <Container className="flex flex-col items-center gap-6 md:gap-12 md:flex-row py-9 md:py-24">
+        <Container
+            className="flex flex-col items-center gap-6 md:gap-12 md:flex-row py-9 md:py-16"
+            id="gradient-users">
             <div>
                 <Image
                     src={`${CDN_URL}/assets/indonesia-asset.png`}
                     width={870}
                     height={339}
+                    alt="indonesia-map"
                 />
             </div>
             <div className="flex flex-col items-center gap-3 text-center md:py-4 md:gap-5 md:text-left md:items-start">
@@ -20,14 +25,16 @@ const IndonesiaMapCTA = (): JSX.Element => {
                     Indonesia menggunakan Gradient
                 </h2>
                 <p className="text-sm md:text-base text-neutral-400">
-                    Daftar untuk mengakses preview materi GRATIS
+                    {isAuthenticated
+                        ? 'Langganan untuk mengakses seluruh materi'
+                        : 'Daftar untuk mengakses preview materi GRATIS'}
                 </p>
                 <Button
-                    href={AUTHENTICATION_ROUTE}
+                    href={isAuthenticated ? '/langganan' : AUTHENTICATION_ROUTE}
                     className="mt-3 md:mt-4"
                     eventName='Click "Daftar Sekarang" Button'
                     variant="primary">
-                    Daftar Sekarang
+                    {isAuthenticated ? 'Langganan Sekarang' : 'Daftar Sekarang'}
                 </Button>
             </div>
         </Container>

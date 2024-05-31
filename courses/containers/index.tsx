@@ -14,6 +14,7 @@ import RenewSubscriptionBanner from 'courses/components/RenewSubscriptionBanner'
 import { useGetActiveSubscriptionQuery } from 'payment/redux/api/subscriptionApi';
 import { useGrid } from 'courses/contexts/GridProvider';
 import Sort from 'commons/components/elements/Sort';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 const ClassContainer = (): JSX.Element => {
     const router = useRouter();
@@ -79,6 +80,7 @@ const ClassContainer = (): JSX.Element => {
     const { data: activePacket } = useGetActiveSubscriptionQuery(undefined, {
         skip: !isAuthenticated
     });
+    const { is_subscribed } = useCourseSubscription();
 
     return (
         <>
@@ -87,7 +89,8 @@ const ClassContainer = (): JSX.Element => {
                     'w-full min-h-screen',
                     !isAuthenticated &&
                         !isLandingPageRevampOn &&
-                        'px-4 md:px-[7.5rem]'
+                        'px-4 md:px-[7.5rem]',
+                    !is_subscribed && 'pb-8'
                 )}>
                 <h1 className="md:text-2xl text-xl font-bold">Kelas</h1>
                 <Tabs

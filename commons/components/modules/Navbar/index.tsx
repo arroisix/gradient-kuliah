@@ -18,7 +18,6 @@ import MobileSidebar from '../Sidebar/mobile';
 import AuthContext from 'authentication/contexts/AuthProvider';
 import { useTracker } from 'tracker/tracker';
 import { useDebouncedCallback } from 'use-debounce';
-import LeftNavbarMenu from './components/LeftNavbarMenu';
 import UserProfile from './components/UserProfile';
 import UserProfileDropdown from './components/UserProfileDropdown';
 import NavMenuIcons from './components/NavMenuIcons';
@@ -27,12 +26,33 @@ import { useGetDetailPacketOfferQuery } from 'payment/redux/api/subscriptionApi'
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import clsx from 'clsx';
+import { BiBookReader, BiSolidBookReader } from 'react-icons/bi';
+import {
+    RiBookOpenLine,
+    RiQuestionnaireLine,
+    RiBookOpenFill,
+    RiQuestionnaireFill
+} from 'react-icons/ri';
+import { cn } from 'commons/utils';
+import { useGetConfigQuery } from 'commons/redux/api/commonApi';
+import NavigationButton from 'commons/components/elements/NavigationButton';
+import { LEARNING_PAGES } from 'commons/constants';
 
-const HIDE_HAMBURGER_MENU_ON = [
-    '/dashboard',
-    '/komunitas',
-    '/astronotes',
-    '/kelas'
+const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
+    {
+        name: 'Class',
+        title: 'Kelas',
+        url: '/kelas',
+        IconActive: BiSolidBookReader,
+        IconUnactive: BiBookReader
+    },
+    {
+        name: 'Library',
+        title: 'Perpustakaan',
+        url: '/astronotes',
+        IconActive: RiBookOpenFill,
+        IconUnactive: RiBookOpenLine
+    }
 ];
 
 const Navbar = ({
@@ -55,7 +75,7 @@ const Navbar = ({
 }): JSX.Element => {
     const tracker = useTracker();
 
-    const { isMobileBreakpoints } = useWindowBreakpoints();
+    const { isDesktopBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { profile } = useContext(AuthContext);
     const user = useSelector(getCurrentUser);
@@ -85,34 +105,48 @@ const Navbar = ({
 
     const computeBgColor = (): string => {
         if (openMobile) {
-            return lightMode ? 'bg-white shadow-md text-black' : 'bg-black';
+            return lightMode ? 'bg-white shadow-md text-black' : 'bg-[#222222]';
         }
 
         if (shouldTransparent) {
-            if (scrollPosition >= height / 2) {
-                return 'bg-black';
+            if (height && scrollPosition >= height / 2) {
+                return is_subscribed ? 'bg-black' : 'bg-[#222222]';
             }
-            return 'bg-transparent hover:bg-black';
+            return 'bg-transparent hover:bg-[#222222]';
         }
 
         if (paymentPage) {
-            return lightMode ? 'bg-white shadow-md' : 'bg-black';
+            return lightMode
+                ? 'bg-white shadow-md'
+                : is_subscribed
+                ? 'bg-black'
+                : 'bg-[#222222]';
         }
 
         if (showSidebar && fullHeightSidebar) {
             if (scrollPosition >= 60) {
-                return 'bg-black';
+                return is_subscribed ? 'bg-black' : 'bg-[#222222]';
             }
 
-            return shouldTransparent ? '' : 'bg-black';
+            return shouldTransparent
+                ? ''
+                : is_subscribed
+                ? 'bg-black'
+                : 'bg-[#222222]';
         }
 
-        return lightMode ? 'bg-white text-black shadow-md' : 'bg-black';
+        return lightMode
+            ? 'bg-white text-black shadow-md'
+            : is_subscribed
+            ? 'bg-black'
+            : 'bg-[#222222]';
     };
 
     const isShowHamburgerMenu = (): boolean =>
-        !HIDE_HAMBURGER_MENU_ON.includes(router.pathname);
-
+        !LEARNING_PAGES.some((page) => router.asPath === page) ||
+        (LEARNING_PAGES.some((page) => router.asPath === page) &&
+            !is_subscribed &&
+            !isDesktopBreakpoints);
     const onMouseLeaveNavbar = (): void => {
         if (isHovered) setHovered(false);
         if (isProfileHovered) setProfileHovered(false);
@@ -150,6 +184,8 @@ const Navbar = ({
         halamanPembayaran ? (router.query.packetId as string) : skipToken
     );
 
+    const { data: configData } = useGetConfigQuery();
+
     const { expiryDay, packet_id, subscription_id, is_subscribed } =
         useCourseSubscription();
     const [closeSubscriptionReminder, setCloseSubscriptionReminder] =
@@ -167,31 +203,73 @@ const Navbar = ({
             className={`fixed top-0 left-0 w-full z-20 ${computeBgColor()} transition-all ease-in-out duration-200 flex flex-col`}
             onMouseEnter={() => setNavbarHovered(true)}
             onMouseLeave={onMouseLeaveNavbar}>
-            <div className="flex items-center justify-between w-full px-4 py-3 md:px-6">
+            <div
+                className={cn(
+                    'flex items-center justify-between w-full px-4 py-3 md:px-8',
+                    is_subscribed ? 'lg:pl-6 lg:pr-28' : 'lg:px-24'
+                )}>
                 <div className="flex items-center gap-4">
                     {(isLandingPageRevampOn ||
                         (!isLandingPageRevampOn && isAuthenticated)) &&
                         isShowHamburgerMenu() && (
                             <FiMenu
-                                className="md:hidden"
-                                stroke="#666666"
+                                className="lg:hidden"
+                                stroke="#ffffff"
+                                size={20}
                                 onClick={() => setOpenSidebar(true)}
                             />
                         )}
-                    <Link href={'/'}>
-                        <span className="text-2xl font-bold cursor-pointer font-[Urbanist]">
-                            {isMobileBreakpoints ? 'G' : 'Gradient'}
+                    <Link href={is_subscribed ? '/dashboard' : '/'}>
+                        <span className="text-2xl font-bold cursor-pointer font-[Urbanist] lg:hidden">
+                            G
+                        </span>
+                        <span className="text-2xl font-bold cursor-pointer font-[Urbanist] hidden lg:flex">
+                            Gradient
                         </span>
                     </Link>
+                    <div
+                        className={cn(
+                            'flex items-center ml-7 gap-6 hidden lg:flex',
+                            is_subscribed &&
+                                LEARNING_PAGES.some(
+                                    (page) => router.asPath === page
+                                ) &&
+                                '!hidden'
+                        )}>
+                        {UNAUTHENTICATED_NAVBAR_BUTTONS.map(
+                            ({
+                                name,
+                                title,
+                                url,
+                                IconActive,
+                                IconUnactive
+                            }) => (
+                                <NavigationButton
+                                    key={name}
+                                    name={name}
+                                    title={title}
+                                    url={url}
+                                    IconActive={IconActive}
+                                    IconUnactive={IconUnactive}
+                                />
+                            )
+                        )}
+                        {configData?.configs.is_community_config_enabled && (
+                            <NavigationButton
+                                name="Community"
+                                title="Komunitas"
+                                url="/komunitas"
+                                IconActive={RiQuestionnaireFill}
+                                IconUnactive={RiQuestionnaireLine}
+                            />
+                        )}
+                    </div>
                     {showSidebar &&
                         fullHeightSidebar &&
-                        (isAuthenticated || isLandingPageRevampOn) && (
+                        (isAuthenticated || isLandingPageRevampOn) &&
+                        is_subscribed && (
                             <div className="hidden md:block w-[250px] h-[64px] fixed top-0 left-0 bg-[#121212] z-[-1]" />
                         )}
-                    <LeftNavbarMenu
-                        lightMode={lightMode}
-                        showSidebar={showSidebar}
-                    />
                 </div>
                 {paymentPage ? (
                     <Button
@@ -209,7 +287,7 @@ const Navbar = ({
                             {isAuthenticated ? (
                                 <nav
                                     className={`ml-12 flex gap-6 cursor-pointer relative`}>
-                                    {router.pathname === '/' && (
+                                    {/* {router.pathname === '/' && (
                                         <Link href="/kelas">
                                             <nav
                                                 className="ml-12 cursor-pointer hover:text-accent-blue"
@@ -219,7 +297,7 @@ const Navbar = ({
                                                 Kelas
                                             </nav>
                                         </Link>
-                                    )}
+                                    )} */}
                                     <NavMenuIcons />
                                     <div
                                         className={`flex items-center gap-2 hover:text-accent-blue ${
@@ -250,12 +328,22 @@ const Navbar = ({
                             ) : (
                                 <>
                                     {isLandingPageRevampOn ? (
-                                        <Button
-                                            variant="primary"
-                                            href="/masuk"
-                                            eventName="Login Button on Navbar">
-                                            Masuk
-                                        </Button>
+                                        <div className="flex gap-2">
+                                            <Button
+                                                variant="custom"
+                                                className="text-sm lg:text-base text-[#B6A6F3]"
+                                                href="/masuk"
+                                                eventName="Login Button on Navbar">
+                                                Masuk
+                                            </Button>
+                                            <Button
+                                                variant="primary"
+                                                className="text-sm lg:text-base"
+                                                href="/daftar"
+                                                eventName="Register Button on Navbar">
+                                                Daftar
+                                            </Button>
+                                        </div>
                                     ) : (
                                         <>
                                             <Link href="/kelas">
@@ -283,13 +371,22 @@ const Navbar = ({
                         <div className="flex gap-4 text-3xl md:hidden">
                             {!isAuthenticated ? (
                                 isLandingPageRevampOn ? (
-                                    <Button
-                                        variant="primary"
-                                        className="text-xs"
-                                        href="/masuk"
-                                        eventName="Login Button on Navbar">
-                                        Masuk
-                                    </Button>
+                                    <div className="flex gap-2">
+                                        <Button
+                                            variant="custom"
+                                            className="text-sm lg:text-base text-[#B6A6F3]"
+                                            href="/masuk"
+                                            eventName="Login Button on Navbar">
+                                            Masuk
+                                        </Button>
+                                        <Button
+                                            variant="primary"
+                                            className="text-xs"
+                                            href="/daftar"
+                                            eventName="Register Button on Navbar">
+                                            Daftar
+                                        </Button>
+                                    </div>
                                 ) : (
                                     <>
                                         <Link
@@ -314,7 +411,7 @@ const Navbar = ({
                                 )
                             ) : (
                                 <div className="flex items-center gap-4">
-                                    {router.pathname === '/' && (
+                                    {/* {router.pathname === '/' && (
                                         <Link
                                             href="/kelas"
                                             onClick={() =>
@@ -330,7 +427,7 @@ const Navbar = ({
                                                 Kelas
                                             </nav>
                                         </Link>
-                                    )}
+                                    )} */}
 
                                     <NavMenuIcons />
                                     <button
@@ -376,7 +473,7 @@ const Navbar = ({
                     <section
                         className={clsx(
                             showSidebar &&
-                                'md:max-w-[calc(100%-250px)] absolute right-0 top-[64px]',
+                                'md:max-w-[calc(100%-250px)] absolute right-0 top-[56px]',
                             'px-4 py-4 md:px-6 bg-[#121212] flex justify-between items-center w-full'
                         )}>
                         <p className="flex items-center gap-2 text-sm font-body">
@@ -416,6 +513,7 @@ const Navbar = ({
             <MobileSidebar
                 openSidebar={openSidebar}
                 setOpenSidebar={setOpenSidebar}
+                configData={configData}
             />
         </header>
     );
