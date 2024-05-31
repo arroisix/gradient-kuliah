@@ -80,7 +80,7 @@ const ClassContainer = (): JSX.Element => {
     const { data: activePacket } = useGetActiveSubscriptionQuery(undefined, {
         skip: !isAuthenticated
     });
-    const { is_subscribed } = useCourseSubscription()
+    const { is_subscribed } = useCourseSubscription();
 
     return (
         <>

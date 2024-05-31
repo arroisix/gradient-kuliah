@@ -73,7 +73,7 @@ const LearnLayout = ({
                         showSidebar &&
                             'pt-16 flex gap-[2rem] lg:gap-[6rem] w-full',
                         !closeReminder && showSubscriptionReminder && 'pt-11',
-                        is_subscribed? 'pb-16' : 'pb-8'
+                        is_subscribed ? 'pb-16' : 'pb-8'
                     )}>
                     {showSidebar && is_subscribed && (
                         <Sidebar fullHeight={fullHeightSidebar} />
