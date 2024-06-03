@@ -230,10 +230,9 @@ const Navbar = ({
                     <div
                         className={cn(
                             'flex items-center ml-7 gap-6 hidden lg:flex',
-                            is_subscribed &&
-                                LEARNING_PAGES.some(
-                                    (page) => router.asPath === page
-                                ) &&
+                            is_subscribed && (LEARNING_PAGES.some(
+                                (page) => router.asPath === page
+                            ) || router.pathname === '/komunitas/[id]' || router.pathname === '/astronotes/[slug]') &&
                                 '!hidden'
                         )}>
                         {UNAUTHENTICATED_NAVBAR_BUTTONS.map(
