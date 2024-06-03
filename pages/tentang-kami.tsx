@@ -6,7 +6,7 @@ import { GetStaticProps } from 'next';
 const About = (): JSX.Element => {
     return (
         <Layout>
-            <section className="min-h-screen pt-24 px-4 md:px-[7.5rem] lg:px-[22rem]">
+            <section className="min-h-screen pt-24 px-4 md:px-[7.5rem] lg:px-[22rem] pb-8">
                 <Breadcrumb className="pb-5" />
                 <h1 className="text-3xl md:text-4xl font-bold">Tentang Kami</h1>
                 <div className="w-full h-full rounded-md p-4 md:p-8 bg-[#121212] mt-4 md:mt-8 mb-4 md:mb-8 flex flex-col">
@@ -50,7 +50,7 @@ const About = (): JSX.Element => {
                         untuk mencapai potensi maksimalnya.{' '}
                     </p>
                 </div>
-                <div className="w-full h-full rounded-md p-4 md:p-8 bg-[#121212] mb-8 flex flex-col md:flex-row items-center md:justify-between">
+                <div className="w-full h-full rounded-md p-4 md:p-8 bg-[#121212] flex flex-col md:flex-row items-center md:justify-between">
                     <h3 className="font-bold mb-2 md:mb-0">
                         Bergabung Bersama Kami
                     </h3>
