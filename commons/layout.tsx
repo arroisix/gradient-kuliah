@@ -32,7 +32,7 @@ const Layout = ({
     const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
         'landing-page-revamp'
     );
-    const router = useRouter()
+    const router = useRouter();
     const { is_subscribed } = useCourseSubscription();
 
     return (
@@ -69,7 +69,7 @@ const Layout = ({
                     {children}
                 </div>
             </section>
-            {(!is_subscribed || router.asPath  === '/') && <Footer />}
+            {(!is_subscribed || router.asPath === '/') && <Footer />}
             <Appbar />
         </div>
     );
