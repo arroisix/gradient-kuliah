@@ -36,7 +36,7 @@ const PrivateDashboardContent = (): JSX.Element => {
                 header="Bacaan Untukmu"
                 items={data?.book_recommendation}
                 showButton
-                btnHref='/perpustakaan'
+                btnHref="/perpustakaan"
                 eventName='User click Book Items on "Bacaan Untukmu" Section'
             />
             <Section

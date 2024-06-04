@@ -118,7 +118,7 @@ const Recommendations = ({
                         Rekomendasi Latihan Soal
                     </h4>
                     <Button
-                        href='/perpustakaan/bank-soal'
+                        href="/perpustakaan/bank-soal"
                         variant="custom"
                         eventName="Click 'Lihat Semua' in Bank Soal Section"
                         className="text-xs text-black bg-white whitespace-nowrap">
@@ -139,7 +139,7 @@ const Recommendations = ({
                         Rekomendasi Rangkuman
                     </h4>
                     <Button
-                        href='/perpustakaan'
+                        href="/perpustakaan"
                         variant="custom"
                         eventName="Click 'Lihat Semua' in Rangkuman Section"
                         className="text-xs text-black bg-white whitespace-nowrap">

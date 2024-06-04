@@ -13,24 +13,30 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 const AstronotesEntrypoint = (): JSX.Element => {
-    const router = useRouter()
+    const router = useRouter();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { data: activePacket } = useGetActiveSubscriptionQuery(undefined, {
         skip: !isAuthenticated
     });
 
-    const suffix = router.pathname.split('/perpustakaan')[1]
-    let type = Tab.all
-    if (suffix === '/astronotes') type = Tab.astronotes
-    if (suffix === '/textbook') type = Tab.textbook
-    if (suffix === '/bank-soal') type = Tab.soal
+    const suffix = router.pathname.split('/perpustakaan')[1];
+    let type = Tab.all;
+    if (suffix === '/astronotes') type = Tab.astronotes;
+    if (suffix === '/textbook') type = Tab.textbook;
+    if (suffix === '/bank-soal') type = Tab.soal;
 
     return (
         <div className="relative grid w-full grid-cols-1 mx-auto xl:max-w-screen-2xl">
             {isAuthenticated && <ContinueReadingSection />}
-            <h1 className="text-xl font-bold md:text-2xl mb-2.5">Perpustakaan</h1>
+            <h1 className="text-xl font-bold md:text-2xl mb-2.5">
+                Perpustakaan
+            </h1>
             {isAuthenticated && <EntrypointSort />}
-            {isAuthenticated ? <EntrypointPrivate type={type} /> : <EntrypointPublic type={type} />}
+            {isAuthenticated ? (
+                <EntrypointPrivate type={type} />
+            ) : (
+                <EntrypointPublic type={type} />
+            )}
             {!(activePacket && activePacket.subscription_id) && (
                 <RenewSubscriptionBanner product="materi" />
             )}

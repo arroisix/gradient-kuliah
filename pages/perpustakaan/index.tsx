@@ -1,14 +1,14 @@
-import LearnLayout from "commons/learnLayout"
-import AstronotesEntrypoint from "courses/containers/learn/astronotes/entrypoint"
-import { GetStaticProps } from "next"
+import LearnLayout from 'commons/learnLayout';
+import AstronotesEntrypoint from 'courses/containers/learn/astronotes/entrypoint';
+import { GetStaticProps } from 'next';
 
 const PerpustakaanPage = (): JSX.Element => {
     return (
         <LearnLayout showSidebar fullHeightSidebar>
             <AstronotesEntrypoint />
         </LearnLayout>
-    )
-}
+    );
+};
 
 export const getStaticProps: GetStaticProps = () => {
     const META_TITLE =
@@ -36,8 +36,8 @@ export const getStaticProps: GetStaticProps = () => {
                 ]
             }
         }
-    }
-}
+    };
+};
 
 PerpustakaanPage.displayName = 'Library';
 export default PerpustakaanPage;

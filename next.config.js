@@ -47,12 +47,12 @@ module.exports = {
                 permanent: false,
                 basePath: false
             },
-            { 
-                source: '/astronotes', 
-                destination: '/perpustakaan', 
+            {
+                source: '/astronotes',
+                destination: '/perpustakaan',
                 permanent: true,
                 basePath: false
-            },
+            }
         ];
     }
 };

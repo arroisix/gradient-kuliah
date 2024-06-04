@@ -1,18 +1,17 @@
-import LearnLayout from "commons/learnLayout"
-import AstronotesEntrypoint from "courses/containers/learn/astronotes/entrypoint"
-import { GetStaticProps } from "next"
+import LearnLayout from 'commons/learnLayout';
+import AstronotesEntrypoint from 'courses/containers/learn/astronotes/entrypoint';
+import { GetStaticProps } from 'next';
 
 const AstronotesPage = (): JSX.Element => {
     return (
         <LearnLayout showSidebar fullHeightSidebar>
             <AstronotesEntrypoint />
         </LearnLayout>
-    )
-}
+    );
+};
 
 export const getStaticProps: GetStaticProps = () => {
-    const META_TITLE =
-        'Kumpulan Rangkuman & Catatan Materi Kuliah | Gradient';
+    const META_TITLE = 'Kumpulan Rangkuman & Catatan Materi Kuliah | Gradient';
     const META_DESCRIPTION =
         'Tingkatkan hasil belajar dari rangkuman & catatan berkualitas yang dirancang khusus agar lebih praktis serta mempercepat waktu Kamu dalam proses belajar.';
 
@@ -36,8 +35,8 @@ export const getStaticProps: GetStaticProps = () => {
                 ]
             }
         }
-    }
-}
+    };
+};
 
 AstronotesPage.displayName = 'Astronotes Library';
 export default AstronotesPage;
