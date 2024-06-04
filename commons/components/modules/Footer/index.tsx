@@ -4,11 +4,11 @@ import TikTok from 'commons/components/elements/Icons/TikTok';
 import Twitter from 'commons/components/elements/Icons/Twitter';
 import Youtube from 'commons/components/elements/Icons/Youtube';
 import Link from 'next/link';
-import { getYear } from 'date-fns';
 import { BsWhatsapp } from 'react-icons/bs';
 import { FaInstagram } from 'react-icons/fa';
 import { IconType } from 'react-icons/lib';
 import { MdMailOutline } from 'react-icons/md';
+import moment from 'moment';
 
 type FooterItemProps = {
     title: string;
@@ -109,7 +109,7 @@ const Footer = (): JSX.Element => {
     const TITLE_BODY_GAP = 4;
     const PRODUCT_BODY_GAP = 3;
     const CONTACT_BODY_GAP = 2;
-    const CURRENT_YEAR = getYear(new Date());
+    const CURRENT_YEAR = moment().year();
 
     return (
         <footer

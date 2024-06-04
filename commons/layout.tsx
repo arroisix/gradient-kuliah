@@ -6,6 +6,8 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import { cn } from './utils';
 import Appbar from './components/modules/Appbar';
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { useRouter } from 'next/router';
 
 interface LayoutProps {
     children?: JSX.Element;
@@ -30,6 +32,8 @@ const Layout = ({
     const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
         'landing-page-revamp'
     );
+    const router = useRouter();
+    const { is_subscribed } = useCourseSubscription();
 
     return (
         <div
@@ -65,7 +69,7 @@ const Layout = ({
                     {children}
                 </div>
             </section>
-            <Footer />
+            {(!is_subscribed || router.asPath === '/') && <Footer />}
             <Appbar />
         </div>
     );
