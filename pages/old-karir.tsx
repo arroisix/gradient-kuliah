@@ -5,7 +5,7 @@ import Layout from 'commons/layout';
 const Career = (): JSX.Element => {
     return (
         <Layout>
-            <section className="min-h-screen pt-24 px-4 md:px-[7.5rem] lg:px-[22rem] mb-4">
+            <section className="min-h-screen pt-24 px-4 md:px-[7.5rem] lg:px-[22rem] pb-4">
                 <h1 className="text-3xl md:text-4xl font-bold">Karir</h1>
                 <div className="w-full h-full rounded-md p-4 md:p-8 bg-[#121212]  mt-4 md:mt-8 mb-4 md:mb-8  flex flex-col">
                     <p>Pastikan kamu,</p>
