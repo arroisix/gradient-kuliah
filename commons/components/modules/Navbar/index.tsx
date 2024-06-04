@@ -198,7 +198,9 @@ const Navbar = ({
         setCloseReminder?.(closeSubscriptionReminder);
     }, [closeSubscriptionReminder, setCloseReminder]);
 
-    const bookDetailPageRegex = new RegExp(/^\/perpustakaan\/([a-zA-Z0-9-]+)\/(.+)$/);
+    const bookDetailPageRegex = new RegExp(
+        /^\/perpustakaan\/([a-zA-Z0-9-]+)\/(.+)$/
+    );
 
     return (
         <header
@@ -237,7 +239,9 @@ const Navbar = ({
                                     (page) => router.asPath === page
                                 ) ||
                                     router.pathname === '/komunitas/[id]' ||
-                                    router.pathname.match(bookDetailPageRegex)) &&
+                                    router.pathname.match(
+                                        bookDetailPageRegex
+                                    )) &&
                                 '!hidden'
                         )}>
                         {UNAUTHENTICATED_NAVBAR_BUTTONS.map(

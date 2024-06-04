@@ -48,7 +48,11 @@ export const EntrypointContent = ({
                 ? `/astronotes/textbook/${slug}/${latestPage}`
                 : `/astronotes/${slug}/${latestPage}`;
         }
-        return category.toLowerCase() === 'textbook'? `/perpustakaan/textbook/${slug}` : category.toLowerCase() === 'catatan'? `/perpustakaan/astronotes/${slug}` : `/perpustakaan/bank-soal/${slug}`;
+        return category.toLowerCase() === 'textbook'
+            ? `/perpustakaan/textbook/${slug}`
+            : category.toLowerCase() === 'catatan'
+            ? `/perpustakaan/astronotes/${slug}`
+            : `/perpustakaan/bank-soal/${slug}`;
     };
 
     return (

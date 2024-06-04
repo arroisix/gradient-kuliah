@@ -35,7 +35,9 @@ const AstronotesDetail = ({
 
     return (
         <div className="mx-auto w-full lg:w-[75%] xl:w-[60%] flex flex-col gap-4 md:gap-6">
-            <Breadcrumb nextItem={{ name: astronotes?.title } as BreadcrumbItemProps} />
+            <Breadcrumb
+                nextItem={{ name: astronotes?.title } as BreadcrumbItemProps}
+            />
             <Tabs />
 
             <div

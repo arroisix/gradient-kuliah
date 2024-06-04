@@ -6,7 +6,11 @@ const COOKIE = 'visitor_id';
 const ACTIVE_AB_TESTING_PAGES = ['/', '/komunitas']; // Add as needed
 
 export const config = {
-    matcher: ['/', '/komunitas', '/perpustakaan/:kategori(textbook|astronotes|bank-soal)/:slug*']
+    matcher: [
+        '/',
+        '/komunitas',
+        '/perpustakaan/:kategori(textbook|astronotes|bank-soal)/:slug*'
+    ]
 };
 
 export async function middleware(req: NextRequest): Promise<NextResponse> {

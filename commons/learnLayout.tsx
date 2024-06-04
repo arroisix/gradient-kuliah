@@ -85,7 +85,16 @@ const LearnLayout = ({
                                 ? 'md:ml-[250px]'
                                 : 'lg:px-16 xl:px-12'
                         )}>
-                        {router.pathname === '/kelas' && <Breadcrumb className={cn('w-full px-4 md:px-8 xl:px-12', (is_subscribed || everSubscribed)? 'pb-5' : 'pt-5')} />}
+                        {router.pathname === '/kelas' && (
+                            <Breadcrumb
+                                className={cn(
+                                    'w-full px-4 md:px-8 xl:px-12',
+                                    is_subscribed || everSubscribed
+                                        ? 'pb-5'
+                                        : 'pt-5'
+                                )}
+                            />
+                        )}
                         {isAuthenticated &&
                             isCoursePage &&
                             activePacket &&

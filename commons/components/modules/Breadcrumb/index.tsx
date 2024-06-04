@@ -5,7 +5,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FaChevronRight } from 'react-icons/fa';
 
-const Breadcrumb = ({ nextItem, className }: { nextItem?: BreadcrumbItemProps, className?: string }): JSX.Element => {
+const Breadcrumb = ({
+    nextItem,
+    className
+}: {
+    nextItem?: BreadcrumbItemProps;
+    className?: string;
+}): JSX.Element => {
     const router = useRouter();
     const { pathname } = router;
     const breadcrumbPath = pathname as BreadcrumbPathnames;
@@ -21,7 +27,13 @@ const Breadcrumb = ({ nextItem, className }: { nextItem?: BreadcrumbItemProps, c
                 url={is_subscribed ? '/dashboard' : '/'}
                 nextItem={breadcrumbsData}
             />
-            {nextItem && <Item name={nextItem.name} url={nextItem.url} nextItem={nextItem.nextItem} />}
+            {nextItem && (
+                <Item
+                    name={nextItem.name}
+                    url={nextItem.url}
+                    nextItem={nextItem.nextItem}
+                />
+            )}
         </div>
     );
 };
@@ -37,11 +49,13 @@ const Item = ({ name, url, nextItem }: BreadcrumbItemProps): JSX.Element => {
                         </h3>
                     </Link>
                     <FaChevronRight className="text-[#666666] h-3 md:h-3.5" />
-                    {nextItem && <Item
-                        name={nextItem.name}
-                        url={nextItem.url}
-                        nextItem={nextItem.nextItem}
-                    />}
+                    {nextItem && (
+                        <Item
+                            name={nextItem.name}
+                            url={nextItem.url}
+                            nextItem={nextItem.nextItem}
+                        />
+                    )}
                 </>
             ) : (
                 <h3 className="font-body text-xs lg:text-sm text-white">

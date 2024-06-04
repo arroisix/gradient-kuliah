@@ -40,7 +40,14 @@ const AstronoteBook = ({
 
                 if (in_progress)
                     router.push(`/astronotes/${slug}/${latest_page || 1}`);
-                else router.push(category_name.toLowerCase() === 'textbook'? `/perpustakaan/textbook/${slug}` : category_name.toLowerCase() === 'catatan'? `/perpustakaan/astronotes/${slug}` : `/perpustakaan/bank-soal/${slug}`);
+                else
+                    router.push(
+                        category_name.toLowerCase() === 'textbook'
+                            ? `/perpustakaan/textbook/${slug}`
+                            : category_name.toLowerCase() === 'catatan'
+                            ? `/perpustakaan/astronotes/${slug}`
+                            : `/perpustakaan/bank-soal/${slug}`
+                    );
             }}
             aria-hidden>
             <div className="aspect-[256/364] relative w-full border rounded border-neutral-700">

@@ -42,7 +42,15 @@ const ContinueReadingSection = (): JSX.Element => {
                                         'flex-none w-[348px]'
                                 )}
                                 imageClassname="min-w-20 min-h-24"
-                                href={book.category_name.toLowerCase() === 'textbook'? `/perpustakaan/textbook/${book.slug}` : book.category_name.toLowerCase() === 'catatan'? `/perpustakaan/astronotes/${book.slug}` : `/perpustakaan/bank-soal/${book.slug}`}
+                                href={
+                                    book.category_name.toLowerCase() ===
+                                    'textbook'
+                                        ? `/perpustakaan/textbook/${book.slug}`
+                                        : book.category_name.toLowerCase() ===
+                                          'catatan'
+                                        ? `/perpustakaan/astronotes/${book.slug}`
+                                        : `/perpustakaan/bank-soal/${book.slug}`
+                                }
                                 key={book.id}
                                 {...book}
                             />

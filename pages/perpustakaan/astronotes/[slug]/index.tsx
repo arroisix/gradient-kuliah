@@ -61,11 +61,17 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
             if (data.book.category.toLowerCase() !== 'catatan') {
                 return {
                     notFound: true
-                }
+                };
             }
 
-            const META_TITLE = `${data.book.category} ${data.book.title.replace('Astronotes: ', '')} Sumber Literatur Terlengkap | Gradient`
-            const META_DESCRIPTION = `Baca rangkuman e-book ${data.book.title.replace('Astronotes: ', '')} untuk menghemat waktu belajar, dan meningkatkan performa akademik. Mulai belajar lebih praktis & terstruktur sekarang.`
+            const META_TITLE = `${data.book.category} ${data.book.title.replace(
+                'Astronotes: ',
+                ''
+            )} Sumber Literatur Terlengkap | Gradient`;
+            const META_DESCRIPTION = `Baca rangkuman e-book ${data.book.title.replace(
+                'Astronotes: ',
+                ''
+            )} untuk menghemat waktu belajar, dan meningkatkan performa akademik. Mulai belajar lebih praktis & terstruktur sekarang.`;
 
             return {
                 revalidate: 300,

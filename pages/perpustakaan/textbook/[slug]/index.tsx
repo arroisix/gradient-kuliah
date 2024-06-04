@@ -61,11 +61,11 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
             if (data.book.category.toLowerCase() !== 'textbook') {
                 return {
                     notFound: true
-                }
+                };
             }
 
-            const META_TITLE = `Pembahasan Soal ${data.book.title}`
-            const META_DESCRIPTION = `Pembahasan Soal ${data.book.title}`
+            const META_TITLE = `Pembahasan Soal ${data.book.title}`;
+            const META_DESCRIPTION = `Pembahasan Soal ${data.book.title}`;
 
             return {
                 revalidate: 300,

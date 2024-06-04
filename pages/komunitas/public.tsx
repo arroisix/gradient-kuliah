@@ -25,7 +25,7 @@ const Komunitas = ({ data }: KomunitasProps): JSX.Element => {
         <KomunitasProvider initialData={data}>
             <LearnLayout showSidebar fullHeightSidebar showSubscriptionReminder>
                 <>
-                    <Breadcrumb className='w-full py-5' />
+                    <Breadcrumb className="w-full py-5" />
                     <KomunitasContainer initialData={data} />
                 </>
             </LearnLayout>
