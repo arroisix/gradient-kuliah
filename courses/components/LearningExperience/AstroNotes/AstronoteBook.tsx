@@ -19,6 +19,7 @@ const AstronoteBook = ({
     education_level,
     in_progress,
     latest_page,
+    category_name,
     eventName = 'Click Book Item on Library Page',
     eventPayload
 }: Astronote & {
@@ -39,7 +40,7 @@ const AstronoteBook = ({
 
                 if (in_progress)
                     router.push(`/astronotes/${slug}/${latest_page || 1}`);
-                else router.push(`/astronotes/${slug}`);
+                else router.push(category_name.toLowerCase() === 'textbook'? `/perpustakaan/textbook/${slug}` : category_name.toLowerCase() === 'catatan'? `/perpustakaan/astronotes/${slug}` : `/perpustakaan/bank-soal/${slug}`);
             }}
             aria-hidden>
             <div className="aspect-[256/364] relative w-full border rounded border-neutral-700">

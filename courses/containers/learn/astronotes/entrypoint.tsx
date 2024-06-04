@@ -1,4 +1,5 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import ContinueReadingSection from 'courses/components/LearningExperience/AstroNotes/Entrypoint/ContinueReadingSection';
 import {
     EntrypointPrivate,
@@ -26,21 +27,24 @@ const AstronotesEntrypoint = (): JSX.Element => {
     if (suffix === '/bank-soal') type = Tab.soal;
 
     return (
-        <div className="relative grid w-full grid-cols-1 mx-auto xl:max-w-screen-2xl">
-            {isAuthenticated && <ContinueReadingSection />}
-            <h1 className="text-xl font-bold md:text-2xl mb-2.5">
-                Perpustakaan
-            </h1>
-            {isAuthenticated && <EntrypointSort />}
-            {isAuthenticated ? (
-                <EntrypointPrivate type={type} />
-            ) : (
-                <EntrypointPublic type={type} />
-            )}
-            {!(activePacket && activePacket.subscription_id) && (
-                <RenewSubscriptionBanner product="materi" />
-            )}
-        </div>
+        <>
+            <Breadcrumb className='w-full pb-5' />
+            <div className="relative grid w-full grid-cols-1 mx-auto xl:max-w-screen-2xl">
+                {isAuthenticated && <ContinueReadingSection />}
+                <h1 className="text-xl font-bold md:text-2xl mb-2.5">
+                    Perpustakaan
+                </h1>
+                {isAuthenticated && <EntrypointSort />}
+                {isAuthenticated ? (
+                    <EntrypointPrivate type={type} />
+                ) : (
+                    <EntrypointPublic type={type} />
+                )}
+                {!(activePacket && activePacket.subscription_id) && (
+                    <RenewSubscriptionBanner product="materi" />
+                )}
+            </div>
+        </>
     );
 };
 

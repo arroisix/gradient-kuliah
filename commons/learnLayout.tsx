@@ -47,7 +47,7 @@ const LearnLayout = ({
     const { data: activePacket } = useGetActiveSubscriptionQuery(undefined, {
         skip: !isAuthenticated
     });
-    const { is_subscribed } = useCourseSubscription();
+    const { is_subscribed, everSubscribed } = useCourseSubscription();
 
     return (
         <>
@@ -85,16 +85,7 @@ const LearnLayout = ({
                                 ? 'md:ml-[250px]'
                                 : 'lg:px-16 xl:px-12'
                         )}>
-                        <Breadcrumb
-                            className={cn(
-                                'px-4 md:px-0 w-full',
-                                fullHeightSidebar && 'md:px-8 xl:px-12',
-                                is_subscribed ? 'pb-5' : 'pt-5',
-                                router.pathname === '/komunitas/public' &&
-                                    !is_subscribed &&
-                                    'pt-10'
-                            )}
-                        />
+                        {router.pathname === '/kelas' && <Breadcrumb className={cn('w-full px-4 md:px-8 xl:px-12', (is_subscribed || everSubscribed)? 'pb-5' : 'pt-5')} />}
                         {isAuthenticated &&
                             isCoursePage &&
                             activePacket &&

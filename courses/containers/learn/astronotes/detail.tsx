@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { FaChevronRight } from 'react-icons/fa';
 import { GrStar } from 'react-icons/gr';
 import { useTracker } from 'tracker/tracker';
 import AstronotesKeyword from 'courses/components/LearningExperience/AstroNotes/Detail/AstronotesKeyword';
@@ -16,6 +15,7 @@ import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Skeleton from 'commons/components/elements/Skeleton';
 import { useGetBookDetailQuery } from 'courses/redux/api/astronotesApi';
+import Breadcrumb from 'commons/components/modules/Breadcrumb';
 
 const AstronotesDetail = ({
     slug: serverSlug,
@@ -35,7 +35,7 @@ const AstronotesDetail = ({
 
     return (
         <div className="mx-auto w-full lg:w-[75%] xl:w-[60%] flex flex-col gap-4 md:gap-6">
-            <Breadcrumbs title={astronotes?.title} />
+            <Breadcrumb nextItem={{ name: astronotes?.title } as BreadcrumbItemProps} />
             <Tabs />
 
             <div
@@ -199,25 +199,6 @@ const Tabs = (): JSX.Element => {
         </div>
     );
 };
-
-const Breadcrumbs = ({ title }: { title?: string }): JSX.Element => {
-    return (
-        <div className="flex flex-row gap-2.5 items-center text-xs md:text-sm py-4">
-            <Link href={'/astronotes'} className="cursor-pointer">
-                <h3 className="text-[#666666] hover:text-[#666666]/[0.75] duration-100 transition-all ease-in-out">
-                    Perpustakaan
-                </h3>
-            </Link>
-            <FaChevronRight className="text-[#666666] h-3 md:h-3.5" />
-            {title ? (
-                <h1 className="text-white">{title}</h1>
-            ) : (
-                <Skeleton isCustomSize className="w-24 h-4" />
-            )}
-        </div>
-    );
-};
-
 const StartReadingButton = ({
     first_problem_id
 }: Pick<BookDetailInterface, 'first_problem_id'>): JSX.Element => {

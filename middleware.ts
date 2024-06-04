@@ -6,7 +6,7 @@ const COOKIE = 'visitor_id';
 const ACTIVE_AB_TESTING_PAGES = ['/', '/komunitas']; // Add as needed
 
 export const config = {
-    matcher: ['/', '/komunitas', '/astronotes/:slug*']
+    matcher: ['/', '/komunitas', '/perpustakaan/:kategori(textbook|astronotes|bank-soal)/:slug*']
 };
 
 export async function middleware(req: NextRequest): Promise<NextResponse> {
@@ -16,12 +16,12 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
 
     if (
         !ACTIVE_AB_TESTING_PAGES.includes(pathname) &&
-        !pathname.startsWith('/astronotes/')
+        !pathname.startsWith('/perpustakaan/')
     ) {
         return res;
     }
 
-    if (pathname.startsWith('/astronotes/')) {
+    if (pathname.startsWith('/perpustakaan/')) {
         const { isBot } = userAgent(req);
         if (isBot) {
             res.cookies.set(IS_BOT, process.env.FRONTEND_ACCESS_TOKEN);

@@ -30,9 +30,11 @@ export const ListBooks = ({
                 }) => (
                     <Link
                         href={
-                            category == 'Textbook'
-                                ? `/astronotes/textbook/${slug}`
-                                : `/astronotes/${slug}`
+                            category.toLowerCase() === 'textbook'
+                                ? `/perpustakaan/textbook/${slug}`
+                                : category.toLowerCase() === 'catatan'
+                                    ? `/perpustakaan/astronotes/${slug}`
+                                    : `/perpustakaan/bank-soal/${slug}`
                         }
                         className="flex items-center gap-5 cursor-pointer"
                         key={book_id}

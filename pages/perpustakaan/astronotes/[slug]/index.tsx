@@ -2,11 +2,11 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import LearnLayout from 'commons/learnLayout';
 import AstronotesDetail from 'courses/containers/learn/astronotes/detail';
 import { wrapper } from 'redux/store';
-import { getBookDetail } from '../../../courses/redux/api/astronotesApi';
-import { getRunningQueriesThunk } from '../../../redux/api/baseApi';
 import { ThunkDispatch } from 'redux-thunk';
 import axios from 'axios';
 import config from 'redux/api/config';
+import { getBookDetail } from 'courses/redux/api/astronotesApi';
+import { getRunningQueriesThunk } from 'redux/api/baseApi';
 
 const AstronotesDetailPage = ({
     slug,
@@ -22,7 +22,7 @@ const AstronotesDetailPage = ({
     );
 };
 
-AstronotesDetailPage.displayName = 'Book Detail';
+AstronotesDetailPage.displayName = 'Astronotes Detail';
 export default AstronotesDetailPage;
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -58,44 +58,28 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
             }
 
             const data = payload[0].data as GetBookDetailResponse;
-            const isTextbook = data.book.category.toLowerCase() === 'textbook';
-            const isAstronotes = data.book.category.toLowerCase() === 'catatan';
-            const titleSEO = isTextbook
-                ? `Pembahasan Soal ${data.book.title}`
-                : isAstronotes
-                ? `${data.book.category} ${data.book.title.replace(
-                      'Astronotes: ',
-                      ''
-                  )} Sumber Literatur Terlengkap | Gradient`
-                : `${data.book.category} ${data.book.title.replace(
-                      'Bank Soal: ',
-                      ''
-                  )} Beserta Pembahasan | Gradient`;
-            const descriptionSEO = isTextbook
-                ? titleSEO
-                : isAstronotes
-                ? `Baca rangkuman e-book ${data.book.title.replace(
-                      'Astronotes: ',
-                      ''
-                  )} untuk menghemat waktu belajar, dan meningkatkan performa akademik. Mulai belajar lebih praktis & terstruktur sekarang.`
-                : `Raih prestasi akademis lebih tinggi melalui soal-soal ${data.book.title.replace(
-                      'Bank Soal: ',
-                      ''
-                  )} berserta solusi lengkap untuk setiap pertanyaan yang akan mudah untuk Kamu pahami.`;
+            if (data.book.category.toLowerCase() !== 'catatan') {
+                return {
+                    notFound: true
+                }
+            }
+
+            const META_TITLE = `${data.book.category} ${data.book.title.replace('Astronotes: ', '')} Sumber Literatur Terlengkap | Gradient`
+            const META_DESCRIPTION = `Baca rangkuman e-book ${data.book.title.replace('Astronotes: ', '')} untuk menghemat waktu belajar, dan meningkatkan performa akademik. Mulai belajar lebih praktis & terstruktur sekarang.`
 
             return {
                 revalidate: 300,
                 props: {
                     slug: params?.slug,
                     astronotes: data.book,
-                    canonical: `https://gradient.academy/astronotes/${params?.slug}`,
-                    title: titleSEO,
-                    description: descriptionSEO,
+                    canonical: `https://gradient.academy/perpustakaan/astronotes/${params?.slug}`,
+                    title: META_TITLE,
+                    description: META_DESCRIPTION,
                     openGraph: {
                         type: 'website',
-                        title: titleSEO,
-                        description: descriptionSEO,
-                        url: `https://gradient.academy/astronotes/${params?.slug}`,
+                        title: META_TITLE,
+                        description: META_DESCRIPTION,
+                        url: `https://gradient.academy/perpustakaan/astronotes/${params?.slug}`,
                         images: [
                             {
                                 url: data.book.cover_url,

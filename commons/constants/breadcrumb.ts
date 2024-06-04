@@ -15,11 +15,27 @@ export const BREADCRUMB: BreadcrumbProps = {
             name: 'Astronotes'
         }
     },
+    '/perpustakaan/astronotes/[slug]': {
+        name: 'Perpustakaan',
+        url: '/perpustakaan',
+        nextItem: {
+            name: 'Astronotes',
+            url: '/perpustakaan/astronotes'
+        }
+    },
     '/perpustakaan/textbook': {
         name: 'Perpustakaan',
         url: '/perpustakaan',
         nextItem: {
             name: 'Text Book'
+        }
+    },
+    '/perpustakaan/textbook/[slug]': {
+        name: 'Perpustakaan',
+        url: '/perpustakaan',
+        nextItem: {
+            name: 'Text Book',
+            url: '/perpustakaan/textbook'
         }
     },
     '/perpustakaan/bank-soal': {
