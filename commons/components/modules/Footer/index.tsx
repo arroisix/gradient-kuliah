@@ -54,15 +54,15 @@ const ITEMS: FooterItemProps[] = [
             },
             {
                 title: 'Textbook Solution',
-                url: '/astronotes?tab=text-book'
+                url: '/perpustakaan/textbook'
             },
             {
                 title: 'Astronotes',
-                url: '/astronotes?tab=astronotes'
+                url: '/perpustakaan/astronotes'
             },
             {
                 title: 'Bank Soal',
-                url: '/astronotes?tab=bank-soal'
+                url: '/perpustakaan/bank-soal'
             },
             {
                 title: 'Komunitas',

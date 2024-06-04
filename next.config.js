@@ -46,7 +46,13 @@ module.exports = {
                 destination: `https://gradient-sitemap.s3.ap-southeast-1.amazonaws.com/${env}/:file`,
                 permanent: false,
                 basePath: false
-            }
+            },
+            { 
+                source: '/astronotes', 
+                destination: '/perpustakaan', 
+                permanent: true,
+                basePath: false
+            },
         ];
     }
 };

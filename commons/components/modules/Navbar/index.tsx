@@ -49,7 +49,7 @@ const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
     {
         name: 'Library',
         title: 'Perpustakaan',
-        url: '/astronotes',
+        url: '/perpustakaan',
         IconActive: RiBookOpenFill,
         IconUnactive: RiBookOpenLine
     }

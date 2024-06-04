@@ -83,7 +83,10 @@ interface ConfigResponse {
 type BreadcrumbPathnames =
     | '/kelas'
     | '/komunitas/public'
-    | '/astronotes'
+    | '/perpustakaan'
+    | '/perpustakaan/astronotes'
+    | '/perpustakaan/textbook'
+    | '/perpustakaan/bank-soal'
     | '/tentang-kami'
     | '/kebijakan-privasi'
     | '/syarat-dan-ketentuan';
@@ -94,6 +97,6 @@ type BreadcrumbProps = {
 
 type BreadcrumbItemProps = {
     name: string;
-    url: string;
+    url?: string;
     nextItem?: BreadcrumbItemProps;
 };

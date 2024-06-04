@@ -100,7 +100,7 @@ const Popular = ({
                 </div>
             )}
             <Link
-                href={type === 'book' ? '/astronotes' : '/kelas'}
+                href={type === 'book' ? '/perpustakaan' : '/kelas'}
                 onClick={() => {
                     const sectionType =
                         type.charAt(0).toUpperCase() + type.slice(1);
