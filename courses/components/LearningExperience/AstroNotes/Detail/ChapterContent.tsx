@@ -30,16 +30,16 @@ const ChapterContent = ({
     const router = useRouter();
     const { problemId } = router.query as { problemId?: string };
     const tracker = useTracker();
-    
+
     const getBaseHref = () => {
         if (category?.toLowerCase() === 'textbook') {
-            return `/perpustakaan/textbook/${slug}`
+            return `/perpustakaan/textbook/${slug}`;
         } else if (category?.toLowerCase() === 'catatan') {
-            return `/perpustakaan/astronotes/${slug}`
+            return `/perpustakaan/astronotes/${slug}`;
         } else {
-            return `/perpustakaan/bank-soal/${slug}`
+            return `/perpustakaan/bank-soal/${slug}`;
         }
-    }
+    };
 
     useEffect(() => {
         if (activeSubchapter_) {
@@ -97,8 +97,12 @@ const ChapterContent = ({
                                     key={subchapterSection.id}
                                     href={
                                         category?.toLowerCase() === 'textbook'
-                                            ? `${getBaseHref()}/${subchapterSection.id}`
-                                            : `${getBaseHref()}/${subchapterSection.page_order}#${subchapterSection.id}`
+                                            ? `${getBaseHref()}/${
+                                                  subchapterSection.id
+                                              }`
+                                            : `${getBaseHref()}/${
+                                                  subchapterSection.page_order
+                                              }#${subchapterSection.id}`
                                     }
                                     onClick={() => {
                                         tracker?.genericTrack(
@@ -160,13 +164,13 @@ const SubchapterButton = ({
 
     const getBaseHref = () => {
         if (category?.toLowerCase() === 'textbook') {
-            return `/perpustakaan/textbook/${slug}`
+            return `/perpustakaan/textbook/${slug}`;
         } else if (category?.toLowerCase() === 'catatan') {
-            return `/perpustakaan/astronotes/${slug}`
+            return `/perpustakaan/astronotes/${slug}`;
         } else {
-            return `/perpustakaan/bank-soal/${slug}`
+            return `/perpustakaan/bank-soal/${slug}`;
         }
-    }
+    };
 
     const handleSubchapterButton = (): void => {
         if (subchapter.sections.length > 0) {

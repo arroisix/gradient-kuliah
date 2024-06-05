@@ -18,8 +18,8 @@ const Astronotes = ({
 }): JSX.Element => {
     const { width: notebookWidth, ref: notebookRef } =
         useElementSize<HTMLDivElement>();
-    const router = useRouter()
-    const { slug, page } = router.query as { slug: string, page: string };
+    const router = useRouter();
+    const { slug, page } = router.query as { slug: string; page: string };
 
     return (
         <AstronotesProvider>
@@ -60,13 +60,16 @@ const Astronotes = ({
                     ref={notebookRef}>
                     <div className="pt-4 w-full max-w-5xl mx-auto sm:px-4">
                         <Breadcrumb
-                            nextItem={{
-                                name: book.title,
-                                url: `/perpustakaan/astronotes/${slug}`,
-                                nextItem: {
-                                    name: `Halaman ${page}`
-                                }
-                            } as BreadcrumbItemProps} />
+                            nextItem={
+                                {
+                                    name: book.title,
+                                    url: `/perpustakaan/astronotes/${slug}`,
+                                    nextItem: {
+                                        name: `Halaman ${page}`
+                                    }
+                                } as BreadcrumbItemProps
+                            }
+                        />
                         <AstroNotesContent content={content} book={book} />
                     </div>
                 </div>

@@ -22,22 +22,25 @@ const Paginator = ({
 }: PaginatorProps): JSX.Element => {
     const tracker = useTracker();
     const router = useRouter();
-    const { slug, page } = router.query as { slug: string, page: string };
+    const { slug, page } = router.query as { slug: string; page: string };
     const MAX_VALUE = totalPage;
     const [pageNumber, setPageNumber] = useState<number>(Number(page));
     const destinationPage = useDebounce(pageNumber, 500);
-    const { data: getBookDetail } = useGetBookDetailQuery({ slug }, { skip: !slug });
-    const category_name = getBookDetail?.book.category.toLowerCase()
+    const { data: getBookDetail } = useGetBookDetailQuery(
+        { slug },
+        { skip: !slug }
+    );
+    const category_name = getBookDetail?.book.category.toLowerCase();
 
     const getBaseHref = () => {
         if (category_name === 'textbook') {
-            return `/perpustakaan/textbook/${slug}`
+            return `/perpustakaan/textbook/${slug}`;
         } else if (category_name === 'catatan') {
-            return `/perpustakaan/astronotes/${slug}`
+            return `/perpustakaan/astronotes/${slug}`;
         } else {
-            return `/perpustakaan/bank-soal/${slug}`
+            return `/perpustakaan/bank-soal/${slug}`;
         }
-    }
+    };
 
     useEffect(() => {
         setPageNumber(Number(page));

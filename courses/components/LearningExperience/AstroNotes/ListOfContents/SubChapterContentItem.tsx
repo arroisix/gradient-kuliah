@@ -44,8 +44,11 @@ export const SubChapterContentItem = ({
     const { isLoading, data: subchapters } = isAuthenticated
         ? privateQueryResult
         : publicQueryResult;
-    const { data: getBookDetail } = useGetBookDetailQuery({ slug }, { skip: !slug });
-    const category_name = getBookDetail?.book.category.toLowerCase()
+    const { data: getBookDetail } = useGetBookDetailQuery(
+        { slug },
+        { skip: !slug }
+    );
+    const category_name = getBookDetail?.book.category.toLowerCase();
 
     if (isLoading) return <Skeleton repeat={4} className="h-5 p-0 mb-0" />;
 
@@ -54,7 +57,11 @@ export const SubChapterContentItem = ({
             {subchapters?.data.map((subchapter: BookSubchapter) => (
                 <Link
                     href={
-                        category_name === 'textbook'? `/perpustakaan/textbook/${slug}/${subchapter.page_order}#${subchapter.id}` : category_name === 'astronotes'? `/perpustakaan/catatan/${slug}/${subchapter.page_order}#${subchapter.id}` : `/perpustakaan/bank-soal/${slug}/${subchapter.page_order}#${subchapter.id}`
+                        category_name === 'textbook'
+                            ? `/perpustakaan/textbook/${slug}/${subchapter.page_order}#${subchapter.id}`
+                            : category_name === 'astronotes'
+                            ? `/perpustakaan/catatan/${slug}/${subchapter.page_order}#${subchapter.id}`
+                            : `/perpustakaan/bank-soal/${slug}/${subchapter.page_order}#${subchapter.id}`
                     }
                     scroll={false}
                     key={subchapter.id}

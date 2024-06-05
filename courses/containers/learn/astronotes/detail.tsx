@@ -217,7 +217,9 @@ const StartReadingButton = ({
         if (!isAuthenticated) return '/daftar';
         if (!!first_problem_id)
             return `/perpustakaan/textbook/${slug}/${first_problem_id}`;
-        return category.toLowerCase() === 'catatan'? `/perpustakaan/astronotes/${slug}/1` : `/perpustakaan/bank-soal/${slug}/1`;
+        return category.toLowerCase() === 'catatan'
+            ? `/perpustakaan/astronotes/${slug}/1`
+            : `/perpustakaan/bank-soal/${slug}/1`;
     };
 
     return (

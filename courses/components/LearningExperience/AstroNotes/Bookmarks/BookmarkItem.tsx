@@ -21,20 +21,23 @@ export const BookmarkItem = ({
 }: BookmarkItemProps): JSX.Element => {
     const router = useRouter();
     const { slug } = router.query as { slug: string };
-    const { data: getBookDetail } = useGetBookDetailQuery({ slug }, { skip: !slug });
-    const category_name = getBookDetail?.book.category.toLowerCase()
+    const { data: getBookDetail } = useGetBookDetailQuery(
+        { slug },
+        { skip: !slug }
+    );
+    const category_name = getBookDetail?.book.category.toLowerCase();
 
     const [isShow, setIsShow] = useState(false);
 
     const getHref = () => {
         if (category_name === 'textbook') {
-            return `/perpustakaan/textbook/${slug}/${data.page_order}`
+            return `/perpustakaan/textbook/${slug}/${data.page_order}`;
         } else if (category_name === 'catatan') {
-            return `/perpustakaan/astronotes/${slug}/${data.page_order}`
+            return `/perpustakaan/astronotes/${slug}/${data.page_order}`;
         } else {
-            return `/perpustakaan/bank-soal/${slug}/${data.page_order}`
+            return `/perpustakaan/bank-soal/${slug}/${data.page_order}`;
         }
-    }
+    };
 
     return (
         <div>
@@ -56,9 +59,7 @@ export const BookmarkItem = ({
                     <FaChevronRight size={12} className="swap-on" />
                     <FaChevronUp size={12} className="swap-off" />
                 </label>
-                <Link
-                    href={getHref()}
-                    className="text-sm">
+                <Link href={getHref()} className="text-sm">
                     Halaman {data.page_order}
                 </Link>
             </div>

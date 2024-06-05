@@ -103,13 +103,18 @@ const ProgressItem = ({
     progress: ClassProgress;
     courseName: string;
 }): JSX.Element => {
-    const { book_slug } = progress
-    const { data: getBookDetail } = useGetBookDetailQuery({ slug: book_slug }, { skip: !book_slug });
+    const { book_slug } = progress;
+    const { data: getBookDetail } = useGetBookDetailQuery(
+        { slug: book_slug },
+        { skip: !book_slug }
+    );
 
     const getHref = (): string => {
         switch (progress.type) {
             case 'book':
-                return getBookDetail?.book.category.toLowerCase() === 'catatan'? `/perpustakaan/astronotes/${book_slug}/${progress.latest_page}` : `/perpustakaan/bank-soal/${book_slug}/${progress.latest_page}`;
+                return getBookDetail?.book.category.toLowerCase() === 'catatan'
+                    ? `/perpustakaan/astronotes/${book_slug}/${progress.latest_page}`
+                    : `/perpustakaan/bank-soal/${book_slug}/${progress.latest_page}`;
             case 'textbook':
                 return `/perpustakaan/textbook/${book_slug}/${progress.latest_page}`;
             case 'video':

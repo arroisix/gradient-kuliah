@@ -28,16 +28,16 @@ const AstronoteBook = ({
 }): JSX.Element => {
     const tracker = useTracker();
     const router = useRouter();
-    
+
     const getBaseHref = () => {
         if (category_name.toLowerCase() === 'textbook') {
-            return `/perpustakaan/textbook/${slug}`
+            return `/perpustakaan/textbook/${slug}`;
         } else if (category_name.toLowerCase() === 'catatan') {
-            return `/perpustakaan/astronotes/${slug}`
+            return `/perpustakaan/astronotes/${slug}`;
         } else {
-            return `/perpustakaan/bank-soal/${slug}`
+            return `/perpustakaan/bank-soal/${slug}`;
         }
-    }
+    };
 
     return (
         <div
@@ -50,8 +50,7 @@ const AstronoteBook = ({
 
                 if (in_progress)
                     router.push(`${getBaseHref()}/${latest_page || 1}`);
-                else
-                    router.push(getBaseHref());
+                else router.push(getBaseHref());
             }}
             aria-hidden>
             <div className="aspect-[256/364] relative w-full border rounded border-neutral-700">
