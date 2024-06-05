@@ -86,9 +86,13 @@ type BreadcrumbPathnames =
     | '/perpustakaan'
     | '/perpustakaan/astronotes'
     | '/perpustakaan/astronotes/[slug]'
+    | '/perpustakaan/astronotes/[slug]/[page]'
     | '/perpustakaan/textbook'
     | '/perpustakaan/textbook/[slug]'
+    | '/perpustakaan/textbook/[slug]/[problemId]'
     | '/perpustakaan/bank-soal'
+    | '/perpustakaan/bank-soal/[slug]'
+    | '/perpustakaan/bank-soal/[slug]/[page]'
     | '/tentang-kami'
     | '/kebijakan-privasi'
     | '/syarat-dan-ketentuan';

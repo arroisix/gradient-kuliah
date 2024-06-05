@@ -17,11 +17,12 @@ const Breadcrumb = ({
     const breadcrumbPath = pathname as BreadcrumbPathnames;
     const breadcrumbsData = BREADCRUMB[breadcrumbPath];
     const { is_subscribed } = useCourseSubscription();
+    const isBookPage = breadcrumbPath === '/perpustakaan/astronotes/[slug]/[page]'
 
     if (!breadcrumbsData) return <></>;
 
     return (
-        <div className={cn('flex flex-wrap items-center gap-1', className)}>
+        <div className={cn('flex flex-wrap items-center gap-1', isBookPage && 'mt-4', className)}>
             <Item
                 name="Home"
                 url={is_subscribed ? '/dashboard' : '/'}

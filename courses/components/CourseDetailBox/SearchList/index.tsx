@@ -119,7 +119,7 @@ const SearchList = (): JSX.Element => {
                                             }
                                         );
                                         router.push(
-                                            `/astronotes/${value.slug}/1`
+                                            value.category.toLowerCase() === 'textbook'? `/perpustakaan/textbook/${value.slug}/1` : value.category.toLowerCase() === 'catatan'? `/perpustakaan/astronotes/${value.slug}/1` : `/perpustakaan/bank-soal/${value.slug}/1`
                                         );
                                     }}
                                     aria-hidden>

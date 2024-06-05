@@ -30,6 +30,16 @@ const ChapterContent = ({
     const router = useRouter();
     const { problemId } = router.query as { problemId?: string };
     const tracker = useTracker();
+    
+    const getBaseHref = () => {
+        if (category?.toLowerCase() === 'textbook') {
+            return `/perpustakaan/textbook/${slug}`
+        } else if (category?.toLowerCase() === 'catatan') {
+            return `/perpustakaan/astronotes/${slug}`
+        } else {
+            return `/perpustakaan/bank-soal/${slug}`
+        }
+    }
 
     useEffect(() => {
         if (activeSubchapter_) {
@@ -87,8 +97,8 @@ const ChapterContent = ({
                                     key={subchapterSection.id}
                                     href={
                                         category?.toLowerCase() === 'textbook'
-                                            ? `/astronotes/textbook/${slug}/${subchapterSection.id}`
-                                            : `/astronotes/${slug}/${subchapterSection.page_order}#${subchapterSection.id}`
+                                            ? `${getBaseHref()}/${subchapterSection.id}`
+                                            : `${getBaseHref()}/${subchapterSection.page_order}#${subchapterSection.id}`
                                     }
                                     onClick={() => {
                                         tracker?.genericTrack(
@@ -148,6 +158,16 @@ const SubchapterButton = ({
         problemId?: string;
     };
 
+    const getBaseHref = () => {
+        if (category?.toLowerCase() === 'textbook') {
+            return `/perpustakaan/textbook/${slug}`
+        } else if (category?.toLowerCase() === 'catatan') {
+            return `/perpustakaan/astronotes/${slug}`
+        } else {
+            return `/perpustakaan/bank-soal/${slug}`
+        }
+    }
+
     const handleSubchapterButton = (): void => {
         if (subchapter.sections.length > 0) {
             onSelectSubchapter(subchapter.sections, subchapter.id);
@@ -169,8 +189,8 @@ const SubchapterButton = ({
     const href =
         subchapter.sections.length == 0
             ? category?.toLowerCase() === 'textbook'
-                ? `/astronotes/textbook/${slug}/${subchapter.id}`
-                : `/astronotes/${slug}/${subchapter.page_order}#${subchapter.id}`
+                ? `${getBaseHref()}/${subchapter.id}`
+                : `${getBaseHref()}/${subchapter.page_order}#${subchapter.id}`
             : router.asPath;
 
     return (

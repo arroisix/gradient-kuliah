@@ -17,17 +17,21 @@ const DashboardCard = ({
     const isCourse = item.type?.toLowerCase() === 'kelas';
     const tracker = useTracker();
     const getLink = (): string => {
+        const baseHref = item.type?.toLowerCase() === 'textbook'
+                            ? `/perpustakaan/textbook/${item.book_slug}`
+                            : item.type?.toLowerCase() === 'catatan'?
+                                `/perpustakaan/astronotes/${item.book_slug}`
+                                :  `/perpustakaan/bank-soal/${item.book_slug}`;
+
         if (isVideo || isCourse) {
             if (item?.chapter_id && item.subchapter_id)
                 return `/kelas/${item.course_slug}/belajar/video/${item.chapter_id}/${item.subchapter_id}`;
             return `/kelas/${item.course_slug}`;
         } else {
             if (item.in_progress && !!item.latest_page) {
-                return item.type?.toLowerCase() === 'textbook'
-                    ? `/astronotes/textbook/${item.book_slug}/${item.latest_page}`
-                    : `/astronotes/${item.book_slug}/${item.latest_page}`;
+                return `${baseHref}/${item.latest_page}`
             }
-            return `/astronotes/${item.book_slug}`;
+            return baseHref;
         }
     };
 

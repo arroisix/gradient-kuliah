@@ -10,14 +10,7 @@ import CryptoJS from 'crypto-js';
 
 const DUMMY_DATE = moment().startOf('year').format();
 
-interface AstronotesPageProps {
-    slug: string;
-    page: number;
-    book: GetBookDetailResponse['book'];
-    content: string;
-}
-
-const AstroNotesPage = ({
+const AstronotesPage = ({
     book,
     slug,
     page,
@@ -37,7 +30,7 @@ const AstroNotesPage = ({
                     }
                 ]}
                 datePublished={DUMMY_DATE}
-                url={`https://gradient.academy/astronotes/${slug}/${page}`}
+                url={`https://gradient.academy/perpustakaan/astronotes/${slug}/${page}`}
                 images={[
                     book?.cover_url,
                     'https://assets.gradient.academy/assets/gradient-G-icon.png'
@@ -51,8 +44,8 @@ const AstroNotesPage = ({
     );
 };
 
-AstroNotesPage.displayName = 'Books Reader';
-export default AstroNotesPage;
+AstronotesPage.displayName = 'Astronotes Reader';
+export default AstronotesPage;
 
 export const getStaticPaths: GetStaticPaths = async () => {
     const { data: response } = await axios.get<ListResponseData<string>>(
@@ -118,6 +111,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     );
     const book = getBookDetail.data.book;
 
+    if (book.category.toLowerCase() !== 'catatan') {
+        return {
+            notFound: true
+        };
+    } 
+
     return {
         revalidate: 300,
         props: {
@@ -128,14 +127,14 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
                 parseInt(page) == 1
                     ? JSON.stringify(getBookContent.data)
                     : encryptedContent.toString(),
-            canonical: `https://gradient.academy/astronotes/${slug}/${page}`,
+            canonical: `https://gradient.academy/perpustakaan/astronotes/${slug}/${page}`,
             title: `Halaman ${page} | ${book?.category} ${book?.title} | Catatan, Rangkuman dan Bank Soal`,
             description: `Belajar dan Paham dengan baca ${book?.category} ${book?.title} hanya di Gradient`,
             openGraph: {
                 type: 'website',
                 title: `Halaman ${page} | ${book?.category} ${book?.title} | Catatan, Rangkuman dan Bank Soal`,
                 description: `Belajar dan Paham dengan baca ${book?.category} ${book?.title} hanya di Gradient`,
-                url: `https://gradient.academy/astronotes/${slug}/${page}`,
+                url: `https://gradient.academy/perpustakaan/astronotes/${slug}/${page}`,
                 images: [
                     {
                         url: book.cover_url,

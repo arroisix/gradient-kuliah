@@ -23,6 +23,14 @@ export const BREADCRUMB: BreadcrumbProps = {
             url: '/perpustakaan/astronotes'
         }
     },
+    '/perpustakaan/astronotes/[slug]/[page]': {
+        name: 'Perpustakaan',
+        url: '/perpustakaan',
+        nextItem: {
+            name: 'Astronotes',
+            url: '/perpustakaan/astronotes'
+        }
+    },
     '/perpustakaan/textbook': {
         name: 'Perpustakaan',
         url: '/perpustakaan',
@@ -38,11 +46,35 @@ export const BREADCRUMB: BreadcrumbProps = {
             url: '/perpustakaan/textbook'
         }
     },
+    '/perpustakaan/textbook/[slug]/[problemId]': {
+        name: 'Perpustakaan',
+        url: '/perpustakaan',
+        nextItem: {
+            name: 'Text Book',
+            url: '/perpustakaan/textbook'
+        }
+    },
     '/perpustakaan/bank-soal': {
         name: 'Perpustakaan',
         url: '/perpustakaan',
         nextItem: {
             name: 'Bank Soal'
+        }
+    },
+    '/perpustakaan/bank-soal/[slug]': {
+        name: 'Perpustakaan',
+        url: '/perpustakaan',
+        nextItem: {
+            name: 'Bank Soal',
+            url: '/perpustakaan/bank-soal'
+        }
+    },
+    '/perpustakaan/bank-soal/[slug]/[page]': {
+        name: 'Perpustakaan',
+        url: '/perpustakaan',
+        nextItem: {
+            name: 'Bank Soal',
+            url: '/perpustakaan/bank-soal'
         }
     },
     '/tentang-kami': {

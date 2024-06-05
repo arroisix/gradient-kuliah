@@ -6,6 +6,8 @@ import { AstronotesProvider } from 'courses/contexts/AstronotesProvider';
 import RatingModal from 'courses/components/LearningExperience/AstroNotes/Sidebar/RatingModal';
 import FeedbackModal from 'courses/components/LearningExperience/AstroNotes/Sidebar/FeedbackModal';
 import CommunityDrawer from 'courses/components/LearningExperience/AstroNotes/Navigation/CommunityDrawer';
+import Breadcrumb from 'commons/components/modules/Breadcrumb';
+import { useRouter } from 'next/router';
 
 const Astronotes = ({
     content,
@@ -16,6 +18,8 @@ const Astronotes = ({
 }): JSX.Element => {
     const { width: notebookWidth, ref: notebookRef } =
         useElementSize<HTMLDivElement>();
+    const router = useRouter()
+    const { slug, page } = router.query as { slug: string, page: string };
 
     return (
         <AstronotesProvider>
@@ -55,6 +59,14 @@ const Astronotes = ({
                     className="relative w-full min-h-screen mt-5 mb-12 md:ml-6"
                     ref={notebookRef}>
                     <div className="pt-4 w-full max-w-5xl mx-auto sm:px-4">
+                        <Breadcrumb
+                            nextItem={{
+                                name: book.title,
+                                url: `/perpustakaan/astronotes/${slug}`,
+                                nextItem: {
+                                    name: `Halaman ${page}`
+                                }
+                            } as BreadcrumbItemProps} />
                         <AstroNotesContent content={content} book={book} />
                     </div>
                 </div>

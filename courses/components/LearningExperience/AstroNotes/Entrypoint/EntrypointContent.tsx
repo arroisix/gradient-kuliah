@@ -43,16 +43,16 @@ export const EntrypointContent = ({
         category: string,
         latestPage: string
     ): string => {
+        const baseHref = category.toLowerCase() === 'textbook'
+                            ? `/perpustakaan/textbook/${slug}`
+                            : category.toLowerCase() === 'catatan'
+                            ? `/perpustakaan/astronotes/${slug}`
+                            : `/perpustakaan/bank-soal/${slug}`
+
         if (latestPage) {
-            return category.toLowerCase() === 'textbook'
-                ? `/astronotes/textbook/${slug}/${latestPage}`
-                : `/astronotes/${slug}/${latestPage}`;
+            return `${baseHref}/${latestPage}`
         }
-        return category.toLowerCase() === 'textbook'
-            ? `/perpustakaan/textbook/${slug}`
-            : category.toLowerCase() === 'catatan'
-            ? `/perpustakaan/astronotes/${slug}`
-            : `/perpustakaan/bank-soal/${slug}`;
+        return baseHref
     };
 
     return (

@@ -125,6 +125,7 @@ const AstronotesDetail = ({
                     )}
                     <StartReadingButton
                         first_problem_id={astronotes?.first_problem_id}
+                        category={astronotes?.category}
                     />
                 </div>
             </div>
@@ -202,8 +203,9 @@ const Tabs = (): JSX.Element => {
     );
 };
 const StartReadingButton = ({
-    first_problem_id
-}: Pick<BookDetailInterface, 'first_problem_id'>): JSX.Element => {
+    first_problem_id,
+    category
+}: Pick<BookDetailInterface, 'first_problem_id' | 'category'>): JSX.Element => {
     const router = useRouter();
     const { slug } = router.query as { slug: string };
     const buttonRef = useRef<HTMLDivElement | null>(null);
@@ -214,8 +216,8 @@ const StartReadingButton = ({
         if (!first_problem_id) return '?';
         if (!isAuthenticated) return '/daftar';
         if (!!first_problem_id)
-            return `/astronotes/textbook/${slug}/${first_problem_id}`;
-        return `/astronotes/${slug}/1`;
+            return `/perpustakaan/textbook/${slug}/${first_problem_id}`;
+        return category.toLowerCase() === 'catatan'? `/perpustakaan/astronotes/${slug}/1` : `/perpustakaan/bank-soal/${slug}/1`;
     };
 
     return (

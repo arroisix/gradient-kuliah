@@ -205,3 +205,10 @@ type LandingPopularBook = {
     book_cover_url: string;
     category_name: 'Textbook' | 'Astronotes' | 'Bank Soal';
 };
+
+interface AstronotesPageProps {
+    slug: string;
+    page: number;
+    book: GetBookDetailResponse['book'];
+    content: string;
+}
