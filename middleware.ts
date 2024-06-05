@@ -3,27 +3,43 @@ import { getFeatures, growthbook } from 'library/growthbook';
 import { NextRequest, NextResponse, userAgent } from 'next/server';
 
 const COOKIE = 'visitor_id';
-const ACTIVE_AB_TESTING_PAGES = ['/', '/komunitas']; // Add as needed
+// const ACTIVE_AB_TESTING_PAGES = ['/', '/komunitas']; // Add as needed
 
 export const config = {
     matcher: [
         '/',
         '/komunitas',
+        '/astronotes',
+        '/astronotes/:slug*',
         '/perpustakaan/:kategori(textbook|astronotes|bank-soal)/:slug*'
     ]
 };
 
 export async function middleware(req: NextRequest): Promise<NextResponse> {
     // We only want to run the A/B test on the homepage
-    const pathname = req.nextUrl.pathname;
+    const url = req.nextUrl.clone();
+    const { pathname, searchParams } = url;
     let res = NextResponse.next();
 
-    if (
-        !ACTIVE_AB_TESTING_PAGES.includes(pathname) &&
-        !pathname.startsWith('/perpustakaan/')
-    ) {
-        return res;
+    if (pathname.startsWith('/astronotes')) {
+        const tab = searchParams.get('tab');
+        searchParams.delete('tab');
+
+        url.pathname = '/perpustakaan';
+
+        if (tab === 'text-book') url.pathname = '/perpustakaan/textbook';
+        if (tab === 'astronotes') url.pathname = '/perpustakaan/astronotes';
+        if (tab === 'bank-soal') url.pathname = '/perpustakaan/bank-soal';
+
+        return NextResponse.redirect(url);
     }
+
+    // if (
+    //     !ACTIVE_AB_TESTING_PAGES.includes(pathname) &&
+    //     !pathname.startsWith('/perpustakaan/')
+    // ) {
+    //     return res;
+    // }
 
     if (pathname.startsWith('/perpustakaan/')) {
         const { isBot } = userAgent(req);
