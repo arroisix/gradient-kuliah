@@ -76,7 +76,11 @@ export const EntrypointContent = ({
     );
 };
 
-export const EntrypointPrivate = ({ category }: { category: Tab }): JSX.Element => {
+export const EntrypointPrivate = ({
+    category
+}: {
+    category: Tab;
+}): JSX.Element => {
     const router = useRouter();
     const { sort } = router.query as { sort?: Sort; tab?: Tab };
 
@@ -103,7 +107,11 @@ export const EntrypointPrivate = ({ category }: { category: Tab }): JSX.Element 
     );
 };
 
-export const EntrypointPublic = ({ category }: { category: Tab }): JSX.Element => {
+export const EntrypointPublic = ({
+    category
+}: {
+    category: Tab;
+}): JSX.Element => {
     const router = useRouter();
     const { sort } = router.query as { sort?: Sort; tab?: Tab };
 
