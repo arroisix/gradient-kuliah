@@ -5,6 +5,7 @@ import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { cn } from 'commons/utils';
 import { AstronoteBookCard } from 'courses/components/LearningExperience/AstroNotes/AstronoteBook';
 import { useGetBookDetailQuery } from 'courses/redux/api/astronotesApi';
+import { getBookBaseHref } from 'courses/utils';
 import { useGetClassProgressQuery } from 'dashboard/redux/api/dashboardApi';
 import Image from 'next/image';
 import React, { useState } from 'react';
@@ -112,11 +113,8 @@ const ProgressItem = ({
     const getHref = (): string => {
         switch (progress.type) {
             case 'book':
-                return getBookDetail?.book.category.toLowerCase() === 'catatan'
-                    ? `/perpustakaan/astronotes/${book_slug}/${progress.latest_page}`
-                    : `/perpustakaan/bank-soal/${book_slug}/${progress.latest_page}`;
             case 'textbook':
-                return `/perpustakaan/textbook/${book_slug}/${progress.latest_page}`;
+                return `${getBookBaseHref(getBookDetail?.book.category ?? '')}/${book_slug}/${progress.latest_page}`;
             case 'video':
                 return `/kelas/${progress.course_slug}/belajar/video/${progress.chapter_id}/${progress.subchapter_id}`;
             default:

@@ -10,6 +10,7 @@ import { HiOutlineChevronDown } from 'react-icons/hi';
 import { useTracker } from 'tracker/tracker';
 import ChapterDetail from './ChapterDetail';
 import ListSubchapter from './ListSubchapter';
+import { getBookBaseHref } from 'courses/utils';
 
 const SearchList = (): JSX.Element => {
     const router = useRouter();
@@ -119,13 +120,9 @@ const SearchList = (): JSX.Element => {
                                             }
                                         );
                                         router.push(
-                                            value.category.toLowerCase() ===
-                                                'textbook'
-                                                ? `/perpustakaan/textbook/${value.slug}/1`
-                                                : value.category.toLowerCase() ===
-                                                  'catatan'
-                                                ? `/perpustakaan/astronotes/${value.slug}/1`
-                                                : `/perpustakaan/bank-soal/${value.slug}/1`
+                                            `${getBookBaseHref(
+                                                value.category
+                                            )}/${value.slug}/1`
                                         );
                                     }}
                                     aria-hidden>

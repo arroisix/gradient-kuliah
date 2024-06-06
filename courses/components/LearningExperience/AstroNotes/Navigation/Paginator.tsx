@@ -8,6 +8,7 @@ import { useDebounce } from 'commons/hooks/useDebounce';
 import { useTracker } from 'tracker/tracker';
 import Link from 'next/link';
 import { useGetBookDetailQuery } from 'courses/redux/api/astronotesApi';
+import { getBookBaseHref } from 'courses/utils';
 
 interface PaginatorProps extends PropsWithClassName {
     currentPage: number;
@@ -30,17 +31,8 @@ const Paginator = ({
         { slug },
         { skip: !slug }
     );
-    const category_name = getBookDetail?.book.category.toLowerCase();
-
-    const getBaseHref = () => {
-        if (category_name === 'textbook') {
-            return `/perpustakaan/textbook/${slug}`;
-        } else if (category_name === 'catatan') {
-            return `/perpustakaan/astronotes/${slug}`;
-        } else {
-            return `/perpustakaan/bank-soal/${slug}`;
-        }
-    };
+    const category_name = getBookDetail?.book.category;
+    const baseHref = `${getBookBaseHref(category_name ?? '')}/${slug}`;
 
     useEffect(() => {
         setPageNumber(Number(page));
@@ -48,7 +40,7 @@ const Paginator = ({
 
     useEffect(() => {
         if (destinationPage !== Number(page)) {
-            router.push(`${getBaseHref()}/${destinationPage}`);
+            router.push(`${baseHref}/${destinationPage}`);
         }
     }, [destinationPage]);
 
@@ -81,9 +73,7 @@ const Paginator = ({
             <div className="flex items-center gap-[10px]">
                 <Link
                     href={
-                        pageNumber > 1
-                            ? `${getBaseHref()}/${pageNumber - 1}`
-                            : '#'
+                        pageNumber > 1 ? `${baseHref}/${pageNumber - 1}` : '#'
                     }
                     onClick={() => {
                         if (pageNumber > 1) {
@@ -115,7 +105,7 @@ const Paginator = ({
                 <Link
                     href={
                         pageNumber < MAX_VALUE
-                            ? `${getBaseHref()}/${pageNumber - 1}`
+                            ? `${baseHref}/${pageNumber - 1}`
                             : '#'
                     }
                     onClick={() => {

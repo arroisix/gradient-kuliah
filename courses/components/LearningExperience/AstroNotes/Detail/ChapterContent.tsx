@@ -5,6 +5,7 @@ import Skeleton from 'commons/components/elements/Skeleton';
 import { useState, useEffect } from 'react';
 import { cn } from 'commons/utils';
 import { useRouter } from 'next/router';
+import { getBookBaseHref } from 'courses/utils';
 
 const ChapterContent = ({
     id,
@@ -30,16 +31,7 @@ const ChapterContent = ({
     const router = useRouter();
     const { problemId } = router.query as { problemId?: string };
     const tracker = useTracker();
-
-    const getBaseHref = () => {
-        if (category?.toLowerCase() === 'textbook') {
-            return `/perpustakaan/textbook/${slug}`;
-        } else if (category?.toLowerCase() === 'catatan') {
-            return `/perpustakaan/astronotes/${slug}`;
-        } else {
-            return `/perpustakaan/bank-soal/${slug}`;
-        }
-    };
+    const baseHref = `${getBookBaseHref(category ?? '')}/${slug}`;
 
     useEffect(() => {
         if (activeSubchapter_) {
@@ -97,12 +89,8 @@ const ChapterContent = ({
                                     key={subchapterSection.id}
                                     href={
                                         category?.toLowerCase() === 'textbook'
-                                            ? `${getBaseHref()}/${
-                                                  subchapterSection.id
-                                              }`
-                                            : `${getBaseHref()}/${
-                                                  subchapterSection.page_order
-                                              }#${subchapterSection.id}`
+                                            ? `${baseHref}/${subchapterSection.id}`
+                                            : `${baseHref}/${subchapterSection.page_order}#${subchapterSection.id}`
                                     }
                                     onClick={() => {
                                         tracker?.genericTrack(
@@ -161,16 +149,7 @@ const SubchapterButton = ({
         slug: string;
         problemId?: string;
     };
-
-    const getBaseHref = () => {
-        if (category?.toLowerCase() === 'textbook') {
-            return `/perpustakaan/textbook/${slug}`;
-        } else if (category?.toLowerCase() === 'catatan') {
-            return `/perpustakaan/astronotes/${slug}`;
-        } else {
-            return `/perpustakaan/bank-soal/${slug}`;
-        }
-    };
+    const baseHref = `${getBookBaseHref(category)}/${slug}`;
 
     const handleSubchapterButton = (): void => {
         if (subchapter.sections.length > 0) {
@@ -193,8 +172,8 @@ const SubchapterButton = ({
     const href =
         subchapter.sections.length == 0
             ? category?.toLowerCase() === 'textbook'
-                ? `${getBaseHref()}/${subchapter.id}`
-                : `${getBaseHref()}/${subchapter.page_order}#${subchapter.id}`
+                ? `${baseHref}/${subchapter.id}`
+                : `${baseHref}/${subchapter.page_order}#${subchapter.id}`
             : router.asPath;
 
     return (

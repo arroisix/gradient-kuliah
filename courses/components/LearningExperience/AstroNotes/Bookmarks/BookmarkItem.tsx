@@ -1,5 +1,6 @@
 import { cn } from 'commons/utils';
 import { useGetBookDetailQuery } from 'courses/redux/api/astronotesApi';
+import { getBookBaseHref } from 'courses/utils';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -25,19 +26,12 @@ export const BookmarkItem = ({
         { slug },
         { skip: !slug }
     );
-    const category_name = getBookDetail?.book.category.toLowerCase();
+    const category_name = getBookDetail?.book.category;
+    const href = `${getBookBaseHref(category_name ?? '')}/${slug}/${
+        data.page_order
+    }`;
 
     const [isShow, setIsShow] = useState(false);
-
-    const getHref = () => {
-        if (category_name === 'textbook') {
-            return `/perpustakaan/textbook/${slug}/${data.page_order}`;
-        } else if (category_name === 'catatan') {
-            return `/perpustakaan/astronotes/${slug}/${data.page_order}`;
-        } else {
-            return `/perpustakaan/bank-soal/${slug}/${data.page_order}`;
-        }
-    };
 
     return (
         <div>
@@ -59,13 +53,13 @@ export const BookmarkItem = ({
                     <FaChevronRight size={12} className="swap-on" />
                     <FaChevronUp size={12} className="swap-off" />
                 </label>
-                <Link href={getHref()} className="text-sm">
+                <Link href={href} className="text-sm">
                     Halaman {data.page_order}
                 </Link>
             </div>
             {isShow && (
                 <Link
-                    href={getHref()}
+                    href={href}
                     className="flex flex-col gap-1 py-2 pl-7 text-neutral-600 dark:text-neutral-400">
                     <>
                         {data.page_chapters?.map((chapter, index) => (

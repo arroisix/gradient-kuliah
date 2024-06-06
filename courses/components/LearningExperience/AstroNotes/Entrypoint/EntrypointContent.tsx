@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { AstronoteBookCard } from '../AstronoteBook';
 import { Sort, Tab } from '../constants';
+import { getBookBaseHref } from 'courses/utils';
 
 export const EntrypointContent = ({
     isLoading,
@@ -43,12 +44,7 @@ export const EntrypointContent = ({
         category: string,
         latestPage: string
     ): string => {
-        const baseHref =
-            category.toLowerCase() === 'textbook'
-                ? `/perpustakaan/textbook/${slug}`
-                : category.toLowerCase() === 'catatan'
-                ? `/perpustakaan/astronotes/${slug}`
-                : `/perpustakaan/bank-soal/${slug}`;
+        const baseHref = `${getBookBaseHref(category)}/${slug}`;
 
         if (latestPage) {
             return `${baseHref}/${latestPage}`;

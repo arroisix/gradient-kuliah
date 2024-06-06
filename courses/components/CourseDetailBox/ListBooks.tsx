@@ -1,5 +1,6 @@
 import Skeleton from 'commons/components/elements/Skeleton';
 import { CDN_URL } from 'commons/constants';
+import { getBookBaseHref } from 'courses/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -29,13 +30,7 @@ export const ListBooks = ({
                     category
                 }) => (
                     <Link
-                        href={
-                            category.toLowerCase() === 'textbook'
-                                ? `/perpustakaan/textbook/${slug}`
-                                : category.toLowerCase() === 'catatan'
-                                ? `/perpustakaan/astronotes/${slug}`
-                                : `/perpustakaan/bank-soal/${slug}`
-                        }
+                        href={`${getBookBaseHref(category)}/${slug}`}
                         className="flex items-center gap-5 cursor-pointer"
                         key={book_id}
                         onClick={() => {

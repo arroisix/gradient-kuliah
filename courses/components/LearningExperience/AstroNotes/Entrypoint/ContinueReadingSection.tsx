@@ -5,6 +5,7 @@ import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { cn } from 'commons/utils';
 import { useGetEntrypointBooksQuery } from 'courses/redux/api/astronotesApi';
 import { useSelector } from 'react-redux';
+import { getBookBaseHref } from 'courses/utils';
 
 const ContinueReadingSection = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -42,15 +43,9 @@ const ContinueReadingSection = (): JSX.Element => {
                                         'flex-none w-[348px]'
                                 )}
                                 imageClassname="min-w-20 min-h-24"
-                                href={
-                                    book.category_name.toLowerCase() ===
-                                    'textbook'
-                                        ? `/perpustakaan/textbook/${book.slug}`
-                                        : book.category_name.toLowerCase() ===
-                                          'catatan'
-                                        ? `/perpustakaan/astronotes/${book.slug}`
-                                        : `/perpustakaan/bank-soal/${book.slug}`
-                                }
+                                href={`${getBookBaseHref(book.category_name)}/${
+                                    book.slug
+                                }`}
                                 key={book.id}
                                 {...book}
                             />

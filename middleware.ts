@@ -1,4 +1,5 @@
 import { IS_BOT } from 'commons/constants';
+import { getBookBaseHref } from 'courses/utils';
 import { getFeatures, growthbook } from 'library/growthbook';
 import { NextRequest, NextResponse, userAgent } from 'next/server';
 
@@ -25,13 +26,13 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
 
         switch (tab) {
             case 'text-book':
-                url.pathname = '/perpustakaan/textbook';
+                url.pathname = getBookBaseHref('textbook');
                 break;
             case 'astronotes':
-                url.pathname = '/perpustakaan/astronotes';
+                url.pathname = getBookBaseHref('catatan');
                 break;
             case 'bank-soal':
-                url.pathname = '/perpustakaan/bank-soal';
+                url.pathname = getBookBaseHref('bank-soal');
                 break;
             default:
                 url.pathname = '/perpustakaan';

@@ -16,6 +16,7 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import Skeleton from 'commons/components/elements/Skeleton';
 import { useGetBookDetailQuery } from 'courses/redux/api/astronotesApi';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
+import { getBookBaseHref } from 'courses/utils';
 
 const AstronotesDetail = ({
     slug: serverSlug,
@@ -210,16 +211,13 @@ const StartReadingButton = ({
     const { slug } = router.query as { slug: string };
     const buttonRef = useRef<HTMLDivElement | null>(null);
     const onScreen = useOnScreen(buttonRef, '-128px 0px 0px 0px');
-
+    const baseHref = `${getBookBaseHref(category)}/${slug}`;
     const isAuthenticated = useSelector(getIsAuthenticated);
     const getLink = (): string => {
         if (!first_problem_id) return '?';
         if (!isAuthenticated) return '/daftar';
-        if (!!first_problem_id)
-            return `/perpustakaan/textbook/${slug}/${first_problem_id}`;
-        return category.toLowerCase() === 'catatan'
-            ? `/perpustakaan/astronotes/${slug}/1`
-            : `/perpustakaan/bank-soal/${slug}/1`;
+        if (!!first_problem_id) return `${baseHref}/${first_problem_id}`;
+        return `${baseHref}/1`;
     };
 
     return (

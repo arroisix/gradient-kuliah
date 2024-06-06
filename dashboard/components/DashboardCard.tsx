@@ -1,5 +1,6 @@
 import { CDN_URL } from 'commons/constants';
 import { cn } from 'commons/utils';
+import { getBookBaseHref } from 'courses/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -17,12 +18,7 @@ const DashboardCard = ({
     const isCourse = item.type?.toLowerCase() === 'kelas';
     const tracker = useTracker();
     const getLink = (): string => {
-        const baseHref =
-            item.type?.toLowerCase() === 'textbook'
-                ? `/perpustakaan/textbook/${item.book_slug}`
-                : item.type?.toLowerCase() === 'catatan'
-                ? `/perpustakaan/astronotes/${item.book_slug}`
-                : `/perpustakaan/bank-soal/${item.book_slug}`;
+        const baseHref = `${getBookBaseHref(item.type)}/${item.book_slug}`
 
         if (isVideo || isCourse) {
             if (item?.chapter_id && item.subchapter_id)
