@@ -18,7 +18,7 @@ const DashboardCard = ({
     const isCourse = item.type?.toLowerCase() === 'kelas';
     const tracker = useTracker();
     const getLink = (): string => {
-        const baseHref = `${getBookBaseHref(item.type)}/${item.book_slug}`
+        const baseHref = `${getBookBaseHref(item.type)}/${item.book_slug}`;
 
         if (isVideo || isCourse) {
             if (item?.chapter_id && item.subchapter_id)
