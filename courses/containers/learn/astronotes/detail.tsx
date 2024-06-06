@@ -211,7 +211,7 @@ const StartReadingButton = ({
     const { slug } = router.query as { slug: string };
     const buttonRef = useRef<HTMLDivElement | null>(null);
     const onScreen = useOnScreen(buttonRef, '-128px 0px 0px 0px');
-    const baseHref = `${getBookBaseHref(category)}/${slug}`;
+    const baseHref = `${getBookBaseHref(category ?? '')}/${slug}`;
     const isAuthenticated = useSelector(getIsAuthenticated);
     const getLink = (): string => {
         if (!first_problem_id) return '?';
