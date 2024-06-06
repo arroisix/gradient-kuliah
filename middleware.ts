@@ -23,11 +23,19 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
         const tab = searchParams.get('tab');
         searchParams.delete('tab');
 
-        url.pathname = '/perpustakaan';
-
-        if (tab === 'text-book') url.pathname = '/perpustakaan/textbook';
-        if (tab === 'astronotes') url.pathname = '/perpustakaan/astronotes';
-        if (tab === 'bank-soal') url.pathname = '/perpustakaan/bank-soal';
+        switch (tab) {
+            case 'text-book':
+                url.pathname = '/perpustakaan/textbook';
+                break;
+            case 'astronotes':
+                url.pathname = '/perpustakaan/astronotes';
+                break;
+            case 'bank-soal':
+                url.pathname = '/perpustakaan/bank-soal';
+                break;
+            default:
+                url.pathname = '/perpustakaan';
+        }
 
         return NextResponse.redirect(url);
     }
