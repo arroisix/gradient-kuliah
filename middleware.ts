@@ -5,8 +5,16 @@ import { NextRequest, NextResponse, userAgent } from 'next/server';
 
 const COOKIE = 'visitor_id';
 
-// 
-const BANK_SOAL_BOOKS_SLUG = ['bank-soal-kalkulus1', 'bank-soal-kimdas2', 'Simulasi-SNBT-2024', 'bank-soal-fisdas1', 'bank-soal-kimdas1', 'bank-soal-kalkulus2', 'bank-soal-fisdas2']
+//
+const BANK_SOAL_BOOKS_SLUG = [
+    'bank-soal-kalkulus1',
+    'bank-soal-kimdas2',
+    'Simulasi-SNBT-2024',
+    'bank-soal-fisdas1',
+    'bank-soal-kimdas1',
+    'bank-soal-kalkulus2',
+    'bank-soal-fisdas2'
+];
 
 export const config = {
     matcher: [
@@ -25,7 +33,7 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
     if (pathname.startsWith('/astronotes')) {
         const tab = searchParams.get('tab');
         searchParams.delete('tab');
-        let newPathname = '/perpustakaan'
+        let newPathname = '/perpustakaan';
 
         switch (tab) {
             case 'text-book':
@@ -41,17 +49,31 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
 
         if (pathname.startsWith('/astronotes/')) {
             if (pathname.startsWith('/astronotes/textbook/')) {
-                newPathname = pathname.replace('/astronotes/', '/perpustakaan/')
+                newPathname = pathname.replace(
+                    '/astronotes/',
+                    '/perpustakaan/'
+                );
             } else if (pathname.includes('calculus-9th-edition')) {
-                newPathname = pathname.replace('/astronotes/', `${getBookBaseHref('textbook')}/`)
-            } else if (BANK_SOAL_BOOKS_SLUG.some(slug => pathname.includes(slug))) {
-                newPathname = pathname.replace('/astronotes/', `${getBookBaseHref('bank-soal')}/`)
+                newPathname = pathname.replace(
+                    '/astronotes/',
+                    `${getBookBaseHref('textbook')}/`
+                );
+            } else if (
+                BANK_SOAL_BOOKS_SLUG.some((slug) => pathname.includes(slug))
+            ) {
+                newPathname = pathname.replace(
+                    '/astronotes/',
+                    `${getBookBaseHref('bank-soal')}/`
+                );
             } else {
-                newPathname = pathname.replace('/astronotes/', `${getBookBaseHref('astronotes')}/`)
+                newPathname = pathname.replace(
+                    '/astronotes/',
+                    `${getBookBaseHref('astronotes')}/`
+                );
             }
         }
 
-        url.pathname = newPathname
+        url.pathname = newPathname;
         return NextResponse.redirect(url);
     }
 
