@@ -36,9 +36,9 @@ const AstronotesEntrypoint = (): JSX.Element => {
                 </h1>
                 {isAuthenticated && <EntrypointSort />}
                 {isAuthenticated ? (
-                    <EntrypointPrivate type={type} />
+                    <EntrypointPrivate category={type} />
                 ) : (
-                    <EntrypointPublic type={type} />
+                    <EntrypointPublic category={type} />
                 )}
                 {!(activePacket && activePacket.subscription_id) && (
                     <RenewSubscriptionBanner product="materi" />

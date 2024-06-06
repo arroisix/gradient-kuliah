@@ -76,14 +76,14 @@ export const EntrypointContent = ({
     );
 };
 
-export const EntrypointPrivate = ({ type }: { type: Tab }): JSX.Element => {
+export const EntrypointPrivate = ({ category }: { category: Tab }): JSX.Element => {
     const router = useRouter();
     const { sort } = router.query as { sort?: Sort; tab?: Tab };
 
     const isAuthenticated = useSelector(getIsAuthenticated);
     const skip = !(
         Object.values(Sort).includes(sort ?? Sort.release) &&
-        Object.values(Tab).includes(type ?? Tab.all)
+        Object.values(Tab).includes(category ?? Tab.all)
     );
 
     const {
@@ -91,7 +91,7 @@ export const EntrypointPrivate = ({ type }: { type: Tab }): JSX.Element => {
         isLoading,
         isFetching
     } = useGetEntrypointBooksQuery(
-        { limit: 100, type: type, status: sort },
+        { limit: 100, type: category, status: sort },
         { skip: !isAuthenticated || skip }
     );
 
@@ -103,14 +103,14 @@ export const EntrypointPrivate = ({ type }: { type: Tab }): JSX.Element => {
     );
 };
 
-export const EntrypointPublic = ({ type }: { type: Tab }): JSX.Element => {
+export const EntrypointPublic = ({ category }: { category: Tab }): JSX.Element => {
     const router = useRouter();
     const { sort } = router.query as { sort?: Sort; tab?: Tab };
 
     const isAuthenticated = useSelector(getIsAuthenticated);
     const skip = !(
         Object.values(Sort).includes(sort ?? Sort.release) &&
-        Object.values(Tab).includes(type ?? Tab.all)
+        Object.values(Tab).includes(category ?? Tab.all)
     );
 
     const {
@@ -118,7 +118,7 @@ export const EntrypointPublic = ({ type }: { type: Tab }): JSX.Element => {
         isLoading,
         isFetching
     } = useGetPublicEntrypointBooksQuery(
-        { limit: 100, type: type, status: sort },
+        { limit: 100, type: category, status: sort },
         { skip: isAuthenticated || skip }
     );
 
