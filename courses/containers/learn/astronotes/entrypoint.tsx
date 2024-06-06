@@ -6,6 +6,7 @@ import {
     EntrypointPublic
 } from 'courses/components/LearningExperience/AstroNotes/Entrypoint/EntrypointContent';
 import EntrypointSort from 'courses/components/LearningExperience/AstroNotes/Entrypoint/EntrypointFilters';
+import EntrypointTabs from 'courses/components/LearningExperience/AstroNotes/Entrypoint/EntrypointTabs';
 import { Tab } from 'courses/components/LearningExperience/AstroNotes/constants';
 import RenewSubscriptionBanner from 'courses/components/RenewSubscriptionBanner';
 import { useRouter } from 'next/router';
@@ -31,9 +32,8 @@ const AstronotesEntrypoint = (): JSX.Element => {
             <Breadcrumb className="w-full pb-5" />
             <div className="relative grid w-full grid-cols-1 mx-auto xl:max-w-screen-2xl">
                 {isAuthenticated && <ContinueReadingSection />}
-                <h1 className="text-xl font-bold md:text-2xl mb-2.5">
-                    Perpustakaan
-                </h1>
+                <h1 className="text-xl font-bold md:text-2xl">Perpustakaan</h1>
+                <EntrypointTabs />
                 {isAuthenticated && <EntrypointSort />}
                 {isAuthenticated ? (
                     <EntrypointPrivate category={type} />
