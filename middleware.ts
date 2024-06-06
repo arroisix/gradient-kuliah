@@ -3,7 +3,6 @@ import { getFeatures, growthbook } from 'library/growthbook';
 import { NextRequest, NextResponse, userAgent } from 'next/server';
 
 const COOKIE = 'visitor_id';
-// const ACTIVE_AB_TESTING_PAGES = ['/', '/komunitas']; // Add as needed
 
 export const config = {
     matcher: [
@@ -16,10 +15,9 @@ export const config = {
 };
 
 export async function middleware(req: NextRequest): Promise<NextResponse> {
-    // We only want to run the A/B test on the homepage
     const url = req.nextUrl.clone();
     const { pathname, searchParams } = url;
-    let res = NextResponse.next();
+    const res = NextResponse.next();
 
     if (pathname.startsWith('/astronotes')) {
         const tab = searchParams.get('tab');
@@ -33,13 +31,6 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
 
         return NextResponse.redirect(url);
     }
-
-    // if (
-    //     !ACTIVE_AB_TESTING_PAGES.includes(pathname) &&
-    //     !pathname.startsWith('/perpustakaan/')
-    // ) {
-    //     return res;
-    // }
 
     if (pathname.startsWith('/perpustakaan/')) {
         const { isBot } = userAgent(req);
@@ -55,21 +46,6 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
     // Setup GrowthBook instance
     growthbook.setFeatures((await getFeatures()) || {});
     growthbook.setAttributes({ id: visitor_id });
-
-    // Pick which page to render depending on a feature flag
-    if (growthbook.isOn('landing-page-revamp')) {
-        const url = req.nextUrl.clone();
-        // Replace response with revamped variant
-        switch (url.pathname) {
-            // case '/':
-            //     url.pathname = '/landing-revamp';
-            //     break;
-            case '/komunitas':
-                url.pathname = '/komunitas/public';
-                break;
-        }
-        res = NextResponse.rewrite(url);
-    }
 
     // Store the visitor cookie if not already there
     if (!req.cookies.get(COOKIE)) {
