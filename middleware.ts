@@ -5,7 +5,7 @@ import { NextRequest, NextResponse, userAgent } from 'next/server';
 
 const COOKIE = 'visitor_id';
 
-//
+// List of bank soal books slug that exist at the time of Perpustakaan URL restructuring (updated: June 6, 2024)
 const BANK_SOAL_BOOKS_SLUG = [
     'bank-soal-kalkulus1',
     'bank-soal-kimdas2',
