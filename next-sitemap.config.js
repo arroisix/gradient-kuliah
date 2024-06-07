@@ -11,7 +11,7 @@ module.exports = {
         '/referral*',
         '/kelas/*',
         '/komunitas/*',
-        '/astronotes/*',
+        '/perpustakaan/*',
         '/sitemaps/*'
     ],
     robotsTxtOptions: {
