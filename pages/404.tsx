@@ -8,7 +8,7 @@ const NotFound = (): JSX.Element => {
     return (
         <Layout isFullBlackBackground>
             <div className="flex flex-col justify-center min-h-screen pt-12 md:pt-14 ">
-                <div className="flex flex-col items-center gap-12 pt-12">
+                <div className="flex flex-col items-center gap-10 md:gap-12 pt-12">
                     <div className="relative w-full max-w-96 md:max-w-3xl">
                         <div className="w-full h-0 pb-[40%]">
                             <Image
