@@ -77,21 +77,21 @@ const ITEMS: FooterItemProps[] = [
 
 const CONTACTS: FooterBodyProps[] = [
     {
-        content: "@gradient_idn",
-        url: "https://www.instagram.com/gradient_idn/",
+        content: '@gradient_idn',
+        url: 'https://www.instagram.com/gradient_idn/',
         Icon: FaInstagram
     },
     {
-        content: "business@gradient.academy",
-        url: "https://mail.google.com/mail/u/0/?fs=1&to=business@gradient.academy&tf=cm",
+        content: 'business@gradient.academy',
+        url: 'https://mail.google.com/mail/u/0/?fs=1&to=business@gradient.academy&tf=cm',
         Icon: MdMailOutline
     },
     {
-        content: "+6285179893859",
-        url: "https://wa.me/+6285179893859",
+        content: '+6285179893859',
+        url: 'https://wa.me/+6285179893859',
         Icon: BsWhatsapp
     }
-]
+];
 
 type FooterSocialMediaProps = {
     Icon: () => JSX.Element;
@@ -161,14 +161,14 @@ const Footer = (): JSX.Element => {
                         <Title title="Punya Pertanyaan?" />
                         <div
                             className={`flex flex-col gap-${CONTACT_BODY_GAP}`}>
-                            {CONTACTS.map((body) =>
-                                <Body 
+                            {CONTACTS.map((body) => (
+                                <Body
                                     key={body.content}
                                     content={body.content}
                                     url={body.url}
                                     Icon={body.Icon}
                                 />
-                            )}
+                            ))}
                         </div>
                     </div>
 
@@ -222,11 +222,7 @@ const Title = ({ title }: { title: string }): JSX.Element => {
     return <h4 className="font-sans font-bold text-white">{title}</h4>;
 };
 
-const Body = ({
-    content,
-    url,
-    Icon
-}: FooterBodyProps): JSX.Element => {
+const Body = ({ content, url, Icon }: FooterBodyProps): JSX.Element => {
     return (
         <Link
             href={url}
