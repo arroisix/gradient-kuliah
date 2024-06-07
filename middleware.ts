@@ -28,7 +28,7 @@ export const config = {
 export async function middleware(req: NextRequest): Promise<NextResponse> {
     const url = req.nextUrl.clone();
     const { pathname, searchParams } = url;
-    const res = NextResponse.next();
+    let res = NextResponse.next();
 
     if (pathname.startsWith('/astronotes')) {
         const tab = searchParams.get('tab');
@@ -91,6 +91,16 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
     // Setup GrowthBook instance
     growthbook.setFeatures((await getFeatures()) || {});
     growthbook.setAttributes({ id: visitor_id });
+
+    // Pick which page to render depending on a feature flag
+    if (growthbook.isOn('landing-page-revamp')) {
+        switch (pathname) {
+            case '/komunitas':
+                url.pathname = '/komunitas/public';
+                break;
+        }
+        res = NextResponse.rewrite(url);
+    }
 
     // Store the visitor cookie if not already there
     if (!req.cookies.get(COOKIE)) {
