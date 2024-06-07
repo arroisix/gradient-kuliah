@@ -4,6 +4,8 @@ import { CDN_URL } from 'commons/constants';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { cn } from 'commons/utils';
 import { AstronoteBookCard } from 'courses/components/LearningExperience/AstroNotes/AstronoteBook';
+import { useGetBookDetailQuery } from 'courses/redux/api/astronotesApi';
+import { getBookBaseHref } from 'courses/utils';
 import { useGetClassProgressQuery } from 'dashboard/redux/api/dashboardApi';
 import Image from 'next/image';
 import React, { useState } from 'react';
@@ -102,10 +104,19 @@ const ProgressItem = ({
     progress: ClassProgress;
     courseName: string;
 }): JSX.Element => {
+    const { book_slug } = progress;
+    const { data: getBookDetail } = useGetBookDetailQuery(
+        { slug: book_slug },
+        { skip: !book_slug }
+    );
+
     const getHref = (): string => {
         switch (progress.type) {
             case 'book':
-                return `/astronotes/${progress.book_slug}/${progress.latest_page}`;
+            case 'textbook':
+                return `${getBookBaseHref(
+                    getBookDetail?.book.category ?? ''
+                )}/${book_slug}/${progress.latest_page}`;
             case 'video':
                 return `/kelas/${progress.course_slug}/belajar/video/${progress.chapter_id}/${progress.subchapter_id}`;
             default:

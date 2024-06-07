@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { AstronoteBookCard } from '../AstronoteBook';
 import { Sort, Tab } from '../constants';
+import { getBookBaseHref } from 'courses/utils';
 
 export const EntrypointContent = ({
     isLoading,
@@ -43,12 +44,12 @@ export const EntrypointContent = ({
         category: string,
         latestPage: string
     ): string => {
+        const baseHref = `${getBookBaseHref(category)}/${slug}`;
+
         if (latestPage) {
-            return category.toLowerCase() === 'textbook'
-                ? `/astronotes/textbook/${slug}/${latestPage}`
-                : `/astronotes/${slug}/${latestPage}`;
+            return `${baseHref}/${latestPage}`;
         }
-        return `/astronotes/${slug}`;
+        return baseHref;
     };
 
     return (
@@ -75,14 +76,18 @@ export const EntrypointContent = ({
     );
 };
 
-export const EntrypointPrivate = (): JSX.Element => {
+export const EntrypointPrivate = ({
+    category
+}: {
+    category: Tab;
+}): JSX.Element => {
     const router = useRouter();
-    const { sort, tab } = router.query as { sort?: Sort; tab?: Tab };
+    const { sort } = router.query as { sort?: Sort; tab?: Tab };
 
     const isAuthenticated = useSelector(getIsAuthenticated);
     const skip = !(
         Object.values(Sort).includes(sort ?? Sort.release) &&
-        Object.values(Tab).includes(tab ?? Tab.all)
+        Object.values(Tab).includes(category ?? Tab.all)
     );
 
     const {
@@ -90,7 +95,7 @@ export const EntrypointPrivate = (): JSX.Element => {
         isLoading,
         isFetching
     } = useGetEntrypointBooksQuery(
-        { limit: 100, type: tab, status: sort },
+        { limit: 100, type: category, status: sort },
         { skip: !isAuthenticated || skip }
     );
 
@@ -102,14 +107,18 @@ export const EntrypointPrivate = (): JSX.Element => {
     );
 };
 
-export const EntrypointPublic = (): JSX.Element => {
+export const EntrypointPublic = ({
+    category
+}: {
+    category: Tab;
+}): JSX.Element => {
     const router = useRouter();
-    const { sort, tab } = router.query as { sort?: Sort; tab?: Tab };
+    const { sort } = router.query as { sort?: Sort; tab?: Tab };
 
     const isAuthenticated = useSelector(getIsAuthenticated);
     const skip = !(
         Object.values(Sort).includes(sort ?? Sort.release) &&
-        Object.values(Tab).includes(tab ?? Tab.all)
+        Object.values(Tab).includes(category ?? Tab.all)
     );
 
     const {
@@ -117,7 +126,7 @@ export const EntrypointPublic = (): JSX.Element => {
         isLoading,
         isFetching
     } = useGetPublicEntrypointBooksQuery(
-        { limit: 100, type: tab, status: sort },
+        { limit: 100, type: category, status: sort },
         { skip: isAuthenticated || skip }
     );
 

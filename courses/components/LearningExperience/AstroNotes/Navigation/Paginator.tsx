@@ -7,6 +7,8 @@ import { pageSliderClassNames } from '../constants';
 import { useDebounce } from 'commons/hooks/useDebounce';
 import { useTracker } from 'tracker/tracker';
 import Link from 'next/link';
+import { useGetBookDetailQuery } from 'courses/redux/api/astronotesApi';
+import { getBookBaseHref } from 'courses/utils';
 
 interface PaginatorProps extends PropsWithClassName {
     currentPage: number;
@@ -21,10 +23,16 @@ const Paginator = ({
 }: PaginatorProps): JSX.Element => {
     const tracker = useTracker();
     const router = useRouter();
-    const { slug, page } = router.query;
+    const { slug, page } = router.query as { slug: string; page: string };
     const MAX_VALUE = totalPage;
     const [pageNumber, setPageNumber] = useState<number>(Number(page));
     const destinationPage = useDebounce(pageNumber, 500);
+    const { data: getBookDetail } = useGetBookDetailQuery(
+        { slug },
+        { skip: !slug }
+    );
+    const category_name = getBookDetail?.book.category;
+    const baseHref = `${getBookBaseHref(category_name ?? '')}/${slug}`;
 
     useEffect(() => {
         setPageNumber(Number(page));
@@ -32,7 +40,7 @@ const Paginator = ({
 
     useEffect(() => {
         if (destinationPage !== Number(page)) {
-            router.push(`/astronotes/${slug}/${destinationPage}`);
+            router.push(`${baseHref}/${destinationPage}`);
         }
     }, [destinationPage]);
 
@@ -65,9 +73,7 @@ const Paginator = ({
             <div className="flex items-center gap-[10px]">
                 <Link
                     href={
-                        pageNumber > 1
-                            ? `/astronotes/${slug}/${pageNumber - 1}`
-                            : '#'
+                        pageNumber > 1 ? `${baseHref}/${pageNumber - 1}` : '#'
                     }
                     onClick={() => {
                         if (pageNumber > 1) {
@@ -99,7 +105,7 @@ const Paginator = ({
                 <Link
                     href={
                         pageNumber < MAX_VALUE
-                            ? `/astronotes/${slug}/${pageNumber + 1}`
+                            ? `${baseHref}/${pageNumber - 1}`
                             : '#'
                     }
                     onClick={() => {

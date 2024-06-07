@@ -102,7 +102,7 @@ const Sidebar = ({
                     </span>
                 </Link>
                 <Link
-                    href={'/astronotes'}
+                    href={'/perpustakaan'}
                     onClick={() => {
                         tracker?.genericTrack(
                             `Click Library ${
@@ -113,7 +113,7 @@ const Sidebar = ({
                     <span
                         className={cn(
                             'flex gap-4 cursor-pointer  font-body text-sm hover:text-[#999999]',
-                            pathname.includes('/astronotes')
+                            pathname.includes('/perpustakaan')
                                 ? 'text-white'
                                 : 'text-[#666666]'
                         )}>

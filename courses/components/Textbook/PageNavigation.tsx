@@ -18,7 +18,9 @@ export const PageNavigation = ({
         <nav className="fixed md:relative bottom-0 inset-x-0 bg-black p-4 gap-2.5 grid grid-cols-2 md:flex z-10 md:p-0">
             <Button
                 href={
-                    !!prev ? `/astronotes/textbook/${slug}/${prev}` : undefined
+                    !!prev
+                        ? `/perpustakaan/textbook/${slug}/${prev}`
+                        : undefined
                 }
                 disabled={!prev}
                 variant="neutral"
@@ -30,7 +32,9 @@ export const PageNavigation = ({
             </Button>
             <Button
                 href={
-                    !!next ? `/astronotes/textbook/${slug}/${next}` : undefined
+                    !!next
+                        ? `/perpustakaan/textbook/${slug}/${next}`
+                        : undefined
                 }
                 disabled={!next}
                 variant="primary"

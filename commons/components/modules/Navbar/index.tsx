@@ -49,7 +49,7 @@ const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
     {
         name: 'Library',
         title: 'Perpustakaan',
-        url: '/astronotes',
+        url: '/perpustakaan',
         IconActive: RiBookOpenFill,
         IconUnactive: RiBookOpenLine
     }
@@ -198,6 +198,10 @@ const Navbar = ({
         setCloseReminder?.(closeSubscriptionReminder);
     }, [closeSubscriptionReminder, setCloseReminder]);
 
+    const bookDetailPageRegex = new RegExp(
+        /^\/perpustakaan\/([a-zA-Z0-9-]+)\/(.+)$/
+    );
+
     return (
         <header
             className={`fixed top-0 left-0 w-full z-20 ${computeBgColor()} transition-all ease-in-out duration-200 flex flex-col`}
@@ -235,7 +239,9 @@ const Navbar = ({
                                     (page) => router.asPath === page
                                 ) ||
                                     router.pathname === '/komunitas/[id]' ||
-                                    router.pathname === '/astronotes/[slug]') &&
+                                    router.pathname.match(
+                                        bookDetailPageRegex
+                                    )) &&
                                 '!hidden'
                         )}>
                         {UNAUTHENTICATED_NAVBAR_BUTTONS.map(

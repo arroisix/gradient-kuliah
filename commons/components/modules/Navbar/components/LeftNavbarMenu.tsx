@@ -38,7 +38,7 @@ const LeftNavbarMenu = ({
                 .is_community_config_enabled as unknown as boolean
         },
         { href: '/kelas', label: 'Kelas' },
-        { href: '/astronotes', label: 'Perpustakaan' }
+        { href: '/perpustakaan', label: 'Perpustakaan' }
     ];
 
     return !isMobileBreakpoints && isShowNavbarMenu() ? (

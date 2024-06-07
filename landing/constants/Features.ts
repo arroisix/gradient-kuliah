@@ -8,7 +8,7 @@ export const FEATURES: LandingFeatureCardProps[] = [
         photoSize: 'md'
     },
     {
-        link: '/astronotes?tab=text-book',
+        link: '/perpustakaan/textbook',
         title: 'Textbook Solution',
         description:
             'Jawaban dan pembahasan untuk soal di textbook kuliah terpopuler',
@@ -16,7 +16,7 @@ export const FEATURES: LandingFeatureCardProps[] = [
         photoSize: 'sm'
     },
     {
-        link: '/astronotes?tab=bank-soal',
+        link: '/perpustakaan/bank-soal',
         title: 'Bank Soal',
         description:
             'Soal ujian asli dari berbagai universitas, beserta pembahasannya',
@@ -24,7 +24,7 @@ export const FEATURES: LandingFeatureCardProps[] = [
         photoSize: 'sm'
     },
     {
-        link: '/astronotes?tab=astronotes',
+        link: '/perpustakaan/astronotes',
         title: 'Astronotes',
         description:
             'Rangkuman materi, lengkap dengan rumus, ilustrasi, dan contoh',
