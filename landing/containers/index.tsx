@@ -58,7 +58,7 @@ const LandingContainer = ({
     return (
         <div className="bg-black min-h-screen">
             <Hero />
-            <Features />
+            <Features title={'Pilih fitur yang sesuai sama cara belajarmu'} />
             <Popular
                 type="book"
                 majorData={majorData}

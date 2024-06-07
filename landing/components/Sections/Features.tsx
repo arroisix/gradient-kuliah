@@ -11,7 +11,11 @@ import { useRef } from 'react';
 import { cn } from 'commons/utils';
 import { useTracker } from 'tracker/tracker';
 
-const Features = (): JSX.Element => {
+interface FeaturesProps {
+    title: string;
+}
+
+const Features = ({ title }: FeaturesProps): JSX.Element => {
     const { cellWidth, gapWidth } = useGrid();
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -29,7 +33,7 @@ const Features = (): JSX.Element => {
         <Container className="flex flex-col gap-5 py-9 md:py-16" id="features">
             <div className="flex justify-between items-center">
                 <h2 className="font-sans text-xl font-extrabold text-center md:text-left">
-                    Pilih fitur yang sesuai sama cara belajarmu
+                    {title}
                 </h2>
                 <div className="hidden md:flex gap-4 text-black">
                     <button
