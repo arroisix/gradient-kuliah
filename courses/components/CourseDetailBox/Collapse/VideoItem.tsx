@@ -62,7 +62,7 @@ const VideoItem = ({
     return (
         <Link
             key={value.id}
-            href={`/kelas/${id}/belajar/video/${chapter_id}/${value.id}`}
+            href={`/kelas/${id}/${value?.subchapter_slug}`}
             className="flex justify-between px-3 py-[10px] cursor-pointer hover:bg-[#272727]"
             onClick={track}>
             <div

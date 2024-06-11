@@ -78,7 +78,7 @@ const SylabbusContent = ({
             {subchapters?.map((subchapter: SubChapter) => (
                 <Link
                     key={subchapter.id}
-                    href={`/kelas/${slug}/belajar/video/${id}/${subchapter.id}`}
+                    href={`/kelas/${slug}/${subchapter.subchapter_slug}`}
                     onClick={() => {
                         tracker?.genericTrack('Click SubChapter Video Item', {
                             'Course Slug': slug,
@@ -106,7 +106,7 @@ const SylabbusContent = ({
                             </p>
                         </div>
                         <span className="sr-only">
-                            {`/kelas/${slug}/belajar/video/${id}/${subchapter.id}`}
+                            {`/kelas/${slug}/${subchapter.subchapter_slug}`}
                         </span>
                     </button>
                 </Link>

@@ -36,7 +36,7 @@ const CourseCard = ({
             return `/kelas/${course.slug}/astronotes`;
         }
         if (latestSubChapter) {
-            return `/kelas/${course.slug}/belajar/video/${latestSubChapter.chapter_id}/${latestSubChapter.id}`;
+            return `/kelas/${course.slug}/${latestSubChapter.subchapter_slug}`;
         }
         return `/kelas/${course.slug}`;
     };

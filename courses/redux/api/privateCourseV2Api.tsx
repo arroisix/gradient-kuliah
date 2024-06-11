@@ -15,8 +15,19 @@ export const privateCourseV2Api = baseApi.injectEndpoints({
                     limit: 20
                 }
             })
+        }),
+        getSubchapterDetailV2: builder.query<
+            SubChapter,
+            { course_slug: string; subchapter_slug: string }
+        >({
+            query: ({ course_slug, subchapter_slug }) => ({
+                url: `${PRIVATE_COURSE_V2_BASE_URL}${course_slug}/subchapter/${subchapter_slug}/`
+            })
         })
     })
 });
 
-export const { useGetPrivateListCoursesV2Query } = privateCourseV2Api;
+export const {
+    useGetPrivateListCoursesV2Query,
+    useGetSubchapterDetailV2Query
+} = privateCourseV2Api;

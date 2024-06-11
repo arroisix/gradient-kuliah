@@ -15,15 +15,14 @@ export const ListContinueLearning = ({
             {learningProgress?.map(
                 ({
                     course_slug,
-                    chapter_id,
-                    subchapter_id,
+                    subchapter_slug,
                     subchapter_thumbnail,
                     subchapter_name,
                     course_name,
                     progress_percentage
                 }) => (
                     <Link
-                        href={`/kelas/${course_slug}/belajar/video/${chapter_id}/${subchapter_id}`}
+                        href={`/kelas/${course_slug}/${subchapter_slug}`}
                         onClick={() => {
                             tracker?.genericTrack(
                                 'Click Latest Watch Progress Card',
@@ -33,7 +32,7 @@ export const ListContinueLearning = ({
                                 }
                             );
                         }}
-                        key={`${course_slug}-${chapter_id}-${subchapter_id}`}>
+                        key={`${course_slug}-${subchapter_slug}`}>
                         <div className="flex gap-[18px] md:gap-[30px] items-center justify-start md:justify-center cursor-pointer">
                             <div className="relative min-w-[120px] sm:min-w-[160px] lg:min-w-[220px] w-1/2 min-h-[83px] sm:h-[120px] lg:h-[150px] max-w-[260px]">
                                 <Image

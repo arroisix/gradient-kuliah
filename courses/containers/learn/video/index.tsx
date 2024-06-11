@@ -7,11 +7,7 @@ import CourseSummary from 'courses/components/CourseSummary';
 import AiTutor from 'courses/components/LearningExperience/AiTutor';
 import AiModalFeedback from 'courses/components/LearningExperience/AiTutor/AiModalFeedback';
 import { useLearning } from 'courses/contexts/LearningProvider';
-import {
-    useGetCourseDetailQuery,
-    useGetPublicSubchapterDetailQuery
-} from 'courses/redux/api/courseApi';
-import { useGetSubchapterDetailQuery } from 'courses/redux/api/privateCourseApi';
+import { useGetCourseDetailQuery } from 'courses/redux/api/courseApi';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -19,6 +15,9 @@ import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import VideoPlayerContainer from 'courses/components/VideoPlayerContainer';
 import { VideoJsonLd } from 'next-seo';
 import moment from 'moment';
+import Breadcrumb from 'commons/components/modules/Breadcrumb';
+import { useGetSubchapterDetailV2Query } from 'courses/redux/api/privateCourseV2Api';
+import { useGetPublicSubchapterDetailV2Query } from 'courses/redux/api/publicCourseV2Api';
 
 const DUMMY_DATE = moment().startOf('year').format();
 
@@ -31,15 +30,15 @@ const VideoLearnContainer = ({
 }): JSX.Element => {
     const { isDesktopBreakpoints } = useWindowBreakpoints();
     const router = useRouter();
-    const { sub, chapter, id } = router.query;
+    const { id, slug } = router.query;
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const privateSubchapterDetails = useGetSubchapterDetailQuery(
-        sub as string,
-        { skip: !sub || !isAuthenticated }
+    const privateSubchapterDetails = useGetSubchapterDetailV2Query(
+        { course_slug: id as string, subchapter_slug: slug as string },
+        { skip: !id || !slug || !isAuthenticated }
     );
-    const publicSubchapterDetails = useGetPublicSubchapterDetailQuery(
-        sub as string,
-        { skip: !sub || isAuthenticated }
+    const publicSubchapterDetails = useGetPublicSubchapterDetailV2Query(
+        { course_slug: id as string, subchapter_slug: slug as string },
+        { skip: !id || !slug || !isAuthenticated }
     );
     const { data: subchapterResponse, isLoading } = isAuthenticated
         ? privateSubchapterDetails
@@ -61,7 +60,19 @@ const VideoLearnContainer = ({
     const subchapter = subchapterResponse ?? ssrSubchapterData;
 
     return (
-        <section className="relative pt-16 pb-16 min-h-[100vh] flex flex-col">
+        <section className="relative pt-14 pb-16 min-h-[100vh] flex flex-col">
+            <Breadcrumb
+                className="pb-2"
+                nextItem={
+                    {
+                        name: course?.course_name,
+                        url: `/kelas/${id}`,
+                        nextItem: {
+                            name: subchapter?.subchapter_name
+                        }
+                    } as BreadcrumbItemProps
+                }
+            />
             <div className="grid grid-cols-1 gap-5 lg:pl-6 lg:pr-[15px] lg:grid-cols-3 pb-1">
                 <div
                     className="w-full lg:col-span-2 h-max lg:pl-8"
@@ -74,13 +85,13 @@ const VideoLearnContainer = ({
                                 'https://assets.gradient.academy/assets/gradient-G-icon.png'
                         ]}
                         uploadDate={DUMMY_DATE}
-                        contentUrl={`https://gradient.academy/kelas/${id}/belajar/video/${chapter}/${sub}`}
+                        contentUrl={`https://gradient.academy/kelas/${id}/${slug}`}
                     />
                     <VideoPlayerContainer
                         isLoadingData={isLoading}
                         subchapter_name={subchapter?.subchapter_name}
                         video={subchapter?.video}
-                        next_subchapter={subchapter?.next_subchapter}
+                        next_subchapter_slug={subchapter?.next_subchapter_slug}
                     />
                     <div className="px-4 py-4 space-y-1 lg:pt-6 sm:px-0 md:px-12 lg:px-0">
                         <h3 className="text-sm lg:text-xl text-neutral-400">
