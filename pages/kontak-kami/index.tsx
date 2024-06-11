@@ -1,5 +1,5 @@
 import Layout from 'commons/layout';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { BsWhatsapp } from 'react-icons/bs';
 import { IconType } from 'react-icons/lib';
@@ -9,22 +9,10 @@ import { AiOutlineEnvironment } from 'react-icons/ai';
 import { CDN_URL } from '../../commons/constants';
 import Image from 'next/image';
 import Breadcrumb from '../../commons/components/modules/Breadcrumb';
+import useWindowBreakpoints from '../../commons/hooks/useWindowBreakpoints';
 
 const ContactUs = (): JSX.Element => {
-    const [isMobile, setIsMobile] = useState(false);
-
-    useEffect(() => {
-        const handleResize = (): void => {
-            setIsMobile(window.innerWidth <= 768);
-        };
-
-        handleResize();
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
+    const { isMobileBreakpoints } = useWindowBreakpoints();
 
     return (
         <Layout isFullBlackBackground>
@@ -34,7 +22,7 @@ const ContactUs = (): JSX.Element => {
                     <div className="relative w-full h-[160px] md:h-[200px] rounded-[16px] border border-[#333333] overflow-hidden">
                         <Image
                             src={
-                                isMobile
+                                isMobileBreakpoints
                                     ? `${CDN_URL}/assets/mobile_contact.png`
                                     : `${CDN_URL}/assets/desktop_contact.png`
                             }
