@@ -35,8 +35,8 @@ const ContactUs = (): JSX.Element => {
                         <Image
                             src={
                                 isMobile
-                                    ? `${CDN_URL}/assets/contact_mobile_2.png`
-                                    : `${CDN_URL}/assets/contact_desktop_2.png`
+                                    ? `${CDN_URL}/assets/mobile_contact.png`
+                                    : `${CDN_URL}/assets/desktop_contact.png`
                             }
                             priority
                             alt="Gradient Banner"
