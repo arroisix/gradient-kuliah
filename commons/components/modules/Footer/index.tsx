@@ -34,7 +34,7 @@ const ITEMS: FooterItemProps[] = [
                 url: '/karir'
             },
             {
-                title: 'Kontak Kami',
+                content: 'Kontak Kami',
                 url: '/kontak-kami'
             }
         ]
