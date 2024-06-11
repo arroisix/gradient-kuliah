@@ -8,6 +8,7 @@ import { MdMailOutline } from 'react-icons/md';
 import { AiOutlineEnvironment } from 'react-icons/ai';
 import { CDN_URL } from '../../commons/constants';
 import Image from 'next/image';
+import Breadcrumb from '../../commons/components/modules/Breadcrumb';
 
 const ContactUs = (): JSX.Element => {
     const [isMobile, setIsMobile] = useState(false);
@@ -28,13 +29,14 @@ const ContactUs = (): JSX.Element => {
     return (
         <Layout isFullBlackBackground>
             <div className="flex flex-col items-center justify-center min-h-screen py-16">
-                <div className="flex flex-col gap-8 w-full max-w-[960px] px-4 md:px-0 pt-12">
+                <div className="flex flex-col gap-8 w-full max-w-[960px] px-4 md:px-0 pt-8">
+                    <Breadcrumb />
                     <div className="relative w-full h-[160px] md:h-[200px] rounded-[16px] border border-[#333333] overflow-hidden">
                         <Image
                             src={
                                 isMobile
-                                    ? `${CDN_URL}/assets/kontak-kami-banner-mobile.png`
-                                    : `${CDN_URL}/assets/kontak-kami-banner-desktop.png`
+                                    ? `${CDN_URL}/assets/contact_mobile_2.png`
+                                    : `${CDN_URL}/assets/contact_desktop_2.png`
                             }
                             priority
                             alt="Gradient Banner"
@@ -42,7 +44,7 @@ const ContactUs = (): JSX.Element => {
                             objectFit="cover"
                         />
                     </div>
-                    <div className="flex flex-col bg-[#121212] py-8 px-6 gap-4 w-full h-fit rounded-[16px]">
+                    <div className="flex flex-col bg-[#121212] md:py-8 py-5 md:px-6 px-4 gap-4 w-full h-fit rounded-[16px]">
                         <div className="flex flex-col md:flex-row gap-4 w-full">
                             <ContactItem
                                 title="WhatsApp"
