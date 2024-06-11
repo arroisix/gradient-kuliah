@@ -87,17 +87,23 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
         return res;
     }
 
-    if (pathname.startsWith('/kelas/') && !pathname.startsWith('/kelas/ptsl/')) {
-        const splitedPathname = pathname.split('/')
-        const subchapterId = splitedPathname[splitedPathname.length-1]
-        const courseSlug = splitedPathname[2]
+    if (
+        pathname.startsWith('/kelas/') &&
+        !pathname.startsWith('/kelas/ptsl/')
+    ) {
+        const splitedPathname = pathname.split('/');
+        const subchapterId = splitedPathname[splitedPathname.length - 1];
+        const courseSlug = splitedPathname[2];
 
         try {
-            const getSubchapterSlug = await fetch(`${apiConfig.API_BASE_URL}courses/public/subchapter/${subchapterId}/slug/`)
-            const subchapterSlug = (await getSubchapterSlug.json()).subchapter_slug
-            url.pathname = `/kelas/${courseSlug}/${subchapterSlug}`
+            const getSubchapterSlug = await fetch(
+                `${apiConfig.API_BASE_URL}courses/public/subchapter/${subchapterId}/slug/`
+            );
+            const subchapterSlug = (await getSubchapterSlug.json())
+                .subchapter_slug;
+            url.pathname = `/kelas/${courseSlug}/${subchapterSlug}`;
         } catch (error) {
-            url.pathname = `/kelas/${courseSlug}`
+            url.pathname = `/kelas/${courseSlug}`;
         }
 
         return NextResponse.redirect(url);

@@ -61,13 +61,15 @@ module.exports = {
             },
             {
                 source: '/kelas/ptsl/belajar/video/1aa041b7-6eb9-4519-8166-9ac58ee84599/db165f53-8537-43fa-8f52-d8f380030735',
-                destination: '/kelas/ptsl/tetsu-nakamura-dari-dokter-jadi-engineer',
+                destination:
+                    '/kelas/ptsl/tetsu-nakamura-dari-dokter-jadi-engineer',
                 permanent: true,
                 basePath: false
             },
             {
                 source: '/kelas/ptsl/belajar/video/1aa041b7-6eb9-4519-8166-9ac58ee84599/e9297977-3fab-4e85-86d7-6eea9c7a35f0',
-                destination: '/kelas/ptsl/teknik-sipil-menyembuhkan-banyak-orang',
+                destination:
+                    '/kelas/ptsl/teknik-sipil-menyembuhkan-banyak-orang',
                 permanent: true,
                 basePath: false
             },
@@ -85,19 +87,22 @@ module.exports = {
             },
             {
                 source: '/kelas/ptsl/belajar/video/040d7e4a-91af-4099-817a-de73dd247846/d9089fb9-cdcf-42a1-8f8b-e262cf7aec90',
-                destination: '/kelas/ptsl/teknik-lingkungan-warisan-yang-berkelanjutan',
+                destination:
+                    '/kelas/ptsl/teknik-lingkungan-warisan-yang-berkelanjutan',
                 permanent: true,
                 basePath: false
             },
             {
                 source: '/kelas/ptsl/belajar/video/040d7e4a-91af-4099-817a-de73dd247846/ffb75949-93a4-4f0a-9462-48c86728bcff',
-                destination: '/kelas/ptsl/bagaimana-manusia-mempengaruhi-lingkungan',
+                destination:
+                    '/kelas/ptsl/bagaimana-manusia-mempengaruhi-lingkungan',
                 permanent: true,
                 basePath: false
             },
             {
                 source: '/kelas/ptsl/belajar/video/040d7e4a-91af-4099-817a-de73dd247846/55145911-67fb-4070-b1ea-3b43a481cc26',
-                destination: '/kelas/ptsl/teknologi-pedang-bermata-dua-dalam-isu-keberlanjutan',
+                destination:
+                    '/kelas/ptsl/teknologi-pedang-bermata-dua-dalam-isu-keberlanjutan',
                 permanent: true,
                 basePath: false
             },
@@ -106,7 +111,7 @@ module.exports = {
                 destination: '/kelas/ptsl/environmentally-benign-technology',
                 permanent: true,
                 basePath: false
-            },
+            }
         ];
     }
 };
