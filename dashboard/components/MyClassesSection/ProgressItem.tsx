@@ -1,4 +1,6 @@
 import { AstronoteBookCard } from 'courses/components/LearningExperience/AstroNotes/AstronoteBook';
+import { useGetBookDetailQuery } from 'courses/redux/api/astronotesApi';
+import { getBookBaseHref } from 'courses/utils';
 import React from 'react';
 
 type ProgressItemProps = {
@@ -10,12 +12,19 @@ const ProgressItem = ({
     progress,
     courseName
 }: ProgressItemProps): JSX.Element => {
+    const { book_slug } = progress;
+    const { data: getBookDetail } = useGetBookDetailQuery(
+        { slug: book_slug },
+        { skip: !book_slug }
+    );
+
     const getHref = (): string => {
         switch (progress.type) {
             case 'book':
-                return `/astronotes/${progress.book_slug}/${progress.latest_page}`;
             case 'textbook':
-                return `/astronotes/textbook/${progress.book_slug}/${progress.latest_page}`;
+                return `${getBookBaseHref(
+                    getBookDetail?.book.category ?? ''
+                )}/${book_slug}/${progress.latest_page}`;
             case 'video':
                 return `/kelas/${progress.course_slug}/belajar/video/${progress.chapter_id}/${progress.subchapter_id}`;
             default:
@@ -25,7 +34,7 @@ const ProgressItem = ({
     return (
         <AstronoteBookCard
             key={progress.id}
-            slug={progress.book_slug}
+            slug={book_slug}
             book_cover_url={progress.thumbnail}
             category_name=""
             title={progress.title}

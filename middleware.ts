@@ -1,27 +1,83 @@
 import { IS_BOT } from 'commons/constants';
+import { getBookBaseHref } from 'courses/utils';
 import { getFeatures, growthbook } from 'library/growthbook';
 import { NextRequest, NextResponse, userAgent } from 'next/server';
 
 const COOKIE = 'visitor_id';
-const ACTIVE_AB_TESTING_PAGES = ['/', '/komunitas']; // Add as needed
+
+// List of bank soal books slug that exist at the time of Perpustakaan URL restructuring (updated: June 6, 2024)
+const BANK_SOAL_BOOKS_SLUG = [
+    'bank-soal-kalkulus1',
+    'bank-soal-kimdas2',
+    'Simulasi-SNBT-2024',
+    'bank-soal-fisdas1',
+    'bank-soal-kimdas1',
+    'bank-soal-kalkulus2',
+    'bank-soal-fisdas2'
+];
 
 export const config = {
-    matcher: ['/', '/komunitas', '/astronotes/:slug*']
+    matcher: [
+        '/',
+        '/komunitas',
+        '/astronotes/:slug*',
+        '/perpustakaan/:kategori(textbook|astronotes|bank-soal)/:slug*'
+    ]
 };
 
 export async function middleware(req: NextRequest): Promise<NextResponse> {
-    // We only want to run the A/B test on the homepage
-    const pathname = req.nextUrl.pathname;
+    const url = req.nextUrl.clone();
+    const { pathname, searchParams } = url;
     let res = NextResponse.next();
 
-    if (
-        !ACTIVE_AB_TESTING_PAGES.includes(pathname) &&
-        !pathname.startsWith('/astronotes/')
-    ) {
-        return res;
+    if (pathname.startsWith('/astronotes')) {
+        const tab = searchParams.get('tab');
+        searchParams.delete('tab');
+        let newPathname = '/perpustakaan';
+
+        switch (tab) {
+            case 'text-book':
+                newPathname = getBookBaseHref('textbook');
+                break;
+            case 'astronotes':
+                newPathname = getBookBaseHref('catatan');
+                break;
+            case 'bank-soal':
+                newPathname = getBookBaseHref('bank-soal');
+                break;
+        }
+
+        if (pathname.startsWith('/astronotes/')) {
+            if (pathname.startsWith('/astronotes/textbook/')) {
+                newPathname = pathname.replace(
+                    '/astronotes/',
+                    '/perpustakaan/'
+                );
+            } else if (pathname.includes('calculus-9th-edition')) {
+                newPathname = pathname.replace(
+                    '/astronotes/',
+                    `${getBookBaseHref('textbook')}/`
+                );
+            } else if (
+                BANK_SOAL_BOOKS_SLUG.some((slug) => pathname.includes(slug))
+            ) {
+                newPathname = pathname.replace(
+                    '/astronotes/',
+                    `${getBookBaseHref('bank-soal')}/`
+                );
+            } else {
+                newPathname = pathname.replace(
+                    '/astronotes/',
+                    `${getBookBaseHref('astronotes')}/`
+                );
+            }
+        }
+
+        url.pathname = newPathname;
+        return NextResponse.redirect(url);
     }
 
-    if (pathname.startsWith('/astronotes/')) {
+    if (pathname.startsWith('/perpustakaan/')) {
         const { isBot } = userAgent(req);
         if (isBot) {
             res.cookies.set(IS_BOT, process.env.FRONTEND_ACCESS_TOKEN);
@@ -38,12 +94,7 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
 
     // Pick which page to render depending on a feature flag
     if (growthbook.isOn('landing-page-revamp')) {
-        const url = req.nextUrl.clone();
-        // Replace response with revamped variant
-        switch (url.pathname) {
-            // case '/':
-            //     url.pathname = '/landing-revamp';
-            //     break;
+        switch (pathname) {
             case '/komunitas':
                 url.pathname = '/komunitas/public';
                 break;

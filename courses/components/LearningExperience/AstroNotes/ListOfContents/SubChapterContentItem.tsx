@@ -1,6 +1,7 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Skeleton from 'commons/components/elements/Skeleton';
 import {
+    useGetBookDetailQuery,
     useGetPublicTableContentSubchaptersQuery,
     useGetTableContentSubchaptersQuery
 } from 'courses/redux/api/astronotesApi';
@@ -24,7 +25,7 @@ export const SubChapterContentItem = ({
     onClick
 }: SubChapterContentItemProps): JSX.Element => {
     const router = useRouter();
-    const { slug } = router.query;
+    const { slug } = router.query as { slug: string };
     const isAuthenticated = useSelector(getIsAuthenticated);
     const privateQueryResult = useGetTableContentSubchaptersQuery(
         {
@@ -43,6 +44,11 @@ export const SubChapterContentItem = ({
     const { isLoading, data: subchapters } = isAuthenticated
         ? privateQueryResult
         : publicQueryResult;
+    const { data: getBookDetail } = useGetBookDetailQuery(
+        { slug },
+        { skip: !slug }
+    );
+    const category_name = getBookDetail?.book.category.toLowerCase();
 
     if (isLoading) return <Skeleton repeat={4} className="h-5 p-0 mb-0" />;
 
@@ -50,7 +56,13 @@ export const SubChapterContentItem = ({
         <>
             {subchapters?.data.map((subchapter: BookSubchapter) => (
                 <Link
-                    href={`/astronotes/${slug}/${subchapter.page_order}#${subchapter.id}`}
+                    href={
+                        category_name === 'textbook'
+                            ? `/perpustakaan/textbook/${slug}/${subchapter.page_order}#${subchapter.id}`
+                            : category_name === 'astronotes'
+                            ? `/perpustakaan/catatan/${slug}/${subchapter.page_order}#${subchapter.id}`
+                            : `/perpustakaan/bank-soal/${slug}/${subchapter.page_order}#${subchapter.id}`
+                    }
                     scroll={false}
                     key={subchapter.id}
                     className="p-1 transition cursor-pointer text-neutral-600 dark:text-neutral-400 btn-ghost rounded-btn"

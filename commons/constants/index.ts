@@ -6,6 +6,9 @@ export const HIGHLIGHT_PROJECT_ID =
 export const LEARNING_PAGES = [
     '/dashboard',
     '/komunitas',
-    '/astronotes',
+    '/perpustakaan',
+    '/perpustakaan/astronotes',
+    '/perpustakaan/textbook',
+    '/perpustakaan/bank-soal',
     '/kelas'
 ];

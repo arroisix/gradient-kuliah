@@ -12,10 +12,13 @@ import moment from 'moment';
 
 type FooterItemProps = {
     title: string;
-    bodies: {
-        title: string;
-        url: string;
-    }[];
+    bodies: FooterBodyProps[];
+};
+
+type FooterBodyProps = {
+    content: string;
+    url: string;
+    Icon?: IconType;
 };
 
 const ITEMS: FooterItemProps[] = [
@@ -23,11 +26,11 @@ const ITEMS: FooterItemProps[] = [
         title: 'Tentang Kami',
         bodies: [
             {
-                title: 'Tentang Gradient',
+                content: 'Tentang Gradient',
                 url: '/tentang-kami'
             },
             {
-                title: 'Karier',
+                content: 'Karier',
                 url: '/karir'
             },
             {
@@ -40,11 +43,11 @@ const ITEMS: FooterItemProps[] = [
         title: 'Panduan',
         bodies: [
             {
-                title: 'Syarat & Ketentuan',
+                content: 'Syarat & Ketentuan',
                 url: '/syarat-dan-ketentuan'
             },
             {
-                title: 'Kebijakan Privasi',
+                content: 'Kebijakan Privasi',
                 url: '/kebijakan-privasi'
             }
         ]
@@ -53,26 +56,44 @@ const ITEMS: FooterItemProps[] = [
         title: 'Produk Gradient',
         bodies: [
             {
-                title: 'Kelas',
+                content: 'Kelas',
                 url: '/kelas'
             },
             {
-                title: 'Textbook Solution',
-                url: '/astronotes?tab=text-book'
+                content: 'Textbook Solution',
+                url: '/perpustakaan/textbook'
             },
             {
-                title: 'Astronotes',
-                url: '/astronotes?tab=astronotes'
+                content: 'Astronotes',
+                url: '/perpustakaan/astronotes'
             },
             {
-                title: 'Bank Soal',
-                url: '/astronotes?tab=bank-soal'
+                content: 'Bank Soal',
+                url: '/perpustakaan/bank-soal'
             },
             {
-                title: 'Komunitas',
+                content: 'Komunitas',
                 url: '/komunitas'
             }
         ]
+    }
+];
+
+const CONTACTS: FooterBodyProps[] = [
+    {
+        content: '@gradient_idn',
+        url: 'https://www.instagram.com/gradient_idn/',
+        Icon: FaInstagram
+    },
+    {
+        content: 'business@gradient.academy',
+        url: 'https://mail.google.com/mail/u/0/?fs=1&to=business@gradient.academy&tf=cm',
+        Icon: MdMailOutline
+    },
+    {
+        content: '+6285179893859',
+        url: 'https://wa.me/+6285179893859',
+        Icon: BsWhatsapp
     }
 ];
 
@@ -130,8 +151,8 @@ const Footer = (): JSX.Element => {
                                 className={`flex flex-col gap-${PRODUCT_BODY_GAP}`}>
                                 {item.bodies.map((body) => (
                                     <Body
-                                        key={body.title}
-                                        body={body.title}
+                                        key={body.content}
+                                        content={body.content}
                                         url={body.url}
                                     />
                                 ))}
@@ -144,21 +165,14 @@ const Footer = (): JSX.Element => {
                         <Title title="Punya Pertanyaan?" />
                         <div
                             className={`flex flex-col gap-${CONTACT_BODY_GAP}`}>
-                            <Body
-                                body="@gradient_idn"
-                                url="https://www.instagram.com/gradient_idn/"
-                                Icon={FaInstagram}
-                            />
-                            <Body
-                                body="business@gradient.academy"
-                                url="mailto:business@gradient.academy"
-                                Icon={MdMailOutline}
-                            />
-                            <Body
-                                body="+6285179893859"
-                                url="https://wa.me/+6285179893859"
-                                Icon={BsWhatsapp}
-                            />
+                            {CONTACTS.map((body) => (
+                                <Body
+                                    key={body.content}
+                                    content={body.content}
+                                    url={body.url}
+                                    Icon={body.Icon}
+                                />
+                            ))}
                         </div>
                     </div>
 
@@ -212,22 +226,14 @@ const Title = ({ title }: { title: string }): JSX.Element => {
     return <h4 className="font-sans font-bold text-white">{title}</h4>;
 };
 
-const Body = ({
-    body,
-    url,
-    Icon
-}: {
-    body: string;
-    url: string;
-    Icon?: IconType;
-}): JSX.Element => {
+const Body = ({ content, url, Icon }: FooterBodyProps): JSX.Element => {
     return (
         <Link
             href={url}
             className="flex items-center gap-2 font-body text-sm text-[#BBBBBB]"
             target={Icon ? '_blank' : '_self'}>
             {Icon && <Icon className="w-[18px] h-[18px] text-[#7264EB]" />}
-            {body}
+            {content}
         </Link>
     );
 };

@@ -1,4 +1,6 @@
 import { cn } from 'commons/utils';
+import { useGetBookDetailQuery } from 'courses/redux/api/astronotesApi';
+import { getBookBaseHref } from 'courses/utils';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -19,7 +21,15 @@ export const BookmarkItem = ({
     onClick
 }: BookmarkItemProps): JSX.Element => {
     const router = useRouter();
-    const { slug } = router.query;
+    const { slug } = router.query as { slug: string };
+    const { data: getBookDetail } = useGetBookDetailQuery(
+        { slug },
+        { skip: !slug }
+    );
+    const category_name = getBookDetail?.book.category;
+    const href = `${getBookBaseHref(category_name ?? '')}/${slug}/${
+        data.page_order
+    }`;
 
     const [isShow, setIsShow] = useState(false);
 
@@ -43,15 +53,13 @@ export const BookmarkItem = ({
                     <FaChevronRight size={12} className="swap-on" />
                     <FaChevronUp size={12} className="swap-off" />
                 </label>
-                <Link
-                    href={`/astronotes/${slug}/${data.page_order}`}
-                    className="text-sm">
+                <Link href={href} className="text-sm">
                     Halaman {data.page_order}
                 </Link>
             </div>
             {isShow && (
                 <Link
-                    href={`/astronotes/${slug}/${data.page_order}`}
+                    href={href}
                     className="flex flex-col gap-1 py-2 pl-7 text-neutral-600 dark:text-neutral-400">
                     <>
                         {data.page_chapters?.map((chapter, index) => (

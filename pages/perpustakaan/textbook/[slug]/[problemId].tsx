@@ -40,7 +40,7 @@ const TextbookSolutionProblemPage = ({
                     }
                 ]}
                 datePublished={DUMMY_DATE}
-                url={`https://gradient.academy/astronotes/textbook/${slug}/${problemId}`}
+                url={`https://gradient.academy/perpustakaan/textbook/${slug}/${problemId}`}
                 images={[
                     'https://assets.gradient.academy/assets/gradient-G-icon.png'
                 ]}
@@ -90,6 +90,12 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
             }
 
             const { book } = payload[0].data as GetBookDetailResponse;
+            if (book.category.toLowerCase() !== 'textbook') {
+                return {
+                    notFound: true
+                };
+            }
+
             const textbook = payload[1].data as TextbookSolution;
 
             const title = `Pembahasan Soal ${textbook.problem.title} | ${book.title}`;
@@ -101,7 +107,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                     slug,
                     problemId,
                     content: textbook,
-                    canonical: `https://gradient.academy/astronotes/textbook/${slug}/${problemId}`,
+                    canonical: `https://gradient.academy/perpustakaan/textbook/${slug}/${problemId}`,
                     // TODO(angga): replace SEO title and descriptions
                     title,
                     description,
@@ -110,7 +116,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                         // TODO(angga): replace SEO title and descriptions
                         title,
                         description,
-                        url: `https://gradient.academy/astronotes/textbook/${slug}/${problemId}`,
+                        url: `https://gradient.academy/perpustakaan/textbook/${slug}/${problemId}`,
                         images: [
                             {
                                 url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
