@@ -72,12 +72,12 @@ interface ContactItemProps {
     Icon?: IconType;
 }
 
-const ContactItem: React.FC<ContactItemProps> = ({
+const ContactItem = ({
     title,
     description,
     url,
     Icon
-}) => {
+}: ContactItemProps): JSX.Element => {
     const content = (
         <div className="flex flex-row bg-[#222222] p-4 w-full rounded-[16px] gap-4">
             <div className="bg-[#7264EB] bg-opacity-30 w-fit p-3 h-fit flex items-center justify-center rounded-[50px]">
