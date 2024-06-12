@@ -87,10 +87,7 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
         return res;
     }
 
-    if (
-        pathname.startsWith('/kelas/') &&
-        !pathname.startsWith('/kelas/ptsl/')
-    ) {
+    if (pathname.startsWith('/kelas/')) {
         const splitedPathname = pathname.split('/');
         const subchapterId = splitedPathname[splitedPathname.length - 1];
         const courseSlug = splitedPathname[2];
