@@ -106,7 +106,7 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
             url.pathname = `/kelas/${courseSlug}`;
         }
 
-        return NextResponse.redirect(url);
+        return NextResponse.redirect(url, 301);
     }
 
     // Get existing visitor cookie or create a new one
