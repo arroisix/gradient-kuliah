@@ -40,8 +40,8 @@ const LearningProgress = ({
                     ? 'mx-5 lg:w-10/12 lg:mx-auto bg-zinc-900 rounded-xl mt-20'
                     : 'h-[70vh]'
             )}>
-            <Breadcrumb 
-                className='absolute top-[72px] lg:top-20 z-10 px-4 md:px-8 lg:px-24'
+            <Breadcrumb
+                className="absolute top-[72px] lg:top-20 z-10 px-4 md:px-8 lg:px-24"
                 nextItem={{ name: data?.course_name } as BreadcrumbItemProps}
             />
             <div

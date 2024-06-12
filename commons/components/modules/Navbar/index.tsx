@@ -86,7 +86,7 @@ const Navbar = ({
     const [openSidebar, setOpenSidebar] = useState(false);
     const { height } = useWindowSize();
     const router = useRouter();
-    const { pathname } = router
+    const { pathname } = router;
     const [scrollPosition, setScrollPosition] = useState(0);
     const handleScroll = (): void => {
         const position = window.pageYOffset;
@@ -211,7 +211,9 @@ const Navbar = ({
             <div
                 className={cn(
                     'flex items-center justify-between w-full px-4 py-3 md:px-8',
-                    is_subscribed && pathname !== '/kelas/[id]' ? 'lg:pl-6 lg:pr-28' : 'lg:px-24'
+                    is_subscribed && pathname !== '/kelas/[id]'
+                        ? 'lg:pl-6 lg:pr-28'
+                        : 'lg:px-24'
                 )}>
                 <div className="flex items-center gap-4">
                     {(isLandingPageRevampOn ||
@@ -240,9 +242,7 @@ const Navbar = ({
                                     (page) => router.asPath === page
                                 ) ||
                                     pathname === '/komunitas/[id]' ||
-                                    pathname.match(
-                                        bookDetailPageRegex
-                                    )) &&
+                                    pathname.match(bookDetailPageRegex)) &&
                                 '!hidden'
                         )}>
                         {UNAUTHENTICATED_NAVBAR_BUTTONS.map(
