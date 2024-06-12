@@ -32,3 +32,6 @@ yarn-error.log*
 .env.production.local
 tsconfig.tsbuildinfo
 .firebase
+
+# jetbrains
+.idea

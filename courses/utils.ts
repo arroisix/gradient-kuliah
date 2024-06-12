@@ -189,3 +189,15 @@ export const dayToMonth = (day: number): string => {
 export const addZeroBefore = (data: number): string => {
     return `${data < 10 ? '0' : ''}${data}`;
 };
+
+export const getBookBaseHref = (book_category: string): string => {
+    switch (book_category.toLowerCase()) {
+        case 'textbook':
+            return '/perpustakaan/textbook';
+        case 'astronotes':
+        case 'catatan':
+            return '/perpustakaan/astronotes';
+        default:
+            return '/perpustakaan/bank-soal';
+    }
+};

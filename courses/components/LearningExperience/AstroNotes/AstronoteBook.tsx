@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import React from 'react';
 import { AiFillStar } from 'react-icons/ai';
 import { HiOutlineAcademicCap } from 'react-icons/hi';
@@ -9,6 +8,7 @@ import { cn } from 'commons/utils';
 import { CDN_URL } from 'commons/constants';
 import { IoTime } from 'react-icons/io5';
 import { TbCircleCheckFilled } from 'react-icons/tb';
+import { getBookBaseHref } from 'courses/utils';
 
 const AstronoteBook = ({
     slug,
@@ -19,6 +19,7 @@ const AstronoteBook = ({
     education_level,
     in_progress,
     latest_page,
+    category_name,
     eventName = 'Click Book Item on Library Page',
     eventPayload
 }: Astronote & {
@@ -26,20 +27,17 @@ const AstronoteBook = ({
     eventPayload?: Record<string, unknown>;
 }): JSX.Element => {
     const tracker = useTracker();
-    const router = useRouter();
+    const baseHref = `${getBookBaseHref(category_name)}/${slug}`;
 
     return (
-        <div
+        <Link
             className="flex flex-col h-full cursor-pointer"
+            href={in_progress ? `${baseHref}/${latest_page || 1}` : baseHref}
             onClick={() => {
                 tracker?.genericTrack(eventName, {
                     'Book Slug': slug,
                     ...eventPayload
                 });
-
-                if (in_progress)
-                    router.push(`/astronotes/${slug}/${latest_page || 1}`);
-                else router.push(`/astronotes/${slug}`);
             }}
             aria-hidden>
             <div className="aspect-[256/364] relative w-full border rounded border-neutral-700">
@@ -75,7 +73,7 @@ const AstronoteBook = ({
                     <HiOutlineAcademicCap size={20} /> {education_level}
                 </div>
             )}
-        </div>
+        </Link>
     );
 };
 

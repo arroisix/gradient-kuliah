@@ -83,10 +83,20 @@ interface ConfigResponse {
 type BreadcrumbPathnames =
     | '/kelas'
     | '/komunitas/public'
-    | '/astronotes'
+    | '/perpustakaan'
+    | '/perpustakaan/astronotes'
+    | '/perpustakaan/astronotes/[slug]'
+    | '/perpustakaan/astronotes/[slug]/[page]'
+    | '/perpustakaan/textbook'
+    | '/perpustakaan/textbook/[slug]'
+    | '/perpustakaan/textbook/[slug]/[problemId]'
+    | '/perpustakaan/bank-soal'
+    | '/perpustakaan/bank-soal/[slug]'
+    | '/perpustakaan/bank-soal/[slug]/[page]'
     | '/tentang-kami'
     | '/kebijakan-privasi'
-    | '/syarat-dan-ketentuan';
+    | '/syarat-dan-ketentuan'
+    | '/kontak-kami';
 
 type BreadcrumbProps = {
     [key in BreadcrumbPathnames]: BreadcrumbItemProps;
@@ -94,6 +104,6 @@ type BreadcrumbProps = {
 
 type BreadcrumbItemProps = {
     name: string;
-    url: string;
+    url?: string;
     nextItem?: BreadcrumbItemProps;
 };

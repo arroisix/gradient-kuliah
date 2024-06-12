@@ -1,5 +1,6 @@
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
 import axios from 'axios';
+import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import LearnLayout from 'commons/learnLayout';
 import withAnon from 'commons/withAnon';
 import KomunitasContainer from 'komunitas/containers';
@@ -19,10 +20,14 @@ const Komunitas = ({ data }: KomunitasProps): JSX.Element => {
     const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
         'landing-page-revamp'
     );
+
     return isLandingPageRevampOn ? (
         <KomunitasProvider initialData={data}>
             <LearnLayout showSidebar fullHeightSidebar showSubscriptionReminder>
-                <KomunitasContainer initialData={data} />
+                <>
+                    <Breadcrumb className="w-full py-5" />
+                    <KomunitasContainer initialData={data} />
+                </>
             </LearnLayout>
         </KomunitasProvider>
     ) : (

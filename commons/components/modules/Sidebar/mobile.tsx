@@ -22,7 +22,7 @@ const MOBILE_SIDEBAR_BUTTONS: NavigationButtonInterface[] = [
     {
         name: 'Library',
         title: 'Perpustakaan',
-        url: '/astronotes',
+        url: '/perpustakaan',
         IconActive: RiBookOpenFill,
         IconUnactive: RiBookOpenLine,
         className: 'mt-4',
@@ -30,22 +30,22 @@ const MOBILE_SIDEBAR_BUTTONS: NavigationButtonInterface[] = [
             {
                 name: 'All Books',
                 title: 'Semua',
-                url: '/astronotes?tab=all'
+                url: '/perpustakaan'
             },
             {
                 name: 'Textbook Solution',
                 title: 'Textbook Solution',
-                url: '/astronotes?tab=text-book'
+                url: '/perpustakaan/textbook'
             },
             {
                 name: 'Question Bank',
                 title: 'Bank Soal',
-                url: '/astronotes?tab=bank-soal'
+                url: '/perpustakaan/bank-soal'
             },
             {
                 name: 'Astronotes',
                 title: 'Astronotes',
-                url: '/astronotes?tab=astronotes'
+                url: '/perpustakaan/astronotes'
             }
         ]
     }

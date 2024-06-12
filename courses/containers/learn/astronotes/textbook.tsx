@@ -5,12 +5,16 @@ import { ShortAnswerSection } from 'courses/components/Textbook/ShortAnswerSecti
 import { LongAnswerSection } from 'courses/components/Textbook/LongAnswerSection';
 import { FeedbackCard } from 'courses/components/Textbook/FeedbackCard';
 import { PageNavigation } from 'courses/components/Textbook/PageNavigation';
-import { useGetTextbookSolutionQuery } from 'courses/redux/api/astronotesApi';
+import {
+    useGetBookDetailQuery,
+    useGetTextbookSolutionQuery
+} from 'courses/redux/api/astronotesApi';
 import { useRouter } from 'next/router';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import TextbookPaywall from './../../../components/Textbook/TextbookPaywall';
 import { IS_BOT } from 'commons/constants';
 import { getCookieValue } from 'commons/utils';
+import Breadcrumb from 'commons/components/modules/Breadcrumb';
 
 type TextbookSolutionProps = {
     data?: TextbookSolution;
@@ -30,6 +34,10 @@ const TextbookSolution = ({
         { slug, problemId, specialToken: isCrawler },
         { skip: !slug || !problemId }
     );
+    const { data: getTextbookDetail } = useGetBookDetailQuery(
+        { slug },
+        { skip: !slug }
+    );
     const data = textbookData ?? initialData;
     useEffect(() => {
         setIsCrawler(getCookieValue(IS_BOT));
@@ -39,6 +47,17 @@ const TextbookSolution = ({
         <div className="drawer drawer-end lg:drawer-open">
             <TableOfContentMenu problem={data?.problem} />
             <div className="pt-40 pb-24 space-y-4 md:pb-12 drawer-content md:max-w-screen-lg md:px-8 lg:px-12 lg:pt-20 lg:mx-auto">
+                <Breadcrumb
+                    nextItem={
+                        {
+                            name: getTextbookDetail?.book.title,
+                            url: `/perpustakaan/textbook/${slug}`,
+                            nextItem: {
+                                name: data?.problem.title
+                            }
+                        } as BreadcrumbItemProps
+                    }
+                />
                 <div className="flex items-start justify-between">
                     <QuestionMetadata problem={data?.problem} />
                     <PageNavigation

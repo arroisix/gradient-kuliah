@@ -12,7 +12,7 @@ const DISPLAYED_ROUTES = [
     '/komunitas',
     '/komunitas/public',
     '/komunitas/pertanyaan-ku',
-    '/astronotes',
+    '/perpustakaan',
     '/kelas'
 ];
 const APPBAR_NAV: AppbarNav[] = [
@@ -34,7 +34,7 @@ const APPBAR_NAV: AppbarNav[] = [
     },
     {
         icon: <RiBookOpenLine size={20} />,
-        href: '/astronotes',
+        href: '/perpustakaan',
         label: 'Perpus'
     }
 ];

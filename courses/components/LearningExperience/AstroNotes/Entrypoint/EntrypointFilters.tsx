@@ -12,7 +12,7 @@ const EntrypointSort = (): JSX.Element => {
     const [showDropdown, setShowDropdown] = useState(false);
 
     return (
-        <div className="sticky z-10 pt-2 pb-4 bg-black top-32">
+        <div className="sticky z-10 pt-2 pb-4 bg-black top-14">
             <button
                 className="flex justify-between items-center gap-2 text-xs font-bold w-full h-8 md:w-52 pl-5 pr-2 py-3 bg-[#2C2C2C] rounded-full"
                 onClick={() => setShowDropdown((prev) => !prev)}

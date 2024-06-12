@@ -34,7 +34,7 @@ const NavigationButton = ({
                         route.asPath.includes(url) ||
                             route.asPath === url ||
                             (name === 'All Books' &&
-                                route.asPath === '/astronotes')
+                                route.asPath === '/perpustakaan')
                             ? ACTIVE_STATE
                             : UNACTIVE_STATE
                     )}>
