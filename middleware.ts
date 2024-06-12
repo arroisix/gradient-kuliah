@@ -74,7 +74,7 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
         }
 
         url.pathname = newPathname;
-        return NextResponse.redirect(url, 308);
+        return NextResponse.redirect(url, 301);
     }
 
     if (pathname.startsWith('/perpustakaan/')) {
