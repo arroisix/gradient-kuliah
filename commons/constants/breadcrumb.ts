@@ -93,5 +93,8 @@ export const BREADCRUMB: BreadcrumbProps = {
     },
     '/syarat-dan-ketentuan': {
         name: 'Syarat dan Ketentuan'
+    },
+    '/kontak-kami': {
+        name: 'Kontak Kami'
     }
 };

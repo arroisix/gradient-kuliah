@@ -97,7 +97,8 @@ type BreadcrumbPathnames =
     | '/perpustakaan/bank-soal/[slug]/[page]'
     | '/tentang-kami'
     | '/kebijakan-privasi'
-    | '/syarat-dan-ketentuan';
+    | '/syarat-dan-ketentuan'
+    | '/kontak-kami';
 
 type BreadcrumbProps = {
     [key in BreadcrumbPathnames]: BreadcrumbItemProps;
