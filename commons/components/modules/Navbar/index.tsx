@@ -214,8 +214,8 @@ const Navbar = ({
                     is_subscribed && showSidebar
                         ? 'lg:pl-6 lg:pr-28'
                         : bookReader
-                            ? 'lg:px-16'
-                            : 'lg:px-24'
+                        ? 'lg:px-16'
+                        : 'lg:px-24'
                 )}>
                 <div className="flex items-center gap-4">
                     {(isLandingPageRevampOn ||
