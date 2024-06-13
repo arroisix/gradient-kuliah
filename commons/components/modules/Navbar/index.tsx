@@ -55,15 +55,7 @@ const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
     }
 ];
 
-const Navbar = ({
-    paymentPage,
-    shouldTransparent,
-    lightMode,
-    showSidebar,
-    fullHeightSidebar,
-    showSubscriptionReminder,
-    setCloseReminder
-}: {
+interface NavbarProps {
     paymentPage: boolean;
     shouldTransparent: boolean;
     courses?: Course[];
@@ -72,7 +64,17 @@ const Navbar = ({
     fullHeightSidebar?: boolean;
     showSubscriptionReminder?: boolean;
     setCloseReminder?: (value: boolean) => void;
-}): JSX.Element => {
+}
+
+const Navbar = ({
+    paymentPage,
+    shouldTransparent,
+    lightMode,
+    showSidebar,
+    fullHeightSidebar,
+    showSubscriptionReminder,
+    setCloseReminder
+}: NavbarProps): JSX.Element => {
     const tracker = useTracker();
 
     const { isDesktopBreakpoints } = useWindowBreakpoints();
@@ -199,10 +201,6 @@ const Navbar = ({
         setCloseReminder?.(closeSubscriptionReminder);
     }, [closeSubscriptionReminder, setCloseReminder]);
 
-    const bookDetailPageRegex = new RegExp(
-        /^\/perpustakaan\/([a-zA-Z0-9-]+)\/(.+)$/
-    );
-
     return (
         <header
             className={`fixed top-0 left-0 w-full z-20 ${computeBgColor()} transition-all ease-in-out duration-200 flex flex-col`}
@@ -210,10 +208,10 @@ const Navbar = ({
             onMouseLeave={onMouseLeaveNavbar}>
             <div
                 className={cn(
-                    'flex items-center justify-between w-full px-4 py-3 md:px-8',
-                    is_subscribed && pathname !== '/kelas/[id]'
+                    'flex items-center justify-between w-full px-4 py-3 md:px-8 lg:px-16',
+                    is_subscribed && showSidebar
                         ? 'lg:pl-6 lg:pr-28'
-                        : 'lg:px-24'
+                        : 'lg:px-16'
                 )}>
                 <div className="flex items-center gap-4">
                     {(isLandingPageRevampOn ||
@@ -237,13 +235,7 @@ const Navbar = ({
                     <div
                         className={cn(
                             'flex items-center ml-7 gap-6 hidden lg:flex',
-                            is_subscribed &&
-                                (LEARNING_PAGES.some(
-                                    (page) => router.asPath === page
-                                ) ||
-                                    pathname === '/komunitas/[id]' ||
-                                    pathname.match(bookDetailPageRegex)) &&
-                                '!hidden'
+                            is_subscribed && showSidebar && '!hidden'
                         )}>
                         {UNAUTHENTICATED_NAVBAR_BUTTONS.map(
                             ({
