@@ -57,6 +57,7 @@ const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
 
 interface NavbarProps {
     paymentPage: boolean;
+    bookReader?: boolean;
     shouldTransparent: boolean;
     courses?: Course[];
     lightMode?: boolean;
@@ -68,6 +69,7 @@ interface NavbarProps {
 
 const Navbar = ({
     paymentPage,
+    bookReader,
     shouldTransparent,
     lightMode,
     showSidebar,
@@ -208,10 +210,12 @@ const Navbar = ({
             onMouseLeave={onMouseLeaveNavbar}>
             <div
                 className={cn(
-                    'flex items-center justify-between w-full px-4 py-3 md:px-8 lg:px-16',
+                    'flex items-center justify-between w-full px-4 py-3 md:px-8',
                     is_subscribed && showSidebar
                         ? 'lg:pl-6 lg:pr-28'
-                        : 'lg:px-16'
+                        : bookReader
+                            ? 'lg:px-16'
+                            : 'lg:px-24'
                 )}>
                 <div className="flex items-center gap-4">
                     {(isLandingPageRevampOn ||
