@@ -46,6 +46,12 @@ module.exports = {
                 destination: `https://gradient-sitemap.s3.ap-southeast-1.amazonaws.com/${env}/:file`,
                 permanent: false,
                 basePath: false
+            },
+            {
+                source: '/sitemaps/:file(.+-sitemap(?:-\\d{1,3})?\\.xml)',
+                destination: `https://gradient-sitemap.s3.ap-southeast-1.amazonaws.com/${env}/:file`,
+                permanent: false,
+                basePath: false
             }
         ];
     }

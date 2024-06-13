@@ -34,11 +34,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
         `${config.API_BASE_URL}courses/subchapter/list-subchapter-with-video/?limit=10`
     );
 
-    const paths = response.data.map(
-        ({ course_slug, chapter_id, subchapter_id }) => ({
-            params: { id: course_slug, chapter: chapter_id, sub: subchapter_id }
-        })
-    );
+    const paths = response.data.map(({ course_slug, subchapter_slug }) => ({
+        params: { id: course_slug, slug: subchapter_slug }
+    }));
 
     return {
         paths,
@@ -49,7 +47,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps = async ({
     params
 }: {
-    params: { id: string; chapter: string; sub: string };
+    params: { id: string; slug: string };
 }): Promise<
     GetStaticPropsResult<
         BelajarPageProps & {
@@ -60,11 +58,11 @@ export const getStaticProps = async ({
         }
     >
 > => {
-    const { id, chapter, sub } = params;
+    const { id, slug } = params;
 
     const [subchapterResponse, courseResponse] = await Promise.all([
         axios.get<SubChapter>(
-            `${config.API_BASE_URL}courses/public/subchapter/${sub}`
+            `${config.API_BASE_URL}courses/v2/public/${id}/subchapter/${slug}/`
         ),
         axios.get<CourseDetailResponse>(`${config.API_BASE_URL}courses/${id}`)
     ]);
@@ -75,14 +73,14 @@ export const getStaticProps = async ({
         props: {
             subchapter,
             course,
-            canonical: `https://gradient.academy/kelas/${id}/belajar/video/${chapter}/${sub}`,
+            canonical: `https://gradient.academy/kelas/${id}/${slug}`,
             title: `${course.course_name}: ${subchapter.subchapter_name}`,
             description: `Nonton Video ${subchapter.subchapter_name} kelas ${course.course_name} hanya di Gradient`,
             openGraph: {
                 type: 'video.other',
                 title: `${course.course_name}: ${subchapter.subchapter_name}`,
                 description: `Nonton Video ${subchapter.subchapter_name} kelas ${course.course_name} hanya di Gradient`,
-                url: `https://gradient.academy/kelas/${id}/belajar/video/${chapter}/${sub}`,
+                url: `https://gradient.academy/kelas/${id}/${slug}`,
                 video: subchapter.video?.video_url,
                 image: subchapter.thumbnail
             }

@@ -86,6 +86,7 @@ const Navbar = ({
     const [openSidebar, setOpenSidebar] = useState(false);
     const { height } = useWindowSize();
     const router = useRouter();
+    const { pathname } = router;
     const [scrollPosition, setScrollPosition] = useState(0);
     const handleScroll = (): void => {
         const position = window.pageYOffset;
@@ -179,7 +180,7 @@ const Navbar = ({
         tracker?.trackButtonClick('Login Button on Navbar', 'Masuk');
     };
 
-    const halamanPembayaran = router.pathname === '/pembayaran';
+    const halamanPembayaran = pathname === '/pembayaran';
     const { data: packet } = useGetDetailPacketOfferQuery(
         halamanPembayaran ? (router.query.packetId as string) : skipToken
     );
@@ -210,7 +211,9 @@ const Navbar = ({
             <div
                 className={cn(
                     'flex items-center justify-between w-full px-4 py-3 md:px-8',
-                    is_subscribed ? 'lg:pl-6 lg:pr-28' : 'lg:px-24'
+                    is_subscribed && pathname !== '/kelas/[id]'
+                        ? 'lg:pl-6 lg:pr-28'
+                        : 'lg:px-24'
                 )}>
                 <div className="flex items-center gap-4">
                     {(isLandingPageRevampOn ||
@@ -238,10 +241,8 @@ const Navbar = ({
                                 (LEARNING_PAGES.some(
                                     (page) => router.asPath === page
                                 ) ||
-                                    router.pathname === '/komunitas/[id]' ||
-                                    router.pathname.match(
-                                        bookDetailPageRegex
-                                    )) &&
+                                    pathname === '/komunitas/[id]' ||
+                                    pathname.match(bookDetailPageRegex)) &&
                                 '!hidden'
                         )}>
                         {UNAUTHENTICATED_NAVBAR_BUTTONS.map(
@@ -295,7 +296,7 @@ const Navbar = ({
                             {isAuthenticated ? (
                                 <nav
                                     className={`ml-12 flex gap-6 cursor-pointer relative`}>
-                                    {/* {router.pathname === '/' && (
+                                    {/* {pathname === '/' && (
                                         <Link href="/kelas">
                                             <nav
                                                 className="ml-12 cursor-pointer hover:text-accent-blue"
@@ -309,7 +310,7 @@ const Navbar = ({
                                     <NavMenuIcons />
                                     <div
                                         className={`flex items-center gap-2 hover:text-accent-blue ${
-                                            router.pathname === '/dashboard' &&
+                                            pathname === '/dashboard' &&
                                             'text-accent-blue'
                                         } ${
                                             isProfileHovered &&
@@ -419,7 +420,7 @@ const Navbar = ({
                                 )
                             ) : (
                                 <div className="flex items-center gap-4">
-                                    {/* {router.pathname === '/' && (
+                                    {/* {pathname === '/' && (
                                         <Link
                                             href="/kelas"
                                             onClick={() =>

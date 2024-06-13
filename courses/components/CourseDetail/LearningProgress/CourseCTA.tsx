@@ -78,7 +78,7 @@ const CourseCTA = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
                     <Button
                         className="md:w-fit text-center mt-4 min-w-[200px]"
                         variant="primary"
-                        href={`/kelas/${slug}/belajar/video/${latest_watch_video?.chapter_id}/${latest_watch_video?.subchapter.id}`}
+                        href={`/kelas/${slug}/${latest_watch_video?.subchapter.subchapter_slug}`}
                         eventName="Continue Learning Button on Course Landing Page"
                         eventPayload={{
                             Position: 'HERO',
@@ -90,7 +90,7 @@ const CourseCTA = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
                     <Button
                         className="md:w-fit text-center mt-4 min-w-[200px]"
                         variant="primary"
-                        href={`/kelas/${slug}/belajar/video/${first_video_in_course?.chapter_id}/${first_video_in_course?.subchapter_id}`}
+                        href={`/kelas/${slug}/${first_video_in_course?.subchapter_slug}`}
                         eventName="Start Learning Button on Course Landing Page"
                         eventPayload={{
                             Position: 'HERO',
@@ -118,7 +118,7 @@ const CourseCTA = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
                     />
                     {isLandingPageRevampOn && (
                         <Button
-                            href={`/kelas/${slug}/belajar/video/${coursePreview?.chapter_id}/${coursePreview?.subchapter_id}`}
+                            href={`/kelas/${slug}/${coursePreview?.subchapter_slug}`}
                             variant="custom"
                             eventName='Click "Tonton Preview" Button'
                             className="text-center bg-neutral-800 whitespace-nowrap">

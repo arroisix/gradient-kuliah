@@ -11,7 +11,6 @@ import { AUTHENTICATION_ROUTE } from 'commons/constants';
 
 const VideoAccordionItem = ({
     subchapter,
-    chapterId,
     isSubscribed,
     contentPicked,
     slug,
@@ -27,13 +26,13 @@ const VideoAccordionItem = ({
                 extraCallback();
             }
             router.replace(
-                `/kelas/${slug}/belajar/video/${chapterId}/${subchapter.id}`,
+                `/kelas/${slug}/${subchapter.subchapter_slug}`,
                 undefined,
                 { shallow: true }
             );
         } else {
             router.push(
-                `${AUTHENTICATION_ROUTE}?redirect=/kelas/${slug}/belajar/video/${chapterId}/${subchapter.id}`
+                `${AUTHENTICATION_ROUTE}?redirect=/kelas/${slug}/${subchapter.subchapter_slug}`
             );
         }
     };

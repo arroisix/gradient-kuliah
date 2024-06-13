@@ -77,6 +77,7 @@ type SubChapter = {
     id: string;
     chapter_id?: string;
     subchapter_name?: string;
+    subchapter_slug?: string;
     thumbnail?: string;
     order: number;
     video?: Video;
@@ -93,10 +94,7 @@ type SubChapter = {
     type?: 'video' | 'exercise';
     exercise_id?: string;
     packet_id?: string;
-    next_subchapter?: {
-        chapter_id: string;
-        id: string;
-    };
+    next_subchapter_slug?: string;
     video_id?: string;
 };
 
@@ -203,6 +201,7 @@ type SubchapterProgress = {
 interface FirstVideoInCourse {
     subchapter_id: string;
     subchapter_name: string;
+    subchapter_slug: string;
     chapter_id: string;
     chapter_name: string;
 }
@@ -293,6 +292,7 @@ interface SubchapterSearch {
     items: {
         id: string;
         subchapter_name: string;
+        subchapter_slug: string;
         order: string;
         duration: string;
         last_duration: string;
@@ -377,6 +377,7 @@ type SubchapterPathResponse = {
     chapter_id: string;
     subchapter_id: string;
     subchapter_name: string;
+    subchapter_slug: string;
     subchapter_thumbnail: string;
     video_is_free: boolean;
     video_duration: string;
