@@ -16,6 +16,7 @@ import Breadcrumb from './components/modules/Breadcrumb';
 interface LayoutProps {
     children: JSX.Element;
     paymentPage?: boolean;
+    bookReader?: boolean;
     shouldTransparent?: boolean;
     courses?: Course[];
     hideNavbar?: boolean;
@@ -28,6 +29,7 @@ interface LayoutProps {
 const LearnLayout = ({
     children,
     paymentPage,
+    bookReader,
     shouldTransparent,
     courses,
     hideNavbar,
@@ -60,6 +62,7 @@ const LearnLayout = ({
                     <Navbar
                         lightMode={lightMode}
                         paymentPage={paymentPage ?? false}
+                        bookReader={bookReader}
                         shouldTransparent={shouldTransparent ?? false}
                         courses={courses}
                         showSidebar={showSidebar}
