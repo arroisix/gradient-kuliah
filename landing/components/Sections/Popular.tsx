@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Container from './Container';
 import DashboardCard from 'dashboard/components/DashboardCard';
 import { useTracker } from 'tracker/tracker';
-import { onlyText } from 'commons/utils';
+import { cn, onlyText } from 'commons/utils';
 import Skeleton from 'commons/components/elements/Skeleton';
 import { useRef } from 'react';
 import { MdOutlineChevronLeft, MdOutlineChevronRight } from 'react-icons/md';
@@ -40,9 +40,11 @@ const Popular = ({
             className="flex flex-col gap-6 py-9 md:py-16 items-center"
             id={`${type}s-recommendation`}>
             <div
-                className={`flex flex-col ${
-                    isScrollable ? 'w-full' : ''
-                } md:flex-row md:justify-between md:items-center`}>
+                className={cn(
+                    'flex flex-col',
+                    isScrollable && 'w-full',
+                    'md:flex-row md:justify-between md:items-center'
+                )}>
                 <div className="flex flex-col gap-3 items-center md:flex-row md:gap-6">
                     <h2 className="font-sans text-xl font-extrabold text-center md:text-left">
                         {type === 'book'
@@ -53,7 +55,7 @@ const Popular = ({
                         name={`${type}-major-recommendation`}
                         id={`${type}-major-recommendation-select`}
                         onChange={(e) => setSelectedMajor(e.target.value)}
-                        className="w-full md:w-auto bg-[#141414] text-sm md:text-base rounded-lg border border-[#333333] shadow-[0_4px_5px_0_rgba(0,0,0,0.502)] cursor-pointer">
+                        className="w-full md:w-[320px] bg-[#141414] text-sm md:text-base rounded-lg border border-[#333333] shadow-[0_4px_5px_0_rgba(0,0,0,0.502)] cursor-pointer">
                         {majorData?.map(({ slug, label }) => (
                             <option key={slug} value={slug}>
                                 {label}
@@ -78,9 +80,10 @@ const Popular = ({
             </div>
             <div
                 ref={scrollContainerRef}
-                className={`w-full flex flex-1 gap-5 xl:gap-6 overflow-x-auto no-scrollbar ${
+                className={cn(
+                    'w-full flex flex-1 gap-5 xl:gap-6 overflow-x-auto no-scrollbar',
                     isScrollable ? 'lg:justify-start' : 'lg:justify-center'
-                }`}>
+                )}>
                 {isLoading ? (
                     <div className="w-full flex gap-5 xl:gap-8 lg:grid lg:grid-cols-4 carousel carousel-center">
                         <Skeleton
