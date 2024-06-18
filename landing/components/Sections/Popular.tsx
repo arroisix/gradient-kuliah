@@ -82,7 +82,7 @@ const Popular = ({
             <div
                 ref={scrollContainerRef}
                 className={cn(
-                    'w-full min-w-96 flex flex-1 gap-5 xl:gap-6 overflow-x-auto no-scrollbar',
+                    'w-full flex flex-1 gap-5 xl:gap-6 overflow-x-auto no-scrollbar',
                     isScrollable ? 'lg:justify-start' : 'lg:justify-center'
                 )}>
                 {isLoading ? (
