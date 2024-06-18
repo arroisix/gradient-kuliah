@@ -60,7 +60,7 @@ const CourseDescription = ({
                             <Button
                                 className="w-full text-center"
                                 variant="primary"
-                                href={`/kelas/${slug}/belajar/video/${latest_watch_video?.chapter_id}/${latest_watch_video?.subchapter.id}`}
+                                href={`/kelas/${slug}/${latest_watch_video?.subchapter.subchapter_slug}`}
                                 eventName="Continue Learning Button on Course Landing Page"
                                 eventPayload={{
                                     Position: 'HERO',
@@ -72,7 +72,7 @@ const CourseDescription = ({
                             <Button
                                 className="w-full text-center"
                                 variant="primary"
-                                href={`/kelas/${slug}/belajar/video/${first_video_in_course?.chapter_id}/${first_video_in_course?.subchapter_id}`}
+                                href={`/kelas/${slug}/${first_video_in_course?.subchapter_slug}`}
                                 eventName="Start Learning Button on Course Landing Page"
                                 eventPayload={{
                                     Position: 'RIGHT_SIDE',

@@ -26,7 +26,7 @@ const ProgressItem = ({
                     getBookDetail?.book.category ?? ''
                 )}/${book_slug}/${progress.latest_page}`;
             case 'video':
-                return `/kelas/${progress.course_slug}/belajar/video/${progress.chapter_id}/${progress.subchapter_id}`;
+                return `/kelas/${progress.course_slug}/${progress.subchapter_slug}`;
             default:
                 return '?';
         }

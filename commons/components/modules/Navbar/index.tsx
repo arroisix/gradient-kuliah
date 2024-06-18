@@ -55,16 +55,9 @@ const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
     }
 ];
 
-const Navbar = ({
-    paymentPage,
-    shouldTransparent,
-    lightMode,
-    showSidebar,
-    fullHeightSidebar,
-    showSubscriptionReminder,
-    setCloseReminder
-}: {
+interface NavbarProps {
     paymentPage: boolean;
+    bookReader?: boolean;
     shouldTransparent: boolean;
     courses?: Course[];
     lightMode?: boolean;
@@ -72,7 +65,18 @@ const Navbar = ({
     fullHeightSidebar?: boolean;
     showSubscriptionReminder?: boolean;
     setCloseReminder?: (value: boolean) => void;
-}): JSX.Element => {
+}
+
+const Navbar = ({
+    paymentPage,
+    bookReader,
+    shouldTransparent,
+    lightMode,
+    showSidebar,
+    fullHeightSidebar,
+    showSubscriptionReminder,
+    setCloseReminder
+}: NavbarProps): JSX.Element => {
     const tracker = useTracker();
 
     const { isDesktopBreakpoints } = useWindowBreakpoints();
@@ -86,6 +90,7 @@ const Navbar = ({
     const [openSidebar, setOpenSidebar] = useState(false);
     const { height } = useWindowSize();
     const router = useRouter();
+    const { pathname } = router;
     const [scrollPosition, setScrollPosition] = useState(0);
     const handleScroll = (): void => {
         const position = window.pageYOffset;
@@ -179,7 +184,7 @@ const Navbar = ({
         tracker?.trackButtonClick('Login Button on Navbar', 'Masuk');
     };
 
-    const halamanPembayaran = router.pathname === '/pembayaran';
+    const halamanPembayaran = pathname === '/pembayaran';
     const { data: packet } = useGetDetailPacketOfferQuery(
         halamanPembayaran ? (router.query.packetId as string) : skipToken
     );
@@ -198,10 +203,6 @@ const Navbar = ({
         setCloseReminder?.(closeSubscriptionReminder);
     }, [closeSubscriptionReminder, setCloseReminder]);
 
-    const bookDetailPageRegex = new RegExp(
-        /^\/perpustakaan\/([a-zA-Z0-9-]+)\/(.+)$/
-    );
-
     return (
         <header
             className={`fixed top-0 left-0 w-full z-20 ${computeBgColor()} transition-all ease-in-out duration-200 flex flex-col`}
@@ -210,7 +211,11 @@ const Navbar = ({
             <div
                 className={cn(
                     'flex items-center justify-between w-full px-4 py-3 md:px-8',
-                    is_subscribed ? 'lg:pl-6 lg:pr-28' : 'lg:px-24'
+                    is_subscribed && showSidebar
+                        ? 'lg:pl-6 lg:pr-28'
+                        : bookReader
+                        ? 'lg:px-16'
+                        : 'lg:px-24'
                 )}>
                 <div className="flex items-center gap-4">
                     {(isLandingPageRevampOn ||
@@ -234,15 +239,7 @@ const Navbar = ({
                     <div
                         className={cn(
                             'flex items-center ml-7 gap-6 hidden lg:flex',
-                            is_subscribed &&
-                                (LEARNING_PAGES.some(
-                                    (page) => router.asPath === page
-                                ) ||
-                                    router.pathname === '/komunitas/[id]' ||
-                                    router.pathname.match(
-                                        bookDetailPageRegex
-                                    )) &&
-                                '!hidden'
+                            is_subscribed && showSidebar && '!hidden'
                         )}>
                         {UNAUTHENTICATED_NAVBAR_BUTTONS.map(
                             ({
@@ -295,7 +292,7 @@ const Navbar = ({
                             {isAuthenticated ? (
                                 <nav
                                     className={`ml-12 flex gap-6 cursor-pointer relative`}>
-                                    {/* {router.pathname === '/' && (
+                                    {/* {pathname === '/' && (
                                         <Link href="/kelas">
                                             <nav
                                                 className="ml-12 cursor-pointer hover:text-accent-blue"
@@ -309,7 +306,7 @@ const Navbar = ({
                                     <NavMenuIcons />
                                     <div
                                         className={`flex items-center gap-2 hover:text-accent-blue ${
-                                            router.pathname === '/dashboard' &&
+                                            pathname === '/dashboard' &&
                                             'text-accent-blue'
                                         } ${
                                             isProfileHovered &&
@@ -419,7 +416,7 @@ const Navbar = ({
                                 )
                             ) : (
                                 <div className="flex items-center gap-4">
-                                    {/* {router.pathname === '/' && (
+                                    {/* {pathname === '/' && (
                                         <Link
                                             href="/kelas"
                                             onClick={() =>

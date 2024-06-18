@@ -105,7 +105,7 @@ const Paginator = ({
                 <Link
                     href={
                         pageNumber < MAX_VALUE
-                            ? `${baseHref}/${pageNumber - 1}`
+                            ? `${baseHref}/${pageNumber + 1}`
                             : '#'
                     }
                     onClick={() => {

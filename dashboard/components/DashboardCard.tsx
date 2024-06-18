@@ -22,7 +22,7 @@ const DashboardCard = ({
 
         if (isVideo || isCourse) {
             if (item?.chapter_id && item.subchapter_id)
-                return `/kelas/${item.course_slug}/belajar/video/${item.chapter_id}/${item.subchapter_id}`;
+                return `/kelas/${item.course_slug}/${item.subchapter_slug}`;
             return `/kelas/${item.course_slug}`;
         } else {
             if (item.in_progress && !!item.latest_page) {

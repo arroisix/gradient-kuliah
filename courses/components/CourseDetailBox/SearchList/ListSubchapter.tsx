@@ -11,6 +11,7 @@ const ListSubchapter = ({
         | {
               id: string;
               subchapter_name: string;
+              subchapter_slug: string;
               order: string;
               duration: string;
               last_duration: string;
@@ -19,7 +20,7 @@ const ListSubchapter = ({
     onClick?: () => void;
 }): JSX.Element => {
     const router = useRouter();
-    const { id, chapter } = router.query;
+    const { id } = router.query;
     const totalDuration = item?.duration
         ?.split(':')
         ?.reverse()
@@ -31,7 +32,7 @@ const ListSubchapter = ({
             className="flex justify-between px-3 py-[10px] cursor-pointer bg-[#1D1D1D] hover:bg-[#272727] rounded"
             onClick={() => {
                 onClick?.();
-                router.push(`/kelas/${id}/belajar/video/${chapter}/${item.id}`);
+                router.push(`/kelas/${id}/${item.subchapter_slug}`);
             }}
             aria-hidden>
             <div className={`w-[80%] flex items-center gap-[10px]`}>

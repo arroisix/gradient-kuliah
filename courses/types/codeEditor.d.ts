@@ -1,6 +1,6 @@
 interface CodeEditorContextProps {
     setContainer: Dispatch<SetStateAction<HTMLDivElement | undefined>>;
-    container: HTMLDivElement | undefined;
+    container: HTMLDivElement | null | undefined;
     controls: {
         run: () => void;
         stop: () => void;

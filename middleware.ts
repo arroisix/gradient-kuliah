@@ -2,6 +2,7 @@ import { IS_BOT } from 'commons/constants';
 import { getBookBaseHref } from 'courses/utils';
 import { getFeatures, growthbook } from 'library/growthbook';
 import { NextRequest, NextResponse, userAgent } from 'next/server';
+import apiConfig from 'redux/api/config';
 
 const COOKIE = 'visitor_id';
 
@@ -21,7 +22,8 @@ export const config = {
         '/',
         '/komunitas',
         '/astronotes/:slug*',
-        '/perpustakaan/:kategori(textbook|astronotes|bank-soal)/:slug*'
+        '/perpustakaan/:kategori(textbook|astronotes|bank-soal)/:slug*',
+        '/kelas/:id/belajar/video/:chapterId/:subchapterId*'
     ]
 };
 
@@ -83,6 +85,25 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
             res.cookies.set(IS_BOT, process.env.FRONTEND_ACCESS_TOKEN);
         }
         return res;
+    }
+
+    if (pathname.startsWith('/kelas/')) {
+        const splitedPathname = pathname.split('/');
+        const subchapterId = splitedPathname[splitedPathname.length - 1];
+        const courseSlug = splitedPathname[2];
+
+        try {
+            const getSubchapterSlug = await fetch(
+                `${apiConfig.API_BASE_URL}courses/public/subchapter/${subchapterId}/slug/`
+            );
+            const subchapterSlug = (await getSubchapterSlug.json())
+                .subchapter_slug;
+            url.pathname = `/kelas/${courseSlug}/${subchapterSlug}`;
+        } catch (error) {
+            url.pathname = `/kelas/${courseSlug}`;
+        }
+
+        return NextResponse.redirect(url, 301);
     }
 
     // Get existing visitor cookie or create a new one

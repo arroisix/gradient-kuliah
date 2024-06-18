@@ -54,7 +54,7 @@ const HeroSection = ({
                     <Button
                         className="md:w-fit text-center mt-4"
                         variant="primary"
-                        href={`/kelas/${slug}/belajar/video/${latest_watch_video?.chapter_id}/${latest_watch_video?.subchapter.id}`}>
+                        href={`/kelas/${slug}/${latest_watch_video?.subchapter?.subchapter_slug}`}>
                         Lanjut Belajar
                     </Button>
                 ) : (

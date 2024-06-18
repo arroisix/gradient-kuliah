@@ -4,6 +4,7 @@ interface StudentLearningProgress {
     subchapter_id: string;
     subchapter_thumbnail: string;
     subchapter_name: string;
+    subchapter_slug: string;
     course_name: string;
     progress_percentage: string;
 }
@@ -33,6 +34,7 @@ interface LearningMaterial {
     course_slug: string;
     chapter_id: string;
     subchapter_id: string;
+    subchapter_slug: string;
     book_slug: string;
     latest_page: number;
 }

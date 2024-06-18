@@ -8,7 +8,6 @@ import Link from 'next/link';
 
 const ContentCard = ({
     subchapter,
-    chapterId,
     isLatest,
     slug
 }: {
@@ -23,7 +22,7 @@ const ContentCard = ({
 
     return (
         <Link
-            href={`/kelas/${slug}/belajar/video/${chapterId}/${subchapter.id}`}
+            href={`/kelas/${slug}/${subchapter.subchapter_slug}`}
             key={subchapter.id}>
             <div
                 className={`p-4 h-40 w-[18rem] md:h-52 md:w-[24rem] bg-neutral-800 mr-2 rounded-lg cursor-pointer flex justify-end flex-col relative ${

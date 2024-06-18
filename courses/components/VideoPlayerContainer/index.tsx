@@ -14,7 +14,10 @@ import VideoRegisterwall from './VideoRegisterWall';
 import { FaPlay } from 'react-icons/fa';
 
 interface VideoPlayerContainerProps
-    extends Pick<SubChapter, 'video' | 'next_subchapter' | 'subchapter_name'> {
+    extends Pick<
+        SubChapter,
+        'video' | 'next_subchapter_slug' | 'subchapter_name'
+    > {
     isLoadingData: boolean;
 }
 
@@ -22,7 +25,7 @@ const VideoPlayerContainer = ({
     isLoadingData = true,
     subchapter_name: title,
     video,
-    next_subchapter
+    next_subchapter_slug
 }: VideoPlayerContainerProps): JSX.Element => {
     const router = useRouter();
     const { id } = router.query;
@@ -43,10 +46,9 @@ const VideoPlayerContainer = ({
           })}`
         : (video?.video_url as string);
 
-    const nextSubchapter =
-        next_subchapter?.chapter_id && next_subchapter.id
-            ? `/kelas/${id}/belajar/video/${next_subchapter?.chapter_id}/${next_subchapter?.id}`
-            : '';
+    const nextSubchapter = next_subchapter_slug
+        ? `/kelas/${id}/${next_subchapter_slug}`
+        : '';
 
     const trackProgress = async (
         last_duration: string,

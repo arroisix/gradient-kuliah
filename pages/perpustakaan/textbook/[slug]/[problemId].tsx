@@ -46,7 +46,7 @@ const TextbookSolutionProblemPage = ({
                 ]}
                 isAccessibleForFree={false}
             />
-            <LearnLayout>
+            <LearnLayout bookReader>
                 <TextbookSolution data={content} />
             </LearnLayout>
         </>
