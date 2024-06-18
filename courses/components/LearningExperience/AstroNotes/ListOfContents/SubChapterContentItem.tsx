@@ -49,7 +49,7 @@ export const SubChapterContentItem = ({
         { slug },
         { skip: !slug }
     );
-    const baseHref = getBookBaseHref(getBookDetail?.book.category ?? '')
+    const baseHref = getBookBaseHref(getBookDetail?.book.category ?? '');
 
     if (isLoading) return <Skeleton repeat={4} className="h-5 p-0 mb-0" />;
 
