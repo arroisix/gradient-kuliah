@@ -42,12 +42,12 @@ const AstronotesDetail = ({
     const baseHref = `${getBookBaseHref(category ?? '')}/${slug}`;
     const getLink = (): string => {
         if (!isAuthenticated) return '/daftar';
-        
+
         if (category === 'textbook') {
             if (!!astronotes?.first_problem_id) {
                 return `${baseHref}/${astronotes?.first_problem_id}`;
             } else {
-                return `${baseHref}/?`
+                return `${baseHref}/?`;
             }
         }
 
