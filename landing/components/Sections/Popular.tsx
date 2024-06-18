@@ -55,7 +55,7 @@ const Popular = ({
                         name={`${type}-major-recommendation`}
                         id={`${type}-major-recommendation-select`}
                         onChange={(e) => setSelectedMajor(e.target.value)}
-                        className="w-full md:w-[320px] bg-[#141414] text-sm md:text-base rounded-lg border border-[#333333] shadow-[0_4px_5px_0_rgba(0,0,0,0.502)] cursor-pointer">
+                        className="w-full  md:w-[320px] bg-[#141414] text-sm md:text-base rounded-lg border border-[#333333] shadow-[0_4px_5px_0_rgba(0,0,0,0.502)] cursor-pointer">
                         {majorData?.map(({ slug, label }) => (
                             <option key={slug} value={slug}>
                                 {label}
@@ -81,7 +81,7 @@ const Popular = ({
             <div
                 ref={scrollContainerRef}
                 className={cn(
-                    'w-full flex flex-1 gap-5 xl:gap-6 overflow-x-auto no-scrollbar',
+                    'w-full min-w-96 flex flex-1 gap-5 xl:gap-6 overflow-x-auto no-scrollbar',
                     isScrollable ? 'lg:justify-start' : 'lg:justify-center'
                 )}>
                 {isLoading ? (
