@@ -37,14 +37,20 @@ const AstronotesDetail = ({
 
     const buttonRef = useRef<HTMLDivElement | null>(null);
     const onScreen = useOnScreen(buttonRef, '-128px 0px 0px 0px');
-    const category = astronotes?.category ?? '';
+    const category = astronotes?.category.toLowerCase() ?? '';
 
     const baseHref = `${getBookBaseHref(category ?? '')}/${slug}`;
     const getLink = (): string => {
-        if (!astronotes?.first_problem_id) return '?';
         if (!isAuthenticated) return '/daftar';
-        if (!!astronotes?.first_problem_id && category == 'textbook')
-            return `${baseHref}/${astronotes?.first_problem_id}`;
+
+        if (category === 'textbook') {
+            if (!!astronotes?.first_problem_id) {
+                return `${baseHref}/${astronotes?.first_problem_id}`;
+            } else {
+                return `${baseHref}/?`;
+            }
+        }
+
         return `${baseHref}/1`;
     };
     const isButtonDisabled =
