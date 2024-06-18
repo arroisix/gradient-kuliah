@@ -5,6 +5,7 @@ import {
     useGetPublicTableContentSubchaptersQuery,
     useGetTableContentSubchaptersQuery
 } from 'courses/redux/api/astronotesApi';
+import { getBookBaseHref } from 'courses/utils';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -48,7 +49,7 @@ export const SubChapterContentItem = ({
         { slug },
         { skip: !slug }
     );
-    const category_name = getBookDetail?.book.category.toLowerCase();
+    const baseHref = getBookBaseHref(getBookDetail?.book.category ?? '')
 
     if (isLoading) return <Skeleton repeat={4} className="h-5 p-0 mb-0" />;
 
@@ -56,13 +57,7 @@ export const SubChapterContentItem = ({
         <>
             {subchapters?.data.map((subchapter: BookSubchapter) => (
                 <Link
-                    href={
-                        category_name === 'textbook'
-                            ? `/perpustakaan/textbook/${slug}/${subchapter.page_order}#${subchapter.id}`
-                            : category_name === 'astronotes'
-                            ? `/perpustakaan/catatan/${slug}/${subchapter.page_order}#${subchapter.id}`
-                            : `/perpustakaan/bank-soal/${slug}/${subchapter.page_order}#${subchapter.id}`
-                    }
+                    href={`${baseHref}/${slug}/${subchapter.page_order}#${subchapter.id}`}
                     scroll={false}
                     key={subchapter.id}
                     className="p-1 transition cursor-pointer text-neutral-600 dark:text-neutral-400 btn-ghost rounded-btn"
