@@ -41,9 +41,10 @@ const Popular = ({
             id={`${type}s-recommendation`}>
             <div
                 className={cn(
-                    'flex flex-col',
-                    isScrollable && 'w-full',
-                    'md:flex-row md:justify-between md:items-center'
+                    'flex flex-col w-full md:flex-row',
+                    isScrollable && 'md:justify-between',
+                    !isScrollable && 'md:justify-center',
+                    'md:items-center'
                 )}>
                 <div className="flex flex-col gap-3 items-center md:flex-row md:gap-6">
                     <h2 className="font-sans text-xl font-extrabold text-center md:text-left">
