@@ -4,7 +4,7 @@ import LearnLayout from 'commons/learnLayout';
 import withAnon from 'commons/withAnon';
 import KomunitasContainer from 'komunitas/containers';
 import { KomunitasProvider } from 'komunitas/contexts/KomunitasProvider';
-import { GetStaticProps } from 'next';
+import { GetStaticPaths, GetStaticProps, GetStaticPropsResult } from 'next';
 import config from 'redux/api/config';
 
 type KomunitasProps = {
@@ -15,7 +15,7 @@ type KomunitasProps = {
     };
 };
 
-const Komunitas = ({ data }: KomunitasProps): JSX.Element => {
+const KomunitasByCategory = ({ data }: KomunitasProps): JSX.Element => {
     const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
         'landing-page-revamp'
     );
@@ -31,9 +31,39 @@ const Komunitas = ({ data }: KomunitasProps): JSX.Element => {
     );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
+KomunitasByCategory.displayName = 'Community By Category Explore';
+export default withAnon(KomunitasByCategory);
+
+export const getStaticPaths: GetStaticPaths = async () => {
+    const { data: response } = await axios.get<SubjectCategoriesResponse>(
+        `${config.API_BASE_URL}communities/public/subject-category/`
+    );
+
+    const paths = response.categories.flatMap(({ slug }) => ({
+        params: { category: slug }
+    }));
+
+    return {
+        paths,
+        fallback: true
+    };
+};
+
+export const getStaticProps: GetStaticProps = async ({
+    params
+}): Promise<
+    GetStaticPropsResult<
+        KomunitasProps & {
+            title: string;
+            description: string;
+            canonical: string;
+            openGraph: { [key: string]: unknown };
+        }
+    >
+> => {
+    const { category } = params as { category: string };
     const { data }: { data: KomunitasProps['data'] } = await axios.get(
-        `${config.API_BASE_URL}communities/public/post/`
+        `${config.API_BASE_URL}communities/public/post/?category_slug=${category}`
     );
 
     const metaTitle =
@@ -44,14 +74,14 @@ export const getStaticProps: GetStaticProps = async () => {
     return {
         props: {
             data,
-            canonical: 'https://gradient.academy/komunitas',
+            canonical: `https://gradient.academy/komunitas/${category}`,
             title: metaTitle,
             description: metaDescription,
             openGraph: {
                 type: 'website',
                 title: metaTitle,
                 description: metaDescription,
-                url: 'https://gradient.academy/komunitas',
+                url: `https://gradient.academy/komunitas/${category}`,
                 images: [
                     {
                         url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
@@ -65,6 +95,3 @@ export const getStaticProps: GetStaticProps = async () => {
         revalidate: 60
     };
 };
-
-Komunitas.displayName = 'Community Explore';
-export default withAnon(Komunitas);

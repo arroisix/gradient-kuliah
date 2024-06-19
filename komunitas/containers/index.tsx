@@ -25,6 +25,7 @@ import Skeleton from 'commons/components/elements/Skeleton';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Spinner from 'commons/components/elements/Spinner';
+import Breadcrumb from 'commons/components/modules/Breadcrumb';
 
 const KomunitasContainer = ({
     initialData
@@ -38,7 +39,7 @@ const KomunitasContainer = ({
     const { isMobileBreakpoints, isTabletBreakpoints } = useWindowBreakpoints();
     const router = useRouter();
     const { pathname } = router;
-    const { ask } = router.query;
+    const { ask, category } = router.query;
     const loadingTransition = useTransition(router);
     const anchor = useRef({} as HTMLDivElement);
 
@@ -63,6 +64,11 @@ const KomunitasContainer = ({
     const [showForm, setShowForm] = useState(false);
     const isAnchorOnScreen = useOnScreen(anchor);
     const tracker = useTracker();
+    const categoryName = subjects?.categories.filter(
+        ({ slug }) => slug === category
+    )[0]
+        ? subjects?.categories.filter(({ slug }) => slug === category)[0].name
+        : '';
 
     useEffect(() => {
         if (
@@ -133,7 +139,12 @@ const KomunitasContainer = ({
                 e.target.options[e.target.options.selectedIndex].text
         });
         setPage(1);
-        setFilter(e.target.value);
+
+        if (pathname.includes('pertanyaan-ku')) {
+            setFilter(e.target.value);
+        } else {
+            router.push(`/komunitas/${e.target.value}`);
+        }
     }
 
     function handleChangeSort(event: any): void {
@@ -145,106 +156,122 @@ const KomunitasContainer = ({
     }
 
     return (
-        <section className="grid w-full grid-cols-1 gap-8 lg:grid-cols-5">
-            <div className="flex flex-col w-full gap-5 lg:col-span-3">
-                <div className="sticky top-16 flex flex-col gap-5 z-[2] bg-black pb-4">
-                    <KomunitasInput
-                        type="text"
-                        name="search"
-                        value={search}
-                        placeholder="Cari pertanyaan"
-                        onChange={handleChangeSearch}
-                        rightIcon={<CgSearch />}
-                        handleSubmit={() => handleSearch()}
-                    />
-                    {showForm ? (
-                        <KomunitasForm
-                            bucketKey="qna"
-                            onSubmit={handleSubmit}
-                            cancelButton={() => setShowForm((prev) => !prev)}
-                            isUsingCategories={true}
-                            subjectCategories={subjects?.categories}
-                            submitButtonText={
-                                isLoadingPost ? (
-                                    <AiOutlineLoading3Quarters className="animate-spin" />
-                                ) : (
-                                    'Tanyakan'
-                                )
-                            }
-                            context="q"
+        <>
+            <Breadcrumb
+                className="w-full py-5"
+                nextItem={
+                    pathname === '/komunitas/[category]'
+                        ? ({
+                              name: categoryName
+                          } as BreadcrumbItemProps)
+                        : undefined
+                }
+            />
+            <section className="grid w-full grid-cols-1 gap-8 lg:grid-cols-5">
+                <div className="flex flex-col w-full gap-5 lg:col-span-3">
+                    <div className="sticky top-16 flex flex-col gap-5 z-[2] bg-black pb-4">
+                        <KomunitasInput
+                            type="text"
+                            name="search"
+                            value={search}
+                            placeholder="Cari pertanyaan"
+                            onChange={handleChangeSearch}
+                            rightIcon={<CgSearch />}
+                            handleSubmit={() => handleSearch()}
                         />
-                    ) : (
-                        <CommunityBanner
-                            askNow={() => setShowForm((prev) => !prev)}
-                        />
-                    )}
-                </div>
+                        {showForm ? (
+                            <KomunitasForm
+                                bucketKey="qna"
+                                onSubmit={handleSubmit}
+                                cancelButton={() =>
+                                    setShowForm((prev) => !prev)
+                                }
+                                isUsingCategories={true}
+                                subjectCategories={subjects?.categories}
+                                submitButtonText={
+                                    isLoadingPost ? (
+                                        <AiOutlineLoading3Quarters className="animate-spin" />
+                                    ) : (
+                                        'Tanyakan'
+                                    )
+                                }
+                                context="q"
+                            />
+                        ) : (
+                            <CommunityBanner
+                                askNow={() => setShowForm((prev) => !prev)}
+                            />
+                        )}
+                    </div>
 
-                {(isMobileBreakpoints || isTabletBreakpoints) && <MobileTabs />}
-                <div className="flex items-center justify-between">
-                    <h2 className="hidden font-extrabold md:block">
-                        {pathname.includes('pertanyaan-ku')
-                            ? 'Pertanyaanku'
-                            : 'Eksplor'}
-                    </h2>
-                    <div className="flex items-center w-full gap-3 md:w-fit">
-                        <DropdownFilter
-                            onChange={handleChangeFilter}
-                            options={subjects}
-                        />
-                        <DropdownSort
-                            showSort={showSort}
-                            setShowSort={setShowSort}
-                            sort={sort}
-                            setSort={setSort}
-                            onChange={handleChangeSort}
-                        />
+                    {(isMobileBreakpoints || isTabletBreakpoints) && (
+                        <MobileTabs />
+                    )}
+                    <div className="flex items-center justify-between">
+                        <h2 className="hidden font-extrabold md:block">
+                            {pathname.includes('pertanyaan-ku')
+                                ? 'Pertanyaanku'
+                                : 'Eksplor'}
+                        </h2>
+                        <div className="flex items-center w-full gap-3 md:w-fit">
+                            <DropdownFilter
+                                onChange={handleChangeFilter}
+                                options={subjects}
+                            />
+                            <DropdownSort
+                                showSort={showSort}
+                                setShowSort={setShowSort}
+                                sort={sort}
+                                setSort={setSort}
+                                onChange={handleChangeSort}
+                            />
+                        </div>
+                    </div>
+                    <div className="flex flex-col items-stretch gap-[18px]">
+                        {isLoadingDataHome && !dataHome?.community_posts && (
+                            <Skeleton repeat={3} className="h-32 !mb-0" />
+                        )}
+                        {dataHome?.community_posts.length === 0 ? (
+                            <EmptyState
+                                setShowForm={setShowForm}
+                                isOnSearch={searchState !== ''}
+                            />
+                        ) : (
+                            dataHome?.community_posts?.map((value, index) => (
+                                <QuestionCard
+                                    key={index}
+                                    {...value}
+                                    clickable={true}
+                                />
+                            ))
+                        )}
+                        {isLoadingDataHome && (
+                            <Spinner
+                                size="medium"
+                                className="border-b-accent-purple border-l-accent-purple"
+                            />
+                        )}
+                        <div ref={anchor} className="w-full h-0" />
                     </div>
                 </div>
-                <div className="flex flex-col items-stretch gap-[18px]">
-                    {isLoadingDataHome && !dataHome?.community_posts && (
-                        <Skeleton repeat={3} className="h-32 !mb-0" />
-                    )}
-                    {dataHome?.community_posts.length === 0 ? (
-                        <EmptyState
-                            setShowForm={setShowForm}
-                            isOnSearch={searchState !== ''}
-                        />
-                    ) : (
-                        dataHome?.community_posts?.map((value, index) => (
-                            <QuestionCard
-                                key={index}
-                                {...value}
-                                clickable={true}
-                            />
-                        ))
-                    )}
-                    {dataHome?.community_posts.length !== 0 && (
-                        <Spinner
-                            size="medium"
-                            className="border-b-accent-purple border-l-accent-purple"
-                        />
-                    )}
-                    <div ref={anchor} className="w-full h-0" />
+                <div className="relative lg:col-span-2">
+                    <RightSidebar askNow={() => setShowForm((prev) => !prev)} />
                 </div>
-            </div>
-            <div className="relative lg:col-span-2">
-                <RightSidebar askNow={() => setShowForm((prev) => !prev)} />
-            </div>
-            {loadingTransition && <LoadingBackdrop />}
-            <Button
-                variant="primary"
-                className={cn(
-                    'transition duration-500 fixed flex items-center gap-2 text-sm md:hidden right-4 bottom-20 md:bottom-8',
-                    !showForm
-                        ? 'opacity-100 pointer-events-auto'
-                        : 'opacity-0 pointer-events-none'
-                )}
-                onClick={() => setShowForm(true)}>
-                <FaRegComment size={16} />
-                Tanya {!isAuthenticated && ' Gratis'}
-            </Button>
-        </section>
+                {loadingTransition && <LoadingBackdrop />}
+                <Button
+                    variant="primary"
+                    className={cn(
+                        'transition duration-500 fixed flex items-center gap-2 text-sm md:hidden right-4 bottom-20 md:bottom-8',
+                        !showForm
+                            ? 'opacity-100 pointer-events-auto'
+                            : 'opacity-0 pointer-events-none'
+                    )}
+                    onClick={() => setShowForm(true)}>
+                    <FaRegComment size={16} />
+                    Tanya {!isAuthenticated && ' Gratis'}
+                </Button>
+            </section>
+        </>
     );
 };
 

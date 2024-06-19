@@ -25,12 +25,13 @@ export const getStaticPaths: GetStaticPaths = async () => {
         `${config.API_BASE_URL}communities/public/post/list/`
     );
 
-    const result: { questions: Pick<CommunityPost, 'slug'>[] } =
-        await communitySlug.json();
+    const result: {
+        questions: Pick<CommunityPost, 'slug' | 'category_slug'>[];
+    } = await communitySlug.json();
 
     return {
-        paths: result.questions.map((question) => ({
-            params: { id: question.slug }
+        paths: result.questions.map(({ category_slug, slug }) => ({
+            params: { category: category_slug, id: slug }
         })),
         fallback: true // can also be true or 'blocking'
     };
@@ -38,49 +39,63 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({
     params
-}): Promise<{
-    props: {
-        data: CommunityPostDetailResponse;
-        title: string;
-        description: string;
-        openGraph: {
-            type: string;
-            title: string;
-            description: string;
-            url: string;
-            images: {
-                url: string;
-                width: number;
-                height: number;
-                alt: string;
-            }[];
-        };
-    };
-    revalidate: number;
-}> => {
+}): Promise<
+    | {
+          props: {
+              data: CommunityPostDetailResponse;
+              canonical: string;
+              title: string;
+              description: string;
+              openGraph: {
+                  type: string;
+                  title: string;
+                  description: string;
+                  url: string;
+                  images: {
+                      url: string;
+                      width: number;
+                      height: number;
+                      alt: string;
+                  }[];
+              };
+          };
+          revalidate: number;
+      }
+    | {
+          notFound: true;
+      }
+> => {
+    const { category, id } = params as { category: string; id: string };
     const { data }: { data: CommunityPostDetailResponse } = await axios.get(
-        `${config.API_BASE_URL}communities/public/post/${params?.id}/`
+        `${config.API_BASE_URL}communities/public/post/${id}/`
     );
+
+    if (data.category_slug !== category) {
+        return {
+            notFound: true
+        };
+    }
 
     const META_TITLE =
         data.content.length > 60
             ? `${data.content.substring(0, 60)} ...`
-            : `${data.content} ...`;
+            : data.content;
     const META_DESCRIPTION =
         data.content.length > 155
             ? `${data.content.substring(0, 155)} ...`
-            : `${data.content} ...`;
+            : data.content;
 
     return {
         props: {
             data,
+            canonical: `https://gradient.academy/komunitas/${category}/${id}`,
             title: META_TITLE,
             description: META_DESCRIPTION,
             openGraph: {
                 type: 'website',
                 title: META_TITLE,
                 description: META_DESCRIPTION,
-                url: `https://gradient.academy`,
+                url: `https://gradient.academy/komunitas/${category}/${id}`,
                 images: [
                     {
                         url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
