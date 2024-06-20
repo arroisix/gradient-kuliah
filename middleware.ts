@@ -21,7 +21,7 @@ export const config = {
     matcher: [
         '/',
         '/komunitas',
-        // '/komunitas/:id((?!pemrograman|probabilitas-statistika|kimia-organik|lainnya|matematika-diskrit|matematika|mekanika-teknik-statika|kimia|fisika)[^/+]+)',
+        '/komunitas/:id((?!pemrograman$|probabilitas-statistika$|kimia-organik$|lainnya$|matematika-diskrit$|matematika$|mekanika-teknik-statika$|kimia$|fisika$)[^/+]+)',
         '/astronotes/:slug*',
         '/perpustakaan/:kategori(textbook|astronotes|bank-soal)/:slug*',
         '/kelas/:id/belajar/video/:chapterId/:subchapterId*'
@@ -80,9 +80,7 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
         return NextResponse.redirect(url, 301);
     }
 
-    // PLEASE CHECK IF THIS WORKS @RIFQI
     if (pathname.startsWith('/perpustakaan/')) {
-        console.log('masukin')
         const { isBot } = userAgent(req);
         if (isBot) {
             res.cookies.set(IS_BOT, process.env.FRONTEND_ACCESS_TOKEN);
@@ -101,8 +99,12 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
             );
             const subchapterSlug = (await getSubchapterSlug.json())
                 .subchapter_slug;
-            // PLEASE CHECK WHAT HAPPENS IF THE CONDITION IS NULL @RIFQI
-            url.pathname = `/kelas/${courseSlug}/${subchapterSlug}`;
+
+            if (subchapterSlug) {
+                url.pathname = `/kelas/${courseSlug}/${subchapterSlug}`;
+            } else {
+                url.pathname = `/kelas/${courseSlug}`;
+            }
         } catch (error) {
             url.pathname = `/kelas/${courseSlug}`;
         }
@@ -110,27 +112,27 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
         return NextResponse.redirect(url, 301);
     }
 
-    // if (pathname.startsWith('/komunitas/')) {
-    //     const splitedPathname = pathname.split('/');
-    //     const postSlug = splitedPathname[splitedPathname.length - 1];
+    if (pathname.startsWith('/komunitas/')) {
+        const splitedPathname = decodeURIComponent(pathname).split('/');
+        const postSlug = splitedPathname[splitedPathname.length - 1];
 
-    //     try {
-    //         const getSubjectCategorySlug = await fetch(
-    //             `${apiConfig.API_BASE_URL}communities/public/subject-category/post/${postSlug}/`
-    //         );
-    //         const subjectCategorySlug = (await getSubjectCategorySlug.json()).subject_category_slug
+        try {
+            const getSubjectCategorySlug = await fetch(
+                `${apiConfig.API_BASE_URL}communities/public/subject-category/post/${postSlug}/`
+            );
+            const subjectCategorySlug = (await getSubjectCategorySlug.json()).subject_category_slug
 
-    //         if (subjectCategorySlug) {
-    //             url.pathname = `/komunitas/${subjectCategorySlug}/${postSlug}`
-    //         } else {
-    //             url.pathname = '/komunitas'
-    //         }
-    //     } catch (error) {
-    //         url.pathname = '/komunitas'
-    //     }
+            if (subjectCategorySlug) {
+                url.pathname = `/komunitas/${subjectCategorySlug}/${postSlug}`
+            } else {
+                url.pathname = '/komunitas'
+            }
+        } catch (error) {
+            url.pathname = '/komunitas'
+        }
 
-    //     return NextResponse.redirect(url, 301);
-    // }
+        return NextResponse.redirect(url, 301);
+    }
 
     // Get existing visitor cookie or create a new one
     const visitor_id = req.cookies.get(COOKIE) || crypto.randomUUID();

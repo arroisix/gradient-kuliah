@@ -25,7 +25,7 @@ const DetailSection = ({
             ? `${detailQuestion?.content.substring(
                   0,
                   QUESTION_TITLE_MAX_LENGTH
-              )}`
+              )} ...`
             : detailQuestion?.content;
 
     return (
