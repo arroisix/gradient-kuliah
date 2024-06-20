@@ -4,8 +4,12 @@ import LearnLayout from 'commons/learnLayout';
 import withAnon from 'commons/withAnon';
 import KomunitasContainer from 'komunitas/containers';
 import { KomunitasProvider } from 'komunitas/contexts/KomunitasProvider';
-import { GetStaticPaths, GetStaticProps, GetStaticPropsResult } from 'next';
+import { getPublicCommunityPost } from 'komunitas/redux/api/komunitasApi';
+import { GetStaticPaths, GetStaticProps } from 'next';
+import { ThunkDispatch } from 'redux-thunk';
 import config from 'redux/api/config';
+import { wrapper } from 'redux/store';
+import { getRunningQueriesThunk } from 'redux/api/baseApi';
 
 type KomunitasProps = {
     data: CommunityPostResponse & {
@@ -49,49 +53,61 @@ export const getStaticPaths: GetStaticPaths = async () => {
     };
 };
 
-export const getStaticProps: GetStaticProps = async ({
-    params
-}): Promise<
-    GetStaticPropsResult<
-        KomunitasProps & {
-            title: string;
-            description: string;
-            canonical: string;
-            openGraph: { [key: string]: unknown };
-        }
-    >
-> => {
-    const { category } = params as { category: string };
-    const { data }: { data: KomunitasProps['data'] } = await axios.get(
-        `${config.API_BASE_URL}communities/public/post/?category_slug=${category}`
-    );
+export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
+    (store) =>
+        async ({ params }) => {
+            const category = params?.category as string
 
-    const metaTitle =
-        'Forum Diskusi Mahasiswa Tanya Jawab Pesoalan Kuliah | Gradient';
-    const metaDescription =
-        'Temukan jawaban atas pertanyaan-pertanyaan dari materi kuliah serta saling bertukar informasi agar dapat meningkatkan pemahaman secara bersama-sama.';
+            (store.dispatch as ThunkDispatch<RootState, never, never>)(
+                getPublicCommunityPost.initiate({ category_slug: category })
+            );
 
-    return {
-        props: {
-            data,
-            canonical: `https://gradient.academy/komunitas/${category}`,
-            title: metaTitle,
-            description: metaDescription,
-            openGraph: {
-                type: 'website',
-                title: metaTitle,
-                description: metaDescription,
-                url: `https://gradient.academy/komunitas/${category}`,
-                images: [
-                    {
-                        url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
-                        width: 48,
-                        height: 48,
-                        alt: 'Gradient Academy'
-                    }
-                ]
+            const payload = await Promise.all(
+                (store.dispatch as ThunkDispatch<RootState, never, never>)(
+                    getRunningQueriesThunk()
+                )
+            );
+
+            if (payload[0].error) {
+                return {
+                    notFound: true
+                };
             }
-        },
-        revalidate: 60
-    };
-};
+
+            const data = payload[0].data as KomunitasProps & {
+                title: string;
+                description: string;
+                canonical: string;
+                openGraph: { [key: string]: unknown };
+            }
+
+            const metaTitle =
+                'Forum Diskusi Mahasiswa Tanya Jawab Pesoalan Kuliah | Gradient';
+            const metaDescription =
+                'Temukan jawaban atas pertanyaan-pertanyaan dari materi kuliah serta saling bertukar informasi agar dapat meningkatkan pemahaman secara bersama-sama.';
+
+            return {
+                props: {
+                    data,
+                    canonical: `https://gradient.academy/komunitas/${category}`,
+                    title: metaTitle,
+                    description: metaDescription,
+                    openGraph: {
+                        type: 'website',
+                        title: metaTitle,
+                        description: metaDescription,
+                        url: `https://gradient.academy/komunitas/${category}`,
+                        images: [
+                            {
+                                url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
+                                width: 48,
+                                height: 48,
+                                alt: 'Gradient Academy'
+                            }
+                        ]
+                    }
+                },
+                revalidate: 60
+            };
+        }
+)

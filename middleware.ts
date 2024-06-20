@@ -113,7 +113,7 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
     }
 
     if (pathname.startsWith('/komunitas/')) {
-        const splitedPathname = decodeURIComponent(pathname).split('/');
+        const splitedPathname = pathname.split('/');
         const postSlug = splitedPathname[splitedPathname.length - 1];
 
         try {
