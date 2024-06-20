@@ -56,7 +56,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
     (store) =>
         async ({ params }) => {
-            const category = params?.category as string
+            const category = params?.category as string;
 
             (store.dispatch as ThunkDispatch<RootState, never, never>)(
                 getPublicCommunityPost.initiate({ category_slug: category })
@@ -79,7 +79,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                 description: string;
                 canonical: string;
                 openGraph: { [key: string]: unknown };
-            }
+            };
 
             const metaTitle =
                 'Forum Diskusi Mahasiswa Tanya Jawab Pesoalan Kuliah | Gradient';
@@ -110,4 +110,4 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                 revalidate: 60
             };
         }
-)
+);

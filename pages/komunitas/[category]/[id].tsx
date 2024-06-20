@@ -58,7 +58,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                 };
             }
 
-            const data = payload[0].data as CommunityPostDetailResponse
+            const data = payload[0].data as CommunityPostDetailResponse;
 
             const META_TITLE =
                 data.content.length > 60
@@ -68,7 +68,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                 data.content.length > 155
                     ? `${data.content.substring(0, 155)} ...`
                     : data.content;
-            
+
             return {
                 props: {
                     data,
@@ -93,7 +93,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                 revalidate: 60 * 60 * 5 // 5 hours
             };
         }
-)
+);
 
 DetailKomunitas.displayName = 'Community Detail';
 export default withAnon(DetailKomunitas);
