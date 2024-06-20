@@ -21,12 +21,12 @@ const DetailSection = ({
         (value) => value.name === detailQuestion?.category
     )[0];
     const questionTitle =
-        detailQuestion.content.length > QUESTION_TITLE_MAX_LENGTH
-            ? `${detailQuestion.content.substring(
+        detailQuestion?.content.length > QUESTION_TITLE_MAX_LENGTH
+            ? `${detailQuestion?.content.substring(
                   0,
                   QUESTION_TITLE_MAX_LENGTH
               )}`
-            : detailQuestion.content;
+            : detailQuestion?.content;
 
     return (
         <>
