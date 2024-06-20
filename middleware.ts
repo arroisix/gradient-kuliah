@@ -120,15 +120,16 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
             const getSubjectCategorySlug = await fetch(
                 `${apiConfig.API_BASE_URL}communities/public/subject-category/post/${postSlug}/`
             );
-            const subjectCategorySlug = (await getSubjectCategorySlug.json()).subject_category_slug
+            const subjectCategorySlug = (await getSubjectCategorySlug.json())
+                .subject_category_slug;
 
             if (subjectCategorySlug) {
-                url.pathname = `/komunitas/${subjectCategorySlug}/${postSlug}`
+                url.pathname = `/komunitas/${subjectCategorySlug}/${postSlug}`;
             } else {
-                url.pathname = '/komunitas'
+                url.pathname = '/komunitas';
             }
         } catch (error) {
-            url.pathname = '/komunitas'
+            url.pathname = '/komunitas';
         }
 
         return NextResponse.redirect(url, 301);
