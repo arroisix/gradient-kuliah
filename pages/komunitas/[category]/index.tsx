@@ -49,7 +49,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
     return {
         paths,
-        fallback: true
+        fallback: 'blocking'
     };
 };
 
@@ -57,6 +57,37 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
     (store) =>
         async ({ params }) => {
             const category = params?.category as string;
+
+            const { data: subjectCategoriesResponse } =
+                await axios.get<SubjectCategoriesResponse>(
+                    `${config.API_BASE_URL}communities/public/subject-category/`
+                );
+
+            const subjectCategoryIsExist =
+                subjectCategoriesResponse.categories.some(
+                    ({ slug }) => category === slug
+                );
+
+            if (!subjectCategoryIsExist) {
+                const { data: categoryByPostSlugResponse } = await axios.get<{
+                    subject_category_slug: string;
+                }>(
+                    `${config.API_BASE_URL}communities/public/subject-category/post/${category}/`
+                );
+
+                let redirectPathname = '/komunitas';
+                const { subject_category_slug } = categoryByPostSlugResponse;
+                if (subject_category_slug) {
+                    redirectPathname = `/komunitas/${subject_category_slug}/${category}`;
+                }
+
+                return {
+                    redirect: {
+                        destination: redirectPathname,
+                        permanent: true
+                    }
+                };
+            }
 
             (store.dispatch as ThunkDispatch<RootState, never, never>)(
                 getPublicCommunityPost.initiate({ category_slug: category })
@@ -74,11 +105,10 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                 };
             }
 
-            const data = payload[0].data as KomunitasProps & {
-                title: string;
-                description: string;
-                canonical: string;
-                openGraph: { [key: string]: unknown };
+            const data = payload[0].data as CommunityPostResponse & {
+                count_items: number;
+                next_page?: number;
+                previous_page?: number;
             };
 
             const metaTitle =
