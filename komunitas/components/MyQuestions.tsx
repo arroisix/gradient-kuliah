@@ -25,8 +25,16 @@ const MyQuestions = ({ questions, askNow }: MyQuestionsProps): JSX.Element => {
                     </span>
                     <div className="flex flex-col gap-2 bg-[#1D1D1D] rounded">
                         {value.items.map(
-                            ({ slug, content, id, unseen_comment_counts }) => (
-                                <Link key={id} href={`/komunitas/${slug}`}>
+                            ({
+                                slug,
+                                category_slug,
+                                content,
+                                id,
+                                unseen_comment_counts
+                            }) => (
+                                <Link
+                                    key={id}
+                                    href={`/komunitas/${category_slug}/${slug}`}>
                                     <div
                                         key={id}
                                         className="flex justify-between items-center gap-2 cursor-pointer z-[1] px-[10px] py-[10px] first:border-none border-t-[1px] border-t-[#2C2C2C]">

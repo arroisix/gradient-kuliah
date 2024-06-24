@@ -3,6 +3,7 @@ interface SubjectCategoriesResponse {
         {
             id: string;
             name: string;
+            slug: string;
         }
     ];
 }
@@ -41,7 +42,7 @@ interface PostQuestionAnswerResponse {
 }
 
 interface CommunityPostQuery {
-    category_id?: string;
+    category_slug?: string;
     sort_by?: 'LATEST' | 'POPULAR' | 'ANSWERED' | 'NOT_ANSWERED';
     user_id?: string;
     search?: string;
@@ -52,6 +53,7 @@ interface CommunityPost {
     content: string;
     slug: string;
     category: string;
+    category_slug: string;
     viewer_counts: number;
     comment_counts: number;
     created_at: timestamp;
@@ -73,6 +75,7 @@ interface MyQuestionListResponse {
             id: string;
             content: string;
             slug: string;
+            category_slug: string;
             unseen_comment_counts: number;
             created_at: timestamp;
         }[];
@@ -90,6 +93,7 @@ interface ExploreQuestion {
     comment_count: number;
     viewer_count: number;
     category_name: string;
+    category_slug: string;
 }
 
 interface CommunityPostDetailResponse {
@@ -99,6 +103,7 @@ interface CommunityPostDetailResponse {
     comment_counts: number;
     created_at: timestamp;
     category: string;
+    category_slug: string;
     student: {
         id: string;
         photo_url: string;

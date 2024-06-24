@@ -1,6 +1,5 @@
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
 import axios from 'axios';
-import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import LearnLayout from 'commons/learnLayout';
 import withAnon from 'commons/withAnon';
 import KomunitasContainer from 'komunitas/containers';
@@ -24,10 +23,7 @@ const Komunitas = ({ data }: KomunitasProps): JSX.Element => {
     return isLandingPageRevampOn ? (
         <KomunitasProvider initialData={data}>
             <LearnLayout showSidebar fullHeightSidebar showSubscriptionReminder>
-                <>
-                    <Breadcrumb className="w-full py-5" />
-                    <KomunitasContainer initialData={data} />
-                </>
+                <KomunitasContainer initialData={data} />
             </LearnLayout>
         </KomunitasProvider>
     ) : (
@@ -55,7 +51,7 @@ export const getStaticProps: GetStaticProps = async () => {
                 type: 'website',
                 title: metaTitle,
                 description: metaDescription,
-                url: `https://gradient.academy`,
+                url: 'https://gradient.academy/komunitas',
                 images: [
                     {
                         url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',

@@ -13,6 +13,21 @@ export const BREADCRUMB: BreadcrumbProps = {
     '/komunitas/public': {
         name: 'Komunitas'
     },
+    '/komunitas/pertanyaan-ku': {
+        name: 'Komunitas',
+        url: '/komunitas',
+        nextItem: {
+            name: 'Pertanyaanku'
+        }
+    },
+    '/komunitas/[category]': {
+        name: 'Komunitas',
+        url: '/komunitas'
+    },
+    '/komunitas/[category]/[id]': {
+        name: 'Komunitas',
+        url: '/komunitas'
+    },
     '/perpustakaan': {
         name: 'Perpustakaan'
     },

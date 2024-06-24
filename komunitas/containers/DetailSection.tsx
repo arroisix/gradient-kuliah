@@ -1,3 +1,4 @@
+import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import AnswerSection from 'komunitas/components/AnswerSection';
 import RightSidebar from 'komunitas/components/CommunityPost/SimilarQuestionSidebar';
 import QuestionCard from 'komunitas/components/QuestionCard';
@@ -11,6 +12,7 @@ type DetailSectionProps = {
 const DetailSection = ({
     initialDetailData
 }: DetailSectionProps): JSX.Element => {
+    const QUESTION_TITLE_MAX_LENGTH = 40;
     const [isShowForm, setIsShowForm] = useState(false);
 
     const { detailQuestion = initialDetailData, subjects } = useKomunitas();
@@ -18,27 +20,48 @@ const DetailSection = ({
     const category = subjects?.categories.filter(
         (value) => value.name === detailQuestion?.category
     )[0];
+    const questionTitle =
+        detailQuestion?.content.length > QUESTION_TITLE_MAX_LENGTH
+            ? `${detailQuestion?.content.substring(
+                  0,
+                  QUESTION_TITLE_MAX_LENGTH
+              )} ...`
+            : detailQuestion?.content;
 
     return (
-        <section className="grid grid-cols-1 lg:grid-cols-3 gap-[2rem]">
-            <div className="flex flex-col w-full lg:col-span-2 gap-9">
-                <div>
-                    <h3 className="pb-5 text-sm font-bold">Pertanyaan</h3>
-                    <QuestionCard
-                        {...(detailQuestion as CommunityPostDetailResponse)}
-                        category={category?.id as string}
-                        clickable={false}
-                        isShowForm={isShowForm}
+        <>
+            <Breadcrumb
+                className="w-full py-5"
+                nextItem={
+                    {
+                        name: category?.name,
+                        url: `/komunitas/${category?.slug}`,
+                        nextItem: {
+                            name: questionTitle
+                        }
+                    } as BreadcrumbItemProps
+                }
+            />
+            <section className="grid grid-cols-1 lg:grid-cols-3 gap-[2rem]">
+                <div className="flex flex-col w-full lg:col-span-2 gap-9">
+                    <div>
+                        <h3 className="pb-5 text-sm font-bold">Pertanyaan</h3>
+                        <QuestionCard
+                            {...(detailQuestion as CommunityPostDetailResponse)}
+                            category={category?.id as string}
+                            clickable={false}
+                            isShowForm={isShowForm}
+                            setIsShowForm={setIsShowForm}
+                        />
+                    </div>
+                    <AnswerSection
+                        category={category}
                         setIsShowForm={setIsShowForm}
                     />
                 </div>
-                <AnswerSection
-                    category={category}
-                    setIsShowForm={setIsShowForm}
-                />
-            </div>
-            <RightSidebar className="lg:col-span-1" category={category} />
-        </section>
+                <RightSidebar className="lg:col-span-1" category={category} />
+            </section>
+        </>
     );
 };
 

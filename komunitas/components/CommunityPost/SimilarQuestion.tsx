@@ -11,7 +11,9 @@ const SimilarQuestion = ({ question }: SimilarQuestionProps): JSX.Element => {
     return (
         <Link
             key={question.slug}
-            href={`/komunitas/${encodeURIComponent(question.slug)}`}
+            href={`/komunitas/${question.category_slug}/${encodeURIComponent(
+                question.slug
+            )}`}
             className="flex flex-col gap-4 p-3 text-xs rounded-lg shadow-lg bg-neutral-800">
             <p className="overflow-hidden text-ellipsis ">{question.content}</p>
             <div className="flex justify-between">
