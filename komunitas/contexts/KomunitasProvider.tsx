@@ -81,8 +81,8 @@ export function KomunitasProvider({
 }): JSX.Element {
     const { profile } = useContext(AuthContext);
     const router = useRouter();
-    const { pathname } = router;
-
+    const { pathname, query } = router;
+    const { category } = query as { category: string };
     const [dataHome, setDataHome] = useState<
         CommunityPostResponse & {
             count_items: number;
@@ -97,7 +97,9 @@ export function KomunitasProvider({
     const [searchState, setSearchState] = useState('');
     const [search, setSearch] = useState('');
     const [page, setPage] = useState(1);
-    const [filter, setFilter] = useState('');
+    const [filter, setFilter] = useState(
+        pathname.includes('pertanyaan-ku') ? '' : category
+    );
     const [sort, setSort] = useState<
         'LATEST' | 'POPULAR' | 'ANSWERED' | 'NOT_ANSWERED'
     >('LATEST');
@@ -118,7 +120,7 @@ export function KomunitasProvider({
     const privateCommunityPostResult = useGetCommunityPostQuery(
         {
             sort_by: sort,
-            category_id: filter,
+            category_slug: filter,
             user_id: pathname.includes('pertanyaan-ku')
                 ? profile?.user_id
                 : undefined,
@@ -137,7 +139,7 @@ export function KomunitasProvider({
     const publicCommunityPostResult = useGetPublicCommunityPostQuery(
         {
             sort_by: sort,
-            category_id: filter,
+            category_slug: filter,
             user_id: pathname.includes('pertanyaan-ku')
                 ? profile?.user_id
                 : undefined,
@@ -202,13 +204,12 @@ export function KomunitasProvider({
             }).unwrap();
 
             const SelectedCategory = subjects?.categories.filter(
-                (value) => value.id === filter
+                (value) => value.slug === filter
             )[0];
 
             if (
                 result &&
-                (SelectedCategory?.name === result?.category ||
-                    filter === '') &&
+                (SelectedCategory?.name === result?.category || !filter) &&
                 (pathname === '/komunitas' ||
                     pathname === '/komunitas/pertanyaan-ku')
             ) {

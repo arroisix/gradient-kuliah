@@ -26,13 +26,15 @@ type Student = {
 const Wrapper = ({
     children,
     clickable,
+    category_slug,
     slug
 }: React.PropsWithChildren<{
     clickable: boolean;
+    category_slug?: string;
     slug?: string;
 }>): JSX.Element =>
     clickable ? (
-        <Link href={`/komunitas/${slug}`} className="w-full">
+        <Link href={`/komunitas/${category_slug}/${slug}`} className="w-full">
             {children}
         </Link>
     ) : (
@@ -45,6 +47,7 @@ const QuestionCard = ({
     slug,
     content,
     category,
+    category_slug,
     viewer_counts,
     comment_counts,
     created_at,
@@ -57,6 +60,7 @@ const QuestionCard = ({
     slug?: string;
     content: string;
     category: string;
+    category_slug: string;
     viewer_counts: number;
     comment_counts: number;
     created_at: number;
@@ -108,7 +112,10 @@ const QuestionCard = ({
     }
 
     return (
-        <Wrapper clickable={clickable} slug={slug}>
+        <Wrapper
+            clickable={clickable}
+            category_slug={category_slug}
+            slug={slug}>
             <div
                 className={cn(
                     'border border-neutral-800 rounded-xl p-4 md:p-5 flex flex-col',

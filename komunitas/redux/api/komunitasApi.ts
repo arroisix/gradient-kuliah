@@ -212,3 +212,6 @@ export const {
     useGetCommunityPostCommentDetailQuery,
     useLazyGetCommunityPostQuery
 } = komunitasApi;
+
+export const { getPublicCommunityPost, getPublicCommunityPostDetail } =
+    komunitasApi.endpoints;

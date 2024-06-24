@@ -54,10 +54,10 @@ const RightSidebar = ({ askNow }: { askNow?: () => void }): JSX.Element => {
                     ) : (
                         <div className="flex flex-col gap-2 bg-[#1D1D1D] rounded">
                             {sideExploreData?.questions?.map(
-                                ({ slug, content }) => (
+                                ({ slug, content, category_slug }) => (
                                     <Link
                                         key={slug}
-                                        href={`/komunitas/${slug}`}>
+                                        href={`/komunitas/${category_slug}/${slug}`}>
                                         <div className="flex justify-between items-center gap-2 cursor-pointer z-[1] px-[10px] py-[10px] first:border-none border-t-[1px] border-t-[#2C2C2C]">
                                             <span className="overflow-hidden text-xs whitespace-nowrap text-ellipsis">
                                                 {content}

@@ -98,7 +98,12 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
             );
             const subchapterSlug = (await getSubchapterSlug.json())
                 .subchapter_slug;
-            url.pathname = `/kelas/${courseSlug}/${subchapterSlug}`;
+
+            if (subchapterSlug) {
+                url.pathname = `/kelas/${courseSlug}/${subchapterSlug}`;
+            } else {
+                url.pathname = `/kelas/${courseSlug}`;
+            }
         } catch (error) {
             url.pathname = `/kelas/${courseSlug}`;
         }

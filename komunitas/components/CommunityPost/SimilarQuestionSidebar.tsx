@@ -15,6 +15,7 @@ type SimilarQuestionSidebarProps = {
     category?: {
         id: string;
         name: string;
+        slug: string;
     };
 } & PropsWithClassName;
 
@@ -66,7 +67,7 @@ const SimilarQuestionSidebar = ({
                 variant="custom"
                 className="w-full text-xs font-extrabold text-center bg-neutral-700"
                 eventName='Click "Lihat di Komunitas" Button'
-                href="/komunitas">
+                href={`/komunitas/${category?.slug}`}>
                 Lihat di Komunitas
             </Button>
         </div>
