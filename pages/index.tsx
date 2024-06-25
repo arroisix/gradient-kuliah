@@ -3,7 +3,7 @@ import Layout from 'commons/layout';
 import withAnon from 'commons/withAnon';
 import { GridProvider } from 'courses/contexts/GridProvider';
 import LandingContainer from 'landing/containers';
-import { NextSeo } from 'next-seo';
+import { CorporateContactJsonLd, DatasetJsonLd } from 'next-seo';
 import React from 'react';
 import config from 'redux/api/config';
 
@@ -12,18 +12,18 @@ type LandingPageProps = {
     pricingData?: ResponseData<PacketOffer>;
     classesData?: ResponseData<Course>;
     popularBooksData?: GetLandingPopularBooksResponseData;
+    description: string;
 };
 
 const RevampedLandingPage = ({
     majorData,
     classesData,
     popularBooksData,
-    pricingData
+    pricingData,
+    description
 }: LandingPageProps): JSX.Element => {
     return (
         <>
-            <NextSeo canonical="https://gradient.academy/" />
-
             <GridProvider>
                 <Layout shouldTransparent>
                     <LandingContainer
@@ -34,6 +34,38 @@ const RevampedLandingPage = ({
                     />
                 </Layout>
             </GridProvider>
+
+            <CorporateContactJsonLd
+                type="EducationalOrganization"
+                name="Gradient"
+                url="https://gradient.academy/"
+                logo="https://assets.gradient.academy/assets/gradient-G-icon.png"
+                alternateName="PT CERDASKAN KEHIDUPAN BANGSA"
+                sameAs={[
+                    "https://www.instagram.com/gradient_idn/",
+                    "https://x.com/gradient_idn?lang=en",
+                    "https://www.youtube.com/@gradient3012",
+                    "https://www.linkedin.com/company/gradient-idn/",
+                    "https://www.tiktok.com/@gradientacademy"
+                ]}
+                contactPoint={[
+                    {
+                        type: "ContactPoint",
+                        telephone: '+6285179893859',
+                        contactType: "customer service",
+                        email: "business@gradient.academy",
+                        areaServed: "ID",
+                        availableLanguage: ["id"]
+                    }
+                ]}
+            />
+
+            <DatasetJsonLd
+                type="WebSite"
+                name="Gradient Academy"
+                url="https://gradient.academy/"
+                description={description}
+            />
         </>
     );
 };
