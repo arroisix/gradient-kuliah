@@ -42,20 +42,20 @@ const RevampedLandingPage = ({
                 logo="https://assets.gradient.academy/assets/gradient-G-icon.png"
                 alternateName="PT CERDASKAN KEHIDUPAN BANGSA"
                 sameAs={[
-                    "https://www.instagram.com/gradient_idn/",
-                    "https://x.com/gradient_idn?lang=en",
-                    "https://www.youtube.com/@gradient3012",
-                    "https://www.linkedin.com/company/gradient-idn/",
-                    "https://www.tiktok.com/@gradientacademy"
+                    'https://www.instagram.com/gradient_idn/',
+                    'https://x.com/gradient_idn?lang=en',
+                    'https://www.youtube.com/@gradient3012',
+                    'https://www.linkedin.com/company/gradient-idn/',
+                    'https://www.tiktok.com/@gradientacademy'
                 ]}
                 contactPoint={[
                     {
-                        type: "ContactPoint",
+                        type: 'ContactPoint',
                         telephone: '+6285179893859',
-                        contactType: "customer service",
-                        email: "business@gradient.academy",
-                        areaServed: "ID",
-                        availableLanguage: ["id"]
+                        contactType: 'customer service',
+                        email: 'business@gradient.academy',
+                        areaServed: 'ID',
+                        availableLanguage: ['id']
                     }
                 ]}
             />
