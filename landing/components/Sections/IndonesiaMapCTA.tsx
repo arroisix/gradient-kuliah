@@ -21,7 +21,7 @@ const IndonesiaMapCTA = (): JSX.Element => {
             </div>
             <div className="flex flex-col items-center gap-3 text-center md:py-4 md:gap-5 md:text-left md:items-start">
                 <h2 className="text-xl font-extrabold leading-tight text-center whitespace-pre-line md:text-[1.75rem] md:text-left">
-                    <span className="text-[#7264EB]">2.350+ pelajar</span> di
+                    <span className="text-[#7264EB]">42.000+ pelajar</span> di
                     Indonesia menggunakan Gradient
                 </h2>
                 <p className="text-sm md:text-base text-neutral-400">
