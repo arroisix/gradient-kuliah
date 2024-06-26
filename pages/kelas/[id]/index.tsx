@@ -29,18 +29,18 @@ const DetailKelas = ({
                 courseName={courseName}
                 description={description}
                 provider={{
-                    type: 'EducationalOrganization',
+                    '@type': 'EducationalOrganization',
                     name: 'Gradient',
                     url: 'https://gradient.academy'
                 }}
                 hasCourseInstance={{
-                    type: 'CourseInstance',
+                    '@type': 'CourseInstance',
                     name: courseName,
                     description: description,
                     courseMode: 'online',
                     instructor: courseData?.lecturers.map(
                         (lecturer: Lecturer) => ({
-                            type: 'Person',
+                            '@type': 'Person',
                             name: lecturer.name,
                             description: lecturer.role,
                             image: lecturer.photo
@@ -48,11 +48,11 @@ const DetailKelas = ({
                     )
                 }}
                 offers={{
-                    type: 'Offer',
+                    '@type': 'Offer',
                     priceCurrency: 'IDR',
                     priceSpecification: packetOffer?.map(
                         ({ packet_name, price }) => ({
-                            type: 'UnitPriceSpecification',
+                            '@type': 'UnitPriceSpecification',
                             name: packet_name,
                             price: price
                         })
@@ -60,7 +60,7 @@ const DetailKelas = ({
                 }}
                 isAccessibleForFree={false}
                 aggregateRating={{
-                    type: 'AggregateRating',
+                    '@type': 'AggregateRating',
                     ratingValue: courseRating?.average_rating,
                     bestRating: courseRating?.best_rating,
                     worstRating: courseRating?.worst_rating,

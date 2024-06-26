@@ -50,7 +50,7 @@ const RevampedLandingPage = ({
                 ]}
                 contactPoint={[
                     {
-                        type: 'ContactPoint',
+                        '@type': 'ContactPoint',
                         telephone: '+6285179893859',
                         contactType: 'customer service',
                         email: 'business@gradient.academy',
