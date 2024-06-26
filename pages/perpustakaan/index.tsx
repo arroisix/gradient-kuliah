@@ -12,9 +12,9 @@ const PerpustakaanPage = (): JSX.Element => {
 
 export const getStaticProps: GetStaticProps = () => {
     const META_TITLE =
-        'Kumpulan Rangkuman, Catatan & Buku Materi Kuliah | Gradient';
+        'Perpustakaan Online Pusat Ruang Baca Digital Terkini | Gradient';
     const META_DESCRIPTION =
-        'Tingkatkan hasil belajar dari rangkuman & catatan berkualitas yang dirancang khusus agar lebih praktis serta mempercepat waktu Kamu dalam proses belajar.';
+        'Nikmati perpustakaan digital dengan akses tanpa batas ke buku, catatan, bank soal, dan solusi terbaik. Temukan semua yang Kamu butuhkan untuk belajar lebih baik.';
 
     return {
         props: {
