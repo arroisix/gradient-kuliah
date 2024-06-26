@@ -29,7 +29,7 @@ const DetailKelas = ({
                 courseName={courseName}
                 description={description}
                 provider={{
-                    '@type': 'EducationalOrganization',
+                    type: 'EducationalOrganization',
                     name: 'Gradient',
                     url: 'https://gradient.academy'
                 }}
