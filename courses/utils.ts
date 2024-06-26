@@ -12,7 +12,8 @@ export const flattenSubchapter = (subchapter: SubChapter): SubChapter[] => {
         videoSubchapter = [
             {
                 ...baseSubchapter,
-                video: subchapter.video
+                video: subchapter.video,
+                created_at: subchapter.created_at
             }
         ];
     }

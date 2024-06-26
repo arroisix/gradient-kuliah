@@ -96,6 +96,7 @@ type SubChapter = {
     packet_id?: string;
     next_subchapter_slug?: string;
     video_id?: string;
+    created_at: Date;
 };
 
 type Chapter = {

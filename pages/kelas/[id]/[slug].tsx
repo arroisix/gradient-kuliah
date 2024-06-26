@@ -5,14 +5,20 @@ import withAnon from 'commons/withAnon';
 import { GetStaticPaths, GetStaticPropsResult } from 'next';
 import axios from 'axios';
 import config from 'redux/api/config';
+import { VideoJsonLd } from 'next-seo';
+import moment from 'moment';
 
 interface BelajarPageProps {
     subchapter: SubChapter;
     course: CourseDetail;
-    canonical: string;
+    description: string;
 }
 
-const Belajar = ({ subchapter, course }: BelajarPageProps): JSX.Element => {
+const Belajar = ({
+    subchapter,
+    course,
+    description
+}: BelajarPageProps): JSX.Element => {
     return (
         <>
             <LearningProvider>
@@ -23,6 +29,17 @@ const Belajar = ({ subchapter, course }: BelajarPageProps): JSX.Element => {
                     />
                 </LearnLayout>
             </LearningProvider>
+
+            <VideoJsonLd
+                name={subchapter?.subchapter_name}
+                description={description}
+                learningResourceType="Concept Overview"
+                contentUrl={subchapter?.video?.video_url}
+                thumbnailUrls={[subchapter?.video?.thumbnail]}
+                uploadDate={moment(new Date(subchapter?.created_at)).format(
+                    'YYYY-MM-DD'
+                )}
+            />
         </>
     );
 };
@@ -69,17 +86,20 @@ export const getStaticProps = async ({
     const subchapter = subchapterResponse.data;
     const course = courseResponse.data.course_detail;
 
+    const META_TITLE = `${course.course_name}: ${subchapter.subchapter_name}`;
+    const META_DESCRIPTION = `Nonton Video ${subchapter.subchapter_name} kelas ${course.course_name} hanya di Gradient`;
+
     return {
         props: {
             subchapter,
             course,
             canonical: `https://gradient.academy/kelas/${id}/${slug}`,
-            title: `${course.course_name}: ${subchapter.subchapter_name}`,
-            description: `Nonton Video ${subchapter.subchapter_name} kelas ${course.course_name} hanya di Gradient`,
+            title: META_TITLE,
+            description: META_DESCRIPTION,
             openGraph: {
                 type: 'video.other',
-                title: `${course.course_name}: ${subchapter.subchapter_name}`,
-                description: `Nonton Video ${subchapter.subchapter_name} kelas ${course.course_name} hanya di Gradient`,
+                title: META_TITLE,
+                description: META_DESCRIPTION,
                 url: `https://gradient.academy/kelas/${id}/${slug}`,
                 video: subchapter.video?.video_url,
                 image: subchapter.thumbnail
