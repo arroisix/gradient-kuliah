@@ -11,7 +11,8 @@ const TextbookPage = (): JSX.Element => {
 };
 
 export const getStaticProps: GetStaticProps = () => {
-    const META_TITLE = 'Kumpulan Kunci Jawaban Buku Perkuliahan + Pembahasannya | Gradient';
+    const META_TITLE =
+        'Kumpulan Kunci Jawaban Buku Perkuliahan + Pembahasannya | Gradient';
     const META_DESCRIPTION =
         'Dapatkan kunci jawaban beserta pembahasan solusi yang telah diverifikasi dosen ternama untuk semua buku perkuliahan. Solusi terbaik untuk setiap materi perkuliahan.';
 
