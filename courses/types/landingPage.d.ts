@@ -60,3 +60,10 @@ interface MajorOptions {
     label: string;
     slug: string;
 }
+
+interface GetCourseRatingResponse {
+    average_rating: number
+    rating_count: number
+    best_rating: number
+    worst_rating: number
+}
