@@ -21,8 +21,8 @@ const DetailKelas = ({
     title: string;
     description: string;
 }): JSX.Element => {
-    const courseName = title.split(' | Gradient')[0]
-    
+    const courseName = title.split(' | Gradient')[0];
+
     return (
         <>
             <CourseJsonLd
@@ -38,21 +38,25 @@ const DetailKelas = ({
                     name: courseName,
                     description: description,
                     courseMode: 'online',
-                    instructor: courseData?.lecturers.map((lecturer: Lecturer) => ({
-                        type: 'Person',
-                        name: lecturer.name,
-                        description: lecturer.role,
-                        image: lecturer.photo
-                    }))
+                    instructor: courseData?.lecturers.map(
+                        (lecturer: Lecturer) => ({
+                            type: 'Person',
+                            name: lecturer.name,
+                            description: lecturer.role,
+                            image: lecturer.photo
+                        })
+                    )
                 }}
                 offers={{
                     type: 'Offer',
                     priceCurrency: 'IDR',
-                    priceSpecification: packetOffer?.map(({ packet_name, price }) => ({
-                        type: 'UnitPriceSpecification',
-                        name: packet_name,
-                        price: price
-                    }))
+                    priceSpecification: packetOffer?.map(
+                        ({ packet_name, price }) => ({
+                            type: 'UnitPriceSpecification',
+                            name: packet_name,
+                            price: price
+                        })
+                    )
                 }}
                 isAccessibleForFree={false}
                 aggregateRating={{
@@ -97,9 +101,10 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
             } = await axios.get<ResponseData<PacketOffer>>(
                 `${config.API_BASE_URL}subscriptions/packet-offer/`
             );
-            const { data: courseRating } = await axios.get<GetCourseRatingResponse>(
-                `${config.API_BASE_URL}courses/public/${params?.id}/rating/`
-            );
+            const { data: courseRating } =
+                await axios.get<GetCourseRatingResponse>(
+                    `${config.API_BASE_URL}courses/public/${params?.id}/rating/`
+                );
 
             const metaTitle =
                 params?.id === 'bedah-jurusan'
