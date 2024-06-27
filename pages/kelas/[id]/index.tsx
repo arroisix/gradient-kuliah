@@ -54,6 +54,7 @@ const DetailKelas = ({
                 }}
                 offers={{
                     '@type': 'Offer',
+                    category: 'Subscription',
                     priceCurrency: 'IDR',
                     priceSpecification: packetOffer?.map(
                         ({ packet_name, price }) => ({
@@ -64,13 +65,17 @@ const DetailKelas = ({
                     )
                 }}
                 isAccessibleForFree={false}
-                aggregateRating={courseRating?.rating_count > 0? {
-                    '@type': 'AggregateRating',
-                    ratingValue: courseRating?.average_rating,
-                    bestRating: courseRating?.best_rating,
-                    worstRating: courseRating?.worst_rating,
-                    ratingCount: courseRating?.rating_count
-                } : undefined}
+                aggregateRating={
+                    courseRating?.rating_count > 0
+                        ? {
+                              '@type': 'AggregateRating',
+                              ratingValue: courseRating?.average_rating,
+                              bestRating: courseRating?.best_rating,
+                              worstRating: courseRating?.worst_rating,
+                              ratingCount: courseRating?.rating_count
+                          }
+                        : undefined
+                }
             />
             <Layout shouldTransparent>
                 <LandingPageOrchestrator id={id} packetOffer={packetOffer} />
