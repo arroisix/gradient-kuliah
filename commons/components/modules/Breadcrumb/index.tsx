@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 type BreadcrumbListElement = {
     name: string;
     url: string;
-}[]
+}[];
 
 const Breadcrumb = ({
     nextItem,
@@ -26,36 +26,48 @@ const Breadcrumb = ({
     const { is_subscribed } = useCourseSubscription();
     const isBookPage =
         breadcrumbPath === '/perpustakaan/astronotes/[slug]/[page]';
-    const [ breadcrumbListElement, setBreadcrumbListElement ] = useState<BreadcrumbListElement>([])
-    
+    const [breadcrumbListElement, setBreadcrumbListElement] =
+        useState<BreadcrumbListElement>([]);
+
     useEffect(() => {
-        const tempBreadcrumbListElement: BreadcrumbListElement = [{
-            name: 'Home',
-            url: 'https://gradient.academy'
-        }]
+        const tempBreadcrumbListElement: BreadcrumbListElement = [
+            {
+                name: 'Home',
+                url: 'https://gradient.academy'
+            }
+        ];
 
-        let currentBreadcrumbData: BreadcrumbItemProps | undefined = breadcrumbsData
-        fillBreadcrumbListElement(tempBreadcrumbListElement, currentBreadcrumbData)
-    
-        currentBreadcrumbData = nextItem
-        fillBreadcrumbListElement(tempBreadcrumbListElement, currentBreadcrumbData)
+        let currentBreadcrumbData: BreadcrumbItemProps | undefined =
+            breadcrumbsData;
+        fillBreadcrumbListElement(
+            tempBreadcrumbListElement,
+            currentBreadcrumbData
+        );
 
-        setBreadcrumbListElement(tempBreadcrumbListElement)
-    }, [nextItem])
+        currentBreadcrumbData = nextItem;
+        fillBreadcrumbListElement(
+            tempBreadcrumbListElement,
+            currentBreadcrumbData
+        );
+
+        setBreadcrumbListElement(tempBreadcrumbListElement);
+    }, [nextItem]);
 
     const fillBreadcrumbListElement = (
-        breadcrumbListElement: BreadcrumbListElement, 
+        breadcrumbListElement: BreadcrumbListElement,
         currentBreadcrumbData: BreadcrumbItemProps | undefined
     ) => {
         while (currentBreadcrumbData) {
             breadcrumbListElement.push({
                 name: currentBreadcrumbData.name,
-                url: `https://gradient.academy${currentBreadcrumbData.url ?? asPath}`
-            })
-            
-            currentBreadcrumbData = currentBreadcrumbData.nextItem
+                url: `https://gradient.academy${
+                    currentBreadcrumbData.url ?? asPath
+                }`
+            });
+
+            currentBreadcrumbData = currentBreadcrumbData.nextItem;
         }
-    }
+    };
 
     if (!breadcrumbsData) return <></>;
 
@@ -81,15 +93,17 @@ const Breadcrumb = ({
                 )}
             </div>
 
-            {breadcrumbListElement.length > 0 &&
+            {breadcrumbListElement.length > 0 && (
                 <BreadcrumbJsonLd
-                    itemListElements={breadcrumbListElement.map((value, index) => ({
-                        position: index + 1,
-                        name: value.name,
-                        item: value.url
-                    }))}
+                    itemListElements={breadcrumbListElement.map(
+                        (value, index) => ({
+                            position: index + 1,
+                            name: value.name,
+                            item: value.url
+                        })
+                    )}
                 />
-            }
+            )}
         </>
     );
 };
