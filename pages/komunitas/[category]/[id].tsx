@@ -9,6 +9,8 @@ import { wrapper } from 'redux/store';
 import { ThunkDispatch } from 'redux-thunk';
 import { getRunningQueriesThunk } from 'redux/api/baseApi';
 import { getPublicCommunityPostDetail } from 'komunitas/redux/api/komunitasApi';
+import { QAPageJsonLd } from 'next-seo';
+import moment from 'moment';
 
 type DetailKomunitasProps = {
     data: CommunityPostDetailResponse;
@@ -16,11 +18,36 @@ type DetailKomunitasProps = {
 
 const DetailKomunitas = ({ data }: DetailKomunitasProps): JSX.Element => {
     return (
-        <KomunitasProvider initialDetailData={data}>
-            <LearnLayout showSidebar fullHeightSidebar>
-                <DetailSection initialDetailData={data} />
-            </LearnLayout>
-        </KomunitasProvider>
+        <>
+            <KomunitasProvider initialDetailData={data}>
+                <LearnLayout showSidebar fullHeightSidebar>
+                    <DetailSection initialDetailData={data} />
+                </LearnLayout>
+            </KomunitasProvider>
+
+            <QAPageJsonLd 
+                mainEntity={{
+                    text: data?.content,
+                    answerCount: data?.comment_counts,
+                    upvoteCount: data?.viewer_counts,
+                    dateCreated: moment(new Date(data?.created_at)).format(
+                        'YYYY-MM-DD'
+                    ),
+                    author: {
+                        '@type': 'Person',
+                        name: data?.student.username
+                    },
+                    // acceptedAnswer: {
+
+                    // }
+                    hasPart: {
+                        '@type': 'WebPageElement',
+                        cssSelector: '#answers',
+                        isAccessibleForFree: false
+                    }
+                }}
+            />
+        </>
     );
 };
 
