@@ -85,7 +85,7 @@ const DetailKomunitas = ({
                     },
                     hasPart: {
                         '@type': 'WebPageElement',
-                        cssSelector: '#answers',
+                        cssSelector: `#${firstComment.id}`,
                         isAccessibleForFree: false
                     }
                 }}
