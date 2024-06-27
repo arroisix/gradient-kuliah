@@ -38,6 +38,11 @@ const DetailKelas = ({
                     name: courseName,
                     description: description,
                     courseMode: 'online',
+                    courseSchedule: {
+                        '@type': 'Schedule',
+                        repeatCount: 18,
+                        repeatFrequency: 'Weekly'
+                    },
                     instructor: courseData?.lecturers.map(
                         (lecturer: Lecturer) => ({
                             '@type': 'Person',
@@ -59,13 +64,13 @@ const DetailKelas = ({
                     )
                 }}
                 isAccessibleForFree={false}
-                aggregateRating={{
+                aggregateRating={courseRating?.rating_count > 0? {
                     '@type': 'AggregateRating',
                     ratingValue: courseRating?.average_rating,
                     bestRating: courseRating?.best_rating,
                     worstRating: courseRating?.worst_rating,
                     ratingCount: courseRating?.rating_count
-                }}
+                } : undefined}
             />
             <Layout shouldTransparent>
                 <LandingPageOrchestrator id={id} packetOffer={packetOffer} />
