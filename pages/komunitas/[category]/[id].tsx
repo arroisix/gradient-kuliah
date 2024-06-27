@@ -42,7 +42,7 @@ const DetailKomunitas = ({ data }: DetailKomunitasProps): JSX.Element => {
                     // }
                     hasPart: {
                         '@type': 'WebPageElement',
-                        cssSelector: '#answers',
+                        cssSelector: 'answers',
                         isAccessibleForFree: false
                     }
                 }}
