@@ -4,6 +4,13 @@ import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FaChevronRight } from 'react-icons/fa';
+import { BreadcrumbJsonLd } from 'next-seo';
+import { useEffect, useState } from 'react';
+
+type BreadcrumbListElement = {
+    name: string;
+    url: string;
+}[]
 
 const Breadcrumb = ({
     nextItem,
@@ -13,35 +20,77 @@ const Breadcrumb = ({
     className?: string;
 }): JSX.Element => {
     const router = useRouter();
-    const { pathname } = router;
+    const { pathname, asPath } = router;
     const breadcrumbPath = pathname as BreadcrumbPathnames;
     const breadcrumbsData = BREADCRUMB[breadcrumbPath];
     const { is_subscribed } = useCourseSubscription();
     const isBookPage =
         breadcrumbPath === '/perpustakaan/astronotes/[slug]/[page]';
+    const [ breadcrumbListElement, setBreadcrumbListElement ] = useState<BreadcrumbListElement>([])
+    
+    useEffect(() => {
+        const tempBreadcrumbListElement: BreadcrumbListElement = [{
+            name: 'Home',
+            url: 'https://gradient.academy'
+        }]
+
+        let currentBreadcrumbData: BreadcrumbItemProps | undefined = breadcrumbsData
+        fillBreadcrumbListElement(tempBreadcrumbListElement, currentBreadcrumbData)
+    
+        currentBreadcrumbData = nextItem
+        fillBreadcrumbListElement(tempBreadcrumbListElement, currentBreadcrumbData)
+
+        setBreadcrumbListElement(tempBreadcrumbListElement)
+    }, [nextItem])
+
+    const fillBreadcrumbListElement = (
+        breadcrumbListElement: BreadcrumbListElement, 
+        currentBreadcrumbData: BreadcrumbItemProps | undefined
+    ) => {
+        while (currentBreadcrumbData) {
+            breadcrumbListElement.push({
+                name: currentBreadcrumbData.name,
+                url: `https://gradient.academy${currentBreadcrumbData.url ?? asPath}`
+            })
+            
+            currentBreadcrumbData = currentBreadcrumbData.nextItem
+        }
+    }
 
     if (!breadcrumbsData) return <></>;
 
     return (
-        <div
-            className={cn(
-                'flex flex-wrap items-center gap-1',
-                isBookPage && 'mt-4',
-                className
-            )}>
-            <Item
-                name="Home"
-                url={is_subscribed ? '/dashboard' : '/'}
-                nextItem={breadcrumbsData}
-            />
-            {nextItem && (
+        <>
+            <div
+                className={cn(
+                    'flex flex-wrap items-center gap-1',
+                    isBookPage && 'mt-4',
+                    className
+                )}>
                 <Item
-                    name={nextItem.name}
-                    url={nextItem.url}
-                    nextItem={nextItem.nextItem}
+                    name="Home"
+                    url={is_subscribed ? '/dashboard' : '/'}
+                    nextItem={breadcrumbsData}
                 />
-            )}
-        </div>
+                {nextItem && (
+                    <Item
+                        name={nextItem.name}
+                        url={nextItem.url}
+                        nextItem={nextItem.nextItem}
+                    />
+                )}
+            </div>
+
+            {breadcrumbListElement.length > 0 &&
+                <BreadcrumbJsonLd
+                    itemListElements={breadcrumbListElement.map((value, index) => ({
+                        position: index + 1,
+                        name: value.name,
+                        item: value.url
+                    }))}
+                />
+            }
+        </>
     );
 };
 
