@@ -25,7 +25,7 @@ const DetailKomunitas = ({ data }: DetailKomunitasProps): JSX.Element => {
                 </LearnLayout>
             </KomunitasProvider>
 
-            <QAPageJsonLd 
+            <QAPageJsonLd
                 mainEntity={{
                     text: data?.content,
                     answerCount: data?.comment_counts,

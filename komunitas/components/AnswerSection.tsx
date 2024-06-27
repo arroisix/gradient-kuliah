@@ -64,7 +64,7 @@ const AnswerSection = ({
     return (
         <div>
             <h3 className="pb-5 text-sm font-bold">Jawaban</h3>
-            <div id='answers' className="flex flex-col gap-[18px]">
+            <div id="answers" className="flex flex-col gap-[18px]">
                 <AnswerSectionContent
                     comments={comments}
                     isLoadingComment={isLoadingComment}
