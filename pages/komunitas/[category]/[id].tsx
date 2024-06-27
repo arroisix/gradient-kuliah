@@ -8,7 +8,10 @@ import config from 'redux/api/config';
 import { wrapper } from 'redux/store';
 import { ThunkDispatch } from 'redux-thunk';
 import { getRunningQueriesThunk } from 'redux/api/baseApi';
-import { getPublicCommunityPostDetail, getCommunityPostCommentDetail } from 'komunitas/redux/api/komunitasApi';
+import {
+    getPublicCommunityPostDetail,
+    getCommunityPostCommentDetail
+} from 'komunitas/redux/api/komunitasApi';
 import { QAPageJsonLd } from 'next-seo';
 import moment from 'moment';
 import { useRouter } from 'next/router';
@@ -19,11 +22,14 @@ type DetailKomunitasProps = {
         count_items: number;
         next_page?: number;
         previous_page?: number;
-    }
+    };
 };
 
-const DetailKomunitas = ({ postData, commentData }: DetailKomunitasProps): JSX.Element => {
-    const { asPath } = useRouter()
+const DetailKomunitas = ({
+    postData,
+    commentData
+}: DetailKomunitasProps): JSX.Element => {
+    const { asPath } = useRouter();
     const dummyComment = {
         id: '',
         content: '',
@@ -35,8 +41,11 @@ const DetailKomunitas = ({ postData, commentData }: DetailKomunitasProps): JSX.E
             username: '',
             is_expert: false
         }
-    } as CommunityPostCommentDetail
-    const firstComment = commentData?.comments.length > 0? commentData?.comments[0] : dummyComment
+    } as CommunityPostCommentDetail;
+    const firstComment =
+        commentData?.comments.length > 0
+            ? commentData?.comments[0]
+            : dummyComment;
 
     return (
         <>
@@ -63,14 +72,16 @@ const DetailKomunitas = ({ postData, commentData }: DetailKomunitasProps): JSX.E
                     acceptedAnswer: {
                         name: firstComment.content,
                         text: firstComment.content,
-                        dateCreated: moment(new Date(firstComment.created_at)).format(
-                            'YYYY-MM-DD'
-                        ),
-                        url: `https://gradient.academy${asPath}${firstComment.id !== ''? `#${firstComment.id}` : ''}`,
+                        dateCreated: moment(
+                            new Date(firstComment.created_at)
+                        ).format('YYYY-MM-DD'),
+                        url: `https://gradient.academy${asPath}${
+                            firstComment.id !== '' ? `#${firstComment.id}` : ''
+                        }`,
                         author: {
                             '@type': 'Person',
                             name: firstComment.student.username
-                        },
+                        }
                     },
                     hasPart: {
                         '@type': 'WebPageElement',
@@ -135,11 +146,12 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                 };
             }
 
-            const commentData = commentPayload[0].data as CommunityPostCommentDetailResponse & {
+            const commentData = commentPayload[0]
+                .data as CommunityPostCommentDetailResponse & {
                 count_items: number;
                 next_page?: number;
                 previous_page?: number;
-            }
+            };
 
             const META_TITLE =
                 postData.content.length > 60
