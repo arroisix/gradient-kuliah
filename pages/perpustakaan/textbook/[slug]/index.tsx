@@ -64,8 +64,8 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                 };
             }
 
-            const META_TITLE = `Pembahasan Soal ${data.book.title}`;
-            const META_DESCRIPTION = `Pembahasan Soal ${data.book.title}`;
+            const META_TITLE = `Kunci Jawaban Buku ${data.book.title} + Pembahasannya | Gradient`;
+            const META_DESCRIPTION = `Temukan kunci jawaban lengkap buku ${data.book.title.toLowerCase()} disusun oleh dosen ternama di Indonesia. Solusi akurat dan pembahasan mendalam mendukung pemahaman Kamu.`;
 
             return {
                 revalidate: 300,

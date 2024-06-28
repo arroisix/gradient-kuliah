@@ -9,48 +9,73 @@ import { CourseJsonLd } from 'next-seo';
 const DetailKelas = ({
     id,
     packetOffer,
-    courseData
+    courseData,
+    courseRating,
+    title,
+    description
 }: {
     id: string;
     packetOffer: PacketOffer[];
     courseData: CourseLandingPageData;
+    courseRating: GetCourseRatingResponse;
+    title: string;
+    description: string;
 }): JSX.Element => {
+    const courseName = title.split(' | Gradient')[0];
+
     return (
         <>
             <CourseJsonLd
-                courseName={courseData?.course_name}
-                description={courseData?.description}
+                courseName={courseName}
+                description={description}
                 provider={{
-                    name: 'Gradient Academy',
-                    url: `https://gradient.academy`
+                    type: 'EducationalOrganization',
+                    name: 'Gradient',
+                    url: 'https://gradient.academy'
                 }}
-                offers={[
-                    {
-                        '@type': 'Offer',
-                        category: 'Subscription',
-                        priceCurrency: 'IDR',
-                        price: 125000
-                    }
-                ]}
-                hasCourseInstance={[
-                    {
-                        '@type': 'CourseInstance',
-                        courseMode: 'Online',
-                        courseSchedule: {
-                            '@type': 'Schedule',
-                            repeatCount: 18,
-                            repeatFrequency: 'Weekly'
-                        },
-                        instructor: [
-                            courseData?.lecturers.map((lecturer: Lecturer) => ({
-                                '@type': 'Person',
-                                name: lecturer.name,
-                                description: lecturer.role,
-                                image: lecturer.photo
-                            }))
-                        ]
-                    }
-                ]}
+                hasCourseInstance={{
+                    '@type': 'CourseInstance',
+                    name: courseName,
+                    description: description,
+                    courseMode: 'online',
+                    courseSchedule: {
+                        '@type': 'Schedule',
+                        repeatCount: 18,
+                        repeatFrequency: 'Weekly'
+                    },
+                    instructor: courseData?.lecturers.map(
+                        (lecturer: Lecturer) => ({
+                            '@type': 'Person',
+                            name: lecturer.name,
+                            description: lecturer.role,
+                            image: lecturer.photo
+                        })
+                    )
+                }}
+                offers={{
+                    '@type': 'Offer',
+                    category: 'Subscription',
+                    priceCurrency: 'IDR',
+                    priceSpecification: packetOffer?.map(
+                        ({ packet_name, price }) => ({
+                            '@type': 'UnitPriceSpecification',
+                            name: packet_name,
+                            price: price
+                        })
+                    )
+                }}
+                isAccessibleForFree={false}
+                aggregateRating={
+                    courseRating?.rating_count > 0
+                        ? {
+                              '@type': 'AggregateRating',
+                              ratingValue: courseRating?.average_rating,
+                              bestRating: courseRating?.best_rating,
+                              worstRating: courseRating?.worst_rating,
+                              ratingCount: courseRating?.rating_count
+                          }
+                        : undefined
+                }
             />
             <Layout shouldTransparent>
                 <LandingPageOrchestrator id={id} packetOffer={packetOffer} />
@@ -86,6 +111,10 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
             } = await axios.get<ResponseData<PacketOffer>>(
                 `${config.API_BASE_URL}subscriptions/packet-offer/`
             );
+            const { data: courseRating } =
+                await axios.get<GetCourseRatingResponse>(
+                    `${config.API_BASE_URL}courses/public/${params?.id}/rating/`
+                );
 
             const metaTitle =
                 params?.id === 'bedah-jurusan'
@@ -131,7 +160,8 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                             }
                         ]
                     },
-                    packetOffer: packetOfferData
+                    packetOffer: packetOfferData,
+                    courseRating
                 },
                 revalidate: 300
             };

@@ -89,6 +89,7 @@ const AnswerCard = ({
 
     return (
         <div
+            id={id}
             className={`flex flex-col gap-3 w-full border-[1px] rounded-xl p-[18px] md:p-5 ${
                 isExpert
                     ? 'border-[#00880080] bg-[#0088001A]'
