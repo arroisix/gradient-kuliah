@@ -43,9 +43,7 @@ const ContinueReadingSection = (): JSX.Element => {
                                         'flex-none w-[348px]'
                                 )}
                                 imageClassname="min-w-20 min-h-24"
-                                href={`${getBookBaseHref(book.category_name)}/${
-                                    book.slug
-                                }`}
+                                href={`${getBookBaseHref(book.category_name)}/${book.slug}/${book.latest_page}`}
                                 key={book.id}
                                 {...book}
                             />
