@@ -31,6 +31,23 @@ const LIST_UPDATED_COURSE_SLUG: { [key: string]: string } = {
     kalkulus2: 'kalkulus-2'
 };
 
+const LIST_UPDATED_BOOK_SLUG: { [key: string]: string } = {
+    'astronotes-mekanika-fluida': 'rangkuman-mekanika-fluida',
+    'astronotes-kimia-organik': 'rangkuman-kimia-organik',
+    'astronotes-statika': 'rangkuman-statika',
+    'astronotes-persamaan-diferensial': 'rangkuman-persamaan-diferensial',
+    'fisdas1-astronotes': 'rangkuman-fisika-dasar-1',
+    'kalkulus2-astronotes': 'rangkuman-kalkulus-2',
+    'kimdas1-astronotes': 'rangkuman-kimia-dasar-1',
+    'kimdas2-astronotes': 'rangkuman-kimia-dasar-2',
+    'fisdas2-astronotes': 'rangkuman-fisika-dasar-2',
+    'kalkulus1-astronotes': 'rangkuman-kalkulus-1',
+    'bank-soal-kalkulus1': 'pembahasan-soal-kalkulus-1',
+    'bank-soal-fisdas1': 'pembahasan-soal-fisika-dasar-1',
+    'bank-soal-kimdas1': 'pembahasan-soal-kimia-dasar-1',
+    'bank-soal-kalkulus2': 'pembahasan-soal-kalkulus-2'
+};
+
 export const config = {
     matcher: [
         '/',
@@ -88,26 +105,47 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
                     `${getBookBaseHref('astronotes')}/`
                 );
             }
+
+            const bookSlug = newPathname.split('/')[3]
+            const bookNewSlug = LIST_UPDATED_BOOK_SLUG[bookSlug]
+            if (bookNewSlug) {
+                newPathname = newPathname.replace(`/${bookSlug}`, `/${bookNewSlug}`)
+            }
         }
 
         url.pathname = newPathname;
+        console.log('/ASTRONOTES YA')
+        console.log(url.pathname)
         return NextResponse.redirect(url, 301);
     }
 
     if (pathname.startsWith('/perpustakaan/')) {
-        const { isBot } = userAgent(req);
-        if (isBot) {
-            res.cookies.set(IS_BOT, process.env.FRONTEND_ACCESS_TOKEN);
+        const bookSlug = pathname.split('/')[3]
+        const bookNewSlug = LIST_UPDATED_BOOK_SLUG[bookSlug]
+        console.log("/PERPUSTAKAAN YA")
+        console.log(bookSlug)
+        console.log(bookNewSlug)
+        if (bookNewSlug) {
+            console.log("asik")
+            url.pathname = pathname.replace(`/${bookSlug}`, `/${bookNewSlug}`)
+            return NextResponse.redirect(url, 301);
+        } else {
+            const { isBot } = userAgent(req);
+            console.log(isBot)
+            if (isBot) {
+                res.cookies.set(IS_BOT, process.env.FRONTEND_ACCESS_TOKEN);
+            }
+            return res;
         }
-        return res;
     }
     console.log('SINI BOS');
 
     if (pathname.startsWith('/kelas/')) {
         const splitedPathname = pathname.split('/');
         let courseSlug = splitedPathname[2];
-        if (LIST_UPDATED_COURSE_SLUG[courseSlug]) {
-            courseSlug = LIST_UPDATED_COURSE_SLUG[courseSlug];
+        const courseNewSlug = LIST_UPDATED_COURSE_SLUG[courseSlug]
+        if (courseNewSlug) {
+            courseSlug = courseNewSlug;
         }
 
         if (pathname.includes('/belajar/video/')) {
