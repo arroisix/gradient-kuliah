@@ -121,7 +121,8 @@ module.exports = {
             },
             {
                 source: '/perpustakaan/astronotes/astronotes-mekanika-fluida',
-                destination: '/perpustakaan/astronotes/rangkuman-mekanika-fluida',
+                destination:
+                    '/perpustakaan/astronotes/rangkuman-mekanika-fluida',
                 permanent: true,
                 basePath: false
             },
@@ -139,13 +140,15 @@ module.exports = {
             },
             {
                 source: '/perpustakaan/astronotes/astronotes-persamaan-diferensial',
-                destination: '/perpustakaan/astronotes/rangkuman-persamaan-diferensial',
+                destination:
+                    '/perpustakaan/astronotes/rangkuman-persamaan-diferensial',
                 permanent: true,
                 basePath: false
             },
             {
                 source: '/perpustakaan/astronotes/fisdas1-astronotes',
-                destination: '/perpustakaan/astronotes/rangkuman-fisika-dasar-1',
+                destination:
+                    '/perpustakaan/astronotes/rangkuman-fisika-dasar-1',
                 permanent: true,
                 basePath: false
             },
@@ -169,7 +172,8 @@ module.exports = {
             },
             {
                 source: '/perpustakaan/astronotes/fisdas2-astronotes',
-                destination: '/perpustakaan/astronotes/rangkuman-fisika-dasar-2',
+                destination:
+                    '/perpustakaan/astronotes/rangkuman-fisika-dasar-2',
                 permanent: true,
                 basePath: false
             },
@@ -181,28 +185,32 @@ module.exports = {
             },
             {
                 source: '/perpustakaan/bank-soal/bank-soal-kalkulus1',
-                destination: '/perpustakaan/bank-soal/pembahasan-soal-kalkulus-1',
+                destination:
+                    '/perpustakaan/bank-soal/pembahasan-soal-kalkulus-1',
                 permanent: true,
                 basePath: false
             },
             {
                 source: '/perpustakaan/bank-soal/bank-soal-fisdas1',
-                destination: '/perpustakaan/bank-soal/pembahasan-soal-fisika-dasar-1',
+                destination:
+                    '/perpustakaan/bank-soal/pembahasan-soal-fisika-dasar-1',
                 permanent: true,
                 basePath: false
             },
             {
                 source: '/perpustakaan/bank-soal/bank-soal-kimdas1',
-                destination: '/perpustakaan/bank-soal/pembahasan-soal-kimia-dasar-1',
+                destination:
+                    '/perpustakaan/bank-soal/pembahasan-soal-kimia-dasar-1',
                 permanent: true,
                 basePath: false
             },
             {
                 source: '/perpustakaan/bank-soal/bank-soal-kalkulus2',
-                destination: '/perpustakaan/bank-soal/pembahasan-soal-kalkulus-2',
+                destination:
+                    '/perpustakaan/bank-soal/pembahasan-soal-kalkulus-2',
                 permanent: true,
                 basePath: false
-            },
+            }
         ];
     }
 };
