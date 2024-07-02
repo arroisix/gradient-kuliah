@@ -6,16 +6,30 @@ import apiConfig from 'redux/api/config';
 
 const COOKIE = 'visitor_id';
 
-// List of bank soal books slug that exist at the time of Perpustakaan URL restructuring (updated: June 6, 2024)
+// List of bank soal books slug that exist at the time of Perpustakaan URL restructuring (updated: July 02, 2024)
 const BANK_SOAL_BOOKS_SLUG = [
-    'bank-soal-kalkulus1',
+    'pembahasan-soal-kalkulus-1',
     'bank-soal-kimdas2',
     'Simulasi-SNBT-2024',
-    'bank-soal-fisdas1',
-    'bank-soal-kimdas1',
-    'bank-soal-kalkulus2',
+    'pembahasan-soal-fisika-dasar-1',
+    'pembahasan-soal-kimia-dasar-1',
+    'pembahasan-soal-kalkulus-2',
     'bank-soal-fisdas2'
 ];
+
+const LIST_UPDATED_COURSE_SLUG: { [key: string]: string } = {
+    fisdas1: 'fisika-dasar-1',
+    kimdas1: 'kimia-dasar-1',
+    fisdas2: 'fisika-dasar-2',
+    kimdas2: 'kimia-dasar-2',
+    anum: 'analisis-numerik',
+    ptsl: 'pengantar-teknik-sipil-dan-lingkungan',
+    matdis: 'matematika-diskrit',
+    ldh: 'logika-dan-himpunan',
+    probstat: 'probabilitas-dan-statistika',
+    kalkulus1: 'kalkulus-1',
+    kalkulus2: 'kalkulus-2'
+};
 
 export const config = {
     matcher: [
@@ -23,7 +37,8 @@ export const config = {
         '/komunitas',
         '/astronotes/:slug*',
         '/perpustakaan/:kategori(textbook|astronotes|bank-soal)/:slug*',
-        '/kelas/:id/belajar/video/:chapterId/:subchapterId*'
+        '/kelas/:id/belajar/video/:chapterId/:subchapterId*',
+        '/kelas/:id(fisdas1|kimdas1|fisdas2|kimdas2|anum|ptsl|matdis|ldh|probstat|kalkulus1|kalkulus2)/:slug*'
     ]
 };
 
@@ -86,26 +101,36 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
         }
         return res;
     }
+    console.log('SINI BOS');
 
     if (pathname.startsWith('/kelas/')) {
         const splitedPathname = pathname.split('/');
-        const subchapterId = splitedPathname[splitedPathname.length - 1];
-        const courseSlug = splitedPathname[2];
+        let courseSlug = splitedPathname[2];
+        if (LIST_UPDATED_COURSE_SLUG[courseSlug]) {
+            courseSlug = LIST_UPDATED_COURSE_SLUG[courseSlug];
+        }
 
-        try {
-            const getSubchapterSlug = await fetch(
-                `${apiConfig.API_BASE_URL}courses/public/subchapter/${subchapterId}/slug/`
-            );
-            const subchapterSlug = (await getSubchapterSlug.json())
-                .subchapter_slug;
+        if (pathname.includes('/belajar/video/')) {
+            const subchapterId = splitedPathname[splitedPathname.length - 1];
+            try {
+                const getSubchapterSlug = await fetch(
+                    `${apiConfig.API_BASE_URL}courses/public/subchapter/${subchapterId}/slug/`
+                );
+                const subchapterSlug = (await getSubchapterSlug.json())
+                    .subchapter_slug;
 
-            if (subchapterSlug) {
-                url.pathname = `/kelas/${courseSlug}/${subchapterSlug}`;
-            } else {
+                if (subchapterSlug) {
+                    url.pathname = `/kelas/${courseSlug}/${subchapterSlug}`;
+                } else {
+                    url.pathname = `/kelas/${courseSlug}`;
+                }
+            } catch (error) {
                 url.pathname = `/kelas/${courseSlug}`;
             }
-        } catch (error) {
-            url.pathname = `/kelas/${courseSlug}`;
+        } else {
+            const subchapterSlug = splitedPathname[splitedPathname.length - 1];
+            url.pathname = `/kelas/${courseSlug}/${subchapterSlug}`;
+            console.log(url.pathname);
         }
 
         return NextResponse.redirect(url, 301);
