@@ -106,32 +106,35 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
                 );
             }
 
-            const bookSlug = newPathname.split('/')[3]
-            const bookNewSlug = LIST_UPDATED_BOOK_SLUG[bookSlug]
+            const bookSlug = newPathname.split('/')[3];
+            const bookNewSlug = LIST_UPDATED_BOOK_SLUG[bookSlug];
             if (bookNewSlug) {
-                newPathname = newPathname.replace(`/${bookSlug}`, `/${bookNewSlug}`)
+                newPathname = newPathname.replace(
+                    `/${bookSlug}`,
+                    `/${bookNewSlug}`
+                );
             }
         }
 
         url.pathname = newPathname;
-        console.log('/ASTRONOTES YA')
-        console.log(url.pathname)
+        console.log('/ASTRONOTES YA');
+        console.log(url.pathname);
         return NextResponse.redirect(url, 301);
     }
 
     if (pathname.startsWith('/perpustakaan/')) {
-        const bookSlug = pathname.split('/')[3]
-        const bookNewSlug = LIST_UPDATED_BOOK_SLUG[bookSlug]
-        console.log("/PERPUSTAKAAN YA")
-        console.log(bookSlug)
-        console.log(bookNewSlug)
+        const bookSlug = pathname.split('/')[3];
+        const bookNewSlug = LIST_UPDATED_BOOK_SLUG[bookSlug];
+        console.log('/PERPUSTAKAAN YA');
+        console.log(bookSlug);
+        console.log(bookNewSlug);
         if (bookNewSlug) {
-            console.log("asik")
-            url.pathname = pathname.replace(`/${bookSlug}`, `/${bookNewSlug}`)
+            console.log('asik');
+            url.pathname = pathname.replace(`/${bookSlug}`, `/${bookNewSlug}`);
             return NextResponse.redirect(url, 301);
         } else {
             const { isBot } = userAgent(req);
-            console.log(isBot)
+            console.log(isBot);
             if (isBot) {
                 res.cookies.set(IS_BOT, process.env.FRONTEND_ACCESS_TOKEN);
             }
@@ -143,7 +146,7 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
     if (pathname.startsWith('/kelas/')) {
         const splitedPathname = pathname.split('/');
         let courseSlug = splitedPathname[2];
-        const courseNewSlug = LIST_UPDATED_COURSE_SLUG[courseSlug]
+        const courseNewSlug = LIST_UPDATED_COURSE_SLUG[courseSlug];
         if (courseNewSlug) {
             courseSlug = courseNewSlug;
         }
