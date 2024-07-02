@@ -1,6 +1,5 @@
 import { cn } from 'commons/utils';
 import React from 'react';
-import { VerificationBadge } from './VerificationBadge';
 import { CorrectAnswerBadge } from './CorrectAnswerBadge';
 import TiptapViewer from './TiptapViewer';
 import Skeleton from 'commons/components/elements/Skeleton';
@@ -63,10 +62,7 @@ export const ShortAnswerSection = ({
 
     return (
         <div className="p-4 mt-2 space-y-4 border rounded-lg border-state-success/50 bg-state-success/25">
-            <div className="flex justify-between">
-                <p className="text-sm font-bold">Jawaban</p>
-                <VerificationBadge badge={problem?.question.badge} />
-            </div>
+            <p className="text-sm font-bold">Jawaban</p>
             {isLoading ? (
                 <Skeleton isCustomSize repeat={3} className="w-full h-4 mb-3" />
             ) : (
