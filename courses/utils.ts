@@ -197,6 +197,7 @@ export const getBookBaseHref = (book_category: string): string => {
             return '/perpustakaan/textbook';
         case 'astronotes':
         case 'catatan':
+        case 'book':
             return '/perpustakaan/astronotes';
         default:
             return '/perpustakaan/bank-soal';
