@@ -13,7 +13,7 @@ export const LongAnswerSection = ({
     const tracker = useTracker();
     const { query } = useRouter();
     const { slug } = query as { slug: string };
-    if (!problem?.question.multiple_steps_solution) return <></>;
+    if (!problem?.question.solution) return <></>;
 
     return (
         <label

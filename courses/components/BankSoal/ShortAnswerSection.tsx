@@ -1,13 +1,12 @@
 import { cn } from 'commons/utils';
 import React from 'react';
-import { CorrectAnswerBadge } from './CorrectAnswerBadge';
-import TiptapViewer from './TiptapViewer';
-import Skeleton from 'commons/components/elements/Skeleton';
+import { CorrectAnswerBadge } from '../Textbook/CorrectAnswerBadge';
+import TiptapViewer from '../Textbook/TiptapViewer';
 
 export const ShortAnswerSection = ({
     problem,
     isLoading
-}: Partial<Pick<TextbookSolution, 'problem'>> & {
+}: Partial<Pick<BankSoal, 'problem'>> & {
     isLoading?: boolean;
 }): JSX.Element => {
     const isMultiselect =
@@ -61,13 +60,21 @@ export const ShortAnswerSection = ({
         return <></>;
 
     return (
-        <div className="p-4 mt-2 space-y-4 border rounded-lg border-state-success/50 bg-state-success/25">
-            <p className="text-sm font-bold">Jawaban</p>
-            {isLoading ? (
-                <Skeleton isCustomSize repeat={3} className="w-full h-4 mb-3" />
-            ) : (
-                renderAnswer()
-            )}
-        </div>
+        <label
+            className={cn(
+                'mb-6 rounded-lg collapse collapse-arrow border border-state-success/50 bg-state-success/25 transition',
+                isLoading && '*:opacity-0 animate-pulse'
+            )}>
+            <input
+                type="checkbox"
+                disabled={isLoading}
+                name="answer"
+                className="!min-h-0"
+            />
+            <div className="font-bold collapse-title collapse-arrow">
+                Jawaban
+            </div>
+            <div className="collapse-content">{renderAnswer()}</div>
+        </label>
     );
 };

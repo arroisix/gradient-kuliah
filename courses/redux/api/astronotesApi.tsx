@@ -1,6 +1,6 @@
 import { baseApi } from 'redux/api/baseApi';
 
-const COURSE_BASE_URL = 'books/';
+const BOOK_BASE_URL = 'books/';
 
 export const astronotesApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -9,7 +9,7 @@ export const astronotesApi = baseApi.injectEndpoints({
             { slug: string; page?: number; specialToken?: string }
         >({
             query: ({ slug, page, specialToken }) => ({
-                url: `${COURSE_BASE_URL}${slug}`,
+                url: `${BOOK_BASE_URL}${slug}`,
                 params: {
                     page: page
                 },
@@ -24,7 +24,7 @@ export const astronotesApi = baseApi.injectEndpoints({
             AstronotesBooksQueryParams | undefined
         >({
             query: (params) => ({
-                url: `${COURSE_BASE_URL}v2/entrypoint/`,
+                url: `${BOOK_BASE_URL}v2/entrypoint/`,
                 params
             }),
             providesTags: [{ type: 'ASTRONOTES', id: 'ENTRYPOINT' }]
@@ -34,7 +34,7 @@ export const astronotesApi = baseApi.injectEndpoints({
             AstronotesBooksQueryParams | undefined
         >({
             query: (params) => ({
-                url: `${COURSE_BASE_URL}v2/public/entrypoint/`,
+                url: `${BOOK_BASE_URL}v2/public/entrypoint/`,
                 params
             }),
             providesTags: [{ type: 'ASTRONOTES', id: 'PUBLIC_ENTRYPOINT' }]
@@ -44,7 +44,7 @@ export const astronotesApi = baseApi.injectEndpoints({
             { slug: string }
         >({
             query: ({ slug }) => ({
-                url: `${COURSE_BASE_URL}public/${slug}/preview/`
+                url: `${BOOK_BASE_URL}public/${slug}/preview/`
             }),
             providesTags: [{ type: 'ASTRONOTES', id: 'PUBLIC_PREVIEW' }]
         }),
@@ -58,7 +58,7 @@ export const astronotesApi = baseApi.injectEndpoints({
             }
         >({
             query: ({ slug, ...body }) => ({
-                url: `${COURSE_BASE_URL}${slug}`,
+                url: `${BOOK_BASE_URL}${slug}`,
                 method: 'POST',
                 body
             }),
@@ -66,7 +66,7 @@ export const astronotesApi = baseApi.injectEndpoints({
         }),
         getBookDetail: builder.query<GetBookDetailResponse, { slug: string }>({
             query: ({ slug }) => ({
-                url: `${COURSE_BASE_URL}${slug}/detail/`
+                url: `${BOOK_BASE_URL}${slug}/detail/`
             }),
             providesTags: [{ type: 'ASTRONOTES', id: 'DETAILS' }]
         }),
@@ -75,19 +75,31 @@ export const astronotesApi = baseApi.injectEndpoints({
             { slug: string; problemId: string; specialToken?: string }
         >({
             query: ({ slug, problemId, specialToken }) => ({
-                url: `${COURSE_BASE_URL}${slug}/problems/${problemId}/`,
+                url: `${BOOK_BASE_URL}${slug}/problems/${problemId}/`,
                 headers: {
                     'X-Special-Request': specialToken
                 }
             }),
             providesTags: [{ type: 'ASTRONOTES', id: 'TEXTBOOK-SOLUTION' }]
         }),
+        getBankSoal: builder.query<
+            BankSoal,
+            { slug: string; problemSlug: string; specialToken?: string }
+        >({
+            query: ({ slug, problemSlug, specialToken }) => ({
+                url: `${BOOK_BASE_URL}bank-soal/${slug}/problems/${problemSlug}/`,
+                headers: {
+                    'X-Special-Request': specialToken
+                }
+            }),
+            providesTags: [{ type: 'ASTRONOTES', id: 'BANK-SOAL' }]
+        }),
         getTableContents: builder.query<
             GetBookChapterResponse,
             { slug: string }
         >({
             query: ({ slug }) => ({
-                url: `${COURSE_BASE_URL}${slug}/chapters/`
+                url: `${BOOK_BASE_URL}${slug}/chapters/`
             })
         }),
         getTableContentSubchapters: builder.query<
@@ -95,7 +107,7 @@ export const astronotesApi = baseApi.injectEndpoints({
             { slug: string; chapter_id: string }
         >({
             query: ({ slug, chapter_id }) => ({
-                url: `${COURSE_BASE_URL}${slug}/chapters/${chapter_id}/subchapters/`
+                url: `${BOOK_BASE_URL}${slug}/chapters/${chapter_id}/subchapters/`
             })
         }),
         getPublicTableContents: builder.query<
@@ -103,7 +115,7 @@ export const astronotesApi = baseApi.injectEndpoints({
             { slug: string }
         >({
             query: ({ slug }) => ({
-                url: `${COURSE_BASE_URL}public/${slug}/chapters/`
+                url: `${BOOK_BASE_URL}public/${slug}/chapters/`
             })
         }),
         getPublicTableContentSubchapters: builder.query<
@@ -111,12 +123,12 @@ export const astronotesApi = baseApi.injectEndpoints({
             { slug: string; chapter_id: string }
         >({
             query: ({ slug, chapter_id }) => ({
-                url: `${COURSE_BASE_URL}public/${slug}/chapters/${chapter_id}/subchapters/`
+                url: `${BOOK_BASE_URL}public/${slug}/chapters/${chapter_id}/subchapters/`
             })
         }),
         getHighlight: builder.query<getHighlightReponse, { slug: string }>({
             query: ({ slug }) => ({
-                url: `${COURSE_BASE_URL}${slug}/highlight`
+                url: `${BOOK_BASE_URL}${slug}/highlight`
             }),
             providesTags: [{ type: 'ASTRONOTES', id: 'HIGHLIGHT' }]
         }),
@@ -127,7 +139,7 @@ export const astronotesApi = baseApi.injectEndpoints({
             postHighlightBody
         >({
             query: ({ slug, ...body }) => ({
-                url: `${COURSE_BASE_URL}${slug}/highlight`,
+                url: `${BOOK_BASE_URL}${slug}/highlight`,
                 method: 'POST',
                 body
             }),
@@ -143,7 +155,7 @@ export const astronotesApi = baseApi.injectEndpoints({
             { slug: string; highlight_id: string }
         >({
             query: ({ slug, highlight_id }) => ({
-                url: `${COURSE_BASE_URL}${slug}/highlight?highlight_id=${highlight_id}`,
+                url: `${BOOK_BASE_URL}${slug}/highlight?highlight_id=${highlight_id}`,
                 method: 'DELETE'
             }),
             invalidatesTags: [
@@ -153,7 +165,7 @@ export const astronotesApi = baseApi.injectEndpoints({
         }),
         getBookmarks: builder.query<ResponseData<Bookmark>, { slug: string }>({
             query: ({ slug }) => ({
-                url: `${COURSE_BASE_URL}${slug}/bookmark`
+                url: `${BOOK_BASE_URL}${slug}/bookmark`
             }),
             providesTags: [{ type: 'ASTRONOTES', id: 'BOOKMARK' }]
         }),
@@ -164,7 +176,7 @@ export const astronotesApi = baseApi.injectEndpoints({
             { slug: string; page_order: number; is_active: boolean }
         >({
             query: ({ slug, ...body }) => ({
-                url: `${COURSE_BASE_URL}${slug}/bookmark`,
+                url: `${BOOK_BASE_URL}${slug}/bookmark`,
                 method: 'POST',
                 body
             }),
@@ -180,7 +192,7 @@ export const astronotesApi = baseApi.injectEndpoints({
             { slug: string; rate: number }
         >({
             query: ({ slug, ...body }) => ({
-                url: `${COURSE_BASE_URL}${slug}/rating`,
+                url: `${BOOK_BASE_URL}${slug}/rating`,
                 method: 'POST',
                 body
             })
@@ -192,17 +204,25 @@ export const astronotesApi = baseApi.injectEndpoints({
             { slug: string; feedback: string }
         >({
             query: ({ slug, ...body }) => ({
-                url: `${COURSE_BASE_URL}${slug}/feedback`,
+                url: `${BOOK_BASE_URL}${slug}/feedback`,
                 method: 'POST',
                 body
             })
         }),
         postTextbookFeedback: builder.mutation<
             void,
-            { slug: string; problemId: string; rating: number; comment: string }
+            {
+                slug: string;
+                problemSlug: string;
+                category: string;
+                rating: number;
+                comment: string;
+            }
         >({
-            query: ({ slug, problemId, ...body }) => ({
-                url: `${COURSE_BASE_URL}${slug}/problems/${problemId}/rating/`,
+            query: ({ slug, problemSlug, category, ...body }) => ({
+                url: `${BOOK_BASE_URL}${
+                    category == 'Bank Soal' ? 'bank-soal/' : ''
+                }${slug}/problems/${problemSlug}/rating/`,
                 method: 'PUT',
                 body
             }),
@@ -213,7 +233,7 @@ export const astronotesApi = baseApi.injectEndpoints({
             GetLandingPopularBooksQueryParam
         >({
             query: (params: GetLandingPopularBooksQueryParam) => ({
-                url: `${COURSE_BASE_URL}landing/popular/`,
+                url: `${BOOK_BASE_URL}landing/popular/`,
                 params: { ...params }
             })
         })
@@ -241,12 +261,14 @@ export const {
     usePostFeedbackMutation,
     usePostTextbookFeedbackMutation,
     useGetTextbookSolutionQuery,
-    useGetLandingPopularBooksQuery
+    useGetLandingPopularBooksQuery,
+    useGetBankSoalQuery
 } = astronotesApi;
 
 export const {
     getBookDetail,
     getTextbookSolution,
+    getBankSoal,
     getAstronotesContent,
     getPublicBookPreview
 } = astronotesApi.endpoints;

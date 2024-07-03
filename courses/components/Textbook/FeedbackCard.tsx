@@ -1,6 +1,9 @@
 import Button from 'commons/components/elements/Button';
 import { cn } from 'commons/utils';
-import { usePostTextbookFeedbackMutation } from 'courses/redux/api/astronotesApi';
+import {
+    useGetBookDetailQuery,
+    usePostTextbookFeedbackMutation
+} from 'courses/redux/api/astronotesApi';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useEffect, useRef, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
@@ -26,18 +29,25 @@ export const FeedbackCard = ({
     }
 
     const router = useRouter();
-    const { slug, problemId } = router.query as {
+    const { slug, problemId, problemSlug } = router.query as {
         slug: string;
         problemId: string;
+        problemSlug: string;
     };
+
+    const { data } = useGetBookDetailQuery({ slug }, { skip: !slug });
+    const book = data?.book;
 
     const [submitRating, { isLoading: isSubmitting }] =
         usePostTextbookFeedbackMutation();
     function handleSubmit(e: FormEvent<HTMLFormElement>): void {
         e.preventDefault();
+        if (!book) return;
+
         submitRating({
             slug,
-            problemId,
+            problemSlug: problemId || problemSlug,
+            category: book.category,
             rating,
             comment: content
         }).then(() => {

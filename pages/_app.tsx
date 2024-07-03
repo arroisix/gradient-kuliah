@@ -76,7 +76,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
             <Head>
                 <meta
                     name="viewport"
-                    content="initial-scale=1.0, width=device-width"
+                    content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0"
                 />
                 <link rel="icon" type="image/x-icon" href="/gradient.ico" />
                 <link rel="apple-touch-icon" href="/gradient.ico" />

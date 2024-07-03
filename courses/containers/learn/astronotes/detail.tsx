@@ -1,22 +1,20 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { GrStar } from 'react-icons/gr';
-import { useTracker } from 'tracker/tracker';
 import AstronotesKeyword from 'courses/components/LearningExperience/AstroNotes/Detail/AstronotesKeyword';
-import Accordion from 'commons/components/elements/Accordion';
-import ChapterContent from 'courses/components/LearningExperience/AstroNotes/Detail/ChapterContent';
 import { TabStyle } from 'courses/components/LearningExperience/AstroNotes/constants';
 import { useRouter } from 'next/router';
-import { cn } from 'commons/utils';
-import Button from 'commons/components/elements/Button';
-import { useRef } from 'react';
-import useOnScreen from 'commons/hooks/useOnScreen';
-import { useSelector } from 'react-redux';
-import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Skeleton from 'commons/components/elements/Skeleton';
 import { useGetBookDetailQuery } from 'courses/redux/api/astronotesApi';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import { getBookBaseHref } from 'courses/utils';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import Button from 'commons/components/elements/Button';
+import useOnScreen from 'commons/hooks/useOnScreen';
+import { cn } from 'commons/utils';
+import TableOfContents from 'courses/components/Textbook/TableOfContents';
+import { useRef } from 'react';
+import { useSelector } from 'react-redux';
 
 const AstronotesDetail = ({
     slug: serverSlug,
@@ -33,7 +31,6 @@ const AstronotesDetail = ({
     );
     const astronotes = data?.book ?? initialData;
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const tracker = useTracker();
 
     const buttonRef = useRef<HTMLDivElement | null>(null);
     const onScreen = useOnScreen(buttonRef, '-128px 0px 0px 0px');
@@ -43,16 +40,20 @@ const AstronotesDetail = ({
     const getLink = (): string => {
         if (!isAuthenticated) return '/daftar';
 
-        if (category === 'textbook') {
-            if (!!astronotes?.first_problem_id) {
+        switch (category) {
+            case 'textbook':
+                if (!!astronotes?.first_problem_id)
+                    return `${baseHref}/${astronotes?.first_problem_id}`;
+                else return `${baseHref}/?`;
+            case 'bank soal':
                 return `${baseHref}/${astronotes?.first_problem_id}`;
-            } else {
-                return `${baseHref}/?`;
-            }
+            default:
+                `${baseHref}/1`;
         }
 
-        return `${baseHref}/1`;
+        return `${baseHref}/?`;
     };
+
     const isButtonDisabled =
         !astronotes?.first_problem_id && category == 'Bank Soal';
 
@@ -177,27 +178,12 @@ const AstronotesDetail = ({
                         Daftar Isi
                     </span>
                     {astronotes ? (
-                        <Accordion
-                            item={astronotes?.chapters.map((value) => ({
-                                title: value.title,
-                                jsxContent: (
-                                    <ChapterContent
-                                        id={value.id}
-                                        slug={slug ?? serverSlug}
-                                        category={astronotes?.category}
-                                    />
-                                ),
-                                onClick: () => {
-                                    tracker?.genericTrack(
-                                        'Click Book Chapter Accordion',
-                                        {
-                                            'Book Slug': slug,
-                                            'Chapter Name': value.title
-                                        }
-                                    );
-                                }
-                            }))}
-                        />
+                        <div className="grid w-full grid-cols-1">
+                            <TableOfContents
+                                chapters={astronotes.chapters}
+                                category={astronotes.category}
+                            />
+                        </div>
                     ) : (
                         <div className="p-4 space-y-4">
                             <Skeleton
