@@ -9,12 +9,12 @@ const COOKIE = 'visitor_id';
 // List of bank soal books slug that exist at the time of Perpustakaan URL restructuring (updated: July 02, 2024)
 const BANK_SOAL_BOOKS_SLUG = [
     'pembahasan-soal-kalkulus-1',
-    'bank-soal-kimdas2',
+    'pembahasan-soal-kimia-dasar-2',
     'Simulasi-SNBT-2024',
     'pembahasan-soal-fisika-dasar-1',
     'pembahasan-soal-kimia-dasar-1',
     'pembahasan-soal-kalkulus-2',
-    'bank-soal-fisdas2'
+    'pembahasan-soal-fisika-dasar-2'
 ];
 
 const LIST_UPDATED_COURSE_SLUG: { [key: string]: string } = {
@@ -45,7 +45,9 @@ const LIST_UPDATED_BOOK_SLUG: { [key: string]: string } = {
     'bank-soal-kalkulus1': 'pembahasan-soal-kalkulus-1',
     'bank-soal-fisdas1': 'pembahasan-soal-fisika-dasar-1',
     'bank-soal-kimdas1': 'pembahasan-soal-kimia-dasar-1',
-    'bank-soal-kalkulus2': 'pembahasan-soal-kalkulus-2'
+    'bank-soal-kalkulus2': 'pembahasan-soal-kalkulus-2',
+    'bank-soal-kimdas2': 'pembahasan-soal-kimia-dasar-2',
+    'bank-soal-fisdas2': 'pembahasan-soal-fisika-dasar-2'
 };
 
 export const config = {
@@ -117,31 +119,23 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
         }
 
         url.pathname = newPathname;
-        console.log('/ASTRONOTES YA');
-        console.log(url.pathname);
         return NextResponse.redirect(url, 301);
     }
 
     if (pathname.startsWith('/perpustakaan/')) {
         const bookSlug = pathname.split('/')[3];
         const bookNewSlug = LIST_UPDATED_BOOK_SLUG[bookSlug];
-        console.log('/PERPUSTAKAAN YA');
-        console.log(bookSlug);
-        console.log(bookNewSlug);
         if (bookNewSlug) {
-            console.log('asik');
             url.pathname = pathname.replace(`/${bookSlug}`, `/${bookNewSlug}`);
             return NextResponse.redirect(url, 301);
         } else {
             const { isBot } = userAgent(req);
-            console.log(isBot);
             if (isBot) {
                 res.cookies.set(IS_BOT, process.env.FRONTEND_ACCESS_TOKEN);
             }
             return res;
         }
     }
-    console.log('SINI BOS');
 
     if (pathname.startsWith('/kelas/')) {
         const splitedPathname = pathname.split('/');
@@ -171,7 +165,6 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
         } else {
             const subchapterSlug = splitedPathname[splitedPathname.length - 1];
             url.pathname = `/kelas/${courseSlug}/${subchapterSlug}`;
-            console.log(url.pathname);
         }
 
         return NextResponse.redirect(url, 301);
