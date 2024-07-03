@@ -17,10 +17,12 @@ const VideoJS = ({
     src,
     isMuxVideo,
     trackProgress,
-    next_subchapter_link
+    next_subchapter_link,
+    autoPlay
 }: {
     src: string;
     isMuxVideo: boolean;
+    autoPlay?: boolean;
     trackProgress?: (
         last_duration: string,
         isFinished?: boolean
@@ -292,7 +294,7 @@ const VideoJS = ({
                 controls
                 preload="auto"
                 width="100%"
-                autoPlay
+                autoPlay={autoPlay}
             />
             {!isPlay && (
                 <>

@@ -1,7 +1,7 @@
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useTrackSubchapterProgressMutation } from 'courses/redux/api/learningExperienceApi';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 import VideoPaywall from './VideoPaywall';
 import VideoJS from 'commons/components/elements/Video/VideoJS';
 import Image from 'next/image';
@@ -10,6 +10,8 @@ import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Spinner from 'commons/components/elements/Spinner';
 import YoutubeVideo from 'commons/components/elements/Video/YoutubeVideo';
+import VideoRegisterwall from './VideoRegisterWall';
+import { FaPlay } from 'react-icons/fa';
 
 interface VideoPlayerContainerProps
     extends Pick<
@@ -34,6 +36,7 @@ const VideoPlayerContainer = ({
         is_subscribed
     } = useCourseSubscription(id as string);
     const [track] = useTrackSubchapterProgressMutation();
+    const [showRegisterwall, setIsShowRegisterwall] = useState(false);
     const isLoading = !video || isLoadingData || isLoadingSubscription;
 
     const isShowPaywall = !is_subscribed && !video?.is_free;
@@ -78,6 +81,31 @@ const VideoPlayerContainer = ({
             </div>
         );
 
+    if (!isAuthenticated && video.is_free) {
+        return (
+            <>
+                <VideoRegisterwall
+                    showRegisterwall={showRegisterwall}
+                    setIsShowRegisterwall={setIsShowRegisterwall}
+                />
+                <div
+                    className="relative w-full md:rounded-lg aspect-video"
+                    onClick={() => setIsShowRegisterwall(true)}
+                    aria-hidden>
+                    <Image
+                        src={video?.thumbnail ?? ''}
+                        alt={title}
+                        width={1920}
+                        height={1080}
+                    />
+                    <div className="absolute inset-0 z-10 grid place-items-center">
+                        <FaPlay className="text-4xl cursor-pointer" />
+                    </div>
+                </div>
+            </>
+        );
+    }
+
     return (
         <div>
             {!isShowPaywall ? (
@@ -93,6 +121,7 @@ const VideoPlayerContainer = ({
                             )}
                             trackProgress={trackProgress}
                             next_subchapter_link={nextSubchapter}
+                            autoPlay={isAuthenticated}
                         />
                     )}
                 </div>
