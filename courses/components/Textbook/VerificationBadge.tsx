@@ -9,7 +9,7 @@ export const VerificationBadge = ({
 
     if (badge === 'generated') {
         return (
-            <div className="flex items-center gap-[6px] px-[10px] py-1 rounded-full bg-accent-purple">
+            <div className="flex w-max items-center gap-[6px] px-[10px] py-1 rounded-full bg-accent-purple">
                 <RiRobot2Fill size={16} />
                 <span className="text-xs font-bold text-center">
                     AI Generated
@@ -19,7 +19,7 @@ export const VerificationBadge = ({
     }
 
     return (
-        <div className="flex items-center gap-[6px] px-[10px] py-1 rounded-full bg-state-success">
+        <div className="flex w-max items-center gap-[6px] px-[10px] py-1 rounded-full bg-state-success">
             <div className="relative w-[14px] h-[14px]">
                 <BsHexagonFill className="text-white" size={14} />
                 <BsCheck

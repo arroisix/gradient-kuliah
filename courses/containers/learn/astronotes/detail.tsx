@@ -40,16 +40,20 @@ const AstronotesDetail = ({
     const getLink = (): string => {
         if (!isAuthenticated) return '/daftar';
 
-        if (category === 'textbook') {
-            if (!!astronotes?.first_problem_id) {
+        switch (category) {
+            case 'textbook':
+                if (!!astronotes?.first_problem_id)
+                    return `${baseHref}/${astronotes?.first_problem_id}`;
+                else return `${baseHref}/?`;
+            case 'bank soal':
                 return `${baseHref}/${astronotes?.first_problem_id}`;
-            } else {
-                return `${baseHref}/?`;
-            }
+            default:
+                `${baseHref}/1`;
         }
 
-        return `${baseHref}/1`;
+        return `${baseHref}/?`;
     };
+
     const isButtonDisabled =
         !astronotes?.first_problem_id && category == 'Bank Soal';
 

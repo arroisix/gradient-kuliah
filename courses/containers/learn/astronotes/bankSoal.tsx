@@ -1,0 +1,96 @@
+import { FeedbackCard } from 'courses/components/Textbook/FeedbackCard';
+import { LongAnswerSection } from 'courses/components/Textbook/LongAnswerSection';
+import { PageNavigation } from 'courses/components/Textbook/PageNavigation';
+import { QuestionMetadata } from 'courses/components/Textbook/QuestionMetadata';
+import { ShortAnswerSection } from 'courses/components/BankSoal/ShortAnswerSection';
+import { TableOfContentMenu } from 'courses/components/Textbook/TableOfContentMenu';
+import TextbookPaywall from 'courses/components/Textbook/TextbookPaywall';
+import Breadcrumb from 'commons/components/modules/Breadcrumb';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { QuestionSection } from 'courses/components/BankSoal/QuestionSection';
+import {
+    useGetBankSoalQuery,
+    useGetBookDetailQuery
+} from 'courses/redux/api/astronotesApi';
+import { getCookieValue } from 'commons/utils';
+import { IS_BOT } from 'commons/constants';
+
+type BankSoalProps = {
+    data?: BankSoal;
+};
+
+const BankSoalContainer = ({
+    data: initialData
+}: BankSoalProps): JSX.Element => {
+    const router = useRouter();
+    const [isCrawler, setIsCrawler] = useState<string>();
+    const { is_subscribed } = useCourseSubscription();
+    const { slug, problemSlug } = router.query as {
+        slug: string;
+        problemSlug: string;
+    };
+    const { data: textbookData, isFetching } = useGetBankSoalQuery(
+        { slug, problemSlug, specialToken: isCrawler },
+        { skip: !slug || !problemSlug }
+    );
+    const { data: getTextbookDetail } = useGetBookDetailQuery(
+        { slug },
+        { skip: !slug }
+    );
+    const data = textbookData ?? initialData;
+    useEffect(() => {
+        setIsCrawler(getCookieValue(IS_BOT));
+    }, []);
+
+    return (
+        <div className="drawer drawer-end lg:drawer-open">
+            <TableOfContentMenu problem={data?.problem} />
+            <div className="pt-40 pb-24 space-y-4 md:pb-12 drawer-content md:max-w-screen-lg md:px-8 lg:px-12 lg:pt-20 lg:mx-auto">
+                <Breadcrumb
+                    nextItem={
+                        {
+                            name: getTextbookDetail?.book.title,
+                            url: `/perpustakaan/textbook/${slug}`,
+                            nextItem: {
+                                name: data?.problem.title
+                            }
+                        } as BreadcrumbItemProps
+                    }
+                />
+                <div className="flex items-start justify-between">
+                    <QuestionMetadata problem={data?.problem} />
+                    <PageNavigation
+                        next={data?.next_problem_id}
+                        prev={data?.prev_problem_id}
+                    />
+                </div>
+                <QuestionSection
+                    problem={data?.problem}
+                    isLoading={isFetching}
+                />
+                {is_subscribed || isCrawler ? (
+                    <>
+                        <ShortAnswerSection
+                            problem={data?.problem}
+                            isLoading={isFetching}
+                        />
+                        <LongAnswerSection
+                            problem={data?.problem}
+                            isLoading={isFetching}
+                        />
+                        <FeedbackCard
+                            review={data?.problem.review}
+                            isLoading={isFetching}
+                        />
+                    </>
+                ) : (
+                    <TextbookPaywall problem={data?.problem} />
+                )}
+            </div>
+        </div>
+    );
+};
+
+export default BankSoalContainer;

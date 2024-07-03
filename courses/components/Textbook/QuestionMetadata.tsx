@@ -13,12 +13,12 @@ export const QuestionMetadata = ({
         {
             id: 'chapter',
             icon: <BiBookBookmark className={iconClassname} />,
-            data: problem?.chapter
+            data: problem?.chapter || problem?.chapter_name
         },
         {
             id: 'section',
             icon: <FaRegListAlt className={iconClassname} />,
-            data: problem?.section
+            data: problem?.section || problem?.section_name
         },
         {
             id: 'page',

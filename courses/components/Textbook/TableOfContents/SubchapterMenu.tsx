@@ -25,7 +25,7 @@ const SubchapterMenu = ({
         slug: string;
         problemId?: string;
     };
-    const hasChildren = subchapter.sections.length !== 0;
+    const hasChildren = subchapter.sections.length !== 0 || !subchapter.slug;
 
     useLayoutEffect(() => {
         setTimeout(() => {
@@ -44,9 +44,14 @@ const SubchapterMenu = ({
 
     const href = (section: BookSubchapterSection): string => {
         const path = getBookBaseHref(category);
-        return category === 'Textbook'
-            ? `${path}/${slug}/${section.id}`
-            : `${path}/${slug}/${section.page_order}#${section.id}`;
+        switch (category) {
+            case 'Textbook':
+                return `${path}/${slug}/${section.id}`;
+            case 'Bank Soal':
+                return `${path}/${slug}/${section.slug}`;
+            default:
+                return `${path}/${slug}/${section.page_order}#${section.id}`;
+        }
     };
 
     const isOpen = subchapter.id == showSubchapter;
@@ -83,6 +88,11 @@ const SubchapterMenu = ({
                                 </Link>
                             </li>
                         ))}
+                        {subchapter.sections.length == 0 && (
+                            <li className="disabled">
+                                <span>Segera hadir!</span>
+                            </li>
+                        )}
                     </ul>
                 </div>
             </li>

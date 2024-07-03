@@ -171,9 +171,9 @@ const SubchapterButton = ({
 
     const href =
         subchapter.sections.length == 0
-            ? category?.toLowerCase() === 'textbook'
-                ? `${baseHref}/${subchapter.id}`
-                : `${baseHref}/${subchapter.page_order}#${subchapter.id}`
+            ? category?.toLowerCase() === 'catatan'
+                ? `${baseHref}/${subchapter.page_order}#${subchapter.id}`
+                : `${baseHref}/${subchapter.id}`
             : router.asPath;
 
     return (
