@@ -25,7 +25,9 @@ const SubchapterMenu = ({
         slug: string;
         problemId?: string;
     };
-    const hasChildren = subchapter.sections.length !== 0 || !subchapter.slug;
+    const hasChildren =
+        subchapter.sections.length !== 0 ||
+        (category == 'Bank Soal' && !subchapter.slug);
 
     useLayoutEffect(() => {
         setTimeout(() => {
