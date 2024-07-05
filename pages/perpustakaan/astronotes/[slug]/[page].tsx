@@ -38,7 +38,7 @@ const AstronotesPage = ({
                 isAccessibleForFree={page == 1 || book.is_free}
             />
             <LearnLayout
-                bookReader
+                noPadding
                 lightMode={theme === 'light'}
                 showSubscriptionReminder>
                 <Astronotes content={content} book={book} key={page} />
