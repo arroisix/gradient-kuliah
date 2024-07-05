@@ -46,13 +46,17 @@ export const EntrypointContent = ({
         latestProblem: string
     ): string => {
         const baseHref = `${getBookBaseHref(category)}/${slug}`;
-        const lowerCasedCategory = category.toLowerCase()
+        const lowerCasedCategory = category.toLowerCase();
 
         if (latestPage && lowerCasedCategory === 'catatan') {
             return `${baseHref}/${latestPage}`;
         }
 
-        if (latestProblem && (lowerCasedCategory === 'textbook' || lowerCasedCategory === 'bank soal')) {
+        if (
+            latestProblem &&
+            (lowerCasedCategory === 'textbook' ||
+                lowerCasedCategory === 'bank soal')
+        ) {
             return `${baseHref}/${latestProblem}`;
         }
 
