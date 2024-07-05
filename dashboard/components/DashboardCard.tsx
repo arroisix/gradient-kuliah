@@ -29,7 +29,7 @@ const DashboardCard = ({
                 if (item.type === 'Astronotes' && !!item.latest_page) {
                     return `${baseHref}/${item.latest_page}`;
                 }
-                
+
                 if (
                     (item.type === 'Bank Soal' || item.type === 'Textbook') &&
                     !!item.latest_problem
