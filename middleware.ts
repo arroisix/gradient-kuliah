@@ -8,13 +8,13 @@ const COOKIE = 'visitor_id';
 
 // List of bank soal books slug that exist at the time of Perpustakaan URL restructuring (updated: July 02, 2024)
 const BANK_SOAL_BOOKS_SLUG = [
-    'pembahasan-soal-kalkulus-1',
-    'pembahasan-soal-kimia-dasar-2',
+    'bank-soal-kalkulus1',
+    'bank-soal-kimdas2',
     'Simulasi-SNBT-2024',
-    'pembahasan-soal-fisika-dasar-1',
-    'pembahasan-soal-kimia-dasar-1',
-    'pembahasan-soal-kalkulus-2',
-    'pembahasan-soal-fisika-dasar-2'
+    'bank-soal-fisdas1',
+    'bank-soal-kimdas1',
+    'bank-soal-kalkulus2',
+    'bank-soal-fisdas2'
 ];
 
 const LIST_UPDATED_COURSE_SLUG: { [key: string]: string } = {
