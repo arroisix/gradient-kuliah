@@ -15,7 +15,7 @@ import { wrapper } from 'redux/store';
 const DUMMY_DATE = moment().startOf('year').format();
 interface TextbookSolutionProblemPageProps {
     slug: string;
-    problemId: string;
+    problemSlug: string;
     content: TextbookSolution;
     title: string;
     description: string;
@@ -23,7 +23,7 @@ interface TextbookSolutionProblemPageProps {
 
 const TextbookSolutionProblemPage = ({
     slug,
-    problemId,
+    problemSlug,
     content,
     title,
     description
@@ -40,7 +40,7 @@ const TextbookSolutionProblemPage = ({
                     }
                 ]}
                 datePublished={DUMMY_DATE}
-                url={`https://gradient.academy/perpustakaan/textbook/${slug}/${problemId}`}
+                url={`https://gradient.academy/perpustakaan/textbook/${slug}/${problemSlug}`}
                 images={[
                     'https://assets.gradient.academy/assets/gradient-G-icon.png'
                 ]}
@@ -66,9 +66,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
     (store) =>
         async ({ params }) => {
-            const { slug, problemId } = params as {
+            const { slug, problemSlug } = params as {
                 slug: string;
-                problemId: string;
+                problemSlug: string;
             };
             const dispatch = store.dispatch as ThunkDispatch<
                 RootState,
@@ -77,7 +77,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
             >;
 
             dispatch(getBookDetail.initiate({ slug }));
-            dispatch(getTextbookSolution.initiate({ slug, problemId }));
+            dispatch(getTextbookSolution.initiate({ slug, problemSlug }));
 
             const payload = await Promise.all(
                 dispatch(getRunningQueriesThunk())
@@ -105,9 +105,9 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                 revalidate: 300,
                 props: {
                     slug,
-                    problemId,
+                    problemSlug,
                     content: textbook,
-                    canonical: `https://gradient.academy/perpustakaan/textbook/${slug}/${problemId}`,
+                    canonical: `https://gradient.academy/perpustakaan/textbook/${slug}/${problemSlug}`,
                     // TODO(angga): replace SEO title and descriptions
                     title,
                     description,
@@ -116,7 +116,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                         // TODO(angga): replace SEO title and descriptions
                         title,
                         description,
-                        url: `https://gradient.academy/perpustakaan/textbook/${slug}/${problemId}`,
+                        url: `https://gradient.academy/perpustakaan/textbook/${slug}/${problemSlug}`,
                         images: [
                             {
                                 url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',

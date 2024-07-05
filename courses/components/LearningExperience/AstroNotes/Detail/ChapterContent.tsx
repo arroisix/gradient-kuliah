@@ -29,7 +29,7 @@ const ChapterContent = ({
     >([]);
     const [activeSubchapter, setActiveSubchapter] = useState(activeSubchapter_);
     const router = useRouter();
-    const { problemId } = router.query as { problemId?: string };
+    const { problemSlug } = router.query as { problemSlug?: string };
     const tracker = useTracker();
     const baseHref = `${getBookBaseHref(category ?? '')}/${slug}`;
 
@@ -105,7 +105,7 @@ const ChapterContent = ({
                                     }}
                                     className={cn(
                                         'w-full text-left p-3 rounded-md hover:bg-[#5F2BCE40]/25 font-sans hover:font-bold hover:text-white duration-100 transition-all ease-in-out',
-                                        problemId == subchapterSection.id &&
+                                        problemSlug == subchapterSection.id &&
                                             'font-bold',
                                         isDrawer
                                             ? 'text-sm'
@@ -145,9 +145,9 @@ const SubchapterButton = ({
 }: SubchapterButtonProps): JSX.Element => {
     const tracker = useTracker();
     const router = useRouter();
-    const { slug, problemId } = router.query as {
+    const { slug, problemSlug } = router.query as {
         slug: string;
-        problemId?: string;
+        problemSlug?: string;
     };
     const baseHref = `${getBookBaseHref(category)}/${slug}`;
 
@@ -184,7 +184,7 @@ const SubchapterButton = ({
             className={cn(
                 'w-full text-left p-3 rounded-md hover:bg-[#5F2BCE40]/[0.25] font-sans hover:font-bold hover:text-white duration-100 transition-all ease-in-out',
                 isDrawer ? 'text-sm' : 'text-sm md:text-base',
-                problemId == subchapter.id ||
+                problemSlug == subchapter.id ||
                     (activeSubchapter == subchapter.id && 'bg-[#333] font-bold')
             )}>
             {subchapter.title}

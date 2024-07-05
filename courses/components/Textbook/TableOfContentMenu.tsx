@@ -16,9 +16,8 @@ export const TableOfContentMenu = ({
 }: Partial<Pick<TextbookSolution, 'problem'>>): JSX.Element => {
     const tracker = useTracker();
     const { query } = useRouter();
-    const { slug, problemId, problemSlug } = query as {
+    const { slug, problemSlug } = query as {
         slug: string;
-        problemId: string;
         problemSlug: string;
     };
     const { isDesktopBreakpoints, isMobileBreakpoints } =
@@ -29,9 +28,8 @@ export const TableOfContentMenu = ({
     const book = data?.book;
 
     useEffect(() => {
-        if ((problemId || problemSlug) && isMobileBreakpoints)
-            setIsDrawerOpen(false);
-    }, [problemId, problemSlug, isMobileBreakpoints]);
+        if (problemSlug && isMobileBreakpoints) setIsDrawerOpen(false);
+    }, [problemSlug, isMobileBreakpoints]);
 
     const Loader = (): JSX.Element => (
         <div className="p-4 space-y-4">

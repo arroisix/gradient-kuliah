@@ -118,6 +118,7 @@ const Popular = ({
                                               subchapter_slug=""
                                               book_slug=""
                                               latest_page={0}
+                                              latest_problem=""
                                               eventName='User click Class Items on "Bacaan Terpopuler di Perpustakaan" Section'
                                               eventPayload={{ Title: title }}
                                           />
@@ -141,6 +142,7 @@ const Popular = ({
                                               subchapter_slug=""
                                               book_slug=""
                                               latest_page={0}
+                                              latest_problem=""
                                               eventName='User click Class Items on "Kelas Terpopuler" Section'
                                               eventPayload={{
                                                   Course: course_name

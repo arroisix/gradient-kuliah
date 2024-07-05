@@ -25,9 +25,9 @@ const ChapterMenu = ({
     setShowChapter
 }: ChapterMenuProps): JSX.Element => {
     const router = useRouter();
-    const { slug, problemId } = router.query as {
+    const { slug, problemSlug } = router.query as {
         slug: string;
-        problemId?: string;
+        problemSlug?: string;
     };
     const { data: subchapters, isLoading } =
         useGetPublicTableContentSubchaptersQuery(
@@ -52,7 +52,7 @@ const ChapterMenu = ({
             const activeChapterElement = document.getElementById(activeChapter);
             activeChapterElement?.scrollIntoView({ behavior: 'smooth' });
         }
-    }, [problemId, activeChapter]);
+    }, [problemSlug, activeChapter]);
 
     const isOpen = chapter.id == showChapter;
 

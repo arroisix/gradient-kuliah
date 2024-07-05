@@ -42,12 +42,15 @@ export const EntrypointContent = ({
     const getLink = (
         slug: string,
         category: string,
-        latestPage: string
+        latestPage: string,
+        latest_problem: string
     ): string => {
         const baseHref = `${getBookBaseHref(category)}/${slug}`;
 
         if (latestPage) {
-            return `${baseHref}/${latestPage}`;
+            return `${baseHref}/${
+                category === 'Catatan' ? latestPage : latest_problem
+            }`;
         }
         return baseHref;
     };
@@ -62,7 +65,8 @@ export const EntrypointContent = ({
                             href={getLink(
                                 book.slug,
                                 book.category_name ?? '',
-                                book.latest_page ?? ''
+                                book.latest_page ?? '',
+                                book.latest_problem ?? ''
                             )}
                             eventName="Click Book Item on Library Page"
                             eventPayload={{ 'Book Slug': book.slug }}

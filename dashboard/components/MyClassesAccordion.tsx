@@ -113,10 +113,14 @@ const ProgressItem = ({
     const getHref = (): string => {
         switch (progress.type) {
             case 'book':
-            case 'textbook':
                 return `${getBookBaseHref(
                     getBookDetail?.book.category ?? ''
                 )}/${book_slug}/${progress.latest_page}`;
+            case 'textbook':
+            case 'bank_soal':
+                return `${getBookBaseHref(
+                    getBookDetail?.book.category ?? ''
+                )}/${book_slug}/${progress.latest_problem}`;
             case 'video':
                 return `/kelas/${progress.course_slug}/${progress.subchapter_slug}`;
             default:

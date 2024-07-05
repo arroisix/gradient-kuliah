@@ -72,10 +72,10 @@ export const astronotesApi = baseApi.injectEndpoints({
         }),
         getTextbookSolution: builder.query<
             TextbookSolution,
-            { slug: string; problemId: string; specialToken?: string }
+            { slug: string; problemSlug: string; specialToken?: string }
         >({
-            query: ({ slug, problemId, specialToken }) => ({
-                url: `${BOOK_BASE_URL}${slug}/problems/${problemId}/`,
+            query: ({ slug, problemSlug, specialToken }) => ({
+                url: `${BOOK_BASE_URL}v2/${slug}/problems/${problemSlug}/`,
                 headers: {
                     'X-Special-Request': specialToken
                 }

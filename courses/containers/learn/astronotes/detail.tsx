@@ -42,11 +42,11 @@ const AstronotesDetail = ({
 
         switch (category) {
             case 'textbook':
-                if (!!astronotes?.first_problem_id)
-                    return `${baseHref}/${astronotes?.first_problem_id}`;
+                if (!!astronotes?.first_problem)
+                    return `${baseHref}/${astronotes?.first_problem}`;
                 else return `${baseHref}/?`;
             case 'bank soal':
-                return `${baseHref}/${astronotes?.first_problem_id}`;
+                return `${baseHref}/${astronotes?.first_problem}`;
             default:
                 `${baseHref}/1`;
         }
@@ -55,7 +55,7 @@ const AstronotesDetail = ({
     };
 
     const isButtonDisabled =
-        !astronotes?.first_problem_id && category == 'Bank Soal';
+        !astronotes?.first_problem && category == 'Bank Soal';
 
     return (
         <>

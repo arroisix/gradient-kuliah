@@ -69,7 +69,7 @@ export const BREADCRUMB: BreadcrumbProps = {
             url: '/perpustakaan/textbook'
         }
     },
-    '/perpustakaan/textbook/[slug]/[problemId]': {
+    '/perpustakaan/textbook/[slug]/[problemSlug]': {
         name: 'Perpustakaan',
         url: '/perpustakaan',
         nextItem: {
@@ -92,7 +92,7 @@ export const BREADCRUMB: BreadcrumbProps = {
             url: '/perpustakaan/bank-soal'
         }
     },
-    '/perpustakaan/bank-soal/[slug]/[page]': {
+    '/perpustakaan/bank-soal/[slug]/[problemSlug]': {
         name: 'Perpustakaan',
         url: '/perpustakaan',
         nextItem: {

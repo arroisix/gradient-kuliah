@@ -21,22 +21,23 @@ const SubchapterMenu = ({
     setShowSubchapter
 }: SubchapterMenuProps): JSX.Element => {
     const router = useRouter();
-    const { slug, problemId } = router.query as {
+    const { slug, problemSlug } = router.query as {
         slug: string;
-        problemId?: string;
+        problemSlug?: string;
     };
     const hasChildren =
         subchapter.sections.length !== 0 ||
-        (category == 'Bank Soal' && !subchapter.slug);
+        ((category === 'Bank Soal' || category === 'Textbook') &&
+            !subchapter.slug);
 
     useLayoutEffect(() => {
         setTimeout(() => {
-            if (document && subchapter.sections.length && problemId) {
-                const problem = document.getElementById(problemId);
+            if (document && subchapter.sections.length && problemSlug) {
+                const problem = document.getElementById(problemSlug);
                 problem?.scrollIntoView({ behavior: 'smooth' });
             }
         }, 200);
-    }, [problemId, subchapter]);
+    }, [problemSlug, subchapter]);
 
     const toggleAccordion = (): void => {
         setShowSubchapter?.(
@@ -48,7 +49,6 @@ const SubchapterMenu = ({
         const path = getBookBaseHref(category);
         switch (category) {
             case 'Textbook':
-                return `${path}/${slug}/${section.id}`;
             case 'Bank Soal':
                 return `${path}/${slug}/${section.slug}`;
             default:
@@ -79,11 +79,11 @@ const SubchapterMenu = ({
                     )}>
                     <ul className="*:!whitespace-normal">
                         {subchapter.sections.map((section) => (
-                            <li id={section.id} key={section.id}>
+                            <li id={section.slug} key={section.slug}>
                                 <Link
                                     href={href(section)}
                                     className={cn(
-                                        section.id == problemId &&
+                                        section.slug == problemSlug &&
                                             'font-semibold text-white'
                                     )}>
                                     {section.title}
@@ -105,7 +105,7 @@ const SubchapterMenu = ({
             <Link
                 href={href(subchapter)}
                 className={cn(
-                    subchapter.id == problemId && 'font-semibold text-white'
+                    subchapter.slug == problemSlug && 'font-semibold text-white'
                 )}>
                 {subchapter.title}
             </Link>

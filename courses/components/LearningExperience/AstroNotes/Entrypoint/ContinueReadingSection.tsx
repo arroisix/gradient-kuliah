@@ -45,7 +45,11 @@ const ContinueReadingSection = (): JSX.Element => {
                                 imageClassname="min-w-20 min-h-24"
                                 href={`${getBookBaseHref(book.category_name)}/${
                                     book.slug
-                                }/${book.latest_page}`}
+                                }/${
+                                    book.category === 'Catatan'
+                                        ? book.latest_page
+                                        : book.latest_problem
+                                }`}
                                 key={book.id}
                                 {...book}
                             />

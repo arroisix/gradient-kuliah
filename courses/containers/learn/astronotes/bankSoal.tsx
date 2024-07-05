@@ -52,7 +52,7 @@ const BankSoalContainer = ({
                     nextItem={
                         {
                             name: getTextbookDetail?.book.title,
-                            url: `/perpustakaan/textbook/${slug}`,
+                            url: `/perpustakaan/bank-soal/${slug}`,
                             nextItem: {
                                 name: data?.problem.title
                             }
@@ -62,8 +62,8 @@ const BankSoalContainer = ({
                 <div className="flex items-start justify-between">
                     <QuestionMetadata problem={data?.problem} />
                     <PageNavigation
-                        next={data?.next_problem_id}
-                        prev={data?.prev_problem_id}
+                        next={data?.next_problem_slug}
+                        prev={data?.prev_problem_slug}
                     />
                 </div>
                 <QuestionSection
