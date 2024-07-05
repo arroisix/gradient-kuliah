@@ -43,7 +43,7 @@ const BankSoalPage = ({
                 ]}
                 isAccessibleForFree={false}
             />
-            <LearnLayout bookReader>
+            <LearnLayout noPadding>
                 <BankSoalContainer data={content as unknown as BankSoal} />
             </LearnLayout>
         </>
