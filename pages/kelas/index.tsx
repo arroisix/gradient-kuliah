@@ -6,7 +6,7 @@ import { GetStaticProps } from 'next';
 const ListClass = (): JSX.Element => {
     return (
         <GridProvider>
-            <LearnLayout showSidebar fullHeightSidebar>
+            <LearnLayout showSidebar fullHeightSidebar noPadding>
                 <ClassContainer />
             </LearnLayout>
         </GridProvider>
