@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import TiptapViewer from './TiptapViewer';
 import { cn } from 'commons/utils';
 import { useTracker } from 'tracker/tracker';
@@ -10,10 +10,15 @@ export const LongAnswerSection = ({
 }: Partial<Pick<TextbookSolution, 'problem'>> & {
     isLoading: boolean;
 }): JSX.Element => {
+    const [isOpen, setIsOpen] = useState(false);
     const tracker = useTracker();
     const { query } = useRouter();
     const { slug } = query as { slug: string };
-    if (!problem?.question.multiple_steps_solution) return <></>;
+    if (!problem?.question.solution) return <></>;
+
+    useEffect(() => {
+        if (isOpen) setIsOpen(false);
+    }, [problem]);
 
     return (
         <label
@@ -24,7 +29,9 @@ export const LongAnswerSection = ({
             <input
                 type="checkbox"
                 disabled={isLoading}
+                checked={isOpen}
                 onChange={(e) => {
+                    setIsOpen(e.target.checked);
                     if (e.target.checked)
                         tracker?.genericTrack(
                             'User Click Solution of Question',

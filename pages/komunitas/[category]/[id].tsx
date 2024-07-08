@@ -8,19 +8,89 @@ import config from 'redux/api/config';
 import { wrapper } from 'redux/store';
 import { ThunkDispatch } from 'redux-thunk';
 import { getRunningQueriesThunk } from 'redux/api/baseApi';
-import { getPublicCommunityPostDetail } from 'komunitas/redux/api/komunitasApi';
+import {
+    getPublicCommunityPostDetail,
+    getCommunityPostCommentDetail
+} from 'komunitas/redux/api/komunitasApi';
+import { QAPageJsonLd } from 'next-seo';
+import moment from 'moment';
+import { useRouter } from 'next/router';
 
 type DetailKomunitasProps = {
-    data: CommunityPostDetailResponse;
+    postData: CommunityPostDetailResponse;
+    commentData: CommunityPostCommentDetailResponse & {
+        count_items: number;
+        next_page?: number;
+        previous_page?: number;
+    };
 };
 
-const DetailKomunitas = ({ data }: DetailKomunitasProps): JSX.Element => {
+const DetailKomunitas = ({
+    postData,
+    commentData
+}: DetailKomunitasProps): JSX.Element => {
+    const { asPath } = useRouter();
+    const dummyComment = {
+        id: '',
+        content: '',
+        comment_counts: 0,
+        created_at: new Date(),
+        student: {
+            id: '',
+            photo_url: '',
+            username: '',
+            is_expert: false
+        }
+    } as CommunityPostCommentDetail;
+    const firstComment =
+        commentData?.comments.length > 0
+            ? commentData?.comments[0]
+            : dummyComment;
+
     return (
-        <KomunitasProvider initialDetailData={data}>
-            <LearnLayout showSidebar fullHeightSidebar>
-                <DetailSection initialDetailData={data} />
-            </LearnLayout>
-        </KomunitasProvider>
+        <>
+            <KomunitasProvider initialDetailData={postData}>
+                <LearnLayout showSidebar fullHeightSidebar>
+                    <DetailSection initialDetailData={postData} />
+                </LearnLayout>
+            </KomunitasProvider>
+
+            <QAPageJsonLd
+                mainEntity={{
+                    name: postData?.content,
+                    text: postData?.content,
+                    answerCount: postData?.comment_counts,
+                    upvoteCount: postData?.viewer_counts,
+                    dateCreated: moment(new Date(postData?.created_at)).format(
+                        'YYYY-MM-DD'
+                    ),
+                    url: `https://gradient.academy${asPath}`,
+                    author: {
+                        '@type': 'Person',
+                        name: postData?.student.username
+                    },
+                    acceptedAnswer: {
+                        name: firstComment.content,
+                        text: firstComment.content,
+                        dateCreated: moment(
+                            new Date(firstComment.created_at)
+                        ).format('YYYY-MM-DD'),
+                        url: `https://gradient.academy${asPath}${
+                            firstComment.id !== '' ? `#${firstComment.id}` : ''
+                        }`,
+                        author: {
+                            '@type': 'Person',
+                            name: firstComment.student.username
+                        }
+                    },
+                    hasPart: {
+                        '@type': 'WebPageElement',
+                        cssSelector: `#${firstComment.id}`,
+                        isAccessibleForFree: false
+                    }
+                }}
+            />
+        </>
     );
 };
 
@@ -46,32 +116,56 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                 getPublicCommunityPostDetail.initiate({ slug: id })
             );
 
-            const payload = await Promise.all(
+            const postPayload = await Promise.all(
                 (store.dispatch as ThunkDispatch<RootState, never, never>)(
                     getRunningQueriesThunk()
                 )
             );
 
-            if (payload[0].error) {
+            if (postPayload[0].error) {
                 return {
                     notFound: true
                 };
             }
 
-            const data = payload[0].data as CommunityPostDetailResponse;
+            const postData = postPayload[0].data as CommunityPostDetailResponse;
+
+            (store.dispatch as ThunkDispatch<RootState, never, never>)(
+                getCommunityPostCommentDetail.initiate({ post_id: postData.id })
+            );
+
+            const commentPayload = await Promise.all(
+                (store.dispatch as ThunkDispatch<RootState, never, never>)(
+                    getRunningQueriesThunk()
+                )
+            );
+
+            if (commentPayload[0].error) {
+                return {
+                    notFound: true
+                };
+            }
+
+            const commentData = commentPayload[0]
+                .data as CommunityPostCommentDetailResponse & {
+                count_items: number;
+                next_page?: number;
+                previous_page?: number;
+            };
 
             const META_TITLE =
-                data.content.length > 60
-                    ? `${data.content.substring(0, 60)} ...`
-                    : data.content;
+                postData.content.length > 60
+                    ? `${postData.content.substring(0, 60)} ...`
+                    : postData.content;
             const META_DESCRIPTION =
-                data.content.length > 155
-                    ? `${data.content.substring(0, 155)} ...`
-                    : data.content;
+                postData.content.length > 155
+                    ? `${postData.content.substring(0, 155)} ...`
+                    : postData.content;
 
             return {
                 props: {
-                    data,
+                    postData,
+                    commentData,
                     canonical: `https://gradient.academy/komunitas/${category}/${id}`,
                     title: META_TITLE,
                     description: META_DESCRIPTION,

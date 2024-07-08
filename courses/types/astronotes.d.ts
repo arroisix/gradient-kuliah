@@ -24,9 +24,11 @@ type BookSubchapterSection = {
     title: string;
     order: number;
     page_order: number;
+    slug?: string;
 };
 
 type BookSubchapter = {
+    slug?: string;
     sections: BookSubchapterSection[];
 } & BookChapter;
 
@@ -157,36 +159,41 @@ interface GetBookDetailResponse {
 
 interface TextbookSolution {
     problem: TextbookProblem;
-    next_problem_id: string;
-    prev_problem_id: string;
+    next_problem_id: string | null;
+    prev_problem_id: string | null;
 }
+
+type BankSoal = TextbookSolution;
 
 interface TextbookProblem {
     id: string;
     title: string;
     chapter_id: string;
     chapter: string;
+    chapter_name: string;
     section_id?: string;
     section?: string;
-    page_number: number;
+    section_name?: string;
+    page_number: number | null;
     is_published: boolean;
+    is_free: boolean;
     review: {
         rating: number;
         comment: string;
     } | null;
     question: {
         type: 'multiple_choice' | 'open_ended';
-        badge: 'verified' | 'generated';
-        answers: [
-            {
-                id: string;
-                answer: string;
-                is_answer: boolean;
-                is_case_sensitive: boolean;
-            }
-        ];
-        solution: string;
+        badge: 'verified' | 'generated' | null;
+        question: string | { [key: string]: any };
+        answers: {
+            id: string;
+            answer: string | { [key: string]: any };
+            is_answer: boolean;
+            is_case_sensitive: boolean;
+        }[];
+        solution: string | { [key: string]: any };
         multiple_steps_solution: boolean;
+        supporting_text?: string | { [key: string]: any };
     };
 }
 

@@ -11,9 +11,10 @@ const TextbookPage = (): JSX.Element => {
 };
 
 export const getStaticProps: GetStaticProps = () => {
-    const META_TITLE = 'Kumpulan Buku Materi Kuliah | Gradient';
+    const META_TITLE =
+        'Kumpulan Kunci Jawaban Buku Perkuliahan + Pembahasannya | Gradient';
     const META_DESCRIPTION =
-        'Tingkatkan hasil belajar dari rangkuman & catatan berkualitas yang dirancang khusus agar lebih praktis serta mempercepat waktu Kamu dalam proses belajar.';
+        'Dapatkan kunci jawaban beserta pembahasan solusi yang telah diverifikasi dosen ternama untuk semua buku perkuliahan. Solusi terbaik untuk setiap materi perkuliahan.';
 
     return {
         props: {

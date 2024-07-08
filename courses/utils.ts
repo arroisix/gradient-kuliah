@@ -12,7 +12,8 @@ export const flattenSubchapter = (subchapter: SubChapter): SubChapter[] => {
         videoSubchapter = [
             {
                 ...baseSubchapter,
-                video: subchapter.video
+                video: subchapter.video,
+                created_at: subchapter.created_at
             }
         ];
     }
@@ -196,6 +197,7 @@ export const getBookBaseHref = (book_category: string): string => {
             return '/perpustakaan/textbook';
         case 'astronotes':
         case 'catatan':
+        case 'book':
             return '/perpustakaan/astronotes';
         default:
             return '/perpustakaan/bank-soal';

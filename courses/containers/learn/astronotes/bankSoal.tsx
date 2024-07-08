@@ -1,38 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import { TableOfContentMenu } from 'courses/components/Textbook/TableOfContentMenu';
-import { QuestionMetadata } from 'courses/components/Textbook/QuestionMetadata';
-import { ShortAnswerSection } from 'courses/components/Textbook/ShortAnswerSection';
-import { LongAnswerSection } from 'courses/components/Textbook/LongAnswerSection';
 import { FeedbackCard } from 'courses/components/Textbook/FeedbackCard';
+import { LongAnswerSection } from 'courses/components/Textbook/LongAnswerSection';
 import { PageNavigation } from 'courses/components/Textbook/PageNavigation';
-import {
-    useGetBookDetailQuery,
-    useGetTextbookSolutionQuery
-} from 'courses/redux/api/astronotesApi';
-import { useRouter } from 'next/router';
-import useCourseSubscription from 'courses/hooks/useCourseSubscription';
-import TextbookPaywall from './../../../components/Textbook/TextbookPaywall';
-import { IS_BOT } from 'commons/constants';
-import { getCookieValue } from 'commons/utils';
+import { QuestionMetadata } from 'courses/components/Textbook/QuestionMetadata';
+import { ShortAnswerSection } from 'courses/components/BankSoal/ShortAnswerSection';
+import { TableOfContentMenu } from 'courses/components/Textbook/TableOfContentMenu';
+import TextbookPaywall from 'courses/components/Textbook/TextbookPaywall';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { QuestionSection } from 'courses/components/BankSoal/QuestionSection';
+import {
+    useGetBankSoalQuery,
+    useGetBookDetailQuery
+} from 'courses/redux/api/astronotesApi';
+import { getCookieValue } from 'commons/utils';
+import { IS_BOT } from 'commons/constants';
 
-type TextbookSolutionProps = {
-    data?: TextbookSolution;
+type BankSoalProps = {
+    data?: BankSoal;
 };
 
-const TextbookSolution = ({
+const BankSoalContainer = ({
     data: initialData
-}: TextbookSolutionProps): JSX.Element => {
+}: BankSoalProps): JSX.Element => {
     const router = useRouter();
     const [isCrawler, setIsCrawler] = useState<string>();
     const { is_subscribed } = useCourseSubscription();
-    const { slug, problemId } = router.query as {
+    const { slug, problemSlug } = router.query as {
         slug: string;
-        problemId: string;
+        problemSlug: string;
     };
-    const { data: textbookData, isFetching } = useGetTextbookSolutionQuery(
-        { slug, problemId, specialToken: isCrawler },
-        { skip: !slug || !problemId }
+    const { data: textbookData, isFetching } = useGetBankSoalQuery(
+        { slug, problemSlug, specialToken: isCrawler },
+        { skip: !slug || !problemSlug }
     );
     const { data: getTextbookDetail } = useGetBookDetailQuery(
         { slug },
@@ -43,21 +44,19 @@ const TextbookSolution = ({
         setIsCrawler(getCookieValue(IS_BOT));
     }, []);
 
+    const crumbs: BreadcrumbItemProps = {
+        name: getTextbookDetail?.book.title ?? '',
+        url: `/perpustakaan/bank-soal/${slug}`,
+        nextItem: {
+            name: data?.problem.title ?? ''
+        }
+    };
+
     return (
         <div className="drawer drawer-end lg:drawer-open">
             <TableOfContentMenu problem={data?.problem} />
-            <div className="pt-40 pb-24 space-y-4 md:pb-12 drawer-content md:px-8 lg:px-12 lg:pt-20">
-                <Breadcrumb
-                    nextItem={
-                        {
-                            name: getTextbookDetail?.book.title,
-                            url: `/perpustakaan/textbook/${slug}`,
-                            nextItem: {
-                                name: data?.problem.title
-                            }
-                        } as BreadcrumbItemProps
-                    }
-                />
+            <div className="pt-40 pb-24 space-y-4 md:pb-12 drawer-content md:max-w-screen-lg md:px-8 lg:px-12 lg:pt-20">
+                <Breadcrumb nextItem={crumbs} />
                 <div className="flex items-start justify-between">
                     <QuestionMetadata problem={data?.problem} />
                     <PageNavigation
@@ -65,6 +64,10 @@ const TextbookSolution = ({
                         prev={data?.prev_problem_id}
                     />
                 </div>
+                <QuestionSection
+                    problem={data?.problem}
+                    isLoading={isFetching}
+                />
                 {data?.problem.is_free || is_subscribed || isCrawler ? (
                     <>
                         <ShortAnswerSection
@@ -88,4 +91,4 @@ const TextbookSolution = ({
     );
 };
 
-export default TextbookSolution;
+export default BankSoalContainer;

@@ -1,33 +1,30 @@
 import LearnLayout from 'commons/learnLayout';
-import moment from 'moment';
-import { GetStaticPaths, GetStaticProps } from 'next';
+import type { GetStaticPaths, GetStaticProps } from 'next/types';
 import { ArticleJsonLd } from 'next-seo';
-import React from 'react';
-import TextbookSolution from 'courses/containers/learn/astronotes/textbook';
-import {
-    getBookDetail,
-    getTextbookSolution
-} from 'courses/redux/api/astronotesApi';
+import moment from 'moment';
+import BankSoalContainer from 'courses/containers/learn/astronotes/bankSoal';
+import { getBankSoal, getBookDetail } from 'courses/redux/api/astronotesApi';
+import { wrapper } from 'redux/store';
 import { ThunkDispatch } from 'redux-thunk';
 import { getRunningQueriesThunk } from 'redux/api/baseApi';
-import { wrapper } from 'redux/store';
 
 const DUMMY_DATE = moment().startOf('year').format();
-interface TextbookSolutionProblemPageProps {
+
+interface BankSoalProblemPageProps {
     slug: string;
-    problemId: string;
-    content: TextbookSolution;
+    problemSlug: string;
+    content: BankSoal;
     title: string;
     description: string;
 }
 
-const TextbookSolutionProblemPage = ({
+const BankSoalPage = ({
     slug,
-    problemId,
+    problemSlug,
     content,
     title,
     description
-}: TextbookSolutionProblemPageProps): JSX.Element => {
+}: BankSoalProblemPageProps): JSX.Element => {
     return (
         <>
             <ArticleJsonLd
@@ -40,35 +37,35 @@ const TextbookSolutionProblemPage = ({
                     }
                 ]}
                 datePublished={DUMMY_DATE}
-                url={`https://gradient.academy/perpustakaan/textbook/${slug}/${problemId}`}
+                url={`https://gradient.academy/perpustakaan/textbook/${slug}/${problemSlug}`}
                 images={[
                     'https://assets.gradient.academy/assets/gradient-G-icon.png'
                 ]}
                 isAccessibleForFree={false}
             />
             <LearnLayout noPadding>
-                <TextbookSolution data={content} />
+                <BankSoalContainer data={content as unknown as BankSoal} />
             </LearnLayout>
         </>
     );
 };
 
-TextbookSolutionProblemPage.displayName = 'Textbook Reader';
-export default TextbookSolutionProblemPage;
+BankSoalPage.displayName = 'Question Bank Reader';
+export default BankSoalPage;
 
 export const getStaticPaths: GetStaticPaths = async () => {
     return {
         paths: [],
-        fallback: true
+        fallback: 'blocking'
     };
 };
 
 export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
     (store) =>
         async ({ params }) => {
-            const { slug, problemId } = params as {
+            const { slug, problemSlug } = params as {
                 slug: string;
-                problemId: string;
+                problemSlug: string;
             };
             const dispatch = store.dispatch as ThunkDispatch<
                 RootState,
@@ -77,7 +74,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
             >;
 
             dispatch(getBookDetail.initiate({ slug }));
-            dispatch(getTextbookSolution.initiate({ slug, problemId }));
+            dispatch(getBankSoal.initiate({ slug, problemSlug }));
 
             const payload = await Promise.all(
                 dispatch(getRunningQueriesThunk())
@@ -90,24 +87,25 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
             }
 
             const { book } = payload[0].data as GetBookDetailResponse;
-            if (book.category.toLowerCase() !== 'textbook') {
+            if (book.category.toLowerCase() !== 'bank soal') {
                 return {
                     notFound: true
                 };
             }
 
-            const textbook = payload[1].data as TextbookSolution;
+            const bankSoal = payload[1].data as BankSoal;
 
-            const title = `Pembahasan Soal ${textbook.problem.title} | ${book.title}`;
+            const title = `Pembahasan Soal ${bankSoal.problem.chapter_name} ${bankSoal.problem.title} | ${book.title}`;
             const description = title;
 
             return {
                 revalidate: 300,
                 props: {
                     slug,
-                    problemId,
-                    content: textbook,
-                    canonical: `https://gradient.academy/perpustakaan/textbook/${slug}/${problemId}`,
+                    problemSlug,
+                    book,
+                    content: bankSoal,
+                    canonical: `https://gradient.academy/perpustakaan/bank-soal/${slug}/${problemSlug}`,
                     // TODO(angga): replace SEO title and descriptions
                     title,
                     description,
@@ -116,7 +114,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                         // TODO(angga): replace SEO title and descriptions
                         title,
                         description,
-                        url: `https://gradient.academy/perpustakaan/textbook/${slug}/${problemId}`,
+                        url: `https://gradient.academy/perpustakaan/bank-soal/${slug}/${problemSlug}`,
                         images: [
                             {
                                 url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',

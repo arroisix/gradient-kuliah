@@ -88,7 +88,7 @@ export const AstronoteBookCard = ({
     ...book
 }: Astronote &
     PropsWithClassName & {
-        type?: 'video' | 'book' | 'textbook';
+        type?: ClassProgress['type'];
         orientation?: 'horizontal' | 'vertical';
         href: string;
         imageClassname?: string;

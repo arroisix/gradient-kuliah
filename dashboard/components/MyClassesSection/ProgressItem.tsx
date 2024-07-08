@@ -1,5 +1,4 @@
 import { AstronoteBookCard } from 'courses/components/LearningExperience/AstroNotes/AstronoteBook';
-import { useGetBookDetailQuery } from 'courses/redux/api/astronotesApi';
 import { getBookBaseHref } from 'courses/utils';
 import React from 'react';
 
@@ -13,18 +12,15 @@ const ProgressItem = ({
     courseName
 }: ProgressItemProps): JSX.Element => {
     const { book_slug } = progress;
-    const { data: getBookDetail } = useGetBookDetailQuery(
-        { slug: book_slug },
-        { skip: !book_slug }
-    );
 
     const getHref = (): string => {
         switch (progress.type) {
             case 'book':
             case 'textbook':
-                return `${getBookBaseHref(
-                    getBookDetail?.book.category ?? ''
-                )}/${book_slug}/${progress.latest_page}`;
+            case 'bank_soal':
+                return `${getBookBaseHref(progress.type)}/${book_slug}/${
+                    progress.latest_page
+                }`;
             case 'video':
                 return `/kelas/${progress.course_slug}/${progress.subchapter_slug}`;
             default:

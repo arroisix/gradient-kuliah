@@ -13,13 +13,9 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import VideoPlayerContainer from 'courses/components/VideoPlayerContainer';
-import { VideoJsonLd } from 'next-seo';
-import moment from 'moment';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import { useGetSubchapterDetailV2Query } from 'courses/redux/api/privateCourseV2Api';
 import { useGetPublicSubchapterDetailV2Query } from 'courses/redux/api/publicCourseV2Api';
-
-const DUMMY_DATE = moment().startOf('year').format();
 
 const VideoLearnContainer = ({
     subchapter: ssrSubchapterData,
@@ -77,16 +73,6 @@ const VideoLearnContainer = ({
                 <div
                     className="w-full lg:col-span-2 h-max lg:pl-8"
                     ref={videoRef}>
-                    <VideoJsonLd
-                        name={`${course?.course_name}: ${subchapter?.subchapter_name}`}
-                        description={`Nonton Video ${subchapter?.subchapter_name} kelas ${course?.course_name} hanya di Gradient`}
-                        thumbnailUrls={[
-                            subchapter?.thumbnail ??
-                                'https://assets.gradient.academy/assets/gradient-G-icon.png'
-                        ]}
-                        uploadDate={DUMMY_DATE}
-                        contentUrl={`https://gradient.academy/kelas/${id}/${slug}`}
-                    />
                     <VideoPlayerContainer
                         isLoadingData={isLoading}
                         subchapter_name={subchapter?.subchapter_name}

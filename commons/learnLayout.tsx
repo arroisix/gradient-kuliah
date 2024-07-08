@@ -16,7 +16,7 @@ import Breadcrumb from './components/modules/Breadcrumb';
 interface LayoutProps {
     children: JSX.Element;
     paymentPage?: boolean;
-    bookReader?: boolean;
+    noPadding?: boolean;
     shouldTransparent?: boolean;
     courses?: Course[];
     hideNavbar?: boolean;
@@ -29,7 +29,7 @@ interface LayoutProps {
 const LearnLayout = ({
     children,
     paymentPage,
-    bookReader,
+    noPadding,
     shouldTransparent,
     courses,
     hideNavbar,
@@ -62,7 +62,7 @@ const LearnLayout = ({
                     <Navbar
                         lightMode={lightMode}
                         paymentPage={paymentPage ?? false}
-                        bookReader={bookReader}
+                        noPadding={noPadding}
                         shouldTransparent={shouldTransparent ?? false}
                         courses={courses}
                         showSidebar={showSidebar}
@@ -76,18 +76,23 @@ const LearnLayout = ({
                         showSidebar &&
                             'pt-16 flex gap-[2rem] lg:gap-[6rem] w-full',
                         !closeReminder && showSubscriptionReminder && 'pt-11',
-                        is_subscribed ? 'pb-16' : 'pb-8'
+                        {
+                            'pb-16': is_subscribed && !noPadding,
+                            'pb-8': !is_subscribed && !noPadding,
+                            'pb-0': noPadding
+                        }
                     )}>
                     {showSidebar && is_subscribed && (
                         <Sidebar fullHeight={fullHeightSidebar} />
                     )}
                     <div
-                        className={cn(
-                            'w-full',
-                            showSidebar && fullHeightSidebar && is_subscribed
-                                ? 'md:ml-[250px]'
-                                : 'lg:px-16 xl:px-12'
-                        )}>
+                        className={cn('w-full', {
+                            'md:ml-[250px]':
+                                showSidebar &&
+                                fullHeightSidebar &&
+                                is_subscribed,
+                            'lg:px-16 xl:px-12': !noPadding
+                        })}>
                         {router.pathname === '/kelas' && (
                             <Breadcrumb
                                 className={cn(
@@ -104,7 +109,7 @@ const LearnLayout = ({
                             activePacket.subscription_id &&
                             courseProgresses &&
                             courseProgresses.length > 0 && (
-                                <div className="course-progress px-0 bg-[#1D1D1D] text-white py-8 overflow-x-hidden">
+                                <div className="course-progress px-0 bg-[#1D1D1D] text-white py-8 overflow-x-hidden mb-8">
                                     <CourseProgress
                                         courseProgresses={courseProgresses}
                                         isLoading={isLoading}

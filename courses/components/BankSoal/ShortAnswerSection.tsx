@@ -1,26 +1,26 @@
 import { cn } from 'commons/utils';
-import React from 'react';
-import { CorrectAnswerBadge } from './CorrectAnswerBadge';
-import TiptapViewer from './TiptapViewer';
-import Skeleton from 'commons/components/elements/Skeleton';
+import React, { useEffect, useState } from 'react';
+import { CorrectAnswerBadge } from '../Textbook/CorrectAnswerBadge';
+import TiptapViewer from '../Textbook/TiptapViewer';
 
 export const ShortAnswerSection = ({
     problem,
-    isEmpty,
     isLoading
-}: Partial<Pick<TextbookSolution, 'problem'>> & {
-    isEmpty?: boolean;
+}: Partial<Pick<BankSoal, 'problem'>> & {
     isLoading?: boolean;
 }): JSX.Element => {
+    const [isOpen, setIsOpen] = useState(false);
     const isMultiselect =
         problem?.question.answers.reduce(
             (trueCount, choice) => trueCount + (choice.is_answer ? 1 : 0),
             0
         ) !== 1;
 
-    const renderAnswer = (): JSX.Element => {
-        if (isEmpty) return <div className="h-8"></div>;
+    useEffect(() => {
+        if (isOpen) setIsOpen(false);
+    }, [problem]);
 
+    const renderAnswer = (): JSX.Element => {
         if (problem?.question.type == 'open_ended')
             return (
                 <>
@@ -58,7 +58,6 @@ export const ShortAnswerSection = ({
     };
 
     if (
-        !isEmpty &&
         problem?.question.answers.every(
             (answer) => JSON.stringify(answer.answer) == '{}'
         )
@@ -66,13 +65,23 @@ export const ShortAnswerSection = ({
         return <></>;
 
     return (
-        <div className="p-4 mt-2 space-y-4 border rounded-lg border-state-success/50 bg-state-success/25">
-            <p className="text-sm font-bold">Jawaban</p>
-            {isLoading ? (
-                <Skeleton isCustomSize repeat={3} className="w-full h-4 mb-3" />
-            ) : (
-                renderAnswer()
-            )}
-        </div>
+        <label
+            className={cn(
+                'mb-6 rounded-lg collapse collapse-arrow border border-state-success/50 bg-state-success/25 transition',
+                isLoading && '*:opacity-0 animate-pulse'
+            )}>
+            <input
+                type="checkbox"
+                disabled={isLoading}
+                checked={isOpen}
+                onChange={(e) => setIsOpen(e.target.checked)}
+                name="answer"
+                className="!min-h-0"
+            />
+            <div className="font-bold collapse-title collapse-arrow">
+                Jawaban
+            </div>
+            <div className="collapse-content">{renderAnswer()}</div>
+        </label>
     );
 };

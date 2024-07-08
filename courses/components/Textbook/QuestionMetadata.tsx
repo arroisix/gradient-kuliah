@@ -1,8 +1,9 @@
 import Skeleton from 'commons/components/elements/Skeleton';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { BiBookBookmark } from 'react-icons/bi';
 import { FaRegListAlt } from 'react-icons/fa';
 import { GrDocument } from 'react-icons/gr';
+import { VerificationBadge } from './VerificationBadge';
 
 export const QuestionMetadata = ({
     problem
@@ -12,12 +13,12 @@ export const QuestionMetadata = ({
         {
             id: 'chapter',
             icon: <BiBookBookmark className={iconClassname} />,
-            data: problem?.chapter
+            data: problem?.chapter || problem?.chapter_name
         },
         {
             id: 'section',
             icon: <FaRegListAlt className={iconClassname} />,
-            data: problem?.section
+            data: problem?.section || problem?.section_name
         },
         {
             id: 'page',
@@ -27,12 +28,14 @@ export const QuestionMetadata = ({
     ];
     return (
         <div className="space-y-3 font-body">
+            <VerificationBadge badge={problem?.question.badge} />
+
             {problem ? (
                 <h1 className="text-xl font-bold">{problem?.title}</h1>
             ) : (
                 <Skeleton isCustomSize className="w-32 h-5" />
             )}
-            <div className="flex flex-col gap-3 md:flex-row md:gap-4">
+            <div className="flex flex-col gap-3 xl:flex-row md:gap-4">
                 {problem
                     ? metadata.map((item) =>
                           item.data ? (
@@ -42,7 +45,7 @@ export const QuestionMetadata = ({
                                   {item.icon} {item.data}
                               </p>
                           ) : (
-                              <></>
+                              <Fragment key={item.id}></Fragment>
                           )
                       )
                     : metadata.map((item) => (
