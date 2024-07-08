@@ -176,6 +176,7 @@ interface TextbookProblem {
     section_name?: string;
     page_number: number | null;
     is_published: boolean;
+    is_free: boolean;
     review: {
         rating: number;
         comment: string;

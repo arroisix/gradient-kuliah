@@ -46,7 +46,7 @@ const TextbookSolution = ({
     return (
         <div className="drawer drawer-end lg:drawer-open">
             <TableOfContentMenu problem={data?.problem} />
-            <div className="pt-40 pb-24 space-y-4 md:pb-12 drawer-content md:px-8 lg:px-12 lg:pt-20 lg:mx-auto">
+            <div className="pt-40 pb-24 space-y-4 md:pb-12 drawer-content md:px-8 lg:px-12 lg:pt-20">
                 <Breadcrumb
                     nextItem={
                         {
@@ -65,7 +65,7 @@ const TextbookSolution = ({
                         prev={data?.prev_problem_id}
                     />
                 </div>
-                {is_subscribed || isCrawler ? (
+                {data?.problem.is_free || is_subscribed || isCrawler ? (
                     <>
                         <ShortAnswerSection
                             problem={data?.problem}

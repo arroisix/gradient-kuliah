@@ -1,5 +1,5 @@
 import Skeleton from 'commons/components/elements/Skeleton';
-import { cn } from 'commons/utils';
+import { checkVisible, cn } from 'commons/utils';
 import { useGetPublicTableContentSubchaptersQuery } from 'courses/redux/api/astronotesApi';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -50,7 +50,8 @@ const ChapterMenu = ({
     useEffect(() => {
         if (document && activeChapter) {
             const activeChapterElement = document.getElementById(activeChapter);
-            activeChapterElement?.scrollIntoView({ behavior: 'smooth' });
+            if (!checkVisible(activeChapterElement as Element))
+                activeChapterElement?.scrollIntoView({ behavior: 'smooth' });
         }
     }, [problemId, activeChapter]);
 
@@ -85,6 +86,7 @@ const ChapterMenu = ({
                         <SubchapterMenu
                             key={subchapter.id}
                             category={category}
+                            chapter={chapter}
                             subchapter={subchapter}
                             activeSubchapter={activeSubchapter}
                             showSubchapter={showSubchapter}

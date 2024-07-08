@@ -1,12 +1,14 @@
-import { cn } from 'commons/utils';
+import { checkVisible, cn } from 'commons/utils';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useLayoutEffect } from 'react';
 import { activeClassName } from './constant';
 import { getBookBaseHref } from 'courses/utils';
+import { useTracker } from 'tracker/tracker';
 
 type SubchapterMenuProps = {
     subchapter: BookSubchapter;
+    chapter: Pick<BookChapter, 'title'>;
     category: BookDetailInterface['category'];
     activeSubchapter?: string;
     showSubchapter?: string;
@@ -15,14 +17,17 @@ type SubchapterMenuProps = {
 
 const SubchapterMenu = ({
     subchapter,
+    chapter,
     category,
     activeSubchapter,
     showSubchapter,
     setShowSubchapter
 }: SubchapterMenuProps): JSX.Element => {
     const router = useRouter();
-    const { slug, problemId } = router.query as {
+    const tracker = useTracker();
+    const { slug, problemId, problemSlug } = router.query as {
         slug: string;
+        problemSlug?: string;
         problemId?: string;
     };
     const hasChildren =
@@ -33,7 +38,8 @@ const SubchapterMenu = ({
         setTimeout(() => {
             if (document && subchapter.sections.length && problemId) {
                 const problem = document.getElementById(problemId);
-                problem?.scrollIntoView({ behavior: 'smooth' });
+                if (!checkVisible(problem as Element))
+                    problem?.scrollIntoView({ behavior: 'smooth' });
             }
         }, 200);
     }, [problemId, subchapter]);
@@ -42,6 +48,12 @@ const SubchapterMenu = ({
         setShowSubchapter?.(
             showSubchapter == subchapter.id ? '' : subchapter.id
         );
+        tracker?.genericTrack('Click Subchapter List of Content', {
+            'Book Slug': slug,
+            'Book Page Query': problemId ?? problemSlug,
+            'Chapter Name': chapter.title,
+            'SubChapter Name': subchapter.title
+        });
     };
 
     const href = (section: BookSubchapterSection): string => {
@@ -105,7 +117,9 @@ const SubchapterMenu = ({
             <Link
                 href={href(subchapter)}
                 className={cn(
-                    subchapter.id == problemId && 'font-semibold text-white'
+                    (subchapter.id == problemId ||
+                        subchapter.slug == problemSlug) &&
+                        'font-semibold text-white'
                 )}>
                 {subchapter.title}
             </Link>

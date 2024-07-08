@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ChapterMenu from './ChapterMenu';
 import { cn } from 'commons/utils';
 
@@ -16,6 +16,10 @@ const TableOfContents = ({
     className
 }: TableOfContentsProps): JSX.Element => {
     const [showChapter, setShowChapter] = useState(activeChapter);
+
+    useEffect(() => {
+        if (activeChapter !== showChapter) setShowChapter(activeChapter);
+    }, [activeChapter]);
 
     return (
         <ul

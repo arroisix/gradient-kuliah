@@ -50,8 +50,8 @@ export const TableOfContentMenu = ({
                     setIsDrawerOpen(checked);
                     tracker?.genericTrack(
                         checked
-                            ? 'Open Textbook List of Content Menu'
-                            : 'Close Textbook List of Content Menu',
+                            ? `Open ${book?.category} List of Content Menu`
+                            : `Close ${book?.category} List of Content Menu`,
                         {
                             'Book Slug': slug,
                             'Book Page Query': query

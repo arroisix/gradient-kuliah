@@ -1,3 +1,4 @@
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
 import { cn } from 'commons/utils';
 import {
@@ -6,6 +7,7 @@ import {
 } from 'courses/redux/api/astronotesApi';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import TextareaAutosize from 'react-textarea-autosize';
 import { toast } from 'react-toastify';
 
@@ -29,6 +31,7 @@ export const FeedbackCard = ({
     }
 
     const router = useRouter();
+    const isAuthenticated = useSelector(getIsAuthenticated);
     const { slug, problemId, problemSlug } = router.query as {
         slug: string;
         problemId: string;
@@ -42,7 +45,7 @@ export const FeedbackCard = ({
         usePostTextbookFeedbackMutation();
     function handleSubmit(e: FormEvent<HTMLFormElement>): void {
         e.preventDefault();
-        if (!book) return;
+        if (!book || !isAuthenticated) return;
 
         submitRating({
             slug,
@@ -131,11 +134,12 @@ export const FeedbackCard = ({
                             />
                         </div>
                         <Button
-                            type="submit"
+                            type={isAuthenticated ? 'submit' : 'button'}
+                            href={isAuthenticated ? undefined : '/masuk'}
                             variant="primary"
                             disabled={isSubmitting}
                             className={cn(
-                                'w-full',
+                                'w-full text-center',
                                 isSubmitting && 'btn-disabled'
                             )}>
                             Kirim Masukan
