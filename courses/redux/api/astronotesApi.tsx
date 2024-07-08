@@ -75,7 +75,7 @@ export const astronotesApi = baseApi.injectEndpoints({
             { slug: string; problemSlug: string; specialToken?: string }
         >({
             query: ({ slug, problemSlug, specialToken }) => ({
-                url: `${BOOK_BASE_URL}v2/${slug}/problems/${problemSlug}/`,
+                url: `${BOOK_BASE_URL}textbook/${slug}/problems/${problemSlug}/`,
                 headers: {
                     'X-Special-Request': specialToken
                 }
@@ -221,7 +221,7 @@ export const astronotesApi = baseApi.injectEndpoints({
         >({
             query: ({ slug, problemSlug, category, ...body }) => ({
                 url: `${BOOK_BASE_URL}${
-                    category == 'Bank Soal' ? 'bank-soal/' : ''
+                    category == 'Bank Soal' ? 'bank-soal/' : 'textbook/'
                 }${slug}/problems/${problemSlug}/rating/`,
                 method: 'PUT',
                 body
