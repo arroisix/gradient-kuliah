@@ -97,14 +97,21 @@ export const AstronoteBookCard = ({
     }): JSX.Element => {
     const tracker = useTracker();
 
+    const authors = book.authors ?? [];
+
     const Info = (): JSX.Element => (
         <>
             <p
                 className={cn(
                     'w-full mt-1 text-xs truncate',
-                    !book.authors && 'hidden'
+                    authors.length === 0 && 'hidden'
                 )}>
-                {book.authors}
+                {book.authors?.map((author, index) => (
+                    <React.Fragment key={index}>
+                        {author.trim()}
+                        {index < authors.length - 1 && ', '}
+                    </React.Fragment>
+                ))}
             </p>
             <p
                 className={cn(

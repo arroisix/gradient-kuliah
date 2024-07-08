@@ -18,21 +18,18 @@ export const OnboardingSection = (): JSX.Element => {
             isProfileComplete ? (
                 <OnboardingSuccess />
             ) : (
-                <div
-                    className={`px-[16px] md:px-0 w-full md:w-[400px] flex flex-col justify-center items-center`}>
-                    <div id="form" className="w-full flex flex-col gap-8">
-                        <div className="h-screen flex flex-col justify-between">
-                            <div className="h-[37px]"></div>
-                            <div className="flex flex-col gap-[16px]">
-                                <h1 className="w-full text-3xl font-extrabold">
-                                    Lengkapi akunmu
-                                </h1>
-                                <FormStep />
-                            </div>
-                            <div className="h-[92px]"></div>
-                        </div>
+                <div className="px-[16px] md:px-0 w-full md:w-[400px] flex flex-col items-center min-h-screen">
+                    <div className="h-[37px] w-full flex-shrink-0"></div>
+                    <div
+                        id="form"
+                        className="w-full flex flex-col gap-8 flex-grow">
+                        <h1 className="w-full text-3xl font-extrabold">
+                            Lengkapi akunmu
+                        </h1>
+                        <FormStep />
                     </div>
-                    <div className="fixed bottom-[36px] px-[16px] md:px-0 w-full md:w-[400px]">
+                    <div className="h-[128px] w-full flex-shrink-0"></div>
+                    <div className="sticky bottom-[36px] px-[16px] md:px-0 w-full">
                         <OnboardingStepper />
                     </div>
                 </div>
