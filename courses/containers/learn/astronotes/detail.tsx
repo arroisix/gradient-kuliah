@@ -48,10 +48,8 @@ const AstronotesDetail = ({
             case 'bank soal':
                 return `${baseHref}/${astronotes?.first_problem}`;
             default:
-                `${baseHref}/1`;
+                return `${baseHref}/1`;
         }
-
-        return `${baseHref}/?`;
     };
 
     const isButtonDisabled =

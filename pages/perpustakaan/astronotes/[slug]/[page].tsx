@@ -51,18 +51,8 @@ AstronotesPage.displayName = 'Astronotes Reader';
 export default AstronotesPage;
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const { data: response } = await axios.get<ListResponseData<string>>(
-        `${config.API_BASE_URL}books/list-slug/`
-    );
-
-    const paths = response.data.flatMap((slug) => [
-        { params: { slug, page: '1' } },
-        { params: { slug, page: '2' } },
-        { params: { slug, page: '3' } }
-    ]);
-
     return {
-        paths,
+        paths: [],
         fallback: 'blocking'
     };
 };

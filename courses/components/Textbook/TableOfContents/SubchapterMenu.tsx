@@ -1,12 +1,14 @@
-import { cn } from 'commons/utils';
+import { checkVisible, cn } from 'commons/utils';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useLayoutEffect } from 'react';
 import { activeClassName } from './constant';
 import { getBookBaseHref } from 'courses/utils';
+import { useTracker } from 'tracker/tracker';
 
 type SubchapterMenuProps = {
     subchapter: BookSubchapter;
+    chapter: Pick<BookChapter, 'title'>;
     category: BookDetailInterface['category'];
     activeSubchapter?: string;
     showSubchapter?: string;
@@ -15,12 +17,14 @@ type SubchapterMenuProps = {
 
 const SubchapterMenu = ({
     subchapter,
+    chapter,
     category,
     activeSubchapter,
     showSubchapter,
     setShowSubchapter
 }: SubchapterMenuProps): JSX.Element => {
     const router = useRouter();
+    const tracker = useTracker();
     const { slug, problemSlug } = router.query as {
         slug: string;
         problemSlug?: string;
@@ -34,7 +38,8 @@ const SubchapterMenu = ({
         setTimeout(() => {
             if (document && subchapter.sections.length && problemSlug) {
                 const problem = document.getElementById(problemSlug);
-                problem?.scrollIntoView({ behavior: 'smooth' });
+                if (!checkVisible(problem as Element))
+                    problem?.scrollIntoView({ behavior: 'smooth' });
             }
         }, 200);
     }, [problemSlug, subchapter]);
@@ -43,6 +48,12 @@ const SubchapterMenu = ({
         setShowSubchapter?.(
             showSubchapter == subchapter.id ? '' : subchapter.id
         );
+        tracker?.genericTrack('Click Subchapter List of Content', {
+            'Book Slug': slug,
+            'Book Page Query': problemSlug,
+            'Chapter Name': chapter.title,
+            'SubChapter Name': subchapter.title
+        });
     };
 
     const href = (section: BookSubchapterSection): string => {

@@ -169,3 +169,12 @@ export const getCSChatRoom = (
 
     return 'https://ig.me/m/gradient_idn';
 };
+
+export function checkVisible(elm: Element): boolean {
+    const rect = elm.getBoundingClientRect();
+    const viewHeight = Math.max(
+        document.documentElement.clientHeight,
+        window.innerHeight
+    );
+    return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+}
