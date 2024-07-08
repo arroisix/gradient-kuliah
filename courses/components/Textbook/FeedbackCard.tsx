@@ -3,6 +3,7 @@ import Button from 'commons/components/elements/Button';
 import { cn } from 'commons/utils';
 import {
     useGetBookDetailQuery,
+    useGetTextbookSolutionQuery,
     usePostTextbookFeedbackMutation
 } from 'courses/redux/api/astronotesApi';
 import { useRouter } from 'next/router';
@@ -32,14 +33,18 @@ export const FeedbackCard = ({
 
     const router = useRouter();
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { slug, problemId, problemSlug } = router.query as {
+    const { slug, problemSlug } = router.query as {
         slug: string;
-        problemId: string;
         problemSlug: string;
     };
 
     const { data } = useGetBookDetailQuery({ slug }, { skip: !slug });
     const book = data?.book;
+
+    const { data: textbookProblem } = useGetTextbookSolutionQuery(
+        { slug, problemSlug },
+        { skip: book?.category !== 'Textbook' }
+    );
 
     const [submitRating, { isLoading: isSubmitting }] =
         usePostTextbookFeedbackMutation();
@@ -49,7 +54,10 @@ export const FeedbackCard = ({
 
         submitRating({
             slug,
-            problemSlug: problemId || problemSlug,
+            problemSlug:
+                book.category === 'Textbook'
+                    ? (textbookProblem?.problem.id as string)
+                    : problemSlug,
             category: book.category,
             rating,
             comment: content

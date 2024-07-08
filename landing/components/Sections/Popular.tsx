@@ -112,12 +112,13 @@ const Popular = ({
                                               thumbnail={book_cover_url}
                                               title={title}
                                               in_progress={false}
-                                              course_slug={slug}
+                                              course_slug=""
                                               chapter_id=""
                                               subchapter_id=""
                                               subchapter_slug=""
-                                              book_slug=""
+                                              book_slug={slug}
                                               latest_page={0}
+                                              latest_problem=""
                                               eventName='User click Class Items on "Bacaan Terpopuler di Perpustakaan" Section'
                                               eventPayload={{ Title: title }}
                                           />
@@ -141,6 +142,7 @@ const Popular = ({
                                               subchapter_slug=""
                                               book_slug=""
                                               latest_page={0}
+                                              latest_problem=""
                                               eventName='User click Class Items on "Kelas Terpopuler" Section'
                                               eventPayload={{
                                                   Course: course_name

@@ -37,6 +37,7 @@ interface LearningMaterial {
     subchapter_slug: string;
     book_slug: string;
     latest_page: number;
+    latest_problem: string;
 }
 
 interface GetDashboardContentResponse {

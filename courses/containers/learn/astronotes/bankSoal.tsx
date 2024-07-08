@@ -60,8 +60,8 @@ const BankSoalContainer = ({
                 <div className="flex items-start justify-between">
                     <QuestionMetadata problem={data?.problem} />
                     <PageNavigation
-                        next={data?.next_problem_id}
-                        prev={data?.prev_problem_id}
+                        next={data?.next_problem_slug}
+                        prev={data?.prev_problem_slug}
                     />
                 </div>
                 <QuestionSection

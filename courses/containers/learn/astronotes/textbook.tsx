@@ -26,13 +26,13 @@ const TextbookSolution = ({
     const router = useRouter();
     const [isCrawler, setIsCrawler] = useState<string>();
     const { is_subscribed } = useCourseSubscription();
-    const { slug, problemId } = router.query as {
+    const { slug, problemSlug } = router.query as {
         slug: string;
-        problemId: string;
+        problemSlug: string;
     };
     const { data: textbookData, isFetching } = useGetTextbookSolutionQuery(
-        { slug, problemId, specialToken: isCrawler },
-        { skip: !slug || !problemId }
+        { slug, problemSlug, specialToken: isCrawler },
+        { skip: !slug || !problemSlug }
     );
     const { data: getTextbookDetail } = useGetBookDetailQuery(
         { slug },
@@ -61,8 +61,8 @@ const TextbookSolution = ({
                 <div className="flex items-start justify-between">
                     <QuestionMetadata problem={data?.problem} />
                     <PageNavigation
-                        next={data?.next_problem_id}
-                        prev={data?.prev_problem_id}
+                        next={data?.next_problem_slug}
+                        prev={data?.prev_problem_slug}
                     />
                 </div>
                 {data?.problem.is_free || is_subscribed || isCrawler ? (
