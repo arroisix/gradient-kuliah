@@ -92,8 +92,9 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
                 );
 
                 const bookSlug = pathname.split('/')[3];
-                const textbookSolutionSlug = await getTextbookSolutionSlugFromId(pathname, bookSlug)
-                if (textbookSolutionSlug) newPathname = textbookSolutionSlug
+                const textbookSolutionSlug =
+                    await getTextbookSolutionSlugFromId(pathname, bookSlug);
+                if (textbookSolutionSlug) newPathname = textbookSolutionSlug;
             } else if (pathname.includes('calculus-9th-edition')) {
                 newPathname = pathname.replace(
                     '/astronotes/',
@@ -129,9 +130,12 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
 
     if (pathname.startsWith('/perpustakaan/')) {
         const bookSlug = pathname.split('/')[3];
-        const textbookSolutionSlug = await getTextbookSolutionSlugFromId(pathname, bookSlug)
-        if (textbookSolutionSlug){
-            url.pathname = textbookSolutionSlug
+        const textbookSolutionSlug = await getTextbookSolutionSlugFromId(
+            pathname,
+            bookSlug
+        );
+        if (textbookSolutionSlug) {
+            url.pathname = textbookSolutionSlug;
             return NextResponse.redirect(url, 301);
         }
 
@@ -206,21 +210,25 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
     return res;
 }
 
-async function getTextbookSolutionSlugFromId(oldPathname: string, bookSlug: string) {
-    const textbookReaderRegex = /^\/perpustakaan\/textbook\/[^/]+\/[^/]+$/; 
-    let newPathname = ''
+async function getTextbookSolutionSlugFromId(
+    oldPathname: string,
+    bookSlug: string
+) {
+    const textbookReaderRegex = /^\/perpustakaan\/textbook\/[^/]+\/[^/]+$/;
+    let newPathname = '';
 
     if (textbookReaderRegex.test(oldPathname)) {
         const splitedPathname = oldPathname.split('/');
-        const problemSlug = splitedPathname[splitedPathname.length - 1]
-            
-        if (isUUID(problemSlug)){
+        const problemSlug = splitedPathname[splitedPathname.length - 1];
+
+        if (isUUID(problemSlug)) {
             try {
                 const getTextbookSolutionSlug = await fetch(
                     `${apiConfig.API_BASE_URL}books/textbook/public/${bookSlug}/problems/${problemSlug}/slug/`
                 );
-                const textbookSolutionSlug = (await getTextbookSolutionSlug.json())
-                    .textbook_solution_slug;
+                const textbookSolutionSlug = (
+                    await getTextbookSolutionSlug.json()
+                ).textbook_solution_slug;
                 if (textbookSolutionSlug) {
                     newPathname = `/perpustakaan/textbook/${bookSlug}/${textbookSolutionSlug}`;
                 } else {
@@ -232,5 +240,5 @@ async function getTextbookSolutionSlugFromId(oldPathname: string, bookSlug: stri
         }
     }
 
-    return newPathname
+    return newPathname;
 }
