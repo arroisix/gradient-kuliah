@@ -77,6 +77,7 @@ const BankSoalContainer = ({
                         <LongAnswerSection
                             problem={data?.problem}
                             isLoading={isFetching}
+                            isCrawler={!!isCrawler}
                         />
                         <FeedbackCard
                             review={data?.problem.review}
