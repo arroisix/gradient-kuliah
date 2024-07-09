@@ -6,8 +6,10 @@ import Skeleton from 'commons/components/elements/Skeleton';
 
 export const ShortAnswerSection = ({
     problem,
+    isEmpty,
     isLoading
 }: Partial<Pick<TextbookSolution, 'problem'>> & {
+    isEmpty?: boolean;
     isLoading?: boolean;
 }): JSX.Element => {
     const isMultiselect =
@@ -17,6 +19,8 @@ export const ShortAnswerSection = ({
         ) !== 1;
 
     const renderAnswer = (): JSX.Element => {
+        if (isEmpty) return <div className="h-8"></div>;
+
         if (problem?.question.type == 'open_ended')
             return (
                 <>
@@ -54,6 +58,7 @@ export const ShortAnswerSection = ({
     };
 
     if (
+        !isEmpty &&
         problem?.question.answers.every(
             (answer) => JSON.stringify(answer.answer) == '{}'
         )

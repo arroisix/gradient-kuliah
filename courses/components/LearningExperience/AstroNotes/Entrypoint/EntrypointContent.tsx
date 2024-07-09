@@ -42,13 +42,24 @@ export const EntrypointContent = ({
     const getLink = (
         slug: string,
         category: string,
-        latestPage: string
+        latestPage: string,
+        latestProblem: string
     ): string => {
         const baseHref = `${getBookBaseHref(category)}/${slug}`;
+        const lowerCasedCategory = category.toLowerCase();
 
-        if (latestPage) {
+        if (latestPage && lowerCasedCategory === 'catatan') {
             return `${baseHref}/${latestPage}`;
         }
+
+        if (
+            latestProblem &&
+            (lowerCasedCategory === 'textbook' ||
+                lowerCasedCategory === 'bank soal')
+        ) {
+            return `${baseHref}/${latestProblem}`;
+        }
+
         return baseHref;
     };
 
@@ -62,7 +73,8 @@ export const EntrypointContent = ({
                             href={getLink(
                                 book.slug,
                                 book.category_name ?? '',
-                                book.latest_page ?? ''
+                                book.latest_page ?? '',
+                                book.latest_problem ?? ''
                             )}
                             eventName="Click Book Item on Library Page"
                             eventPayload={{ 'Book Slug': book.slug }}

@@ -16,7 +16,7 @@ const TextbookPaywall = ({
     return !is_subscribed ? (
         <div className="relative mt-6">
             <div className="z-0 w-full select-none">
-                <ShortAnswerSection problem={problem} />
+                <ShortAnswerSection isEmpty problem={problem} />
             </div>
             <div className="absolute top-10 h-20 w-full bg-gradient-to-b from-transparent via-black to-black z-[1]"></div>
 

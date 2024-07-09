@@ -1,5 +1,5 @@
 import { cn } from 'commons/utils';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { CorrectAnswerBadge } from '../Textbook/CorrectAnswerBadge';
 import TiptapViewer from '../Textbook/TiptapViewer';
 
@@ -9,11 +9,16 @@ export const ShortAnswerSection = ({
 }: Partial<Pick<BankSoal, 'problem'>> & {
     isLoading?: boolean;
 }): JSX.Element => {
+    const [isOpen, setIsOpen] = useState(false);
     const isMultiselect =
         problem?.question.answers.reduce(
             (trueCount, choice) => trueCount + (choice.is_answer ? 1 : 0),
             0
         ) !== 1;
+
+    useEffect(() => {
+        if (isOpen) setIsOpen(false);
+    }, [problem]);
 
     const renderAnswer = (): JSX.Element => {
         if (problem?.question.type == 'open_ended')
@@ -68,6 +73,8 @@ export const ShortAnswerSection = ({
             <input
                 type="checkbox"
                 disabled={isLoading}
+                checked={isOpen}
+                onChange={(e) => setIsOpen(e.target.checked)}
                 name="answer"
                 className="!min-h-0"
             />

@@ -26,13 +26,13 @@ const TextbookSolution = ({
     const router = useRouter();
     const [isCrawler, setIsCrawler] = useState<string>();
     const { is_subscribed } = useCourseSubscription();
-    const { slug, problemId } = router.query as {
+    const { slug, problemSlug } = router.query as {
         slug: string;
-        problemId: string;
+        problemSlug: string;
     };
     const { data: textbookData, isFetching } = useGetTextbookSolutionQuery(
-        { slug, problemId, specialToken: isCrawler },
-        { skip: !slug || !problemId }
+        { slug, problemSlug, specialToken: isCrawler },
+        { skip: !slug || !problemSlug }
     );
     const { data: getTextbookDetail } = useGetBookDetailQuery(
         { slug },
@@ -46,7 +46,7 @@ const TextbookSolution = ({
     return (
         <div className="drawer drawer-end lg:drawer-open">
             <TableOfContentMenu problem={data?.problem} />
-            <div className="pt-40 pb-24 space-y-4 md:pb-12 drawer-content md:px-8 lg:px-12 lg:pt-20 lg:mx-auto">
+            <div className="pt-40 pb-24 space-y-4 md:pb-12 drawer-content md:px-8 lg:px-12 lg:pt-20">
                 <Breadcrumb
                     nextItem={
                         {
@@ -61,11 +61,11 @@ const TextbookSolution = ({
                 <div className="flex items-start justify-between">
                     <QuestionMetadata problem={data?.problem} />
                     <PageNavigation
-                        next={data?.next_problem_id}
-                        prev={data?.prev_problem_id}
+                        next={data?.next_problem_slug}
+                        prev={data?.prev_problem_slug}
                     />
                 </div>
-                {is_subscribed || isCrawler ? (
+                {data?.problem.is_free || is_subscribed || isCrawler ? (
                     <>
                         <ShortAnswerSection
                             problem={data?.problem}

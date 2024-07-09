@@ -30,7 +30,7 @@ export const PageNavigation = ({
                 disabled={!prev}
                 variant="neutral"
                 className="flex items-center justify-center !pl-3"
-                eventName="User Click Back Question of Textbook"
+                eventName={`User Click Back Question of ${book?.category}`}
                 eventPayload={{ 'Book Slug': slug }}>
                 <BiChevronLeft className="w-6 h-6" />
                 Back
@@ -40,7 +40,7 @@ export const PageNavigation = ({
                 disabled={!next}
                 variant="primary"
                 className="flex items-center justify-center !pr-3"
-                eventName="User Click Next Question of Textbook"
+                eventName={`User Click Next Question of ${book?.category}`}
                 eventPayload={{ 'Book Slug': slug }}>
                 Next
                 <BiChevronRight className="w-6 h-6" />

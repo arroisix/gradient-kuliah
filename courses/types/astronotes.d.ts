@@ -124,6 +124,7 @@ interface Astronote {
     percentage_progress?: number;
     last_chapter_read?: string;
     latest_page?: string;
+    latest_problem?: string;
 }
 interface AstronoteBooksResponse {
     books: Astronote[];
@@ -151,6 +152,7 @@ interface BookDetailInterface {
     is_free: boolean;
     is_public: boolean;
     first_problem_id?: string;
+    first_problem?: string;
 }
 
 interface GetBookDetailResponse {
@@ -159,14 +161,15 @@ interface GetBookDetailResponse {
 
 interface TextbookSolution {
     problem: TextbookProblem;
-    next_problem_id: string | null;
-    prev_problem_id: string | null;
+    next_problem_slug: string | null;
+    prev_problem_slug: string | null;
 }
 
 type BankSoal = TextbookSolution;
 
 interface TextbookProblem {
     id: string;
+    slug: string;
     title: string;
     chapter_id: string;
     chapter: string;
@@ -176,6 +179,7 @@ interface TextbookProblem {
     section_name?: string;
     page_number: number | null;
     is_published: boolean;
+    is_free: boolean;
     review: {
         rating: number;
         comment: string;

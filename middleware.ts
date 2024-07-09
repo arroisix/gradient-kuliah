@@ -3,18 +3,19 @@ import { getBookBaseHref } from 'courses/utils';
 import { getFeatures, growthbook } from 'library/growthbook';
 import { NextRequest, NextResponse, userAgent } from 'next/server';
 import apiConfig from 'redux/api/config';
+import { validate as isUUID } from 'uuid';
 
 const COOKIE = 'visitor_id';
 
 // List of bank soal books slug that exist at the time of Perpustakaan URL restructuring (updated: July 02, 2024)
 const BANK_SOAL_BOOKS_SLUG = [
-    'pembahasan-soal-kalkulus-1',
-    'pembahasan-soal-kimia-dasar-2',
+    'bank-soal-kalkulus1',
+    'bank-soal-kimdas2',
     'Simulasi-SNBT-2024',
-    'pembahasan-soal-fisika-dasar-1',
-    'pembahasan-soal-kimia-dasar-1',
-    'pembahasan-soal-kalkulus-2',
-    'pembahasan-soal-fisika-dasar-2'
+    'bank-soal-fisdas1',
+    'bank-soal-kimdas1',
+    'bank-soal-kalkulus2',
+    'bank-soal-fisdas2'
 ];
 
 const LIST_UPDATED_COURSE_SLUG: { [key: string]: string } = {
@@ -89,6 +90,11 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
                     '/astronotes/',
                     '/perpustakaan/'
                 );
+
+                const bookSlug = pathname.split('/')[3];
+                const textbookSolutionSlug =
+                    await getTextbookSolutionSlugFromId(pathname, bookSlug);
+                if (textbookSolutionSlug) newPathname = textbookSolutionSlug;
             } else if (pathname.includes('calculus-9th-edition')) {
                 newPathname = pathname.replace(
                     '/astronotes/',
@@ -124,6 +130,15 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
 
     if (pathname.startsWith('/perpustakaan/')) {
         const bookSlug = pathname.split('/')[3];
+        const textbookSolutionSlug = await getTextbookSolutionSlugFromId(
+            pathname,
+            bookSlug
+        );
+        if (textbookSolutionSlug) {
+            url.pathname = textbookSolutionSlug;
+            return NextResponse.redirect(url, 301);
+        }
+
         const bookNewSlug = LIST_UPDATED_BOOK_SLUG[bookSlug];
         if (bookNewSlug) {
             url.pathname = pathname.replace(`/${bookSlug}`, `/${bookNewSlug}`);
@@ -193,4 +208,37 @@ export async function middleware(req: NextRequest): Promise<NextResponse> {
     }
 
     return res;
+}
+
+async function getTextbookSolutionSlugFromId(
+    oldPathname: string,
+    bookSlug: string
+) {
+    const textbookReaderRegex = /^\/perpustakaan\/textbook\/[^/]+\/[^/]+$/;
+    let newPathname = '';
+
+    if (textbookReaderRegex.test(oldPathname)) {
+        const splitedPathname = oldPathname.split('/');
+        const problemSlug = splitedPathname[splitedPathname.length - 1];
+
+        if (isUUID(problemSlug)) {
+            try {
+                const getTextbookSolutionSlug = await fetch(
+                    `${apiConfig.API_BASE_URL}books/textbook/public/${bookSlug}/problems/${problemSlug}/slug/`
+                );
+                const textbookSolutionSlug = (
+                    await getTextbookSolutionSlug.json()
+                ).textbook_solution_slug;
+                if (textbookSolutionSlug) {
+                    newPathname = `/perpustakaan/textbook/${bookSlug}/${textbookSolutionSlug}`;
+                } else {
+                    newPathname = `/perpustakaan/textbook/${bookSlug}`;
+                }
+            } catch (error) {
+                newPathname = `/perpustakaan/textbook/${bookSlug}`;
+            }
+        }
+    }
+
+    return newPathname;
 }

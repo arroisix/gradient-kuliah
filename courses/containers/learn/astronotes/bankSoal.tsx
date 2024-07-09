@@ -44,33 +44,31 @@ const BankSoalContainer = ({
         setIsCrawler(getCookieValue(IS_BOT));
     }, []);
 
+    const crumbs: BreadcrumbItemProps = {
+        name: getTextbookDetail?.book.title ?? '',
+        url: `/perpustakaan/bank-soal/${slug}`,
+        nextItem: {
+            name: data?.problem.title ?? ''
+        }
+    };
+
     return (
         <div className="drawer drawer-end lg:drawer-open">
             <TableOfContentMenu problem={data?.problem} />
-            <div className="pt-40 pb-24 space-y-4 md:pb-12 drawer-content md:max-w-screen-lg md:px-8 lg:px-12 lg:pt-20 lg:mx-auto">
-                <Breadcrumb
-                    nextItem={
-                        {
-                            name: getTextbookDetail?.book.title,
-                            url: `/perpustakaan/textbook/${slug}`,
-                            nextItem: {
-                                name: data?.problem.title
-                            }
-                        } as BreadcrumbItemProps
-                    }
-                />
+            <div className="pt-40 pb-24 space-y-4 md:pb-12 drawer-content md:max-w-screen-lg md:px-8 lg:px-12 lg:pt-20">
+                <Breadcrumb nextItem={crumbs} />
                 <div className="flex items-start justify-between">
                     <QuestionMetadata problem={data?.problem} />
                     <PageNavigation
-                        next={data?.next_problem_id}
-                        prev={data?.prev_problem_id}
+                        next={data?.next_problem_slug}
+                        prev={data?.prev_problem_slug}
                     />
                 </div>
                 <QuestionSection
                     problem={data?.problem}
                     isLoading={isFetching}
                 />
-                {is_subscribed || isCrawler ? (
+                {data?.problem.is_free || is_subscribed || isCrawler ? (
                     <>
                         <ShortAnswerSection
                             problem={data?.problem}
