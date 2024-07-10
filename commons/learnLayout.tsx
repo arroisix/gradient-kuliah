@@ -3,15 +3,8 @@ import Sidebar from './components/modules/Sidebar';
 import Appbar from './components/modules/Appbar';
 import { cn } from './utils';
 import { useState } from 'react';
-import CourseProgress from 'courses/containers/courseProgress';
-import { useRouter } from 'next/router';
-import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
-import { useSelector } from 'react-redux';
-import { useGetCourseProgressV2Query } from 'courses/redux/api/courseV2Api';
-import { useGetActiveSubscriptionQuery } from 'payment/redux/api/subscriptionApi';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import Footer from './components/modules/Footer';
-import Breadcrumb from './components/modules/Breadcrumb';
 
 interface LayoutProps {
     children: JSX.Element;
@@ -39,17 +32,7 @@ const LearnLayout = ({
     showSubscriptionReminder
 }: LayoutProps): JSX.Element => {
     const [closeReminder, setCloseReminder] = useState(true);
-    const router = useRouter();
-    const isCoursePage = router.pathname === '/kelas';
-    const isAuthenticated = useSelector(getIsAuthenticated);
-    const { data: courseProgresses, isLoading } = useGetCourseProgressV2Query(
-        undefined,
-        { skip: !isAuthenticated }
-    );
-    const { data: activePacket } = useGetActiveSubscriptionQuery(undefined, {
-        skip: !isAuthenticated
-    });
-    const { is_subscribed, everSubscribed } = useCourseSubscription();
+    const { is_subscribed } = useCourseSubscription();
 
     return (
         <>
@@ -93,29 +76,6 @@ const LearnLayout = ({
                                 is_subscribed,
                             'lg:px-16 xl:px-12': !noPadding
                         })}>
-                        {router.pathname === '/kelas' && (
-                            <Breadcrumb
-                                className={cn(
-                                    'w-full px-4 md:px-8 xl:px-12',
-                                    is_subscribed || everSubscribed
-                                        ? 'pb-5'
-                                        : 'pt-5'
-                                )}
-                            />
-                        )}
-                        {isAuthenticated &&
-                            isCoursePage &&
-                            activePacket &&
-                            activePacket.subscription_id &&
-                            courseProgresses &&
-                            courseProgresses.length > 0 && (
-                                <div className="course-progress px-0 bg-[#1D1D1D] text-white py-8 overflow-x-hidden mb-8">
-                                    <CourseProgress
-                                        courseProgresses={courseProgresses}
-                                        isLoading={isLoading}
-                                    />
-                                </div>
-                            )}
                         <div
                             className={cn(
                                 'px-4 md:px-0 w-full',

@@ -1,32 +1,25 @@
-import { useGrid } from 'courses/contexts/GridProvider';
+import { cn } from 'commons/utils';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import { IoCheckmarkCircle, IoTime } from 'react-icons/io5';
+import { useTracker } from 'tracker/tracker';
 
 type CourseCardProps = {
     course: Course;
     latestSubChapter?: SubChapter;
     latestWatchProgress?: WatchProgress;
-    isInGrid?: boolean;
-    isFirstInGrid?: boolean;
-    onClick?: () => void;
-};
+    eventName?: string;
+    eventPayload?: { [key: string]: string };
+} & PropsWithClassName;
 
 const CourseCard = ({
     course,
     latestSubChapter,
     latestWatchProgress,
-    isInGrid,
-    isFirstInGrid,
-    onClick
+    eventName = 'Click Class Card',
+    eventPayload,
+    className
 }: CourseCardProps): JSX.Element => {
-    const router = useRouter();
-
-    useEffect(() => {
-        if (course && !course.is_only_notebook)
-            router.prefetch(`/kelas/${course.slug}`);
-    }, [course]);
+    const tracker = useTracker();
 
     const decideUrl = (): string => {
         if (course.is_coming_soon && !course.slug) {
@@ -40,29 +33,30 @@ const CourseCard = ({
         }
         return `/kelas/${course.slug}`;
     };
-
-    const url = decideUrl();
-
-    const { cellRef, cellWidth, screenWidth } = useGrid();
+    const CourseLabel = latestWatchProgress ? 'p' : 'h2';
 
     return (
-        <Link href={url} onClick={() => onClick?.()}>
+        <Link
+            href={decideUrl()}
+            onClick={() =>
+                tracker?.genericTrack(eventName, {
+                    ...eventPayload,
+                    'Course Slug': course.slug
+                })
+            }>
             <div
-                className={`relative flex items-end overflow-hidden rounded-lg cursor-pointer h-[224px] bg-neutral-800 border-[0.5px] border-[#666666]`}
+                className={cn(
+                    'relative flex items-end overflow-hidden rounded-lg cursor-pointer h-56 bg-neutral-800 border-[0.5px] border-[#666666]',
+                    className
+                )}
                 style={{
-                    width: !isInGrid
-                        ? `${
-                              screenWidth! < 768 ? cellWidth! - 150 : cellWidth
-                          }px`
-                        : 'auto',
                     background: `url(${
                         !latestSubChapter
                             ? course.thumbnail
                             : latestSubChapter.thumbnail
                     }) center / cover no-repeat, #333333`
-                }}
-                {...(isInGrid && isFirstInGrid ? { ref: cellRef } : {})}>
-                <div className="bg-[#121212] w-full md:px-[16px] px-[12px] pt-[8px] pb-[12px]">
+                }}>
+                <div className="bg-[#121212] w-full md:px-4 px-3 pt-2 pb-3">
                     {latestWatchProgress &&
                         (!latestWatchProgress.is_finished ? (
                             <div className="flex items-center text-[#F2C04C]">
@@ -75,9 +69,9 @@ const CourseCard = ({
                                 <p className="ml-2 text-xs">Completed</p>
                             </div>
                         ))}
-                    <p className="mt-1 font-semibold line-clamp-2 text-ellipsis">
+                    <CourseLabel className="mt-1 font-semibold line-clamp-2 text-ellipsis">
                         {course.course_name}
-                    </p>
+                    </CourseLabel>
                     {latestSubChapter && (
                         <p className="text-sm text-[#999999] mt-1 line-clamp-2 text-ellipsis">
                             Bab: {latestSubChapter.subchapter_name}
