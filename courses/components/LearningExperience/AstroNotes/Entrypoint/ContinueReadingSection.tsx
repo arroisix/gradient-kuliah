@@ -1,14 +1,16 @@
-import React from 'react';
-import { AstronoteBookCard } from '../AstronoteBook';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { cn } from 'commons/utils';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useGetEntrypointBooksQuery } from 'courses/redux/api/astronotesApi';
-import { useSelector } from 'react-redux';
 import { getBookBaseHref } from 'courses/utils';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { AstronoteBookCard } from '../AstronoteBook';
 
 const ContinueReadingSection = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const { is_subscribed: isSubscribed } = useCourseSubscription();
     const { data: astronotes, isLoading } = useGetEntrypointBooksQuery(
         { limit: 10 },
         { skip: !isAuthenticated }
@@ -18,7 +20,7 @@ const ContinueReadingSection = (): JSX.Element => {
     if (
         isLoading ||
         !astronotes ||
-        !astronotes?.books.some(
+        !astronotes?.data?.some(
             (book) => book.in_progress && book.percentage_progress !== 100
         )
     )
@@ -28,10 +30,22 @@ const ContinueReadingSection = (): JSX.Element => {
         <div className="relative pt-6 pb-4 mb-6 sm:pb-6 space-y-4 z-[1] overflow-x-visible">
             <div className="absolute h-full -z-[1] -inset-x-full bg-neutral-900 top-0 "></div>
             <b>Terakhir Dibaca</b>
-            <div className="w-screen relative md:w-[calc(100vw-250px)] gap-4 carousel carousel-center right-4 md:right-8 xl:right-12 2xl:-inset-x-[calc((100vw-250px-1536px)/2)]">
-                {astronotes.books.flatMap((book) =>
+            <div
+                className={cn(
+                    'w-screen relative gap-4 carousel carousel-center right-4 md:right-8 lg:right-24',
+                    isSubscribed
+                        ? 'md:w-[calc(100vw-250px)] min-[1786px]:-inset-x-[calc((100vw-250px-1536px)/2)]'
+                        : 'md:w-screen min-[1786px]:-inset-x-[calc((100vw-1536px)/2)]'
+                )}>
+                {astronotes.data.flatMap((book) =>
                     book.in_progress && book.percentage_progress !== 100 ? (
-                        <div className="carousel-item first:ml-4 last:mr-4 md:first:ml-8 md:last:mr-8 xl:first:ml-12 xl:last:mr-12 2xl:first:ml-[calc((100vw-250px-1536px)/2)] 2xl:last:mr-[calc((100vw-250px-1536px)/2)]">
+                        <div
+                            className={cn(
+                                'carousel-item first:ml-4 last:mr-4 md:first:ml-8 md:last:mr-8 lg:first:ml-24 lg:last:mr-24',
+                                isSubscribed
+                                    ? 'min-[1786px]:first:ml-[calc((100vw-250px-1536px)/2)] min-[1786px]:last:mr-[calc((100vw-250px-1536px)/2)]'
+                                    : 'min-[1786px]:first:ml-[calc((100vw-1536px)/2)] min-[1786px]:last:mr-[calc((100vw-1536px)/2)]'
+                            )}>
                             <AstronoteBookCard
                                 orientation={
                                     isMobileBreakpoints

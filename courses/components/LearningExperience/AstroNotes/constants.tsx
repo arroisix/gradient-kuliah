@@ -99,14 +99,14 @@ export enum Tab {
     soal = 'bank-soal'
 }
 
-export enum Sort {
+export enum EntrypointSort {
     release = 'last-released',
     read = 'last-read',
     unread = 'unread'
 }
 
-export const SORT_OPTIONS = {
-    [Sort.release]: 'Terakhir Rilis',
-    [Sort.read]: 'Terakhir Dibaca',
-    [Sort.unread]: 'Belum Dibaca'
-};
+export const SORT_OPTIONS = [
+    { value: EntrypointSort.release, label: 'Terakhir Rilis' },
+    { value: EntrypointSort.read, label: 'Terakhir Dibaca' },
+    { value: EntrypointSort.unread, label: 'Belum Dibaca' }
+];

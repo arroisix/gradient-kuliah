@@ -15,22 +15,28 @@ const EntrypointTabs = (): JSX.Element => {
         );
 
     return (
-        <div className="sticky z-10 flex items-end w-full pt-5 pb-2 overflow-x-auto bg-black md:pt-6 top-14 no-scrollbar">
-            <Link className={tabStyle('/perpustakaan')} href={'/perpustakaan'}>
+        <div className="sticky z-10 flex items-end w-full pt-5 pb-2 overflow-x-auto bg-black md:pt-6 top-10 no-scrollbar">
+            <Link
+                scroll={false}
+                className={tabStyle('/perpustakaan')}
+                href={'/perpustakaan'}>
                 Semua
             </Link>
             <Link
                 className={tabStyle(getBookBaseHref('textbook'))}
+                scroll={false}
                 href={getBookBaseHref('textbook')}>
                 Textbook Solution
             </Link>
             <Link
                 className={tabStyle(getBookBaseHref('astronotes'))}
+                scroll={false}
                 href={getBookBaseHref('astronotes')}>
                 Astronotes
             </Link>
             <Link
                 className={tabStyle(getBookBaseHref('bank-soal'))}
+                scroll={false}
                 href={getBookBaseHref('bank-soal')}>
                 Bank Soal
             </Link>

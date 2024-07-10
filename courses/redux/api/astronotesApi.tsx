@@ -20,7 +20,7 @@ export const astronotesApi = baseApi.injectEndpoints({
             providesTags: [{ type: 'ASTRONOTES', id: 'ALL' }]
         }),
         getEntrypointBooks: builder.query<
-            AstronoteBooksResponse,
+            ListResponseData<Astronote>,
             AstronotesBooksQueryParams | undefined
         >({
             query: (params) => ({
@@ -30,7 +30,7 @@ export const astronotesApi = baseApi.injectEndpoints({
             providesTags: [{ type: 'ASTRONOTES', id: 'ENTRYPOINT' }]
         }),
         getPublicEntrypointBooks: builder.query<
-            AstronoteBooksResponse,
+            ListResponseData<Astronote>,
             AstronotesBooksQueryParams | undefined
         >({
             query: (params) => ({

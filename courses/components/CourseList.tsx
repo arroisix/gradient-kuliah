@@ -6,6 +6,13 @@ import CourseCard from './CourseCard';
 import EmptyCourse from './EmptyCourse';
 import Paginator from 'commons/components/elements/Paginator';
 
+const VALID_SECTION = ['all', 'newly-released', 'coming-soon'];
+const VALID_SORT = ['latest', 'popularity', 'lexicography'];
+const PAGE_SIZE = 6;
+type CourseQueryParams = Omit<FilterCourseQueryParams, 'section'> & {
+    tab?: string;
+};
+
 const CourseList = ({
     isLoading,
     courses
@@ -13,7 +20,7 @@ const CourseList = ({
     isLoading: boolean;
     courses?: ListResponseData<Course>;
 }): JSX.Element => {
-    const totalPages = Math.ceil((courses?.count_items ?? 0) / 9);
+    const totalPages = Math.ceil((courses?.count_items ?? 0) / PAGE_SIZE);
     if (isLoading)
         return (
             <div className="grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 xl:grid-cols-3 xl:gap-6">
@@ -39,13 +46,6 @@ const CourseList = ({
             />
         </>
     );
-};
-
-const VALID_SECTION = ['all', 'newly-released', 'coming-soon'];
-const VALID_SORT = ['latest', 'popularity', 'lexicography'];
-const PAGE_SIZE = 6;
-type CourseQueryParams = Omit<FilterCourseQueryParams, 'section'> & {
-    tab?: string;
 };
 
 export const PublicCourseList = (): JSX.Element => {

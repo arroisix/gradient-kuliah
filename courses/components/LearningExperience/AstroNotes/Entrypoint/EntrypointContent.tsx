@@ -8,24 +8,27 @@ import {
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { AstronoteBookCard } from '../AstronoteBook';
-import { Sort, Tab } from '../constants';
+import { EntrypointSort, Tab } from '../constants';
 import { getBookBaseHref } from 'courses/utils';
+import Paginator from 'commons/components/elements/Paginator';
+
+const PAGE_SIZE = 12;
 
 export const EntrypointContent = ({
     isLoading,
     astronotes
 }: {
     isLoading: boolean;
-    astronotes?: Astronote[];
+    astronotes?: ListResponseData<Astronote>;
 }): JSX.Element => {
     if (isLoading)
         return (
             <div className="grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 xl:gap-6">
-                <Skeleton repeat={5} className="w-full h-36 !mb-0" />
+                <Skeleton repeat={6} className="w-full h-36 !mb-0" />
             </div>
         );
 
-    if (!isLoading && astronotes?.length == 0)
+    if (!isLoading && astronotes && astronotes.data?.length == 0)
         return (
             <div className="flex flex-col items-center w-full gap-5 py-12">
                 <img
@@ -63,28 +66,41 @@ export const EntrypointContent = ({
         return baseHref;
     };
 
+    const totalPages = Math.ceil((astronotes?.count_items ?? 0) / PAGE_SIZE);
+
     return (
-        <div className="grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 xl:gap-6">
-            {!!astronotes && !isLoading && (
-                <>
-                    {astronotes?.map((book) => (
-                        <AstronoteBookCard
-                            key={book.id}
-                            href={getLink(
-                                book.slug,
-                                book.category_name ?? '',
-                                book.latest_page ?? '',
-                                book.latest_problem ?? ''
-                            )}
-                            eventName="Click Book Item on Library Page"
-                            eventPayload={{ 'Book Slug': book.slug }}
-                            imageClassname="min-w-20 min-h-24"
-                            {...book}
-                        />
-                    ))}
-                </>
+        <>
+            <div className="grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 xl:gap-6">
+                {!!astronotes && !isLoading && (
+                    <>
+                        {astronotes?.data?.map((book) => (
+                            <AstronoteBookCard
+                                key={book.id}
+                                isHeading
+                                href={getLink(
+                                    book.slug,
+                                    book.category_name ?? '',
+                                    book.latest_page ?? '',
+                                    book.latest_problem ?? ''
+                                )}
+                                eventName="Click Book Item on Library Page"
+                                eventPayload={{ 'Book Slug': book.slug }}
+                                imageClassname="min-w-20 min-h-24"
+                                {...book}
+                            />
+                        ))}
+                    </>
+                )}
+            </div>
+            {astronotes && astronotes?.count_items > PAGE_SIZE && (
+                <Paginator
+                    totalPages={totalPages}
+                    hasNextPage={!!astronotes?.next_page}
+                    hasPreviousPage={!!astronotes?.previous_page}
+                    className="justify-center w-full pb-8"
+                />
             )}
-        </div>
+        </>
     );
 };
 
@@ -94,12 +110,15 @@ export const EntrypointPrivate = ({
     category: Tab;
 }): JSX.Element => {
     const router = useRouter();
-    const { sort } = router.query as { sort?: Sort; tab?: Tab };
+    const { sort, page: pageParam } = router.query as {
+        sort?: EntrypointSort;
+        page: string;
+    };
+    const page = parseInt(pageParam ?? '1');
 
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const skip = !(
-        Object.values(Sort).includes(sort ?? Sort.release) &&
-        Object.values(Tab).includes(category ?? Tab.all)
+    const skip = !Object.values(EntrypointSort).includes(
+        sort ?? EntrypointSort.release
     );
 
     const {
@@ -107,14 +126,14 @@ export const EntrypointPrivate = ({
         isLoading,
         isFetching
     } = useGetEntrypointBooksQuery(
-        { limit: 100, type: category, status: sort },
+        { limit: PAGE_SIZE, type: category, status: sort, page },
         { skip: !isAuthenticated || skip }
     );
 
     return (
         <EntrypointContent
             isLoading={isLoading || isFetching}
-            astronotes={astronotes?.books}
+            astronotes={astronotes}
         />
     );
 };
@@ -125,12 +144,15 @@ export const EntrypointPublic = ({
     category: Tab;
 }): JSX.Element => {
     const router = useRouter();
-    const { sort } = router.query as { sort?: Sort; tab?: Tab };
+    const { sort, page: pageParam } = router.query as {
+        sort?: EntrypointSort;
+        page: string;
+    };
+    const page = parseInt(pageParam ?? '1');
 
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const skip = !(
-        Object.values(Sort).includes(sort ?? Sort.release) &&
-        Object.values(Tab).includes(category ?? Tab.all)
+    const skip = !Object.values(EntrypointSort).includes(
+        sort ?? EntrypointSort.release
     );
 
     const {
@@ -138,14 +160,14 @@ export const EntrypointPublic = ({
         isLoading,
         isFetching
     } = useGetPublicEntrypointBooksQuery(
-        { limit: 100, type: category, status: sort },
+        { limit: PAGE_SIZE, type: category, status: sort, page },
         { skip: isAuthenticated || skip }
     );
 
     return (
         <EntrypointContent
             isLoading={isLoading || isFetching}
-            astronotes={astronotes?.books}
+            astronotes={astronotes}
         />
     );
 };

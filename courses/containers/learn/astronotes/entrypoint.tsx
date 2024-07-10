@@ -1,13 +1,16 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import Sort from 'commons/components/elements/Sort';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import ContinueReadingSection from 'courses/components/LearningExperience/AstroNotes/Entrypoint/ContinueReadingSection';
 import {
     EntrypointPrivate,
     EntrypointPublic
 } from 'courses/components/LearningExperience/AstroNotes/Entrypoint/EntrypointContent';
-import EntrypointSort from 'courses/components/LearningExperience/AstroNotes/Entrypoint/EntrypointFilters';
 import EntrypointTabs from 'courses/components/LearningExperience/AstroNotes/Entrypoint/EntrypointTabs';
-import { Tab } from 'courses/components/LearningExperience/AstroNotes/constants';
+import {
+    SORT_OPTIONS,
+    Tab
+} from 'courses/components/LearningExperience/AstroNotes/constants';
 import RenewSubscriptionBanner from 'courses/components/RenewSubscriptionBanner';
 import { useRouter } from 'next/router';
 import { useGetActiveSubscriptionQuery } from 'payment/redux/api/subscriptionApi';
@@ -34,7 +37,13 @@ const AstronotesEntrypoint = (): JSX.Element => {
                 {isAuthenticated && <ContinueReadingSection />}
                 <h1 className="text-xl font-bold md:text-2xl">Perpustakaan</h1>
                 <EntrypointTabs />
-                {isAuthenticated && <EntrypointSort />}
+                {isAuthenticated && (
+                    <Sort
+                        options={SORT_OPTIONS}
+                        defaultSelected="last-released"
+                        className="sticky z-10 py-2 bg-black top-28"
+                    />
+                )}
                 {isAuthenticated ? (
                     <EntrypointPrivate category={type} />
                 ) : (

@@ -22,13 +22,13 @@ const Recommendations = ({
             major: recommendation as string,
             limit: isMobileBreakpoints ? 2 : 4
         });
-    const { data: questionBankBookData, isLoading: isLoadingQuestionBankBook } =
+    const { data: bankSoal, isLoading: isLoadingQuestionBankBook } =
         useGetPublicEntrypointBooksQuery({
             major: recommendation as string,
             limit: isMobileBreakpoints ? 2 : 5,
             type: 'bank-soal'
         });
-    const { data: notebookData, isLoading: isLoadingNotebook } =
+    const { data: astronotes, isLoading: isLoadingNotebook } =
         useGetPublicEntrypointBooksQuery({
             major: recommendation as string,
             limit: isMobileBreakpoints ? 2 : 5,
@@ -39,9 +39,7 @@ const Recommendations = ({
         categoryName: 'Bank Soal' | 'Textbook' | 'Catatan'
     ): JSX.Element => {
         const books =
-            categoryName === 'Bank Soal'
-                ? questionBankBookData?.books
-                : notebookData?.books;
+            categoryName === 'Bank Soal' ? bankSoal?.data : astronotes?.data;
         const bookList = books?.filter(
             (category) => category.category_name === categoryName
         );

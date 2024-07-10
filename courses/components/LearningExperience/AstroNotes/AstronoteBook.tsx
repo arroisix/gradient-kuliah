@@ -85,6 +85,7 @@ export const AstronoteBookCard = ({
     href,
     className,
     imageClassname,
+    isHeading = false,
     ...book
 }: Astronote &
     PropsWithClassName & {
@@ -94,6 +95,7 @@ export const AstronoteBookCard = ({
         imageClassname?: string;
         eventName?: string;
         eventPayload?: Record<string, unknown>;
+        isHeading?: boolean;
     }): JSX.Element => {
     const tracker = useTracker();
 
@@ -169,6 +171,8 @@ export const AstronoteBookCard = ({
         </>
     );
 
+    const BookTitleLabel = isHeading ? 'h2' : 'p';
+
     return (
         <Link
             href={href}
@@ -218,7 +222,9 @@ export const AstronoteBookCard = ({
                     )}
                 </p>
 
-                <p className="font-sans text-sm font-bold">{book.title}</p>
+                <BookTitleLabel className="font-sans text-sm font-bold">
+                    {book.title}
+                </BookTitleLabel>
                 {book.in_progress ? <Progress /> : <Info />}
             </div>
         </Link>
