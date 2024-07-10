@@ -41,7 +41,11 @@ export function AuthProvider({
     const router = useRouter();
 
     useEffect(() => {
-        if (!isProfileComplete && router.pathname !== '/onboarding' && router.pathname !== '/keluar-perangkat') {
+        if (
+            !isProfileComplete &&
+            router.pathname !== '/onboarding' &&
+            router.pathname !== '/keluar-perangkat'
+        ) {
             router.push('/onboarding');
         }
     }, [isProfileComplete, router]);
