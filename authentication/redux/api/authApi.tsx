@@ -37,7 +37,7 @@ export const authApi = baseApi.injectEndpoints({
             UpdateUserInputData
         >({
             query: (data: UpdateUserInputData) => ({
-                url: `${STUDENT_BASE_URL}new-update-profile/`,
+                url: `${STUDENT_BASE_URL}v2/update-profile/`,
                 method: 'PUT',
                 body: data
             }),
@@ -56,7 +56,7 @@ export const authApi = baseApi.injectEndpoints({
             Record<string, never>
         >({
             query: () => ({
-                url: `${STUDENT_BASE_URL}profile/`
+                url: `${STUDENT_BASE_URL}v2/profile/`
             }),
             providesTags: ['PROFILE']
         }),

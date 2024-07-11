@@ -29,7 +29,7 @@ export const OnboardingSection = (): JSX.Element => {
                         <FormStep />
                     </div>
                     <div className="h-[128px] w-full flex-shrink-0"></div>
-                    <div className="sticky bottom-[36px] px-[16px] md:px-0 w-full">
+                    <div className="sticky bottom-[24px] px-[16px] md:px-0 w-full">
                         <OnboardingStepper />
                     </div>
                 </div>

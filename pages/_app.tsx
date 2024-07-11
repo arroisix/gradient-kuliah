@@ -34,6 +34,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { MixpanelProvider } from 'tracker/MixpanelProvider';
 import { HighlightInit } from '@highlight-run/next/client';
 import { HIGHLIGHT_PROJECT_ID } from 'commons/constants';
+import UpdateProfileNotification from 'profile/components/UpdateProfileNotification';
 
 const store = useStore();
 
@@ -97,6 +98,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
                         <GoogleOAuthProvider clientId="734268158155-omc5qdjjl5kdrbute446h18i5rvjauiv.apps.googleusercontent.com">
                             <ThemeContextProvider>
                                 <AuthProvider>
+                                    <UpdateProfileNotification />
                                     <Component {...pageProps} />
                                 </AuthProvider>
                             </ThemeContextProvider>

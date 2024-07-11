@@ -15,9 +15,11 @@ import Avatar from 'react-avatar';
 import useUploadFile from 'commons/hooks/useUploadFile';
 import Image from 'next/image';
 import { useTracker } from 'tracker/tracker';
+import { useHandleSuccessfulForm } from 'profile/utils';
 
 export const GeneralProfileForm = (): JSX.Element => {
     const tracker = useTracker();
+    const { handleSuccessfulForm } = useHandleSuccessfulForm();
 
     const [isValid, setIsValid] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
@@ -100,9 +102,7 @@ export const GeneralProfileForm = (): JSX.Element => {
                 const result = await updateUser(payload);
 
                 if (!(result as ReduxHTTPError).error) {
-                    toast.success(`Perubahan berhasil disimpan`, {
-                        position: toast.POSITION.TOP_CENTER
-                    });
+                    handleSuccessfulForm();
                 }
 
                 return setSubmitting(false);

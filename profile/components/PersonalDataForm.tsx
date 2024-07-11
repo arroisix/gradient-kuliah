@@ -7,11 +7,12 @@ import {
     ReduxHTTPError,
     useProfileContext
 } from 'profile/contexts/ProfileProvider';
-import { toast } from 'react-toastify';
+import { useHandleSuccessfulForm } from 'profile/utils';
 import { useTracker } from 'tracker/tracker';
 
 export const PersonalDataForm = (): JSX.Element => {
     const tracker = useTracker();
+    const { handleSuccessfulForm } = useHandleSuccessfulForm();
 
     const { isLoading, updateUser, profile } = useProfileContext();
     return (
@@ -51,9 +52,7 @@ export const PersonalDataForm = (): JSX.Element => {
                 const result = await updateUser(payload);
 
                 if (!(result as ReduxHTTPError).error) {
-                    toast.success(`Perubahan berhasil disimpan`, {
-                        position: toast.POSITION.TOP_CENTER
-                    });
+                    handleSuccessfulForm();
                 }
 
                 setSubmitting(false);
