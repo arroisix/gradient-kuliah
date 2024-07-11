@@ -109,9 +109,9 @@ const Paywall = ({
                         )}
                         <div className={cn('flex flex-col gap-4 pt-4')}>
                             <div className="flex flex-col text-center md:gap-1">
-                                <h3 className="font-extrabold">
+                                <p className="font-extrabold">
                                     {pricing.packet_name}
-                                </h3>
+                                </p>
                                 <p
                                     className={cn(
                                         'text-4xl font-extrabold font-body',
