@@ -5,7 +5,7 @@ import { GetStaticProps } from 'next';
 const TextbookPage = (): JSX.Element => {
     return (
         <LearnLayout showSidebar fullHeightSidebar>
-            <AstronotesEntrypoint />
+            <AstronotesEntrypoint title="Kumpulan Kunci Jawaban dari Buku Pembelajaran Kuliah" />
         </LearnLayout>
     );
 };

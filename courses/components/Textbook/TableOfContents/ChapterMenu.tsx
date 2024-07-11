@@ -68,7 +68,7 @@ const ChapterMenu = ({
                     !activeChapter && isOpen && activeClassName,
                     chapter.id == activeChapter && activeClassName
                 )}>
-                {chapter.title}
+                <h2>{chapter.title}</h2>
             </button>
             <ul
                 className={cn(

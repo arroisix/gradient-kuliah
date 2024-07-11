@@ -56,37 +56,37 @@ const VideoLearnContainer = ({
     const subchapter = subchapterResponse ?? ssrSubchapterData;
 
     return (
-        <section className="relative pt-14 pb-16 min-h-[100vh] flex flex-col">
-            <Breadcrumb
-                className="pb-2"
-                nextItem={
-                    {
-                        name: course?.course_name,
-                        url: `/kelas/${id}`,
-                        nextItem: {
-                            name: subchapter?.subchapter_name
-                        }
-                    } as BreadcrumbItemProps
-                }
-            />
-            <div className="grid grid-cols-1 gap-5 lg:pl-6 lg:pr-[15px] lg:grid-cols-3 pb-1">
+        <section className="relative pb-16 min-h-[100vh] flex flex-col">
+            <div className="grid grid-cols-1 gap-5 pb-px pt-14 lg:pl-6 lg:grid-cols-3">
                 <div
-                    className="w-full lg:col-span-2 h-max lg:pl-8"
+                    className="flex flex-col w-full lg:col-span-2 h-max lg:pl-8"
                     ref={videoRef}>
+                    <Breadcrumb
+                        className="py-4"
+                        nextItem={
+                            {
+                                name: course?.course_name,
+                                url: `/kelas/${id}`,
+                                nextItem: {
+                                    name: subchapter?.subchapter_name
+                                }
+                            } as BreadcrumbItemProps
+                        }
+                    />
+                    <div className="order-last px-4 py-4 space-y-1 lg:pt-6 sm:px-0 md:px-12 lg:px-0">
+                        <p className="text-sm lg:text-xl text-neutral-400">
+                            Kelas {course?.course_name}
+                        </p>
+                        <h1 className="text-base font-extrabold md:text-2xl">
+                            {subchapter?.subchapter_name}
+                        </h1>
+                    </div>
                     <VideoPlayerContainer
                         isLoadingData={isLoading}
                         subchapter_name={subchapter?.subchapter_name}
                         video={subchapter?.video}
                         next_subchapter_slug={subchapter?.next_subchapter_slug}
                     />
-                    <div className="px-4 py-4 space-y-1 lg:pt-6 sm:px-0 md:px-12 lg:px-0">
-                        <h3 className="text-sm lg:text-xl text-neutral-400">
-                            {course?.course_name}
-                        </h3>
-                        <h2 className="text-base font-extrabold md:text-2xl">
-                            {subchapter?.subchapter_name}
-                        </h2>
-                    </div>
                 </div>
                 {!isLoading && isDesktopBreakpoints ? (
                     <div

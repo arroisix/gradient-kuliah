@@ -108,13 +108,13 @@ const VideoItem = ({
                         <HiLockClosed className="text-neutral-600" />
                     )}
                 </div>
-                <span
+                <h4
                     className={cn(
-                        'inline-block overflow-hidden text-xs font-body whitespace-nowrap text-ellipsis',
+                        'overflow-hidden text-xs font-body whitespace-nowrap text-ellipsis',
                         !is_subscribed && !value.is_free && 'text-neutral-600'
                     )}>
                     {value.subchapter_name}
-                </span>
+                </h4>
             </div>
             <div className="flex gap-1 text-xs font-body">
                 {duration && (

@@ -17,7 +17,11 @@ import { useGetActiveSubscriptionQuery } from 'payment/redux/api/subscriptionApi
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-const AstronotesEntrypoint = (): JSX.Element => {
+const AstronotesEntrypoint = ({
+    title = 'Perpustakaan'
+}: {
+    title?: string;
+}): JSX.Element => {
     const router = useRouter();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { data: activePacket } = useGetActiveSubscriptionQuery(undefined, {
@@ -35,7 +39,9 @@ const AstronotesEntrypoint = (): JSX.Element => {
             <Breadcrumb className="w-full pb-5" />
             <div className="relative grid w-full grid-cols-1 mx-auto xl:max-w-screen-2xl">
                 {isAuthenticated && <ContinueReadingSection />}
-                <h1 className="text-xl font-bold md:text-2xl">Perpustakaan</h1>
+                <h1 className="text-xl font-bold md:text-2xl text-balance">
+                    {title}
+                </h1>
                 <EntrypointTabs />
                 {isAuthenticated && (
                     <Sort

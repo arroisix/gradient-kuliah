@@ -51,15 +51,15 @@ const ExerciseItem = ({ value }: { value: SubChapter }): JSX.Element => {
                             <HiLockClosed className="text-neutral-600" />
                         )}
                     </div>
-                    <span
+                    <h4
                         className={cn(
-                            'inline-block overflow-hidden text-xs font-body whitespace-nowrap text-ellipsis',
+                            'overflow-hidden text-xs font-body whitespace-nowrap text-ellipsis',
                             !is_subscribed &&
                                 !value.is_free &&
                                 'text-neutral-600'
                         )}>
                         {value.exercise_name}
-                    </span>
+                    </h4>
                 </div>
             </div>
             <Modal

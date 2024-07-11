@@ -5,7 +5,7 @@ import { GetStaticProps } from 'next';
 const BankSoalPage = (): JSX.Element => {
     return (
         <LearnLayout showSidebar fullHeightSidebar>
-            <AstronotesEntrypoint />
+            <AstronotesEntrypoint title="Kumpulan Bank Soal Materi Perkuliahan" />
         </LearnLayout>
     );
 };

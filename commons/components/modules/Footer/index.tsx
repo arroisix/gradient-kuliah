@@ -140,8 +140,8 @@ const Footer = (): JSX.Element => {
         <footer
             id="footer"
             className="w-full flex flex-col bg-[#121212] gap-8 lg:gap-12 px-6 md:px-12 xl:px-24 pt-6 md:pt-8 pb-5 md:pb-6">
-            <div className="flex flex-col-reverse lg:flex-row gap-8 lg:gap-0 w-full">
-                <div className="w-full flex flex-col lg:flex-row gap-7 xl:gap-12">
+            <div className="flex flex-col-reverse w-full gap-8 lg:flex-row lg:gap-0">
+                <div className="flex flex-col w-full lg:flex-row gap-7 xl:gap-12">
                     {ITEMS.map((item) => (
                         <div
                             key={item.title}
@@ -160,7 +160,7 @@ const Footer = (): JSX.Element => {
                         </div>
                     ))}
                 </div>
-                <div className="flex flex-col-reverse lg:flex-row gap-7 xl:gap-12 lg:justify-end w-full">
+                <div className="flex flex-col-reverse w-full lg:flex-row gap-7 xl:gap-12 lg:justify-end">
                     <div className={`flex flex-col gap-${TITLE_BODY_GAP}`}>
                         <Title title="Punya Pertanyaan?" />
                         <div
@@ -178,14 +178,14 @@ const Footer = (): JSX.Element => {
 
                     <div
                         className={`flex flex-col gap-${TITLE_BODY_GAP} lg:max-w-[45%] xl:max-w-[50%]`}>
-                        <span className="font-extrabold text-2xl text-white">
+                        <span className="text-2xl font-extrabold text-white">
                             Gradient
                         </span>
                         <div
                             className={`flex flex-col gap-${CONTACT_BODY_GAP}`}>
-                            <h4 className="font-sans font-bold text-sm text-white">
+                            <p className="font-sans text-sm font-bold text-white">
                                 Kantor Kami
-                            </h4>
+                            </p>
                             <div className="flex flex-col gap-1">
                                 <span className="font-body text-sm text-[#BBBBBB]">
                                     Gedung Smesco SME Tower Kontrak Hukum Office
@@ -203,11 +203,11 @@ const Footer = (): JSX.Element => {
             </div>
             <div className="flex flex-col gap-4">
                 <hr className="border-[#666666]" />
-                <div className="flex flex-col-reverse lg:flex-row justify-between items-center gap-4 lg:gap-0">
+                <div className="flex flex-col-reverse items-center justify-between gap-4 lg:flex-row lg:gap-0">
                     <span className="font-body text-sm text-[#BBBBBB] text-center lg:text-left">
                         {`© ${CURRENT_YEAR} Gradient Academy. All rights reserved.`}
                     </span>
-                    <div className="flex flex-row gap-4 items-center">
+                    <div className="flex flex-row items-center gap-4">
                         {SOCIAL_MEDIAS.map(({ Icon, url }, idx) => (
                             <SocialMedia
                                 key={`social-media-${idx + 1}`}
@@ -223,7 +223,7 @@ const Footer = (): JSX.Element => {
 };
 
 const Title = ({ title }: { title: string }): JSX.Element => {
-    return <h4 className="font-sans font-bold text-white">{title}</h4>;
+    return <p className="font-sans font-bold text-white">{title}</p>;
 };
 
 const Body = ({ content, url, Icon }: FooterBodyProps): JSX.Element => {

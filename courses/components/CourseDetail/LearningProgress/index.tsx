@@ -27,7 +27,6 @@ const LearningProgress = ({
     const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
         'landing-page-revamp'
     );
-    /* Frame 3423 */
 
     return (
         <div
@@ -88,12 +87,12 @@ const LearningProgress = ({
                         Segera Hadir
                     </div>
                     <h1
-                        className={`font-bold ${
+                        className={`font-bold text-balance ${
                             isAuthenticated
                                 ? 'text-xl lg:text-base'
                                 : 'text-4xl'
                         }`}>
-                        {data?.course_name}
+                        Kelas {data?.course_name}
                     </h1>
                     <div className="w-full h-px bg-gray-500 lg:ml-3 lg:w-9/12" />
                     {isAuthenticated && !data?.is_coming_soon && (

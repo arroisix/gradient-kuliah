@@ -6,6 +6,7 @@ interface AccordionItemProps {
     title: string;
     content?: string;
     jsxContent?: JSX.Element;
+    isHeading?: boolean;
     className?: string;
     isOpen?: boolean;
     onClick?: () => void;
@@ -22,9 +23,11 @@ export const AccordionItem = ({
     jsxContent,
     onClick,
     className,
-    isOpen
+    isOpen,
+    isHeading
 }: AccordionItemProps): JSX.Element => {
     const [open, setOpen] = useState(isOpen ?? false);
+    const AccordionTitle = isHeading ? 'h3' : 'span';
 
     const renderContent = (): JSX.Element => {
         if (jsxContent) {
@@ -51,23 +54,22 @@ export const AccordionItem = ({
 
     return (
         <>
-            <div
-                className={`text-sm md:text-base font-semibold px-4 py-3 flex justify-between items-center cursor-pointer bg-neutral-900 first:mt-0 mt-4 ${
+            <button
+                className={cn(
+                    'text-sm w-full md:text-base font-semibold px-4 py-3 flex justify-between items-center cursor-pointer bg-neutral-900 first:mt-0 mt-4',
                     open ? 'rounded-t-lg' : 'rounded-lg'
-                }`}
-                role="alert"
+                )}
                 onClick={() => {
                     setOpen(!open);
                     onClick?.();
-                }}
-                aria-hidden="true">
-                {title}
+                }}>
+                <AccordionTitle>{title}</AccordionTitle>
                 {open ? (
                     <FaChevronUp className="w-4 h-4" />
                 ) : (
                     <FaChevronDown className="w-4 h-4" />
                 )}
-            </div>
+            </button>
             {open && renderContent()}
         </>
     );

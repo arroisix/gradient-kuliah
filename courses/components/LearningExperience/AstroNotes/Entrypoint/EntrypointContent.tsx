@@ -12,7 +12,7 @@ import { EntrypointSort, Tab } from '../constants';
 import { getBookBaseHref } from 'courses/utils';
 import Paginator from 'commons/components/elements/Paginator';
 
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 6;
 
 export const EntrypointContent = ({
     isLoading,

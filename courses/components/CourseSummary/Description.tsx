@@ -120,9 +120,9 @@ const Description = (): JSX.Element => {
                     {!isOnScreen && (
                         <div className="w-full h-[40px] absolute left-0 bottom-[-1px] bg-gradient-to-b from-transparent to-[#121212] z-[1]"></div>
                     )}
-                    <span className="inline-block text-xs font-body text-neutral-600 md:text-base">
-                        PENGAJAR
-                    </span>
+                    <h2 className="text-xs uppercase font-body text-neutral-600 md:text-base">
+                        Pengajar
+                    </h2>
                     <div className="flex flex-col gap-3 max-h-[200px] overflow-hidden">
                         <div className="flex flex-col gap-3 overflow-y-auto">
                             {courseDetail?.course_detail.lecturers?.map(
@@ -137,9 +137,9 @@ const Description = (): JSX.Element => {
                                             className="object-cover rounded-full"
                                         />
                                         <div className="flex flex-col gap-1">
-                                            <span className="inline-block font-body text-[#CCCCCC] text-xs md:text-base">
+                                            <h3 className="font-body text-[#CCCCCC] text-xs md:text-base">
                                                 {value.name}
-                                            </span>
+                                            </h3>
                                             <span className="inline-block text-xs font-extrabold md:text-base">
                                                 {value.role}
                                             </span>

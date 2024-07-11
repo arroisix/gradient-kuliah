@@ -36,7 +36,9 @@ const ClassContainer = (): JSX.Element => {
                 {isAuthenticated && courseProgresses && (
                     <CourseProgress courseProgresses={courseProgresses} />
                 )}
-                <h1 className="text-xl font-bold md:text-2xl">Kelas</h1>
+                <h1 className="text-xl font-bold md:text-2xl">
+                    Kelas &amp; Video Perkuliahan Online Terbaik
+                </h1>
                 <CourseTabs />
                 {isAuthenticated && (
                     <Sort

@@ -81,7 +81,7 @@ const SubchapterMenu = ({
                         !activeSubchapter && isOpen && activeClassName,
                         subchapter.id == activeSubchapter && activeClassName
                     )}>
-                    {subchapter.title}
+                    <h3>{subchapter.title}</h3>
                 </button>
                 <div
                     className={cn(
@@ -97,7 +97,7 @@ const SubchapterMenu = ({
                                         section.slug == problemSlug &&
                                             'font-semibold text-white'
                                     )}>
-                                    {section.title}
+                                    <h4>{section.title}</h4>
                                 </Link>
                             </li>
                         ))}
@@ -118,7 +118,7 @@ const SubchapterMenu = ({
                 className={cn(
                     subchapter.slug == problemSlug && 'font-semibold text-white'
                 )}>
-                {subchapter.title}
+                <h3>{subchapter.title}</h3>
             </Link>
         </li>
     );
