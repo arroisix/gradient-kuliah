@@ -46,7 +46,6 @@ export const ReferenceStep = (): JSX.Element => {
                             errors.join_reasoning =
                                 'Alasan bergabung tidak boleh kosong';
 
-                        console.log(errors);
                         return errors;
                     }}>
                     {({
