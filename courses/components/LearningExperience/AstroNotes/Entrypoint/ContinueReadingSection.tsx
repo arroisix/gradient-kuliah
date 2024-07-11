@@ -60,7 +60,7 @@ const ContinueReadingSection = (): JSX.Element => {
                                 href={`${getBookBaseHref(book.category_name)}/${
                                     book.slug
                                 }/${
-                                    book.category === 'Catatan'
+                                    book.category_name === 'Catatan'
                                         ? book.latest_page
                                         : book.latest_problem
                                 }`}
