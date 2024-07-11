@@ -40,6 +40,10 @@ const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
         });
     }
 
+    const onChangeTracker = (tab: string): void => {
+        tracker?.genericTrack(`Click ${tab} Tab`);
+    };
+
     return (
         <div className="flex flex-col w-screen px-5 lg:w-5/12">
             <div className="flex items-center px-4 bg-[#212121] rounded-lg">
@@ -74,77 +78,80 @@ const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
                     />
                 )}
             </div>
-            <div className="pt-[17px] md:pt-6 pb-[14px] md:pb-4">
+            <div
+                role="tablist"
+                className="grid-cols-2 pt-4 pb-4 tabs tabs-bordered md:pt-6">
                 {!isSearch && (
-                    <div className="flex">
-                        <span
-                            className={`inline-block w-full text-center text-sm pb-[6px] cursor-pointer ${
-                                navigation === 'VIDEO'
-                                    ? 'border-b-2 border-[#C4B9FF] font-extrabold text-[#C4B9FF]'
-                                    : 'font-medium text-[#CCCCCC] border-b border-[#272727] hover:text-neutral-500'
-                            }`}
-                            onClick={() => {
-                                tracker?.genericTrack('Click Video Tab');
-                                setNavigation('VIDEO');
-                            }}
-                            aria-hidden>
-                            VIDEO
-                        </span>
+                    <>
+                        <label className="tab has-[:checked]:tab-active has-[:checked]:font-bold flex-1 text-center text-sm pb-3 uppercase">
+                            <input
+                                role="tab"
+                                type="radio"
+                                name="course-details-tab"
+                                value="video"
+                                className="hidden"
+                                defaultChecked
+                                onChange={(e) =>
+                                    onChangeTracker(e.target.value)
+                                }
+                            />
+                            <h2>Video</h2>
+                        </label>
+                        <div role="tabpanel" className="py-4 tab-content">
+                            <Accordion
+                                item={
+                                    courseContent?.chapters?.map((value) => ({
+                                        title: value.chapter_name,
+                                        isHeading: true,
+                                        jsxContent: (
+                                            <SylabbusContent
+                                                id={value.chapter_id}
+                                                slug={slug}
+                                            />
+                                        ),
+                                        onClick: () => {
+                                            tracker?.genericTrack(
+                                                'Click Chapter Accordion',
+                                                {
+                                                    'Course Slug': id,
+                                                    'Chapter Name':
+                                                        value.chapter_name
+                                                }
+                                            );
+                                        }
+                                    })) ?? []
+                                }
+                            />
+                            {isLoadingCourse && (
+                                <div className="flex flex-col w-full gap-2">
+                                    <Skeleton className="h-14" repeat={5} />
+                                </div>
+                            )}
+                        </div>
                         {(courseContent?.books.length ?? 0) > 0 && (
-                            <span
-                                className={`inline-block w-full text-center text-sm pb-[6px] cursor-pointer ${
-                                    navigation === 'BOOK'
-                                        ? 'border-b-2 border-[#C4B9FF] font-extrabold text-[#C4B9FF]'
-                                        : 'font-medium text-[#CCCCCC] border-b border-[#272727] hover:text-neutral-500'
-                                }`}
-                                onClick={() => {
-                                    tracker?.genericTrack('Click Book Tab');
-                                    setNavigation('BOOK');
-                                }}
-                                aria-hidden>
-                                BUKU
-                            </span>
+                            <label className="tab has-[:checked]:tab-active has-[:checked]:font-bold flex-1 text-center text-sm pb-3 uppercase">
+                                <input
+                                    role="tab"
+                                    type="radio"
+                                    name="course-details-tab"
+                                    value="book"
+                                    className="hidden"
+                                    onChange={(e) =>
+                                        onChangeTracker(e.target.value)
+                                    }
+                                />
+                                <h2>Buku</h2>
+                            </label>
                         )}
-                    </div>
+                        <div role="tabpanel" className="py-4 tab-content">
+                            <ListBooks
+                                books={courseContent?.books as Book[]}
+                                isLoading={isLoadingCourse}
+                            />
+                        </div>
+                    </>
                 )}
             </div>
-            {navigation === 'VIDEO' && (
-                <>
-                    <Accordion
-                        item={
-                            courseContent?.chapters?.map((value) => ({
-                                title: value.chapter_name,
-                                jsxContent: (
-                                    <SylabbusContent
-                                        id={value.chapter_id}
-                                        slug={slug}
-                                    />
-                                ),
-                                onClick: () => {
-                                    tracker?.genericTrack(
-                                        'Click Chapter Accordion',
-                                        {
-                                            'Course Slug': id,
-                                            'Chapter Name': value.chapter_name
-                                        }
-                                    );
-                                }
-                            })) ?? []
-                        }
-                    />
-                    {isLoadingCourse && (
-                        <div className="flex flex-col w-full gap-2">
-                            <Skeleton className="h-14" repeat={5} />
-                        </div>
-                    )}
-                </>
-            )}
-            {navigation === 'BOOK' && (
-                <ListBooks
-                    books={courseContent?.books as Book[]}
-                    isLoading={isLoadingCourse}
-                />
-            )}
             {navigation === 'ON_SEARCH' && <SearchList />}
         </div>
     );

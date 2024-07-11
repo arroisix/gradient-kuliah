@@ -44,6 +44,7 @@ interface UpdateUserResponseData {
     is_profile_complete: boolean;
     device_type_id: number;
     device_allowed: boolean;
+    display_update_data_notification: boolean;
 }
 
 interface UpdateGeneralProfileInputData extends UpdateUserResponseData {

@@ -2,20 +2,15 @@
 import GreenCheck from 'commons/components/elements/Icons/GreenCheck';
 import Play from 'commons/components/elements/Icons/Play';
 import Skeleton from 'commons/components/elements/Skeleton';
-import {
-    // useGetPublicSubchapterDetailQuery,
-    useGetSubchapterQuery
-} from 'courses/redux/api/courseApi';
+import { useGetSubchapterQuery } from 'courses/redux/api/courseApi';
 import Link from 'next/link';
 import React from 'react';
-// import { useSelector } from 'react-redux';
 import { useTracker } from 'tracker/tracker';
 
 const SylabbusContent = ({
     id,
     slug
 }: GradientBaseComponentWithId & { slug: string }): JSX.Element => {
-    // const isAuthenticated = useSelector(getIsAuthenticated);
     const { data: subchapters, isLoading } = useGetSubchapterQuery(
         { chapterId: id },
         {
@@ -26,16 +21,6 @@ const SylabbusContent = ({
             })
         }
     );
-    // const publicSubchapters = useGetPublicSubchapterDetailQuery(id, {
-    //     skip: isAuthenticated || !id,
-    //     selectFromResult: ({ data, isLoading }) => ({
-    //         data: data?.subchapters.filter(({ type }) => type === 'video'),
-    //         isLoading: isLoading
-    //     })
-    // });
-    // const { data: subchapters, isLoading } = isAuthenticated
-    //     ? privateSubchapters
-    //     : publicSubchapters;
     const tracker = useTracker();
 
     return (
@@ -98,9 +83,9 @@ const SylabbusContent = ({
                             {subchapter.is_finished ? <GreenCheck /> : <Play />}
                         </div>
                         <div className="flex flex-col text-left">
-                            <p className="text-lg text-neutral-200">
+                            <h4 className="text-lg text-neutral-200">
                                 {subchapter.subchapter_name}
-                            </p>
+                            </h4>
                             <p className="text-lg text-neutral-600">
                                 {subchapter.duration}
                             </p>

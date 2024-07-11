@@ -1,6 +1,7 @@
 import Skeleton from 'commons/components/elements/Skeleton';
 import { useGetCourseQuery } from 'courses/redux/api/courseApi';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useRef } from 'react';
 import { FaChevronRight } from 'react-icons/fa';
@@ -11,24 +12,25 @@ const ClassCard = ({
     title,
     description,
     slug,
-    onClick
+    eventName,
+    eventPayload
 }: {
     cover: string;
     title: string;
     description: string;
     slug: string;
-    onClick?: () => void;
+    eventName: string;
+    eventPayload: { [key: string]: string };
 }): JSX.Element => {
-    const router = useRouter();
+    const tracker = useTracker();
 
     return (
-        <div
+        <Link
+            href={`/kelas/${slug}`}
             className="relative w-fit snap-center bg-[#5F2BCE33] rounded-3xl overflow-hidden cursor-pointer"
             onClick={() => {
-                onClick?.();
-                router.push(`/kelas/${slug}`);
-            }}
-            aria-hidden>
+                tracker?.genericTrack(eventName, eventPayload);
+            }}>
             <div className="relative w-[208px] h-[142px] md:h-[225px] md:w-[330px]">
                 <Image
                     src={cover}
@@ -40,25 +42,23 @@ const ClassCard = ({
             </div>
             <div className="w-[200px] md:w-[330px] px-[18px] py-2 md:py-[14px]">
                 <div className="flex items-center gap-1">
-                    <span className="inline-block font-extrabold text-xs md:text-lg whitespace-nowrap text-ellipsis overflow-hidden">
+                    <h3 className="overflow-hidden text-xs font-extrabold md:text-lg whitespace-nowrap text-ellipsis">
                         {title}
-                    </span>
+                    </h3>
                     <FaChevronRight size={10} className="text-[#FFFFFF33]" />
                 </div>
                 <span className="inline-block font-medium text-[#FFFFFF80] text-[10px] md:text-base">
                     {description}
                 </span>
             </div>
-        </div>
+        </Link>
     );
 };
 
 const AnotherClass = (): JSX.Element => {
-    const tracker = useTracker();
-
     const ref = useRef<HTMLDivElement>(null);
     const router = useRouter();
-    const { id } = router.query;
+    const { id } = router.query as { id: string };
 
     const { data, isLoading } = useGetCourseQuery(undefined, {
         selectFromResult: ({ data, isLoading }) => ({
@@ -82,34 +82,34 @@ const AnotherClass = (): JSX.Element => {
     }
 
     return (
-        <div className="flex flex-col gap-5 md:gap-6 pt-8">
-            <div className="flex justify-between items-center px-5 md:px-16">
-                <span className="inline-block font-extrabold text-sm md:text-lg">
+        <div className="flex flex-col gap-5 pt-8 md:gap-6">
+            <div className="flex items-center justify-between px-5 md:px-16">
+                <h2 className="text-sm font-extrabold md:text-lg">
                     Kelas Lainnya
-                </span>
-                <div className="hidden md:flex gap-3">
+                </h2>
+                <div className="hidden gap-3 md:flex">
                     <FaChevronRight
                         size={20}
                         onClick={scrollLeft}
-                        className="text-neutral-500 hover:text-white rotate-180 cursor-pointer transition-all"
+                        className="transition-all rotate-180 cursor-pointer text-neutral-500 hover:text-white"
                     />
                     <FaChevronRight
                         size={20}
                         onClick={scrollRight}
-                        className="text-neutral-500 hover:text-white cursor-pointer transition-all"
+                        className="transition-all cursor-pointer text-neutral-500 hover:text-white"
                     />
                 </div>
             </div>
             <div
                 ref={ref}
-                className="w-full overflow-x-scroll snap-x body scroll-smooth px-5 md:px-16">
+                className="w-full px-5 overflow-x-scroll snap-x body scroll-smooth md:px-16">
                 <div className="w-max mx-auto flex gap-[18px] md:gap-7">
                     {isLoading && (
-                        <>
-                            <Skeleton className="w-[300px] h-[200px]" />
-                            <Skeleton className="w-[300px] h-[200px]" />
-                            <Skeleton className="w-[300px] h-[200px]" />
-                        </>
+                        <Skeleton
+                            repeat={3}
+                            isCustomSize
+                            className="w-[300px] h-[200px]"
+                        />
                     )}
                     {data?.map(
                         (
@@ -122,14 +122,10 @@ const AnotherClass = (): JSX.Element => {
                                 title={course_name}
                                 description={short_description}
                                 slug={slug}
-                                onClick={() => {
-                                    tracker?.genericTrack(
-                                        'Click Other Class Card',
-                                        {
-                                            'Course Slug': id,
-                                            'Target Course Slug': slug
-                                        }
-                                    );
+                                eventName="Click Other Class Card"
+                                eventPayload={{
+                                    'Course Slug': id,
+                                    'Target Course Slug': slug
                                 }}
                             />
                         )

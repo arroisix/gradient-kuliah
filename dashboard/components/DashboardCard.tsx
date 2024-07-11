@@ -40,6 +40,7 @@ const DashboardCard = ({
             return baseHref;
         }
     };
+    const CategoryLabel = item.type == 'Video' ? 'p' : 'h3';
 
     return (
         <Link
@@ -79,10 +80,10 @@ const DashboardCard = ({
                 </div>
             </div>
             <div className="flex flex-col gap-1 p-2">
-                <p className="text-xs text-neutral-400">
+                <CategoryLabel className="text-xs text-neutral-400">
                     {item.type === 'Video' ? 'Kelas' : item.type}
-                </p>
-                <p className="text-sm font-bold text-white">{item.title}</p>
+                </CategoryLabel>
+                <h4 className="text-sm font-bold text-white">{item.title}</h4>
             </div>
         </Link>
     );

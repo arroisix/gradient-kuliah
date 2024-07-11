@@ -22,7 +22,7 @@ const Belajar = ({
     return (
         <>
             <LearningProvider>
-                <LearnLayout showSubscriptionReminder>
+                <LearnLayout noPadding showSubscriptionReminder>
                     <VideoLearnContainer
                         subchapter={subchapter}
                         course={course}

@@ -1,86 +1,75 @@
+import { cn } from 'commons/utils';
 import CourseCard from 'courses/components/CourseCard';
-import { useGrid } from 'courses/contexts/GridProvider';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useRef } from 'react';
-import { useTracker } from 'tracker/tracker';
 import { MdOutlineChevronLeft, MdOutlineChevronRight } from 'react-icons/md';
 
 export default function CourseProgress({
-    courseProgresses,
-    isLoading
+    courseProgresses
 }: {
     courseProgresses: CourseProgress[];
-    isLoading: boolean;
 }): JSX.Element {
-    const tracker = useTracker();
-    const { cellWidth, gapWidth, screenWidth } = useGrid();
-
     const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const { is_subscribed: isSubscribed } = useCourseSubscription();
 
-    const scrollTo = (direction: 'left' | 'right') => {
-        const scrollWidth = cellWidth! + gapWidth!;
-        const scrollAmount =
-            direction === 'left' ? -scrollWidth! : scrollWidth!;
+    const scrollTo = (direction: 'left' | 'right'): void => {
+        const scrollWidth = 300;
+        const scrollAmount = direction === 'left' ? -scrollWidth : scrollWidth;
         scrollContainerRef.current?.scrollBy({
             left: scrollAmount,
             behavior: 'smooth'
         });
     };
 
+    if (courseProgresses.length == 0) return <></>;
+
     return (
-        <section className="relative w-full">
-            <div className="flex justify-between items-center w-full px-4 md:px-8 xl:px-12">
-                <h1 className="text-4xl font-bold md:text-4xl">Kelasku</h1>
-                <div className="hidden md:flex gap-4 text-black">
-                    <button
-                        className="bg-white hover:bg-[#F8F8F8] duration-200 w-[40px] h-[40px] rounded-full flex justify-center items-center text-2xl"
-                        onClick={() => scrollTo('left')}>
-                        <MdOutlineChevronLeft />
-                    </button>
-                    <button
-                        className="bg-white hover:bg-[#F8F8F8] duration-200 w-[40px] h-[40px] rounded-full flex justify-center items-center text-2xl"
-                        onClick={() => scrollTo('right')}>
-                        <MdOutlineChevronRight />
-                    </button>
-                </div>
+        <section className="relative py-4 mb-6 sm:pb-6 space-y-4 z-[1] overflow-x-visible">
+            <div className="absolute h-full -z-[1] -inset-x-full bg-neutral-900 top-0"></div>
+            <div className="flex items-center justify-between w-full">
+                <b>Kelasku</b>
+                {courseProgresses.length > 2 && (
+                    <div className="hidden gap-3 md:flex">
+                        <button
+                            className="text-black bg-white border-white hover:bg-neutral-300 btn btn-neutral btn-circle btn-sm"
+                            onClick={() => scrollTo('left')}>
+                            <MdOutlineChevronLeft />
+                        </button>
+                        <button
+                            className="text-black bg-white border-white hover:bg-neutral-300 btn-neutral btn btn-circle btn-sm"
+                            onClick={() => scrollTo('right')}>
+                            <MdOutlineChevronRight />
+                        </button>
+                    </div>
+                )}
             </div>
             <div
                 ref={scrollContainerRef}
-                className="overflow-x-auto flex gap-4 md:gap-1 lg:gap-4 mt-6 px-4 md:px-8 xl:px-12"
-                style={{
-                    maxWidth: `${
-                        screenWidth! >= 768 ? screenWidth! - 250 : screenWidth
-                    }px`,
-                    msOverflowStyle: 'none',
-                    scrollbarWidth: 'none'
-                }}>
-                {isLoading || !cellWidth ? (
-                    <>
-                        <div className="p-4 h-[224px] w-[300px] bg-neutral-600 animate-pulse rounded-lg" />
-                        <div className="p-4 h-[224px] w-[300px] bg-neutral-600 animate-pulse rounded-lg" />
-                        <div className="p-4 h-[224px] w-[300px] bg-neutral-600 animate-pulse rounded-lg" />
-                    </>
-                ) : (
-                    courseProgresses?.map((courseProgress: CourseProgress) => (
+                className={cn(
+                    'w-screen relative gap-4 carousel carousel-center right-4 md:right-8 lg:right-24',
+                    isSubscribed
+                        ? 'md:w-[calc(100vw-250px)] min-[1786px]:-inset-x-[calc((100vw-250px-1536px)/2)]'
+                        : 'md:w-screen min-[1786px]:-inset-x-[calc((100vw-1536px)/2)]'
+                )}>
+                {courseProgresses?.map((courseProgress: CourseProgress) => (
+                    <div
+                        key={courseProgress.id}
+                        className={cn(
+                            'carousel-item first:ml-4 last:mr-4 md:first:ml-8 md:last:mr-8 lg:first:ml-24 lg:last:mr-24',
+                            isSubscribed
+                                ? 'min-[1786px]:first:ml-[calc((100vw-250px-1536px)/2)] min-[1786px]:last:mr-[calc((100vw-250px-1536px)/2)]'
+                                : 'min-[1786px]:first:ml-[calc((100vw-1536px)/2)] min-[1786px]:last:mr-[calc((100vw-1536px)/2)]'
+                        )}>
                         <CourseCard
-                            isInGrid={false}
                             course={courseProgress.course}
                             latestSubChapter={courseProgress.latest_subchapter}
                             latestWatchProgress={
                                 courseProgress.latest_watch_progress
                             }
-                            key={courseProgress.id}
-                            onClick={() => {
-                                tracker?.genericTrack(
-                                    'Click Public Class Card On Class Page',
-                                    {
-                                        'Course Slug':
-                                            courseProgress.course.slug
-                                    }
-                                );
-                            }}
+                            className="flex-none w-56 min-[400px]:w-[348px]"
                         />
-                    ))
-                )}
+                    </div>
+                ))}
             </div>
         </section>
     );

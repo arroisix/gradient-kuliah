@@ -28,8 +28,8 @@ const CourseSummary = (): JSX.Element => {
     return (
         <div className="flex flex-col gap-5 pt-8 pb-12 bg-[#121212]">
             <div className="flex gap-5 px-5 lg:gap-8 md:px-16">
-                <span
-                    className={`inline-block lg:hidden font-bold text-sm pb-[6px] cursor-pointer ${
+                <button
+                    className={`uppercase lg:hidden font-bold text-sm pb-[6px] cursor-pointer ${
                         navigation === 'COURSE'
                             ? 'border-b-2 border-accent-purple'
                             : 'text-neutral-600 border-none hover:text-neutral-500'
@@ -40,12 +40,11 @@ const CourseSummary = (): JSX.Element => {
                             'Video Title': subchapter?.subchapter_name
                         });
                         setNavigation('COURSE');
-                    }}
-                    aria-hidden>
-                    PELAJARAN
-                </span>
-                <span
-                    className={`inline-block font-bold text-sm pb-[6px] cursor-pointer ${
+                    }}>
+                    <h2>Pelajaran</h2>
+                </button>
+                <button
+                    className={`uppercase font-bold text-sm pb-3 cursor-pointer ${
                         navigation === 'DESCRIPTION'
                             ? 'border-b-2 border-accent-purple'
                             : 'text-neutral-600 border-none hover:text-neutral-500'
@@ -56,10 +55,9 @@ const CourseSummary = (): JSX.Element => {
                             'Video Title': subchapter?.subchapter_name
                         });
                         setNavigation('DESCRIPTION');
-                    }}
-                    aria-hidden>
-                    DESKRIPSI
-                </span>
+                    }}>
+                    <h2>Deskripsi</h2>
+                </button>
                 {isAuthenticated && (
                     <span
                         className={`inline-block font-bold text-sm pb-[6px] cursor-pointer ${

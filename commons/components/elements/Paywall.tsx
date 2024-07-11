@@ -37,9 +37,11 @@ const Paywall = ({
             '.carousel-item:nth-child(2)'
         ) as HTMLDivElement;
         if (container && element) {
-            container.scrollLeft =
-                element.offsetLeft -
-                (container.offsetWidth - element.offsetWidth) / 2;
+            container.scrollBy({
+                left:
+                    element.offsetLeft -
+                    (container.offsetWidth - element.offsetWidth) / 2
+            });
         }
     };
 
@@ -68,7 +70,7 @@ const Paywall = ({
                 if (isCarousel && container) centerScroll(container);
             }}
             className={cn(
-                'items-center gap-4 justify-center',
+                'items-center gap-4',
                 className,
                 isCarousel
                     ? 'carousel carousel-center px-4'
@@ -107,20 +109,20 @@ const Paywall = ({
                         )}
                         <div className={cn('flex flex-col gap-4 pt-4')}>
                             <div className="flex flex-col text-center md:gap-1">
-                                <h4 className="font-extrabold">
+                                <p className="font-extrabold">
                                     {pricing.packet_name}
-                                </h4>
-                                <h5
+                                </p>
+                                <p
                                     className={cn(
                                         'text-4xl font-extrabold font-body',
                                         isHighlighted &&
                                             'bg-clip-text bg-gradient-highlighted-price text-transparent'
                                     )}>
                                     {formatPrice(pricing.price)}
-                                </h5>
-                                <h6 className="text-xl font-bold line-through decoration-2 text-stone-500 decoration-red-600 font-body">
+                                </p>
+                                <p className="text-xl font-bold line-through decoration-2 text-stone-500 decoration-red-600 font-body">
                                     {formatPrice(pricing.price_before_discount)}
-                                </h6>
+                                </p>
                             </div>
                             <div className="flex flex-col h-full gap-2 px-5">
                                 {pricing.benefits?.feature?.map(

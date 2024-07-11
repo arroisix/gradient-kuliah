@@ -1,5 +1,4 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
-import Skeleton from 'commons/components/elements/Skeleton';
 import useElementSize from 'commons/hooks/useElementSize';
 import useOnScreen from 'commons/hooks/useOnScreen';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
@@ -21,13 +20,8 @@ import { CodeEditorProvider } from 'courses/hooks/useCodeEditor';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 const CourseDetailBox = (): JSX.Element => {
-    const tracker = useTracker();
-
     const [navigation, setNavigation] =
         useState<CourseDetailNavigation>('VIDEO');
-
-    const [isModalFeedbackOpen, setIsModalFeedbackOpen] =
-        useState<boolean>(false);
 
     const { checkCustomBreakpoints } = useWindowBreakpoints();
     const anchor = useRef<HTMLDivElement>({} as HTMLDivElement);
@@ -52,13 +46,11 @@ const CourseDetailBox = (): JSX.Element => {
         })
     });
     const { is_subscribed } = useCourseSubscription();
-
+    const duration = moment
+        .utc(learningProgress?.total_duration as number)
+        .format('(H[h] mm[m])');
     return (
         <>
-            <ModalCourseFeedback
-                isOpen={isModalFeedbackOpen}
-                setOpen={setIsModalFeedbackOpen}
-            />
             <div
                 className="relative w-full h-full bg-[#121212] lg:overflow-hidden"
                 ref={boxRef}>
@@ -66,42 +58,16 @@ const CourseDetailBox = (): JSX.Element => {
                     <div className="w-full h-[40px] absolute bottom-0 bg-gradient-to-b from-transparent to-[#121212] z-[1]"></div>
                 )}
                 <div
-                    className="flex flex-col gap-[14px] px-5 md:px-16 lg:px-[18px] py-[18px] bg-[#1D1D1D]"
+                    className="flex flex-col gap-4 py-4 px-5 md:px-16 lg:px-4 bg-[#1D1D1D]"
                     ref={headerBoxRef}>
                     <div className="flex items-center justify-between">
-                        <h4 className="overflow-hidden font-sans text-base font-extrabold xl:text-lg whitespace-nowrap text-ellipsis">
+                        <h2 className="overflow-hidden font-sans text-base font-extrabold xl:text-lg whitespace-nowrap text-ellipsis">
                             {course?.course_name}
-                        </h4>
-                        <span className="min-w-[100px] font-body font-extrabold text-base xl:text-lg text-[#FFFFFF80] pl-1">
-                            {isLoadingLearning ? (
-                                <Skeleton className="h-[20px] !m-0 !p-0" />
-                            ) : (
-                                `(${moment
-                                    .utc(
-                                        learningProgress?.total_duration as number
-                                    )
-                                    .format('H')}h ${moment
-                                    .utc(
-                                        learningProgress?.total_duration as number
-                                    )
-                                    .format('mm')}m)`
-                            )}
+                        </h2>
+                        <span className="min-w-[100px] text-right font-body font-extrabold text-base xl:text-lg text-white/50 pl-1">
+                            {duration}
                         </span>
-                        {is_subscribed && (
-                            <div className="w-[20px] grow">
-                                <MdStarPurple500
-                                    size={20}
-                                    className="ml-auto mr-0 cursor-pointer text-neutral-400 hover:text-white"
-                                    onClick={() => {
-                                        tracker?.genericTrack(
-                                            'Click Give Rating Button',
-                                            { 'Course Slug': id }
-                                        );
-                                        setIsModalFeedbackOpen(true);
-                                    }}
-                                />
-                            </div>
-                        )}
+                        {is_subscribed && <FeedbackButton />}
                     </div>
                     <ProgressBar
                         total_finished_video={
@@ -143,6 +109,34 @@ const CourseDetailBox = (): JSX.Element => {
                         </CodeEditorProvider>
                     </div>
                 </CourseSubchapterSearchProvider>
+            </div>
+        </>
+    );
+};
+
+const FeedbackButton = (): JSX.Element => {
+    const router = useRouter();
+    const { id } = router.query as { id: string };
+    const tracker = useTracker();
+    const [isModalFeedbackOpen, setIsModalFeedbackOpen] = useState(false);
+
+    return (
+        <>
+            <ModalCourseFeedback
+                isOpen={isModalFeedbackOpen}
+                setOpen={setIsModalFeedbackOpen}
+            />
+            <div className="w-5 grow">
+                <MdStarPurple500
+                    size={20}
+                    className="ml-auto mr-0 cursor-pointer text-neutral-400 hover:text-white"
+                    onClick={() => {
+                        tracker?.genericTrack('Click Give Rating Button', {
+                            'Course Slug': id
+                        });
+                        setIsModalFeedbackOpen(true);
+                    }}
+                />
             </div>
         </>
     );

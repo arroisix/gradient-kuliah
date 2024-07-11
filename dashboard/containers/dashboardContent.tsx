@@ -123,9 +123,9 @@ const DashboardContent = (): JSX.Element => {
             </div>
             {!is_subscribed && (
                 <div className="w-full space-y-6">
-                    <h2 className="text-xl font-extrabold leading-relaxed text-center">
+                    <p className="text-xl font-extrabold leading-relaxed text-center">
                         Tertarik? Beli sekarang untuk mengakses seluruh materi
-                    </h2>
+                    </p>
                     {isLoadingPricingData && !pricingData ? (
                         <div className="flex flex-col items-center justify-center gap-4 xl:flex-row xl:flex-nowrap">
                             <Skeleton

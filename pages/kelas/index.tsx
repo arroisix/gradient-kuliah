@@ -1,15 +1,12 @@
 import LearnLayout from 'commons/learnLayout';
 import ClassContainer from 'courses/containers';
-import { GridProvider } from 'courses/contexts/GridProvider';
 import { GetStaticProps } from 'next';
 
 const ListClass = (): JSX.Element => {
     return (
-        <GridProvider>
-            <LearnLayout showSidebar fullHeightSidebar noPadding>
-                <ClassContainer />
-            </LearnLayout>
-        </GridProvider>
+        <LearnLayout showSidebar fullHeightSidebar>
+            <ClassContainer />
+        </LearnLayout>
     );
 };
 
@@ -23,6 +20,7 @@ export const getStaticProps: GetStaticProps = async () => {
         props: {
             title: META_TITLE,
             description: META_DESCRIPTION,
+            canonical: `https://gradient.academy/kelas`,
             openGraph: {
                 type: 'website',
                 title: META_TITLE,

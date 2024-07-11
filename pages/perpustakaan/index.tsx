@@ -5,7 +5,7 @@ import { GetStaticProps } from 'next';
 const PerpustakaanPage = (): JSX.Element => {
     return (
         <LearnLayout showSidebar fullHeightSidebar>
-            <AstronotesEntrypoint />
+            <AstronotesEntrypoint title="Perpustakaan Online Modul Perkuliahan" />
         </LearnLayout>
     );
 };

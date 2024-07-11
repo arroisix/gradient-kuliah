@@ -38,8 +38,7 @@ export const ListBooks = ({
                                 'Course Slug': slug,
                                 'Book Title': title
                             });
-                        }}
-                        aria-hidden>
+                        }}>
                         <div
                             className={
                                 'relative flex-none border rounded-md border-neutral-700 aspect-[256/364] w-20'
@@ -56,9 +55,9 @@ export const ListBooks = ({
                             />
                         </div>
                         <div className="flex flex-col gap-[6px]">
-                            <span className="inline-block text-lg font-body text-neutral-200">
+                            <h3 className="inline-block text-lg font-body text-neutral-200">
                                 {title}
-                            </span>
+                            </h3>
                             <div>
                                 {authors && (
                                     <span className="inline-block text-base font-body text-neutral-600">

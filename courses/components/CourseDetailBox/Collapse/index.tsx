@@ -31,21 +31,20 @@ const Collapse = ({
 
     return (
         <div key={key} className="bg-[#1D1D1D] rounded">
-            <div
-                className={`flex justify-between gap-2 p-3 cursor-pointer ${
+            <button
+                className={`flex w-full justify-between gap-2 p-3 cursor-pointer ${
                     isOpen && 'border-b-[1px] border-[#2D2D2D]'
                 }`}
-                onClick={() => setIsOpen((prev) => !prev)}
-                aria-hidden>
-                <div className="w-[85%] flex items-center gap-2">
+                onClick={() => setIsOpen((prev) => !prev)}>
+                <div className="flex items-center gap-2 grow">
                     {is_finished ? (
                         <HiCheck size={18} className="text-[#02EC60]" />
                     ) : chapter === chapter_id ? (
                         <FaPlay size={14} />
                     ) : null}
-                    <span className="inline-block overflow-hidden text-sm font-extrabold whitespace-nowrap text-ellipsis">
+                    <h3 className="overflow-hidden text-sm font-extrabold whitespace-nowrap text-ellipsis">
                         {title}
-                    </span>
+                    </h3>
                 </div>
                 <HiOutlineChevronDown
                     size={18}
@@ -53,7 +52,7 @@ const Collapse = ({
                         isOpen ? 'rotate-180' : ''
                     } transition-all`}
                 />
-            </div>
+            </button>
             <div className={`${isOpen ? '' : 'hidden'}`}>
                 {isLoading && <Skeleton className="h-[30px] !m-0" repeat={3} />}
                 {!isLoading &&

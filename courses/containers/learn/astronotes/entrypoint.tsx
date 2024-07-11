@@ -1,20 +1,27 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import Sort from 'commons/components/elements/Sort';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import ContinueReadingSection from 'courses/components/LearningExperience/AstroNotes/Entrypoint/ContinueReadingSection';
 import {
     EntrypointPrivate,
     EntrypointPublic
 } from 'courses/components/LearningExperience/AstroNotes/Entrypoint/EntrypointContent';
-import EntrypointSort from 'courses/components/LearningExperience/AstroNotes/Entrypoint/EntrypointFilters';
 import EntrypointTabs from 'courses/components/LearningExperience/AstroNotes/Entrypoint/EntrypointTabs';
-import { Tab } from 'courses/components/LearningExperience/AstroNotes/constants';
+import {
+    SORT_OPTIONS,
+    Tab
+} from 'courses/components/LearningExperience/AstroNotes/constants';
 import RenewSubscriptionBanner from 'courses/components/RenewSubscriptionBanner';
 import { useRouter } from 'next/router';
 import { useGetActiveSubscriptionQuery } from 'payment/redux/api/subscriptionApi';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-const AstronotesEntrypoint = (): JSX.Element => {
+const AstronotesEntrypoint = ({
+    title = 'Perpustakaan'
+}: {
+    title?: string;
+}): JSX.Element => {
     const router = useRouter();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { data: activePacket } = useGetActiveSubscriptionQuery(undefined, {
@@ -32,9 +39,17 @@ const AstronotesEntrypoint = (): JSX.Element => {
             <Breadcrumb className="w-full pb-5" />
             <div className="relative grid w-full grid-cols-1 mx-auto xl:max-w-screen-2xl">
                 {isAuthenticated && <ContinueReadingSection />}
-                <h1 className="text-xl font-bold md:text-2xl">Perpustakaan</h1>
+                <h1 className="text-xl font-bold md:text-2xl text-balance">
+                    {title}
+                </h1>
                 <EntrypointTabs />
-                {isAuthenticated && <EntrypointSort />}
+                {isAuthenticated && (
+                    <Sort
+                        options={SORT_OPTIONS}
+                        defaultSelected="last-released"
+                        className="sticky z-10 py-2 bg-black top-28"
+                    />
+                )}
                 {isAuthenticated ? (
                     <EntrypointPrivate category={type} />
                 ) : (

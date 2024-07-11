@@ -5,7 +5,7 @@ import { GetStaticProps } from 'next';
 const AstronotesPage = (): JSX.Element => {
     return (
         <LearnLayout showSidebar fullHeightSidebar>
-            <AstronotesEntrypoint />
+            <AstronotesEntrypoint title="Catatan & Rangkuman Materi Kuliah" />
         </LearnLayout>
     );
 };

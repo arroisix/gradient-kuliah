@@ -114,9 +114,9 @@ const Item = ({ name, url, nextItem }: BreadcrumbItemProps): JSX.Element => {
             {nextItem || url ? (
                 <>
                     <Link href={url ?? ''} className="cursor-pointer">
-                        <h3 className="font-body text-xs lg:text-sm duration-100 transition-all ease-in-out text-[#999999] hover:text-[#999999]/[0.75]">
+                        <p className="font-body text-xs lg:text-sm duration-100 transition-all ease-in-out text-[#999999] hover:text-[#999999]/[0.75]">
                             {name}
-                        </h3>
+                        </p>
                     </Link>
                     <FaChevronRight className="text-[#666666] h-3 md:h-3.5" />
                     {nextItem && (
@@ -128,9 +128,9 @@ const Item = ({ name, url, nextItem }: BreadcrumbItemProps): JSX.Element => {
                     )}
                 </>
             ) : (
-                <h3 className="font-body text-xs lg:text-sm text-white">
+                <p className="text-xs text-white font-body lg:text-sm">
                     {name}
-                </h3>
+                </p>
             )}
         </>
     );

@@ -14,7 +14,7 @@ const VideoPaywall = ({
     return (
         <div
             className={cn(
-                'flex flex-col items-center justify-center w-screen -mx-4 sm:w-auto sm:mx-0 md:sticky '
+                'py-4 flex flex-col items-center justify-center w-screen -mx-4 sm:w-auto sm:mx-0 md:sticky '
             )}>
             <h2 className="mb-4 text-xl font-extrabold leading-relaxed text-center">
                 {header}

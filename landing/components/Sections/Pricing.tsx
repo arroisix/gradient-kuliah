@@ -16,9 +16,9 @@ const Pricing = ({
                 'space-y-6 py-9 md:py-16 scroll-mt-12',
                 isTabletBreakpoints && '!px-0'
             )}>
-            <h2 className="text-xl font-extrabold leading-relaxed text-center">
+            <p className="text-xl font-extrabold leading-relaxed text-center">
                 Tertarik? Langganan untuk mengakses seluruh materi
-            </h2>
+            </p>
             <Paywall
                 pricingData={pricingData}
                 ctaEventName={ctaEventName}
