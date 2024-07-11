@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 
 const UpdateProfileNotification = (): JSX.Element => {
     const { pathname } = useRouter();
-    const EXCLUDED_PATHNAME = ['/keluar-perangkat'];
+    const EXCLUDED_PATHNAME = ['/keluar-perangkat', '/profil/pendidikan'];
     const { profile } = useAuth();
     const [update] = useUpdateUserMutation();
 
