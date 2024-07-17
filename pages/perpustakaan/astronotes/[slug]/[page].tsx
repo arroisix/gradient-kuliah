@@ -18,6 +18,8 @@ const AstronotesPage = ({
 }: AstronotesPageProps): JSX.Element => {
     const { theme } = useThemeContext();
 
+    console.log(theme);
+
     return (
         <>
             <ArticleJsonLd

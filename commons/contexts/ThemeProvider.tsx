@@ -1,4 +1,10 @@
-import { ReactNode, createContext, useContext, useState } from 'react';
+import {
+    ReactNode,
+    createContext,
+    useContext,
+    useEffect,
+    useState
+} from 'react';
 
 interface ThemeContextInterface {
     theme: 'dark' | 'light';
@@ -24,29 +30,30 @@ export const ThemeContextProvider = ({
         setTheme(theme === 'dark' ? 'light' : 'dark');
     };
 
-    // useEffect(() => {
-    //     const localTheme = localStorage.getItem('theme');
-    //     if (localTheme !== null) {
-    //         setTheme(localTheme as themeType);
-    //     } else {
-    //         setTheme(
-    //             window.matchMedia('(prefers-color-scheme: dark)').matches
-    //                 ? 'dark'
-    //                 : 'light'
-    //         );
-    //     }
-    // }, []);
+    useEffect(() => {
+        const localTheme = 'dark';
+        if (localTheme !== null) {
+            setTheme(localTheme as themeType);
+        } else {
+            setTheme(
+                // window.matchMedia('(prefers-color-scheme: dark)').matches
+                //     ? 'dark'
+                //     : 'light'
+                'dark'
+            );
+        }
+    }, []);
 
-    // useEffect(() => {
-    //     document
-    //         .querySelector('html')
-    //         ?.classList.add(theme === 'dark' ? 'dark' : 'light');
-    //     return () => {
-    //         document
-    //             .querySelector('html')
-    //             ?.classList.remove(theme === 'dark' ? 'dark' : 'light');
-    //     };
-    // }, [theme]);
+    useEffect(() => {
+        document
+            .querySelector('html')
+            ?.classList.add(theme === 'dark' ? 'dark' : 'light');
+        return () => {
+            document
+                .querySelector('html')
+                ?.classList.remove(theme === 'dark' ? 'dark' : 'light');
+        };
+    }, [theme]);
 
     const contextValue = {
         theme,
