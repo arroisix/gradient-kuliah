@@ -9,6 +9,7 @@ import { CDN_URL } from 'commons/constants';
 import { IoTime } from 'react-icons/io5';
 import { TbCircleCheckFilled } from 'react-icons/tb';
 import { getBookBaseHref } from 'courses/utils';
+import { FaRegCirclePlay } from 'react-icons/fa6';
 
 const AstronoteBook = ({
     slug,
@@ -100,6 +101,12 @@ export const AstronoteBookCard = ({
     const tracker = useTracker();
 
     const authors = book.authors ?? [];
+    const categoryLabel: { [key: string]: string } = {
+        Catatan: 'Astronotes',
+        Textbook: 'Textbook Solution',
+        'Bank Soal': 'Bank Soal',
+        [type]: type
+    };
 
     const Info = (): JSX.Element => (
         <>
@@ -132,20 +139,7 @@ export const AstronoteBookCard = ({
                     {book.rating.toFixed(1)}
                 </span>
             </p>
-            <div className="grow"></div>
-            <div
-                className={cn(
-                    'rounded-full px-3 py-2 font-bold w-fit text-xs bg-neutral-800',
-                    {
-                        'bg-[#D05140]': book.category_name === 'Textbook',
-                        'bg-[#953EAA]': book.category_name === 'Astronotes',
-                        'bg-[#4B93E8]': book.category_name === 'Bank Soal'
-                    }
-                )}>
-                {book.category_name === 'Textbook'
-                    ? 'Textbook Solution'
-                    : book.category_name}
-            </div>
+            <div className="grow min-h-2"></div>
         </>
     );
 
@@ -153,21 +147,14 @@ export const AstronoteBookCard = ({
         <>
             <p
                 className={cn(
-                    'pt-2 font-sans text-xs text-neutral-400',
+                    'pt-2 font-sans text-xs text-neutral-200 line-clamp-1',
                     (!book.last_chapter_read ||
                         book.percentage_progress == 100) &&
                         'hidden'
                 )}>
-                Bab: {book.last_chapter_read}
+                {book.last_chapter_read}
             </p>
-            <div className="grow"></div>
-            <div className="flex items-center w-full gap-2 mt-2 text-xs text-neutral-400">
-                <progress
-                    className="grow progress progress-primary"
-                    value={book.percentage_progress}
-                    max={100}></progress>
-                {book.percentage_progress}%
-            </div>
+            <div className="grow min-h-2"></div>
         </>
     );
 
@@ -178,16 +165,16 @@ export const AstronoteBookCard = ({
             href={href}
             onClick={() => tracker?.genericTrack(eventName, eventPayload)}
             className={cn(
-                'flex gap-4 p-3 bg-black border rounded-lg border-neutral-700 shadow-md shadow-black/25',
+                'flex gap-4 p-3 bg-graphite-800 border rounded-lg border-graphite-600/50 shadow-md shadow-black/25',
                 orientation == 'vertical' &&
-                    'flex-col w-[150px] items-center flex-none',
+                    'flex-col w-40 items-center flex-none',
                 className
             )}>
             <div
                 className={cn(
                     'relative flex-none border rounded-md border-neutral-700',
                     orientation == 'vertical' && 'w-24',
-                    type !== 'video' ? 'aspect-[256/364]' : 'aspect-[7/8]',
+                    type !== 'video' ? 'aspect-[256/364]' : 'aspect-square',
                     imageClassname
                 )}>
                 <Image
@@ -200,15 +187,23 @@ export const AstronoteBookCard = ({
                     objectFit="cover"
                     className="rounded"
                 />
+                {type === 'video' && (
+                    <div className="absolute inset-0 grid place-items-center">
+                        <div className="text-white border-none btn btn-circle bg-graphite-900/60">
+                            <FaRegCirclePlay size={32} />
+                        </div>
+                    </div>
+                )}
             </div>
-            <div className="flex flex-col overflow-hidden font-body grow">
+            <div className="flex flex-col w-full overflow-hidden font-body grow">
                 <p
+                    hidden={!book.in_progress}
                     className={cn(
-                        'flex items-center pb-2 text-xs',
-                        !book.in_progress && 'hidden',
+                        !book.in_progress ? 'hidden' : 'flex',
+                        'items-center text-xs mb-2',
                         book.percentage_progress == 100
-                            ? 'text-[#43B75D]'
-                            : 'text-accent-yellow'
+                            ? 'text-[#282b29]'
+                            : 'text-accent-yellow items-center pl-1 pr-2 py-0.5 font-medium rounded bg-accent-yellow/25 w-fit'
                     )}>
                     {book.percentage_progress == 100 ? (
                         <>
@@ -217,15 +212,31 @@ export const AstronoteBookCard = ({
                         </>
                     ) : (
                         <>
-                            <IoTime size={12} className="mr-1" /> In Progress
+                            <IoTime size={12} className="mr-1" /> In Progress -{' '}
+                            {book.percentage_progress}%
                         </>
                     )}
                 </p>
 
-                <BookTitleLabel className="font-sans text-sm font-bold">
+                <BookTitleLabel className="font-sans text-sm font-bold text-balance line-clamp-2">
                     {book.title}
                 </BookTitleLabel>
                 {book.in_progress ? <Progress /> : <Info />}
+                <div
+                    className={cn(
+                        'rounded-full text-xs w-fit text-white font-semibold px-3 py-1 bg-neutral-700',
+                        {
+                            'bg-[#00B78B]': book.category_name === 'Textbook',
+                            'bg-[#CC009E]':
+                                book.category_name === 'Catatan' ||
+                                book.category_name === 'Astronotes',
+                            'bg-[#0083FF]': book.category_name === 'Bank Soal'
+                        }
+                    )}>
+                    {type !== 'video'
+                        ? categoryLabel[book.category_name]
+                        : 'Video'}
+                </div>
             </div>
         </Link>
     );

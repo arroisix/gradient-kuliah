@@ -19,9 +19,9 @@ export default function RenewalCard(): JSX.Element | null {
 
     if (everSubscribed && expiryDay == 0) {
         return (
-            <section className="bg-accent-orange flex gap-3 justify-between rounded-lg overflow-hidden">
-                <div className="self-stretch p-4 lg:p-6 pr-0 flex flex-col justify-between items-start">
-                    <p className="m-0 font-sans font-bold text-sm lg:text-2xl">
+            <section className="flex justify-between gap-3 overflow-hidden rounded-lg bg-accent-orange">
+                <div className="flex flex-col items-start self-stretch justify-between p-4 pr-0 lg:p-6">
+                    <p className="m-0 font-sans text-sm font-bold lg:text-2xl">
                         Masa langganan habis, beli lagi untuk lanjut belajar
                     </p>
                     <Link
@@ -29,7 +29,7 @@ export default function RenewalCard(): JSX.Element | null {
                             pathname: '/pembayaran',
                             query: { packetId: lastPacketId }
                         }}
-                        className="text-accent-orange text-xs lg:text-sm font-sans px-4 py-2 bg-white rounded-full font-bold">
+                        className="px-4 py-2 font-sans text-xs font-bold bg-white rounded-full text-accent-orange lg:text-sm">
                         Beli Lagi
                     </Link>
                 </div>
@@ -42,8 +42,8 @@ export default function RenewalCard(): JSX.Element | null {
         );
     } else {
         return (
-            <section className="bg-accent-orange flex gap-3 justify-between items-center rounded-lg p-4 py-2 lg:py-3 lg:mr-16 xl:mr-16">
-                <p className="m-0 font-sans font-bold text-sm">
+            <section className="flex items-center justify-between gap-3 p-4 py-2 rounded-lg bg-accent-orange lg:py-3 w-full md:w-[calc(100vw-250px-4rem)] lg:w-full">
+                <p className="m-0 font-sans text-sm font-bold">
                     {expiryDay} hari lagi langganan habis
                 </p>
                 <Link
@@ -54,7 +54,7 @@ export default function RenewalCard(): JSX.Element | null {
                             subscriptionId: subscription_id
                         }
                     }}
-                    className="text-accent-orange text-xs font-sans px-4 py-2 bg-white rounded-full font-bold">
+                    className="px-4 py-2 font-sans text-xs font-bold bg-white rounded-full text-accent-orange">
                     Perbarui
                 </Link>
             </section>

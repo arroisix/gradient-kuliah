@@ -50,6 +50,7 @@ export const makeid = (length: number): string => {
 };
 
 export const capitalize = (sentence: string): string => {
+    if (!sentence) return sentence;
     const words = sentence.split(' ');
 
     const capitalizeWords = words.map(

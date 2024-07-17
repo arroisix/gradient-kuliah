@@ -38,8 +38,8 @@ const LearnLayout = ({
         <>
             <div
                 className={cn(
-                    'w-screen min-h-screen text-white overflow-clip',
-                    lightMode ? 'bg-white' : 'bg-neutral-1000'
+                    'w-screen min-h-screen text-white overflow-clip overscroll-none',
+                    lightMode ? 'bg-white' : 'bg-black'
                 )}>
                 {!hideNavbar && (
                     <Navbar

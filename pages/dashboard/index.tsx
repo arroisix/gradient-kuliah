@@ -5,11 +5,9 @@ import { GetStaticProps } from 'next';
 
 const Dashboard = (): JSX.Element => {
     return (
-        <>
-            <LearnLayout showSidebar fullHeightSidebar>
-                <DashboardContainer />
-            </LearnLayout>
-        </>
+        <LearnLayout showSidebar fullHeightSidebar>
+            <DashboardContainer />
+        </LearnLayout>
     );
 };
 

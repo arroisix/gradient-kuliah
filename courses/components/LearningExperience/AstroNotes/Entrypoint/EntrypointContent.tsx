@@ -70,7 +70,7 @@ export const EntrypointContent = ({
 
     return (
         <>
-            <div className="grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 xl:gap-6">
+            <div className="grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 2xl:grid-cols-3 xl:gap-6">
                 {!!astronotes && !isLoading && (
                     <>
                         {astronotes?.data?.map((book) => (

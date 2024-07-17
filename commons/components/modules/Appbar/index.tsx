@@ -13,6 +13,9 @@ const DISPLAYED_ROUTES = [
     '/komunitas/public',
     '/komunitas/pertanyaan-ku',
     '/perpustakaan',
+    '/perpustakaan/textbook',
+    '/perpustakaan/bank-soal',
+    '/perpustakaan/astronotes',
     '/kelas'
 ];
 const APPBAR_NAV: AppbarNav[] = [

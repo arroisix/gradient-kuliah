@@ -13,6 +13,13 @@ const ProgressItem = ({
 }: ProgressItemProps): JSX.Element => {
     const { book_slug } = progress;
 
+    const progressTypeMap: { [key: string]: string } = {
+        video: 'Video',
+        book: 'Catatan',
+        bank_soal: 'Bank Soal',
+        textbook: 'Textbook'
+    };
+
     const getHref = (): string => {
         switch (progress.type) {
             case 'book':
@@ -35,7 +42,7 @@ const ProgressItem = ({
             key={progress.id}
             slug={book_slug}
             book_cover_url={progress.thumbnail}
-            category_name=""
+            category_name={progressTypeMap[progress.type]}
             title={progress.title}
             percentage_progress={progress.percentage_progress}
             last_chapter_read={progress.latest_chapter}
@@ -47,7 +54,7 @@ const ProgressItem = ({
             is_public
             in_progress
             href={getHref()}
-            imageClassname="min-h-24 lg:min-h-16"
+            imageClassname="min-w-20 min-h-24 lg:min-h-16"
             eventName='User click item on "Kelasku" Accordion'
             eventPayload={{
                 Course: courseName,
