@@ -1,5 +1,5 @@
+import ProductCard from 'commons/components/elements/ProductCard';
 import { cn } from 'commons/utils';
-import CourseCard from 'courses/components/CourseCard';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useRef } from 'react';
 import { MdOutlineChevronLeft, MdOutlineChevronRight } from 'react-icons/md';
@@ -22,6 +22,22 @@ export default function CourseProgress({
     };
 
     if (courseProgresses.length == 0) return <></>;
+
+    const getProduct = (progress: CourseProgress): Product => ({
+        title: progress.course.course_name,
+        thumbnail: progress.course.thumbnail,
+        inProgress: true,
+        latestProgress: 0,
+        latestChapter: progress.latest_subchapter.subchapter_name
+    });
+
+    const getHref = (progress: CourseProgress): string => {
+        if (!progress.course.slug) return '';
+        if (progress.latest_subchapter) {
+            return `/kelas/${progress.course.slug}/${progress.latest_subchapter.subchapter_slug}`;
+        }
+        return `/kelas/${progress.course.slug}`;
+    };
 
     return (
         <section className="relative py-4 mb-6 sm:pb-6 space-y-4 z-[1] overflow-x-visible">
@@ -60,14 +76,23 @@ export default function CourseProgress({
                                 ? 'min-[1786px]:first:ml-[calc((100vw-250px-1536px)/2)] min-[1786px]:last:mr-[calc((100vw-250px-1536px)/2)]'
                                 : 'min-[1786px]:first:ml-[calc((100vw-1536px)/2)] min-[1786px]:last:mr-[calc((100vw-1536px)/2)]'
                         )}>
-                        <CourseCard
+                        <ProductCard
+                            key={courseProgress.id}
+                            orientation="vertical"
+                            category="kelas"
+                            eventName="Click Class Card"
+                            href={getHref(courseProgress)}
+                            product={getProduct(courseProgress)}
+                            className="flex-none w-56 min-[400px]:w-[348px]"
+                        />
+                        {/* <CourseCard
                             course={courseProgress.course}
                             latestSubChapter={courseProgress.latest_subchapter}
                             latestWatchProgress={
                                 courseProgress.latest_watch_progress
                             }
                             className="flex-none w-56 min-[400px]:w-[348px]"
-                        />
+                        /> */}
                     </div>
                 ))}
             </div>

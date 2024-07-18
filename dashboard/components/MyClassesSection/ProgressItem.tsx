@@ -1,4 +1,5 @@
-import { AstronoteBookCard } from 'courses/components/LearningExperience/AstroNotes/AstronoteBook';
+import ProductCard from 'commons/components/elements/ProductCard';
+import { cn } from 'commons/utils';
 import { getBookBaseHref } from 'courses/utils';
 import React from 'react';
 
@@ -37,24 +38,25 @@ const ProgressItem = ({
                 return '?';
         }
     };
+
+    const product: Product = {
+        title: progress.title,
+        latestProgress: progress.percentage_progress,
+        latestChapter: progress.latest_chapter,
+        thumbnail: progress.thumbnail,
+        inProgress: true
+    };
+
     return (
-        <AstronoteBookCard
-            key={progress.id}
-            slug={book_slug}
-            book_cover_url={progress.thumbnail}
-            category_name={progressTypeMap[progress.type]}
-            title={progress.title}
-            percentage_progress={progress.percentage_progress}
-            last_chapter_read={progress.latest_chapter}
-            type={progress.type}
-            id={progress.id}
-            rating={0}
-            category_id=""
-            is_free
-            is_public
-            in_progress
+        <ProductCard
+            orientation="horizontal"
+            category={progressTypeMap[progress.type]}
             href={getHref()}
-            imageClassname="min-w-20 min-h-24 lg:min-h-16"
+            imageClassname={cn(
+                'min-w-20 lg:min-h-16',
+                progress.type == 'video' ? 'w-20 sm:w-24 xl:w-28' : 'min-h-24'
+            )}
+            product={product}
             eventName='User click item on "Kelasku" Accordion'
             eventPayload={{
                 Course: courseName,

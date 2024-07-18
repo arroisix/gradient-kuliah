@@ -2,9 +2,11 @@ import Skeleton from 'commons/components/elements/Skeleton';
 import { useGetPrivateListCoursesV2Query } from 'courses/redux/api/privateCourseV2Api';
 import { useGetPublicListCoursesV2Query } from 'courses/redux/api/publicCourseV2Api';
 import { useRouter } from 'next/router';
-import CourseCard from './CourseCard';
 import EmptyCourse from './EmptyCourse';
 import Paginator from 'commons/components/elements/Paginator';
+import ProductCard from 'commons/components/elements/ProductCard';
+import { cn } from 'commons/utils';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 const VALID_SECTION = ['all', 'newly-released', 'coming-soon'];
 const VALID_SORT = ['latest', 'popularity', 'lexicography'];
@@ -20,6 +22,7 @@ const CourseList = ({
     isLoading: boolean;
     courses?: ListResponseData<Course>;
 }): JSX.Element => {
+    const { is_subscribed: isSubscribed } = useCourseSubscription();
     const totalPages = Math.ceil((courses?.count_items ?? 0) / PAGE_SIZE);
     if (isLoading)
         return (
@@ -31,11 +34,36 @@ const CourseList = ({
     if (!isLoading && courses && courses.data.length == 0)
         return <EmptyCourse />;
 
+    const getProduct = (course: Course): Product => ({
+        title: course.course_name,
+        thumbnail: course.thumbnail,
+        inProgress: false,
+        latestProgress: 0
+    });
+
+    const getHref = (course: Course): string => {
+        if (course.is_coming_soon && !course.slug) return '';
+        if (course.is_only_notebook) return `/kelas/${course.slug}/astronotes`;
+        return `/kelas/${course.slug}`;
+    };
+
     return (
         <>
-            <div className="grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 xl:grid-cols-3 xl:gap-6">
+            <div
+                className={cn(
+                    'grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 xl:grid-cols-3 xl:gap-6',
+                    !isSubscribed && 'lg:grid-cols-3'
+                )}>
                 {courses?.data.map((course: Course) => (
-                    <CourseCard course={course} key={course.id} />
+                    <ProductCard
+                        key={course.id}
+                        heading="h2"
+                        orientation="vertical"
+                        category="kelas"
+                        eventName="Click Class Card"
+                        href={getHref(course)}
+                        product={getProduct(course)}
+                    />
                 ))}
             </div>
             <Paginator

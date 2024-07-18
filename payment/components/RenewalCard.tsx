@@ -42,7 +42,7 @@ export default function RenewalCard(): JSX.Element | null {
         );
     } else {
         return (
-            <section className="flex items-center justify-between gap-3 p-4 py-2 rounded-lg bg-accent-orange lg:py-3 w-full md:w-[calc(100vw-250px-4rem)] lg:w-full">
+            <section className="flex items-center justify-between gap-3 p-4 py-2 rounded-lg bg-accent-orange lg:py-3 w-full md:w-[calc(100vw-250px-4rem)] lg:w-[calc(100vw-250px-12rem)] max-w-screen-2xl">
                 <p className="m-0 font-sans text-sm font-bold">
                     {expiryDay} hari lagi langganan habis
                 </p>

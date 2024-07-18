@@ -1,12 +1,11 @@
-import Button from 'commons/components/elements/Button';
-import Skeleton from 'commons/components/elements/Skeleton';
+import ProductCard from 'commons/components/elements/ProductCard';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
-import AstronoteBook from 'courses/components/LearningExperience/AstroNotes/AstronoteBook';
 import { useGetPublicEntrypointBooksQuery } from 'courses/redux/api/astronotesApi';
 import { useGetPublicListCoursesQuery } from 'courses/redux/api/publicCourseApi';
-import ClassCard from 'landing/components/RevampedSections/ClassCard';
+import { getBookBaseHref } from 'courses/utils';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
+import DashboardSection from './DashboardSection';
 
 const Recommendations = ({
     onFinishLoading
@@ -25,39 +24,15 @@ const Recommendations = ({
     const { data: bankSoal, isLoading: isLoadingQuestionBankBook } =
         useGetPublicEntrypointBooksQuery({
             major: recommendation as string,
-            limit: isMobileBreakpoints ? 2 : 5,
+            limit: 4,
             type: 'bank-soal'
         });
     const { data: astronotes, isLoading: isLoadingNotebook } =
         useGetPublicEntrypointBooksQuery({
             major: recommendation as string,
-            limit: isMobileBreakpoints ? 2 : 5,
+            limit: 4,
             type: 'astronotes'
         });
-
-    const renderBooks = (
-        categoryName: 'Bank Soal' | 'Textbook' | 'Catatan'
-    ): JSX.Element => {
-        const books =
-            categoryName === 'Bank Soal' ? bankSoal?.data : astronotes?.data;
-        const bookList = books?.filter(
-            (category) => category.category_name === categoryName
-        );
-        const eventName = `Click ${
-            categoryName === 'Textbook' ? 'Rangkuman' : categoryName
-        } Card`;
-        return (
-            <>
-                {bookList?.map((book) => (
-                    <AstronoteBook
-                        key={book.id}
-                        eventName={eventName}
-                        {...book}
-                    />
-                ))}
-            </>
-        );
-    };
 
     useEffect(() => {
         if (
@@ -74,83 +49,100 @@ const Recommendations = ({
         onFinishLoading
     ]);
 
+    const getCourseProduct = (course: Course): Product => ({
+        title: course.course_name,
+        thumbnail: course.thumbnail,
+        inProgress: false,
+        latestProgress: 0
+    });
+
+    const getBookProduct = (book: Astronote): Product => ({
+        title: book.title,
+        thumbnail: book.book_cover_url,
+        inProgress: book?.in_progress ?? false,
+        latestProgress: book?.percentage_progress ?? 0,
+        latestChapter: book.last_chapter_read,
+        authors: book.authors,
+        rating: book.rating
+    });
+
+    const getHref = (book: Astronote): string =>
+        `${getBookBaseHref(book.category_name)}/${book.slug}${
+            book.in_progress ? `/${book.latest_page || 1}` : ''
+        }`;
+
     return (
         <>
             <div className="space-y-4" data-tour="step-1">
-                <div className="flex items-center justify-between">
-                    <h4 className="text-lg font-extrabold md:text-xl">
-                        Rekomendasi Video
-                    </h4>
-                    <Button
-                        href="/kelas"
-                        variant="custom"
-                        eventName="Click 'Lihat Semua' in Video Section"
-                        className="text-xs text-black bg-white whitespace-nowrap">
-                        Lihat Semua
-                    </Button>
-                </div>
-                <div className="grid grid-cols-2 gap-4 lg:grid-cols-4 xl:gap-6">
-                    {isLoadingCourse ? (
-                        <Skeleton repeat={isMobileBreakpoints ? 2 : 4} />
-                    ) : (
-                        <>
-                            {courseData?.data.map((course) => (
-                                <ClassCard
-                                    key={course.id}
-                                    cover={course.thumbnail}
-                                    slug={course.slug}
-                                    title={course.course_name}
-                                    eventPayload={{
-                                        Variant: 'NOV 2023',
-                                        'Accessed from': 'DASHBOARD'
-                                    }}
-                                />
-                            ))}
-                        </>
-                    )}
-                </div>
+                <DashboardSection
+                    header="Rekomendasi Video"
+                    isLoading={isLoadingCourse}
+                    showButton
+                    btnHref="/kelas"
+                    items={courseData?.data}>
+                    {(item) => {
+                        const course = item as Course;
+                        return (
+                            <ProductCard
+                                category="video"
+                                href={`/kelas/${course.slug}`}
+                                orientation="vertical"
+                                product={getCourseProduct(course)}
+                                className="w-full"
+                                eventName="Click Class Card on Dashboard Recommendation"
+                                eventPayload={{
+                                    Variant: 'JUL 2024',
+                                    'Accessed from': 'DASHBOARD',
+                                    'Course Slug': course.slug
+                                }}
+                            />
+                        );
+                    }}
+                </DashboardSection>
             </div>
             <div className="space-y-4" data-tour="step-2">
-                <div className="flex items-center justify-between">
-                    <h4 className="text-lg font-extrabold md:text-xl">
-                        Rekomendasi Latihan Soal
-                    </h4>
-                    <Button
-                        href="/perpustakaan/bank-soal"
-                        variant="custom"
-                        eventName="Click 'Lihat Semua' in Bank Soal Section"
-                        className="text-xs text-black bg-white whitespace-nowrap">
-                        Lihat Semua
-                    </Button>
-                </div>
-                <div className="grid grid-cols-2 gap-4 lg:grid-cols-5 xl:gap-6">
-                    {isLoadingQuestionBankBook ? (
-                        <Skeleton repeat={isMobileBreakpoints ? 2 : 5} />
-                    ) : (
-                        renderBooks('Bank Soal')
+                <DashboardSection
+                    header="Rekomendasi Latihan Soal"
+                    isLoading={isLoadingQuestionBankBook}
+                    showButton
+                    btnHref="/perpustakaan/bank-soal"
+                    items={bankSoal?.data}>
+                    {(item, i) => (
+                        <ProductCard
+                            category="Bank Soal"
+                            href={getHref(item as Astronote)}
+                            orientation="vertical"
+                            product={getBookProduct(item as Astronote)}
+                            className="w-full"
+                            eventName="Click Book Item on Dashboard Recommendation"
+                            eventPayload={{
+                                'Book Slug': bankSoal?.data[i].slug
+                            }}
+                        />
                     )}
-                </div>
+                </DashboardSection>
             </div>
             <div className="space-y-4" data-tour="step-3">
-                <div className="flex items-center justify-between">
-                    <h4 className="text-lg font-extrabold md:text-xl">
-                        Rekomendasi Rangkuman
-                    </h4>
-                    <Button
-                        href="/perpustakaan"
-                        variant="custom"
-                        eventName="Click 'Lihat Semua' in Rangkuman Section"
-                        className="text-xs text-black bg-white whitespace-nowrap">
-                        Lihat Semua
-                    </Button>
-                </div>
-                <div className="grid grid-cols-2 gap-4 lg:grid-cols-5 xl:gap-6">
-                    {isLoadingNotebook ? (
-                        <Skeleton repeat={isMobileBreakpoints ? 2 : 5} />
-                    ) : (
-                        renderBooks('Catatan')
+                <DashboardSection
+                    header="Rekomendasi Rangkuman"
+                    isLoading={isLoadingNotebook}
+                    showButton
+                    btnHref="/perpustakaan/astronotes"
+                    items={astronotes?.data}>
+                    {(item, i) => (
+                        <ProductCard
+                            category="Astronotes"
+                            href={getHref(item as Astronote)}
+                            orientation="vertical"
+                            product={getBookProduct(item as Astronote)}
+                            className="w-full"
+                            eventName="Click Book Item on Dashboard Recommendation"
+                            eventPayload={{
+                                'Book Slug': astronotes?.data[i].slug
+                            }}
+                        />
                     )}
-                </div>
+                </DashboardSection>
             </div>
         </>
     );

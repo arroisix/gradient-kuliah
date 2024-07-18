@@ -27,7 +27,7 @@ interface StudentCourseResponse {
 
 interface LearningMaterial {
     id: string;
-    type: 'Video' | 'Textbook' | 'Astronotes' | 'Bank Soal';
+    type: 'Video' | 'Textbook' | 'Astronotes' | 'Bank Soal' | 'Kelas';
     thumbnail: string;
     title: string;
     in_progress: boolean;

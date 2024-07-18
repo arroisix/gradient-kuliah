@@ -1,138 +1,114 @@
-import Button from 'commons/components/elements/Button';
-import Skeleton from 'commons/components/elements/Skeleton';
 import { useGetDashboardContentQuery } from 'dashboard/redux/api/dashboardApi';
 import React from 'react';
-import DashboardCard from './DashboardCard';
-import { cn } from 'commons/utils';
 import MyClassesAccordion from './MyClassesSection';
-import useCourseSubscription from 'courses/hooks/useCourseSubscription';
-
-/** Styling assumptions
- * Sidebar width: 250px
- * Screen XL: 1536px
- */
-const CAROUSEL =
-    'w-screen relative gap-4 carousel carousel-center right-4 xl:gap-6';
-const CAROUSEL_ITEM =
-    'carousel-item first:ml-4 last:mr-4 lg:first:ml-0 lg:last:mr-0 w-40';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import DashboardSection from './DashboardSection';
+import { getBookBaseHref } from 'courses/utils';
+import ProductCard from 'commons/components/elements/ProductCard';
 
 const PrivateDashboardContent = (): JSX.Element => {
-    const { data, isLoading, isFetching } = useGetDashboardContentQuery();
+    const isAuthenticated = useSelector(getIsAuthenticated);
+    const { data, isLoading, isFetching } = useGetDashboardContentQuery(
+        undefined,
+        { skip: !isAuthenticated }
+    );
+
+    const getHref = (item: LearningMaterial): string => {
+        const baseHref = `${getBookBaseHref(item.type)}/${item.book_slug}`;
+
+        if (item.type === 'Video' || item.type === 'Kelas') {
+            if (item?.chapter_id && item.subchapter_id)
+                return `/kelas/${item.course_slug}/${item.subchapter_slug}`;
+            return `/kelas/${item.course_slug}`;
+        } else {
+            if (item.in_progress && !!item.latest_page) {
+                if (item.type === 'Astronotes' && !!item.latest_page) {
+                    return `${baseHref}/${item.latest_page}`;
+                }
+
+                if (
+                    (item.type === 'Bank Soal' || item.type === 'Textbook') &&
+                    !!item.latest_problem
+                ) {
+                    return `${baseHref}/${item.latest_problem}`;
+                }
+            }
+            return baseHref;
+        }
+    };
+
+    const getProduct = (item: LearningMaterial): Product => ({
+        title: item.title,
+        thumbnail: item.thumbnail,
+        inProgress: false,
+        latestProgress: 0
+    });
 
     return (
         <>
             {data?.just_released.length !== 0 && (
-                <Section
+                <DashboardSection
                     isLoading={isLoading}
                     header="Baru Rilis"
-                    items={data?.just_released}
-                />
+                    items={data?.just_released}>
+                    {(item, i) => (
+                        <ProductCard
+                            key={data?.just_released[i].id}
+                            orientation="vertical"
+                            category={(item as LearningMaterial).type}
+                            href={getHref(item as LearningMaterial)}
+                            product={getProduct(item as LearningMaterial)}
+                            eventName='User click Items on "Baru Rilis" Section'
+                            className="w-full"
+                        />
+                    )}
+                </DashboardSection>
             )}
             <MyClassesAccordion
                 isLoading={isLoading || isFetching}
                 courses={data?.my_class}
             />
-            <Section
+            <DashboardSection
                 isLoading={isLoading}
                 header="Bacaan Untukmu"
                 items={data?.book_recommendation}
                 showButton
-                btnHref="/perpustakaan"
-                eventName='User click Book Items on "Bacaan Untukmu" Section'
-            />
-            <Section
+                btnHref="/perpustakaan">
+                {(item) => (
+                    <ProductCard
+                        key={(item as LearningMaterial).id}
+                        orientation="vertical"
+                        category={(item as LearningMaterial)?.type}
+                        href={getHref(item as LearningMaterial)}
+                        product={getProduct(item as LearningMaterial)}
+                        eventName='User click Book Items on "Bacaan Untukmu" Section'
+                        className="w-full"
+                    />
+                )}
+            </DashboardSection>
+            <DashboardSection
+                isCourse
                 isLoading={isLoading}
                 header="Kelas Untukmu"
                 items={data?.class_recommendation}
-                type="Video"
                 showButton
-                btnHref="/kelas"
-                eventName='User click Class Items on "Kelas Untukmu" Section'
-            />
-        </>
-    );
-};
-
-const Section = ({
-    isLoading,
-    header,
-    items,
-    showButton,
-    btnHref,
-    eventName,
-    type
-}: {
-    header: string;
-    isLoading: boolean;
-    items?: LearningMaterial[];
-    showButton?: boolean;
-    btnHref?: string;
-    eventName?: string;
-    type?: LearningMaterial['type'];
-}): JSX.Element => {
-    const { is_subscribed: isSubscribed } = useCourseSubscription();
-    return (
-        <div className="relative space-y-4" data-tour="step-1">
-            <div className={cn('flex items-center justify-between w-full')}>
-                <h4 className="text-lg font-extrabold md:text-xl">{header}</h4>
-                <Button
-                    href={btnHref}
-                    variant="custom"
-                    eventName={`User click "Lihat Semua" on "${header}" Section`}
-                    className={cn(
-                        !showButton && 'hidden',
-                        'text-xs text-black bg-white whitespace-nowrap'
-                    )}>
-                    Lihat Semua
-                </Button>
-            </div>
-            <div
-                className={cn(
-                    CAROUSEL,
-                    isSubscribed &&
-                        'md:w-[calc(100vw-250px-4rem)] lg:w-full md:right-8',
-                    isSubscribed
-                        ? 'lg:grid lg:grid-cols-4 lg:right-auto'
-                        : 'md:grid md:grid-cols-4 md:right-auto md:w-full'
-                )}>
-                {isLoading ? (
-                    <Skeleton
-                        repeat={4}
-                        className={cn(
-                            CAROUSEL_ITEM,
-                            isSubscribed
-                                ? 'md:first:ml-8 md:last:mr-8 lg:w-full'
-                                : 'md:first:ml-0 md:last:mr-0 md:w-full',
-                            '!px-0 h-60 !w-40 lg:!w-full'
-                        )}
+                btnHref="/kelas">
+                {(item) => (
+                    <ProductCard
+                        key={(item as LearningMaterial).id}
+                        orientation="vertical"
+                        category="kelas"
+                        href={`/kelas/${
+                            (item as LearningMaterial).course_slug
+                        }`}
+                        product={getProduct(item as LearningMaterial)}
+                        eventName='User click Class Items on "Kelas Untukmu" Section'
+                        className="w-full"
                     />
-                ) : (
-                    <>
-                        {items?.map((item) => (
-                            <div
-                                key={item.id}
-                                className={cn(
-                                    CAROUSEL_ITEM,
-                                    isSubscribed
-                                        ? 'md:first:ml-8 md:last:mr-8 lg:w-full'
-                                        : 'md:first:ml-0 md:last:mr-0 md:w-full'
-                                )}>
-                                <DashboardCard
-                                    {...item}
-                                    eventName={eventName}
-                                    eventPayload={
-                                        item.type == 'Video'
-                                            ? { Course: item.title }
-                                            : { Title: item.title }
-                                    }
-                                    type={type ?? item.type}
-                                />
-                            </div>
-                        ))}
-                    </>
                 )}
-            </div>
-        </div>
+            </DashboardSection>
+        </>
     );
 };
 

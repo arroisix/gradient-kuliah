@@ -16,10 +16,10 @@ const RegisterBanner = (): JSX.Element => {
                     objectFit="contain"
                 />
             </div>
-            <h5 className="z-[1] text-lg font-extrabold md:text-2xl">
+            <p className="z-[1] text-lg font-extrabold md:text-2xl">
                 Daftar dan telusuri <br className="block lg:hidden " />
                 fitur belajar Gradient
-            </h5>
+            </p>
             <Button
                 variant="custom"
                 href={AUTHENTICATION_ROUTE}

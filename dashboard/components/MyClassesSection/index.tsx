@@ -50,7 +50,7 @@ const MyClassesAccordion = ({
             className={cn(
                 'space-y-4 w-full',
                 isSubscribed
-                    ? 'md:w-[calc(100vw-250px-4rem)] lg:w-full'
+                    ? 'md:w-[calc(100vw-250px-4rem)] lg:w-[calc(100vw-250px-12rem)] max-w-screen-2xl'
                     : 'md:w-full'
             )}>
             <div
