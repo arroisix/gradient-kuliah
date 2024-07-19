@@ -30,7 +30,7 @@ const Description = (): JSX.Element => {
     );
     const publicSubchapterDetails = useGetPublicSubchapterDetailV2Query(
         { course_slug: id as string, subchapter_slug: slug as string },
-        { skip: !id || !slug || !isAuthenticated }
+        { skip: !id || !slug }
     );
     const { data: subchapterDetail, isLoading } = isAuthenticated
         ? privateSubchapterDetails
