@@ -3,20 +3,18 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import Skeleton from 'commons/components/elements/Skeleton';
 import useOnScreen from 'commons/hooks/useOnScreen';
-import {
-    useGetCourseDetailQuery,
-    useGetPublicSubchapterDetailQuery
-} from 'courses/redux/api/courseApi';
-import { useGetSubchapterDetailQuery } from 'courses/redux/api/privateCourseApi';
+import { useGetCourseDetailQuery } from 'courses/redux/api/courseApi';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { useGetSubchapterDetailV2Query } from 'courses/redux/api/privateCourseV2Api';
+import { useGetPublicSubchapterDetailV2Query } from 'courses/redux/api/publicCourseV2Api';
 
 const Description = (): JSX.Element => {
     const router = useRouter();
-    const { id, sub } = router.query;
+    const { id, slug } = router.query;
     const anchor = useRef<HTMLDivElement>({} as HTMLDivElement);
     const isOnScreen = useOnScreen(anchor);
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -26,13 +24,13 @@ const Description = (): JSX.Element => {
         { skip: !id }
     );
 
-    const privateSubchapterDetails = useGetSubchapterDetailQuery(
-        sub as string,
-        { skip: !isAuthenticated || !sub }
+    const privateSubchapterDetails = useGetSubchapterDetailV2Query(
+        { course_slug: id as string, subchapter_slug: slug as string },
+        { skip: !id || !slug || !isAuthenticated }
     );
-    const publicSubchapterDetails = useGetPublicSubchapterDetailQuery(
-        sub as string,
-        { skip: !sub }
+    const publicSubchapterDetails = useGetPublicSubchapterDetailV2Query(
+        { course_slug: id as string, subchapter_slug: slug as string },
+        { skip: !id || !slug || !isAuthenticated }
     );
     const { data: subchapterDetail, isLoading } = isAuthenticated
         ? privateSubchapterDetails
