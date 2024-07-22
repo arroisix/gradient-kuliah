@@ -12,7 +12,7 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import { useGetSubchapterDetailV2Query } from 'courses/redux/api/privateCourseV2Api';
 import { useGetPublicSubchapterDetailV2Query } from 'courses/redux/api/publicCourseV2Api';
 
-const Description = (): JSX.Element => {
+const Description = ({ ssrSubchapter }: { ssrSubchapter: SubChapter }): JSX.Element => {
     const router = useRouter();
     const { id, slug } = router.query;
     const anchor = useRef<HTMLDivElement>({} as HTMLDivElement);
@@ -35,19 +35,20 @@ const Description = (): JSX.Element => {
     const { data: subchapterDetail, isLoading } = isAuthenticated
         ? privateSubchapterDetails
         : publicSubchapterDetails;
+    const subchapter = subchapterDetail ?? ssrSubchapter;
 
     return (
         <div className="flex flex-col lg:flex-row justify-between gap-4 lg:gap-[150px] px-5 md:px-16">
             <article>
                 {isLoading && <Skeleton className="!w-[200px] !h-[20px]" />}
                 <p className="text-xs font-body md:text-base">
-                    {subchapterDetail?.video?.description !== '-' ? (
+                    {subchapter?.video?.description !== '-' ? (
                         <ReactMarkdown
                             remarkPlugins={[remarkMath]}
                             rehypePlugins={[rehypeKatex]}
                             linkTarget={'_blank'}>
                             {
-                                subchapterDetail?.video?.description?.replaceAll(
+                                subchapter?.video?.description?.replaceAll(
                                     '\n',
                                     '\n\n'
                                 ) as string

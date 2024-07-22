@@ -98,7 +98,7 @@ const VideoLearnContainer = ({
                     <div className="col-span-1 hidden lg:block h-[300px] bg-neutral-600 rounded-lg animate-pulse" />
                 )}
             </div>
-            <CourseSummary />
+            <CourseSummary ssrSubchapter={ssrSubchapterData} />
             <AnotherClass />
             {video?.ai_unique_id && (
                 <AiTutor
