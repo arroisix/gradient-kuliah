@@ -221,4 +221,5 @@ interface AstronotesPageProps {
     page: number;
     book: GetBookDetailResponse['book'];
     content: string;
+    recommendations: GetBookRecommendationResponse;
 }

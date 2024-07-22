@@ -190,3 +190,13 @@ interface TrackCodingProgressInputData {
     coding_progress_id: string;
     latest_code: string;
 }
+
+interface GetBookRecommendationRequest {
+    category: 'astronotes' | 'bank-soal' | 'textbook' | string;
+    slug: string;
+    astronotes_only?: boolean;
+}
+interface GetBookRecommendationResponse {
+    related_books: Astronote[];
+    other_books: Astronote[];
+}

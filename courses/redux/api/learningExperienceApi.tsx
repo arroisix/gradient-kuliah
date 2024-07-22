@@ -163,6 +163,15 @@ export const learningExperienceApi = baseApi.injectEndpoints({
                 }
             }),
             invalidatesTags: ['CODING_PROGRESS']
+        }),
+        getBookRecommendations: builder.query<
+            GetBookRecommendationResponse,
+            GetBookRecommendationRequest
+        >({
+            query: (params: GetBookRecommendationRequest) => ({
+                url: `${LEARNING_EXPERIENCE_BASE_URL}recommendations/${params.category}/${params.slug}/`,
+                params: { astronotes_only: params.astronotes_only }
+            })
         })
     }),
     overrideExisting: false
@@ -183,5 +192,8 @@ export const {
     useSubmitExamAnswerMutation,
     useFinishExamMutation,
     useGetCodingProgressQuery,
-    useTrackCodingProgressMutation
+    useTrackCodingProgressMutation,
+    useGetBookRecommendationsQuery
 } = learningExperienceApi;
+
+export const { getBookRecommendations } = learningExperienceApi.endpoints;

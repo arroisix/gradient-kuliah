@@ -14,7 +14,8 @@ const AstronotesPage = ({
     book,
     slug,
     page,
-    content
+    content,
+    recommendations
 }: AstronotesPageProps): JSX.Element => {
     const { theme } = useThemeContext();
 
@@ -43,7 +44,12 @@ const AstronotesPage = ({
                 noPadding
                 lightMode={theme === 'light'}
                 showSubscriptionReminder>
-                <Astronotes content={content} book={book} key={page} />
+                <Astronotes
+                    content={content}
+                    book={book}
+                    key={page}
+                    recommendations={recommendations}
+                />
             </LearnLayout>
         </>
     );
@@ -62,38 +68,51 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
     const { slug, page } = params as { slug: string; page: string };
     let isError = false;
-    const [getBookContent, getBookDetail] = await Promise.all([
-        parseInt(page) == 1
-            ? axios
-                  .get<GetAstronotesContentResponse>(
-                      `${config.API_BASE_URL}books/public/${slug}/preview/`
-                  )
-                  .catch(() => {
-                      isError = true;
-                  })
-            : axios
-                  .get<GetAstronotesContentResponse>(
-                      `${config.API_BASE_URL}books/${slug}`,
-                      {
-                          headers: {
-                              'X-Special-Request':
-                                  process.env.FRONTEND_ACCESS_TOKEN
+    const [getBookContent, getBookDetail, getBookRecommendations] =
+        await Promise.all([
+            parseInt(page) == 1
+                ? axios
+                      .get<GetAstronotesContentResponse>(
+                          `${config.API_BASE_URL}books/public/${slug}/preview/`
+                      )
+                      .catch(() => {
+                          isError = true;
+                      })
+                : axios
+                      .get<GetAstronotesContentResponse>(
+                          `${config.API_BASE_URL}books/${slug}`,
+                          {
+                              headers: {
+                                  'X-Special-Request':
+                                      process.env.FRONTEND_ACCESS_TOKEN
+                              }
                           }
-                      }
-                  )
-                  .catch(() => {
-                      isError = true;
-                  }),
-        axios
-            .get<GetBookDetailResponse>(
-                `${config.API_BASE_URL}books/${slug}/detail/`
-            )
-            .catch(() => {
-                isError = true;
-            })
-    ]);
+                      )
+                      .catch(() => {
+                          isError = true;
+                      }),
+            axios
+                .get<GetBookDetailResponse>(
+                    `${config.API_BASE_URL}books/${slug}/detail/`
+                )
+                .catch(() => {
+                    isError = true;
+                }),
+            axios
+                .get<GetBookRecommendationResponse>(
+                    `${config.API_BASE_URL}learning-experiences/recommendations/astronotes/${slug}/?astronotes_only=true`
+                )
+                .catch(() => {
+                    isError = true;
+                })
+        ]);
 
-    if (isError || !getBookContent || !getBookDetail) {
+    if (
+        isError ||
+        !getBookContent ||
+        !getBookDetail ||
+        !getBookRecommendations
+    ) {
         return {
             notFound: true
         };
@@ -105,6 +124,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         key
     );
     const book = getBookDetail.data.book;
+    const recommendations = getBookRecommendations.data;
 
     if (book.category.toLowerCase() !== 'catatan') {
         return {
@@ -122,6 +142,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
                 parseInt(page) == 1
                     ? JSON.stringify(getBookContent.data)
                     : encryptedContent.toString(),
+            recommendations,
             canonical: `https://gradient.academy/perpustakaan/astronotes/${slug}/${page}`,
             title: `Halaman ${page} | ${book?.category} ${book?.title} | Catatan, Rangkuman dan Bank Soal`,
             description: `Belajar dan Paham dengan baca ${book?.category} ${book?.title} hanya di Gradient`,

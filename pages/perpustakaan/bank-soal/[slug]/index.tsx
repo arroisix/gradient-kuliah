@@ -7,17 +7,24 @@ import axios from 'axios';
 import config from 'redux/api/config';
 import { getBookDetail } from 'courses/redux/api/astronotesApi';
 import { getRunningQueriesThunk } from 'redux/api/baseApi';
+import { getBookRecommendations } from 'courses/redux/api/learningExperienceApi';
 
 const BankSoalDetailPage = ({
     slug,
-    astronotes
+    astronotes,
+    recommendations
 }: {
     slug: string;
     astronotes: BookDetailInterface;
+    recommendations: GetBookRecommendationResponse;
 }): JSX.Element => {
     return (
-        <LearnLayout showSidebar fullHeightSidebar>
-            <AstronotesDetail slug={slug} astronotes={astronotes} />
+        <LearnLayout showSidebar fullHeightSidebar noPadding>
+            <AstronotesDetail
+                slug={slug}
+                astronotes={astronotes}
+                recommendations={recommendations}
+            />
         </LearnLayout>
     );
 };
@@ -41,14 +48,19 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
     (store) =>
         async ({ params }) => {
-            (store.dispatch as ThunkDispatch<RootState, never, never>)(
-                getBookDetail.initiate({ slug: params?.slug as string })
+            const { slug } = params as { slug: string };
+            const dispatch = store.dispatch as ThunkDispatch<
+                RootState,
+                never,
+                never
+            >;
+            dispatch(getBookDetail.initiate({ slug }));
+            dispatch(
+                getBookRecommendations.initiate({ category: 'bank-soal', slug })
             );
 
             const payload = await Promise.all(
-                (store.dispatch as ThunkDispatch<RootState, never, never>)(
-                    getRunningQueriesThunk()
-                )
+                dispatch(getRunningQueriesThunk())
             );
 
             if (payload[0].error) {
@@ -58,6 +70,8 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
             }
 
             const data = payload[0].data as GetBookDetailResponse;
+            const recommendations = payload[1]
+                .data as GetBookRecommendationResponse;
             if (data.book.category.toLowerCase() !== 'bank soal') {
                 return {
                     notFound: true
@@ -78,6 +92,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                 props: {
                     slug: params?.slug,
                     astronotes: data.book,
+                    recommendations,
                     canonical: `https://gradient.academy/perpustakaan/bank-soal/${params?.slug}`,
                     title: META_TITLE,
                     description: META_DESCRIPTION,
