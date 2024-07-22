@@ -40,12 +40,12 @@ const Description = ({
         ? privateSubchapterDetails
         : publicSubchapterDetails;
     const subchapter = subchapterDetail ?? ssrSubchapter;
-    const videoDescription = subchapter?.video?.description
+    const videoDescription = subchapter?.video?.description;
 
     return (
         <div className="flex flex-col lg:flex-row justify-between gap-4 lg:gap-[150px] px-5 md:px-16">
             <article>
-                {!!videoDescription? 
+                {!!videoDescription ? (
                     <p className="text-xs font-body md:text-base">
                         {videoDescription !== '-' ? (
                             <ReactMarkdown
@@ -62,9 +62,10 @@ const Description = ({
                         ) : (
                             '-'
                         )}
-                    </p> :
+                    </p>
+                ) : (
                     <Skeleton className="!w-[200px] !h-[20px]" />
-                }
+                )}
             </article>
             <div className="bg-[#FFFFFF08] rounded-[10px]">
                 <div className="lg:min-w-[360px] flex justify-center gap-8 sm:gap-10 px-6 py-5 border-b border-[#2D2D2D]">
