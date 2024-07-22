@@ -1,7 +1,6 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Modal from 'commons/components/modules/Modal';
 import useElementSize from 'commons/hooks/useElementSize';
-import AnotherClass from 'courses/components/AnotherClass';
 import CourseDetailBox from 'courses/components/CourseDetailBox';
 import CourseSummary from 'courses/components/CourseSummary';
 import AiTutor from 'courses/components/LearningExperience/AiTutor';
@@ -16,24 +15,27 @@ import VideoPlayerContainer from 'courses/components/VideoPlayerContainer';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import { useGetSubchapterDetailV2Query } from 'courses/redux/api/privateCourseV2Api';
 import { useGetPublicSubchapterDetailV2Query } from 'courses/redux/api/publicCourseV2Api';
+import RelatedVideosSection from 'courses/components/RelatedVideosSection';
 
 const VideoLearnContainer = ({
     subchapter: ssrSubchapterData,
-    course: ssrCourseData
+    course: ssrCourseData,
+    recommendations
 }: {
     subchapter: SubChapter;
     course: CourseDetail;
+    recommendations: GetVideoRecommendationResponse;
 }): JSX.Element => {
     const { isDesktopBreakpoints } = useWindowBreakpoints();
     const router = useRouter();
-    const { id, slug } = router.query;
+    const { id, slug } = router.query as { id: string; slug: string };
     const isAuthenticated = useSelector(getIsAuthenticated);
     const privateSubchapterDetails = useGetSubchapterDetailV2Query(
-        { course_slug: id as string, subchapter_slug: slug as string },
+        { course_slug: id, subchapter_slug: slug },
         { skip: !id || !slug || !isAuthenticated }
     );
     const publicSubchapterDetails = useGetPublicSubchapterDetailV2Query(
-        { course_slug: id as string, subchapter_slug: slug as string },
+        { course_slug: id, subchapter_slug: slug },
         { skip: !id || !slug }
     );
     const { data: subchapterResponse, isLoading } = isAuthenticated
@@ -56,7 +58,7 @@ const VideoLearnContainer = ({
     const subchapter = subchapterResponse ?? ssrSubchapterData;
 
     return (
-        <section className="relative pb-16 min-h-[100vh] flex flex-col">
+        <section className="relative flex flex-col overflow-visible">
             <div className="grid grid-cols-1 gap-5 pb-px pt-14 lg:pl-6 lg:grid-cols-3">
                 <div
                     className="flex flex-col w-full lg:col-span-2 h-max lg:pl-8"
@@ -99,7 +101,14 @@ const VideoLearnContainer = ({
                 )}
             </div>
             <CourseSummary ssrSubchapter={ssrSubchapterData} />
-            <AnotherClass />
+            <RelatedVideosSection
+                title="Video Terkait"
+                videos={recommendations?.related_videos}
+            />
+            <RelatedVideosSection
+                title="Eksplor Video Lainnya"
+                videos={recommendations?.other_videos}
+            />
             {video?.ai_unique_id && (
                 <AiTutor
                     uniqueId={video.ai_unique_id}

@@ -34,9 +34,7 @@ const VerticalProductCard = ({
             <div
                 className={cn(
                     'w-full grid place-items-center',
-                    category.toLowerCase() == 'kelas'
-                        ? 'aspect-[2/1]'
-                        : 'aspect-[4/3]',
+                    isCourse || isVideo ? 'aspect-[2/1]' : 'aspect-[4/3]',
                     !(isVideo || isCourse) && 'py-2'
                 )}>
                 <div
@@ -109,6 +107,9 @@ const VerticalProductCard = ({
                     )}>
                     {category}
                 </div>
+                <p className={cn(!product?.courseName && 'hidden', 'text-xs')}>
+                    {product?.courseName}
+                </p>
                 <TitleLabel
                     className={cn(
                         'text-sm grow font-bold line-clamp-2 text-balance'

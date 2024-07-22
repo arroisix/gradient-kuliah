@@ -30,7 +30,7 @@ const CourseSummary = ({
     }, [isDesktopBreakpoints]);
 
     return (
-        <div className="flex flex-col gap-5 pt-8 pb-12 bg-[#121212]">
+        <div className="w-screen -ml-4 sm:w-full sm:ml-0 flex flex-col gap-5 pt-8 pb-12 bg-[#121212]">
             <div className="flex gap-5 px-5 lg:gap-8 md:px-16">
                 <button
                     className={`uppercase lg:hidden font-bold text-sm pb-[6px] cursor-pointer ${

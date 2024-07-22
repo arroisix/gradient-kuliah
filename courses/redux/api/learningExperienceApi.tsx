@@ -172,6 +172,14 @@ export const learningExperienceApi = baseApi.injectEndpoints({
                 url: `${LEARNING_EXPERIENCE_BASE_URL}recommendations/${params.category}/${params.slug}/`,
                 params: { astronotes_only: params.astronotes_only }
             })
+        }),
+        getVideoRecommendations: builder.query<
+            GetVideoRecommendationResponse,
+            { slug: string }
+        >({
+            query: ({ slug }: { slug: string }) => ({
+                url: `${LEARNING_EXPERIENCE_BASE_URL}recommendations/videos/${slug}/`
+            })
         })
     }),
     overrideExisting: false
@@ -193,7 +201,8 @@ export const {
     useFinishExamMutation,
     useGetCodingProgressQuery,
     useTrackCodingProgressMutation,
-    useGetBookRecommendationsQuery
+    useGetBookRecommendationsQuery,
+    useGetVideoRecommendationsQuery
 } = learningExperienceApi;
 
 export const { getBookRecommendations } = learningExperienceApi.endpoints;

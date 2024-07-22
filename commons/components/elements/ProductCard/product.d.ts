@@ -20,4 +20,5 @@ type Product = {
     rating?: number;
     isComingSoon?: boolean;
     isNew?: boolean;
+    courseName?: string;
 };

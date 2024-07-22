@@ -85,14 +85,6 @@ export default function CourseProgress({
                             product={getProduct(courseProgress)}
                             className="flex-none w-56 min-[400px]:w-[348px]"
                         />
-                        {/* <CourseCard
-                            course={courseProgress.course}
-                            latestSubChapter={courseProgress.latest_subchapter}
-                            latestWatchProgress={
-                                courseProgress.latest_watch_progress
-                            }
-                            className="flex-none w-56 min-[400px]:w-[348px]"
-                        /> */}
                     </div>
                 ))}
             </div>

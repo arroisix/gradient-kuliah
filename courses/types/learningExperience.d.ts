@@ -200,3 +200,16 @@ interface GetBookRecommendationResponse {
     related_books: Astronote[];
     other_books: Astronote[];
 }
+
+type VideoRecommendation = {
+    id: string;
+    title: string;
+    subchapter_slug: string;
+    course_slug: string;
+    course_name: string;
+    thumbnail: string;
+};
+interface GetVideoRecommendationResponse {
+    related_videos: VideoRecommendation[];
+    other_videos: VideoRecommendation[];
+}

@@ -51,7 +51,7 @@ const AstronotesDetail = ({
             slug,
             category: slugify(category == 'catatan' ? 'astronotes' : category)
         },
-        { skip: !isSubscribed || !category }
+        { skip: !isSubscribed || !category || !slug }
     );
     const getLink = (): string => {
         if (!isAuthenticated) return '/daftar';

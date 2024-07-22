@@ -12,12 +12,14 @@ interface BelajarPageProps {
     subchapter: SubChapter;
     course: CourseDetail;
     description: string;
+    recommendations: GetVideoRecommendationResponse;
 }
 
 const Belajar = ({
     subchapter,
     course,
-    description
+    description,
+    recommendations
 }: BelajarPageProps): JSX.Element => {
     return (
         <>
@@ -26,6 +28,7 @@ const Belajar = ({
                     <VideoLearnContainer
                         subchapter={subchapter}
                         course={course}
+                        recommendations={recommendations}
                     />
                 </LearnLayout>
             </LearningProvider>
@@ -77,14 +80,21 @@ export const getStaticProps = async ({
 > => {
     const { id, slug } = params;
 
-    const [subchapterResponse, courseResponse] = await Promise.all([
-        axios.get<SubChapter>(
-            `${config.API_BASE_URL}courses/v2/public/${id}/subchapter/${slug}/`
-        ),
-        axios.get<CourseDetailResponse>(`${config.API_BASE_URL}courses/${id}`)
-    ]);
+    const [subchapterResponse, courseResponse, recommendationResponse] =
+        await Promise.all([
+            axios.get<SubChapter>(
+                `${config.API_BASE_URL}courses/v2/public/${id}/subchapter/${slug}/`
+            ),
+            axios.get<CourseDetailResponse>(
+                `${config.API_BASE_URL}courses/${id}`
+            ),
+            axios.get<GetVideoRecommendationResponse>(
+                `${config.API_BASE_URL}learning-experiences/recommendations/videos/${slug}/`
+            )
+        ]);
     const subchapter = subchapterResponse.data;
     const course = courseResponse.data.course_detail;
+    const recommendations = recommendationResponse.data;
 
     const META_TITLE = `${course.course_name}: ${subchapter.subchapter_name}`;
     const META_DESCRIPTION = `Nonton Video ${subchapter.subchapter_name} kelas ${course.course_name} hanya di Gradient`;
@@ -93,6 +103,7 @@ export const getStaticProps = async ({
         props: {
             subchapter,
             course,
+            recommendations,
             canonical: `https://gradient.academy/kelas/${id}/${slug}`,
             title: META_TITLE,
             description: META_DESCRIPTION,

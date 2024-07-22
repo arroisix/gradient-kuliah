@@ -139,7 +139,7 @@ const Footer = (): JSX.Element => {
     return (
         <footer
             id="footer"
-            className="w-full flex flex-col bg-[#121212] gap-8 lg:gap-12 px-6 md:px-12 xl:px-24 pt-6 md:pt-8 pb-5 md:pb-6">
+            className="w-screen flex flex-col bg-[#121212] gap-8 lg:gap-12 px-6 md:px-12 xl:px-24 pt-6 md:pt-8 pb-5 md:pb-6">
             <div className="flex flex-col-reverse w-full gap-8 lg:flex-row lg:gap-0">
                 <div className="flex flex-col w-full lg:flex-row gap-7 xl:gap-12">
                     {ITEMS.map((item) => (
