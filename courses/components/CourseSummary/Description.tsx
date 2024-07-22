@@ -12,7 +12,11 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import { useGetSubchapterDetailV2Query } from 'courses/redux/api/privateCourseV2Api';
 import { useGetPublicSubchapterDetailV2Query } from 'courses/redux/api/publicCourseV2Api';
 
-const Description = ({ ssrSubchapter }: { ssrSubchapter: SubChapter }): JSX.Element => {
+const Description = ({
+    ssrSubchapter
+}: {
+    ssrSubchapter: SubChapter;
+}): JSX.Element => {
     const router = useRouter();
     const { id, slug } = router.query;
     const anchor = useRef<HTMLDivElement>({} as HTMLDivElement);

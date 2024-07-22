@@ -9,7 +9,11 @@ import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 
-const CourseSummary = ({ ssrSubchapter }: { ssrSubchapter: SubChapter }): JSX.Element => {
+const CourseSummary = ({
+    ssrSubchapter
+}: {
+    ssrSubchapter: SubChapter;
+}): JSX.Element => {
     const tracker = useTracker();
     const router = useRouter();
     const { subchapter } = useLearning();
@@ -79,7 +83,9 @@ const CourseSummary = ({ ssrSubchapter }: { ssrSubchapter: SubChapter }): JSX.El
             </div>
             <div>
                 {navigation === 'COURSE' && <CourseDetailBox />}
-                {navigation === 'DESCRIPTION' && <Description ssrSubchapter={ssrSubchapter} />}
+                {navigation === 'DESCRIPTION' && (
+                    <Description ssrSubchapter={ssrSubchapter} />
+                )}
                 {isAuthenticated && navigation === 'DISCUSSION' && (
                     <div className="md:px-16">
                         <QnaSection />
