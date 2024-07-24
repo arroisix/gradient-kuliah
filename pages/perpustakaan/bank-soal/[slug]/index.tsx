@@ -34,7 +34,8 @@ export default BankSoalDetailPage;
 
 export const getStaticPaths: GetStaticPaths = async () => {
     const { data: response } = await axios.get<ListResponseData<string>>(
-        `${config.API_BASE_URL}books/list-slug/`
+        `${config.API_BASE_URL}books/list-slug/`,
+        { params: { category: 'Bank Soal' } }
     );
 
     const paths = response.data.flatMap((slug) => ({ params: { slug } }));

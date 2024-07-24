@@ -127,3 +127,18 @@ interface CommunityPostCommentDetail {
 interface CommunityPostCommentDetailResponse {
     comments: CommunityPostCommentDetail[];
 }
+
+type CommunityPostRecommendation = {
+    id: string;
+    slug: string;
+    preview_content: string;
+    category: string;
+    category_slug: string;
+    viewer_counts: number;
+    comment_counts: number;
+};
+
+interface GetCommunityPostRecommendationResponse {
+    related_questions: CommunityPostRecommendation[];
+    popular_questions: CommunityPostRecommendation[];
+}

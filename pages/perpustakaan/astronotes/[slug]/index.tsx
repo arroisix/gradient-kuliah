@@ -34,7 +34,8 @@ export default AstronotesDetailPage;
 
 export const getStaticPaths: GetStaticPaths = async () => {
     const { data: response } = await axios.get<ListResponseData<string>>(
-        `${config.API_BASE_URL}books/list-slug/`
+        `${config.API_BASE_URL}books/list-slug/`,
+        { params: { category: 'Catatan' } }
     );
 
     const paths = response.data.flatMap((slug) => ({ params: { slug } }));
