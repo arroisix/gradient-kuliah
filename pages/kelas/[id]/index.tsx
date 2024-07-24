@@ -12,7 +12,8 @@ const DetailKelas = ({
     courseData,
     courseRating,
     title,
-    description
+    description,
+    recommendations
 }: {
     id: string;
     packetOffer: PacketOffer[];
@@ -20,6 +21,7 @@ const DetailKelas = ({
     courseRating: GetCourseRatingResponse;
     title: string;
     description: string;
+    recommendations: GetCourseRecommendationResponse;
 }): JSX.Element => {
     const courseName = title.split(' | Gradient')[0];
 
@@ -78,7 +80,12 @@ const DetailKelas = ({
                 }
             />
             <Layout shouldTransparent>
-                <LandingPageOrchestrator id={id} packetOffer={packetOffer} />
+                <LandingPageOrchestrator
+                    id={id}
+                    packetOffer={packetOffer}
+                    course={courseData}
+                    recommendations={recommendations}
+                />
             </Layout>
         </>
     );
@@ -103,18 +110,29 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
     () =>
         async ({ params }) => {
-            const { data: courseData } = await axios.get<CourseLandingPageData>(
-                `${config.API_BASE_URL}courses/public/landing/${params?.id}`
-            );
-            const {
-                data: { data: packetOfferData }
-            } = await axios.get<ResponseData<PacketOffer>>(
-                `${config.API_BASE_URL}subscriptions/packet-offer/`
-            );
-            const { data: courseRating } =
-                await axios.get<GetCourseRatingResponse>(
+            const [
+                courseResponse,
+                pricingResponse,
+                ratingResponse,
+                recommendationResponse
+            ] = await Promise.all([
+                axios.get<CourseLandingPageData>(
+                    `${config.API_BASE_URL}courses/public/landing/${params?.id}`
+                ),
+                axios.get<ResponseData<PacketOffer>>(
+                    `${config.API_BASE_URL}subscriptions/packet-offer/`
+                ),
+                axios.get<GetCourseRatingResponse>(
                     `${config.API_BASE_URL}courses/public/${params?.id}/rating/`
-                );
+                ),
+                axios.get<GetCourseRecommendationResponse>(
+                    `${config.API_BASE_URL}learning-experiences/recommendations/courses/${params?.id}/`
+                )
+            ]);
+            const courseData = courseResponse.data;
+            const packetOffer = pricingResponse.data.data;
+            const courseRating = ratingResponse.data;
+            const recommendations = recommendationResponse.data;
 
             const metaTitle =
                 params?.id === 'bedah-jurusan'
@@ -129,6 +147,9 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                 props: {
                     id: params?.id,
                     courseData,
+                    packetOffer,
+                    courseRating,
+                    recommendations,
                     canonical: `https://gradient.academy/kelas/${courseData.course_slug}`,
                     title: metaTitle,
                     description: metaDescription,
@@ -159,9 +180,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                                 alt: 'Gradient Academy'
                             }
                         ]
-                    },
-                    packetOffer: packetOfferData,
-                    courseRating
+                    }
                 },
                 revalidate: 300
             };

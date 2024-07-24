@@ -19,7 +19,11 @@ const SORT_OPTIONS = [
     { value: 'lexicography', label: 'A -> Z' }
 ];
 
-const ClassContainer = (): JSX.Element => {
+const ClassContainer = ({
+    courses
+}: {
+    courses: ListResponseData<Course>;
+}): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
 
     const { data: courseProgresses } = useGetCourseProgressV2Query(undefined, {
@@ -47,7 +51,11 @@ const ClassContainer = (): JSX.Element => {
                         className="sticky z-10 py-2 bg-black top-28"
                     />
                 )}
-                {isAuthenticated ? <PrivateCourseList /> : <PublicCourseList />}
+                {isAuthenticated ? (
+                    <PrivateCourseList />
+                ) : (
+                    <PublicCourseList courses={courses} />
+                )}
                 {!(activePacket && activePacket.subscription_id) && (
                     <RenewSubscriptionBanner product="materi" />
                 )}

@@ -19,7 +19,7 @@ const CourseList = ({
     isLoading,
     courses
 }: {
-    isLoading: boolean;
+    isLoading?: boolean;
     courses?: ListResponseData<Course>;
 }): JSX.Element => {
     const { is_subscribed: isSubscribed } = useCourseSubscription();
@@ -76,17 +76,22 @@ const CourseList = ({
     );
 };
 
-export const PublicCourseList = (): JSX.Element => {
+export const PublicCourseList = ({
+    courses: ssrCourses
+}: {
+    courses: ListResponseData<Course>;
+}): JSX.Element => {
     const router = useRouter();
     const { tab: section, sort, page } = router.query as CourseQueryParams;
-    const { data: courses, isLoading } = useGetPublicListCoursesV2Query({
+    const { data: queriedCourses } = useGetPublicListCoursesV2Query({
         section: VALID_SECTION.includes(section ?? '') ? section : 'all',
         sort: VALID_SORT.includes(sort ?? '') ? sort : 'latest',
         page: parseInt(page ?? '1'),
         limit: PAGE_SIZE
     });
+    const courses = queriedCourses ?? ssrCourses;
 
-    return <CourseList courses={courses} isLoading={isLoading} />;
+    return <CourseList courses={courses} />;
 };
 
 export const PrivateCourseList = (): JSX.Element => {

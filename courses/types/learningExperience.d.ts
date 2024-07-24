@@ -213,3 +213,13 @@ interface GetVideoRecommendationResponse {
     related_videos: VideoRecommendation[];
     other_videos: VideoRecommendation[];
 }
+
+type CourseRecommendation = Omit<
+    VideoRecommendation,
+    'subchapter_slug' | 'title'
+>;
+
+interface GetCourseRecommendationResponse {
+    related_courses: CourseRecommendation[];
+    other_courses: CourseRecommendation[];
+}
