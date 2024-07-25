@@ -18,9 +18,11 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 const AstronotesEntrypoint = ({
-    title = 'Perpustakaan'
+    title = 'Perpustakaan',
+    books
 }: {
     title?: string;
+    books: ListResponseData<Astronote>;
 }): JSX.Element => {
     const router = useRouter();
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -53,7 +55,7 @@ const AstronotesEntrypoint = ({
                 {isAuthenticated ? (
                     <EntrypointPrivate category={type} />
                 ) : (
-                    <EntrypointPublic category={type} />
+                    <EntrypointPublic category={type} books={books} />
                 )}
                 {!(activePacket && activePacket.subscription_id) && (
                     <RenewSubscriptionBanner product="materi" />

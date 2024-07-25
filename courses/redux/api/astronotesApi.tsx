@@ -266,6 +266,7 @@ export const {
 } = astronotesApi;
 
 export const {
+    getPublicEntrypointBooks,
     getBookDetail,
     getTextbookSolution,
     getBankSoal,

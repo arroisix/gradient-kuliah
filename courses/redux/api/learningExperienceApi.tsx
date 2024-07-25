@@ -180,6 +180,22 @@ export const learningExperienceApi = baseApi.injectEndpoints({
             query: ({ slug }: { slug: string }) => ({
                 url: `${LEARNING_EXPERIENCE_BASE_URL}recommendations/videos/${slug}/`
             })
+        }),
+        getTextbookProblemRecommendations: builder.query<
+            GetProblemRecommendationsResponse,
+            { slug: string }
+        >({
+            query: (params: { slug: string }) => ({
+                url: `${LEARNING_EXPERIENCE_BASE_URL}recommendations/textbook/problems/${params.slug}/`
+            })
+        }),
+        getBankSoalProblemRecommendations: builder.query<
+            GetProblemRecommendationsResponse,
+            { slug: string }
+        >({
+            query: (params: { slug: string }) => ({
+                url: `${LEARNING_EXPERIENCE_BASE_URL}recommendations/bank-soal/problems/${params.slug}/`
+            })
         })
     }),
     overrideExisting: false
@@ -205,4 +221,8 @@ export const {
     useGetVideoRecommendationsQuery
 } = learningExperienceApi;
 
-export const { getBookRecommendations } = learningExperienceApi.endpoints;
+export const {
+    getBookRecommendations,
+    getTextbookProblemRecommendations,
+    getBankSoalProblemRecommendations
+} = learningExperienceApi.endpoints;

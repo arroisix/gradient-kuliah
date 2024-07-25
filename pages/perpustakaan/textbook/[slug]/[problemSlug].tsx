@@ -11,6 +11,7 @@ import {
 import { ThunkDispatch } from 'redux-thunk';
 import { getRunningQueriesThunk } from 'redux/api/baseApi';
 import { wrapper } from 'redux/store';
+import { getTextbookProblemRecommendations } from 'courses/redux/api/learningExperienceApi';
 
 const DUMMY_DATE = moment().startOf('year').format();
 interface TextbookSolutionProblemPageProps {
@@ -19,6 +20,7 @@ interface TextbookSolutionProblemPageProps {
     content: TextbookSolution;
     title: string;
     description: string;
+    recommendations: GetProblemRecommendationsResponse;
 }
 
 const TextbookSolutionProblemPage = ({
@@ -26,7 +28,8 @@ const TextbookSolutionProblemPage = ({
     problemSlug,
     content,
     title,
-    description
+    description,
+    recommendations
 }: TextbookSolutionProblemPageProps): JSX.Element => {
     return (
         <>
@@ -47,7 +50,10 @@ const TextbookSolutionProblemPage = ({
                 isAccessibleForFree={false}
             />
             <LearnLayout noPadding>
-                <TextbookSolution data={content} />
+                <TextbookSolution
+                    data={content}
+                    recommendations={recommendations}
+                />
             </LearnLayout>
         </>
     );
@@ -78,6 +84,11 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
 
             dispatch(getBookDetail.initiate({ slug }));
             dispatch(getTextbookSolution.initiate({ slug, problemSlug }));
+            dispatch(
+                getTextbookProblemRecommendations.initiate({
+                    slug: problemSlug
+                })
+            );
 
             const payload = await Promise.all(
                 dispatch(getRunningQueriesThunk())
@@ -97,6 +108,8 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
             }
 
             const textbook = payload[1].data as TextbookSolution;
+            const recommendations = payload[2]
+                .data as GetProblemRecommendationsResponse;
 
             const title = `Pembahasan Soal ${textbook.problem.title} | ${book.title}`;
             const description = title;
@@ -107,13 +120,12 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                     slug,
                     problemSlug,
                     content: textbook,
+                    recommendations,
                     canonical: `https://gradient.academy/perpustakaan/textbook/${slug}/${problemSlug}`,
-                    // TODO(angga): replace SEO title and descriptions
                     title,
                     description,
                     openGraph: {
                         type: 'website',
-                        // TODO(angga): replace SEO title and descriptions
                         title,
                         description,
                         url: `https://gradient.academy/perpustakaan/textbook/${slug}/${problemSlug}`,

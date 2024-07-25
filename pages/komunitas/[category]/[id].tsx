@@ -152,7 +152,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                 };
             }
 
-            const recommendations = postPayload[1].data;
+            const recommendations = postPayload[1].data ?? null;
             const commentData = commentPayload[0]
                 .data as CommunityPostCommentDetailResponse & {
                 count_items: number;

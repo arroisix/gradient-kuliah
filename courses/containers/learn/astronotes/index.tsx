@@ -83,14 +83,14 @@ const Astronotes = ({
                                 isMobileBreakpoints ? 'vertical' : 'horizontal'
                             }
                             title="Astronotes Terkait"
-                            books={recommendations.related_books}
+                            books={recommendations?.related_books}
                         />
                         <RelatedBooksSection
                             orientation={
                                 isMobileBreakpoints ? 'vertical' : 'horizontal'
                             }
                             title="Eksplor Astronotes Lainnya"
-                            books={recommendations.other_books}
+                            books={recommendations?.other_books}
                         />
                     </div>
                 </div>

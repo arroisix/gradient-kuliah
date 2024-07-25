@@ -16,13 +16,16 @@ import {
 } from 'courses/redux/api/astronotesApi';
 import { getCookieValue } from 'commons/utils';
 import { IS_BOT } from 'commons/constants';
+import RelatedProblemsSection from 'courses/components/Textbook/RelatedProblemsSection';
 
 type BankSoalProps = {
     data?: BankSoal;
+    recommendations: GetProblemRecommendationsResponse;
 };
 
 const BankSoalContainer = ({
-    data: initialData
+    data: initialData,
+    recommendations
 }: BankSoalProps): JSX.Element => {
     const router = useRouter();
     const [isCrawler, setIsCrawler] = useState<string>();
@@ -55,7 +58,7 @@ const BankSoalContainer = ({
     return (
         <div className="drawer drawer-end lg:drawer-open">
             <TableOfContentMenu problem={data?.problem} />
-            <div className="pt-40 pb-24 space-y-4 md:pb-12 drawer-content md:max-w-screen-lg md:px-8 lg:px-12 lg:pt-20">
+            <div className="pt-40 pb-12 space-y-4 drawer-content md:max-w-screen-lg md:px-8 lg:px-12 lg:pt-20">
                 <Breadcrumb nextItem={crumbs} />
                 <div className="flex items-start justify-between">
                     <QuestionMetadata problem={data?.problem} />
@@ -87,6 +90,14 @@ const BankSoalContainer = ({
                 ) : (
                     <TextbookPaywall problem={data?.problem} />
                 )}
+                <RelatedProblemsSection
+                    title="Soal Terkait"
+                    problems={recommendations?.related_problems}
+                />
+                <RelatedProblemsSection
+                    title="Eksplor Soal Lainnya"
+                    problems={recommendations?.other_problems}
+                />
             </div>
         </div>
     );

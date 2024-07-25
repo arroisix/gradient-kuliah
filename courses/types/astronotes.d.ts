@@ -223,3 +223,16 @@ interface AstronotesPageProps {
     content: string;
     recommendations: GetBookRecommendationResponse;
 }
+
+interface ProblemRecommendation {
+    book_title: string;
+    book_category: string;
+    book_slug: string;
+    problem_slug: string;
+    question_snippet: JSONContent;
+}
+
+interface GetProblemRecommendationsResponse {
+    related_problems: ProblemRecommendation[];
+    other_problems: ProblemRecommendation[];
+}

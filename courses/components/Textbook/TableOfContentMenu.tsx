@@ -88,7 +88,7 @@ export const TableOfContentMenu = ({
                 </div>
                 <BiChevronRight size={24} />
             </label>
-            <div className="z-20 pt-0 lg:pt-11 lg:!overflow-y-auto drawer-side lg:z-[11] [scrollbar-gutter:stable]">
+            <div className="z-20 pt-0 lg:pt-11 lg:!overflow-y-auto drawer-side lg:z-[11] lg:[scrollbar-gutter:stable]">
                 <label
                     htmlFor="toc-drawer"
                     className="drawer-overlay lg:hidden"></label>
