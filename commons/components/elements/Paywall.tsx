@@ -57,6 +57,7 @@ const Paywall = ({
         if (!isAuthenticated) {
             router.push(`/daftar?redirect=${pembayaranPage}`);
         } else {
+            localStorage.setItem('packetId', pricing.id);
             sendGTMEvent({
                 event: 'add_package',
                 ecommerce: {
@@ -70,7 +71,6 @@ const Paywall = ({
                     ]
                 }
             });
-            localStorage.setItem('packetId', pricing.id);
             router.push(pembayaranPage);
         }
     };

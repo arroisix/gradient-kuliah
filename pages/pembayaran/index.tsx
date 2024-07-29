@@ -40,6 +40,12 @@ const Payment = (): JSX.Element => {
         }
     }, [isSubscribeViaWhatsapp, isAuthenticated, packet, subscriptionId]);
 
+    useEffect(() => {
+        if (packetId) {
+            localStorage.setItem('packetId', packetId as string);
+        }
+    }, [packetId]);
+
     return (
         <Layout paymentPage isFullBlackBackground>
             {packetId ? (
