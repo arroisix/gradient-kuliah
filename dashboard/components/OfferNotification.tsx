@@ -6,7 +6,7 @@ const OfferNotification = (): JSX.Element => {
     const { checkCustomBreakpoints } = useWindowBreakpoints();
 
     return (
-        <div className="flex justify-between items-center gap-4 py-[0.5rem] px-[1rem] border-[1px] border-accent-purple rounded-lg">
+        <div className="flex items-center justify-between gap-4 px-4 py-2 rounded-lg border-px border-accent-purple">
             <span className="text-sm font-extrabold">
                 Beli sekali. Akses tanpa batas.
             </span>

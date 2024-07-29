@@ -6,7 +6,7 @@ import { useGetEntrypointBooksQuery } from 'courses/redux/api/astronotesApi';
 import { getBookBaseHref } from 'courses/utils';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { AstronoteBookCard } from '../AstronoteBook';
+import ProductCard from 'commons/components/elements/ProductCard';
 
 const ContinueReadingSection = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -25,6 +25,24 @@ const ContinueReadingSection = (): JSX.Element => {
         )
     )
         return <></>;
+
+    const getHref = (book: Astronote): string => {
+        return `${getBookBaseHref(book.category_name)}/${book.slug}/${
+            book.category_name === 'Catatan'
+                ? book.latest_page
+                : book.latest_problem
+        }`;
+    };
+
+    const getProduct = (book: Astronote): Product => ({
+        title: book.title,
+        thumbnail: book.book_cover_url,
+        inProgress: book?.in_progress ?? false,
+        latestProgress: book?.percentage_progress ?? 0,
+        latestChapter: book.last_chapter_read,
+        authors: book.authors,
+        rating: book.rating
+    });
 
     return (
         <div className="relative pt-6 pb-4 mb-6 sm:pb-6 space-y-4 z-[1] overflow-x-visible">
@@ -46,26 +64,24 @@ const ContinueReadingSection = (): JSX.Element => {
                                     ? 'min-[1786px]:first:ml-[calc((100vw-250px-1536px)/2)] min-[1786px]:last:mr-[calc((100vw-250px-1536px)/2)]'
                                     : 'min-[1786px]:first:ml-[calc((100vw-1536px)/2)] min-[1786px]:last:mr-[calc((100vw-1536px)/2)]'
                             )}>
-                            <AstronoteBookCard
+                            <ProductCard
+                                key={book.id}
+                                href={getHref(book)}
                                 orientation={
                                     isMobileBreakpoints
                                         ? 'vertical'
                                         : 'horizontal'
                                 }
+                                category={book.category_name}
+                                product={getProduct(book)}
                                 className={cn(
-                                    !isMobileBreakpoints &&
-                                        'flex-none w-[348px]'
+                                    isMobileBreakpoints
+                                        ? 'w-48'
+                                        : 'flex-none w-[348px]'
                                 )}
-                                imageClassname="min-w-20 min-h-24"
-                                href={`${getBookBaseHref(book.category_name)}/${
-                                    book.slug
-                                }/${
-                                    book.category_name === 'Catatan'
-                                        ? book.latest_page
-                                        : book.latest_problem
-                                }`}
-                                key={book.id}
-                                {...book}
+                                eventName="Click Book Item on Library Page"
+                                eventPayload={{ 'Book Slug': book.slug }}
+                                imageClassname="sm:min-w-20"
                             />
                         </div>
                     ) : (

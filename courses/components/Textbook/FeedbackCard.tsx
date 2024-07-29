@@ -70,7 +70,7 @@ export const FeedbackCard = ({
     return (
         <div
             className={cn(
-                'bg-[#121212] border border-neutral-900 rounded-lg px-4 py-3 flex flex-col md:flex-row gap-3 md:items-center md:justify-between transition',
+                'bg-[#121212] border border-neutral-800 rounded-lg px-4 py-3 flex flex-col md:flex-row gap-3 md:items-center md:justify-between transition',
                 isLoading && '*:opacity-0 animate-pulse'
             )}>
             <p className="text-sm font-medium">

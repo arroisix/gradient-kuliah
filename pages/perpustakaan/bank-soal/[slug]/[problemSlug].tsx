@@ -7,6 +7,7 @@ import { getBankSoal, getBookDetail } from 'courses/redux/api/astronotesApi';
 import { wrapper } from 'redux/store';
 import { ThunkDispatch } from 'redux-thunk';
 import { getRunningQueriesThunk } from 'redux/api/baseApi';
+import { getBankSoalProblemRecommendations } from 'courses/redux/api/learningExperienceApi';
 
 const DUMMY_DATE = moment().startOf('year').format();
 
@@ -16,6 +17,7 @@ interface BankSoalProblemPageProps {
     content: BankSoal;
     title: string;
     description: string;
+    recommendations: GetProblemRecommendationsResponse;
 }
 
 const BankSoalPage = ({
@@ -23,7 +25,8 @@ const BankSoalPage = ({
     problemSlug,
     content,
     title,
-    description
+    description,
+    recommendations
 }: BankSoalProblemPageProps): JSX.Element => {
     return (
         <>
@@ -44,7 +47,10 @@ const BankSoalPage = ({
                 isAccessibleForFree={false}
             />
             <LearnLayout noPadding>
-                <BankSoalContainer data={content as unknown as BankSoal} />
+                <BankSoalContainer
+                    data={content as unknown as BankSoal}
+                    recommendations={recommendations}
+                />
             </LearnLayout>
         </>
     );
@@ -75,6 +81,11 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
 
             dispatch(getBookDetail.initiate({ slug }));
             dispatch(getBankSoal.initiate({ slug, problemSlug }));
+            dispatch(
+                getBankSoalProblemRecommendations.initiate({
+                    slug: problemSlug
+                })
+            );
 
             const payload = await Promise.all(
                 dispatch(getRunningQueriesThunk())
@@ -94,6 +105,8 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
             }
 
             const bankSoal = payload[1].data as BankSoal;
+            const recommendations = payload[2]
+                .data as GetProblemRecommendationsResponse;
 
             const title = `Pembahasan Soal ${bankSoal.problem.chapter_name} ${bankSoal.problem.title} | ${book.title}`;
             const description = title;
@@ -105,13 +118,12 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                     problemSlug,
                     book,
                     content: bankSoal,
+                    recommendations,
                     canonical: `https://gradient.academy/perpustakaan/bank-soal/${slug}/${problemSlug}`,
-                    // TODO(angga): replace SEO title and descriptions
                     title,
                     description,
                     openGraph: {
                         type: 'website',
-                        // TODO(angga): replace SEO title and descriptions
                         title,
                         description,
                         url: `https://gradient.academy/perpustakaan/bank-soal/${slug}/${problemSlug}`,

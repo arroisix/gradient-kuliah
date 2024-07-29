@@ -135,7 +135,6 @@ const DashboardContent = (): JSX.Element => {
                         </div>
                     ) : (
                         <Paywall
-                            isCompact
                             pricingData={pricingData?.data}
                             ctaEventName="Click Pricing Button on Dashboard"
                         />

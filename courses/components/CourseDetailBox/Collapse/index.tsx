@@ -42,7 +42,7 @@ const Collapse = ({
                     ) : chapter === chapter_id ? (
                         <FaPlay size={14} />
                     ) : null}
-                    <h3 className="overflow-hidden text-sm font-extrabold whitespace-nowrap text-ellipsis">
+                    <h3 className="overflow-hidden text-sm font-extrabold text-left text-balance text-ellipsis">
                         {title}
                     </h3>
                 </div>

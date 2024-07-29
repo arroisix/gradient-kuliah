@@ -31,11 +31,11 @@ const Features = ({ title }: FeaturesProps): JSX.Element => {
 
     return (
         <Container className="flex flex-col gap-5 py-9 md:py-16" id="features">
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
                 <h2 className="font-sans text-xl font-extrabold text-center md:text-left">
                     {title}
                 </h2>
-                <div className="hidden md:flex gap-4 text-black">
+                <div className="hidden gap-4 text-black md:flex">
                     <button
                         className="bg-white hover:bg-[#F8F8F8] duration-200 w-8 h-8 rounded-full flex justify-center items-center text-2xl"
                         onClick={() => scrollTo('left')}>
@@ -50,7 +50,7 @@ const Features = ({ title }: FeaturesProps): JSX.Element => {
             </div>
             <div
                 ref={scrollContainerRef}
-                className="course-progress flex gap-6 overflow-x-auto">
+                className="flex gap-6 overflow-x-auto course-progress no-scrollbar">
                 {FEATURES.map(
                     ({ link, title, description, photoName, photoSize }) => (
                         <FeatureCard
@@ -89,11 +89,11 @@ const FeatureCard = ({
             <div
                 ref={cellRef}
                 className="min-w-[275px] bg-[#272727] px-4 pt-4 rounded-xl flex flex-col gap-2 h-[270px] shadow-[0_6px_8px_0_rgba(0,0,0,0.5)] relative overflow-hidden">
-                <div className="flex justify-between items-center">
-                    <h3 className="font-sans font-bold text-xl">{title}</h3>
+                <div className="flex items-center justify-between">
+                    <h3 className="font-sans text-xl font-bold">{title}</h3>
                     <Chevron />
                 </div>
-                <p className="font-body text-sm">{description}</p>
+                <p className="text-sm font-body">{description}</p>
                 <div
                     className={cn(
                         'absolute top-28',

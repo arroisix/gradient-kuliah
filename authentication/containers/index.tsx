@@ -1,3 +1,4 @@
+import { sendGTMEvent } from '@next/third-parties/google';
 import { useGoogleLogin } from '@react-oauth/google';
 import { AUTH_SECTION } from 'authentication/constants';
 import { RegistrationProvider } from 'authentication/contexts/RegistrationProvider';
@@ -25,6 +26,11 @@ export const AuthenticationContainer: React.FC = () => {
                     email: res.data.user.email,
                     method: 'google'
                 });
+                if (res.data.is_new_user)
+                    sendGTMEvent({
+                        event: 'new_register',
+                        email: res.data.user.email
+                    });
             }
         },
         onError: () => {
@@ -46,12 +52,12 @@ export const AuthenticationContainer: React.FC = () => {
 
             {pathname !== '/onboarding' ? (
                 <div className="max-w-[360px] w-full px-[18px] py-12 flex flex-col gap-10 justify-center items-center">
-                    <div className="flex flex-grow items-end">
+                    <div className="flex items-end flex-grow">
                         <span className="font-bold font-[Urbanist] text-[28px] text-5xl">
                             Gradient
                         </span>
                     </div>
-                    <div className="flex flex-grow flex-col items-center justify-start w-full gap-4">
+                    <div className="flex flex-col items-center justify-start flex-grow w-full gap-4">
                         <div className="flex flex-col w-full gap-[18px] text-center">
                             <span className="text-2xl font-extrabold text-white">
                                 {pathname === '/masuk' ? 'Log In' : 'Buat akun'}

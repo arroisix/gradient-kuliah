@@ -163,6 +163,39 @@ export const learningExperienceApi = baseApi.injectEndpoints({
                 }
             }),
             invalidatesTags: ['CODING_PROGRESS']
+        }),
+        getBookRecommendations: builder.query<
+            GetBookRecommendationResponse,
+            GetBookRecommendationRequest
+        >({
+            query: (params: GetBookRecommendationRequest) => ({
+                url: `${LEARNING_EXPERIENCE_BASE_URL}recommendations/${params.category}/${params.slug}/`,
+                params: { astronotes_only: params.astronotes_only }
+            })
+        }),
+        getVideoRecommendations: builder.query<
+            GetVideoRecommendationResponse,
+            { slug: string }
+        >({
+            query: ({ slug }: { slug: string }) => ({
+                url: `${LEARNING_EXPERIENCE_BASE_URL}recommendations/videos/${slug}/`
+            })
+        }),
+        getTextbookProblemRecommendations: builder.query<
+            GetProblemRecommendationsResponse,
+            { slug: string }
+        >({
+            query: (params: { slug: string }) => ({
+                url: `${LEARNING_EXPERIENCE_BASE_URL}recommendations/textbook/problems/${params.slug}/`
+            })
+        }),
+        getBankSoalProblemRecommendations: builder.query<
+            GetProblemRecommendationsResponse,
+            { slug: string }
+        >({
+            query: (params: { slug: string }) => ({
+                url: `${LEARNING_EXPERIENCE_BASE_URL}recommendations/bank-soal/problems/${params.slug}/`
+            })
         })
     }),
     overrideExisting: false
@@ -183,5 +216,13 @@ export const {
     useSubmitExamAnswerMutation,
     useFinishExamMutation,
     useGetCodingProgressQuery,
-    useTrackCodingProgressMutation
+    useTrackCodingProgressMutation,
+    useGetBookRecommendationsQuery,
+    useGetVideoRecommendationsQuery
 } = learningExperienceApi;
+
+export const {
+    getBookRecommendations,
+    getTextbookProblemRecommendations,
+    getBankSoalProblemRecommendations
+} = learningExperienceApi.endpoints;

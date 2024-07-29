@@ -1,6 +1,7 @@
 import { baseApi } from 'redux/api/baseApi';
 
 const KOMUNITAS_BASE_URL = 'communities/';
+const LEARNING_EXPERIENCE_BASE_URL = 'learning-experiences/';
 
 export const komunitasApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -193,6 +194,14 @@ export const komunitasApi = baseApi.injectEndpoints({
                           'COMMUNITIES'
                       ]
                     : [{ type: 'COMMUNITIES', id: 'LIST' }]
+        }),
+        getCommunityPostRecommendations: builder.query<
+            GetCommunityPostRecommendationResponse,
+            { slug: string }
+        >({
+            query: ({ slug }: { slug: string }) => ({
+                url: `${LEARNING_EXPERIENCE_BASE_URL}recommendations/communities/${slug}/`
+            })
         })
     })
 });
@@ -216,5 +225,6 @@ export const {
 export const {
     getPublicCommunityPost,
     getPublicCommunityPostDetail,
-    getCommunityPostCommentDetail
+    getCommunityPostCommentDetail,
+    getCommunityPostRecommendations
 } = komunitasApi.endpoints;

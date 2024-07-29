@@ -190,3 +190,36 @@ interface TrackCodingProgressInputData {
     coding_progress_id: string;
     latest_code: string;
 }
+
+interface GetBookRecommendationRequest {
+    category: 'astronotes' | 'bank-soal' | 'textbook' | string;
+    slug: string;
+    astronotes_only?: boolean;
+}
+interface GetBookRecommendationResponse {
+    related_books: Astronote[];
+    other_books: Astronote[];
+}
+
+type VideoRecommendation = {
+    id: string;
+    title: string;
+    subchapter_slug: string;
+    course_slug: string;
+    course_name: string;
+    thumbnail: string;
+};
+interface GetVideoRecommendationResponse {
+    related_videos: VideoRecommendation[];
+    other_videos: VideoRecommendation[];
+}
+
+type CourseRecommendation = Omit<
+    VideoRecommendation,
+    'subchapter_slug' | 'title'
+>;
+
+interface GetCourseRecommendationResponse {
+    related_courses: CourseRecommendation[];
+    other_courses: CourseRecommendation[];
+}

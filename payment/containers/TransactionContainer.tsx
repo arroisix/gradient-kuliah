@@ -9,10 +9,13 @@ import Skeleton from 'commons/components/elements/Skeleton';
 import Image from 'next/image';
 import { CDN_URL } from 'commons/constants';
 import { queryParamBuilder } from 'commons/utils';
+import { sendGTMEvent } from '@next/third-parties/google';
+import { usePayment } from 'payment/contexts/PaymentProvider';
 
 const TransactionContainer = (): JSX.Element => {
     const router = useRouter();
     const { id, redirect } = router.query;
+    const { packet } = usePayment();
     const { isLoading, data } = useGetTransactionQuery(id as string, {
         skip: id === undefined || id === null,
         pollingInterval: 3000
@@ -52,6 +55,22 @@ const TransactionContainer = (): JSX.Element => {
     useEffect(() => {
         if (data) {
             if (data.status === 'SUCCESS') {
+                sendGTMEvent({
+                    event: 'purchase',
+                    ecommerce: {
+                        transaction_id: data.id,
+                        currency: 'IDR',
+                        value: data.amount,
+                        payment_type: data.payment_method,
+                        items: [
+                            {
+                                item_id: packet?.packet_name,
+                                price: packet?.price
+                            }
+                        ]
+                    }
+                });
+
                 toast.success(`Pembayaran Sukses!`, {
                     position: toast.POSITION.TOP_CENTER
                 });

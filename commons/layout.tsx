@@ -40,10 +40,10 @@ const Layout = ({
             className={cn(
                 'relative w-screen overflow-x-clip min-h-screen text-white',
                 isFullBlackBackground
-                    ? 'bg-neutral-1000'
+                    ? 'bg-black'
                     : isLandingPageRevampOn
                     ? 'bg-[#101010]'
-                    : 'bg-neutral-1000',
+                    : 'bg-black',
                 paymentPage && 'flex flex-col'
             )}>
             <Navbar
@@ -55,7 +55,7 @@ const Layout = ({
                 className={cn(
                     showSidebar &&
                         isAuthenticated &&
-                        'pt-24 pb-10 px-4 md:pl-5 md:pr-[5rem] lg:pr-[7.5rem] flex gap-[2rem] lg:gap-[6rem]',
+                        'pt-24 pb-10 px-4 md:pl-5 md:pr-[5rem] lg:pr-[7.5rem] flex gap-8 lg:gap-[6rem]',
                     !paymentPage ? 'min-h-screen' : 'flex-1'
                 )}>
                 {showSidebar && isAuthenticated && (

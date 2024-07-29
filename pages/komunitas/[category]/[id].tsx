@@ -10,7 +10,8 @@ import { ThunkDispatch } from 'redux-thunk';
 import { getRunningQueriesThunk } from 'redux/api/baseApi';
 import {
     getPublicCommunityPostDetail,
-    getCommunityPostCommentDetail
+    getCommunityPostCommentDetail,
+    getCommunityPostRecommendations
 } from 'komunitas/redux/api/komunitasApi';
 import { QAPageJsonLd } from 'next-seo';
 import moment from 'moment';
@@ -23,11 +24,13 @@ type DetailKomunitasProps = {
         next_page?: number;
         previous_page?: number;
     };
+    recommendations: GetCommunityPostRecommendationResponse;
 };
 
 const DetailKomunitas = ({
     postData,
-    commentData
+    commentData,
+    recommendations
 }: DetailKomunitasProps): JSX.Element => {
     const { asPath } = useRouter();
     const dummyComment = {
@@ -51,7 +54,10 @@ const DetailKomunitas = ({
         <>
             <KomunitasProvider initialDetailData={postData}>
                 <LearnLayout showSidebar fullHeightSidebar>
-                    <DetailSection initialDetailData={postData} />
+                    <DetailSection
+                        initialDetailData={postData}
+                        recommendations={recommendations}
+                    />
                 </LearnLayout>
             </KomunitasProvider>
 
@@ -111,15 +117,17 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
     (store) =>
         async ({ params }) => {
             const { category, id } = params as { category: string; id: string };
+            const dispatch = store.dispatch as ThunkDispatch<
+                RootState,
+                never,
+                never
+            >;
 
-            (store.dispatch as ThunkDispatch<RootState, never, never>)(
-                getPublicCommunityPostDetail.initiate({ slug: id })
-            );
+            dispatch(getPublicCommunityPostDetail.initiate({ slug: id }));
+            dispatch(getCommunityPostRecommendations.initiate({ slug: id }));
 
             const postPayload = await Promise.all(
-                (store.dispatch as ThunkDispatch<RootState, never, never>)(
-                    getRunningQueriesThunk()
-                )
+                dispatch(getRunningQueriesThunk())
             );
 
             if (postPayload[0].error) {
@@ -130,14 +138,12 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
 
             const postData = postPayload[0].data as CommunityPostDetailResponse;
 
-            (store.dispatch as ThunkDispatch<RootState, never, never>)(
+            dispatch(
                 getCommunityPostCommentDetail.initiate({ post_id: postData.id })
             );
 
             const commentPayload = await Promise.all(
-                (store.dispatch as ThunkDispatch<RootState, never, never>)(
-                    getRunningQueriesThunk()
-                )
+                dispatch(getRunningQueriesThunk())
             );
 
             if (commentPayload[0].error) {
@@ -146,6 +152,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                 };
             }
 
+            const recommendations = postPayload[1].data ?? null;
             const commentData = commentPayload[0]
                 .data as CommunityPostCommentDetailResponse & {
                 count_items: number;
@@ -166,6 +173,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                 props: {
                     postData,
                     commentData,
+                    recommendations,
                     canonical: `https://gradient.academy/komunitas/${category}/${id}`,
                     title: META_TITLE,
                     description: META_DESCRIPTION,

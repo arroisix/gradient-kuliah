@@ -15,13 +15,16 @@ import TextbookPaywall from './../../../components/Textbook/TextbookPaywall';
 import { IS_BOT } from 'commons/constants';
 import { getCookieValue } from 'commons/utils';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
+import RelatedProblemsSection from 'courses/components/Textbook/RelatedProblemsSection';
 
 type TextbookSolutionProps = {
     data?: TextbookSolution;
+    recommendations?: GetProblemRecommendationsResponse;
 };
 
 const TextbookSolution = ({
-    data: initialData
+    data: initialData,
+    recommendations
 }: TextbookSolutionProps): JSX.Element => {
     const router = useRouter();
     const [isCrawler, setIsCrawler] = useState<string>();
@@ -46,7 +49,7 @@ const TextbookSolution = ({
     return (
         <div className="drawer drawer-end lg:drawer-open">
             <TableOfContentMenu problem={data?.problem} />
-            <div className="pt-40 pb-24 space-y-4 md:pb-12 drawer-content md:px-8 lg:px-12 lg:pt-20">
+            <div className="w-full pt-40 pb-12 mx-auto space-y-4 drawer-content md:max-w-screen-2xl md:px-8 lg:px-12 lg:pt-20">
                 <Breadcrumb
                     nextItem={
                         {
@@ -84,6 +87,14 @@ const TextbookSolution = ({
                 ) : (
                     <TextbookPaywall problem={data?.problem} />
                 )}
+                <RelatedProblemsSection
+                    title="Soal Terkait"
+                    problems={recommendations?.related_problems}
+                />
+                <RelatedProblemsSection
+                    title="Eksplor Soal Lainnya"
+                    problems={recommendations?.other_problems}
+                />
             </div>
         </div>
     );

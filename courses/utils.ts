@@ -191,8 +191,9 @@ export const addZeroBefore = (data: number): string => {
     return `${data < 10 ? '0' : ''}${data}`;
 };
 
-export const getBookBaseHref = (book_category: string): string => {
-    switch (book_category.toLowerCase()) {
+export const getBookBaseHref = (category?: string): string => {
+    if (!category) return '?';
+    switch (category.toLowerCase()) {
         case 'textbook':
             return '/perpustakaan/textbook';
         case 'astronotes':

@@ -63,7 +63,7 @@ const AnswerSection = ({
 
     return (
         <div>
-            <h3 className="pb-5 text-sm font-bold">Jawaban</h3>
+            <h2 className="pb-5 text-sm font-bold">Jawaban</h2>
             <div className="flex flex-col gap-[18px]">
                 <AnswerSectionContent
                     comments={comments}

@@ -9,7 +9,11 @@ import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 
-const CourseSummary = (): JSX.Element => {
+const CourseSummary = ({
+    ssrSubchapter
+}: {
+    ssrSubchapter: SubChapter;
+}): JSX.Element => {
     const tracker = useTracker();
     const router = useRouter();
     const { subchapter } = useLearning();
@@ -26,7 +30,7 @@ const CourseSummary = (): JSX.Element => {
     }, [isDesktopBreakpoints]);
 
     return (
-        <div className="flex flex-col gap-5 pt-8 pb-12 bg-[#121212]">
+        <div className="w-screen -ml-4 sm:w-full sm:ml-0 flex flex-col gap-5 pt-8 pb-12 bg-[#121212]">
             <div className="flex gap-5 px-5 lg:gap-8 md:px-16">
                 <button
                     className={`uppercase lg:hidden font-bold text-sm pb-[6px] cursor-pointer ${
@@ -79,7 +83,9 @@ const CourseSummary = (): JSX.Element => {
             </div>
             <div>
                 {navigation === 'COURSE' && <CourseDetailBox />}
-                {navigation === 'DESCRIPTION' && <Description />}
+                {navigation === 'DESCRIPTION' && (
+                    <Description ssrSubchapter={ssrSubchapter} />
+                )}
                 {isAuthenticated && navigation === 'DISCUSSION' && (
                     <div className="md:px-16">
                         <QnaSection />

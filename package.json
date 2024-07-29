@@ -23,6 +23,7 @@
         "@headlessui/react": "^1.7.3",
         "@highlight-run/next": "^7.3.3",
         "@mux/videojs-kit": "^0.12.0",
+        "@next/third-parties": "^14.2.5",
         "@notionhq/client": "^2.2.10",
         "@react-oauth/google": "^0.5.1",
         "@react-spring/parallax": "^9.5.5",

@@ -25,6 +25,7 @@ import CourseDetail from '../CourseDetail';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Pricing from 'landing/components/Sections/Pricing';
+import RelatedCoursesSection from '../RelatedCoursesSection';
 
 const COMPONENT_DICTIONARY: { [key in LandingPageSectionKey]: JSX.Element } = {
     hero: <HeroSection slug="dummy" />,
@@ -92,10 +93,14 @@ export const AuthLandingPage = ({ id }: { id: string }): JSX.Element => {
 
 const LandingPageOrchestrator = ({
     id,
-    packetOffer
+    packetOffer,
+    course,
+    recommendations
 }: {
     id: string;
     packetOffer: PacketOffer[];
+    course: CourseLandingPageData;
+    recommendations: GetCourseRecommendationResponse;
 }): JSX.Element => {
     const { is_subscribed, isDoneFetchingSubcription } =
         useCourseSubscription();
@@ -112,6 +117,16 @@ const LandingPageOrchestrator = ({
             ) : (
                 <></>
             )}
+            <div>
+                <RelatedCoursesSection
+                    title={`Kelas Terkait '${course.course_name}'`}
+                    courses={recommendations?.related_courses}
+                />
+                <RelatedCoursesSection
+                    title="Eksplor Kelas Lainnya"
+                    courses={recommendations?.other_courses}
+                />
+            </div>
         </>
     );
 };

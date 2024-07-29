@@ -4,6 +4,7 @@ import Button from 'commons/components/elements/Button';
 import ProgressItem from './ProgressItem';
 import { cn } from 'commons/utils';
 import { useGetClassProgressQuery } from 'dashboard/redux/api/dashboardApi';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 type AccordionItemProps = {
     toggleAccordion: (slug: string, name: string) => void;
@@ -20,6 +21,7 @@ const AccordionItem = ({
     isEditing,
     toggleAccordion
 }: AccordionItemProps): JSX.Element => {
+    const { is_subscribed: isSubscribed } = useCourseSubscription();
     const { data, isFetching } = useGetClassProgressQuery(
         { slug },
         { skip: !isOpen }
@@ -30,7 +32,7 @@ const AccordionItem = ({
             key={slug}
             className={cn(
                 isEditing && 'hidden',
-                'rounded-lg collapse collapse-arrow bg-neutral-800'
+                'rounded-lg collapse collapse-arrow bg-graphite-900'
             )}>
             <input
                 type="checkbox"
@@ -45,8 +47,9 @@ const AccordionItem = ({
             <div className="collapse-content">
                 <div
                     className={cn(
-                        'grid grid-cols-1 gap-4 mb-6 lg:grid-cols-3 lg:grid-rows-1',
+                        'grid grid-cols-1 gap-4 mb-6 lg:grid-cols-2 xl:grid-cols-3 lg:grid-rows-1',
                         {
+                            'md:grid-cols-2': !isSubscribed,
                             'grid-rows-2': data?.class_progress.length == 2,
                             'grid-rows-3': data?.class_progress.length == 3
                         }

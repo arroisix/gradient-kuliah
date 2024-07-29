@@ -8,14 +8,19 @@ import FeedbackModal from 'courses/components/LearningExperience/AstroNotes/Side
 import CommunityDrawer from 'courses/components/LearningExperience/AstroNotes/Navigation/CommunityDrawer';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import { useRouter } from 'next/router';
+import RelatedBooksSection from 'courses/components/LearningExperience/AstroNotes/InternalLinking/RelatedBooksSection';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 
 const Astronotes = ({
     content,
-    book
+    book,
+    recommendations
 }: {
     content: string;
     book: BookDetailInterface;
+    recommendations: GetBookRecommendationResponse;
 }): JSX.Element => {
+    const { isMobileBreakpoints } = useWindowBreakpoints();
     const { width: notebookWidth, ref: notebookRef } =
         useElementSize<HTMLDivElement>();
     const router = useRouter();
@@ -23,7 +28,7 @@ const Astronotes = ({
 
     return (
         <AstronotesProvider>
-            <section className="relative flex flex-col px-4 pb-4 text-black bg-white overflow-x-clip md:flex-row md:gap-2 dark:bg-black dark:text-white">
+            <section className="relative flex flex-col text-black bg-white sm:pb-4 md:flex-row md:gap-2 dark:bg-black dark:text-white">
                 {/* TODO(angga): removed until higher in priority
                 
                 {highlighted && (
@@ -56,9 +61,9 @@ const Astronotes = ({
                     <AstronotesSidebar />
                 </aside>
                 <div
-                    className="relative w-full min-h-screen mt-5 mb-12 md:ml-6"
+                    className="relative grid items-center w-full min-h-screen grid-cols-1 mt-5 md:ml-6"
                     ref={notebookRef}>
-                    <div className="pt-4 w-full max-w-5xl mx-auto sm:px-4">
+                    <div className="w-full max-w-5xl pt-4 mx-auto sm:px-4">
                         <Breadcrumb
                             nextItem={
                                 {
@@ -71,6 +76,22 @@ const Astronotes = ({
                             }
                         />
                         <AstroNotesContent content={content} book={book} />
+                    </div>
+                    <div className="flex flex-col w-full pt-8 lg:py-8 max-w-screen-2xl lg:mx-auto lg:gap-8">
+                        <RelatedBooksSection
+                            orientation={
+                                isMobileBreakpoints ? 'vertical' : 'horizontal'
+                            }
+                            title="Astronotes Terkait"
+                            books={recommendations?.related_books}
+                        />
+                        <RelatedBooksSection
+                            orientation={
+                                isMobileBreakpoints ? 'vertical' : 'horizontal'
+                            }
+                            title="Eksplor Astronotes Lainnya"
+                            books={recommendations?.other_books}
+                        />
                     </div>
                 </div>
                 <CommunityDrawer />

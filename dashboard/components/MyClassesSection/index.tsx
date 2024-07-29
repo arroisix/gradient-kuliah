@@ -8,6 +8,7 @@ import Spinner from 'commons/components/elements/Spinner';
 import EmptyState from './EmptyState';
 import AccordionItem from './AccordionItem';
 import ClassActionItem from './ClassActionItem';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 const MyClassesAccordion = ({
     isLoading,
@@ -20,6 +21,7 @@ const MyClassesAccordion = ({
     const [isEditing, setIsEditing] = useState(false);
     const [deleting, setDeleting] = useState<string[]>([]);
     const tracker = useTracker();
+    const { is_subscribed: isSubscribed } = useCourseSubscription();
     const [edit, { isLoading: isSubmitting, isSuccess }] =
         useUpdateMyClassesMutation();
 
@@ -44,7 +46,13 @@ const MyClassesAccordion = ({
     };
 
     const MyClassesLayout = ({ children }: PropsWithChildren): JSX.Element => (
-        <div className="space-y-4 md:pr-16">
+        <div
+            className={cn(
+                'space-y-4 w-full',
+                isSubscribed
+                    ? 'md:w-[calc(100vw-250px-4rem)] lg:w-[calc(100vw-250px-12rem)] max-w-screen-2xl'
+                    : 'md:w-full'
+            )}>
             <div
                 aria-hidden
                 className={cn(

@@ -1,16 +1,18 @@
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import AnswerSection from 'komunitas/components/AnswerSection';
-import RightSidebar from 'komunitas/components/CommunityPost/SimilarQuestionSidebar';
+import SimilarQuestionSection from 'komunitas/components/CommunityPost/SimilarQuestionSection';
 import QuestionCard from 'komunitas/components/QuestionCard';
 import { useKomunitas } from 'komunitas/contexts/KomunitasProvider';
 import { useState } from 'react';
 
 type DetailSectionProps = {
     initialDetailData: CommunityPostDetailResponse;
+    recommendations: GetCommunityPostRecommendationResponse;
 };
 
 const DetailSection = ({
-    initialDetailData
+    initialDetailData,
+    recommendations
 }: DetailSectionProps): JSX.Element => {
     const QUESTION_TITLE_MAX_LENGTH = 40;
     const [isShowForm, setIsShowForm] = useState(false);
@@ -42,10 +44,10 @@ const DetailSection = ({
                     } as BreadcrumbItemProps
                 }
             />
-            <section className="grid grid-cols-1 lg:grid-cols-3 gap-[2rem]">
+            <section className="grid grid-cols-1 gap-8 lg:grid-cols-3">
                 <div className="flex flex-col w-full lg:col-span-2 gap-9">
                     <div>
-                        <h3 className="pb-5 text-sm font-bold">Pertanyaan</h3>
+                        <h2 className="pb-5 text-sm font-bold">Pertanyaan</h2>
                         <QuestionCard
                             {...(detailQuestion as CommunityPostDetailResponse)}
                             category={category?.id as string}
@@ -59,8 +61,18 @@ const DetailSection = ({
                         setIsShowForm={setIsShowForm}
                     />
                 </div>
-                <RightSidebar className="lg:col-span-1" category={category} />
+                <SimilarQuestionSection
+                    className="lg:col-span-1"
+                    title="Pertanyaan Terkait"
+                    questions={recommendations?.related_questions}
+                />
             </section>
+            <SimilarQuestionSection
+                orientation="horizontal"
+                title={`Pertanyaan Terpopuler untuk '${category?.name}'`}
+                questions={recommendations?.popular_questions}
+                className="-mb-8 md:mb-0 md:mt-4"
+            />
         </>
     );
 };

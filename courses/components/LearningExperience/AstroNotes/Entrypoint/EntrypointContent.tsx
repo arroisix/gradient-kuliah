@@ -7,10 +7,12 @@ import {
 } from 'courses/redux/api/astronotesApi';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
-import { AstronoteBookCard } from '../AstronoteBook';
 import { EntrypointSort, Tab } from '../constants';
 import { getBookBaseHref } from 'courses/utils';
 import Paginator from 'commons/components/elements/Paginator';
+import ProductCard from 'commons/components/elements/ProductCard';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { cn } from 'commons/utils';
 
 const PAGE_SIZE = 6;
 
@@ -21,7 +23,8 @@ export const EntrypointContent = ({
     isLoading: boolean;
     astronotes?: ListResponseData<Astronote>;
 }): JSX.Element => {
-    if (isLoading)
+    const { is_subscribed: isSubscribed } = useCourseSubscription();
+    if (!astronotes && isLoading)
         return (
             <div className="grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 xl:gap-6">
                 <Skeleton repeat={6} className="w-full h-36 !mb-0" />
@@ -66,17 +69,34 @@ export const EntrypointContent = ({
         return baseHref;
     };
 
+    const getProduct = (book: Astronote): Product => ({
+        title: book.title,
+        thumbnail: book.book_cover_url,
+        inProgress: book?.in_progress ?? false,
+        latestProgress: book?.percentage_progress ?? 0,
+        latestChapter: book.last_chapter_read,
+        authors: book.authors,
+        rating: book.rating
+    });
+
     const totalPages = Math.ceil((astronotes?.count_items ?? 0) / PAGE_SIZE);
 
     return (
         <>
-            <div className="grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 xl:gap-6">
-                {!!astronotes && !isLoading && (
+            <div
+                className={cn(
+                    'grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 2xl:grid-cols-3 xl:gap-6',
+                    !isSubscribed && 'lg:grid-cols-3'
+                )}>
+                {!!astronotes && (
                     <>
                         {astronotes?.data?.map((book) => (
-                            <AstronoteBookCard
+                            <ProductCard
                                 key={book.id}
-                                isHeading
+                                orientation="horizontal"
+                                heading="h2"
+                                category={book.category_name}
+                                product={getProduct(book)}
                                 href={getLink(
                                     book.slug,
                                     book.category_name ?? '',
@@ -86,7 +106,6 @@ export const EntrypointContent = ({
                                 eventName="Click Book Item on Library Page"
                                 eventPayload={{ 'Book Slug': book.slug }}
                                 imageClassname="min-w-20 min-h-24"
-                                {...book}
                             />
                         ))}
                     </>
@@ -132,16 +151,18 @@ export const EntrypointPrivate = ({
 
     return (
         <EntrypointContent
-            isLoading={isLoading || isFetching}
+            isLoading={!isLoading && isFetching} // only show skeleton on page change
             astronotes={astronotes}
         />
     );
 };
 
 export const EntrypointPublic = ({
-    category
+    category,
+    books
 }: {
     category: Tab;
+    books: ListResponseData<Astronote>;
 }): JSX.Element => {
     const router = useRouter();
     const { sort, page: pageParam } = router.query as {
@@ -155,19 +176,15 @@ export const EntrypointPublic = ({
         sort ?? EntrypointSort.release
     );
 
-    const {
-        data: astronotes,
-        isLoading,
-        isFetching
-    } = useGetPublicEntrypointBooksQuery(
+    const { data: astronotes, isFetching } = useGetPublicEntrypointBooksQuery(
         { limit: PAGE_SIZE, type: category, status: sort, page },
         { skip: isAuthenticated || skip }
     );
 
     return (
         <EntrypointContent
-            isLoading={isLoading || isFetching}
-            astronotes={astronotes}
+            isLoading={isFetching}
+            astronotes={astronotes ?? books}
         />
     );
 };

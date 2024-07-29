@@ -3,20 +3,22 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import Skeleton from 'commons/components/elements/Skeleton';
 import useOnScreen from 'commons/hooks/useOnScreen';
-import {
-    useGetCourseDetailQuery,
-    useGetPublicSubchapterDetailQuery
-} from 'courses/redux/api/courseApi';
-import { useGetSubchapterDetailQuery } from 'courses/redux/api/privateCourseApi';
+import { useGetCourseDetailQuery } from 'courses/redux/api/courseApi';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { useGetSubchapterDetailV2Query } from 'courses/redux/api/privateCourseV2Api';
+import { useGetPublicSubchapterDetailV2Query } from 'courses/redux/api/publicCourseV2Api';
 
-const Description = (): JSX.Element => {
+const Description = ({
+    ssrSubchapter
+}: {
+    ssrSubchapter: SubChapter;
+}): JSX.Element => {
     const router = useRouter();
-    const { id, sub } = router.query;
+    const { id, slug } = router.query;
     const anchor = useRef<HTMLDivElement>({} as HTMLDivElement);
     const isOnScreen = useOnScreen(anchor);
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -26,39 +28,44 @@ const Description = (): JSX.Element => {
         { skip: !id }
     );
 
-    const privateSubchapterDetails = useGetSubchapterDetailQuery(
-        sub as string,
-        { skip: !isAuthenticated || !sub }
+    const privateSubchapterDetails = useGetSubchapterDetailV2Query(
+        { course_slug: id as string, subchapter_slug: slug as string },
+        { skip: !id || !slug || !isAuthenticated }
     );
-    const publicSubchapterDetails = useGetPublicSubchapterDetailQuery(
-        sub as string,
-        { skip: !sub }
+    const publicSubchapterDetails = useGetPublicSubchapterDetailV2Query(
+        { course_slug: id as string, subchapter_slug: slug as string },
+        { skip: !id || !slug }
     );
-    const { data: subchapterDetail, isLoading } = isAuthenticated
+    const { data: subchapterDetail } = isAuthenticated
         ? privateSubchapterDetails
         : publicSubchapterDetails;
+    const subchapter = subchapterDetail ?? ssrSubchapter;
+    const videoDescription = subchapter?.video?.description;
 
     return (
         <div className="flex flex-col lg:flex-row justify-between gap-4 lg:gap-[150px] px-5 md:px-16">
             <article>
-                {isLoading && <Skeleton className="!w-[200px] !h-[20px]" />}
-                <p className="text-xs font-body md:text-base">
-                    {subchapterDetail?.video?.description !== '-' ? (
-                        <ReactMarkdown
-                            remarkPlugins={[remarkMath]}
-                            rehypePlugins={[rehypeKatex]}
-                            linkTarget={'_blank'}>
-                            {
-                                subchapterDetail?.video?.description?.replaceAll(
-                                    '\n',
-                                    '\n\n'
-                                ) as string
-                            }
-                        </ReactMarkdown>
-                    ) : (
-                        '-'
-                    )}
-                </p>
+                {!!videoDescription ? (
+                    <p className="text-xs font-body md:text-base">
+                        {videoDescription !== '-' ? (
+                            <ReactMarkdown
+                                remarkPlugins={[remarkMath]}
+                                rehypePlugins={[rehypeKatex]}
+                                linkTarget={'_blank'}>
+                                {
+                                    videoDescription.replaceAll(
+                                        '\n',
+                                        '\n\n'
+                                    ) as string
+                                }
+                            </ReactMarkdown>
+                        ) : (
+                            '-'
+                        )}
+                    </p>
+                ) : (
+                    <Skeleton className="!w-[200px] !h-[20px]" />
+                )}
             </article>
             <div className="bg-[#FFFFFF08] rounded-[10px]">
                 <div className="lg:min-w-[360px] flex justify-center gap-8 sm:gap-10 px-6 py-5 border-b border-[#2D2D2D]">
