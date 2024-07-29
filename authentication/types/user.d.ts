@@ -25,6 +25,7 @@ interface LoginResponseData {
     user: User;
     token: string;
     is_profile_complete: boolean;
+    is_new_user?: boolean;
 }
 
 interface UpdateUserResponseData {

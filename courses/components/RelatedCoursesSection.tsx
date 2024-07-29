@@ -35,8 +35,8 @@ const RelatedCoursesSection = ({
     if (!isLoading && !courses) return <></>;
 
     return (
-        <div className="flex flex-col w-screen gap-5 py-4 md:w-full first:pt-8 last:pb-8 md:gap-6 bg-graphite-800">
-            <div className="flex items-center justify-between px-5 md:px-16">
+        <div className="flex flex-col items-center w-screen gap-5 py-4 md:w-full first:pt-8 last:pb-8 md:gap-6 bg-graphite-800">
+            <div className="flex items-center justify-between w-full px-5 md:px-16 2xl:w-2/3 2xl:px-0">
                 <h2 className="font-extrabold sm:text-sm md:text-lg">
                     {title}
                 </h2>
@@ -59,12 +59,8 @@ const RelatedCoursesSection = ({
             </div>
             <div
                 ref={ref}
-                className="w-full px-5 overflow-x-scroll no-scrollbar snap-x scroll-smooth md:px-16">
-                <div
-                    className={cn(
-                        'w-full sm:w-max flex flex-col sm:flex-row gap-4 md:gap-7',
-                        courses && courses.length > 3 && 'mx-auto'
-                    )}>
+                className="w-full px-5 overflow-x-scroll no-scrollbar snap-x scroll-smooth md:px-16 2xl:w-2/3 2xl:px-0">
+                <div className="flex flex-col w-full gap-4 sm:w-max sm:flex-row md:gap-6">
                     {isLoading && (
                         <Skeleton
                             repeat={5}

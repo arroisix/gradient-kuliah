@@ -58,7 +58,7 @@ const BankSoalContainer = ({
     return (
         <div className="drawer drawer-end lg:drawer-open">
             <TableOfContentMenu problem={data?.problem} />
-            <div className="pt-40 pb-12 space-y-4 drawer-content md:max-w-screen-lg md:px-8 lg:px-12 lg:pt-20">
+            <div className="w-full pt-40 pb-12 mx-auto space-y-4 drawer-content md:max-w-screen-2xl md:px-8 lg:px-12 lg:pt-20">
                 <Breadcrumb nextItem={crumbs} />
                 <div className="flex items-start justify-between">
                     <QuestionMetadata problem={data?.problem} />

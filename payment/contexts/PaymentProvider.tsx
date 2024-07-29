@@ -6,6 +6,7 @@ import React, {
     useState
 } from 'react';
 import { useGetDetailPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
+import { sendGTMEvent } from '@next/third-parties/google';
 
 interface PaymentContextType {
     isModalCheckoutOpen: boolean;
@@ -31,13 +32,31 @@ export function PaymentProvider({
     const { data: packet } = useGetDetailPacketOfferQuery(packetId);
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('VA_BNI');
 
+    const selectPaymentMethod = (to: PaymentMethod): void => {
+        setPaymentMethod(to);
+        sendGTMEvent({
+            event: 'add_package',
+            ecommerce: {
+                currency: 'IDR',
+                value: packet?.price,
+                payment_type: paymentMethod,
+                items: [
+                    {
+                        item_id: packet?.packet_name,
+                        price: packet?.price
+                    }
+                ]
+            }
+        });
+    };
+
     const memoedValue = useMemo(
         () => ({
             isModalCheckoutOpen,
             setModalCheckoutOpen,
             packet,
             paymentMethod,
-            setPaymentMethod
+            setPaymentMethod: selectPaymentMethod
         }),
         [isModalCheckoutOpen, packet, paymentMethod]
     );

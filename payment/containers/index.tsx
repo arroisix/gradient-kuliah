@@ -8,7 +8,6 @@ import { useEffect, useRef } from 'react';
 import MethodListBox from '../components/MethodListBox';
 import MethodBox from 'payment/components/MethodBox';
 import { MdOutlineQrCodeScanner } from 'react-icons/md';
-// import { MdOutlineQrCodeScanner } from 'react-icons/md';
 
 const SubscriptionContainer = (): JSX.Element => {
     const otherPaymentMethodRef = useRef<HTMLDivElement>(null);

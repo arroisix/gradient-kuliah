@@ -100,11 +100,11 @@ const LearningProgress = ({
                             <div className="text-xs text-gray-500 lg:ml-3">
                                 TERAKHIR DIPELAJARI
                             </div>
-                            <h1 className="text-xl font-bold lg:ml-3 lg:text-2xl">
+                            <p className="text-xl font-bold lg:ml-3 lg:text-2xl">
                                 {latest_watch_video?.subchapter
                                     .subchapter_name ??
                                     'Belum ada progress belajar'}
-                            </h1>
+                            </p>
                         </>
                     )}
                 </div>

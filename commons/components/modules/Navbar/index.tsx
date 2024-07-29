@@ -342,6 +342,7 @@ const Navbar = ({
                                                 Masuk
                                             </Button>
                                             <Button
+                                                id="signup-on-navbar"
                                                 variant="primary"
                                                 className="text-sm lg:text-base"
                                                 href="/daftar"
@@ -385,6 +386,7 @@ const Navbar = ({
                                             Masuk
                                         </Button>
                                         <Button
+                                            id="signup-on-navbar"
                                             variant="primary"
                                             className="text-xs"
                                             href="/daftar"

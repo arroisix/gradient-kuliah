@@ -197,6 +197,7 @@ export const LoginSection: React.FC = () => {
                         <div className="flex justify-center w-full gap-2">
                             <span>Belum punya akun?</span>
                             <Link
+                                id="signup-on-login-page"
                                 href={`/daftar${
                                     !!router.query.redirect
                                         ? `?redirect=${router.query.redirect}`

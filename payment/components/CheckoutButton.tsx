@@ -5,6 +5,7 @@ import Button from 'commons/components/elements/Button';
 import useCheckout from '../hooks/useCheckout';
 import { usePayment } from 'payment/contexts/PaymentProvider';
 import { queryParamBuilder } from 'commons/utils';
+import { sendGTMEvent } from '@next/third-parties/google';
 
 const CheckoutButton = ({
     packetId,
@@ -22,7 +23,7 @@ const CheckoutButton = ({
     phoneNumber?: string;
 }): JSX.Element => {
     const { checkout, freeCheckout, extendCheckout } = useCheckout();
-    const { setModalCheckoutOpen } = usePayment();
+    const { packet, setModalCheckoutOpen } = usePayment();
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const { subscriptionId, redirect } = router.query;
@@ -42,12 +43,25 @@ const CheckoutButton = ({
 
             if (!!data?.data) {
                 const transaction = data.data;
+                sendGTMEvent({
+                    event: 'add_package',
+                    ecommerce: {
+                        transaction_id: transaction.id,
+                        currency: 'IDR',
+                        value: transaction.amount,
+                        payment_type: transaction.payment_method,
+                        items: [
+                            {
+                                item_id: packet?.packet_name,
+                                price: packet?.price
+                            }
+                        ]
+                    }
+                });
 
                 toast.info(
                     `Silahkan lanjutkan proses pembayaran sesuai metode yang kamu pilih`,
-                    {
-                        position: toast.POSITION.TOP_CENTER
-                    }
+                    { position: toast.POSITION.TOP_CENTER }
                 );
 
                 router.push(
@@ -66,12 +80,25 @@ const CheckoutButton = ({
 
             if (!!data?.data) {
                 const transaction = data.data;
+                sendGTMEvent({
+                    event: 'add_package',
+                    ecommerce: {
+                        transaction_id: transaction.id,
+                        currency: 'IDR',
+                        value: transaction.amount,
+                        payment_type: transaction.payment_method,
+                        items: [
+                            {
+                                item_id: packet?.packet_name,
+                                price: packet?.price
+                            }
+                        ]
+                    }
+                });
 
                 toast.info(
                     `Silahkan lanjutkan proses pembayaran sesuai metode yang kamu pilih`,
-                    {
-                        position: toast.POSITION.TOP_CENTER
-                    }
+                    { position: toast.POSITION.TOP_CENTER }
                 );
 
                 router.push(

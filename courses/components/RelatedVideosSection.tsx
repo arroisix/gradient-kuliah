@@ -60,11 +60,7 @@ const RelatedVideosSection = ({
             <div
                 ref={ref}
                 className="w-full px-5 overflow-x-scroll no-scrollbar snap-x scroll-smooth md:px-16">
-                <div
-                    className={cn(
-                        'w-full sm:w-max flex flex-col sm:flex-row gap-4 md:gap-7',
-                        videos && videos.length > 3 && 'mx-auto'
-                    )}>
+                <div className="flex flex-col w-full gap-4 sm:w-max sm:flex-row md:gap-7">
                     {isLoading && (
                         <Skeleton
                             repeat={5}

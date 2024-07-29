@@ -5,7 +5,8 @@ import React from 'react';
 import { SlCheck } from 'react-icons/sl';
 import { useSelector } from 'react-redux';
 import Button from './Button';
-import { cn, queryParamBuilder } from 'commons/utils';
+import { cn, queryParamBuilder, slugify } from 'commons/utils';
+import { sendGTMEvent } from '@next/third-parties/google';
 
 type PaywallProps = {
     isCarousel?: boolean;
@@ -45,17 +46,31 @@ const Paywall = ({
         }
     };
 
-    const handleClick = (packetId: string): void => {
+    const handleClick = (pricing: PacketOffer): void => {
         if (redirect) localStorage.setItem('redirect', redirect as string);
 
         const pembayaranPage = `/pembayaran?${queryParamBuilder({
-            packetId,
+            packetId: pricing.id,
             redirect: redirect as string
         })}`;
 
         if (!isAuthenticated) {
             router.push(`/daftar?redirect=${pembayaranPage}`);
         } else {
+            sendGTMEvent({
+                event: 'add_package',
+                ecommerce: {
+                    currency: 'IDR',
+                    value: pricing.price,
+                    items: [
+                        {
+                            item_id: pricing.packet_name,
+                            price: pricing.price
+                        }
+                    ]
+                }
+            });
+            localStorage.setItem('packetId', pricing.id);
             router.push(pembayaranPage);
         }
     };
@@ -147,8 +162,12 @@ const Paywall = ({
                                 )}
                             </div>
                             <Button
+                                id={`subscribe-${slugify(
+                                    pricing.packet_name
+                                )}-${pricing.price}`}
+                                type="button"
                                 variant="primary"
-                                onClick={() => handleClick(pricing.id)}
+                                onClick={() => handleClick(pricing)}
                                 className="mx-5 mb-5"
                                 eventName={ctaEventName}
                                 eventPayload={{

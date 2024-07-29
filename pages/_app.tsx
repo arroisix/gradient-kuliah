@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import { GoogleTagManager } from '@next/third-parties/google';
 import 'styles/index.css';
 import 'styles/videojs.css';
 // core styles shared by all of react-notion-x (required)
@@ -40,19 +41,6 @@ const store = useStore();
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     const router = useRouter();
-
-    const loadClientSideOnlyLibrary = async (): Promise<void> => {
-        const TagManager = await import('react-gtm-module');
-        // @ts-ignoreimport { HighlightInit } from '@highlight-run/next/client';
-
-        TagManager.initialize({
-            gtmId: 'GTM-T3KZ4FB'
-        });
-    };
-
-    useEffect(() => {
-        loadClientSideOnlyLibrary();
-    }, []);
 
     useEffect(() => {
         // Load features from the GrowthBook API and keep them up-to-date
@@ -117,6 +105,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
                     urlBlocklist: []
                 }}
             />
+            <GoogleTagManager gtmId="GTM-T3KZ4FB" />
         </>
     );
 }

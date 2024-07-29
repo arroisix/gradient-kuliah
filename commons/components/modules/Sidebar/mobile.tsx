@@ -28,11 +28,6 @@ const MOBILE_SIDEBAR_BUTTONS: NavigationButtonInterface[] = [
         className: 'mt-4',
         subMenus: [
             {
-                name: 'All Books',
-                title: 'Semua',
-                url: '/perpustakaan'
-            },
-            {
                 name: 'Textbook Solution',
                 title: 'Textbook Solution',
                 url: '/perpustakaan/textbook'

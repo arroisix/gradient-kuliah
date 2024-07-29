@@ -77,7 +77,7 @@ const Astronotes = ({
                         />
                         <AstroNotesContent content={content} book={book} />
                     </div>
-                    <div className="flex flex-col w-full pt-8 lg:py-8 max-w-screen-2xl lg:gap-8">
+                    <div className="flex flex-col w-full pt-8 lg:py-8 max-w-screen-2xl lg:mx-auto lg:gap-8">
                         <RelatedBooksSection
                             orientation={
                                 isMobileBreakpoints ? 'vertical' : 'horizontal'

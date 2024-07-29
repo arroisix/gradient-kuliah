@@ -9,6 +9,8 @@ import { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { getDisplayName } from './utils';
+import { useGetPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
+import { sendGTMEvent } from '@next/third-parties/google';
 
 const withAnon = <P extends object>(
     WrappedComponent: React.ComponentType<P>
@@ -25,10 +27,12 @@ const withAnon = <P extends object>(
                 everSubscribed,
                 isLoading: isLoadingSubscribed
             } = useCourseSubscription();
+            const { data: pricingData, isLoading: isLoadingPricing } =
+                useGetPacketOfferQuery();
             const router = useRouter();
 
             if (!!accessToken) {
-                if (!isLoadingSubscribed) {
+                if (!isLoadingSubscribed && !isLoadingPricing) {
                     if (['/masuk', '/daftar'].includes(router.pathname)) {
                         if (!isProfileComplete) {
                             router.replace(
@@ -47,6 +51,25 @@ const withAnon = <P extends object>(
                                 const packetId =
                                     localStorage.getItem('packetId');
                                 if (packetId) {
+                                    const pricing = pricingData?.data.find(
+                                        (p) => p.id == packetId
+                                    );
+                                    if (pricing) {
+                                        sendGTMEvent({
+                                            event: 'add_package',
+                                            ecommerce: {
+                                                currency: 'IDR',
+                                                value: pricing.price,
+                                                items: [
+                                                    {
+                                                        item_id:
+                                                            pricing.packet_name,
+                                                        price: pricing.price
+                                                    }
+                                                ]
+                                            }
+                                        });
+                                    }
                                     router.replace(
                                         `/pembayaran?packetId=${packetId}`
                                     );

@@ -7,6 +7,7 @@ import { useRegisterMutation } from 'authentication/redux/api/authApi';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTracker } from 'tracker/tracker';
+import { sendGTMEvent } from '@next/third-parties/google';
 
 export const RegistrationSection: React.FC = () => {
     const [reveal, setReveal] = useState(false);
@@ -39,7 +40,13 @@ export const RegistrationSection: React.FC = () => {
                     'Basic Register',
                     trackedValues
                 );
-                await register(values);
+                const response = await register(values).unwrap();
+                if (response.is_new_user) {
+                    sendGTMEvent({
+                        event: 'new_register',
+                        email: response.user.email
+                    });
+                }
                 setSubmitting(false);
             }}>
             {({

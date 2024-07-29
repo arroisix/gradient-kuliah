@@ -61,11 +61,7 @@ const RelatedProblemsSection = ({
             <div
                 ref={ref}
                 className="w-full overflow-x-scroll no-scrollbar snap-x scroll-smooth">
-                <div
-                    className={cn(
-                        'w-full md:w-max flex flex-col md:flex-row gap-4',
-                        problems && problems.length > 3 && 'mx-auto'
-                    )}>
+                <div className="flex flex-col w-full gap-4 md:w-max md:flex-row">
                     {isLoading && (
                         <Skeleton
                             repeat={5}

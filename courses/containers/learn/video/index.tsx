@@ -101,14 +101,16 @@ const VideoLearnContainer = ({
                 )}
             </div>
             <CourseSummary ssrSubchapter={ssrSubchapterData} />
-            <RelatedVideosSection
-                title="Video Terkait"
-                videos={recommendations?.related_videos}
-            />
-            <RelatedVideosSection
-                title="Eksplor Video Lainnya"
-                videos={recommendations?.other_videos}
-            />
+            <div>
+                <RelatedVideosSection
+                    title="Video Terkait"
+                    videos={recommendations?.related_videos}
+                />
+                <RelatedVideosSection
+                    title="Eksplor Video Lainnya"
+                    videos={recommendations?.other_videos}
+                />
+            </div>
             {video?.ai_unique_id && (
                 <AiTutor
                     uniqueId={video.ai_unique_id}
