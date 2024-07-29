@@ -58,7 +58,10 @@ const StatusInfo = ({
         ];
         const isShowLink = isPaymentWithQR.includes(payment_method);
         return (
-            <div className="flex justify-center items-center gap-[6px] mt-[18px] px-3 py-2 bg-[#F2C04C1A] border border-[#F2C04C1A] rounded font-body text-[#CCCCCC80] text-xs sm:text-sm">
+            <div
+                aria-hidden
+                className="flex justify-center items-center gap-[6px] mt-[18px] px-3 py-2 bg-[#F2C04C1A] border border-[#F2C04C1A] rounded font-body text-[#CCCCCC80] text-xs sm:text-sm"
+                onClick={() => localStorage.setItem('packetId', packetId)}>
                 {`Bayar sebelum ${moment(deadline)
                     .utc()
                     .format('D MMM YYYY HH:mm')} WIB. `}

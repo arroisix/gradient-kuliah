@@ -2,10 +2,15 @@ import withAuth from 'commons/withAuth';
 import Layout from 'commons/layout';
 import TransactionContainer from 'payment/containers/TransactionContainer';
 import { PaymentProvider } from 'payment/contexts/PaymentProvider';
-import { useLocalStorage } from 'usehooks-ts';
+import { useEffect, useState } from 'react';
 
 const Checkout = (): JSX.Element => {
-    const [packetId] = useLocalStorage('packetId', null);
+    const [packetId, setPacketId] = useState<string | null>(null);
+
+    useEffect(() => {
+        setPacketId(localStorage.getItem('packetId'));
+    }, []);
+
     return (
         <Layout paymentPage>
             {packetId ? (
