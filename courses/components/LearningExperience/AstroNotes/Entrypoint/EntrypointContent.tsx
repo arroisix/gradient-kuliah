@@ -24,9 +24,13 @@ export const EntrypointContent = ({
     astronotes?: ListResponseData<Astronote>;
 }): JSX.Element => {
     const { is_subscribed: isSubscribed } = useCourseSubscription();
-    if (!astronotes && isLoading)
+    if (isLoading)
         return (
-            <div className="grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 xl:gap-6">
+            <div
+                className={cn(
+                    'grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 2xl:grid-cols-3 xl:gap-6',
+                    !isSubscribed && 'lg:grid-cols-3'
+                )}>
                 <Skeleton repeat={6} className="w-full h-36 !mb-0" />
             </div>
         );
@@ -176,14 +180,18 @@ export const EntrypointPublic = ({
         sort ?? EntrypointSort.release
     );
 
-    const { data: astronotes, isFetching } = useGetPublicEntrypointBooksQuery(
+    const {
+        data: astronotes,
+        isLoading,
+        isFetching
+    } = useGetPublicEntrypointBooksQuery(
         { limit: PAGE_SIZE, type: category, status: sort, page },
         { skip: isAuthenticated || skip }
     );
 
     return (
         <EntrypointContent
-            isLoading={isFetching}
+            isLoading={!isLoading && isFetching} // only show skeleton on page change
             astronotes={astronotes ?? books}
         />
     );
