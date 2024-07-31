@@ -14,6 +14,7 @@ import {
 import CourseTabs from 'courses/components/CourseTabs';
 import React, { useState } from 'react';
 import { IoIosSearch } from 'react-icons/io';
+import { useDebounce } from 'use-debounce';
 
 const SORT_OPTIONS = [
     { value: 'latest', label: 'Terakhir Rilis' },
@@ -28,6 +29,9 @@ const ClassContainer = ({
 }): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const [searchTerm, setSearchTerm] = useState('');
+    const [debouncedSearchTerm] = useDebounce(searchTerm, 500, {
+        maxWait: 1000
+    });
 
     const { data: courseProgresses } = useGetCourseProgressV2Query(undefined, {
         skip: !isAuthenticated
@@ -77,9 +81,12 @@ const ClassContainer = ({
                     )}
                 </div>
                 {isAuthenticated ? (
-                    <PrivateCourseList content={searchTerm} />
+                    <PrivateCourseList content={debouncedSearchTerm} />
                 ) : (
-                    <PublicCourseList courses={courses} content={searchTerm} />
+                    <PublicCourseList
+                        courses={courses}
+                        content={debouncedSearchTerm}
+                    />
                 )}
                 {!(activePacket && activePacket.subscription_id) && (
                     <RenewSubscriptionBanner product="materi" />

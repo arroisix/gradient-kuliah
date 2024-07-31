@@ -17,6 +17,7 @@ import { useGetActiveSubscriptionQuery } from 'payment/redux/api/subscriptionApi
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { IoIosSearch } from 'react-icons/io';
+import { useDebounce } from 'use-debounce';
 
 const AstronotesEntrypoint = ({
     title = 'Perpustakaan',
@@ -38,6 +39,9 @@ const AstronotesEntrypoint = ({
     if (suffix === '/bank-soal') type = Tab.soal;
 
     const [searchTerm, setSearchTerm] = useState('');
+    const [debouncedSearchTerm] = useDebounce(searchTerm, 500, {
+        maxWait: 1000
+    });
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
@@ -78,12 +82,15 @@ const AstronotesEntrypoint = ({
                     )}
                 </div>
                 {isAuthenticated ? (
-                    <EntrypointPrivate category={type} content={searchTerm} />
+                    <EntrypointPrivate
+                        category={type}
+                        content={debouncedSearchTerm}
+                    />
                 ) : (
                     <EntrypointPublic
                         category={type}
                         books={books}
-                        content={searchTerm}
+                        content={debouncedSearchTerm}
                     />
                 )}
                 {!(activePacket && activePacket.subscription_id) && (
