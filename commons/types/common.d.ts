@@ -13,6 +13,7 @@ interface ResponseData<T> {
 interface BaseListQueryParams {
     page?: int;
     limit?: int;
+    content?: string;
     keyword?: string;
 }
 

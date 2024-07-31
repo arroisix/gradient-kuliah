@@ -12,6 +12,8 @@ import {
     PublicCourseList
 } from 'courses/components/CourseList';
 import CourseTabs from 'courses/components/CourseTabs';
+import React, { useState } from 'react';
+import { IoIosSearch } from 'react-icons/io';
 
 const SORT_OPTIONS = [
     { value: 'latest', label: 'Terakhir Rilis' },
@@ -25,6 +27,7 @@ const ClassContainer = ({
     courses: ListResponseData<Course>;
 }): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const [searchTerm, setSearchTerm] = useState('');
 
     const { data: courseProgresses } = useGetCourseProgressV2Query(undefined, {
         skip: !isAuthenticated
@@ -32,6 +35,10 @@ const ClassContainer = ({
     const { data: activePacket } = useGetActiveSubscriptionQuery(undefined, {
         skip: !isAuthenticated
     });
+
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+    };
 
     return (
         <>
@@ -44,17 +51,35 @@ const ClassContainer = ({
                     Kelas &amp; Video Perkuliahan Online Terbaik
                 </h1>
                 <CourseTabs />
-                {isAuthenticated && (
-                    <Sort
-                        options={SORT_OPTIONS}
-                        defaultSelected="latest"
-                        className="sticky z-10 py-2 bg-black top-28"
-                    />
-                )}
+                <div className="flex items-center justify-between sticky z-10 py-2 bg-black top-28">
+                    <form onSubmit={handleSearch} className="flex-grow mr-4">
+                        <div className="relative">
+                            <input
+                                type="text"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                placeholder="Cari kelas"
+                                className="w-full px-4 py-2 bg-[#212121] rounded-3xl text-white"
+                            />
+                            <IoIosSearch
+                                size={20}
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#DADADA] cursor-pointer"
+                                onClick={handleSearch}
+                            />
+                        </div>
+                    </form>
+                    {isAuthenticated && (
+                        <Sort
+                            options={SORT_OPTIONS}
+                            defaultSelected="latest"
+                            className="sticky z-10 py-2 top-28"
+                        />
+                    )}
+                </div>
                 {isAuthenticated ? (
-                    <PrivateCourseList />
+                    <PrivateCourseList content={searchTerm} />
                 ) : (
-                    <PublicCourseList courses={courses} />
+                    <PublicCourseList courses={courses} content={searchTerm} />
                 )}
                 {!(activePacket && activePacket.subscription_id) && (
                     <RenewSubscriptionBanner product="materi" />

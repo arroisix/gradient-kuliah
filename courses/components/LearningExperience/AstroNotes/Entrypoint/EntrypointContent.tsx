@@ -128,9 +128,11 @@ export const EntrypointContent = ({
 };
 
 export const EntrypointPrivate = ({
-    category
+    category,
+    content
 }: {
     category: Tab;
+    content: string;
 }): JSX.Element => {
     const router = useRouter();
     const { sort, page: pageParam } = router.query as {
@@ -149,7 +151,7 @@ export const EntrypointPrivate = ({
         isLoading,
         isFetching
     } = useGetEntrypointBooksQuery(
-        { limit: PAGE_SIZE, type: category, status: sort, page },
+        { limit: PAGE_SIZE, type: category, status: sort, page, content },
         { skip: !isAuthenticated || skip }
     );
 
@@ -163,10 +165,12 @@ export const EntrypointPrivate = ({
 
 export const EntrypointPublic = ({
     category,
-    books
+    books,
+    content
 }: {
     category: Tab;
     books: ListResponseData<Astronote>;
+    content: string;
 }): JSX.Element => {
     const router = useRouter();
     const { sort, page: pageParam } = router.query as {
@@ -185,7 +189,7 @@ export const EntrypointPublic = ({
         isLoading,
         isFetching
     } = useGetPublicEntrypointBooksQuery(
-        { limit: PAGE_SIZE, type: category, status: sort, page },
+        { limit: PAGE_SIZE, type: category, status: sort, page, content },
         { skip: isAuthenticated || skip }
     );
 

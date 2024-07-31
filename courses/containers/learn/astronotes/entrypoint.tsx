@@ -14,8 +14,9 @@ import {
 import RenewSubscriptionBanner from 'courses/components/RenewSubscriptionBanner';
 import { useRouter } from 'next/router';
 import { useGetActiveSubscriptionQuery } from 'payment/redux/api/subscriptionApi';
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { IoIosSearch } from 'react-icons/io';
 
 const AstronotesEntrypoint = ({
     title = 'Perpustakaan',
@@ -36,6 +37,12 @@ const AstronotesEntrypoint = ({
     if (suffix === '/textbook') type = Tab.textbook;
     if (suffix === '/bank-soal') type = Tab.soal;
 
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+    };
+
     return (
         <>
             <Breadcrumb className="w-full pb-5" />
@@ -45,17 +52,39 @@ const AstronotesEntrypoint = ({
                     {title}
                 </h1>
                 <EntrypointTabs />
-                {isAuthenticated && (
-                    <Sort
-                        options={SORT_OPTIONS}
-                        defaultSelected="last-released"
-                        className="sticky z-10 py-2 bg-black top-28"
-                    />
-                )}
+                <div className="flex items-center justify-between sticky z-10 py-2 bg-black top-28">
+                    <form onSubmit={handleSearch} className="flex-grow mr-4">
+                        <div className="relative">
+                            <input
+                                type="text"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                placeholder="Cari buku"
+                                className="w-full px-4 py-2 bg-[#212121] rounded-3xl text-white"
+                            />
+                            <IoIosSearch
+                                size={20}
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#DADADA] cursor-pointer"
+                                onClick={handleSearch}
+                            />
+                        </div>
+                    </form>
+                    {isAuthenticated && (
+                        <Sort
+                            options={SORT_OPTIONS}
+                            defaultSelected="last-released"
+                            className="sticky z-10 py-2 top-28"
+                        />
+                    )}
+                </div>
                 {isAuthenticated ? (
-                    <EntrypointPrivate category={type} />
+                    <EntrypointPrivate category={type} content={searchTerm} />
                 ) : (
-                    <EntrypointPublic category={type} books={books} />
+                    <EntrypointPublic
+                        category={type}
+                        books={books}
+                        content={searchTerm}
+                    />
                 )}
                 {!(activePacket && activePacket.subscription_id) && (
                     <RenewSubscriptionBanner product="materi" />
