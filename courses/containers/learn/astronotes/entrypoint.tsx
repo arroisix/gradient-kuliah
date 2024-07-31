@@ -43,10 +43,6 @@ const AstronotesEntrypoint = ({
         maxWait: 1000
     });
 
-    const handleSearch = (e: React.FormEvent) => {
-        e.preventDefault();
-    };
-
     return (
         <>
             <Breadcrumb className="w-full pb-5" />
@@ -57,22 +53,19 @@ const AstronotesEntrypoint = ({
                 </h1>
                 <EntrypointTabs />
                 <div className="flex items-center justify-between sticky z-10 py-2 bg-black top-28">
-                    <form onSubmit={handleSearch} className="flex-grow mr-4">
-                        <div className="relative">
-                            <input
-                                type="text"
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                placeholder="Cari buku"
-                                className="w-full px-4 py-2 bg-[#212121] rounded-3xl text-white"
-                            />
-                            <IoIosSearch
-                                size={20}
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#DADADA] cursor-pointer"
-                                onClick={handleSearch}
-                            />
-                        </div>
-                    </form>
+                    <div className="relative flex-grow mr-4">
+                        <input
+                            type="text"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            placeholder="Cari buku"
+                            className="w-full px-4 py-2 bg-[#212121] rounded-3xl text-white"
+                        />
+                        <IoIosSearch
+                            size={20}
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#DADADA] cursor-pointer"
+                        />
+                    </div>
                     {isAuthenticated && (
                         <Sort
                             options={SORT_OPTIONS}
@@ -84,13 +77,13 @@ const AstronotesEntrypoint = ({
                 {isAuthenticated ? (
                     <EntrypointPrivate
                         category={type}
-                        content={debouncedSearchTerm}
+                        search={debouncedSearchTerm}
                     />
                 ) : (
                     <EntrypointPublic
                         category={type}
                         books={books}
-                        content={debouncedSearchTerm}
+                        search={debouncedSearchTerm}
                     />
                 )}
                 {!(activePacket && activePacket.subscription_id) && (
