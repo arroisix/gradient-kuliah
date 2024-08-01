@@ -26,7 +26,11 @@ const CourseList = ({
     const totalPages = Math.ceil((courses?.count_items ?? 0) / PAGE_SIZE);
     if (isLoading)
         return (
-            <div className="grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 xl:grid-cols-3 xl:gap-6">
+            <div
+                className={cn(
+                    'grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 xl:grid-cols-3 xl:gap-6',
+                    !isSubscribed && 'lg:grid-cols-3'
+                )}>
                 <Skeleton repeat={6} className="w-full h-56 !mb-0" />
             </div>
         );
@@ -83,7 +87,11 @@ export const PublicCourseList = ({
 }): JSX.Element => {
     const router = useRouter();
     const { tab: section, sort, page } = router.query as CourseQueryParams;
-    const { data: queriedCourses } = useGetPublicListCoursesV2Query({
+    const {
+        data: queriedCourses,
+        isLoading,
+        isFetching
+    } = useGetPublicListCoursesV2Query({
         section: VALID_SECTION.includes(section ?? '') ? section : 'all',
         sort: VALID_SORT.includes(sort ?? '') ? sort : 'latest',
         page: parseInt(page ?? '1'),
@@ -91,14 +99,20 @@ export const PublicCourseList = ({
     });
     const courses = queriedCourses ?? ssrCourses;
 
-    return <CourseList courses={courses} />;
+    return (
+        <CourseList courses={courses} isLoading={!isLoading && isFetching} />
+    );
 };
 
 export const PrivateCourseList = (): JSX.Element => {
     const router = useRouter();
     const { tab: section, sort, page } = router.query as CourseQueryParams;
 
-    const { isLoading, data: courses } = useGetPrivateListCoursesV2Query(
+    const {
+        isLoading,
+        isFetching,
+        data: courses
+    } = useGetPrivateListCoursesV2Query(
         {
             section: VALID_SECTION.includes(section ?? '') ? section : 'all',
             sort: VALID_SORT.includes(sort ?? '') ? sort : 'latest',
@@ -108,5 +122,7 @@ export const PrivateCourseList = (): JSX.Element => {
         { refetchOnMountOrArgChange: true }
     );
 
-    return <CourseList courses={courses} isLoading={isLoading} />;
+    return (
+        <CourseList courses={courses} isLoading={!isLoading && isFetching} />
+    );
 };

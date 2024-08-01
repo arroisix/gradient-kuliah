@@ -62,11 +62,11 @@ const Paywall = ({
                 event: 'add_package',
                 ecommerce: {
                     currency: 'IDR',
-                    value: pricing.price,
+                    value: parseInt(pricing.price ?? '0'),
                     items: [
                         {
                             item_id: pricing.packet_name,
-                            price: pricing.price
+                            price: parseInt(pricing.price ?? '0')
                         }
                     ]
                 }

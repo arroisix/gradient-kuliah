@@ -44,11 +44,11 @@ const CheckoutButton = ({
             if (!!data?.data) {
                 const transaction = data.data;
                 sendGTMEvent({
-                    event: 'add_package',
+                    event: 'begin_checkout',
                     ecommerce: {
                         transaction_id: transaction.id,
                         currency: 'IDR',
-                        value: transaction.amount,
+                        value: parseInt(transaction.amount ?? '0'),
                         payment_type: transaction.payment_method,
                         items: [
                             {
@@ -81,11 +81,11 @@ const CheckoutButton = ({
             if (!!data?.data) {
                 const transaction = data.data;
                 sendGTMEvent({
-                    event: 'add_package',
+                    event: 'begin_checkout',
                     ecommerce: {
                         transaction_id: transaction.id,
                         currency: 'IDR',
-                        value: transaction.amount,
+                        value: parseInt(transaction.amount ?? '0'),
                         payment_type: transaction.payment_method,
                         items: [
                             {

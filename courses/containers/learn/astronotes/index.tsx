@@ -10,21 +10,40 @@ import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import { useRouter } from 'next/router';
 import RelatedBooksSection from 'courses/components/LearningExperience/AstroNotes/InternalLinking/RelatedBooksSection';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
+import { useGetBookRecommendationsQuery } from 'courses/redux/api/learningExperienceApi';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
 const Astronotes = ({
     content,
     book,
-    recommendations
+    recommendations: initialRecommendations
 }: {
     content: string;
     book: BookDetailInterface;
     recommendations: GetBookRecommendationResponse;
 }): JSX.Element => {
     const { isMobileBreakpoints } = useWindowBreakpoints();
+    const isAuthenticated = useSelector(getIsAuthenticated);
+
     const { width: notebookWidth, ref: notebookRef } =
         useElementSize<HTMLDivElement>();
     const router = useRouter();
     const { slug, page } = router.query as { slug: string; page: string };
+    const {
+        data: hydratedRecommendations,
+        isLoading: isLoadingRecommendations
+    } = useGetBookRecommendationsQuery(
+        {
+            slug,
+            category: 'astronotes'
+        },
+        {
+            skip: !isAuthenticated || !slug,
+            refetchOnMountOrArgChange: true
+        }
+    );
+    const recommendations = hydratedRecommendations || initialRecommendations;
 
     return (
         <AstronotesProvider>
@@ -61,7 +80,7 @@ const Astronotes = ({
                     <AstronotesSidebar />
                 </aside>
                 <div
-                    className="relative grid items-center w-full min-h-screen grid-cols-1 mt-5 md:ml-6"
+                    className="relative grid items-center w-full min-h-screen grid-cols-1 mt-5 md:ml-6 lg:pb-12"
                     ref={notebookRef}>
                     <div className="w-full max-w-5xl pt-4 mx-auto sm:px-4">
                         <Breadcrumb
@@ -77,12 +96,13 @@ const Astronotes = ({
                         />
                         <AstroNotesContent content={content} book={book} />
                     </div>
-                    <div className="flex flex-col w-full pt-8 lg:py-8 max-w-screen-2xl lg:mx-auto lg:gap-8">
+                    <div className="flex flex-col w-full pt-8 lg:py-8 lg:max-w-5xl xl:max-w-screen-2xl lg:mx-auto lg:gap-8">
                         <RelatedBooksSection
                             orientation={
                                 isMobileBreakpoints ? 'vertical' : 'horizontal'
                             }
                             title="Astronotes Terkait"
+                            isLoading={isLoadingRecommendations}
                             books={recommendations?.related_books}
                         />
                         <RelatedBooksSection
@@ -90,6 +110,7 @@ const Astronotes = ({
                                 isMobileBreakpoints ? 'vertical' : 'horizontal'
                             }
                             title="Eksplor Astronotes Lainnya"
+                            isLoading={isLoadingRecommendations}
                             books={recommendations?.other_books}
                         />
                     </div>

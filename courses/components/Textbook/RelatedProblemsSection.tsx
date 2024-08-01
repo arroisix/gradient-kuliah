@@ -80,7 +80,7 @@ const RelatedProblemsSection = ({
                                 content={problem.question_snippet}
                                 className="text-sm font-semibold line-clamp-2"
                             />
-                            <div className="flex">
+                            <div className="flex items-end">
                                 <p className="flex-1 text-sm text-graphite-400">
                                     {problem.book_title}
                                 </p>

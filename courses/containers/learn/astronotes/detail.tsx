@@ -17,12 +17,11 @@ import { useRef } from 'react';
 import { useSelector } from 'react-redux';
 import RelatedBooksSection from 'courses/components/LearningExperience/AstroNotes/InternalLinking/RelatedBooksSection';
 import { useGetBookRecommendationsQuery } from 'courses/redux/api/learningExperienceApi';
-import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 const AstronotesDetail = ({
     slug: serverSlug,
     astronotes: initialData,
-    recommendations
+    recommendations: initialRecommendations
 }: {
     slug: string;
     astronotes: BookDetailInterface;
@@ -36,7 +35,6 @@ const AstronotesDetail = ({
     );
     const astronotes = data?.book ?? initialData;
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { is_subscribed: isSubscribed } = useCourseSubscription();
 
     const buttonRef = useRef<HTMLDivElement | null>(null);
     const onScreen = useOnScreen(buttonRef, '-128px 0px 0px 0px');
@@ -51,8 +49,13 @@ const AstronotesDetail = ({
             slug,
             category: slugify(category == 'catatan' ? 'astronotes' : category)
         },
-        { skip: !isSubscribed || !category || !slug }
+        {
+            skip: !isAuthenticated || !category || !slug,
+            refetchOnMountOrArgChange: true
+        }
     );
+    const recommendations = hydratedRecommendations || initialRecommendations;
+
     const getLink = (): string => {
         if (!isAuthenticated) return '/daftar';
 
@@ -219,18 +222,12 @@ const AstronotesDetail = ({
                     <RelatedBooksSection
                         title={`${capitalize(category)} Terkait`}
                         isLoading={isLoadingRecommendations}
-                        books={
-                            hydratedRecommendations?.related_books ??
-                            recommendations?.related_books
-                        }
+                        books={recommendations?.related_books}
                     />
                     <RelatedBooksSection
                         title="Eksplor Buku Lainnya"
                         isLoading={isLoadingRecommendations}
-                        books={
-                            hydratedRecommendations?.other_books ??
-                            recommendations?.other_books
-                        }
+                        books={recommendations?.other_books}
                     />
                 </div>
             </div>

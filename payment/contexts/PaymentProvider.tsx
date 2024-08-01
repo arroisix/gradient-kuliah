@@ -35,15 +35,15 @@ export function PaymentProvider({
     const selectPaymentMethod = (to: PaymentMethod): void => {
         setPaymentMethod(to);
         sendGTMEvent({
-            event: 'add_package',
+            event: 'add_payment_info',
             ecommerce: {
                 currency: 'IDR',
-                value: packet?.price,
-                payment_type: paymentMethod,
+                value: parseInt(packet?.price ?? ''),
+                payment_type: to,
                 items: [
                     {
                         item_id: packet?.packet_name,
-                        price: packet?.price
+                        price: parseInt(packet?.price ?? '')
                     }
                 ]
             }
