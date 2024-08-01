@@ -81,9 +81,11 @@ const CourseList = ({
 };
 
 export const PublicCourseList = ({
-    courses: ssrCourses
+    courses: ssrCourses,
+    search
 }: {
     courses: ListResponseData<Course>;
+    search?: string;
 }): JSX.Element => {
     const router = useRouter();
     const { tab: section, sort, page } = router.query as CourseQueryParams;
@@ -95,7 +97,8 @@ export const PublicCourseList = ({
         section: VALID_SECTION.includes(section ?? '') ? section : 'all',
         sort: VALID_SORT.includes(sort ?? '') ? sort : 'latest',
         page: parseInt(page ?? '1'),
-        limit: PAGE_SIZE
+        limit: PAGE_SIZE,
+        search
     });
     const courses = queriedCourses ?? ssrCourses;
 
@@ -104,7 +107,11 @@ export const PublicCourseList = ({
     );
 };
 
-export const PrivateCourseList = (): JSX.Element => {
+export const PrivateCourseList = ({
+    search
+}: {
+    search?: string;
+}): JSX.Element => {
     const router = useRouter();
     const { tab: section, sort, page } = router.query as CourseQueryParams;
 
@@ -117,7 +124,8 @@ export const PrivateCourseList = (): JSX.Element => {
             section: VALID_SECTION.includes(section ?? '') ? section : 'all',
             sort: VALID_SORT.includes(sort ?? '') ? sort : 'latest',
             page: parseInt(page ?? '1'),
-            limit: PAGE_SIZE
+            limit: PAGE_SIZE,
+            search
         } as FilterCourseQueryParams,
         { refetchOnMountOrArgChange: true }
     );
