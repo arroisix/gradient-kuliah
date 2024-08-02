@@ -14,6 +14,7 @@ export type PAYMENT_DICT = {
     ID_LINKAJA: string;
     ALFAMART: string;
     INDOMARET: string;
+    VOUCHER?: string | null;
     MANUAL?: string;
     OTHER: null;
 };
@@ -34,7 +35,8 @@ export const LOGO_PAYMENT: PAYMENT_DICT = {
     ID_LINKAJA: 'linkaja.png',
     ALFAMART: 'alfamart.png',
     INDOMARET: 'indomaret.png',
-    OTHER: null
+    OTHER: null,
+    VOUCHER: null
 };
 
 export const NAME_PAYMENT: PAYMENT_DICT = {
@@ -54,5 +56,6 @@ export const NAME_PAYMENT: PAYMENT_DICT = {
     ALFAMART: 'Alfamart',
     INDOMARET: 'Indomaret',
     MANUAL: 'Manual',
-    OTHER: null
+    OTHER: null,
+    VOUCHER: 'Kode Voucher'
 };

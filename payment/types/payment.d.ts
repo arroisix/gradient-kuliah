@@ -3,6 +3,7 @@ type PaymentMethod =
     | PaymentMethodEwallet
     | PaymentMethodOutlet
     | 'QRIS'
+    | 'VOUCHER'
     | 'OTHER';
 
 type PaymentMethodVirtualAccount =
