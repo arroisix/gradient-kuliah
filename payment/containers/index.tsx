@@ -2,12 +2,13 @@ import FreeBox from 'payment/components/FreeBox';
 import FreeModalCheckout from 'payment/components/ModalCheckout/freeModal';
 import OtherPaymentBox from 'payment/components/OtherPayment';
 import ModalCheckout from '../components/ModalCheckout';
-import { AiFillBank, AiOutlineMobile } from 'react-icons/ai';
+import { AiFillBank, AiFillShop, AiOutlineMobile } from 'react-icons/ai';
 import { usePayment } from '../contexts/PaymentProvider';
 import { useEffect, useRef } from 'react';
 import MethodListBox from '../components/MethodListBox';
 import MethodBox from 'payment/components/MethodBox';
 import { MdOutlineQrCodeScanner } from 'react-icons/md';
+import Ticket from 'commons/components/elements/Icons/Ticket';
 
 const SubscriptionContainer = (): JSX.Element => {
     const otherPaymentMethodRef = useRef<HTMLDivElement>(null);
@@ -81,6 +82,16 @@ const SubscriptionContainer = (): JSX.Element => {
                             <MethodBox paymentMethod="ID_OVO" />
                             <MethodBox paymentMethod="ID_SHOPEEPAY" />
                             <MethodBox paymentMethod="ID_LINKAJA" />
+                        </MethodListBox>
+                        <MethodListBox
+                            title="Redeem Voucher"
+                            icon={<AiFillShop className="mr-2 text-base" />}>
+                            <MethodBox paymentMethod="VOUCHER">
+                                <div className="flex flex-col items-center text-neutral-900">
+                                    <Ticket color="#5f2bce" size="30" />
+                                    <div className="text-sm">Kode Voucher</div>
+                                </div>
+                            </MethodBox>
                         </MethodListBox>
                         {/* TODO(litha): hidden until paperwork ready
                         <MethodListBox

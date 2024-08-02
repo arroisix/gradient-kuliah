@@ -12,6 +12,7 @@ import Spinner from 'commons/components/elements/Spinner';
 import { useValidatePromoMutation } from 'referral/redux/referalApi';
 import { useTracker } from 'tracker/tracker';
 import { MdOutlineQrCodeScanner } from 'react-icons/md';
+import Ticket from 'commons/components/elements/Icons/Ticket';
 
 const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
     const [phoneNumber, setPhoneNumber] = useState<string>();
@@ -101,8 +102,41 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
         setPhoneNumber(phoneNumber);
     }
 
+    const renderPaymentMethodLogo = () => {
+        if (paymentMethod === 'QRIS') {
+            return (
+                <div className="flex flex-col items-center text-neutral-900">
+                    <MdOutlineQrCodeScanner
+                        size={20}
+                        className="text-accent-purple"
+                    />
+                    <div className="text-xs">Scan QRIS</div>
+                </div>
+            );
+        }
+
+        if (paymentMethod === 'VOUCHER') {
+            return (
+                <div className="flex flex-col items-center text-neutral-900">
+                    <Ticket color="#5f2bce" size="20" />
+                    <div className="text-xs">Kode Voucher</div>
+                </div>
+            );
+        }
+
+        return (
+            <div className="h-[20px] w-[65px] relative">
+                <Image
+                    src={`https://d2uqn6ndx4ow3t.cloudfront.net/assets/payments/${LOGO_PAYMENT[paymentMethod]}`}
+                    layout="fill"
+                />
+            </div>
+        );
+    };
+
     return (
         <Modal
+            key={paymentMethod}
             isOpen={isOpen}
             setOpen={handleCloseModal}
             variant="dark"
@@ -119,22 +153,7 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
                         {NAME_PAYMENT[paymentMethod]}
                     </p>
                     <div className="rounded-lg h-[50px] w-[100px] bg-white flex items-center justify-center">
-                        {paymentMethod === 'QRIS' ? (
-                            <div className="flex flex-col items-center text-neutral-900">
-                                <MdOutlineQrCodeScanner
-                                    size={20}
-                                    className="text-accent-purple"
-                                />
-                                <div className="text-xs">Scan QRIS</div>
-                            </div>
-                        ) : (
-                            <div className="h-[20px] w-[65px] relative">
-                                <Image
-                                    src={`https://d2uqn6ndx4ow3t.cloudfront.net/assets/payments/${LOGO_PAYMENT[paymentMethod]}`}
-                                    layout="fill"
-                                />
-                            </div>
-                        )}
+                        {renderPaymentMethodLogo()}
                     </div>
                 </div>
             </div>
@@ -192,12 +211,18 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
             </div>
             <div className="flex flex-col w-full mb-4">
                 <p className="text-xs font-body text-neutral-400">
-                    Kode Voucher/Referral
+                    {paymentMethod === 'VOUCHER'
+                        ? 'Kode Voucher'
+                        : 'Kode Promo/Referral'}
                 </p>
                 <div className="flex justify-between items-center gap-3 w-full mt-2 px-4 bg-[#2D2D2D] rounded-[6px]">
                     <input
                         type="text"
-                        placeholder="Masukkan kode untuk dapat diskon"
+                        placeholder={
+                            paymentMethod === 'VOUCHER'
+                                ? 'Masukkan kode yang ada di voucher'
+                                : 'Masukkan kode untuk dapat diskon'
+                        }
                         value={inputCode}
                         onChange={(event) => setInputCode(event.target.value)}
                         className="w-full px-0 py-4 text-xs bg-transparent border-none placeholder:text-neutral-600 focus:outline-none focus:ring-0 focus:appearance-none"
@@ -269,6 +294,10 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
                     paymentMethod={paymentMethod}
                     promoCode={inputCode}
                     disabled={
+                        (paymentMethod === 'VOUCHER' &&
+                            (!inputCode ||
+                                !!!validateResult?.is_valid ||
+                                loadingValidate)) ||
                         (inputCode === ''
                             ? false
                             : validateResult || loadingValidate
