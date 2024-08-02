@@ -96,16 +96,22 @@ const CheckoutButton = ({
                     }
                 });
 
-                toast.info(
-                    `Silahkan lanjutkan proses pembayaran sesuai metode yang kamu pilih`,
-                    { position: toast.POSITION.TOP_CENTER }
-                );
-
-                router.push(
-                    `/checkout/${transaction.id}?${queryParamBuilder({
-                        redirect: redirect as string
-                    })}`
-                );
+                if (transaction.payment_method === 'VOUCHER') {
+                    toast.success(`Redeem kode voucher berhasil!`, {
+                        position: toast.POSITION.TOP_CENTER
+                    });
+                    router.push('/checkout/sukses');
+                } else {
+                    toast.info(
+                        `Silahkan lanjutkan proses pembayaran sesuai metode yang kamu pilih`,
+                        { position: toast.POSITION.TOP_CENTER }
+                    );
+                    router.push(
+                        `/checkout/${transaction.id}?${queryParamBuilder({
+                            redirect: redirect as string
+                        })}`
+                    );
+                }
             }
         }
 
