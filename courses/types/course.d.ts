@@ -8,6 +8,7 @@ interface FilterCourseQueryParams {
     major?: string;
     section?: string;
     sort?: string;
+    search?: string;
 }
 
 interface TrackSubchapterProgressInputData {
