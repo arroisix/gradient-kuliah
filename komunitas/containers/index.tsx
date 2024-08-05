@@ -169,7 +169,7 @@ const KomunitasContainer = ({
             />
             <section className="grid w-full grid-cols-1 gap-8 lg:grid-cols-5">
                 <div className="flex flex-col w-full gap-5 lg:col-span-3">
-                    <div className="sticky top-16 flex flex-col gap-5 z-[2] bg-black pb-4">
+                    <div className="sticky top-14 flex flex-col gap-5 z-[2] bg-black py-4">
                         <KomunitasInput
                             type="text"
                             name="search"

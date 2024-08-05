@@ -59,7 +59,7 @@ const VideoLearnContainer = ({
 
     return (
         <section className="relative flex flex-col overflow-visible">
-            <div className="grid grid-cols-1 gap-5 pb-px pt-14 lg:pl-6 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-5 pb-px lg:pl-6 lg:grid-cols-3">
                 <div
                     className="flex flex-col w-full lg:col-span-2 h-max lg:pl-8"
                     ref={videoRef}>

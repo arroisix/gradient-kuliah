@@ -8,7 +8,7 @@ const PilihPaket = (): JSX.Element => {
     const router = useRouter();
 
     return (
-        <section className="py-24 px-[18px] m-auto max-w-[1064px] w-full">
+        <section className="py-24 px-[18px] mt-14 m-auto max-w-[1064px] w-full">
             <button
                 className="rounded-full p-[10px] self-start bg-[#212121]"
                 onClick={() => router.back()}>

@@ -49,7 +49,7 @@ const TextbookSolution = ({
     return (
         <div className="drawer drawer-end lg:drawer-open">
             <TableOfContentMenu problem={data?.problem} />
-            <div className="w-full pt-40 pb-12 mx-auto space-y-4 drawer-content md:max-w-screen-2xl md:px-8 lg:px-12 lg:pt-20">
+            <div className="w-full pt-8 pb-12 mx-auto space-y-4 drawer-content md:max-w-screen-2xl md:px-8 lg:px-12">
                 <Breadcrumb
                     nextItem={
                         {
