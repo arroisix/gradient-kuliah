@@ -9,47 +9,26 @@ import { useGetPublicListCoursesV2Query } from 'courses/redux/api/publicCourseV2
 import { useGetLandingPopularBooksQuery } from 'courses/redux/api/astronotesApi';
 
 const LandingContainer = ({
-    majorData,
     classesData,
     popularBooksData,
     pricingData
 }: LandingContainerProps): JSX.Element => {
-    const [selectedBookMajor, setSelectedBookMajor] = useState<string>(
-        majorData?.[0].slug ?? 'all'
-    );
-    const [selectedCourseMajor, setSelectedCourseMajors] = useState<string>(
-        majorData?.[0].slug ?? 'all'
-    );
     const {
         data: booksData,
-        isFetching: isLoadingBooksData,
-        refetch: refetchBooksData
-    } = useGetLandingPopularBooksQuery({ major: selectedBookMajor });
+        isFetching: isLoadingBooksData
+    } = useGetLandingPopularBooksQuery({ major: 'all' });
     const {
         data: coursesData,
-        isFetching: isLoadingCoursesData,
-        refetch: refetchCoursesData
-    } = useGetPublicListCoursesV2Query({ major: selectedCourseMajor });
+        isFetching: isLoadingCoursesData
+    } = useGetPublicListCoursesV2Query({ major: 'all' });
     const [popularBooks, setPopularBooks] = useState<LandingPopularBook[]>(
         popularBooksData ?? []
     );
     const [classes, setClasses] = useState<Course[]>(classesData ?? []);
 
     useEffect(() => {
-        if (selectedBookMajor !== 'all') {
-            refetchBooksData();
-        }
-    }, [selectedBookMajor]);
-
-    useEffect(() => {
         setPopularBooks(booksData?.books ?? []);
     }, [booksData]);
-
-    useEffect(() => {
-        if (selectedCourseMajor !== 'all') {
-            refetchCoursesData();
-        }
-    }, [selectedCourseMajor]);
 
     useEffect(() => {
         setClasses(coursesData?.data ?? []);
@@ -61,16 +40,12 @@ const LandingContainer = ({
             <Features title={'Pilih fitur yang sesuai sama cara belajarmu'} />
             <Popular
                 type="book"
-                majorData={majorData}
                 popularBooks={popularBooks}
-                setSelectedMajor={setSelectedBookMajor}
                 isLoading={isLoadingBooksData}
             />
             <Popular
                 type="course"
-                majorData={majorData}
                 classes={classes}
-                setSelectedMajor={setSelectedCourseMajors}
                 isLoading={isLoadingCoursesData}
             />
             <Testimony />

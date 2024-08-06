@@ -11,10 +11,8 @@ import { getBookBaseHref } from 'courses/utils';
 
 const Popular = ({
     type,
-    majorData,
     classes,
     popularBooks,
-    setSelectedMajor,
     isLoading
 }: LandingPopularProps): JSX.Element => {
     const tracker = useTracker();
@@ -47,24 +45,11 @@ const Popular = ({
                     !isScrollable && 'md:justify-center',
                     'md:items-center'
                 )}>
-                <div className="flex flex-col items-center gap-3 md:flex-row md:gap-6">
-                    <h2 className="font-sans text-xl font-extrabold text-center md:text-left">
-                        {type === 'book'
-                            ? 'Bacaan Terpopuler di Perpustakaan'
-                            : 'Kelas Terpopuler'}
-                    </h2>
-                    <select
-                        name={`${type}-major-recommendation`}
-                        id={`${type}-major-recommendation-select`}
-                        onChange={(e) => setSelectedMajor(e.target.value)}
-                        className="w-full  md:w-[320px] bg-[#141414] text-sm md:text-base rounded-lg border border-[#333333] shadow-[0_4px_5px_0_rgba(0,0,0,0.502)] cursor-pointer">
-                        {majorData?.map(({ slug, label }) => (
-                            <option key={slug} value={slug}>
-                                {label}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+                <h2 className="font-sans text-xl font-extrabold text-center md:text-left">
+                    {type === 'book'
+                        ? 'Bacaan Terpopuler di Perpustakaan'
+                        : 'Kelas Terpopuler'}
+                </h2>
                 {isScrollable && (
                     <div className="hidden gap-4 text-black md:flex">
                         <button

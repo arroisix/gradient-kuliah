@@ -1,6 +1,5 @@
 type LandingContainerProps = {
     pricingData?: PacketOffer[];
-    majorData?: MajorOptions[];
     classesData?: Course[];
     popularBooksData?: LandingPopularBook[];
 };
@@ -43,9 +42,7 @@ type LandingTestimonyInterface = {
 
 type LandingPopularProps = {
     type: 'book' | 'course';
-    majorData?: MajorOptions[];
     classes?: Course[];
     popularBooks?: LandingPopularBook[];
-    setSelectedMajor: Dispatch<SetStateAction<string>>;
     isLoading: boolean;
 };
