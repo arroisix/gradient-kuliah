@@ -8,7 +8,6 @@ import React from 'react';
 import config from 'redux/api/config';
 
 type LandingPageProps = {
-    majorData?: ResponseData<MajorOptions>;
     pricingData?: ResponseData<PacketOffer>;
     classesData?: ResponseData<Course>;
     popularBooksData?: GetLandingPopularBooksResponseData;
@@ -16,7 +15,6 @@ type LandingPageProps = {
 };
 
 const RevampedLandingPage = ({
-    majorData,
     classesData,
     popularBooksData,
     pricingData,
@@ -27,7 +25,6 @@ const RevampedLandingPage = ({
             <GridProvider>
                 <Layout shouldTransparent>
                     <LandingContainer
-                        majorData={majorData?.data}
                         classesData={classesData?.data}
                         popularBooksData={popularBooksData?.books}
                         pricingData={pricingData?.data}
@@ -75,7 +72,6 @@ export async function getStaticProps(): Promise<{
         pricingData: ResponseData<PacketOffer>;
         classesData: ResponseData<Course>;
         popularBooksData: GetLandingPopularBooksResponseData;
-        majorData: ResponseData<MajorOptions>;
         canonical: string;
         title: string;
         description: string;
@@ -94,10 +90,6 @@ export async function getStaticProps(): Promise<{
     };
     revalidate?: number;
 }> {
-    const { data: majorData }: { data: ResponseData<MajorOptions> } =
-        await axios.get(
-            `${config.API_BASE_URL}courses/public/major-recommendations/`
-        );
     const { data: classesData }: { data: ResponseData<Course> } =
         await axios.get(`${config.API_BASE_URL}courses/v2/public/?major=all`);
     const {
@@ -118,7 +110,6 @@ export async function getStaticProps(): Promise<{
             pricingData,
             classesData,
             popularBooksData,
-            majorData,
             canonical: 'https://gradient.academy/',
             title: META_TITLE,
             description: META_DESCRIPTION,
