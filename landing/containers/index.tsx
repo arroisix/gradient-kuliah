@@ -13,14 +13,10 @@ const LandingContainer = ({
     popularBooksData,
     pricingData
 }: LandingContainerProps): JSX.Element => {
-    const {
-        data: booksData,
-        isFetching: isLoadingBooksData
-    } = useGetLandingPopularBooksQuery({ major: 'all' });
-    const {
-        data: coursesData,
-        isFetching: isLoadingCoursesData
-    } = useGetPublicListCoursesV2Query({ major: 'all' });
+    const { data: booksData, isFetching: isLoadingBooksData } =
+        useGetLandingPopularBooksQuery({ major: 'all' });
+    const { data: coursesData, isFetching: isLoadingCoursesData } =
+        useGetPublicListCoursesV2Query({ major: 'all' });
     const [popularBooks, setPopularBooks] = useState<LandingPopularBook[]>(
         popularBooksData ?? []
     );
