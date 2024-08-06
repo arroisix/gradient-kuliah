@@ -7,6 +7,7 @@ import Paginator from 'commons/components/elements/Paginator';
 import ProductCard from 'commons/components/elements/ProductCard';
 import { cn } from 'commons/utils';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { useEffect, useRef } from 'react';
 
 const VALID_SECTION = ['all', 'newly-released', 'coming-soon'];
 const VALID_SORT = ['latest', 'popularity', 'lexicography'];
@@ -89,6 +90,18 @@ export const PublicCourseList = ({
 }): JSX.Element => {
     const router = useRouter();
     const { tab: section, sort, page } = router.query as CourseQueryParams;
+
+    const prevSearchRef = useRef(search);
+
+    useEffect(() => {
+        if (search !== prevSearchRef.current) {
+            prevSearchRef.current = search;
+            router.push({ query: { ...router.query, page: '1' } }, undefined, {
+                shallow: true
+            });
+        }
+    }, [search, router]);
+
     const {
         data: queriedCourses,
         isLoading,
@@ -114,6 +127,17 @@ export const PrivateCourseList = ({
 }): JSX.Element => {
     const router = useRouter();
     const { tab: section, sort, page } = router.query as CourseQueryParams;
+
+    const prevSearchRef = useRef(search);
+
+    useEffect(() => {
+        if (search !== prevSearchRef.current) {
+            prevSearchRef.current = search;
+            router.push({ query: { ...router.query, page: '1' } }, undefined, {
+                shallow: true
+            });
+        }
+    }, [search, router]);
 
     const {
         isLoading,
