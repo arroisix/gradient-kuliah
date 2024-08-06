@@ -1,4 +1,3 @@
-import { useThemeContext } from 'commons/contexts/ThemeProvider';
 import LearnLayout from 'commons/learnLayout';
 import Astronotes from 'courses/containers/learn/astronotes';
 import type { GetStaticPaths, GetStaticProps } from 'next/types';
@@ -17,10 +16,6 @@ const AstronotesPage = ({
     content,
     recommendations
 }: AstronotesPageProps): JSX.Element => {
-    const { theme } = useThemeContext();
-
-    console.log(theme);
-
     return (
         <>
             <ArticleJsonLd
@@ -40,10 +35,7 @@ const AstronotesPage = ({
                 ]}
                 isAccessibleForFree={page == 1 || book.is_free}
             />
-            <LearnLayout
-                noPadding
-                lightMode={theme === 'light'}
-                showSubscriptionReminder>
+            <LearnLayout noPadding showSubscriptionReminder>
                 <Astronotes
                     content={content}
                     book={book}

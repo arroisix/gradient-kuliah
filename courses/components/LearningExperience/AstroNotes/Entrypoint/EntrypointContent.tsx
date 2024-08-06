@@ -13,6 +13,7 @@ import Paginator from 'commons/components/elements/Paginator';
 import ProductCard from 'commons/components/elements/ProductCard';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { cn } from 'commons/utils';
+import { useEffect, useRef } from 'react';
 
 const PAGE_SIZE = 6;
 
@@ -140,6 +141,16 @@ export const EntrypointPrivate = ({
         page: string;
     };
     const page = parseInt(pageParam ?? '1');
+    const prevSearchRef = useRef(search);
+
+    useEffect(() => {
+        if (search !== prevSearchRef.current) {
+            prevSearchRef.current = search;
+            router.push({ query: { ...router.query, page: '1' } }, undefined, {
+                shallow: true
+            });
+        }
+    }, [search, router]);
 
     const isAuthenticated = useSelector(getIsAuthenticated);
     const skip = !Object.values(EntrypointSort).includes(
@@ -178,6 +189,16 @@ export const EntrypointPublic = ({
         page: string;
     };
     const page = parseInt(pageParam ?? '1');
+    const prevSearchRef = useRef(search);
+
+    useEffect(() => {
+        if (search !== prevSearchRef.current) {
+            prevSearchRef.current = search;
+            router.push({ query: { ...router.query, page: '1' } }, undefined, {
+                shallow: true
+            });
+        }
+    }, [search, router]);
 
     const isAuthenticated = useSelector(getIsAuthenticated);
     const skip = !Object.values(EntrypointSort).includes(

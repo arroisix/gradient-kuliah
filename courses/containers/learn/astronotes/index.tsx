@@ -47,7 +47,7 @@ const Astronotes = ({
 
     return (
         <AstronotesProvider>
-            <section className="relative flex flex-col text-black bg-white sm:pb-4 md:flex-row md:gap-2 dark:bg-black dark:text-white">
+            <section className="relative flex flex-col px-4 pt-4 text-black bg-white sm:pb-4 md:flex-row md:gap-2 dark:bg-black dark:text-white">
                 {/* TODO(angga): removed until higher in priority
                 
                 {highlighted && (
@@ -80,9 +80,9 @@ const Astronotes = ({
                     <AstronotesSidebar />
                 </aside>
                 <div
-                    className="relative grid items-center w-full min-h-screen grid-cols-1 mt-5 md:ml-6 lg:pb-12"
+                    className="relative grid items-center w-full min-h-screen grid-cols-1 mt-5 lg:pb-12"
                     ref={notebookRef}>
-                    <div className="w-full max-w-5xl pt-4 mx-auto sm:px-4">
+                    <div className="w-full max-w-5xl mx-auto sm:px-4">
                         <Breadcrumb
                             nextItem={
                                 {

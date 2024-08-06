@@ -7,7 +7,7 @@ export default function EmptyCourse(): JSX.Element {
             <div className="flex justify-center">
                 <Image priority src={emptyCourse} />
             </div>
-            <p className="mt-6 text-lg font-semibold text-white">
+            <p className="mt-6 text-lg text-center font-semibold text-white">
                 Tidak ada kelas yang sesuai
             </p>
         </div>

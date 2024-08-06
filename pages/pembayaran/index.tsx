@@ -11,6 +11,7 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import Image from 'next/image';
 import { CDN_URL } from 'commons/constants';
 import { useTracker } from 'tracker/tracker';
+import PaketInfo from 'payment/components/PaketInfo';
 
 const Payment = (): JSX.Element => {
     const router = useRouter();
@@ -64,7 +65,10 @@ const Payment = (): JSX.Element => {
                             </p>
                         </section>
                     ) : (
-                        <SubscriptionContainer />
+                        <>
+                            <PaketInfo />
+                            <SubscriptionContainer />
+                        </>
                     )}
                 </PaymentProvider>
             ) : (
