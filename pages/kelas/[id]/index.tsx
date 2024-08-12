@@ -137,7 +137,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
             const metaTitle =
                 params?.id === 'bedah-jurusan'
                     ? 'Program Webinar Bedah Jurusan Kuliah Bersama Expert | Gradient'
-                    : `Kelas Online ${courseData?.course_name}, Materi Belajar Super Interaktif | Gradient`;
+                    : `Kelas Online ${courseData?.course_name}, Materi Belajar Super Interaktif`;
             const metaDescription =
                 params?.id === 'bedah-jurusan'
                     ? 'Program webinar gratis! Temukan wawasan mendalam tentang jurusan kuliah favorit Kamu dari para ahli yang telah berpengalaman dan sukses berkarir dibidangnya.'

@@ -79,8 +79,9 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                 };
             }
 
-            const META_TITLE = `Kunci Jawaban Buku ${data.book.title} + Pembahasannya | Gradient`;
-            const META_DESCRIPTION = `Temukan kunci jawaban lengkap buku ${data.book.title.toLowerCase()} disusun oleh dosen ternama di Indonesia. Solusi akurat dan pembahasan mendalam mendukung pemahaman Kamu.`;
+            const authors = data.book.authors.join(', ')
+            const META_TITLE = `Buku ${data.book.title} by ${authors}`
+            const META_DESCRIPTION = `Temukan kunci jawaban buku ${data.book.title} dari ${authors}, solusi dan pembahasan disusun mendalam oleh dosen-dosen ternama di Indonesia.`
 
             return {
                 revalidate: 300,

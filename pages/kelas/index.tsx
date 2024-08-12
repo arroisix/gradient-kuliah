@@ -33,7 +33,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
         );
 
         const META_TITLE =
-            'Kursus & Kelas Online Bersama Dosen Terbaik Indonesia | Gradient';
+            'Kursus & Kelas Online Bersama Dosen Terbaik Indonesia';
         const META_DESCRIPTION =
             'Kursus online yang dirancang khusus untuk membantu kesuksesan akademik mahasiswa dalam proses belajar dan akan diajari langsung oleh dosen-dosen terbaik di Indonesia';
 

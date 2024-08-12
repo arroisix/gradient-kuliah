@@ -37,7 +37,7 @@ export const getStaticProps: GetStaticProps = async () => {
     );
 
     const metaTitle =
-        'Forum Diskusi Mahasiswa Tanya Jawab Persoalan Kuliah | Gradient';
+        'Forum Diskusi Mahasiswa Tanya Jawab Persoalan Kuliah';
     const metaDescription =
         'Temukan jawaban atas pertanyaan-pertanyaan dari materi kuliah serta saling bertukar informasi agar dapat meningkatkan pemahaman secara bersama-sama.';
 
