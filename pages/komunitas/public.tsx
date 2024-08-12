@@ -36,8 +36,7 @@ export const getStaticProps: GetStaticProps = async () => {
         `${config.API_BASE_URL}communities/public/post/`
     );
 
-    const metaTitle =
-        'Forum Diskusi Mahasiswa Tanya Jawab Persoalan Kuliah';
+    const metaTitle = 'Forum Diskusi Mahasiswa Tanya Jawab Persoalan Kuliah';
     const metaDescription =
         'Temukan jawaban atas pertanyaan-pertanyaan dari materi kuliah serta saling bertukar informasi agar dapat meningkatkan pemahaman secara bersama-sama.';
 

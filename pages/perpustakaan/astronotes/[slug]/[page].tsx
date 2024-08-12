@@ -124,8 +124,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         };
     }
 
-    const META_TITLE = getBookContent.data.chapter? `Catatan & Rangkuman ${getBookContent.data.chapter}` : `Halaman ${page} | ${book?.category} ${book?.title} | Catatan, Rangkuman dan Bank Soal`
-    const META_DESCRIPTION = getBookContent.data.chapter? `Pelajari konsep-konsep penting dari materi ${getBookContent.data.chapter} melalui rangkuman yang ringkas dan mudah dipahami dengan cepat.` : `Belajar dan Paham dengan baca ${book?.category} ${book?.title} hanya di Gradient`
+    const META_TITLE = getBookContent.data.chapter
+        ? `Catatan & Rangkuman ${getBookContent.data.chapter}`
+        : `Halaman ${page} | ${book?.category} ${book?.title} | Catatan, Rangkuman dan Bank Soal`;
+    const META_DESCRIPTION = getBookContent.data.chapter
+        ? `Pelajari konsep-konsep penting dari materi ${getBookContent.data.chapter} melalui rangkuman yang ringkas dan mudah dipahami dengan cepat.`
+        : `Belajar dan Paham dengan baca ${book?.category} ${book?.title} hanya di Gradient`;
 
     return {
         revalidate: 300,

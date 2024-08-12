@@ -79,9 +79,9 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                 };
             }
 
-            const authors = data.book.authors.join(', ')
-            const META_TITLE = `Buku ${data.book.title} by ${authors}`
-            const META_DESCRIPTION = `Temukan kunci jawaban buku ${data.book.title} dari ${authors}, solusi dan pembahasan disusun mendalam oleh dosen-dosen ternama di Indonesia.`
+            const authors = data.book.authors.join(', ');
+            const META_TITLE = `Buku ${data.book.title} by ${authors}`;
+            const META_DESCRIPTION = `Temukan kunci jawaban buku ${data.book.title} dari ${authors}, solusi dan pembahasan disusun mendalam oleh dosen-dosen ternama di Indonesia.`;
 
             return {
                 revalidate: 300,

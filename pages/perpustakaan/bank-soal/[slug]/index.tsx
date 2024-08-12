@@ -79,8 +79,8 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                 };
             }
 
-            const META_TITLE = `${data.book.title} Beserta Pembahasannya`
-            const META_DESCRIPTION = `Raih prestasi akademis lebih tinggi melalui latihan soal ${data.book.title} beserta solusi lengkap untuk setiap pertanyaan yang akan mudah untuk Kamu pahami.`
+            const META_TITLE = `${data.book.title} Beserta Pembahasannya`;
+            const META_DESCRIPTION = `Raih prestasi akademis lebih tinggi melalui latihan soal ${data.book.title} beserta solusi lengkap untuk setiap pertanyaan yang akan mudah untuk Kamu pahami.`;
 
             return {
                 revalidate: 300,

@@ -96,7 +96,7 @@ export const getStaticProps = async ({
     const course = courseResponse.data.course_detail;
     const recommendations = recommendationResponse.data;
 
-    const META_TITLE = `Materi ${course.course_name}: ${subchapter.subchapter_name}`
+    const META_TITLE = `Materi ${course.course_name}: ${subchapter.subchapter_name}`;
     const META_DESCRIPTION = `Video pembelajaran ${subchapter.subchapter_name}. Tingkatkan pemahaman kamu dengan materi berkualitas tinggi dari para ahli.`;
 
     return {
