@@ -41,7 +41,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
         const books = payload[0].data as ListResponseData<Astronote>;
 
         const META_TITLE =
-            'Kumpulan Kunci Jawaban Buku Perkuliahan + Pembahasannya | Gradient';
+            'Kumpulan Kunci Jawaban Buku Perkuliahan + Pembahasannya';
         const META_DESCRIPTION =
             'Dapatkan kunci jawaban beserta pembahasan solusi yang telah diverifikasi dosen ternama untuk semua buku perkuliahan. Solusi terbaik untuk setiap materi perkuliahan.';
 

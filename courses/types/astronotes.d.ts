@@ -7,6 +7,7 @@ interface GetAstronotesContentResponse {
     total_page: number;
     current_page: number;
     page_content: string;
+    chapter: string;
 }
 
 type BookChapter = {

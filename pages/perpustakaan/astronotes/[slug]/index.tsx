@@ -82,14 +82,8 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                 };
             }
 
-            const META_TITLE = `${data.book.category} ${data.book.title.replace(
-                'Astronotes: ',
-                ''
-            )} Sumber Literatur Terlengkap | Gradient`;
-            const META_DESCRIPTION = `Baca rangkuman e-book ${data.book.title.replace(
-                'Astronotes: ',
-                ''
-            )} untuk menghemat waktu belajar, dan meningkatkan performa akademik. Mulai belajar lebih praktis & terstruktur sekarang.`;
+            const META_TITLE = `Daftar Isi Diktat/Buku ${data.book.title}`;
+            const META_DESCRIPTION = `Baca diktat E-book ${data.book.title} untuk menghemat waktu belajar, dan meningkatkan performa akademik. Mulai belajar lebih praktis & terstruktur sekarang.`;
 
             return {
                 revalidate: 300,

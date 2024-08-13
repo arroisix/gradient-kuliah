@@ -40,8 +40,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
         }
         const books = payload[0].data as ListResponseData<Astronote>;
 
-        const META_TITLE =
-            'Kumpulan Rangkuman & Catatan Materi Kuliah | Gradient';
+        const META_TITLE = 'Kumpulan Rangkuman & Catatan Materi Kuliah';
         const META_DESCRIPTION =
             'Tingkatkan hasil belajar dari rangkuman & catatan berkualitas yang dirancang khusus agar lebih praktis serta mempercepat waktu Kamu dalam proses belajar.';
 
