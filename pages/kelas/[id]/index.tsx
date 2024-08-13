@@ -23,12 +23,10 @@ const DetailKelas = ({
     description: string;
     recommendations: GetCourseRecommendationResponse;
 }): JSX.Element => {
-    const courseName = title.split(' | Gradient')[0];
-
     return (
         <>
             <CourseJsonLd
-                courseName={courseName}
+                courseName={title}
                 description={description}
                 provider={{
                     type: 'EducationalOrganization',
@@ -37,7 +35,7 @@ const DetailKelas = ({
                 }}
                 hasCourseInstance={{
                     '@type': 'CourseInstance',
-                    name: courseName,
+                    name: title,
                     description: description,
                     courseMode: 'online',
                     courseSchedule: {
@@ -136,7 +134,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
 
             const metaTitle =
                 params?.id === 'bedah-jurusan'
-                    ? 'Program Webinar Bedah Jurusan Kuliah Bersama Expert | Gradient'
+                    ? 'Program Webinar Bedah Jurusan Kuliah Bersama Expert'
                     : `Kelas Online ${courseData?.course_name}, Materi Belajar Super Interaktif`;
             const metaDescription =
                 params?.id === 'bedah-jurusan'
