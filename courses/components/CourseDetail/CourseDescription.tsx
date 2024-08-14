@@ -1,5 +1,4 @@
 import Button from 'commons/components/elements/Button';
-import { useGetLandingCourseDataQuery } from 'courses/redux/api/publicCourseApi';
 import SubscribeButton from '../LandingPage/Common/SubscribeButton';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
@@ -7,9 +6,11 @@ import { useSelector } from 'react-redux';
 import { PercentageProgess } from './LearningProgress/PercentageProgress';
 
 const CourseDescription = ({
-    slug
-}: GradientBaseComponentWithSlug): JSX.Element => {
-    const { data } = useGetLandingCourseDataQuery(slug);
+    slug,
+    course
+}: Pick<GradientBaseComponentWithSlug, 'slug'> & {
+    course: CourseLandingPageData;
+}): JSX.Element => {
     const {
         is_subscribed,
         latest_watch_video,
@@ -22,14 +23,14 @@ const CourseDescription = ({
         <div className="w-screen px-5 lg:w-3/12">
             <div className="flex flex-col gap-2 p-4 bg-zinc-900 rounded-xl">
                 <h2 className="font-semibold text-gray-500">
-                    Tentang Kelas {data?.course_name}
+                    Tentang Kelas {course?.course_name}
                 </h2>
                 <div className="w-full h-px bg-gray-500" />
-                <div className="text-sm">{data?.description}</div>
+                <div className="text-sm">{course?.description}</div>
 
                 <h2 className="text-sm text-gray-500 uppercase">Pengajar</h2>
                 <div className="flex flex-col gap-2">
-                    {data?.lecturers.map((lecturer: Lecturer) => (
+                    {course?.lecturers.map((lecturer: Lecturer) => (
                         <div
                             className="flex items-center gap-2"
                             key={lecturer.name}>
