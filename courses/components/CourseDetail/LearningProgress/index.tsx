@@ -27,6 +27,8 @@ const LearningProgress = ({
     const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
         'landing-page-revamp'
     );
+    const temporaryCourseName = slug.replaceAll('-', ' ').replaceAll(' dan ', ' & ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    const courseName = data?.course_name? data?.course_name : temporaryCourseName
 
     return (
         <div
@@ -41,7 +43,7 @@ const LearningProgress = ({
             )}>
             <Breadcrumb
                 className="absolute top-[72px] lg:top-20 z-10 px-4 md:px-8 lg:px-24"
-                nextItem={{ name: data?.course_name } as BreadcrumbItemProps}
+                nextItem={{ name: courseName } as BreadcrumbItemProps}
             />
             <div
                 className={cn(
