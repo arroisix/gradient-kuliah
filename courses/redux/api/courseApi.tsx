@@ -154,6 +154,17 @@ export const courseApi = baseApi.injectEndpoints({
             query: ({ slug, book_id }) => ({
                 url: `${COURSE_BASE_URL}${slug}/book/${book_id}`
             })
+        }),
+        getPopularVideos: builder.query<
+            ListResponseData<
+                Omit<VideoRecommendation, 'title'> & { subchapter_name: string }
+            >,
+            BaseListQueryParams
+        >({
+            query: (params) => ({
+                url: `${COURSE_BASE_URL}public/subchapters/`,
+                params
+            })
         })
     })
 });
@@ -169,5 +180,8 @@ export const {
     usePostCourseFeedbackMutation,
     useAddToWaitingListMutation,
     useGetBookContentQuery,
-    useLazyGetSearchCourseContentQuery
+    useLazyGetSearchCourseContentQuery,
+    useGetPopularVideosQuery
 } = courseApi;
+
+export const { getPopularVideos } = courseApi.endpoints;

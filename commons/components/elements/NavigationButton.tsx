@@ -20,7 +20,7 @@ const NavigationButton = ({
     const route = useRouter();
 
     return (
-        <>
+        <div className="flex flex-col gap-4">
             <Link
                 href={url}
                 className={className}
@@ -56,7 +56,7 @@ const NavigationButton = ({
                     setOpenSidebar={setOpenSidebar}
                 />
             ))}
-        </>
+        </div>
     );
 };
 

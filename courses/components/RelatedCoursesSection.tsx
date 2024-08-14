@@ -32,7 +32,7 @@ const RelatedCoursesSection = ({
         }
     }
 
-    if (!isLoading && !courses) return <></>;
+    if (!isLoading && (!courses || courses.length === 0)) return <></>;
 
     return (
         <div className="flex flex-col items-center w-screen gap-5 py-4 md:w-full first:pt-8 last:pb-8 md:gap-6 bg-graphite-800">

@@ -92,7 +92,7 @@ const HorizontalProductCard = ({
                     className={cn(
                         'rounded-full text-xs w-fit text-white font-semibold px-3 py-1 bg-neutral-700',
                         {
-                            'bg-[#00B78B]': category === 'Textbook',
+                            'bg-[#00B78B]': category.includes('Textbook'),
                             'bg-[#CC009E]':
                                 category === 'Catatan' ||
                                 category === 'Astronotes',

@@ -8,9 +8,9 @@ const ProductCard = ({
     ...props
 }: ProductCardProps): JSX.Element => {
     const categoryLabel: { [key: string]: string } = {
+        [category]: category,
         Catatan: 'Astronotes',
-        Textbook: 'Textbook Solution',
-        [category]: category
+        Textbook: 'Textbook Solution'
     };
 
     return orientation == 'horizontal' ? (

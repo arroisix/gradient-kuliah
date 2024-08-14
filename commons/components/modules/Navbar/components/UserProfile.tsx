@@ -36,7 +36,7 @@ const UserProfile = (): JSX.Element => {
                 role="menubar"
                 tabIndex={0}
                 className={cn(
-                    'dropdown-content mt-4 p-2 w-48 menu shadow-md rounded-lg border',
+                    'dropdown-content mt-4 p-2 w-max menu shadow-md rounded-lg border text-sm font-medium',
                     lightMode
                         ? 'bg-white text-black'
                         : 'bg-graphite-900 border-graphite-600/50 text-white'

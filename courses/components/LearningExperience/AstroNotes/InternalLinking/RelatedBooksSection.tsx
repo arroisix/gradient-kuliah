@@ -19,7 +19,7 @@ const RelatedBooksSection = ({
     orientation = 'vertical'
 }: RelatedBooksSectionProps): JSX.Element => {
     const { is_subscribed: isSubscribed } = useCourseSubscription();
-    if (!isLoading && !books) return <></>;
+    if (!isLoading && (!books || books.length === 0)) return <></>;
 
     const getHref = (book: Astronote): string => {
         const baseHref = `${getBookBaseHref(book.category)}/${book.slug}`;

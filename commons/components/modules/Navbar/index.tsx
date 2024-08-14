@@ -12,8 +12,6 @@ import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import MobileSidebar from '../Sidebar/mobile';
 import AuthContext from 'authentication/contexts/AuthProvider';
 import UserAvatar from './components/UserAvatar';
-import NavMenuIcons from './components/NavMenuIcons';
-import { useFeatureIsOn } from '@growthbook/growthbook-react';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { BiBookReader, BiSolidBookReader } from 'react-icons/bi';
 import {
@@ -29,6 +27,7 @@ import { LEARNING_PAGES } from 'commons/constants';
 import AuthButtons from './components/AuthButtons';
 import UserProfile from './components/UserProfile';
 import { useThemeContext } from 'commons/contexts/ThemeProvider';
+import SearchBar from '../Searchbar';
 
 const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
     {
@@ -80,9 +79,6 @@ const Navbar = ({
         const position = window.pageYOffset;
         setScrollPosition(position);
     };
-    const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
-        'landing-page-revamp'
-    );
     const { is_subscribed: isSubscribed } = useCourseSubscription();
 
     useEffect(() => {
@@ -137,6 +133,8 @@ const Navbar = ({
         (LEARNING_PAGES.some((page) => router.asPath === page) &&
             !isSubscribed &&
             !isDesktopBreakpoints);
+    const isShowSidebar =
+        showSidebar && fullHeightSidebar && isAuthenticated && isSubscribed;
 
     const { data: configData } = useGetConfigQuery();
 
@@ -148,14 +146,14 @@ const Navbar = ({
             )}>
             <div
                 className={cn(
-                    'flex items-center min-h-14 justify-between w-full px-4 py-3 md:px-8',
+                    'flex items-center min-h-14 justify-between w-full px-4 py-3 md:px-8 gap-4',
                     isSubscribed && showSidebar
-                        ? 'lg:pl-6 lg:pr-28'
+                        ? 'lg:px-6'
                         : noPadding
                         ? 'lg:px-16'
                         : 'lg:px-12'
                 )}>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center flex-auto gap-4 md:flex-1 lg:flex-auto lg:gap-8">
                     {isShowHamburgerMenu && (
                         <FiMenu
                             className="text-white lg:hidden"
@@ -173,7 +171,7 @@ const Navbar = ({
                     </Link>
                     <div
                         className={cn(
-                            'items-center ml-7 gap-6 hidden lg:flex',
+                            'items-center gap-6 hidden lg:flex',
                             isSubscribed && showSidebar && '!hidden'
                         )}>
                         {UNAUTHENTICATED_NAVBAR_BUTTONS.map((nav) => (
@@ -196,12 +194,16 @@ const Navbar = ({
                             />
                         )}
                     </div>
-                    {showSidebar &&
-                        fullHeightSidebar &&
-                        (isAuthenticated || isLandingPageRevampOn) &&
-                        isSubscribed && (
-                            <div className="hidden md:block w-[250px] h-[64px] fixed top-0 left-0 bg-[#121212] z-[-1]" />
-                        )}
+                    {isShowSidebar && (
+                        <div className="hidden md:block w-[250px] h-[64px] fixed top-0 left-0 bg-[#121212] z-[-1]" />
+                    )}
+                    <div
+                        className={cn(
+                            'w-full max-w-lg',
+                            isShowSidebar && 'lg:ml-[250px] lg:pl-6 lg:absolute'
+                        )}>
+                        <SearchBar />
+                    </div>
                 </div>
                 {paymentPage ? (
                     <Button
@@ -217,10 +219,7 @@ const Navbar = ({
                     <>
                         <div className="hidden font-bold md:flex">
                             {isAuthenticated ? (
-                                <nav className="relative flex gap-6 ml-12">
-                                    <NavMenuIcons />
-                                    <UserProfile />
-                                </nav>
+                                <UserProfile />
                             ) : (
                                 <AuthButtons />
                             )}
@@ -231,7 +230,6 @@ const Navbar = ({
                                 <AuthButtons />
                             ) : (
                                 <div className="flex items-center gap-4">
-                                    <NavMenuIcons />
                                     <button
                                         className="flex items-center text-base font-bold"
                                         onClick={() =>

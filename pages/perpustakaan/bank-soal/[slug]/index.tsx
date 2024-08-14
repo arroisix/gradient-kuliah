@@ -19,7 +19,7 @@ const BankSoalDetailPage = ({
     recommendations: GetBookRecommendationResponse;
 }): JSX.Element => {
     return (
-        <LearnLayout showSidebar fullHeightSidebar noPadding>
+        <LearnLayout showSidebar fullHeightSidebar>
             <AstronotesDetail
                 slug={slug}
                 astronotes={astronotes}

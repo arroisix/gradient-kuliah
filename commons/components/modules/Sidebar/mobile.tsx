@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { BiBookReader, BiSolidBookReader } from 'react-icons/bi';
+import { BiBookReader, BiSearch, BiSolidBookReader } from 'react-icons/bi';
 import { MdOutlineClose } from 'react-icons/md';
 import {
     RiBookOpenLine,
@@ -20,12 +20,18 @@ const MOBILE_SIDEBAR_BUTTONS: NavigationButtonInterface[] = [
         IconUnactive: BiBookReader
     },
     {
+        name: 'Search',
+        title: 'Search',
+        url: '/search',
+        IconActive: BiSearch,
+        IconUnactive: BiSearch
+    },
+    {
         name: 'Library',
         title: 'Perpustakaan',
         url: '/perpustakaan',
         IconActive: RiBookOpenFill,
         IconUnactive: RiBookOpenLine,
-        className: 'mt-4',
         subMenus: [
             {
                 name: 'Textbook Solution',
@@ -74,7 +80,7 @@ const MobileSidebar = ({
                             className="text-[#ffffff]"
                         />
                     </header>
-                    <div className="flex flex-col gap-[1rem] px-6 py-4">
+                    <div className="flex flex-col gap-8 px-6 py-4">
                         {MOBILE_SIDEBAR_BUTTONS.map(
                             ({
                                 name,
@@ -105,8 +111,7 @@ const MobileSidebar = ({
                                 url="/komunitas"
                                 IconActive={RiQuestionnaireFill}
                                 IconUnactive={RiQuestionnaireLine}
-                                setOpenSidebar={setOpenSidebar}
-                                className="mt-4">
+                                setOpenSidebar={setOpenSidebar}>
                                 <CommunityNotificationBadge />
                             </NavigationButton>
                         )}
