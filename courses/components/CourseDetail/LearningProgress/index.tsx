@@ -27,8 +27,15 @@ const LearningProgress = ({
     const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
         'landing-page-revamp'
     );
-    const temporaryCourseName = slug.replaceAll('-', ' ').replaceAll(' dan ', ' & ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-    const courseName = data?.course_name? data?.course_name : temporaryCourseName
+    const temporaryCourseName = slug
+        .replaceAll('-', ' ')
+        .replaceAll(' dan ', ' & ')
+        .split(' ')
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+    const courseName = data?.course_name
+        ? data?.course_name
+        : temporaryCourseName;
 
     return (
         <div
