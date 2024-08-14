@@ -12,7 +12,7 @@ const CourseDetail = ({
     ssrCourse: CourseLandingPageData;
 }): JSX.Element => {
     const { data } = useGetLandingCourseDataQuery(slug);
-    const course = data ?? ssrCourse
+    const course = data ?? ssrCourse;
 
     return (
         <main className="flex flex-col gap-8 pb-16">
