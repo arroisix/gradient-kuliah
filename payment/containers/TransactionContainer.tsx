@@ -60,7 +60,7 @@ const TransactionContainer = (): JSX.Element => {
                     ecommerce: {
                         transaction_id: data.id,
                         currency: 'IDR',
-                        value: data.amount,
+                        value: parseInt(data.amount),
                         payment_type: data.payment_method,
                         items: [
                             {

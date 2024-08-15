@@ -32,13 +32,9 @@ const CourseBookResults = ({
                     <ProductCard
                         key={doc.id}
                         orientation="vertical"
-                        category={
-                            doc.type === 'bank_soal_problem'
-                                ? 'Bank Soal'
-                                : 'Textbook Solution'
-                        }
+                        category={doc.book_category}
                         eventName=""
-                        href={`${getBookBaseHref(doc.book_category)}${
+                        href={`${getBookBaseHref(doc.book_category)}/${
                             doc.book_slug
                         }`}
                         className="carousel-item w-60"
