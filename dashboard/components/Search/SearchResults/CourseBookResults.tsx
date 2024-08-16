@@ -32,7 +32,7 @@ const CourseBookResults = ({
                     <ProductCard
                         key={doc.id}
                         orientation="vertical"
-                        category={doc.book_category}
+                        category={doc?.book_category ?? ''}
                         eventName=""
                         href={`${getBookBaseHref(doc.book_category)}/${
                             doc.book_slug

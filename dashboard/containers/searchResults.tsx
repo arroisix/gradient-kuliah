@@ -39,7 +39,7 @@ const SearchResults = ({
     };
     const page = parseInt(pageParam ?? '1');
     const paginationParams =
-        type === 'all'
+        !type || type === 'all'
             ? { page }
             : type === 'community'
             ? { primary_page: page }
