@@ -28,11 +28,11 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
             never
         >;
         dispatch(getPopularSearches.initiate({}));
-        dispatch(getPopularVideos.initiate({}));
+        dispatch(getPopularVideos.initiate({ sort: 'popular' }));
         dispatch(getPopularBooks.initiate({ type: 'astronotes' }));
         dispatch(getPopularBooks.initiate({ type: 'text-book' }));
         dispatch(getPopularBooks.initiate({ type: 'bank-soal' }));
-        dispatch(getPublicCommunityPost.initiate({}));
+        dispatch(getPublicCommunityPost.initiate({ sort_by: 'POPULAR' }));
         const payload = await Promise.all(dispatch(getRunningQueriesThunk()));
 
         if (payload.some((response) => response.isError)) {

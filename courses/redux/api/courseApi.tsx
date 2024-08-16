@@ -159,7 +159,7 @@ export const courseApi = baseApi.injectEndpoints({
             ListResponseData<
                 Omit<VideoRecommendation, 'title'> & { subchapter_name: string }
             >,
-            BaseListQueryParams
+            BaseListQueryParams & { sort?: 'latest' | 'popular' }
         >({
             query: (params) => ({
                 url: `${COURSE_BASE_URL}public/subchapters/`,
