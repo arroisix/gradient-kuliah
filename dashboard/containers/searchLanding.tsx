@@ -37,7 +37,7 @@ const SearchLanding = ({
     popularDiscussions
 }: SearchLandingProps): JSX.Element => {
     const { data: videos, isLoading: isLoadingVideos } =
-        useGetPopularVideosQuery({}, { skip: !isHydrate });
+        useGetPopularVideosQuery({ sort: 'popular' }, { skip: !isHydrate });
     const { data: astronotes, isLoading: isLoadingAstronotes } =
         useGetPopularBooksQuery({ type: 'astronotes' }, { skip: !isHydrate });
     const { data: textbook, isLoading: isLoadingTextbook } =
@@ -45,7 +45,10 @@ const SearchLanding = ({
     const { data: bankSoal, isLoading: isLoadingBankSoal } =
         useGetPopularBooksQuery({ type: 'bank-soal' }, { skip: !isHydrate });
     const { data: discussion, isLoading: isLoadingDiscussion } =
-        useGetPublicCommunityPostQuery({}, { skip: !isHydrate });
+        useGetPublicCommunityPostQuery(
+            { sort_by: 'POPULAR' },
+            { skip: !isHydrate }
+        );
 
     return (
         <div className="space-y-8">
