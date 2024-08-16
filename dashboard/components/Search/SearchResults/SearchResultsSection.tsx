@@ -131,7 +131,7 @@ const ResultsCardFactory = ({
             return (
                 <SearchResultCard
                     key={doc.id}
-                    href={`${getBookBaseHref('textbook')}/${doc.course_slug}/${
+                    href={`${getBookBaseHref('textbook')}/${doc.book_slug}/${
                         doc.problem_slug
                     }`}
                     title={
