@@ -32,7 +32,7 @@ const RelatedVideosSection = ({
         }
     }
 
-    if (!isLoading && !videos) return <></>;
+    if (!isLoading && (!videos || videos.length === 0)) return <></>;
 
     return (
         <div className="flex flex-col w-screen gap-5 py-4 -ml-4 md:ml-0 md:w-full first:pt-8 last:pb-8 md:gap-6 bg-graphite-800">

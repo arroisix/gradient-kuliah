@@ -39,7 +39,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
         const books = payload[0].data as ListResponseData<Astronote>;
 
         const META_TITLE =
-            'Perpustakaan Online Pusat Ruang Baca Digital Terkini | Gradient';
+            'Perpustakaan Online Pusat Ruang Baca Digital Terkini';
         const META_DESCRIPTION =
             'Nikmati perpustakaan digital dengan akses tanpa batas ke buku, catatan, bank soal, dan solusi terbaik. Temukan semua yang Kamu butuhkan untuk belajar lebih baik.';
 

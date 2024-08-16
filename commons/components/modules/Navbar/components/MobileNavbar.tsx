@@ -1,12 +1,12 @@
 import Link from 'next/link';
-import { MdHistory, MdLogout, MdOutlinePersonOutline } from 'react-icons/md';
-import { HiOutlineUsers } from 'react-icons/hi';
+import { MdHistory, MdLogout, MdPerson } from 'react-icons/md';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useLogoutMutation } from 'authentication/redux/api/authApi';
 import { useRouter } from 'next/router';
 import { cn } from 'commons/utils';
 import { useDispatch } from 'react-redux';
 import { clearCache } from 'authentication/redux/slices/userSlice';
+import { FaGift } from 'react-icons/fa';
 
 interface MobileNavbarProps {
     openMobile: boolean;
@@ -32,67 +32,55 @@ const MobileNavbar = ({
                     lightMode ? 'bg-white' : 'bg-[#171717]'
                 )}>
                 <div className="w-full">
-                    <div className="pb-4">
-                        <Link href={'/profil'}>
-                            <div
-                                className={cn(
-                                    'flex hover:text-accent-blue font-normal w-full items-center mb-4',
-                                    lightMode ? 'text-black' : 'text-white'
-                                )}>
-                                <div>
-                                    <MdOutlinePersonOutline className="text-2xl" />
-                                </div>
-                                <div className="w-full ml-4">
-                                    <p className="text-base">Profil</p>
-                                </div>
-                            </div>
-                        </Link>
-                        <Link href={'/transaksi'}>
-                            <div
-                                className={cn(
-                                    'flex hover:text-accent-blue font-normal w-full items-center mb-4',
-                                    lightMode ? 'text-black' : 'text-white'
-                                )}>
-                                <div>
-                                    <MdHistory className="text-2xl" />
-                                </div>
-                                <div className="w-full ml-4">
-                                    <p className="text-base">
-                                        Riwayat Pembelian
-                                    </p>
-                                </div>
-                            </div>
-                        </Link>
-                        {is_subscribed && (
-                            <Link href={'/referral'}>
-                                <div
-                                    className={cn(
-                                        'flex hover:text-accent-blue font-normal w-full items-center mb-4',
-                                        lightMode ? 'text-black' : 'text-white'
-                                    )}>
-                                    <div>
-                                        <HiOutlineUsers className="text-xl" />
-                                    </div>
-                                    <div className="w-full ml-4">
-                                        <p className="text-base">Referral</p>
-                                    </div>
-                                </div>
-                            </Link>
-                        )}
+                    <Link href={'/profil'}>
                         <div
-                            className="flex items-center w-full font-normal text-accent-orange hover:text-state-error"
-                            onClick={async () => {
-                                await logout();
-                                dispatch(clearCache());
-                                router.push('/');
-                            }}
-                            aria-hidden>
-                            <div>
-                                <MdLogout className="text-2xl" />
-                            </div>
+                            className={cn(
+                                'flex hover:text-accent-blue font-normal w-full items-center mb-4',
+                                lightMode ? 'text-black' : 'text-white'
+                            )}>
+                            <MdPerson size={20} />
                             <div className="w-full ml-4">
-                                <p className="text-base">Logout</p>
+                                <p className="text-base">Profil</p>
                             </div>
+                        </div>
+                    </Link>
+                    <Link href={'/transaksi'}>
+                        <div
+                            className={cn(
+                                'flex hover:text-accent-blue font-normal w-full items-center mb-4',
+                                lightMode ? 'text-black' : 'text-white'
+                            )}>
+                            <MdHistory size={20} />
+                            <div className="w-full ml-4">
+                                <p className="text-base">Riwayat Pembelian</p>
+                            </div>
+                        </div>
+                    </Link>
+                    {is_subscribed && (
+                        <Link href={'/referral'}>
+                            <div
+                                className={cn(
+                                    'flex hover:text-accent-blue font-normal w-full items-center mb-4',
+                                    lightMode ? 'text-black' : 'text-white'
+                                )}>
+                                <FaGift size={20} />
+                                <div className="w-full ml-4">
+                                    <p className="text-base">Referral</p>
+                                </div>
+                            </div>
+                        </Link>
+                    )}
+                    <div
+                        className="flex items-center w-full font-normal text-accent-orange hover:text-state-error"
+                        onClick={async () => {
+                            await logout();
+                            dispatch(clearCache());
+                            router.push('/');
+                        }}
+                        aria-hidden>
+                        <MdLogout size={20} />
+                        <div className="w-full ml-4">
+                            <p className="text-base">Logout</p>
                         </div>
                     </div>
                 </div>

@@ -16,6 +16,7 @@ module.exports = {
     theme: {
         fontFamily: {
             sans: ['Raleway', 'sans-serif'],
+            inter: ['Inter', 'sans-serif'],
             body: ['Open Sans', 'Roboto'],
             serif: ['Playfair Display', 'serif'],
             mono: ['Roboto Mono', 'serif']

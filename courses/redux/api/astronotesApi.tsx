@@ -236,6 +236,15 @@ export const astronotesApi = baseApi.injectEndpoints({
                 url: `${BOOK_BASE_URL}landing/popular/`,
                 params: { ...params }
             })
+        }),
+        getPopularBooks: builder.query<
+            ListResponseData<PopularBook>,
+            BaseListQueryParams & { type: string }
+        >({
+            query: (params) => ({
+                url: `${BOOK_BASE_URL}search/popular/`,
+                params
+            })
         })
     })
 });
@@ -262,7 +271,8 @@ export const {
     usePostTextbookFeedbackMutation,
     useGetTextbookSolutionQuery,
     useGetLandingPopularBooksQuery,
-    useGetBankSoalQuery
+    useGetBankSoalQuery,
+    useGetPopularBooksQuery
 } = astronotesApi;
 
 export const {
@@ -271,5 +281,6 @@ export const {
     getTextbookSolution,
     getBankSoal,
     getAstronotesContent,
-    getPublicBookPreview
+    getPublicBookPreview,
+    getPopularBooks
 } = astronotesApi.endpoints;

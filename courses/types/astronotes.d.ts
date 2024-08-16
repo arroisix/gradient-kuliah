@@ -7,6 +7,7 @@ interface GetAstronotesContentResponse {
     total_page: number;
     current_page: number;
     page_content: string;
+    chapter: string;
 }
 
 type BookChapter = {
@@ -236,3 +237,10 @@ interface GetProblemRecommendationsResponse {
     related_problems: ProblemRecommendation[];
     other_problems: ProblemRecommendation[];
 }
+
+type PopularBook = Pick<Astronote, 'id' | 'book_cover_url' | 'category'> & {
+    book_title: string;
+    book_slug: string;
+    problem_title: string;
+    problem_slug: string;
+};

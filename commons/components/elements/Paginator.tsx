@@ -14,6 +14,7 @@ type PaginatorProps = {
     totalPages: number;
     hasNextPage: boolean;
     hasPreviousPage: boolean;
+    scroll?: boolean;
 } & PropsWithClassName;
 
 const Paginator = ({
@@ -22,6 +23,7 @@ const Paginator = ({
     page: pageState,
     setPage,
     totalPages,
+    scroll = false,
     className
 }: PaginatorProps): JSX.Element => {
     const router = useRouter();
@@ -62,78 +64,84 @@ const Paginator = ({
     );
 
     return (
-        <div className={cn('flex gap-3', className)}>
+        <div
+            className={cn(
+                'flex items-center gap-4 flex-wrap sm:flex-nowrap',
+                className
+            )}>
             <PageButton
                 href={getHref(hasPreviousPage ? page - 1 : page)}
                 type="button"
-                scroll={false}
+                scroll={scroll}
                 disabled={!hasPreviousPage}
                 onClick={() => {
                     if (!hasPreviousPage) return;
                     setPage?.((prev) => prev - 1);
                 }}
                 className={cn(
-                    'btn btn-sm rounded-full bg-surface-200 text-white pl-2',
+                    'btn sm:btn-sm rounded-full order-last sm:order-none min-w-max flex-1 sm:flex-none bg-surface-200 text-white pl-2',
                     !hasPreviousPage && 'btn-disabled'
                 )}>
                 <BiChevronLeft className="w-5 h-5" /> Prev
             </PageButton>
-            <PageButton
-                href={getHref(1)}
-                type="button"
-                scroll={false}
-                onClick={() => setPage?.(1)}
-                className={cn(
-                    'btn btn-sm btn-circle ',
-                    page === 1
-                        ? 'btn-neutral bg-white border-white text-black'
-                        : 'btn-outline text-white border-neutral-600'
-                )}>
-                1
-            </PageButton>
-            {totalPages > 6 && page > 4 && <p>...</p>}
-            {pageButtons.map((pageNav) => (
+            <div className="flex items-center justify-between w-full sm:gap-3 sm:justify-center sm:w-max sm:flex-none">
                 <PageButton
-                    href={getHref(pageNav)}
-                    key={`pagenav-${pageNav}`}
-                    onClick={() => setPage?.(pageNav)}
-                    scroll={false}
+                    href={getHref(1)}
                     type="button"
+                    scroll={scroll}
+                    onClick={() => setPage?.(1)}
                     className={cn(
-                        'btn btn-sm btn-circle',
-                        pageNav === page
+                        'btn btn-sm min-[425px]:btn-md sm:btn-sm btn-circle ',
+                        page === 1
                             ? 'btn-neutral bg-white border-white text-black'
                             : 'btn-outline text-white border-neutral-600'
                     )}>
-                    {pageNav}
+                    1
                 </PageButton>
-            ))}
-            {totalPages > 6 && page < totalPages - 2 && <p>...</p>}
-            {totalPages > 5 && (
-                <PageButton
-                    href={getHref(totalPages)}
-                    type="button"
-                    scroll={false}
-                    onClick={() => setPage?.(totalPages)}
-                    className={cn(
-                        'btn btn-sm btn-circle ',
-                        totalPages === page
-                            ? 'btn-neutral bg-white border-white text-black'
-                            : 'btn-outline text-white border-neutral-600'
-                    )}>
-                    {totalPages}
-                </PageButton>
-            )}
+                {totalPages > 6 && page > 4 && <p>...</p>}
+                {pageButtons.map((pageNav) => (
+                    <PageButton
+                        href={getHref(pageNav)}
+                        key={`pagenav-${pageNav}`}
+                        onClick={() => setPage?.(pageNav)}
+                        scroll={scroll}
+                        type="button"
+                        className={cn(
+                            'btn btn-sm min-[425px]:btn-md sm:btn-sm btn-circle',
+                            pageNav === page
+                                ? 'btn-neutral bg-white border-white text-black'
+                                : 'btn-outline text-white border-neutral-600'
+                        )}>
+                        {pageNav}
+                    </PageButton>
+                ))}
+                {totalPages > 6 && page < totalPages - 2 && <p>...</p>}
+                {totalPages > 5 && (
+                    <PageButton
+                        href={getHref(totalPages)}
+                        type="button"
+                        scroll={scroll}
+                        onClick={() => setPage?.(totalPages)}
+                        className={cn(
+                            'btn btn-sm min-[425px]:btn-md sm:btn-sm btn-circle ',
+                            totalPages === page
+                                ? 'btn-neutral bg-white border-white text-black'
+                                : 'btn-outline text-white border-neutral-600'
+                        )}>
+                        {totalPages}
+                    </PageButton>
+                )}
+            </div>
             <PageButton
                 href={getHref(hasNextPage ? page + 1 : page)}
                 type="button"
-                scroll={false}
+                scroll={scroll}
                 onClick={() => {
                     if (!hasNextPage) return;
                     setPage?.((prev) => prev + 1);
                 }}
                 className={cn(
-                    'btn btn-sm rounded-full text-white bg-surface-200 pr-2',
+                    'btn sm:btn-sm rounded-full order-last sm:order-none flex-1 sm:flex-none text-white min-w-max bg-surface-200 pr-2',
                     !hasNextPage && 'btn-disabled'
                 )}>
                 Next <BiChevronRight className="w-5 h-5" />

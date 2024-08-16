@@ -8,7 +8,7 @@ import { ButtonProps } from './button';
 const BUTTON_THEME: { [key: string]: string } = {
     primary: 'bg-accent-purple rounded-full text-white font-body',
     secondary: 'bg-accent-blue rounded-full text-primary-blue font-body',
-    tertiary: 'text-primary-blue font-body',
+    tertiary: 'text-[#B6A6F3] font-semibold hover:bg-graphite-900 rounded',
     neutral: 'bg-neutral-700 rounded-full text-white',
     disabled: 'bg-neutral-400 text-neutral-300 rounded-full font-body',
     custom: 'rounded-full font-body'
@@ -52,7 +52,7 @@ const Button = ({
     };
 
     const computeVariant = (): string => {
-        const styling = 'font-bold cursor-pointer';
+        const styling = 'font-bold cursor-pointer transition';
         return cn(
             styling,
             className,

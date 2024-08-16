@@ -50,7 +50,7 @@ const ContinueReadingSection = (): JSX.Element => {
             <b>Terakhir Dibaca</b>
             <div
                 className={cn(
-                    'w-screen relative gap-4 carousel carousel-center right-4 md:right-8 lg:right-24',
+                    'w-screen relative gap-4 carousel carousel-center right-4 md:right-8 lg:right-12',
                     isSubscribed
                         ? 'md:w-[calc(100vw-250px)] min-[1786px]:-inset-x-[calc((100vw-250px-1536px)/2)]'
                         : 'md:w-screen min-[1786px]:-inset-x-[calc((100vw-1536px)/2)]'
@@ -59,7 +59,7 @@ const ContinueReadingSection = (): JSX.Element => {
                     book.in_progress && book.percentage_progress !== 100 ? (
                         <div
                             className={cn(
-                                'carousel-item first:ml-4 last:mr-4 md:first:ml-8 md:last:mr-8 lg:first:ml-24 lg:last:mr-24',
+                                'carousel-item first:ml-4 last:mr-4 md:first:ml-8 md:last:mr-8 lg:first:ml-12 lg:last:mr-12',
                                 isSubscribed
                                     ? 'min-[1786px]:first:ml-[calc((100vw-250px-1536px)/2)] min-[1786px]:last:mr-[calc((100vw-250px-1536px)/2)]'
                                     : 'min-[1786px]:first:ml-[calc((100vw-1536px)/2)] min-[1786px]:last:mr-[calc((100vw-1536px)/2)]'

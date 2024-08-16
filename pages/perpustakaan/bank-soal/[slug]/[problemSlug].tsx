@@ -108,8 +108,12 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
             const recommendations = payload[2]
                 .data as GetProblemRecommendationsResponse;
 
-            const title = `Pembahasan Soal ${bankSoal.problem.chapter_name} ${bankSoal.problem.title} | ${book.title}`;
-            const description = title;
+            const title =
+                bankSoal.problem.title.length > 70
+                    ? `${bankSoal.problem.title.substring(0, 70)} ...`
+                    : bankSoal.problem.title;
+            const description =
+                'Persiapkan diri kamu untuk menghadapi ujian dengan kumpuan soal-soal UTS, UAS, ujian, dan bank soal dari universitas ternama. Pelajari setiap soal dengan detail!';
 
             return {
                 revalidate: 300,

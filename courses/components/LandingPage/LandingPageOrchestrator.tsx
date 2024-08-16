@@ -107,7 +107,7 @@ const LandingPageOrchestrator = ({
     const isAuthenticated = useSelector(getIsAuthenticated);
     return (
         <>
-            <CourseDetail slug={id} />
+            <CourseDetail ssrCourse={course} slug={id} />
             {(!is_subscribed && isDoneFetchingSubcription) ||
             !isAuthenticated ? (
                 <Pricing

@@ -40,7 +40,7 @@ const DashboardSection = ({
                 className={cn(
                     'flex items-center justify-between w-full',
                     isSubscribed &&
-                        'md:w-[calc(100vw-250px-4rem)] lg:w-[calc(100vw-250px-12rem)]'
+                        'md:w-[calc(100vw-250px-4rem)] lg:w-[calc(100vw-250px-6rem)]'
                 )}>
                 <h2 className="text-lg font-extrabold md:text-xl">{header}</h2>
                 <Button
@@ -60,11 +60,12 @@ const DashboardSection = ({
                     isSubscribed &&
                         'md:w-[calc(100vw-250px)] md:right-8 2xl:w-full 2xl:grid 2xl:grid-cols-4',
                     {
-                        'lg:grid lg:right-auto lg:grid-cols-4 lg:w-[calc(100vw-250px-12rem)]':
+                        'lg:grid lg:right-auto lg:grid-cols-4 lg:w-[calc(100vw-250px-6rem)]':
                             !isCourse && isSubscribed,
                         'md:grid md:right-auto md:w-full md:grid-cols-4':
                             !isCourse && !isSubscribed,
-                        'lg:right-24 2xl:right-auto': isCourse
+                        'lg:right-12 2xl:right-auto': isCourse && isSubscribed,
+                        'lg:right-24 2xl:right-auto': isCourse && !isSubscribed
                     }
                 )}>
                 {isLoading ? (
@@ -94,8 +95,10 @@ const DashboardSection = ({
                                         ' lg:w-full': !isCourse && isSubscribed,
                                         'md:first:ml-0 md:last:mr-0 md:w-full':
                                             !isCourse && !isSubscribed,
+                                        'lg:first:ml-12 lg:last:mr-12 2xl:first:ml-0 2xl:last:mr-0':
+                                            isCourse && isSubscribed,
                                         'lg:first:ml-24 lg:last:mr-24 2xl:first:ml-0 2xl:last:mr-0':
-                                            isCourse
+                                            isCourse && !isSubscribed
                                     }
                                 )}>
                                 {children?.(item, i)}

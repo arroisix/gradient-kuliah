@@ -111,8 +111,12 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
             const recommendations = payload[2]
                 .data as GetProblemRecommendationsResponse;
 
-            const title = `Pembahasan Soal ${textbook.problem.title} | ${book.title}`;
-            const description = title;
+            const section = textbook.problem.section
+                ? textbook.problem.section
+                : textbook.problem.chapter;
+            const title = `Pembahasan Soal & Kunci Jawaban ${section}`;
+            const description =
+                'Temukan pembahasan soal-soal dari buku ajar perkuliahan yang disusun oleh dosen-dosen terbaik. Solusi yang mendalam dan komprehensif dapat meningkatkan kemampuan kamu.';
 
             return {
                 revalidate: 300,

@@ -1,5 +1,4 @@
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
-import { useGetLandingCourseDataQuery } from 'courses/redux/api/publicCourseApi';
 import { MdInfoOutline } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
@@ -18,9 +17,11 @@ const CENTERED_HERO = [
 ];
 
 const LearningProgress = ({
-    slug
-}: GradientBaseComponentWithSlug): JSX.Element => {
-    const { data } = useGetLandingCourseDataQuery(slug);
+    slug,
+    course
+}: Pick<GradientBaseComponentWithSlug, 'slug'> & {
+    course: CourseLandingPageData;
+}): JSX.Element => {
     const { is_subscribed, expiryDay, latest_watch_video } =
         useCourseSubscription(slug);
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -35,21 +36,21 @@ const LearningProgress = ({
                 isLandingPageRevampOn
                     ? 'justify-end sm:justify-center'
                     : 'justify-center',
-                data?.is_coming_soon && !data.cover
+                course?.is_coming_soon && !course.cover
                     ? 'mx-5 lg:w-10/12 lg:mx-auto bg-zinc-900 rounded-xl mt-20'
                     : 'h-[70vh]'
             )}>
             <Breadcrumb
                 className="absolute top-[72px] lg:top-20 z-10 px-4 md:px-8 lg:px-24"
-                nextItem={{ name: data?.course_name } as BreadcrumbItemProps}
+                nextItem={{ name: course?.course_name } as BreadcrumbItemProps}
             />
             <div
                 className={cn(
                     'absolute bottom-0 flex w-screen h-full',
-                    !data?.cover && 'hidden'
+                    !course?.cover && 'hidden'
                 )}>
                 <img
-                    src={data?.cover}
+                    src={course?.cover}
                     className={cn(
                         'object-cover w-screen',
                         CENTERED_HERO.includes(slug)
@@ -60,7 +61,7 @@ const LearningProgress = ({
                 />
                 <div className="absolute self-end w-screen h-40 outline-none border-hidden bg-gradient-to-b from-transparent to-[#101010] lg:h-32" />
             </div>
-            {!data?.cover && (
+            {!course?.cover && (
                 <div className="flex items-center justify-center mt-6 md:justify-end md:absolute md:w-full md:pr-5">
                     <Image
                         src={`${CDN_URL}/assets/dashboard-subscribe.png`}
@@ -73,7 +74,7 @@ const LearningProgress = ({
             )}
             <div
                 className={cn(
-                    data?.is_coming_soon && !data.cover
+                    course?.is_coming_soon && !course.cover
                         ? 'md:px-5 md:max-w-[50vw]'
                         : 'md:px-[7.5rem] lg:max-w-[60vw]',
                     'px-4 py-4 z-10  flex flex-col gap-2'
@@ -82,7 +83,7 @@ const LearningProgress = ({
                     <div
                         className={cn(
                             'rounded-full px-3 py-1 w-max font-body bg-gradient-to-r from-[#F2C04C] via-[#E48E0D] to-[#E4B50D] font-bold text-white text-xs',
-                            !data?.is_coming_soon && 'hidden'
+                            !course?.is_coming_soon && 'hidden'
                         )}>
                         Segera Hadir
                     </div>
@@ -92,10 +93,10 @@ const LearningProgress = ({
                                 ? 'text-xl lg:text-base'
                                 : 'text-4xl'
                         }`}>
-                        Kelas {data?.course_name}
+                        Kelas {course?.course_name}
                     </h1>
                     <div className="w-full h-px bg-gray-500 lg:ml-3 lg:w-9/12" />
-                    {isAuthenticated && !data?.is_coming_soon && (
+                    {isAuthenticated && !course?.is_coming_soon && (
                         <>
                             <div className="text-xs text-gray-500 lg:ml-3">
                                 TERAKHIR DIPELAJARI

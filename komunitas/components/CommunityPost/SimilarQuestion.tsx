@@ -2,6 +2,11 @@ import { cn } from 'commons/utils';
 import Link from 'next/link';
 import React from 'react';
 import { FaRegEye, FaRegComment } from 'react-icons/fa6';
+import ReactMarkdown from 'react-markdown';
+import rehypeKatex from 'rehype-katex';
+import rehypeRaw from 'rehype-raw';
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
 
 type SimilarQuestionProps = {
     question: CommunityPostRecommendation;
@@ -11,6 +16,7 @@ const SimilarQuestion = ({
     question,
     className
 }: SimilarQuestionProps): JSX.Element => {
+    const hasBlockContent = question.preview_content?.includes('$');
     return (
         <Link
             key={question.slug}
@@ -21,9 +27,17 @@ const SimilarQuestion = ({
                 'flex flex-col gap-4 p-3 rounded-lg shadow-lg bg-neutral-800',
                 className
             )}>
-            <p className="overflow-hidden text-xs text-ellipsis">
+            <ReactMarkdown
+                className={cn(
+                    'markdown-table markdown-overflow-break-word markdown-blue-link markdown-img-max-height markdown-body astronotes text-sm font-semibold whitespace-pre-wrap',
+                    hasBlockContent ? 'line-clamp-2' : 'line-clamp-3'
+                )}
+                remarkPlugins={[remarkMath, remarkGfm]}
+                rehypePlugins={[rehypeKatex, rehypeRaw]}
+                linkTarget={'_blank'}>
                 {question.preview_content}
-            </p>
+            </ReactMarkdown>
+            <div className="grow"></div>
             <div className="flex items-center justify-between">
                 <p className="font-bold text-[#B6A6F3] text-xs">
                     {question.category}

@@ -40,7 +40,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
         }
         const books = payload[0].data as ListResponseData<Astronote>;
 
-        const META_TITLE = 'Kumpulan Bank Soal Perkuliahan Terbaru | Gradient ';
+        const META_TITLE = 'Kumpulan Bank Soal Perkuliahan Terbaru';
         const META_DESCRIPTION =
             'Kumpulan latihan soal terlengkap dengan pembahasan mendetail memberikan solusi yang mudah dipahami dan mulailah belajar dengan cara yang menyenangkan dan interaktif.';
 

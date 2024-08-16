@@ -4,7 +4,7 @@ import { cn } from 'commons/utils';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { BiBookReader } from 'react-icons/bi';
+import { BiBookReader, BiSearch } from 'react-icons/bi';
 import { FiHome } from 'react-icons/fi';
 import { RiBookOpenLine, RiQuestionnaireLine } from 'react-icons/ri';
 import { useTracker } from 'tracker/tracker';
@@ -26,11 +26,10 @@ const Sidebar = ({
     return (
         <aside
             className={cn(
-                'hidden md:block top-[64px] bg-[#121212] w-[250px] pl-6 pr-3 py-4',
+                'hidden md:block top-[64px] bg-[#121212] w-[250px] pl-6 pr-3 py-4 z-10',
                 fullHeight ? 'fixed h-full' : 'h-fit sticky',
                 className
-            )}
-            style={{ zIndex: 100 }}>
+            )}>
             <div className="flex flex-col gap-[18px]">
                 {/* <Link href={'/notifikasi'}>
                     <span
@@ -61,6 +60,20 @@ const Sidebar = ({
                         <FiHome size={20} />
                         Home
                     </span>
+                </Link>
+                <Link
+                    href={'/search'}
+                    onClick={() => {
+                        tracker?.genericTrack(`Click Search Navigation`);
+                    }}
+                    className={cn(
+                        'flex gap-4 cursor-pointer font-body text-sm hover:text-graphite-400',
+                        pathname.includes('/search')
+                            ? 'text-white'
+                            : 'text-graphite-600'
+                    )}>
+                    <BiSearch size={20} />
+                    Search
                 </Link>
                 {configData?.configs.is_community_config_enabled && (
                     <Link

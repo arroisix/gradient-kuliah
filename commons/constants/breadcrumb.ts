@@ -111,5 +111,11 @@ export const BREADCRUMB: BreadcrumbProps = {
     },
     '/kontak-kami': {
         name: 'Kontak Kami'
+    },
+    '/search/results': {
+        name: 'Hasil pencarian untuk'
+    },
+    '/search/results/[keywords]': {
+        name: 'Hasil pencarian untuk'
     }
 };

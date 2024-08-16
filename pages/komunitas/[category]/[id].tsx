@@ -102,7 +102,8 @@ const DetailKomunitas = ({
 
 export const getStaticPaths: GetStaticPaths = async () => {
     const { data: response } = await axios.get<ExploreQuestionResponse>(
-        `${config.API_BASE_URL}communities/public/post/list/`
+        `${config.API_BASE_URL}communities/public/post/list/`,
+        { params: { limit: 5 } }
     );
 
     return {

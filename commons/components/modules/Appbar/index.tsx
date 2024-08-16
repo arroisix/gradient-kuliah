@@ -3,7 +3,7 @@ import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { BiBookReader } from 'react-icons/bi';
+import { BiBookReader, BiSearch } from 'react-icons/bi';
 import { FiHome } from 'react-icons/fi';
 import { RiBookOpenLine, RiQuestionnaireLine } from 'react-icons/ri';
 
@@ -25,10 +25,9 @@ const APPBAR_NAV: AppbarNav[] = [
         label: 'Home'
     },
     {
-        icon: <RiQuestionnaireLine size={20} />,
-        href: '/komunitas',
-        alias: ['/komunitas', '/komunitas/public', '/komunitas/pertanyaan-ku'],
-        label: 'Komunitas'
+        icon: <BiSearch size={20} />,
+        href: '/search',
+        label: 'Search'
     },
     {
         icon: <BiBookReader size={20} />,
@@ -39,6 +38,12 @@ const APPBAR_NAV: AppbarNav[] = [
         icon: <RiBookOpenLine size={20} />,
         href: '/perpustakaan',
         label: 'Perpus'
+    },
+    {
+        icon: <RiQuestionnaireLine size={20} />,
+        href: '/komunitas',
+        alias: ['/komunitas', '/komunitas/public', '/komunitas/pertanyaan-ku'],
+        label: 'Diskusi'
     }
 ];
 const Appbar = (): JSX.Element | null => {

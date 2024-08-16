@@ -74,16 +74,22 @@ const LearnLayout = ({
                     )}
                     <div
                         className={cn('w-full', {
-                            'md:ml-[250px]':
-                                showSidebar &&
-                                fullHeightSidebar &&
-                                isSubscribed,
-                            'lg:px-16 xl:px-12': !noPadding
+                            'md:pl-[250px]':
+                                showSidebar && fullHeightSidebar && isSubscribed
                         })}>
                         <div
                             className={cn(
-                                'px-4 md:px-0 w-full',
-                                fullHeightSidebar && 'md:px-8 xl:px-12',
+                                'px-4 md:px-0 w-full font-inter',
+                                {
+                                    'md:px-8 lg:px-12':
+                                        fullHeightSidebar &&
+                                        isSubscribed &&
+                                        !noPadding,
+                                    'md:px-8 lg:px-24':
+                                        fullHeightSidebar &&
+                                        !isSubscribed &&
+                                        !noPadding
+                                },
                                 !isSubscribed && 'pt-5'
                             )}>
                             {children}

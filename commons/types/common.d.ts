@@ -102,7 +102,9 @@ type BreadcrumbPathnames =
     | '/tentang-kami'
     | '/kebijakan-privasi'
     | '/syarat-dan-ketentuan'
-    | '/kontak-kami';
+    | '/kontak-kami'
+    | '/search/results'
+    | '/search/results/[keywords]';
 
 type BreadcrumbProps = {
     [key in BreadcrumbPathnames]: BreadcrumbItemProps;

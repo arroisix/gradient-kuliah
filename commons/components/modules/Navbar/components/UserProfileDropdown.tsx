@@ -1,13 +1,14 @@
 import React from 'react';
 import { useTracker } from 'tracker/tracker';
 import Link from 'next/link';
-import { MdLogout, MdPerson } from 'react-icons/md';
+import { MdHistory, MdLogout, MdPerson } from 'react-icons/md';
 import { cn } from 'commons/utils';
 import { useLogoutMutation } from 'authentication/redux/api/authApi';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { clearCache } from 'authentication/redux/slices/userSlice';
 import { useThemeContext } from 'commons/contexts/ThemeProvider';
+import { FaGift } from 'react-icons/fa';
 
 const UserProfileDropdown = (): JSX.Element => {
     const tracker = useTracker();
@@ -29,6 +30,28 @@ const UserProfileDropdown = (): JSX.Element => {
                     }}>
                     <MdPerson size={16} className="mr-2" />
                     <span>Profil</span>
+                </Link>
+            </li>
+            <li>
+                <Link
+                    href="/transaksi"
+                    className={cn(lightMode ? 'text-black' : 'text-white')}
+                    onClick={() => {
+                        tracker?.genericTrack('Click Transaction History');
+                    }}>
+                    <MdHistory size={16} className="mr-2" />
+                    <span>Riwayat Pembelian</span>
+                </Link>
+            </li>
+            <li>
+                <Link
+                    href="/referral"
+                    className={cn(lightMode ? 'text-black' : 'text-white')}
+                    onClick={() => {
+                        tracker?.genericTrack('Click Referral');
+                    }}>
+                    <FaGift size={16} className="mr-2" />
+                    <span>Referral</span>
                 </Link>
             </li>
             <li>

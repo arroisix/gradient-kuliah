@@ -50,9 +50,9 @@ const Belajar = ({
 export const getStaticPaths: GetStaticPaths = async () => {
     const { data: response } = await axios.get<
         ListResponseData<SubchapterPathResponse>
-    >(
-        `${config.API_BASE_URL}courses/subchapter/list-subchapter-with-video/?limit=10`
-    );
+    >(`${config.API_BASE_URL}courses/subchapter/list-subchapter-with-video/`, {
+        params: { limit: 5 }
+    });
 
     const paths = response.data.map(({ course_slug, subchapter_slug }) => ({
         params: { id: course_slug, slug: subchapter_slug }
@@ -96,8 +96,8 @@ export const getStaticProps = async ({
     const course = courseResponse.data.course_detail;
     const recommendations = recommendationResponse.data;
 
-    const META_TITLE = `${course.course_name}: ${subchapter.subchapter_name}`;
-    const META_DESCRIPTION = `Nonton Video ${subchapter.subchapter_name} kelas ${course.course_name} hanya di Gradient`;
+    const META_TITLE = `Materi ${course.course_name}: ${subchapter.subchapter_name}`;
+    const META_DESCRIPTION = `Video pembelajaran ${subchapter.subchapter_name}. Tingkatkan pemahaman kamu dengan materi berkualitas tinggi dari para ahli.`;
 
     return {
         props: {
