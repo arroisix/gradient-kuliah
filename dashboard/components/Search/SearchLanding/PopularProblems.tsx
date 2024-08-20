@@ -9,6 +9,7 @@ import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import Skeleton from 'commons/components/elements/Skeleton';
+import { useTracker } from 'tracker/tracker';
 
 type PopularProblemsProps = {
     isLoading?: boolean;
@@ -21,6 +22,21 @@ const PopularProblems = ({
     title,
     problems
 }: PopularProblemsProps): JSX.Element => {
+    const tracker = useTracker();
+
+    const track = (problem: PopularBook): void => {
+        if (problem.category === 'Textbook')
+            tracker?.genericTrack(
+                'Click Most Popular Textbook on Search Landing Page',
+                { 'Textbook Details Slug': problem.book_slug }
+            );
+        else
+            tracker?.genericTrack(
+                'Click Most Popular Bank Soal on Search Landing Page',
+                { 'Bank Soal Details Slug': problem.book_slug }
+            );
+    };
+
     if (isLoading)
         return (
             <PopularProducts title={title}>
@@ -37,6 +53,7 @@ const PopularProblems = ({
         <PopularProducts title={title}>
             {problems?.map((problem) => (
                 <Link
+                    onClick={() => track(problem)}
                     key={problem.problem_slug}
                     href={`${getBookBaseHref(problem.category)}/${
                         problem.book_slug

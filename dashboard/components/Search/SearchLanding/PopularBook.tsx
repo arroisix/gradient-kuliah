@@ -31,7 +31,6 @@ const PopularBook = ({ isLoading, books }: PopularBookProps): JSX.Element => {
                     orientation="vertical"
                     href={`${getBookBaseHref(book.category)}/${book.book_slug}`}
                     category={book.category ?? ''}
-                    eventName="Test"
                     product={{
                         title: book.book_title,
                         thumbnail: book.book_cover_url,
@@ -40,6 +39,10 @@ const PopularBook = ({ isLoading, books }: PopularBookProps): JSX.Element => {
                     }}
                     className="carousel-item w-60"
                     imageClassname="min-w-16"
+                    eventName="Click Most Popular Astronotes on Search Landing Page"
+                    eventPayload={{
+                        'Astronotes Slug': book.book_slug
+                    }}
                 />
             ))}
         </PopularProducts>

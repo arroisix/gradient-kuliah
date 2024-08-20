@@ -37,7 +37,10 @@ const PopularVideos = ({
                         latestProgress: 0
                     }}
                     className="carousel-item w-80"
-                    eventName="Click Popular Video Card"
+                    eventName="Click Most Popular Video on Search Landing Page"
+                    eventPayload={{
+                        'Video Slug': video.subchapter_slug
+                    }}
                 />
             ))}
         </PopularProducts>

@@ -34,6 +34,10 @@ const PopularDiscussions = ({
                         preview_content: discussion.content
                     }}
                     className="carousel-item w-80"
+                    eventName="Click Most Popular Community Post on Search Landing Page"
+                    eventPayload={{
+                        'Community Post Slug': discussion.slug
+                    }}
                 />
             ))}
         </PopularProducts>

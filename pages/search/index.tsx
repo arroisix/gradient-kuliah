@@ -48,11 +48,9 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
         const popularBankSoal = payload[4].data;
         const popularDiscussions = payload[5].data;
 
-        // TODO: decide SEO title
-        const META_TITLE =
-            'Perpustakaan Online Pusat Ruang Baca Digital Terkini | Gradient';
+        const META_TITLE = 'Cari Topik, Materi, Pembahasan Soal di Gradient';
         const META_DESCRIPTION =
-            'Nikmati perpustakaan digital dengan akses tanpa batas ke buku, catatan, bank soal, dan solusi terbaik. Temukan semua yang Kamu butuhkan untuk belajar lebih baik.';
+            'Temukan semua yang Kamu butuhkan untuk belajar lebih baik.';
 
         return {
             revalidate: 60 * 60 * 24, // revalidate every 24 hours

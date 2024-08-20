@@ -3,6 +3,7 @@ import { TabStyle } from 'courses/components/LearningExperience/AstroNotes/const
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { useTracker } from 'tracker/tracker';
 
 const TAB_OPTIONS = [
     { value: 'all', label: 'Semua' },
@@ -14,8 +15,9 @@ const TAB_OPTIONS = [
 ];
 
 const ResultsTabs = (): JSX.Element => {
+    const tracker = useTracker();
     const router = useRouter();
-    const { type: currentTab } = router.query as { type: string };
+    const { type: currentTab, q } = router.query as { type: string; q: string };
 
     const tabStyle = (tab: string): string =>
         cn(
@@ -25,6 +27,13 @@ const ResultsTabs = (): JSX.Element => {
                 : TabStyle.default
         );
 
+    const track = (tab: string): void => {
+        tracker?.genericTrack('Click Search Tab', {
+            Keyword: q,
+            Tab: tab
+        });
+    };
+
     return (
         <div className="sticky z-10 flex items-end w-full pt-5 pb-2 overflow-x-auto bg-black md:pt-6 top-10 no-scrollbar">
             {TAB_OPTIONS.map((type) => (
@@ -32,6 +41,7 @@ const ResultsTabs = (): JSX.Element => {
                     key={type.value}
                     className={tabStyle(type.value)}
                     scroll={false}
+                    onClick={() => track(type.label)}
                     href={{
                         query: { ...router.query, page: 1, type: type.value }
                     }}>

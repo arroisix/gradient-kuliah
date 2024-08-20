@@ -3,8 +3,8 @@ import LearnLayout from 'commons/learnLayout';
 import AstronotesDetail from 'courses/containers/learn/astronotes/detail';
 import { wrapper } from 'redux/store';
 import { ThunkDispatch } from 'redux-thunk';
-import axios from 'axios';
-import config from 'redux/api/config';
+// import axios from 'axios';
+// import config from 'redux/api/config';
 import { getBookDetail } from 'courses/redux/api/astronotesApi';
 import { getRunningQueriesThunk } from 'redux/api/baseApi';
 import { getBookRecommendations } from 'courses/redux/api/learningExperienceApi';
@@ -33,15 +33,15 @@ BankSoalDetailPage.displayName = 'Question Bank Detail';
 export default BankSoalDetailPage;
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const { data: response } = await axios.get<ListResponseData<string>>(
-        `${config.API_BASE_URL}books/list-slug/`,
-        { params: { category: 'Bank Soal' } }
-    );
+    // const { data: response } = await axios.get<ListResponseData<string>>(
+    //     `${config.API_BASE_URL}books/list-slug/`,
+    //     { params: { category: 'Bank Soal' } }
+    // );
 
-    const paths = response.data.flatMap((slug) => ({ params: { slug } }));
+    // const paths = response.data.flatMap((slug) => ({ params: { slug } }));
 
     return {
-        paths,
+        paths: [],
         fallback: true
     };
 };
