@@ -3,12 +3,14 @@ import { useGetAutocompleteQuery } from 'commons/redux/api/searchApi';
 import { useField } from 'formik';
 import Link from 'next/link';
 import React from 'react';
+import { useTracker } from 'tracker/tracker';
 
 const AutocompleteSuggestion = ({
     onClick
 }: {
     onClick: () => void;
 }): JSX.Element => {
+    const tracker = useTracker();
     const [{ value }] = useField<string>('q');
     const debouncedSearchQuery = useDebounce(value, 500);
     const { data } = useGetAutocompleteQuery(
@@ -17,6 +19,13 @@ const AutocompleteSuggestion = ({
     );
 
     if (!data || !data.result.found) return <></>;
+
+    const track = (keyword: string): void => {
+        tracker?.genericTrack('Click Keyword Recommendation', {
+            'Keyword Recommendation': keyword
+        });
+        onClick();
+    };
 
     return (
         <ul
@@ -30,7 +39,7 @@ const AutocompleteSuggestion = ({
                             pathname: '/search/results',
                             query: { q: suggestion.q }
                         }}
-                        onClick={onClick}>
+                        onClick={() => track(suggestion.q)}>
                         {suggestion.q}
                     </Link>
                 </li>

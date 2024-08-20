@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { Dispatch, SetStateAction } from 'react';
 import { BiChevronLeft, BiChevronRight } from 'react-icons/bi';
+import { useTracker } from 'tracker/tracker';
 import { UrlObject } from 'url';
 
 type PaginatorProps = {
@@ -15,6 +16,8 @@ type PaginatorProps = {
     hasNextPage: boolean;
     hasPreviousPage: boolean;
     scroll?: boolean;
+    eventName?: string;
+    eventPayload?: { [key: string]: unknown };
 } & PropsWithClassName;
 
 const Paginator = ({
@@ -24,8 +27,11 @@ const Paginator = ({
     setPage,
     totalPages,
     scroll = false,
-    className
+    className,
+    eventName = 'Click Pagination',
+    eventPayload
 }: PaginatorProps): JSX.Element => {
+    const tracker = useTracker();
     const router = useRouter();
     const { page: pageParam } = router.query as { page: string };
     const page = parseInt(pageParam ?? 1);
@@ -33,6 +39,13 @@ const Paginator = ({
     const PageButton = pageState !== undefined ? 'button' : Link;
     const getHref = (newPage: number): string | UrlObject =>
         pageState ? '?' : { query: { ...router.query, page: newPage } };
+
+    const trackPageChange = (to: number, eventName_?: string): void => {
+        tracker?.genericTrack(eventName_ ?? eventName, {
+            'Target Page': to,
+            ...eventPayload
+        });
+    };
 
     /**
      * Determines how many page buttons to render. The first page's button is rendered separately.
@@ -76,6 +89,7 @@ const Paginator = ({
                 disabled={!hasPreviousPage}
                 onClick={() => {
                     if (!hasPreviousPage) return;
+                    trackPageChange(page - 1, 'Click Next Pagination');
                     setPage?.((prev) => prev - 1);
                 }}
                 className={cn(
@@ -89,7 +103,10 @@ const Paginator = ({
                     href={getHref(1)}
                     type="button"
                     scroll={scroll}
-                    onClick={() => setPage?.(1)}
+                    onClick={() => {
+                        trackPageChange(1);
+                        setPage?.(1);
+                    }}
                     className={cn(
                         'btn btn-sm min-[425px]:btn-md sm:btn-sm btn-circle ',
                         page === 1
@@ -103,7 +120,10 @@ const Paginator = ({
                     <PageButton
                         href={getHref(pageNav)}
                         key={`pagenav-${pageNav}`}
-                        onClick={() => setPage?.(pageNav)}
+                        onClick={() => {
+                            trackPageChange(pageNav);
+                            setPage?.(pageNav);
+                        }}
                         scroll={scroll}
                         type="button"
                         className={cn(
@@ -121,7 +141,10 @@ const Paginator = ({
                         href={getHref(totalPages)}
                         type="button"
                         scroll={scroll}
-                        onClick={() => setPage?.(totalPages)}
+                        onClick={() => {
+                            trackPageChange(totalPages);
+                            setPage?.(totalPages);
+                        }}
                         className={cn(
                             'btn btn-sm min-[425px]:btn-md sm:btn-sm btn-circle ',
                             totalPages === page
@@ -138,6 +161,7 @@ const Paginator = ({
                 scroll={scroll}
                 onClick={() => {
                     if (!hasNextPage) return;
+                    trackPageChange(page + 1, 'Click Previous Pagination');
                     setPage?.((prev) => prev + 1);
                 }}
                 className={cn(

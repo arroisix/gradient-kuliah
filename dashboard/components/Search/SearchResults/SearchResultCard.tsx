@@ -12,6 +12,8 @@ import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import SearchResultThumbnail from './SearchResultThumbnail';
 import Link from 'next/link';
+import { useTracker } from 'tracker/tracker';
+import { useRouter } from 'next/router';
 
 const SearchResultCard = (props: SearchResultCardProps): JSX.Element => {
     const {
@@ -25,8 +27,22 @@ const SearchResultCard = (props: SearchResultCardProps): JSX.Element => {
         commentCount,
         isAnswered
     } = props;
+    const router = useRouter();
+    const { q, type: currentTab } = router.query as { q: string; type: string };
+    const tracker = useTracker();
+
+    const track = (): void => {
+        tracker?.genericTrack('Click Search Result', {
+            Keyword: q,
+            Tab: currentTab,
+            'Product Type': type,
+            'Product Slug': href
+        });
+    };
+
     return (
         <Link
+            onClick={track}
             href={href}
             className="w-full flex flex-col md:flex-row md:min-h-32 border rounded-lg bg-[#222] border-graphite-600/50">
             <div className="w-full aspect-[2/1] md:aspect-[4/3] md:max-w-32 lg:min-w-48 relative">

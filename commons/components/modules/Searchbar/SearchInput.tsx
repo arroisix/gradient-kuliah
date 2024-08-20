@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { useLocalStorage } from 'usehooks-ts';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { useSelector } from 'react-redux';
+import { useTracker } from 'tracker/tracker';
 
 const SearchInput = ({
     onSubmit,
@@ -17,6 +18,7 @@ const SearchInput = ({
     isAutoFocus?: boolean;
 } & PropsWithClassName): JSX.Element => {
     const router = useRouter();
+    const tracker = useTracker();
     const ref = useRef<HTMLButtonElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -29,6 +31,10 @@ const SearchInput = ({
         if (isAutoFocus) inputRef.current?.focus();
     }, [isAutoFocus]);
 
+    const track = (): void => {
+        tracker?.genericTrack('Attempt to Use Advance Search');
+    };
+
     return (
         <Formik
             initialValues={{ q: '' }}
@@ -39,6 +45,9 @@ const SearchInput = ({
                 }
                 if (isAuthenticated)
                     setSearchHistory([q, ...history.slice(0, 9)]);
+                tracker?.genericTrack('User Search with Keyword', {
+                    keyword: q
+                });
                 router.push({ pathname: '/search/results', query: { q } });
                 onSubmit?.();
                 ref.current?.focus();
@@ -52,6 +61,7 @@ const SearchInput = ({
                                 <input
                                     {...field}
                                     ref={inputRef}
+                                    onFocus={track}
                                     className="w-full px-0 border-none focus:ring-0 grow placeholder:text-graphite-400 placeholder:text-sm input-sm"
                                     placeholder="Cari topik, materi, atau soal apapun"
                                 />

@@ -12,19 +12,6 @@ import React, {
     useState
 } from 'react';
 
-const LANDING_PAGE_JUN_2023 = [
-    '/',
-    '/komunitas',
-    '/komunitas/[id]',
-    '/dashboard'
-];
-const LANDING_PAGE_REVAMP_NOV_2023 = [
-    '/landing-revamp',
-    '/komunitas/public',
-    '/komunitas/[id]',
-    '/dashboard'
-];
-
 export interface Tracker {
     trackPageView(pageName: string, query?: Record<string, unknown>): void;
     identify(info: {
@@ -54,7 +41,6 @@ const useTrackPageView = (
     const [firstPageVisit, setFirstPageVisit] = useState(false);
     const router = useRouter();
     const growthbook = useGrowthBook<GrowthbookFeatures>();
-    const isLandingPageRevampOn = growthbook?.isOn('landing-page-revamp');
 
     const eventPayloadBuilder = useMemo(
         () => (): Record<string, unknown> => {
@@ -62,22 +48,17 @@ const useTrackPageView = (
                 'Page Query': router.query
             };
 
-            const isNov2023Revamp =
-                LANDING_PAGE_REVAMP_NOV_2023.includes(router.pathname) &&
-                isLandingPageRevampOn;
-            const isJun2023Revamp =
-                LANDING_PAGE_JUN_2023.includes(router.pathname) &&
-                !isLandingPageRevampOn;
-
-            if (isNov2023Revamp) {
-                eventPayload['Variant'] = 'NOV 2023';
-            } else if (isJun2023Revamp) {
-                eventPayload['Variant'] = 'JUN 2023';
+            if (router.pathname.startsWith('/search')) {
+                const { keywords, q } = router.query as {
+                    keywords: string;
+                    q: string;
+                };
+                if (!!keywords || !!q) eventPayload.keyword = q ?? keywords;
             }
 
             return eventPayload;
         },
-        [router.query, router.pathname, isLandingPageRevampOn]
+        [router.query, router.pathname]
     );
 
     useLayoutEffect(() => {

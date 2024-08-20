@@ -107,6 +107,9 @@ const SearchResults = ({
                     'justify-center'
                 )}
                 scroll
+                eventPayload={{
+                    Keyword: keywords ?? q
+                }}
             />
         </div>
     );

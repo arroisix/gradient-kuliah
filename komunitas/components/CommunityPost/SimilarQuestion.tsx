@@ -7,19 +7,31 @@ import rehypeKatex from 'rehype-katex';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
+import { useTracker } from 'tracker/tracker';
 
 type SimilarQuestionProps = {
     question: CommunityPostRecommendation;
+    eventName?: string;
+    eventPayload?: { [key: string]: unknown };
 } & PropsWithClassName;
 
 const SimilarQuestion = ({
     question,
+    eventName = 'Click on Related Question',
+    eventPayload,
     className
 }: SimilarQuestionProps): JSX.Element => {
+    const tracker = useTracker();
     const hasBlockContent = question.preview_content?.includes('$');
+
+    const track = (): void => {
+        tracker?.genericTrack(eventName, eventPayload);
+    };
+
     return (
         <Link
             key={question.slug}
+            onClick={track}
             href={`/komunitas/${question.category_slug}/${encodeURIComponent(
                 question.slug
             )}`}
