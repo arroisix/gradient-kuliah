@@ -1,7 +1,7 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
-import { useGetPublicSubchapterDetailQuery } from 'courses/redux/api/courseApi';
-import { useGetSubchapterDetailQuery } from 'courses/redux/api/privateCourseApi';
+import { useGetPublicSubchapterDetailV2Query } from 'courses/redux/api/publicCourseV2Api';
+import { useGetSubchapterDetailV2Query } from 'courses/redux/api/privateCourseV2Api';
 import { useRouter } from 'next/router';
 import { createContext, ReactNode, useContext, useMemo } from 'react';
 import { useSelector } from 'react-redux';
@@ -26,7 +26,7 @@ export function LearningProvider({
 }): JSX.Element {
     const router = useRouter();
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { id, sub } = router.query;
+    const { id, slug } = router.query as { id: string; slug: string };
 
     const {
         is_subscribed,
@@ -34,13 +34,13 @@ export function LearningProvider({
         latest_watch_video,
         watch_progress
     } = useCourseSubscription(id as string);
-    const privateSubchapterDetails = useGetSubchapterDetailQuery(
-        sub as string,
-        { skip: !sub || !isAuthenticated }
+    const privateSubchapterDetails = useGetSubchapterDetailV2Query(
+        { course_slug: id, subchapter_slug: slug },
+        { skip: !id || !slug || !isAuthenticated }
     );
-    const publicSubchapterDetails = useGetPublicSubchapterDetailQuery(
-        sub as string,
-        { skip: !sub || isAuthenticated }
+    const publicSubchapterDetails = useGetPublicSubchapterDetailV2Query(
+        { course_slug: id, subchapter_slug: slug },
+        { skip: !id || !slug }
     );
     const { data } = isAuthenticated
         ? privateSubchapterDetails
