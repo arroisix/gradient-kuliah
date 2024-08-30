@@ -99,7 +99,7 @@ const ResultsCardFactory = ({
                         getHighlight('subchapter_name') ?? doc.subchapter_name
                     }
                     type={type}
-                    desc={getHighlight('content') ?? ''}
+                    desc={getHighlight('page_content') ?? ''}
                     course={doc.course_name}
                     chapter={getHighlight('chapter_name') ?? doc.chapter_name}
                     thumbnail={doc.thumbnail}
