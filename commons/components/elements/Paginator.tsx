@@ -98,7 +98,13 @@ const Paginator = ({
                 )}>
                 <BiChevronLeft className="w-5 h-5" /> Prev
             </PageButton>
-            <div className="flex items-center justify-between w-full sm:gap-3 sm:justify-center sm:w-max sm:flex-none">
+            <div
+                className={cn(
+                    'flex items-center w-full sm:gap-3 sm:justify-center sm:w-max sm:flex-none',
+                    pageButtons.length < 5
+                        ? 'justify-center gap-4'
+                        : 'justify-around'
+                )}>
                 <PageButton
                     href={getHref(1)}
                     type="button"

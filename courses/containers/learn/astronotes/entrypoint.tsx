@@ -52,14 +52,14 @@ const AstronotesEntrypoint = ({
                     {title}
                 </h1>
                 <EntrypointTabs />
-                <div className="flex items-center justify-between sticky z-10 py-2 bg-black top-28">
+                <div className="sticky z-10 flex items-center justify-between py-2 bg-black top-28">
                     <div className="relative flex-grow mr-4">
                         <input
                             type="text"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             placeholder="Cari buku"
-                            className="w-full px-4 py-2 bg-[#212121] rounded-3xl text-white"
+                            className="w-full px-4 py-2 text-white border bg-graphite-800 placeholder:text-graphite-600 border-graphite-600/50 rounded-3xl"
                         />
                         <IoIosSearch
                             size={20}
