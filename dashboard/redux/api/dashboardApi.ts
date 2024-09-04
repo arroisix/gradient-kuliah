@@ -18,9 +18,13 @@ export const dashboardApi = baseApi.injectEndpoints({
                 url: `${STUDENT_BASE_URL}course/`
             })
         }),
-        getDashboardContent: builder.query<GetDashboardContentResponse, void>({
-            query: () => ({
-                url: `${LEARNING_BASE_URL}dashboard/`
+        getDashboardContent: builder.query<
+            GetDashboardContentResponse,
+            { type?: string }
+        >({
+            query: ({ type }) => ({
+                url: `${LEARNING_BASE_URL}dashboard/`,
+                params: { type: type }
             }),
             providesTags: [{ type: 'PROFILE', id: 'DASHBOARD' }]
         }),
