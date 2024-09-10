@@ -1,0 +1,80 @@
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import Sort from 'commons/components/elements/Sort';
+import Filter from 'commons/components/elements/Filter';
+import LatihanContent from '../../../components/Latihan/Entrypoint/EntrypointContent';
+import LatihanTabs from '../../../components/Latihan/Entrypoint/EntrypointTabs';
+import {
+    FILTER_OPTIONS,
+    LATIHAN_SORT_OPTIONS
+} from '../../../components/Latihan/constants';
+import { useGetExerciseLandingPageQuery } from '../../../redux/api/exercisesApi';
+import Breadcrumb from 'commons/components/modules/Breadcrumb';
+import MyExercisesSection from '../../../components/Latihan/Entrypoint/MyExercisesSection';
+
+const LatihanEntrypoint = (): JSX.Element => {
+    const router = useRouter();
+    const {
+        status = 'all',
+        subject = 'all',
+        sort = 'latest',
+        page: pageQuery = '1'
+    } = router.query;
+    const [page, setPage] = useState(Number(pageQuery));
+
+    useEffect(() => {
+        setPage(Number(pageQuery));
+    }, [pageQuery]);
+
+    const { data, isLoading, isFetching } = useGetExerciseLandingPageQuery({
+        page,
+        limit: 6,
+        status: status as string,
+        subject: subject as string,
+        sort: sort as string
+    });
+
+    const handlePageChange = (newPage: number) => {
+        router.push({ query: { ...router.query, page: newPage } }, undefined, {
+            shallow: true
+        });
+    };
+
+    return (
+        <>
+            <Breadcrumb className="w-full pb-5" />
+
+            {data?.my_exercises && (
+                <MyExercisesSection myExercises={data.my_exercises} />
+            )}
+
+            <h1 className="text-xl font-bold md:text-2xl text-balance">
+                Latihan
+            </h1>
+
+            <LatihanTabs />
+
+            <div className="flex gap-4 items-center my-4">
+                <Filter
+                    options={FILTER_OPTIONS}
+                    defaultSelected={subject as string}
+                />
+                <Sort
+                    options={LATIHAN_SORT_OPTIONS}
+                    defaultSelected={sort as string}
+                />
+            </div>
+
+            <LatihanContent
+                isLoading={isLoading || isFetching}
+                exercises={data?.exercises || []}
+                myExercises={data?.my_exercises || []}
+                totalPages={data?.total_pages || 1}
+                currentPage={page}
+                onPageChange={handlePageChange}
+            />
+        </>
+    );
+};
+
+export default LatihanEntrypoint;
