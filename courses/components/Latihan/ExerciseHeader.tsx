@@ -17,8 +17,7 @@ const ExerciseHeader: React.FC<ExerciseHeaderProps> = ({
     prevLink,
     nextLink
 }) => {
-    const router = useRouter();
-
+    useRouter();
     return (
         <div
             className={`p-4 flex flex-row w-full max-w-full items-center ${

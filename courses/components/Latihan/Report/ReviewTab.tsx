@@ -67,12 +67,7 @@ const mockData = {
 };
 
 const ReviewTab = () => {
-    const [filter, setFilter] = useState('all');
-
-    const handleFilterChange = (selectedValue: string) => {
-        setFilter(selectedValue);
-    };
-
+    const [filter] = useState('all');
     const filteredProblems = mockData.problems.filter((problem) => {
         if (filter === 'correct') return problem.user_progress.is_correct;
         if (filter === 'incorrect') return !problem.user_progress.is_correct;

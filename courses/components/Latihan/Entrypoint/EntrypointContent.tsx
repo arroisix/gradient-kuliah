@@ -16,7 +16,6 @@ interface LatihanContentProps {
 const LatihanContent: React.FC<LatihanContentProps> = ({
     isLoading,
     exercises,
-    myExercises,
     totalPages,
     currentPage,
     onPageChange

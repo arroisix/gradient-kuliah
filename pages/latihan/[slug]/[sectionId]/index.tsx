@@ -55,7 +55,7 @@ const SectionPage = () => {
                         {currentSection.name}
                     </h2>
                     <p className="text-gray-400">
-                        Dengan menekan 'Mulai Latihan' kamu akan langsung
+                        Dengan menekan Mulai Latihan kamu akan langsung
                         diarahkan ke soal pertama
                     </p>
                 </div>
