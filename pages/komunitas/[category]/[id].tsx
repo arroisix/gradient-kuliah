@@ -107,10 +107,15 @@ export const getStaticPaths: GetStaticPaths = async () => {
     );
 
     return {
-        paths: response.questions.map(({ category_slug, slug }) => ({
-            params: { category: category_slug, id: slug }
-        })),
-        fallback: true // can also be true or 'blocking'
+        paths: response.questions
+            .filter((question) => question.category_slug && question.slug)
+            .map(({ category_slug, slug }) => ({
+                params: {
+                    category: category_slug.toString(),
+                    id: slug.toString()
+                }
+            })),
+        fallback: true
     };
 };
 
