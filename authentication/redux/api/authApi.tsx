@@ -26,6 +26,12 @@ export const authApi = baseApi.injectEndpoints({
                 body: data
             })
         }),
+        emailActivation: builder.mutation<EmailActivationResponseData, string>({
+            query: (token: string) => ({
+                url: `${AUTH_BASE_URL}verify-email-activation/${token}/`,
+                method: 'POST'
+            })
+        }),
         logout: builder.mutation<void, void>({
             query: () => ({
                 url: `${AUTH_BASE_URL}logout/`,
@@ -140,6 +146,7 @@ export const authApi = baseApi.injectEndpoints({
 export const {
     useLoginMutation,
     useSocialLoginMutation,
+    useEmailActivationMutation,
     useRegisterMutation,
     useUpdateUserMutation,
     useGetRegisterReferenceQuery,
