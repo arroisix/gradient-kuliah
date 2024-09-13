@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 import Skeleton from 'commons/components/elements/Skeleton';
 import { useGetExerciseDetailQuery } from '../../../courses/redux/api/exercisesApi';
 import LatihanLayout from '../../../courses/components/Latihan/LatihanLayout';
@@ -7,13 +6,7 @@ import LatihanStart from '../../../courses/components/Latihan/LatihanStart';
 
 const ExerciseStartPage = () => {
     const router = useRouter();
-    const [slug, setSlug] = useState<string | null>(null);
-
-    useEffect(() => {
-        if (router.isReady) {
-            setSlug(router.query.slug as string);
-        }
-    }, [router.isReady, router.query.slug]);
+    const { slug } = router.query;
 
     const { data: exercise, isLoading } = useGetExerciseDetailQuery(
         { exercise_slug: slug as string },
@@ -22,7 +15,7 @@ const ExerciseStartPage = () => {
         }
     );
 
-    if (!router.isReady || isLoading) {
+    if (isLoading) {
         return (
             <LatihanLayout>
                 <Skeleton className="w-full h-full" />
@@ -31,9 +24,7 @@ const ExerciseStartPage = () => {
     }
 
     if (!exercise) {
-        if (typeof window !== 'undefined') {
-            router.push('/latihan');
-        }
+        router.back();
         return null;
     }
 
