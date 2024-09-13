@@ -4,7 +4,8 @@ import {
     ExerciseHistory,
     ExerciseLandingPage,
     ExerciseProblem,
-    ExerciseProblemProgress, ExerciseProblemProgressList,
+    ExerciseProblemProgress,
+    ExerciseProblemProgressList,
     ExerciseProgress,
     ExerciseReportSummary
 } from '../../types/exercises';
@@ -159,8 +160,8 @@ export const exerciseApi = baseApi.injectEndpoints({
             ]
         }),
 
-        getExerciseProblemProgressList: builder.query<
-            ExerciseProblemProgressList,
+        getOrCreateExerciseProblemProgress: builder.query<
+            ExerciseProblemProgress,
             {
                 exercise_slug: string;
                 exercise_progress_id: string;
@@ -168,12 +169,13 @@ export const exerciseApi = baseApi.injectEndpoints({
             }
         >({
             query: ({ exercise_slug, exercise_progress_id, problem_id }) => ({
-                url: `${EXERCISE_BASE_URL}private/exercises/${exercise_slug}/progress/${exercise_progress_id}/problems/${problem_id}/progress/`
+                url: `${EXERCISE_BASE_URL}private/exercises/${exercise_slug}/progress/${exercise_progress_id}/problems/${problem_id}/progress/`,
+                method: 'GET'
             }),
             providesTags: (result, error, arg) => [
                 {
                     type: 'ASTRONOTES',
-                    id: `EXERCISE_PROBLEM_PROGRESS_LIST_${arg.exercise_progress_id}`
+                    id: `EXERCISE_PROBLEM_PROGRESS_${arg.exercise_progress_id}_${arg.problem_id}`
                 }
             ]
         }),
@@ -238,7 +240,7 @@ export const {
     useGetExerciseProblemQuery,
     useGetExerciseProgressQuery,
     useGetLatestExerciseProblemProgressQuery,
-    useGetExerciseProblemProgressListQuery,
+    useGetOrCreateExerciseProblemProgressQuery,
     useCreateExerciseProgressMutation,
     useUpdateExerciseProgressMutation,
     useCreateExerciseProblemProgressMutation,
@@ -255,5 +257,6 @@ export const {
     getExerciseReportSummary,
     getExerciseProblemReport,
     getLatestExerciseProblemProgress,
+    getOrCreateExerciseProblemProgress,
     getExerciseLandingPage
 } = exerciseApi.endpoints;

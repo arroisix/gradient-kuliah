@@ -1,8 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
-    useCreateExerciseProblemProgressMutation,
-    useGetExerciseProblemProgressListQuery,
+    useGetOrCreateExerciseProblemProgressQuery,
     useGetExerciseProblemQuery,
     useGetExerciseProgressQuery,
     useUpdateExerciseProblemProgressMutation,
@@ -27,13 +26,7 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
     const [openEndedAnswer, setOpenEndedAnswer] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const [localProblemProgress, setLocalProblemProgress] = useState<any>(null);
     const [showExplanation, setShowExplanation] = useState(false);
-    const [isInitializing, setIsInitializing] = useState(true);
-    const [initializationError, setInitializationError] = useState<
-        string | null
-    >(null);
-    const hasAttemptedInitialization = useRef(false);
 
     const { data: problem, isLoading: isProblemLoading } =
         useGetExerciseProblemQuery(
@@ -44,140 +37,47 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
     const { data: exerciseProgress, isLoading: isProgressLoading } =
         useGetExerciseProgressQuery({ exercise_slug: slug }, { skip: !slug });
 
-    const {
-        data: problemProgressList,
-        isLoading: isProblemProgressListLoading
-    } = useGetExerciseProblemProgressListQuery(
-        {
-            exercise_slug: slug,
-            exercise_progress_id: exerciseProgress?.id ?? '',
-            problem_id: problemId
-        },
-        {
-            skip: !exerciseProgress?.id,
-            refetchOnMountOrArgChange: true
-        }
-    );
+    const { data: problemProgress, isLoading: isProblemProgressLoading } =
+        useGetOrCreateExerciseProblemProgressQuery(
+            {
+                exercise_slug: slug,
+                exercise_progress_id: exerciseProgress?.id ?? '',
+                problem_id: problemId
+            },
+            {
+                skip: !exerciseProgress?.id,
+                refetchOnMountOrArgChange: true
+            }
+        );
 
-    const [createProblemProgress] = useCreateExerciseProblemProgressMutation();
     const [updateProblemProgress] = useUpdateExerciseProblemProgressMutation();
     const [updateExerciseProgress] = useUpdateExerciseProgressMutation();
 
     useEffect(() => {
-        setIsSubmitted(false);
         setSelectedAnswers([]);
         setOpenEndedAnswer('');
-        hasAttemptedInitialization.current = false;
-        setIsInitializing(true);
-        setInitializationError(null);
+        setShowExplanation(false);
+        setIsSubmitted(false);
     }, [problemId]);
 
     useEffect(() => {
-        console.log('Exercise Progress:', exerciseProgress);
-        console.log('Problem:', problem);
-        console.log('Problem Progress List:', problemProgressList);
-        console.log(
-            'Is Problem Progress List Loading:',
-            isProblemProgressListLoading
-        );
-        const initializeProblemProgress = async () => {
+        if (problemProgress) {
+            setIsSubmitted(problemProgress.status === 'COMPLETED');
             if (
-                hasAttemptedInitialization.current ||
-                !exerciseProgress ||
-                !problem ||
-                isProblemProgressListLoading
+                problem?.question.type === 'MULTIPLE_CHOICE' &&
+                problemProgress.submitted_answer_id
             ) {
-                return;
-            }
-
-            hasAttemptedInitialization.current = true;
-
-            const existingProgress =
-                problemProgressList?.problem_progresses.find(
-                    (progress) => progress.problem_id === problem.id
+                setSelectedAnswers(
+                    problemProgress.submitted_answer_id.split(',')
                 );
-            console.log('Problem Progress,', existingProgress);
-            if (existingProgress) {
-                setLocalProblemProgress(existingProgress);
-                if (existingProgress.status === 'COMPLETED') {
-                    setIsSubmitted(true);
-                }
-                if (
-                    problem.question.type === 'MULTIPLE_CHOICE' &&
-                    existingProgress.submitted_answer_id
-                ) {
-                    setSelectedAnswers(
-                        existingProgress.submitted_answer_id.split(',')
-                    );
-                } else if (
-                    problem.question.type !== 'MULTIPLE_CHOICE' &&
-                    existingProgress.submitted_answer_text
-                ) {
-                    setOpenEndedAnswer(existingProgress.submitted_answer_text);
-                }
-            } else {
-                try {
-                    const result = await createProblemProgress({
-                        exercise_slug: slug,
-                        exercise_progress_id: exerciseProgress.id,
-                        problem_id: problem.id
-                    }).unwrap();
-                    setLocalProblemProgress(result);
-                } catch (error) {
-                    console.error('Failed to create problem progress:', error);
-                    setInitializationError(
-                        'Failed to initialize problem. Please try refreshing the page.'
-                    );
-                }
+            } else if (
+                problem?.question.type !== 'MULTIPLE_CHOICE' &&
+                problemProgress.submitted_answer_text
+            ) {
+                setOpenEndedAnswer(problemProgress.submitted_answer_text);
             }
-            setIsInitializing(false);
-        };
-
-        if (
-            exerciseProgress &&
-            problem &&
-            !isProblemProgressListLoading &&
-            !hasAttemptedInitialization.current
-        ) {
-            initializeProblemProgress();
         }
-    }, [
-        exerciseProgress,
-        problem,
-        problemProgressList,
-        isProblemProgressListLoading,
-        slug,
-        createProblemProgress
-    ]);
-
-    const updateAnswer = async (newAnswer: string | string[]) => {
-        if (!localProblemProgress || !problem) return;
-
-        const updateData: any = {
-            status: 'IN_PROGRESS'
-        };
-
-        if (problem.question.type === 'MULTIPLE_CHOICE') {
-            updateData.submitted_answer_id = Array.isArray(newAnswer)
-                ? newAnswer.join(',')
-                : newAnswer;
-        } else {
-            updateData.submitted_answer_text = newAnswer;
-        }
-
-        try {
-            const result = await updateProblemProgress({
-                exercise_slug: slug,
-                exercise_progress_id: exerciseProgress!.id,
-                problem_id: problem.id,
-                problem_progress_id: localProblemProgress.id,
-                data: updateData
-            }).unwrap();
-            setLocalProblemProgress(result);
-        } catch (error) {
-            console.error('Failed to update problem progress:', error);
-        }
-    };
+    }, [problemProgress, problem]);
 
     const handleAnswerChange = (newAnswer: string | string[]) => {
         if (problem?.question.type === 'MULTIPLE_CHOICE') {
@@ -185,96 +85,60 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
         } else {
             setOpenEndedAnswer(newAnswer as string);
         }
-        updateAnswer(newAnswer);
     };
 
     const handleSubmit = async () => {
-        console.log('Submit button clicked');
-        if (!localProblemProgress || !problem || isSubmitting || isSubmitted) {
-            console.log('Submission prevented. Reason:', {
-                noProblemProgress: !localProblemProgress,
-                noProblem: !problem,
-                isSubmitting,
-                alreadySubmitted: isSubmitted
-            });
-            return;
-        }
+        if (!problemProgress || !problem || isSubmitting) return;
 
         setIsSubmitting(true);
-        console.log('Setting isSubmitting to true');
 
-        const now = new Date().toISOString();
-        const submissionData: any = {
-            status: 'COMPLETED',
-            completed_at: now
+        const submissionData = {
+            submitted_answer_id:
+                problem.question.type === 'MULTIPLE_CHOICE'
+                    ? selectedAnswers.join(',')
+                    : undefined,
+            submitted_answer_text:
+                problem.question.type !== 'MULTIPLE_CHOICE'
+                    ? openEndedAnswer
+                    : undefined
         };
 
-        if (problem.question.type === 'MULTIPLE_CHOICE') {
-            submissionData.submitted_answer_id = selectedAnswers.join(',');
-        } else {
-            submissionData.submitted_answer_text = openEndedAnswer;
-        }
-
-        console.log('Submission data:', submissionData);
-
         try {
-            console.log('Updating problem progress');
-            const result = await updateProblemProgress({
+            await updateProblemProgress({
                 exercise_slug: slug,
                 exercise_progress_id: exerciseProgress!.id,
                 problem_id: problem.id,
-                problem_progress_id: localProblemProgress.id,
+                problem_progress_id: problemProgress.id,
                 data: submissionData
             }).unwrap();
-            console.log('Problem progress updated successfully:', result);
-            setLocalProblemProgress(result);
+
             setIsSubmitted(true);
-            if (!problem?.next_navigation && exerciseProgress) {
-                console.log('Updating exercise progress to COMPLETED');
-                try {
-                    const exerciseResult = await updateExerciseProgress({
-                        exercise_slug: slug,
-                        progress_id: exerciseProgress.id,
-                        data: {
-                            status: 'COMPLETED',
-                            completed_at: new Date().toISOString()
-                        }
-                    }).unwrap();
-                    console.log(
-                        'Exercise progress updated successfully:',
-                        exerciseResult
-                    );
-                } catch (error) {
-                    console.error('Failed to update exercise progress:', error);
-                }
-            } else {
-                console.log(
-                    'Not the final problem or exercise progress not available'
-                );
+
+            if (!problem.next_navigation && exerciseProgress) {
+                await updateExerciseProgress({
+                    exercise_slug: slug,
+                    progress_id: exerciseProgress.id,
+                    data: {
+                        status: 'COMPLETED',
+                        completed_at: new Date().toISOString()
+                    }
+                }).unwrap();
             }
         } catch (error) {
             console.error('Failed to update problem progress:', error);
         } finally {
             setIsSubmitting(false);
-            console.log('Setting isSubmitting to false');
         }
     };
 
-    if (
-        isInitializing ||
-        isProblemLoading ||
-        isProgressLoading ||
-        !localProblemProgress
-    ) {
+    if (isProblemLoading || isProgressLoading || isProblemProgressLoading) {
         return <Skeleton className="w-full h-full" />;
     }
 
-    if (initializationError) {
-        return <div className="text-red-500">{initializationError}</div>;
-    }
-
-    if (!problem || !exerciseProgress) {
-        return <div>Problem or exercise progress not found</div>;
+    if (!problem || !exerciseProgress || !problemProgress) {
+        return (
+            <div>Problem, exercise progress, or problem progress not found</div>
+        );
     }
 
     const isAnswerProvided =
