@@ -5,7 +5,6 @@ import {
     ExerciseLandingPage,
     ExerciseProblem,
     ExerciseProblemProgress,
-    ExerciseProblemProgressList,
     ExerciseProgress,
     ExerciseReportSummary
 } from '../../types/exercises';
