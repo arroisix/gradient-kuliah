@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Skeleton from 'commons/components/elements/Skeleton';
 import { useGetExerciseDetailQuery } from '../../../courses/redux/api/exercisesApi';
@@ -15,6 +16,12 @@ const ExerciseStartPage = () => {
         }
     );
 
+    useEffect(() => {
+        if (!isLoading && !exercise) {
+            router.back();
+        }
+    }, [isLoading, exercise, router]);
+
     if (isLoading) {
         return (
             <LatihanLayout>
@@ -24,7 +31,6 @@ const ExerciseStartPage = () => {
     }
 
     if (!exercise) {
-        router.back();
         return null;
     }
 
