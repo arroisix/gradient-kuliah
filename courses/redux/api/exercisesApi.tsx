@@ -4,7 +4,7 @@ import {
     ExerciseHistory,
     ExerciseLandingPage,
     ExerciseProblem,
-    ExerciseProblemProgress,
+    ExerciseProblemProgress, ExerciseProblemProgressList,
     ExerciseProgress,
     ExerciseReportSummary
 } from '../../types/exercises';
@@ -159,6 +159,25 @@ export const exerciseApi = baseApi.injectEndpoints({
             ]
         }),
 
+        getExerciseProblemProgressList: builder.query<
+            ExerciseProblemProgressList,
+            {
+                exercise_slug: string;
+                exercise_progress_id: string;
+                problem_id: string;
+            }
+        >({
+            query: ({ exercise_slug, exercise_progress_id, problem_id }) => ({
+                url: `${EXERCISE_BASE_URL}private/exercises/${exercise_slug}/progress/${exercise_progress_id}/problems/${problem_id}/progress/`
+            }),
+            providesTags: (result, error, arg) => [
+                {
+                    type: 'ASTRONOTES',
+                    id: `EXERCISE_PROBLEM_PROGRESS_LIST_${arg.exercise_progress_id}`
+                }
+            ]
+        }),
+
         getExerciseReportSummary: builder.query<
             ExerciseReportSummary,
             { exercise_slug: string }
@@ -219,6 +238,7 @@ export const {
     useGetExerciseProblemQuery,
     useGetExerciseProgressQuery,
     useGetLatestExerciseProblemProgressQuery,
+    useGetExerciseProblemProgressListQuery,
     useCreateExerciseProgressMutation,
     useUpdateExerciseProgressMutation,
     useCreateExerciseProblemProgressMutation,
@@ -234,5 +254,6 @@ export const {
     getExerciseProblem,
     getExerciseReportSummary,
     getExerciseProblemReport,
+    getLatestExerciseProblemProgress,
     getExerciseLandingPage
 } = exerciseApi.endpoints;

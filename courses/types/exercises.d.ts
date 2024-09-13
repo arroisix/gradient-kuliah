@@ -99,6 +99,10 @@ export interface ExerciseProblemProgress {
     completed_at: string | null;
 }
 
+export interface ExerciseProblemProgressList {
+    problem_progresses: ExerciseProblemProgress[];
+}
+
 export interface ExerciseReportSummary {
     exercise_id: string;
     score: number;

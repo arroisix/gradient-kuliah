@@ -2,9 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import {
     useCreateExerciseProblemProgressMutation,
+    useGetExerciseProblemProgressListQuery,
     useGetExerciseProblemQuery,
     useGetExerciseProgressQuery,
-    useGetLatestExerciseProblemProgressQuery,
     useUpdateExerciseProblemProgressMutation,
     useUpdateExerciseProgressMutation
 } from '../../../redux/api/exercisesApi';
@@ -45,12 +45,18 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
         useGetExerciseProgressQuery({ exercise_slug: slug }, { skip: !slug });
 
     const {
-        data: problemProgress,
-        isLoading: isProblemProgressLoading,
-        refetch: refetchProblemProgress
-    } = useGetLatestExerciseProblemProgressQuery(
-        { problem_progress_id: exerciseProgress?.last_problem_id ?? '' },
-        { skip: !exerciseProgress?.id || !exerciseProgress?.last_problem_id }
+        data: problemProgressList,
+        isLoading: isProblemProgressListLoading
+    } = useGetExerciseProblemProgressListQuery(
+        {
+            exercise_slug: slug,
+            exercise_progress_id: exerciseProgress?.id ?? '',
+            problem_id: problemId
+        },
+        {
+            skip: !exerciseProgress?.id,
+            refetchOnMountOrArgChange: true
+        }
     );
 
     const [createProblemProgress] = useCreateExerciseProblemProgressMutation();
@@ -67,21 +73,47 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
     }, [problemId]);
 
     useEffect(() => {
+        console.log('Exercise Progress:', exerciseProgress);
+        console.log('Problem:', problem);
+        console.log('Problem Progress List:', problemProgressList);
+        console.log(
+            'Is Problem Progress List Loading:',
+            isProblemProgressListLoading
+        );
         const initializeProblemProgress = async () => {
             if (
                 hasAttemptedInitialization.current ||
                 !exerciseProgress ||
-                !problem
+                !problem ||
+                isProblemProgressListLoading
             ) {
                 return;
             }
 
             hasAttemptedInitialization.current = true;
 
-            if (problemProgress && problemProgress.problem_id === problem.id) {
-                setLocalProblemProgress(problemProgress);
-                if (problemProgress.status === 'COMPLETED') {
+            const existingProgress =
+                problemProgressList?.problem_progresses.find(
+                    (progress) => progress.problem_id === problem.id
+                );
+            console.log('Problem Progress,', existingProgress);
+            if (existingProgress) {
+                setLocalProblemProgress(existingProgress);
+                if (existingProgress.status === 'COMPLETED') {
                     setIsSubmitted(true);
+                }
+                if (
+                    problem.question.type === 'MULTIPLE_CHOICE' &&
+                    existingProgress.submitted_answer_id
+                ) {
+                    setSelectedAnswers(
+                        existingProgress.submitted_answer_id.split(',')
+                    );
+                } else if (
+                    problem.question.type !== 'MULTIPLE_CHOICE' &&
+                    existingProgress.submitted_answer_text
+                ) {
+                    setOpenEndedAnswer(existingProgress.submitted_answer_text);
                 }
             } else {
                 try {
@@ -101,14 +133,60 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
             setIsInitializing(false);
         };
 
-        initializeProblemProgress();
+        if (
+            exerciseProgress &&
+            problem &&
+            !isProblemProgressListLoading &&
+            !hasAttemptedInitialization.current
+        ) {
+            initializeProblemProgress();
+        }
     }, [
         exerciseProgress,
         problem,
-        problemProgress,
+        problemProgressList,
+        isProblemProgressListLoading,
         slug,
         createProblemProgress
     ]);
+
+    const updateAnswer = async (newAnswer: string | string[]) => {
+        if (!localProblemProgress || !problem) return;
+
+        const updateData: any = {
+            status: 'IN_PROGRESS'
+        };
+
+        if (problem.question.type === 'MULTIPLE_CHOICE') {
+            updateData.submitted_answer_id = Array.isArray(newAnswer)
+                ? newAnswer.join(',')
+                : newAnswer;
+        } else {
+            updateData.submitted_answer_text = newAnswer;
+        }
+
+        try {
+            const result = await updateProblemProgress({
+                exercise_slug: slug,
+                exercise_progress_id: exerciseProgress!.id,
+                problem_id: problem.id,
+                problem_progress_id: localProblemProgress.id,
+                data: updateData
+            }).unwrap();
+            setLocalProblemProgress(result);
+        } catch (error) {
+            console.error('Failed to update problem progress:', error);
+        }
+    };
+
+    const handleAnswerChange = (newAnswer: string | string[]) => {
+        if (problem?.question.type === 'MULTIPLE_CHOICE') {
+            setSelectedAnswers(newAnswer as string[]);
+        } else {
+            setOpenEndedAnswer(newAnswer as string);
+        }
+        updateAnswer(newAnswer);
+    };
 
     const handleSubmit = async () => {
         console.log('Submit button clicked');
@@ -174,7 +252,6 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
                     'Not the final problem or exercise progress not available'
                 );
             }
-            await refetchProblemProgress();
         } catch (error) {
             console.error('Failed to update problem progress:', error);
         } finally {
@@ -187,7 +264,7 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
         isInitializing ||
         isProblemLoading ||
         isProgressLoading ||
-        (isProblemProgressLoading && !localProblemProgress)
+        !localProblemProgress
     ) {
         return <Skeleton className="w-full h-full" />;
     }
@@ -229,13 +306,13 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
                             <MultipleChoiceProblem
                                 options={problem.question.options}
                                 selectedAnswers={selectedAnswers}
-                                onAnswerSelect={setSelectedAnswers}
+                                onAnswerSelect={handleAnswerChange}
                                 isSubmitted={isSubmitted}
                             />
                         ) : (
                             <OpenEndedProblem
                                 answer={openEndedAnswer}
-                                onAnswerChange={setOpenEndedAnswer}
+                                onAnswerChange={handleAnswerChange}
                             />
                         )}
                     </>
