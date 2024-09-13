@@ -28,6 +28,11 @@ interface LoginResponseData {
     is_new_user?: boolean;
 }
 
+interface EmailActivationResponseData {
+    is_valid: boolean;
+    message: string;
+}
+
 interface UpdateUserResponseData {
     gender: string;
     user_id: string;
