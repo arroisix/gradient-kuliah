@@ -1,9 +1,14 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
 import Skeleton from 'commons/components/elements/Skeleton';
 import { useGetExerciseDetailQuery } from '../../../courses/redux/api/exercisesApi';
 import LatihanLayout from '../../../courses/components/Latihan/LatihanLayout';
-import LatihanStart from '../../../courses/components/Latihan/LatihanStart';
+
+const LatihanStart = dynamic(
+    () => import('../../../courses/components/Latihan/LatihanStart'),
+    { ssr: false }
+);
 
 const ExerciseStartPage = () => {
     const router = useRouter();
@@ -17,10 +22,14 @@ const ExerciseStartPage = () => {
     );
 
     useEffect(() => {
-        if (!isLoading && !exercise) {
+        if (!isLoading && !exercise && typeof window !== 'undefined') {
             router.back();
         }
     }, [isLoading, exercise, router]);
+
+    if (typeof window === 'undefined') {
+        return null;
+    }
 
     if (isLoading) {
         return (
@@ -40,5 +49,11 @@ const ExerciseStartPage = () => {
         </LatihanLayout>
     );
 };
+
+export async function getServerSideProps() {
+    return {
+        props: {}
+    };
+}
 
 export default ExerciseStartPage;
