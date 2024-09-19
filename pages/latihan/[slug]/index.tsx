@@ -1,59 +1,39 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
+import { wrapper } from 'redux/store';
 import dynamic from 'next/dynamic';
-import Skeleton from 'commons/components/elements/Skeleton';
-import { useGetExerciseDetailQuery } from '../../../courses/redux/api/exercisesApi';
-import LatihanLayout from '../../../courses/components/Latihan/LatihanLayout';
+import { getRunningQueriesThunk } from 'redux/api/baseApi';
+import { getExerciseDetail } from '../../../courses/redux/api/exercisesApi';
 
-const LatihanStart = dynamic(
-    () => import('../../../courses/components/Latihan/LatihanStart'),
+const ExerciseStartContent = dynamic(
+    () =>
+        import(
+            '../../../courses/components/Latihan/ExerciseStart/ExerciseStartContent'
+        ),
     { ssr: false }
 );
 
-const ExerciseStartPage = () => {
-    const router = useRouter();
-    const { slug } = router.query;
-
-    const { data: exercise, isLoading } = useGetExerciseDetailQuery(
-        { exercise_slug: slug as string },
-        {
-            skip: !slug
-        }
-    );
-
-    useEffect(() => {
-        if (!isLoading && !exercise && typeof window !== 'undefined') {
-            router.back();
-        }
-    }, [isLoading, exercise, router]);
-
-    if (typeof window === 'undefined') {
-        return null;
-    }
-
-    if (isLoading) {
-        return (
-            <LatihanLayout>
-                <Skeleton className="w-full h-full" />
-            </LatihanLayout>
-        );
-    }
-
-    if (!exercise) {
-        return null;
-    }
-
-    return (
-        <LatihanLayout>
-            <LatihanStart exercise={exercise} />
-        </LatihanLayout>
-    );
+const ExerciseStartPage = (): JSX.Element => {
+    return <ExerciseStartContent />;
 };
 
-export async function getServerSideProps() {
-    return {
-        props: {}
-    };
-}
+export const getServerSideProps: GetServerSideProps =
+    wrapper.getServerSideProps((store) => async (context) => {
+        const { slug } = context.params as { slug: string };
 
+        await store.dispatch(
+            getExerciseDetail.initiate({ exercise_slug: slug }) as any
+        );
+
+        await Promise.all(store.dispatch(getRunningQueriesThunk() as any));
+
+        return {
+            props: {
+                canonical: `https://gradient.academy/latihan/${slug}`,
+                title: 'Start Exercise - Gradient Academy',
+                description: 'Start your exercise'
+            }
+        };
+    });
+
+ExerciseStartPage.displayName = 'ExerciseStart';
 export default ExerciseStartPage;

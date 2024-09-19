@@ -1,29 +1,34 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
 import ScoreCard from './ScoreCard';
 import ExerciseHeader from '../ExerciseHeader';
-import SummaryTab from './SummaryTab';
-import RiwayatTab from './RiwayatTab';
 import {
     useGetExerciseReportSummaryQuery,
     useGetExerciseHistoryQuery
 } from '../../../redux/api/exercisesApi';
 import Skeleton from 'commons/components/elements/Skeleton';
-import ReviewTab from './ReviewTab';
+
+const SummaryTab = dynamic(() => import('./SummaryTab'), { ssr: false });
+const ReviewTab = dynamic(() => import('./ReviewTab'), { ssr: false });
+const RiwayatTab = dynamic(() => import('./RiwayatTab'), { ssr: false });
 
 type Tab = 'summary' | 'review' | 'history';
 
-const ExerciseReportLayout: React.FC = () => {
+interface ExerciseReportLayoutProps {
+    slug: string;
+}
+
+const ExerciseReportLayout: React.FC<ExerciseReportLayoutProps> = ({
+    slug
+}) => {
     const [activeTab, setActiveTab] = useState<Tab>('summary');
-    const router = useRouter();
-    const { slug } = router.query;
 
     const {
         data: summaryData,
         isLoading: isSummaryLoading,
         error: summaryError
     } = useGetExerciseReportSummaryQuery(
-        { exercise_slug: slug as string },
+        { exercise_slug: slug },
         { skip: !slug }
     );
 
@@ -31,10 +36,7 @@ const ExerciseReportLayout: React.FC = () => {
         data: historyData,
         isLoading: isHistoryLoading,
         error: historyError
-    } = useGetExerciseHistoryQuery(
-        { exercise_slug: slug as string },
-        { skip: !slug }
-    );
+    } = useGetExerciseHistoryQuery({ exercise_slug: slug }, { skip: !slug });
 
     if (isSummaryLoading || isHistoryLoading) {
         return <Skeleton className="w-full h-full" />;
@@ -72,33 +74,23 @@ const ExerciseReportLayout: React.FC = () => {
                         />
                         <div className="flex space-x-4 mb-6">
                             <div className="flex items-end w-full border-b border-gray-700">
-                                <button
-                                    className={`text-center text-sm py-3 border-b-2 flex-1 ${
-                                        activeTab === 'summary'
-                                            ? 'text-white border-purple-600'
-                                            : 'text-gray-400 border-transparent'
-                                    }`}
-                                    onClick={() => setActiveTab('summary')}>
-                                    Summary
-                                </button>
-                                <button
-                                    className={`text-center text-sm py-3 border-b-2 flex-1 ${
-                                        activeTab === 'review'
-                                            ? 'text-white border-purple-600'
-                                            : 'text-gray-400 border-transparent'
-                                    }`}
-                                    onClick={() => setActiveTab('review')}>
-                                    Review
-                                </button>
-                                <button
-                                    className={`text-center text-sm py-3 border-b-2 flex-1 ${
-                                        activeTab === 'history'
-                                            ? 'text-white border-purple-600'
-                                            : 'text-gray-400 border-transparent'
-                                    }`}
-                                    onClick={() => setActiveTab('history')}>
-                                    Riwayat
-                                </button>
+                                {['summary', 'review', 'history'].map((tab) => (
+                                    <button
+                                        key={tab}
+                                        className={`text-center text-sm py-3 border-b-2 flex-1 ${
+                                            activeTab === tab
+                                                ? 'text-white border-purple-600'
+                                                : 'text-gray-400 border-transparent'
+                                        }`}
+                                        onClick={() =>
+                                            setActiveTab(tab as Tab)
+                                        }>
+                                        {tab === 'history'
+                                            ? 'Riwayat'
+                                            : tab.charAt(0).toUpperCase() +
+                                              tab.slice(1)}
+                                    </button>
+                                ))}
                             </div>
                         </div>
                         <div className="flex-grow overflow-y-auto">
