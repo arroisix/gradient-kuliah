@@ -41,9 +41,11 @@ const LatihanStart: React.FC<ExerciseStartProps> = ({ exercise }) => {
                 <p className="text-gray-400 mb-2">
                     {exercise.total_problems} Soal
                 </p>
-                <p className="text-gray-400">
-                    {Math.floor(exercise.total_duration / 60)} Menit
-                </p>
+                {exercise.total_duration > 0 && (
+                    <p className="text-gray-400">
+                        {Math.floor(exercise.total_duration / 60)} Menit
+                    </p>
+                )}
             </div>
             <div className="mt-auto">
                 <Link href={`/latihan/${exercise.slug}/${firstSectionId}`}>

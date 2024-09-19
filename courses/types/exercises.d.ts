@@ -73,6 +73,7 @@ export interface ExerciseProblem {
     current_problem_number: number;
     next_navigation: NavigationItem | null;
     prev_navigation: NavigationItem | null;
+    single_answer: boolean;
 }
 
 export interface ExerciseProgress {
@@ -91,9 +92,9 @@ export interface ExerciseProblemProgress {
     id: string;
     exercise_progress_id: string;
     problem_id: string;
-    status: string;
+    status: 'IN_PROGRESS' | 'COMPLETED';
     submitted_answer_text: string | null;
-    submitted_answer_id: string | null;
+    submitted_answer_ids: string[];
     is_correct: boolean | null;
     started_at: string;
     completed_at: string | null;
@@ -123,4 +124,23 @@ export interface ExerciseReportSummary {
             type: string;
         }>;
     }>;
+}
+
+export interface ExerciseInProblemSet {
+    id: string;
+    order: number;
+    is_answered: boolean;
+}
+
+export interface ProblemSetDetail {
+    id: string;
+    name: string;
+    order: number;
+    show_solution: string;
+    time_constraint: string;
+    time_limit: number;
+    problems: ExerciseInProblemSet[];
+    total_problems: number;
+    answered_problems: number;
+    unanswered_problems: number;
 }

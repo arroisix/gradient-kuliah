@@ -27,6 +27,7 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [showExplanation, setShowExplanation] = useState(false);
+    const [isCorrect, setIsCorrect] = useState(false);
 
     const { data: problem, isLoading: isProblemLoading } =
         useGetExerciseProblemQuery(
@@ -62,19 +63,25 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
 
     useEffect(() => {
         if (problemProgress) {
-            setIsSubmitted(problemProgress.status === 'COMPLETED');
+            const hasAnswer =
+                problem?.question.type === 'MULTIPLE_CHOICE'
+                    ? problemProgress.submitted_answer_ids &&
+                      problemProgress.submitted_answer_ids.length > 0
+                    : !!problemProgress.submitted_answer_text;
+
+            setIsSubmitted(problemProgress.status === 'COMPLETED' || hasAnswer);
+
             if (
                 problem?.question.type === 'MULTIPLE_CHOICE' &&
-                problemProgress.submitted_answer_id
+                problemProgress.submitted_answer_ids
             ) {
-                setSelectedAnswers(
-                    problemProgress.submitted_answer_id.split(',')
-                );
+                setSelectedAnswers(problemProgress.submitted_answer_ids);
             } else if (
                 problem?.question.type !== 'MULTIPLE_CHOICE' &&
                 problemProgress.submitted_answer_text
             ) {
                 setOpenEndedAnswer(problemProgress.submitted_answer_text);
+                setIsCorrect(problemProgress.is_correct ?? false);
             }
         }
     }, [problemProgress, problem]);
@@ -93,9 +100,9 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
         setIsSubmitting(true);
 
         const submissionData = {
-            submitted_answer_id:
+            submitted_answer_ids:
                 problem.question.type === 'MULTIPLE_CHOICE'
-                    ? selectedAnswers.join(',')
+                    ? selectedAnswers
                     : undefined,
             submitted_answer_text:
                 problem.question.type !== 'MULTIPLE_CHOICE'
@@ -142,7 +149,7 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
     }
 
     const isAnswerProvided =
-        problem.question.type === 'MULTIPLE_CHOICE'
+        problem?.question.type === 'MULTIPLE_CHOICE'
             ? selectedAnswers.length > 0
             : openEndedAnswer.trim() !== '';
 
@@ -160,11 +167,12 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
                                     {problem.question.text}
                                 </p>
                             </div>
-                            {problem.question.type === 'MULTIPLE_CHOICE' && (
-                                <p className="text-[#FEC84B] text-xs font-normal">
-                                    Jawaban bisa lebih dari 1
-                                </p>
-                            )}
+                            {problem.question.type === 'MULTIPLE_CHOICE' &&
+                                !problem.single_answer && (
+                                    <p className="text-[#FEC84B] text-xs font-normal">
+                                        Jawaban bisa lebih dari 1
+                                    </p>
+                                )}
                         </div>
                         {problem.question.type === 'MULTIPLE_CHOICE' ? (
                             <MultipleChoiceProblem
@@ -177,6 +185,8 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
                             <OpenEndedProblem
                                 answer={openEndedAnswer}
                                 onAnswerChange={handleAnswerChange}
+                                isSubmitted={isSubmitted}
+                                isCorrect={isCorrect}
                             />
                         )}
                     </>

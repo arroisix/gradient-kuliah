@@ -22,11 +22,10 @@ const MultipleChoiceProblem: React.FC<MultipleChoiceProblemProps> = ({
 }) => {
     const handleAnswerSelect = (answerId: string) => {
         if (!isSubmitted) {
-            onAnswerSelect(
-                selectedAnswers.includes(answerId)
-                    ? selectedAnswers.filter((id) => id !== answerId)
-                    : [...selectedAnswers, answerId]
-            );
+            const updatedAnswers = selectedAnswers.includes(answerId)
+                ? selectedAnswers.filter((id) => id !== answerId)
+                : [...selectedAnswers, answerId];
+            onAnswerSelect(updatedAnswers);
         }
     };
 

@@ -6,7 +6,8 @@ import {
     ExerciseProblem,
     ExerciseProblemProgress,
     ExerciseProgress,
-    ExerciseReportSummary
+    ExerciseReportSummary,
+    ProblemSetDetail
 } from '../../types/exercises';
 
 const EXERCISE_BASE_URL = 'exercises/';
@@ -229,6 +230,15 @@ export const exerciseApi = baseApi.injectEndpoints({
                     id: `EXERCISE_ENTRYPOINT`
                 }
             ]
+        }),
+
+        getProblemSetDetail: builder.query<ProblemSetDetail, string>({
+            query: (problemSetId) => ({
+                url: `${EXERCISE_BASE_URL}exercises/problem-sets/${problemSetId}/`
+            }),
+            providesTags: (result, error, arg) => [
+                { type: 'ASTRONOTES', id: `PROBLEM_SET_${arg}` }
+            ]
         })
     })
 });
@@ -246,7 +256,8 @@ export const {
     useUpdateExerciseProblemProgressMutation,
     useGetExerciseReportSummaryQuery,
     useGetExerciseProblemReportQuery,
-    useGetExerciseLandingPageQuery
+    useGetExerciseLandingPageQuery,
+    useGetProblemSetDetailQuery
 } = exerciseApi;
 
 export const {
