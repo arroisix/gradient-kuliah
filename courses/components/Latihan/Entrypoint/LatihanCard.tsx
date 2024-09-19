@@ -27,12 +27,6 @@ const LatihanCard: React.FC<LatihanCardProps> = ({ exercise }) => {
             }
         );
 
-    const truncateTitle = (title: string, maxLength: number) => {
-        return title.length > maxLength
-            ? title.substring(0, maxLength) + '...'
-            : title;
-    };
-
     const handleExerciseStart = async () => {
         if (!exerciseProgress || exerciseProgress.status === 'COMPLETED') {
             try {
@@ -67,8 +61,12 @@ const LatihanCard: React.FC<LatihanCardProps> = ({ exercise }) => {
                     </h3>
                 </div>
                 <div className="text-sm text-gray-400 mt-2 flex items-center justify-between">
-                    <span className="truncate max-w-[60%]">{exercise.subject}</span>
-                    <span className="whitespace-nowrap">{exercise.total_questions} Soal</span>
+                    <span className="truncate max-w-[60%]">
+                        {exercise.subject}
+                    </span>
+                    <span className="whitespace-nowrap">
+                        {exercise.total_questions} Soal
+                    </span>
                 </div>
             </div>
         </Link>
