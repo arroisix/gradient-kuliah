@@ -20,8 +20,11 @@ export const getServerSideProps: GetServerSideProps =
     wrapper.getServerSideProps((store) => async (context) => {
         const { slug } = context.params as { slug: string };
 
+        const state = store.getState();
+        const token = state.authentication.user.token;
+
         await store.dispatch(
-            getExerciseDetail.initiate({ exercise_slug: slug }) as any
+            getExerciseDetail.initiate({ exercise_slug: slug, token }) as any
         );
 
         await Promise.all(store.dispatch(getRunningQueriesThunk() as any));

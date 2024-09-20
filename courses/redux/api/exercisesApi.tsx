@@ -14,9 +14,13 @@ const EXERCISE_BASE_URL = 'exercises/';
 
 export const exerciseApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        getExerciseDetail: builder.query<Exercise, { exercise_slug: string }>({
-            query: ({ exercise_slug }) => ({
-                url: `${EXERCISE_BASE_URL}exercises/${exercise_slug}/`
+        getExerciseDetail: builder.query<
+            Exercise,
+            { exercise_slug: string; token?: string }
+        >({
+            query: ({ exercise_slug, token }) => ({
+                url: `${EXERCISE_BASE_URL}exercises/${exercise_slug}/`,
+                headers: token ? { Authorization: `Token ${token}` } : undefined
             }),
             providesTags: (result, error, arg) => [
                 { type: 'ASTRONOTES', id: `EXERCISE_${arg.exercise_slug}` }
