@@ -63,7 +63,16 @@ const ProblemCard = ({ problem, index }: { problem: any; index: number }) => {
 
             {isTextBased ? (
                 <div className="">
-                    <div className="text-white p-3 bg-[#EC5D49] bg-opacity-50 rounded-md border border-[#EA5D49]">
+                    <div
+                        className={`text-white p-3 bg-opacity-50 rounded-md border ${
+                            problem.user_progress.is_correct
+                                ? 'border-green-500'
+                                : 'border-red-500'
+                        } ${
+                            problem.user_progress.is_correct
+                                ? 'bg-[#2AC27A40] text-[#2AC27A]'
+                                : 'bg-[#EA5D4940] text-[#EA5D49]'
+                        }\`}>`}>
                         {problem.user_progress.submitted_answer.join('')}
                     </div>
                     <p className="text-sm mt-2">
