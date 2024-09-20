@@ -3,72 +3,19 @@ import { IoMdCheckmark as Check } from 'react-icons/io';
 import { IoMdClose as X } from 'react-icons/io';
 import Filter from 'commons/components/elements/Filter';
 import { REVIEW_FILTER_OPTIONS } from '../constants';
+import { useGetLatestExerciseReviewQuery } from '../../../redux/api/exercisesApi';
+import Skeleton from 'commons/components/elements/Skeleton';
 
-const mockData = {
-    problems: [
-        {
-            id: 'a31532b1-c8c3-4898-a995-41c9587cc1ae',
-            question: {
-                text: 'Di bawah ini yang termasuk ke dalam faktor-faktor yang mempengaruhi pergeseran arah kesetimbangan zat kimia adalah...',
-                type: 'MULTIPLE_CHOICE',
-                options: ['Konsentrasi', 'Suhu', 'Jenis Zat', 'Tekanan']
-            },
-            user_progress: {
-                status: 'COMPLETED',
-                is_correct: true,
-                submitted_answer: ['Konsentrasi']
-            },
-            performance: {
-                percentile: 0.0,
-                message:
-                    'Kamu menyelesaikan soal ini lebih cepat dari rata-rata user'
-            }
-        },
-        {
-            id: 'b31532b1-c8c3-4898-a995-41c9587cc1ae',
-            question: {
-                text: 'Jika rumus molekul cuka adalah CH3COOH, rumus empirisnya adalah?',
-                type: 'MULTIPLE_CHOICE',
-                options: ['CH₂O', 'CHO', 'CHO₂', 'C₂HO']
-            },
-            user_progress: {
-                status: 'COMPLETED',
-                is_correct: true,
-                submitted_answer: ['CHO']
-            },
-            performance: {
-                percentile: 50.0,
-                message:
-                    'Kamu menyelesaikan soal ini lebih cepat dari rata-rata user'
-            }
-        },
-        {
-            id: 'c31532b1-c8c3-4898-a995-41c9587cc1ae',
-            question: {
-                text: 'Pada reaksi kesetimbangan 2XY ⇌ X₂ + Y₂, sebanyak 4 mol XY dipanaskan sehingga terbentuk 1 mol X₂. Derajat disosiasi dari reaksi tersebut adalah...',
-                type: 'SHORT_ANSWER',
-                options: [],
-                correct_answer: '0.5'
-            },
-            user_progress: {
-                status: 'COMPLETED',
-                is_correct: false,
-                submitted_answer: '0.4'
-            },
-            performance: {
-                percentile: 30.0,
-                message: 'Jawaban kamu salah'
-            }
-        }
-    ],
-    current_page: 1,
-    limit: 2,
-    total_items: 2
-};
-
-const ReviewTab = () => {
+const ReviewTab = ({ exerciseSlug }: { exerciseSlug: string }) => {
     const [filter] = useState('all');
-    const filteredProblems = mockData.problems.filter((problem) => {
+    const { data, isLoading, error } = useGetLatestExerciseReviewQuery({
+        exercise_slug: exerciseSlug
+    });
+
+    if (isLoading) return <Skeleton className="w-full h-full" />;
+    if (error) return <div>Error loading review data</div>;
+
+    const filteredProblems = data?.problems.filter((problem) => {
         if (filter === 'correct') return problem.user_progress.is_correct;
         if (filter === 'incorrect') return !problem.user_progress.is_correct;
         return true;
@@ -77,7 +24,7 @@ const ReviewTab = () => {
     return (
         <div className="w-full flex flex-col gap-6 max-w-[640px]">
             <Filter options={REVIEW_FILTER_OPTIONS} defaultSelected={filter} />
-            {filteredProblems.map((problem, index) => (
+            {filteredProblems?.map((problem, index) => (
                 <ProblemCard
                     key={problem.id}
                     problem={problem}
@@ -89,7 +36,7 @@ const ReviewTab = () => {
 };
 
 const ProblemCard = ({ problem, index }: { problem: any; index: number }) => {
-    const isTextBased = problem.question.options.length === 0;
+    const isTextBased = problem.question.type !== 'MULTIPLE_CHOICE';
 
     return (
         <div
@@ -117,26 +64,29 @@ const ProblemCard = ({ problem, index }: { problem: any; index: number }) => {
             {isTextBased ? (
                 <div className="">
                     <div className="text-white p-3 bg-[#EC5D49] bg-opacity-50 rounded-md border border-[#EA5D49]">
-                        {problem.user_progress.submitted_answer}
+                        {problem.user_progress.submitted_answer.join('')}
                     </div>
-                    <p className="text-sm">
+                    <p className="text-sm mt-2">
                         Jawaban Benar:{' '}
                         <span className="font-semibold">
-                            {problem.question.correct_answer}
+                            {problem.solution}
                         </span>
                     </p>
                 </div>
             ) : (
                 <div className="flex flex-col gap-1">
-                    {problem.question.options.map(
-                        (option: string, idx: number) => (
-                            <Option
-                                key={idx}
-                                option={option}
-                                isCorrect={idx === 0}
-                            />
-                        )
-                    )}
+                    {problem.question.options.map((option: any) => (
+                        <Option
+                            key={option.id}
+                            option={option}
+                            isCorrect={problem.user_progress.submitted_answer.includes(
+                                option.id
+                            )}
+                            isSelected={problem.user_progress.submitted_answer.includes(
+                                option.id
+                            )}
+                        />
+                    ))}
                 </div>
             )}
 
@@ -151,27 +101,35 @@ const ProblemCard = ({ problem, index }: { problem: any; index: number }) => {
 
 const Option = ({
     option,
-    isCorrect
+    isCorrect,
+    isSelected
 }: {
-    option: string;
+    option: any;
     isCorrect: boolean;
+    isSelected: boolean;
 }) => {
     return (
         <div
             className={`flex justify-between items-center p-3 my-1 rounded-md w-full max-w-[608px] h-[45px] ${
-                isCorrect ? 'bg-[#2AC27A]' : 'bg-[#EC5D49]'
+                isSelected
+                    ? isCorrect
+                        ? 'bg-[#2AC27A]'
+                        : 'bg-[#EC5D49]'
+                    : 'bg-[#444444]'
             } bg-opacity-50`}>
-            <span className="text-sm font-medium">{option}</span>
-            <div
-                className={`flex justify-center items-center rounded-md w-[20px] h-[20px] ${
-                    isCorrect ? 'bg-[#2AC27A]' : 'bg-[#EC5D49]'
-                }`}>
-                {isCorrect ? (
-                    <Check className="text-white" size={16} />
-                ) : (
-                    <X className="text-white" size={16} />
-                )}
-            </div>
+            <span className="text-sm font-medium">{option.text}</span>
+            {isSelected && (
+                <div
+                    className={`flex justify-center items-center rounded-md w-[20px] h-[20px] ${
+                        isCorrect ? 'bg-[#2AC27A]' : 'bg-[#EC5D49]'
+                    }`}>
+                    {isCorrect ? (
+                        <Check className="text-white" size={16} />
+                    ) : (
+                        <X className="text-white" size={16} />
+                    )}
+                </div>
+            )}
         </div>
     );
 };

@@ -4,7 +4,7 @@ import {
     ExerciseHistory,
     ExerciseLandingPage,
     ExerciseProblem,
-    ExerciseProblemProgress,
+    ExerciseProblemProgress, ExerciseProblemReport,
     ExerciseProgress,
     ExerciseReportSummary,
     ProblemSetDetail
@@ -214,6 +214,21 @@ export const exerciseApi = baseApi.injectEndpoints({
             ]
         }),
 
+        getLatestExerciseReview: builder.query<
+            ExerciseProblemReport,
+            { exercise_slug: string }
+        >({
+            query: ({ exercise_slug }) => ({
+                url: `${EXERCISE_BASE_URL}exercises/${exercise_slug}/review/`
+            }),
+            providesTags: (result, error, arg) => [
+                {
+                    type: 'ASTRONOTES',
+                    id: `EXERCISE_REVIEW_${arg.exercise_slug}`
+                }
+            ]
+        }),
+
         getExerciseLandingPage: builder.query<
             ExerciseLandingPage,
             {
@@ -260,6 +275,7 @@ export const {
     useUpdateExerciseProblemProgressMutation,
     useGetExerciseReportSummaryQuery,
     useGetExerciseProblemReportQuery,
+    useGetLatestExerciseReviewQuery,
     useGetExerciseLandingPageQuery,
     useGetProblemSetDetailQuery
 } = exerciseApi;

@@ -144,3 +144,49 @@ export interface ProblemSetDetail {
     answered_problems: number;
     unanswered_problems: number;
 }
+
+export interface ExerciseProblemReport {
+    problems: ProblemReport[];
+    current_page: number;
+    limit: number;
+    total_items: number;
+}
+
+export interface ProblemReport {
+    id: string;
+    question: {
+        text: string;
+        type: string;
+        options: Array<{
+            id: string;
+            text: string;
+        }>;
+    };
+    solution: string;
+    user_progress: {
+        status: string;
+        submitted_answer: string[];
+        is_correct: boolean | null;
+        started_at: string;
+        completed_at: string | null;
+    };
+    performance: {
+        percentile: number;
+        message: string;
+    };
+    topics_to_review: {
+        chapter: string;
+        subchapters: string[];
+    };
+    recommended_materials: Array<{
+        id: string;
+        name: string;
+        type: string;
+    }>;
+    attempt_history: Array<{
+        attempt: number;
+        score: number;
+        date: string;
+        submitted_answer: string[];
+    }>;
+}

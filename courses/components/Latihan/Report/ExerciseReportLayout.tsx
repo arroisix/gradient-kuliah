@@ -106,7 +106,9 @@ const ExerciseReportLayout: React.FC<ExerciseReportLayoutProps> = ({
                                     }
                                 />
                             )}
-                            {activeTab === 'review' && <ReviewTab />}
+                            {activeTab === 'review' && (
+                                <ReviewTab exerciseSlug={slug} />
+                            )}
                             {activeTab === 'history' && (
                                 <RiwayatTab history={historyData.history} />
                             )}
