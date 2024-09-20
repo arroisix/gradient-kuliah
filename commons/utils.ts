@@ -1,6 +1,7 @@
 import { isValidElement, Children } from 'react';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import moment from 'moment';
 
 export function cn(...inputs: ClassValue[]): string {
     return twMerge(clsx(inputs));
@@ -179,3 +180,19 @@ export function checkVisible(elm: Element): boolean {
     );
     return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
 }
+
+export const formatDuration = (durationString?: string | null): string => {
+    if (!durationString) return '00:00';
+    const duration = moment.duration(durationString);
+    const [seconds, minutes, hours] = [
+        duration.get('second'),
+        duration.get('minute'),
+        duration.get('hour')
+    ];
+
+    const displayHours = hours > 0 ? `${String(hours).padStart(2, '0')}:` : '';
+    const formattedMinutes = String(minutes).padStart(2, '0');
+    const formattedSeconds = String(seconds).padStart(2, '0');
+
+    return `${displayHours}${formattedMinutes}:${formattedSeconds}`;
+};

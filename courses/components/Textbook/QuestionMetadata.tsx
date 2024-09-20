@@ -4,6 +4,7 @@ import { BiBookBookmark } from 'react-icons/bi';
 import { FaRegListAlt } from 'react-icons/fa';
 import { GrDocument } from 'react-icons/gr';
 import { VerificationBadge } from './VerificationBadge';
+import FreeBadge from 'commons/components/elements/FreeBadge';
 
 export const QuestionMetadata = ({
     problem
@@ -35,6 +36,7 @@ export const QuestionMetadata = ({
             ) : (
                 <Skeleton isCustomSize className="w-32 h-5" />
             )}
+            {problem?.is_free && <FreeBadge />}
             <div className="flex flex-col gap-3 xl:flex-row md:gap-4">
                 {problem
                     ? metadata.map((item) =>

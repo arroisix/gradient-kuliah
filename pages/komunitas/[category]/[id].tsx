@@ -1,10 +1,8 @@
-import axios from 'axios';
 import LearnLayout from 'commons/learnLayout';
 import withAnon from 'commons/withAnon';
 import DetailSection from 'komunitas/containers/DetailSection';
 import { KomunitasProvider } from 'komunitas/contexts/KomunitasProvider';
 import { GetStaticProps, GetStaticPaths } from 'next';
-import config from 'redux/api/config';
 import { wrapper } from 'redux/store';
 import { ThunkDispatch } from 'redux-thunk';
 import { getRunningQueriesThunk } from 'redux/api/baseApi';
@@ -101,15 +99,8 @@ const DetailKomunitas = ({
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const { data: response } = await axios.get<ExploreQuestionResponse>(
-        `${config.API_BASE_URL}communities/public/post/list/`,
-        { params: { limit: 5 } }
-    );
-
     return {
-        paths: response.questions.map(({ category_slug, slug }) => ({
-            params: { category: category_slug, id: slug }
-        })),
+        paths: [],
         fallback: true // can also be true or 'blocking'
     };
 };

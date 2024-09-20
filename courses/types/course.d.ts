@@ -51,6 +51,7 @@ type Course = {
     is_coming_soon?: boolean;
     is_new?: boolean;
     is_only_notebook?: boolean;
+    is_free?: boolean;
 };
 
 // type SubChapter = {
@@ -320,6 +321,7 @@ type CourseDetail = {
     level: string;
     rating: number;
     total_books: number;
+    is_free: boolean;
     lecturers: {
         name: string;
         role: string;

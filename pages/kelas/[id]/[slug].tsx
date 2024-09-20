@@ -48,16 +48,6 @@ const Belajar = ({
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    // const { data: response } = await axios.get<
-    //     ListResponseData<SubchapterPathResponse>
-    // >(`${config.API_BASE_URL}courses/subchapter/list-subchapter-with-video/`, {
-    //     params: { limit: 5 }
-    // });
-
-    // const paths = response.data.map(({ course_slug, subchapter_slug }) => ({
-    //     params: { id: course_slug, slug: subchapter_slug }
-    // }));
-
     return {
         paths: [],
         fallback: true
