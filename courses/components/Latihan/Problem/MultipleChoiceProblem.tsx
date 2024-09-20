@@ -12,20 +12,29 @@ interface MultipleChoiceProblemProps {
     selectedAnswers: string[];
     onAnswerSelect: (selectedAnswers: string[]) => void;
     isSubmitted: boolean;
+    isSingleAnswer: boolean;
 }
 
 const MultipleChoiceProblem: React.FC<MultipleChoiceProblemProps> = ({
     options,
     selectedAnswers,
     onAnswerSelect,
-    isSubmitted
+    isSubmitted,
+    isSingleAnswer
 }) => {
     const handleAnswerSelect = (answerId: string) => {
+        console.log("selected answers", selectedAnswers);
         if (!isSubmitted) {
-            const updatedAnswers = selectedAnswers.includes(answerId)
-                ? selectedAnswers.filter((id) => id !== answerId)
-                : [...selectedAnswers, answerId];
-            onAnswerSelect(updatedAnswers);
+            if (isSingleAnswer) {
+                // For single-answer questions, always select the clicked answer
+                onAnswerSelect([answerId]);
+            } else {
+                // For multiple-answer questions, keep the existing behavior
+                const updatedAnswers = selectedAnswers.includes(answerId)
+                    ? selectedAnswers.filter((id) => id !== answerId)
+                    : [...selectedAnswers, answerId];
+                onAnswerSelect(updatedAnswers);
+            }
         }
     };
 
