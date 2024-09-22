@@ -13,6 +13,7 @@ interface MultipleChoiceProblemProps {
     onAnswerSelect: (selectedAnswers: string[]) => void;
     isSubmitted: boolean;
     isSingleAnswer: boolean;
+    showSolution: string;
 }
 
 const MultipleChoiceProblem: React.FC<MultipleChoiceProblemProps> = ({
@@ -20,16 +21,14 @@ const MultipleChoiceProblem: React.FC<MultipleChoiceProblemProps> = ({
     selectedAnswers,
     onAnswerSelect,
     isSubmitted,
-    isSingleAnswer
+    isSingleAnswer,
+    showSolution
 }) => {
     const handleAnswerSelect = (answerId: string) => {
-        console.log("selected answers", selectedAnswers);
         if (!isSubmitted) {
             if (isSingleAnswer) {
-                // For single-answer questions, always select the clicked answer
                 onAnswerSelect([answerId]);
             } else {
-                // For multiple-answer questions, keep the existing behavior
                 const updatedAnswers = selectedAnswers.includes(answerId)
                     ? selectedAnswers.filter((id) => id !== answerId)
                     : [...selectedAnswers, answerId];
@@ -39,7 +38,7 @@ const MultipleChoiceProblem: React.FC<MultipleChoiceProblemProps> = ({
     };
 
     const getButtonClass = (option: Option) => {
-        if (isSubmitted) {
+        if (isSubmitted && showSolution !== 'AFTER_COMPLETE') {
             if (option.is_correct) {
                 return 'bg-[#2AC27A80] text-white bg-opacity-50';
             }
@@ -63,7 +62,7 @@ const MultipleChoiceProblem: React.FC<MultipleChoiceProblemProps> = ({
                     onClick={() => handleAnswerSelect(option.id)}
                     disabled={isSubmitted}>
                     <span>{option.text}</span>
-                    {isSubmitted ? (
+                    {isSubmitted && showSolution !== 'AFTER_COMPLETE' ? (
                         option.is_correct ? (
                             <Check className="text-white" size={20} />
                         ) : selectedAnswers.includes(option.id) ? (

@@ -5,28 +5,55 @@ interface ExerciseTimerProps {
     timeConstraint?: string;
     timeLimit?: number;
     currentProblemId?: string;
+    problemProgress?: {
+        started_at: string;
+    };
+    firstProblemProgress?: {
+        started_at: string;
+    };
 }
 
 const ExerciseTimer: React.FC<ExerciseTimerProps> = ({
     timeConstraint,
     timeLimit = 0,
-    currentProblemId
+    currentProblemId,
+    problemProgress,
+    firstProblemProgress
 }) => {
     const [timeLeft, setTimeLeft] = useState(timeLimit);
 
     useEffect(() => {
-        if (timeConstraint === 'NONE') return;
+        if (timeConstraint === 'NONE' || !timeLimit) return;
 
-        if (timeConstraint === 'PER_PROBLEM') {
-            setTimeLeft(timeLimit);
+        let startTime: number;
+        if (timeConstraint === 'TOTAL_TIME' && firstProblemProgress) {
+            startTime = new Date(firstProblemProgress.started_at).getTime();
+        } else if (timeConstraint === 'PER_PROBLEM' && problemProgress) {
+            startTime = new Date(problemProgress.started_at).getTime();
+        } else {
+            return; // Exit if we don't have the necessary data
         }
 
-        const timer = setInterval(() => {
-            setTimeLeft((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
-        }, 1000);
+        const endTime = startTime + timeLimit * 1000;
+
+        const updateTimer = () => {
+            const now = Date.now();
+            const remaining = Math.max(0, endTime - now);
+            setTimeLeft(Math.floor(remaining / 1000));
+        };
+
+        updateTimer();
+
+        const timer = setInterval(updateTimer, 1000);
 
         return () => clearInterval(timer);
-    }, [timeConstraint, timeLimit, currentProblemId]);
+    }, [
+        timeConstraint,
+        timeLimit,
+        currentProblemId,
+        problemProgress,
+        firstProblemProgress
+    ]);
 
     if (timeConstraint === 'NONE') return null;
 
@@ -39,7 +66,10 @@ const ExerciseTimer: React.FC<ExerciseTimerProps> = ({
             .padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
     };
 
-    const progressPercentage = (timeLeft / timeLimit) * 100;
+    const progressPercentage = Math.max(
+        0,
+        Math.min(100, (timeLeft / timeLimit) * 100)
+    );
 
     return (
         <div className="w-[520px] mb-4 flex flex-col items-center">

@@ -12,6 +12,12 @@ interface LatihanLayoutProps {
     timeConstraint?: string | null | undefined;
     timeLimit?: number;
     currentProblemId?: string;
+    problemProgress?: {
+        started_at: string;
+    };
+    firstProblemProgress?: {
+        started_at: string;
+    };
 }
 
 const LatihanLayout: React.FC<LatihanLayoutProps> = ({
@@ -22,7 +28,9 @@ const LatihanLayout: React.FC<LatihanLayoutProps> = ({
     nextLink,
     timeConstraint,
     timeLimit,
-    currentProblemId
+    currentProblemId,
+    problemProgress,
+    firstProblemProgress
 }) => {
     const [showSidebar, setShowSidebar] = useState(false);
 
@@ -45,6 +53,8 @@ const LatihanLayout: React.FC<LatihanLayoutProps> = ({
                             timeConstraint={timeConstraint}
                             timeLimit={timeLimit}
                             currentProblemId={currentProblemId}
+                            problemProgress={problemProgress}
+                            firstProblemProgress={firstProblemProgress}
                         />
                     </div>
                 )}

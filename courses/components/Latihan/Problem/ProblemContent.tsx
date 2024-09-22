@@ -181,6 +181,7 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
                                 onAnswerSelect={handleAnswerChange}
                                 isSubmitted={isSubmitted}
                                 isSingleAnswer={problem.single_answer}
+                                showSolution={'PER_PROBLEM'}
                             />
                         ) : (
                             <OpenEndedProblem
@@ -188,6 +189,7 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
                                 onAnswerChange={handleAnswerChange}
                                 isSubmitted={isSubmitted}
                                 isCorrect={isCorrect}
+                                showSolution={'PER_PROBLEM'}
                             />
                         )}
                     </>

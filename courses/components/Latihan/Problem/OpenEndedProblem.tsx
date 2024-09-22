@@ -5,16 +5,18 @@ interface OpenEndedProblemProps {
     onAnswerChange: (answer: string) => void;
     isSubmitted: boolean;
     isCorrect: boolean;
+    showSolution: string;
 }
 
 const OpenEndedProblem: React.FC<OpenEndedProblemProps> = ({
     answer,
     onAnswerChange,
     isSubmitted,
-    isCorrect
+    isCorrect,
+    showSolution
 }) => {
     const getTextareaClass = () => {
-        if (isSubmitted) {
+        if (isSubmitted && showSolution !== 'AFTER_COMPLETE') {
             return isCorrect
                 ? 'bg-[#EC5D4980] text-white'
                 : 'bg-[#2AC27A80] text-white';

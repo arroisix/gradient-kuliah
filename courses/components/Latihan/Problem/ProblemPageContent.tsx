@@ -1,7 +1,9 @@
 import React from 'react';
 import {
     useGetExerciseProblemQuery,
-    useGetProblemSetDetailQuery
+    useGetProblemSetDetailQuery,
+    useGetOrCreateExerciseProblemProgressQuery,
+    useGetExerciseProgressQuery
 } from 'courses/redux/api/exercisesApi';
 import ProblemContent from './ProblemContent';
 import LatihanLayout from '../LatihanLayout';
@@ -26,12 +28,56 @@ const ProblemPageContent: React.FC<ProblemPageContentProps> = ({
     const { data: problemSetData, isLoading: problemSetLoading } =
         useGetProblemSetDetailQuery(sectionId, { skip: !sectionId });
 
-    if (problemLoading || problemSetLoading || !problem || !problemSetData) {
+    const { data: exerciseProgress, isLoading: isProgressLoading } =
+        useGetExerciseProgressQuery({ exercise_slug: slug }, { skip: !slug });
+
+    const { data: problemProgress, isLoading: isProblemProgressLoading } =
+        useGetOrCreateExerciseProblemProgressQuery(
+            {
+                exercise_slug: slug,
+                exercise_progress_id: exerciseProgress?.id ?? '',
+                problem_id: problemId
+            },
+            {
+                skip: !exerciseProgress?.id,
+                refetchOnMountOrArgChange: true
+            }
+        );
+
+    const {
+        data: firstProblemProgress,
+        isLoading: isFirstProblemProgressLoading
+    } = useGetOrCreateExerciseProblemProgressQuery(
+        {
+            exercise_slug: slug,
+            exercise_progress_id: exerciseProgress?.id ?? '',
+            problem_id: problemSetData?.problems[0]?.id ?? ''
+        },
+        {
+            skip: !exerciseProgress?.id || !problemSetData?.problems[0]?.id,
+            refetchOnMountOrArgChange: true
+        }
+    );
+
+    if (
+        problemLoading ||
+        problemSetLoading ||
+        isProgressLoading ||
+        isProblemProgressLoading ||
+        isFirstProblemProgressLoading ||
+        !problem ||
+        !problemSetData ||
+        !problemProgress ||
+        !firstProblemProgress
+    ) {
         return <div>Loading...</div>;
     }
 
-    const { time_constraint: timeConstraint, time_limit: timeLimit } =
-        problemSetData;
+    const {
+        time_constraint: timeConstraint,
+        time_limit: timeLimit,
+        show_solution: showSolution
+    } = problemSetData;
 
     return (
         <LatihanLayout
@@ -52,11 +98,14 @@ const ProblemPageContent: React.FC<ProblemPageContentProps> = ({
             }
             timeConstraint={timeConstraint}
             timeLimit={timeLimit}
-            currentProblemId={problemId}>
+            currentProblemId={problemId}
+            problemProgress={problemProgress}
+            firstProblemProgress={firstProblemProgress}>
             <ProblemContent
                 slug={slug}
                 problemId={problemId}
                 sectionId={sectionId}
+                showSolution={showSolution}
             />
         </LatihanLayout>
     );
