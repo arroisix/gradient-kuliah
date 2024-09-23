@@ -1,5 +1,6 @@
-import { cn } from 'commons/utils';
+import { cn, formatDuration } from 'commons/utils';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import moment from 'moment';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -16,32 +17,13 @@ const VideoItem = ({
 }): JSX.Element => {
     const tracker = useTracker();
     const router = useRouter();
-    const { id, sub } = router.query;
+    const { id, slug } = router.query;
     const { is_subscribed } = useCourseSubscription();
 
     const { duration, last_duration: lastDuration } = value;
 
-    const convertToSeconds = (timeString?: string | null): number => {
-        if (!timeString) return 0;
-        const duration = timeString.split(':').map(Number);
-        const [seconds, minutes, hours] = duration.reverse();
-        return (hours ?? 0) * 60 * 60 + minutes * 60 + seconds;
-    };
-
-    const totalDuration = convertToSeconds(duration);
-    const totalLastDuration = convertToSeconds(lastDuration);
-
-    const formatTime = (totalSeconds: number): string => {
-        const minutes = Math.floor(totalSeconds / 60);
-        const seconds = totalSeconds % 60;
-        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(
-            2,
-            '0'
-        )}`;
-    };
-
-    const lastDurationDisplay = formatTime(totalLastDuration);
-    const durationDisplay = formatTime(totalDuration);
+    const lastDurationDisplay = formatDuration(lastDuration);
+    const durationDisplay = formatDuration(duration);
 
     const track = (): void => {
         if (is_subscribed || value.is_free) {
@@ -68,7 +50,7 @@ const VideoItem = ({
             <div
                 className={cn(
                     'flex items-center gap-[10px]',
-                    sub === value.id ? 'w-[65%]' : 'w-[80%]'
+                    slug === value.subchapter_slug ? 'w-[65%]' : 'w-[80%]'
                 )}>
                 <div className="w-[18px] h-[18px]">
                     {value.is_finished ? (
@@ -76,15 +58,19 @@ const VideoItem = ({
                             size={18}
                             className="text-[#02EC60]"
                         />
-                    ) : sub === value.id ? (
+                    ) : slug === value.subchapter_slug ? (
                         <div className="w-[18px] h-[18px] relative flex justify-center items-center">
                             <div
                                 className="radial-progress"
                                 style={
                                     {
                                         '--value': Math.floor(
-                                            ((totalLastDuration ?? 0) /
-                                                (totalDuration ?? 0)) *
+                                            (moment
+                                                .duration(lastDuration)
+                                                .asSeconds() /
+                                                moment
+                                                    .duration(duration)
+                                                    .asSeconds()) *
                                                 100
                                         ),
                                         '--size': '15px',
@@ -119,7 +105,7 @@ const VideoItem = ({
             <div className="flex gap-1 text-xs font-body">
                 {duration && (
                     <>
-                        {sub === value.id && (
+                        {slug === value.subchapter_slug && (
                             <>
                                 <span className="inline-block">
                                     {lastDurationDisplay}

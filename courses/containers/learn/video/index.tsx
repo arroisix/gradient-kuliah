@@ -16,6 +16,7 @@ import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import { useGetSubchapterDetailV2Query } from 'courses/redux/api/privateCourseV2Api';
 import { useGetPublicSubchapterDetailV2Query } from 'courses/redux/api/publicCourseV2Api';
 import RelatedVideosSection from 'courses/components/RelatedVideosSection';
+import FreeBadge from 'commons/components/elements/FreeBadge';
 
 const VideoLearnContainer = ({
     subchapter: ssrSubchapterData,
@@ -76,12 +77,13 @@ const VideoLearnContainer = ({
                         }
                     />
                     <div className="order-last px-4 py-4 space-y-1 lg:pt-6 sm:px-0 md:px-12 lg:px-0">
-                        <p className="text-sm lg:text-xl text-neutral-400">
+                        <p className="text-sm text-neutral-400">
                             Kelas {course?.course_name}
                         </p>
                         <h1 className="text-base font-extrabold md:text-2xl">
                             {subchapter?.subchapter_name}
                         </h1>
+                        {subchapter?.video?.is_free && <FreeBadge />}
                     </div>
                     <VideoPlayerContainer
                         isLoadingData={isLoading}

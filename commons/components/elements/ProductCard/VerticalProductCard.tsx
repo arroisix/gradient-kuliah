@@ -7,6 +7,7 @@ import { FaRegCirclePlay } from 'react-icons/fa6';
 import { IoTime } from 'react-icons/io5';
 import { TbCircleCheckFilled } from 'react-icons/tb';
 import { useTracker } from 'tracker/tracker';
+import FreeBadge from '../FreeBadge';
 
 const VerticalProductCard = ({
     href,
@@ -28,7 +29,7 @@ const VerticalProductCard = ({
             href={href}
             onClick={() => tracker?.genericTrack(eventName, eventPayload)}
             className={cn(
-                'relative flex flex-col items-end overflow-hidden rounded-lg cursor-pointer bg-neutral-800 border border-graphite-600/50',
+                'relative z-0 flex flex-col items-end overflow-hidden rounded-lg cursor-pointer bg-neutral-800 border border-graphite-600/50',
                 className
             )}>
             <div
@@ -37,6 +38,22 @@ const VerticalProductCard = ({
                     isCourse || isVideo ? 'aspect-[2/1]' : 'aspect-[4/3]',
                     !(isVideo || isCourse) && 'py-2'
                 )}>
+                <div className="absolute z-10 flex items-center gap-2 top-4 left-4">
+                    {product.isComingSoon && (
+                        <div
+                            className={cn(
+                                'badge w-max px-3 bg-gradient-to-r from-[#F2C04C] via-[#E48E0D] to-[#E4B50D] font-bold text-white border-none'
+                            )}>
+                            Segera Hadir
+                        </div>
+                    )}
+                    {!product.isComingSoon && product.isNew && (
+                        <div className="bg-[#E9202A] badge text-white border-[#E9202A] font-bold border-none px-3">
+                            Baru
+                        </div>
+                    )}
+                    {product.isFree && <FreeBadge />}
+                </div>
                 <div
                     className={cn(
                         'relative rounded-md border-neutral-700 object-center',
@@ -122,18 +139,6 @@ const VerticalProductCard = ({
                     </p>
                 )}
             </div>
-            <div
-                className={cn(
-                    'rounded-full px-3 py-1 w-max bg-gradient-to-r from-[#F2C04C] via-[#E48E0D] to-[#E4B50D] font-bold text-white text-xs',
-                    !product.isComingSoon && 'hidden'
-                )}>
-                Segera Hadir
-            </div>
-            {!product.isComingSoon && product.isNew && (
-                <div className="bg-[#E9202A] px-4 rounded-full py-1 absolute top-4 left-4 font-bold">
-                    Baru
-                </div>
-            )}
         </Link>
     );
 };

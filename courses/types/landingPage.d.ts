@@ -49,6 +49,7 @@ interface CourseLandingPageData {
     packets: Packet[];
     is_coming_soon: boolean;
     is_waiting_list: boolean;
+    is_free: boolean;
 }
 
 interface MajorOptions {

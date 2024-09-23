@@ -43,7 +43,10 @@ const CourseList = ({
         title: course.course_name,
         thumbnail: course.thumbnail,
         inProgress: false,
-        latestProgress: 0
+        latestProgress: 0,
+        isComingSoon: course?.is_coming_soon,
+        isNew: course?.is_new,
+        isFree: course?.is_free
     });
 
     const getHref = (course: Course): string => {
