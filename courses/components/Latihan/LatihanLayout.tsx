@@ -18,7 +18,7 @@ interface LatihanLayoutProps {
     firstProblemProgress?: {
         started_at: string;
     };
-    onTimeExpired: () => void;
+    onTimeExpired?: () => void;
 }
 
 const LatihanLayout: React.FC<LatihanLayoutProps> = ({

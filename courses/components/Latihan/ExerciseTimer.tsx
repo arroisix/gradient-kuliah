@@ -11,7 +11,7 @@ interface ExerciseTimerProps {
     firstProblemProgress?: {
         started_at: string;
     };
-    onTimeExpired: () => void;
+    onTimeExpired?: () => void;
 }
 
 const ExerciseTimer: React.FC<ExerciseTimerProps> = ({
@@ -48,7 +48,9 @@ const ExerciseTimer: React.FC<ExerciseTimerProps> = ({
             setTimeLeft(Math.floor(remaining / 1000));
 
             if (remaining <= 0) {
-                onTimeExpired();
+                if (onTimeExpired) {
+                    onTimeExpired();
+                }
             }
         };
 
