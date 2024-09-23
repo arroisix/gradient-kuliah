@@ -27,17 +27,24 @@ const ExerciseTimer: React.FC<ExerciseTimerProps> = ({
 
         let startTime: number;
         if (timeConstraint === 'TOTAL_TIME' && firstProblemProgress) {
-            startTime = new Date(firstProblemProgress.started_at).getTime();
+            startTime =
+                new Date(firstProblemProgress.started_at).getTime() -
+                7 * 60 * 60 * 1000;
         } else if (timeConstraint === 'PER_PROBLEM' && problemProgress) {
-            startTime = new Date(problemProgress.started_at).getTime();
+            startTime =
+                new Date(problemProgress.started_at).getTime() -
+                7 * 60 * 60 * 1000;
         } else {
-            return; // Exit if we don't have the necessary data
+            return;
         }
+
+        console.log('start time', startTime);
 
         const endTime = startTime + timeLimit * 1000;
 
         const updateTimer = () => {
             const now = Date.now();
+            console.log('now', now);
             const remaining = Math.max(0, endTime - now);
             setTimeLeft(Math.floor(remaining / 1000));
         };

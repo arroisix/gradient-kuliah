@@ -4,7 +4,8 @@ import {
     ExerciseHistory,
     ExerciseLandingPage,
     ExerciseProblem,
-    ExerciseProblemProgress, ExerciseProblemReport,
+    ExerciseProblemProgress,
+    ExerciseProblemReport,
     ExerciseProgress,
     ExerciseReportSummary,
     ProblemSetDetail
@@ -186,15 +187,30 @@ export const exerciseApi = baseApi.injectEndpoints({
 
         getExerciseReportSummary: builder.query<
             ExerciseReportSummary,
-            { exercise_slug: string }
+            { exercise_slug: string; exercise_progress_id: string }
         >({
-            query: ({ exercise_slug }) => ({
-                url: `${EXERCISE_BASE_URL}exercises/${exercise_slug}/summary/`
+            query: ({ exercise_slug, exercise_progress_id }) => ({
+                url: `${EXERCISE_BASE_URL}exercises/${exercise_slug}/progress/${exercise_progress_id}/summary/`
             }),
             providesTags: (result, error, arg) => [
                 {
                     type: 'ASTRONOTES',
-                    id: `EXERCISE_SUMMARY_${arg.exercise_slug}`
+                    id: `EXERCISE_SUMMARY_${arg.exercise_slug}_${arg.exercise_progress_id}`
+                }
+            ]
+        }),
+
+        getExerciseReport: builder.query<
+            ExerciseProblemReport,
+            { exercise_slug: string; exercise_progress_id: string }
+        >({
+            query: ({ exercise_slug, exercise_progress_id }) => ({
+                url: `${EXERCISE_BASE_URL}exercises/${exercise_slug}/progress/${exercise_progress_id}/report/`
+            }),
+            providesTags: (result, error, arg) => [
+                {
+                    type: 'ASTRONOTES',
+                    id: `EXERCISE_REPORT_${arg.exercise_slug}_${arg.exercise_progress_id}`
                 }
             ]
         }),
@@ -210,21 +226,6 @@ export const exerciseApi = baseApi.injectEndpoints({
                 {
                     type: 'ASTRONOTES',
                     id: `EXERCISE_PROBLEM_REPORT_${arg.problem_id}`
-                }
-            ]
-        }),
-
-        getLatestExerciseReview: builder.query<
-            ExerciseProblemReport,
-            { exercise_slug: string }
-        >({
-            query: ({ exercise_slug }) => ({
-                url: `${EXERCISE_BASE_URL}exercises/${exercise_slug}/review/`
-            }),
-            providesTags: (result, error, arg) => [
-                {
-                    type: 'ASTRONOTES',
-                    id: `EXERCISE_REVIEW_${arg.exercise_slug}`
                 }
             ]
         }),
@@ -275,7 +276,7 @@ export const {
     useUpdateExerciseProblemProgressMutation,
     useGetExerciseReportSummaryQuery,
     useGetExerciseProblemReportQuery,
-    useGetLatestExerciseReviewQuery,
+    useGetExerciseReportQuery,
     useGetExerciseLandingPageQuery,
     useGetProblemSetDetailQuery
 } = exerciseApi;

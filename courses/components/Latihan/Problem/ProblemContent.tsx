@@ -4,8 +4,7 @@ import {
     useGetOrCreateExerciseProblemProgressQuery,
     useGetExerciseProblemQuery,
     useGetExerciseProgressQuery,
-    useUpdateExerciseProblemProgressMutation,
-    useUpdateExerciseProgressMutation
+    useUpdateExerciseProblemProgressMutation
 } from '../../../redux/api/exercisesApi';
 import MultipleChoiceProblem from './MultipleChoiceProblem';
 import OpenEndedProblem from './OpenEndedProblem';
@@ -15,12 +14,14 @@ interface ProblemContentProps {
     problemId: string;
     slug: string;
     sectionId: string;
+    showSolution: string;
 }
 
 const ProblemContent: React.FC<ProblemContentProps> = ({
     slug,
     problemId,
-    sectionId
+    sectionId,
+    showSolution
 }) => {
     const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
     const [openEndedAnswer, setOpenEndedAnswer] = useState('');
@@ -52,7 +53,6 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
         );
 
     const [updateProblemProgress] = useUpdateExerciseProblemProgressMutation();
-    const [updateExerciseProgress] = useUpdateExerciseProgressMutation();
 
     useEffect(() => {
         setSelectedAnswers([]);
@@ -120,17 +120,6 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
             }).unwrap();
 
             setIsSubmitted(true);
-
-            if (!problem.next_navigation && exerciseProgress) {
-                await updateExerciseProgress({
-                    exercise_slug: slug,
-                    progress_id: exerciseProgress.id,
-                    data: {
-                        status: 'COMPLETED',
-                        completed_at: new Date().toISOString()
-                    }
-                }).unwrap();
-            }
         } catch (error) {
             console.error('Failed to update problem progress:', error);
         } finally {
@@ -181,7 +170,7 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
                                 onAnswerSelect={handleAnswerChange}
                                 isSubmitted={isSubmitted}
                                 isSingleAnswer={problem.single_answer}
-                                showSolution={'PER_PROBLEM'}
+                                showSolution={showSolution}
                             />
                         ) : (
                             <OpenEndedProblem
@@ -189,7 +178,7 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
                                 onAnswerChange={handleAnswerChange}
                                 isSubmitted={isSubmitted}
                                 isCorrect={isCorrect}
-                                showSolution={'PER_PROBLEM'}
+                                showSolution={showSolution}
                             />
                         )}
                     </>
@@ -216,13 +205,13 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
                         disabled={!isAnswerProvided || isSubmitting}>
                         {isSubmitting ? 'Submitting...' : 'Submit'}
                     </button>
-                ) : (
+                ) : showSolution === 'PER_PROBLEM' ? (
                     <button
                         className="w-full py-3 rounded-full font-semibold bg-[#4B5563] text-white hover:bg-[#374151] transition-colors"
                         onClick={() => setShowExplanation(!showExplanation)}>
                         {showExplanation ? 'Lihat Soal' : 'Lihat Pembahasan'}
                     </button>
-                )}
+                ) : null}
                 {isSubmitted && (
                     <Link
                         href={
@@ -230,7 +219,7 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
                                 ? problem.next_navigation.type === 'problem'
                                     ? `/latihan/${slug}/${sectionId}/${problem.next_navigation.id}`
                                     : `/latihan/${slug}/${problem.next_navigation.id}`
-                                : `/latihan/${slug}/report`
+                                : `/latihan/${slug}/report/${exerciseProgress.id}`
                         }
                         passHref>
                         <button className="w-full py-3 rounded-full font-semibold bg-[#7F56D9] text-white hover:bg-[#6941C6] transition-colors">

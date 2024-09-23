@@ -3,19 +3,13 @@ import { IoMdCheckmark as Check } from 'react-icons/io';
 import { IoMdClose as X } from 'react-icons/io';
 import Filter from 'commons/components/elements/Filter';
 import { REVIEW_FILTER_OPTIONS } from '../constants';
-import { useGetLatestExerciseReviewQuery } from '../../../redux/api/exercisesApi';
-import Skeleton from 'commons/components/elements/Skeleton';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
-const ReviewTab = ({ exerciseSlug }: { exerciseSlug: string }) => {
+const ReviewTab = ({ problems }: { problems: any[] }) => {
     const [filter] = useState('all');
-    const { data, isLoading, error } = useGetLatestExerciseReviewQuery({
-        exercise_slug: exerciseSlug
-    });
 
-    if (isLoading) return <Skeleton className="w-full h-full" />;
-    if (error) return <div>Error loading review data</div>;
-
-    const filteredProblems = data?.problems.filter((problem) => {
+    const filteredProblems = problems.filter((problem) => {
         if (filter === 'correct') return problem.user_progress.is_correct;
         if (filter === 'incorrect') return !problem.user_progress.is_correct;
         return true;
@@ -37,6 +31,8 @@ const ReviewTab = ({ exerciseSlug }: { exerciseSlug: string }) => {
 
 const ProblemCard = ({ problem, index }: { problem: any; index: number }) => {
     const isTextBased = problem.question.type !== 'MULTIPLE_CHOICE';
+    const router = useRouter();
+    const { slug, exerciseProgressId } = router.query;
 
     return (
         <div
@@ -88,9 +84,7 @@ const ProblemCard = ({ problem, index }: { problem: any; index: number }) => {
                         <Option
                             key={option.id}
                             option={option}
-                            isCorrect={problem.user_progress.submitted_answer.includes(
-                                option.id
-                            )}
+                            isCorrect={option.id === problem.solution_id}
                             isSelected={problem.user_progress.submitted_answer.includes(
                                 option.id
                             )}
@@ -99,11 +93,13 @@ const ProblemCard = ({ problem, index }: { problem: any; index: number }) => {
                 </div>
             )}
 
-            <div className="">
+            <Link
+                href={`/latihan/${slug}/report/${exerciseProgressId}/${problem.id}`}
+                passHref>
                 <button className="bg-[#444444] hover:bg-[#666666] text-white text-sm py-2 px-4 rounded-full w-full">
                     Selengkapnya
                 </button>
-            </div>
+            </Link>
         </div>
     );
 };
@@ -120,14 +116,14 @@ const Option = ({
     return (
         <div
             className={`flex justify-between items-center p-3 my-1 rounded-md w-full max-w-[608px] h-[45px] ${
-                isSelected
+                isSelected || isCorrect
                     ? isCorrect
                         ? 'bg-[#2AC27A]'
                         : 'bg-[#EC5D49]'
                     : 'bg-[#444444]'
             } bg-opacity-50`}>
             <span className="text-sm font-medium">{option.text}</span>
-            {isSelected && (
+            {(isSelected || isCorrect) && (
                 <div
                     className={`flex justify-center items-center rounded-md w-[20px] h-[20px] ${
                         isCorrect ? 'bg-[#2AC27A]' : 'bg-[#EC5D49]'

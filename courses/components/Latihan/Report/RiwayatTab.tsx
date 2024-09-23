@@ -1,15 +1,24 @@
 import React from 'react';
 
-interface RiwayatTabProps {
-    history: Array<{
-        attempt: number;
-        score: number;
-        date: string;
-        score_change: number | null;
-    }>;
+interface HistoryEntry {
+    id: string;
+    attempt: number;
+    score: number;
+    date: string;
+    score_change: number | null;
 }
 
-const RiwayatTab: React.FC<RiwayatTabProps> = ({ history }) => {
+interface RiwayatTabProps {
+    history: HistoryEntry[];
+    currentExerciseProgressId: string;
+    onSelectExerciseProgress: (exerciseProgressId: string) => void;
+}
+
+const RiwayatTab: React.FC<RiwayatTabProps> = ({
+    history,
+    currentExerciseProgressId,
+    onSelectExerciseProgress
+}) => {
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
         const options: Intl.DateTimeFormatOptions = {
@@ -26,11 +35,13 @@ const RiwayatTab: React.FC<RiwayatTabProps> = ({ history }) => {
 
     return (
         <div className="w-full h-full flex flex-col space-y-4">
-            {reversedHistory.map((entry, index) => (
+            {reversedHistory.map((entry) => (
                 <div
-                    key={index}
+                    key={entry.id}
                     className={`flex flex-col bg-[#252A31] rounded-lg p-5 w-full gap-4 ${
-                        index === 0 ? 'border-l-2 border-[#5F2BCE]' : ''
+                        entry.id === currentExerciseProgressId
+                            ? 'border-l-2 border-[#5F2BCE]'
+                            : ''
                     }`}>
                     <div className="flex justify-between items-center">
                         <div className="flex flex-col">
@@ -38,7 +49,7 @@ const RiwayatTab: React.FC<RiwayatTabProps> = ({ history }) => {
                                 Percobaan #{entry.attempt}
                             </span>
                             <span className="text-[#BBBBBB] text-sm">
-                                {index === 0
+                                {entry.id === currentExerciseProgressId
                                     ? 'Saat ini'
                                     : formatDate(entry.date)}
                             </span>
@@ -67,8 +78,10 @@ const RiwayatTab: React.FC<RiwayatTabProps> = ({ history }) => {
                         </div>
                     </div>
 
-                    {index !== 0 && (
-                        <button className="w-full py-3 rounded-full font-semibold bg-[#444444] text-white hover:bg-[#33373E] transition-colors">
+                    {entry.id !== currentExerciseProgressId && (
+                        <button
+                            className="w-full py-3 rounded-full font-semibold bg-[#444444] text-white hover:bg-[#33373E] transition-colors"
+                            onClick={() => onSelectExerciseProgress(entry.id)}>
                             Lihat Detail
                         </button>
                     )}

@@ -4,9 +4,11 @@ import ScoreCard from './ScoreCard';
 import ExerciseHeader from '../ExerciseHeader';
 import {
     useGetExerciseReportSummaryQuery,
-    useGetExerciseHistoryQuery
+    useGetExerciseHistoryQuery,
+    useGetExerciseReportQuery
 } from '../../../redux/api/exercisesApi';
 import Skeleton from 'commons/components/elements/Skeleton';
+import { useRouter } from 'next/router';
 
 const SummaryTab = dynamic(() => import('./SummaryTab'), { ssr: false });
 const ReviewTab = dynamic(() => import('./ReviewTab'), { ssr: false });
@@ -16,20 +18,34 @@ type Tab = 'summary' | 'review' | 'history';
 
 interface ExerciseReportLayoutProps {
     slug: string;
+    exerciseProgressId: string;
 }
 
 const ExerciseReportLayout: React.FC<ExerciseReportLayoutProps> = ({
-    slug
+    slug,
+    exerciseProgressId
 }) => {
     const [activeTab, setActiveTab] = useState<Tab>('summary');
+    const [currentExerciseProgressId, setCurrentExerciseProgressId] =
+        useState(exerciseProgressId);
+    const router = useRouter();
 
     const {
         data: summaryData,
         isLoading: isSummaryLoading,
         error: summaryError
     } = useGetExerciseReportSummaryQuery(
-        { exercise_slug: slug },
-        { skip: !slug }
+        { exercise_slug: slug, exercise_progress_id: exerciseProgressId },
+        { skip: !slug || !exerciseProgressId }
+    );
+
+    const {
+        data: reportData,
+        isLoading: isReportLoading,
+        error: reportError
+    } = useGetExerciseReportQuery(
+        { exercise_slug: slug, exercise_progress_id: exerciseProgressId },
+        { skip: !slug || !exerciseProgressId }
     );
 
     const {
@@ -38,11 +54,27 @@ const ExerciseReportLayout: React.FC<ExerciseReportLayoutProps> = ({
         error: historyError
     } = useGetExerciseHistoryQuery({ exercise_slug: slug }, { skip: !slug });
 
-    if (isSummaryLoading || isHistoryLoading) {
+    const handleSelectExerciseProgress = (newExerciseProgressId: string) => {
+        setCurrentExerciseProgressId(newExerciseProgressId);
+        router.push(
+            `/latihan/${slug}/report/${newExerciseProgressId}`,
+            undefined,
+            { shallow: true }
+        );
+    };
+
+    if (isSummaryLoading || isReportLoading || isHistoryLoading) {
         return <Skeleton className="w-full h-full" />;
     }
 
-    if (summaryError || historyError || !summaryData || !historyData) {
+    if (
+        summaryError ||
+        reportError ||
+        historyError ||
+        !summaryData ||
+        !reportData ||
+        !historyData
+    ) {
         return <div>Error loading data</div>;
     }
 
@@ -107,10 +139,18 @@ const ExerciseReportLayout: React.FC<ExerciseReportLayoutProps> = ({
                                 />
                             )}
                             {activeTab === 'review' && (
-                                <ReviewTab exerciseSlug={slug} />
+                                <ReviewTab problems={reportData.problems} />
                             )}
                             {activeTab === 'history' && (
-                                <RiwayatTab history={historyData.history} />
+                                <RiwayatTab
+                                    history={historyData.history}
+                                    currentExerciseProgressId={
+                                        currentExerciseProgressId
+                                    }
+                                    onSelectExerciseProgress={
+                                        handleSelectExerciseProgress
+                                    }
+                                />
                             )}
                         </div>
                     </div>

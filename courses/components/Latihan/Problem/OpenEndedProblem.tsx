@@ -18,8 +18,8 @@ const OpenEndedProblem: React.FC<OpenEndedProblemProps> = ({
     const getTextareaClass = () => {
         if (isSubmitted && showSolution !== 'AFTER_COMPLETE') {
             return isCorrect
-                ? 'bg-[#EC5D4980] text-white'
-                : 'bg-[#2AC27A80] text-white';
+                ? 'bg-[#2AC27A80] text-white'
+                : 'bg-[#EC5D4980] text-white';
         }
         return 'bg-[#374151] text-white';
     };

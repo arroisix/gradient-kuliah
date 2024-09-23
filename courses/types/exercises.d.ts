@@ -46,6 +46,7 @@ interface ExerciseLandingPage {
 export interface ExerciseHistory {
     exercise_id: string;
     history: Array<{
+        id: string;
         attempt: number;
         score: number;
         date: string;
@@ -163,6 +164,7 @@ export interface ProblemReport {
         }>;
     };
     solution: string;
+    solution_id: string;
     user_progress: {
         status: string;
         submitted_answer: string[];

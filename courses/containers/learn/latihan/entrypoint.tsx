@@ -40,6 +40,16 @@ const LatihanEntrypoint = (): JSX.Element => {
         });
     };
 
+    const handleStatusChange = (newStatus: string) => {
+        router.push(
+            { query: { ...router.query, status: newStatus, page: 1 } },
+            undefined,
+            {
+                shallow: true
+            }
+        );
+    };
+
     return (
         <>
             <Breadcrumb className="w-full pb-5" />
@@ -52,7 +62,10 @@ const LatihanEntrypoint = (): JSX.Element => {
                 Latihan
             </h1>
 
-            <LatihanTabs />
+            <LatihanTabs
+                activeStatus={status as string}
+                onStatusChange={handleStatusChange}
+            />
 
             <div className="flex gap-4 items-center my-4">
                 <Filter
