@@ -28,6 +28,15 @@ interface ExerciseStartProps {
 const LatihanStart: React.FC<ExerciseStartProps> = ({ exercise }) => {
     const firstSectionId = exercise.problem_sets[0]?.id;
 
+    const formatDuration = (duration: number) => {
+        if (duration < 60) {
+            return `${duration} Detik`;
+        } else {
+            const minutes = Math.floor(duration / 60);
+            return `${minutes} Menit`;
+        }
+    };
+
     return (
         <div className="flex flex-col h-full">
             <div className="flex-grow">
@@ -43,7 +52,7 @@ const LatihanStart: React.FC<ExerciseStartProps> = ({ exercise }) => {
                 </p>
                 {exercise.total_duration > 0 && (
                     <p className="text-gray-400">
-                        {Math.floor(exercise.total_duration / 60)} Menit
+                        {formatDuration(exercise.total_duration)}
                     </p>
                 )}
             </div>

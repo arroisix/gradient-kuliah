@@ -37,6 +37,8 @@ const MultipleChoiceProblem: React.FC<MultipleChoiceProblemProps> = ({
         }
     };
 
+    console.log('Show solution,', showSolution);
+
     const getButtonClass = (option: Option) => {
         if (isSubmitted && showSolution !== 'AFTER_COMPLETE') {
             if (option.is_correct) {
