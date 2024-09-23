@@ -9,8 +9,30 @@ import ProductCard from 'commons/components/elements/ProductCard';
 
 const PrivateDashboardContent = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { data, isLoading, isFetching } = useGetDashboardContentQuery(
-        undefined,
+
+    const { data: justReleased, isLoading: isLoadingJustReleased } =
+        useGetDashboardContentQuery(
+            { type: 'just_released' },
+            { skip: !isAuthenticated }
+        );
+    const {
+        data: myClass,
+        isLoading: isLoadingMyClass,
+        isFetching: isFetchingMyClass
+    } = useGetDashboardContentQuery(
+        { type: 'user_classes' },
+        { skip: !isAuthenticated }
+    );
+    const { data: bookRecommendation, isLoading: isLoadingBookRecommendation } =
+        useGetDashboardContentQuery(
+            { type: 'book_recommendation' },
+            { skip: !isAuthenticated }
+        );
+    const {
+        data: classRecommendation,
+        isLoading: isLoadingClassRecommendation
+    } = useGetDashboardContentQuery(
+        { type: 'class_recommendation' },
         { skip: !isAuthenticated }
     );
 
@@ -47,14 +69,14 @@ const PrivateDashboardContent = (): JSX.Element => {
 
     return (
         <>
-            {data?.just_released.length !== 0 && (
+            {justReleased?.just_released.length !== 0 && (
                 <DashboardSection
-                    isLoading={isLoading}
+                    isLoading={isLoadingJustReleased}
                     header="Baru Rilis"
-                    items={data?.just_released}>
+                    items={justReleased?.just_released}>
                     {(item, i) => (
                         <ProductCard
-                            key={data?.just_released[i].id}
+                            key={justReleased?.just_released[i].id}
                             orientation="vertical"
                             category={(item as LearningMaterial).type}
                             href={getHref(item as LearningMaterial)}
@@ -66,13 +88,13 @@ const PrivateDashboardContent = (): JSX.Element => {
                 </DashboardSection>
             )}
             <MyClassesAccordion
-                isLoading={isLoading || isFetching}
-                courses={data?.my_class}
+                isLoading={isLoadingMyClass || isFetchingMyClass}
+                courses={myClass?.my_class}
             />
             <DashboardSection
-                isLoading={isLoading}
+                isLoading={isLoadingBookRecommendation}
                 header="Bacaan Untukmu"
-                items={data?.book_recommendation}
+                items={bookRecommendation?.book_recommendation}
                 showButton
                 btnHref="/perpustakaan">
                 {(item) => (
@@ -89,9 +111,9 @@ const PrivateDashboardContent = (): JSX.Element => {
             </DashboardSection>
             <DashboardSection
                 isCourse
-                isLoading={isLoading}
+                isLoading={isLoadingClassRecommendation}
                 header="Kelas Untukmu"
-                items={data?.class_recommendation}
+                items={classRecommendation?.class_recommendation}
                 showButton
                 btnHref="/kelas">
                 {(item) => (

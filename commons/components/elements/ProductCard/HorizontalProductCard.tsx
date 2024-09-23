@@ -8,6 +8,7 @@ import { TbCircleCheckFilled } from 'react-icons/tb';
 import { useTracker } from 'tracker/tracker';
 import Image from 'next/image';
 import { BiSolidStar } from 'react-icons/bi';
+import FreeBadge from '../FreeBadge';
 
 const HorizontalProductCard = ({
     href,
@@ -79,6 +80,9 @@ const HorizontalProductCard = ({
                         </>
                     )}
                 </p>
+                {product.isFree && !product.inProgress && (
+                    <FreeBadge className="mb-2 badge-sm" />
+                )}
 
                 <TitleLabel className="font-sans text-sm font-bold text-balance line-clamp-2">
                     {product.title}
@@ -125,10 +129,10 @@ const Info = ({ product }: { product: Product }): JSX.Element => {
             </p>
             <p
                 className={cn(
-                    'mt-2 text-accent-yellow text-xs font-bold flex gap-1',
+                    'mt-2 text-graphite-400 text-xs font-bold items-center flex gap-1',
                     !product.rating && 'hidden'
                 )}>
-                <BiSolidStar size={16} />
+                <BiSolidStar size={14} />
                 {product.rating && product.rating.toFixed(1)}
             </p>
             <div className="grow min-h-2"></div>

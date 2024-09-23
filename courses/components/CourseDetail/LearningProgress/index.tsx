@@ -8,6 +8,7 @@ import CourseCTA from './CourseCTA';
 import { CDN_URL } from 'commons/constants';
 import Image from 'next/image';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
+import FreeBadge from 'commons/components/elements/FreeBadge';
 
 const CENTERED_HERO = [
     'kimdas1',
@@ -80,12 +81,15 @@ const LearningProgress = ({
                     'px-4 py-4 z-10  flex flex-col gap-2'
                 )}>
                 <div className="flex flex-col gap-2">
-                    <div
-                        className={cn(
-                            'rounded-full px-3 py-1 w-max font-body bg-gradient-to-r from-[#F2C04C] via-[#E48E0D] to-[#E4B50D] font-bold text-white text-xs',
-                            !course?.is_coming_soon && 'hidden'
-                        )}>
-                        Segera Hadir
+                    <div className="flex gap-2 mb-1">
+                        <div
+                            className={cn(
+                                'badge w-max px-3 bg-gradient-to-r from-[#F2C04C] via-[#E48E0D] to-[#E4B50D] font-bold text-white border-none',
+                                !course?.is_coming_soon && 'hidden'
+                            )}>
+                            Segera Hadir
+                        </div>
+                        {course.is_free && <FreeBadge />}
                     </div>
                     <h1
                         className={`font-bold text-balance ${

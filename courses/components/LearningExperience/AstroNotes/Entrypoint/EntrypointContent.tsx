@@ -81,7 +81,8 @@ export const EntrypointContent = ({
         latestProgress: book?.percentage_progress ?? 0,
         latestChapter: book.last_chapter_read,
         authors: book.authors,
-        rating: book.rating
+        rating: book.rating,
+        isFree: book.is_free
     });
 
     const totalPages = Math.ceil((astronotes?.count_items ?? 0) / PAGE_SIZE);

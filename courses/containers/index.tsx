@@ -51,18 +51,18 @@ const ClassContainer = ({
                     Kelas &amp; Video Perkuliahan Online Terbaik
                 </h1>
                 <CourseTabs />
-                <div className="flex items-center justify-between sticky z-10 py-2 bg-black top-28">
+                <div className="sticky z-10 flex items-center justify-between py-2 bg-black top-28">
                     <div className="relative flex-grow mr-4">
                         <input
                             type="text"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             placeholder="Cari kelas"
-                            className="w-full px-4 py-2 bg-[#212121] rounded-3xl text-white"
+                            className="w-full px-4 py-2 text-white border rounded-full bg-graphite-800 placeholder:text-graphite-600 border-graphite-600/50"
                         />
                         <IoIosSearch
                             size={20}
-                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#DADADA] cursor-pointer"
+                            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-[#DADADA] cursor-pointer"
                         />
                     </div>
                     {isAuthenticated && (

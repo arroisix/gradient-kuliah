@@ -17,6 +17,7 @@ import { useRef } from 'react';
 import { useSelector } from 'react-redux';
 import RelatedBooksSection from 'courses/components/LearningExperience/AstroNotes/InternalLinking/RelatedBooksSection';
 import { useGetBookRecommendationsQuery } from 'courses/redux/api/learningExperienceApi';
+import FreeBadge from 'commons/components/elements/FreeBadge';
 
 const AstronotesDetail = ({
     slug: serverSlug,
@@ -104,6 +105,7 @@ const AstronotesDetail = ({
                             />
                         </div>
                         <div className="flex flex-col items-center gap-4 md:items-start">
+                            {astronotes?.is_free && <FreeBadge />}
                             <h1 className="text-base font-extrabold text-white md:text-lg lg:text-xl">
                                 {astronotes?.title ? (
                                     astronotes?.title

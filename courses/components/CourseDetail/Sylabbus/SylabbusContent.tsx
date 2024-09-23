@@ -1,7 +1,8 @@
-// import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import FreeBadge from 'commons/components/elements/FreeBadge';
 import GreenCheck from 'commons/components/elements/Icons/GreenCheck';
 import Play from 'commons/components/elements/Icons/Play';
 import Skeleton from 'commons/components/elements/Skeleton';
+import { formatDuration } from 'commons/utils';
 import { useGetSubchapterQuery } from 'courses/redux/api/courseApi';
 import Link from 'next/link';
 import React from 'react';
@@ -82,12 +83,13 @@ const SylabbusContent = ({
                         <div>
                             {subchapter.is_finished ? <GreenCheck /> : <Play />}
                         </div>
-                        <div className="flex flex-col text-left">
-                            <h4 className="text-lg text-neutral-200">
+                        <div className="flex flex-col gap-2 text-left">
+                            <h4 className="text-sm text-white">
                                 {subchapter.subchapter_name}
                             </h4>
-                            <p className="text-lg text-neutral-600">
-                                {subchapter.duration}
+                            {subchapter.is_free && <FreeBadge />}
+                            <p className="text-xs text-graphite-600">
+                                {formatDuration(subchapter.duration)}
                             </p>
                         </div>
                         <span className="sr-only">

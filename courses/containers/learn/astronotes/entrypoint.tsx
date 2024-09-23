@@ -59,7 +59,7 @@ const AstronotesEntrypoint = ({
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             placeholder="Cari buku"
-                            className="w-full px-4 py-2 text-white border bg-graphite-800 placeholder:text-graphite-600 border-graphite-600/50 rounded-3xl"
+                            className="w-full px-4 py-2 text-white border rounded-full bg-graphite-800 placeholder:text-graphite-600 border-graphite-600/50"
                         />
                         <IoIosSearch
                             size={20}
