@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ProblemReport } from '../../../../types/exercises';
 import { IoMdCheckmark as Check, IoMdClose as X } from 'react-icons/io';
+import TiptapViewer from '../../../Textbook/TiptapViewer';
 
 interface ProblemDetailContentProps {
     problem: ProblemReport;
@@ -39,7 +40,7 @@ const ProblemDetailContent: React.FC<ProblemDetailContentProps> = ({
 
             {!showExplanation ? (
                 <>
-                    <p className="text-sm">{problem.question.text}</p>
+                    <TiptapViewer content={problem.question.text} />
 
                     {isTextBased ? (
                         <div className="">
@@ -60,7 +61,7 @@ const ProblemDetailContent: React.FC<ProblemDetailContentProps> = ({
                             <p className="text-sm mt-2">
                                 Jawaban Benar:{' '}
                                 <span className="font-semibold">
-                                    {problem.solution}
+                                    <TiptapViewer content={problem.solution} />
                                 </span>
                             </p>
                         </div>
@@ -86,9 +87,7 @@ const ProblemDetailContent: React.FC<ProblemDetailContentProps> = ({
                     <h3 className="text-white text-sm font-normal mb-2">
                         Pembahasan
                     </h3>
-                    <p className="text-white font-semibold text-base">
-                        {problem.solution}
-                    </p>
+                    <TiptapViewer content={problem.solution} />
                 </div>
             )}
 
@@ -119,7 +118,9 @@ const Option = ({
                         : 'bg-[#EC5D49]'
                     : 'bg-[#444444]'
             } bg-opacity-50`}>
-            <span className="text-sm font-medium">{option.text}</span>
+            <span className="text-sm font-medium">
+                <TiptapViewer content={option.text} />
+            </span>
             {(isSelected || isCorrect) && (
                 <div
                     className={`flex justify-center items-center rounded-md w-[20px] h-[20px] ${

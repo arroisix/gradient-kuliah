@@ -1,9 +1,10 @@
 import React from 'react';
 import { Check, X } from 'lucide-react';
+import TiptapViewer from '../../Textbook/TiptapViewer';
 
 interface Option {
     id: string;
-    text: string;
+    answer: any;
     is_correct: boolean;
 }
 
@@ -63,16 +64,27 @@ const MultipleChoiceProblem: React.FC<MultipleChoiceProblemProps> = ({
                     )}`}
                     onClick={() => handleAnswerSelect(option.id)}
                     disabled={isSubmitted}>
-                    <span>{option.text}</span>
+                    <div className="flex-grow">
+                        <TiptapViewer content={option.answer} />
+                    </div>
                     {isSubmitted && showSolution !== 'AFTER_COMPLETE' ? (
                         option.is_correct ? (
-                            <Check className="text-white" size={20} />
+                            <Check
+                                className="text-white flex-shrink-0 ml-2"
+                                size={20}
+                            />
                         ) : selectedAnswers.includes(option.id) ? (
-                            <X className="text-white" size={20} />
+                            <X
+                                className="text-white flex-shrink-0 ml-2"
+                                size={20}
+                            />
                         ) : null
                     ) : (
                         selectedAnswers.includes(option.id) && (
-                            <Check className="text-white" size={20} />
+                            <Check
+                                className="text-white flex-shrink-0 ml-2"
+                                size={20}
+                            />
                         )
                     )}
                 </button>

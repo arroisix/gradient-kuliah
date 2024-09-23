@@ -5,6 +5,7 @@ import Filter from 'commons/components/elements/Filter';
 import { REVIEW_FILTER_OPTIONS } from '../constants';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import TiptapViewer from '../../Textbook/TiptapViewer';
 
 const ReviewTab = ({ problems }: { problems: any[] }) => {
     const [filter] = useState('all');
@@ -15,6 +16,8 @@ const ReviewTab = ({ problems }: { problems: any[] }) => {
         return true;
     });
 
+    console.log('Problems,', problems);
+    console.log('filtered problems,', filteredProblems);
     return (
         <div className="w-full flex flex-col gap-6 max-w-[640px]">
             <Filter options={REVIEW_FILTER_OPTIONS} defaultSelected={filter} />
@@ -30,10 +33,16 @@ const ReviewTab = ({ problems }: { problems: any[] }) => {
 };
 
 const ProblemCard = ({ problem, index }: { problem: any; index: number }) => {
-    const isTextBased = problem.question.type !== 'MULTIPLE_CHOICE';
+    const isTextBased = problem.question.type !== 'MULTIPLE_CHOICE' && problem.question.type !== 'MULTIPLE_ANSWER';
     const router = useRouter();
     const { slug, exerciseProgressId } = router.query;
-
+    console.log(
+        'problem.user_progress.submitted_answer:',
+        problem.user_progress.submitted_answer
+    );
+    console.log('Problem,', problem);
+    console.log("problem.question.type,", problem.question.type);
+    console.log("is text based,", isTextBased);
     return (
         <div
             className={`p-4 flex flex-col gap-3 bg-[#1B2129] rounded-md text-white border-t-2 ${
@@ -55,7 +64,9 @@ const ProblemCard = ({ problem, index }: { problem: any; index: number }) => {
                 </div>
             </div>
 
-            <p className="text-sm">{problem.question.text}</p>
+            <p className="text-sm">
+                <TiptapViewer content={problem.question.text} />
+            </p>
 
             {isTextBased ? (
                 <div className="">
@@ -74,7 +85,7 @@ const ProblemCard = ({ problem, index }: { problem: any; index: number }) => {
                     <p className="text-sm mt-2">
                         Jawaban Benar:{' '}
                         <span className="font-semibold">
-                            {problem.solution}
+                            <TiptapViewer content={problem.solution} />
                         </span>
                     </p>
                 </div>
@@ -113,6 +124,7 @@ const Option = ({
     isCorrect: boolean;
     isSelected: boolean;
 }) => {
+    console.log('option.text type:', typeof option.text);
     return (
         <div
             className={`flex justify-between items-center p-3 my-1 rounded-md w-full max-w-[608px] h-[45px] ${
@@ -122,7 +134,9 @@ const Option = ({
                         : 'bg-[#EC5D49]'
                     : 'bg-[#444444]'
             } bg-opacity-50`}>
-            <span className="text-sm font-medium">{option.text}</span>
+            <span className="text-sm font-medium">
+                <TiptapViewer content={option.text} />
+            </span>
             {(isSelected || isCorrect) && (
                 <div
                     className={`flex justify-center items-center rounded-md w-[20px] h-[20px] ${

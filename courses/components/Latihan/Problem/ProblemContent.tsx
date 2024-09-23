@@ -9,6 +9,7 @@ import {
 import MultipleChoiceProblem from './MultipleChoiceProblem';
 import OpenEndedProblem from './OpenEndedProblem';
 import Skeleton from 'commons/components/elements/Skeleton';
+import TiptapViewer from '../../Textbook/TiptapViewer';
 
 interface ProblemContentProps {
     problemId: string;
@@ -149,6 +150,8 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
             ? selectedAnswers.length > 0
             : openEndedAnswer.trim() !== '';
 
+    console.log("Problem,", problem);
+
     return (
         <div className="flex flex-col h-full justify-between">
             <div className="flex flex-col space-y-6">
@@ -159,9 +162,9 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
                                 <h3 className="text-white text-sm font-normal">
                                     Nomor {problem.current_problem_number}
                                 </h3>
-                                <p className="text-white font-medium text-base">
-                                    {problem.question.text}
-                                </p>
+                                <TiptapViewer
+                                    content={problem.question.question}
+                                />
                             </div>
                             {problem.question.type === 'MULTIPLE_CHOICE' &&
                                 !problem.single_answer && (
@@ -195,9 +198,7 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
                         <h3 className="text-white text-sm font-normal mb-2">
                             Pembahasan
                         </h3>
-                        <p className="text-white font-semibold text-base">
-                            {problem.question.explanation}
-                        </p>
+                        <TiptapViewer content={problem.question.solution} />
                     </div>
                 )}
             </div>

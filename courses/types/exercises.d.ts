@@ -66,10 +66,14 @@ export interface ExerciseProblem {
     is_free: boolean;
     question: {
         id: string;
-        text: string;
+        question: any;
         type: string;
-        options: Array<any>;
-        explanation: string;
+        options: Array<{
+            id: string;
+            answer: any;
+            is_correct: boolean;
+        }>;
+        solution: any;
     };
     current_problem_number: number;
     next_navigation: NavigationItem | null;
@@ -156,14 +160,14 @@ export interface ExerciseProblemReport {
 export interface ProblemReport {
     id: string;
     question: {
-        text: string;
+        text: any; // This will be the JSON content
         type: string;
         options: Array<{
             id: string;
-            text: string;
+            text: any; // This will be the JSON content
         }>;
     };
-    solution: string;
+    solution: any; // This will be the JSON content
     solution_id: string;
     user_progress: {
         status: string;
