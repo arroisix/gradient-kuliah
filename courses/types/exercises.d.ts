@@ -97,7 +97,7 @@ export interface ExerciseProblemProgress {
     id: string;
     exercise_progress_id: string;
     problem_id: string;
-    status: 'IN_PROGRESS' | 'COMPLETED';
+    status: string;
     submitted_answer_text: string | null;
     submitted_answer_ids: string[];
     is_correct: boolean | null;

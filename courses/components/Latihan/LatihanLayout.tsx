@@ -18,6 +18,7 @@ interface LatihanLayoutProps {
     firstProblemProgress?: {
         started_at: string;
     };
+    onTimeExpired: () => void;
 }
 
 const LatihanLayout: React.FC<LatihanLayoutProps> = ({
@@ -30,31 +31,37 @@ const LatihanLayout: React.FC<LatihanLayoutProps> = ({
     timeLimit,
     currentProblemId,
     problemProgress,
-    firstProblemProgress
+    firstProblemProgress,
+    onTimeExpired
 }) => {
     const [showSidebar, setShowSidebar] = useState(false);
 
     const toggleSidebar = () => setShowSidebar(!showSidebar);
 
+    const canNavigate = timeConstraint !== 'PER_PROBLEM';
+
     return (
         <div className="flex flex-col justify-center items-center min-h-screen pb-9 bg-black px-4">
-            {showSidebar && <QuizNavigationSidebar onClose={toggleSidebar} />}
+            {showSidebar && canNavigate && (
+                <QuizNavigationSidebar onClose={toggleSidebar} />
+            )}
             <div className="w-[520px]">
                 <ExerciseHeader
-                    showNavigation={showNavigation}
+                    showNavigation={showNavigation && canNavigate}
                     title={title}
-                    prevLink={prevLink}
-                    nextLink={nextLink}
+                    prevLink={canNavigate ? prevLink : null}
+                    nextLink={canNavigate ? nextLink : null}
                     onNavigationClick={toggleSidebar}
                 />
                 {timeConstraint && timeConstraint !== 'NONE' && (
-                    <div className="mt-2 flex justify-center">
+                    <div className="flex justify-center">
                         <ExerciseTimer
                             timeConstraint={timeConstraint}
                             timeLimit={timeLimit}
                             currentProblemId={currentProblemId}
                             problemProgress={problemProgress}
                             firstProblemProgress={firstProblemProgress}
+                            onTimeExpired={onTimeExpired}
                         />
                     </div>
                 )}

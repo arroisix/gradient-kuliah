@@ -11,6 +11,7 @@ interface ExerciseTimerProps {
     firstProblemProgress?: {
         started_at: string;
     };
+    onTimeExpired: () => void;
 }
 
 const ExerciseTimer: React.FC<ExerciseTimerProps> = ({
@@ -18,7 +19,8 @@ const ExerciseTimer: React.FC<ExerciseTimerProps> = ({
     timeLimit = 0,
     currentProblemId,
     problemProgress,
-    firstProblemProgress
+    firstProblemProgress,
+    onTimeExpired
 }) => {
     const [timeLeft, setTimeLeft] = useState(timeLimit);
 
@@ -38,19 +40,19 @@ const ExerciseTimer: React.FC<ExerciseTimerProps> = ({
             return;
         }
 
-        console.log('start time', startTime);
-
         const endTime = startTime + timeLimit * 1000;
 
         const updateTimer = () => {
             const now = Date.now();
-            console.log('now', now);
             const remaining = Math.max(0, endTime - now);
             setTimeLeft(Math.floor(remaining / 1000));
+
+            if (remaining <= 0) {
+                onTimeExpired();
+            }
         };
 
         updateTimer();
-
         const timer = setInterval(updateTimer, 1000);
 
         return () => clearInterval(timer);
@@ -59,7 +61,8 @@ const ExerciseTimer: React.FC<ExerciseTimerProps> = ({
         timeLimit,
         currentProblemId,
         problemProgress,
-        firstProblemProgress
+        firstProblemProgress,
+        onTimeExpired
     ]);
 
     if (timeConstraint === 'NONE') return null;

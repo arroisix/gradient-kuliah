@@ -3,8 +3,10 @@ import {
     useGetExerciseProblemQuery,
     useGetProblemSetDetailQuery,
     useGetOrCreateExerciseProblemProgressQuery,
-    useGetExerciseProgressQuery
+    useGetExerciseProgressQuery,
+    useUpdateExerciseProgressMutation
 } from 'courses/redux/api/exercisesApi';
+import { useRouter } from 'next/router';
 import ProblemContent from './ProblemContent';
 import LatihanLayout from '../LatihanLayout';
 
@@ -19,6 +21,7 @@ const ProblemPageContent: React.FC<ProblemPageContentProps> = ({
     problemId,
     sectionId
 }) => {
+    const router = useRouter();
     const { data: problem, isLoading: problemLoading } =
         useGetExerciseProblemQuery(
             { exercise_slug: slug, problem_id: problemId },
@@ -58,6 +61,19 @@ const ProblemPageContent: React.FC<ProblemPageContentProps> = ({
             refetchOnMountOrArgChange: true
         }
     );
+
+    const [updateExerciseProgress] = useUpdateExerciseProgressMutation();
+
+    const handleTimeExpired = async () => {
+        if (exerciseProgress) {
+            await updateExerciseProgress({
+                exercise_slug: slug,
+                progress_id: exerciseProgress.id,
+                data: { status: 'COMPLETED' }
+            }).unwrap();
+            router.push(`/latihan/${slug}/report/${exerciseProgress.id}`);
+        }
+    };
 
     if (
         problemLoading ||
@@ -100,12 +116,16 @@ const ProblemPageContent: React.FC<ProblemPageContentProps> = ({
             timeLimit={timeLimit}
             currentProblemId={problemId}
             problemProgress={problemProgress}
-            firstProblemProgress={firstProblemProgress}>
+            firstProblemProgress={firstProblemProgress}
+            onTimeExpired={handleTimeExpired}>
             <ProblemContent
                 slug={slug}
                 problemId={problemId}
                 sectionId={sectionId}
                 showSolution={showSolution}
+                timeConstraint={timeConstraint}
+                timeLimit={timeLimit}
+                onTimeExpired={handleTimeExpired}
             />
         </LatihanLayout>
     );

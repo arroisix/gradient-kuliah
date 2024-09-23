@@ -33,7 +33,9 @@ const ReviewTab = ({ problems }: { problems: any[] }) => {
 };
 
 const ProblemCard = ({ problem, index }: { problem: any; index: number }) => {
-    const isTextBased = problem.question.type !== 'MULTIPLE_CHOICE' && problem.question.type !== 'MULTIPLE_ANSWER';
+    const isTextBased =
+        problem.question.type !== 'MULTIPLE_CHOICE' &&
+        problem.question.type !== 'MULTIPLE_ANSWER';
     const router = useRouter();
     const { slug, exerciseProgressId } = router.query;
     console.log(
@@ -41,8 +43,8 @@ const ProblemCard = ({ problem, index }: { problem: any; index: number }) => {
         problem.user_progress.submitted_answer
     );
     console.log('Problem,', problem);
-    console.log("problem.question.type,", problem.question.type);
-    console.log("is text based,", isTextBased);
+    console.log('problem.question.type,', problem.question.type);
+    console.log('is text based,', isTextBased);
     return (
         <div
             className={`p-4 flex flex-col gap-3 bg-[#1B2129] rounded-md text-white border-t-2 ${

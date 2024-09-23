@@ -9,6 +9,7 @@ import {
 } from '../../../redux/api/exercisesApi';
 import Skeleton from 'commons/components/elements/Skeleton';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 const SummaryTab = dynamic(() => import('./SummaryTab'), { ssr: false });
 const ReviewTab = dynamic(() => import('./ReviewTab'), { ssr: false });
@@ -161,9 +162,12 @@ const ExerciseReportLayout: React.FC<ExerciseReportLayoutProps> = ({
                     <button className="w-full py-3 rounded-full font-semibold bg-[#4B5563] text-white hover:bg-[#374151] transition-colors">
                         Bagikan
                     </button>
-                    <button className="w-full py-3 rounded-full font-semibold bg-[#7F56D9] text-white hover:bg-[#6941C6] transition-colors">
-                        Coba Lagi
-                    </button>
+                    <Link
+                        href={`/latihan/${slug}`}
+                        className="w-full py-3 rounded-full font-semibold bg-[#7F56D9] text-white hover:bg-[#6941C6] transition-colors text-center"
+                        passHref>
+                        <a className="">Coba Lagi</a>
+                    </Link>
                 </div>
             </div>
         </div>

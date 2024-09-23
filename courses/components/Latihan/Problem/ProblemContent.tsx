@@ -1,28 +1,38 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import {
     useGetOrCreateExerciseProblemProgressQuery,
     useGetExerciseProblemQuery,
     useGetExerciseProgressQuery,
-    useUpdateExerciseProblemProgressMutation
+    useUpdateExerciseProblemProgressMutation,
+    useUpdateExerciseProgressMutation,
+    useGetExerciseDetailQuery,
+    useGetExerciseReportQuery
 } from '../../../redux/api/exercisesApi';
 import MultipleChoiceProblem from './MultipleChoiceProblem';
 import OpenEndedProblem from './OpenEndedProblem';
 import Skeleton from 'commons/components/elements/Skeleton';
 import TiptapViewer from '../../Textbook/TiptapViewer';
+import ExerciseFinishModal from '../ExerciseFinishModal';
 
 interface ProblemContentProps {
     problemId: string;
     slug: string;
     sectionId: string;
     showSolution: string;
+    timeConstraint: string;
+    timeLimit: number;
+    onTimeExpired: () => void;
 }
 
 const ProblemContent: React.FC<ProblemContentProps> = ({
     slug,
     problemId,
     sectionId,
-    showSolution
+    showSolution,
+    timeConstraint,
+    timeLimit,
+    onTimeExpired
 }) => {
     const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
     const [openEndedAnswer, setOpenEndedAnswer] = useState('');
@@ -30,6 +40,8 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [showExplanation, setShowExplanation] = useState(false);
     const [isCorrect, setIsCorrect] = useState(false);
+    const [isFinishModalOpen, setIsFinishModalOpen] = useState(false);
+    const [allProblemsAnswered, setAllProblemsAnswered] = useState(false);
 
     const { data: problem, isLoading: isProblemLoading } =
         useGetExerciseProblemQuery(
@@ -54,6 +66,19 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
         );
 
     const [updateProblemProgress] = useUpdateExerciseProblemProgressMutation();
+    const [updateExerciseProgress] = useUpdateExerciseProgressMutation();
+
+    const { data: exerciseDetail } = useGetExerciseDetailQuery({
+        exercise_slug: slug
+    });
+    const { data: exerciseReport, refetch: refetchExerciseReport } =
+        useGetExerciseReportQuery(
+            {
+                exercise_slug: slug,
+                exercise_progress_id: exerciseProgress?.id ?? ''
+            },
+            { skip: !exerciseProgress?.id }
+        );
 
     useEffect(() => {
         setSelectedAnswers([]);
@@ -89,7 +114,17 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
         }
     }, [problemProgress, problem]);
 
+    const checkAllProblemsAnswered = useCallback(() => {
+        if (exerciseDetail && exerciseReport) {
+            const totalProblems = exerciseDetail.total_problems;
+            const answeredProblems = exerciseReport.problems.length;
+            setAllProblemsAnswered(totalProblems === answeredProblems);
+        }
+    }, [exerciseDetail, exerciseReport]);
+
     const handleAnswerChange = (newAnswer: string | string[]) => {
+        if (isSubmitted && showSolution === 'PER_PROBLEM') return;
+
         if (
             problem?.question.type === 'MULTIPLE_CHOICE' ||
             problem?.question.type === 'MULTIPLE_ANSWER'
@@ -99,6 +134,10 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
             setOpenEndedAnswer(newAnswer as string);
         }
     };
+
+    useEffect(() => {
+        checkAllProblemsAnswered();
+    }, [checkAllProblemsAnswered]);
 
     const handleSubmit = async () => {
         if (!problemProgress || !problem || isSubmitting) return;
@@ -114,7 +153,8 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
             submitted_answer_text:
                 problem.question.type !== 'MULTIPLE_CHOICE'
                     ? openEndedAnswer
-                    : undefined
+                    : undefined,
+            status: 'COMPLETED'
         };
 
         try {
@@ -127,11 +167,51 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
             }).unwrap();
 
             setIsSubmitted(true);
+
+            await refetchExerciseReport();
+
+            checkAllProblemsAnswered();
         } catch (error) {
             console.error('Failed to update problem progress:', error);
         } finally {
             setIsSubmitting(false);
         }
+    };
+
+    const handleTimeExpired = useCallback(async () => {
+        if (timeConstraint === 'TOTAL_TIME') {
+            await updateExerciseProgress({
+                exercise_slug: slug,
+                progress_id: exerciseProgress!.id,
+                data: { status: 'COMPLETED' }
+            }).unwrap();
+        } else if (timeConstraint === 'PER_PROBLEM') {
+            handleSubmit();
+        }
+        onTimeExpired();
+    }, [
+        timeConstraint,
+        slug,
+        exerciseProgress,
+        updateExerciseProgress,
+        handleSubmit,
+        onTimeExpired
+    ]);
+
+    useEffect(() => {
+        if (timeConstraint !== 'NONE' && timeLimit > 0) {
+            const timer = setTimeout(handleTimeExpired, timeLimit * 1000);
+            return () => clearTimeout(timer);
+        }
+        return undefined;
+    }, [timeConstraint, timeLimit, handleTimeExpired]);
+
+    const handleFinishExercise = () => {
+        setIsFinishModalOpen(true);
+    };
+
+    const handleConfirmFinish = () => {
+        setIsFinishModalOpen(false);
     };
 
     if (isProblemLoading || isProgressLoading || isProblemProgressLoading) {
@@ -149,8 +229,6 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
         problem?.question.type === 'MULTIPLE_ANSWER'
             ? selectedAnswers.length > 0
             : openEndedAnswer.trim() !== '';
-
-    console.log("Problem,", problem);
 
     return (
         <div className="flex flex-col h-full justify-between">
@@ -221,24 +299,36 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
                         {showExplanation ? 'Lihat Soal' : 'Lihat Pembahasan'}
                     </button>
                 ) : null}
-                {isSubmitted && (
+                {isSubmitted && problem.next_navigation && (
                     <Link
                         href={
-                            problem.next_navigation
-                                ? problem.next_navigation.type === 'problem'
-                                    ? `/latihan/${slug}/${sectionId}/${problem.next_navigation.id}`
-                                    : `/latihan/${slug}/${problem.next_navigation.id}`
-                                : `/latihan/${slug}/report/${exerciseProgress.id}`
+                            problem.next_navigation.type === 'problem'
+                                ? `/latihan/${slug}/${sectionId}/${problem.next_navigation.id}`
+                                : `/latihan/${slug}/${problem.next_navigation.id}`
                         }
                         passHref>
                         <button className="w-full py-3 rounded-full font-semibold bg-[#7F56D9] text-white hover:bg-[#6941C6] transition-colors">
-                            {problem.next_navigation
-                                ? 'Selanjutnya'
-                                : 'Lihat Laporan'}
+                            Selanjutnya
                         </button>
                     </Link>
                 )}
+                {isSubmitted && !problem.next_navigation && (
+                    <button
+                        className="w-full py-3 rounded-full font-semibold bg-[#7F56D9] text-white hover:bg-[#6941C6] transition-colors"
+                        onClick={handleFinishExercise}>
+                        Selesaikan Latihan
+                    </button>
+                )}
             </div>
+            <ExerciseFinishModal
+                isOpen={isFinishModalOpen}
+                onClose={() => setIsFinishModalOpen(false)}
+                onConfirm={handleConfirmFinish}
+                onReturnToExercise={() => setIsFinishModalOpen(false)}
+                allProblemsAnswered={allProblemsAnswered}
+                slug={slug}
+                exerciseProgressId={exerciseProgress.id}
+            />
         </div>
     );
 };
