@@ -64,7 +64,8 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
     useEffect(() => {
         if (problemProgress) {
             const hasAnswer =
-                problem?.question.type === 'MULTIPLE_CHOICE'
+                problem?.question.type === 'MULTIPLE_CHOICE' ||
+                problem?.question.type === 'MULTIPLE_ANSWER'
                     ? problemProgress.submitted_answer_ids &&
                       problemProgress.submitted_answer_ids.length > 0
                     : !!problemProgress.submitted_answer_text;
@@ -72,7 +73,8 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
             setIsSubmitted(problemProgress.status === 'COMPLETED' || hasAnswer);
 
             if (
-                problem?.question.type === 'MULTIPLE_CHOICE' &&
+                (problem?.question.type === 'MULTIPLE_CHOICE' ||
+                    problem?.question.type === 'MULTIPLE_ANSWER') &&
                 problemProgress.submitted_answer_ids
             ) {
                 setSelectedAnswers(problemProgress.submitted_answer_ids);
@@ -87,7 +89,10 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
     }, [problemProgress, problem]);
 
     const handleAnswerChange = (newAnswer: string | string[]) => {
-        if (problem?.question.type === 'MULTIPLE_CHOICE') {
+        if (
+            problem?.question.type === 'MULTIPLE_CHOICE' ||
+            problem?.question.type === 'MULTIPLE_ANSWER'
+        ) {
             setSelectedAnswers(newAnswer as string[]);
         } else {
             setOpenEndedAnswer(newAnswer as string);
@@ -101,7 +106,8 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
 
         const submissionData = {
             submitted_answer_ids:
-                problem.question.type === 'MULTIPLE_CHOICE'
+                problem?.question.type === 'MULTIPLE_CHOICE' ||
+                problem?.question.type === 'MULTIPLE_ANSWER'
                     ? selectedAnswers
                     : undefined,
             submitted_answer_text:
@@ -138,7 +144,8 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
     }
 
     const isAnswerProvided =
-        problem?.question.type === 'MULTIPLE_CHOICE'
+        problem?.question.type === 'MULTIPLE_CHOICE' ||
+        problem?.question.type === 'MULTIPLE_ANSWER'
             ? selectedAnswers.length > 0
             : openEndedAnswer.trim() !== '';
 
@@ -163,7 +170,8 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
                                     </p>
                                 )}
                         </div>
-                        {problem.question.type === 'MULTIPLE_CHOICE' ? (
+                        {problem?.question.type === 'MULTIPLE_CHOICE' ||
+                        problem?.question.type === 'MULTIPLE_ANSWER' ? (
                             <MultipleChoiceProblem
                                 options={problem.question.options}
                                 selectedAnswers={selectedAnswers}
