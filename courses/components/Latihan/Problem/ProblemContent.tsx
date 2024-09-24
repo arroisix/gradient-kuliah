@@ -42,6 +42,7 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
     const [isCorrect, setIsCorrect] = useState(false);
     const [isFinishModalOpen, setIsFinishModalOpen] = useState(false);
     const [allProblemsAnswered, setAllProblemsAnswered] = useState(false);
+    const [isAnswerChanged, setIsAnswerChanged] = useState(false);
 
     const { data: problem, isLoading: isProblemLoading } =
         useGetExerciseProblemQuery(
@@ -123,7 +124,7 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
     }, [exerciseDetail, exerciseReport]);
 
     const handleAnswerChange = (newAnswer: string | string[]) => {
-        if (isSubmitted && showSolution === 'PER_PROBLEM') return;
+        if (isSubmitted && showSolution !== 'AFTER_COMPLETE') return;
 
         if (
             problem?.question.type === 'MULTIPLE_CHOICE' ||
@@ -132,6 +133,10 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
             setSelectedAnswers(newAnswer as string[]);
         } else {
             setOpenEndedAnswer(newAnswer as string);
+        }
+
+        if (isSubmitted) {
+            setIsAnswerChanged(true);
         }
     };
 
@@ -153,8 +158,7 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
             submitted_answer_text:
                 problem.question.type !== 'MULTIPLE_CHOICE'
                     ? openEndedAnswer
-                    : undefined,
-            status: 'COMPLETED'
+                    : undefined
         };
 
         try {
@@ -167,6 +171,7 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
             }).unwrap();
 
             setIsSubmitted(true);
+            setIsAnswerChanged(false);
 
             await refetchExerciseReport();
 
@@ -281,7 +286,8 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
                 )}
             </div>
             <div className="flex flex-col gap-3">
-                {!isSubmitted ? (
+                {(!isSubmitted ||
+                    (showSolution === 'AFTER_COMPLETE' && isAnswerChanged)) && (
                     <button
                         className={`w-full py-3 rounded-full font-semibold transition-colors ${
                             isAnswerProvided
@@ -290,16 +296,21 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
                         }`}
                         onClick={handleSubmit}
                         disabled={!isAnswerProvided || isSubmitting}>
-                        {isSubmitting ? 'Submitting...' : 'Submit'}
+                        {isSubmitting
+                            ? 'Submitting...'
+                            : isAnswerChanged
+                            ? 'Resubmit'
+                            : 'Submit'}
                     </button>
-                ) : showSolution === 'PER_PROBLEM' ? (
+                )}
+                {isSubmitted && showSolution === 'PER_PROBLEM' && (
                     <button
                         className="w-full py-3 rounded-full font-semibold bg-[#4B5563] text-white hover:bg-[#374151] transition-colors"
                         onClick={() => setShowExplanation(!showExplanation)}>
                         {showExplanation ? 'Lihat Soal' : 'Lihat Pembahasan'}
                     </button>
-                ) : null}
-                {isSubmitted && problem.next_navigation && (
+                )}
+                {isSubmitted && problem.next_navigation && !isAnswerChanged && (
                     <Link
                         href={
                             problem.next_navigation.type === 'problem'
@@ -312,13 +323,15 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
                         </button>
                     </Link>
                 )}
-                {isSubmitted && !problem.next_navigation && (
-                    <button
-                        className="w-full py-3 rounded-full font-semibold bg-[#7F56D9] text-white hover:bg-[#6941C6] transition-colors"
-                        onClick={handleFinishExercise}>
-                        Selesaikan Latihan
-                    </button>
-                )}
+                {isSubmitted &&
+                    !problem.next_navigation &&
+                    !isAnswerChanged && (
+                        <button
+                            className="w-full py-3 rounded-full font-semibold bg-[#7F56D9] text-white hover:bg-[#6941C6] transition-colors"
+                            onClick={handleFinishExercise}>
+                            Selesaikan Latihan
+                        </button>
+                    )}
             </div>
             <ExerciseFinishModal
                 isOpen={isFinishModalOpen}

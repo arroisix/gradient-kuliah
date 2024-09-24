@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { useRouter } from 'next/router';
 import { useGetProblemSetDetailQuery } from '../../redux/api/exercisesApi';
@@ -6,29 +6,50 @@ import Link from 'next/link';
 
 interface QuizNavigationSidebarProps {
     onClose: () => void;
+    isOpen: boolean;
 }
 
 const QuizNavigationSidebar: React.FC<QuizNavigationSidebarProps> = ({
-    onClose
+    onClose,
+    isOpen
 }) => {
     const router = useRouter();
     const { slug, sectionId: problemSetId, problemId } = router.query;
+    const [isRendered, setIsRendered] = useState(false);
 
     const {
         data: problemSetData,
         isLoading,
         error
-    } = useGetProblemSetDetailQuery(problemSetId as string);
+    } = useGetProblemSetDetailQuery(problemSetId as string, {
+        skip: !problemSetId
+    });
 
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error loading problem set data</div>;
+    useEffect(() => {
+        if (isOpen) {
+            setIsRendered(true);
+        } else {
+            const timer = setTimeout(() => setIsRendered(false), 300);
+            return () => clearTimeout(timer);
+        }
+        return;
+    }, [isOpen]);
+
+    if (!isRendered) return null;
+
+    if (isLoading) return <div className="hidden">Loading...</div>;
+    if (error)
+        return <div className="hidden">Error loading problem set data</div>;
     if (!problemSetData) return null;
 
     const { name, problems, answered_problems, unanswered_problems } =
         problemSetData;
 
     return (
-        <div className="fixed top-0 left-0 w-[240px] h-full bg-[#1B2129] flex flex-col">
+        <div
+            className={`fixed top-0 left-0 w-[240px] h-full bg-[#1B2129] flex flex-col transition-transform duration-300 ease-in-out ${
+                isOpen ? 'translate-x-0' : '-translate-x-full'
+            }`}>
             <div className="w-full h-[56px] px-4 py-4 flex gap-3 items-center">
                 <button
                     onClick={onClose}

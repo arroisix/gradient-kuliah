@@ -26,7 +26,7 @@ const MultipleChoiceProblem: React.FC<MultipleChoiceProblemProps> = ({
     showSolution
 }) => {
     const handleAnswerSelect = (answerId: string) => {
-        if (!isSubmitted) {
+        if (!isSubmitted || showSolution === 'AFTER_COMPLETE') {
             if (isSingleAnswer) {
                 onAnswerSelect([answerId]);
             } else {
@@ -37,8 +37,6 @@ const MultipleChoiceProblem: React.FC<MultipleChoiceProblemProps> = ({
             }
         }
     };
-
-    console.log('Show solution,', showSolution);
 
     const getButtonClass = (option: Option) => {
         if (isSubmitted && showSolution !== 'AFTER_COMPLETE') {
@@ -63,7 +61,7 @@ const MultipleChoiceProblem: React.FC<MultipleChoiceProblemProps> = ({
                         option
                     )}`}
                     onClick={() => handleAnswerSelect(option.id)}
-                    disabled={isSubmitted}>
+                    disabled={isSubmitted && showSolution !== 'AFTER_COMPLETE'}>
                     <div className="flex-grow">
                         <TiptapViewer content={option.answer} />
                     </div>

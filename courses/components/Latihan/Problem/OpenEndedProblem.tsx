@@ -32,7 +32,7 @@ const OpenEndedProblem: React.FC<OpenEndedProblemProps> = ({
                 placeholder="Tuliskan jawaban di sini"
                 value={answer}
                 onChange={(e) => onAnswerChange(e.target.value)}
-                disabled={isSubmitted}
+                disabled={isSubmitted && showSolution !== 'AFTER_COMPLETE'}
             />
         </div>
     );

@@ -42,9 +42,10 @@ const LatihanLayout: React.FC<LatihanLayoutProps> = ({
 
     return (
         <div className="flex flex-col justify-center items-center min-h-screen pb-9 bg-black px-4">
-            {showSidebar && canNavigate && (
-                <QuizNavigationSidebar onClose={toggleSidebar} />
-            )}
+            <QuizNavigationSidebar
+                onClose={toggleSidebar}
+                isOpen={showSidebar}
+            />
             <div className="w-[520px]">
                 <ExerciseHeader
                     showNavigation={showNavigation && canNavigate}

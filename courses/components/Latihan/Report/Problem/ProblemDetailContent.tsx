@@ -11,7 +11,9 @@ const ProblemDetailContent: React.FC<ProblemDetailContentProps> = ({
     problem
 }) => {
     const [showExplanation, setShowExplanation] = useState(false);
-    const isTextBased = problem.question.type !== 'MULTIPLE_CHOICE';
+    const isTextBased =
+        problem.question.type !== 'MULTIPLE_CHOICE' &&
+        problem.question.type !== 'MULTIPLE_ANSWER';
 
     const toggleExplanation = () => {
         setShowExplanation(!showExplanation);

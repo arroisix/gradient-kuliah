@@ -19,7 +19,9 @@ const ProblemHistoryTab: React.FC<ProblemHistoryTabProps> = ({ data }) => {
     };
 
     const reversedAttempts = [...data.attempt_history].reverse();
-    const isMultipleChoice = data.question.type === 'MULTIPLE_CHOICE';
+    const isMultipleChoice =
+        data.question.type === 'MULTIPLE_CHOICE' ||
+        data.question.type === 'MULTIPLE_ANSWER';
 
     return (
         <div className="w-full h-full flex flex-col space-y-4">
