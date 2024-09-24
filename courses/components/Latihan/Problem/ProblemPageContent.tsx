@@ -62,6 +62,12 @@ const ProblemPageContent: React.FC<ProblemPageContentProps> = ({
         }
     );
 
+    const isCurrentProblemSubmitted =
+        problemProgress?.status === 'COMPLETED' ||
+        (problemProgress?.submitted_answer_ids &&
+            problemProgress.submitted_answer_ids.length > 0) ||
+        !!problemProgress?.submitted_answer_text;
+
     const [updateExerciseProgress] = useUpdateExerciseProgressMutation();
 
     const handleTimeExpired = async () => {
@@ -117,6 +123,7 @@ const ProblemPageContent: React.FC<ProblemPageContentProps> = ({
             currentProblemId={problemId}
             problemProgress={problemProgress}
             firstProblemProgress={firstProblemProgress}
+            isCurrentProblemSubmitted={isCurrentProblemSubmitted}
             onTimeExpired={handleTimeExpired}>
             <ProblemContent
                 slug={slug}

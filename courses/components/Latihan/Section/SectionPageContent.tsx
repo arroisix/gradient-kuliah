@@ -2,7 +2,7 @@ import React from 'react';
 import Skeleton from 'commons/components/elements/Skeleton';
 import Link from 'next/link';
 import LatihanLayout from '../../../../courses/components/Latihan/LatihanLayout';
-import { useGetExerciseDetailQuery } from '../../../../courses/redux/api/exercisesApi';
+import { useGetExerciseDetailQuery } from '../../../redux/api/exercisesApi';
 
 interface SectionPageContentProps {
     slug: string;

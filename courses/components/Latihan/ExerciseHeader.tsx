@@ -37,7 +37,7 @@ const ExerciseHeader: React.FC<ExerciseHeaderProps> = ({
     return (
         <>
             <div
-                className={`p-4 flex flex-row w-full max-w-full items-center ${
+                className={`px-4 md:px-4 py-2 md:py-4 flex flex-row w-full max-w-full items-center ${
                     showNavigation || title ? 'justify-between' : 'justify-end'
                 }`}>
                 {title && !showNavigation && (
@@ -52,11 +52,11 @@ const ExerciseHeader: React.FC<ExerciseHeaderProps> = ({
                 </a>
 
                 {showNavigation && (
-                    <div className="flex gap-4 items-center">
+                    <div className="flex gap-3 md:gap-4 items-center">
                         <button
                             onClick={onNavigationClick}
-                            className="bg-[#333540] rounded-sm px-3 py-1.5 h-[30px] w-[132px] flex items-center justify-center">
-                            <span className="text-white text-sm">
+                            className="bg-[#333540] rounded-sm px-2 md:px-3 py-1 md:py-1.5 h-[30px] w-[120px] md:w-[132px] flex items-center justify-center">
+                            <span className="text-white text-xs md:text-sm">
                                 Quiz Navigation
                             </span>
                         </button>

@@ -40,18 +40,20 @@ const LatihanStart: React.FC<ExerciseStartProps> = ({ exercise }) => {
     return (
         <div className="flex flex-col h-full">
             <div className="flex-grow">
-                <div className="bg-[#333540] rounded-full w-16 h-16 flex items-center justify-center mb-4">
+                <div className="bg-[#333540] rounded-full w-12 h-12 md:w-16 md:h-16 flex items-center justify-center mb-4">
                     <span className="text-4xl">{exercise.icon}</span>
                 </div>
                 <h2 className="text-2xl font-semibold text-white mb-4">
                     {exercise.title}
                 </h2>
-                <p className="text-gray-400 mb-2">{exercise.course.name}</p>
-                <p className="text-gray-400 mb-2">
+                <p className="text-base text-gray-400 mb-2">
+                    {exercise.course.name}
+                </p>
+                <p className="text-base text-gray-400 mb-2">
                     {exercise.total_problems} Soal
                 </p>
                 {exercise.total_duration > 0 && (
-                    <p className="text-gray-400">
+                    <p className="text-base text-gray-400">
                         {formatDuration(exercise.total_duration)}
                     </p>
                 )}

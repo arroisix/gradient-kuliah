@@ -19,6 +19,7 @@ interface LatihanLayoutProps {
         started_at: string;
     };
     onTimeExpired?: () => void;
+    isCurrentProblemSubmitted?: boolean;
 }
 
 const LatihanLayout: React.FC<LatihanLayoutProps> = ({
@@ -32,7 +33,8 @@ const LatihanLayout: React.FC<LatihanLayoutProps> = ({
     currentProblemId,
     problemProgress,
     firstProblemProgress,
-    onTimeExpired
+    onTimeExpired,
+    isCurrentProblemSubmitted = false
 }) => {
     const [showSidebar, setShowSidebar] = useState(false);
 
@@ -41,35 +43,42 @@ const LatihanLayout: React.FC<LatihanLayoutProps> = ({
     const canNavigate = timeConstraint !== 'PER_PROBLEM';
 
     return (
-        <div className="flex flex-col justify-center items-center min-h-screen pb-9 bg-black px-4">
+        <div className="flex flex-col px-4 justify-center items-center min-h-screen bg-black">
             <QuizNavigationSidebar
                 onClose={toggleSidebar}
                 isOpen={showSidebar}
             />
-            <div className="w-[520px]">
-                <ExerciseHeader
-                    showNavigation={showNavigation && canNavigate}
-                    title={title}
-                    prevLink={canNavigate ? prevLink : null}
-                    nextLink={canNavigate ? nextLink : null}
-                    onNavigationClick={toggleSidebar}
-                />
-                {timeConstraint && timeConstraint !== 'NONE' && (
-                    <div className="flex justify-center">
-                        <ExerciseTimer
-                            timeConstraint={timeConstraint}
-                            timeLimit={timeLimit}
-                            currentProblemId={currentProblemId}
-                            problemProgress={problemProgress}
-                            firstProblemProgress={firstProblemProgress}
-                            onTimeExpired={onTimeExpired}
-                        />
+            <div className="w-full h-full max-w-[520px] md:px-4">
+                <div className="w-full h-full md:w-[520px]">
+                    <ExerciseHeader
+                        showNavigation={showNavigation && canNavigate}
+                        title={title}
+                        prevLink={canNavigate ? prevLink : null}
+                        nextLink={canNavigate ? nextLink : null}
+                        onNavigationClick={toggleSidebar}
+                    />
+                    {timeConstraint && timeConstraint !== 'NONE' && (
+                        <div className="flex justify-center">
+                            <ExerciseTimer
+                                timeConstraint={timeConstraint}
+                                timeLimit={timeLimit}
+                                currentProblemId={currentProblemId}
+                                problemProgress={problemProgress}
+                                firstProblemProgress={firstProblemProgress}
+                                onTimeExpired={onTimeExpired}
+                                isCurrentProblemSubmitted={
+                                    isCurrentProblemSubmitted
+                                }
+                            />
+                        </div>
+                    )}
+                </div>
+                <div className="relative w-full max-w-[520px] h-[90vh] md:h-[639px] mb-6 md:mb-9">
+                    <div className="bg-[#1B2129] rounded-2xl overflow-hidden h-full">
+                        <div className="p-6 md:p-8 h-full flex flex-col">
+                            {children}
+                        </div>
                     </div>
-                )}
-            </div>
-            <div className="relative w-full max-w-[520px] h-[639px]">
-                <div className="bg-[#1B2129] rounded-2xl overflow-hidden h-full">
-                    <div className="p-8 h-full flex flex-col">{children}</div>
                 </div>
             </div>
         </div>

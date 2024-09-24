@@ -12,6 +12,7 @@ interface ExerciseTimerProps {
         started_at: string;
     };
     onTimeExpired?: () => void;
+    isCurrentProblemSubmitted?: boolean;
 }
 
 const ExerciseTimer: React.FC<ExerciseTimerProps> = ({
@@ -20,12 +21,17 @@ const ExerciseTimer: React.FC<ExerciseTimerProps> = ({
     currentProblemId,
     problemProgress,
     firstProblemProgress,
-    onTimeExpired
+    onTimeExpired,
+    isCurrentProblemSubmitted = false
 }) => {
     const [timeLeft, setTimeLeft] = useState(timeLimit);
 
     useEffect(() => {
         if (timeConstraint === 'NONE' || !timeLimit) return;
+        if (timeConstraint === 'PER_PROBLEM' && isCurrentProblemSubmitted) {
+            setTimeLeft(0);
+            return;
+        }
 
         let startTime: number;
         if (timeConstraint === 'TOTAL_TIME' && firstProblemProgress) {
@@ -64,7 +70,8 @@ const ExerciseTimer: React.FC<ExerciseTimerProps> = ({
         currentProblemId,
         problemProgress,
         firstProblemProgress,
-        onTimeExpired
+        onTimeExpired,
+        isCurrentProblemSubmitted
     ]);
 
     if (timeConstraint === 'NONE') return null;
@@ -84,7 +91,7 @@ const ExerciseTimer: React.FC<ExerciseTimerProps> = ({
     );
 
     return (
-        <div className="w-[520px] mb-4 flex flex-col items-center">
+        <div className="w-full max-w-[520px] mb-4 flex flex-col items-center">
             <div className="w-full h-2 bg-[#666666] rounded-full mb-2">
                 <div
                     className="h-full bg-purple-500 rounded-full"

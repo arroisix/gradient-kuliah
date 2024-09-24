@@ -1,5 +1,6 @@
 import React from 'react';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useUpdateExerciseProgressMutation } from '../../redux/api/exercisesApi';
 
 interface ExerciseFinishModalProps {
     isOpen: boolean;
@@ -14,17 +15,33 @@ interface ExerciseFinishModalProps {
 const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
     isOpen,
     onClose,
-    onConfirm,
     onReturnToExercise,
     allProblemsAnswered,
     slug,
     exerciseProgressId
 }) => {
+    const router = useRouter();
+    const [updateExerciseProgress] = useUpdateExerciseProgressMutation();
+
     if (!isOpen) return null;
 
+    const handleSubmit = async () => {
+        try {
+            await updateExerciseProgress({
+                exercise_slug: slug,
+                progress_id: exerciseProgressId,
+                data: { status: 'COMPLETED' }
+            }).unwrap();
+
+            await router.push(`/latihan/${slug}/report/${exerciseProgressId}`);
+        } catch (error) {
+            console.error('Failed to submit exercise:', error);
+        }
+    };
+
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-[#1D1D1D] rounded-2xl px-6 py-8 max-w-sm w-full">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
+            <div className="bg-[#1D1D1D] rounded-2xl px-6 py-8 w-full max-w-[328px] md:max-w-sm">
                 {allProblemsAnswered ? (
                     <>
                         <h2 className="text-xl font-semibold text-white mb-4 text-center">
@@ -35,15 +52,11 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
                             jawaban kamu di semua soal
                         </p>
                         <div className="flex flex-col gap-4">
-                            <Link
-                                href={`/latihan/${slug}/report/${exerciseProgressId}`}
-                                passHref>
-                                <button
-                                    onClick={onConfirm}
-                                    className="w-full bg-[#7F56D9] font-semibold text-white py-2 px-4 rounded-full hover:bg-opacity-90 transition-colors">
-                                    Submit
-                                </button>
-                            </Link>
+                            <button
+                                onClick={handleSubmit}
+                                className="w-full bg-[#7F56D9] font-semibold text-white py-2 px-4 rounded-full hover:bg-opacity-90 transition-colors">
+                                Submit
+                            </button>
                             <button
                                 onClick={onClose}
                                 className="bg-[#333540] font-semibold text-white py-2 px-4 rounded-full hover:bg-opacity-90 transition-colors">
@@ -67,7 +80,7 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
                                 Kembali ke Latihan
                             </button>
                             <button
-                                onClick={onConfirm}
+                                onClick={handleSubmit}
                                 className="bg-[#EA5C49] font-semibold text-white py-2 px-4 rounded-full hover:bg-opacity-90 transition-colors">
                                 Tetap Submit
                             </button>

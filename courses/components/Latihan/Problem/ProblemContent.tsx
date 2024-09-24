@@ -5,7 +5,6 @@ import {
     useGetExerciseProblemQuery,
     useGetExerciseProgressQuery,
     useUpdateExerciseProblemProgressMutation,
-    useUpdateExerciseProgressMutation,
     useGetExerciseDetailQuery,
     useGetExerciseReportQuery
 } from '../../../redux/api/exercisesApi';
@@ -29,10 +28,7 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
     slug,
     problemId,
     sectionId,
-    showSolution,
-    timeConstraint,
-    timeLimit,
-    onTimeExpired
+    showSolution
 }) => {
     const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
     const [openEndedAnswer, setOpenEndedAnswer] = useState('');
@@ -50,8 +46,11 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
             { skip: !slug || !problemId }
         );
 
-    const { data: exerciseProgress, isLoading: isProgressLoading } =
-        useGetExerciseProgressQuery({ exercise_slug: slug }, { skip: !slug });
+    const {
+        data: exerciseProgress,
+        isLoading: isProgressLoading,
+        refetch: refetchExerciseProgress
+    } = useGetExerciseProgressQuery({ exercise_slug: slug });
 
     const { data: problemProgress, isLoading: isProblemProgressLoading } =
         useGetOrCreateExerciseProblemProgressQuery(
@@ -67,7 +66,6 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
         );
 
     const [updateProblemProgress] = useUpdateExerciseProblemProgressMutation();
-    const [updateExerciseProgress] = useUpdateExerciseProgressMutation();
 
     const { data: exerciseDetail } = useGetExerciseDetailQuery({
         exercise_slug: slug
@@ -87,6 +85,12 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
         setShowExplanation(false);
         setIsSubmitted(false);
     }, [problemId]);
+
+    useEffect(() => {
+        if (sectionId) {
+            refetchExerciseProgress();
+        }
+    }, [sectionId, refetchExerciseProgress]);
 
     useEffect(() => {
         if (problemProgress) {
@@ -183,35 +187,9 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
         }
     };
 
-    const handleTimeExpired = useCallback(async () => {
-        if (timeConstraint === 'TOTAL_TIME') {
-            await updateExerciseProgress({
-                exercise_slug: slug,
-                progress_id: exerciseProgress!.id,
-                data: { status: 'COMPLETED' }
-            }).unwrap();
-        } else if (timeConstraint === 'PER_PROBLEM') {
-            handleSubmit();
-        }
-        onTimeExpired();
-    }, [
-        timeConstraint,
-        slug,
-        exerciseProgress,
-        updateExerciseProgress,
-        handleSubmit,
-        onTimeExpired
-    ]);
-
-    useEffect(() => {
-        if (timeConstraint !== 'NONE' && timeLimit > 0) {
-            const timer = setTimeout(handleTimeExpired, timeLimit * 1000);
-            return () => clearTimeout(timer);
-        }
-        return undefined;
-    }, [timeConstraint, timeLimit, handleTimeExpired]);
-
-    const handleFinishExercise = () => {
+    const handleFinishExercise = async () => {
+        await refetchExerciseReport();
+        checkAllProblemsAnswered();
         setIsFinishModalOpen(true);
     };
 
