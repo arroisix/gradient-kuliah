@@ -5,7 +5,9 @@ import {
     RiBookOpenLine,
     RiBookOpenFill,
     RiQuestionnaireLine,
-    RiQuestionnaireFill
+    RiQuestionnaireFill,
+    RiFileListLine,
+    RiFileListFill
 } from 'react-icons/ri';
 import CommunityNotificationBadge from '../../elements/CommunityNotificationBadge';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -49,6 +51,13 @@ const MOBILE_SIDEBAR_BUTTONS: NavigationButtonInterface[] = [
                 url: '/perpustakaan/astronotes'
             }
         ]
+    },
+    {
+        name: 'Latihan',
+        title: 'Latihan',
+        url: '/latihan',
+        IconActive: RiFileListFill,
+        IconUnactive: RiFileListLine
     }
 ];
 

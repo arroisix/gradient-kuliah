@@ -57,7 +57,7 @@ const ProblemReportPage: React.FC = () => {
 
     return (
         <div className="flex justify-center items-start min-h-screen pb-20 h-fit bg-black">
-            <div className="relative w-full max-w-[640px]">
+            <div className="relative w-full max-w-[640px] px-4 sm:px-0">
                 <ExerciseHeader title="Exercise Report" />
                 <div className="overflow-hidden h-full">
                     <div className="h-full flex flex-col">
@@ -66,7 +66,7 @@ const ProblemReportPage: React.FC = () => {
                                 <button
                                     key={problem.id}
                                     onClick={() => handleProblemChange(index)}
-                                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm ${
+                                    className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm ${
                                         index === currentProblemIndex
                                             ? 'bg-white text-black'
                                             : 'bg-gray-700 text-white'
@@ -81,7 +81,7 @@ const ProblemReportPage: React.FC = () => {
                                 {['summary', 'history'].map((tab) => (
                                     <button
                                         key={tab}
-                                        className={`text-center text-sm py-3 border-b-2 flex-1 ${
+                                        className={`text-center text-xs sm:text-sm py-3 border-b-2 flex-1 ${
                                             activeTab === tab
                                                 ? 'text-white border-purple-600'
                                                 : 'text-gray-400 border-transparent'
@@ -108,7 +108,7 @@ const ProblemReportPage: React.FC = () => {
                 </div>
             </div>
             <div className="fixed bottom-0 left-0 w-full p-4 bg-black flex justify-center">
-                <div className="w-[640px] flex justify-between gap-2">
+                <div className="w-full max-w-[640px] flex justify-between">
                     <Link
                         className="w-full"
                         href={`/latihan/${slug}/report/${exerciseProgressId}`}

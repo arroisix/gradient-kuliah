@@ -38,8 +38,8 @@ const SummaryTab: React.FC<SummaryTabProps> = ({
                 </div>
             </div>
 
-            <div className="flex h-[206px] gap-4">
-                <div className="bg-[#252A31] rounded-lg border-t-2 border-[#2AC179] p-5 h-[206px] flex flex-col gap-4 flex-1">
+            <div className="flex flex-col sm:flex-row gap-4">
+                <div className="bg-[#252A31] rounded-lg border-t-2 border-[#2AC179] p-5 flex flex-col gap-4 flex-1">
                     <div className="text-white font-semibold flex items-center gap-2">
                         ✅<span>Paling Dikuasai</span>
                     </div>
@@ -48,18 +48,18 @@ const SummaryTab: React.FC<SummaryTabProps> = ({
                             masteredTopics.map((topic, index) => (
                                 <div
                                     key={index}
-                                    className="bg-[#4B4E5F] text-white px-4 py-2 rounded-full text-sm">
+                                    className="bg-[#4B4E5F] text-white px-4 py-2 rounded-full text-xs sm:text-sm">
                                     {topic}
                                 </div>
                             ))
                         ) : (
-                            <div className="text-white text-sm">
+                            <div className="text-white text-xs sm:text-sm">
                                 Belum ada topik yang dikuasai
                             </div>
                         )}
                     </div>
                 </div>
-                <div className="bg-[#252A31] rounded-lg border-t-2 border-[#EB5D49] p-5 h-[206px] flex flex-col gap-4 flex-1">
+                <div className="bg-[#252A31] rounded-lg border-t-2 border-[#EB5D49] p-5 flex flex-col gap-4 flex-1">
                     <div className="text-white font-semibold flex items-center gap-2">
                         🚨<span>Perlu Belajar Lagi</span>
                     </div>
@@ -68,12 +68,12 @@ const SummaryTab: React.FC<SummaryTabProps> = ({
                             topicsToImprove.map((topic, index) => (
                                 <div
                                     key={index}
-                                    className="bg-[#4B4E5F] text-white px-4 py-2 rounded-full text-sm">
+                                    className="bg-[#4B4E5F] text-white px-4 py-2 rounded-full text-xs sm:text-sm">
                                     {topic}
                                 </div>
                             ))
                         ) : (
-                            <div className="text-white text-sm">
+                            <div className="text-white text-xs sm:text-sm">
                                 Tidak ada topik untuk diperbaiki
                             </div>
                         )}

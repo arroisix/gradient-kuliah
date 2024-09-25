@@ -91,8 +91,8 @@ const ExerciseReportLayout: React.FC<ExerciseReportLayoutProps> = ({
     })();
 
     return (
-        <div className="flex justify-center items-start min-h-screen pb-20 h-fit bg-black">
-            <div className="relative w-full max-w-[640px]">
+        <div className="flex justify-center items-start min-h-screen pb-36 sm:pb-20 h-fit bg-black">
+            <div className="relative w-full max-w-[640px] px-4 sm:px-0">
                 <ExerciseHeader title={'Exercise Report'} />
                 <div className="overflow-hidden h-full">
                     <div className="h-full flex flex-col">
@@ -110,7 +110,7 @@ const ExerciseReportLayout: React.FC<ExerciseReportLayoutProps> = ({
                                 {['summary', 'review', 'history'].map((tab) => (
                                     <button
                                         key={tab}
-                                        className={`text-center text-sm py-3 border-b-2 flex-1 ${
+                                        className={`text-center text-xs sm:text-sm py-3 border-b-2 flex-1 ${
                                             activeTab === tab
                                                 ? 'text-white border-purple-600'
                                                 : 'text-gray-400 border-transparent'
@@ -158,7 +158,7 @@ const ExerciseReportLayout: React.FC<ExerciseReportLayoutProps> = ({
                 </div>
             </div>
             <div className="fixed bottom-0 left-0 w-full p-4 bg-black flex justify-center">
-                <div className="w-[640px] flex justify-between gap-2">
+                <div className="w-full max-w-[640px] flex flex-col sm:flex-row justify-between gap-2">
                     <button className="w-full py-3 rounded-full font-semibold bg-[#4B5563] text-white hover:bg-[#374151] transition-colors">
                         Bagikan
                     </button>
