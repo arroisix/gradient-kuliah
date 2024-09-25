@@ -5,7 +5,11 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { BiBookReader, BiSearch } from 'react-icons/bi';
 import { FiHome } from 'react-icons/fi';
-import { RiBookOpenLine, RiQuestionnaireLine } from 'react-icons/ri';
+import {
+    RiBookOpenLine,
+    RiFileListLine,
+    RiQuestionnaireLine
+} from 'react-icons/ri';
 
 const DISPLAYED_ROUTES = [
     '/dashboard',
@@ -44,6 +48,11 @@ const APPBAR_NAV: AppbarNav[] = [
         href: '/komunitas',
         alias: ['/komunitas', '/komunitas/public', '/komunitas/pertanyaan-ku'],
         label: 'Diskusi'
+    },
+    {
+        icon: <RiFileListLine size={20} />,
+        href: '/latihan',
+        label: 'Latihan'
     }
 ];
 const Appbar = (): JSX.Element | null => {
