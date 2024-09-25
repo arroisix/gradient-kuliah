@@ -20,7 +20,8 @@ const DISPLAYED_ROUTES = [
     '/perpustakaan/textbook',
     '/perpustakaan/bank-soal',
     '/perpustakaan/astronotes',
-    '/kelas'
+    '/kelas',
+    '/latihan'
 ];
 const APPBAR_NAV: AppbarNav[] = [
     {
