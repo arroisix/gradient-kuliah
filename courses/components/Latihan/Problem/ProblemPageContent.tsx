@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import {
     useGetExerciseProblemQuery,
     useGetProblemSetDetailQuery,
     useGetOrCreateExerciseProblemProgressQuery,
     useGetExerciseProgressQuery,
-    useUpdateExerciseProgressMutation
+    useUpdateExerciseProgressMutation,
+    useUpdateExerciseProblemProgressMutation
 } from 'courses/redux/api/exercisesApi';
 import { useRouter } from 'next/router';
 import ProblemContent from './ProblemContent';
@@ -23,6 +24,8 @@ const ProblemPageContent: React.FC<ProblemPageContentProps> = ({
 }) => {
     const router = useRouter();
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const hasTimeExpiredRef = useRef(false);
+
     const { data: problem, isLoading: problemLoading } =
         useGetExerciseProblemQuery(
             { exercise_slug: slug, problem_id: problemId },
@@ -65,6 +68,7 @@ const ProblemPageContent: React.FC<ProblemPageContentProps> = ({
 
     useEffect(() => {
         setIsSubmitted(false);
+        hasTimeExpiredRef.current = false;
     }, [problemId]);
 
     const isCurrentProblemSubmitted =
@@ -79,17 +83,76 @@ const ProblemPageContent: React.FC<ProblemPageContentProps> = ({
     }, []);
 
     const [updateExerciseProgress] = useUpdateExerciseProgressMutation();
+    const [updateProblemProgress] = useUpdateExerciseProblemProgressMutation();
 
-    const handleTimeExpired = async () => {
-        if (exerciseProgress) {
-            await updateExerciseProgress({
-                exercise_slug: slug,
-                progress_id: exerciseProgress.id,
-                data: { status: 'COMPLETED' }
-            }).unwrap();
-            router.push(`/latihan/${slug}/report/${exerciseProgress.id}`);
+    const handleTimeExpired = useCallback(async () => {
+        if (!hasTimeExpiredRef.current) {
+            hasTimeExpiredRef.current = true;
+            if (problemSetData?.time_constraint === 'TOTAL_TIME') {
+                if (exerciseProgress) {
+                    try {
+                        await updateExerciseProgress({
+                            exercise_slug: slug,
+                            progress_id: exerciseProgress.id,
+                            data: { status: 'COMPLETED' }
+                        }).unwrap();
+                        router.push(
+                            `/latihan/${slug}/report/${exerciseProgress.id}`
+                        );
+                    } catch (error) {
+                        console.error(
+                            'Failed to update exercise progress:',
+                            error
+                        );
+                        hasTimeExpiredRef.current = false;
+                    }
+                }
+            } else if (problemSetData?.time_constraint === 'PER_PROBLEM') {
+                if (problemProgress) {
+                    try {
+                        await updateProblemProgress({
+                            exercise_slug: slug,
+                            exercise_progress_id: exerciseProgress!.id,
+                            problem_id: problemId,
+                            problem_progress_id: problemProgress.id,
+                            data: { status: 'IN_PROGRESS' }
+                        }).unwrap();
+
+                        if (problem?.next_navigation) {
+                            const nextUrl =
+                                problem.next_navigation.type === 'problem'
+                                    ? `/latihan/${slug}/${sectionId}/${problem.next_navigation.id}`
+                                    : `/latihan/${slug}/${problem.next_navigation.id}`;
+                            router.push(nextUrl);
+                        } else {
+                            router.push(
+                                `/latihan/${slug}/report/${
+                                    exerciseProgress!.id
+                                }`
+                            );
+                        }
+                    } catch (error) {
+                        console.error(
+                            'Failed to update problem progress:',
+                            error
+                        );
+                        hasTimeExpiredRef.current = false;
+                    }
+                }
+            }
         }
-    };
+    }, [
+        exerciseProgress,
+        problemProgress,
+        problemSetData,
+        problem,
+        router,
+        slug,
+        sectionId,
+        problemId,
+        updateExerciseProgress,
+        updateProblemProgress
+    ]);
 
     if (
         problemLoading ||
@@ -110,8 +173,6 @@ const ProblemPageContent: React.FC<ProblemPageContentProps> = ({
         time_limit: timeLimit,
         show_solution: showSolution
     } = problemSetData;
-
-    console.log('isCurrentProblemSubmitted', isCurrentProblemSubmitted);
 
     return (
         <LatihanLayout

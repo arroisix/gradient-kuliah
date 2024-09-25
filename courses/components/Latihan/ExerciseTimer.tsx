@@ -27,6 +27,12 @@ const ExerciseTimer: React.FC<ExerciseTimerProps> = ({
     const [timeLeft, setTimeLeft] = useState(timeLimit);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
     const endTimeRef = useRef<number | null>(null);
+    const hasExpiredRef = useRef(false);
+    const onTimeExpiredRef = useRef(onTimeExpired);
+
+    useEffect(() => {
+        onTimeExpiredRef.current = onTimeExpired;
+    }, [onTimeExpired]);
 
     const clearTimer = useCallback(() => {
         if (timerRef.current) {
@@ -42,13 +48,14 @@ const ExerciseTimer: React.FC<ExerciseTimerProps> = ({
         const remaining = Math.max(0, endTimeRef.current - now);
         setTimeLeft(Math.floor(remaining / 1000));
 
-        if (remaining <= 0) {
+        if (remaining <= 0 && !hasExpiredRef.current) {
             clearTimer();
-            if (onTimeExpired) {
-                onTimeExpired();
+            hasExpiredRef.current = true;
+            if (onTimeExpiredRef.current) {
+                onTimeExpiredRef.current();
             }
         }
-    }, [clearTimer, onTimeExpired]);
+    }, [clearTimer]);
 
     useEffect(() => {
         if (timeConstraint === 'NONE' || !timeLimit) return;
@@ -67,6 +74,7 @@ const ExerciseTimer: React.FC<ExerciseTimerProps> = ({
         }
 
         endTimeRef.current = startTime + timeLimit * 1000;
+        hasExpiredRef.current = false;
 
         updateTimer();
 
