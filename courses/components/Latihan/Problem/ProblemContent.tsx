@@ -30,7 +30,7 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
     problemId,
     sectionId,
     showSolution,
-                                                           onSubmit
+    onSubmit
 }) => {
     const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
     const [openEndedAnswer, setOpenEndedAnswer] = useState('');
@@ -284,7 +284,7 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
                             : 'Submit'}
                     </button>
                 )}
-                {isSubmitted && showSolution === 'PER_PROBLEM' && (
+                {isSubmitted && showSolution === 'AFTER_PROBLEM' && (
                     <button
                         className="w-full py-3 rounded-full font-semibold bg-[#4B5563] text-white hover:bg-[#374151] transition-colors"
                         onClick={() => setShowExplanation(!showExplanation)}>
