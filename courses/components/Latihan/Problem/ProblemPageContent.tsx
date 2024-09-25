@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import {
     useGetExerciseProblemQuery,
     useGetProblemSetDetailQuery,
@@ -22,6 +22,7 @@ const ProblemPageContent: React.FC<ProblemPageContentProps> = ({
     sectionId
 }) => {
     const router = useRouter();
+    const [isSubmitted, setIsSubmitted] = useState(false);
     const { data: problem, isLoading: problemLoading } =
         useGetExerciseProblemQuery(
             { exercise_slug: slug, problem_id: problemId },
@@ -63,10 +64,15 @@ const ProblemPageContent: React.FC<ProblemPageContentProps> = ({
     );
 
     const isCurrentProblemSubmitted =
+        isSubmitted ||
         problemProgress?.status === 'COMPLETED' ||
         (problemProgress?.submitted_answer_ids &&
             problemProgress.submitted_answer_ids.length > 0) ||
         !!problemProgress?.submitted_answer_text;
+
+    const handleSubmit = useCallback(() => {
+        setIsSubmitted(true);
+    }, []);
 
     const [updateExerciseProgress] = useUpdateExerciseProgressMutation();
 
@@ -101,6 +107,8 @@ const ProblemPageContent: React.FC<ProblemPageContentProps> = ({
         show_solution: showSolution
     } = problemSetData;
 
+    console.log('isCurrentProblemSubmitted', isCurrentProblemSubmitted);
+
     return (
         <LatihanLayout
             showNavigation={true}
@@ -133,6 +141,7 @@ const ProblemPageContent: React.FC<ProblemPageContentProps> = ({
                 timeConstraint={timeConstraint}
                 timeLimit={timeLimit}
                 onTimeExpired={handleTimeExpired}
+                onSubmit={handleSubmit}
             />
         </LatihanLayout>
     );

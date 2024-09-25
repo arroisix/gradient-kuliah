@@ -22,13 +22,15 @@ interface ProblemContentProps {
     timeConstraint: string;
     timeLimit: number;
     onTimeExpired: () => void;
+    onSubmit: () => void;
 }
 
 const ProblemContent: React.FC<ProblemContentProps> = ({
     slug,
     problemId,
     sectionId,
-    showSolution
+    showSolution,
+                                                           onSubmit
 }) => {
     const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
     const [openEndedAnswer, setOpenEndedAnswer] = useState('');
@@ -176,6 +178,7 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
 
             setIsSubmitted(true);
             setIsAnswerChanged(false);
+            onSubmit();
 
             await refetchExerciseReport();
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { IoTimeOutline } from 'react-icons/io5';
 
 interface ExerciseTimerProps {
@@ -25,13 +25,33 @@ const ExerciseTimer: React.FC<ExerciseTimerProps> = ({
     isCurrentProblemSubmitted = false
 }) => {
     const [timeLeft, setTimeLeft] = useState(timeLimit);
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const endTimeRef = useRef<number | null>(null);
+
+    const clearTimer = useCallback(() => {
+        if (timerRef.current) {
+            clearInterval(timerRef.current);
+            timerRef.current = null;
+        }
+    }, []);
+
+    const updateTimer = useCallback(() => {
+        if (endTimeRef.current === null) return;
+
+        const now = Date.now();
+        const remaining = Math.max(0, endTimeRef.current - now);
+        setTimeLeft(Math.floor(remaining / 1000));
+
+        if (remaining <= 0) {
+            clearTimer();
+            if (onTimeExpired) {
+                onTimeExpired();
+            }
+        }
+    }, [clearTimer, onTimeExpired]);
 
     useEffect(() => {
         if (timeConstraint === 'NONE' || !timeLimit) return;
-        if (timeConstraint === 'PER_PROBLEM' && isCurrentProblemSubmitted) {
-            setTimeLeft(0);
-            return;
-        }
 
         let startTime: number;
         if (timeConstraint === 'TOTAL_TIME' && firstProblemProgress) {
@@ -46,33 +66,32 @@ const ExerciseTimer: React.FC<ExerciseTimerProps> = ({
             return;
         }
 
-        const endTime = startTime + timeLimit * 1000;
-
-        const updateTimer = () => {
-            const now = Date.now();
-            const remaining = Math.max(0, endTime - now);
-            setTimeLeft(Math.floor(remaining / 1000));
-
-            if (remaining <= 0) {
-                if (onTimeExpired) {
-                    onTimeExpired();
-                }
-            }
-        };
+        endTimeRef.current = startTime + timeLimit * 1000;
 
         updateTimer();
-        const timer = setInterval(updateTimer, 1000);
 
-        return () => clearInterval(timer);
+        if (!isCurrentProblemSubmitted || timeConstraint === 'TOTAL_TIME') {
+            clearTimer();
+            timerRef.current = setInterval(updateTimer, 1000);
+        }
+
+        return clearTimer;
     }, [
         timeConstraint,
         timeLimit,
         currentProblemId,
         problemProgress,
         firstProblemProgress,
-        onTimeExpired,
-        isCurrentProblemSubmitted
+        isCurrentProblemSubmitted,
+        clearTimer,
+        updateTimer
     ]);
+
+    useEffect(() => {
+        if (timeConstraint === 'PER_PROBLEM' && isCurrentProblemSubmitted) {
+            clearTimer();
+        }
+    }, [timeConstraint, isCurrentProblemSubmitted, clearTimer]);
 
     if (timeConstraint === 'NONE') return null;
 
