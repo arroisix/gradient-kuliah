@@ -28,8 +28,10 @@ const QuizNavigationSidebar: React.FC<QuizNavigationSidebarProps> = ({
     useEffect(() => {
         if (isOpen) {
             setIsRendered(true);
+            document.body.style.overflow = 'hidden';
         } else {
             const timer = setTimeout(() => setIsRendered(false), 300);
+            document.body.style.overflow = '';
             return () => clearTimeout(timer);
         }
         return;
@@ -47,10 +49,10 @@ const QuizNavigationSidebar: React.FC<QuizNavigationSidebarProps> = ({
 
     return (
         <div
-            className={`fixed top-0 left-0 w-[240px] h-full bg-[#1B2129] flex flex-col transition-transform duration-300 ease-in-out ${
-                isOpen ? 'translate-x-0' : '-translate-x-full'
-            }`}>
-            <div className="w-full h-[56px] px-4 py-4 flex gap-3 items-center">
+            className={`fixed inset-0 bg-[#1B2129] flex flex-col transition-transform duration-300 ease-in-out z-50
+                ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+                md:w-[240px] md:right-auto`}>
+            <div className="w-full h-[56px] px-4 py-4 flex gap-3 items-center border-b border-gray-700">
                 <button
                     onClick={onClose}
                     className="text-gray-400 hover:text-white">
@@ -62,14 +64,14 @@ const QuizNavigationSidebar: React.FC<QuizNavigationSidebarProps> = ({
             </div>
             <div className="flex-grow p-4 overflow-y-auto">
                 <h3 className="text-white text-sm mb-4">{name}</h3>
-                <div className="grid grid-cols-4 gap-2 mb-4">
+                <div className="grid grid-cols-5 md:grid-cols-4 gap-2 mb-4">
                     {problems.map((problem) => (
                         <Link
                             key={problem.id}
                             href={`/latihan/${slug}/${problemSetId}/${problem.id}`}
                             passHref>
                             <a
-                                className={`w-10 h-10 rounded-md flex items-center justify-center text-sm
+                                className={`w-full aspect-square rounded-md flex items-center justify-center text-sm
                                     ${
                                         problem.id === problemId
                                             ? 'bg-white text-[#222222]'
