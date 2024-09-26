@@ -14,6 +14,26 @@ import Skeleton from 'commons/components/elements/Skeleton';
 import TiptapViewer from '../../Textbook/TiptapViewer';
 import ExerciseFinishModal from '../ExerciseFinishModal';
 
+const Spinner = () => (
+    <svg
+        className="animate-spin h-5 w-5 text-white"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24">
+        <circle
+            className="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"></circle>
+        <path
+            className="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+);
+
 interface ProblemContentProps {
     problemId: string;
     slug: string;
@@ -41,6 +61,7 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
     const [isFinishModalOpen, setIsFinishModalOpen] = useState(false);
     const [allProblemsAnswered, setAllProblemsAnswered] = useState(false);
     const [isAnswerChanged, setIsAnswerChanged] = useState(false);
+    const [isLoadingFinish, setIsLoadingFinish] = useState(false);
 
     const { data: problem, isLoading: isProblemLoading } =
         useGetExerciseProblemQuery(
@@ -191,9 +212,14 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
     };
 
     const handleFinishExercise = async () => {
-        await refetchExerciseReport();
-        checkAllProblemsAnswered();
-        setIsFinishModalOpen(true);
+        setIsLoadingFinish(true);
+        try {
+            await refetchExerciseReport();
+            checkAllProblemsAnswered();
+            setIsFinishModalOpen(true);
+        } finally {
+            setIsLoadingFinish(false);
+        }
     };
 
     const handleConfirmFinish = () => {
@@ -274,14 +300,16 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
                             isAnswerProvided
                                 ? 'bg-[#7F56D9] text-white hover:bg-[#6941C6]'
                                 : 'bg-gray-400 text-white cursor-not-allowed'
-                        }`}
+                        } flex items-center justify-center`}
                         onClick={handleSubmit}
                         disabled={!isAnswerProvided || isSubmitting}>
-                        {isSubmitting
-                            ? 'Submitting...'
-                            : isAnswerChanged
-                            ? 'Resubmit'
-                            : 'Submit'}
+                        {isSubmitting ? (
+                            <Spinner />
+                        ) : isAnswerChanged ? (
+                            'Resubmit'
+                        ) : (
+                            'Submit'
+                        )}
                     </button>
                 )}
                 {isSubmitted && showSolution === 'AFTER_PROBLEM' && (
@@ -308,9 +336,14 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
                     !problem.next_navigation &&
                     !isAnswerChanged && (
                         <button
-                            className="w-full py-3 rounded-full font-semibold bg-[#7F56D9] text-white hover:bg-[#6941C6] transition-colors"
-                            onClick={handleFinishExercise}>
-                            Selesaikan Latihan
+                            className="w-full py-3 rounded-full font-semibold bg-[#7F56D9] text-white hover:bg-[#6941C6] transition-colors flex items-center justify-center"
+                            onClick={handleFinishExercise}
+                            disabled={isLoadingFinish}>
+                            {isLoadingFinish ? (
+                                <Spinner />
+                            ) : (
+                                'Selesaikan Latihan'
+                            )}
                         </button>
                     )}
             </div>

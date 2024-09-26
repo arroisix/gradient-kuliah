@@ -96,9 +96,35 @@ const ProblemPageContent: React.FC<ProblemPageContentProps> = ({
                             progress_id: exerciseProgress.id,
                             data: { status: 'COMPLETED' }
                         }).unwrap();
-                        router.push(
-                            `/latihan/${slug}/report/${exerciseProgress.id}`
-                        );
+
+                        const finalProblem =
+                            problemSetData.problems[
+                                problemSetData.problems.length - 1
+                            ];
+
+                        if (finalProblem && finalProblem.id === problemId) {
+                            if (problem?.next_navigation) {
+                                if (
+                                    problem.next_navigation.type === 'section'
+                                ) {
+                                    router.push(
+                                        `/latihan/${slug}/${problem.next_navigation.id}`
+                                    );
+                                } else {
+                                    router.push(
+                                        `/latihan/${slug}/${sectionId}/${problem.next_navigation.id}`
+                                    );
+                                }
+                            } else {
+                                router.push(
+                                    `/latihan/${slug}/report/${exerciseProgress.id}`
+                                );
+                            }
+                        } else {
+                            router.push(
+                                `/latihan/${slug}/report/${exerciseProgress.id}`
+                            );
+                        }
                     } catch (error) {
                         console.error(
                             'Failed to update exercise progress:',

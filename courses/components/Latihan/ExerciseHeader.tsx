@@ -29,7 +29,7 @@ const ExerciseHeader: React.FC<ExerciseHeaderProps> = ({
         setIsModalOpen(true);
     };
 
-    const handleConfirmClose = () => {
+    const handleConfirmClose = async () => {
         setIsModalOpen(false);
         router.push('/latihan');
     };

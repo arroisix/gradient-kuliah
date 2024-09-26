@@ -73,9 +73,7 @@ const ProblemDetailContent: React.FC<ProblemDetailContentProps> = ({
                                 <Option
                                     key={option.id}
                                     option={option}
-                                    isCorrect={
-                                        option.id === problem.solution_id
-                                    }
+                                    isCorrect={option.is_correct}
                                     isSelected={problem.user_progress.submitted_answer.includes(
                                         option.id
                                     )}

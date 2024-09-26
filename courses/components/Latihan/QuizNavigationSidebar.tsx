@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { useRouter } from 'next/router';
-import { useGetProblemSetDetailQuery } from '../../redux/api/exercisesApi';
+import { useLazyGetProblemSetDetailQuery } from '../../redux/api/exercisesApi';
 import Link from 'next/link';
 
 interface QuizNavigationSidebarProps {
@@ -17,25 +17,23 @@ const QuizNavigationSidebar: React.FC<QuizNavigationSidebarProps> = ({
     const { slug, sectionId: problemSetId, problemId } = router.query;
     const [isRendered, setIsRendered] = useState(false);
 
-    const {
-        data: problemSetData,
-        isLoading,
-        error
-    } = useGetProblemSetDetailQuery(problemSetId as string, {
-        skip: !problemSetId
-    });
+    const [fetchProblemSetData, { data: problemSetData, isLoading, error }] =
+        useLazyGetProblemSetDetailQuery();
 
     useEffect(() => {
-        if (isOpen) {
+        if (isOpen && problemSetId) {
+            fetchProblemSetData(problemSetId as string);
             setIsRendered(true);
             document.body.style.overflow = 'hidden';
         } else {
-            const timer = setTimeout(() => setIsRendered(false), 300);
+            const timer = setTimeout(() => {
+                setIsRendered(false);
+            }, 300);
             document.body.style.overflow = '';
             return () => clearTimeout(timer);
         }
         return;
-    }, [isOpen]);
+    }, [isOpen, problemSetId, fetchProblemSetData]);
 
     if (!isRendered) return null;
 

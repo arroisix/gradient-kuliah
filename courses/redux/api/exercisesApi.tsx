@@ -278,7 +278,8 @@ export const {
     useGetExerciseProblemReportQuery,
     useGetExerciseReportQuery,
     useGetExerciseLandingPageQuery,
-    useGetProblemSetDetailQuery
+    useGetProblemSetDetailQuery,
+    useLazyGetProblemSetDetailQuery
 } = exerciseApi;
 
 export const {
