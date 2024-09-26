@@ -62,7 +62,7 @@ const RelatedBooksSection = ({
                 )}
                 {books?.map((book) => (
                     <ProductCard
-                        key={book.id}
+                        key={book.slug}
                         orientation="horizontal"
                         href={getHref(book)}
                         category={book.category ?? ''}
