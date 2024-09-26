@@ -1170,7 +1170,8 @@ input[type='number']::-webkit-outer-spin-button {
     font-size: 85%;
     line-height: 1.45;
     tab-size: 4;
-    @apply border-l-4 rounded-md text-graphite-200 border-accent-blue/60 bg-surface-100;
+    background-color: #20262E;
+    @apply border-l-4 rounded-md text-graphite-200 border-accent-blue/60;
 }
 
 .markdown-body pre code {
