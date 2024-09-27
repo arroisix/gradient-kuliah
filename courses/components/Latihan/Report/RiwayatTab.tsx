@@ -61,20 +61,19 @@ const RiwayatTab: React.FC<RiwayatTabProps> = ({
                                     /100
                                 </span>
                             </span>
-                            <div
-                                className={`text-sm ${
-                                    entry.score_change != null
-                                        ? entry.score_change > 0
-                                            ? 'text-[#2AC179]'
-                                            : 'text-[#EB5D49]'
-                                        : ''
-                                }`}>
-                                {entry.score_change != null
-                                    ? `${entry.score_change > 0 ? '+' : ''}${
-                                          entry.score_change
-                                      } poin`
-                                    : ''}
-                            </div>
+                            {entry.score_change != null &&
+                                entry.score_change !== 0 && (
+                                    <div
+                                        className={`text-sm ${
+                                            entry.score_change > 0
+                                                ? 'text-[#2AC179]'
+                                                : 'text-[#EB5D49]'
+                                        }`}>
+                                        {`${entry.score_change > 0 ? '+' : ''}${
+                                            entry.score_change
+                                        } poin`}
+                                    </div>
+                                )}
                         </div>
                     </div>
 

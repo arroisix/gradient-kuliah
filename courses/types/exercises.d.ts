@@ -160,14 +160,15 @@ export interface ExerciseProblemReport {
 export interface ProblemReport {
     id: string;
     question: {
-        text: any; // This will be the JSON content
+        text: any;
         type: string;
         options: Array<{
             id: string;
-            text: any; // This will be the JSON content
+            text: any;
+            is_correct: boolean;
         }>;
     };
-    solution: any; // This will be the JSON content
+    solution: any;
     solution_id: string;
     user_progress: {
         status: string;

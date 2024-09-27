@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IoMdCheckmark as Check } from 'react-icons/io';
 import { IoMdClose as X } from 'react-icons/io';
 import Filter from 'commons/components/elements/Filter';
@@ -8,7 +8,15 @@ import { useRouter } from 'next/router';
 import TiptapViewer from '../../Textbook/TiptapViewer';
 
 const ReviewTab = ({ problems }: { problems: any[] }) => {
-    const [filter] = useState('all');
+    const router = useRouter();
+    const { filter: urlFilter } = router.query;
+    const [filter, setFilter] = useState((urlFilter as string) || 'all');
+
+    useEffect(() => {
+        if (urlFilter) {
+            setFilter(urlFilter as string);
+        }
+    }, [urlFilter]);
 
     const filteredProblems = problems.filter((problem) => {
         if (filter === 'correct') return problem.user_progress.is_correct;
@@ -16,11 +24,26 @@ const ReviewTab = ({ problems }: { problems: any[] }) => {
         return true;
     });
 
-    console.log('Problems,', problems);
-    console.log('filtered problems,', filteredProblems);
+    const handleFilterChange = (newFilter: string) => {
+        router.push(
+            {
+                pathname: router.pathname,
+                query: { ...router.query, filter: newFilter }
+            },
+            undefined,
+            { shallow: true }
+        );
+    };
+
     return (
         <div className="w-full flex flex-col gap-6 max-w-[640px]">
-            <Filter options={REVIEW_FILTER_OPTIONS} defaultSelected={filter} />
+            <Filter
+                options={REVIEW_FILTER_OPTIONS}
+                defaultSelected={filter}
+                className="w-full"
+                onChange={handleFilterChange}
+                fullWidth={true}
+            />
             {filteredProblems?.map((problem, index) => (
                 <ProblemCard
                     key={problem.id}
