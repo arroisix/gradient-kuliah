@@ -1,4 +1,5 @@
 import React from 'react';
+import { cn } from 'commons/utils';
 
 interface OpenEndedProblemProps {
     answer: string;
@@ -27,7 +28,10 @@ const OpenEndedProblem: React.FC<OpenEndedProblemProps> = ({
     return (
         <div className="w-full">
             <textarea
-                className={`w-full p-3 rounded-lg resize-none ${getTextareaClass()}`}
+                className={cn(
+                    'w-full p-3 rounded-lg resize-none',
+                    getTextareaClass()
+                )}
                 rows={1}
                 placeholder="Tuliskan jawaban di sini"
                 value={answer}

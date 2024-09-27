@@ -1,6 +1,7 @@
 import React from 'react';
 import { Check, X } from 'lucide-react';
 import TiptapViewer from '../../Textbook/TiptapViewer';
+import { cn } from 'commons/utils';
 
 interface Option {
     id: string;
@@ -57,9 +58,10 @@ const MultipleChoiceProblem: React.FC<MultipleChoiceProblemProps> = ({
             {options.map((option) => (
                 <button
                     key={option.id}
-                    className={`flex items-center justify-between w-full p-3 rounded-lg text-left ${getButtonClass(
-                        option
-                    )}`}
+                    className={cn(
+                        'flex items-center justify-between w-full p-3 rounded-lg text-left',
+                        getButtonClass(option)
+                    )}
                     onClick={() => handleAnswerSelect(option.id)}
                     disabled={isSubmitted && showSolution !== 'AFTER_COMPLETE'}>
                     <div className="flex-grow">

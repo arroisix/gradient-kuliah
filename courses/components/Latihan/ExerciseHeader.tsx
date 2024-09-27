@@ -5,6 +5,7 @@ import { IoChevronBackOutline, IoChevronForwardOutline } from 'react-icons/io5';
 import { useRouter } from 'next/router';
 import { router } from 'next/client';
 import ExerciseCloseModal from './ExerciseCloseModal';
+import { cn } from 'commons/utils';
 
 interface ExerciseHeaderProps {
     title?: string;
@@ -37,16 +38,17 @@ const ExerciseHeader: React.FC<ExerciseHeaderProps> = ({
     return (
         <>
             <div
-                className={`px-4 md:px-4 py-2 md:py-4 flex flex-row w-full max-w-full items-center ${
+                className={cn(
+                    'px-4 md:px-4 py-2 md:py-4 flex flex-row w-full max-w-full items-center',
                     showNavigation || title ? 'justify-between' : 'justify-end'
-                }`}>
+                )}>
                 {title && !showNavigation && (
                     <div className="text-sm font-base text-white">{title}</div>
                 )}
 
                 <a
                     href="/latihan"
-                    className="text-gray-400 hover:text-white z-10"
+                    className="text-graphite-400 hover:text-white z-10"
                     onClick={handleCloseClick}>
                     <IoClose size={24} />
                 </a>
@@ -62,21 +64,19 @@ const ExerciseHeader: React.FC<ExerciseHeaderProps> = ({
                         </button>
                         <Link href={prevLink || ''} passHref>
                             <a
-                                className={`bg-[#333540] text-gray-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full ${
-                                    !prevLink
-                                        ? 'opacity-50 cursor-not-allowed'
-                                        : ''
-                                }`}>
+                                className={cn(
+                                    'bg-[#333540] text-graphite-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full',
+                                    !prevLink && 'opacity-50 cursor-not-allowed'
+                                )}>
                                 <IoChevronBackOutline size={20} />
                             </a>
                         </Link>
                         <Link href={nextLink || ''} passHref>
                             <a
-                                className={`bg-[#333540] text-gray-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full ${
-                                    !nextLink
-                                        ? 'opacity-50 cursor-not-allowed'
-                                        : ''
-                                }`}>
+                                className={cn(
+                                    'bg-[#333540] text-graphite-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full',
+                                    !nextLink && 'opacity-50 cursor-not-allowed'
+                                )}>
                                 <IoChevronForwardOutline size={20} />
                             </a>
                         </Link>
