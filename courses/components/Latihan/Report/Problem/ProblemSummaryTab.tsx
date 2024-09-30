@@ -17,7 +17,8 @@ const ProblemSummaryTab: React.FC<ProblemSummaryTabProps> = ({ data }) => {
                 </div>
             </div>
 
-            {data.topics_to_review.subchapters.length > 0 && (
+            {(data.topics_to_review.subchapters.length > 0 ||
+                data.topics_to_review.chapter.length > 0) && (
                 <div className="bg-[#252A31] rounded-lg p-4 border-t-2 border-[#EB5D49]">
                     <h3 className="text-white font-semibold mb-2 flex items-center">
                         🚨 Perlu Belajar Lagi
@@ -26,26 +27,39 @@ const ProblemSummaryTab: React.FC<ProblemSummaryTabProps> = ({ data }) => {
                         <div className="text-white text-sm font-semibold mb-2">
                             Chapter
                         </div>
-                        <div className="bg-[#4B4E5F] text-white px-3 py-1 rounded-full text-sm inline-block">
-                            {data.topics_to_review.chapter ||
-                                'No chapter specified'}
-                        </div>
+                        {data.topics_to_review.chapter ? (
+                            <div className="bg-[#4B4E5F] text-white px-3 py-1 rounded-full text-sm inline-block">
+                                {data.topics_to_review.chapter}
+                            </div>
+                        ) : (
+                            <div className="text-green-400 text-sm">
+                                Hebat! Tidak ada Chapter yang perlu kamu
+                                pelajari lagi
+                            </div>
+                        )}
                     </div>
                     <div>
                         <div className="text-white text-sm font-semibold mb-2">
                             Subchapter
                         </div>
-                        <div className="flex flex-wrap gap-2">
-                            {data.topics_to_review.subchapters.map(
-                                (subchapter, index) => (
-                                    <div
-                                        key={index}
-                                        className="bg-[#4B4E5F] text-white px-3 py-1 rounded-full text-sm">
-                                        {subchapter}
-                                    </div>
-                                )
-                            )}
-                        </div>
+                        {data.topics_to_review.subchapters.length > 0 ? (
+                            <div className="flex flex-wrap gap-2">
+                                {data.topics_to_review.subchapters.map(
+                                    (subchapter, index) => (
+                                        <div
+                                            key={index}
+                                            className="bg-[#4B4E5F] text-white px-3 py-1 rounded-full text-sm">
+                                            {subchapter}
+                                        </div>
+                                    )
+                                )}
+                            </div>
+                        ) : (
+                            <div className="text-green-400 text-sm">
+                                Hebat! Tidak ada Subchapter yang perlu kamu
+                                pelajari lagi
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
