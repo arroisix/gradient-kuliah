@@ -33,6 +33,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
 
         if (payload.some((response) => response.isError)) {
             return {
+                revalidate: 30,
                 notFound: true
             };
         }
