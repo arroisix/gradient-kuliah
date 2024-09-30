@@ -106,6 +106,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         !getBookRecommendations
     ) {
         return {
+            revalidate: 30,
             notFound: true
         };
     }
@@ -120,6 +121,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
     if (book.category.toLowerCase() !== 'catatan') {
         return {
+            revalidate: 30,
             notFound: true
         };
     }
