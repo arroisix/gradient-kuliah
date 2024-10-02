@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { IoClose } from 'react-icons/io5';
 import { IoChevronBackOutline, IoChevronForwardOutline } from 'react-icons/io5';
 import { useRouter } from 'next/router';
-import { router } from 'next/client';
 import ExerciseCloseModal from './ExerciseCloseModal';
 import { cn } from 'commons/utils';
 
