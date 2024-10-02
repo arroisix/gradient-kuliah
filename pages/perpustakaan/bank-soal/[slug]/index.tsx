@@ -3,8 +3,6 @@ import LearnLayout from 'commons/learnLayout';
 import AstronotesDetail from 'courses/containers/learn/astronotes/detail';
 import { wrapper } from 'redux/store';
 import { ThunkDispatch } from 'redux-thunk';
-// import axios from 'axios';
-// import config from 'redux/api/config';
 import { getBookDetail } from 'courses/redux/api/astronotesApi';
 import { getRunningQueriesThunk } from 'redux/api/baseApi';
 import { getBookRecommendations } from 'courses/redux/api/learningExperienceApi';
