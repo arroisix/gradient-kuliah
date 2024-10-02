@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { FaPlay } from 'react-icons/fa';
 import { HiCheck, HiOutlineChevronDown } from 'react-icons/hi';
 import VideoItem from './VideoItem';
-import ExerciseItem from './ExerciseItem';
 import InteractiveExerciseItem from './InteractiveExerciseItem';
 
 const Collapse = ({
