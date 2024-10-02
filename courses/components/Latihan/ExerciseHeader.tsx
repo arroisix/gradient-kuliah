@@ -22,12 +22,18 @@ const ExerciseHeader: React.FC<ExerciseHeaderProps> = ({
     nextLink,
     onNavigationClick
 }) => {
-    useRouter();
+    const router = useRouter();
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const isReportPage = router.asPath.includes('/report/');
 
     const handleCloseClick = (e: React.MouseEvent) => {
         e.preventDefault();
-        setIsModalOpen(true);
+        if (isReportPage) {
+            router.push('/latihan');
+        } else {
+            setIsModalOpen(true);
+        }
     };
 
     const handleConfirmClose = async () => {

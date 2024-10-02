@@ -94,11 +94,14 @@ type SubChapter = {
     exercise_name?: string | null;
     is_on_progress?: boolean | null;
     type?: 'video' | 'exercise';
-    exercise_id?: string;
     packet_id?: string;
     next_subchapter_slug?: string;
     video_id?: string;
     created_at: Date;
+    exercise_id?: string;
+    title?: string;
+    icon?: string;
+    exercise_slug?: string;
 };
 
 type Chapter = {

@@ -6,6 +6,7 @@ import { FaPlay } from 'react-icons/fa';
 import { HiCheck, HiOutlineChevronDown } from 'react-icons/hi';
 import VideoItem from './VideoItem';
 import ExerciseItem from './ExerciseItem';
+import InteractiveExerciseItem from './InteractiveExerciseItem';
 
 const Collapse = ({
     key,
@@ -64,7 +65,11 @@ const Collapse = ({
                                 chapter_id={chapter_id}
                             />
                         ) : (
-                            <ExerciseItem key={value.id} value={value} />
+                            <InteractiveExerciseItem
+                                key={value.id}
+                                value={value}
+                                chapter_id={chapter_id}
+                            />
                         )
                     )}
             </div>

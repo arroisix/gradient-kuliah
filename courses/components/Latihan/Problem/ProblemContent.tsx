@@ -280,6 +280,7 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
                                 isSubmitted={isSubmitted}
                                 isCorrect={isCorrect}
                                 showSolution={showSolution}
+                                correctAnswer={problem.question.solution}
                             />
                         )}
                     </>
