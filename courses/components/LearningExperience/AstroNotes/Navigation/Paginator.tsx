@@ -12,12 +12,16 @@ import { getBookBaseHref } from 'courses/utils';
 
 interface PaginatorProps extends PropsWithClassName {
     currentPage: number;
+    nextPage?: number;
+    prevPage?: number;
     totalPage: number;
     isLoading: boolean;
 }
 
 const Paginator = ({
     totalPage,
+    nextPage,
+    prevPage,
     isLoading,
     className
 }: PaginatorProps): JSX.Element => {
@@ -72,16 +76,14 @@ const Paginator = ({
             </div>
             <div className="flex items-center gap-[10px]">
                 <Link
-                    href={
-                        pageNumber > 1 ? `${baseHref}/${pageNumber - 1}` : '#'
-                    }
+                    href={prevPage ? `${baseHref}/${prevPage}` : '#'}
                     onClick={() => {
-                        if (pageNumber > 1) {
+                        if (prevPage) {
                             tracker?.genericTrack('Click Book Pagination', {
                                 'Book Slug': slug,
                                 'Book Page Query': page,
                                 'Current Page': pageNumber,
-                                'Target Page': pageNumber - 1
+                                'Target Page': prevPage
                             });
                         }
                     }}>
@@ -89,7 +91,7 @@ const Paginator = ({
                         size={24}
                         className={cn(
                             'text-[#666666] transition-all',
-                            pageNumber > 1
+                            prevPage
                                 ? 'hover:text-black dark:hover:text-white cursor-pointer'
                                 : 'opacity-50'
                         )}
@@ -103,18 +105,14 @@ const Paginator = ({
                     )}
                 </span>
                 <Link
-                    href={
-                        pageNumber < MAX_VALUE
-                            ? `${baseHref}/${pageNumber + 1}`
-                            : '#'
-                    }
+                    href={nextPage ? `${baseHref}/${nextPage}` : '#'}
                     onClick={() => {
-                        if (pageNumber < MAX_VALUE) {
+                        if (nextPage) {
                             tracker?.genericTrack('Click Book Pagination', {
                                 'Book Slug': slug,
                                 'Book Page Query': page,
                                 'Current Page': pageNumber,
-                                'Target Page': pageNumber + 1
+                                'Target Page': nextPage
                             });
                         }
                     }}>
@@ -122,7 +120,7 @@ const Paginator = ({
                         size={24}
                         className={cn(
                             'text-[#666666] transition-all',
-                            pageNumber < MAX_VALUE
+                            nextPage
                                 ? 'hover:text-black dark:hover:text-white cursor-pointer'
                                 : 'opacity-50'
                         )}
