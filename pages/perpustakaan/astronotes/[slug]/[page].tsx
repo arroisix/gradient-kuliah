@@ -72,7 +72,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
                       })
                 : axios
                       .get<GetAstronotesContentResponse>(
-                          `${config.API_BASE_URL}books/${slug}`,
+                          `${config.API_BASE_URL}books/${slug}?page=${page}`,
                           {
                               headers: {
                                   'X-Special-Request':
@@ -98,6 +98,17 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
                     isError = true;
                 })
         ]);
+
+    if (getBookContent) {
+        if (getBookContent.data.current_page !== parseInt(page)) {
+            return {
+                redirect: {
+                    destination: `/perpustakaan/astronotes/${slug}/${getBookContent.data.current_page}`,
+                    permanent: false
+                }
+            };
+        }
+    }
 
     if (
         isError ||
