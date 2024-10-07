@@ -12,34 +12,14 @@ interface ExerciseFinishModalProps {
     exerciseProgressId: string;
 }
 
-const Spinner = () => (
-    <svg
-        className="animate-spin h-5 w-5 text-white"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24">
-        <circle
-            className="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="4"></circle>
-        <path
-            className="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-    </svg>
-);
-
 const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
-    isOpen,
-    onClose,
-    onReturnToExercise,
-    allProblemsAnswered,
-    slug,
-    exerciseProgressId
-}) => {
+                                                                     isOpen,
+                                                                     onClose,
+                                                                     onReturnToExercise,
+                                                                     allProblemsAnswered,
+                                                                     slug,
+                                                                     exerciseProgressId
+                                                                 }) => {
     const router = useRouter();
     const [updateExerciseProgress] = useUpdateExerciseProgressMutation();
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -80,7 +60,11 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
                                 onClick={handleSubmit}
                                 disabled={isSubmitting}
                                 className="w-full bg-[#7F56D9] font-semibold text-white py-2 px-4 rounded-full hover:bg-opacity-90 transition-colors flex items-center justify-center">
-                                {isSubmitting ? <Spinner /> : 'Submit'}
+                                {isSubmitting ? (
+                                    <span className="loading loading-spinner loading-sm"></span>
+                                ) : (
+                                    'Submit'
+                                )}
                             </button>
                             <button
                                 onClick={onClose}
@@ -110,7 +94,11 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
                                 onClick={handleSubmit}
                                 disabled={isSubmitting}
                                 className="bg-[#EA5C49] font-semibold text-white py-2 px-4 rounded-full hover:bg-opacity-90 transition-colors flex items-center justify-center">
-                                {isSubmitting ? <Spinner /> : 'Tetap Submit'}
+                                {isSubmitting ? (
+                                    <span className="loading loading-spinner loading-sm"></span>
+                                ) : (
+                                    'Tetap Submit'
+                                )}
                             </button>
                         </div>
                     </>

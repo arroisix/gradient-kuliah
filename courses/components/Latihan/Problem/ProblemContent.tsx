@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import {
     useGetOrCreateExerciseProblemProgressQuery,
@@ -14,26 +14,6 @@ import Skeleton from 'commons/components/elements/Skeleton';
 import TiptapViewer from '../../Textbook/TiptapViewer';
 import ExerciseFinishModal from '../ExerciseFinishModal';
 
-const Spinner = () => (
-    <svg
-        className="animate-spin h-5 w-5 text-white"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24">
-        <circle
-            className="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="4"></circle>
-        <path
-            className="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-    </svg>
-);
-
 interface ProblemContentProps {
     problemId: string;
     slug: string;
@@ -45,322 +25,358 @@ interface ProblemContentProps {
     onSubmit: () => void;
 }
 
-const ProblemContent: React.FC<ProblemContentProps> = ({
-    slug,
-    problemId,
-    sectionId,
-    showSolution,
-    onSubmit
-}) => {
-    const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
-    const [openEndedAnswer, setOpenEndedAnswer] = useState('');
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isSubmitted, setIsSubmitted] = useState(false);
-    const [showExplanation, setShowExplanation] = useState(false);
-    const [isCorrect, setIsCorrect] = useState(false);
-    const [isFinishModalOpen, setIsFinishModalOpen] = useState(false);
-    const [allProblemsAnswered, setAllProblemsAnswered] = useState(false);
-    const [isAnswerChanged, setIsAnswerChanged] = useState(false);
-    const [isLoadingFinish, setIsLoadingFinish] = useState(false);
+const ProblemContent: React.FC<ProblemContentProps> = React.memo(
+    ({ slug, problemId, sectionId, showSolution, onSubmit }) => {
+        const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
+        const [openEndedAnswer, setOpenEndedAnswer] = useState('');
+        const [isSubmitting, setIsSubmitting] = useState(false);
+        const [isSubmitted, setIsSubmitted] = useState(false);
+        const [showExplanation, setShowExplanation] = useState(false);
+        const [isCorrect, setIsCorrect] = useState(false);
+        const [isFinishModalOpen, setIsFinishModalOpen] = useState(false);
+        const [allProblemsAnswered, setAllProblemsAnswered] = useState(false);
+        const [isAnswerChanged, setIsAnswerChanged] = useState(false);
+        const [isLoadingFinish, setIsLoadingFinish] = useState(false);
 
-    const { data: problem, isLoading: isProblemLoading } =
-        useGetExerciseProblemQuery(
-            { exercise_slug: slug, problem_id: problemId },
-            { skip: !slug || !problemId }
-        );
+        const { data: problem, isLoading: isProblemLoading } =
+            useGetExerciseProblemQuery(
+                { exercise_slug: slug, problem_id: problemId },
+                { skip: !slug || !problemId }
+            );
 
-    const {
-        data: exerciseProgress,
-        isLoading: isProgressLoading,
-        refetch: refetchExerciseProgress
-    } = useGetExerciseProgressQuery({ exercise_slug: slug });
+        const {
+            data: exerciseProgress,
+            isLoading: isProgressLoading,
+            refetch: refetchExerciseProgress
+        } = useGetExerciseProgressQuery({ exercise_slug: slug });
 
-    const { data: problemProgress, isLoading: isProblemProgressLoading } =
-        useGetOrCreateExerciseProblemProgressQuery(
-            {
-                exercise_slug: slug,
-                exercise_progress_id: exerciseProgress?.id ?? '',
-                problem_id: problemId
-            },
-            {
-                skip: !exerciseProgress?.id,
-                refetchOnMountOrArgChange: true
+        const { data: problemProgress, isLoading: isProblemProgressLoading } =
+            useGetOrCreateExerciseProblemProgressQuery(
+                {
+                    exercise_slug: slug,
+                    exercise_progress_id: exerciseProgress?.id ?? '',
+                    problem_id: problemId
+                },
+                {
+                    skip: !exerciseProgress?.id,
+                    refetchOnMountOrArgChange: true
+                }
+            );
+
+        const [updateProblemProgress] =
+            useUpdateExerciseProblemProgressMutation();
+
+        const { data: exerciseDetail } = useGetExerciseDetailQuery({
+            exercise_slug: slug
+        });
+        const { data: exerciseReport, refetch: refetchExerciseReport } =
+            useGetExerciseReportQuery(
+                {
+                    exercise_slug: slug,
+                    exercise_progress_id: exerciseProgress?.id ?? ''
+                },
+                { skip: !exerciseProgress?.id }
+            );
+
+        useEffect(() => {
+            setSelectedAnswers([]);
+            setOpenEndedAnswer('');
+            setShowExplanation(false);
+            setIsSubmitted(false);
+        }, [problemId]);
+
+        useEffect(() => {
+            if (sectionId) {
+                refetchExerciseProgress();
             }
-        );
+        }, [sectionId, refetchExerciseProgress]);
 
-    const [updateProblemProgress] = useUpdateExerciseProblemProgressMutation();
+        useEffect(() => {
+            if (problemProgress && problem) {
+                const hasAnswer =
+                    problem.question.type === 'MULTIPLE_CHOICE' ||
+                    problem.question.type === 'MULTIPLE_ANSWER'
+                        ? problemProgress.submitted_answer_ids &&
+                          problemProgress.submitted_answer_ids.length > 0
+                        : !!problemProgress.submitted_answer_text;
 
-    const { data: exerciseDetail } = useGetExerciseDetailQuery({
-        exercise_slug: slug
-    });
-    const { data: exerciseReport, refetch: refetchExerciseReport } =
-        useGetExerciseReportQuery(
-            {
-                exercise_slug: slug,
-                exercise_progress_id: exerciseProgress?.id ?? ''
-            },
-            { skip: !exerciseProgress?.id }
-        );
+                setIsSubmitted(
+                    problemProgress.status === 'COMPLETED' || hasAnswer
+                );
 
-    useEffect(() => {
-        setSelectedAnswers([]);
-        setOpenEndedAnswer('');
-        setShowExplanation(false);
-        setIsSubmitted(false);
-    }, [problemId]);
-
-    useEffect(() => {
-        if (sectionId) {
-            refetchExerciseProgress();
-        }
-    }, [sectionId, refetchExerciseProgress]);
-
-    useEffect(() => {
-        if (problemProgress) {
-            const hasAnswer =
-                problem?.question.type === 'MULTIPLE_CHOICE' ||
-                problem?.question.type === 'MULTIPLE_ANSWER'
-                    ? problemProgress.submitted_answer_ids &&
-                      problemProgress.submitted_answer_ids.length > 0
-                    : !!problemProgress.submitted_answer_text;
-
-            setIsSubmitted(problemProgress.status === 'COMPLETED' || hasAnswer);
-
-            if (
-                (problem?.question.type === 'MULTIPLE_CHOICE' ||
-                    problem?.question.type === 'MULTIPLE_ANSWER') &&
-                problemProgress.submitted_answer_ids
-            ) {
-                setSelectedAnswers(problemProgress.submitted_answer_ids);
-            } else if (
-                problem?.question.type !== 'MULTIPLE_CHOICE' &&
-                problemProgress.submitted_answer_text
-            ) {
-                setOpenEndedAnswer(problemProgress.submitted_answer_text);
-                setIsCorrect(problemProgress.is_correct ?? false);
+                if (
+                    (problem.question.type === 'MULTIPLE_CHOICE' ||
+                        problem.question.type === 'MULTIPLE_ANSWER') &&
+                    problemProgress.submitted_answer_ids
+                ) {
+                    setSelectedAnswers(problemProgress.submitted_answer_ids);
+                } else if (
+                    problem.question.type !== 'MULTIPLE_CHOICE' &&
+                    problemProgress.submitted_answer_text
+                ) {
+                    setOpenEndedAnswer(problemProgress.submitted_answer_text);
+                    setIsCorrect(problemProgress.is_correct ?? false);
+                }
             }
-        }
-    }, [problemProgress, problem]);
+        }, [problemProgress, problem]);
 
-    const checkAllProblemsAnswered = useCallback(() => {
-        if (exerciseDetail && exerciseReport) {
-            const totalProblems = exerciseDetail.total_problems;
-            const answeredProblems = exerciseReport.problems.length;
-            setAllProblemsAnswered(totalProblems === answeredProblems);
-        }
-    }, [exerciseDetail, exerciseReport]);
+        const checkAllProblemsAnswered = useCallback(() => {
+            if (exerciseDetail && exerciseReport) {
+                const totalProblems = exerciseDetail.total_problems;
+                const answeredProblems = exerciseReport.problems.length;
+                setAllProblemsAnswered(totalProblems === answeredProblems);
+            }
+        }, [exerciseDetail, exerciseReport]);
 
-    const handleAnswerChange = (newAnswer: string | string[]) => {
-        if (isSubmitted && showSolution !== 'AFTER_COMPLETE') return;
+        const handleAnswerChange = useCallback(
+            (newAnswer: string | string[]) => {
+                if (isSubmitted && showSolution !== 'AFTER_COMPLETE') return;
 
-        if (
-            problem?.question.type === 'MULTIPLE_CHOICE' ||
-            problem?.question.type === 'MULTIPLE_ANSWER'
-        ) {
-            setSelectedAnswers(newAnswer as string[]);
-        } else {
-            setOpenEndedAnswer(newAnswer as string);
-        }
+                if (
+                    problem?.question.type === 'MULTIPLE_CHOICE' ||
+                    problem?.question.type === 'MULTIPLE_ANSWER'
+                ) {
+                    setSelectedAnswers(newAnswer as string[]);
+                } else {
+                    setOpenEndedAnswer(newAnswer as string);
+                }
 
-        if (isSubmitted) {
-            setIsAnswerChanged(true);
-        }
-    };
+                if (isSubmitted) {
+                    setIsAnswerChanged(true);
+                }
+            },
+            [isSubmitted, showSolution, problem]
+        );
 
-    useEffect(() => {
-        checkAllProblemsAnswered();
-    }, [checkAllProblemsAnswered]);
+        useEffect(() => {
+            checkAllProblemsAnswered();
+        }, [checkAllProblemsAnswered]);
 
-    const handleSubmit = async () => {
-        if (!problemProgress || !problem || isSubmitting) return;
+        const handleSubmit = useCallback(async () => {
+            if (!problemProgress || !problem || isSubmitting) return;
 
-        setIsSubmitting(true);
+            setIsSubmitting(true);
 
-        const submissionData = {
-            submitted_answer_ids:
-                problem?.question.type === 'MULTIPLE_CHOICE' ||
-                problem?.question.type === 'MULTIPLE_ANSWER'
-                    ? selectedAnswers
-                    : undefined,
-            submitted_answer_text:
-                problem.question.type !== 'MULTIPLE_CHOICE'
-                    ? openEndedAnswer
-                    : undefined
-        };
-
-        try {
-            await updateProblemProgress({
-                exercise_slug: slug,
-                exercise_progress_id: exerciseProgress!.id,
-                problem_id: problem.id,
-                problem_progress_id: problemProgress.id,
-                data: submissionData
-            }).unwrap();
+            const submissionData = {
+                submitted_answer_ids:
+                    problem?.question.type === 'MULTIPLE_CHOICE' ||
+                    problem?.question.type === 'MULTIPLE_ANSWER'
+                        ? selectedAnswers
+                        : undefined,
+                submitted_answer_text:
+                    problem.question.type !== 'MULTIPLE_CHOICE'
+                        ? openEndedAnswer
+                        : undefined
+            };
 
             setIsSubmitted(true);
             setIsAnswerChanged(false);
             onSubmit();
 
-            await refetchExerciseReport();
+            try {
+                const updatePromise = updateProblemProgress({
+                    exercise_slug: slug,
+                    exercise_progress_id: exerciseProgress!.id,
+                    problem_id: problem.id,
+                    problem_progress_id: problemProgress.id,
+                    data: submissionData
+                }).unwrap();
 
-            checkAllProblemsAnswered();
-        } catch (error) {
-            console.error('Failed to update problem progress:', error);
-        } finally {
-            setIsSubmitting(false);
+                const reportPromise = refetchExerciseReport();
+
+                await Promise.all([updatePromise, reportPromise]);
+
+                checkAllProblemsAnswered();
+            } catch (error) {
+                console.error('Failed to update problem progress:', error);
+                setIsSubmitted(false);
+                setIsAnswerChanged(true);
+            } finally {
+                setIsSubmitting(false);
+            }
+        }, [
+            problem,
+            problemProgress,
+            isSubmitting,
+            selectedAnswers,
+            openEndedAnswer,
+            slug,
+            exerciseProgress,
+            updateProblemProgress,
+            onSubmit,
+            refetchExerciseReport,
+            checkAllProblemsAnswered
+        ]);
+
+        const handleFinishExercise = useCallback(async () => {
+            setIsLoadingFinish(true);
+            try {
+                await refetchExerciseReport();
+                checkAllProblemsAnswered();
+                setIsFinishModalOpen(true);
+            } finally {
+                setIsLoadingFinish(false);
+            }
+        }, [refetchExerciseReport, checkAllProblemsAnswered]);
+
+        const handleConfirmFinish = useCallback(() => {
+            setIsFinishModalOpen(false);
+        }, []);
+
+        const isLoading =
+            isProblemLoading || isProgressLoading || isProblemProgressLoading;
+
+        const isAnswerProvided = useMemo(() => {
+            if (!problem) return false;
+            return problem.question.type === 'MULTIPLE_CHOICE' ||
+                problem.question.type === 'MULTIPLE_ANSWER'
+                ? selectedAnswers.length > 0
+                : openEndedAnswer.trim() !== '';
+        }, [problem, selectedAnswers, openEndedAnswer]);
+
+        if (isLoading) {
+            return <Skeleton className="w-full h-full" />;
         }
-    };
 
-    const handleFinishExercise = async () => {
-        setIsLoadingFinish(true);
-        try {
-            await refetchExerciseReport();
-            checkAllProblemsAnswered();
-            setIsFinishModalOpen(true);
-        } finally {
-            setIsLoadingFinish(false);
+        if (!problem || !exerciseProgress || !problemProgress) {
+            return (
+                <div>
+                    Problem, exercise progress, or problem progress not found
+                </div>
+            );
         }
-    };
 
-    const handleConfirmFinish = () => {
-        setIsFinishModalOpen(false);
-    };
-
-    if (isProblemLoading || isProgressLoading || isProblemProgressLoading) {
-        return <Skeleton className="w-full h-full" />;
-    }
-
-    if (!problem || !exerciseProgress || !problemProgress) {
         return (
-            <div>Problem, exercise progress, or problem progress not found</div>
-        );
-    }
-
-    const isAnswerProvided =
-        problem?.question.type === 'MULTIPLE_CHOICE' ||
-        problem?.question.type === 'MULTIPLE_ANSWER'
-            ? selectedAnswers.length > 0
-            : openEndedAnswer.trim() !== '';
-
-    return (
-        <div className="flex flex-col h-full">
-            <div className="flex-grow overflow-y-auto">
-                {!showExplanation ? (
-                    <div className="flex flex-col space-y-6">
-                        <div className="flex flex-col space-y-4">
-                            <div className="flex flex-col space-y-2">
-                                <h3 className="text-white text-sm font-normal">
-                                    Nomor {problem.current_problem_number}
-                                </h3>
+            <div className="flex flex-col h-full">
+                <div className="flex-grow overflow-y-auto">
+                    {!showExplanation ? (
+                        <div className="flex flex-col space-y-6">
+                            <div className="flex flex-col space-y-4">
+                                <div className="flex flex-col space-y-2">
+                                    <h3 className="text-white text-sm font-normal">
+                                        Nomor {problem.current_problem_number}
+                                    </h3>
+                                    <TiptapViewer
+                                        content={problem.question.question}
+                                    />
+                                </div>
+                                {problem.question.type === 'MULTIPLE_ANSWER' &&
+                                    !problem.single_answer && (
+                                        <p className="text-[#FEC84B] text-xs font-normal">
+                                            Jawaban bisa lebih dari 1
+                                        </p>
+                                    )}
+                            </div>
+                            {problem?.question.type === 'MULTIPLE_CHOICE' ||
+                            problem?.question.type === 'MULTIPLE_ANSWER' ? (
+                                <MultipleChoiceProblem
+                                    options={problem.question.options}
+                                    selectedAnswers={selectedAnswers}
+                                    onAnswerSelect={handleAnswerChange}
+                                    isSubmitted={isSubmitted}
+                                    isSingleAnswer={problem.single_answer}
+                                    showSolution={showSolution}
+                                />
+                            ) : (
+                                <OpenEndedProblem
+                                    answer={openEndedAnswer}
+                                    onAnswerChange={handleAnswerChange}
+                                    isSubmitted={isSubmitted}
+                                    isCorrect={isCorrect}
+                                    showSolution={showSolution}
+                                    correctAnswer={problem.question.solution}
+                                />
+                            )}
+                        </div>
+                    ) : (
+                        <div className="flex flex-col space-y-3">
+                            <h3 className="text-white text-sm font-normal">
+                                Pembahasan
+                            </h3>
+                            <div className="overflow-y-auto">
                                 <TiptapViewer
-                                    content={problem.question.question}
+                                    content={problem.question.solution}
                                 />
                             </div>
-                            {problem.question.type === 'MULTIPLE_ANSWER' &&
-                                !problem.single_answer && (
-                                    <p className="text-[#FEC84B] text-xs font-normal">
-                                        Jawaban bisa lebih dari 1
-                                    </p>
-                                )}
                         </div>
-                        {problem?.question.type === 'MULTIPLE_CHOICE' ||
-                        problem?.question.type === 'MULTIPLE_ANSWER' ? (
-                            <MultipleChoiceProblem
-                                options={problem.question.options}
-                                selectedAnswers={selectedAnswers}
-                                onAnswerSelect={handleAnswerChange}
-                                isSubmitted={isSubmitted}
-                                isSingleAnswer={problem.single_answer}
-                                showSolution={showSolution}
-                            />
-                        ) : (
-                            <OpenEndedProblem
-                                answer={openEndedAnswer}
-                                onAnswerChange={handleAnswerChange}
-                                isSubmitted={isSubmitted}
-                                isCorrect={isCorrect}
-                                showSolution={showSolution}
-                                correctAnswer={problem.question.solution}
-                            />
-                        )}
-                    </div>
-                ) : (
-                    <div className="flex flex-col space-y-3">
-                        <h3 className="text-white text-sm font-normal">
-                            Pembahasan
-                        </h3>
-                        <div className="overflow-y-auto">
-                            <TiptapViewer content={problem.question.solution} />
-                        </div>
-                    </div>
-                )}
-            </div>
-            <div className="flex flex-col gap-3 mt-4">
-                {(!isSubmitted ||
-                    (showSolution === 'AFTER_COMPLETE' && isAnswerChanged)) && (
-                    <button
-                        className={`w-full py-3 rounded-full font-semibold transition-colors ${
-                            isAnswerProvided
-                                ? 'bg-[#7F56D9] text-white hover:bg-[#6941C6]'
-                                : 'bg-gray-400 text-white cursor-not-allowed'
-                        } flex items-center justify-center`}
-                        onClick={handleSubmit}
-                        disabled={!isAnswerProvided || isSubmitting}>
-                        {isSubmitting ? (
-                            <Spinner />
-                        ) : isAnswerChanged ? (
-                            'Resubmit'
-                        ) : (
-                            'Submit'
-                        )}
-                    </button>
-                )}
-                {isSubmitted && showSolution === 'AFTER_PROBLEM' && (
-                    <button
-                        className="w-full py-3 rounded-full font-semibold bg-[#4B5563] text-white hover:bg-[#374151] transition-colors"
-                        onClick={() => setShowExplanation(!showExplanation)}>
-                        {showExplanation ? 'Lihat Soal' : 'Lihat Pembahasan'}
-                    </button>
-                )}
-                {isSubmitted && problem.next_navigation && !isAnswerChanged && (
-                    <Link
-                        href={
-                            problem.next_navigation.type === 'problem'
-                                ? `/latihan/${slug}/${sectionId}/${problem.next_navigation.id}`
-                                : `/latihan/${slug}/${problem.next_navigation.id}`
-                        }
-                        passHref>
-                        <button className="w-full py-3 rounded-full font-semibold bg-[#7F56D9] text-white hover:bg-[#6941C6] transition-colors">
-                            Selanjutnya
-                        </button>
-                    </Link>
-                )}
-                {isSubmitted &&
-                    !problem.next_navigation &&
-                    !isAnswerChanged && (
+                    )}
+                </div>
+                <div className="flex flex-col gap-3 mt-4">
+                    {(!isSubmitted ||
+                        (showSolution === 'AFTER_COMPLETE' &&
+                            isAnswerChanged)) && (
                         <button
-                            className="w-full py-3 rounded-full font-semibold bg-[#7F56D9] text-white hover:bg-[#6941C6] transition-colors flex items-center justify-center"
-                            onClick={handleFinishExercise}
-                            disabled={isLoadingFinish}>
-                            {isLoadingFinish ? (
-                                <Spinner />
+                            className={`w-full py-3 rounded-full font-semibold transition-colors ${
+                                isAnswerProvided
+                                    ? 'bg-[#7F56D9] text-white hover:bg-[#6941C6]'
+                                    : 'bg-gray-400 text-white cursor-not-allowed'
+                            } flex items-center justify-center`}
+                            onClick={handleSubmit}
+                            disabled={!isAnswerProvided || isSubmitting}>
+                            {isSubmitting ? (
+                                <span className="loading loading-spinner loading-sm"></span>
+                            ) : isAnswerChanged ? (
+                                'Resubmit'
                             ) : (
-                                'Selesaikan Latihan'
+                                'Submit'
                             )}
                         </button>
                     )}
+                    {isSubmitted && showSolution === 'AFTER_PROBLEM' && (
+                        <button
+                            className="w-full py-3 rounded-full font-semibold bg-[#4B5563] text-white hover:bg-[#374151] transition-colors"
+                            onClick={() =>
+                                setShowExplanation(!showExplanation)
+                            }>
+                            {showExplanation
+                                ? 'Lihat Soal'
+                                : 'Lihat Pembahasan'}
+                        </button>
+                    )}
+                    {isSubmitted &&
+                        problem.next_navigation &&
+                        !isAnswerChanged && (
+                            <Link
+                                href={
+                                    problem.next_navigation.type === 'problem'
+                                        ? `/latihan/${slug}/${sectionId}/${problem.next_navigation.id}`
+                                        : `/latihan/${slug}/${problem.next_navigation.id}`
+                                }
+                                passHref>
+                                <button className="w-full py-3 rounded-full font-semibold bg-[#7F56D9] text-white hover:bg-[#6941C6] transition-colors">
+                                    Selanjutnya
+                                </button>
+                            </Link>
+                        )}
+                    {isSubmitted &&
+                        !problem.next_navigation &&
+                        !isAnswerChanged && (
+                            <button
+                                className="w-full py-3 rounded-full font-semibold bg-[#7F56D9] text-white hover:bg-[#6941C6] transition-colors flex items-center justify-center"
+                                onClick={handleFinishExercise}
+                                disabled={isLoadingFinish}>
+                                {isLoadingFinish ? (
+                                    <span className="loading loading-spinner loading-sm"></span>
+                                ) : (
+                                    'Selesaikan Latihan'
+                                )}
+                            </button>
+                        )}
+                </div>
+                <ExerciseFinishModal
+                    isOpen={isFinishModalOpen}
+                    onClose={() => setIsFinishModalOpen(false)}
+                    onConfirm={handleConfirmFinish}
+                    onReturnToExercise={() => setIsFinishModalOpen(false)}
+                    allProblemsAnswered={allProblemsAnswered}
+                    slug={slug}
+                    exerciseProgressId={exerciseProgress.id}
+                />
             </div>
-            <ExerciseFinishModal
-                isOpen={isFinishModalOpen}
-                onClose={() => setIsFinishModalOpen(false)}
-                onConfirm={handleConfirmFinish}
-                onReturnToExercise={() => setIsFinishModalOpen(false)}
-                allProblemsAnswered={allProblemsAnswered}
-                slug={slug}
-                exerciseProgressId={exerciseProgress.id}
-            />
-        </div>
-    );
-};
+        );
+    }
+);
+
+ProblemContent.displayName = 'ProblemContent';
 
 export default ProblemContent;

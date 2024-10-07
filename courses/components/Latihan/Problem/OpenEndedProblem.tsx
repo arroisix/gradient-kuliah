@@ -20,7 +20,7 @@ const OpenEndedProblem: React.FC<OpenEndedProblemProps> = ({
     showSolution
 }) => {
     const getTextareaClass = () => {
-        if (isSubmitted && showSolution !== 'AFTER_COMPLETE') {
+        if (isSubmitted && showSolution === 'AFTER_PROBLEM') {
             return isCorrect
                 ? 'bg-[#2AC27A40] text-[#2AC27A] border-[#2AC27A]'
                 : 'bg-[#EA5D4940] text-[#EA5D49] border-[#EA5D49]';
@@ -41,7 +41,7 @@ const OpenEndedProblem: React.FC<OpenEndedProblemProps> = ({
                 onChange={(e) => onAnswerChange(e.target.value)}
                 disabled={isSubmitted && showSolution !== 'AFTER_COMPLETE'}
             />
-            {isSubmitted && showSolution !== 'AFTER_COMPLETE' && (
+            {isSubmitted && showSolution === 'AFTER_PROBLEM' && (
                 <div className="mt-2">
                     <p className="text-sm text-white">
                         Jawaban Benar:{' '}
