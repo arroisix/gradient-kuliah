@@ -18,7 +18,9 @@ import {
     RiBookOpenLine,
     RiQuestionnaireLine,
     RiBookOpenFill,
-    RiQuestionnaireFill, RiFileListFill, RiFileListLine
+    RiQuestionnaireFill,
+    RiFileListFill,
+    RiFileListLine
 } from 'react-icons/ri';
 import { cn } from 'commons/utils';
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';

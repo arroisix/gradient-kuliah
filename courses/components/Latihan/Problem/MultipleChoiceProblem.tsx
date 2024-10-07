@@ -42,10 +42,10 @@ const MultipleChoiceProblem: React.FC<MultipleChoiceProblemProps> = ({
     return (
         <div className="flex flex-col space-y-2">
             {options.map((option) => (
-                <div
+                <button
                     key={option.id}
                     className={cn(
-                        'flex items-center p-3 rounded-lg w-full cursor-pointer',
+                        'flex items-center justify-between p-3 rounded-lg w-full text-left',
                         isSubmitted && showSolution === 'AFTER_PROBLEM'
                             ? option.is_correct
                                 ? 'bg-[#2AC27A80]'
@@ -59,7 +59,8 @@ const MultipleChoiceProblem: React.FC<MultipleChoiceProblemProps> = ({
                             showSolution === 'AFTER_PROBLEM' &&
                             'cursor-default'
                     )}
-                    onClick={() => handleAnswerSelect(option.id)}>
+                    onClick={() => handleAnswerSelect(option.id)}
+                    disabled={isSubmitted && showSolution !== 'AFTER_COMPLETE'}>
                     <div className="flex-grow text-sm font-medium text-white">
                         <TiptapViewer content={option.answer} />
                     </div>
@@ -92,7 +93,7 @@ const MultipleChoiceProblem: React.FC<MultipleChoiceProblemProps> = ({
                             )}
                         </div>
                     )}
-                </div>
+                </button>
             ))}
         </div>
     );
