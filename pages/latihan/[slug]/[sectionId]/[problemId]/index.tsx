@@ -1,13 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
-
-const ProblemPageContent = dynamic(
-    () => import('courses/components/Latihan/Problem/ProblemPageContent'),
-    {
-        ssr: false
-    }
-);
+import ProblemPageContent from 'courses/components/Latihan/Problem/ProblemPageContent';
 
 const ProblemPage: React.FC = () => {
     const router = useRouter();

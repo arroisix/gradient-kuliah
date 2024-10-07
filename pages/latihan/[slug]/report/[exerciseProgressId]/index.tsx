@@ -1,16 +1,8 @@
-import { GetServerSideProps } from 'next';
-import dynamic from 'next/dynamic';
+import { NextPage } from 'next';
 import { useRouter } from 'next/router';
+import ExerciseReportLayout from '../../../../../courses/components/Latihan/Report/ExerciseReportLayout';
 
-const ExerciseReportLayout = dynamic(
-    () =>
-        import(
-            '../../../../../courses/components/Latihan/Report/ExerciseReportLayout'
-        ),
-    { ssr: false }
-);
-
-const ExerciseReportPage = () => {
+const ExerciseReportPage: NextPage = () => {
     const router = useRouter();
     const { slug, exerciseProgressId } = router.query;
 
@@ -24,20 +16,6 @@ const ExerciseReportPage = () => {
             exerciseProgressId={exerciseProgressId as string}
         />
     );
-};
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-    const { slug, exerciseProgressId } = context.params as {
-        slug: string;
-        exerciseProgressId: string;
-    };
-
-    return {
-        props: {
-            slug,
-            exerciseProgressId
-        }
-    };
 };
 
 export default ExerciseReportPage;

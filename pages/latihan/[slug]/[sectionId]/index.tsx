@@ -1,13 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
-
-const SectionPageContent = dynamic(
-    () => import('courses/components/Latihan/Section/SectionPageContent'),
-    {
-        ssr: false
-    }
-);
+import SectionPageContent from 'courses/components/Latihan/Section/SectionPageContent';
 
 const SectionPage: React.FC = () => {
     const router = useRouter();
