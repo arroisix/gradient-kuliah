@@ -243,10 +243,10 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
             : openEndedAnswer.trim() !== '';
 
     return (
-        <div className="flex flex-col h-full justify-between">
-            <div className="flex flex-col space-y-6">
+        <div className="flex flex-col h-full">
+            <div className="flex-grow overflow-y-auto">
                 {!showExplanation ? (
-                    <>
+                    <div className="flex flex-col space-y-6">
                         <div className="flex flex-col space-y-4">
                             <div className="flex flex-col space-y-2">
                                 <h3 className="text-white text-sm font-normal">
@@ -256,7 +256,7 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
                                     content={problem.question.question}
                                 />
                             </div>
-                            {problem.question.type === 'MULTIPLE_CHOICE' &&
+                            {problem.question.type === 'MULTIPLE_ANSWER' &&
                                 !problem.single_answer && (
                                     <p className="text-[#FEC84B] text-xs font-normal">
                                         Jawaban bisa lebih dari 1
@@ -283,17 +283,19 @@ const ProblemContent: React.FC<ProblemContentProps> = ({
                                 correctAnswer={problem.question.solution}
                             />
                         )}
-                    </>
+                    </div>
                 ) : (
-                    <div className="flex flex-col gap-3">
-                        <h3 className="text-white text-sm font-normal mb-2">
+                    <div className="flex flex-col space-y-3">
+                        <h3 className="text-white text-sm font-normal">
                             Pembahasan
                         </h3>
-                        <TiptapViewer content={problem.question.solution} />
+                        <div className="overflow-y-auto">
+                            <TiptapViewer content={problem.question.solution} />
+                        </div>
                     </div>
                 )}
             </div>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3 mt-4">
                 {(!isSubmitted ||
                     (showSolution === 'AFTER_COMPLETE' && isAnswerChanged)) && (
                     <button

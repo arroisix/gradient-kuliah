@@ -82,8 +82,9 @@ const LatihanEntrypoint = (): JSX.Element => {
                 isLoading={isLoading || isFetching}
                 exercises={data?.exercises || []}
                 myExercises={data?.my_exercises || []}
-                totalPages={data?.total_pages || 1}
-                currentPage={page}
+                totalItems={data?.count_items || 0}
+                currentPage={data?.current_page || 1}
+                limit={data?.limit || 6}
                 onPageChange={handlePageChange}
             />
         </>

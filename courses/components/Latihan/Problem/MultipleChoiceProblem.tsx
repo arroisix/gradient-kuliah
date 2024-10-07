@@ -39,55 +39,60 @@ const MultipleChoiceProblem: React.FC<MultipleChoiceProblemProps> = ({
         }
     };
 
-    const getButtonClass = (option: Option) => {
-        if (isSubmitted && showSolution !== 'AFTER_COMPLETE') {
-            if (option.is_correct) {
-                return 'bg-[#2AC27A80] text-white bg-opacity-50';
-            }
-            if (selectedAnswers.includes(option.id) && !option.is_correct) {
-                return 'bg-[#EC5D4980] text-white bg-opacity-50';
-            }
-        }
-        return selectedAnswers.includes(option.id)
-            ? 'bg-[#7F56D9] text-white'
-            : 'bg-[#374151] text-white';
-    };
-
     return (
         <div className="flex flex-col space-y-2">
             {options.map((option) => (
-                <button
+                <div
                     key={option.id}
                     className={cn(
-                        'flex items-center justify-between w-full p-3 rounded-lg text-left',
-                        getButtonClass(option)
+                        'flex items-center p-3 rounded-lg w-full cursor-pointer',
+                        isSubmitted && showSolution === 'AFTER_PROBLEM'
+                            ? option.is_correct
+                                ? 'bg-[#2AC27A80]'
+                                : selectedAnswers.includes(option.id)
+                                ? 'bg-[#EC5D4980]'
+                                : 'bg-[#4B4E5F]'
+                            : selectedAnswers.includes(option.id)
+                            ? 'bg-[#333540]'
+                            : 'bg-[#4B4E5F]',
+                        isSubmitted &&
+                            showSolution === 'AFTER_PROBLEM' &&
+                            'cursor-default'
                     )}
-                    onClick={() => handleAnswerSelect(option.id)}
-                    disabled={isSubmitted && showSolution !== 'AFTER_COMPLETE'}>
-                    <div className="flex-grow">
+                    onClick={() => handleAnswerSelect(option.id)}>
+                    <div className="flex-grow text-sm font-medium text-white">
                         <TiptapViewer content={option.answer} />
                     </div>
-                    {isSubmitted && showSolution !== 'AFTER_COMPLETE' ? (
-                        option.is_correct ? (
-                            <Check
-                                className="text-white flex-shrink-0 ml-2"
-                                size={20}
-                            />
-                        ) : selectedAnswers.includes(option.id) ? (
-                            <X
-                                className="text-white flex-shrink-0 ml-2"
-                                size={20}
-                            />
-                        ) : null
-                    ) : (
-                        selectedAnswers.includes(option.id) && (
-                            <Check
-                                className="text-white flex-shrink-0 ml-2"
-                                size={20}
-                            />
-                        )
+                    {(!isSingleAnswer ||
+                        selectedAnswers.includes(option.id) ||
+                        (isSubmitted && showSolution === 'AFTER_PROBLEM')) && (
+                        <div
+                            className={cn(
+                                'flex justify-center items-center rounded-[4px] w-5 h-5',
+                                isSubmitted && showSolution === 'AFTER_PROBLEM'
+                                    ? option.is_correct
+                                        ? 'bg-[#2AC27A]'
+                                        : selectedAnswers.includes(option.id)
+                                        ? 'bg-[#EC5D49]'
+                                        : 'bg-[#898C9E]'
+                                    : selectedAnswers.includes(option.id)
+                                    ? 'bg-[#5F2BCE]'
+                                    : 'bg-[#898C9E]'
+                            )}>
+                            {isSubmitted && showSolution === 'AFTER_PROBLEM' ? (
+                                option.is_correct ? (
+                                    <Check className="text-white" size={16} />
+                                ) : selectedAnswers.includes(option.id) ? (
+                                    <X className="text-white" size={16} />
+                                ) : null
+                            ) : (
+                                selectedAnswers.includes(option.id) && (
+                                    <Check className="text-white" size={16} />
+                                )
+                            )}
+                        </div>
                     )}
-                </button>
+                </div>
             ))}
         </div>
     );

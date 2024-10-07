@@ -8,16 +8,18 @@ interface LatihanContentProps {
     isLoading: boolean;
     exercises: ExerciseItem[];
     myExercises: ExerciseItem[];
-    totalPages: number;
+    totalItems: number;
     currentPage: number;
+    limit: number;
     onPageChange: (page: number) => void;
 }
 
 const LatihanContent: React.FC<LatihanContentProps> = ({
     isLoading,
     exercises,
-    totalPages,
+    totalItems,
     currentPage,
+    limit,
     onPageChange
 }) => {
     if (isLoading) {
@@ -27,6 +29,8 @@ const LatihanContent: React.FC<LatihanContentProps> = ({
             </div>
         );
     }
+
+    const totalPages = Math.ceil(totalItems / limit);
 
     return (
         <div>
