@@ -34,6 +34,11 @@ interface ExerciseItem {
     status?: string;
 }
 
+interface CourseFilter {
+    id: string;
+    name: string;
+}
+
 interface ExerciseLandingPage {
     my_exercises: ExerciseItem[];
     exercises: ExerciseItem[];
@@ -42,6 +47,7 @@ interface ExerciseLandingPage {
     previous_page: number | null;
     current_page: number;
     limit: number;
+    course_filters: CourseFilter[];
 }
 
 export interface ExerciseHistory {
@@ -156,6 +162,7 @@ export interface ExerciseProblemReport {
     current_page: number;
     limit: number;
     total_items: number;
+    all_problems_answered: boolean;
 }
 
 export interface ProblemReport {

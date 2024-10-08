@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import Skeleton from 'commons/components/elements/Skeleton';
 import ProblemDetailContent from './ProblemDetailContent';
 import ProblemSummaryTab from './ProblemSummaryTab';
 import ProblemHistoryTab from './ProblemHistoryTab';
@@ -37,7 +36,13 @@ const ProblemReportPage: React.FC = () => {
     });
 
     if (isProblemLoading || isExerciseLoading)
-        return <Skeleton className="w-full h-full" />;
+        return (
+            <div className="flex flex-col items-center justify-center h-screen">
+                <span className="loading loading-spinner loading-lg"></span>
+                <p className="mt-4 text-white">Loading...</p>
+            </div>
+        );
+
     if (problemError || exerciseError) return <div>Error loading data</div>;
     if (!problemReport || !exerciseReport) return <div>No data available</div>;
 

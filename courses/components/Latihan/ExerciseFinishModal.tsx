@@ -13,13 +13,13 @@ interface ExerciseFinishModalProps {
 }
 
 const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
-                                                                     isOpen,
-                                                                     onClose,
-                                                                     onReturnToExercise,
-                                                                     allProblemsAnswered,
-                                                                     slug,
-                                                                     exerciseProgressId
-                                                                 }) => {
+    isOpen,
+    onClose,
+    onReturnToExercise,
+    allProblemsAnswered,
+    slug,
+    exerciseProgressId
+}) => {
     const router = useRouter();
     const [updateExerciseProgress] = useUpdateExerciseProgressMutation();
     const [isSubmitting, setIsSubmitting] = useState(false);

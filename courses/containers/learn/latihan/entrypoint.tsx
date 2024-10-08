@@ -4,10 +4,7 @@ import Sort from 'commons/components/elements/Sort';
 import Filter from 'commons/components/elements/Filter';
 import LatihanContent from '../../../components/Latihan/Entrypoint/EntrypointContent';
 import LatihanTabs from '../../../components/Latihan/Entrypoint/EntrypointTabs';
-import {
-    FILTER_OPTIONS,
-    LATIHAN_SORT_OPTIONS
-} from '../../../components/Latihan/constants';
+import { LATIHAN_SORT_OPTIONS } from '../../../components/Latihan/constants';
 import { useGetExerciseLandingPageQuery } from '../../../redux/api/exercisesApi';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import MyExercisesSection from '../../../components/Latihan/Entrypoint/MyExercisesSection';
@@ -16,7 +13,7 @@ const LatihanEntrypoint = (): JSX.Element => {
     const router = useRouter();
     const {
         status = 'all',
-        subject = 'all',
+        course_id = 'all',
         sort = 'latest',
         page: pageQuery = '1'
     } = router.query;
@@ -30,7 +27,7 @@ const LatihanEntrypoint = (): JSX.Element => {
         page,
         limit: 6,
         status: status as string,
-        subject: subject as string,
+        course_id: course_id as string,
         sort: sort as string
     });
 
@@ -49,6 +46,22 @@ const LatihanEntrypoint = (): JSX.Element => {
             }
         );
     };
+
+    const handleCourseChange = (newCourseId: string) => {
+        router.push(
+            { query: { ...router.query, course_id: newCourseId, page: 1 } },
+            undefined,
+            {
+                shallow: true
+            }
+        );
+    };
+
+    const courseFilterOptions =
+        data?.course_filters?.map((course) => ({
+            value: course.id,
+            label: course.name
+        })) || [];
 
     return (
         <>
@@ -69,8 +82,9 @@ const LatihanEntrypoint = (): JSX.Element => {
 
             <div className="flex gap-4 items-center my-4">
                 <Filter
-                    options={FILTER_OPTIONS}
-                    defaultSelected={subject as string}
+                    options={courseFilterOptions}
+                    defaultSelected={course_id as string}
+                    onChange={handleCourseChange}
                 />
                 <Sort
                     options={LATIHAN_SORT_OPTIONS}

@@ -191,7 +191,12 @@ const ProblemPageContent: React.FC<ProblemPageContentProps> = ({
         !problemProgress ||
         !firstProblemProgress
     ) {
-        return <div>Loading...</div>;
+        return (
+            <div className="flex flex-col items-center justify-center h-screen">
+                <span className="loading loading-spinner loading-lg"></span>
+                <p className="mt-4 text-white">Loading...</p>
+            </div>
+        );
     }
 
     const {

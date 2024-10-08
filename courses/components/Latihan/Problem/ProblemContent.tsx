@@ -5,7 +5,6 @@ import {
     useGetExerciseProblemQuery,
     useGetExerciseProgressQuery,
     useUpdateExerciseProblemProgressMutation,
-    useGetExerciseDetailQuery,
     useGetExerciseReportQuery
 } from '../../../redux/api/exercisesApi';
 import MultipleChoiceProblem from './MultipleChoiceProblem';
@@ -34,7 +33,6 @@ const ProblemContent: React.FC<ProblemContentProps> = React.memo(
         const [showExplanation, setShowExplanation] = useState(false);
         const [isCorrect, setIsCorrect] = useState(false);
         const [isFinishModalOpen, setIsFinishModalOpen] = useState(false);
-        const [allProblemsAnswered, setAllProblemsAnswered] = useState(false);
         const [isAnswerChanged, setIsAnswerChanged] = useState(false);
         const [isLoadingFinish, setIsLoadingFinish] = useState(false);
 
@@ -66,9 +64,6 @@ const ProblemContent: React.FC<ProblemContentProps> = React.memo(
         const [updateProblemProgress] =
             useUpdateExerciseProblemProgressMutation();
 
-        const { data: exerciseDetail } = useGetExerciseDetailQuery({
-            exercise_slug: slug
-        });
         const { data: exerciseReport, refetch: refetchExerciseReport } =
             useGetExerciseReportQuery(
                 {
@@ -120,14 +115,6 @@ const ProblemContent: React.FC<ProblemContentProps> = React.memo(
             }
         }, [problemProgress, problem]);
 
-        const checkAllProblemsAnswered = useCallback(() => {
-            if (exerciseDetail && exerciseReport) {
-                const totalProblems = exerciseDetail.total_problems;
-                const answeredProblems = exerciseReport.problems.length;
-                setAllProblemsAnswered(totalProblems === answeredProblems);
-            }
-        }, [exerciseDetail, exerciseReport]);
-
         const handleAnswerChange = useCallback(
             (newAnswer: string | string[]) => {
                 if (isSubmitted && showSolution !== 'AFTER_COMPLETE') return;
@@ -147,10 +134,6 @@ const ProblemContent: React.FC<ProblemContentProps> = React.memo(
             },
             [isSubmitted, showSolution, problem]
         );
-
-        useEffect(() => {
-            checkAllProblemsAnswered();
-        }, [checkAllProblemsAnswered]);
 
         const handleSubmit = useCallback(async () => {
             if (!problemProgress || !problem || isSubmitting) return;
@@ -185,8 +168,6 @@ const ProblemContent: React.FC<ProblemContentProps> = React.memo(
                 const reportPromise = refetchExerciseReport();
 
                 await Promise.all([updatePromise, reportPromise]);
-
-                checkAllProblemsAnswered();
             } catch (error) {
                 console.error('Failed to update problem progress:', error);
                 setIsSubmitted(false);
@@ -204,20 +185,18 @@ const ProblemContent: React.FC<ProblemContentProps> = React.memo(
             exerciseProgress,
             updateProblemProgress,
             onSubmit,
-            refetchExerciseReport,
-            checkAllProblemsAnswered
+            refetchExerciseReport
         ]);
 
         const handleFinishExercise = useCallback(async () => {
             setIsLoadingFinish(true);
             try {
                 await refetchExerciseReport();
-                checkAllProblemsAnswered();
                 setIsFinishModalOpen(true);
             } finally {
                 setIsLoadingFinish(false);
             }
-        }, [refetchExerciseReport, checkAllProblemsAnswered]);
+        }, [refetchExerciseReport]);
 
         const handleConfirmFinish = useCallback(() => {
             setIsFinishModalOpen(false);
@@ -238,10 +217,16 @@ const ProblemContent: React.FC<ProblemContentProps> = React.memo(
             return <Skeleton className="w-full h-full" />;
         }
 
-        if (!problem || !exerciseProgress || !problemProgress) {
+        if (
+            !problem ||
+            !exerciseProgress ||
+            !problemProgress ||
+            !exerciseReport
+        ) {
             return (
                 <div>
-                    Problem, exercise progress, or problem progress not found
+                    Problem, exercise progress, problem progress, or exercise
+                    report not found
                 </div>
             );
         }
@@ -368,7 +353,7 @@ const ProblemContent: React.FC<ProblemContentProps> = React.memo(
                     onClose={() => setIsFinishModalOpen(false)}
                     onConfirm={handleConfirmFinish}
                     onReturnToExercise={() => setIsFinishModalOpen(false)}
-                    allProblemsAnswered={allProblemsAnswered}
+                    allProblemsAnswered={exerciseReport.all_problems_answered}
                     slug={slug}
                     exerciseProgressId={exerciseProgress.id}
                 />
