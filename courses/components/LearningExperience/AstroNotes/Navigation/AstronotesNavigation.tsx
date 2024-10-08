@@ -45,6 +45,8 @@ const AstronotesNavigation = (): JSX.Element => {
             {data && (
                 <Paginator
                     currentPage={data.current_page}
+                    prevPage={data.prev_page}
+                    nextPage={data.next_page}
                     totalPage={data.total_page}
                     isLoading={isLoading}
                     className="flex-1"

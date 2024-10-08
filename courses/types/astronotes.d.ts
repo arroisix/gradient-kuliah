@@ -6,6 +6,8 @@ interface GetAstronotesContentResponse {
     chapter_title: string;
     total_page: number;
     current_page: number;
+    prev_page?: number;
+    next_page?: number;
     page_content: string;
     chapter: string;
 }
