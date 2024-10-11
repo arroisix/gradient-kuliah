@@ -5,7 +5,8 @@ import {
     useGetExerciseProblemQuery,
     useGetExerciseProgressQuery,
     useUpdateExerciseProblemProgressMutation,
-    useGetExerciseReportQuery
+    useGetExerciseReportQuery,
+    useGetExerciseProblemSolutionQuery
 } from '../../../redux/api/exercisesApi';
 import MultipleChoiceProblem from './MultipleChoiceProblem';
 import OpenEndedProblem from './OpenEndedProblem';
@@ -71,6 +72,12 @@ const ProblemContent: React.FC<ProblemContentProps> = React.memo(
                     exercise_progress_id: exerciseProgress?.id ?? ''
                 },
                 { skip: !exerciseProgress?.id }
+            );
+
+        const { data: solution, isFetching: isFetchingSolution } =
+            useGetExerciseProblemSolutionQuery(
+                { exercise_slug: slug, problem_id: problemId },
+                { skip: !isSubmitted || showSolution === 'NONE' }
             );
 
         useEffect(() => {
@@ -261,6 +268,7 @@ const ProblemContent: React.FC<ProblemContentProps> = React.memo(
                                     isSubmitted={isSubmitted}
                                     isSingleAnswer={problem.single_answer}
                                     showSolution={showSolution}
+                                    solution={solution}
                                 />
                             ) : (
                                 <OpenEndedProblem
@@ -269,7 +277,7 @@ const ProblemContent: React.FC<ProblemContentProps> = React.memo(
                                     isSubmitted={isSubmitted}
                                     isCorrect={isCorrect}
                                     showSolution={showSolution}
-                                    correctAnswer={problem.question.solution}
+                                    solution={solution}
                                 />
                             )}
                         </div>
@@ -279,9 +287,13 @@ const ProblemContent: React.FC<ProblemContentProps> = React.memo(
                                 Pembahasan
                             </h3>
                             <div className="overflow-y-auto">
-                                <TiptapViewer
-                                    content={problem.question.solution}
-                                />
+                                {isFetchingSolution ? (
+                                    <p>Loading solution...</p>
+                                ) : solution ? (
+                                    <TiptapViewer content={solution.solution} />
+                                ) : (
+                                    <p>Solution not available</p>
+                                )}
                             </div>
                         </div>
                     )}
@@ -307,7 +319,7 @@ const ProblemContent: React.FC<ProblemContentProps> = React.memo(
                             )}
                         </button>
                     )}
-                    {isSubmitted && showSolution === 'AFTER_PROBLEM' && (
+                    {isSubmitted && showSolution !== 'NONE' && (
                         <button
                             className="w-full py-3 rounded-full font-semibold bg-[#4B5563] text-white hover:bg-[#374151] transition-colors"
                             onClick={() =>

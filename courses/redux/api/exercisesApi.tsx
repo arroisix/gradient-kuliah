@@ -6,6 +6,7 @@ import {
     ExerciseProblem,
     ExerciseProblemProgress,
     ExerciseProblemReport,
+    ExerciseProblemSolution,
     ExerciseProgress,
     ExerciseReportSummary,
     ProblemSetDetail
@@ -49,6 +50,18 @@ export const exerciseApi = baseApi.injectEndpoints({
         >({
             query: ({ exercise_slug, problem_id }) => ({
                 url: `${EXERCISE_BASE_URL}exercises/${exercise_slug}/problems/${problem_id}/`
+            }),
+            providesTags: (result, error, arg) => [
+                { type: 'ASTRONOTES', id: `EXERCISE_PROBLEM_${arg.problem_id}` }
+            ]
+        }),
+
+        getExerciseProblemSolution: builder.query<
+            ExerciseProblemSolution,
+            { exercise_slug: string; problem_id: string }
+        >({
+            query: ({ exercise_slug, problem_id }) => ({
+                url: `${EXERCISE_BASE_URL}exercises/${exercise_slug}/problems/${problem_id}/solution/`
             }),
             providesTags: (result, error, arg) => [
                 { type: 'ASTRONOTES', id: `EXERCISE_PROBLEM_${arg.problem_id}` }
@@ -279,7 +292,8 @@ export const {
     useGetExerciseReportQuery,
     useGetExerciseLandingPageQuery,
     useGetProblemSetDetailQuery,
-    useLazyGetProblemSetDetailQuery
+    useLazyGetProblemSetDetailQuery,
+    useGetExerciseProblemSolutionQuery
 } = exerciseApi;
 
 export const {

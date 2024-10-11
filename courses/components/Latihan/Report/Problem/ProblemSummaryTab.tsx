@@ -1,5 +1,12 @@
 import React from 'react';
-import { ProblemReport } from '../../../../types/exercises';
+import {
+    ProblemReport,
+    RecommendedMaterial
+} from '../../../../types/exercises';
+import { FaRegCirclePlay } from 'react-icons/fa6';
+import { BiSolidStar } from 'react-icons/bi';
+import Image from 'next/image';
+import Link from 'next/link';
 
 interface ProblemSummaryTabProps {
     data: ProblemReport;
@@ -68,52 +75,114 @@ const ProblemSummaryTab: React.FC<ProblemSummaryTabProps> = ({ data }) => {
                 <h3 className="text-white font-semibold mb-4">
                     Rekomendasi Materi
                 </h3>
-                <div className="space-y-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {data.recommended_materials.map((material, index) => (
-                        <div
-                            key={index}
-                            className="flex items-center bg-[#1B2129] rounded-lg p-2">
-                            {material.type === 'Video' ? (
-                                <div className="w-12 h-12 bg-gray-600 rounded-md mr-3 flex items-center justify-center">
-                                    <svg
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
-                                            stroke="white"
-                                            strokeWidth="2"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                        />
-                                        <path
-                                            d="M10 8L16 12L10 16V8Z"
-                                            stroke="white"
-                                            strokeWidth="2"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                        />
-                                    </svg>
-                                </div>
-                            ) : (
-                                <div className="w-12 h-12 bg-gray-600 rounded-md mr-3"></div>
-                            )}
-                            <div>
-                                <h4 className="text-white text-sm font-medium">
-                                    {material.name}
-                                </h4>
-                                <p className="text-[#BBBBBB] text-xs">
-                                    {material.type}
-                                </p>
-                            </div>
-                        </div>
+                        <RecommendationCard key={index} material={material} />
                     ))}
                 </div>
             </div>
         </div>
     );
+};
+
+const RecommendationCard: React.FC<{ material: RecommendedMaterial }> = ({
+    material
+}) => {
+    const isBook = material.type === 'Book';
+    const href = getHref(material);
+
+    return (
+        <Link href={href}>
+            <a
+                className={`flex rounded-lg overflow-hidden h-40 ${
+                    isBook ? 'bg-[#222222]' : 'bg-[#121212]'
+                } border border-[#666666]`}>
+                {isBook ? (
+                    <BookCard material={material} />
+                ) : (
+                    <CourseOrVideoCard material={material} />
+                )}
+            </a>
+        </Link>
+    );
+};
+
+const BookCard: React.FC<{ material: RecommendedMaterial }> = ({
+    material
+}) => (
+    <>
+        <div className="relative w-[108px] h-40 flex-shrink-0">
+            <Image
+                src={material.thumbnail}
+                alt={material.name}
+                layout="fill"
+                objectFit="cover"
+            />
+        </div>
+        <div className="p-3 flex flex-col justify-between flex-grow">
+            <div>
+                <h4 className="text-white text-sm font-medium line-clamp-2">
+                    {material.name}
+                </h4>
+                <div className="flex items-center mt-1">
+                    <BiSolidStar className="text-yellow-400 mr-1" />
+                    <span className="text-white text-xs">
+                        {material.rating?.toFixed(1)}
+                    </span>
+                </div>
+            </div>
+            <div className="mt-2">
+                <span
+                    className={`text-white text-xs font-semibold px-2 py-1 rounded-full ${
+                        material.book_type === 'bank-soal'
+                            ? 'bg-[#0083FF]'
+                            : 'bg-[#CC009E]'
+                    }`}>
+                    {material.book_type === 'bank-soal'
+                        ? 'Bank Soal'
+                        : 'Astronotes'}
+                </span>
+            </div>
+        </div>
+    </>
+);
+
+const CourseOrVideoCard: React.FC<{ material: RecommendedMaterial }> = ({
+    material
+}) => (
+    <div className="flex flex-col w-full">
+        <div className="relative w-full h-[108px]">
+            <Image
+                src={material.thumbnail}
+                alt={material.name}
+                layout="fill"
+                objectFit="cover"
+            />
+            {material.type === 'Video' && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                    <FaRegCirclePlay className="text-white text-3xl" />
+                </div>
+            )}
+        </div>
+        <div className="p-3 flex-grow">
+            <h4 className="text-white text-sm font-medium line-clamp-2">
+                {material.name}
+            </h4>
+        </div>
+    </div>
+);
+
+const getHref = (material: RecommendedMaterial): string => {
+    switch (material.type) {
+        case 'Course':
+            return `/kelas/${material.slug}`;
+        case 'Video':
+            return `/kelas/${material.course_slug}/${material.slug}`;
+        case 'Book':
+            return `/perpustakaan/${material.book_type}/${material.slug}`;
+        default:
+            return '#';
+    }
 };
 
 export default ProblemSummaryTab;

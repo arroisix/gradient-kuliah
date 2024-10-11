@@ -6,7 +6,6 @@ import { cn } from 'commons/utils';
 interface Option {
     id: string;
     answer: any;
-    is_correct: boolean;
 }
 
 interface MultipleChoiceProblemProps {
@@ -16,6 +15,12 @@ interface MultipleChoiceProblemProps {
     isSubmitted: boolean;
     isSingleAnswer: boolean;
     showSolution: string;
+    solution?: {
+        options: Array<{
+            id: string;
+            is_correct: boolean;
+        }>;
+    };
 }
 
 const MultipleChoiceProblem: React.FC<MultipleChoiceProblemProps> = ({
@@ -24,7 +29,8 @@ const MultipleChoiceProblem: React.FC<MultipleChoiceProblemProps> = ({
     onAnswerSelect,
     isSubmitted,
     isSingleAnswer,
-    showSolution
+    showSolution,
+    solution
 }) => {
     const handleAnswerSelect = (answerId: string) => {
         if (!isSubmitted || showSolution === 'AFTER_COMPLETE') {
@@ -39,6 +45,13 @@ const MultipleChoiceProblem: React.FC<MultipleChoiceProblemProps> = ({
         }
     };
 
+    const isCorrect = (optionId: string) => {
+        return (
+            solution?.options.find((opt) => opt.id === optionId)?.is_correct ||
+            false
+        );
+    };
+
     return (
         <div className="flex flex-col space-y-2">
             {options.map((option) => (
@@ -46,8 +59,10 @@ const MultipleChoiceProblem: React.FC<MultipleChoiceProblemProps> = ({
                     key={option.id}
                     className={cn(
                         'flex items-center justify-between p-3 rounded-lg w-full text-left',
-                        isSubmitted && showSolution === 'AFTER_PROBLEM'
-                            ? option.is_correct
+                        isSubmitted &&
+                            showSolution === 'AFTER_PROBLEM' &&
+                            solution
+                            ? isCorrect(option.id)
                                 ? 'bg-[#2AC27A80]'
                                 : selectedAnswers.includes(option.id)
                                 ? 'bg-[#EC5D4980]'
@@ -66,12 +81,16 @@ const MultipleChoiceProblem: React.FC<MultipleChoiceProblemProps> = ({
                     </div>
                     {(!isSingleAnswer ||
                         selectedAnswers.includes(option.id) ||
-                        (isSubmitted && showSolution === 'AFTER_PROBLEM')) && (
+                        (isSubmitted &&
+                            showSolution === 'AFTER_PROBLEM' &&
+                            solution)) && (
                         <div
                             className={cn(
                                 'flex justify-center items-center rounded-[4px] w-5 h-5',
-                                isSubmitted && showSolution === 'AFTER_PROBLEM'
-                                    ? option.is_correct
+                                isSubmitted &&
+                                    showSolution === 'AFTER_PROBLEM' &&
+                                    solution
+                                    ? isCorrect(option.id)
                                         ? 'bg-[#2AC27A]'
                                         : selectedAnswers.includes(option.id)
                                         ? 'bg-[#EC5D49]'
@@ -80,8 +99,10 @@ const MultipleChoiceProblem: React.FC<MultipleChoiceProblemProps> = ({
                                     ? 'bg-[#5F2BCE]'
                                     : 'bg-[#898C9E]'
                             )}>
-                            {isSubmitted && showSolution === 'AFTER_PROBLEM' ? (
-                                option.is_correct ? (
+                            {isSubmitted &&
+                            showSolution === 'AFTER_PROBLEM' &&
+                            solution ? (
+                                isCorrect(option.id) ? (
                                     <Check className="text-white" size={16} />
                                 ) : selectedAnswers.includes(option.id) ? (
                                     <X className="text-white" size={16} />

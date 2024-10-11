@@ -88,6 +88,17 @@ export interface ExerciseProblem {
     single_answer: boolean;
 }
 
+export interface ExerciseProblemSolution {
+    id: string;
+    question_id: string;
+    solution: any;
+    options: Array<{
+        id: string;
+        answer: any;
+        is_correct: boolean;
+    }>;
+}
+
 export interface ExerciseProgress {
     id: string;
     student_id: string;
@@ -196,7 +207,11 @@ export interface ProblemReport {
     recommended_materials: Array<{
         id: string;
         name: string;
-        type: string;
+        slug: string;
+        type: 'Course' | 'Video' | 'Book';
+        thumbnail: string;
+        book_type?: 'astronotes' | 'bank-soal' | 'text-book';
+        rating?: number;
     }>;
     attempt_history: Array<{
         attempt: number;
@@ -204,4 +219,16 @@ export interface ProblemReport {
         date: string;
         submitted_answer: string[];
     }>;
+}
+
+interface RecommendedMaterial {
+    id: string;
+    name: string;
+    slug: string;
+    type: 'Course' | 'Video' | 'Book';
+    thumbnail: string;
+    book_type?: 'astronotes' | 'bank-soal' | 'text-book';
+    rating?: number;
+    course_slug?: string;
+    subchapter_slug?: string;
 }
