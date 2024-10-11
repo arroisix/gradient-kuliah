@@ -319,7 +319,7 @@ const ProblemContent: React.FC<ProblemContentProps> = React.memo(
                             )}
                         </button>
                     )}
-                    {isSubmitted && showSolution !== 'NONE' && (
+                    {isSubmitted && showSolution === 'AFTER_PROBLEM' && (
                         <button
                             className="w-full py-3 rounded-full font-semibold bg-[#4B5563] text-white hover:bg-[#374151] transition-colors"
                             onClick={() =>
