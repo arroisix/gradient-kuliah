@@ -82,7 +82,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({
             </div>
 
             {performanceBreakdown.length > 0 && (
-                <div className="bg-[#252A31] rounded-lg p-5 w-[640px] h-auto flex flex-col gap-4">
+                <div className="bg-[#252A31] rounded-lg p-5 max-w-[640px] h-auto flex flex-col gap-4">
                     <div className="text-white text-base font-bold">
                         Urutan Kesulitanmu
                     </div>
