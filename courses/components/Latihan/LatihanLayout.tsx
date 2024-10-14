@@ -38,18 +38,18 @@ const LatihanLayout: React.FC<LatihanLayoutProps> = ({
 }) => {
     const [showSidebar, setShowSidebar] = useState(false);
 
-    const toggleSidebar = () => setShowSidebar(!showSidebar);
+    const toggleSidebar = (): void => setShowSidebar(!showSidebar);
 
     const canNavigate = timeConstraint !== 'PER_PROBLEM';
 
     return (
-        <div className="flex flex-col px-4 justify-center items-center min-h-screen bg-black">
+        <div className="flex flex-col px-4 justify-center items-center h-[100dvh] bg-black">
             <QuizNavigationSidebar
                 onClose={toggleSidebar}
                 isOpen={showSidebar}
             />
             <div className="w-full h-full max-w-[520px] md:px-4">
-                <div className="w-full h-full md:w-[520px]">
+                <div className="w-full md:w-[520px]">
                     <ExerciseHeader
                         showNavigation={showNavigation && canNavigate}
                         title={title}

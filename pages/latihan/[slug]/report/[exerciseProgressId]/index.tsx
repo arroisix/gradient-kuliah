@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import ExerciseReportLayout from '../../../../../courses/components/Latihan/Report/ExerciseReportLayout';
+import ExerciseReportLayout from 'courses/components/Latihan/Report/ExerciseReportLayout';
 
 const ExerciseReportPage: NextPage = () => {
     const router = useRouter();

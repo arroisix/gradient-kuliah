@@ -58,10 +58,12 @@ const ProblemPageContent: React.FC<ProblemPageContentProps> = ({
         {
             exercise_slug: slug,
             exercise_progress_id: exerciseProgress?.id ?? '',
-            problem_id: problemSetData?.problems[0]?.id ?? ''
+            problem_id: problemSetData?.problems
+                ? problemSetData?.problems[0]?.id ?? ''
+                : ''
         },
         {
-            skip: !exerciseProgress?.id || !problemSetData?.problems[0]?.id,
+            skip: !exerciseProgress?.id || !problemSetData?.problems,
             refetchOnMountOrArgChange: true
         }
     );

@@ -80,7 +80,12 @@ const ProblemReportPage: React.FC = () => {
                                 </button>
                             ))}
                         </div>
-                        <ProblemDetailContent problem={latestAttempt} />
+                        <ProblemDetailContent
+                            problem={{
+                                ...latestAttempt,
+                                index: currentProblemIndex
+                            }}
+                        />
                         <div className="flex space-x-4 mb-6">
                             <div className="flex items-end w-full border-b border-gray-700">
                                 {['summary', 'history'].map((tab) => (

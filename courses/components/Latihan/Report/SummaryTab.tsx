@@ -29,7 +29,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({
             <div className="text-white text-base font-bold">
                 Analisis Hasil Latihan
             </div>
-            <div className="flex flex-row items-center justify-between bg-[#252A31] rounded-lg p-5">
+            <div className="flex flex-row items-center justify-between bg-[#252A31] rounded-lg p-5 gap-2">
                 <div className="text-white text-3xl font-semibold">
                     {percentile}%
                 </div>

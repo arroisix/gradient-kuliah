@@ -1,13 +1,5 @@
 import React from 'react';
-import dynamic from 'next/dynamic';
-
-const ProblemDetailPage = dynamic(
-    () =>
-        import(
-            '../../../../../../courses/components/Latihan/Report/Problem/ProblemDetailPage'
-        ),
-    { ssr: false }
-);
+import ProblemDetailPage from 'courses/components/Latihan/Report/Problem/ProblemDetailPage';
 
 const ProblemDetailPageWrapper: React.FC = () => {
     return <ProblemDetailPage />;

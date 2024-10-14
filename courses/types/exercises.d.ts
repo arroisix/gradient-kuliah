@@ -32,6 +32,7 @@ interface ExerciseItem {
     total_questions: number;
     progress?: number;
     status?: string;
+    is_free: boolean;
 }
 
 interface CourseFilter {

@@ -4,7 +4,9 @@ import { IoMdCheckmark as Check, IoMdClose as X } from 'react-icons/io';
 import TiptapViewer from '../../../Textbook/TiptapViewer';
 
 interface ProblemDetailContentProps {
-    problem: ProblemReport;
+    problem: ProblemReport & {
+        index: number;
+    };
 }
 
 const ProblemDetailContent: React.FC<ProblemDetailContentProps> = ({
@@ -15,7 +17,7 @@ const ProblemDetailContent: React.FC<ProblemDetailContentProps> = ({
         problem.question.type !== 'MULTIPLE_CHOICE' &&
         problem.question.type !== 'MULTIPLE_ANSWER';
 
-    const toggleExplanation = () => {
+    const toggleExplanation = (): void => {
         setShowExplanation(!showExplanation);
     };
 
@@ -27,7 +29,9 @@ const ProblemDetailContent: React.FC<ProblemDetailContentProps> = ({
                     : 'border-red-500'
             }`}>
             <div className="flex justify-between items-center w-full max-w-[608px] h-auto">
-                <h3 className="text-sm text-[#999999]">Nomor {problem.id}</h3>
+                <h3 className="text-sm text-[#999999]">
+                    Nomor {problem.index + 1}
+                </h3>
                 <div
                     className={`flex items-center justify-center gap-1 text-xs font-medium rounded-md px-2 py-1 ${
                         problem.user_progress.is_correct

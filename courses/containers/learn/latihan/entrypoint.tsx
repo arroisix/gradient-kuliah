@@ -8,6 +8,8 @@ import { LATIHAN_SORT_OPTIONS } from '../../../components/Latihan/constants';
 import { useGetExerciseLandingPageQuery } from '../../../redux/api/exercisesApi';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import MyExercisesSection from '../../../components/Latihan/Entrypoint/MyExercisesSection';
+import RenewSubscriptionBanner from 'courses/components/RenewSubscriptionBanner';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 const LatihanEntrypoint = (): JSX.Element => {
     const router = useRouter();
@@ -18,6 +20,7 @@ const LatihanEntrypoint = (): JSX.Element => {
         page: pageQuery = '1'
     } = router.query;
     const [page, setPage] = useState(Number(pageQuery));
+    const { is_subscribed } = useCourseSubscription();
 
     useEffect(() => {
         setPage(Number(pageQuery));
@@ -94,6 +97,7 @@ const LatihanEntrypoint = (): JSX.Element => {
                 currentPage={data?.current_page || 1}
                 limit={data?.limit || 6}
             />
+            {!is_subscribed && <RenewSubscriptionBanner product="latihan" />}
         </>
     );
 };
