@@ -4,6 +4,9 @@ import { ExerciseItem } from '../../../types/exercises';
 import { cn } from 'commons/utils';
 import { IoTime } from 'react-icons/io5';
 import { TbCircleCheckFilled } from 'react-icons/tb';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 interface LatihanCardProps {
     exercise: ExerciseItem;
@@ -16,6 +19,21 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
     className,
     cardType
 }) => {
+    const isAuthenticated = useSelector(getIsAuthenticated);
+    const { is_subscribed } = useCourseSubscription();
+
+    const decideURLLink = (): string => {
+        if (isAuthenticated) {
+            if (exercise.is_free || is_subscribed) {
+                return `/latihan/${exercise.slug}`;
+            } else {
+                return '/langganan';
+            }
+        } else {
+            return '/masuk';
+        }
+    };
+
     const renderProgresBadge = (): JSX.Element => {
         if (exercise.status === 'IN_PROGRESS' && exercise.progress) {
             return (
@@ -55,7 +73,7 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
 
     return (
         <Link
-            href={`/latihan/${exercise.slug}`}
+            href={decideURLLink()}
             className={cn(
                 'block h-full w-full',
                 'bg-graphite-800 rounded-2xl p-5',

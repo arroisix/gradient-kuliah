@@ -1,6 +1,8 @@
 import { cn } from 'commons/utils';
 import React from 'react';
 import { LatihanTabStyle } from '../constants';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { useSelector } from 'react-redux';
 
 interface LatihanTabsProps {
     activeStatus: string;
@@ -11,6 +13,7 @@ const LatihanTabs: React.FC<LatihanTabsProps> = ({
     activeStatus,
     onStatusChange
 }) => {
+    const isAuthenticated = useSelector(getIsAuthenticated);
     const tabStyle = (status: string): string =>
         cn(
             'text-center text-sm py-3 border-b-2 flex-1 md:flex-none first:!px-1 whitespace-nowrap cursor-pointer',
@@ -27,25 +30,29 @@ const LatihanTabs: React.FC<LatihanTabsProps> = ({
                 aria-pressed={activeStatus === 'all'}>
                 Semua
             </button>
-            <button
-                className={tabStyle('not_started')}
-                onClick={() => onStatusChange('not_started')}
-                aria-pressed={activeStatus === 'not_started'}>
-                Not Started
-            </button>
-            <button
-                className={tabStyle('completed')}
-                onClick={() => onStatusChange('completed')}
-                aria-pressed={activeStatus === 'completed'}>
-                Completed
-            </button>
-            <div
-                className={cn(
-                    'border-b-2 hidden md:block md:grow',
-                    LatihanTabStyle.default
-                )}>
-                {' '}
-            </div>
+            {isAuthenticated && (
+                <>
+                    <button
+                        className={tabStyle('not_started')}
+                        onClick={() => onStatusChange('not_started')}
+                        aria-pressed={activeStatus === 'not_started'}>
+                        Not Started
+                    </button>
+                    <button
+                        className={tabStyle('completed')}
+                        onClick={() => onStatusChange('completed')}
+                        aria-pressed={activeStatus === 'completed'}>
+                        Completed
+                    </button>
+                    <div
+                        className={cn(
+                            'border-b-2 hidden md:block md:grow',
+                            LatihanTabStyle.default
+                        )}>
+                        {' '}
+                    </div>
+                </>
+            )}
         </div>
     );
 };

@@ -21,7 +21,7 @@ export const exerciseApi = baseApi.injectEndpoints({
             { exercise_slug: string; token?: string }
         >({
             query: ({ exercise_slug, token }) => ({
-                url: `${EXERCISE_BASE_URL}exercises/${exercise_slug}/`,
+                url: `${EXERCISE_BASE_URL}${exercise_slug}/`,
                 headers: token ? { Authorization: `Token ${token}` } : undefined
             }),
             providesTags: (result, error, arg) => [
@@ -34,7 +34,7 @@ export const exerciseApi = baseApi.injectEndpoints({
             { exercise_slug: string }
         >({
             query: ({ exercise_slug }) => ({
-                url: `${EXERCISE_BASE_URL}exercises/${exercise_slug}/history/`
+                url: `${EXERCISE_BASE_URL}${exercise_slug}/history/`
             }),
             providesTags: (result, error, arg) => [
                 {
@@ -49,7 +49,7 @@ export const exerciseApi = baseApi.injectEndpoints({
             { exercise_slug: string; problem_id: string }
         >({
             query: ({ exercise_slug, problem_id }) => ({
-                url: `${EXERCISE_BASE_URL}exercises/${exercise_slug}/problems/${problem_id}/`
+                url: `${EXERCISE_BASE_URL}${exercise_slug}/problems/${problem_id}/`
             }),
             providesTags: (result, error, arg) => [
                 { type: 'ASTRONOTES', id: `EXERCISE_PROBLEM_${arg.problem_id}` }
@@ -61,7 +61,7 @@ export const exerciseApi = baseApi.injectEndpoints({
             { exercise_slug: string; problem_id: string }
         >({
             query: ({ exercise_slug, problem_id }) => ({
-                url: `${EXERCISE_BASE_URL}exercises/${exercise_slug}/problems/${problem_id}/solution/`
+                url: `${EXERCISE_BASE_URL}${exercise_slug}/problems/${problem_id}/solution/`
             }),
             providesTags: (result, error, arg) => [
                 { type: 'ASTRONOTES', id: `EXERCISE_PROBLEM_${arg.problem_id}` }
@@ -73,7 +73,7 @@ export const exerciseApi = baseApi.injectEndpoints({
             { exercise_slug: string }
         >({
             query: ({ exercise_slug }) => ({
-                url: `${EXERCISE_BASE_URL}private/exercises/${exercise_slug}/progress/`
+                url: `${EXERCISE_BASE_URL}private/${exercise_slug}/progress/`
             }),
             providesTags: (result, error, arg) => [
                 {
@@ -88,7 +88,7 @@ export const exerciseApi = baseApi.injectEndpoints({
             { exercise_slug: string }
         >({
             query: ({ exercise_slug }) => ({
-                url: `${EXERCISE_BASE_URL}private/exercises/${exercise_slug}/progress/`,
+                url: `${EXERCISE_BASE_URL}private/${exercise_slug}/progress/`,
                 method: 'POST'
             }),
             invalidatesTags: (result, error, arg) => [
@@ -109,7 +109,7 @@ export const exerciseApi = baseApi.injectEndpoints({
             }
         >({
             query: ({ exercise_slug, progress_id, data }) => ({
-                url: `${EXERCISE_BASE_URL}private/exercises/${exercise_slug}/progress/${progress_id}/`,
+                url: `${EXERCISE_BASE_URL}private/${exercise_slug}/progress/${progress_id}/`,
                 method: 'PUT',
                 body: data
             }),
@@ -125,7 +125,7 @@ export const exerciseApi = baseApi.injectEndpoints({
             }
         >({
             query: ({ problem_progress_id }) => ({
-                url: `${EXERCISE_BASE_URL}private/exercises/problem-progress/${problem_progress_id}/`
+                url: `${EXERCISE_BASE_URL}private/problem-progress/${problem_progress_id}/`
             }),
             providesTags: (result, error, arg) => [
                 {
@@ -144,7 +144,7 @@ export const exerciseApi = baseApi.injectEndpoints({
             }
         >({
             query: ({ exercise_slug, exercise_progress_id, problem_id }) => ({
-                url: `${EXERCISE_BASE_URL}private/exercises/${exercise_slug}/progress/${exercise_progress_id}/problems/${problem_id}/progress/`,
+                url: `${EXERCISE_BASE_URL}private/${exercise_slug}/progress/${exercise_progress_id}/problems/${problem_id}/progress/`,
                 method: 'POST'
             }),
             invalidatesTags: (result, error, arg) => [
@@ -169,7 +169,7 @@ export const exerciseApi = baseApi.injectEndpoints({
                 problem_progress_id,
                 data
             }) => ({
-                url: `${EXERCISE_BASE_URL}private/exercises/${exercise_slug}/progress/${exercise_progress_id}/problems/${problem_id}/progress/${problem_progress_id}/`,
+                url: `${EXERCISE_BASE_URL}private/${exercise_slug}/progress/${exercise_progress_id}/problems/${problem_id}/progress/${problem_progress_id}/`,
                 method: 'PUT',
                 body: data
             }),
@@ -191,7 +191,7 @@ export const exerciseApi = baseApi.injectEndpoints({
             }
         >({
             query: ({ exercise_slug, exercise_progress_id, problem_id }) => ({
-                url: `${EXERCISE_BASE_URL}private/exercises/${exercise_slug}/progress/${exercise_progress_id}/problems/${problem_id}/progress/`,
+                url: `${EXERCISE_BASE_URL}private/${exercise_slug}/progress/${exercise_progress_id}/problems/${problem_id}/progress/`,
                 method: 'GET'
             }),
             providesTags: (result, error, arg) => [
@@ -207,7 +207,7 @@ export const exerciseApi = baseApi.injectEndpoints({
             { exercise_slug: string; exercise_progress_id: string }
         >({
             query: ({ exercise_slug, exercise_progress_id }) => ({
-                url: `${EXERCISE_BASE_URL}exercises/${exercise_slug}/progress/${exercise_progress_id}/summary/`
+                url: `${EXERCISE_BASE_URL}${exercise_slug}/progress/${exercise_progress_id}/summary/`
             }),
             providesTags: (result, error, arg) => [
                 {
@@ -222,7 +222,7 @@ export const exerciseApi = baseApi.injectEndpoints({
             { exercise_slug: string; exercise_progress_id: string }
         >({
             query: ({ exercise_slug, exercise_progress_id }) => ({
-                url: `${EXERCISE_BASE_URL}exercises/${exercise_slug}/progress/${exercise_progress_id}/report/`
+                url: `${EXERCISE_BASE_URL}${exercise_slug}/progress/${exercise_progress_id}/report/`
             }),
             providesTags: (result, error, arg) => [
                 {
@@ -237,7 +237,7 @@ export const exerciseApi = baseApi.injectEndpoints({
             { exercise_slug: string; problem_id: string }
         >({
             query: ({ exercise_slug, problem_id }) => ({
-                url: `${EXERCISE_BASE_URL}exercises/${exercise_slug}/problems/${problem_id}/report/`
+                url: `${EXERCISE_BASE_URL}${exercise_slug}/problems/${problem_id}/report/`
             }),
             providesTags: (result, error, arg) => [
                 {
@@ -258,7 +258,7 @@ export const exerciseApi = baseApi.injectEndpoints({
             }
         >({
             query: (params) => ({
-                url: `${EXERCISE_BASE_URL}exercises/`,
+                url: `${EXERCISE_BASE_URL}`,
                 params
             }),
             providesTags: () => [
@@ -271,7 +271,7 @@ export const exerciseApi = baseApi.injectEndpoints({
 
         getProblemSetDetail: builder.query<ProblemSetDetail, string>({
             query: (problemSetId) => ({
-                url: `${EXERCISE_BASE_URL}exercises/problem-sets/${problemSetId}/`
+                url: `${EXERCISE_BASE_URL}problem-sets/${problemSetId}/`
             }),
             providesTags: [{ type: 'PROBLEM_SET', id: `LIST` }]
         })
