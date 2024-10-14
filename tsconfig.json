@@ -27,7 +27,8 @@
         "next-env.d.ts",
         "**/*.ts",
         "**/*.tsx",
-        "library/marked-katex/index.js"
-, "courses/components/Latihan/ExerciseStart/ExerciseStartPageContent"    ],
+        "library/marked-katex/index.js",
+        "courses/components/Latihan/ExerciseStart/ExerciseStartPageContent"
+    ],
     "exclude": ["node_modules"]
 }

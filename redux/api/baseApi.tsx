@@ -33,6 +33,7 @@ export const baseApi = createApi({
         'PROFILE',
         'COMMUNITIES',
         'ASTRONOTES',
+        'PROBLEM_SET',
         'CONNECTED_DEVICES',
         'TRANSACTION'
     ],

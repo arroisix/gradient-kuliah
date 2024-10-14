@@ -174,7 +174,11 @@ export const exerciseApi = baseApi.injectEndpoints({
                 body: data
             }),
             invalidatesTags: (result, error, arg) => [
-                { type: 'ASTRONOTES', id: `EXERCISE_PROBLEM_${arg.problem_id}` }
+                {
+                    type: 'ASTRONOTES',
+                    id: `EXERCISE_PROBLEM_${arg.problem_id}`
+                },
+                { type: 'PROBLEM_SET', id: 'LIST' }
             ]
         }),
 
@@ -193,7 +197,7 @@ export const exerciseApi = baseApi.injectEndpoints({
             providesTags: (result, error, arg) => [
                 {
                     type: 'ASTRONOTES',
-                    id: `EXERCISE_PROBLEM_PROGRESS_${arg.exercise_progress_id}_${arg.problem_id}`
+                    id: `EXERCISE_PROBLEM_PROGRESS_${arg.problem_id}`
                 }
             ]
         }),
@@ -269,9 +273,7 @@ export const exerciseApi = baseApi.injectEndpoints({
             query: (problemSetId) => ({
                 url: `${EXERCISE_BASE_URL}exercises/problem-sets/${problemSetId}/`
             }),
-            providesTags: (result, error, arg) => [
-                { type: 'ASTRONOTES', id: `PROBLEM_SET_${arg}` }
-            ]
+            providesTags: [{ type: 'PROBLEM_SET', id: `LIST` }]
         })
     })
 });

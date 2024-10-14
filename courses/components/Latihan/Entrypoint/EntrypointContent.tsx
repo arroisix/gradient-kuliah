@@ -11,7 +11,6 @@ interface LatihanContentProps {
     totalItems: number;
     currentPage: number;
     limit: number;
-    onPageChange: (page: number) => void;
 }
 
 const LatihanContent: React.FC<LatihanContentProps> = ({
@@ -19,8 +18,7 @@ const LatihanContent: React.FC<LatihanContentProps> = ({
     exercises,
     totalItems,
     currentPage,
-    limit,
-    onPageChange
+    limit
 }) => {
     if (isLoading) {
         return (
@@ -36,13 +34,15 @@ const LatihanContent: React.FC<LatihanContentProps> = ({
         <div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
                 {exercises.map((exercise) => (
-                    <LatihanCard key={exercise.id} exercise={exercise} />
+                    <LatihanCard
+                        key={exercise.id}
+                        exercise={exercise}
+                        cardType="allExercises"
+                    />
                 ))}
             </div>
             <Paginator
                 totalPages={totalPages}
-                page={currentPage}
-                setPage={(newPage) => onPageChange(newPage as number)}
                 hasNextPage={currentPage < totalPages}
                 hasPreviousPage={currentPage > 1}
                 className="justify-center w-full py-8"

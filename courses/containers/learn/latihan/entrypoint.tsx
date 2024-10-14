@@ -31,13 +31,7 @@ const LatihanEntrypoint = (): JSX.Element => {
         sort: sort as string
     });
 
-    const handlePageChange = (newPage: number) => {
-        router.push({ query: { ...router.query, page: newPage } }, undefined, {
-            shallow: true
-        });
-    };
-
-    const handleStatusChange = (newStatus: string) => {
+    const handleStatusChange = (newStatus: string): void => {
         router.push(
             { query: { ...router.query, status: newStatus, page: 1 } },
             undefined,
@@ -47,7 +41,7 @@ const LatihanEntrypoint = (): JSX.Element => {
         );
     };
 
-    const handleCourseChange = (newCourseId: string) => {
+    const handleCourseChange = (newCourseId: string): void => {
         router.push(
             { query: { ...router.query, course_id: newCourseId, page: 1 } },
             undefined,
@@ -99,7 +93,6 @@ const LatihanEntrypoint = (): JSX.Element => {
                 totalItems={data?.count_items || 0}
                 currentPage={data?.current_page || 1}
                 limit={data?.limit || 6}
-                onPageChange={handlePageChange}
             />
         </>
     );

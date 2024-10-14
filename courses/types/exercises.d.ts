@@ -121,6 +121,7 @@ export interface ExerciseProblemProgress {
     is_correct: boolean | null;
     started_at: string;
     completed_at: string | null;
+    all_problems_answered: boolean;
 }
 
 export interface ExerciseProblemProgressList {

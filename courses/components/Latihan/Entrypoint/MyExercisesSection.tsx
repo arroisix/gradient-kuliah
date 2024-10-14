@@ -2,6 +2,8 @@ import React from 'react';
 import { ExerciseItem } from '../../../types/exercises';
 import LatihanCard from './LatihanCard';
 import { cn } from 'commons/utils';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 
 interface MyExercisesSectionProps {
     myExercises: ExerciseItem[];
@@ -10,6 +12,9 @@ interface MyExercisesSectionProps {
 const MyExercisesSection: React.FC<MyExercisesSectionProps> = ({
     myExercises
 }) => {
+    const { is_subscribed: isSubscribed } = useCourseSubscription();
+    const { isMobileBreakpoints } = useWindowBreakpoints();
+
     if (!myExercises || myExercises.length === 0) return null;
 
     return (
@@ -18,10 +23,31 @@ const MyExercisesSection: React.FC<MyExercisesSectionProps> = ({
 
             <b className="text-white">Latihanku</b>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div
+                className={cn(
+                    'w-screen relative gap-4 carousel carousel-center right-4 md:right-8 lg:right-12',
+                    isSubscribed
+                        ? 'md:w-[calc(100vw-250px)] min-[1786px]:-inset-x-[calc((100vw-250px-1536px)/2)]'
+                        : 'md:w-screen min-[1786px]:-inset-x-[calc((100vw-1536px)/2)]'
+                )}>
                 {myExercises.map((exercise) => (
-                    <div key={exercise.id} className={cn('carousel-item')}>
-                        <LatihanCard exercise={exercise} />
+                    <div
+                        key={exercise.id}
+                        className={cn(
+                            'carousel-item first:ml-4 last:mr-4 md:first:ml-8 md:last:mr-8 lg:first:ml-12 lg:last:mr-12',
+                            isSubscribed
+                                ? 'min-[1786px]:first:ml-[calc((100vw-250px-1536px)/2)] min-[1786px]:last:mr-[calc((100vw-250px-1536px)/2)]'
+                                : 'min-[1786px]:first:ml-[calc((100vw-1536px)/2)] min-[1786px]:last:mr-[calc((100vw-1536px)/2)]'
+                        )}>
+                        <LatihanCard
+                            exercise={exercise}
+                            cardType="myExercises"
+                            className={
+                                isMobileBreakpoints
+                                    ? 'w-[175px] h-[210px]'
+                                    : 'w-[300px] h-[190px]'
+                            }
+                        />
                     </div>
                 ))}
             </div>
