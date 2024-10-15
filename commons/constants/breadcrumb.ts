@@ -117,5 +117,8 @@ export const BREADCRUMB: BreadcrumbProps = {
     },
     '/search/results/[keywords]': {
         name: 'Hasil pencarian untuk'
+    },
+    '/latihan': {
+        name: 'Latihan'
     }
 };

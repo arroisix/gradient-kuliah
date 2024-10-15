@@ -6,7 +6,11 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { BiBookReader, BiSearch } from 'react-icons/bi';
 import { FiHome } from 'react-icons/fi';
-import { RiBookOpenLine, RiQuestionnaireLine } from 'react-icons/ri';
+import {
+    RiBookOpenLine,
+    RiFileListLine,
+    RiQuestionnaireLine
+} from 'react-icons/ri';
 import { useTracker } from 'tracker/tracker';
 
 const Sidebar = ({
@@ -132,6 +136,26 @@ const Sidebar = ({
                         )}>
                         <RiBookOpenLine size={20} />
                         Perpustakaan
+                    </span>
+                </Link>
+                <Link
+                    href={'/latihan'}
+                    onClick={() => {
+                        tracker?.genericTrack(
+                            `Click Exercises ${
+                                !fullHeight ? 'Course ' : ''
+                            }Navigation`
+                        );
+                    }}>
+                    <span
+                        className={cn(
+                            'flex gap-4 cursor-pointer  font-body text-sm hover:text-[#999999]',
+                            pathname.includes('/latihan')
+                                ? 'text-white'
+                                : 'text-[#666666]'
+                        )}>
+                        <RiFileListLine size={20} />
+                        Latihan
                     </span>
                 </Link>
             </div>

@@ -18,7 +18,9 @@ import {
     RiBookOpenLine,
     RiQuestionnaireLine,
     RiBookOpenFill,
-    RiQuestionnaireFill
+    RiQuestionnaireFill,
+    RiFileListFill,
+    RiFileListLine
 } from 'react-icons/ri';
 import { cn } from 'commons/utils';
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
@@ -43,6 +45,13 @@ const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
         url: '/perpustakaan',
         IconActive: RiBookOpenFill,
         IconUnactive: RiBookOpenLine
+    },
+    {
+        name: 'Exercise',
+        title: 'Latihan',
+        url: '/latihan',
+        IconActive: RiFileListFill,
+        IconUnactive: RiFileListLine
     }
 ];
 
