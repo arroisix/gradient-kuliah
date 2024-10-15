@@ -55,7 +55,7 @@ const ProblemReportPage: React.FC = () => {
 
     const handleProblemChange = (index: number) => {
         const newProblemId = exerciseReport.problems[index].id;
-        router.push(
+        router.replace(
             `/latihan/${slug}/report/${exerciseProgressId}/${newProblemId}`
         );
     };

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 interface ExerciseCloseModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onConfirm: () => Promise<void>;
+    onConfirm: () => void;
 }
 
 const ExerciseCloseModal: React.FC<ExerciseCloseModalProps> = ({
@@ -15,10 +15,10 @@ const ExerciseCloseModal: React.FC<ExerciseCloseModalProps> = ({
 
     if (!isOpen) return null;
 
-    const handleConfirm = async () => {
+    const handleConfirm = (): void => {
         setIsLoading(true);
         try {
-            await onConfirm();
+            onConfirm();
         } catch (error) {
             console.error('Error ending exercise:', error);
         } finally {
