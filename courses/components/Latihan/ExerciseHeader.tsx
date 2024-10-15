@@ -29,7 +29,6 @@ const ExerciseHeader: React.FC<ExerciseHeaderProps> = ({
     const handleCloseClick = (e: React.MouseEvent): void => {
         e.preventDefault();
         if (isReportPage) {
-            // router.push('/latihan');
             router.back();
         } else {
             setIsModalOpen(true);
