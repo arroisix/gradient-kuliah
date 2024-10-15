@@ -54,8 +54,8 @@ const InteractiveExerciseItem = ({
         if (is_subscribed || value.is_free) {
             if (value.status == 'COMPLETED') {
                 if (
-                    value.latest_score &&
-                    value.minimum_score &&
+                    value.latest_score !== undefined &&
+                    value.minimum_score !== undefined &&
                     value?.latest_score >= value?.minimum_score
                 ) {
                     return (
@@ -124,14 +124,15 @@ const InteractiveExerciseItem = ({
                 </h4>
             </div>
             <div className="flex gap-1 text-xs font-body">
-                {value.status == 'COMPLETED' && value.latest_score && (
-                    <span>
-                        {parseFloat(
-                            value?.latest_score as unknown as string
-                        ).toFixed(2)}
-                        /100
-                    </span>
-                )}
+                {value.status == 'COMPLETED' &&
+                    value.latest_score != undefined && (
+                        <span>
+                            {parseFloat(
+                                value?.latest_score as unknown as string
+                            ).toFixed(2)}
+                            /100
+                        </span>
+                    )}
             </div>
         </Link>
     );
