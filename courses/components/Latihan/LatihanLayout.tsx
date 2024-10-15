@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ExerciseHeader from './ExerciseHeader';
 import QuizNavigationSidebar from './QuizNavigationSidebar';
 import ExerciseTimer from './ExerciseTimer';
+import { cn } from 'commons/utils';
 
 interface LatihanLayoutProps {
     children: React.ReactNode;
@@ -73,7 +74,13 @@ const LatihanLayout: React.FC<LatihanLayoutProps> = ({
                         </div>
                     )}
                 </div>
-                <div className="relative w-full max-w-[520px] h-[90dvh] md:h-[639px] mb-6 md:mb-9">
+                <div
+                    className={cn(
+                        'relative w-full max-w-[520px] h-full md:h-[639px] mb-6 md:mb-9',
+                        timeConstraint && timeConstraint !== 'NONE'
+                            ? 'max-h-[83dvh]'
+                            : 'max-h-[90dvh]'
+                    )}>
                     <div className="bg-[#1B2129] rounded-2xl overflow-hidden h-full">
                         <div className="p-6 md:p-8 h-full flex flex-col">
                             {children}
