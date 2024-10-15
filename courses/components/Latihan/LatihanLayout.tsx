@@ -73,7 +73,7 @@ const LatihanLayout: React.FC<LatihanLayoutProps> = ({
                         </div>
                     )}
                 </div>
-                <div className="relative w-full max-w-[520px] h-[90vh] md:h-[639px] mb-6 md:mb-9">
+                <div className="relative w-full max-w-[520px] h-[90dvh] md:h-[639px] mb-6 md:mb-9">
                     <div className="bg-[#1B2129] rounded-2xl overflow-hidden h-full">
                         <div className="p-6 md:p-8 h-full flex flex-col">
                             {children}
