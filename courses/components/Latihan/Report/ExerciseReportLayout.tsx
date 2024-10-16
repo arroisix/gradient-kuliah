@@ -54,9 +54,11 @@ const ExerciseReportLayout: React.FC<ExerciseReportLayoutProps> = ({
         error: historyError
     } = useGetExerciseHistoryQuery({ exercise_slug: slug }, { skip: !slug });
 
-    const handleSelectExerciseProgress = (newExerciseProgressId: string) => {
+    const handleSelectExerciseProgress = (
+        newExerciseProgressId: string
+    ): void => {
         setCurrentExerciseProgressId(newExerciseProgressId);
-        router.push(
+        router.replace(
             `/latihan/${slug}/report/${newExerciseProgressId}`,
             undefined,
             { shallow: true }
@@ -163,12 +165,11 @@ const ExerciseReportLayout: React.FC<ExerciseReportLayoutProps> = ({
             </div>
             <div className="fixed bottom-0 left-0 w-full p-4 bg-black flex justify-center">
                 <div className="w-full max-w-[640px] flex flex-col sm:flex-row justify-between gap-2">
-                    <Link
-                        href={`/latihan`}
-                        className="w-full py-3 rounded-full font-semibold bg-[#4B5563] text-white hover:bg-[#374151] transition-colors text-center"
-                        passHref>
+                    <button
+                        onClick={() => router.back()}
+                        className="w-full py-3 rounded-full font-semibold bg-[#4B5563] text-white hover:bg-[#374151] transition-colors text-center">
                         Selesai
-                    </Link>
+                    </button>
                     <Link
                         href={`/latihan/${slug}`}
                         className="w-full py-3 rounded-full font-semibold bg-[#7F56D9] text-white hover:bg-[#6941C6] transition-colors text-center"

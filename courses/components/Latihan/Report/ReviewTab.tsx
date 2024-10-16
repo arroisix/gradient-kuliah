@@ -61,13 +61,7 @@ const ProblemCard = ({ problem, index }: { problem: any; index: number }) => {
         problem.question.type !== 'MULTIPLE_ANSWER';
     const router = useRouter();
     const { slug, exerciseProgressId } = router.query;
-    console.log(
-        'problem.user_progress.submitted_answer:',
-        problem.user_progress.submitted_answer
-    );
-    console.log('Problem,', problem);
-    console.log('problem.question.type,', problem.question.type);
-    console.log('is text based,', isTextBased);
+
     return (
         <div
             className={`p-4 flex flex-col gap-3 bg-[#1B2129] rounded-md text-white border-t-2 ${
@@ -148,7 +142,7 @@ const Option = ({
     option: any;
     isCorrect: boolean;
     isSelected: boolean;
-}) => {
+}): JSX.Element => {
     console.log('option.text type:', typeof option.text);
     return (
         <div

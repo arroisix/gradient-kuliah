@@ -26,18 +26,18 @@ const ExerciseHeader: React.FC<ExerciseHeaderProps> = ({
 
     const isReportPage = router.asPath.includes('/report/');
 
-    const handleCloseClick = (e: React.MouseEvent) => {
+    const handleCloseClick = (e: React.MouseEvent): void => {
         e.preventDefault();
         if (isReportPage) {
-            router.push('/latihan');
+            router.back();
         } else {
             setIsModalOpen(true);
         }
     };
 
-    const handleConfirmClose = async () => {
+    const handleConfirmClose = (): void => {
         setIsModalOpen(false);
-        router.push('/latihan');
+        router.back();
     };
 
     return (
@@ -51,12 +51,11 @@ const ExerciseHeader: React.FC<ExerciseHeaderProps> = ({
                     <div className="text-sm font-base text-white">{title}</div>
                 )}
 
-                <a
-                    href="/latihan"
+                <button
                     className="text-graphite-400 hover:text-white z-10"
                     onClick={handleCloseClick}>
                     <IoClose size={24} />
-                </a>
+                </button>
 
                 {showNavigation && (
                     <div className="flex gap-3 md:gap-4 items-center">
@@ -67,7 +66,7 @@ const ExerciseHeader: React.FC<ExerciseHeaderProps> = ({
                                 Quiz Navigation
                             </span>
                         </button>
-                        <Link href={prevLink || ''} passHref>
+                        <Link href={prevLink || ''} replace passHref>
                             <a
                                 className={cn(
                                     'bg-[#333540] text-graphite-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full',
@@ -76,7 +75,7 @@ const ExerciseHeader: React.FC<ExerciseHeaderProps> = ({
                                 <IoChevronBackOutline size={20} />
                             </a>
                         </Link>
-                        <Link href={nextLink || ''} passHref>
+                        <Link href={nextLink || ''} replace passHref>
                             <a
                                 className={cn(
                                     'bg-[#333540] text-graphite-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full',

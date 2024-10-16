@@ -11,7 +11,7 @@ interface LatihanStartProps {
 const LatihanStart: React.FC<LatihanStartProps> = ({ exercise }) => {
     const firstSectionId = exercise.problem_sets[0]?.id;
 
-    const formatDuration = (duration: number) => {
+    const formatDuration = (duration: number): string => {
         if (duration < 60) {
             return `${duration} Detik`;
         } else {
@@ -50,6 +50,7 @@ const LatihanStart: React.FC<LatihanStartProps> = ({ exercise }) => {
             </div>
             <div className="mt-auto">
                 <Link
+                    replace
                     href={`/latihan/${exercise.slug}/${firstSectionId}`}
                     className={cn(
                         'w-full bg-[#7F56D9] text-white py-3 rounded-full font-semibold',

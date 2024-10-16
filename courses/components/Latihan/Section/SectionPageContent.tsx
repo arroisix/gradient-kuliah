@@ -65,6 +65,7 @@ const SectionPageContent: React.FC<SectionPageContentProps> = ({
                 </div>
                 {firstProblemId && (
                     <Link
+                        replace
                         className="w-full"
                         href={`/latihan/${slug}/${sectionId}/${firstProblemId}`}>
                         <button className="w-full bg-[#7F56D9] text-white py-3 rounded-full font-semibold hover:bg-[#6941C6] transition-colors">
