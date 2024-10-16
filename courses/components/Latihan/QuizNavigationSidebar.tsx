@@ -72,6 +72,7 @@ const QuizNavigationSidebar: React.FC<QuizNavigationSidebarProps> = ({
                         <Link
                             key={problem.id}
                             href={`/latihan/${slug}/${problemSetId}/${problem.id}`}
+                            replace
                             passHref>
                             <a
                                 className={`w-full aspect-square rounded-md flex items-center justify-center text-sm

@@ -109,21 +109,21 @@ const ProblemPageContent: React.FC<ProblemPageContentProps> = ({
                                 if (
                                     problem.next_navigation.type === 'section'
                                 ) {
-                                    router.push(
+                                    router.replace(
                                         `/latihan/${slug}/${problem.next_navigation.id}`
                                     );
                                 } else {
-                                    router.push(
+                                    router.replace(
                                         `/latihan/${slug}/${sectionId}/${problem.next_navigation.id}`
                                     );
                                 }
                             } else {
-                                router.push(
+                                router.replace(
                                     `/latihan/${slug}/report/${exerciseProgress.id}`
                                 );
                             }
                         } else {
-                            router.push(
+                            router.replace(
                                 `/latihan/${slug}/report/${exerciseProgress.id}`
                             );
                         }
@@ -151,9 +151,9 @@ const ProblemPageContent: React.FC<ProblemPageContentProps> = ({
                                 problem.next_navigation.type === 'problem'
                                     ? `/latihan/${slug}/${sectionId}/${problem.next_navigation.id}`
                                     : `/latihan/${slug}/${problem.next_navigation.id}`;
-                            router.push(nextUrl);
+                            router.replace(nextUrl);
                         } else {
-                            router.push(
+                            router.replace(
                                 `/latihan/${slug}/report/${
                                     exerciseProgress!.id
                                 }`

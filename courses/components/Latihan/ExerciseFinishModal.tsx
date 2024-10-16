@@ -35,7 +35,9 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
                 data: { status: 'COMPLETED' }
             }).unwrap();
 
-            await router.push(`/latihan/${slug}/report/${exerciseProgressId}`);
+            await router.replace(
+                `/latihan/${slug}/report/${exerciseProgressId}`
+            );
         } catch (error) {
             console.error('Failed to submit exercise:', error);
         } finally {

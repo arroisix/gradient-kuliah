@@ -102,6 +102,9 @@ type SubChapter = {
     title?: string;
     icon?: string;
     exercise_slug?: string;
+    status?: 'IN_PROGRESS' | 'COMPLETED';
+    minimum_score?: number;
+    latest_score?: number;
 };
 
 type Chapter = {

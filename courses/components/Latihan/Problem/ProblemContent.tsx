@@ -315,6 +315,7 @@ const ProblemContent: React.FC<ProblemContentProps> = React.memo(
                         problem.next_navigation &&
                         !isAnswerChanged && (
                             <Link
+                                replace
                                 href={
                                     problem.next_navigation.type === 'problem'
                                         ? `/latihan/${slug}/${sectionId}/${problem.next_navigation.id}`
