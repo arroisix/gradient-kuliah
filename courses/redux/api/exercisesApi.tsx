@@ -283,13 +283,7 @@ export const exerciseApi = baseApi.injectEndpoints({
         >({
             query: ({ bookSlug, pageNumber }) => ({
                 url: `${EXERCISE_BASE_URL}astronotes/${bookSlug}/page/${pageNumber}/exercises/`
-            }),
-            providesTags: (result, error, arg) => [
-                {
-                    type: 'ASTRONOTES',
-                    id: `ASTRONOTES_EXERCISES_${arg.bookSlug}_${arg.pageNumber}`
-                }
-            ]
+            })
         })
     })
 });
