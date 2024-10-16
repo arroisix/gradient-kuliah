@@ -1,5 +1,6 @@
 import { baseApi } from 'redux/api/baseApi';
 import {
+    AstronotesExercise,
     Exercise,
     ExerciseHistory,
     ExerciseLandingPage,
@@ -274,6 +275,15 @@ export const exerciseApi = baseApi.injectEndpoints({
                 url: `${EXERCISE_BASE_URL}problem-sets/${problemSetId}/`
             }),
             providesTags: [{ type: 'PROBLEM_SET', id: `LIST` }]
+        }),
+
+        getAstronotesExercises: builder.query<
+            { exercises: AstronotesExercise[] },
+            { bookSlug: string; pageNumber: string }
+        >({
+            query: ({ bookSlug, pageNumber }) => ({
+                url: `${EXERCISE_BASE_URL}astronotes/${bookSlug}/page/${pageNumber}/exercises/`
+            })
         })
     })
 });
@@ -295,7 +305,8 @@ export const {
     useGetExerciseLandingPageQuery,
     useGetProblemSetDetailQuery,
     useLazyGetProblemSetDetailQuery,
-    useGetExerciseProblemSolutionQuery
+    useGetExerciseProblemSolutionQuery,
+    useGetAstronotesExercisesQuery
 } = exerciseApi;
 
 export const {
