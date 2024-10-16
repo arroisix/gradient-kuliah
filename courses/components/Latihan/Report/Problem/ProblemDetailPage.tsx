@@ -121,6 +121,7 @@ const ProblemReportPage: React.FC = () => {
                 <div className="w-full max-w-[640px] flex justify-between">
                     <Link
                         className="w-full"
+                        replace
                         href={`/latihan/${slug}/report/${exerciseProgressId}`}
                         passHref>
                         <a className="w-full">
