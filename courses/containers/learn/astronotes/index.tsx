@@ -13,6 +13,8 @@ import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { useGetBookRecommendationsQuery } from 'courses/redux/api/learningExperienceApi';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { useGetAstronotesExercisesQuery } from '../../../redux/api/exercisesApi';
+import AstronotesExercisesSection from '../../../components/Latihan/Astronotes/AstronotesExercisesSection';
 
 const Astronotes = ({
     content,
@@ -44,6 +46,12 @@ const Astronotes = ({
         }
     );
     const recommendations = hydratedRecommendations || initialRecommendations;
+
+    const { data: exercisesData, isLoading: isLoadingExercises } =
+        useGetAstronotesExercisesQuery(
+            { bookSlug: slug, pageNumber: page },
+            { skip: !slug || !page }
+        );
 
     return (
         <AstronotesProvider>
@@ -97,6 +105,10 @@ const Astronotes = ({
                         <AstroNotesContent content={content} book={book} />
                     </div>
                     <div className="flex flex-col w-full pt-8 lg:py-8 lg:max-w-5xl xl:max-w-screen-2xl lg:mx-auto lg:gap-8">
+                        <AstronotesExercisesSection
+                            exercises={exercisesData?.exercises || []}
+                            isLoading={isLoadingExercises}
+                        />
                         <RelatedBooksSection
                             orientation={
                                 isMobileBreakpoints ? 'vertical' : 'horizontal'

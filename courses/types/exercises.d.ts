@@ -234,3 +234,15 @@ interface RecommendedMaterial {
     course_slug?: string;
     subchapter_slug?: string;
 }
+
+export interface AstronotesExercise {
+    id: string;
+    slug: string;
+    title: string;
+    subject: string;
+    icon: string;
+    total_questions: number;
+    progress?: number;
+    status?: string;
+    is_free: boolean;
+}
