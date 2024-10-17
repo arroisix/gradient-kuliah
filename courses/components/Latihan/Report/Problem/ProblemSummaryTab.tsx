@@ -7,6 +7,8 @@ import { FaRegCirclePlay } from 'react-icons/fa6';
 import { BiSolidStar } from 'react-icons/bi';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useTracker } from '../../../../../tracker/tracker';
 
 interface ProblemSummaryTabProps {
     data: ProblemReport;
@@ -88,15 +90,29 @@ const ProblemSummaryTab: React.FC<ProblemSummaryTabProps> = ({ data }) => {
 const RecommendationCard: React.FC<{ material: RecommendedMaterial }> = ({
     material
 }) => {
+    const tracker = useTracker();
+    const router = useRouter();
+    const { slug, exerciseProgressId, problemId } = router.query;
     const isBook = material.type === 'Book';
     const href = getHref(material);
+
+    const handleClick = () => {
+        tracker?.genericTrack('Click Material Recomendation Card', {
+            EXERCISE_SLUG: slug as string,
+            PROGRESS_ID: exerciseProgressId as string,
+            PROBLEM_ID: problemId as string,
+            CARD_LINK: getHref(material),
+            CARD_TYPE: material.type,
+        });
+    };
 
     return (
         <Link href={href}>
             <a
                 className={`flex rounded-lg overflow-hidden h-40 ${
                     isBook ? 'bg-[#222222]' : 'bg-[#121212]'
-                } border border-[#666666]`}>
+                } border border-[#666666]`}
+                onClick={handleClick}>
                 {isBook ? (
                     <BookCard material={material} />
                 ) : (

@@ -1,6 +1,8 @@
 import React from 'react';
 import Skeleton from 'commons/components/elements/Skeleton';
 import LatihanCard from '../Entrypoint/LatihanCard';
+import { useTracker } from '../../../../tracker/tracker';
+import { useRouter } from 'next/router';
 
 interface AstronotesExercise {
     id: string;
@@ -23,6 +25,18 @@ const AstronotesExercisesSection: React.FC<AstronotesExercisesSectionProps> = ({
     exercises,
     isLoading
 }) => {
+    const tracker = useTracker();
+    const router = useRouter();
+    const { slug: astronotesSlug } = router.query;
+
+    const handleExerciseClick = (exercise: AstronotesExercise) => {
+        tracker?.genericTrack('Click Exercise from Astronotes', {
+            EXERCISE_SLUG: exercise.slug,
+            ASTRONOTES_SLUG: astronotesSlug as string,
+            PAGE: router.asPath
+        });
+    };
+
     if (!isLoading && exercises.length === 0) return null;
 
     return (
@@ -43,6 +57,7 @@ const AstronotesExercisesSection: React.FC<AstronotesExercisesSectionProps> = ({
                             key={exercise.id}
                             exercise={exercise}
                             cardType="allExercises"
+                            onClick={() => handleExerciseClick(exercise)}
                         />
                     ))
                 )}

@@ -24,16 +24,16 @@ const InteractiveExerciseItem = ({
 
     const track = (): void => {
         if (is_subscribed || value.is_free) {
-            tracker?.genericTrack('Click Exercise Item', {
-                'Course Slug': id,
-                'Exercise Title': value.title,
-                'Chapter ID': chapter_id
+            tracker?.genericTrack('Click Exercise from Course Subchapter', {
+                EXERCISE_SLUG: value?.exercise_slug,
+                COURSE_SLUG: id as string,
+                SUBCHAPTER_SLUG: value.id
             });
         } else {
             tracker?.genericTrack('Click Locked Exercise Item', {
-                'Course Slug': id,
-                'Exercise Title': value.title,
-                'Chapter ID': chapter_id
+                EXERCISE_SLUG: value?.exercise_slug,
+                COURSE_SLUG: id as string,
+                SUBCHAPTER_SLUG: value.id
             });
         }
     };

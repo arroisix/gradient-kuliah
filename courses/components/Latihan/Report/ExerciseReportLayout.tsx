@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import ScoreCard from './ScoreCard';
 import ExerciseHeader from '../ExerciseHeader';
@@ -9,6 +9,7 @@ import {
 } from '../../../redux/api/exercisesApi';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useTracker } from 'tracker/tracker';
 
 const SummaryTab = dynamic(() => import('./SummaryTab'), { ssr: false });
 const ReviewTab = dynamic(() => import('./ReviewTab'), { ssr: false });
@@ -25,10 +26,26 @@ const ExerciseReportLayout: React.FC<ExerciseReportLayoutProps> = ({
     slug,
     exerciseProgressId
 }) => {
+    const tracker = useTracker();
     const [activeTab, setActiveTab] = useState<Tab>('summary');
     const [currentExerciseProgressId, setCurrentExerciseProgressId] =
         useState(exerciseProgressId);
     const router = useRouter();
+
+    useEffect(() => {
+        if (activeTab === 'review') {
+            tracker?.genericTrack('Visit Latihan Review Page', {
+                EXERCISE_SLUG: slug,
+                PROGRESS_ID: exerciseProgressId
+            });
+        }
+        if (activeTab === 'history') {
+            tracker?.genericTrack('Visit Latihan History Page', {
+                EXERCISE_SLUG: slug,
+                PROGRESS_ID: exerciseProgressId
+            });
+        }
+    }, [activeTab, slug, exerciseProgressId, tracker]);
 
     const {
         data: summaryData,
@@ -166,14 +183,26 @@ const ExerciseReportLayout: React.FC<ExerciseReportLayoutProps> = ({
             <div className="fixed bottom-0 left-0 w-full p-4 bg-black flex justify-center">
                 <div className="w-full max-w-[640px] flex flex-col sm:flex-row justify-between gap-2">
                     <button
-                        onClick={() => router.back()}
+                        onClick={() => {
+                            tracker?.genericTrack('Click Finish Button', {
+                                EXERCISE_SLUG: slug,
+                                PROGRESS_ID: exerciseProgressId
+                            });
+                            router.back();
+                        }}
                         className="w-full py-3 rounded-full font-semibold bg-[#4B5563] text-white hover:bg-[#374151] transition-colors text-center">
                         Selesai
                     </button>
                     <Link
                         href={`/latihan/${slug}`}
                         className="w-full py-3 rounded-full font-semibold bg-[#7F56D9] text-white hover:bg-[#6941C6] transition-colors text-center"
-                        passHref>
+                        passHref
+                        onClick={() => {
+                            tracker?.genericTrack('Click Try Again Button', {
+                                EXERCISE_SLUG: slug,
+                                PROGRESS_ID: exerciseProgressId
+                            });
+                        }}>
                         <a>Coba Lagi</a>
                     </Link>
                 </div>

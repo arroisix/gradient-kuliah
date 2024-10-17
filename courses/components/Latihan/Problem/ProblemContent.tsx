@@ -12,6 +12,7 @@ import OpenEndedProblem from './OpenEndedProblem';
 import Skeleton from 'commons/components/elements/Skeleton';
 import TiptapViewer from '../../Textbook/TiptapViewer';
 import ExerciseFinishModal from '../ExerciseFinishModal';
+import { useTracker } from 'tracker/tracker';
 
 interface ProblemContentProps {
     problemId: string;
@@ -26,6 +27,8 @@ interface ProblemContentProps {
 
 const ProblemContent: React.FC<ProblemContentProps> = React.memo(
     ({ slug, problemId, sectionId, showSolution, onSubmit }) => {
+        const tracker = useTracker();
+
         const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
         const [openEndedAnswer, setOpenEndedAnswer] = useState('');
         const [isSubmitting, setIsSubmitting] = useState(false);
@@ -131,8 +134,17 @@ const ProblemContent: React.FC<ProblemContentProps> = React.memo(
                 if (isSubmitted) {
                     setIsAnswerChanged(true);
                 }
+                tracker?.genericTrack('Click Question Answer Choice', {
+                    EXERCISE_SLUG: slug,
+                    SECTION_SLUG: sectionId,
+                    PROBLEM_ID: problemId,
+                    ANSWER_ID: Array.isArray(newAnswer)
+                        ? newAnswer.join(',')
+                        : newAnswer,
+                    PROBLEM_TYPE: problem?.question.type
+                });
             },
-            [isSubmitted, showSolution, problem]
+            [isSubmitted, showSolution, problem, tracker]
         );
 
         const handleSubmit = useCallback(async () => {
@@ -155,6 +167,16 @@ const ProblemContent: React.FC<ProblemContentProps> = React.memo(
             setIsSubmitted(true);
             setIsAnswerChanged(false);
             onSubmit();
+
+            tracker?.genericTrack('Submit User Answer', {
+                EXERCISE_SLUG: slug,
+                SECTION_SLUG: sectionId,
+                PROBLEM_ID: problemId,
+                ANSWER_IDS: Array.isArray(selectedAnswers)
+                    ? selectedAnswers.join(',')
+                    : openEndedAnswer,
+                PROBLEM_TYPE: problem?.question.type
+            });
 
             try {
                 await updateProblemProgress({
@@ -180,16 +202,40 @@ const ProblemContent: React.FC<ProblemContentProps> = React.memo(
             slug,
             exerciseProgress,
             updateProblemProgress,
-            onSubmit
+            onSubmit,
+            tracker
         ]);
 
+        const handleNextQuestion = () => {
+            tracker?.genericTrack('Click Selanjutnya Button', {
+                EXERCISE_SLUG: slug,
+                SECTION_SLUG: sectionId,
+                PROBLEM_ID: problemId
+            });
+        };
+
+        const toggleExplanation = () => {
+            const eventName = showExplanation
+                ? 'Click Lihat Soal'
+                : 'Click Lihat Pembahasan';
+            tracker?.genericTrack(eventName, {
+                EXERCISE_SLUG: slug,
+                SECTION_SLUG: sectionId,
+                PROBLEM_ID: problemId
+            });
+            setShowExplanation(!showExplanation);
+        };
+
         const handleFinishExercise = useCallback(async () => {
+            tracker?.genericTrack('Click Finish Latihan', {
+                EXERCISE_SLUG: slug
+            });
             setIsLoadingFinish(true);
 
             await refetchProblemProgress();
             setIsFinishModalOpen(true);
             setIsLoadingFinish(false);
-        }, []);
+        }, [slug, tracker]);
 
         const handleConfirmFinish = useCallback(() => {
             setIsFinishModalOpen(false);
@@ -303,9 +349,7 @@ const ProblemContent: React.FC<ProblemContentProps> = React.memo(
                     {isSubmitted && showSolution === 'AFTER_PROBLEM' && (
                         <button
                             className="w-full py-3 rounded-full font-semibold bg-[#4B5563] text-white hover:bg-[#374151] transition-colors"
-                            onClick={() =>
-                                setShowExplanation(!showExplanation)
-                            }>
+                            onClick={toggleExplanation}>
                             {showExplanation
                                 ? 'Lihat Soal'
                                 : 'Lihat Pembahasan'}
@@ -321,7 +365,8 @@ const ProblemContent: React.FC<ProblemContentProps> = React.memo(
                                         ? `/latihan/${slug}/${sectionId}/${problem.next_navigation.id}`
                                         : `/latihan/${slug}/${problem.next_navigation.id}`
                                 }
-                                passHref>
+                                passHref
+                                onClick={handleNextQuestion}>
                                 <button className="w-full py-3 rounded-full font-semibold bg-[#7F56D9] text-white hover:bg-[#6941C6] transition-colors">
                                     Selanjutnya
                                 </button>
