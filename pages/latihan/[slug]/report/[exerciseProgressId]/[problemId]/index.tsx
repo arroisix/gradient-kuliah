@@ -1,7 +1,8 @@
 import React from 'react';
 import ProblemDetailPage from 'courses/components/Latihan/Report/Problem/ProblemDetailPage';
+import { NextPage } from 'next';
 
-const ProblemDetailPageWrapper: React.FC = () => {
+const ProblemDetailPageWrapper: NextPage = () => {
     return <ProblemDetailPage />;
 };
 
