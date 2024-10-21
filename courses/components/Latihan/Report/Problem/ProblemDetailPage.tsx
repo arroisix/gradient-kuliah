@@ -55,7 +55,7 @@ const ProblemReportPage: React.FC = () => {
     const latestAttempt =
         problemReport.problems[problemReport.problems.length - 1];
 
-    const handleProblemChange = (index: number) => {
+    const handleProblemChange = (index: number): void => {
         const newProblemId = exerciseReport.problems[index].id;
         tracker?.genericTrack('Click Other Question Detail', {
             EXERCISE_SLUG: slug as string,
@@ -67,7 +67,7 @@ const ProblemReportPage: React.FC = () => {
         );
     };
 
-    const handleTabChange = (newTab: Tab) => {
+    const handleTabChange = (newTab: Tab): void => {
         tracker?.genericTrack(
             `Click ${
                 newTab === 'summary' ? 'Summary' : 'History'
@@ -81,7 +81,7 @@ const ProblemReportPage: React.FC = () => {
         setActiveTab(newTab);
     };
 
-    const handleBackToReport = () => {
+    const handleBackToReport = (): void => {
         tracker?.genericTrack('Click Back to Report Button', {
             EXERCISE_SLUG: slug as string,
             PROGRESS_ID: exerciseProgressId as string,
