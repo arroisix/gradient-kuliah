@@ -102,13 +102,13 @@ const RecommendationCard: React.FC<{ material: RecommendedMaterial }> = ({
             PROGRESS_ID: exerciseProgressId as string,
             PROBLEM_ID: problemId as string,
             CARD_LINK: getHref(material),
-            CARD_TYPE: material.type,
+            CARD_TYPE: material.type
         });
     };
 
     return (
         <Link href={href}>
-            <a
+            <button
                 className={`flex rounded-lg overflow-hidden h-40 ${
                     isBook ? 'bg-[#222222]' : 'bg-[#121212]'
                 } border border-[#666666]`}
@@ -118,7 +118,7 @@ const RecommendationCard: React.FC<{ material: RecommendedMaterial }> = ({
                 ) : (
                     <CourseOrVideoCard material={material} />
                 )}
-            </a>
+            </button>
         </Link>
     );
 };

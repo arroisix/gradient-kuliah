@@ -10,8 +10,7 @@ import { useSelector } from 'react-redux';
 import { useTracker } from 'tracker/tracker';
 
 const InteractiveExerciseItem = ({
-    value,
-    chapter_id
+    value
 }: {
     value: SubChapter;
     chapter_id: string;
