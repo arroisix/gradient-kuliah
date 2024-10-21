@@ -7,7 +7,7 @@ import { TbCircleCheckFilled } from 'react-icons/tb';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
-import { useTracker } from '../../../../tracker/tracker';
+import { useTracker } from 'tracker/tracker';
 
 interface LatihanCardProps {
     exercise: ExerciseItem;

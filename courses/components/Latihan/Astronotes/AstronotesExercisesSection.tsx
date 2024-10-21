@@ -1,7 +1,7 @@
 import React from 'react';
 import Skeleton from 'commons/components/elements/Skeleton';
 import LatihanCard from '../Entrypoint/LatihanCard';
-import { useTracker } from '../../../../tracker/tracker';
+import { useTracker } from 'tracker/tracker';
 import { useRouter } from 'next/router';
 
 interface AstronotesExercise {

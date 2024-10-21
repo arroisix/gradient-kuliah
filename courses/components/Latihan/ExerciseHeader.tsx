@@ -87,24 +87,24 @@ const ExerciseHeader: React.FC<ExerciseHeaderProps> = ({
                             </span>
                         </button>
                         <Link href={prevLink || ''} replace passHref>
-                            <a
+                            <button
                                 className={cn(
                                     'bg-[#333540] text-graphite-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full',
                                     !prevLink && 'opacity-50 cursor-not-allowed'
                                 )}
                                 onClick={handlePrevClick}>
                                 <IoChevronBackOutline size={20} />
-                            </a>
+                            </button>
                         </Link>
                         <Link href={nextLink || ''} replace passHref>
-                            <a
+                            <button
                                 className={cn(
                                     'bg-[#333540] text-graphite-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full',
                                     !nextLink && 'opacity-50 cursor-not-allowed'
                                 )}
                                 onClick={handleNextClick}>
                                 <IoChevronForwardOutline size={20} />
-                            </a>
+                            </button>
                         </Link>
                     </div>
                 )}
