@@ -21,6 +21,13 @@ export interface Exercise {
         problem_count: number;
         first_problem_id: string;
     }>;
+    is_already_completed: boolean;
+    latest_progress: ExerciseProgress & {
+        next_problem_id: string;
+        next_problem_title: string;
+        next_section_id: string;
+        next_section_title: string;
+    };
 }
 
 interface ExerciseItem {
@@ -110,6 +117,8 @@ export interface ExerciseProgress {
     completed_at: string | null;
     score: number;
     created_at: string;
+    answered_questions: number;
+    total_questions: number;
 }
 
 export interface ExerciseProblemProgress {

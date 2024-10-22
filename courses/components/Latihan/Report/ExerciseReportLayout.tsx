@@ -184,19 +184,20 @@ const ExerciseReportLayout: React.FC<ExerciseReportLayoutProps> = ({
                 <div className="w-full max-w-[640px] flex flex-col sm:flex-row justify-between gap-2">
                     <button
                         onClick={() => {
+                            router.back();
                             tracker?.genericTrack('Click Finish Button', {
                                 EXERCISE_SLUG: slug,
                                 PROGRESS_ID: exerciseProgressId
                             });
-                            router.back();
                         }}
                         className="w-full py-3 rounded-full font-semibold bg-[#4B5563] text-white hover:bg-[#374151] transition-colors text-center">
                         Selesai
                     </button>
                     <Link
-                        href={`/latihan/${slug}`}
+                        href={`/latihan/${slug}?reattempt=1`}
                         className="w-full py-3 rounded-full font-semibold bg-[#7F56D9] text-white hover:bg-[#6941C6] transition-colors text-center"
                         passHref
+                        replace
                         onClick={() => {
                             tracker?.genericTrack('Click Try Again Button', {
                                 EXERCISE_SLUG: slug,

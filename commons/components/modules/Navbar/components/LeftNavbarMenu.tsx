@@ -38,7 +38,13 @@ const LeftNavbarMenu = ({
                 .is_community_config_enabled as unknown as boolean
         },
         { href: '/kelas', label: 'Kelas' },
-        { href: '/perpustakaan', label: 'Perpustakaan' }
+        { href: '/perpustakaan', label: 'Perpustakaan' },
+        {
+            href: '/latihan',
+            label: 'Latihan',
+            enabled: configData?.configs
+                .is_exercise_config_enabled as unknown as boolean
+        }
     ];
 
     return !isMobileBreakpoints && isShowNavbarMenu() ? (

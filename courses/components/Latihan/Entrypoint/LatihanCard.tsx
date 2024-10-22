@@ -46,7 +46,11 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
     };
 
     const renderProgresBadge = (): JSX.Element => {
-        if (exercise.status === 'IN_PROGRESS' && exercise.progress) {
+        if (
+            exercise.status === 'IN_PROGRESS' &&
+            exercise.progress !== null &&
+            exercise.progress !== undefined
+        ) {
             return (
                 <p
                     className={cn(
