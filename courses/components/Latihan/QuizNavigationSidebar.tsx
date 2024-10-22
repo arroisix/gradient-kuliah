@@ -3,6 +3,7 @@ import { IoClose } from 'react-icons/io5';
 import { useRouter } from 'next/router';
 import { useGetProblemSetDetailQuery } from '../../redux/api/exercisesApi';
 import Link from 'next/link';
+import { useTracker } from '../../../tracker/tracker';
 
 interface QuizNavigationSidebarProps {
     onClose: () => void;
@@ -16,6 +17,7 @@ const QuizNavigationSidebar: React.FC<QuizNavigationSidebarProps> = ({
     const router = useRouter();
     const { slug, sectionId: problemSetId, problemId } = router.query;
     const [isRendered, setIsRendered] = useState(false);
+    const tracker = useTracker();
 
     const {
         data: problemSetData,
@@ -25,6 +27,14 @@ const QuizNavigationSidebar: React.FC<QuizNavigationSidebarProps> = ({
         skip: !problemSetId || !isOpen,
         refetchOnMountOrArgChange: true
     });
+
+    const handleQuestionClick = (problemId: string) => {
+        tracker?.genericTrack('Click Question from Quiz Navigation', {
+            EXERCISE_SLUG: slug as string,
+            SECTION_SLUG: problemSetId as string,
+            PROBLEM_ID: problemId
+        });
+    };
 
     useEffect(() => {
         if (isOpen && problemSetId) {
@@ -73,7 +83,8 @@ const QuizNavigationSidebar: React.FC<QuizNavigationSidebarProps> = ({
                             key={problem.id}
                             href={`/latihan/${slug}/${problemSetId}/${problem.id}`}
                             replace
-                            passHref>
+                            passHref
+                            onClick={() => handleQuestionClick(problem.id)}>
                             <a
                                 className={`w-full aspect-square rounded-md flex items-center justify-center text-sm
                                     ${

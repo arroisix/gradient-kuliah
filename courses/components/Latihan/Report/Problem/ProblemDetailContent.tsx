@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { ProblemReport } from '../../../../types/exercises';
 import { IoMdCheckmark as Check, IoMdClose as X } from 'react-icons/io';
 import TiptapViewer from '../../../Textbook/TiptapViewer';
+import { useTracker } from 'tracker/tracker';
+import { router } from 'next/client';
 
 interface ProblemDetailContentProps {
     problem: ProblemReport & {
@@ -12,12 +14,24 @@ interface ProblemDetailContentProps {
 const ProblemDetailContent: React.FC<ProblemDetailContentProps> = ({
     problem
 }) => {
+    const tracker = useTracker();
     const [showExplanation, setShowExplanation] = useState(false);
     const isTextBased =
         problem.question.type !== 'MULTIPLE_CHOICE' &&
         problem.question.type !== 'MULTIPLE_ANSWER';
+    const { slug, exerciseProgressId } = router.query;
 
     const toggleExplanation = (): void => {
+        tracker?.genericTrack(
+            showExplanation
+                ? 'Click Lihat Soal on Problem Detail'
+                : 'Click Lihat Pembahasan on Problem Detail',
+            {
+                EXERCISE_SLUG: slug as string,
+                PROGRESS_ID: exerciseProgressId as string,
+                PROBLEM_ID: problem.id
+            }
+        );
         setShowExplanation(!showExplanation);
     };
 

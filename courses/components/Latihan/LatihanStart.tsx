@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { cn } from 'commons/utils';
 import { Exercise } from '../../types/exercises';
 import { GraduationCap, List, Clock } from 'lucide-react';
+import { useTracker } from '../../../tracker/tracker';
 
 interface LatihanStartProps {
     exercise: Exercise;
@@ -10,6 +11,13 @@ interface LatihanStartProps {
 
 const LatihanStart: React.FC<LatihanStartProps> = ({ exercise }) => {
     const firstSectionId = exercise.problem_sets[0]?.id;
+    const tracker = useTracker();
+
+    const handleStartClick = () => {
+        tracker?.genericTrack('Click Start Latihan Button', {
+            EXERCISE_SLUG: exercise.slug as string
+        });
+    };
 
     const formatDuration = (duration: number): string => {
         if (duration < 60) {
@@ -52,6 +60,7 @@ const LatihanStart: React.FC<LatihanStartProps> = ({ exercise }) => {
                 <Link
                     replace
                     href={`/latihan/${exercise.slug}/${firstSectionId}`}
+                    onClick={handleStartClick}
                     className={cn(
                         'w-full bg-[#7F56D9] text-white py-3 rounded-full font-semibold',
                         'hover:bg-[#6941C6] transition-colors',

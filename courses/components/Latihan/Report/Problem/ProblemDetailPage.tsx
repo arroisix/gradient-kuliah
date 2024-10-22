@@ -9,10 +9,12 @@ import {
 } from '../../../../redux/api/exercisesApi';
 import ExerciseHeader from '../../ExerciseHeader';
 import Link from 'next/link';
+import { useTracker } from 'tracker/tracker';
 
 type Tab = 'summary' | 'history';
 
 const ProblemReportPage: React.FC = () => {
+    const tracker = useTracker();
     const [activeTab, setActiveTab] = useState<Tab>('summary');
     const router = useRouter();
     const { slug, exerciseProgressId, problemId } = router.query;
@@ -53,11 +55,38 @@ const ProblemReportPage: React.FC = () => {
     const latestAttempt =
         problemReport.problems[problemReport.problems.length - 1];
 
-    const handleProblemChange = (index: number) => {
+    const handleProblemChange = (index: number): void => {
         const newProblemId = exerciseReport.problems[index].id;
+        tracker?.genericTrack('Click Other Question Detail', {
+            EXERCISE_SLUG: slug as string,
+            PROGRESS_ID: exerciseProgressId as string,
+            PROBLEM_ID: newProblemId
+        });
         router.replace(
             `/latihan/${slug}/report/${exerciseProgressId}/${newProblemId}`
         );
+    };
+
+    const handleTabChange = (newTab: Tab): void => {
+        tracker?.genericTrack(
+            `Click ${
+                newTab === 'summary' ? 'Summary' : 'History'
+            } Tab on Problem Detail`,
+            {
+                EXERCISE_SLUG: slug as string,
+                PROGRESS_ID: exerciseProgressId as string,
+                PROBLEM_ID: problemId as string
+            }
+        );
+        setActiveTab(newTab);
+    };
+
+    const handleBackToReport = (): void => {
+        tracker?.genericTrack('Click Back to Report Button', {
+            EXERCISE_SLUG: slug as string,
+            PROGRESS_ID: exerciseProgressId as string,
+            PROBLEM_ID: problemId as string
+        });
     };
 
     return (
@@ -97,7 +126,7 @@ const ProblemReportPage: React.FC = () => {
                                                 : 'text-gray-400 border-transparent'
                                         }`}
                                         onClick={() =>
-                                            setActiveTab(tab as Tab)
+                                            handleTabChange(tab as Tab)
                                         }>
                                         {tab === 'history'
                                             ? 'Riwayat'
@@ -125,7 +154,9 @@ const ProblemReportPage: React.FC = () => {
                         href={`/latihan/${slug}/report/${exerciseProgressId}`}
                         passHref>
                         <a className="w-full">
-                            <button className="w-full py-3 rounded-full font-semibold bg-[#7F56D9] text-white hover:bg-[#6941C6] transition-colors">
+                            <button
+                                className="w-full py-3 rounded-full font-semibold bg-[#7F56D9] text-white hover:bg-[#6941C6] transition-colors"
+                                onClick={handleBackToReport}>
                                 Balik ke Laporan
                             </button>
                         </a>

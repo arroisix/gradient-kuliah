@@ -6,6 +6,7 @@ import { REVIEW_FILTER_OPTIONS } from '../constants';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import TiptapViewer from '../../Textbook/TiptapViewer';
+import { useTracker } from 'tracker/tracker';
 
 const ReviewTab = ({ problems }: { problems: any[] }) => {
     const router = useRouter();
@@ -59,8 +60,17 @@ const ProblemCard = ({ problem, index }: { problem: any; index: number }) => {
     const isTextBased =
         problem.question.type !== 'MULTIPLE_CHOICE' &&
         problem.question.type !== 'MULTIPLE_ANSWER';
+    const tracker = useTracker();
     const router = useRouter();
     const { slug, exerciseProgressId } = router.query;
+
+    const handleClickDetail = () => {
+        tracker?.genericTrack('Click Problem Detail', {
+            EXERCISE_SLUG: slug as string,
+            PROGRESS_ID: exerciseProgressId as string,
+            PROBLEM_ID: problem.id
+        });
+    };
 
     return (
         <div
@@ -126,7 +136,9 @@ const ProblemCard = ({ problem, index }: { problem: any; index: number }) => {
             <Link
                 href={`/latihan/${slug}/report/${exerciseProgressId}/${problem.id}`}
                 passHref>
-                <button className="bg-[#444444] hover:bg-[#666666] text-white text-sm py-2 px-4 rounded-full w-full">
+                <button
+                    className="bg-[#444444] hover:bg-[#666666] text-white text-sm py-2 px-4 rounded-full w-full"
+                    onClick={handleClickDetail}>
                     Selengkapnya
                 </button>
             </Link>

@@ -7,20 +7,31 @@ import { TbCircleCheckFilled } from 'react-icons/tb';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { useTracker } from 'tracker/tracker';
 
 interface LatihanCardProps {
     exercise: ExerciseItem;
     className?: string;
     cardType: 'myExercises' | 'allExercises';
+    onClick?: () => void;
 }
 
 const LatihanCard: React.FC<LatihanCardProps> = ({
     exercise,
     className,
-    cardType
+    cardType,
+    onClick
 }) => {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { is_subscribed } = useCourseSubscription();
+    const tracker = useTracker();
+
+    const handleClick = () => {
+        tracker?.genericTrack('Click Latihan Card', {
+            EXERCISE_SLUG: exercise.slug
+        });
+        if (onClick) onClick();
+    };
 
     const decideURLLink = (): string => {
         if (isAuthenticated) {
@@ -74,6 +85,7 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
     return (
         <Link
             href={decideURLLink()}
+            onClick={handleClick}
             className={cn(
                 'block h-full w-full',
                 'bg-graphite-800 rounded-2xl p-5',

@@ -3,6 +3,7 @@ import Skeleton from 'commons/components/elements/Skeleton';
 import Link from 'next/link';
 import LatihanLayout from '../../../../courses/components/Latihan/LatihanLayout';
 import { useGetExerciseDetailQuery } from '../../../redux/api/exercisesApi';
+import { useTracker } from 'tracker/tracker';
 
 interface SectionPageContentProps {
     slug: string;
@@ -13,10 +14,18 @@ const SectionPageContent: React.FC<SectionPageContentProps> = ({
     slug,
     sectionId
 }) => {
+    const tracker = useTracker();
     const { data: exerciseDetail, isLoading } = useGetExerciseDetailQuery(
         { exercise_slug: slug },
         { skip: !slug }
     );
+
+    const handleStartSection = () => {
+        tracker?.genericTrack('Click Start Latihan Section Button', {
+            EXERCISE_SLUG: slug,
+            SECTION_SLUG: sectionId
+        });
+    };
 
     if (isLoading) {
         return (
@@ -67,7 +76,8 @@ const SectionPageContent: React.FC<SectionPageContentProps> = ({
                     <Link
                         replace
                         className="w-full"
-                        href={`/latihan/${slug}/${sectionId}/${firstProblemId}`}>
+                        href={`/latihan/${slug}/${sectionId}/${firstProblemId}`}
+                        onClick={handleStartSection}>
                         <button className="w-full bg-[#7F56D9] text-white py-3 rounded-full font-semibold hover:bg-[#6941C6] transition-colors">
                             Mulai Latihan
                         </button>

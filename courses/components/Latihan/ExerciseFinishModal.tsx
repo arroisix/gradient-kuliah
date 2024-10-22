@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useUpdateExerciseProgressMutation } from '../../redux/api/exercisesApi';
+import { useTracker } from 'tracker/tracker';
 
 interface ExerciseFinishModalProps {
     isOpen: boolean;
@@ -20,6 +21,7 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
     slug,
     exerciseProgressId
 }) => {
+    const tracker = useTracker();
     const router = useRouter();
     const [updateExerciseProgress] = useUpdateExerciseProgressMutation();
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -27,6 +29,14 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
     if (!isOpen) return null;
 
     const handleSubmit = async () => {
+        tracker?.genericTrack(
+            allProblemsAnswered
+                ? 'Click Keep Finish Exercise'
+                : 'Click Skip Empty Answer and Keep Finish Exercise',
+            {
+                EXERCISE_SLUG: slug
+            }
+        );
         setIsSubmitting(true);
         try {
             await updateExerciseProgress({
@@ -43,6 +53,18 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
         } finally {
             setIsSubmitting(false);
         }
+    };
+
+    const handleCancel = () => {
+        tracker?.genericTrack(
+            allProblemsAnswered
+                ? 'Click Cancel Button on Confirmation Modal'
+                : 'Click Cancel Button on Confirmation Modal when Empty Answer',
+            {
+                EXERCISE_SLUG: slug
+            }
+        );
+        onClose();
     };
 
     return (
@@ -69,7 +91,7 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
                                 )}
                             </button>
                             <button
-                                onClick={onClose}
+                                onClick={handleCancel}
                                 disabled={isSubmitting}
                                 className="bg-[#333540] font-semibold text-white py-2 px-4 rounded-full hover:bg-opacity-90 transition-colors">
                                 Batal

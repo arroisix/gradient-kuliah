@@ -3,6 +3,8 @@ import ExerciseHeader from './ExerciseHeader';
 import QuizNavigationSidebar from './QuizNavigationSidebar';
 import ExerciseTimer from './ExerciseTimer';
 import { cn } from 'commons/utils';
+import { useTracker } from 'tracker/tracker';
+import { useRouter } from 'next/router';
 
 interface LatihanLayoutProps {
     children: React.ReactNode;
@@ -37,9 +39,20 @@ const LatihanLayout: React.FC<LatihanLayoutProps> = ({
     onTimeExpired,
     isCurrentProblemSubmitted = false
 }) => {
+    const tracker = useTracker();
+    const router = useRouter();
     const [showSidebar, setShowSidebar] = useState(false);
 
-    const toggleSidebar = (): void => setShowSidebar(!showSidebar);
+    const toggleSidebar = (): void => {
+        setShowSidebar(!showSidebar);
+        tracker?.genericTrack(
+            showSidebar ? 'Close Quiz Navigation' : 'Open Quiz Navigation',
+            {
+                EXERCISE_SLUG: router.query.slug as string,
+                SECTION_SLUG: router.query.sectionId as string
+            }
+        );
+    };
 
     const canNavigate = timeConstraint !== 'PER_PROBLEM';
 

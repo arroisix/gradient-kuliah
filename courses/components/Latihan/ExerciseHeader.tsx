@@ -5,6 +5,7 @@ import { IoChevronBackOutline, IoChevronForwardOutline } from 'react-icons/io5';
 import { useRouter } from 'next/router';
 import ExerciseCloseModal from './ExerciseCloseModal';
 import { cn } from 'commons/utils';
+import { useTracker } from 'tracker/tracker';
 
 interface ExerciseHeaderProps {
     title?: string;
@@ -21,6 +22,7 @@ const ExerciseHeader: React.FC<ExerciseHeaderProps> = ({
     nextLink,
     onNavigationClick
 }) => {
+    const tracker = useTracker();
     const router = useRouter();
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -28,6 +30,10 @@ const ExerciseHeader: React.FC<ExerciseHeaderProps> = ({
 
     const handleCloseClick = (e: React.MouseEvent): void => {
         e.preventDefault();
+        tracker?.genericTrack('Click Close Latihan', {
+            EXERCISE_SLUG: router.query.slug as string,
+            CURRENT_URL_PATH: router.asPath
+        });
         if (isReportPage) {
             router.back();
         } else {
@@ -38,6 +44,20 @@ const ExerciseHeader: React.FC<ExerciseHeaderProps> = ({
     const handleConfirmClose = (): void => {
         setIsModalOpen(false);
         router.back();
+    };
+
+    const handleNextClick = () => {
+        tracker?.genericTrack('Click Next Question Arrow', {
+            EXERCISE_SLUG: router.query.slug as string,
+            SECTION_SLUG: router.query.sectionId as string
+        });
+    };
+
+    const handlePrevClick = () => {
+        tracker?.genericTrack('Click Previous Question Arrow', {
+            EXERCISE_SLUG: router.query.slug as string,
+            SECTION_SLUG: router.query.sectionId as string
+        });
     };
 
     return (
@@ -67,22 +87,24 @@ const ExerciseHeader: React.FC<ExerciseHeaderProps> = ({
                             </span>
                         </button>
                         <Link href={prevLink || ''} replace passHref>
-                            <a
+                            <button
                                 className={cn(
                                     'bg-[#333540] text-graphite-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full',
                                     !prevLink && 'opacity-50 cursor-not-allowed'
-                                )}>
+                                )}
+                                onClick={handlePrevClick}>
                                 <IoChevronBackOutline size={20} />
-                            </a>
+                            </button>
                         </Link>
                         <Link href={nextLink || ''} replace passHref>
-                            <a
+                            <button
                                 className={cn(
                                     'bg-[#333540] text-graphite-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full',
                                     !nextLink && 'opacity-50 cursor-not-allowed'
-                                )}>
+                                )}
+                                onClick={handleNextClick}>
                                 <IoChevronForwardOutline size={20} />
-                            </a>
+                            </button>
                         </Link>
                     </div>
                 )}

@@ -1,4 +1,6 @@
 import React from 'react';
+import { useTracker } from '../../../../tracker/tracker';
+import { useRouter } from 'next/router';
 
 interface HistoryEntry {
     id: string;
@@ -19,6 +21,10 @@ const RiwayatTab: React.FC<RiwayatTabProps> = ({
     currentExerciseProgressId,
     onSelectExerciseProgress
 }) => {
+    const tracker = useTracker();
+    const router = useRouter();
+    const { slug } = router.query;
+
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
         const options: Intl.DateTimeFormatOptions = {
@@ -32,6 +38,18 @@ const RiwayatTab: React.FC<RiwayatTabProps> = ({
     };
 
     const reversedHistory = [...history].reverse();
+
+    const handleSelectExerciseProgress = (progressId: string) => {
+        tracker?.genericTrack(
+            'Click See Other Report Detail from History Tab',
+            {
+                EXERCISE_SLUG: slug as string,
+                CURRENT_PROGRESS_ID: currentExerciseProgressId,
+                TARGET_PROGRESS_ID: progressId
+            }
+        );
+        onSelectExerciseProgress(progressId);
+    };
 
     return (
         <div className="w-full h-full flex flex-col space-y-4">
@@ -80,7 +98,9 @@ const RiwayatTab: React.FC<RiwayatTabProps> = ({
                     {entry.id !== currentExerciseProgressId && (
                         <button
                             className="w-full py-3 rounded-full font-semibold bg-[#444444] text-white hover:bg-[#33373E] transition-colors"
-                            onClick={() => onSelectExerciseProgress(entry.id)}>
+                            onClick={() =>
+                                handleSelectExerciseProgress(entry.id)
+                            }>
                             Lihat Detail
                         </button>
                     )}

@@ -1,8 +1,16 @@
 import LearnLayout from 'commons/learnLayout';
 import LatihanEntrypoint from 'courses/containers/learn/latihan/entrypoint';
 import { GetStaticProps } from 'next';
+import { useTracker } from '../../tracker/tracker';
+import { useEffect } from 'react';
 
 const LatihanPage = (): JSX.Element => {
+    const tracker = useTracker();
+
+    useEffect(() => {
+        tracker?.genericTrack('Visit Latihan Landing Page');
+    }, [tracker]);
+
     return (
         <LearnLayout showSidebar fullHeightSidebar>
             <LatihanEntrypoint />
