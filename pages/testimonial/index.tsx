@@ -8,6 +8,8 @@ import Paginator from '../../commons/components/elements/Paginator';
 import testimonialData from '../../commons/data/testimonials.json';
 import { Testimonial } from '../../commons/types/testimonial';
 
+const PAGE_SIZE = 3;
+
 interface TestimonialPageProps {
     testimonials: Testimonial[];
 }
@@ -16,13 +18,13 @@ const TestimonialPage = ({
     testimonials
 }: TestimonialPageProps): JSX.Element => {
     const router = useRouter();
-    const currentPage = parseInt((router.query.page as string) ?? '1');
-    const itemsPerPage = 3;
+    const { page } = router.query as { page: string };
+    const currentPage = parseInt(page ?? '1');
 
-    const start = (currentPage - 1) * itemsPerPage;
-    const end = start + itemsPerPage;
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const end = start + PAGE_SIZE;
     const currentTestimonials = testimonials.slice(start, end);
-    const totalPages = Math.ceil(testimonials.length / itemsPerPage);
+    const totalPages = Math.ceil(testimonials.length / PAGE_SIZE);
 
     return (
         <Layout isFullBlackBackground>

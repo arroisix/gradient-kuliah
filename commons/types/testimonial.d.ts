@@ -1,9 +1,9 @@
-export interface University {
+export interface TestimonialUniversity {
     name: string;
     major: string;
 }
 
-export interface Image {
+export interface TestimonialImage {
     url: string;
     alt: string;
 }
@@ -11,7 +11,7 @@ export interface Image {
 export interface Testimonial {
     id: string;
     name: string;
-    university: University;
+    university: TestimonialUniversity;
     text: string;
-    image: Image;
+    image: TestimonialImage;
 }
