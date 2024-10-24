@@ -1,3 +1,4 @@
+import { GetStaticProps } from 'next';
 import React from 'react';
 import Layout from 'commons/layout';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
@@ -7,12 +8,17 @@ import Paginator from '../../commons/components/elements/Paginator';
 import testimonialData from '../../commons/data/testimonials.json';
 import { Testimonial } from '../../commons/types/testimonial';
 
-const TestimonialPage = () => {
+interface TestimonialPageProps {
+    testimonials: Testimonial[];
+}
+
+const TestimonialPage = ({
+    testimonials
+}: TestimonialPageProps): JSX.Element => {
     const router = useRouter();
     const currentPage = parseInt((router.query.page as string) ?? '1');
     const itemsPerPage = 3;
 
-    const testimonials = testimonialData.testimonials;
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
     const currentTestimonials = testimonials.slice(start, end);
@@ -61,6 +67,35 @@ const TestimonialPage = () => {
             </div>
         </Layout>
     );
+};
+
+export const getStaticProps: GetStaticProps = () => {
+    const META_TITLE = 'Testimonial Mahasiswa Pengguna Gradient | Gradient';
+    const META_DESCRIPTION =
+        'Lihat apa kata mahasiswa yang telah menggunakan Gradient sebagai platform belajar online mereka. Bergabung dengan ribuan mahasiswa lainnya untuk meningkatkan prestasi akademik Anda.';
+
+    return {
+        props: {
+            testimonials: testimonialData.testimonials,
+            canonical: 'https://gradient.academy/testimonial',
+            title: META_TITLE,
+            description: META_DESCRIPTION,
+            openGraph: {
+                type: 'website',
+                title: META_TITLE,
+                description: META_DESCRIPTION,
+                url: 'https://gradient.academy/testimonial',
+                images: [
+                    {
+                        url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
+                        width: 48,
+                        height: 48,
+                        alt: 'Gradient Academy'
+                    }
+                ]
+            }
+        }
+    };
 };
 
 export default TestimonialPage;
