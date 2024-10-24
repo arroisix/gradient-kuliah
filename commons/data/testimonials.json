@@ -1,0 +1,95 @@
+{
+  "testimonials": [
+    {
+      "id": "t1",
+      "name": "Ida Garaad",
+      "university": {
+        "name": "Universitas Indonesia",
+        "major": "Ilmu Komputer"
+      },
+      "text": "Gradient is more than just a learning tool; it's a valuable resource that helps students succeed in college. It's a complete all-in-one for us. You'll need it for securing impressive GPA!",
+      "image": {
+        "url": "/images/testimonials/ida-garaad.jpg",
+        "alt": "Ida Garaad - Computer Science Student"
+      }
+    },
+    {
+      "id": "t2",
+      "name": "Noora Hanifa",
+      "university": {
+        "name": "Universitas Gajah Mada",
+        "major": "Teknik Kimia"
+      },
+      "text": "Gradient is more than just a learning tool; it's a valuable resource that helps students succeed in college. It's an all-in-one tool that provides every tools and resources that we need in our fingertips. It's a staple for good GPA if you're studying STEM!",
+      "image": {
+        "url": "/images/testimonials/noora-hanifa.jpg",
+        "alt": "Noora Hanifa - Chemical Engineering Student"
+      }
+    },
+    {
+      "id": "t3",
+      "name": "Adam Carlsen",
+      "university": {
+        "name": "Institut Pertanian Bogor",
+        "major": "Biologi"
+      },
+      "text": "Video materinya memberikan feel berbeda karena penyampaiannya yang profesional namun mudah untuk dimengerti.",
+      "image": {
+        "url": "/images/testimonials/adam-carlsen.jpg",
+        "alt": "Adam Carlsen - Biology Student"
+      }
+    },
+    {
+      "id": "t4",
+      "name": "Sarah Wijaya",
+      "university": {
+        "name": "Institut Teknologi Bandung",
+        "major": "Teknik Informatika"
+      },
+      "text": "Platform yang sangat membantu dalam memahami materi kuliah. Penjelasannya detail dan mudah diikuti. Recommended banget buat yang mau meningkatkan nilai akademik!",
+      "image": {
+        "url": "/images/testimonials/sarah-wijaya.jpg",
+        "alt": "Sarah Wijaya - Informatics Engineering Student"
+      }
+    },
+    {
+      "id": "t5",
+      "name": "Rafi Ahmad",
+      "university": {
+        "name": "Universitas Airlangga",
+        "major": "Kedokteran"
+      },
+      "text": "Gradient membantu banget dalam memahami konsep-konsep yang sulit. Videonya berkualitas dan materinya lengkap. Sangat worth it untuk investasi pendidikan!",
+      "image": {
+        "url": "/images/testimonials/rafi-ahmad.jpg",
+        "alt": "Rafi Ahmad - Medical Student"
+      }
+    },
+    {
+      "id": "t6",
+      "name": "Lisa Permata",
+      "university": {
+        "name": "Universitas Brawijaya",
+        "major": "Teknik Elektro"
+      },
+      "text": "Saya suka cara Gradient menyajikan materi pembelajaran. Sistematis, jelas, dan yang penting bisa diakses kapan saja. Perfect buat mahasiswa yang ingin belajar mandiri.",
+      "image": {
+        "url": "/images/testimonials/lisa-permata.jpg",
+        "alt": "Lisa Permata - Electrical Engineering Student"
+      }
+    },
+    {
+      "id": "t7",
+      "name": "Budi Santoso",
+      "university": {
+        "name": "Universitas Diponegoro",
+        "major": "Teknik Mesin"
+      },
+      "text": "Kualitas konten pembelajaran yang disediakan Gradient sangat baik. Recommended untuk mahasiswa teknik yang ingin memahami konsep dengan lebih mendalam.",
+      "image": {
+        "url": "/images/testimonials/budi-santoso.jpg",
+        "alt": "Budi Santoso - Mechanical Engineering Student"
+      }
+    }
+  ]
+}
