@@ -2,93 +2,249 @@
   "testimonials": [
     {
       "id": "t1",
-      "name": "Ida Garaad",
+      "name": "Achmad Eugene",
       "university": {
-        "name": "Universitas Indonesia",
-        "major": "Ilmu Komputer"
+        "name": "Institut Teknologi Sebelas Maret",
+        "major": ""
       },
-      "text": "Gradient is more than just a learning tool; it's a valuable resource that helps students succeed in college. It's a complete all-in-one for us. You'll need it for securing impressive GPA!",
+      "text": "Setahun terakhir, Gradient Academy bener-bener bantu aku. Hampir semua matkul persiapan seperti Fisika, Kimia, Kalkulus, dan Analisis Numerik punya materi yang lengkap di Gradient. Pengajarnya juga profesional banget di bidangnya. Materinya bisa dipelajari berulang-ulang, dan ada latihan soal juga. Pokoknya, Gradient Academy keren banget! Terima kasih Gradient!",
       "image": {
-        "url": "/images/testimonials/ida-garaad.jpg",
-        "alt": "Ida Garaad - Computer Science Student"
+        "url": "/images/testimonials/placeholder.jpg",
+        "alt": "Achmad Eugene - ITS Student"
       }
     },
     {
       "id": "t2",
-      "name": "Noora Hanifa",
+      "name": "Ananda Teguh Imawan",
       "university": {
-        "name": "Universitas Gajah Mada",
-        "major": "Teknik Kimia"
+        "name": "Institut Teknologi Sebelas Maret",
+        "major": ""
       },
-      "text": "Gradient is more than just a learning tool; it's a valuable resource that helps students succeed in college. It's an all-in-one tool that provides every tools and resources that we need in our fingertips. It's a staple for good GPA if you're studying STEM!",
+      "text": "Awal kenal Gradient dari kelas 3 SMA dan langsung tertarik karena ngadain kelas kalkulus 1. Setelah SNBT, aku langsung daftar buat belajar kalkulus karena gabut nunggu pengumuman. Saat belajar di sini, aku jadi tau kalo aku sebenarnya ga tau apa-apa tentang konsep dasar kalkulus. Penjelasan di Gradient sangat bagus untuk yang punya jiwa penasaran dan mau belajar sains yang sebenarnya.",
       "image": {
-        "url": "/images/testimonials/noora-hanifa.jpg",
-        "alt": "Noora Hanifa - Chemical Engineering Student"
+        "url": "/images/testimonials/placeholder.jpg",
+        "alt": "Ananda Teguh Imawan - ITS Student"
       }
     },
     {
       "id": "t3",
-      "name": "Adam Carlsen",
+      "name": "Izza Hanif",
       "university": {
-        "name": "Institut Pertanian Bogor",
-        "major": "Biologi"
+        "name": "Institut Teknologi Sebelas Maret",
+        "major": ""
       },
-      "text": "Video materinya memberikan feel berbeda karena penyampaiannya yang profesional namun mudah untuk dimengerti.",
+      "text": "Saya sangat puas dengan platform pembelajaran online melalui gradient! Materinya sangat komprehensif, termasuk topik-topik lanjutan seperti persamaan diferensial dan fisika, yang disampaikan dengan cara menarik dan mudah dimengerti. Pokok pembahasannya juga mulai dari konsep bukan hafalan sehingga cocok dengan saya. Penjelasan mengenai persamaan diferensial sangat detail dan mencakup banyak contoh penerapan praktis. Fitur-fitur seperti forum diskusi dan soal-soal sangat membantu dalam proses belajar. Recommend bangettt.",
       "image": {
-        "url": "/images/testimonials/adam-carlsen.jpg",
-        "alt": "Adam Carlsen - Biology Student"
+        "url": "/images/testimonials/placeholder.jpg",
+        "alt": "Izza Hanif - ITS Student"
       }
     },
     {
       "id": "t4",
-      "name": "Sarah Wijaya",
+      "name": "Adi Jalu Pratomo",
       "university": {
-        "name": "Institut Teknologi Bandung",
-        "major": "Teknik Informatika"
+        "name": "Universitas Airlangga",
+        "major": ""
       },
-      "text": "Platform yang sangat membantu dalam memahami materi kuliah. Penjelasannya detail dan mudah diikuti. Recommended banget buat yang mau meningkatkan nilai akademik!",
+      "text": "GRADIENT LU KOK KEBANGETAN SIH !!!! canda ya ges ya. Maksudnya tuh kebangetan banget kualitasnya alias baguuuuus banget loooh. Aku kasih tau ya ges ya Gradient ini bener² penyelamat banget di fase² aku pertama kuliah. Dimana disaat itu aku bener² nggak seneng sama yang namanya matematika, bahkan nilai mtk ku di uts semester 2 dapet 20, tapi setelah ikut gradient aku jadi seneng matematika. Dan terbukti nilai matematikaku di uas dapet 85+!",
       "image": {
-        "url": "/images/testimonials/sarah-wijaya.jpg",
-        "alt": "Sarah Wijaya - Informatics Engineering Student"
+        "url": "/images/testimonials/placeholder.jpg",
+        "alt": "Adi Jalu Pratomo - UNAIR Student"
       }
     },
     {
       "id": "t5",
-      "name": "Rafi Ahmad",
+      "name": "Sofiah Amanda",
       "university": {
         "name": "Universitas Airlangga",
-        "major": "Kedokteran"
+        "major": ""
       },
-      "text": "Gradient membantu banget dalam memahami konsep-konsep yang sulit. Videonya berkualitas dan materinya lengkap. Sangat worth it untuk investasi pendidikan!",
+      "text": "Aku pakai gradient karena merasa kesusahan di mata kuliah tertentu, dan aku liat di gradient itu ada semua mata kuliah yang ga aku kuasai. Apalagi mata kuliah yang ada di gradient terus bertambah. Dengan adanya gradient ini membantu aku banget buat belajar mandiri karena materinya bener bener diajarin dari konsepnya.",
       "image": {
-        "url": "/images/testimonials/rafi-ahmad.jpg",
-        "alt": "Rafi Ahmad - Medical Student"
+        "url": "/images/testimonials/placeholder.jpg",
+        "alt": "Sofiah Amanda - UNAIR Student"
       }
     },
     {
       "id": "t6",
-      "name": "Lisa Permata",
+      "name": "Desca Affajry Rais",
       "university": {
-        "name": "Universitas Brawijaya",
-        "major": "Teknik Elektro"
+        "name": "Universitas Diponegoro",
+        "major": "Matematika"
       },
-      "text": "Saya suka cara Gradient menyajikan materi pembelajaran. Sistematis, jelas, dan yang penting bisa diakses kapan saja. Perfect buat mahasiswa yang ingin belajar mandiri.",
+      "text": "Sebagai mahasiswa Matematika, tentunya aku banyak bergulat pada mata kuliah yang ada logika dan hitungannya. Adanya Gradient ini membantuku untuk memahami mata kuliah di prodi Matematika terutama mata kuliah Kalkulus. Video pembelajarannya mudah dimengerti dan on point banget. Astronotesnya juga membantu banget buat persiapan kuis, UTS, dan UAS.",
       "image": {
-        "url": "/images/testimonials/lisa-permata.jpg",
-        "alt": "Lisa Permata - Electrical Engineering Student"
+        "url": "/images/testimonials/placeholder.jpg",
+        "alt": "Desca Affajry Rais - Mathematics Student"
       }
     },
     {
       "id": "t7",
-      "name": "Budi Santoso",
+      "name": "Jullian Miracle Joseph",
       "university": {
         "name": "Universitas Diponegoro",
-        "major": "Teknik Mesin"
+        "major": ""
       },
-      "text": "Kualitas konten pembelajaran yang disediakan Gradient sangat baik. Recommended untuk mahasiswa teknik yang ingin memahami konsep dengan lebih mendalam.",
+      "text": "Dulu ketemu gradient dari iklan instagram, sempet penasaran karena ternyata pas dengan apa yang sedang aku pelajarin yaitu mata kuliah kalkulus. Pas aku nonton penjelasannya benar-benar detail jadi bisa memahami materinya bukan sekedar menghafal. Terimakasih gradient karena sudah membantu nilai kalkulus ku menjadi A setahun terakhir ini, dosennya wenak bangett jelasinnya. Terimakasih Gradienttt!!",
       "image": {
-        "url": "/images/testimonials/budi-santoso.jpg",
-        "alt": "Budi Santoso - Mechanical Engineering Student"
+        "url": "/images/testimonials/placeholder.jpg",
+        "alt": "Jullian Miracle Joseph - UNDIP Student"
+      }
+    },
+    {
+      "id": "t8",
+      "name": "Vincent",
+      "university": {
+        "name": "Universitas Diponegoro",
+        "major": ""
+      },
+      "text": "Gradient ini salah satu website belajar yang sangat membantuku. Aku udah sering langganan gradient sejak SMA. Awalnya iseng iseng nyobain karena muncul di iklan, eh keterusan karena materinya menarik dan gampang buat dipahami, bahkan bagi anak SMA. Selain materinya yang menarik, soal soalnya juga ga kalah menarik. Ragu buat berlangganan? Ada beberapa kelas gratis untuk kalian coba. Ayo cobain sekarang!",
+      "image": {
+        "url": "/images/testimonials/placeholder.jpg",
+        "alt": "Vincent - UNDIP Student"
+      }
+    },
+    {
+      "id": "t9",
+      "name": "Novia",
+      "university": {
+        "name": "Universitas Brawijaya",
+        "major": ""
+      },
+      "text": "Pas semester 1 mata kuliah yang aku dapet kebanyakan mata kuliah dasar kayak kimia, fisika, kalkulus. Karna dunia kuliah terbilang baru banget buat aku, akhirnya aku ngerasa cukup tertinggal. Waktu itu gradient sering banget lewat di home instagram aku, akhirnya aku mutusin buat kepoin. Eh ternyata malah ketagihan buat langganan gradient. Selain tutornya dari univ ternama, aku paling suka sm fitur astronotesnya. Yang awalnya ngerasa ngga bakal bisa survive, alhamdulillah dapat nilai bagus karna ikut gradient.",
+      "image": {
+        "url": "/images/testimonials/placeholder.jpg",
+        "alt": "Novia - UNBRAW Student"
+      }
+    },
+    {
+      "id": "t10",
+      "name": "Muhammad Fakhri Aldiansyah",
+      "university": {
+        "name": "Universitas Brawijaya",
+        "major": "Teknik Informatika"
+      },
+      "text": "Sempat lewat di tiktok ada platform belajar mata kuliah namanya Gradient waktu saya kelas 12. Saya cermati materinya, pengajarnya, latihan soalnya, dan fasilitas lainnya benar-benar membuat saya tertarik untuk belajar mata kuliah kalkulus dan mata kuliah lainnya. Karena status saya saat ini Maba Teknik Informatika jalur SNBP dan libur panjang, kesempatan inilah saya curi start belajar di Gradient supaya lebih siap menghadapi materi dan tugas di perkuliahan.",
+      "image": {
+        "url": "/images/testimonials/placeholder.jpg",
+        "alt": "Muhammad Fakhri Aldiansyah - Informatics Engineering Student"
+      }
+    },
+    {
+      "id": "t11",
+      "name": "Khaira Athifa Dwiswari Yunianto",
+      "university": {
+        "name": "Universitas Indonesia",
+        "major": "Matematika"
+      },
+      "text": "Pertama kali lihat Gradient di Instagram dan pas bangett momennya waktu keterima Matematika UI. Karena aku penasaran dan kelihatannya menarik, akhirnya aku coba cek website nya. Ternyataa materi materi yang aku butuhkan saat kuliah di bahas. Aku seneng banget karena Gradient punya rangkuman, bank soal, dan video penjelasan yang to the point. Dari saat itu sampe sekarang mau semester 3, aku masih berlangganan karena emang keren bangett!",
+      "image": {
+        "url": "/images/testimonials/placeholder.jpg",
+        "alt": "Khaira Athifa - Mathematics Student"
+      }
+    },
+    {
+      "id": "t12",
+      "name": "Nambi Pribadi",
+      "university": {
+        "name": "Universitas Indonesia",
+        "major": "Teknik"
+      },
+      "text": "Jujur dari dulu pas masih sma udah liat instagramnya gradient. Mulai dari cara penyampaian materinya sampai contoh soal yg dikasih udah bikin aku excited, pokoknya kalo lolos ke teknik aku harus join. Dan ya, pas lulus tiba-tiba bisa masuk ke teknik ui dan harus bertarung dengan matkul-matkul kematian itu, mulai deh aku berlangganan dan emang bener penjelasan yang dikasih itu bukan sekedar contoh soal aja tapi bener-bener konsep pengerjaannya bagaimana.",
+      "image": {
+        "url": "/images/testimonials/placeholder.jpg",
+        "alt": "Nambi Pribadi - Engineering Student"
+      }
+    },
+    {
+      "id": "t13",
+      "name": "Dominikus",
+      "university": {
+        "name": "Institut Teknologi Bandung",
+        "major": ""
+      },
+      "text": "Sebetulnya aku uda tau gradient sejak awal aku sma. Waktu itu aku liat iklannya dan tertarik banget buat cobain karena diajarinnya sama orang-orang hebat, khususnya dosen itb. Kebetulan banget aku punya mimpi buat kuliah di itb, jadi aku pikir lewat gradient aku kaya trial diajarin dosen itb. Ternyata gradient cocok banget buat aku yang rasa pengen tahunya tinggi banget. Materinya gak hanya di bahas luarnya doang, tapi tiap materi di kupas sampe akar-akarnya.",
+      "image": {
+        "url": "/images/testimonials/placeholder.jpg",
+        "alt": "Dominikus - ITB Student"
+      }
+    },
+    {
+      "id": "t14",
+      "name": "Moh. Ichwan Afzani Zahran",
+      "university": {
+        "name": "Institut Teknologi Bandung",
+        "major": ""
+      },
+      "text": "Waktu sebelum penjurusan, Aku ngerasa kalo Aku bakal lancar lancar aja ngelewatinnya, tapi takdir berkata lain. Semester selanjutnya aku pengen belajar ekstra, jadi aku nyoba nyari media belajar yang bagus, disitulah aku ketemu gradient. Aku nemu gradien itu di Instagram, ngeliat ada dosen kayak Pak Matheus sama Pak Getbogi yang denger-denger gokil kalo ngajar, akhirnya aku cobain deh karena emang harganya lumayan murah, apalagi banyak diskonnya.",
+      "image": {
+        "url": "/images/testimonials/placeholder.jpg",
+        "alt": "Moh. Ichwan Afzani Zahran - ITB Student"
+      }
+    },
+    {
+      "id": "t15",
+      "name": "Achmad Adil",
+      "university": {
+        "name": "Universitas Hasanuddin",
+        "major": "Kimia"
+      },
+      "text": "Halo kakak admin gua pengen ngucapin makasih banyak telah membuat platform ini. Aku yg udah sem 6 di kimia selalu mengkotakkan diri salah jurusan setelah nonton video pembelajaran di gradient ternyata yang ku sadari adalah cara belajar dengan pemahaman konsep itu sangat menyenangkan. Padahal tadi pagi baru beli paket 1 bulan dan langsung mind blowing dengan pemaparan materi dari dosen dosen yang keren. Hemat kantong mahasiswa plus benefit yg didapatkan wadidaw banget.",
+      "image": {
+        "url": "/images/testimonials/placeholder.jpg",
+        "alt": "Achmad Adil - Chemistry Student"
+      }
+    },
+    {
+      "id": "t16",
+      "name": "M. Dzaky Dwiayoka Putra",
+      "university": {
+        "name": "Universitas Sriwijaya",
+        "major": "Teknik Sipil"
+      },
+      "text": "Jadi aku udah makai Gradient itu dari Maret sampai Juni, kira-kira 3 bulanan selama makainya. Aku awalnya nemuin web ini tuh dari yang tanya-tanya temen kyk web apasi yang cocok buat anak kuliahan but it'll remind me seputar materi sma yang dimana ak juga awal-awal itu ngerasain covid jadi bisa dbilang lemah di bagian pondasi materi sma. Nah pas coba di Gradient itu benar-benar kita dikasih teori-teori materi dan ya itu benar-benar membantu.",
+      "image": {
+        "url": "/images/testimonials/placeholder.jpg",
+        "alt": "M. Dzaky Dwiayoka Putra - Civil Engineering Student"
+      }
+    },
+    {
+      "id": "t17",
+      "name": "Alie Pratama",
+      "university": {
+        "name": "Universitas Teknologi Yogyakarta",
+        "major": "Informatika"
+      },
+      "text": "Gradient sangat membantuku upgrade nilai 😇Dapet A semua gara-gara ikut kelas gradient yang ngebantu aku banget buat upgrade skill MTK. Yang pasti mentornya jelasinnya tuh dari akar banget, jadi paham alur belajarnya. Notesnya juga ngebantu aku yang kadang suka males buat nulis catetan. Pokoknya di Gradient ilmunya ngga main-main, emang beneran beda dari apa yang aku dapet dari kampus.",
+      "image": {
+        "url": "/images/testimonials/placeholder.jpg",
+        "alt": "Alie Pratama - Informatics Student"
+      }
+    },
+    {
+      "id": "t18",
+      "name": "Safira",
+      "university": {
+        "name": "SMA Pradita Dirgantara",
+        "major": ""
+      },
+      "text": "Di Gradient materinya dijelaskan benar-benar dari dasar jadi kita bisa mengerti kenapa bisa jadi begini atau kenapa bisa jadi begitu. Di video belajarnya pun saya kira materi tersampaikan dengan baik menggunakan bahasa yang sederhana dan bisa dipahami. Banyak video belajar, latihan soal, dan catatan untuk berbagai materi yang sudah lebih dari cukup untuk dijadikan sumber belajar.",
+      "image": {
+        "url": "/images/testimonials/placeholder.jpg",
+        "alt": "Safira - SMA Pradita Dirgantara Student"
+      }
+    },
+    {
+      "id": "t19",
+      "name": "Erlangga Fikriansyah",
+      "university": {
+        "name": "Universitas Jenderal Soedirman",
+        "major": "Matematika"
+      },
+      "text": "Gradient ini value yang diberikan itu luar biasa, dari sumber daya pengajar yang berkualitas, infrastruktur website yang sangat baik dari segi UI/UX maupun server, pokoknya value for money dehh, bahkan valuenya kelebihan, mantap. Oh iya, durasi pervideo pembelajaran di gradient tidak terlalu Panjang <= 10 menit, namun materinya mencakup semua itu bagi saya sangat efisien. Karna Gradient juga akhirnya sekarang jadi masuk ke jurusan Matematika di Unsoed.",
+      "image": {
+        "url": "/images/testimonials/placeholder.jpg",
+        "alt": "Erlangga Fikriansyah - Mathematics Student"
       }
     }
   ]
