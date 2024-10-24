@@ -9,7 +9,9 @@ export const growthbook = new GrowthBook<GrowthbookFeatures>({
 });
 
 export function updateGrowthBookURL(): void {
-    growthbook.setURL(window.location.href);
+    if (typeof window !== 'undefined') {
+        growthbook.setURL(window.location.href);
+    }
 }
 
 // Fetch features from GrowthBook API and cache in memory

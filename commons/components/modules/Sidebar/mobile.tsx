@@ -5,7 +5,9 @@ import {
     RiBookOpenLine,
     RiBookOpenFill,
     RiQuestionnaireLine,
-    RiQuestionnaireFill
+    RiQuestionnaireFill,
+    RiFileListLine,
+    RiFileListFill
 } from 'react-icons/ri';
 import CommunityNotificationBadge from '../../elements/CommunityNotificationBadge';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -103,6 +105,16 @@ const MobileSidebar = ({
                                     setOpenSidebar={setOpenSidebar}
                                 />
                             )
+                        )}
+                        {configData?.configs.is_exercise_config_enabled && (
+                            <NavigationButton
+                                name="Exercise"
+                                title="Latihan"
+                                url="/latihan"
+                                IconActive={RiFileListFill}
+                                IconUnactive={RiFileListLine}
+                                setOpenSidebar={setOpenSidebar}
+                            />
                         )}
                         {configData?.configs.is_community_config_enabled && (
                             <NavigationButton

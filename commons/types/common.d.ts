@@ -104,7 +104,8 @@ type BreadcrumbPathnames =
     | '/syarat-dan-ketentuan'
     | '/kontak-kami'
     | '/search/results'
-    | '/search/results/[keywords]';
+    | '/search/results/[keywords]'
+    | '/latihan';
 
 type BreadcrumbProps = {
     [key in BreadcrumbPathnames]: BreadcrumbItemProps;

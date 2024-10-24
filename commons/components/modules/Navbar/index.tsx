@@ -18,7 +18,9 @@ import {
     RiBookOpenLine,
     RiQuestionnaireLine,
     RiBookOpenFill,
-    RiQuestionnaireFill
+    RiQuestionnaireFill,
+    RiFileListFill,
+    RiFileListLine
 } from 'react-icons/ri';
 import { cn } from 'commons/utils';
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
@@ -184,6 +186,15 @@ const Navbar = ({
                                 IconUnactive={nav.IconUnactive}
                             />
                         ))}
+                        {configData?.configs.is_exercise_config_enabled && (
+                            <NavigationButton
+                                name="Exercise"
+                                title="Latihan"
+                                url="/latihan"
+                                IconActive={RiFileListFill}
+                                IconUnactive={RiFileListLine}
+                            />
+                        )}
                         {configData?.configs.is_community_config_enabled && (
                             <NavigationButton
                                 name="Community"
