@@ -45,13 +45,6 @@ const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
         url: '/perpustakaan',
         IconActive: RiBookOpenFill,
         IconUnactive: RiBookOpenLine
-    },
-    {
-        name: 'Exercise',
-        title: 'Latihan',
-        url: '/latihan',
-        IconActive: RiFileListFill,
-        IconUnactive: RiFileListLine
     }
 ];
 
@@ -193,6 +186,15 @@ const Navbar = ({
                                 IconUnactive={nav.IconUnactive}
                             />
                         ))}
+                        {configData?.configs.is_exercise_config_enabled && (
+                            <NavigationButton
+                                name="Exercise"
+                                title="Latihan"
+                                url="/latihan"
+                                IconActive={RiFileListFill}
+                                IconUnactive={RiFileListLine}
+                            />
+                        )}
                         {configData?.configs.is_community_config_enabled && (
                             <NavigationButton
                                 name="Community"

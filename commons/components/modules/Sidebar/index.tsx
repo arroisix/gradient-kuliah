@@ -138,26 +138,28 @@ const Sidebar = ({
                         Perpustakaan
                     </span>
                 </Link>
-                <Link
-                    href={'/latihan'}
-                    onClick={() => {
-                        tracker?.genericTrack(
-                            `Click Exercises ${
-                                !fullHeight ? 'Course ' : ''
-                            }Navigation`
-                        );
-                    }}>
-                    <span
-                        className={cn(
-                            'flex gap-4 cursor-pointer  font-body text-sm hover:text-[#999999]',
-                            pathname.includes('/latihan')
-                                ? 'text-white'
-                                : 'text-[#666666]'
-                        )}>
-                        <RiFileListLine size={20} />
-                        Latihan
-                    </span>
-                </Link>
+                {configData?.configs.is_exercise_config_enabled && (
+                    <Link
+                        href={'/latihan'}
+                        onClick={() => {
+                            tracker?.genericTrack(
+                                `Click Exercises ${
+                                    !fullHeight ? 'Course ' : ''
+                                }Navigation`
+                            );
+                        }}>
+                        <span
+                            className={cn(
+                                'flex gap-4 cursor-pointer  font-body text-sm hover:text-[#999999]',
+                                pathname.includes('/latihan')
+                                    ? 'text-white'
+                                    : 'text-[#666666]'
+                            )}>
+                            <RiFileListLine size={20} />
+                            Latihan
+                        </span>
+                    </Link>
+                )}
             </div>
         </aside>
     );

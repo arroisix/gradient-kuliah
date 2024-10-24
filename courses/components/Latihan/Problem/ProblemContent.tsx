@@ -6,7 +6,7 @@ import {
     useGetExerciseProgressQuery,
     useUpdateExerciseProblemProgressMutation,
     useGetExerciseProblemSolutionQuery
-} from '../../../redux/api/exercisesApi';
+} from 'courses/redux/api/exercisesApi';
 import MultipleChoiceProblem from './MultipleChoiceProblem';
 import OpenEndedProblem from './OpenEndedProblem';
 import Skeleton from 'commons/components/elements/Skeleton';

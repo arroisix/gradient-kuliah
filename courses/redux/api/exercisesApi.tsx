@@ -17,13 +17,9 @@ const EXERCISE_BASE_URL = 'exercises/';
 
 export const exerciseApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        getExerciseDetail: builder.query<
-            Exercise,
-            { exercise_slug: string; token?: string }
-        >({
-            query: ({ exercise_slug, token }) => ({
-                url: `${EXERCISE_BASE_URL}${exercise_slug}/`,
-                headers: token ? { Authorization: `Token ${token}` } : undefined
+        getExerciseDetail: builder.query<Exercise, { exercise_slug: string }>({
+            query: ({ exercise_slug }) => ({
+                url: `${EXERCISE_BASE_URL}${exercise_slug}/`
             }),
             providesTags: (result, error, arg) => [
                 { type: 'ASTRONOTES', id: `EXERCISE_${arg.exercise_slug}` }
@@ -179,7 +175,9 @@ export const exerciseApi = baseApi.injectEndpoints({
                     type: 'ASTRONOTES',
                     id: `EXERCISE_PROBLEM_${arg.problem_id}`
                 },
-                { type: 'PROBLEM_SET', id: 'LIST' }
+                { type: 'PROBLEM_SET', id: 'LIST' },
+                { type: 'ASTRONOTES', id: `EXERCISE_ENTRYPOINT` },
+                { type: 'ASTRONOTES', id: `EXERCISE_${arg.exercise_slug}` }
             ]
         }),
 

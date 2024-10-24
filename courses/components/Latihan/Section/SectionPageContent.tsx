@@ -20,7 +20,7 @@ const SectionPageContent: React.FC<SectionPageContentProps> = ({
         { skip: !slug }
     );
 
-    const handleStartSection = () => {
+    const handleStartSection = (): void => {
         tracker?.genericTrack('Click Start Latihan Section Button', {
             EXERCISE_SLUG: slug,
             SECTION_SLUG: sectionId
