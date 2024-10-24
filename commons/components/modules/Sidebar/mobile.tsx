@@ -51,13 +51,6 @@ const MOBILE_SIDEBAR_BUTTONS: NavigationButtonInterface[] = [
                 url: '/perpustakaan/astronotes'
             }
         ]
-    },
-    {
-        name: 'Latihan',
-        title: 'Latihan',
-        url: '/latihan',
-        IconActive: RiFileListFill,
-        IconUnactive: RiFileListLine
     }
 ];
 
@@ -112,6 +105,16 @@ const MobileSidebar = ({
                                     setOpenSidebar={setOpenSidebar}
                                 />
                             )
+                        )}
+                        {configData?.configs.is_exercise_config_enabled && (
+                            <NavigationButton
+                                name="Exercise"
+                                title="Latihan"
+                                url="/latihan"
+                                IconActive={RiFileListFill}
+                                IconUnactive={RiFileListLine}
+                                setOpenSidebar={setOpenSidebar}
+                            />
                         )}
                         {configData?.configs.is_community_config_enabled && (
                             <NavigationButton
