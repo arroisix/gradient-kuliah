@@ -36,10 +36,8 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
 
     return (
         <div
-            className={cn(
-                'relative w-full h-full bg-[#222222] rounded-2xl p-4 md:p-6',
-                'flex flex-col justify-between border border-[#444444]'
-            )}>
+            className="relative w-full h-full bg-[#222222] rounded-2xl p-4 md:p-6
+                flex flex-col justify-between border border-[#444444]">
             <div className="relative">
                 <div className="absolute top-0 left-0">
                     <ImQuotesLeft className="w-8 h-6 text-[#7264EB]" />
@@ -70,7 +68,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
                 </div>
             </div>
 
-            <div className={cn('flex flex-col gap-3 md:gap-4 mt-4')}>
+            <div className="flex flex-col gap-3 md:gap-4 mt-4">
                 <div className="relative w-12 h-12 rounded-full overflow-hidden">
                     <Image
                         src={image}
@@ -80,7 +78,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
                         className="rounded-full object-cover"
                     />
                 </div>
-                <div className={cn('flex flex-col gap-0.5 md:gap-1')}>
+                <div className="flex flex-col gap-0.5 md:gap-1">
                     <h3 className="font-semibold text-sm md:text-lg text-white">
                         {name}
                     </h3>
