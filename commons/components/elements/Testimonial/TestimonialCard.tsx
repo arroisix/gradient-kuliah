@@ -35,13 +35,13 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
     }, [text]);
 
     return (
-        <div className="relative w-full h-full bg-[#222222] rounded-2xl p-4 md:p-6 flex flex-col justify-between border border-[#444444]">
-            <div className="relative">
+        <div className="relative w-full bg-[#222222] rounded-2xl p-4 md:p-6 flex flex-col border border-[#444444]">
+            <div className="relative flex-1">
                 <div className="absolute top-0 left-0">
                     <ImQuotesLeft className="w-8 h-6 text-[#7264EB]" />
                 </div>
-                <div className="relative">
-                    <div className="relative">
+                <div className="relative h-full">
+                    <div className="relative min-h-[12rem]">
                         <p
                             ref={textRef}
                             className={cn(
@@ -57,9 +57,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
                     {shouldShowButton && (
                         <button
                             onClick={() => setIsExpanded(!isExpanded)}
-                            className={cn(
-                                'text-[#B6A6F3] font-bold text-base hover:underline mt-2'
-                            )}>
+                            className="text-[#B6A6F3] font-bold text-base hover:underline mt-2">
                             {isExpanded ? 'Lebih Sedikit' : 'Baca Selengkapnya'}
                         </button>
                     )}
