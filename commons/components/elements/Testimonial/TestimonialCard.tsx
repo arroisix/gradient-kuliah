@@ -35,9 +35,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
     }, [text]);
 
     return (
-        <div
-            className="relative w-full h-full bg-[#222222] rounded-2xl p-4 md:p-6
-                flex flex-col justify-between border border-[#444444]">
+        <div className="relative w-full h-full bg-[#222222] rounded-2xl p-4 md:p-6 flex flex-col justify-between border border-[#444444]">
             <div className="relative">
                 <div className="absolute top-0 left-0">
                     <ImQuotesLeft className="w-8 h-6 text-[#7264EB]" />

@@ -30,7 +30,7 @@ const TestimonialPage = ({
     return (
         <Layout isFullBlackBackground>
             <div className="min-h-screen py-16">
-                <div className="max-w-[960px] mx-auto px-4 md:px-0">
+                <div className="max-w-[960px] mx-auto px-4 md:px-4 lg:px-0">
                     <Breadcrumb className="py-4" />
                     <div className="flex flex-col gap-8 pt-2">
                         <div className="text-center gap-2">
