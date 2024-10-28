@@ -78,7 +78,6 @@ export const {
     useGetOnePacketOneCourseQuery,
     useFreeCheckoutMutation,
     useGetActiveSubscriptionQuery,
-    useGetActiveSubscriptionBySlugQuery,
     useGetOneCourseManyPacketQuery,
     useExtendCheckoutMutation,
     useGetDetailPacketOfferQuery,

@@ -6,7 +6,7 @@ import {
     useGetExerciseReportSummaryQuery,
     useGetExerciseHistoryQuery,
     useGetExerciseReportQuery
-} from '../../../redux/api/exercisesApi';
+} from 'courses/redux/api/exercisesApi';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useTracker } from 'tracker/tracker';
@@ -53,7 +53,7 @@ const ExerciseReportLayout: React.FC<ExerciseReportLayoutProps> = ({
         error: summaryError
     } = useGetExerciseReportSummaryQuery(
         { exercise_slug: slug, exercise_progress_id: exerciseProgressId },
-        { skip: !slug || !exerciseProgressId }
+        { skip: !slug || !exerciseProgressId || activeTab !== 'summary' }
     );
 
     const {
@@ -62,14 +62,17 @@ const ExerciseReportLayout: React.FC<ExerciseReportLayoutProps> = ({
         error: reportError
     } = useGetExerciseReportQuery(
         { exercise_slug: slug, exercise_progress_id: exerciseProgressId },
-        { skip: !slug || !exerciseProgressId }
+        { skip: !slug || !exerciseProgressId || activeTab !== 'review' }
     );
 
     const {
         data: historyData,
         isLoading: isHistoryLoading,
         error: historyError
-    } = useGetExerciseHistoryQuery({ exercise_slug: slug }, { skip: !slug });
+    } = useGetExerciseHistoryQuery(
+        { exercise_slug: slug },
+        { skip: !slug || activeTab !== 'history' }
+    );
 
     const handleSelectExerciseProgress = (
         newExerciseProgressId: string
@@ -91,24 +94,17 @@ const ExerciseReportLayout: React.FC<ExerciseReportLayoutProps> = ({
         );
     }
 
-    if (
-        summaryError ||
-        reportError ||
-        historyError ||
-        !summaryData ||
-        !reportData ||
-        !historyData
-    ) {
+    if (summaryError || reportError || historyError) {
         return <div>Error loading data</div>;
     }
 
     const hasImprovement = (() => {
-        if (historyData.history.length > 1) {
+        if (historyData && historyData?.history.length > 1) {
             const latestAttempt =
-                historyData.history[historyData.history.length - 1];
+                historyData?.history[historyData?.history.length - 1];
             const previousAttempt =
-                historyData.history[historyData.history.length - 2];
-            return latestAttempt.score > previousAttempt.score;
+                historyData?.history[historyData?.history.length - 2];
+            return latestAttempt?.score > previousAttempt?.score;
         }
         return false;
     })();
@@ -119,15 +115,17 @@ const ExerciseReportLayout: React.FC<ExerciseReportLayoutProps> = ({
                 <ExerciseHeader title={'Exercise Report'} />
                 <div className="overflow-hidden h-full">
                     <div className="h-full flex flex-col">
-                        <ScoreCard
-                            score={summaryData.score}
-                            correctAnswers={summaryData.correct_answers}
-                            incorrectAnswers={
-                                summaryData.total_questions -
-                                summaryData.correct_answers
-                            }
-                            improvement={hasImprovement}
-                        />
+                        {summaryData && (
+                            <ScoreCard
+                                score={summaryData.score}
+                                correctAnswers={summaryData.correct_answers}
+                                incorrectAnswers={
+                                    summaryData.total_questions -
+                                    summaryData.correct_answers
+                                }
+                                improvement={hasImprovement}
+                            />
+                        )}
                         <div className="flex space-x-4 mb-6">
                             <div className="flex items-end w-full border-b border-gray-700">
                                 {['summary', 'review', 'history'].map((tab) => (
@@ -150,7 +148,7 @@ const ExerciseReportLayout: React.FC<ExerciseReportLayoutProps> = ({
                             </div>
                         </div>
                         <div className="flex-grow overflow-y-auto">
-                            {activeTab === 'summary' && (
+                            {activeTab === 'summary' && summaryData && (
                                 <SummaryTab
                                     percentile={summaryData.percentile}
                                     masteredTopics={summaryData.mastered_topics}
@@ -162,10 +160,10 @@ const ExerciseReportLayout: React.FC<ExerciseReportLayoutProps> = ({
                                     }
                                 />
                             )}
-                            {activeTab === 'review' && (
+                            {activeTab === 'review' && reportData && (
                                 <ReviewTab problems={reportData.problems} />
                             )}
-                            {activeTab === 'history' && (
+                            {activeTab === 'history' && historyData && (
                                 <RiwayatTab
                                     history={historyData.history}
                                     currentExerciseProgressId={
