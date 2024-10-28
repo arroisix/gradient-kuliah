@@ -79,7 +79,8 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
                         {name}
                     </h3>
                     <p className="text-xs md:text-sm text-gray-400">
-                        {university.major} - {university.name}
+                        {university.major ? `${university.major} - ` : ''}
+                        {university.name}
                     </p>
                 </div>
             </div>
