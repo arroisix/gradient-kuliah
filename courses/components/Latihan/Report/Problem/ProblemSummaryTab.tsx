@@ -96,6 +96,8 @@ const RecommendationCard: React.FC<{ material: RecommendedMaterial }> = ({
     const isBook = material.type === 'Book';
     const href = getHref(material);
 
+    console.log(material);
+
     const handleClick = () => {
         tracker?.genericTrack('Click Material Recomendation Card', {
             EXERCISE_SLUG: slug as string,
@@ -109,7 +111,7 @@ const RecommendationCard: React.FC<{ material: RecommendedMaterial }> = ({
     return (
         <Link href={href}>
             <button
-                className={`flex rounded-lg overflow-hidden h-40 ${
+                className={`flex rounded-lg overflow-hidden h-40 w-full ${
                     isBook ? 'bg-[#222222]' : 'bg-[#121212]'
                 } border border-[#666666]`}
                 onClick={handleClick}>
@@ -135,17 +137,15 @@ const BookCard: React.FC<{ material: RecommendedMaterial }> = ({
                 objectFit="cover"
             />
         </div>
-        <div className="p-3 flex flex-col justify-between flex-grow">
-            <div>
-                <h4 className="text-white text-sm font-medium line-clamp-2">
-                    {material.name}
-                </h4>
-                <div className="flex items-center mt-1">
-                    <BiSolidStar className="text-yellow-400 mr-1" />
-                    <span className="text-white text-xs">
-                        {material.rating?.toFixed(1)}
-                    </span>
-                </div>
+        <div className="p-3 flex flex-col justify-between items-start flex-grow">
+            <h4 className="text-white text-sm font-medium line-clamp-2">
+                {material.name}
+            </h4>
+            <div className="flex items-center mt-1">
+                <BiSolidStar className="text-yellow-400 mr-1" />
+                <span className="text-white text-xs">
+                    {material.rating?.toFixed(1)}
+                </span>
             </div>
             <div className="mt-2">
                 <span
@@ -181,7 +181,7 @@ const CourseOrVideoCard: React.FC<{ material: RecommendedMaterial }> = ({
             )}
         </div>
         <div className="p-3 flex-grow">
-            <h4 className="text-white text-sm font-medium line-clamp-2">
+            <h4 className="text-white text-sm font-medium line-clamp-1 text-left">
                 {material.name}
             </h4>
         </div>
