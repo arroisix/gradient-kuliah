@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import Paginator from '../../commons/components/elements/Paginator';
 import testimonialData from '../../commons/data/testimonials.json';
 import { Testimonial } from '../../commons/types/testimonial';
+import { CDN_URL } from '../../commons/constants';
 
 const PAGE_SIZE = 3;
 
@@ -52,7 +53,7 @@ const TestimonialPage = ({
                                         name={testimonial.name}
                                         university={testimonial.university}
                                         text={testimonial.text}
-                                        image={testimonial.image.url}
+                                        image={`${CDN_URL}/assets/testimonials/${testimonial.image.url}`}
                                     />
                                 )
                             )}
