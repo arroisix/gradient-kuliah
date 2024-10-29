@@ -42,14 +42,14 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
                 </div>
                 <div className="relative h-full">
                     <div className="relative min-h-[12rem]">
-                        <p
+                        <h3
                             ref={textRef}
                             className={cn(
                                 'text-base md:text-xl text-white font-bold mt-8',
                                 !isExpanded && 'line-clamp-6'
                             )}>
                             {text}
-                        </p>
+                        </h3>
                         {shouldShowButton && !isExpanded && (
                             <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#222222] to-transparent" />
                         )}
@@ -75,13 +75,13 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
                     />
                 </div>
                 <div className="flex flex-col gap-0.5 md:gap-1">
-                    <h3 className="font-semibold text-sm md:text-lg text-white">
+                    <h4 className="font-semibold text-sm md:text-lg text-white">
                         {name}
-                    </h3>
-                    <p className="text-xs md:text-sm text-gray-400">
+                    </h4>
+                    <h4 className="text-xs md:text-sm text-gray-400">
                         {university.major ? `${university.major} - ` : ''}
                         {university.name}
-                    </p>
+                    </h4>
                 </div>
             </div>
         </div>

@@ -53,7 +53,7 @@ const TestimonialPage = ({
                                         name={testimonial.name}
                                         university={testimonial.university}
                                         text={testimonial.text}
-                                        image={`${CDN_URL}/assets/testimonials/${testimonial.image.url}`}
+                                        image={`${CDN_URL}/assets/${testimonial.image.url}`}
                                     />
                                 )
                             )}
