@@ -105,7 +105,8 @@ type BreadcrumbPathnames =
     | '/kontak-kami'
     | '/search/results'
     | '/search/results/[keywords]'
-    | '/latihan';
+    | '/latihan'
+    | '/testimonial';
 
 type BreadcrumbProps = {
     [key in BreadcrumbPathnames]: BreadcrumbItemProps;

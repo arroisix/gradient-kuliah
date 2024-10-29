@@ -36,6 +36,10 @@ const ITEMS: FooterItemProps[] = [
             {
                 content: 'Kontak Kami',
                 url: '/kontak-kami'
+            },
+            {
+                content: 'Testimoni',
+                url: '/testimonial'
             }
         ]
     },
