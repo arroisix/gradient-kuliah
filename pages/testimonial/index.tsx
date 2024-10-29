@@ -8,6 +8,7 @@ import Paginator from '../../commons/components/elements/Paginator';
 import testimonialData from '../../commons/data/testimonials.json';
 import { Testimonial } from '../../commons/types/testimonial';
 import { CDN_URL } from '../../commons/constants';
+import { cn } from '../../commons/utils';
 
 const PAGE_SIZE = 3;
 
@@ -27,6 +28,13 @@ const TestimonialPage = ({
     const currentTestimonials = testimonials.slice(start, end);
     const totalPages = Math.ceil(testimonials.length / PAGE_SIZE);
 
+    const gridClassName = cn(
+        'grid grid-cols-1 gap-6',
+        currentTestimonials.length < 3
+            ? `md:grid-cols-${currentTestimonials.length} md:justify-center md:max-w-fit md:mx-auto`
+            : 'md:grid-cols-3'
+    );
+
     return (
         <Layout isFullBlackBackground>
             <div className="min-h-screen py-16">
@@ -45,7 +53,7 @@ const TestimonialPage = ({
                             </h2>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className={gridClassName}>
                             {currentTestimonials.map(
                                 (testimonial: Testimonial) => (
                                     <TestimonialCard
