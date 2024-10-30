@@ -39,7 +39,7 @@ const ITEMS: FooterItemProps[] = [
             },
             {
                 content: 'Testimoni',
-                url: '/testimonial'
+                url: '/testimoni'
             }
         ]
     },
