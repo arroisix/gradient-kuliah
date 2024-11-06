@@ -71,6 +71,13 @@ const Collapse = ({
                             />
                         )
                     )}
+                {!isLoading && data?.subchapters.length === 0 && (
+                    <div className="p-2">
+                        <p className="text-sm text-graphite-600">
+                            Sabar ya, materi ini akan segera hadir untukmu.
+                        </p>
+                    </div>
+                )}
             </div>
         </div>
     );
