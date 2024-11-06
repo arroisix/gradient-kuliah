@@ -45,7 +45,10 @@ const VideoItem = ({
         <Link
             key={value.id}
             href={`/kelas/${id}/${value?.subchapter_slug}`}
-            className="flex justify-between px-3 py-[10px] cursor-pointer hover:bg-[#272727]"
+            className={cn(
+                'flex justify-between px-3 py-[10px] cursor-pointer hover:bg-[#272727]',
+                slug === value.subchapter_slug && 'bg-[#272727]'
+            )}
             onClick={track}>
             <div
                 className={cn(
