@@ -158,7 +158,7 @@ const Option = ({
     console.log('option.text type:', typeof option.text);
     return (
         <div
-            className={`flex justify-between items-center p-3 my-1 rounded-md w-full max-w-[608px] h-[45px] ${
+            className={`flex flex-grow justify-between items-center p-3 my-1 rounded-md w-full max-w-[608px] min-h-[45px] ${
                 isSelected || isCorrect
                     ? isCorrect
                         ? 'bg-[#2AC27A]'
