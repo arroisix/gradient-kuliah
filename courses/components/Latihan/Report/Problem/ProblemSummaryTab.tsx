@@ -96,8 +96,6 @@ const RecommendationCard: React.FC<{ material: RecommendedMaterial }> = ({
     const isBook = material.type === 'Book';
     const href = getHref(material);
 
-    console.log(material);
-
     const handleClick = () => {
         tracker?.genericTrack('Click Material Recomendation Card', {
             EXERCISE_SLUG: slug as string,

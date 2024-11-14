@@ -45,7 +45,7 @@ const InteractiveExerciseItem = ({
                 return '/langganan';
             }
         } else {
-            return '/masuk';
+            return `/masuk?redirect=${router.asPath}`;
         }
     };
 

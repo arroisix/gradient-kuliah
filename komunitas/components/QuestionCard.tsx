@@ -16,6 +16,7 @@ import Link from 'next/link';
 import { cn } from 'commons/utils';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import ShareContentButton from 'courses/components/ShareContentButton';
 
 type Student = {
     id: string;
@@ -177,6 +178,12 @@ const QuestionCard = ({
                                 {comment_counts}
                             </span>
                         </div>
+                        <ShareContentButton
+                            shareCopy="Coba cek diskusi ini deh di Gradient Academy!"
+                            typeCopy="KOMUNITAS"
+                            iconOnly
+                            className="w-fit !px-0"
+                        />
                     </div>
                     {!isShowForm && setIsShowForm && isAuthenticated && (
                         <button

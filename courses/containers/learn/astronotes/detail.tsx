@@ -18,6 +18,7 @@ import { useSelector } from 'react-redux';
 import RelatedBooksSection from 'courses/components/LearningExperience/AstroNotes/InternalLinking/RelatedBooksSection';
 import { useGetBookRecommendationsQuery } from 'courses/redux/api/learningExperienceApi';
 import FreeBadge from 'commons/components/elements/FreeBadge';
+import ShareContentButton from 'courses/components/ShareContentButton';
 
 const AstronotesDetail = ({
     slug: serverSlug,
@@ -28,7 +29,7 @@ const AstronotesDetail = ({
     astronotes: BookDetailInterface;
     recommendations: GetBookRecommendationResponse;
 }): JSX.Element => {
-    const { query } = useRouter();
+    const { query, asPath } = useRouter();
     const { slug } = query as { slug: string };
     const { data } = useGetBookDetailQuery(
         { slug },
@@ -58,7 +59,7 @@ const AstronotesDetail = ({
     const recommendations = hydratedRecommendations || initialRecommendations;
 
     const getLink = (): string => {
-        if (!isAuthenticated) return '/daftar';
+        if (!isAuthenticated) return `/daftar?redirect=${asPath}`;
 
         switch (category) {
             case 'textbook':
@@ -175,7 +176,9 @@ const AstronotesDetail = ({
                                     />
                                 </div>
                             )}
-                            <div ref={buttonRef} className="w-full">
+                            <div
+                                ref={buttonRef}
+                                className="w-full flex gap-2 items-center flex-col md:flex-row flex-wrap">
                                 <Button
                                     href={getLink()}
                                     variant="primary"
@@ -186,6 +189,11 @@ const AstronotesDetail = ({
                                     )}>
                                     Mulai Membaca
                                 </Button>
+                                <ShareContentButton
+                                    typeCopy={astronotes?.category ?? ''}
+                                    shareCopy={`Coba deh cek Pembahasan Soal dari Buku ${astronotes?.title} di Gradient Academy!`}
+                                    className="md:text-base w-fit"
+                                />
                             </div>
                         </div>
                     </div>

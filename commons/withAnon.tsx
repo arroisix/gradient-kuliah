@@ -74,9 +74,15 @@ const withAnon = <P extends object>(
                                         `/pembayaran?packetId=${packetId}`
                                     );
                                 } else {
-                                    if (everSubscribed)
+                                    if (everSubscribed) {
                                         router.replace('/dashboard');
-                                    else router.replace('/');
+                                    } else if (!!router.query.redirect) {
+                                        router.replace(
+                                            `${router.query.redirect}`
+                                        );
+                                    } else {
+                                        router.replace('/');
+                                    }
                                 }
                             }
                         }

@@ -11,6 +11,7 @@ import React, { FormEvent, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import TextareaAutosize from 'react-textarea-autosize';
 import { toast } from 'react-toastify';
+import ShareContentButton from '../ShareContentButton';
 
 export const FeedbackCard = ({
     review,
@@ -77,23 +78,29 @@ export const FeedbackCard = ({
                 Berikan penilaian untuk membantu kami meningkatkan kualitas
                 jawaban
             </p>
-            <div className="flex justify-center gap-2">
-                {Array.from({ length: 5 }).map((_, i) => (
-                    <button
-                        key={i}
-                        onClick={() => {
-                            dialogRef.current?.showModal();
-                            setRating(i + 1);
-                        }}
-                        disabled={isLoading}
-                        className={cn(
-                            'mask mask-star-2 h-10 w-10 md:h-8 md:w-8',
-                            i + 1 <= rating
-                                ? 'bg-accent-yellow'
-                                : 'bg-neutral-700',
-                            isLoading && '!bg-neutral-800 animate-pulse'
-                        )}></button>
-                ))}
+            <div className="flex justify-center gap-4">
+                <div className="flex justify-center gap-2">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                        <button
+                            key={i}
+                            onClick={() => {
+                                dialogRef.current?.showModal();
+                                setRating(i + 1);
+                            }}
+                            disabled={isLoading}
+                            className={cn(
+                                'mask mask-star-2 h-10 w-10 md:h-8 md:w-8',
+                                i + 1 <= rating
+                                    ? 'bg-accent-yellow'
+                                    : 'bg-neutral-700',
+                                isLoading && '!bg-neutral-800 animate-pulse'
+                            )}></button>
+                    ))}
+                </div>
+                <ShareContentButton
+                    shareCopy={`Coba cek pembahasan soal ${data?.book.title} ini di Gradient Academy!`}
+                    typeCopy={book?.category as unknown as string}
+                />
             </div>
             <dialog
                 id="feedback-sheet"

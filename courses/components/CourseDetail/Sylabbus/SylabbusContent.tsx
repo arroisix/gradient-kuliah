@@ -7,6 +7,7 @@ import { formatDuration } from 'commons/utils';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useGetSubchapterQuery } from 'courses/redux/api/courseApi';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useTracker } from 'tracker/tracker';
@@ -15,6 +16,7 @@ const SylabbusContent = ({
     id,
     slug
 }: GradientBaseComponentWithId & { slug: string }): JSX.Element => {
+    const router = useRouter();
     const { is_subscribed } = useCourseSubscription();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { data: subchapters, isLoading } = useGetSubchapterQuery(
@@ -39,7 +41,7 @@ const SylabbusContent = ({
                 return '/langganan';
             }
         } else {
-            return '/masuk';
+            return `/masuk?redirect=${router.asPath}`;
         }
     };
 

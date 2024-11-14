@@ -105,7 +105,7 @@ const KeluarPerangkat = (): JSX.Element => {
 
                 <section className="flex flex-col gap-3">
                     <Button
-                        href="/"
+                        href={(router.query.redirect as string) ?? '/'}
                         variant="primary"
                         disabled={disableLogin}
                         className="!py-3 text-base !font-sans text-center">

@@ -33,7 +33,9 @@ export default function RenewSubscriptionBanner({
                     onClick={() => {
                         if (isAuthenticated)
                             window.location.href = '/langganan';
-                        else window.location.href = '/daftar';
+                        else
+                            window.location.href =
+                                '/daftar?redirect=/langganan';
                     }}>
                     <p className="hidden md:block">Beli Paket</p>
                     <p className="md:hidden">Beli</p>

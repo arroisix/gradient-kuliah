@@ -17,7 +17,7 @@ const StartReadingButton = ({
     const isAuthenticated = useSelector(getIsAuthenticated);
     const getLink = (): string => {
         if (!first_problem_id) return '?';
-        if (!isAuthenticated) return '/daftar';
+        if (!isAuthenticated) return `/daftar?redirect=${router.basePath}`;
         if (!!first_problem_id)
             return `/astronotes/textbook/${slug}/${first_problem_id}`;
         return `/astronotes/${slug}/1`;
