@@ -6,6 +6,7 @@ import { GraduationCap, List, Clock } from 'lucide-react';
 import { useTracker } from 'tracker/tracker';
 import { useRouter } from 'next/router';
 import { IoTime } from 'react-icons/io5';
+import ShareContentButton from '../ShareContentButton';
 
 interface LatihanStartProps {
     exercise: Exercise;
@@ -122,21 +123,30 @@ const LatihanStart: React.FC<LatihanStartProps> = ({ exercise }) => {
                             </h4>
                         </div>
                     )}
-                <Link
-                    replace
-                    href={decideStartButton()}
-                    onClick={handleStartClick}
-                    className={cn(
-                        'w-full bg-[#7F56D9] text-white py-3 rounded-full font-semibold',
-                        'hover:bg-[#6941C6] transition-colors',
-                        'flex items-center justify-center'
-                    )}>
-                    {exercise.latest_progress !== null &&
-                    exercise.latest_progress.answered_questions > 0 &&
-                    exercise.latest_progress.status !== 'COMPLETED'
-                        ? 'Lanjutkan Latihan'
-                        : 'Mulai Latihan'}
-                </Link>
+                <div className="flex gap-2 items-center">
+                    <Link
+                        replace
+                        href={decideStartButton()}
+                        onClick={handleStartClick}
+                        className={cn(
+                            'w-full bg-[#7F56D9] text-white py-3 rounded-full font-semibold',
+                            'hover:bg-[#6941C6] transition-colors',
+                            'flex items-center justify-center'
+                        )}>
+                        {exercise.latest_progress !== null &&
+                        exercise.latest_progress.answered_questions > 0 &&
+                        exercise.latest_progress.status !== 'COMPLETED'
+                            ? 'Lanjutkan Latihan'
+                            : 'Mulai Latihan'}
+                    </Link>
+                    <ShareContentButton
+                        shareCopy={`Yuk coba kerjain ${exercise.title} di Gradient Academy!`}
+                        typeCopy="Exercise"
+                        iconOnly
+                        iconSize={16}
+                        className="bg-neutral-700 text-white !py-5"
+                    />
+                </div>
             </div>
         </div>
     );

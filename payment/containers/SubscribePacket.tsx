@@ -26,7 +26,7 @@ export const PacketCard = ({
 
     function handleClick(): void {
         if (!isAuthenticated) {
-            router.push('/daftar');
+            router.push(`/daftar?redirect=${router.asPath}`);
         } else {
             // redirect to pembayaran page
             router.push({

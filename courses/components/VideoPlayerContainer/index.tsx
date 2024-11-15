@@ -66,6 +66,19 @@ const VideoPlayerContainer = ({
         });
     };
 
+    const setIsShowRegisterWallHandler = async (): Promise<void> => {
+        if (typeof window !== 'undefined') {
+            const queryParams = new URLSearchParams(window.location.search);
+
+            // Set new or modify existing page value
+            queryParams.set('redirect', router.asPath);
+
+            // Replace current querystring with the new one
+            history.replaceState(null, '', '?' + queryParams.toString());
+        }
+        setIsShowRegisterwall((data) => !data);
+    };
+
     if (isLoading)
         return (
             <div className="relative w-full md:rounded-lg aspect-video">
@@ -86,11 +99,11 @@ const VideoPlayerContainer = ({
             <>
                 <VideoRegisterwall
                     showRegisterwall={showRegisterwall}
-                    setIsShowRegisterwall={setIsShowRegisterwall}
+                    setIsShowRegisterwall={setIsShowRegisterWallHandler}
                 />
                 <div
                     className="relative w-full md:rounded-lg aspect-video"
-                    onClick={() => setIsShowRegisterwall(true)}
+                    onClick={setIsShowRegisterWallHandler}
                     aria-hidden>
                     <Image
                         src={video?.thumbnail ?? ''}

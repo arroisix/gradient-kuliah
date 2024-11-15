@@ -137,6 +137,7 @@ const DashboardContent = (): JSX.Element => {
                         <Paywall
                             pricingData={pricingData?.data}
                             ctaEventName="Click Pricing Button on Dashboard"
+                            className="justify-center"
                         />
                     )}
                 </div>

@@ -17,6 +17,8 @@ import { useGetSubchapterDetailV2Query } from 'courses/redux/api/privateCourseV2
 import { useGetPublicSubchapterDetailV2Query } from 'courses/redux/api/publicCourseV2Api';
 import RelatedVideosSection from 'courses/components/RelatedVideosSection';
 import FreeBadge from 'commons/components/elements/FreeBadge';
+import RatingButton from 'courses/components/CourseRatingButton';
+import ShareContentButton from 'courses/components/ShareContentButton';
 
 const VideoLearnContainer = ({
     subchapter: ssrSubchapterData,
@@ -76,14 +78,23 @@ const VideoLearnContainer = ({
                             } as BreadcrumbItemProps
                         }
                     />
-                    <div className="order-last px-4 py-4 space-y-1 lg:pt-6 sm:px-0 md:px-12 lg:px-0">
+                    <div className="order-last px-4 py-4 space-y-1 md:space-y-2 lg:pt-6 sm:px-0 md:px-12 lg:px-0">
                         <p className="text-sm text-neutral-400">
                             Kelas {course?.course_name}
                         </p>
                         <h1 className="text-base font-extrabold md:text-2xl">
                             {subchapter?.subchapter_name}
                         </h1>
-                        {subchapter?.video?.is_free && <FreeBadge />}
+                        <div className="flex items-center gap-2 justify-center w-fit">
+                            {subchapter?.video?.is_free && (
+                                <FreeBadge className="py-4 px-5" />
+                            )}
+                            <RatingButton />
+                            <ShareContentButton
+                                typeCopy="COURSE VIDEO"
+                                shareCopy={`Coba deh nonton Video ${subchapter?.subchapter_name} dari Gradient Academy!`}
+                            />
+                        </div>
                     </div>
                     <VideoPlayerContainer
                         isLoadingData={isLoading}

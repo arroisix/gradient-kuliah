@@ -88,6 +88,9 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
                 // If this is an accessToken we just render the component that was passed with all its props
 
                 return <WrappedComponent {...props} />;
+            } else {
+                router.push(`/masuk?redirect=${window.location.href}`);
+                return;
             }
         }
         return <LoadingBackdrop />;
