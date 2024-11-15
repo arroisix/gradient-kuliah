@@ -30,7 +30,7 @@ const MethodBox = ({
             const currentDate = new Date();
             window.open(
                 getCSChatRoom(
-                    'WA',
+                    'IG',
                     encodeURIComponent(
                         `Halo, Saya tertarik untuk berlangganan dan membayar via transfer BCA\n\n[ID:${currentDate.getDate()}${addZeroBefore(
                             currentDate.getMonth() + 1
