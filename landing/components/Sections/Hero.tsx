@@ -41,8 +41,12 @@ const Hero = (): JSX.Element => {
                                 : 'flex-row gap-4'
                         )}>
                         <Link
-                            href={isAuthenticated ? '/langganan' : '/daftar'}
-                            className="bg-accent-purple rounded-full text-white font-body font-bold py-2.5 px-12 text-sm lg:text-base w-full text-center w-full"
+                            href={
+                                isAuthenticated
+                                    ? '/langganan'
+                                    : '/daftar?redirect=/langganan'
+                            }
+                            className="bg-accent-purple rounded-full text-white font-body font-bold py-2.5 px-12 text-sm lg:text-base text-center w-full"
                             onClick={() =>
                                 handleClick(
                                     isAuthenticated

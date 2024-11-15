@@ -55,7 +55,11 @@ const Paywall = ({
         })}`;
 
         if (!isAuthenticated) {
-            router.push(`/daftar?redirect=${pembayaranPage}`);
+            router.push(
+                `/daftar?${queryParamBuilder({
+                    redirect: '/pembayaran?packetId=' + pricing.id
+                })}`
+            );
         } else {
             localStorage.setItem('packetId', pricing.id);
             sendGTMEvent({

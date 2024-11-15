@@ -4,6 +4,8 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useSelector } from 'react-redux';
 import { PercentageProgess } from './LearningProgress/PercentageProgress';
+import ShareContentButton from '../ShareContentButton';
+import RatingButton from '../CourseRatingButton';
 
 const CourseDescription = ({
     slug,
@@ -27,7 +29,13 @@ const CourseDescription = ({
                 </h2>
                 <div className="w-full h-px bg-gray-500" />
                 <div className="text-sm">{course?.description}</div>
-
+                <div className="flex gap-2 w-full">
+                    <RatingButton />
+                    <ShareContentButton
+                        typeCopy="COURSE"
+                        shareCopy={`Coba deh cek Kelas ${course?.course_name} di Gradient Academy!`}
+                    />
+                </div>
                 <h2 className="text-sm text-gray-500 uppercase">Pengajar</h2>
                 <div className="flex flex-col gap-2">
                     {course?.lecturers.map((lecturer: Lecturer) => (

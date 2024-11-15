@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useTracker } from 'tracker/tracker';
+import { useRouter } from 'next/router';
 
 interface LatihanCardProps {
     exercise: ExerciseItem;
@@ -22,6 +23,7 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
     cardType,
     onClick
 }) => {
+    const router = useRouter();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { is_subscribed } = useCourseSubscription();
     const tracker = useTracker();
@@ -41,7 +43,7 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
                 return '/langganan';
             }
         } else {
-            return '/masuk';
+            return `/masuk?redirect=${router.asPath}`;
         }
     };
 

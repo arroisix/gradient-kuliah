@@ -133,11 +133,7 @@ export const RegistrationSection: React.FC = () => {
                         <div className="flex justify-center w-full gap-2 mt-8">
                             <span>Sudah punya akun?</span>
                             <Link
-                                href={`/masuk${
-                                    !!router.query.redirect
-                                        ? `?redirect=${router.query.redirect}`
-                                        : ''
-                                }`}
+                                href={`/masuk?redirect=${router.asPath}`}
                                 onClick={() => {
                                     tracker?.trackButtonClick(
                                         'Login Button on Register Page',

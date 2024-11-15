@@ -131,7 +131,13 @@ export const rtkQueryErrorLogger: Middleware = () => (next) => (action) => {
             }
 
             if (status === 403 && action.payload.data?.device_allowed) {
-                Router.replace('/keluar-perangkat');
+                if (!!Router.query.redirect) {
+                    Router.replace(
+                        `/keluar-perangkat?redirect=${Router.query.redirect}`
+                    );
+                } else {
+                    Router.replace('/keluar-perangkat');
+                }
             }
         } catch (e) {
             toast.error(

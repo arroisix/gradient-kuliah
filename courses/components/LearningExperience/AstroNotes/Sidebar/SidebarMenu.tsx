@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import ShareContentButton from 'courses/components/ShareContentButton';
 
 const SidebarMenu = ({ className }: PropsWithClassName): JSX.Element => {
     const tracker = useTracker();
@@ -100,6 +101,14 @@ const SidebarMenu = ({ className }: PropsWithClassName): JSX.Element => {
                     </li>
                 )
             )}
+            <li>
+                <ShareContentButton
+                    shareCopy="Coba deh cek Rangkuman ini di Gradient Academy!"
+                    typeCopy="ASTRONOTES"
+                    iconOnly
+                    className="!px-2 w-fit"
+                />
+            </li>
         </ul>
     );
 };
