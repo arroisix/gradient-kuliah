@@ -119,6 +119,25 @@ const Sidebar = ({
                     </span>
                 </Link>
                 <Link
+                    href={'/copilot'}
+                    onClick={() => {
+                        tracker?.genericTrack(
+                            `Click Copilot ${
+                                !fullHeight ? 'Course ' : ''
+                            }Navigation`
+                        );
+                    }}>
+                    <span
+                        className={`flex gap-4 cursor-pointer ${
+                            pathname.includes('/copilot')
+                                ? 'text-white'
+                                : 'text-[#666666]'
+                        }  font-body text-sm hover:text-[#999999]`}>
+                        <BiBookReader size={20} />
+                        Copilot AI
+                    </span>
+                </Link>
+                <Link
                     href={'/perpustakaan'}
                     onClick={() => {
                         tracker?.genericTrack(
