@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import ProblemPageContent from 'courses/components/Latihan/Problem/ProblemPageContent';
+import withAuth from 'commons/withAuth';
 
 const ProblemPage: React.FC = () => {
     const router = useRouter();
@@ -24,4 +25,4 @@ const ProblemPage: React.FC = () => {
     );
 };
 
-export default ProblemPage;
+export default withAuth(ProblemPage);
