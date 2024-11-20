@@ -1,10 +1,13 @@
 import LearnLayout from 'commons/learnLayout';
 import CopilotContainer from 'copilot/containers/CopilotContainer';
 import { GetServerSideProps } from 'next';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 
 const CopilotSession = (): JSX.Element => {
+    const { isMobileBreakpoints } = useWindowBreakpoints();
+
     return (
-        <LearnLayout noPadding>
+        <LearnLayout noPadding hideNavbar={isMobileBreakpoints} noTopPadding>
             <CopilotContainer />
         </LearnLayout>
     );

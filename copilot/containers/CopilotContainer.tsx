@@ -6,6 +6,9 @@ import ChatSection from '../components/ChatSection/ChatSection';
 import { ChatMessage } from '../types/copilot';
 import PromptBar from '../components/MainSection/PromptBar';
 import { chatApi } from '../redux/api/copilotApi';
+import MobileHeader from '../components/MobileHeader/MobileHeader';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
+import { cn } from 'commons/utils';
 
 const CopilotContainer = (): JSX.Element => {
     const router = useRouter();
@@ -16,6 +19,8 @@ const CopilotContainer = (): JSX.Element => {
     const [currentSessionId, setCurrentSessionId] = useState<
         string | undefined
     >();
+    const [showMobileHistory, setShowMobileHistory] = useState(false);
+    const { isMobileBreakpoints } = useWindowBreakpoints();
 
     useEffect(() => {
         if (
@@ -124,7 +129,25 @@ const CopilotContainer = (): JSX.Element => {
     };
 
     return (
-        <div className="flex h-screen bg-[#101010] overflow-hidden -mx-4 md:px-4">
+        <div
+            className={cn(
+                'flex h-screen bg-[#101010] overflow-hidden',
+                isMobileBreakpoints && '-mx-4',
+                'md:mx-0'
+            )}>
+            {showMobileHistory && (
+                <button
+                    className="fixed inset-0 bg-black bg-opacity-50 z-50 md:hidden"
+                    onClick={() => setShowMobileHistory(false)}>
+                    <HistorySection
+                        isOpen={showMobileHistory}
+                        onClose={() => setShowMobileHistory(false)}
+                        onOpen={() => setShowMobileHistory(true)}
+                        isMobile
+                    />
+                </button>
+            )}
+
             <div className="hidden md:block">
                 <HistorySection
                     isOpen={showHistory}
@@ -134,6 +157,10 @@ const CopilotContainer = (): JSX.Element => {
             </div>
 
             <div className="flex-1 flex flex-col h-full">
+                <MobileHeader
+                    onOpenHistory={() => setShowMobileHistory(true)}
+                />
+
                 {messages.length > 0 ? (
                     <>
                         <div className="flex-1 overflow-y-auto relative">

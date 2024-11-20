@@ -9,58 +9,37 @@ interface HistorySectionProps {
     isOpen: boolean;
     onClose: () => void;
     onOpen: () => void;
+    isMobile?: boolean;
 }
 
-const HISTORY_ITEMS: any[] = [
-    // {
-    //     title: 'Percepatan Sebagai Vektor',
-    //     preview:
-    //         'Percepatan merupakan besaran vektor karena memiliki besar dan arah. Besaran vektor bias...',
-    //     timestamp: '12 Jul 2024, 19.30'
-    // },
-    // {
-    //     title: 'Rangkuman Purcell Turunan',
-    //     preview:
-    //         'Berikut adalah rangkuman Bab Turunan dalam buku Calculus oleh Edwin Purcell: 1. Konsep T...',
-    //     timestamp: '12 Jul 2024, 19.30'
-    // },
-    // {
-    //     title: 'Rangkuman Purcell Turunan',
-    //     preview:
-    //         'Berikut adalah rangkuman Bab Turunan dalam buku Calculus oleh Edwin Purcell: 1. Konsep T...',
-    //     timestamp: '12 Jul 2024, 19.30'
-    // },
-    // {
-    //     title: 'Rangkuman Purcell Turunan',
-    //     preview:
-    //         'Berikut adalah rangkuman Bab Turunan dalam buku Calculus oleh Edwin Purcell: 1. Konsep T...',
-    //     timestamp: '12 Jul 2024, 19.30'
-    // },
-    // {
-    //     title: 'Rangkuman Purcell Turunan',
-    //     preview:
-    //         'Berikut adalah rangkuman Bab Turunan dalam buku Calculus oleh Edwin Purcell: 1. Konsep T...',
-    //     timestamp: '12 Jul 2024, 19.30'
-    // }
-];
+const HISTORY_ITEMS: any[] = [];
 
 const HistorySection = ({
     isOpen,
     onClose,
-    onOpen
+    onOpen,
+    isMobile = false
 }: HistorySectionProps): JSX.Element => {
     const hasHistory = HISTORY_ITEMS.length > 0;
+
+    const mobileClasses = isMobile
+        ? 'fixed left-0 top-0 bottom-0 w-full transform transition-transform duration-300 ease-in-out'
+        : '';
+    const mobileTransform = isMobile && !isOpen ? '-translate-x-full' : '';
+
     return (
         <div
             className={cn(
-                'transition-all duration-300 ease-in-out',
-                isOpen ? 'w-80' : 'w-16',
-                'bg-neutral-900 h-screen flex flex-col'
+                'bg-neutral-900 h-screen flex flex-col',
+                !isMobile && 'transition-all duration-300 ease-in-out',
+                !isMobile && (isOpen ? 'w-80' : 'w-16'),
+                mobileClasses,
+                mobileTransform
             )}>
-            {!isOpen ? (
+            {!isOpen && !isMobile ? (
                 <button
                     onClick={onOpen}
-                    className="flex justify-center pt-4 w-full text-white hover:text-neutral-400 transition-colors duration-200">
+                    className="flex justify-center pt-6 w-full text-white hover:text-neutral-400 transition-colors duration-200">
                     <AiOutlineHistory size={24} />
                 </button>
             ) : (
