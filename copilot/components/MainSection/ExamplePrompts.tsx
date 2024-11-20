@@ -6,14 +6,20 @@ const EXAMPLE_PROMPTS = [
     'Bikinin rangkuman buku purcell bab turunan!'
 ];
 
-const ExamplePrompts = (): JSX.Element => {
+interface ExamplePromptsProps {
+    onPromptClick: (prompt: string) => Promise<void>;
+}
+
+const ExamplePrompts = ({
+    onPromptClick
+}: ExamplePromptsProps): JSX.Element => {
     return (
         <div className="flex flex-col gap-3">
             {EXAMPLE_PROMPTS.map((prompt, index) => (
                 <button
                     key={index}
-                    className="flex items-center justify-between border border-neutral-800 hover:bg-neutral-800/50 px-4 py-3 rounded-lg text-left transition-colors"
-                >
+                    onClick={() => onPromptClick(prompt)}
+                    className="flex items-center justify-between border border-neutral-800 hover:bg-neutral-800/50 px-4 py-3 rounded-lg text-left transition-colors">
                     <span>{prompt}</span>
                     <FiArrowUpRight className="text-neutral-400" />
                 </button>

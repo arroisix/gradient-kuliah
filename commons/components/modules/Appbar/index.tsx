@@ -21,7 +21,8 @@ const DISPLAYED_ROUTES = [
     '/perpustakaan/bank-soal',
     '/perpustakaan/astronotes',
     '/kelas',
-    '/latihan'
+    '/latihan',
+    '/copilot'
 ];
 const APPBAR_NAV: AppbarNav[] = [
     {

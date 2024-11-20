@@ -11,37 +11,37 @@ interface HistorySectionProps {
     onOpen: () => void;
 }
 
-const HISTORY_ITEMS = [
-    {
-        title: 'Percepatan Sebagai Vektor',
-        preview:
-            'Percepatan merupakan besaran vektor karena memiliki besar dan arah. Besaran vektor bias...',
-        timestamp: '12 Jul 2024, 19.30'
-    },
-    {
-        title: 'Rangkuman Purcell Turunan',
-        preview:
-            'Berikut adalah rangkuman Bab Turunan dalam buku Calculus oleh Edwin Purcell: 1. Konsep T...',
-        timestamp: '12 Jul 2024, 19.30'
-    },
-    {
-        title: 'Rangkuman Purcell Turunan',
-        preview:
-            'Berikut adalah rangkuman Bab Turunan dalam buku Calculus oleh Edwin Purcell: 1. Konsep T...',
-        timestamp: '12 Jul 2024, 19.30'
-    },
-    {
-        title: 'Rangkuman Purcell Turunan',
-        preview:
-            'Berikut adalah rangkuman Bab Turunan dalam buku Calculus oleh Edwin Purcell: 1. Konsep T...',
-        timestamp: '12 Jul 2024, 19.30'
-    },
-    {
-        title: 'Rangkuman Purcell Turunan',
-        preview:
-            'Berikut adalah rangkuman Bab Turunan dalam buku Calculus oleh Edwin Purcell: 1. Konsep T...',
-        timestamp: '12 Jul 2024, 19.30'
-    }
+const HISTORY_ITEMS: any[] = [
+    // {
+    //     title: 'Percepatan Sebagai Vektor',
+    //     preview:
+    //         'Percepatan merupakan besaran vektor karena memiliki besar dan arah. Besaran vektor bias...',
+    //     timestamp: '12 Jul 2024, 19.30'
+    // },
+    // {
+    //     title: 'Rangkuman Purcell Turunan',
+    //     preview:
+    //         'Berikut adalah rangkuman Bab Turunan dalam buku Calculus oleh Edwin Purcell: 1. Konsep T...',
+    //     timestamp: '12 Jul 2024, 19.30'
+    // },
+    // {
+    //     title: 'Rangkuman Purcell Turunan',
+    //     preview:
+    //         'Berikut adalah rangkuman Bab Turunan dalam buku Calculus oleh Edwin Purcell: 1. Konsep T...',
+    //     timestamp: '12 Jul 2024, 19.30'
+    // },
+    // {
+    //     title: 'Rangkuman Purcell Turunan',
+    //     preview:
+    //         'Berikut adalah rangkuman Bab Turunan dalam buku Calculus oleh Edwin Purcell: 1. Konsep T...',
+    //     timestamp: '12 Jul 2024, 19.30'
+    // },
+    // {
+    //     title: 'Rangkuman Purcell Turunan',
+    //     preview:
+    //         'Berikut adalah rangkuman Bab Turunan dalam buku Calculus oleh Edwin Purcell: 1. Konsep T...',
+    //     timestamp: '12 Jul 2024, 19.30'
+    // }
 ];
 
 const HistorySection = ({
@@ -49,6 +49,7 @@ const HistorySection = ({
     onClose,
     onOpen
 }: HistorySectionProps): JSX.Element => {
+    const hasHistory = HISTORY_ITEMS.length > 0;
     return (
         <div
             className={cn(
@@ -96,30 +97,42 @@ const HistorySection = ({
                     </div>
 
                     <div className="flex flex-col min-h-0 flex-1">
-                        <div className="overflow-y-auto px-2 flex-1">
-                            {HISTORY_ITEMS.map((item, index) => (
-                                <div
-                                    key={index}
-                                    className="p-3 hover:bg-[#222222] rounded-lg cursor-pointer group">
-                                    <div className="flex items-start justify-between gap-2">
-                                        <div>
-                                            <h3 className="font-semibold text-sm mb-1">
-                                                {item.title}
-                                            </h3>
-                                            <p className="text-sm text-neutral-400 line-clamp-2">
-                                                {item.preview}
-                                            </p>
+                        {hasHistory ? (
+                            <div className="overflow-y-auto px-2 flex-1">
+                                {HISTORY_ITEMS.map((item, index) => (
+                                    <div
+                                        key={index}
+                                        className="p-3 hover:bg-[#222222] rounded-lg cursor-pointer group">
+                                        <div className="flex items-start justify-between gap-2">
+                                            <div>
+                                                <h3 className="font-semibold text-sm mb-1">
+                                                    {item.title}
+                                                </h3>
+                                                <p className="text-sm text-neutral-400 line-clamp-2">
+                                                    {item.preview}
+                                                </p>
+                                            </div>
+                                            <button className="opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <BsThreeDotsVertical className="text-neutral-400" />
+                                            </button>
                                         </div>
-                                        <button className="opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <BsThreeDotsVertical className="text-neutral-400" />
-                                        </button>
+                                        <span className="text-xs text-neutral-500 mt-2 block">
+                                            {item.timestamp}
+                                        </span>
                                     </div>
-                                    <span className="text-xs text-neutral-500 mt-2 block">
-                                        {item.timestamp}
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center h-full text-center px-4">
+                                <p className="text-base font-medium">
+                                    Kamu belum pernah memulai percakapan
+                                </p>
+                                <p className="text-sm text-neutral-400 mt-2">
+                                    Riwayat percakapanmu dengan Copilot AI akan
+                                    tersimpan di sini
+                                </p>
+                            </div>
+                        )}
 
                         <div className="shrink-0 p-4 border-t border-neutral-800">
                             <div className="bg-[#222222] p-4 rounded-lg">
@@ -133,7 +146,7 @@ const HistorySection = ({
                                             setiap hari
                                         </p>
                                     </div>
-                                    <div className="flex items-center gap-2 bg-[#333333] px-2 py-1 rounded-md">
+                                    <div className="flex items-center gap-0.5 bg-[#333333] pl-1 pr-2 py-1 rounded-md">
                                         <span className="text-yellow-500">
                                             ⚡
                                         </span>

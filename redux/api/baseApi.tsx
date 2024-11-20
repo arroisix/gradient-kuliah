@@ -35,7 +35,8 @@ export const baseApi = createApi({
         'ASTRONOTES',
         'PROBLEM_SET',
         'CONNECTED_DEVICES',
-        'TRANSACTION'
+        'TRANSACTION',
+        'CHAT_HISTORY'
     ],
     baseQuery: fetchBaseQuery({
         baseUrl: config.API_BASE_URL,

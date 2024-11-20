@@ -21,5 +21,4 @@ export const getStaticProps: GetStaticProps = () => {
     };
 };
 
-Copilot.displayName = 'Copilot AI';
 export default Copilot;
