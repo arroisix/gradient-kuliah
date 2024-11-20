@@ -4,6 +4,7 @@ import { BsArrowCounterclockwise } from 'react-icons/bs';
 import { FiThumbsDown, FiThumbsUp } from 'react-icons/fi';
 import { BsBookmark } from 'react-icons/bs';
 import { BsCheck } from 'react-icons/bs';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
@@ -15,9 +16,14 @@ import CopilotIcon from '../../assets/CopilotIcon';
 interface ChatSectionProps {
     messages: ChatMessage[];
     onRetry?: (message: ChatMessage) => void;
+    isLoading?: boolean;
 }
 
-const ChatSection = ({ messages, onRetry }: ChatSectionProps): JSX.Element => {
+const ChatSection = ({
+    messages,
+    onRetry,
+    isLoading
+}: ChatSectionProps): JSX.Element => {
     const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
 
     const handleCopy = async (text: string, messageId: string) => {
@@ -66,7 +72,7 @@ const ChatSection = ({ messages, onRetry }: ChatSectionProps): JSX.Element => {
                                 className={cn(
                                     'max-w-[80%]',
                                     message.role === 'user' &&
-                                    'bg-[#5F2BCE] px-4 py-3 rounded-2xl'
+                                        'bg-[#5F2BCE] px-4 py-3 rounded-2xl'
                                 )}>
                                 {message.role === 'assistant' ? (
                                     <div className="space-y-4">
@@ -129,16 +135,13 @@ const ChatSection = ({ messages, onRetry }: ChatSectionProps): JSX.Element => {
                                                 </button>
                                             </div>
                                             <div className="flex items-center gap-2 ml-auto">
-                                                <button
-                                                    className="text-neutral-400 hover:text-white p-2 hover:bg-neutral-800 rounded-lg transition-colors">
+                                                <button className="text-neutral-400 hover:text-white p-2 hover:bg-neutral-800 rounded-lg transition-colors">
                                                     <FiThumbsUp size={20} />
                                                 </button>
-                                                <button
-                                                    className="text-neutral-400 hover:text-white p-2 hover:bg-neutral-800 rounded-lg transition-colors">
+                                                <button className="text-neutral-400 hover:text-white p-2 hover:bg-neutral-800 rounded-lg transition-colors">
                                                     <FiThumbsDown size={20} />
                                                 </button>
-                                                <button
-                                                    className="text-neutral-400 hover:text-white p-2 hover:bg-neutral-800 rounded-lg transition-colors">
+                                                <button className="text-neutral-400 hover:text-white p-2 hover:bg-neutral-800 rounded-lg transition-colors">
                                                     <BsBookmark size={20} />
                                                 </button>
                                             </div>
@@ -152,6 +155,18 @@ const ChatSection = ({ messages, onRetry }: ChatSectionProps): JSX.Element => {
                             </div>
                         </div>
                     ))}
+
+                    {isLoading && (
+                        <div className="flex justify-center items-center w-full py-4">
+                            <AiOutlineLoading3Quarters
+                                size={24}
+                                className="animate-spin text-neutral-400"
+                            />
+                            <span className="ml-2 text-neutral-400">
+                                Copilot sedang berpikir...
+                            </span>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

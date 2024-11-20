@@ -82,7 +82,7 @@ const CopilotContainer = (): JSX.Element => {
                     onComplete: (messageId, sessionId) => {
                         if (sessionId && currentSessionId) {
                             setCurrentSessionId(sessionId);
-                            router.push(`/copilot/${sessionId}`);
+                            // router.push(`/copilot/${sessionId}`);
                         } else if (sessionId) {
                             // TODO: Redirect to newly created session id
                             setCurrentSessionId(sessionId);
@@ -141,6 +141,7 @@ const CopilotContainer = (): JSX.Element => {
                                 <ChatSection
                                     messages={messages}
                                     onRetry={handleRetry}
+                                    isLoading={isLoading}
                                 />
                             </div>
                             <div ref={messagesEndRef} />
