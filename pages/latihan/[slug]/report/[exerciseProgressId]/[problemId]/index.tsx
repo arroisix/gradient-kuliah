@@ -4,6 +4,7 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 // import ProblemDetailPage from 'courses/components/Latihan/Report/Problem/ProblemDetailPage';
 import { NextPage } from 'next';
+import withAuth from 'commons/withAuth';
 
 const ProblemDetailPage = dynamic(
     () => import('courses/components/Latihan/Report/Problem/ProblemDetailPage'),
@@ -16,4 +17,4 @@ const ProblemDetailPageWrapper: NextPage = () => {
     return <ProblemDetailPage />;
 };
 
-export default ProblemDetailPageWrapper;
+export default withAuth(ProblemDetailPageWrapper);

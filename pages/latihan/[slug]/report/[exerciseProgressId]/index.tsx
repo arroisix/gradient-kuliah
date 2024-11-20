@@ -1,6 +1,7 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import ExerciseReportLayout from 'courses/components/Latihan/Report/ExerciseReportLayout';
+import withAuth from 'commons/withAuth';
 
 const ExerciseReportPage: NextPage = () => {
     const router = useRouter();
@@ -23,4 +24,4 @@ const ExerciseReportPage: NextPage = () => {
     );
 };
 
-export default ExerciseReportPage;
+export default withAuth(ExerciseReportPage);
