@@ -204,7 +204,7 @@ const CopilotContainer = (): JSX.Element => {
                             onScroll={handleScroll}
                             className={cn(
                                 'flex-1 overflow-y-auto relative',
-                                !isMobileBreakpoints && 'pt-6',
+                                !isMobileBreakpoints && 'pt-6 px-4 md:px-8 lg:px-16',
                                 isMobileBreakpoints && 'mt-16 pb-16'
                             )}>
                             <ChatSection
@@ -219,7 +219,7 @@ const CopilotContainer = (): JSX.Element => {
                                 'w-full max-w-3xl mx-auto',
                                 isMobileBreakpoints
                                     ? 'fixed bottom-8 left-0 right-0 bg-[#101010] pb-6'
-                                    : 'mb-8 px-4'
+                                    : 'mb-8 px-4 md:px-8 lg:px-16'
                             )}>
                             <PromptBar
                                 onSend={handleSendMessage}

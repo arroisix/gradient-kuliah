@@ -50,7 +50,7 @@ const ChatSection = ({
 
     return (
         <div className="w-full min-h-screen h-full pb-16">
-            <div className="max-w-3xl w-full mx-auto px-4 md:px-8 pb-16">
+            <div className="max-w-3xl w-full mx-auto pb-16">
                 <div className="space-y-6">
                     {messages.map((message) => (
                         <div
