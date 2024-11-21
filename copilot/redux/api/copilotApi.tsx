@@ -113,14 +113,17 @@ export const chatApi = {
 
     getChatHistory: async (): Promise<ChatHistoryResponse> => {
         const token = localStorage.getItem('token');
-        const response = await fetch(`${COPILOT_BASE_URL}chat/history/`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Token ${token}`,
-                Accept: '*/*'
+        const response = await fetch(
+            `${COPILOT_BASE_URL}chat/history/single/`,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Token ${token}`,
+                    Accept: '*/*'
+                }
             }
-        });
+        );
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);

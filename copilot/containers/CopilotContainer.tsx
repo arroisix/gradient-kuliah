@@ -13,7 +13,9 @@ const CopilotContainer = (): JSX.Element => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoadingHistory, setIsLoadingHistory] = useState(true);
     const [isLoadingResponse, setIsLoadingResponse] = useState(false);
+    const [showScrollButton, setShowScrollButton] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const chatContainerRef = useRef<HTMLDivElement>(null);
     const [currentSessionId, setCurrentSessionId] = useState<
         string | undefined
     >();
@@ -23,9 +25,9 @@ const CopilotContainer = (): JSX.Element => {
         const loadChatHistory = async () => {
             try {
                 const response = await chatApi.getChatHistory();
-                if (response.History && response.History.length > 0) {
+                if (response.history && response.history.length > 0) {
                     const convertedMessages: ChatMessage[] =
-                        response.History.map(
+                        response.history.map(
                             (item: {
                                 role: 'AI' | 'User';
                                 message: string;
@@ -54,6 +56,20 @@ const CopilotContainer = (): JSX.Element => {
 
         loadChatHistory();
     }, []);
+
+    const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+        const target = e.target as HTMLDivElement;
+        const isNearBottom =
+            target.scrollHeight - target.scrollTop - target.clientHeight < 100;
+        setShowScrollButton(!isNearBottom);
+    };
+
+    const scrollToBottom = () => {
+        chatContainerRef.current?.scrollTo({
+            top: chatContainerRef.current.scrollHeight,
+            behavior: 'smooth'
+        });
+    };
 
     const handleSendMessage = async (prompt: string) => {
         if (!prompt.trim()) return;
@@ -160,32 +176,9 @@ const CopilotContainer = (): JSX.Element => {
                 isMobileBreakpoints && '-mx-4',
                 'md:mx-0'
             )}>
-            {/* TODO: Implement History Section
-       {showMobileHistory && (
-           <button
-               className="fixed inset-0 bg-black bg-opacity-50 z-50 md:hidden"
-               onClick={() => setShowMobileHistory(false)}>
-               <HistorySection
-                   isOpen={showMobileHistory}
-                   onClose={() => setShowMobileHistory(false)}
-                   onOpen={() => setShowMobileHistory(true)}
-                   isMobile
-               />
-           </button>
-       )}
-
-       <div className="hidden md:block">
-           <HistorySection
-               isOpen={showHistory}
-               onClose={() => setShowHistory(false)}
-               onOpen={() => setShowHistory(true)}
-           />
-       </div>
-       */}
-
             <div
                 className={cn(
-                    'flex-1 flex flex-col h-full w-full',
+                    'flex-1 flex flex-col h-full w-full relative',
                     !isMobileBreakpoints && 'px-24'
                 )}>
                 {isMobileBreakpoints && (
@@ -207,8 +200,10 @@ const CopilotContainer = (): JSX.Element => {
                 ) : messages.length > 0 ? (
                     <>
                         <div
+                            ref={chatContainerRef}
+                            onScroll={handleScroll}
                             className={cn(
-                                'flex-1 overflow-y-auto',
+                                'flex-1 overflow-y-auto relative',
                                 !isMobileBreakpoints && 'pt-6',
                                 isMobileBreakpoints && 'mt-16 pb-16'
                             )}>
@@ -231,6 +226,26 @@ const CopilotContainer = (): JSX.Element => {
                                 isLoading={isLoadingResponse}
                             />
                         </div>
+
+                        {showScrollButton && (
+                            <button
+                                onClick={scrollToBottom}
+                                className="fixed bottom-32 left-1/2 -translate-x-1/2 bg-[#5F2BCE] hover:bg-[#4f24a8] text-white p-3 rounded-full shadow-lg transition-all duration-200 z-10">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-6 w-6"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                                    />
+                                </svg>
+                            </button>
+                        )}
                     </>
                 ) : (
                     <MainSection onSendMessage={handleSendMessage} />

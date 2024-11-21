@@ -12,7 +12,7 @@ export interface ChatInput {
 }
 
 export interface ChatHistoryResponse {
-    History: {
+    history: {
         role: 'AI' | 'User';
         message: string;
         image?: string | null;
