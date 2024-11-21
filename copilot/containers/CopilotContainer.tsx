@@ -204,7 +204,8 @@ const CopilotContainer = (): JSX.Element => {
                             onScroll={handleScroll}
                             className={cn(
                                 'flex-1 overflow-y-auto relative',
-                                !isMobileBreakpoints && 'pt-6 px-4 md:px-8 lg:px-16',
+                                !isMobileBreakpoints &&
+                                    'pt-6 px-4 md:px-8 lg:px-16',
                                 isMobileBreakpoints && 'mt-16 pb-16'
                             )}>
                             <ChatSection
