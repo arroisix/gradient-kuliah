@@ -38,6 +38,9 @@ export interface ChatMessage {
     role: 'user' | 'assistant';
     content: string;
     timestamp: string;
+    rating?: number;
+    isBookmarked?: boolean;
+    image?: string | null;
 }
 
 export interface MainSectionProps {

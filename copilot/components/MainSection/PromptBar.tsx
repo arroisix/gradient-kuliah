@@ -5,6 +5,7 @@ import { ImOmega } from 'react-icons/im';
 import { cn } from 'commons/utils';
 import MathForm from '../../../komunitas/components/KomunitasForm/MathForm';
 import SymbolForm from '../../../komunitas/components/KomunitasForm/SymbolForm';
+import useWindowBreakpoints from '../../../commons/hooks/useWindowBreakpoints';
 
 interface PromptBarProps {
     onSend?: (prompt: string) => void;
@@ -17,6 +18,7 @@ const PromptBar = ({ onSend, isLoading }: PromptBarProps): JSX.Element => {
     const [activeForm, setActiveForm] = useState<'math' | 'symbol' | null>(
         null
     );
+    const { isMobileBreakpoints } = useWindowBreakpoints();
 
     const handleSend = () => {
         if (prompt.trim() && onSend && !isLoading) {
@@ -53,7 +55,13 @@ const PromptBar = ({ onSend, isLoading }: PromptBarProps): JSX.Element => {
 
     return (
         <div className="flex flex-col gap-2">
-            <div className="border-2 border-neutral-800 rounded-xl py-2">
+            <div
+                className={cn(
+                    'py-2',
+                    !isMobileBreakpoints &&
+                        'border-2 border-neutral-800 rounded-xl',
+                    isMobileBreakpoints && 'border-t border-neutral-800'
+                )}>
                 <div className="px-2 pb-3">
                     <input
                         ref={inputRef}
@@ -104,11 +112,12 @@ const PromptBar = ({ onSend, isLoading }: PromptBarProps): JSX.Element => {
                         </button>
                     </div>
 
-                    <div className="flex items-center gap-1 bg-[#222222] pl-2 rounded-full">
-                        <div className="flex items-center gap-0.5 text-sm border-r border-neutral-700 pr-2">
-                            <span className="text-yellow-500">⚡</span>
-                            <span>5</span>
-                        </div>
+                    <div className="flex items-center gap-1 pl-2 rounded-full">
+                        {/*TODO: Implement Energy*/}
+                        {/*<div className="flex items-center gap-0.5 text-sm border-r border-neutral-700 pr-2">*/}
+                        {/*    <span className="text-yellow-500">⚡</span>*/}
+                        {/*    <span>5</span>*/}
+                        {/*</div>*/}
                         <button
                             onClick={handleSend}
                             disabled={isLoading || !prompt.trim()}

@@ -30,7 +30,8 @@ import AuthButtons from './components/AuthButtons';
 import UserProfile from './components/UserProfile';
 import { useThemeContext } from 'commons/contexts/ThemeProvider';
 import SearchBar from '../Searchbar';
-import CopilotIcon from '../../../../copilot/assets/CopilotIcon';
+import CopilotIconFill from '../../../../copilot/assets/CopilotIconFill';
+import CopilotIconLine from '../../../../copilot/assets/CopilotIconLine';
 
 const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
     {
@@ -192,8 +193,8 @@ const Navbar = ({
                                 name="Copilot AI"
                                 title="Copilot AI"
                                 url="/copilot"
-                                IconActive={RiFileListFill}
-                                IconUnactive={CopilotIcon}
+                                IconActive={CopilotIconFill}
+                                IconUnactive={CopilotIconLine}
                             />
                         )}
                         {configData?.configs.is_exercise_config_enabled && (

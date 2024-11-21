@@ -12,6 +12,7 @@ import {
     RiQuestionnaireLine
 } from 'react-icons/ri';
 import { useTracker } from 'tracker/tracker';
+import CopilotIconLine from '../../../../copilot/assets/CopilotIconLine';
 
 const Sidebar = ({
     fullHeight,
@@ -133,7 +134,7 @@ const Sidebar = ({
                                 ? 'text-white'
                                 : 'text-[#666666]'
                         }  font-body text-sm hover:text-[#999999]`}>
-                        <BiBookReader size={20} />
+                        <CopilotIconLine />
                         Copilot AI
                     </span>
                 </Link>
