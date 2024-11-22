@@ -97,7 +97,9 @@ const Appbar = (): JSX.Element | null => {
             {showExpanded && (
                 <div
                     className="fixed inset-0 bg-black/50 z-10"
-                    onClick={() => setShowExpanded(false)}>
+                    onClick={() => setShowExpanded(false)}
+                    onKeyDown={() => setShowExpanded(false)}
+                    aria-hidden="true">
                     <div className="absolute bottom-16 left-1/2 -translate-x-1/2 bg-[#1D1D1D] rounded-lg overflow-hidden">
                         {APPBAR_NAV.find(
                             (menu) => menu.isExpandable
@@ -115,27 +117,40 @@ const Appbar = (): JSX.Element | null => {
                 </div>
             )}
 
-            {/* Main Appbar */}
             <div
                 className="btm-nav bg-[#121212] md:hidden"
                 style={{ zIndex: 11 }}>
-                {APPBAR_NAV.map((menu) => (
+                {APPBAR_NAV.map((menu, index) => (
                     <Link
                         key={menu.label}
                         href={menu.href}
                         onClick={(e) => handleDiscussionClick(e, menu)}
                         className={cn(
+                            'flex flex-col items-center relative',
                             router.pathname === menu.href
                                 ? 'text-white'
                                 : 'text-[#666]',
-                            'flex flex-col items-center'
+                            index === 2 && 'gap-3 -mt-3'
                         )}>
-                        {menu.isExpandable
-                            ? currentIcon === 'diskusi'
-                                ? menu.icon
-                                : menu.iconAlt
-                            : menu.icon}
-                        <span className="text-xs mt-1">{menu.label}</span>
+                        {menu.isExpandable ? (
+                            <div className="relative">
+                                <div className="absolute inset-0 w-12 h-12 bg-[#5F2BCE] rounded-full -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2" />
+                                <div className="relative z-10">
+                                    {currentIcon === 'diskusi'
+                                        ? menu.icon
+                                        : menu.iconAlt}
+                                </div>
+                            </div>
+                        ) : (
+                            menu.icon
+                        )}
+                        <span
+                            className={cn(
+                                'text-xs',
+                                index === 2 ? 'mt-2' : 'mt-1'
+                            )}>
+                            {menu.label}
+                        </span>
                     </Link>
                 ))}
             </div>
