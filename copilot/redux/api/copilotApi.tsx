@@ -134,14 +134,24 @@ export const chatApi = {
 
     changeMessageRating: async (input: ChangeRatingInput): Promise<void> => {
         const token = localStorage.getItem('token');
-        await fetch(`${COPILOT_BASE_URL}change_message_rating/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Token ${token}`
-            },
-            body: JSON.stringify(input)
-        });
+        const response = await fetch(
+            `${COPILOT_BASE_URL}change_message_rating/`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Token ${token}`,
+                    Accept: '*/*'
+                },
+                body: JSON.stringify(input)
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return response.json();
     },
 
     toggleChatBookmark: async (input: ToggleBookmarkInput): Promise<void> => {

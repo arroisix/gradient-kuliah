@@ -210,8 +210,10 @@ const CopilotContainer = (): JSX.Element => {
                             )}>
                             <ChatSection
                                 messages={messages}
+                                setMessages={setMessages}
                                 onRetry={handleRetry}
                                 isLoading={isLoadingResponse}
+                                currentSessionId={currentSessionId}
                             />
                             <div ref={messagesEndRef} />
                         </div>

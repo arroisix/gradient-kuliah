@@ -12,19 +12,50 @@ import remarkGfm from 'remark-gfm';
 import { ChatMessage } from '../../types/copilot';
 import { cn } from 'commons/utils';
 import CopilotIcon from '../../assets/CopilotIcon';
+import { chatApi } from '../../redux/api/copilotApi';
 
 interface ChatSectionProps {
     messages: ChatMessage[];
     onRetry?: (message: ChatMessage) => void;
+    setMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
     isLoading?: boolean;
+    currentSessionId?: string;
 }
 
 const ChatSection = ({
     messages,
+    setMessages,
     onRetry,
-    isLoading
+    isLoading,
+    currentSessionId
 }: ChatSectionProps): JSX.Element => {
     const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
+    const [isRating, setIsRating] = useState<Record<string, boolean>>({});
+
+    const handleRating = async (message: ChatMessage, newRating: number) => {
+        if (!currentSessionId || isRating[message.id]) return;
+
+        try {
+            setIsRating((prev) => ({ ...prev, [message.id]: true }));
+
+            const ratingToApply = message.rating === newRating ? 0 : newRating;
+
+            await chatApi.changeMessageRating({
+                session_id: currentSessionId,
+                message_id: message.id,
+                rating: ratingToApply
+            });
+
+            const updatedMessages = messages.map((msg) =>
+                msg.id === message.id ? { ...msg, rating: ratingToApply } : msg
+            );
+            setMessages(updatedMessages);
+        } catch (error) {
+            console.error('Failed to rate message:', error);
+        } finally {
+            setIsRating((prev) => ({ ...prev, [message.id]: false }));
+        }
+    };
 
     const handleCopy = async (text: string, messageId: string) => {
         try {
@@ -135,11 +166,56 @@ const ChatSection = ({
                                                 </button>
                                             </div>
                                             <div className="flex items-center gap-2 ml-auto">
-                                                <button className="text-neutral-400 hover:text-white p-2 hover:bg-neutral-800 rounded-lg transition-colors">
-                                                    <FiThumbsUp size={20} />
+                                                <button
+                                                    onClick={() =>
+                                                        handleRating(message, 1)
+                                                    }
+                                                    disabled={
+                                                        isRating[message.id]
+                                                    }
+                                                    className={cn(
+                                                        'p-2 rounded-lg transition-colors',
+                                                        message.rating === 1
+                                                            ? 'bg-[#5F2BCE] text-white'
+                                                            : 'text-neutral-400 hover:text-white hover:bg-neutral-800',
+                                                        isRating[message.id] &&
+                                                            'opacity-50 cursor-not-allowed'
+                                                    )}>
+                                                    <FiThumbsUp
+                                                        size={20}
+                                                        className={cn(
+                                                            message.rating ===
+                                                                1 &&
+                                                                'fill-current'
+                                                        )}
+                                                    />
                                                 </button>
-                                                <button className="text-neutral-400 hover:text-white p-2 hover:bg-neutral-800 rounded-lg transition-colors">
-                                                    <FiThumbsDown size={20} />
+                                                <button
+                                                    onClick={() =>
+                                                        handleRating(
+                                                            message,
+                                                            -1
+                                                        )
+                                                    }
+                                                    disabled={
+                                                        isRating[message.id]
+                                                    }
+                                                    className={cn(
+                                                        'p-2 rounded-lg transition-colors',
+                                                        message.rating === -1
+                                                            ? 'bg-[#5F2BCE] text-white'
+                                                            : 'text-neutral-400 hover:text-white hover:bg-neutral-800',
+                                                        isRating[message.id] &&
+                                                            'opacity-50 cursor-not-allowed'
+                                                    )}>
+                                                    <FiThumbsDown
+                                                        size={20}
+                                                        className={cn(
+                                                            message.rating ===
+                                                                -1 &&
+                                                                'fill-current'
+                                                        )}
+                                                    />
                                                 </button>
                                                 <button className="text-neutral-400 hover:text-white p-2 hover:bg-neutral-800 rounded-lg transition-colors">
                                                     <BsBookmark size={20} />
