@@ -135,7 +135,7 @@ export const chatApi = {
     changeMessageRating: async (input: ChangeRatingInput): Promise<void> => {
         const token = localStorage.getItem('token');
         const response = await fetch(
-            `${COPILOT_BASE_URL}change_message_rating/`,
+            `${COPILOT_BASE_URL}change-message-rating/`,
             {
                 method: 'POST',
                 headers: {
