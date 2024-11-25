@@ -35,7 +35,7 @@ export interface ToggleBookmarkInput {
 
 export interface ChatMessage {
     id: string;
-    role: 'user' | 'assistant';
+    role: 'AI' | 'User';
     content: string;
     timestamp: string;
     rating?: number;
@@ -44,5 +44,5 @@ export interface ChatMessage {
 }
 
 export interface MainSectionProps {
-    onSendMessage: (prompt: string) => Promise<void>;
+    onSendMessage: (prompt: string, imageUrl?: string) => void;
 }

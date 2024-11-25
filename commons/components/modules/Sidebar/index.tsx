@@ -96,7 +96,7 @@ const Sidebar = ({
                             );
                         }}>
                         <RiQuestionnaireLine size={20} />
-                        Komunitas
+                        Diskusi
                         <CommunityNotificationBadge />
                     </Link>
                 )}

@@ -7,7 +7,7 @@ const EXAMPLE_PROMPTS = [
 ];
 
 interface ExamplePromptsProps {
-    onPromptClick: (prompt: string) => Promise<void>;
+    onPromptClick: (prompt: string, imageUrl?: string) => void;
 }
 
 const ExamplePrompts = ({

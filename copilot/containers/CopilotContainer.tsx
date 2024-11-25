@@ -41,7 +41,7 @@ const CopilotContainer = (): JSX.Element => {
                                 image?: string | null;
                             }) => ({
                                 id: item.message_id,
-                                role: item.role === 'AI' ? 'assistant' : 'user',
+                                role: item.role === 'AI' ? 'AI' : 'User',
                                 content: item.message,
                                 timestamp: new Date().toISOString(),
                                 rating: item.rating,
@@ -75,7 +75,12 @@ const CopilotContainer = (): JSX.Element => {
         });
     };
 
-    const handleSendMessage = async (prompt: string) => {
+    const [pendingMessage, setPendingMessage] = useState<{
+        content: string;
+        timestamp: string;
+    } | null>(null);
+
+    const handleSendMessage = async (prompt: string, imageUrl?: string) => {
         if (!prompt.trim()) return;
 
         setIsLoadingResponse(true);
@@ -85,49 +90,29 @@ const CopilotContainer = (): JSX.Element => {
             ...prev,
             {
                 id: crypto.randomUUID(),
-                role: 'user',
+                role: 'User',
                 content: prompt,
-                timestamp
+                timestamp,
+                image: imageUrl || null
             }
         ]);
 
         let currentResponse = '';
-        const assistantMessageId = crypto.randomUUID();
 
         try {
             await chatApi.chatSingle(
                 {
                     input_text: prompt,
-                    session_id: currentSessionId
+                    session_id: currentSessionId,
+                    image_url: imageUrl
                 },
                 {
                     onContent: (content) => {
                         setTimeout(() => {
                             currentResponse += content;
-                            setMessages((prev) => {
-                                const newMessages = [...prev];
-                                const assistantMessageIndex =
-                                    newMessages.findIndex(
-                                        (msg) => msg.id === assistantMessageId
-                                    );
-
-                                if (assistantMessageIndex !== -1) {
-                                    newMessages[assistantMessageIndex] = {
-                                        ...newMessages[assistantMessageIndex],
-                                        content: currentResponse
-                                    };
-                                    return newMessages;
-                                } else {
-                                    return [
-                                        ...newMessages,
-                                        {
-                                            id: assistantMessageId,
-                                            role: 'assistant',
-                                            content: currentResponse,
-                                            timestamp: new Date().toISOString()
-                                        }
-                                    ];
-                                }
+                            setPendingMessage({
+                                content: currentResponse,
+                                timestamp: new Date().toISOString()
                             });
                         }, 50);
                     },
@@ -135,19 +120,32 @@ const CopilotContainer = (): JSX.Element => {
                         if (sessionId) {
                             setCurrentSessionId(sessionId);
                         }
+                        if (messageId) {
+                            setMessages((prev) => [
+                                ...prev,
+                                {
+                                    id: messageId,
+                                    role: 'AI',
+                                    content: currentResponse,
+                                    timestamp: new Date().toISOString()
+                                }
+                            ]);
+                            setPendingMessage(null);
+                        }
                     },
                     onError: (error) => {
                         console.error('Chat error:', error);
                         setMessages((prev) => [
                             ...prev,
                             {
-                                id: crypto.randomUUID(),
-                                role: 'assistant',
+                                id: 'error',
+                                role: 'AI',
                                 content:
                                     'Maaf, terjadi kesalahan. Silakan coba lagi.',
                                 timestamp: new Date().toISOString()
                             }
                         ]);
+                        setPendingMessage(null);
                     }
                 }
             );
@@ -156,19 +154,20 @@ const CopilotContainer = (): JSX.Element => {
             setMessages((prev) => [
                 ...prev,
                 {
-                    id: crypto.randomUUID(),
-                    role: 'assistant',
+                    id: 'error',
+                    role: 'AI',
                     content: 'Maaf, terjadi kesalahan. Silakan coba lagi.',
                     timestamp: new Date().toISOString()
                 }
             ]);
+            setPendingMessage(null);
         } finally {
             setIsLoadingResponse(false);
         }
     };
 
     const handleRetry = (message: ChatMessage) => {
-        handleSendMessage(message.content);
+        handleSendMessage(message.content, message.image || undefined);
     };
 
     return (
@@ -214,6 +213,7 @@ const CopilotContainer = (): JSX.Element => {
                             )}>
                             <ChatSection
                                 messages={messages}
+                                pendingMessage={pendingMessage}
                                 setMessages={setMessages}
                                 onRetry={handleRetry}
                                 isLoading={isLoadingResponse}
