@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { BiBookReader, BiSearch, BiSolidBookReader } from 'react-icons/bi';
+import { BiBookReader, BiSolidBookReader } from 'react-icons/bi';
 import { MdOutlineClose } from 'react-icons/md';
 import {
     RiBookOpenLine,
