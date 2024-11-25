@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { BiCopy } from 'react-icons/bi';
 import { BsArrowCounterclockwise } from 'react-icons/bs';
 import { FiThumbsDown, FiThumbsUp } from 'react-icons/fi';
-import { BsBookmark } from 'react-icons/bs';
 import { BsCheck } from 'react-icons/bs';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import ReactMarkdown from 'react-markdown';
@@ -40,6 +39,7 @@ const ChatSection = ({
 
             const ratingToApply = message.rating === newRating ? 0 : newRating;
 
+            console.log('messages', messages);
             await chatApi.changeMessageRating({
                 session_id: currentSessionId,
                 message_id: message.id,
@@ -216,9 +216,6 @@ const ChatSection = ({
                                                                 'fill-current'
                                                         )}
                                                     />
-                                                </button>
-                                                <button className="text-neutral-400 hover:text-white p-2 hover:bg-neutral-800 rounded-lg transition-colors">
-                                                    <BsBookmark size={20} />
                                                 </button>
                                             </div>
                                         </div>

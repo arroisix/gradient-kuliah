@@ -8,6 +8,9 @@ import MobileHeader from '../components/MobileHeader/MobileHeader';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { cn } from 'commons/utils';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import CopilotAuthPrompt from '../components/AuthPrompt/AuthPrompt';
 
 const CopilotContainer = (): JSX.Element => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -20,6 +23,7 @@ const CopilotContainer = (): JSX.Element => {
         string | undefined
     >();
     const { isMobileBreakpoints } = useWindowBreakpoints();
+    const isAuthenticated = useSelector(getIsAuthenticated);
 
     useEffect(() => {
         const loadChatHistory = async () => {
@@ -206,7 +210,7 @@ const CopilotContainer = (): JSX.Element => {
                                 'flex-1 overflow-y-auto relative',
                                 !isMobileBreakpoints &&
                                     'pt-6 px-4 md:px-8 lg:px-16',
-                                isMobileBreakpoints && 'mt-16 pb-16'
+                                isMobileBreakpoints && 'px-4 mt-16 pb-16'
                             )}>
                             <ChatSection
                                 messages={messages}
@@ -253,6 +257,8 @@ const CopilotContainer = (): JSX.Element => {
                 ) : (
                     <MainSection onSendMessage={handleSendMessage} />
                 )}
+
+                {!isAuthenticated && <CopilotAuthPrompt />}
             </div>
         </div>
     );

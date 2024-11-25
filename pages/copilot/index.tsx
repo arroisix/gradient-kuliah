@@ -2,12 +2,18 @@ import LearnLayout from 'commons/learnLayout';
 import { GetStaticProps } from 'next';
 import CopilotContainer from '../../copilot/containers/CopilotContainer';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
 const Copilot = (): JSX.Element => {
     const { isMobileBreakpoints } = useWindowBreakpoints();
+    const isAuthenticated = useSelector(getIsAuthenticated);
 
     return (
-        <LearnLayout noPadding hideNavbar={isMobileBreakpoints} noTopPadding>
+        <LearnLayout
+            noPadding
+            hideNavbar={isAuthenticated && isMobileBreakpoints}
+            noTopPadding>
             <CopilotContainer />
         </LearnLayout>
     );

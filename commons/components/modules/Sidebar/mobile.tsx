@@ -12,6 +12,8 @@ import {
 import CommunityNotificationBadge from '../../elements/CommunityNotificationBadge';
 import { AnimatePresence, motion } from 'framer-motion';
 import NavigationButton from 'commons/components/elements/NavigationButton';
+import CopilotIconFill from '../../../../copilot/assets/CopilotIconFill';
+import CopilotIconLine from '../../../../copilot/assets/CopilotIconLine';
 
 const MOBILE_SIDEBAR_BUTTONS: NavigationButtonInterface[] = [
     {
@@ -22,11 +24,11 @@ const MOBILE_SIDEBAR_BUTTONS: NavigationButtonInterface[] = [
         IconUnactive: BiBookReader
     },
     {
-        name: 'Search',
-        title: 'Search',
-        url: '/search',
-        IconActive: BiSearch,
-        IconUnactive: BiSearch
+        name: 'Copilot AI',
+        title: 'Copilot AI',
+        url: '/copilot',
+        IconActive: CopilotIconFill,
+        IconUnactive: CopilotIconLine
     },
     {
         name: 'Library',
@@ -118,8 +120,8 @@ const MobileSidebar = ({
                         )}
                         {configData?.configs.is_community_config_enabled && (
                             <NavigationButton
-                                name="Community"
-                                title="Komunitas"
+                                name="Diskusi"
+                                title="Diskusi"
                                 url="/komunitas"
                                 IconActive={RiQuestionnaireFill}
                                 IconUnactive={RiQuestionnaireLine}

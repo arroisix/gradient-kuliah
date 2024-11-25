@@ -11,6 +11,8 @@ import {
     RiQuestionnaireLine,
     RiRobot2Fill
 } from 'react-icons/ri';
+import { IoClose } from 'react-icons/io5';
+import CopilotIconFill from '../../../../copilot/assets/CopilotIconFill';
 
 const DISPLAYED_ROUTES = [
     '/dashboard',
@@ -34,7 +36,7 @@ const APPBAR_NAV: AppbarNav[] = [
     },
     {
         icon: <RiQuestionnaireLine size={20} />,
-        iconAlt: <RiRobot2Fill size={20} />,
+        iconAlt: <CopilotIconFill />,
         href: '/komunitas',
         isExpandable: true,
         expandedLinks: [
@@ -100,19 +102,29 @@ const Appbar = (): JSX.Element | null => {
                     onClick={() => setShowExpanded(false)}
                     onKeyDown={() => setShowExpanded(false)}
                     aria-hidden="true">
-                    <div className="absolute bottom-16 left-1/2 -translate-x-1/2 bg-[#1D1D1D] rounded-lg overflow-hidden">
-                        {APPBAR_NAV.find(
-                            (menu) => menu.isExpandable
-                        )?.expandedLinks?.map((link) => (
-                            <Link
-                                key={link.href}
-                                href={link.href}
-                                className="flex items-center gap-3 px-6 py-4 hover:bg-neutral-800"
-                                onClick={() => setShowExpanded(false)}>
-                                {link.icon}
-                                <span>{link.label}</span>
-                            </Link>
-                        ))}
+                    <div className="fixed bottom-24 left-1/2 -translate-x-1/2 bg-[#1D1D1D] rounded-full overflow-hidden shadow-xl w-[calc(100%-128px)] max-w-sm">
+                        <div className="flex">
+                            {APPBAR_NAV.find(
+                                (menu) => menu.isExpandable
+                            )?.expandedLinks?.map((link, index, array) => (
+                                <React.Fragment key={link.href}>
+                                    <Link
+                                        href={link.href}
+                                        className="flex-1 flex flex-col items-center gap-0.5 p-2 hover:bg-neutral-800 transition-colors"
+                                        onClick={() => setShowExpanded(false)}>
+                                        <div className="w-6 h-6 rounded-full flex items-center justify-center">
+                                            {link.icon}
+                                        </div>
+                                        <span className="text-sm font-medium text-white">
+                                            {link.label}
+                                        </span>
+                                    </Link>
+                                    {index < array.length - 1 && (
+                                        <div className="w-px bg-neutral-800" />
+                                    )}
+                                </React.Fragment>
+                            ))}
+                        </div>
                     </div>
                 </div>
             )}
@@ -135,10 +147,17 @@ const Appbar = (): JSX.Element | null => {
                         {menu.isExpandable ? (
                             <div className="relative">
                                 <div className="absolute inset-0 w-12 h-12 bg-[#5F2BCE] rounded-full -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2" />
-                                <div className="relative z-10">
-                                    {currentIcon === 'diskusi'
-                                        ? menu.icon
-                                        : menu.iconAlt}
+                                <div className="text-white relative z-10">
+                                    {showExpanded ? (
+                                        <IoClose
+                                            size={20}
+                                            className="text-white"
+                                        />
+                                    ) : currentIcon === 'diskusi' ? (
+                                        menu.icon
+                                    ) : (
+                                        menu.iconAlt
+                                    )}
                                 </div>
                             </div>
                         ) : (
@@ -149,7 +168,11 @@ const Appbar = (): JSX.Element | null => {
                                 'text-xs',
                                 index === 2 ? 'mt-2' : 'mt-1'
                             )}>
-                            {menu.label}
+                            {menu.isExpandable
+                                ? showExpanded
+                                    ? menu.label
+                                    : menu.label
+                                : menu.label}
                         </span>
                     </Link>
                 ))}
