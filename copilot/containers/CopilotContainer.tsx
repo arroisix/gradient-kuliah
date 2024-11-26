@@ -117,27 +117,20 @@ const CopilotContainer = (): JSX.Element => {
                 },
                 {
                     onContent: (content) => {
-                        setTimeout(() => {
-                            currentResponse += content;
-                            setPendingMessage({
-                                content: currentResponse,
-                                timestamp: new Date().toISOString()
-                            });
-                        }, 50);
+                        currentResponse += content;
+                        setPendingMessage({
+                            content: currentResponse,
+                            timestamp: new Date().toISOString()
+                        });
                     },
                     onComplete: (messageId, sessionId) => {
+                        setPendingMessage(null);
+
                         if (sessionId) {
                             setCurrentSessionId(sessionId);
                         }
                         if (messageId) {
                             setMessages((prev) => {
-                                const lastMsg = prev[prev.length - 1];
-                                if (
-                                    lastMsg?.role === 'AI' &&
-                                    lastMsg.content === currentResponse
-                                ) {
-                                    return prev;
-                                }
                                 const aiMessage: ChatMessage = {
                                     id: messageId,
                                     role: 'AI',
@@ -146,11 +139,12 @@ const CopilotContainer = (): JSX.Element => {
                                 };
                                 return [...prev, aiMessage];
                             });
-                            setPendingMessage(null);
                         }
                     },
                     onError: (error) => {
                         console.error('Chat error:', error);
+                        setPendingMessage(null);
+
                         const errorMessage: ChatMessage = {
                             id: 'error',
                             role: 'AI',
@@ -159,12 +153,13 @@ const CopilotContainer = (): JSX.Element => {
                             timestamp: new Date().toISOString()
                         };
                         setMessages((prev) => [...prev, errorMessage]);
-                        setPendingMessage(null);
                     }
                 }
             );
         } catch (error) {
             console.error('Chat error:', error);
+            setPendingMessage(null);
+
             const errorMessage: ChatMessage = {
                 id: 'error',
                 role: 'AI',
@@ -172,7 +167,6 @@ const CopilotContainer = (): JSX.Element => {
                 timestamp: new Date().toISOString()
             };
             setMessages((prev) => [...prev, errorMessage]);
-            setPendingMessage(null);
         } finally {
             setIsLoadingResponse(false);
         }
