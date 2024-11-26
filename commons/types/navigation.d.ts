@@ -5,10 +5,18 @@ interface NavLink {
 }
 
 interface AppbarNav {
-    icon: JSX.Element;
-    label: string;
+    icon: React.ReactNode;
+    iconAlt?: React.ReactNode;
     href: string;
-    alias?: string[];
+    label: string;
+    isExpandable?: boolean;
+    expandedLinks?: ExpandedLink[];
+}
+
+interface ExpandedLink {
+    href: string;
+    label: string;
+    icon: React.ReactNode;
 }
 
 interface NavigationButtonInterface {

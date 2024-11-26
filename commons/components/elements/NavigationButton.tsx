@@ -30,7 +30,7 @@ const NavigationButton = ({
                 }}>
                 <span
                     className={cn(
-                        'flex gap-4 cursor-pointer hover:text-[#666666] items-center',
+                        'flex gap-4 cursor-pointer hover:text-[#666666] items-center whitespace-nowrap', // Added whitespace-nowrap here
                         route.asPath.includes(url) ||
                             route.asPath === url ||
                             (name === 'All Books' &&
@@ -41,7 +41,8 @@ const NavigationButton = ({
                     {route.asPath.includes(url)
                         ? IconActive && <IconActive size={20} />
                         : IconUnactive && <IconUnactive size={20} />}
-                    {title}
+                    <span className="whitespace-nowrap">{title}</span>{' '}
+                    {/* Also wrapped the title specifically */}
                     {children}
                 </span>
             </Link>

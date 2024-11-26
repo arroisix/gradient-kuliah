@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { BiBookReader, BiSearch, BiSolidBookReader } from 'react-icons/bi';
+import { BiBookReader, BiSolidBookReader } from 'react-icons/bi';
 import { MdOutlineClose } from 'react-icons/md';
 import {
     RiBookOpenLine,
@@ -12,6 +12,8 @@ import {
 import CommunityNotificationBadge from '../../elements/CommunityNotificationBadge';
 import { AnimatePresence, motion } from 'framer-motion';
 import NavigationButton from 'commons/components/elements/NavigationButton';
+import CopilotIconFill from 'copilot/assets/CopilotIconFill';
+import CopilotIconLine from 'copilot/assets/CopilotIconLine';
 
 const MOBILE_SIDEBAR_BUTTONS: NavigationButtonInterface[] = [
     {
@@ -22,11 +24,11 @@ const MOBILE_SIDEBAR_BUTTONS: NavigationButtonInterface[] = [
         IconUnactive: BiBookReader
     },
     {
-        name: 'Search',
-        title: 'Search',
-        url: '/search',
-        IconActive: BiSearch,
-        IconUnactive: BiSearch
+        name: 'Copilot AI',
+        title: 'Copilot AI',
+        url: '/copilot',
+        IconActive: CopilotIconFill,
+        IconUnactive: CopilotIconLine
     },
     {
         name: 'Library',
@@ -102,8 +104,13 @@ const MobileSidebar = ({
                                     IconUnactive={IconUnactive}
                                     className={className}
                                     subMenus={subMenus}
-                                    setOpenSidebar={setOpenSidebar}
-                                />
+                                    setOpenSidebar={setOpenSidebar}>
+                                    {name === 'Copilot AI' && (
+                                        <span className="flex items-center gap-2 ml-2 py-1 px-3 rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] font-semibold text-xs text-white">
+                                            Baru
+                                        </span>
+                                    )}
+                                </NavigationButton>
                             )
                         )}
                         {configData?.configs.is_exercise_config_enabled && (
@@ -119,7 +126,7 @@ const MobileSidebar = ({
                         {configData?.configs.is_community_config_enabled && (
                             <NavigationButton
                                 name="Community"
-                                title="Komunitas"
+                                title="Diskusi"
                                 url="/komunitas"
                                 IconActive={RiQuestionnaireFill}
                                 IconUnactive={RiQuestionnaireLine}
