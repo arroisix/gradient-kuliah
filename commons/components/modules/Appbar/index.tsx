@@ -13,6 +13,7 @@ import {
 } from 'react-icons/ri';
 import { IoClose } from 'react-icons/io5';
 import CopilotIconFill from 'copilot/assets/CopilotIconFill';
+import { useGetConfigQuery } from 'commons/redux/api/commonApi';
 
 const DISPLAYED_ROUTES = [
     '/dashboard',
@@ -72,6 +73,7 @@ const Appbar = (): JSX.Element | null => {
     const [currentIcon, setCurrentIcon] = useState<'diskusi' | 'copilot'>(
         'diskusi'
     );
+    const { data: configData } = useGetConfigQuery();
 
     const isShowAppbar = (): boolean =>
         DISPLAYED_ROUTES.includes(router.asPath) ||
@@ -92,6 +94,27 @@ const Appbar = (): JSX.Element | null => {
             e.preventDefault();
             setShowExpanded(!showExpanded);
         }
+    };
+
+    const renderExpandableMenu = (menu: AppbarNav): JSX.Element => {
+        if (configData?.configs.is_copilot_config_enabled) {
+            return (
+                <div className="relative">
+                    <div className="absolute inset-0 w-12 h-12 bg-[#5F2BCE] rounded-full -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2" />
+                    <div className="text-white relative z-10">
+                        {showExpanded ? (
+                            <IoClose size={20} className="text-white" />
+                        ) : currentIcon === 'diskusi' ? (
+                            menu.icon
+                        ) : (
+                            menu.iconAlt
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        return <RiQuestionnaireLine size={20} />;
     };
 
     return isShowAppbar() && is_subscribed ? (
@@ -142,36 +165,29 @@ const Appbar = (): JSX.Element | null => {
                             router.pathname === menu.href
                                 ? 'text-white'
                                 : 'text-[#666]',
-                            index === 2 && 'gap-3 -mt-3'
+                            index === 2 &&
+                                configData?.configs.is_copilot_config_enabled &&
+                                'gap-3 -mt-3'
                         )}>
-                        {menu.isExpandable ? (
-                            <div className="relative">
-                                <div className="absolute inset-0 w-12 h-12 bg-[#5F2BCE] rounded-full -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2" />
-                                <div className="text-white relative z-10">
-                                    {showExpanded ? (
-                                        <IoClose
-                                            size={20}
-                                            className="text-white"
-                                        />
-                                    ) : currentIcon === 'diskusi' ? (
-                                        menu.icon
-                                    ) : (
-                                        menu.iconAlt
-                                    )}
-                                </div>
-                            </div>
-                        ) : (
-                            menu.icon
-                        )}
+                        {menu.isExpandable
+                            ? renderExpandableMenu(menu)
+                            : menu.icon}
                         <span
                             className={cn(
                                 'text-xs',
-                                index === 2 ? 'mt-2' : 'mt-1'
+                                index === 2 &&
+                                    configData?.configs
+                                        .is_copilot_config_enabled
+                                    ? 'mt-2'
+                                    : 'mt-1'
                             )}>
                             {menu.isExpandable
                                 ? showExpanded
                                     ? menu.label
-                                    : menu.label
+                                    : configData?.configs
+                                          .is_copilot_config_enabled
+                                    ? menu.label
+                                    : 'Diskusi'
                                 : menu.label}
                         </span>
                     </Link>

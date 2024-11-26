@@ -12,7 +12,8 @@ const NavigationButton = ({
     className,
     subMenus,
     children,
-    setOpenSidebar
+    setOpenSidebar,
+    tooltip
 }: NavigationButtonProps): JSX.Element => {
     const ACTIVE_STATE = 'text-white font-bold';
     const UNACTIVE_STATE = 'text-[#CCCCCC] font-medium';
@@ -20,7 +21,12 @@ const NavigationButton = ({
     const route = useRouter();
 
     return (
-        <div className="flex flex-col gap-4">
+        <div
+            className={cn(
+                'flex flex-col gap-4',
+                tooltip && 'tooltip tooltip-bottom'
+            )}
+            data-tip={tooltip}>
             <Link
                 href={url}
                 className={className}
