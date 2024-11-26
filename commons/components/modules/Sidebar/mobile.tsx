@@ -12,8 +12,8 @@ import {
 import CommunityNotificationBadge from '../../elements/CommunityNotificationBadge';
 import { AnimatePresence, motion } from 'framer-motion';
 import NavigationButton from 'commons/components/elements/NavigationButton';
-import CopilotIconFill from '../../../../copilot/assets/CopilotIconFill';
-import CopilotIconLine from '../../../../copilot/assets/CopilotIconLine';
+import CopilotIconFill from 'copilot/assets/CopilotIconFill';
+import CopilotIconLine from 'copilot/assets/CopilotIconLine';
 
 const MOBILE_SIDEBAR_BUTTONS: NavigationButtonInterface[] = [
     {
@@ -120,7 +120,7 @@ const MobileSidebar = ({
                         )}
                         {configData?.configs.is_community_config_enabled && (
                             <NavigationButton
-                                name="Diskusi"
+                                name="Community"
                                 title="Diskusi"
                                 url="/komunitas"
                                 IconActive={RiQuestionnaireFill}

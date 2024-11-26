@@ -12,7 +12,7 @@ import {
     RiQuestionnaireLine
 } from 'react-icons/ri';
 import { useTracker } from 'tracker/tracker';
-import CopilotIconLine from '../../../../copilot/assets/CopilotIconLine';
+import CopilotIconLine from 'copilot/assets/CopilotIconLine';
 
 const Sidebar = ({
     fullHeight,

@@ -24,6 +24,11 @@ const CopilotContainer = (): JSX.Element => {
     >();
     const { isMobileBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const [pendingMessage, setPendingMessage] = useState<{
+        content: string;
+        timestamp: string;
+    } | null>(null);
+    const [isEditorOpen, setIsEditorOpen] = useState(false);
 
     useEffect(() => {
         const loadChatHistory = async () => {
@@ -50,6 +55,7 @@ const CopilotContainer = (): JSX.Element => {
                             })
                         );
                     setMessages(convertedMessages);
+                    setCurrentSessionId(response.session_id);
                 }
             } catch (error) {
                 console.error('Error loading chat history:', error);
@@ -75,28 +81,31 @@ const CopilotContainer = (): JSX.Element => {
         });
     };
 
-    const [pendingMessage, setPendingMessage] = useState<{
-        content: string;
-        timestamp: string;
-    } | null>(null);
-
     const handleSendMessage = async (prompt: string, imageUrl?: string) => {
         if (!prompt.trim()) return;
+
+        const lastMessage = messages[messages.length - 1];
+        if (
+            lastMessage?.content === prompt &&
+            lastMessage.role === 'User' &&
+            Date.now() - new Date(lastMessage.timestamp).getTime() < 2000
+        ) {
+            console.log('Preventing duplicate message');
+            return;
+        }
 
         setIsLoadingResponse(true);
         const timestamp = new Date().toISOString();
 
-        setMessages((prev) => [
-            ...prev,
-            {
-                id: crypto.randomUUID(),
-                role: 'User',
-                content: prompt,
-                timestamp,
-                image: imageUrl || null
-            }
-        ]);
+        const userMessage: ChatMessage = {
+            id: crypto.randomUUID(),
+            role: 'User',
+            content: prompt,
+            timestamp,
+            image: imageUrl || null
+        };
 
+        setMessages((prev) => [...prev, userMessage]);
         let currentResponse = '';
 
         try {
@@ -121,45 +130,48 @@ const CopilotContainer = (): JSX.Element => {
                             setCurrentSessionId(sessionId);
                         }
                         if (messageId) {
-                            setMessages((prev) => [
-                                ...prev,
-                                {
+                            setMessages((prev) => {
+                                const lastMsg = prev[prev.length - 1];
+                                if (
+                                    lastMsg?.role === 'AI' &&
+                                    lastMsg.content === currentResponse
+                                ) {
+                                    return prev;
+                                }
+                                const aiMessage: ChatMessage = {
                                     id: messageId,
                                     role: 'AI',
                                     content: currentResponse,
                                     timestamp: new Date().toISOString()
-                                }
-                            ]);
+                                };
+                                return [...prev, aiMessage];
+                            });
                             setPendingMessage(null);
                         }
                     },
                     onError: (error) => {
                         console.error('Chat error:', error);
-                        setMessages((prev) => [
-                            ...prev,
-                            {
-                                id: 'error',
-                                role: 'AI',
-                                content:
-                                    'Maaf, terjadi kesalahan. Silakan coba lagi.',
-                                timestamp: new Date().toISOString()
-                            }
-                        ]);
+                        const errorMessage: ChatMessage = {
+                            id: 'error',
+                            role: 'AI',
+                            content:
+                                'Maaf, terjadi kesalahan. Silakan coba lagi.',
+                            timestamp: new Date().toISOString()
+                        };
+                        setMessages((prev) => [...prev, errorMessage]);
                         setPendingMessage(null);
                     }
                 }
             );
         } catch (error) {
             console.error('Chat error:', error);
-            setMessages((prev) => [
-                ...prev,
-                {
-                    id: 'error',
-                    role: 'AI',
-                    content: 'Maaf, terjadi kesalahan. Silakan coba lagi.',
-                    timestamp: new Date().toISOString()
-                }
-            ]);
+            const errorMessage: ChatMessage = {
+                id: 'error',
+                role: 'AI',
+                content: 'Maaf, terjadi kesalahan. Silakan coba lagi.',
+                timestamp: new Date().toISOString()
+            };
+            setMessages((prev) => [...prev, errorMessage]);
             setPendingMessage(null);
         } finally {
             setIsLoadingResponse(false);
@@ -209,7 +221,9 @@ const CopilotContainer = (): JSX.Element => {
                                 'flex-1 overflow-y-auto relative',
                                 !isMobileBreakpoints &&
                                     'pt-6 px-4 md:px-8 lg:px-16',
-                                isMobileBreakpoints && 'px-4 mt-16 pb-16'
+                                isMobileBreakpoints && 'px-4 mt-16 pb-16',
+                                messages.length <= 2 &&
+                                    'flex flex-col justify-end'
                             )}>
                             <ChatSection
                                 messages={messages}
@@ -231,10 +245,13 @@ const CopilotContainer = (): JSX.Element => {
                             <PromptBar
                                 onSend={handleSendMessage}
                                 isLoading={isLoadingResponse}
+                                onStateChange={({ isEditorOpen }) =>
+                                    setIsEditorOpen(isEditorOpen)
+                                }
                             />
                         </div>
 
-                        {showScrollButton && (
+                        {showScrollButton && !isEditorOpen && (
                             <button
                                 onClick={scrollToBottom}
                                 className="fixed bottom-32 left-1/2 -translate-x-1/2 bg-[#5F2BCE] hover:bg-[#4f24a8] text-white p-3 rounded-full shadow-lg transition-all duration-200 z-10">

@@ -24,7 +24,7 @@ const ImageModal = ({ isOpen, onClose, imageUrl }: ImageModalProps) => {
                     <div className="fixed inset-0 bg-black/75" />
                 </Transition.Child>
 
-                <div className="fixed inset-0 overflow-y-auto">
+                <div className="fixed inset-0 max-w-[480px] overflow-y-auto">
                     <div className="flex min-h-full items-center justify-center p-16">
                         <Transition.Child
                             as={Fragment}

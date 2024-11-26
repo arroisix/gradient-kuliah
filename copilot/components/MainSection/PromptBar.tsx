@@ -1,6 +1,5 @@
-import { useState, useRef, KeyboardEvent, DragEvent } from 'react';
+import { useState, useRef, KeyboardEvent, DragEvent, useEffect } from 'react';
 import { BsImage, BsArrowUpShort } from 'react-icons/bs';
-import { TbSquareRoot } from 'react-icons/tb';
 import { ImOmega } from 'react-icons/im';
 import { IoMdClose } from 'react-icons/io';
 import { cn } from 'commons/utils';
@@ -12,9 +11,14 @@ import useUploadFile from 'commons/hooks/useUploadFile';
 interface PromptBarProps {
     onSend?: (prompt: string, imageUrl?: string) => void;
     isLoading?: boolean;
+    onStateChange?: (state: { isEditorOpen: boolean }) => void;
 }
 
-const PromptBar = ({ onSend, isLoading }: PromptBarProps): JSX.Element => {
+const PromptBar = ({
+    onSend,
+    isLoading,
+    onStateChange
+}: PromptBarProps): JSX.Element => {
     const [prompt, setPrompt] = useState('');
     const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [imageName, setImageName] = useState<string | null>(null);
@@ -26,6 +30,10 @@ const PromptBar = ({ onSend, isLoading }: PromptBarProps): JSX.Element => {
     );
     const { isMobileBreakpoints } = useWindowBreakpoints();
     const { uploadFile } = useUploadFile('qna');
+
+    useEffect(() => {
+        onStateChange?.({ isEditorOpen: activeForm !== null });
+    }, [activeForm, onStateChange]);
 
     const handleSend = () => {
         if (prompt.trim() && onSend && !isLoading) {
@@ -216,21 +224,21 @@ const PromptBar = ({ onSend, isLoading }: PromptBarProps): JSX.Element => {
                             aria-label="Upload image">
                             <BsImage size={20} />
                         </button>
-                        <button
-                            className={cn(
-                                'text-neutral-400 hover:text-white p-2 rounded-lg transition-colors',
-                                activeForm === 'math' &&
-                                    'bg-neutral-800 text-white'
-                            )}
-                            onClick={() =>
-                                setActiveForm(
-                                    activeForm === 'math' ? null : 'math'
-                                )
-                            }
-                            disabled={isLoading}
-                            aria-label="Math input">
-                            <TbSquareRoot size={20} />
-                        </button>
+                        {/*<button*/}
+                        {/*    className={cn(*/}
+                        {/*        'text-neutral-400 hover:text-white p-2 rounded-lg transition-colors',*/}
+                        {/*        activeForm === 'math' &&*/}
+                        {/*            'bg-neutral-800 text-white'*/}
+                        {/*    )}*/}
+                        {/*    onClick={() =>*/}
+                        {/*        setActiveForm(*/}
+                        {/*            activeForm === 'math' ? null : 'math'*/}
+                        {/*        )*/}
+                        {/*    }*/}
+                        {/*    disabled={isLoading}*/}
+                        {/*    aria-label="Math input">*/}
+                        {/*    <TbSquareRoot size={20} />*/}
+                        {/*</button>*/}
                         <button
                             className={cn(
                                 'text-neutral-400 hover:text-white p-2 rounded-lg transition-colors',

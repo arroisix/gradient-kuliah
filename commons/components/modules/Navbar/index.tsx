@@ -30,8 +30,8 @@ import AuthButtons from './components/AuthButtons';
 import UserProfile from './components/UserProfile';
 import { useThemeContext } from 'commons/contexts/ThemeProvider';
 import SearchBar from '../Searchbar';
-import CopilotIconFill from '../../../../copilot/assets/CopilotIconFill';
-import CopilotIconLine from '../../../../copilot/assets/CopilotIconLine';
+import CopilotIconFill from 'copilot/assets/CopilotIconFill';
+import CopilotIconLine from 'copilot/assets/CopilotIconLine';
 
 const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
     {

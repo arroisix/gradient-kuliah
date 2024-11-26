@@ -23,7 +23,7 @@ const MainSection = ({ onSendMessage }: MainSectionProps): JSX.Element => {
                         Lagi butuh bantuan apa sobat?
                     </h1>
 
-                    <div className="w-full">
+                    <div className="w-full max-w-[360px]">
                         <p className="text-neutral-400 mb-4">
                             Psst... kamu bisa nanya kayak gini:
                         </p>

@@ -12,6 +12,7 @@ export interface ChatInput {
 }
 
 export interface ChatHistoryResponse {
+    session_id: string;
     history: {
         role: 'AI' | 'User';
         message: string;

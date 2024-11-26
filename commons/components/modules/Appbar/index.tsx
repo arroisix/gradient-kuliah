@@ -12,7 +12,7 @@ import {
     RiRobot2Fill
 } from 'react-icons/ri';
 import { IoClose } from 'react-icons/io5';
-import CopilotIconFill from '../../../../copilot/assets/CopilotIconFill';
+import CopilotIconFill from 'copilot/assets/CopilotIconFill';
 
 const DISPLAYED_ROUTES = [
     '/dashboard',
