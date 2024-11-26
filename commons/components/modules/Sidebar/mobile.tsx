@@ -106,7 +106,7 @@ const MobileSidebar = ({
                                     subMenus={subMenus}
                                     setOpenSidebar={setOpenSidebar}>
                                     {name === 'Copilot AI' && (
-                                        <span className="flex items-center gap-2 ml-2 py-1 px-3 rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] text-xs text-white">
+                                        <span className="flex items-center gap-2 ml-2 py-1 px-3 rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] font-semibold text-xs text-white">
                                             Baru
                                         </span>
                                     )}
