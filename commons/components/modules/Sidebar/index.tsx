@@ -1,9 +1,3 @@
-import CommunityNotificationBadge from 'commons/components/elements/CommunityNotificationBadge';
-import { useGetConfigQuery } from 'commons/redux/api/commonApi';
-import { cn } from 'commons/utils';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React from 'react';
 import { BiBookReader, BiSearch } from 'react-icons/bi';
 import { FiHome } from 'react-icons/fi';
 import {
@@ -11,7 +5,12 @@ import {
     RiFileListLine,
     RiQuestionnaireLine
 } from 'react-icons/ri';
+import { useRouter } from 'next/router';
 import { useTracker } from 'tracker/tracker';
+import Link from 'next/link';
+import { cn } from 'commons/utils';
+import { useGetConfigQuery } from 'commons/redux/api/commonApi';
+import CommunityNotificationBadge from 'commons/components/elements/CommunityNotificationBadge';
 import CopilotIconLine from 'copilot/assets/CopilotIconLine';
 
 const Sidebar = ({
@@ -25,7 +24,6 @@ const Sidebar = ({
     const { pathname } = route;
 
     const { data: configData } = useGetConfigQuery();
-
     const tracker = useTracker();
 
     return (
@@ -36,17 +34,6 @@ const Sidebar = ({
                 className
             )}>
             <div className="flex flex-col gap-[18px]">
-                {/* <Link href={'/notifikasi'}>
-                    <span
-                        className={`flex gap-4 cursor-pointer ${
-                            pathname.includes('/notifikasi')
-                                ? 'text-white'
-                                : 'text-[#666666]'
-                        }  font-body text-sm hover:text-[#999999]`}>
-                        <RiNotification3Line size={20} />
-                        Notifikasi
-                    </span>
-                </Link> */}
                 <Link
                     href={'/dashboard'}
                     onClick={() => {
@@ -61,7 +48,7 @@ const Sidebar = ({
                             pathname.includes('/dashboard')
                                 ? 'text-white'
                                 : 'text-[#666666]'
-                        }  font-body text-sm hover:text-[#999999]`}>
+                        } font-body text-sm hover:text-[#999999]`}>
                         <FiHome size={20} />
                         Home
                     </span>
@@ -69,7 +56,7 @@ const Sidebar = ({
                 <Link
                     href={'/search'}
                     onClick={() => {
-                        tracker?.genericTrack(`Click Search Navigation`);
+                        tracker?.genericTrack('Click Search Navigation');
                     }}
                     className={cn(
                         'flex gap-4 cursor-pointer font-body text-sm hover:text-graphite-400',
@@ -87,7 +74,7 @@ const Sidebar = ({
                             pathname.includes('/komunitas')
                                 ? 'text-white'
                                 : 'text-[#666666]'
-                        }  font-body text-sm hover:text-[#999999]`}
+                        } font-body text-sm hover:text-[#999999]`}
                         onClick={() => {
                             tracker?.genericTrack(
                                 `Click Community ${
@@ -114,7 +101,7 @@ const Sidebar = ({
                             pathname.includes('/kelas')
                                 ? 'text-white'
                                 : 'text-[#666666]'
-                        }  font-body text-sm hover:text-[#999999]`}>
+                        } font-body text-sm hover:text-[#999999]`}>
                         <BiBookReader size={20} />
                         Kelas
                     </span>
@@ -133,9 +120,12 @@ const Sidebar = ({
                             pathname.includes('/copilot')
                                 ? 'text-white'
                                 : 'text-[#666666]'
-                        }  font-body text-sm hover:text-[#999999]`}>
+                        } font-body text-sm hover:text-[#999999]`}>
                         <CopilotIconLine />
                         Copilot AI
+                        <span className="flex items-center gap-2 ml-2 py-1 px-3 rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] text-xs text-white">
+                            Baru
+                        </span>
                     </span>
                 </Link>
                 <Link
