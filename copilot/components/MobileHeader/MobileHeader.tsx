@@ -32,6 +32,9 @@ const MobileHeader = (): JSX.Element => {
                         className="flex items-center gap-1 text-white">
                         <span className="font-bold">Copilot AI</span>
                         <BiChevronDown size={20} />
+                        <span className="flex items-center gap-2 ml-2 py-1 px-3 rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] font-semibold text-xs text-white">
+                            Beta
+                        </span>
                     </button>
 
                     {/*<button className="text-white p-2 hover:bg-neutral-800 rounded-lg transition-colors">*/}
@@ -111,12 +114,16 @@ const MobileHeader = (): JSX.Element => {
                                                 </div>
                                                 <div>
                                                     <h3 className="font-bold">
-                                                        Copilot AI
+                                                        Copilot AI (Beta)
                                                     </h3>
                                                     <p className="text-sm text-neutral-400">
                                                         Chatbot teman belajar,
-                                                        didukung AI
+                                                        didukung AI.
                                                     </p>
+                                                    <span className="text-xs text-neutral-500">
+                                                        Copilot AI gratis selama
+                                                        versi Beta!
+                                                    </span>
                                                 </div>
                                             </Link>
                                         </div>

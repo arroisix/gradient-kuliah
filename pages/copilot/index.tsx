@@ -23,9 +23,9 @@ export const getStaticProps: GetStaticProps = () => {
     return {
         props: {
             canonical: 'https://gradient.academy/copilot',
-            title: 'Gradient Copilot AI - Your Smart Study Assistant',
+            title: 'Gradient Copilot AI - Asisten Belajar Kamu',
             description:
-                'Learn with AI-powered assistance that helps you understand concepts better through interactive discussions and guided problem-solving.'
+                'Belajar dengan bantuan Asisten AI yang siap membantu kamu 24 jam non stop!'
         }
     };
 };

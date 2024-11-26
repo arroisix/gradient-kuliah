@@ -32,10 +32,15 @@ const LeftNavbarMenu = ({
     const NAV_MENUS: NavLink[] = [
         { href: '/dashboard', label: 'Home' },
         {
-            href: '/komunitas',
-            label: 'Komunitas',
+            href: '/copilot',
+            label: 'Copilot AI',
             enabled: configData?.configs
-                .is_community_config_enabled as unknown as boolean
+                .is_copilot_config_enabled as unknown as boolean,
+            tooltip: 'Copilot AI gratis selama versi Beta!'
+        },
+        {
+            href: '/komunitas',
+            label: 'Diskusi'
         },
         { href: '/kelas', label: 'Kelas' },
         { href: '/perpustakaan', label: 'Perpustakaan' },

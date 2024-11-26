@@ -188,13 +188,14 @@ const Navbar = ({
                                 IconUnactive={nav.IconUnactive}
                             />
                         ))}
-                        {configData?.configs.is_exercise_config_enabled && (
+                        {configData?.configs.is_copilot_config_enabled && (
                             <NavigationButton
                                 name="Copilot AI"
                                 title="Copilot AI"
                                 url="/copilot"
                                 IconActive={CopilotIconFill}
                                 IconUnactive={CopilotIconLine}
+                                tooltip="Copilot AI gratis selama versi Beta!"
                             />
                         )}
                         {configData?.configs.is_exercise_config_enabled && (
@@ -206,15 +207,13 @@ const Navbar = ({
                                 IconUnactive={RiFileListLine}
                             />
                         )}
-                        {configData?.configs.is_community_config_enabled && (
-                            <NavigationButton
-                                name="Community"
-                                title="Komunitas"
-                                url="/komunitas"
-                                IconActive={RiQuestionnaireFill}
-                                IconUnactive={RiQuestionnaireLine}
-                            />
-                        )}
+                        <NavigationButton
+                            name="Community"
+                            title="Diskusi"
+                            url="/komunitas"
+                            IconActive={RiQuestionnaireFill}
+                            IconUnactive={RiQuestionnaireLine}
+                        />
                     </div>
                     {isShowSidebar && (
                         <div className="hidden md:block w-[250px] h-[64px] fixed top-0 left-0 bg-[#121212] z-[-1]" />

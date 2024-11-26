@@ -24,13 +24,6 @@ const MOBILE_SIDEBAR_BUTTONS: NavigationButtonInterface[] = [
         IconUnactive: BiBookReader
     },
     {
-        name: 'Copilot AI',
-        title: 'Copilot AI',
-        url: '/copilot',
-        IconActive: CopilotIconFill,
-        IconUnactive: CopilotIconLine
-    },
-    {
         name: 'Library',
         title: 'Perpustakaan',
         url: '/perpustakaan',
@@ -104,14 +97,24 @@ const MobileSidebar = ({
                                     IconUnactive={IconUnactive}
                                     className={className}
                                     subMenus={subMenus}
-                                    setOpenSidebar={setOpenSidebar}>
-                                    {name === 'Copilot AI' && (
-                                        <span className="flex items-center gap-2 ml-2 py-1 px-3 rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] font-semibold text-xs text-white">
-                                            Baru
-                                        </span>
-                                    )}
-                                </NavigationButton>
+                                    setOpenSidebar={setOpenSidebar}
+                                />
                             )
+                        )}
+                        {configData?.configs.is_copilot_config_enabled && (
+                            <NavigationButton
+                                name="Copilot"
+                                title="Copilot AI"
+                                url="/copilot"
+                                IconActive={CopilotIconFill}
+                                IconUnactive={CopilotIconLine}
+                                setOpenSidebar={setOpenSidebar}>
+                                <span
+                                    className="flex items-center gap-2 ml-2 py-1 px-3 rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] font-semibold text-xs text-white tooltip tooltip-right"
+                                    data-tip="Copilot AI gratis selama versi Beta!">
+                                    Beta
+                                </span>
+                            </NavigationButton>
                         )}
                         {configData?.configs.is_exercise_config_enabled && (
                             <NavigationButton
@@ -123,17 +126,15 @@ const MobileSidebar = ({
                                 setOpenSidebar={setOpenSidebar}
                             />
                         )}
-                        {configData?.configs.is_community_config_enabled && (
-                            <NavigationButton
-                                name="Community"
-                                title="Diskusi"
-                                url="/komunitas"
-                                IconActive={RiQuestionnaireFill}
-                                IconUnactive={RiQuestionnaireLine}
-                                setOpenSidebar={setOpenSidebar}>
-                                <CommunityNotificationBadge />
-                            </NavigationButton>
-                        )}
+                        <NavigationButton
+                            name="Community"
+                            title="Diskusi"
+                            url="/komunitas"
+                            IconActive={RiQuestionnaireFill}
+                            IconUnactive={RiQuestionnaireLine}
+                            setOpenSidebar={setOpenSidebar}>
+                            <CommunityNotificationBadge />
+                        </NavigationButton>
                     </div>
                 </motion.div>
             )}

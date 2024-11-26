@@ -199,7 +199,11 @@ const PromptBar = ({
                         onChange={(e) => setPrompt(e.target.value)}
                         onKeyPress={handleKeyPress}
                         onPaste={handlePaste}
-                        placeholder="Lagi butuh bantuan apa sobat?"
+                        placeholder={
+                            isMobileBreakpoints
+                                ? 'Jangan masukkan data pribadi kamu yaa!'
+                                : 'Lagi butuh bantuan apa sobat? Jangan masukkan data pribadi kamu yaa!'
+                        }
                         className="w-full bg-transparent border-none focus:ring-0 outline-none text-white"
                         disabled={isLoading}
                     />
@@ -255,19 +259,23 @@ const PromptBar = ({
                             <ImOmega size={16} />
                         </button>
                     </div>
-
-                    <button
-                        onClick={handleSend}
-                        disabled={isLoading || !prompt.trim()}
-                        className={cn(
-                            'transition-colors bg-[#5F2BCE] p-1.5 rounded-full',
-                            prompt.trim() && !isLoading
-                                ? 'opacity-100 hover:opacity-90'
-                                : 'opacity-50 cursor-not-allowed'
-                        )}
-                        aria-label="Send message">
-                        <BsArrowUpShort size={24} className="text-white" />
-                    </button>
+                    <div className="flex items-center gap-1 md:gap-2">
+                        <span className="text-neutral-500 text-xs font-thin">
+                            *Copilot bisa salah, tolong cek lagi yaa!
+                        </span>
+                        <button
+                            onClick={handleSend}
+                            disabled={isLoading || !prompt.trim()}
+                            className={cn(
+                                'transition-colors bg-[#5F2BCE] p-1.5 rounded-full',
+                                prompt.trim() && !isLoading
+                                    ? 'opacity-100 hover:opacity-90'
+                                    : 'opacity-50 cursor-not-allowed'
+                            )}
+                            aria-label="Send message">
+                            <BsArrowUpShort size={24} className="text-white" />
+                        </button>
+                    </div>
                 </div>
             </div>
 
