@@ -58,6 +58,7 @@ const ContinueReadingSection = (): JSX.Element => {
                 {astronotes.data.flatMap((book) =>
                     book.in_progress && book.percentage_progress !== 100 ? (
                         <div
+                            key={`container-${book.id}`}
                             className={cn(
                                 'carousel-item first:ml-4 last:mr-4 md:first:ml-8 md:last:mr-8 lg:first:ml-12 lg:last:mr-12',
                                 isSubscribed

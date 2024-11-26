@@ -11,6 +11,7 @@ interface LayoutProps {
     children: JSX.Element;
     paymentPage?: boolean;
     noPadding?: boolean;
+    noTopPadding?: boolean;
     shouldTransparent?: boolean;
     courses?: Course[];
     hideNavbar?: boolean;
@@ -24,6 +25,7 @@ const LearnLayout = ({
     children,
     paymentPage,
     noPadding,
+    noTopPadding,
     shouldTransparent,
     courses,
     hideNavbar,
@@ -61,7 +63,8 @@ const LearnLayout = ({
                 )}
                 <div
                     className={cn(
-                        'pt-16',
+                        'md:pt-16',
+                        !noTopPadding && 'pt-16',
                         showSidebar && 'flex gap-[2rem] lg:gap-[6rem] w-full',
                         {
                             'pb-16': isSubscribed && !noPadding,

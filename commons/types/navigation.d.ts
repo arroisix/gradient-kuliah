@@ -2,13 +2,23 @@ interface NavLink {
     enabled?: boolean;
     href: string;
     label: string;
+    tooltip?: string;
 }
 
 interface AppbarNav {
-    icon: JSX.Element;
-    label: string;
+    icon: React.ReactNode;
+    iconAlt?: React.ReactNode;
     href: string;
-    alias?: string[];
+    label: string;
+    isExpandable?: boolean;
+    isAlt?: boolean;
+    expandedLinks?: ExpandedLink[];
+}
+
+interface ExpandedLink {
+    href: string;
+    label: string;
+    icon: React.ReactNode;
 }
 
 interface NavigationButtonInterface {
@@ -20,6 +30,7 @@ interface NavigationButtonInterface {
     className?: string;
     subMenus?: NavigationButtonInterface[];
     children?: ReactNode;
+    tooltip?: string;
 }
 
 interface NavigationButtonProps extends NavigationButtonInterface {

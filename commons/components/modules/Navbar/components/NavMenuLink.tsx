@@ -6,7 +6,8 @@ const NavMenuLink = ({
     enabled,
     href,
     label,
-    lightMode
+    lightMode,
+    tooltip
 }: NavLink & { lightMode?: boolean }): JSX.Element => {
     return enabled ?? true ? (
         <Button
@@ -14,8 +15,10 @@ const NavMenuLink = ({
             variant="custom"
             className={cn(
                 '!p-0 font-body font-normal text-xs text-neutral-400',
-                lightMode ? 'hover:text-black' : 'hover:text-white'
-            )}>
+                lightMode ? 'hover:text-black' : 'hover:text-white',
+                tooltip && 'tooltip tooltip-right'
+            )}
+            data-tip={tooltip}>
             {label}
         </Button>
     ) : (
