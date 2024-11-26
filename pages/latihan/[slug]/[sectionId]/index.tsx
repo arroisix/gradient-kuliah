@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import SectionPageContent from 'courses/components/Latihan/Section/SectionPageContent';
+import withAuth from 'commons/withAuth';
 
 const SectionPage: React.FC = () => {
     const router = useRouter();
@@ -23,4 +24,4 @@ const SectionPage: React.FC = () => {
     );
 };
 
-export default SectionPage;
+export default withAuth(SectionPage);
