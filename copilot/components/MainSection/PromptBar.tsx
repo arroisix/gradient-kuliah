@@ -201,7 +201,7 @@ const PromptBar = ({
                         onPaste={handlePaste}
                         placeholder={
                             isMobileBreakpoints
-                                ? 'Jangan masukkan data pribadi kamu yaa!'
+                                ? '... Jangan gunakan data pribadi disini yaa ...'
                                 : 'Lagi butuh bantuan apa sobat? Jangan masukkan data pribadi kamu yaa!'
                         }
                         className="w-full bg-transparent border-none focus:ring-0 outline-none text-white"

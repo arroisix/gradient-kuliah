@@ -61,11 +61,18 @@ const CopilotContainer = (): JSX.Element => {
                 console.error('Error loading chat history:', error);
             } finally {
                 setIsLoadingHistory(false);
+                scrollToBottom();
             }
         };
 
         loadChatHistory();
     }, []);
+
+    useEffect(() => {
+        if (messages && messages.length > 0) {
+            scrollToBottom();
+        }
+    }, [messages]);
 
     const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
         const target = e.target as HTMLDivElement;
@@ -75,10 +82,17 @@ const CopilotContainer = (): JSX.Element => {
     };
 
     const scrollToBottom = () => {
-        chatContainerRef.current?.scrollTo({
-            top: chatContainerRef.current.scrollHeight,
-            behavior: 'smooth'
-        });
+        if (isMobileBreakpoints) {
+            messagesEndRef.current?.scrollIntoView({
+                block: 'nearest',
+                behavior: 'smooth'
+            });
+        } else {
+            chatContainerRef.current?.scrollTo({
+                top: chatContainerRef.current?.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
     };
 
     const handleSendMessage = async (prompt: string, imageUrl?: string) => {
@@ -106,6 +120,7 @@ const CopilotContainer = (): JSX.Element => {
         };
 
         setMessages((prev) => [...prev, userMessage]);
+        scrollToBottom();
         let currentResponse = '';
 
         try {
@@ -122,6 +137,7 @@ const CopilotContainer = (): JSX.Element => {
                             content: currentResponse,
                             timestamp: new Date().toISOString()
                         });
+                        scrollToBottom();
                     },
                     onComplete: (messageId, sessionId) => {
                         setPendingMessage(null);
@@ -153,6 +169,7 @@ const CopilotContainer = (): JSX.Element => {
                             timestamp: new Date().toISOString()
                         };
                         setMessages((prev) => [...prev, errorMessage]);
+                        scrollToBottom();
                     }
                 }
             );
@@ -167,8 +184,10 @@ const CopilotContainer = (): JSX.Element => {
                 timestamp: new Date().toISOString()
             };
             setMessages((prev) => [...prev, errorMessage]);
+            scrollToBottom();
         } finally {
             setIsLoadingResponse(false);
+            scrollToBottom();
         }
     };
 
@@ -227,7 +246,7 @@ const CopilotContainer = (): JSX.Element => {
                                 isLoading={isLoadingResponse}
                                 currentSessionId={currentSessionId}
                             />
-                            <div ref={messagesEndRef} />
+                            <div ref={messagesEndRef} id="dummy-bubble" />
                         </div>
                         <div
                             className={cn(
@@ -264,6 +283,7 @@ const CopilotContainer = (): JSX.Element => {
                                 </svg>
                             </button>
                         )}
+                        <div ref={messagesEndRef} id="dummy-bubble" />
                     </>
                 ) : (
                     <MainSection onSendMessage={handleSendMessage} />

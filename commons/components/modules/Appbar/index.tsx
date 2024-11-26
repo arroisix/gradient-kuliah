@@ -90,7 +90,10 @@ const Appbar = (): JSX.Element | null => {
     }, []);
 
     const handleDiscussionClick = (e: React.MouseEvent, menu: AppbarNav) => {
-        if (menu.isExpandable) {
+        if (
+            menu.isExpandable &&
+            configData?.configs.is_copilot_config_enabled
+        ) {
             e.preventDefault();
             setShowExpanded(!showExpanded);
         }
@@ -162,7 +165,7 @@ const Appbar = (): JSX.Element | null => {
                         onClick={(e) => handleDiscussionClick(e, menu)}
                         className={cn(
                             'flex flex-col items-center relative',
-                            router.pathname === menu.href
+                            router.pathname.includes(menu.href)
                                 ? 'text-white'
                                 : 'text-[#666]',
                             index === 2 &&
