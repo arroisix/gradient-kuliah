@@ -121,7 +121,7 @@ const AnswerCard = ({
                             size={4}
                         />
                         <span className="inline-block text-xs font-body text-neutral-600">
-                            {moment(created_at).utc().calendar()}
+                            {moment(created_at).utc(true).calendar()}
                         </span>
                     </div>
                 </div>

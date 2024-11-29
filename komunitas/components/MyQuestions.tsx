@@ -21,7 +21,7 @@ const MyQuestions = ({ questions, askNow }: MyQuestionsProps): JSX.Element => {
             {questions?.map((value) => (
                 <div key={value.date} className="flex flex-col gap-2">
                     <span className="text-xs font-body text-neutral-600">
-                        {moment(value.date).utc().format('MMM DD')}
+                        {moment(value.date).utc(true).format('MMM DD')}
                     </span>
                     <div className="flex flex-col gap-2 bg-[#1D1D1D] rounded">
                         {value.items.map(

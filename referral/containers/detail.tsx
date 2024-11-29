@@ -280,7 +280,7 @@ const ListReferee = (): JSX.Element => {
                                     </div>
                                     <span className="inline-block font-body text-xs md:text-sm">
                                         {moment(referred_at)
-                                            .utc()
+                                            .utc(true)
                                             .format('DD MMM YYYY')}
                                     </span>
                                 </div>

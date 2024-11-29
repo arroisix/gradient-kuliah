@@ -199,7 +199,7 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
                             <span className="inline-block">
                                 {moment()
                                     .add(packet?.active_duration, 'd')
-                                    .utc()
+                                    .utc(true)
                                     .format('D-MM-YYYY')}
                             </span>
                         </p>
