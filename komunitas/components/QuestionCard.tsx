@@ -151,7 +151,7 @@ const QuestionCard = ({
                             size={4}
                         />
                         <p className="text-xs font-body text-neutral-600">
-                            {moment(created_at).utc().calendar()}
+                            {moment(created_at).utc(true).calendar()}
                         </p>
                     </div>
                 </div>

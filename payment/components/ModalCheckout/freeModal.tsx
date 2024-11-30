@@ -31,7 +31,7 @@ const FreeModalCheckout = ({
                                 Langganan hingga{' '}
                                 {moment()
                                     .add(packet?.active_duration, 'd')
-                                    .utc()
+                                    .utc(true)
                                     .format('D MMM YYYY')}
                             </span>
                         )}

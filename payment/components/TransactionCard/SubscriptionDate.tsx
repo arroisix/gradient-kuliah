@@ -19,7 +19,7 @@ const SubscriptionDate = ({
         ? moment(subscriptionEnd)
         : startDate.clone().add(subscriptionPackage.active_duration, 'day');
     const formatDate = (date: Moment): string => {
-        return moment(date).utc().format('D MMM YYYY');
+        return moment(date).utc(true).format('D MMM YYYY');
     };
 
     return (
