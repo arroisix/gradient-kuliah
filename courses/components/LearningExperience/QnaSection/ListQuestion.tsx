@@ -36,7 +36,7 @@ const AnswerItem = ({ answer }: { answer: QnaAnswer }): JSX.Element => {
                     </p>
                     <p className="text-xs font-light font-body text-neutral-600 md:text-base">
                         {moment(answer.created_at)
-                            .utc()
+                            .utc(true)
                             .format('D MMM YYYY [-] hh:mm [WIB]')}
                     </p>
                 </div>
@@ -120,7 +120,7 @@ const QuestionItem = ({ question }: { question: QnaQuestion }): JSX.Element => {
                     </p>
                     <p className="text-xs font-light font-body text-neutral-600 md:text-base">
                         {moment(question.created_at)
-                            .utc()
+                            .utc(true)
                             .format('D MMM YYYY [-] hh:mm [WIB]')}
                     </p>
                 </div>

@@ -63,7 +63,7 @@ const StatusInfo = ({
                 className="flex justify-center items-center gap-[6px] mt-[18px] px-3 py-2 bg-[#F2C04C1A] border border-[#F2C04C1A] rounded font-body text-[#CCCCCC80] text-xs sm:text-sm"
                 onClick={() => localStorage.setItem('packetId', packetId)}>
                 {`Bayar sebelum ${moment(deadline)
-                    .utc()
+                    .utc(true)
                     .format('D MMM YYYY HH:mm')} WIB. `}
                 {isList && !isShowLink && (
                     <Link
