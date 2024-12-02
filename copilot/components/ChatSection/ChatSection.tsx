@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { BiCopy } from 'react-icons/bi';
-import { BsArrowCounterclockwise } from 'react-icons/bs';
+import { BsArrowCounterclockwise, BsBookmark } from 'react-icons/bs';
 import { FiThumbsDown, FiThumbsUp } from 'react-icons/fi';
 import { BsCheck } from 'react-icons/bs';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
@@ -34,6 +34,9 @@ const ChatSection = ({
 }: ChatSectionProps): JSX.Element => {
     const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
     const [isRating, setIsRating] = useState<Record<string, boolean>>({});
+    const [isBookmarking, setIsBookmarking] = useState<Record<string, boolean>>(
+        {}
+    );
     const [imageError, setImageError] = useState<Record<string, boolean>>({});
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
@@ -68,6 +71,29 @@ const ChatSection = ({
             console.error('Failed to rate message:', error);
         } finally {
             setIsRating((prev) => ({ ...prev, [message.id]: false }));
+        }
+    };
+
+    const handleBookmark = async (message: ChatMessage) => {
+        if (!currentSessionId || isBookmarking[message.id]) return;
+
+        try {
+            setIsBookmarking((prev) => ({ ...prev, [message.id]: true }));
+            await chatApi.toggleBookmark({
+                session_id: currentSessionId,
+                message_id: message.id
+            });
+
+            const updatedMessages = messages.map((msg) =>
+                msg.id === message.id
+                    ? { ...msg, isBookmarked: !msg.isBookmarked }
+                    : msg
+            );
+            setMessages(updatedMessages);
+        } catch (error) {
+            console.error('Failed to toggle bookmark:', error);
+        } finally {
+            setIsBookmarking((prev) => ({ ...prev, [message.id]: false }));
         }
     };
 
@@ -196,6 +222,25 @@ const ChatSection = ({
                                         size={20}
                                         className={cn(
                                             message.rating === -1 &&
+                                                'fill-current'
+                                        )}
+                                    />
+                                </button>
+                                <button
+                                    onClick={() => handleBookmark(message)}
+                                    disabled={isBookmarking[message.id]}
+                                    className={cn(
+                                        'p-2 rounded-lg transition-colors',
+                                        message.isBookmarked
+                                            ? 'bg-[#5F2BCE] text-white'
+                                            : 'text-neutral-400 hover:text-white hover:bg-neutral-800',
+                                        isBookmarking[message.id] &&
+                                            'opacity-50 cursor-not-allowed'
+                                    )}>
+                                    <BsBookmark
+                                        size={20}
+                                        className={cn(
+                                            message.isBookmarked &&
                                                 'fill-current'
                                         )}
                                     />

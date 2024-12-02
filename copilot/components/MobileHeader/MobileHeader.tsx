@@ -1,31 +1,33 @@
 import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { BiChevronDown } from 'react-icons/bi';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { HiMenuAlt2 } from 'react-icons/hi';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { BsPencil, BsQuestionCircleFill } from 'react-icons/bs';
 import { IoClose } from 'react-icons/io5';
 import { RiRobot2Fill } from 'react-icons/ri';
 import Link from 'next/link';
+import router from 'next/router';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface MobileHeaderProps {
     onOpenHistory: () => void;
 }
 
-const MobileHeader = (): JSX.Element => {
+const MobileHeader = ({ onOpenHistory }: MobileHeaderProps): JSX.Element => {
+    const handleNewChat = () => {
+        router.push('/copilot');
+    };
+
     const [isOpen, setIsOpen] = useState(false);
 
     return (
         <>
             <div className="md:hidden flex items-center justify-between px-4 py-3 bg-[#101010] border-b border-neutral-800">
-                <div className="flex w-full items-center justify-center gap-4">
-                    {/*<button*/}
-                    {/*    onClick={onOpenHistory}*/}
-                    {/*    className="text-white p-1 -ml-1">*/}
-                    {/*    <HiMenuAlt2 size={24} />*/}
-                    {/*</button>*/}
+                <div className="flex w-full items-center justify-between gap-4">
+                    <button
+                        onClick={onOpenHistory}
+                        className="text-white p-1 -ml-1">
+                        <HiMenuAlt2 size={24} />
+                    </button>
 
                     <button
                         onClick={() => setIsOpen(true)}
@@ -37,9 +39,11 @@ const MobileHeader = (): JSX.Element => {
                         </span>
                     </button>
 
-                    {/*<button className="text-white p-2 hover:bg-neutral-800 rounded-lg transition-colors">*/}
-                    {/*    <BsPencil size={20} />*/}
-                    {/*</button>*/}
+                    <button
+                        onClick={handleNewChat}
+                        className="text-white p-2 hover:bg-neutral-800 rounded-lg transition-colors">
+                        <BsPencil size={20} />
+                    </button>
                 </div>
             </div>
 
