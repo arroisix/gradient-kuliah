@@ -56,6 +56,8 @@ const LatihanLayout: React.FC<LatihanLayoutProps> = ({
 
     const canNavigate = timeConstraint !== 'PER_PROBLEM';
 
+    console.log(firstProblemProgress, 'FIRST PROBLEM');
+
     return (
         <div className="flex flex-col px-4 justify-center items-center h-[100dvh] bg-black">
             <QuizNavigationSidebar
