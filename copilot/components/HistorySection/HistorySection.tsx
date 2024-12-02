@@ -6,9 +6,8 @@ import Link from 'next/link';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { BiCopy, BiSearch } from 'react-icons/bi';
-import { BsPencil } from 'react-icons/bs';
+import { BsPencilSquare } from 'react-icons/bs';
 import { AiOutlineHistory, AiOutlineLoading3Quarters } from 'react-icons/ai';
-import { BsThreeDotsVertical } from 'react-icons/bs';
 import { cn } from 'commons/utils';
 import { chatApi } from '../../redux/api/copilotApi';
 import { useRouter } from 'next/router';
@@ -17,6 +16,8 @@ import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import remarkGfm from 'remark-gfm';
+import SessionMenuDropdown from './SessionMenuDropdown';
+import RenameDialog from './RenameDialog';
 
 interface HistorySectionProps {
     isOpen: boolean;
@@ -41,21 +42,29 @@ const HistorySection = ({
     const [sessionHistory, setSessionHistory] = useState<
         SessionHistoryResponse['data']
     >([]);
-    const [, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [activeTab, setActiveTab] = useState<'history' | 'bookmark'>(
         'history'
     );
     const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
+    const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
+    const [selectedSession, setSelectedSession] = useState<{
+        id: string;
+        name: string;
+    } | null>(null);
 
     useEffect(() => {
         const loadBookmarkedChats = async () => {
             if (activeTab === 'bookmark') {
                 try {
+                    setIsLoading(true);
                     const response = await chatApi.getBookmarkedChats();
                     setBookmarkedChats(response.data);
                 } catch (error) {
                     console.error('Failed to load bookmarked chats:', error);
+                } finally {
+                    setIsLoading(false);
                 }
             }
         };
@@ -148,6 +157,39 @@ const HistorySection = ({
         }
     };
 
+    const handleRename = async (sessionId: string) => {
+        const session = sessionHistory.find((s) => s.id === sessionId);
+        if (session) {
+            setSelectedSession({ id: sessionId, name: session.name });
+            setIsRenameDialogOpen(true);
+        }
+    };
+
+    const handleRenameSubmit = async (newName: string) => {
+        if (!selectedSession) return;
+
+        try {
+            await chatApi.renameSession({
+                session_id: selectedSession.id,
+                name: newName
+            });
+
+            setSessionHistory((prev) =>
+                prev.map((session) =>
+                    session.id === selectedSession.id
+                        ? { ...session, name: newName }
+                        : session
+                )
+            );
+        } catch (error) {
+            console.error('Failed to rename session:', error);
+        }
+    };
+
+    // const handleDelete = async (sessionId: string) => {
+    //     return;
+    // };
+
     const mobileClasses = isMobile
         ? 'fixed left-0 top-0 bottom-0 w-full transform transition-transform duration-300 ease-in-out'
         : '';
@@ -179,7 +221,7 @@ const HistorySection = ({
                         <button
                             onClick={handleNewChat}
                             className="p-2 rounded-lg transition-colors duration-200">
-                            <BsPencil size={20} />
+                            <BsPencilSquare size={20} />
                         </button>
                     </div>
 
@@ -220,7 +262,14 @@ const HistorySection = ({
                     </div>
 
                     <div className="flex flex-col min-h-0 flex-1">
-                        {isSearching ? (
+                        {isLoading ? (
+                            <div className="flex items-center justify-center h-full">
+                                <AiOutlineLoading3Quarters
+                                    className="animate-spin text-neutral-400"
+                                    size={24}
+                                />
+                            </div>
+                        ) : isSearching ? (
                             <div className="flex items-center justify-center h-full">
                                 <AiOutlineLoading3Quarters
                                     className="animate-spin text-neutral-400"
@@ -277,12 +326,14 @@ const HistorySection = ({
                                                         )}
                                                     </span>
                                                     <button
-                                                        onClick={() =>
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            e.stopPropagation();
                                                             handleCopy(
                                                                 chat.message,
                                                                 chat.message_id
-                                                            )
-                                                        }
+                                                            );
+                                                        }}
                                                         className="text-neutral-400 hover:text-white p-1 rounded-lg transition-colors">
                                                         {copiedMessageId ===
                                                         chat.message_id ? (
@@ -305,27 +356,35 @@ const HistorySection = ({
                                     <Link
                                         href={`/copilot/${session.id}`}
                                         key={session.id}
-                                        className="p-3 hover:bg-[#222222] rounded-lg cursor-pointer group block">
-                                        <div className="flex items-start justify-between gap-2">
-                                            <div>
-                                                <h3 className="font-semibold text-sm mb-1">
-                                                    {session.name}
-                                                </h3>
-                                                <p className="text-sm text-neutral-400 line-clamp-2">
-                                                    {session.latest_chat}
-                                                </p>
+                                        className="group block">
+                                        <div className="p-3 hover:bg-[#222222] rounded-lg cursor-pointer">
+                                            <div className="flex items-start justify-between gap-2">
+                                                <div>
+                                                    <h3 className="font-semibold text-sm mb-1">
+                                                        {session.name}
+                                                    </h3>
+                                                    <p className="text-sm text-neutral-400 line-clamp-2">
+                                                        {session.latest_chat}
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <button className="opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <BsThreeDotsVertical className="text-neutral-400" />
-                                            </button>
-                                        </div>
-                                        {session.latest_chat_at && (
-                                            <span className="text-xs text-neutral-500 mt-2 block">
-                                                {formatTimestamp(
-                                                    session.latest_chat_at
+                                            <span className="flex flex-row justify-between text-neutral-500 mt-2 block">
+                                                {session.latest_chat_at ? (
+                                                    <span className="text-xs">
+                                                        {formatTimestamp(
+                                                            session.latest_chat_at
+                                                        )}
+                                                    </span>
+                                                ) : (
+                                                    <span></span>
                                                 )}
+                                                <SessionMenuDropdown
+                                                    sessionId={session.id}
+                                                    onRename={handleRename}
+                                                    onDelete={() => undefined}
+                                                />
                                             </span>
-                                        )}
+                                        </div>
                                     </Link>
                                 ))}
                             </div>
@@ -338,6 +397,14 @@ const HistorySection = ({
                         )}
                     </div>
                 </>
+            )}
+            {selectedSession && (
+                <RenameDialog
+                    isOpen={isRenameDialogOpen}
+                    onClose={() => setIsRenameDialogOpen(false)}
+                    onRename={handleRenameSubmit}
+                    initialName={selectedSession.name}
+                />
             )}
         </div>
     );

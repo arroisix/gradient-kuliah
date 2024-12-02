@@ -2,7 +2,7 @@ import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { BiChevronDown } from 'react-icons/bi';
 import { HiMenuAlt2 } from 'react-icons/hi';
-import { BsPencil, BsQuestionCircleFill } from 'react-icons/bs';
+import { BsPencilSquare, BsQuestionCircleFill } from 'react-icons/bs';
 import { IoClose } from 'react-icons/io5';
 import { RiRobot2Fill } from 'react-icons/ri';
 import Link from 'next/link';
@@ -42,7 +42,7 @@ const MobileHeader = ({ onOpenHistory }: MobileHeaderProps): JSX.Element => {
                     <button
                         onClick={handleNewChat}
                         className="text-white p-2 hover:bg-neutral-800 rounded-lg transition-colors">
-                        <BsPencil size={20} />
+                        <BsPencilSquare size={20} />
                     </button>
                 </div>
             </div>
