@@ -34,7 +34,7 @@ const RenameDialog = ({
         }
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const value = e.target.value;
         if (value.length <= MAX_CHARS) {
             setName(value);
@@ -84,11 +84,11 @@ const RenameDialog = ({
 
                             <form onSubmit={handleSubmit} className="mt-4">
                                 <div className="relative">
-                                    <input
-                                        type="text"
+                                    <textarea
                                         value={name}
                                         onChange={handleChange}
-                                        className="w-full bg-neutral-800 border-none rounded-[8px] p-3 text-white focus:ring-2 focus:ring-[#5F2BCE]"
+                                        rows={3}
+                                        className="w-full bg-neutral-800 border-none rounded-[8px] py-4 px-3 text-white focus:ring-2 focus:ring-[#5F2BCE] resize-none"
                                         placeholder="Enter new name"
                                     />
                                     <span className="absolute right-2 bottom-2 text-xs text-neutral-400">
