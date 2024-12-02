@@ -143,7 +143,7 @@ const ChatSection = ({
                     </div>
                 )}
                 {message.role === 'AI' ? (
-                    <div className="space-y-4">
+                    <div className="space-y-4 w-full">
                         <ReactMarkdown
                             className="markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height markdown-body math-display-overflow text-white"
                             remarkPlugins={[remarkMath, remarkGfm]}
@@ -282,7 +282,8 @@ const ChatSection = ({
                                     className={cn(
                                         'max-w-[80%]',
                                         message.role === 'User' &&
-                                            'bg-[#5F2BCE] px-4 py-3 rounded-2xl'
+                                            'bg-[#5F2BCE] px-4 py-3 rounded-2xl',
+                                        message.role === 'AI' && 'w-full'
                                     )}>
                                     {renderMessage(message)}
                                 </div>
