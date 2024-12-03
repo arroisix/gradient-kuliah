@@ -19,6 +19,7 @@ import remarkGfm from 'remark-gfm';
 import SessionMenuDropdown from './SessionMenuDropdown';
 import RenameDialog from './RenameDialog';
 import { HiOutlineMenuAlt2 } from 'react-icons/hi';
+import { BsBookmark } from 'react-icons/bs';
 
 interface HistorySectionProps {
     isOpen: boolean;
@@ -54,6 +55,9 @@ const HistorySection = ({
         id: string;
         name: string;
     } | null>(null);
+    const [isBookmarking, setIsBookmarking] = useState<Record<string, boolean>>(
+        {}
+    );
 
     useEffect(() => {
         const loadBookmarkedChats = async () => {
@@ -94,13 +98,21 @@ const HistorySection = ({
     }, [isOpen]);
 
     const filteredSessions = useMemo(() => {
-        return sessionHistory.filter(
+        const filtered = sessionHistory.filter(
             (session) =>
                 session.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 session.latest_chat
                     .toLowerCase()
                     .includes(searchTerm.toLowerCase())
         );
+        return filtered.sort((a, b) => {
+            if (!a.latest_chat_at) return 1;
+            if (!b.latest_chat_at) return -1;
+            return (
+                new Date(b.latest_chat_at).getTime() -
+                new Date(a.latest_chat_at).getTime()
+            );
+        });
     }, [sessionHistory, searchTerm]);
 
     const formatTimestamp = (timestamp: string | null) => {
@@ -187,6 +199,29 @@ const HistorySection = ({
         }
     };
 
+    const handleBookmarkMessage = async (
+        messageId: string,
+        sessionId: string
+    ) => {
+        if (isBookmarking[messageId]) return;
+
+        try {
+            setIsBookmarking((prev) => ({ ...prev, [messageId]: true }));
+            await chatApi.toggleBookmark({
+                session_id: sessionId,
+                message_id: messageId
+            });
+
+            setBookmarkedChats((prev) =>
+                prev.filter((chat) => chat.message_id !== messageId)
+            );
+        } catch (error) {
+            console.error('Failed to toggle bookmark:', error);
+        } finally {
+            setIsBookmarking((prev) => ({ ...prev, [messageId]: false }));
+        }
+    };
+
     const handleDelete = async (sessionId: string) => {
         try {
             await chatApi.deleteSession(sessionId);
@@ -204,7 +239,7 @@ const HistorySection = ({
     };
 
     const mobileClasses = isMobile
-        ? 'fixed left-0 top-0 bottom-0 w-full transform transition-transform duration-300 ease-in-out'
+        ? 'bg-neutral-900 fixed left-0 top-0 bottom-0 w-full transform transition-transform duration-300 ease-in-out'
         : '';
     const mobileTransform = isMobile && !isOpen ? '-translate-x-full' : '';
 
@@ -345,25 +380,58 @@ const HistorySection = ({
                                                             chat.timestamp
                                                         )}
                                                     </span>
-                                                    <button
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            e.stopPropagation();
-                                                            handleCopy(
-                                                                chat.message,
-                                                                chat.message_id
-                                                            );
-                                                        }}
-                                                        className="text-neutral-400 hover:text-white p-1 rounded-lg transition-colors">
-                                                        {copiedMessageId ===
-                                                        chat.message_id ? (
-                                                            <span className="text-sm text-green-500">
-                                                                Copied!
-                                                            </span>
-                                                        ) : (
-                                                            <BiCopy size={20} />
-                                                        )}
-                                                    </button>
+                                                    <div className="flex items-center gap-2">
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                e.stopPropagation();
+                                                                handleCopy(
+                                                                    chat.message,
+                                                                    chat.message_id
+                                                                );
+                                                            }}
+                                                            className="text-neutral-400 hover:text-white p-1 rounded-lg transition-colors">
+                                                            {copiedMessageId ===
+                                                            chat.message_id ? (
+                                                                <span className="text-sm text-green-500">
+                                                                    Copied!
+                                                                </span>
+                                                            ) : (
+                                                                <BiCopy
+                                                                    size={20}
+                                                                />
+                                                            )}
+                                                        </button>
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                e.stopPropagation();
+                                                                handleBookmarkMessage(
+                                                                    chat.message_id,
+                                                                    chat.session_id
+                                                                );
+                                                            }}
+                                                            disabled={
+                                                                isBookmarking[
+                                                                    chat
+                                                                        .message_id
+                                                                ]
+                                                            }
+                                                            className={cn(
+                                                                'p-2 rounded-lg transition-colors',
+                                                                'bg-[#5F2BCE] text-white',
+                                                                isBookmarking[
+                                                                    chat
+                                                                        .message_id
+                                                                ] &&
+                                                                    'opacity-50 cursor-not-allowed'
+                                                            )}>
+                                                            <BsBookmark
+                                                                size={16}
+                                                                className="fill-current"
+                                                            />
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             )}
                                         </div>
