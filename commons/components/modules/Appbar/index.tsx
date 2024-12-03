@@ -77,7 +77,8 @@ const Appbar = (): JSX.Element | null => {
 
     const isShowAppbar = (): boolean =>
         DISPLAYED_ROUTES.includes(router.asPath) ||
-        DISPLAYED_ROUTES.includes(router.pathname);
+        DISPLAYED_ROUTES.includes(router.pathname) ||
+        router.pathname.startsWith('/copilot');
 
     useEffect(() => {
         const interval = setInterval(() => {

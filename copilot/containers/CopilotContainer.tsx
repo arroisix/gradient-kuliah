@@ -11,8 +11,15 @@ import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import CopilotAuthPrompt from '../components/AuthPrompt/AuthPrompt';
+import HistorySection from 'copilot/components/HistorySection/HistorySection';
 
-const CopilotContainer = (): JSX.Element => {
+interface CopilotContainerProps {
+    sessionId?: string;
+}
+
+const CopilotContainer = ({
+    sessionId
+}: CopilotContainerProps): JSX.Element => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoadingHistory, setIsLoadingHistory] = useState(true);
     const [isLoadingResponse, setIsLoadingResponse] = useState(false);
@@ -29,11 +36,18 @@ const CopilotContainer = (): JSX.Element => {
         timestamp: string;
     } | null>(null);
     const [isEditorOpen, setIsEditorOpen] = useState(false);
+    const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
     useEffect(() => {
+        console.log('session id,', sessionId);
         const loadChatHistory = async () => {
+            if (!sessionId) {
+                setIsLoadingHistory(false);
+                return;
+            }
+
             try {
-                const response = await chatApi.getChatHistory();
+                const response = await chatApi.getChatHistory(sessionId);
                 if (response.history && response.history.length > 0) {
                     const convertedMessages: ChatMessage[] =
                         response.history.map(
@@ -55,7 +69,7 @@ const CopilotContainer = (): JSX.Element => {
                             })
                         );
                     setMessages(convertedMessages);
-                    setCurrentSessionId(response.session_id);
+                    setCurrentSessionId(sessionId);
                 }
             } catch (error) {
                 console.error('Error loading chat history:', error);
@@ -66,7 +80,7 @@ const CopilotContainer = (): JSX.Element => {
         };
 
         loadChatHistory();
-    }, []);
+    }, [sessionId]);
 
     useEffect(() => {
         if (messages && messages.length > 0) {
@@ -124,7 +138,7 @@ const CopilotContainer = (): JSX.Element => {
         let currentResponse = '';
 
         try {
-            await chatApi.chatSingle(
+            await chatApi.chat(
                 {
                     input_text: prompt,
                     session_id: currentSessionId,
@@ -204,14 +218,27 @@ const CopilotContainer = (): JSX.Element => {
                 isMobileBreakpoints && '-mx-4',
                 'md:mx-0'
             )}>
+            {isAuthenticated && (
+                <HistorySection
+                    isOpen={isHistoryOpen}
+                    onClose={() => setIsHistoryOpen(false)}
+                    onOpen={() => setIsHistoryOpen(true)}
+                    isMobile={isMobileBreakpoints}
+                />
+            )}
             <div
                 className={cn(
-                    'flex-1 flex flex-col h-full w-full relative',
-                    !isMobileBreakpoints && 'px-24'
+                    'flex-1 flex flex-col w-full relative',
+                    !isMobileBreakpoints && 'px-24 h-full',
+                    messages.length === 0
+                        ? isMobileBreakpoints && 'h-screen'
+                        : !isMobileBreakpoints && 'h-full'
                 )}>
                 {isMobileBreakpoints && (
                     <div className="fixed top-0 left-0 right-0 z-10 bg-[#101010]">
-                        <MobileHeader />
+                        <MobileHeader
+                            onOpenHistory={() => setIsHistoryOpen(true)}
+                        />
                     </div>
                 )}
 
