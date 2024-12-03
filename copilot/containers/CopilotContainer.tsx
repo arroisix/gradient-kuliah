@@ -228,8 +228,11 @@ const CopilotContainer = ({
             )}
             <div
                 className={cn(
-                    'flex-1 flex flex-col h-full w-full relative',
-                    !isMobileBreakpoints && 'px-24'
+                    'flex-1 flex flex-col w-full relative',
+                    !isMobileBreakpoints && 'px-24 h-full',
+                    messages.length === 0
+                        ? isMobileBreakpoints && 'h-screen'
+                        : !isMobileBreakpoints && 'h-full'
                 )}>
                 {isMobileBreakpoints && (
                     <div className="fixed top-0 left-0 right-0 z-10 bg-[#101010]">
