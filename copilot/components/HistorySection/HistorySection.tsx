@@ -18,7 +18,7 @@ import rehypeKatex from 'rehype-katex';
 import remarkGfm from 'remark-gfm';
 import SessionMenuDropdown from './SessionMenuDropdown';
 import RenameDialog from './RenameDialog';
-import { HiOutlineMenuAlt2 } from 'react-icons/hi';
+import { HiOutlineChatAlt, HiOutlineMenuAlt2 } from 'react-icons/hi';
 import { BsBookmark } from 'react-icons/bs';
 
 interface HistorySectionProps {
@@ -353,90 +353,114 @@ const HistorySection = ({
                             </div>
                         ) : activeTab === 'bookmark' ? (
                             <div className="overflow-y-auto px-2 flex-1">
-                                {bookmarkedChats.map((chat) => (
-                                    <Link
-                                        href={`/copilot/${chat.session_id}`}
-                                        key={chat.message_id}
-                                        className="p-3 hover:bg-[#222222] rounded-lg cursor-pointer flex flex-row group block">
-                                        <div className="flex-shrink-0 mr-3">
-                                            <div className="w-8 h-8 rounded-full bg-[#5F2BCE] flex items-center justify-center">
-                                                <CopilotIcon />
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <ReactMarkdown
-                                                className="markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height markdown-body math-display-overflow text-white text-sm"
-                                                remarkPlugins={[
-                                                    remarkMath,
-                                                    remarkGfm
-                                                ]}
-                                                rehypePlugins={[rehypeKatex]}>
-                                                {chat.message}
-                                            </ReactMarkdown>
-                                            {chat.timestamp && (
-                                                <div className="flex items-center justify-between gap-2 mt-2">
-                                                    <span className="text-xs text-neutral-500">
-                                                        {formatTimestamp(
-                                                            chat.timestamp
-                                                        )}
-                                                    </span>
-                                                    <div className="flex items-center gap-2">
-                                                        <button
-                                                            onClick={(e) => {
-                                                                e.preventDefault();
-                                                                e.stopPropagation();
-                                                                handleCopy(
-                                                                    chat.message,
-                                                                    chat.message_id
-                                                                );
-                                                            }}
-                                                            className="text-neutral-400 hover:text-white p-1 rounded-lg transition-colors">
-                                                            {copiedMessageId ===
-                                                            chat.message_id ? (
-                                                                <span className="text-sm text-green-500">
-                                                                    Copied!
-                                                                </span>
-                                                            ) : (
-                                                                <BiCopy
-                                                                    size={20}
-                                                                />
-                                                            )}
-                                                        </button>
-                                                        <button
-                                                            onClick={(e) => {
-                                                                e.preventDefault();
-                                                                e.stopPropagation();
-                                                                handleBookmarkMessage(
-                                                                    chat.message_id,
-                                                                    chat.session_id
-                                                                );
-                                                            }}
-                                                            disabled={
-                                                                isBookmarking[
-                                                                    chat
-                                                                        .message_id
-                                                                ]
-                                                            }
-                                                            className={cn(
-                                                                'p-2 rounded-lg transition-colors',
-                                                                'bg-[#5F2BCE] text-white',
-                                                                isBookmarking[
-                                                                    chat
-                                                                        .message_id
-                                                                ] &&
-                                                                    'opacity-50 cursor-not-allowed'
-                                                            )}>
-                                                            <BsBookmark
-                                                                size={16}
-                                                                className="fill-current"
-                                                            />
-                                                        </button>
-                                                    </div>
+                                {bookmarkedChats.length > 0 ? (
+                                    bookmarkedChats.map((chat) => (
+                                        <Link
+                                            href={`/copilot/${chat.session_id}`}
+                                            key={chat.message_id}
+                                            className="p-3 hover:bg-[#222222] rounded-lg cursor-pointer flex flex-row group block">
+                                            <div className="flex-shrink-0 mr-3">
+                                                <div className="w-8 h-8 rounded-full bg-[#5F2BCE] flex items-center justify-center">
+                                                    <CopilotIcon />
                                                 </div>
-                                            )}
-                                        </div>
-                                    </Link>
-                                ))}
+                                            </div>
+                                            <div>
+                                                <ReactMarkdown
+                                                    className="markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height markdown-body math-display-overflow text-white text-sm"
+                                                    remarkPlugins={[
+                                                        remarkMath,
+                                                        remarkGfm
+                                                    ]}
+                                                    rehypePlugins={[
+                                                        rehypeKatex
+                                                    ]}>
+                                                    {chat.message}
+                                                </ReactMarkdown>
+                                                {chat.timestamp && (
+                                                    <div className="flex items-center justify-between gap-2 mt-2">
+                                                        <span className="text-xs text-neutral-500">
+                                                            {formatTimestamp(
+                                                                chat.timestamp
+                                                            )}
+                                                        </span>
+                                                        <div className="flex items-center gap-2">
+                                                            <button
+                                                                onClick={(
+                                                                    e
+                                                                ) => {
+                                                                    e.preventDefault();
+                                                                    e.stopPropagation();
+                                                                    handleCopy(
+                                                                        chat.message,
+                                                                        chat.message_id
+                                                                    );
+                                                                }}
+                                                                className="text-neutral-400 hover:text-white p-1 rounded-lg transition-colors">
+                                                                {copiedMessageId ===
+                                                                chat.message_id ? (
+                                                                    <span className="text-sm text-green-500">
+                                                                        Copied!
+                                                                    </span>
+                                                                ) : (
+                                                                    <BiCopy
+                                                                        size={
+                                                                            20
+                                                                        }
+                                                                    />
+                                                                )}
+                                                            </button>
+                                                            <button
+                                                                onClick={(
+                                                                    e
+                                                                ) => {
+                                                                    e.preventDefault();
+                                                                    e.stopPropagation();
+                                                                    handleBookmarkMessage(
+                                                                        chat.message_id,
+                                                                        chat.session_id
+                                                                    );
+                                                                }}
+                                                                disabled={
+                                                                    isBookmarking[
+                                                                        chat
+                                                                            .message_id
+                                                                    ]
+                                                                }
+                                                                className={cn(
+                                                                    'p-2 rounded-lg transition-colors',
+                                                                    'bg-[#5F2BCE] text-white',
+                                                                    isBookmarking[
+                                                                        chat
+                                                                            .message_id
+                                                                    ] &&
+                                                                        'opacity-50 cursor-not-allowed'
+                                                                )}>
+                                                                <BsBookmark
+                                                                    size={16}
+                                                                    className="fill-current"
+                                                                />
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </Link>
+                                    ))
+                                ) : (
+                                    <div className="flex flex-col items-center justify-center h-full gap-2 text-center px-4">
+                                        <BsBookmark
+                                            size={48}
+                                            className="text-neutral-600"
+                                        />
+                                        <h3 className="font-semibold text-neutral-400">
+                                            Belum ada chat yang dibookmark
+                                        </h3>
+                                        <p className="text-sm text-neutral-500">
+                                            Kamu bisa bookmark chat yang ingin
+                                            kamu simpan untuk dibaca nanti
+                                        </p>
+                                    </div>
+                                )}
                             </div>
                         ) : filteredSessions.length > 0 ? (
                             <div className="overflow-y-auto px-2 flex-1">
@@ -477,9 +501,17 @@ const HistorySection = ({
                                 ))}
                             </div>
                         ) : (
-                            <div className="flex items-center justify-center h-full">
-                                <p className="text-neutral-400">
-                                    No data found
+                            <div className="flex flex-col items-center justify-center h-full gap-2 text-center px-4">
+                                <HiOutlineChatAlt
+                                    size={48}
+                                    className="text-neutral-600"
+                                />
+                                <h3 className="font-semibold text-neutral-400">
+                                    Kamu belum pernah memulai percakapan
+                                </h3>
+                                <p className="text-sm text-neutral-500">
+                                    Riwayat percakapanmu dengan Copilot AI akan
+                                    tersimpan di sini
                                 </p>
                             </div>
                         )}
