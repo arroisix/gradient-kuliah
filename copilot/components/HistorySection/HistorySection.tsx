@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { BiCopy, BiSearch } from 'react-icons/bi';
-import { BsPencilSquare } from 'react-icons/bs';
+import { FiEdit } from 'react-icons/fi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { cn } from 'commons/utils';
 import { chatApi } from '../../redux/api/copilotApi';
@@ -227,7 +227,7 @@ const HistorySection = ({
                     <button
                         onClick={handleNewChat}
                         className="text-white hover:text-neutral-400 transition-colors duration-200">
-                        <BsPencilSquare size={20} />
+                        <FiEdit size={20} />
                     </button>
                 </div>
             ) : (
@@ -241,7 +241,7 @@ const HistorySection = ({
                         <button
                             onClick={handleNewChat}
                             className="p-2 rounded-lg transition-colors duration-200">
-                            <BsPencilSquare size={20} />
+                            <FiEdit size={20} />
                         </button>
                     </div>
 
