@@ -7,7 +7,7 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { BiCopy, BiSearch } from 'react-icons/bi';
 import { BsPencilSquare } from 'react-icons/bs';
-import { AiOutlineHistory, AiOutlineLoading3Quarters } from 'react-icons/ai';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { cn } from 'commons/utils';
 import { chatApi } from '../../redux/api/copilotApi';
 import { useRouter } from 'next/router';
@@ -18,6 +18,7 @@ import rehypeKatex from 'rehype-katex';
 import remarkGfm from 'remark-gfm';
 import SessionMenuDropdown from './SessionMenuDropdown';
 import RenameDialog from './RenameDialog';
+import { HiOutlineMenuAlt2 } from 'react-icons/hi';
 
 interface HistorySectionProps {
     isOpen: boolean;
@@ -198,18 +199,25 @@ const HistorySection = ({
     return (
         <div
             className={cn(
-                'bg-neutral-900 h-full flex flex-col z-50',
+                'h-full flex flex-col z-50',
                 !isMobile && 'transition-all duration-300 ease-in-out',
-                !isMobile && (isOpen ? 'w-80' : 'w-16'),
+                !isMobile && (isOpen ? 'w-80 bg-neutral-900' : 'w-20 fixed'),
                 mobileClasses,
                 mobileTransform
             )}>
             {!isOpen && !isMobile ? (
-                <button
-                    onClick={onOpen}
-                    className="flex justify-center pt-6 w-full text-white hover:text-neutral-400 transition-colors duration-200">
-                    <AiOutlineHistory size={24} />
-                </button>
+                <div className="flex flex-row items-center gap-4 px-4 pt-6">
+                    <button
+                        onClick={onOpen}
+                        className="text-white hover:text-neutral-400 transition-colors duration-200">
+                        <HiOutlineMenuAlt2 size={24} />
+                    </button>
+                    <button
+                        onClick={handleNewChat}
+                        className="text-white hover:text-neutral-400 transition-colors duration-200">
+                        <BsPencilSquare size={20} />
+                    </button>
+                </div>
             ) : (
                 <>
                     <div className="shrink-0 p-4 flex items-center justify-between">
