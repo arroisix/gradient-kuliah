@@ -262,6 +262,27 @@ export const chatApi = {
         return response.json();
     },
 
+    deleteSession: async (sessionId: string): Promise<{ message: string }> => {
+        const token = localStorage.getItem('token');
+        const response = await fetch(
+            `${COPILOT_BASE_URL}session/${sessionId}/`,
+            {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Token ${token}`,
+                    Accept: '*/*'
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return response.json();
+    },
+
     searchChat: async (keyword: string, type = 'all', page = 1, limit = 10) => {
         const token = localStorage.getItem('token');
         const response = await fetch(

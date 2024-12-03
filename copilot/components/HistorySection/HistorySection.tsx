@@ -187,9 +187,21 @@ const HistorySection = ({
         }
     };
 
-    // const handleDelete = async (sessionId: string) => {
-    //     return;
-    // };
+    const handleDelete = async (sessionId: string) => {
+        try {
+            await chatApi.deleteSession(sessionId);
+
+            setSessionHistory((prev) =>
+                prev.filter((session) => session.id !== sessionId)
+            );
+
+            if (router.query.sessionId === sessionId) {
+                router.push('/copilot');
+            }
+        } catch (error) {
+            console.error('Failed to delete session:', error);
+        }
+    };
 
     const mobileClasses = isMobile
         ? 'fixed left-0 top-0 bottom-0 w-full transform transition-transform duration-300 ease-in-out'
@@ -389,7 +401,7 @@ const HistorySection = ({
                                                 <SessionMenuDropdown
                                                     sessionId={session.id}
                                                     onRename={handleRename}
-                                                    onDelete={() => undefined}
+                                                    onDelete={handleDelete}
                                                 />
                                             </span>
                                         </div>
