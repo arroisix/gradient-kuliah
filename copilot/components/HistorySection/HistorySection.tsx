@@ -238,6 +238,12 @@ const HistorySection = ({
         }
     };
 
+    useEffect(() => {
+        if (isMobile && isOpen) {
+            onClose();
+        }
+    }, [router.query.sessionId]);
+
     const mobileClasses = isMobile
         ? 'bg-neutral-900 fixed left-0 top-0 bottom-0 w-full transform transition-transform duration-300 ease-in-out'
         : '';

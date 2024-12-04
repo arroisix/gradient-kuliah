@@ -3,6 +3,8 @@ export interface ChatResponse {
     content: string | null;
     message_id: string | null;
     session_id: string | null;
+    session_name: string | null;
+    keyword: string | null;
 }
 
 export interface ChatInput {
@@ -37,6 +39,7 @@ export interface ChatMessage {
     rating?: number;
     isBookmarked?: boolean;
     image?: string | null;
+    keyword?: string | null;
 }
 
 interface BookmarkedChatsResponse {

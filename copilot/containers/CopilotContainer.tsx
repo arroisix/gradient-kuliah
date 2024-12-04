@@ -153,7 +153,12 @@ const CopilotContainer = ({
                         });
                         scrollToBottom();
                     },
-                    onComplete: (messageId, sessionId) => {
+                    onComplete: (
+                        messageId,
+                        sessionId,
+                        sessionName,
+                        keyword
+                    ) => {
                         setPendingMessage(null);
 
                         if (sessionId) {
@@ -165,7 +170,8 @@ const CopilotContainer = ({
                                     id: messageId,
                                     role: 'AI',
                                     content: currentResponse,
-                                    timestamp: new Date().toISOString()
+                                    timestamp: new Date().toISOString(),
+                                    keyword: keyword
                                 };
                                 return [...prev, aiMessage];
                             });
