@@ -15,6 +15,7 @@ import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { useGetAstronotesExercisesQuery } from 'courses/redux/api/exercisesApi';
 import AstronotesExercisesSection from 'courses/components/Latihan/Astronotes/AstronotesExercisesSection';
+import CopilotEntrypoint from '../../../../copilot/components/CopilotEntrypoint';
 
 const Astronotes = ({
     content,
