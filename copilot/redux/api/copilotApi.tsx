@@ -11,7 +11,12 @@ const COPILOT_BASE_URL = `${BASE_URL}copilots/`;
 
 interface StreamCallbacks {
     onContent?: (content: string) => void;
-    onComplete?: (messageId: string, sessionId: string) => void;
+    onComplete?: (
+        messageId: string,
+        sessionId: string,
+        sessionName: string | null,
+        keyword: string | null
+    ) => void;
     onError?: (error: any) => void;
 }
 
@@ -38,7 +43,9 @@ async function processStream(
                     } else if (jsonValue.type === 'INFO') {
                         callbacks.onComplete?.(
                             jsonValue.message_id,
-                            jsonValue.session_id
+                            jsonValue.session_id,
+                            jsonValue.session_name,
+                            jsonValue.keyword
                         );
                     }
                 } catch (err) {

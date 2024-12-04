@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { BiCopy } from 'react-icons/bi';
 import { BsArrowCounterclockwise, BsBookmark } from 'react-icons/bs';
-import { FiThumbsDown, FiThumbsUp } from 'react-icons/fi';
+import { FiArrowUpLeft, FiThumbsDown, FiThumbsUp } from 'react-icons/fi';
 import { BsCheck } from 'react-icons/bs';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import ReactMarkdown from 'react-markdown';
@@ -150,7 +150,12 @@ const ChatSection = ({
                             rehypePlugins={[rehypeKatex]}>
                             {message.content}
                         </ReactMarkdown>
-                        <div className="flex items-center gap-4">
+                        <div
+                            className={cn(
+                                'flex items-center gap-4',
+                                message.keyword &&
+                                    'pb-2 border-b border-[#333333]'
+                            )}>
                             <div className="flex items-center gap-2">
                                 <button
                                     onClick={() =>
@@ -247,6 +252,22 @@ const ChatSection = ({
                                 </button>
                             </div>
                         </div>
+                        {message.keyword && (
+                            <button
+                                onClick={() => {
+                                    if (message.keyword) {
+                                        window.location.href = `/search/results?q=${encodeURIComponent(
+                                            message.keyword
+                                        )}`;
+                                    }
+                                }}
+                                className="w-full px-4 py-3 text-start text-neutral-400 hover:bg-[#222222] rounded-lg transition-colors flex items-center justify-between border border-[#333333]">
+                                <span className="text-sm">
+                                    Lihat materi terkait
+                                </span>
+                                <FiArrowUpLeft className="text-neutral-400" />
+                            </button>
+                        )}
                     </div>
                 ) : (
                     <p className="text-white whitespace-pre-wrap">
