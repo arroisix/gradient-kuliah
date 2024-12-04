@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { BiCopy } from 'react-icons/bi';
-import { BsArrowCounterclockwise } from 'react-icons/bs';
-import { FiThumbsDown, FiThumbsUp } from 'react-icons/fi';
+import { BsArrowCounterclockwise, BsBookmark } from 'react-icons/bs';
+import { FiArrowUpLeft, FiThumbsDown, FiThumbsUp } from 'react-icons/fi';
 import { BsCheck } from 'react-icons/bs';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import ReactMarkdown from 'react-markdown';
@@ -34,6 +34,9 @@ const ChatSection = ({
 }: ChatSectionProps): JSX.Element => {
     const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
     const [isRating, setIsRating] = useState<Record<string, boolean>>({});
+    const [isBookmarking, setIsBookmarking] = useState<Record<string, boolean>>(
+        {}
+    );
     const [imageError, setImageError] = useState<Record<string, boolean>>({});
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
@@ -68,6 +71,29 @@ const ChatSection = ({
             console.error('Failed to rate message:', error);
         } finally {
             setIsRating((prev) => ({ ...prev, [message.id]: false }));
+        }
+    };
+
+    const handleBookmark = async (message: ChatMessage) => {
+        if (!currentSessionId || isBookmarking[message.id]) return;
+
+        try {
+            setIsBookmarking((prev) => ({ ...prev, [message.id]: true }));
+            await chatApi.toggleBookmark({
+                session_id: currentSessionId,
+                message_id: message.id
+            });
+
+            const updatedMessages = messages.map((msg) =>
+                msg.id === message.id
+                    ? { ...msg, isBookmarked: !msg.isBookmarked }
+                    : msg
+            );
+            setMessages(updatedMessages);
+        } catch (error) {
+            console.error('Failed to toggle bookmark:', error);
+        } finally {
+            setIsBookmarking((prev) => ({ ...prev, [message.id]: false }));
         }
     };
 
@@ -117,14 +143,19 @@ const ChatSection = ({
                     </div>
                 )}
                 {message.role === 'AI' ? (
-                    <div className="space-y-4">
+                    <div className="space-y-4 w-full">
                         <ReactMarkdown
                             className="markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height markdown-body math-display-overflow text-white"
                             remarkPlugins={[remarkMath, remarkGfm]}
                             rehypePlugins={[rehypeKatex]}>
                             {message.content}
                         </ReactMarkdown>
-                        <div className="flex items-center gap-4">
+                        <div
+                            className={cn(
+                                'flex items-center gap-4',
+                                message.keyword &&
+                                    'pb-2 border-b border-[#333333]'
+                            )}>
                             <div className="flex items-center gap-2">
                                 <button
                                     onClick={() =>
@@ -200,8 +231,43 @@ const ChatSection = ({
                                         )}
                                     />
                                 </button>
+                                <button
+                                    onClick={() => handleBookmark(message)}
+                                    disabled={isBookmarking[message.id]}
+                                    className={cn(
+                                        'p-2 rounded-lg transition-colors',
+                                        message.isBookmarked
+                                            ? 'bg-[#5F2BCE] text-white'
+                                            : 'text-neutral-400 hover:text-white hover:bg-neutral-800',
+                                        isBookmarking[message.id] &&
+                                            'opacity-50 cursor-not-allowed'
+                                    )}>
+                                    <BsBookmark
+                                        size={20}
+                                        className={cn(
+                                            message.isBookmarked &&
+                                                'fill-current'
+                                        )}
+                                    />
+                                </button>
                             </div>
                         </div>
+                        {message.keyword && (
+                            <button
+                                onClick={() => {
+                                    if (message.keyword) {
+                                        window.location.href = `/search/results?q=${encodeURIComponent(
+                                            message.keyword
+                                        )}`;
+                                    }
+                                }}
+                                className="w-full px-4 py-3 text-start text-neutral-400 hover:bg-[#222222] rounded-lg transition-colors flex items-center justify-between border border-[#333333]">
+                                <span className="text-sm">
+                                    Lihat materi terkait
+                                </span>
+                                <FiArrowUpLeft className="text-neutral-400" />
+                            </button>
+                        )}
                     </div>
                 ) : (
                     <p className="text-white whitespace-pre-wrap">
@@ -237,7 +303,8 @@ const ChatSection = ({
                                     className={cn(
                                         'max-w-[80%]',
                                         message.role === 'User' &&
-                                            'bg-[#5F2BCE] px-4 py-3 rounded-2xl'
+                                            'bg-[#5F2BCE] px-4 py-3 rounded-2xl',
+                                        message.role === 'AI' && 'w-full'
                                     )}>
                                     {renderMessage(message)}
                                 </div>

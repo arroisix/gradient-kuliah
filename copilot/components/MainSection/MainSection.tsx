@@ -18,7 +18,7 @@ const MainSection = ({ onSendMessage }: MainSectionProps): JSX.Element => {
                     'flex-1 min-h-0 overflow-y-auto',
                     isMobileBreakpoints && 'mt-16 mb-24'
                 )}>
-                <div className="flex flex-col items-center justify-center min-h-full max-w-3xl mx-auto w-full gap-8 py-8 px-4">
+                <div className="flex flex-col md:items-center md:justify-center min-h-full max-w-3xl mx-auto w-full gap-8 py-8 px-4">
                     <h1 className="text-2xl font-bold text-center">
                         Lagi butuh bantuan apa sobat?
                     </h1>

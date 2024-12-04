@@ -3,6 +3,8 @@ export interface ChatResponse {
     content: string | null;
     message_id: string | null;
     session_id: string | null;
+    session_name: string | null;
+    keyword: string | null;
 }
 
 export interface ChatInput {
@@ -29,11 +31,6 @@ export interface ChangeRatingInput {
     rating: number;
 }
 
-export interface ToggleBookmarkInput {
-    session_id: string;
-    message_id: string;
-}
-
 export interface ChatMessage {
     id: string;
     role: 'AI' | 'User';
@@ -42,6 +39,36 @@ export interface ChatMessage {
     rating?: number;
     isBookmarked?: boolean;
     image?: string | null;
+    keyword?: string | null;
+}
+
+interface BookmarkedChatsResponse {
+    data: Array<{
+        message_id: string;
+        session_id: string;
+        role: 'AI' | 'User';
+        message: string;
+        timestamp: string | null;
+    }>;
+}
+
+interface SessionHistoryResponse {
+    data: Array<{
+        id: string;
+        name: string;
+        latest_chat: string;
+        latest_chat_at: string | null;
+    }>;
+}
+
+interface RenameSessionInput {
+    session_id: string;
+    name: string;
+}
+
+interface ToggleBookmarkInput {
+    session_id: string;
+    message_id: string;
 }
 
 export interface MainSectionProps {

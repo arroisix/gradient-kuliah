@@ -19,6 +19,7 @@ import RelatedVideosSection from 'courses/components/RelatedVideosSection';
 import FreeBadge from 'commons/components/elements/FreeBadge';
 import RatingButton from 'courses/components/CourseRatingButton';
 import ShareContentButton from 'courses/components/ShareContentButton';
+import CopilotEntrypoint from '../../../../copilot/components/CopilotEntrypoint';
 
 const VideoLearnContainer = ({
     subchapter: ssrSubchapterData,
@@ -96,6 +97,7 @@ const VideoLearnContainer = ({
                             />
                         </div>
                     </div>
+                    <CopilotEntrypoint />
                     <VideoPlayerContainer
                         isLoadingData={isLoading}
                         subchapter_name={subchapter?.subchapter_name}

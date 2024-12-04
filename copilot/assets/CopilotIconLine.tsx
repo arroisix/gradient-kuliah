@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface CopilotIconLineProps {
-    className?: string; // Accept Tailwind CSS classes
+    className?: string;
 }
 
 const CopilotIconLine: React.FC<CopilotIconLineProps> = ({ className }) => {
