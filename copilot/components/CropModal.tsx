@@ -31,12 +31,10 @@ const CropModal = ({ onClose, imageUrl, onCropComplete }: CropModalProps) => {
 
         const img = e.currentTarget;
         const viewportHeight = window.innerHeight;
-        // Adjust these values to match your actual header/footer heights
-        const headerHeight = isMobileBreakpoints ? 140 : 100; // Increased for more space
-        const footerHeight = isMobileBreakpoints ? 180 : 120; // Increased for more space
+        const headerHeight = isMobileBreakpoints ? 140 : 100;
+        const footerHeight = isMobileBreakpoints ? 180 : 120;
         const availableHeight = viewportHeight - headerHeight - footerHeight;
 
-        // Calculate scale while maintaining aspect ratio
         const scale = Math.min(
             availableHeight / img.height,
             (window.innerWidth * 0.8) / img.width
