@@ -89,6 +89,7 @@
         "react-dom": "18.1.0",
         "react-gtm-module": "^2.0.11",
         "react-icons": "^4.6.0",
+        "react-image-crop": "^11.0.7",
         "react-intersection-observer": "^9.4.0",
         "react-jsbarcode": "^0.4.2",
         "react-markdown": "^8.0.3",
