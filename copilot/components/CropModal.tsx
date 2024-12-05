@@ -54,10 +54,11 @@ const CropModal = ({ onClose, imageUrl, onCropComplete }: CropModalProps) => {
         const canvas = document.createElement('canvas');
         const scaleX = imageSrc.naturalWidth / imageSrc.width;
         const scaleY = imageSrc.naturalHeight / imageSrc.height;
-        canvas.width = crop.width;
-        canvas.height = crop.height;
-        const ctx = canvas.getContext('2d');
 
+        canvas.width = crop.width * scaleX;
+        canvas.height = crop.height * scaleY;
+
+        const ctx = canvas.getContext('2d');
         if (!ctx) return;
 
         ctx.drawImage(
@@ -68,16 +69,20 @@ const CropModal = ({ onClose, imageUrl, onCropComplete }: CropModalProps) => {
             crop.height * scaleY,
             0,
             0,
-            crop.width,
-            crop.height
+            canvas.width,
+            canvas.height
         );
 
-        canvas.toBlob((blob) => {
-            if (!blob) return;
-            const croppedImageUrl = URL.createObjectURL(blob);
-            onCropComplete(croppedImageUrl);
-            onClose();
-        });
+        canvas.toBlob(
+            (blob) => {
+                if (!blob) return;
+                const croppedImageUrl = URL.createObjectURL(blob);
+                onCropComplete(croppedImageUrl);
+                onClose();
+            },
+            'image/jpeg',
+            1.0
+        );
     };
 
     return (
