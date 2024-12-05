@@ -58,6 +58,7 @@ const CopilotContainer = ({
                                 rating: number;
                                 is_bookmarked: boolean;
                                 image?: string | null;
+                                keyword?: string | null;
                             }) => ({
                                 id: item.message_id,
                                 role: item.role === 'AI' ? 'AI' : 'User',
@@ -65,7 +66,8 @@ const CopilotContainer = ({
                                 timestamp: new Date().toISOString(),
                                 rating: item.rating,
                                 isBookmarked: item.is_bookmarked,
-                                image: item.image
+                                image: item.image,
+                                keyword: item.keyword
                             })
                         );
                     setMessages(convertedMessages);

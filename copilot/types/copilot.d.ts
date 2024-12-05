@@ -22,6 +22,7 @@ export interface ChatHistoryResponse {
         message_id: string;
         rating: number;
         is_bookmarked: boolean;
+        keyword?: string | null;
     }[];
 }
 

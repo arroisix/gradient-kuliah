@@ -9,6 +9,7 @@ import { useSearchQuery } from 'commons/redux/api/searchApi';
 import SearchResultsCarousel from 'dashboard/components/Search/SearchResults/SearchResultsCarousel';
 import Paginator from 'commons/components/elements/Paginator';
 import { cn } from 'commons/utils';
+import CopilotEntrypoint from '../../copilot/components/CopilotEntrypoint';
 
 const SORT_OPTIONS = [
     { value: 'relevant', label: 'Paling Relevan' },
@@ -85,6 +86,7 @@ const SearchResults = ({
     return (
         <div>
             <Breadcrumb nextItem={{ name: `"${keywords ?? q}"` }} />
+            <CopilotEntrypoint text={'Mau dapat jawaban yang lebih tepat?'} />
             <ResultsTabs />
             <div className="flex w-full gap-4 py-2 md:w-max">
                 <SearchByCourse />
