@@ -269,7 +269,8 @@ const CopilotContainer = ({
                                 'flex-1 overflow-y-auto relative',
                                 !isMobileBreakpoints &&
                                     'pt-6 px-4 md:px-8 lg:px-16',
-                                isMobileBreakpoints && 'px-4 mt-16 pb-16',
+                                isMobileBreakpoints &&
+                                    'px-4 mt-16 pb-16 min-h-screen',
                                 messages.length <= 2 &&
                                     'flex flex-col justify-end'
                             )}>

@@ -42,7 +42,11 @@ const MainSection = ({ onSendMessage }: MainSectionProps): JSX.Element => {
                         onImageCapture={handleImageCapture}
                     />
 
-                    <div className="w-full max-w-[360px]">
+                    <div
+                        className={cn(
+                            'w-full',
+                            !isMobileBreakpoints && 'max-w-[360px]'
+                        )}>
                         <p className="text-neutral-400 mb-4">
                             Psst... kamu bisa nanya kayak gini:
                         </p>

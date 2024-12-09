@@ -1,6 +1,8 @@
 import { BsQuestionCircleFill } from 'react-icons/bs';
 import { BiSolidCamera } from 'react-icons/bi';
 import { useRef } from 'react';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
+import { cn } from 'commons/utils';
 
 interface ActionButtonsProps {
     onFocusPrompt?: () => void;
@@ -12,6 +14,7 @@ const ActionButtons = ({
     onImageCapture
 }: ActionButtonsProps): JSX.Element => {
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const { isMobileBreakpoints } = useWindowBreakpoints();
 
     const handleScanClick = () => {
         if (fileInputRef.current) {
@@ -27,7 +30,11 @@ const ActionButtons = ({
     };
 
     return (
-        <div className="flex gap-2 justify-between w-full max-w-[360px]">
+        <div
+            className={cn(
+                'flex gap-2 justify-between w-full',
+                !isMobileBreakpoints && 'max-w-[360px]'
+            )}>
             <input
                 type="file"
                 accept="image/*"
