@@ -135,13 +135,13 @@ const CropModal = ({ onClose, imageUrl, onCropComplete }: CropModalProps) => {
                 <div className="flex gap-4 max-w-lg mx-auto">
                     <button
                         type="button"
-                        className="w-full px-4 py-3 text-sm font-semibold text-white bg-neutral-800 rounded-[70px]"
+                        className="w-full px-4 py-3 text-sm font-semibold text-white bg-neutral-800 rounded-full"
                         onClick={onClose}>
                         Kembali
                     </button>
                     <button
                         type="button"
-                        className="w-full px-4 py-3 text-sm font-semibold text-white bg-[#5F2BCE] rounded-[70px]"
+                        className="w-full px-4 py-3 text-sm font-semibold text-white bg-[#5F2BCE] rounded-full"
                         onClick={getCroppedImg}>
                         Tanyakan
                     </button>
