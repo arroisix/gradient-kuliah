@@ -14,6 +14,7 @@ import CopilotIcon from '../../assets/CopilotIcon';
 import { chatApi } from '../../redux/api/copilotApi';
 import Image from 'next/image';
 import ImageModal from '../ImageModal/ImageModal';
+import useWindowBreakpoints from '../../../commons/hooks/useWindowBreakpoints';
 
 interface ChatSectionProps {
     messages: ChatMessage[];
@@ -39,6 +40,7 @@ const ChatSection = ({
     );
     const [imageError, setImageError] = useState<Record<string, boolean>>({});
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const { isMobileBreakpoints } = useWindowBreakpoints();
 
     const handleOpenImage = (imageUrl: string | null | undefined) => {
         if (imageUrl) {
@@ -280,9 +282,24 @@ const ChatSection = ({
 
     return (
         <>
-            <div className="w-full min-h-[1200px] h-full pb-16">
-                <div className="max-w-3xl w-full mx-auto pb-16">
-                    <div className="space-y-6">
+            <div
+                className={cn(
+                    'w-full h-full',
+                    isMobileBreakpoints
+                        ? 'flex flex-col flex-1'
+                        : 'min-h-[1200px]',
+                    'pb-16'
+                )}>
+                <div
+                    className={cn(
+                        'max-w-3xl w-full mx-auto pb-16',
+                        isMobileBreakpoints && 'flex-1 flex flex-col'
+                    )}>
+                    <div
+                        className={cn(
+                            'space-y-6',
+                            isMobileBreakpoints && 'flex-1'
+                        )}>
                         {messages.map((message) => (
                             <div
                                 key={message.id}

@@ -1,8 +1,9 @@
-import { RiRobotFill, RiCameraFill } from 'react-icons/ri';
+import { RiCameraFill } from 'react-icons/ri';
 import { FcGoogle } from 'react-icons/fc';
 import Link from 'next/link';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { cn } from 'commons/utils';
+import { BsQuestionCircleFill } from 'react-icons/bs';
 
 interface CopilotAuthPromptProps {
     className?: string;
@@ -44,11 +45,11 @@ const CopilotAuthPrompt = ({ className }: CopilotAuthPromptProps) => {
                                         : 'justify-center'
                                 )}>
                                 <button className="flex shrink-0 items-center justify-center gap-2 bg-[#222222] hover:bg-neutral-800 px-4 py-3 rounded-lg transition-colors">
-                                    <RiRobotFill className="text-[#5F2BCE]" />
+                                    <BsQuestionCircleFill color="#5F2BCE" />
                                     <span>Tanya Soal</span>
                                 </button>
                                 <button className="flex shrink-0 items-center justify-center gap-2 bg-[#222222] hover:bg-neutral-800 px-4 py-3 rounded-lg transition-colors">
-                                    <RiCameraFill className="text-[#5D75FF]" />
+                                    <RiCameraFill color="#5D75FF" />
                                     <span>Scan Foto Soal</span>
                                 </button>
                                 <button className="flex shrink-0 items-center justify-center gap-2 bg-[#222222] hover:bg-neutral-800 px-4 py-3 rounded-lg transition-colors">
