@@ -2,7 +2,8 @@ import {
     ChatInput,
     ChatHistoryResponse,
     ChangeRatingInput,
-    ToggleBookmarkInput
+    ToggleBookmarkInput,
+    ContentRecommendationResponse
 } from '../../types/copilot';
 import config from '../../../redux/api/config';
 
@@ -311,5 +312,63 @@ export const chatApi = {
         }
 
         return response.json();
+    },
+
+    getContentRecommendation: async (
+        query: string
+    ): Promise<ContentRecommendationResponse> => {
+        const token = localStorage.getItem('token');
+        const response = await fetch(
+            `${COPILOT_BASE_URL}chat/content-recommendation/?q=${encodeURIComponent(
+                query
+            )}`,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Token ${token}`,
+                    Accept: '*/*'
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return response.json();
+    },
+
+    searchSummary: async (
+        input: { input_text: string },
+        callbacks: StreamCallbacks
+    ) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`${COPILOT_BASE_URL}search-summary/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Token ${token}`,
+                    Accept: '*/*'
+                },
+                body: JSON.stringify(input)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const reader = response.body
+                ?.pipeThrough(new TextDecoderStream())
+                .getReader();
+
+            if (reader) {
+                await processStream(reader, callbacks);
+            }
+        } catch (error) {
+            callbacks.onError?.(error);
+            console.error('Search summary error:', error);
+        }
     }
 };

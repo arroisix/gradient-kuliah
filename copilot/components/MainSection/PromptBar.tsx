@@ -12,7 +12,6 @@ import { IoMdClose } from 'react-icons/io';
 import { cn } from 'commons/utils';
 import MathForm from '../../../komunitas/components/KomunitasForm/MathForm';
 import SymbolForm from '../../../komunitas/components/KomunitasForm/SymbolForm';
-import useWindowBreakpoints from '../../../commons/hooks/useWindowBreakpoints';
 import useUploadFile from 'commons/hooks/useUploadFile';
 import CropModal from '../CropModal';
 
@@ -42,7 +41,6 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
         const [activeForm, setActiveForm] = useState<'math' | 'symbol' | null>(
             null
         );
-        const { isMobileBreakpoints } = useWindowBreakpoints();
         const { uploadFile } = useUploadFile('qna');
         const [showCropModal, setShowCropModal] = useState(false);
         const [tempImageUrl, setTempImageUrl] = useState<string | null>(null);
@@ -178,10 +176,7 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
                     <div
                         className={cn(
                             'py-2 relative',
-                            !isMobileBreakpoints &&
-                                'border-2 border-neutral-800 rounded-xl',
-                            isMobileBreakpoints &&
-                                'border-t border-neutral-800',
+                            'border-t md:border-t-0 md:border-2 border-neutral-800 md:rounded-xl',
                             isDragging && 'border-[#5F2BCE] border-2',
                             isDragging && 'ring-2 ring-[#5F2BCE]/50'
                         )}
@@ -233,11 +228,9 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
                                 onKeyPress={handleKeyPress}
                                 onPaste={handlePaste}
                                 placeholder={
-                                    isMobileBreakpoints
-                                        ? '... Jangan gunakan data pribadi disini yaa ...'
-                                        : 'Lagi butuh bantuan apa sobat? Jangan masukkan data pribadi kamu yaa!'
+                                    'Lagi butuh bantuan apa sobat? Jangan masukkan data pribadi kamu yaa!'
                                 }
-                                className="w-full bg-transparent border-none focus:ring-0 outline-none text-white"
+                                className="w-full bg-transparent border-none focus:ring-0 outline-none text-white md:placeholder:text-base placeholder:text-sm"
                                 disabled={isLoading}
                             />
                         </div>
@@ -325,7 +318,7 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
                     <div
                         className={cn(
                             'absolute inset-0 bg-[#101010]',
-                            isMobileBreakpoints ? 'fixed z-50' : ''
+                            'fixed md:absolute z-50 md:z-auto'
                         )}>
                         <CropModal
                             onClose={() => {
