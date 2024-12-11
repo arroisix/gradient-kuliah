@@ -15,6 +15,7 @@ import CopilotIcon from '../../assets/CopilotIcon';
 import { chatApi } from '../../redux/api/copilotApi';
 import ImageModal from '../ImageModal/ImageModal';
 import { Library } from 'lucide-react';
+import MessageObserver from '../MessageObserver';
 
 interface ChatSectionProps {
     messages: ChatMessage[];
@@ -268,7 +269,12 @@ const ChatSection = ({
     };
 
     const renderMessage = (message: ChatMessage) => {
-        return (
+        const isLatestAIMessage =
+            message.role === 'AI' &&
+            message.id ===
+                messages.filter((m) => m.role === 'AI').slice(-1)[0]?.id;
+
+        const messageContent = (
             <>
                 {message.image && !imageError[message.id] && (
                     <div className="relative w-full">
@@ -396,7 +402,7 @@ const ChatSection = ({
                                 </button>
                             </div>
                         </div>
-                        {renderRecommendations(message)}
+                        {isLatestAIMessage && renderRecommendations(message)}
                     </div>
                 ) : (
                     <p className="text-white whitespace-pre-wrap">
@@ -405,6 +411,23 @@ const ChatSection = ({
                 )}
             </>
         );
+
+        if (message.role === 'AI') {
+            return (
+                <MessageObserver
+                    message={message}
+                    onRecommendationsUpdate={(recommendations) => {
+                        if (isLatestAIMessage) {
+                            setRecommendations(recommendations);
+                        }
+                    }}
+                    isLatest={isLatestAIMessage}>
+                    {messageContent}
+                </MessageObserver>
+            );
+        }
+
+        return messageContent;
     };
 
     return (
