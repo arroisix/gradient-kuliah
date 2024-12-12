@@ -217,7 +217,7 @@ const ChatSection = ({
                                                                     content.thumbnail
                                                                 }
                                                                 alt={
-                                                                    content.book_name ||
+                                                                    content.subchapter_name ||
                                                                     ''
                                                                 }
                                                                 layout="fill"
@@ -229,6 +229,16 @@ const ChatSection = ({
                                                                     <div className="w-0 h-0 border-t-8 border-t-transparent border-l-[16px] border-l-white border-b-8 border-b-transparent ml-1"></div>
                                                                 </div>
                                                             </div>
+                                                            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90" />
+                                                            {content.subchapter_name && (
+                                                                <div className="absolute bottom-0 left-0 right-0 p-3">
+                                                                    <p className="text-[10px] text-white font-medium line-clamp-2">
+                                                                        {
+                                                                            content.subchapter_name
+                                                                        }
+                                                                    </p>
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     )}
                                                 </>

@@ -47,24 +47,25 @@ const MessageObserver = ({
                 return content.book_slug && content.problem_slug
                     ? `/perpustakaan/bank-soal/${content.book_slug}/${content.problem_slug}`
                     : '#';
+            default:
+                return '#';
         }
     };
 
     useEffect(() => {
-        if (!message.keyword || message.role !== 'AI' || isLatest) {
+        if (
+            !message.keyword ||
+            message.role !== 'AI' ||
+            hasCalledApi.current ||
+            isLatest
+        ) {
             return;
         }
-
-        let clearTimer: NodeJS.Timeout;
 
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        if (clearTimer) {
-                            clearTimeout(clearTimer);
-                        }
-
+                    if (entry.isIntersecting && !hasCalledApi.current) {
                         timerRef.current = setTimeout(async () => {
                             setIsLoadingRecommendations(true);
                             try {
@@ -82,22 +83,12 @@ const MessageObserver = ({
                                     'Failed to fetch recommendations:',
                                     error
                                 );
-                                setLocalRecommendations([]);
-                                onRecommendationsUpdate([]);
                             } finally {
                                 setIsLoadingRecommendations(false);
                             }
                         }, 2000);
-                    } else {
-                        if (timerRef.current) {
-                            clearTimeout(timerRef.current);
-                        }
-
-                        clearTimer = setTimeout(() => {
-                            setLocalRecommendations([]);
-                            onRecommendationsUpdate([]);
-                            hasCalledApi.current = false;
-                        }, 2000);
+                    } else if (!entry.isIntersecting && timerRef.current) {
+                        clearTimeout(timerRef.current);
                     }
                 });
             },
@@ -115,12 +106,8 @@ const MessageObserver = ({
             if (timerRef.current) {
                 clearTimeout(timerRef.current);
             }
-            if (clearTimer) {
-                clearTimeout(clearTimer);
-            }
-            hasCalledApi.current = false;
         };
-    }, [message.keyword, message.role, isLatest, onRecommendationsUpdate]);
+    }, [message.keyword, message.role, onRecommendationsUpdate]);
 
     const renderLocalRecommendations = () => {
         if (!message.keyword || isLatest) return null;
@@ -166,7 +153,7 @@ const MessageObserver = ({
                                                                         content.thumbnail
                                                                     }
                                                                     alt={
-                                                                        content.book_name ||
+                                                                        content.subchapter_name ||
                                                                         ''
                                                                     }
                                                                     layout="fill"
@@ -178,6 +165,16 @@ const MessageObserver = ({
                                                                         <div className="w-0 h-0 border-t-8 border-t-transparent border-l-[16px] border-l-white border-b-8 border-b-transparent ml-1"></div>
                                                                     </div>
                                                                 </div>
+                                                                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90" />
+                                                                {content.subchapter_name && (
+                                                                    <div className="absolute bottom-0 left-0 right-0 p-3">
+                                                                        <p className="text-[10px] text-white font-medium line-clamp-2">
+                                                                            {
+                                                                                content.subchapter_name
+                                                                            }
+                                                                        </p>
+                                                                    </div>
+                                                                )}
                                                             </div>
                                                         )}
                                                     </>

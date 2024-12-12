@@ -79,6 +79,7 @@ interface ContentRecommendation {
         | 'textbook_problem'
         | 'bank_soal_problem';
     course_slug: string | null;
+    subchapter_name: string | null;
     subchapter_slug: string | null;
     thumbnail: string | null;
     book_name: string | null;
