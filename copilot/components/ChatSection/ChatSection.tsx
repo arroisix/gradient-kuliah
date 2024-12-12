@@ -1,19 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BiCopy } from 'react-icons/bi';
-import { BsArrowCounterclockwise, BsBookmark } from 'react-icons/bs';
-import { FiArrowUpLeft, FiThumbsDown, FiThumbsUp } from 'react-icons/fi';
-import { BsCheck } from 'react-icons/bs';
+import { BsArrowCounterclockwise, BsBookmark, BsCheck } from 'react-icons/bs';
+import { FiThumbsDown, FiThumbsUp } from 'react-icons/fi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import remarkGfm from 'remark-gfm';
-import { ChatMessage } from '../../types/copilot';
+import Image from 'next/image';
+import { ChatMessage, ContentRecommendation } from '../../types/copilot';
 import { cn } from 'commons/utils';
 import CopilotIcon from '../../assets/CopilotIcon';
 import { chatApi } from '../../redux/api/copilotApi';
-import Image from 'next/image';
 import ImageModal from '../ImageModal/ImageModal';
+import MessageObserver from './MessageObserver';
+import ContentRecommendations from './ContentRecommendations';
 
 interface ChatSectionProps {
     messages: ChatMessage[];
@@ -39,6 +40,11 @@ const ChatSection = ({
     );
     const [imageError, setImageError] = useState<Record<string, boolean>>({});
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [recommendations, setRecommendations] = useState<
+        ContentRecommendation[]
+    >([]);
+    const [isLoadingRecommendations, setIsLoadingRecommendations] =
+        useState(false);
 
     const handleOpenImage = (imageUrl: string | null | undefined) => {
         if (imageUrl) {
@@ -123,8 +129,49 @@ const ChatSection = ({
         setImageError((prev) => ({ ...prev, [messageId]: true }));
     };
 
-    const renderMessage = (message: ChatMessage) => {
+    useEffect(() => {
+        const fetchRecommendations = async (keyword: string) => {
+            setIsLoadingRecommendations(true);
+            try {
+                const response = await chatApi.getContentRecommendation(
+                    keyword
+                );
+                setRecommendations(response.recommendation.slice(0, 3));
+            } catch (error) {
+                console.error('Failed to fetch recommendations:', error);
+                setRecommendations([]);
+            } finally {
+                setIsLoadingRecommendations(false);
+            }
+        };
+
+        const lastMessage = messages[messages.length - 1];
+        if (lastMessage?.role === 'AI' && lastMessage.keyword) {
+            fetchRecommendations(lastMessage.keyword);
+        } else {
+            setRecommendations([]);
+        }
+    }, [messages]);
+
+    const renderRecommendations = (message: ChatMessage) => {
+        if (!message.keyword) return null;
+
         return (
+            <ContentRecommendations
+                keyword={message.keyword}
+                recommendations={recommendations}
+                isLoading={isLoadingRecommendations}
+            />
+        );
+    };
+
+    const renderMessage = (message: ChatMessage) => {
+        const isLatestAIMessage =
+            message.role === 'AI' &&
+            message.id ===
+                messages.filter((m) => m.role === 'AI').slice(-1)[0]?.id;
+
+        const messageContent = (
             <>
                 {message.image && !imageError[message.id] && (
                     <div className="relative w-full">
@@ -252,22 +299,7 @@ const ChatSection = ({
                                 </button>
                             </div>
                         </div>
-                        {message.keyword && (
-                            <button
-                                onClick={() => {
-                                    if (message.keyword) {
-                                        window.location.href = `/search/results?q=${encodeURIComponent(
-                                            message.keyword
-                                        )}`;
-                                    }
-                                }}
-                                className="w-full px-4 py-3 text-start text-neutral-400 hover:bg-[#222222] rounded-lg transition-colors flex items-center justify-between border border-[#333333]">
-                                <span className="text-sm">
-                                    Lihat materi terkait
-                                </span>
-                                <FiArrowUpLeft className="text-neutral-400" />
-                            </button>
-                        )}
+                        {isLatestAIMessage && renderRecommendations(message)}
                     </div>
                 ) : (
                     <p className="text-white whitespace-pre-wrap">
@@ -276,13 +308,39 @@ const ChatSection = ({
                 )}
             </>
         );
+
+        if (message.role === 'AI') {
+            return (
+                <MessageObserver
+                    message={message}
+                    onRecommendationsUpdate={(recommendations) => {
+                        if (isLatestAIMessage) {
+                            setRecommendations(recommendations);
+                        }
+                    }}
+                    isLatest={isLatestAIMessage}>
+                    {messageContent}
+                </MessageObserver>
+            );
+        }
+
+        return messageContent;
     };
 
     return (
         <>
-            <div className="w-full min-h-[1200px] h-full pb-16">
-                <div className="max-w-3xl w-full mx-auto pb-16">
-                    <div className="space-y-6">
+            <div
+                className={cn(
+                    'w-full h-full pb-16',
+                    'flex flex-col md:flex-1',
+                    'min-h-[1200px] md:min-h-0'
+                )}>
+                <div
+                    className={cn(
+                        'w-full mx-auto pb-16',
+                        'flex-1 flex flex-col md:block'
+                    )}>
+                    <div className={cn('space-y-6', 'flex-1 md:block')}>
                         {messages.map((message) => (
                             <div
                                 key={message.id}
@@ -301,7 +359,6 @@ const ChatSection = ({
                                 )}
                                 <div
                                     className={cn(
-                                        'max-w-[80%]',
                                         message.role === 'User' &&
                                             'bg-[#5F2BCE] px-4 py-3 rounded-2xl',
                                         message.role === 'AI' && 'w-full'

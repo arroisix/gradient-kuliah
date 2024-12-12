@@ -10,7 +10,8 @@ module.exports = {
         './profile/**/*.{ts,js,jsx,tsx}',
         './komunitas/**/*.{ts,js,jsx,tsx}',
         './referral/**/*.{ts,js,jsx,tsx}',
-        './legal/**/*.{ts,js,jsx,tsx}'
+        './legal/**/*.{ts,js,jsx,tsx}',
+        './copilot/**/*.{ts,js,jsx,tsx}'
     ],
     darkMode: 'class',
     theme: {

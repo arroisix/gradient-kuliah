@@ -3,12 +3,14 @@ import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import ResultsTabs from 'dashboard/components/Search/SearchResults/ResultsTabs';
 import SearchByCourse from 'dashboard/components/Search/SearchResults/SearchByCourse';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 import SearchResultsSection from '../components/Search/SearchResults/SearchResultsSection';
 import { useSearchQuery } from 'commons/redux/api/searchApi';
 import SearchResultsCarousel from 'dashboard/components/Search/SearchResults/SearchResultsCarousel';
 import Paginator from 'commons/components/elements/Paginator';
 import { cn } from 'commons/utils';
+import SearchSummary from '../../copilot/components/SearchSummary/SearchSummary';
+import CopilotEntrypoint from '../../copilot/components/CopilotEntrypoint'; // Import CopilotEntrypoint
 
 const SORT_OPTIONS = [
     { value: 'relevant', label: 'Paling Relevan' },
@@ -82,9 +84,21 @@ const SearchResults = ({
     const result = resultQuery ?? results?.results.slice(-1).pop();
     const totalPages = totalPagesQuery || getTotalPages(results);
 
+    const [isSummaryEmpty, setIsSummaryEmpty] = useState(false);
+
     return (
         <div>
             <Breadcrumb nextItem={{ name: `"${keywords ?? q}"` }} />
+
+            {isSummaryEmpty ? (
+                <CopilotEntrypoint
+                    text="Mau dapet jawaban yang
+lebih akurat?"
+                />
+            ) : (
+                <SearchSummary onSummaryFetched={setIsSummaryEmpty} />
+            )}
+
             <ResultsTabs />
             <div className="flex w-full gap-4 py-2 md:w-max">
                 <SearchByCourse />

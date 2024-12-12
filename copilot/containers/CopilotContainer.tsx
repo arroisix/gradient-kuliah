@@ -37,9 +37,22 @@ const CopilotContainer = ({
     } | null>(null);
     const [isEditorOpen, setIsEditorOpen] = useState(false);
     const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+    const promptBarRef = useRef<HTMLInputElement>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handleFocusPrompt = () => {
+        promptBarRef.current?.focus();
+    };
+
+    const handleImageCapture = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
+        }
+    };
 
     useEffect(() => {
         console.log('session id,', sessionId);
+        console.log('is mobile breakpoints,', isMobileBreakpoints);
         const loadChatHistory = async () => {
             if (!sessionId) {
                 setIsLoadingHistory(false);
@@ -58,6 +71,7 @@ const CopilotContainer = ({
                                 rating: number;
                                 is_bookmarked: boolean;
                                 image?: string | null;
+                                keyword?: string | null;
                             }) => ({
                                 id: item.message_id,
                                 role: item.role === 'AI' ? 'AI' : 'User',
@@ -65,7 +79,8 @@ const CopilotContainer = ({
                                 timestamp: new Date().toISOString(),
                                 rating: item.rating,
                                 isBookmarked: item.is_bookmarked,
-                                image: item.image
+                                image: item.image,
+                                keyword: item.keyword
                             })
                         );
                     setMessages(convertedMessages);
@@ -219,10 +234,8 @@ const CopilotContainer = ({
         <div
             className={cn(
                 'flex bg-[#101010] overflow-hidden',
-                !isMobileBreakpoints &&
-                    'fixed top-[64px] bottom-0 left-0 right-0',
-                isMobileBreakpoints && '-mx-4',
-                'md:mx-0'
+                '-mx-4 md:mx-0',
+                'md:fixed md:top-[64px] md:bottom-0 md:left-0 md:right-0'
             )}>
             {isAuthenticated && (
                 <HistorySection
@@ -234,19 +247,15 @@ const CopilotContainer = ({
             )}
             <div
                 className={cn(
-                    'flex-1 flex flex-col w-full relative',
-                    !isMobileBreakpoints && 'px-24 h-full',
-                    messages.length === 0
-                        ? isMobileBreakpoints && 'h-screen'
-                        : !isMobileBreakpoints && 'h-full'
+                    'flex-1 flex flex-col w-full relative md:items-center',
+                    'px-4 md:px-24 md:h-full',
+                    messages.length === 0 ? 'h-screen md:h-auto' : 'md:h-full'
                 )}>
-                {isMobileBreakpoints && (
-                    <div className="fixed top-0 left-0 right-0 z-10 bg-[#101010]">
-                        <MobileHeader
-                            onOpenHistory={() => setIsHistoryOpen(true)}
-                        />
-                    </div>
-                )}
+                <div className="md:hidden fixed top-0 left-0 right-0 z-10 bg-[#101010]">
+                    <MobileHeader
+                        onOpenHistory={() => setIsHistoryOpen(true)}
+                    />
+                </div>
 
                 {isLoadingHistory ? (
                     <div className="flex-1 flex items-center justify-center">
@@ -264,10 +273,9 @@ const CopilotContainer = ({
                             ref={chatContainerRef}
                             onScroll={handleScroll}
                             className={cn(
-                                'flex-1 overflow-y-auto relative',
-                                !isMobileBreakpoints &&
-                                    'pt-6 px-4 md:px-8 lg:px-16',
-                                isMobileBreakpoints && 'px-4 mt-16 pb-16',
+                                'flex-1 pt-4 max-w-4xl overflow-y-auto relative no-scrollbar',
+                                'mt-16 pb-16 min-h-screen',
+                                'md:mt-0 md:pt-6 md:min-h-0',
                                 messages.length <= 2 &&
                                     'flex flex-col justify-end'
                             )}>
@@ -281,45 +289,56 @@ const CopilotContainer = ({
                             />
                             <div ref={messagesEndRef} id="dummy-bubble" />
                         </div>
-                        <div
-                            className={cn(
-                                'w-full max-w-3xl mx-auto',
-                                isMobileBreakpoints
-                                    ? 'fixed bottom-8 left-0 right-0 bg-[#101010] pb-6'
-                                    : 'mb-8 px-4 md:px-8 lg:px-16'
-                            )}>
-                            <PromptBar
-                                onSend={handleSendMessage}
-                                isLoading={isLoadingResponse}
-                                onStateChange={({ isEditorOpen }) =>
-                                    setIsEditorOpen(isEditorOpen)
-                                }
-                            />
-                        </div>
-
-                        {showScrollButton && !isEditorOpen && (
-                            <button
-                                onClick={scrollToBottom}
-                                className="fixed bottom-32 left-1/2 -translate-x-1/2 bg-[#5F2BCE] hover:bg-[#4f24a8] text-white p-3 rounded-full shadow-lg transition-all duration-200 z-10">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="h-6 w-6"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                                    />
-                                </svg>
-                            </button>
-                        )}
-                        <div ref={messagesEndRef} id="dummy-bubble" />
                     </>
                 ) : (
-                    <MainSection onSendMessage={handleSendMessage} />
+                    <MainSection
+                        onSendMessage={handleSendMessage}
+                        onFocusPrompt={handleFocusPrompt}
+                        onImageCapture={handleImageCapture}
+                    />
+                )}
+
+                <div
+                    className={cn(
+                        'w-full max-w-4xl mx-auto',
+                        'fixed bottom-8 left-0 right-0 bg-[#101010] pb-6',
+                        'md:static md:mb-8 md:pb-0'
+                    )}>
+                    <PromptBar
+                        ref={promptBarRef}
+                        fileInputRef={fileInputRef}
+                        onSend={handleSendMessage}
+                        isLoading={isLoadingResponse}
+                        onStateChange={({ isEditorOpen }) =>
+                            setIsEditorOpen(isEditorOpen)
+                        }
+                    />
+                </div>
+
+                {showScrollButton && !isEditorOpen && (
+                    <button
+                        onClick={scrollToBottom}
+                        className={cn(
+                            'fixed p-3 bg-[#5F2BCE] hover:bg-[#4f24a8] text-white rounded-full shadow-lg transition-all duration-200 z-10',
+                            'bottom-32',
+                            'left-1/2 -translate-x-1/2',
+                            'md:left-[calc(50%+144px)] md:translate-x-[-50%]',
+                            !isHistoryOpen && 'md:left-1/2 md:-translate-x-1/2'
+                        )}>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                            />
+                        </svg>
+                    </button>
                 )}
 
                 {!isAuthenticated && <CopilotAuthPrompt />}
