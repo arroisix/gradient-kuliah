@@ -10,8 +10,8 @@ import { BsImage, BsArrowUpShort } from 'react-icons/bs';
 import { ImOmega } from 'react-icons/im';
 import { IoMdClose } from 'react-icons/io';
 import { cn } from 'commons/utils';
-import MathForm from '../../../komunitas/components/KomunitasForm/MathForm';
-import SymbolForm from '../../../komunitas/components/KomunitasForm/SymbolForm';
+import MathForm from 'komunitas/components/KomunitasForm/MathForm';
+import SymbolForm from 'komunitas/components/KomunitasForm/SymbolForm';
 import useUploadFile from 'commons/hooks/useUploadFile';
 import CropModal from '../CropModal';
 

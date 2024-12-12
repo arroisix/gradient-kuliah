@@ -5,7 +5,7 @@ import {
     ToggleBookmarkInput,
     ContentRecommendationResponse
 } from '../../types/copilot';
-import config from '../../../redux/api/config';
+import config from 'redux/api/config';
 
 const BASE_URL = config.API_BASE_URL;
 const COPILOT_BASE_URL = `${BASE_URL}copilots/`;
