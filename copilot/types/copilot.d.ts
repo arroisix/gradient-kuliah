@@ -72,6 +72,29 @@ interface ToggleBookmarkInput {
     message_id: string;
 }
 
+interface ContentRecommendation {
+    type:
+        | 'course_video'
+        | 'astronotes_content'
+        | 'textbook_problem'
+        | 'bank_soal_problem';
+    course_slug: string | null;
+    subchapter_name: string | null;
+    subchapter_slug: string | null;
+    thumbnail: string | null;
+    book_name: string | null;
+    book_slug: string | null;
+    book_page: number | null;
+    problem_slug: string | null;
+    snippet: string | null;
+}
+
+interface ContentRecommendationResponse {
+    recommendation: ContentRecommendation[];
+}
+
 export interface MainSectionProps {
     onSendMessage: (prompt: string, imageUrl?: string) => void;
+    onFocusPrompt: () => void;
+    onImageCapture: () => void;
 }
