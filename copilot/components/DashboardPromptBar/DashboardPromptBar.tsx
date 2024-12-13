@@ -148,7 +148,7 @@ const DashboardPromptBar = (): JSX.Element => {
     return (
         <div className="w-full">
             <h1 className="text-2xl font-semibold mb-4">
-                Halo, {user.full_name}
+                Halo, {user.full_name.split(' ')[0]}
             </h1>
             <div className="relative bg-[#1D1D1D] rounded-xl">
                 <span
