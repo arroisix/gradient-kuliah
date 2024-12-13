@@ -11,6 +11,7 @@ import SymbolForm from 'komunitas/components/KomunitasForm/SymbolForm';
 import CropModal from '../CropModal';
 import { chatApi } from '../../redux/api/copilotApi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import { SparkleIcon } from 'lucide-react';
 const DashboardPromptBar = (): JSX.Element => {
     const router = useRouter();
     const user = useSelector(getCurrentUser);
@@ -154,6 +155,7 @@ const DashboardPromptBar = (): JSX.Element => {
                 <span
                     className="absolute -top-3 -right-1 flex items-center gap-2 py-1 px-3 rounded-md bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] font-semibold text-sm md:text-base text-white tooltip tooltip-left"
                     data-tip="Copilot AI gratis selama versi Beta!">
+                    <SparkleIcon size={16} fill="currentColor" />
                     Baru
                 </span>
                 <div
