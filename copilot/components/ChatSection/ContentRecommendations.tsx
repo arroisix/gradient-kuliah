@@ -54,19 +54,12 @@ const ContentRecommendations: React.FC<ContentRecommendationsProps> = ({
         </div>
     );
 
-    return (
-        <div className="mt-4 space-y-4">
-            <button
-                onClick={() => {
-                    window.location.href = `/search/results?q=${encodeURIComponent(
-                        keyword
-                    )}`;
-                }}
-                className="w-full px-4 py-3 text-start text-neutral-400 hover:bg-[#222222] rounded-lg transition-colors flex items-center justify-between border border-[#333333]">
-                <span className="text-sm">Lihat materi terkait</span>
-                <FiArrowUpLeft className="text-neutral-400" />
-            </button>
+    const renderRecommendations = () => {
+        if (!isLoading && (!recommendations || recommendations.length === 0)) {
+            return null;
+        }
 
+        return (
             <div className="relative w-full">
                 <div className="absolute left-0 right-0">
                     <div className="flex gap-4 overflow-x-auto no-scrollbar">
@@ -145,6 +138,22 @@ const ContentRecommendations: React.FC<ContentRecommendationsProps> = ({
                 </div>
                 <div className="h-[160px]" />
             </div>
+        );
+    };
+
+    return (
+        <div className="mt-4 space-y-4">
+            <button
+                onClick={() => {
+                    window.location.href = `/search/results?q=${encodeURIComponent(
+                        keyword
+                    )}`;
+                }}
+                className="w-full px-4 py-3 text-start text-neutral-400 hover:bg-[#222222] rounded-lg transition-colors flex items-center justify-between border border-[#333333]">
+                <span className="text-sm">Lihat materi terkait</span>
+                <FiArrowUpLeft className="text-neutral-400" />
+            </button>
+            {renderRecommendations()}
         </div>
     );
 };

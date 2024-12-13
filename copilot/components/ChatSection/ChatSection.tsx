@@ -340,7 +340,7 @@ const ChatSection = ({
                         'w-full mx-auto pb-16',
                         'flex-1 flex flex-col md:block'
                     )}>
-                    <div className={cn('space-y-6', 'flex-1 md:block')}>
+                    <div className={cn('space-y-6 w-full', 'flex-1 md:block')}>
                         {messages.map((message) => (
                             <div
                                 key={message.id}
