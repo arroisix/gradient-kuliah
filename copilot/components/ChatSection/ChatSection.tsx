@@ -333,7 +333,7 @@ const ChatSection = ({
                 className={cn(
                     'w-full h-full pb-16',
                     'flex flex-col md:flex-1',
-                    'min-h-[1200px] md:min-h-0'
+                    'min-h-[900px] md:min-h-0'
                 )}>
                 <div
                     className={cn(
