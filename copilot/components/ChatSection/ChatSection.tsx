@@ -340,7 +340,7 @@ const ChatSection = ({
                         'w-full mx-auto pb-16',
                         'flex-1 flex flex-col md:block'
                     )}>
-                    <div className={cn('space-y-6', 'flex-1 md:block')}>
+                    <div className={cn('space-y-6 w-full', 'flex-1 md:block')}>
                         {messages.map((message) => (
                             <div
                                 key={message.id}
@@ -360,7 +360,7 @@ const ChatSection = ({
                                 <div
                                     className={cn(
                                         message.role === 'User' &&
-                                            'bg-[#5F2BCE] px-4 py-3 rounded-2xl',
+                                            'bg-[#5F2BCE] px-4 py-3 rounded-t-2xl rounded-bl-2xl',
                                         message.role === 'AI' && 'w-full'
                                     )}>
                                     {renderMessage(message)}
