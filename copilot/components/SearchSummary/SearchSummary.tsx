@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { chatApi } from 'copilot/redux/api/copilotApi';
 import { useRouter } from 'next/router';
 import { cn } from 'commons/utils';
@@ -16,18 +16,6 @@ const SearchSummary = ({
     const [summary, setSummary] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
-    const contentRef = useRef<HTMLParagraphElement>(null);
-    const [canExpand, setCanExpand] = useState(false);
-
-    useEffect(() => {
-        const checkIfExpandable = () => {
-            if (contentRef.current) {
-                setCanExpand(contentRef.current.scrollHeight > 72);
-            }
-        };
-
-        checkIfExpandable();
-    }, [summary]);
 
     useEffect(() => {
         const fetchSummary = async () => {
@@ -66,8 +54,10 @@ const SearchSummary = ({
 
     if (!q) return <></>;
 
+    const canExpand = summary.length > 330;
+
     return (
-        <div className="bg-[#1E1930] rounded-2xl px-4 md:px-6 mt-6 py-4 md:py-5">
+        <div className="bg-[#1E1930] rounded-2xl px-4 md:px-6 my-6 py-4 md:py-5">
             <div className="flex justify-between items-start gap-4 mb-2">
                 {isLoading ? (
                     <div className="h-7 w-32 bg-gray-700 animate-pulse rounded" />
@@ -98,7 +88,6 @@ const SearchSummary = ({
                     summary && (
                         <>
                             <p
-                                ref={contentRef}
                                 className={cn(
                                     'text-base text-gray-200',
                                     !isExpanded && 'line-clamp-3'

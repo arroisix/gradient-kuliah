@@ -273,7 +273,7 @@ const CopilotContainer = ({
                             ref={chatContainerRef}
                             onScroll={handleScroll}
                             className={cn(
-                                'flex-1 pt-4 max-w-4xl overflow-y-auto relative no-scrollbar',
+                                'flex-1 pt-4 w-full max-w-4xl overflow-y-auto relative no-scrollbar',
                                 'mt-16 pb-16 min-h-screen',
                                 'md:mt-0 md:pt-6 md:min-h-0',
                                 messages.length <= 2 &&
