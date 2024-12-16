@@ -2,6 +2,7 @@ import { FiArrowUpRight } from 'react-icons/fi';
 import { useEffect, useState } from 'react';
 import { chatApi } from '../../redux/api/copilotApi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import { useTracker } from 'tracker/tracker';
 
 interface ExamplePromptsProps {
     onPromptClick: (prompt: string, imageUrl?: string) => void;
@@ -12,6 +13,7 @@ const ExamplePrompts = ({
 }: ExamplePromptsProps): JSX.Element => {
     const [templates, setTemplates] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const tracker = useTracker();
 
     useEffect(() => {
         const fetchTemplates = async () => {
@@ -44,7 +46,12 @@ const ExamplePrompts = ({
             {templates.map((prompt, index) => (
                 <button
                     key={index}
-                    onClick={() => onPromptClick(prompt)}
+                    onClick={() => {
+                        tracker?.genericTrack('Click Message Template', {
+                            MESSAGE_CONTENT: prompt
+                        });
+                        onPromptClick(prompt);
+                    }}
                     className="flex items-center justify-between border border-neutral-800 hover:bg-neutral-800/50 px-4 py-3 rounded-lg text-left transition-colors">
                     <span>{prompt}</span>
                     <FiArrowUpRight className="text-neutral-400" />

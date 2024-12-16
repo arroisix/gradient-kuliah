@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import CopilotIconFill from '../assets/CopilotIconFill';
 import RobotEntrypoint from '../assets/RobotEntrypoint';
+import { useTracker } from 'tracker/tracker';
 
 interface CopilotEntrypointProps {
     text?: string;
@@ -11,6 +12,12 @@ export default function CopilotEntrypoint({
     text = 'Kamu ada pertanyaan terkait materi ini?',
     subtext
 }: CopilotEntrypointProps) {
+    const tracker = useTracker();
+
+    const handleClick = () => {
+        tracker?.genericTrack('User click Check on Copilot');
+    };
+
     return (
         <div className="order-last bg-gradient-to-t from-black to-transparent rounded-lg shadow-lg py-4">
             <div className="bg-[#222222] rounded-lg p-4 pt-6 relative">
@@ -30,6 +37,7 @@ export default function CopilotEntrypoint({
                     </div>
                     <Link
                         href="/copilot"
+                        onClick={handleClick}
                         className="w-full bg-[#5F2BCE] hover:bg-[#4F24A8] text-white font-medium p-3 rounded-lg flex items-center justify-center gap-2 transition-colors">
                         <CopilotIconFill />
                         <span>Tanya Copilot AI</span>

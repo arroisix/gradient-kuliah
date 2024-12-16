@@ -3,6 +3,7 @@ import { BiSolidCamera } from 'react-icons/bi';
 import { useRef } from 'react';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { cn } from 'commons/utils';
+import { useTracker } from 'tracker/tracker';
 
 interface ActionButtonsProps {
     onFocusPrompt?: () => void;
@@ -15,6 +16,7 @@ const ActionButtons = ({
 }: ActionButtonsProps): JSX.Element => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const { isMobileBreakpoints } = useWindowBreakpoints();
+    const tracker = useTracker();
 
     const handleScanClick = () => {
         if (fileInputRef.current) {
@@ -44,13 +46,19 @@ const ActionButtons = ({
                 onChange={handleFileChange}
             />
             <button
-                onClick={() => onFocusPrompt?.()}
+                onClick={() => {
+                    tracker?.genericTrack('Click Tanya Soal CTA');
+                    onFocusPrompt?.();
+                }}
                 className="flex-1 flex items-center justify-center gap-2 bg-[#222222] hover:bg-neutral-800 p-4 rounded-lg transition-colors">
                 <BsQuestionCircleFill color={'#9747FF'} size={20} />
                 <span>Tanya Soal</span>
             </button>
             <button
-                onClick={handleScanClick}
+                onClick={() => {
+                    tracker?.genericTrack('Click Scan Foto Soal CTA');
+                    handleScanClick();
+                }}
                 className="flex-1 flex items-center justify-center gap-2 bg-[#222222] hover:bg-neutral-800 p-4 rounded-lg transition-colors">
                 <BiSolidCamera color={'#5D75FF'} size={20} />
                 <span>Scan Foto Soal</span>

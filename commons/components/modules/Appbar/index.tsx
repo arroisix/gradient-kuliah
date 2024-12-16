@@ -14,6 +14,7 @@ import {
 import { IoClose } from 'react-icons/io5';
 import CopilotIconFill from 'copilot/assets/CopilotIconFill';
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
+import { useTracker } from 'tracker/tracker';
 
 const DISPLAYED_ROUTES = [
     '/dashboard',
@@ -74,6 +75,7 @@ const Appbar = (): JSX.Element | null => {
         'diskusi'
     );
     const { data: configData } = useGetConfigQuery();
+    const tracker = useTracker();
 
     const isShowAppbar = (): boolean =>
         DISPLAYED_ROUTES.includes(router.asPath) ||
@@ -96,6 +98,7 @@ const Appbar = (): JSX.Element | null => {
             configData?.configs.is_copilot_config_enabled
         ) {
             e.preventDefault();
+            tracker?.genericTrack('Click Diskusi & AI Purple CTA');
             setShowExpanded(!showExpanded);
         }
     };
@@ -138,7 +141,20 @@ const Appbar = (): JSX.Element | null => {
                                     <Link
                                         href={link.href}
                                         className="flex-1 flex flex-col items-center gap-0.5 p-2 hover:bg-neutral-800 transition-colors"
-                                        onClick={() => setShowExpanded(false)}>
+                                        onClick={() => {
+                                            if (link.label === 'Copilot AI') {
+                                                tracker?.genericTrack(
+                                                    'Click Open Copilot CTA from Purple Button'
+                                                );
+                                            } else if (
+                                                link.label === 'Diskusi'
+                                            ) {
+                                                tracker?.genericTrack(
+                                                    'Click Open Diskusi CTA from Purple Button'
+                                                );
+                                            }
+                                            setShowExpanded(false);
+                                        }}>
                                         <div className="w-6 h-6 rounded-full flex items-center justify-center">
                                             {link.icon}
                                         </div>

@@ -15,6 +15,7 @@ import { chatApi } from '../../redux/api/copilotApi';
 import ImageModal from '../ImageModal/ImageModal';
 import MessageObserver from './MessageObserver';
 import ContentRecommendations from './ContentRecommendations';
+import { useTracker } from 'tracker/tracker';
 
 interface ChatSectionProps {
     messages: ChatMessage[];
@@ -45,6 +46,7 @@ const ChatSection = ({
     >([]);
     const [isLoadingRecommendations, setIsLoadingRecommendations] =
         useState(false);
+    const tracker = useTracker();
 
     const handleOpenImage = (imageUrl: string | null | undefined) => {
         if (imageUrl) {
@@ -62,6 +64,10 @@ const ChatSection = ({
         try {
             setIsRating((prev) => ({ ...prev, [message.id]: true }));
             const ratingToApply = message.rating === newRating ? 0 : newRating;
+
+            tracker?.genericTrack('Rating a Message', {
+                RATING: ratingToApply
+            });
 
             await chatApi.changeMessageRating({
                 session_id: currentSessionId,
@@ -82,6 +88,10 @@ const ChatSection = ({
 
     const handleBookmark = async (message: ChatMessage) => {
         if (!currentSessionId || isBookmarking[message.id]) return;
+
+        tracker?.genericTrack('Bookmarked a Message', {
+            MESSAGE_ID: message.id
+        });
 
         try {
             setIsBookmarking((prev) => ({ ...prev, [message.id]: true }));
@@ -106,6 +116,11 @@ const ChatSection = ({
     const handleCopy = async (text: string, messageId: string) => {
         try {
             await navigator.clipboard.writeText(text);
+
+            tracker?.genericTrack('User Copy AI Response', {
+                MESSAGE_ID: messageId
+            });
+
             setCopiedMessageId(messageId);
             setTimeout(() => {
                 setCopiedMessageId(null);
@@ -116,6 +131,10 @@ const ChatSection = ({
     };
 
     const handleRetry = (message: ChatMessage) => {
+        tracker?.genericTrack('User Retry Generate AI Response', {
+            MESSAGE_ID: message.id
+        });
+
         const messageIndex = messages.findIndex((m) => m.id === message.id);
         if (messageIndex > 0) {
             const userMessage = messages[messageIndex - 1];

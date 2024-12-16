@@ -12,6 +12,7 @@ import CropModal from '../CropModal';
 import { chatApi } from '../../redux/api/copilotApi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { SparkleIcon } from 'lucide-react';
+import { useTracker } from 'tracker/tracker';
 
 const DashboardPromptBar = (): JSX.Element => {
     const router = useRouter();
@@ -28,10 +29,18 @@ const DashboardPromptBar = (): JSX.Element => {
     const { uploadFile } = useUploadFile('qna');
     const [showCropModal, setShowCropModal] = useState(false);
     const [tempImageUrl, setTempImageUrl] = useState<string | null>(null);
+    const tracker = useTracker();
 
     const handleSend = async () => {
         if (!prompt.trim() || isLoading) return;
         setIsLoading(true);
+
+        tracker?.genericTrack(
+            'User Attempt to Search/Ask from Dashboard Search Box',
+            {
+                QUERY: prompt
+            }
+        );
 
         try {
             await chatApi.chat(
