@@ -12,6 +12,7 @@ import CropModal from '../CropModal';
 import { chatApi } from '../../redux/api/copilotApi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { SparkleIcon } from 'lucide-react';
+
 const DashboardPromptBar = (): JSX.Element => {
     const router = useRouter();
     const user = useSelector(getCurrentUser);
@@ -27,16 +28,17 @@ const DashboardPromptBar = (): JSX.Element => {
     const { uploadFile } = useUploadFile('qna');
     const [showCropModal, setShowCropModal] = useState(false);
     const [tempImageUrl, setTempImageUrl] = useState<string | null>(null);
+
     const handleSend = async () => {
         if (!prompt.trim() || isLoading) return;
         setIsLoading(true);
-        let sessionId: string | null = null;
+
         try {
             await chatApi.chat(
                 { input_text: prompt, image_url: imageUrl || undefined },
                 {
                     onContent: () => {
-                        // Empty
+                        // empty
                     },
                     onComplete: async (
                         messageId,
@@ -44,17 +46,20 @@ const DashboardPromptBar = (): JSX.Element => {
                         _,
                         keyword
                     ) => {
-                        sessionId = chatSessionId;
+                        setPrompt('');
+                        setImageUrl(null);
+                        setImageName(null);
+                        setActiveForm(null);
+
                         if (keyword) {
-                            router.push(
+                            await router.push(
                                 `/search/results?q=${encodeURIComponent(
                                     keyword
                                 )}`
                             );
-
-                            if (sessionId) {
+                            if (chatSessionId) {
                                 chatApi
-                                    .deleteSession(sessionId)
+                                    .deleteSession(chatSessionId)
                                     .catch((error) => {
                                         console.error(
                                             'Failed to delete session:',
@@ -62,25 +67,37 @@ const DashboardPromptBar = (): JSX.Element => {
                                         );
                                     });
                             }
-                        } else if (sessionId) {
-                            router.push(`/copilot/${sessionId}`);
+                        } else if (chatSessionId) {
+                            await router.push(`/copilot/${chatSessionId}`);
                         }
+
+                        setIsLoading(false);
                     },
                     onError: (error) => {
                         console.error('Chat error:', error);
+                        setIsLoading(false);
                     }
                 }
             );
         } catch (error) {
             console.error('Failed to send message:', error);
-        } finally {
             setIsLoading(false);
-            setPrompt('');
-            setImageUrl(null);
-            setImageName(null);
-            setActiveForm(null);
         }
     };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === 'Enter') {
+            if (e.shiftKey) {
+                return;
+            } else {
+                e.preventDefault();
+                if (prompt.trim() && !isLoading) {
+                    handleSend();
+                }
+            }
+        }
+    };
+
     const handleSymbolClick = (symbol: string) => {
         const textArea = document.querySelector('textarea');
         if (textArea) {
@@ -98,6 +115,7 @@ const DashboardPromptBar = (): JSX.Element => {
             });
         }
     };
+
     const handleFileUpload = async (file: File) => {
         if (!file.type.startsWith('image/')) {
             console.error('Only image files are allowed');
@@ -107,6 +125,7 @@ const DashboardPromptBar = (): JSX.Element => {
         setTempImageUrl(tempUrl);
         setShowCropModal(true);
     };
+
     const handleCropComplete = async (croppedImageUrl: string) => {
         try {
             const response = await fetch(croppedImageUrl);
@@ -126,6 +145,7 @@ const DashboardPromptBar = (): JSX.Element => {
             setTempImageUrl(null);
         }
     };
+
     const handlePaste = async (e: React.ClipboardEvent) => {
         const items = e.clipboardData.items;
         for (const item of items) {
@@ -138,6 +158,7 @@ const DashboardPromptBar = (): JSX.Element => {
             }
         }
     };
+
     const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         setIsDragging(false);
@@ -146,6 +167,7 @@ const DashboardPromptBar = (): JSX.Element => {
             await handleFileUpload(file);
         }
     };
+
     return (
         <div className="w-full">
             <h1 className="text-2xl font-semibold mb-4">
@@ -208,6 +230,7 @@ const DashboardPromptBar = (): JSX.Element => {
                             <textarea
                                 value={prompt}
                                 onChange={(e) => setPrompt(e.target.value)}
+                                onKeyDown={handleKeyDown}
                                 onPaste={handlePaste}
                                 placeholder="Tanya soal atau cari materi"
                                 className="w-full p-0 min-h-[100px] bg-transparent border-none resize-none outline-none text-white placeholder:text-gray-500 focus:ring-0 focus:outline-none"
@@ -292,4 +315,5 @@ const DashboardPromptBar = (): JSX.Element => {
         </div>
     );
 };
+
 export default DashboardPromptBar;
