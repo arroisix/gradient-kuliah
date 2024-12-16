@@ -370,5 +370,23 @@ export const chatApi = {
             callbacks.onError?.(error);
             console.error('Search summary error:', error);
         }
+    },
+
+    getTemplates: async (): Promise<{ templates: string[] }> => {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${COPILOT_BASE_URL}chat/template/`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Token ${token}`,
+                Accept: '*/*'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return response.json();
     }
 };
