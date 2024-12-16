@@ -4,7 +4,7 @@ import { BsImage, BsArrowUpShort } from 'react-icons/bs';
 import { ImOmega } from 'react-icons/im';
 import { IoMdClose } from 'react-icons/io';
 import { useSelector } from 'react-redux';
-import { getCurrentUser } from '../../../authentication/redux/selectors/userSelector';
+import { getCurrentUser } from 'authentication/redux/selectors/userSelector';
 import { cn } from 'commons/utils';
 import useUploadFile from 'commons/hooks/useUploadFile';
 import SymbolForm from 'komunitas/components/KomunitasForm/SymbolForm';
