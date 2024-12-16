@@ -1,6 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
+import { useTracker } from 'tracker/tracker';
 
 interface RenameDialogProps {
     isOpen: boolean;
@@ -18,6 +19,7 @@ const RenameDialog = ({
     const [name, setName] = useState(initialName);
     const [isLoading, setIsLoading] = useState(false);
     const MAX_CHARS = 100;
+    const tracker = useTracker();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -25,6 +27,9 @@ const RenameDialog = ({
 
         setIsLoading(true);
         try {
+            tracker?.genericTrack('Rename Chat History Session', {
+                SESSION_ID: name
+            });
             await onRename(name);
             onClose();
         } catch (error) {

@@ -58,9 +58,7 @@ const Sidebar = ({
                         href={'/copilot'}
                         onClick={() => {
                             tracker?.genericTrack(
-                                `Click Copilot ${
-                                    !fullHeight ? 'Course ' : ''
-                                }Navigation`
+                                'Click Copilot Sidebar Navigation'
                             );
                         }}>
                         <span
