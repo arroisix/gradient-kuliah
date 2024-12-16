@@ -14,6 +14,7 @@ import MathForm from 'komunitas/components/KomunitasForm/MathForm';
 import SymbolForm from 'komunitas/components/KomunitasForm/SymbolForm';
 import useUploadFile from 'commons/hooks/useUploadFile';
 import CropModal from '../CropModal';
+import { useTracker } from 'tracker/tracker';
 
 interface PromptBarProps {
     onSend?: (prompt: string, imageUrl?: string) => void;
@@ -44,6 +45,7 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
         const { uploadFile } = useUploadFile('qna');
         const [showCropModal, setShowCropModal] = useState(false);
         const [tempImageUrl, setTempImageUrl] = useState<string | null>(null);
+        const tracker = useTracker();
 
         useEffect(() => {
             onStateChange?.({ isEditorOpen: activeForm !== null });
@@ -51,6 +53,9 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
 
         const handleSend = () => {
             if (prompt.trim() && onSend && !isLoading) {
+                tracker?.genericTrack('Send Message to Copilot', {
+                    MESSAGE_CONTENT: prompt
+                });
                 onSend(prompt, imageUrl || undefined);
                 setPrompt('');
                 setImageUrl(null);
@@ -246,9 +251,12 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
                                     onChange={handleImageUpload}
                                 />
                                 <button
-                                    onClick={() =>
-                                        fileInputRef.current?.click()
-                                    }
+                                    onClick={() => {
+                                        tracker?.genericTrack(
+                                            'Click Image Attachment'
+                                        );
+                                        fileInputRef.current?.click();
+                                    }}
                                     disabled={isLoading}
                                     className={cn(
                                         'text-neutral-400 hover:text-white transition-colors',
@@ -263,13 +271,16 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
                                         activeForm === 'symbol' &&
                                             'bg-neutral-800 text-white'
                                     )}
-                                    onClick={() =>
+                                    onClick={() => {
+                                        tracker?.genericTrack(
+                                            'Click Special Symbol Button'
+                                        );
                                         setActiveForm(
                                             activeForm === 'symbol'
                                                 ? null
                                                 : 'symbol'
-                                        )
-                                    }
+                                        );
+                                    }}
                                     disabled={isLoading}
                                     aria-label="Symbol input">
                                     <ImOmega size={16} />

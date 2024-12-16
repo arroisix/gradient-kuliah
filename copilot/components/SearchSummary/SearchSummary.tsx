@@ -3,6 +3,7 @@ import { chatApi } from 'copilot/redux/api/copilotApi';
 import { useRouter } from 'next/router';
 import { cn } from 'commons/utils';
 import CopilotIconFill from '../../assets/CopilotIconFill';
+import { useTracker } from 'tracker/tracker';
 
 interface SearchSummaryProps {
     onSummaryFetched: (isEmpty: boolean) => void;
@@ -16,6 +17,14 @@ const SearchSummary = ({
     const [summary, setSummary] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
+    const tracker = useTracker();
+
+    const handleExpand = () => {
+        tracker?.genericTrack('User click Expand on Search Summary', {
+            QUERY: q as string
+        });
+        setIsExpanded(!isExpanded);
+    };
 
     useEffect(() => {
         const fetchSummary = async () => {
@@ -97,7 +106,7 @@ const SearchSummary = ({
 
                             {canExpand && (
                                 <button
-                                    onClick={() => setIsExpanded(!isExpanded)}
+                                    onClick={handleExpand}
                                     className="w-full md:w-fit text-sm text-gray-400 hover:text-white transition-colors border border-[#999999] hover:border-white rounded-full px-6 py-2">
                                     {isExpanded
                                         ? 'Lebih sedikit'

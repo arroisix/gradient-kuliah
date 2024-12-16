@@ -20,6 +20,7 @@ import SessionMenuDropdown from './SessionMenuDropdown';
 import RenameDialog from './RenameDialog';
 import { HiOutlineChatAlt, HiOutlineMenuAlt2 } from 'react-icons/hi';
 import { BsBookmark } from 'react-icons/bs';
+import { useTracker } from 'tracker/tracker';
 
 interface HistorySectionProps {
     isOpen: boolean;
@@ -58,6 +59,13 @@ const HistorySection = ({
     const [isBookmarking, setIsBookmarking] = useState<Record<string, boolean>>(
         {}
     );
+    const tracker = useTracker();
+
+    useEffect(() => {
+        if (isOpen) {
+            tracker?.genericTrack('Open Chat History Sidebar');
+        }
+    }, [isOpen, tracker]);
 
     useEffect(() => {
         const loadBookmarkedChats = async () => {
@@ -129,6 +137,12 @@ const HistorySection = ({
     const handleSearch = async (term: string) => {
         setSearchTerm(term);
 
+        if (term.trim()) {
+            tracker?.genericTrack('Search Message from Chat History', {
+                QUERY: term
+            });
+        }
+
         if (searchDebounce.current) {
             clearTimeout(searchDebounce.current);
         }
@@ -154,6 +168,7 @@ const HistorySection = ({
     };
 
     const handleNewChat = () => {
+        tracker?.genericTrack('Create Empty Copilot Session');
         router.push('/copilot');
         onClose();
     };
@@ -224,6 +239,9 @@ const HistorySection = ({
 
     const handleDelete = async (sessionId: string) => {
         try {
+            tracker?.genericTrack('Delete Chat History Session', {
+                SESSION_ID: sessionId
+            });
             await chatApi.deleteSession(sessionId);
 
             setSessionHistory((prev) =>
@@ -236,6 +254,21 @@ const HistorySection = ({
         } catch (error) {
             console.error('Failed to delete session:', error);
         }
+    };
+
+    const handleTabChange = (tab: 'history' | 'bookmark') => {
+        tracker?.genericTrack(
+            tab === 'history'
+                ? 'Click Riwayat Tab Navigation'
+                : 'Click Bookmark Tab Navigation'
+        );
+        setActiveTab(tab);
+    };
+
+    const handleSessionClick = (sessionId: string) => {
+        tracker?.genericTrack('Click Chat History Session', {
+            SESSION_ID: sessionId
+        });
     };
 
     useEffect(() => {
@@ -301,7 +334,7 @@ const HistorySection = ({
 
                     <div className="shrink-0 flex border-t border-neutral-800 pt-2 mb-4">
                         <button
-                            onClick={() => setActiveTab('history')}
+                            onClick={() => handleTabChange('history')}
                             className={cn(
                                 'flex-1 py-2 text-sm',
                                 activeTab === 'history'
@@ -311,7 +344,7 @@ const HistorySection = ({
                             Riwayat
                         </button>
                         <button
-                            onClick={() => setActiveTab('bookmark')}
+                            onClick={() => handleTabChange('bookmark')}
                             className={cn(
                                 'flex-1 py-2 text-sm',
                                 activeTab === 'bookmark'
@@ -473,6 +506,9 @@ const HistorySection = ({
                                 {filteredSessions.map((session) => (
                                     <Link
                                         href={`/copilot/${session.id}`}
+                                        onClick={() =>
+                                            handleSessionClick(session.id)
+                                        }
                                         key={session.id}
                                         className="group block">
                                         <div className="p-3 hover:bg-[#222222] rounded-lg cursor-pointer">
