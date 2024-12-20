@@ -7,6 +7,7 @@ import DashboardBanner from './dashboardBanner';
 import DashboardContent from './dashboardContent';
 import RenewalCard from 'payment/components/RenewalCard';
 import DashboardPromptBar from 'copilot/components/DashboardPromptBar/DashboardPromptBar';
+import EmailVerificationBanner from '../components/EmailVerification/EmailVerificationBanner';
 
 const DashboardContainer = (): JSX.Element => {
     const router = useRouter();
@@ -20,6 +21,7 @@ const DashboardContainer = (): JSX.Element => {
 
     return (
         <section className="flex flex-col w-full gap-6 pb-4 mx-auto sm:overflow-x-clip md:overflow-x-visible max-w-screen-2xl">
+            <EmailVerificationBanner />
             <RenewalCard />
             {isAuthenticated && <DashboardPromptBar />}
             <DashboardBanner />
