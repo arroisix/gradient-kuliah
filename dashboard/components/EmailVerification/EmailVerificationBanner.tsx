@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getCurrentUser } from 'authentication/redux/selectors/userSelector';
+import { useRequestEmailActivationMutation } from 'authentication/redux/api/authApi';
 import LockIcon from '../../assets/LockIcon';
 import EmailVerificationModal from './EmailVerificationModal';
 
@@ -13,9 +14,15 @@ const EmailVerificationBanner: React.FC<EmailVerificationBannerProps> = ({
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const user = useSelector(getCurrentUser);
+    const [requestEmailActivation] = useRequestEmailActivationMutation();
 
-    const handleVerify = () => {
-        setIsModalOpen(true);
+    const handleVerify = async () => {
+        try {
+            await requestEmailActivation().unwrap();
+            setIsModalOpen(true);
+        } catch (error) {
+            console.error('Failed to send verification email:', error);
+        }
     };
 
     return (

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { IoClose } from 'react-icons/io5';
+import { useRequestEmailActivationMutation } from 'authentication/redux/api/authApi';
 
 interface EmailVerificationModalProps {
     isOpen: boolean;
@@ -14,6 +15,7 @@ const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({
 }) => {
     const [countdown, setCountdown] = useState<number>(30);
     const [canResend, setCanResend] = useState<boolean>(false);
+    const [requestEmailActivation] = useRequestEmailActivationMutation();
 
     useEffect(() => {
         let timer: NodeJS.Timeout;
@@ -30,10 +32,14 @@ const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({
         };
     }, [isOpen, countdown]);
 
-    const handleResend = () => {
-        // Implement resend logic
-        setCountdown(30);
-        setCanResend(false);
+    const handleResend = async () => {
+        try {
+            await requestEmailActivation().unwrap();
+            setCountdown(30);
+            setCanResend(false);
+        } catch (error) {
+            console.error('Failed to resend verification email:', error);
+        }
     };
 
     if (!isOpen) return null;
@@ -80,7 +86,7 @@ const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({
                     onClick={() =>
                         window.open('https://mail.google.com', '_blank')
                     }
-                    className="w-full py-3 bg-[#5F2BCE] hover:bg-[#4F24A8] text-white rounded-full transition-colors mt-auto">
+                    className="w-full py-3 bg-[#5F2BCE] hover:bg-[#4F24A8] font-bold text-white rounded-full transition-colors mt-auto">
                     Periksa Inbox
                 </button>
             </div>

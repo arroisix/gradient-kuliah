@@ -139,6 +139,12 @@ export const authApi = baseApi.injectEndpoints({
             }),
             transformResponse: (resp: { data: RecommendationResponse[] }) =>
                 resp.data
+        }),
+        requestEmailActivation: builder.mutation<void, void>({
+            query: () => ({
+                url: `${AUTH_BASE_URL}email-activation/`,
+                method: 'POST'
+            })
         })
     })
 });
@@ -161,5 +167,6 @@ export const {
     useGetDeviceTypesQuery,
     useGetCurrentConnectedDeviceQuery,
     useGetStudentRecommendationQuery,
-    useLazyGetStudentRecommendationQuery
+    useLazyGetStudentRecommendationQuery,
+    useRequestEmailActivationMutation
 } = authApi;

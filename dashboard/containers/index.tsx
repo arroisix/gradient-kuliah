@@ -8,12 +8,14 @@ import DashboardContent from './dashboardContent';
 import RenewalCard from 'payment/components/RenewalCard';
 import DashboardPromptBar from 'copilot/components/DashboardPromptBar/DashboardPromptBar';
 import EmailVerificationBanner from '../components/EmailVerification/EmailVerificationBanner';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 const DashboardContainer = (): JSX.Element => {
     const router = useRouter();
     const { checkout } = router.query;
     const [isReferralModalOpen, setIsReferralModalOpen] = useState(false);
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const { profile } = useAuth();
 
     useEffect(() => {
         if (checkout === 'success') setIsReferralModalOpen(true);
@@ -21,7 +23,9 @@ const DashboardContainer = (): JSX.Element => {
 
     return (
         <section className="flex flex-col w-full gap-6 pb-4 mx-auto sm:overflow-x-clip md:overflow-x-visible max-w-screen-2xl">
-            <EmailVerificationBanner />
+            {profile && !profile.is_email_verified && (
+                <EmailVerificationBanner />
+            )}
             <RenewalCard />
             {isAuthenticated && <DashboardPromptBar />}
             <DashboardBanner />
