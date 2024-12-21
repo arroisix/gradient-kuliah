@@ -28,9 +28,9 @@ const EmailVerificationBanner: React.FC<EmailVerificationBannerProps> = ({
     return (
         <>
             <div
-                className={`relative bg-[#03AC5C25] overflow-hidden rounded-xl w-full px-4 py-6 ${className}`}>
+                className={`relative bg-[#03AC5C30] overflow-hidden rounded-xl w-full px-4 py-6 ${className}`}>
                 <div className="relative z-10 max-w-[70%]">
-                    <h2 className="text-white text-base md:text-lg font-medium mb-3">
+                    <h2 className="text-white text-base md:text-lg font-semibold mb-3">
                         <span className="inline">Tingkatkan </span>
                         <span className="text-[#03AC5C]">keamanan akun </span>
                         <span className="block md:inline">
