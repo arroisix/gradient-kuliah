@@ -41,14 +41,14 @@ const DashboardFeatures = () => {
             title: 'Perpus',
             description: 'Text book, rangkuman, bank soal',
             Icon: PerpusIcon,
-            url: '/perpus'
+            url: '/perpustakaan'
         },
         {
             id: 'kuis',
             title: 'Kuis',
             description: 'Uji kemampuanmu sekarang',
             Icon: KuisIcon,
-            url: '/kuis'
+            url: '/latihan'
         }
     ];
 
@@ -58,7 +58,7 @@ const DashboardFeatures = () => {
             title: 'Diskusi',
             description: 'Tanya ke tutor atau user lain',
             Icon: DiskusiIcon,
-            url: '/diskusi'
+            url: '/komunitas'
         }
     ];
 
