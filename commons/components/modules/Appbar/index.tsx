@@ -3,18 +3,15 @@ import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
-import { BiBookReader } from 'react-icons/bi';
-import { FiHome } from 'react-icons/fi';
-import {
-    RiBookOpenLine,
-    RiFileListLine,
-    RiQuestionnaireLine,
-    RiRobot2Fill
-} from 'react-icons/ri';
 import { IoClose } from 'react-icons/io5';
-import CopilotIconFill from 'copilot/assets/CopilotIconFill';
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
 import { useTracker } from 'tracker/tracker';
+import PencilOnLineIcon from '../../elements/Icons/PencilLine';
+import BookStackIcon from '../../elements/Icons/BookStack';
+import KelasIcon from '../../elements/Icons/Kelas';
+import DiskusiIcon from '../../elements/Icons/Diskusi';
+import HomeIcon from '../../elements/Icons/Home';
+import CopilotIconLine from '../../../../copilot/assets/CopilotIconLine';
 
 const DISPLAYED_ROUTES = [
     '/dashboard',
@@ -27,41 +24,41 @@ const DISPLAYED_ROUTES = [
 
 const APPBAR_NAV: AppbarNav[] = [
     {
-        icon: <FiHome size={20} />,
+        icon: <HomeIcon />,
         href: '/dashboard',
         label: 'Home'
     },
     {
-        icon: <BiBookReader size={20} />,
+        icon: <KelasIcon size={20} />,
         href: '/kelas',
         label: 'Kelas'
     },
     {
-        icon: <RiQuestionnaireLine size={20} />,
-        iconAlt: <CopilotIconFill />,
+        icon: <DiskusiIcon />,
+        iconAlt: <CopilotIconLine />,
         href: '/komunitas',
         isExpandable: true,
         expandedLinks: [
             {
                 href: '/komunitas',
                 label: 'Diskusi',
-                icon: <RiQuestionnaireLine size={20} />
+                icon: <DiskusiIcon />
             },
             {
                 href: '/copilot',
                 label: 'Copilot AI',
-                icon: <RiRobot2Fill size={20} />
+                icon: <CopilotIconLine />
             }
         ],
         label: 'Diskusi & AI'
     },
     {
-        icon: <RiBookOpenLine size={20} />,
+        icon: <BookStackIcon size={20} />,
         href: '/perpustakaan',
         label: 'Perpus'
     },
     {
-        icon: <RiFileListLine size={20} />,
+        icon: <PencilOnLineIcon size={20} />,
         href: '/latihan',
         label: 'Latihan'
     }
@@ -121,7 +118,7 @@ const Appbar = (): JSX.Element | null => {
             );
         }
 
-        return <RiQuestionnaireLine size={20} />;
+        return <DiskusiIcon />;
     };
 
     return isShowAppbar() && is_subscribed ? (
