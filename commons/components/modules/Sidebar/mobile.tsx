@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
 import { MdOutlineClose } from 'react-icons/md';
-import { RiQuestionnaireLine, RiQuestionnaireFill } from 'react-icons/ri';
 import CommunityNotificationBadge from '../../elements/CommunityNotificationBadge';
 import { AnimatePresence, motion } from 'framer-motion';
 import NavigationButton from 'commons/components/elements/NavigationButton';
@@ -12,6 +11,8 @@ import PencilOnLineIconFill from '../../elements/Icons/PencilLineFill';
 import KelasIcon from '../../elements/Icons/Kelas';
 import KelasIconFill from '../../elements/Icons/KelasFill';
 import BookStackIconFill from '../../elements/Icons/BookStackFill';
+import DiskusiIcon from '../../elements/Icons/Diskusi';
+import DiskusiIconFill from '../../elements/Icons/DiskusiFill';
 
 const MOBILE_SIDEBAR_BUTTONS: NavigationButtonInterface[] = [
     {
@@ -128,8 +129,8 @@ const MobileSidebar = ({
                             name="Community"
                             title="Diskusi"
                             url="/komunitas"
-                            IconActive={RiQuestionnaireFill}
-                            IconUnactive={RiQuestionnaireLine}
+                            IconActive={DiskusiIconFill}
+                            IconUnactive={DiskusiIcon}
                             setOpenSidebar={setOpenSidebar}>
                             <CommunityNotificationBadge />
                         </NavigationButton>

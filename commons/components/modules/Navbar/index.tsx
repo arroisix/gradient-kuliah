@@ -13,7 +13,6 @@ import MobileSidebar from '../Sidebar/mobile';
 import AuthContext from 'authentication/contexts/AuthProvider';
 import UserAvatar from './components/UserAvatar';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
-import { RiQuestionnaireLine, RiQuestionnaireFill } from 'react-icons/ri';
 import { cn } from 'commons/utils';
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
 import NavigationButton from 'commons/components/elements/NavigationButton';
@@ -30,6 +29,8 @@ import KelasIcon from '../../elements/Icons/Kelas';
 import BookStackIcon from '../../elements/Icons/BookStack';
 import BookStackIconFill from '../../elements/Icons/BookStackFill';
 import KelasIconFill from '../../elements/Icons/KelasFill';
+import DiskusiIconFill from '../../elements/Icons/DiskusiFill';
+import DiskusiIcon from '../../elements/Icons/Diskusi';
 
 const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
     {
@@ -209,8 +210,8 @@ const Navbar = ({
                             name="Community"
                             title="Diskusi"
                             url="/komunitas"
-                            IconActive={RiQuestionnaireFill}
-                            IconUnactive={RiQuestionnaireLine}
+                            IconActive={DiskusiIconFill}
+                            IconUnactive={DiskusiIcon}
                         />
                     </div>
                     {isShowSidebar && (

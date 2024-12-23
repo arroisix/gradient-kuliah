@@ -3,8 +3,6 @@ import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
-import { FiHome } from 'react-icons/fi';
-import { RiQuestionnaireLine } from 'react-icons/ri';
 import { IoClose } from 'react-icons/io5';
 import CopilotIconFill from 'copilot/assets/CopilotIconFill';
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
@@ -12,6 +10,8 @@ import { useTracker } from 'tracker/tracker';
 import PencilOnLineIcon from '../../elements/Icons/PencilLine';
 import BookStackIcon from '../../elements/Icons/BookStack';
 import KelasIcon from '../../elements/Icons/Kelas';
+import DiskusiIcon from '../../elements/Icons/Diskusi';
+import HomeIcon from '../../elements/Icons/Home';
 
 const DISPLAYED_ROUTES = [
     '/dashboard',
@@ -24,7 +24,7 @@ const DISPLAYED_ROUTES = [
 
 const APPBAR_NAV: AppbarNav[] = [
     {
-        icon: <FiHome size={20} />,
+        icon: <HomeIcon />,
         href: '/dashboard',
         label: 'Home'
     },
@@ -34,7 +34,7 @@ const APPBAR_NAV: AppbarNav[] = [
         label: 'Kelas'
     },
     {
-        icon: <RiQuestionnaireLine size={20} />,
+        icon: <DiskusiIcon />,
         iconAlt: <CopilotIconFill />,
         href: '/komunitas',
         isExpandable: true,
@@ -42,7 +42,7 @@ const APPBAR_NAV: AppbarNav[] = [
             {
                 href: '/komunitas',
                 label: 'Diskusi',
-                icon: <RiQuestionnaireLine size={20} />
+                icon: <DiskusiIcon />
             },
             {
                 href: '/copilot',
@@ -118,7 +118,7 @@ const Appbar = (): JSX.Element | null => {
             );
         }
 
-        return <RiQuestionnaireLine size={20} />;
+        return <DiskusiIcon />;
     };
 
     return isShowAppbar() && is_subscribed ? (

@@ -1,5 +1,3 @@
-import { FiHome } from 'react-icons/fi';
-import { RiQuestionnaireLine } from 'react-icons/ri';
 import { useRouter } from 'next/router';
 import { useTracker } from 'tracker/tracker';
 import Link from 'next/link';
@@ -10,6 +8,8 @@ import CopilotIconLine from 'copilot/assets/CopilotIconLine';
 import BookStackIcon from '../../elements/Icons/BookStack';
 import KelasIcon from '../../elements/Icons/Kelas';
 import PencilOnLineIcon from '../../elements/Icons/PencilLine';
+import DiskusiIcon from '../../elements/Icons/Diskusi';
+import HomeIcon from '../../elements/Icons/Home';
 
 const Sidebar = ({
     fullHeight,
@@ -47,7 +47,7 @@ const Sidebar = ({
                                 ? 'text-white'
                                 : 'text-[#666666]'
                         } font-body text-sm hover:text-[#999999]`}>
-                        <FiHome size={20} />
+                        <HomeIcon />
                         Home
                     </span>
                 </Link>
@@ -88,7 +88,7 @@ const Sidebar = ({
                             }Navigation`
                         );
                     }}>
-                    <RiQuestionnaireLine size={20} />
+                    <DiskusiIcon />
                     Diskusi
                     <CommunityNotificationBadge />
                 </Link>
