@@ -8,8 +8,8 @@ import { useGetConfigQuery } from 'commons/redux/api/commonApi';
 import CommunityNotificationBadge from 'commons/components/elements/CommunityNotificationBadge';
 import CopilotIconLine from 'copilot/assets/CopilotIconLine';
 import BookStackIcon from '../../elements/Icons/BookStack';
-import { PencilLineIcon } from 'lucide-react';
 import KelasIcon from '../../elements/Icons/Kelas';
+import PencilOnLineIcon from '../../elements/Icons/PencilLine';
 
 const Sidebar = ({
     fullHeight,
@@ -148,7 +148,7 @@ const Sidebar = ({
                                     ? 'text-white'
                                     : 'text-[#666666]'
                             )}>
-                            <PencilLineIcon size={20} />
+                            <PencilOnLineIcon size={20} />
                             Latihan
                         </span>
                     </Link>
