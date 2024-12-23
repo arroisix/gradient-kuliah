@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
 import { IoClose } from 'react-icons/io5';
-import CopilotIconFill from 'copilot/assets/CopilotIconFill';
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
 import { useTracker } from 'tracker/tracker';
 import PencilOnLineIcon from '../../elements/Icons/PencilLine';
@@ -12,6 +11,7 @@ import BookStackIcon from '../../elements/Icons/BookStack';
 import KelasIcon from '../../elements/Icons/Kelas';
 import DiskusiIcon from '../../elements/Icons/Diskusi';
 import HomeIcon from '../../elements/Icons/Home';
+import CopilotIconLine from '../../../../copilot/assets/CopilotIconLine';
 
 const DISPLAYED_ROUTES = [
     '/dashboard',
@@ -35,7 +35,7 @@ const APPBAR_NAV: AppbarNav[] = [
     },
     {
         icon: <DiskusiIcon />,
-        iconAlt: <CopilotIconFill />,
+        iconAlt: <CopilotIconLine />,
         href: '/komunitas',
         isExpandable: true,
         expandedLinks: [
@@ -47,7 +47,7 @@ const APPBAR_NAV: AppbarNav[] = [
             {
                 href: '/copilot',
                 label: 'Copilot AI',
-                icon: <CopilotIconFill />
+                icon: <CopilotIconLine />
             }
         ],
         label: 'Diskusi & AI'
