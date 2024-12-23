@@ -4,6 +4,7 @@ import { getCurrentUser } from 'authentication/redux/selectors/userSelector';
 import { useRequestEmailActivationMutation } from 'authentication/redux/api/authApi';
 import LockIcon from '../../assets/LockIcon';
 import EmailVerificationModal from './EmailVerificationModal';
+import { useTracker } from 'tracker/tracker';
 
 interface EmailVerificationBannerProps {
     className?: string;
@@ -15,9 +16,18 @@ const EmailVerificationBanner: React.FC<EmailVerificationBannerProps> = ({
     const [isModalOpen, setIsModalOpen] = useState(false);
     const user = useSelector(getCurrentUser);
     const [requestEmailActivation] = useRequestEmailActivationMutation();
+    const tracker = useTracker();
 
     const handleVerify = async () => {
         try {
+            tracker?.trackButtonClick(
+                'Email Verification',
+                'Verifikasi Email',
+                {
+                    email: user.email,
+                    source: 'verification_banner'
+                }
+            );
             await requestEmailActivation().unwrap();
             setIsModalOpen(true);
         } catch (error) {

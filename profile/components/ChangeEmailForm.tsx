@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import { useProfileContext } from '../contexts/ProfileProvider';
 import { useState } from 'react';
 import EmailVerificationModal from 'dashboard/components/EmailVerification/EmailVerificationModal';
+import { useTracker } from 'tracker/tracker';
 
 interface ErrorResponse {
     data?: {
@@ -25,6 +26,7 @@ export const ChangeEmailForm = (): JSX.Element => {
     const [requestEmailActivation] = useRequestEmailActivationMutation();
     const [showVerificationModal, setShowVerificationModal] = useState(false);
     const [newEmail, setNewEmail] = useState('');
+    const tracker = useTracker();
 
     return (
         <>
@@ -68,6 +70,11 @@ export const ChangeEmailForm = (): JSX.Element => {
                             profession: profile.profession,
                             profession_field: profile.profession_field
                         };
+
+                        tracker?.genericTrack('User Change Email', {
+                            old_email: profile.email,
+                            new_email: values.email
+                        });
 
                         await updateUser(payload).unwrap();
                         setNewEmail(values.email);
@@ -118,6 +125,14 @@ export const ChangeEmailForm = (): JSX.Element => {
                 }) => (
                     <form onSubmit={handleSubmit}>
                         <div className="flex flex-col gap-4">
+                            <div className="flex flex-col gap-1">
+                                <label className="text-sm font-semibold text-white">
+                                    Email Lama
+                                </label>
+                                <span className="text-gray-400">
+                                    {profile?.email}
+                                </span>
+                            </div>
                             <Input
                                 label="Email Baru"
                                 type="email"

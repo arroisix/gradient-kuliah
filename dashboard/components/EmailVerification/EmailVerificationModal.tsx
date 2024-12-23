@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { IoClose } from 'react-icons/io5';
-import { useRequestEmailActivationMutation } from 'authentication/redux/api/authApi';
+import {
+    useRequestEmailActivationMutation,
+    useGetProfileQuery
+} from 'authentication/redux/api/authApi';
 
 interface EmailVerificationModalProps {
     isOpen: boolean;
@@ -16,6 +19,20 @@ const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({
     const [countdown, setCountdown] = useState<number>(30);
     const [canResend, setCanResend] = useState<boolean>(false);
     const [requestEmailActivation] = useRequestEmailActivationMutation();
+
+    const { data: profile } = useGetProfileQuery(
+        {},
+        {
+            pollingInterval: 5000,
+            skip: !isOpen
+        }
+    );
+
+    useEffect(() => {
+        if (profile?.is_email_verified) {
+            onClose();
+        }
+    }, [profile?.is_email_verified, onClose]);
 
     useEffect(() => {
         let timer: NodeJS.Timeout;

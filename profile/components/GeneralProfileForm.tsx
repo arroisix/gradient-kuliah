@@ -159,6 +159,9 @@ export const GeneralProfileForm = (): JSX.Element => {
                                 <span className="text-[#FFFFFF]">
                                     {profile?.username}
                                 </span>
+                                <span className="text-gray-400 text-sm">
+                                    {profile?.email}
+                                </span>
                                 <div className="flex flex-col gap-1">
                                     <label
                                         htmlFor="photo-profile"
