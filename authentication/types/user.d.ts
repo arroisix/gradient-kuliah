@@ -51,6 +51,8 @@ interface UpdateUserResponseData {
     device_type_id: number;
     device_allowed: boolean;
     display_update_data_notification: boolean;
+    provider: 'basic' | 'google';
+    is_email_verified: boolean;
 }
 
 interface UpdateGeneralProfileInputData extends UpdateUserResponseData {
