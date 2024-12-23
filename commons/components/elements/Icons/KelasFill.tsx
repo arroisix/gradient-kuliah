@@ -1,11 +1,11 @@
 import React from 'react';
 
-interface KelasIconProps {
+interface KelasIconFillProps {
     size?: number;
     className?: string;
 }
 
-const KelasIcon: React.FC<KelasIconProps> = ({
+const KelasIconFill: React.FC<KelasIconFillProps> = ({
     size = 20,
     className
 }) => {
@@ -14,7 +14,7 @@ const KelasIcon: React.FC<KelasIconProps> = ({
             width={size}
             height={size}
             viewBox="0 0 20 20"
-            fill="none"
+            fill="currentColor"
             xmlns="http://www.w3.org/2000/svg"
             className={className}>
             <path
@@ -30,4 +30,4 @@ const KelasIcon: React.FC<KelasIconProps> = ({
     );
 };
 
-export default KelasIcon;
+export default KelasIconFill;

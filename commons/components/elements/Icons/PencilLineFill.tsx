@@ -1,11 +1,11 @@
 import React from 'react';
 
-interface PencilOnLineIconProps {
+interface PencilOnLineIconFillProps {
     size?: number;
     className?: string;
 }
 
-const PencilOnLineIcon: React.FC<PencilOnLineIconProps> = ({
+const PencilOnLineIconFill: React.FC<PencilOnLineIconFillProps> = ({
     size = 20,
     className
 }) => {
@@ -14,7 +14,7 @@ const PencilOnLineIcon: React.FC<PencilOnLineIconProps> = ({
             width={size}
             height={size}
             viewBox="0 0 20 20"
-            fill="none"
+            fill="currentColor"
             xmlns="http://www.w3.org/2000/svg"
             className={className}>
             <path
@@ -34,6 +34,4 @@ const PencilOnLineIcon: React.FC<PencilOnLineIconProps> = ({
     );
 };
 
-export default PencilOnLineIcon;
-
-
+export default PencilOnLineIconFill;

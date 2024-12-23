@@ -1,34 +1,32 @@
 import { Dispatch, SetStateAction } from 'react';
-import { BiBookReader, BiSolidBookReader } from 'react-icons/bi';
 import { MdOutlineClose } from 'react-icons/md';
-import {
-    RiBookOpenLine,
-    RiBookOpenFill,
-    RiQuestionnaireLine,
-    RiQuestionnaireFill,
-    RiFileListLine,
-    RiFileListFill
-} from 'react-icons/ri';
+import { RiQuestionnaireLine, RiQuestionnaireFill } from 'react-icons/ri';
 import CommunityNotificationBadge from '../../elements/CommunityNotificationBadge';
 import { AnimatePresence, motion } from 'framer-motion';
 import NavigationButton from 'commons/components/elements/NavigationButton';
 import CopilotIconFill from 'copilot/assets/CopilotIconFill';
 import CopilotIconLine from 'copilot/assets/CopilotIconLine';
+import BookStackIcon from '../../elements/Icons/BookStack';
+import PencilOnLineIcon from '../../elements/Icons/PencilLine';
+import PencilOnLineIconFill from '../../elements/Icons/PencilLineFill';
+import KelasIcon from '../../elements/Icons/Kelas';
+import KelasIconFill from '../../elements/Icons/KelasFill';
+import BookStackIconFill from '../../elements/Icons/BookStackFill';
 
 const MOBILE_SIDEBAR_BUTTONS: NavigationButtonInterface[] = [
     {
         name: 'Class',
         title: 'Kelas',
         url: '/kelas',
-        IconActive: BiSolidBookReader,
-        IconUnactive: BiBookReader
+        IconActive: KelasIconFill,
+        IconUnactive: KelasIcon
     },
     {
         name: 'Library',
         title: 'Perpustakaan',
         url: '/perpustakaan',
-        IconActive: RiBookOpenFill,
-        IconUnactive: RiBookOpenLine,
+        IconActive: BookStackIconFill,
+        IconUnactive: BookStackIcon,
         subMenus: [
             {
                 name: 'Textbook Solution',
@@ -121,8 +119,8 @@ const MobileSidebar = ({
                                 name="Exercise"
                                 title="Latihan"
                                 url="/latihan"
-                                IconActive={RiFileListFill}
-                                IconUnactive={RiFileListLine}
+                                IconActive={PencilOnLineIconFill}
+                                IconUnactive={PencilOnLineIcon}
                                 setOpenSidebar={setOpenSidebar}
                             />
                         )}

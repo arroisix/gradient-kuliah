@@ -1,11 +1,11 @@
 import React from 'react';
 
-interface BookStackIconProps {
+interface BookStackIconFillProps {
     size?: number;
     className?: string;
 }
 
-const BookStackIcon: React.FC<BookStackIconProps> = ({
+const BookStackIconFill: React.FC<BookStackIconFillProps> = ({
     size = 20,
     className
 }) => {
@@ -73,4 +73,4 @@ const BookStackIcon: React.FC<BookStackIconProps> = ({
     );
 };
 
-export default BookStackIcon;
+export default BookStackIconFill;

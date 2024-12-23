@@ -13,15 +13,7 @@ import MobileSidebar from '../Sidebar/mobile';
 import AuthContext from 'authentication/contexts/AuthProvider';
 import UserAvatar from './components/UserAvatar';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
-import { BiBookReader, BiSolidBookReader } from 'react-icons/bi';
-import {
-    RiBookOpenLine,
-    RiQuestionnaireLine,
-    RiBookOpenFill,
-    RiQuestionnaireFill,
-    RiFileListFill,
-    RiFileListLine
-} from 'react-icons/ri';
+import { RiQuestionnaireLine, RiQuestionnaireFill } from 'react-icons/ri';
 import { cn } from 'commons/utils';
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
 import NavigationButton from 'commons/components/elements/NavigationButton';
@@ -32,21 +24,27 @@ import { useThemeContext } from 'commons/contexts/ThemeProvider';
 import SearchBar from '../Searchbar';
 import CopilotIconFill from 'copilot/assets/CopilotIconFill';
 import CopilotIconLine from 'copilot/assets/CopilotIconLine';
+import PencilOnLineIconFill from '../../elements/Icons/PencilLineFill';
+import PencilOnLineIcon from '../../elements/Icons/PencilLine';
+import KelasIcon from '../../elements/Icons/Kelas';
+import BookStackIcon from '../../elements/Icons/BookStack';
+import BookStackIconFill from '../../elements/Icons/BookStackFill';
+import KelasIconFill from '../../elements/Icons/KelasFill';
 
 const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
     {
         name: 'Class',
         title: 'Kelas',
         url: '/kelas',
-        IconActive: BiSolidBookReader,
-        IconUnactive: BiBookReader
+        IconActive: KelasIconFill,
+        IconUnactive: KelasIcon
     },
     {
         name: 'Library',
         title: 'Perpustakaan',
         url: '/perpustakaan',
-        IconActive: RiBookOpenFill,
-        IconUnactive: RiBookOpenLine
+        IconActive: BookStackIconFill,
+        IconUnactive: BookStackIcon
     }
 ];
 
@@ -203,8 +201,8 @@ const Navbar = ({
                                 name="Exercise"
                                 title="Latihan"
                                 url="/latihan"
-                                IconActive={RiFileListFill}
-                                IconUnactive={RiFileListLine}
+                                IconActive={PencilOnLineIconFill}
+                                IconUnactive={PencilOnLineIcon}
                             />
                         )}
                         <NavigationButton

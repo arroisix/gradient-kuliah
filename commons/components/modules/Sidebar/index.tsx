@@ -1,10 +1,5 @@
-import { BiBookReader } from 'react-icons/bi';
 import { FiHome } from 'react-icons/fi';
-import {
-    RiBookOpenLine,
-    RiFileListLine,
-    RiQuestionnaireLine
-} from 'react-icons/ri';
+import { RiQuestionnaireLine } from 'react-icons/ri';
 import { useRouter } from 'next/router';
 import { useTracker } from 'tracker/tracker';
 import Link from 'next/link';
@@ -12,6 +7,9 @@ import { cn } from 'commons/utils';
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
 import CommunityNotificationBadge from 'commons/components/elements/CommunityNotificationBadge';
 import CopilotIconLine from 'copilot/assets/CopilotIconLine';
+import BookStackIcon from '../../elements/Icons/BookStack';
+import { PencilLineIcon } from 'lucide-react';
+import KelasIcon from '../../elements/Icons/Kelas';
 
 const Sidebar = ({
     fullHeight,
@@ -109,7 +107,7 @@ const Sidebar = ({
                                 ? 'text-white'
                                 : 'text-[#666666]'
                         } font-body text-sm hover:text-[#999999]`}>
-                        <BiBookReader size={20} />
+                        <KelasIcon size={20} />
                         Kelas
                     </span>
                 </Link>
@@ -129,7 +127,7 @@ const Sidebar = ({
                                 ? 'text-white'
                                 : 'text-[#666666]'
                         )}>
-                        <RiBookOpenLine size={20} />
+                        <BookStackIcon size={20} />
                         Perpustakaan
                     </span>
                 </Link>
@@ -150,7 +148,7 @@ const Sidebar = ({
                                     ? 'text-white'
                                     : 'text-[#666666]'
                             )}>
-                            <RiFileListLine size={20} />
+                            <PencilLineIcon size={20} />
                             Latihan
                         </span>
                     </Link>
