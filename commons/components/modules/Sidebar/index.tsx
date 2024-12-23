@@ -1,10 +1,3 @@
-import { BiBookReader } from 'react-icons/bi';
-import { FiHome } from 'react-icons/fi';
-import {
-    RiBookOpenLine,
-    RiFileListLine,
-    RiQuestionnaireLine
-} from 'react-icons/ri';
 import { useRouter } from 'next/router';
 import { useTracker } from 'tracker/tracker';
 import Link from 'next/link';
@@ -12,6 +5,11 @@ import { cn } from 'commons/utils';
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
 import CommunityNotificationBadge from 'commons/components/elements/CommunityNotificationBadge';
 import CopilotIconLine from 'copilot/assets/CopilotIconLine';
+import BookStackIcon from '../../elements/Icons/BookStack';
+import KelasIcon from '../../elements/Icons/Kelas';
+import PencilOnLineIcon from '../../elements/Icons/PencilLine';
+import DiskusiIcon from '../../elements/Icons/Diskusi';
+import HomeIcon from '../../elements/Icons/Home';
 
 const Sidebar = ({
     fullHeight,
@@ -49,7 +47,7 @@ const Sidebar = ({
                                 ? 'text-white'
                                 : 'text-[#666666]'
                         } font-body text-sm hover:text-[#999999]`}>
-                        <FiHome size={20} />
+                        <HomeIcon />
                         Home
                     </span>
                 </Link>
@@ -90,7 +88,7 @@ const Sidebar = ({
                             }Navigation`
                         );
                     }}>
-                    <RiQuestionnaireLine size={20} />
+                    <DiskusiIcon />
                     Diskusi
                     <CommunityNotificationBadge />
                 </Link>
@@ -109,7 +107,7 @@ const Sidebar = ({
                                 ? 'text-white'
                                 : 'text-[#666666]'
                         } font-body text-sm hover:text-[#999999]`}>
-                        <BiBookReader size={20} />
+                        <KelasIcon size={20} />
                         Kelas
                     </span>
                 </Link>
@@ -129,7 +127,7 @@ const Sidebar = ({
                                 ? 'text-white'
                                 : 'text-[#666666]'
                         )}>
-                        <RiBookOpenLine size={20} />
+                        <BookStackIcon size={20} />
                         Perpustakaan
                     </span>
                 </Link>
@@ -150,7 +148,7 @@ const Sidebar = ({
                                     ? 'text-white'
                                     : 'text-[#666666]'
                             )}>
-                            <RiFileListLine size={20} />
+                            <PencilOnLineIcon size={20} />
                             Latihan
                         </span>
                     </Link>

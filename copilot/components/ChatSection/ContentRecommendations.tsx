@@ -74,6 +74,8 @@ const ContentRecommendations: React.FC<ContentRecommendationsProps> = ({
                                 <Link
                                     key={index}
                                     href={getContentUrl(content)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className="flex-shrink-0 bg-[#222222] w-[280px] rounded-lg overflow-hidden flex flex-col hover:bg-[#2C2C2C] transition-colors duration-200">
                                     {content.type === 'course_video' ? (
                                         <>
@@ -141,14 +143,18 @@ const ContentRecommendations: React.FC<ContentRecommendationsProps> = ({
         );
     };
 
+    const handleSeeRelatedMaterials = () => {
+        window.open(
+            `/search/results?q=${encodeURIComponent(keyword)}`,
+            '_blank',
+            'noopener,noreferrer'
+        );
+    };
+
     return (
         <div className="mt-4 space-y-4">
             <button
-                onClick={() => {
-                    window.location.href = `/search/results?q=${encodeURIComponent(
-                        keyword
-                    )}`;
-                }}
+                onClick={handleSeeRelatedMaterials}
                 className="w-full px-4 py-3 text-start text-neutral-400 hover:bg-[#222222] rounded-lg transition-colors flex items-center justify-between border border-[#333333]">
                 <span className="text-sm">Lihat materi terkait</span>
                 <FiArrowUpLeft className="text-neutral-400" />

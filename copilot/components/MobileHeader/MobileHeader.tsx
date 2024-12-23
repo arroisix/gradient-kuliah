@@ -60,7 +60,7 @@ const MobileHeader = ({ onOpenHistory }: MobileHeaderProps): JSX.Element => {
                         leave="ease-in duration-200"
                         leaveFrom="opacity-100"
                         leaveTo="opacity-0">
-                        <div className="fixed bg-black/30" />
+                        <div className="fixed inset-0 bg-black/75" />
                     </Transition.Child>
 
                     <div className="fixed left-0 right-0 -bottom-2">

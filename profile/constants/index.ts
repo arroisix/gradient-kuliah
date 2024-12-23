@@ -7,7 +7,8 @@ import { PersonalDataForm } from 'profile/components/PersonalDataForm';
 import { CgBell } from 'react-icons/cg';
 import { GoHome } from 'react-icons/go';
 import { HiOutlineAcademicCap } from 'react-icons/hi';
-import { MdOutlinePhoneAndroid } from 'react-icons/md';
+import { MdOutlineMail, MdOutlinePhoneAndroid } from 'react-icons/md';
+import { ChangeEmailForm } from '../components/ChangeEmailForm';
 
 export const PROFILE_MENUS = [
     {
@@ -24,6 +25,13 @@ export const PROFILE_MENUS = [
         label: 'Pendidikan',
         Icon: HiOutlineAcademicCap,
         url: 'profil/pendidikan'
+    },
+    {
+        label: 'Ganti Email',
+        Icon: MdOutlineMail,
+        url: 'profil/ganti-email',
+        showIf: (profile?: UpdateUserResponseData) =>
+            profile?.provider === 'basic'
     },
     {
         label: 'Perangkat Terhubung',
@@ -52,5 +60,6 @@ export const PROFILE_MANAGEMENT_FORMS: ProfileManagementFormsInterface = {
     '/profil/profil-umum': GeneralProfileForm,
     '/profil/data-diri': PersonalDataForm,
     '/profil/pendidikan': EducationLevelForm,
-    '/profil/perangkat-terhubung': PerangkatTerhubungForm
+    '/profil/perangkat-terhubung': PerangkatTerhubungForm,
+    '/profil/ganti-email': ChangeEmailForm
 };
