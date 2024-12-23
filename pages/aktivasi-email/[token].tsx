@@ -27,7 +27,7 @@ const EmailActivation = (): JSX.Element => {
                 {data && (
                     <span className="text-base">
                         {data.is_valid
-                            ? 'Aktivasi berhasil, silahkan kembali ke Aplikasi'
+                            ? 'Aktivasi berhasil, silahkan kembali beraktivitas'
                             : data.message}
                     </span>
                 )}
