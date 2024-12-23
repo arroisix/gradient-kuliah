@@ -9,6 +9,7 @@ import RenewalCard from 'payment/components/RenewalCard';
 import DashboardPromptBar from 'copilot/components/DashboardPromptBar/DashboardPromptBar';
 import EmailVerificationBanner from '../components/EmailVerification/EmailVerificationBanner';
 import { useAuth } from 'authentication/contexts/AuthProvider';
+import DashboardFeatures from '../components/DashboardFeatures';
 
 const DashboardContainer = (): JSX.Element => {
     const router = useRouter();
@@ -28,6 +29,7 @@ const DashboardContainer = (): JSX.Element => {
             )}
             <RenewalCard />
             {isAuthenticated && <DashboardPromptBar />}
+            <DashboardFeatures />
             <DashboardBanner />
             <DashboardContent />
             <ReferralModal
