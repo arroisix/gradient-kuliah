@@ -7,7 +7,7 @@ interface DiskusiIconProps {
 }
 
 const DiskusiIcon: React.FC<DiskusiIconProps> = ({
-    width = 21,
+    width = 20,
     height = 20,
     className
 }) => {
@@ -15,7 +15,7 @@ const DiskusiIcon: React.FC<DiskusiIconProps> = ({
         <svg
             width={width}
             height={height}
-            viewBox="0 0 21 20"
+            viewBox="0 0 20 20"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
             className={className}>
