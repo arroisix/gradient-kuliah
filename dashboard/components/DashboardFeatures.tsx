@@ -8,6 +8,7 @@ import KuisIcon from '../assets/KuisIcon';
 import DiskusiIcon from '../assets/DiskusiIcon';
 import LainnyaIcon from '../assets/LainnyaIcon';
 import CopilotAIIcon from '../assets/CopilotAIIcon';
+import { useTracker } from 'tracker/tracker';
 
 type Feature = {
     id: string;
@@ -19,6 +20,7 @@ type Feature = {
 
 const DashboardFeatures = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const tracker = useTracker();
 
     const mainFeature: Feature = {
         id: 'copilot',
@@ -78,6 +80,9 @@ const DashboardFeatures = () => {
         <div className="w-full mx-auto space-y-4">
             <Link
                 href={mainFeature.url}
+                onClick={() =>
+                    tracker?.genericTrack('Click Copilot AI Dashboard Card')
+                }
                 className="block p-4 bg-[#1D1D1D] rounded-xl hover:bg-neutral-800 transition-colors relative overflow-hidden">
                 <div className="flex items-start">
                     <div>
@@ -102,6 +107,11 @@ const DashboardFeatures = () => {
                     <Link
                         key={feature.id}
                         href={feature.url}
+                        onClick={() =>
+                            tracker?.genericTrack(
+                                `Click ${feature.title} Dashboard Card`
+                            )
+                        }
                         className="p-3 bg-[#1D1D1D] rounded-xl hover:bg-neutral-800 transition-colors">
                         <div className="flex flex-col items-center text-center">
                             <div className="w-12 h-12 flex items-center justify-center mb-2">
@@ -115,7 +125,12 @@ const DashboardFeatures = () => {
                 ))}
 
                 <button
-                    onClick={() => setIsOpen(true)}
+                    onClick={() => {
+                        setIsOpen(true);
+                        tracker?.genericTrack(
+                            'Click More Features Dashboard Card'
+                        );
+                    }}
                     className="p-3 bg-[#1D1D1D] rounded-xl hover:bg-neutral-800 transition-colors">
                     <div className="flex flex-col items-center text-center">
                         <div className="w-12 h-12 flex items-center justify-center mb-2">
@@ -170,6 +185,11 @@ const DashboardFeatures = () => {
                                         <div className="space-y-2">
                                             <Link
                                                 href={mainFeature.url}
+                                                onClick={() =>
+                                                    tracker?.genericTrack(
+                                                        'Click Copilot AI Modal Card'
+                                                    )
+                                                }
                                                 className="flex items-center gap-3 p-4 rounded-xl bg-neutral-800/50 hover:bg-neutral-800 transition-colors">
                                                 <div className="relative">
                                                     <div className="w-10 h-10 bg-[#333540] rounded-full flex items-center justify-center">
@@ -201,6 +221,11 @@ const DashboardFeatures = () => {
                                                 <Link
                                                     key={feature.id}
                                                     href={feature.url}
+                                                    onClick={() =>
+                                                        tracker?.genericTrack(
+                                                            `Click ${feature.title} Modal Card`
+                                                        )
+                                                    }
                                                     className="flex items-center gap-3 p-4 rounded-xl bg-neutral-800/50 hover:bg-neutral-800 transition-colors">
                                                     <ModalFeatureIcon
                                                         Icon={feature.Icon}

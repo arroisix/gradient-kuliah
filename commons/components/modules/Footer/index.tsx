@@ -76,8 +76,12 @@ const ITEMS: FooterItemProps[] = [
                 url: '/perpustakaan/bank-soal'
             },
             {
-                content: 'Komunitas',
+                content: 'Diskusi',
                 url: '/komunitas'
+            },
+            {
+                content: 'Copilot AI',
+                url: '/copilot'
             }
         ]
     }
