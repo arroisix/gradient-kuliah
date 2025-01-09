@@ -1,17 +1,13 @@
 export enum FlashcardSort {
     trending = 'trending',
-    latest = 'latest',
-    oldest = 'oldest',
-    aToZ = 'a-z',
-    zToA = 'z-a'
+    view = 'view',
+    like = 'like'
 }
 
 export const FLASHCARD_SORT_OPTIONS = [
     { value: FlashcardSort.trending, label: 'Trending' },
-    { value: FlashcardSort.latest, label: 'Terbaru' },
-    { value: FlashcardSort.oldest, label: 'Terlama' },
-    { value: FlashcardSort.aToZ, label: 'A-Z' },
-    { value: FlashcardSort.zToA, label: 'Z-A' }
+    { value: FlashcardSort.view, label: 'Paling Banyak Dilihat' },
+    { value: FlashcardSort.like, label: 'Paling Disukai' }
 ];
 
 export enum FlashcardTabStyle {
@@ -22,5 +18,5 @@ export enum FlashcardTabStyle {
 
 export enum FlashcardTab {
     all = 'all',
-    yours = 'yours'
+    yours = 'user'
 }

@@ -10,11 +10,11 @@ interface SortProps {
 }
 
 const Sort = ({
-                  options,
-                  defaultSelected,
-                  iconOnly = false,
-                  className
-              }: SortProps & PropsWithClassName): JSX.Element => {
+    options,
+    defaultSelected,
+    iconOnly = false,
+    className
+}: SortProps & PropsWithClassName): JSX.Element => {
     const router = useRouter();
     const { sort } = router.query as { sort: string };
 
@@ -61,7 +61,7 @@ const Sort = ({
                                 size={16}
                                 className={cn(
                                     (!sort && value == defaultSelected) ||
-                                    sort === value
+                                        sort === value
                                         ? 'text-neutral-600'
                                         : 'text-transparent'
                                 )}

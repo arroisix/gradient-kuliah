@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { IoClose } from 'react-icons/io5';
-import { IoInformationCircle } from 'react-icons/io5';
-import { IoAttach } from 'react-icons/io5';
+import { IoClose, IoInformationCircle, IoAttach } from 'react-icons/io5';
 import { Switch } from '@headlessui/react';
 import { RiRobot2Fill } from 'react-icons/ri';
 import {
@@ -10,6 +8,7 @@ import {
     AiOutlineFileWord,
     AiOutlineFileImage
 } from 'react-icons/ai';
+import { useCreateFlashcardMutation } from '../../redux/api/flashcardsApi';
 
 interface FileWithPreview extends File {
     preview?: string;
@@ -22,7 +21,13 @@ interface FormData {
     isPrivate: boolean;
 }
 
-const CreateFlashcardForm = (): JSX.Element => {
+interface CreateFlashcardFormProps {
+    useAi: boolean;
+}
+
+const CreateFlashcardForm = ({
+    useAi = false
+}: CreateFlashcardFormProps): JSX.Element => {
     const router = useRouter();
     const [formData, setFormData] = useState<FormData>({
         title: '',
@@ -31,14 +36,25 @@ const CreateFlashcardForm = (): JSX.Element => {
         isPrivate: false
     });
 
+    const [createFlashcard, { isLoading }] = useCreateFlashcardMutation();
+
     const handleClose = () => {
         router.push('/flashcard');
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Handle form submission logic here
-        console.log('Form submitted:', formData);
+        try {
+            const response = await createFlashcard({
+                title: formData.title,
+                description: formData.description,
+                is_private: formData.isPrivate
+            }).unwrap();
+            console.log('Flashcard created successfully:', response);
+            router.push('/flashcard');
+        } catch (error) {
+            console.error('Failed to create flashcard:', error);
+        }
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,6 +133,7 @@ const CreateFlashcardForm = (): JSX.Element => {
                 </div>
 
                 <form
+                    id="createFlashcardForm"
                     onSubmit={handleSubmit}
                     className="space-y-4 md:space-y-6">
                     <div className="space-y-2">
@@ -133,7 +150,7 @@ const CreateFlashcardForm = (): JSX.Element => {
                                     title: e.target.value
                                 }))
                             }
-                            className="w-full bg-[#222222] border-none rounded-lg py-3 px-4 text-white placeholder:text-neutral-500 focus:ring-2 focus:ring-[#5F2BCE]"
+                            className="w-full bg-[#222222] border-none rounded-lg py-3 px-4 text-white placeholder:text-neutral-500"
                         />
                     </div>
 
@@ -153,93 +170,99 @@ const CreateFlashcardForm = (): JSX.Element => {
                                 }
                                 maxLength={500}
                                 rows={4}
-                                className="w-full bg-[#222222] border-none rounded-lg py-3 px-4 text-white placeholder:text-neutral-500 focus:ring-2 focus:ring-[#5F2BCE] resize-none"
+                                className="w-full bg-[#222222] border-none rounded-lg py-3 px-4 text-white placeholder:text-neutral-500 resize-none"
                             />
                             <span className="absolute right-2 bottom-2 text-xs text-neutral-400">
                                 {formData.description.length}/500
                             </span>
                         </div>
-                        <div className="flex items-start gap-2 p-4 rounded-lg bg-[#252246]">
-                            <IoInformationCircle
-                                size={20}
-                                className="text-[#7D89CC] flex-shrink-0 mt-0.5"
-                            />
-                            <p className="text-sm text-neutral-400">
-                                <span className="md:hidden">
-                                    Deskripsi membantu Copilot AI menyusun
-                                    flashcard yang sesuai konteks
-                                </span>
-                                <span className="hidden md:inline">
-                                    Deskripsi grup membantu Copilot AI memberi
-                                    jawaban yang sesuai konteks
-                                </span>
-                            </p>
-                        </div>
+                        {useAi && (
+                            <div className="flex items-start gap-2 p-4 rounded-lg bg-[#252246]">
+                                <IoInformationCircle
+                                    size={20}
+                                    className="text-[#7D89CC] flex-shrink-0 mt-0.5"
+                                />
+                                <p className="text-sm text-neutral-400">
+                                    <span className="md:hidden">
+                                        Deskripsi membantu Copilot AI menyusun
+                                        flashcard yang sesuai konteks
+                                    </span>
+                                    <span className="hidden md:inline">
+                                        Deskripsi grup membantu Copilot AI
+                                        memberi jawaban yang sesuai konteks
+                                    </span>
+                                </p>
+                            </div>
+                        )}
                     </div>
-
-                    <div className="space-y-2">
-                        <label className="block text-sm text-neutral-400">
-                            Referensi (Maks. 3)
-                        </label>
+                    {useAi && (
                         <div className="space-y-2">
-                            {formData.files.length > 0 && (
-                                <div className="flex gap-2 overflow-x-auto md:grid md:grid-cols-3 pb-2 md:pb-0">
-                                    {formData.files.map((file, index) => (
-                                        <div
-                                            key={index}
-                                            className="relative bg-[#222222] rounded-lg p-3 flex-shrink-0 w-60 md:w-auto">
-                                            <button
-                                                type="button"
-                                                onClick={() =>
-                                                    removeFile(index)
-                                                }
-                                                className="absolute -right-2 -top-2 w-5 h-5 bg-neutral-800 rounded-full flex items-center justify-center text-neutral-400 hover:text-white">
-                                                <IoClose size={14} />
-                                            </button>
-                                            <div className="flex items-center gap-3">
-                                                {getFileIcon(file.type).icon}
-                                                <div className="flex flex-col overflow-hidden">
-                                                    <span className="text-sm text-white truncate max-w-[180px] md:max-w-none">
-                                                        {file.name}
-                                                    </span>
-                                                    <span className="text-xs text-neutral-500">
-                                                        {
-                                                            getFileIcon(
-                                                                file.type
-                                                            ).label
-                                                        }
-                                                    </span>
+                            <label className="block text-sm text-neutral-400">
+                                Referensi (Maks. 3)
+                            </label>
+                            <div className="space-y-2">
+                                {formData.files.length > 0 && (
+                                    <div className="flex gap-2 overflow-x-auto md:grid md:grid-cols-3 pb-2 md:pb-0">
+                                        {formData.files.map((file, index) => (
+                                            <div
+                                                key={index}
+                                                className="relative bg-[#222222] rounded-lg p-3 flex-shrink-0 w-60 md:w-auto">
+                                                <button
+                                                    type="button"
+                                                    onClick={() =>
+                                                        removeFile(index)
+                                                    }
+                                                    className="absolute -right-2 -top-2 w-5 h-5 bg-neutral-800 rounded-full flex items-center justify-center text-neutral-400 hover:text-white">
+                                                    <IoClose size={14} />
+                                                </button>
+                                                <div className="flex items-center gap-3">
+                                                    {
+                                                        getFileIcon(file.type)
+                                                            .icon
+                                                    }
+                                                    <div className="flex flex-col overflow-hidden">
+                                                        <span className="text-sm text-white truncate max-w-[180px] md:max-w-none">
+                                                            {file.name}
+                                                        </span>
+                                                        <span className="text-xs text-neutral-500">
+                                                            {
+                                                                getFileIcon(
+                                                                    file.type
+                                                                ).label
+                                                            }
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                            {formData.files.length < 3 && (
-                                <div>
-                                    <input
-                                        type="file"
-                                        multiple
-                                        onChange={handleFileChange}
-                                        className="hidden"
-                                        id="file-upload"
-                                        accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
-                                    />
-                                    <label
-                                        htmlFor="file-upload"
-                                        className="flex items-center gap-2 w-full bg-[#222222] border-none rounded-lg py-3 px-4 text-neutral-500 cursor-pointer">
-                                        <IoAttach
-                                            size={20}
-                                            className="flex-shrink-0"
+                                        ))}
+                                    </div>
+                                )}
+                                {formData.files.length < 3 && (
+                                    <div>
+                                        <input
+                                            type="file"
+                                            multiple
+                                            onChange={handleFileChange}
+                                            className="hidden"
+                                            id="file-upload"
+                                            accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
                                         />
-                                        <span>
-                                            Upload file (PDF, JPG, Docx)
-                                        </span>
-                                    </label>
-                                </div>
-                            )}
+                                        <label
+                                            htmlFor="file-upload"
+                                            className="flex items-center gap-2 w-full bg-[#222222] border-none rounded-lg py-3 px-4 text-neutral-500 cursor-pointer">
+                                            <IoAttach
+                                                size={20}
+                                                className="flex-shrink-0"
+                                            />
+                                            <span>
+                                                Upload file (PDF, JPG, Docx)
+                                            </span>
+                                        </label>
+                                    </div>
+                                )}
+                            </div>
                         </div>
-                    </div>
+                    )}
 
                     <div className="flex items-center gap-3">
                         <span className="text-sm text-white">
@@ -275,9 +298,8 @@ const CreateFlashcardForm = (): JSX.Element => {
                 <button
                     type="submit"
                     form="createFlashcardForm"
-                    className="fixed md:static bottom-4 left-4 right-4 w-[calc(100%-32px)] md:w-[140px] px-5 py-3 rounded-[14px] md:rounded-full bg-[#5F2BCE] text-white hover:opacity-90 transition-colors text-base font-semibold">
-                    <span className="md:hidden">Buat Flashcard</span>
-                    <span className="hidden md:inline">Buat</span>
+                    className="fixed md:static bottom-4 left-4 right-4 w-[calc(100%-32px)] md:w-[140px] px-5 py-3 rounded-[14px] md:rounded-full bg-[#5F2BCE] text-white hover:opacity-90 transition-colors text-base font-semibold disabled:opacity-50">
+                    {isLoading ? 'Loading...' : 'Buat'}
                 </button>
             </div>
         </div>

@@ -5,46 +5,83 @@ import { IoEyeOutline } from 'react-icons/io5';
 import { BsThreeDots } from 'react-icons/bs';
 import { BiShare } from 'react-icons/bi';
 import { useRouter } from 'next/router';
+import {
+    useDeleteFlashcardMutation,
+    useGetFlashcardDetailQuery
+} from '../redux/api/flashcardsApi';
+import { Menu, Transition } from '@headlessui/react';
+import { Fragment } from 'react';
+import DeleteModal from '../components/Detail/DeleteModal';
 
-const MOCK_DATA = {
-    id: '7f7bcfc9-50bd-4cd9-b65c-945dc5d99bf7',
-    title: 'UTS DDP 1',
-    description:
-        'Bahas materi Python, mulai dari basic rules, looping, rekursif, dan OOP lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit...',
-    is_private: false,
-    card_count: 0,
-    created_by: {
-        name: 'Astrida Nayla Fauzia',
-        photo_profile: ''
-    }
-};
-
-const FlashcardDetailContainer = () => {
-    const [isDescExpanded, setIsDescExpanded] = useState(false);
+const FlashcardDetailContainer = (): JSX.Element => {
     const router = useRouter();
-    const { description } = MOCK_DATA;
+    const { id } = router.query;
+    const [isDescExpanded, setIsDescExpanded] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [deleteFlashcard] = useDeleteFlashcardMutation();
 
-    const truncatedDesc = description.slice(0, 132);
-    const shouldTruncate = description.length > 132;
-    const userInitials = MOCK_DATA.created_by.name
+    const { data: flashcard, isLoading } = useGetFlashcardDetailQuery(
+        { flashcard_id: id as string },
+        {
+            skip: !id
+        }
+    );
+
+    const handleEdit = () => {
+        router.push(`/flashcard/${id}/edit`);
+    };
+
+    const handleDelete = () => {
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleDeleteConfirm = async () => {
+        try {
+            if (id) {
+                const response = await deleteFlashcard({
+                    flashcard_id: id as string
+                }).unwrap();
+                console.log(
+                    'Flashcard deleted successfully:',
+                    response.message
+                );
+                setIsDeleteModalOpen(false);
+                router.push('/flashcard');
+            }
+        } catch (error) {
+            console.error('Failed to delete flashcard:', error);
+        }
+    };
+
+    const handleDeleteCancel = () => {
+        setIsDeleteModalOpen(false);
+    };
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (!flashcard) {
+        return <></>;
+    }
+
+    const truncatedDesc = flashcard.description.slice(0, 132);
+    const shouldTruncate = flashcard.description.length > 132;
+    const userInitials = flashcard.created_by.name
         .split(' ')
         .map((n) => n[0])
         .slice(0, 2)
         .join('');
 
-    const handleEdit = () => {
-        router.push(`/flashcard/${MOCK_DATA.id}/edit`);
-    };
-
     return (
         <div className="px-4 py-6">
             <div className="flex items-center justify-between mb-6">
                 <h1 className="text-3xl font-bold text-white">
-                    {MOCK_DATA.title}
+                    {flashcard.title}
                 </h1>
                 <button
                     onClick={handleEdit}
-                    className="inline-flex items-center gap-2 bg-[#5F2BCE] text-white px-6 py-3 rounded-full hover:opacity-90 transition-colors font-semibold">
+                    className="inline-flex items-center gap-2 bg-[#5F2BCE] text-white px-4 py-2 rounded-full hover:opacity-90 transition-colors font-semibold">
                     <BsFillPencilFill size={20} />
                     <span>Tulis Flashcard</span>
                 </button>
@@ -57,39 +94,43 @@ const FlashcardDetailContainer = () => {
                         className="text-[#7D89CC]"
                     />
                     <span className="text-white">
-                        {MOCK_DATA.card_count} Cards
+                        {flashcard.card_count} Cards
                     </span>
                 </div>
                 <div className="text-[#333333]">|</div>
                 <div className="flex items-center gap-2">
                     <IoEyeOutline size={20} className="text-[#7D89CC]" />
-                    <span className="text-white">Publik</span>
+                    <span className="text-white">
+                        {flashcard.is_private ? 'Privat' : 'Publik'}
+                    </span>
                 </div>
             </div>
 
-            <div className="bg-[#222222] rounded-xl p-6 mb-6">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h2 className="text-base font-semibold text-white mb-4">
-                            Yah... flashcard kamu masih kosong
-                        </h2>
-                        <button
-                            onClick={handleEdit}
-                            className="inline-flex items-center gap-2 bg-[#5F2BCE] text-white px-6 py-3 rounded-full hover:opacity-90 transition-colors text-sm font-semibold">
-                            <BsFillPencilFill size={16} />
-                            <span>Tulis Flashcard</span>
-                        </button>
+            {/* Keep the empty state if there are no cards */}
+            {(!flashcard.cards || flashcard.cards.length === 0) && (
+                <div className="bg-[#222222] rounded-xl p-6 mb-6">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h2 className="text-base font-semibold text-white mb-4">
+                                Yah... flashcard kamu masih kosong
+                            </h2>
+                            <button
+                                onClick={handleEdit}
+                                className="inline-flex items-center gap-2 bg-[#5F2BCE] text-white px-4 py-2 rounded-full hover:opacity-90 transition-colors text-sm font-semibold">
+                                <BsFillPencilFill size={16} />
+                                <span>Tulis Flashcard</span>
+                            </button>
+                        </div>
+                        <div className="w-24 h-24"></div>
                     </div>
-                    {/* Icon placeholder */}
-                    <div className="w-24 h-24"></div>
                 </div>
-            </div>
+            )}
 
             <div className="mb-6">
                 <p className="text-sm text-neutral-400">Deskripsi</p>
                 <div>
                     <p className="text-neutral-200">
-                        {isDescExpanded ? description : truncatedDesc}
+                        {isDescExpanded ? flashcard.description : truncatedDesc}
                         {shouldTruncate && !isDescExpanded && '...'}
                     </p>
                     {shouldTruncate && (
@@ -110,7 +151,7 @@ const FlashcardDetailContainer = () => {
                     <div>
                         <p className="text-sm text-neutral-400">Dibuat oleh</p>
                         <p className="font-medium text-white">
-                            {MOCK_DATA.created_by.name}
+                            {flashcard.created_by.name}
                         </p>
                     </div>
                 </div>
@@ -119,9 +160,45 @@ const FlashcardDetailContainer = () => {
                         <BiShare size={20} />
                         <span>Bagikan</span>
                     </button>
-                    <button className="p-2 bg-[#333333] text-white hover:bg-opacity-80 transition-colors rounded-full">
-                        <BsThreeDots size={20} />
-                    </button>
+
+                    <Menu as="div" className="relative">
+                        <Menu.Button className="p-2 bg-[#333333] text-white hover:bg-opacity-80 transition-colors rounded-full">
+                            <BsThreeDots size={20} />
+                        </Menu.Button>
+                        <Transition
+                            as={Fragment}
+                            enter="transition duration-100 ease-out"
+                            enterFrom="transform scale-95 opacity-0"
+                            enterTo="transform scale-100 opacity-100"
+                            leave="transition duration-75 ease-out"
+                            leaveFrom="transform scale-100 opacity-100"
+                            leaveTo="transform scale-95 opacity-0">
+                            <Menu.Items className="absolute right-0 mt-1 w-40 bg-neutral-800 rounded-lg shadow-lg py-1 z-50">
+                                <Menu.Item>
+                                    {({ active }) => (
+                                        <button
+                                            onClick={handleEdit}
+                                            className={`${
+                                                active ? 'bg-neutral-700' : ''
+                                            } w-full text-left px-4 py-2 text-sm text-white`}>
+                                            Edit
+                                        </button>
+                                    )}
+                                </Menu.Item>
+                                <Menu.Item>
+                                    {({ active }) => (
+                                        <button
+                                            onClick={handleDelete}
+                                            className={`${
+                                                active ? 'bg-neutral-700' : ''
+                                            } w-full text-left px-4 py-2 text-sm text-red-500`}>
+                                            Hapus
+                                        </button>
+                                    )}
+                                </Menu.Item>
+                            </Menu.Items>
+                        </Transition>
+                    </Menu>
                 </div>
             </div>
 
@@ -130,13 +207,20 @@ const FlashcardDetailContainer = () => {
             <div>
                 <h2 className="text-xl font-bold text-white mb-4">Favorit</h2>
                 <div className="flex flex-col items-center justify-center py-12">
-                    {/* Icon placeholder */}
                     <div className="w-24 h-24 mb-4" />
                     <p className="text-neutral-400">
                         Belum ada flashcard favorit
                     </p>
                 </div>
             </div>
+
+            {isDeleteModalOpen && (
+                <DeleteModal
+                    isOpen={isDeleteModalOpen}
+                    onConfirm={handleDeleteConfirm}
+                    onCancel={handleDeleteCancel}
+                />
+            )}
         </div>
     );
 };

@@ -5,6 +5,7 @@ import FlashcardTabs from './FlashcardTabs';
 import Sort from 'commons/components/elements/Sort';
 import { FLASHCARD_SORT_OPTIONS, FlashcardSort } from '../../constants';
 import AddFlashcardDialog from './AddFlashcardDialog';
+import { useGetFlashcardsQuery } from '../../redux/api/flashcardsApi';
 
 const FlashcardSection = (): JSX.Element => {
     const router = useRouter();
@@ -12,32 +13,19 @@ const FlashcardSection = (): JSX.Element => {
     const [activeTab, setActiveTab] = useState(tab as string);
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
+    const { data: flashcardsData, isLoading } = useGetFlashcardsQuery({
+        page: 1,
+        limit: 10,
+        type: activeTab as 'all' | 'user',
+        sort_by: sort as 'trending' | 'view' | 'like'
+    });
+
     const handleTabChange = (newTab: string): void => {
         router.push({ query: { ...router.query, tab: newTab } }, undefined, {
             shallow: true
         });
         setActiveTab(newTab);
     };
-
-    // Hardcoded data for now
-    const flashcards = [
-        {
-            id: '1',
-            title: 'UTS DDP 1',
-            totalCards: 50,
-            icon: '📚',
-            type: 'Flashcard',
-            author: 'Kamu'
-        },
-        {
-            id: '2',
-            title: 'Istilah Ekonomi Makro',
-            totalCards: 50,
-            icon: '📊',
-            type: 'Flashcard',
-            author: 'Asfiolitha Litha'
-        }
-    ];
 
     return (
         <div className="w-full">
@@ -62,11 +50,21 @@ const FlashcardSection = (): JSX.Element => {
                 />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-                {flashcards.map((flashcard) => (
-                    <FlashcardCard key={flashcard.id} {...flashcard} />
-                ))}
-            </div>
+            {isLoading ? (
+                <div>Loading...</div>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+                    {flashcardsData?.data.map((flashcard) => (
+                        <FlashcardCard
+                            key={flashcard.id}
+                            id={flashcard.id}
+                            title={flashcard.title}
+                            totalCards={flashcard.card_count}
+                            author={flashcard.created_by.name}
+                        />
+                    ))}
+                </div>
+            )}
 
             <AddFlashcardDialog
                 isOpen={isAddDialogOpen}
