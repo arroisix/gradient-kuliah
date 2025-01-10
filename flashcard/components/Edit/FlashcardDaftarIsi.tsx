@@ -2,15 +2,17 @@ import React from 'react';
 
 interface DaftarIsiProps {
     onAddCard: () => void;
+    canAdd: boolean;
 }
 
-const DaftarIsi = ({ onAddCard }: DaftarIsiProps): JSX.Element => {
+const DaftarIsi = ({ onAddCard, canAdd }: DaftarIsiProps): JSX.Element => {
     return (
         <div>
             <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-bold text-white">Daftar Isi</h2>
                 <button
                     onClick={onAddCard}
+                    disabled={!canAdd}
                     className="inline-flex items-center gap-2 px-4 py-2 rounded-full font-semibold bg-[#5F2BCE] text-white hover:bg-opacity-90 transition-colors">
                     + Tambah Flashcard
                 </button>

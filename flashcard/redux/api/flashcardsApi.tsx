@@ -1,5 +1,5 @@
 import { baseApi } from '../../../redux/api/baseApi';
-import { FlashcardListResponse, FlashcardDetail } from '../../types/flashcards';
+import { FlashcardListResponse, FlashcardDetail, Card } from '../../types/flashcards';
 
 const FLASHCARD_BASE_URL = 'flashcards/';
 
@@ -133,7 +133,7 @@ export const flashcardApi = baseApi.injectEndpoints({
         }),
 
         addCard: builder.mutation<
-            FlashcardDetail,
+            Card,
             {
                 flashcard_id: string;
                 question: object;
@@ -152,7 +152,7 @@ export const flashcardApi = baseApi.injectEndpoints({
         }),
 
         editCard: builder.mutation<
-            FlashcardDetail,
+            Card,
             {
                 card_id: string;
                 question: object;

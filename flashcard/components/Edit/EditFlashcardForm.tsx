@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { IoEyeOutline } from 'react-icons/io5';
 import { IoCamera, IoImage } from 'react-icons/io5';
@@ -7,6 +7,10 @@ import { HiOutlineDocumentText } from 'react-icons/hi';
 import { BiSave } from 'react-icons/bi';
 import { ImOmega } from 'react-icons/im';
 import { BsThreeDots } from 'react-icons/bs';
+import { Menu, Transition } from '@headlessui/react';
+import { useDeleteCardMutation } from 'flashcard/redux/api/flashcardsApi';
+import DeleteModal from '../Detail/DeleteModal';
+import { Fragment } from 'react';
 
 const createTipTapContent = (
     text: string,
@@ -82,31 +86,31 @@ const EditFlashcardForm = ({
     onNavigate
 }: EditFlashcardFormProps): JSX.Element => {
     const router = useRouter();
-    const currentCard = flashcardData.cards[currentIndex] || {
-        id: 'temp',
-        question: {
-            type: 'doc',
-            content: [
-                {
-                    type: 'paragraph',
-                    attrs: { textAlign: 'justify' },
-                    content: [{ type: 'text', text: '' }]
-                }
-            ]
-        },
-        answer: {
-            type: 'doc',
-            content: [
-                {
-                    type: 'paragraph',
-                    attrs: { textAlign: 'justify' },
-                    content: [{ type: 'text', text: '' }]
-                }
-            ]
-        }
-    };
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [deleteCard] = useDeleteCardMutation();
+    const currentCard = flashcardData.cards[currentIndex];
 
     const totalCards = flashcardData.cards.length;
+
+    const handleDelete = () => {
+        setIsDeleteModalOpen(true);
+    };
+    
+    const handleDeleteConfirm = async () => {
+        try {
+            await deleteCard({
+                card_id: currentCard.id
+            }).unwrap();
+            setIsDeleteModalOpen(false);
+            router.push(`/flashcard/${router.query.id}/edit`);
+        } catch (error) {
+            console.error('Failed to delete card:', error);
+        }
+    };
+    
+    const handleDeleteCancel = () => {
+        setIsDeleteModalOpen(false);
+    };
 
     const handleImageUpload = async (
         cardId: string,
@@ -146,6 +150,10 @@ const EditFlashcardForm = ({
 
         onUpdateCard(cardId, field, newContent);
     };
+
+    if (!currentCard) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div className="min-h-screen py-6">
@@ -194,13 +202,33 @@ const EditFlashcardForm = ({
                             <BiSave size={20} />
                             <span>Simpan</span>
                         </button>
-                        <button
-                            onClick={() =>
-                                router.push(`/flashcard/${router.query.id}`)
-                            }
-                            className="p-2 rounded-full bg-[#333333] text-white hover:bg-opacity-80 transition-colors">
-                            <BsThreeDots size={20} />
-                        </button>
+                        <Menu as="div" className="relative">
+                            <Menu.Button className="p-2 rounded-full bg-[#333333] text-white hover:bg-opacity-80 transition-colors">
+                                <BsThreeDots size={20} />
+                            </Menu.Button>
+                            <Transition
+                                as={Fragment}
+                                enter="transition duration-100 ease-out"
+                                enterFrom="transform scale-95 opacity-0"
+                                enterTo="transform scale-100 opacity-100"
+                                leave="transition duration-75 ease-out"
+                                leaveFrom="transform scale-100 opacity-100"
+                                leaveTo="transform scale-95 opacity-0">
+                                <Menu.Items className="absolute right-0 mt-1 w-40 bg-neutral-800 rounded-lg shadow-lg py-1 z-50">
+                                    <Menu.Item>
+                                        {({ active }) => (
+                                            <button
+                                                onClick={handleDelete}
+                                                className={`${
+                                                    active ? 'bg-neutral-700' : ''
+                                                } w-full text-left px-4 py-2 text-sm text-red-500`}>
+                                                Hapus Card Ini
+                                            </button>
+                                        )}
+                                    </Menu.Item>
+                                </Menu.Items>
+                            </Transition>
+                        </Menu>
                     </div>
                 </div>
 
@@ -301,7 +329,7 @@ const EditFlashcardForm = ({
                             ←
                         </button>
                         <span className="text-neutral-400 mx-12">
-                            {currentIndex + 1}/{totalCards}
+                        {totalCards > 0 ? `${currentIndex + 1}/${totalCards}` : '0/0'}
                         </span>
                         <button
                             onClick={() => onNavigate('next')}
@@ -318,8 +346,16 @@ const EditFlashcardForm = ({
 
                 <div className="h-[0.5px] bg-[#333333] mb-6" />
 
-                <DaftarIsi onAddCard={onAddCard} />
+                <DaftarIsi onAddCard={onAddCard} canAdd={flashcardData.cards.some(card => card.id !== 'temp')} />
             </div>
+
+            {isDeleteModalOpen && (
+                <DeleteModal
+                    isOpen={isDeleteModalOpen}
+                    onConfirm={handleDeleteConfirm}
+                    onCancel={handleDeleteCancel}
+                />
+            )}
         </div>
     );
 };

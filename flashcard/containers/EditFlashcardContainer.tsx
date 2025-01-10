@@ -31,73 +31,27 @@ const EditFlashcardContainer = (): JSX.Element => {
 
     React.useEffect(() => {
         if (flashcardDetail) {
-            if (flashcardDetail.cards && flashcardDetail.cards.length > 0) {
-                setLocalCards(flashcardDetail.cards);
-            } else {
-                setLocalCards([
-                    {
-                        id: 'temp',
-                        question: {
-                            type: 'doc',
-                            content: [
-                                {
-                                    type: 'paragraph',
-                                    attrs: { textAlign: 'justify' },
-                                    content: [{ type: 'text', text: '' }]
-                                }
-                            ]
-                        },
-                        answer: {
-                            type: 'doc',
-                            content: [
-                                {
-                                    type: 'paragraph',
-                                    attrs: { textAlign: 'justify' },
-                                    content: [{ type: 'text', text: '' }]
-                                }
-                            ]
-                        }
-                    }
-                ]);
-            }
+            setLocalCards(flashcardDetail.cards || []);
         }
     }, [flashcardDetail]);
-
+    
     const handleSave = useCallback(async () => {
         if (!hasChanges || !flashcardDetail) return;
-
+    
         const currentCard = localCards[currentIndex];
-
+    
         try {
-            if (currentCard.id === 'temp') {
-                // new card
-                await addCard({
-                    flashcard_id: flashcardId as string,
-                    question: currentCard.question,
-                    answer: currentCard.answer
-                }).unwrap();
-            } else {
-                // existing card
-                await editCard({
-                    card_id: currentCard.id,
-                    question: currentCard.question,
-                    answer: currentCard.answer
-                }).unwrap();
-            }
-
+            await editCard({
+                card_id: currentCard.id,
+                question: currentCard.question,
+                answer: currentCard.answer
+            }).unwrap();
+    
             setHasChanges(false);
         } catch (error) {
             console.error('Failed to save card:', error);
         }
-    }, [
-        addCard,
-        editCard,
-        hasChanges,
-        currentIndex,
-        localCards,
-        flashcardId,
-        flashcardDetail
-    ]);
+    }, [editCard, hasChanges, currentIndex, localCards, flashcardDetail]);
 
     const handleUpdateCard = useCallback(
         (cardId: string, field: 'question' | 'answer', value: object) => {
@@ -111,35 +65,42 @@ const EditFlashcardContainer = (): JSX.Element => {
         []
     );
 
-    const handleAddCard = useCallback(() => {
-        const newCard = {
-            id: 'temp',
-            question: {
-                type: 'doc',
-                content: [
-                    {
+    const handleAddCard = useCallback(async () => {
+        try {
+            const newCard = await addCard({
+                flashcard_id: flashcardId as string,
+                question: {
+                    type: 'doc',
+                    content: [{
                         type: 'paragraph',
                         attrs: { textAlign: 'justify' },
                         content: [{ type: 'text', text: '' }]
-                    }
-                ]
-            },
-            answer: {
-                type: 'doc',
-                content: [
-                    {
+                    }]
+                },
+                answer: {
+                    type: 'doc',
+                    content: [{
                         type: 'paragraph',
                         attrs: { textAlign: 'justify' },
                         content: [{ type: 'text', text: '' }]
-                    }
-                ]
-            }
-        };
-
-        setLocalCards((prev) => [...prev, newCard]);
-        setCurrentIndex((prev) => prev + 1);
-        setHasChanges(true);
-    }, []);
+                    }]
+                }
+            }).unwrap();
+            
+            const cardToAdd = {
+                id: newCard.id,
+                question: newCard.question,
+                answer: newCard.answer
+            };
+            
+            setLocalCards(prev => [...prev, cardToAdd]);
+            setCurrentIndex(localCards.length); 
+            setHasChanges(false);
+    
+        } catch (error) {
+            console.error('Failed to add new card:', error);
+        }
+    }, [addCard, flashcardId, localCards.length]);
 
     const handleNavigateCard = useCallback(
         (direction: 'prev' | 'next') => {
@@ -149,19 +110,19 @@ const EditFlashcardContainer = (): JSX.Element => {
                     : Math.max(prev - 1, 0)
             );
         },
-        [localCards.length]
+        [localCards]
     );
 
     if (isLoading) return <div>Loading...</div>;
     if (!flashcardDetail) <></>;
 
-    const formattedData = {
+    const formattedData = React.useMemo(() => ({
         title: flashcardDetail?.title ?? '',
         lastSaved: 'Just now',
         totalCards: localCards.length,
-        isPublic: !flashcardDetail?.is_private ?? true,
+        isPublic: !flashcardDetail?.is_private,
         cards: localCards
-    };
+    }), [flashcardDetail?.title, flashcardDetail?.is_private, localCards]);
 
     return (
         <EditFlashcardForm

@@ -6,6 +6,7 @@ import { BsThreeDots } from 'react-icons/bs';
 import { BiShare } from 'react-icons/bi';
 import { useRouter } from 'next/router';
 import {
+    useAddCardMutation,
     useDeleteFlashcardMutation,
     useGetFlashcardDetailQuery
 } from '../redux/api/flashcardsApi';
@@ -19,16 +20,54 @@ const FlashcardDetailContainer = (): JSX.Element => {
     const [isDescExpanded, setIsDescExpanded] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deleteFlashcard] = useDeleteFlashcardMutation();
+    const [addCard] = useAddCardMutation();
 
-    const { data: flashcard, isLoading } = useGetFlashcardDetailQuery(
+    const { data: flashcard, isLoading, refetch } = useGetFlashcardDetailQuery(
         { flashcard_id: id as string },
         {
             skip: !id
         }
     );
 
-    const handleEdit = () => {
-        router.push(`/flashcard/${id}/edit`);
+    const handleEdit = async () => {
+        if (!flashcard) return;
+    
+        if (!flashcard.cards || flashcard.cards.length === 0) {
+            try {
+                const newCard = await addCard({
+                    flashcard_id: id as string,
+                    question: {
+                        type: 'doc',
+                        content: [
+                            {
+                                type: 'paragraph',
+                                attrs: { textAlign: 'justify' },
+                                content: [{ type: 'text', text: '' }]
+                            }
+                        ]
+                    },
+                    answer: {
+                        type: 'doc',
+                        content: [
+                            {
+                                type: 'paragraph',
+                                attrs: { textAlign: 'justify' },
+                                content: [{ type: 'text', text: '' }]
+                            }
+                        ]
+                    }
+                }).unwrap();
+    
+                await refetch();
+    
+                router.push(`/flashcard/${id}/edit`);
+            } catch (error) {
+                console.error('Failed to create initial card:', error);
+                return;
+            }
+        } else {
+            router.push(`/flashcard/${id}/edit`);
+        }
     };
 
     const handleDelete = () => {
@@ -106,7 +145,6 @@ const FlashcardDetailContainer = (): JSX.Element => {
                 </div>
             </div>
 
-            {/* Keep the empty state if there are no cards */}
             {(!flashcard.cards || flashcard.cards.length === 0) && (
                 <div className="bg-[#222222] rounded-xl p-6 mb-6">
                     <div className="flex items-center justify-between">

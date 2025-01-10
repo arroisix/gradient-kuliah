@@ -16,7 +16,7 @@ const CreateFlashcardPage = (): JSX.Element => {
             hideNavbar={isAuthenticated && isMobileBreakpoints}
             noTopPadding>
             <div className="container mx-auto max-w-3xl">
-                <CreateFlashcardForm />
+                <CreateFlashcardForm useAi={false} />
             </div>
         </LearnLayout>
     );
