@@ -1,4 +1,3 @@
-// types/flashcards.ts
 export interface User {
     name: string;
     photo_profile: string;

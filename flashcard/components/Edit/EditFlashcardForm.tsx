@@ -95,7 +95,7 @@ const EditFlashcardForm = ({
     const handleDelete = () => {
         setIsDeleteModalOpen(true);
     };
-    
+
     const handleDeleteConfirm = async () => {
         try {
             await deleteCard({
@@ -107,7 +107,7 @@ const EditFlashcardForm = ({
             console.error('Failed to delete card:', error);
         }
     };
-    
+
     const handleDeleteCancel = () => {
         setIsDeleteModalOpen(false);
     };
@@ -220,7 +220,9 @@ const EditFlashcardForm = ({
                                             <button
                                                 onClick={handleDelete}
                                                 className={`${
-                                                    active ? 'bg-neutral-700' : ''
+                                                    active
+                                                        ? 'bg-neutral-700'
+                                                        : ''
                                                 } w-full text-left px-4 py-2 text-sm text-red-500`}>
                                                 Hapus Card Ini
                                             </button>
@@ -329,7 +331,9 @@ const EditFlashcardForm = ({
                             ←
                         </button>
                         <span className="text-neutral-400 mx-12">
-                        {totalCards > 0 ? `${currentIndex + 1}/${totalCards}` : '0/0'}
+                            {totalCards > 0
+                                ? `${currentIndex + 1}/${totalCards}`
+                                : '0/0'}
                         </span>
                         <button
                             onClick={() => onNavigate('next')}
@@ -346,7 +350,12 @@ const EditFlashcardForm = ({
 
                 <div className="h-[0.5px] bg-[#333333] mb-6" />
 
-                <DaftarIsi onAddCard={onAddCard} canAdd={flashcardData.cards.some(card => card.id !== 'temp')} />
+                <DaftarIsi
+                    onAddCard={onAddCard}
+                    canAdd={flashcardData.cards.some(
+                        (card) => card.id !== 'temp'
+                    )}
+                />
             </div>
 
             {isDeleteModalOpen && (

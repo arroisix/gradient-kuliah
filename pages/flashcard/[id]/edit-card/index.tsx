@@ -1,13 +1,13 @@
 import React from 'react';
 import { GetServerSideProps } from 'next';
 import LearnLayout from 'commons/learnLayout';
-import EditFlashcardContainer from 'flashcard/containers/EditFlashcardContainer';
+import EditCardContainer from 'flashcard/containers/EditCardContainer';
 
 const EditFlashcardPage = (): JSX.Element => {
     return (
-        <LearnLayout noPadding noTopPadding>
+        <LearnLayout>
             <div className="container mx-auto max-w-3xl">
-                <EditFlashcardContainer />
+                <EditCardContainer />
             </div>
         </LearnLayout>
     );

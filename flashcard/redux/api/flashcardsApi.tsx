@@ -1,5 +1,9 @@
 import { baseApi } from '../../../redux/api/baseApi';
-import { FlashcardListResponse, FlashcardDetail, Card } from '../../types/flashcards';
+import {
+    FlashcardListResponse,
+    FlashcardDetail,
+    Card
+} from '../../types/flashcards';
 
 const FLASHCARD_BASE_URL = 'flashcards/';
 

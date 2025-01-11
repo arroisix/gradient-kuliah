@@ -22,7 +22,11 @@ const FlashcardDetailContainer = (): JSX.Element => {
     const [deleteFlashcard] = useDeleteFlashcardMutation();
     const [addCard] = useAddCardMutation();
 
-    const { data: flashcard, isLoading, refetch } = useGetFlashcardDetailQuery(
+    const {
+        data: flashcard,
+        isLoading,
+        refetch
+    } = useGetFlashcardDetailQuery(
         { flashcard_id: id as string },
         {
             skip: !id
@@ -31,7 +35,7 @@ const FlashcardDetailContainer = (): JSX.Element => {
 
     const handleEdit = async () => {
         if (!flashcard) return;
-    
+
         if (!flashcard.cards || flashcard.cards.length === 0) {
             try {
                 const newCard = await addCard({
@@ -57,17 +61,21 @@ const FlashcardDetailContainer = (): JSX.Element => {
                         ]
                     }
                 }).unwrap();
-    
+
                 await refetch();
-    
-                router.push(`/flashcard/${id}/edit`);
+
+                router.push(`/flashcard/${id}/edit-card`);
             } catch (error) {
                 console.error('Failed to create initial card:', error);
                 return;
             }
         } else {
-            router.push(`/flashcard/${id}/edit`);
+            router.push(`/flashcard/${id}/edit-card`);
         }
+    };
+
+    const handleEditFlashcard = () => {
+        router.push(`/flashcard/${id}/edit`);
     };
 
     const handleDelete = () => {
@@ -215,7 +223,7 @@ const FlashcardDetailContainer = (): JSX.Element => {
                                 <Menu.Item>
                                     {({ active }) => (
                                         <button
-                                            onClick={handleEdit}
+                                            onClick={handleEditFlashcard}
                                             className={`${
                                                 active ? 'bg-neutral-700' : ''
                                             } w-full text-left px-4 py-2 text-sm text-white`}>

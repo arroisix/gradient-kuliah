@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { IoClose, IoInformationCircle, IoAttach } from 'react-icons/io5';
 import { Switch } from '@headlessui/react';
@@ -8,7 +8,10 @@ import {
     AiOutlineFileWord,
     AiOutlineFileImage
 } from 'react-icons/ai';
-import { useCreateFlashcardMutation } from '../../redux/api/flashcardsApi';
+import {
+    useCreateFlashcardMutation,
+    useEditFlashcardMutation
+} from '../../redux/api/flashcardsApi';
 
 interface FileWithPreview extends File {
     preview?: string;
@@ -23,10 +26,19 @@ interface FormData {
 
 interface CreateFlashcardFormProps {
     useAi: boolean;
+    mode?: 'create' | 'edit';
+    initialData?: {
+        id: string;
+        title: string;
+        description: string;
+        is_private: boolean;
+    };
 }
 
 const CreateFlashcardForm = ({
-    useAi = false
+    useAi = false,
+    mode = 'create',
+    initialData
 }: CreateFlashcardFormProps): JSX.Element => {
     const router = useRouter();
     const [formData, setFormData] = useState<FormData>({
@@ -36,24 +48,55 @@ const CreateFlashcardForm = ({
         isPrivate: false
     });
 
-    const [createFlashcard, { isLoading }] = useCreateFlashcardMutation();
+    const [createFlashcard, { isLoading: isCreateLoading }] =
+        useCreateFlashcardMutation();
+    const [editFlashcard, { isLoading: isEditLoading }] =
+        useEditFlashcardMutation();
+
+    const isLoading = isCreateLoading || isEditLoading;
+
+    useEffect(() => {
+        if (mode === 'edit' && initialData) {
+            setFormData({
+                title: initialData.title,
+                description: initialData.description,
+                files: [],
+                isPrivate: initialData.is_private
+            });
+        }
+    }, [mode, initialData]);
 
     const handleClose = () => {
-        router.push('/flashcard');
+        if (mode === 'edit' && initialData) {
+            router.push(`/flashcard/${initialData.id}`);
+        } else {
+            router.push('/flashcard');
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        console.log('mode', mode);
+        console.log('initial data,', initialData);
         try {
-            const response = await createFlashcard({
-                title: formData.title,
-                description: formData.description,
-                is_private: formData.isPrivate
-            }).unwrap();
-            console.log('Flashcard created successfully:', response);
-            router.push('/flashcard');
+            if (mode === 'edit' && initialData) {
+                await editFlashcard({
+                    flashcard_id: initialData.id,
+                    title: formData.title,
+                    description: formData.description,
+                    is_private: formData.isPrivate
+                }).unwrap();
+                router.push(`/flashcard/${initialData.id}`);
+            } else {
+                await createFlashcard({
+                    title: formData.title,
+                    description: formData.description,
+                    is_private: formData.isPrivate
+                }).unwrap();
+                router.push('/flashcard');
+            }
         } catch (error) {
-            console.error('Failed to create flashcard:', error);
+            console.error('Failed to handle flashcard:', error);
         }
     };
 
@@ -117,23 +160,27 @@ const CreateFlashcardForm = ({
                         </button>
                     </div>
                     <div className="space-y-2">
-                        <div className="inline-flex items-center gap-2 bg-[#2F2B43] w-fit px-3 py-1 rounded-full md:hidden">
-                            <RiRobot2Fill
-                                size={20}
-                                className="text-[#7D89CC]"
-                            />
-                            <span className="text-white font-medium">
-                                Copilot AI
-                            </span>
-                        </div>
+                        {useAi && (
+                            <div className="inline-flex items-center gap-2 bg-[#2F2B43] w-fit px-3 py-1 rounded-full md:hidden">
+                                <RiRobot2Fill
+                                    size={20}
+                                    className="text-[#7D89CC]"
+                                />
+                                <span className="text-white font-medium">
+                                    Copilot AI
+                                </span>
+                            </div>
+                        )}
                         <h1 className="text-2xl font-bold text-white">
-                            Buat Flashcard
+                            {mode === 'edit'
+                                ? 'Edit Flashcard'
+                                : 'Buat Flashcard'}
                         </h1>
                     </div>
                 </div>
 
                 <form
-                    id="createFlashcardForm"
+                    id="flashcardForm"
                     onSubmit={handleSubmit}
                     className="space-y-4 md:space-y-6">
                     <div className="space-y-2">
@@ -297,9 +344,13 @@ const CreateFlashcardForm = ({
                 </button>
                 <button
                     type="submit"
-                    form="createFlashcardForm"
+                    form="flashcardForm"
                     className="fixed md:static bottom-4 left-4 right-4 w-[calc(100%-32px)] md:w-[140px] px-5 py-3 rounded-[14px] md:rounded-full bg-[#5F2BCE] text-white hover:opacity-90 transition-colors text-base font-semibold disabled:opacity-50">
-                    {isLoading ? 'Loading...' : 'Buat'}
+                    {isLoading
+                        ? 'Loading...'
+                        : mode === 'edit'
+                        ? 'Simpan'
+                        : 'Buat'}
                 </button>
             </div>
         </div>
