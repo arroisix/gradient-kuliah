@@ -19,7 +19,7 @@ const createTipTapContent = (
     const content: Array<any> = [
         {
             type: 'paragraph',
-            attrs: { textAlign: 'justify' },
+            attrs: { textAlign: 'center' },
             content: [{ type: 'text', text }]
         }
     ];
@@ -102,7 +102,7 @@ const EditFlashcardForm = ({
                 card_id: currentCard.id
             }).unwrap();
             setIsDeleteModalOpen(false);
-            router.push(`/flashcard/${router.query.id}/edit`);
+            router.push(`/flashcard/${router.query.id}`);
         } catch (error) {
             console.error('Failed to delete card:', error);
         }

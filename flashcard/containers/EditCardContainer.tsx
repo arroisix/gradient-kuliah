@@ -74,7 +74,7 @@ const EditCardContainer = (): JSX.Element => {
                     content: [
                         {
                             type: 'paragraph',
-                            attrs: { textAlign: 'justify' },
+                            attrs: { textAlign: 'center' },
                             content: [{ type: 'text', text: '' }]
                         }
                     ]
@@ -84,7 +84,7 @@ const EditCardContainer = (): JSX.Element => {
                     content: [
                         {
                             type: 'paragraph',
-                            attrs: { textAlign: 'justify' },
+                            attrs: { textAlign: 'center' },
                             content: [{ type: 'text', text: '' }]
                         }
                     ]
