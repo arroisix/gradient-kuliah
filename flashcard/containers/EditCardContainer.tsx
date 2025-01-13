@@ -7,6 +7,7 @@ import {
     useGetFlashcardDetailQuery
 } from '../redux/api/flashcardsApi';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
+import { Card } from '../types/flashcards';
 
 const EditCardContainer = (): JSX.Element => {
     const router = useRouter();
@@ -19,13 +20,7 @@ const EditCardContainer = (): JSX.Element => {
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [hasChanges, setHasChanges] = useState(false);
-    const [localCards, setLocalCards] = useState<
-        Array<{
-            id: string;
-            question: Record<string, any>;
-            answer: Record<string, any>;
-        }>
-    >([]);
+    const [localCards, setLocalCards] = useState<Card[]>([]);
 
     const [addCard] = useAddCardMutation();
     const [editCard] = useEditCardMutation();
@@ -55,7 +50,7 @@ const EditCardContainer = (): JSX.Element => {
     }, [editCard, hasChanges, currentIndex, localCards, flashcardDetail]);
 
     const handleUpdateCard = useCallback(
-        (cardId: string, field: 'question' | 'answer', value: object) => {
+        (cardId: string, field: 'question' | 'answer', value: string) => {
             setLocalCards((prev) =>
                 prev.map((card) =>
                     card.id === cardId ? { ...card, [field]: value } : card
@@ -70,32 +65,15 @@ const EditCardContainer = (): JSX.Element => {
         try {
             const newCard = await addCard({
                 flashcard_id: flashcardId as string,
-                question: {
-                    type: 'doc',
-                    content: [
-                        {
-                            type: 'paragraph',
-                            attrs: { textAlign: 'center' },
-                            content: [{ type: 'text', text: '' }]
-                        }
-                    ]
-                },
-                answer: {
-                    type: 'doc',
-                    content: [
-                        {
-                            type: 'paragraph',
-                            attrs: { textAlign: 'center' },
-                            content: [{ type: 'text', text: '' }]
-                        }
-                    ]
-                }
+                question: 'Istilah atau pertanyaan',
+                answer: 'Definisi atau jawaban'
             }).unwrap();
 
-            const cardToAdd = {
+            const cardToAdd: Card = {
                 id: newCard.id,
                 question: newCard.question,
-                answer: newCard.answer
+                answer: newCard.answer,
+                updated_at: newCard.updated_at
             };
 
             setLocalCards((prev) => [...prev, cardToAdd]);
@@ -118,7 +96,7 @@ const EditCardContainer = (): JSX.Element => {
     );
 
     if (isLoading) return <div>Loading...</div>;
-    if (!flashcardDetail) <></>;
+    if (!flashcardDetail) return <></>;
 
     const formattedData = React.useMemo(
         () => ({

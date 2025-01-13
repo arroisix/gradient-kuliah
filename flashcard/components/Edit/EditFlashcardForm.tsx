@@ -1,56 +1,14 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { IoEyeOutline } from 'react-icons/io5';
-import { IoCamera, IoImage } from 'react-icons/io5';
 import DaftarIsi from './FlashcardDaftarIsi';
 import { HiOutlineDocumentText } from 'react-icons/hi';
 import { BiSave } from 'react-icons/bi';
-import { ImOmega } from 'react-icons/im';
 import { BsThreeDots } from 'react-icons/bs';
 import { Menu, Transition } from '@headlessui/react';
 import { useDeleteCardMutation } from 'flashcard/redux/api/flashcardsApi';
 import DeleteModal from '../Detail/DeleteModal';
 import { Fragment } from 'react';
-
-const createTipTapContent = (
-    text: string,
-    image?: { src: string; width?: number; height?: string }
-) => {
-    const content: Array<any> = [
-        {
-            type: 'paragraph',
-            attrs: { textAlign: 'center' },
-            content: [{ type: 'text', text }]
-        }
-    ];
-
-    if (image) {
-        content.push({
-            type: 'image',
-            attrs: {
-                src: image.src,
-                alt: null,
-                title: null,
-                width: image.width || 640,
-                height: image.height || 'auto',
-                'data-align': 'center'
-            }
-        });
-    }
-
-    return {
-        type: 'doc',
-        content
-    };
-};
-
-const extractTextFromTipTap = (content: Record<string, any>): string => {
-    try {
-        return content?.content?.[0]?.content?.[0]?.text || '';
-    } catch {
-        return '';
-    }
-};
 
 interface EditFlashcardFormProps {
     flashcardData: {
@@ -60,8 +18,8 @@ interface EditFlashcardFormProps {
         isPublic: boolean;
         cards: Array<{
             id: string;
-            question: Record<string, any>;
-            answer: Record<string, any>;
+            question: string;
+            answer: string;
         }>;
     };
     currentIndex: number;
@@ -69,7 +27,7 @@ interface EditFlashcardFormProps {
     onUpdateCard: (
         cardId: string,
         field: 'question' | 'answer',
-        value: Record<string, any>
+        value: string
     ) => void;
     onAddCard: () => void;
     onSave: () => void;
@@ -112,43 +70,12 @@ const EditFlashcardForm = ({
         setIsDeleteModalOpen(false);
     };
 
-    const handleImageUpload = async (
-        cardId: string,
-        field: 'question' | 'answer'
-    ) => {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = 'image/*';
-
-        input.onchange = async (e) => {
-            const file = (e.target as HTMLInputElement).files?.[0];
-            if (file) {
-                const imageUrl = 'https://example.com/image.jpg'; // Replace with actual upload
-
-                const currentText = extractTextFromTipTap(currentCard[field]);
-                const newContent = createTipTapContent(currentText, {
-                    src: imageUrl
-                });
-
-                onUpdateCard(cardId, field, newContent);
-            }
-        };
-
-        input.click();
-    };
-
     const handleTextChange = (
         cardId: string,
         field: 'question' | 'answer',
         value: string
     ) => {
-        const existingImage = currentCard[field]?.content?.find(
-            (item: any) => item.type === 'image'
-        );
-
-        const newContent = createTipTapContent(value, existingImage?.attrs);
-
-        onUpdateCard(cardId, field, newContent);
+        onUpdateCard(cardId, field, value);
     };
 
     if (!currentCard) {
@@ -238,9 +165,7 @@ const EditFlashcardForm = ({
                     <div className="space-y-6">
                         <div className="relative">
                             <textarea
-                                value={extractTextFromTipTap(
-                                    currentCard?.question
-                                )}
+                                value={currentCard.question}
                                 onChange={(e) =>
                                     handleTextChange(
                                         currentCard.id,
@@ -251,36 +176,11 @@ const EditFlashcardForm = ({
                                 placeholder="Istilah atau pertanyaan"
                                 className="w-full min-h-[120px] bg-[#222222] rounded-lg p-3 text-white resize-none border-none outline-none placeholder:text-neutral-500"
                             />
-                            <div className="absolute bottom-3 left-3 flex gap-2">
-                                <button
-                                    onClick={() =>
-                                        handleImageUpload(
-                                            currentCard.id,
-                                            'question'
-                                        )
-                                    }
-                                    className="text-neutral-400 hover:text-white p-2 rounded-lg transition-colors"
-                                    aria-label="Upload image">
-                                    <IoCamera size={20} />
-                                </button>
-                                <button
-                                    className="text-neutral-400 hover:text-white p-2 rounded-lg transition-colors"
-                                    aria-label="Insert image">
-                                    <IoImage size={20} />
-                                </button>
-                                <button
-                                    className="text-neutral-400 hover:text-white p-2 rounded-lg transition-colors"
-                                    aria-label="Math formula">
-                                    <ImOmega size={16} />
-                                </button>
-                            </div>
                         </div>
 
                         <div className="relative">
                             <textarea
-                                value={extractTextFromTipTap(
-                                    currentCard?.answer
-                                )}
+                                value={currentCard.answer}
                                 onChange={(e) =>
                                     handleTextChange(
                                         currentCard.id,
@@ -291,29 +191,6 @@ const EditFlashcardForm = ({
                                 placeholder="Definisi atau jawaban"
                                 className="w-full min-h-[120px] bg-[#222222] rounded-lg p-3 text-white resize-none border-none outline-none placeholder:text-neutral-500"
                             />
-                            <div className="absolute bottom-3 left-3 flex gap-2">
-                                <button
-                                    onClick={() =>
-                                        handleImageUpload(
-                                            currentCard.id,
-                                            'answer'
-                                        )
-                                    }
-                                    className="text-neutral-400 hover:text-white p-2 rounded-lg transition-colors"
-                                    aria-label="Upload image">
-                                    <IoCamera size={20} />
-                                </button>
-                                <button
-                                    className="text-neutral-400 hover:text-white p-2 rounded-lg transition-colors"
-                                    aria-label="Insert image">
-                                    <IoImage size={20} />
-                                </button>
-                                <button
-                                    className="text-neutral-400 hover:text-white p-2 rounded-lg transition-colors"
-                                    aria-label="Math formula">
-                                    <ImOmega size={16} />
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>

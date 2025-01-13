@@ -17,35 +17,19 @@ export interface FlashcardSource {
     file_name: string;
 }
 
-export interface FlashcardContent {
-    type: string;
-    content: Array<{
-        type: string;
-        attrs?: {
-            textAlign?: string;
-            alt?: string | null;
-            src?: string;
-            title?: string | null;
-            width?: number;
-            height?: string;
-            'data-align'?: string;
-        };
-        content?: Array<{
-            text?: string;
-            type?: string;
-        }>;
-    }>;
-}
-
 export interface Card {
     id: string;
-    question: FlashcardContent;
-    answer: FlashcardContent;
+    question: string;
+    answer: string;
     updated_at: string;
     is_favorite?: boolean;
 }
 
 export interface FlashcardDetail extends Flashcard {
+    created_by_me: boolean;
+    ai_generated: boolean;
+    is_completed: boolean;
+    sources: FlashcardSource[];
     cards: Card[];
 }
 
@@ -73,8 +57,8 @@ export interface CreateFlashcardCopilotRequest extends CreateFlashcardRequest {
 }
 
 export interface CardRequest {
-    question: FlashcardContent;
-    answer: FlashcardContent;
+    question: string;
+    answer: string;
 }
 
 export interface LastSeenResponse {

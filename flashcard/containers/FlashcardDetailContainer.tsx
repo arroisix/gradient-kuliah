@@ -39,26 +39,8 @@ const FlashcardDetailContainer = (): JSX.Element => {
             try {
                 await addCard({
                     flashcard_id: id as string,
-                    question: {
-                        type: 'doc',
-                        content: [
-                            {
-                                type: 'paragraph',
-                                attrs: { textAlign: 'center' },
-                                content: [{ type: 'text', text: '' }]
-                            }
-                        ]
-                    },
-                    answer: {
-                        type: 'doc',
-                        content: [
-                            {
-                                type: 'paragraph',
-                                attrs: { textAlign: 'center' },
-                                content: [{ type: 'text', text: '' }]
-                            }
-                        ]
-                    }
+                    question: '',
+                    answer: ''
                 }).unwrap();
 
                 await refetch();
@@ -117,6 +99,7 @@ const FlashcardDetailContainer = (): JSX.Element => {
         return <></>;
     }
 
+    const favoriteCards = flashcard.cards.filter((card) => card.is_favorite);
     const hasCards = flashcard.cards && flashcard.cards.length > 0;
     const userInitials = flashcard.created_by.name
         .split(' ')
@@ -170,12 +153,36 @@ const FlashcardDetailContainer = (): JSX.Element => {
                     <h2 className="text-xl font-bold text-white mb-4">
                         Favorit
                     </h2>
-                    <div className="flex flex-col items-center justify-center py-12">
-                        <div className="w-24 h-24 mb-4" />
-                        <p className="text-neutral-400">
-                            Belum ada flashcard favorit
-                        </p>
-                    </div>
+                    {favoriteCards.length > 0 ? (
+                        <div className="space-y-2">
+                            {favoriteCards.map((card) => (
+                                <div
+                                    key={card.id}
+                                    className="w-full p-4 text-left rounded-lg bg-[#222222]">
+                                    <div className="flex items-start justify-between">
+                                        <div className="flex-1 space-y-1">
+                                            <p className="text-white whitespace-pre-wrap">
+                                                {card.question}
+                                            </p>
+                                            <p className="text-sm text-[#666666] whitespace-pre-wrap">
+                                                {card.answer}
+                                            </p>
+                                        </div>
+                                        <span className="text-2xl flex-shrink-0 ml-2 text-[#F2C04C]">
+                                            ★
+                                        </span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="flex flex-col items-center justify-center py-12">
+                            <div className="w-24 h-24 mb-4" />
+                            <p className="text-neutral-400">
+                                Belum ada flashcard favorit
+                            </p>
+                        </div>
+                    )}
                 </div>
 
                 {isDeleteModalOpen && (

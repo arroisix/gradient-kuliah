@@ -88,7 +88,14 @@ export const flashcardApi = baseApi.injectEndpoints({
                     'Content-Type': 'application/json',
                     Accept: 'application/json'
                 }
-            })
+            }),
+            providesTags: (result, error, { flashcard_id }) => [
+                { type: 'FLASHCARD' as const, id: flashcard_id },
+                ...(result?.cards?.map((card) => ({
+                    type: 'FLASHCARD_CARD' as const,
+                    id: card.id
+                })) || [])
+            ]
         }),
 
         editFlashcard: builder.mutation<
@@ -140,8 +147,8 @@ export const flashcardApi = baseApi.injectEndpoints({
             Card,
             {
                 flashcard_id: string;
-                question: object;
-                answer: object;
+                question: string;
+                answer: string;
             }
         >({
             query: ({ flashcard_id, ...body }) => ({
@@ -159,8 +166,8 @@ export const flashcardApi = baseApi.injectEndpoints({
             Card,
             {
                 card_id: string;
-                question: object;
-                answer: object;
+                question: string;
+                answer: string;
             }
         >({
             query: ({ card_id, ...body }) => ({
@@ -183,6 +190,19 @@ export const flashcardApi = baseApi.injectEndpoints({
                     Accept: 'application/json'
                 }
             })
+        }),
+        toggleFavoriteCard: builder.mutation<Card, { card_id: string }>({
+            query: ({ card_id }) => ({
+                url: `${FLASHCARD_BASE_URL}cards/${card_id}/toggle-favorite/`,
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json'
+                }
+            }),
+            invalidatesTags: (result, error, { card_id }) => [
+                { type: 'FLASHCARD_CARD' as const, id: card_id }
+            ]
         })
     })
 });
@@ -198,5 +218,6 @@ export const {
     useGetLastSeenFlashcardsQuery,
     useAddCardMutation,
     useEditCardMutation,
-    useDeleteCardMutation
+    useDeleteCardMutation,
+    useToggleFavoriteCardMutation
 } = flashcardApi;

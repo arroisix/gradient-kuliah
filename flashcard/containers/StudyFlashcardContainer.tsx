@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { useGetFlashcardDetailQuery } from '../redux/api/flashcardsApi';
+import {
+    useGetFlashcardDetailQuery,
+    useToggleFavoriteCardMutation
+} from '../redux/api/flashcardsApi';
 import TiptapViewer from 'courses/components/Textbook/TiptapViewer';
 import FlashcardContent from 'flashcard/components/Detail/FlashcardContent';
 import FlashcardHeader from 'flashcard/components/Detail/FlashcardHeader';
@@ -11,7 +14,6 @@ import Breadcrumb from 'commons/components/modules/Breadcrumb';
 interface StudyState {
     isFlipped: boolean;
     showHint: boolean;
-    starred: boolean[];
 }
 
 const StudyFlashcardContainer = (): JSX.Element => {
@@ -21,14 +23,15 @@ const StudyFlashcardContainer = (): JSX.Element => {
     const [showAnswer, setShowAnswer] = useState(false);
     const [studyState, setStudyState] = useState<StudyState>({
         isFlipped: false,
-        showHint: false,
-        starred: []
+        showHint: false
     });
 
     const { data: flashcard, isLoading } = useGetFlashcardDetailQuery(
         { flashcard_id: id as string },
         { skip: !id }
     );
+
+    const [toggleFavorite] = useToggleFavoriteCardMutation();
 
     const handleFlip = () => {
         setStudyState((prev) => ({
@@ -60,15 +63,12 @@ const StudyFlashcardContainer = (): JSX.Element => {
         }
     };
 
-    const handleToggleStar = () => {
-        setStudyState((prev) => {
-            const newStarred = [...prev.starred];
-            newStarred[currentIndex] = !newStarred[currentIndex];
-            return {
-                ...prev,
-                starred: newStarred
-            };
-        });
+    const handleToggleFavorite = async (cardId: string) => {
+        try {
+            await toggleFavorite({ card_id: cardId }).unwrap();
+        } catch (error) {
+            console.error('Failed to toggle favorite:', error);
+        }
     };
 
     if (isLoading) return <div>Loading...</div>;
@@ -109,7 +109,7 @@ const StudyFlashcardContainer = (): JSX.Element => {
                     studyState={studyState}
                     onFlip={handleFlip}
                     onHint={handleShowHint}
-                    onStar={handleToggleStar}
+                    onToggleFavorite={handleToggleFavorite}
                 />
 
                 <div className="h-[0.5px] bg-[#333333] my-6" />
@@ -169,8 +169,8 @@ const StudyFlashcardContainer = (): JSX.Element => {
                                     <span
                                         className={cn(
                                             'text-2xl flex-shrink-0 ml-2',
-                                            studyState.starred[index]
-                                                ? 'text-yellow-400'
+                                            card.is_favorite
+                                                ? 'text-[#F2C04C]'
                                                 : 'text-[#666666]'
                                         )}>
                                         ★

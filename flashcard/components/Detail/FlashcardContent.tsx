@@ -1,25 +1,24 @@
 import React from 'react';
-import TiptapViewer from 'courses/components/Textbook/TiptapViewer';
 import { cn } from 'commons/utils';
-import { FlashcardContent as IFlashcardContent } from 'flashcard/types/flashcards';
 
 interface FlashcardContentProps {
     currentIndex: number;
     totalCards: number;
     cards: Array<{
-        question: IFlashcardContent;
-        answer: IFlashcardContent;
+        id: string;
+        question: string;
+        answer: string;
+        is_favorite?: boolean;
     }>;
     onNavigate: (direction: 'prev' | 'next') => void;
     mode?: 'detail' | 'study';
     studyState?: {
         isFlipped: boolean;
         showHint: boolean;
-        starred: boolean[];
     };
     onFlip?: () => void;
     onHint?: () => void;
-    onStar?: () => void;
+    onToggleFavorite?: (cardId: string) => void;
 }
 
 const FlashcardContent = ({
@@ -31,40 +30,18 @@ const FlashcardContent = ({
     studyState,
     onFlip,
     onHint,
-    onStar
+    onToggleFavorite
 }: FlashcardContentProps): JSX.Element => {
     const currentContent = studyState?.isFlipped
         ? cards[currentIndex]?.answer
         : cards[currentIndex].question;
 
-    const getHintText = (
-        question: IFlashcardContent,
-        answer: IFlashcardContent
-    ): IFlashcardContent[] => {
-        if (!answer.content?.[0]?.content?.[0]?.text) return [question];
-
-        const answerText = answer.content[0].content[0].text;
-        const visibleLength = Math.floor(answerText.length * 0.2);
-
-        const hintContent = {
-            type: answer.type,
-            content: [
-                {
-                    type: answer.content[0].type,
-                    attrs: { ...answer.content[0].attrs, textAlign: 'center' },
-                    content: [
-                        {
-                            type: answer.content[0].content[0].type,
-                            text:
-                                answerText.slice(0, visibleLength) +
-                                '_'.repeat(answerText.length - visibleLength)
-                        }
-                    ]
-                }
-            ]
-        };
-
-        return [question, hintContent];
+    const getHintText = (answer: string): string => {
+        const visibleLength = Math.floor(answer.length * 0.2);
+        return (
+            answer.slice(0, visibleLength) +
+            '_'.repeat(answer.length - visibleLength)
+        );
     };
 
     const cardContent =
@@ -80,41 +57,34 @@ const FlashcardContent = ({
                 <div className="text-center w-full">
                     {studyState?.showHint && !studyState.isFlipped ? (
                         <div className="space-y-4">
-                            <TiptapViewer
-                                content={cards[currentIndex].question}
-                                className="text-white font-semibold"
-                            />
-                            <TiptapViewer
-                                content={
-                                    getHintText(
-                                        cards[currentIndex].question,
-                                        cards[currentIndex].answer
-                                    )[1]
-                                }
-                                className="text-[#7D89CC]"
-                            />
+                            <p className="text-white font-semibold whitespace-pre-wrap">
+                                {cards[currentIndex].question}
+                            </p>
+                            <p className="text-[#7D89CC] whitespace-pre-wrap">
+                                {getHintText(cards[currentIndex].answer)}
+                            </p>
                         </div>
                     ) : (
-                        <TiptapViewer
-                            content={currentContent}
-                            className="text-white"
-                        />
+                        <p className="text-white whitespace-pre-wrap">
+                            {currentContent}
+                        </p>
                     )}
                 </div>
 
-                {onStar && (
+                {onToggleFavorite && (
                     <button
                         onClick={(e) => {
                             e.stopPropagation();
-                            onStar();
+                            onToggleFavorite(cards[currentIndex].id);
                         }}
                         className="absolute top-4 right-4">
                         <span
-                            className={`text-2xl ${
-                                studyState?.starred[currentIndex]
-                                    ? 'text-yellow-400'
-                                    : 'text-neutral-400'
-                            }`}>
+                            className={cn(
+                                'text-2xl',
+                                cards[currentIndex].is_favorite
+                                    ? 'text-[#7D89CC]'
+                                    : 'text-[#7D89CC] opacity-25'
+                            )}>
                             ★
                         </span>
                     </button>
@@ -132,13 +102,27 @@ const FlashcardContent = ({
                 )}
             </button>
         ) : (
-            <div className="bg-[#252246] rounded-xl p-6 min-h-[320px] flex items-center justify-center">
+            <div className="bg-[#252246] rounded-xl p-6 min-h-[320px] flex items-center justify-center relative">
                 <div className="text-xl font-semibold text-white w-full">
-                    <TiptapViewer
-                        content={cards[currentIndex].question}
-                        className="text-center"
-                    />
+                    <p className="text-center whitespace-pre-wrap">
+                        {cards[currentIndex].question}
+                    </p>
                 </div>
+                {onToggleFavorite && (
+                    <button
+                        onClick={() => onToggleFavorite(cards[currentIndex].id)}
+                        className="absolute top-4 right-4">
+                        <span
+                            className={cn(
+                                'text-2xl',
+                                cards[currentIndex].is_favorite
+                                    ? 'text-[#7D89CC]'
+                                    : 'text-[#7D89CC] opacity-25'
+                            )}>
+                            ★
+                        </span>
+                    </button>
+                )}
             </div>
         );
 
