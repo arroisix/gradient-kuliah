@@ -4,6 +4,9 @@ import { useGetFlashcardDetailQuery } from '../redux/api/flashcardsApi';
 import TiptapViewer from 'courses/components/Textbook/TiptapViewer';
 import FlashcardContent from 'flashcard/components/Detail/FlashcardContent';
 import FlashcardHeader from 'flashcard/components/Detail/FlashcardHeader';
+import { Switch } from '@headlessui/react';
+import { cn } from 'commons/utils';
+import Breadcrumb from 'commons/components/modules/Breadcrumb';
 
 interface StudyState {
     isFlipped: boolean;
@@ -15,6 +18,7 @@ const StudyFlashcardContainer = (): JSX.Element => {
     const router = useRouter();
     const { id } = router.query;
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [showAnswer, setShowAnswer] = useState(false);
     const [studyState, setStudyState] = useState<StudyState>({
         isFlipped: false,
         showHint: false,
@@ -73,50 +77,108 @@ const StudyFlashcardContainer = (): JSX.Element => {
     const totalCards = flashcard.cards.length;
 
     return (
-        <div className="px-4 py-6">
-            <FlashcardHeader
-                title={flashcard.title}
-                cardCount={flashcard.card_count}
-                isPrivate={flashcard.is_private}
-                hasCards={true}
-                mode="study"
-            />
+        <div className="w-full">
+            <div className="px-12">
+                <Breadcrumb
+                    className="w-full py-4"
+                    nextItem={{
+                        name: flashcard.title,
+                        url: `/flashcard/${id}`,
+                        nextItem: {
+                            name: 'Pelajari Flashcard'
+                        }
+                    }}
+                />
+            </div>
 
-            <FlashcardContent
-                currentIndex={currentIndex}
-                totalCards={totalCards}
-                cards={flashcard.cards}
-                onNavigate={handleNavigate}
-                mode="study"
-                studyState={studyState}
-                onFlip={handleFlip}
-                onHint={handleShowHint}
-                onStar={handleToggleStar}
-            />
+            <div className="container mx-auto max-w-3xl px-4 py-6">
+                <FlashcardHeader
+                    title={flashcard.title}
+                    cardCount={flashcard.card_count}
+                    isPrivate={flashcard.is_private}
+                    hasCards={true}
+                    mode="study"
+                />
 
-            <div className="mt-12">
-                <h2 className="text-xl font-bold text-white mb-4">
-                    Daftar Isi
-                </h2>
-                <div className="space-y-2">
-                    {flashcard.cards.map((card, index) => (
-                        <button
-                            key={card.id}
-                            onClick={() => setCurrentIndex(index)}
-                            className={`w-full p-4 text-left rounded-lg ${
-                                index === currentIndex
-                                    ? 'bg-[#252246]'
-                                    : 'bg-[#222222]'
-                            }`}>
-                            <div className="flex justify-between">
-                                <TiptapViewer
-                                    content={card.question}
-                                    className="text-white"
+                <FlashcardContent
+                    currentIndex={currentIndex}
+                    totalCards={totalCards}
+                    cards={flashcard.cards}
+                    onNavigate={handleNavigate}
+                    mode="study"
+                    studyState={studyState}
+                    onFlip={handleFlip}
+                    onHint={handleShowHint}
+                    onStar={handleToggleStar}
+                />
+
+                <div className="h-[0.5px] bg-[#333333] my-6" />
+
+                <div className="mt-12">
+                    <div className="flex items-center justify-between mb-6">
+                        <h2 className="text-xl font-bold text-white">
+                            Daftar Isi
+                        </h2>
+                        <div className="flex items-center gap-3">
+                            <span className="text-base text-white">
+                                Tampilkan Jawaban
+                            </span>
+                            <Switch
+                                checked={showAnswer}
+                                onChange={setShowAnswer}
+                                className={`${
+                                    showAnswer
+                                        ? 'bg-[#03AC5C]'
+                                        : 'bg-neutral-700'
+                                } relative inline-flex h-6 w-11 items-center rounded-full transition-colors`}>
+                                <span
+                                    className={`${
+                                        showAnswer
+                                            ? 'translate-x-6'
+                                            : 'translate-x-1'
+                                    } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
                                 />
-                                <span className="text-[#666666]">★</span>
-                            </div>
-                        </button>
-                    ))}
+                            </Switch>
+                        </div>
+                    </div>
+                    <div className="space-y-2">
+                        {flashcard.cards.map((card, index) => (
+                            <button
+                                key={card.id}
+                                onClick={() => setCurrentIndex(index)}
+                                className={cn(
+                                    'w-full p-4 text-left rounded-lg transition-colors',
+                                    index === currentIndex
+                                        ? 'bg-[#252246]'
+                                        : 'bg-[#222222]'
+                                )}>
+                                <div className="flex items-start justify-between">
+                                    <div className="flex-1 space-y-1">
+                                        <TiptapViewer
+                                            content={card.question}
+                                            className="text-white"
+                                        />
+                                        {showAnswer && (
+                                            <div className="text-sm text-[#666666]">
+                                                <TiptapViewer
+                                                    content={card.answer}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+                                    <span
+                                        className={cn(
+                                            'text-2xl flex-shrink-0 ml-2',
+                                            studyState.starred[index]
+                                                ? 'text-yellow-400'
+                                                : 'text-[#666666]'
+                                        )}>
+                                        ★
+                                    </span>
+                                </div>
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>

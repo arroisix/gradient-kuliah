@@ -6,9 +6,7 @@ import StudyFlashcardContainer from 'flashcard/containers/StudyFlashcardContaine
 const StudyFlashcardPage = (): JSX.Element => {
     return (
         <LearnLayout>
-            <div className="container mx-auto max-w-3xl">
-                <StudyFlashcardContainer />
-            </div>
+            <StudyFlashcardContainer />
         </LearnLayout>
     );
 };

@@ -355,6 +355,8 @@ const EditFlashcardForm = ({
                     canAdd={flashcardData.cards.some(
                         (card) => card.id !== 'temp'
                     )}
+                    cards={flashcardData.cards}
+                    currentIndex={currentIndex}
                 />
             </div>
 

@@ -15,9 +15,7 @@ const FlashcardDetailPage = (): JSX.Element => {
             noPadding
             hideNavbar={isAuthenticated && isMobileBreakpoints}
             noTopPadding>
-            <div className="container mx-auto max-w-3xl">
-                <FlashcardDetailContainer />
-            </div>
+            <FlashcardDetailContainer />
         </LearnLayout>
     );
 };

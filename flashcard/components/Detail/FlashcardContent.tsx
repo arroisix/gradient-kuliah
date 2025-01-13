@@ -126,7 +126,7 @@ const FlashcardContent = ({
                             e.stopPropagation();
                             onHint?.();
                         }}
-                        className="absolute bottom-4 right-4 text-[#B6A6F3] hover:opacity-80 text-sm">
+                        className="absolute px-4 py-2 bg-[#1E1930] rounded-full bottom-4 right-4 text-[#B6A6F3] hover:opacity-80 text-sm">
                         Lihat Hint
                     </button>
                 )}

@@ -6,6 +6,7 @@ import {
     useEditCardMutation,
     useGetFlashcardDetailQuery
 } from '../redux/api/flashcardsApi';
+import Breadcrumb from 'commons/components/modules/Breadcrumb';
 
 const EditCardContainer = (): JSX.Element => {
     const router = useRouter();
@@ -131,15 +132,31 @@ const EditCardContainer = (): JSX.Element => {
     );
 
     return (
-        <EditFlashcardForm
-            flashcardData={formattedData}
-            currentIndex={currentIndex}
-            hasChanges={hasChanges}
-            onUpdateCard={handleUpdateCard}
-            onAddCard={handleAddCard}
-            onSave={handleSave}
-            onNavigate={handleNavigateCard}
-        />
+        <div className="w-full">
+            <div className="px-12">
+                <Breadcrumb
+                    className="w-full py-4"
+                    nextItem={{
+                        name: flashcardDetail ? flashcardDetail?.title : '',
+                        url: `/flashcard/${flashcardId}`,
+                        nextItem: {
+                            name: 'Edit Flashcard'
+                        }
+                    }}
+                />
+            </div>
+            <div className="container mx-auto max-w-3xl px-4 py-6">
+                <EditFlashcardForm
+                    flashcardData={formattedData}
+                    currentIndex={currentIndex}
+                    hasChanges={hasChanges}
+                    onUpdateCard={handleUpdateCard}
+                    onAddCard={handleAddCard}
+                    onSave={handleSave}
+                    onNavigate={handleNavigateCard}
+                />
+            </div>
+        </div>
     );
 };
 

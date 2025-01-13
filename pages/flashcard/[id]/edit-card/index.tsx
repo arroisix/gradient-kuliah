@@ -6,9 +6,7 @@ import EditCardContainer from 'flashcard/containers/EditCardContainer';
 const EditFlashcardPage = (): JSX.Element => {
     return (
         <LearnLayout>
-            <div className="container mx-auto max-w-3xl">
-                <EditCardContainer />
-            </div>
+            <EditCardContainer />
         </LearnLayout>
     );
 };

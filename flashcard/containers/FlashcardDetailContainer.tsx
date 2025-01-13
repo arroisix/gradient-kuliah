@@ -11,6 +11,7 @@ import FlashcardContent from '../components/Detail/FlashcardContent';
 import FlashcardDescription from '../components/Detail/FlashcardDescription';
 import FlashcardActions from '../components/Detail/FlashcardActions';
 import EmptyState from '../components/Detail/EmptyState';
+import Breadcrumb from 'commons/components/modules/Breadcrumb';
 
 const FlashcardDetailContainer = (): JSX.Element => {
     const router = useRouter();
@@ -124,54 +125,67 @@ const FlashcardDetailContainer = (): JSX.Element => {
         .join('');
 
     return (
-        <div className="px-4 py-6">
-            <FlashcardHeader
-                title={flashcard.title}
-                cardCount={flashcard.card_count}
-                isPrivate={flashcard.is_private}
-                hasCards={hasCards}
-                onWriteCard={handleEdit}
-            />
-
-            {hasCards ? (
-                <FlashcardContent
-                    currentIndex={currentIndex}
-                    totalCards={flashcard.cards.length}
-                    cards={flashcard.cards}
-                    onNavigate={handleNavigate}
+        <div className="w-full">
+            <div className="px-16">
+                <Breadcrumb
+                    className="w-full py-4"
+                    nextItem={{
+                        name: flashcard.title
+                    }}
                 />
-            ) : (
-                <EmptyState onWrite={handleEdit} />
-            )}
-
-            <FlashcardDescription description={flashcard.description} />
-
-            <FlashcardActions
-                userInitials={userInitials}
-                userName={flashcard.created_by.name}
-                onEdit={handleEditFlashcard}
-                onDelete={handleDelete}
-            />
-
-            <div className="h-[0.5px] bg-[#333333] mb-6" />
-
-            <div>
-                <h2 className="text-xl font-bold text-white mb-4">Favorit</h2>
-                <div className="flex flex-col items-center justify-center py-12">
-                    <div className="w-24 h-24 mb-4" />
-                    <p className="text-neutral-400">
-                        Belum ada flashcard favorit
-                    </p>
-                </div>
             </div>
 
-            {isDeleteModalOpen && (
-                <DeleteModal
-                    isOpen={isDeleteModalOpen}
-                    onConfirm={handleDeleteConfirm}
-                    onCancel={handleDeleteCancel}
+            <div className="container mx-auto max-w-3xl px-4 py-6">
+                <FlashcardHeader
+                    title={flashcard.title}
+                    cardCount={flashcard.card_count}
+                    isPrivate={flashcard.is_private}
+                    hasCards={hasCards}
+                    onWriteCard={handleEdit}
                 />
-            )}
+
+                {hasCards ? (
+                    <FlashcardContent
+                        currentIndex={currentIndex}
+                        totalCards={flashcard.cards.length}
+                        cards={flashcard.cards}
+                        onNavigate={handleNavigate}
+                    />
+                ) : (
+                    <EmptyState onWrite={handleEdit} />
+                )}
+
+                <FlashcardDescription description={flashcard.description} />
+
+                <FlashcardActions
+                    userInitials={userInitials}
+                    userName={flashcard.created_by.name}
+                    onEdit={handleEditFlashcard}
+                    onDelete={handleDelete}
+                />
+
+                <div className="h-[0.5px] bg-[#333333] mb-6" />
+
+                <div>
+                    <h2 className="text-xl font-bold text-white mb-4">
+                        Favorit
+                    </h2>
+                    <div className="flex flex-col items-center justify-center py-12">
+                        <div className="w-24 h-24 mb-4" />
+                        <p className="text-neutral-400">
+                            Belum ada flashcard favorit
+                        </p>
+                    </div>
+                </div>
+
+                {isDeleteModalOpen && (
+                    <DeleteModal
+                        isOpen={isDeleteModalOpen}
+                        onConfirm={handleDeleteConfirm}
+                        onCancel={handleDeleteCancel}
+                    />
+                )}
+            </div>
         </div>
     );
 };
