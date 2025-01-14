@@ -6,6 +6,7 @@ import Sort from 'commons/components/elements/Sort';
 import { FLASHCARD_SORT_OPTIONS, FlashcardSort } from '../../constants';
 import AddFlashcardDialog from './AddFlashcardDialog';
 import { useGetFlashcardsQuery } from '../../redux/api/flashcardsApi';
+import Skeleton from 'commons/components/elements/Skeleton';
 
 const FlashcardSection = (): JSX.Element => {
     const router = useRouter();
@@ -51,7 +52,9 @@ const FlashcardSection = (): JSX.Element => {
             </div>
 
             {isLoading ? (
-                <div>Loading...</div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
+                    <Skeleton repeat={6} className="w-full h-[158px] !mb-0" />
+                </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
                     {flashcardsData?.data.map((flashcard) => (

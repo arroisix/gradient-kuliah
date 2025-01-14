@@ -3,6 +3,7 @@ import { BiShare } from 'react-icons/bi';
 import { BsThreeDots } from 'react-icons/bs';
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
+import { toast } from 'react-toastify';
 
 interface FlashcardActionsProps {
     userInitials: string;
@@ -19,6 +20,18 @@ const FlashcardActions = ({
     onDelete,
     createdByMe = true
 }: FlashcardActionsProps): JSX.Element => {
+    const handleShare = async () => {
+        try {
+            const currentUrl = window.location.href;
+            await navigator.clipboard.writeText(currentUrl);
+            toast.success('Link ke flashcard berhasil disalin', {
+                position: toast.POSITION.TOP_CENTER
+            });
+        } catch (error) {
+            console.error('Failed to copy link:', error);
+        }
+    };
+
     return (
         <div className="flex gap-6 md:gap-0 md:items-center flex-col md:flex-row justify-between mb-6">
             <div className="flex items-center gap-2">
@@ -31,7 +44,9 @@ const FlashcardActions = ({
                 </div>
             </div>
             <div className="flex items-center gap-2">
-                <button className="inline-flex items-center gap-2 px-4 text-sm font-semibold py-2 bg-[#333333] text-white hover:bg-opacity-80 transition-colors rounded-full">
+                <button
+                    onClick={handleShare}
+                    className="inline-flex items-center gap-2 px-4 text-sm font-semibold py-2 bg-[#333333] text-white hover:bg-opacity-80 transition-colors rounded-full">
                     <BiShare size={20} />
                     <span>Bagikan</span>
                 </button>
