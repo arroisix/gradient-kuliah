@@ -11,6 +11,7 @@ import { Switch } from '@headlessui/react';
 import { cn } from 'commons/utils';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
+import { toast } from 'react-toastify';
 
 interface StudyState {
     isFlipped: boolean;
@@ -66,7 +67,15 @@ const StudyFlashcardContainer = (): JSX.Element => {
 
     const handleToggleFavorite = async (cardId: string) => {
         try {
-            await toggleFavorite({ card_id: cardId }).unwrap();
+            const response = await toggleFavorite({ card_id: cardId }).unwrap();
+            toast.success(
+                response.is_favorite
+                    ? 'Berhasil ditambah ke favorit'
+                    : 'Berhasil dihapus dari favorit',
+                {
+                    position: toast.POSITION.TOP_CENTER
+                }
+            );
         } catch (error) {
             console.error('Failed to toggle favorite:', error);
         }

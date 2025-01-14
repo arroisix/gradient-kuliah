@@ -12,6 +12,7 @@ import {
     useCreateFlashcardMutation,
     useEditFlashcardMutation
 } from '../../redux/api/flashcardsApi';
+import { toast } from 'react-toastify';
 
 interface FileWithPreview extends File {
     preview?: string;
@@ -86,6 +87,9 @@ const CreateFlashcardForm = ({
                     description: formData.description,
                     is_private: formData.isPrivate
                 }).unwrap();
+                toast.success('Detail flashcard diperbarui', {
+                    position: toast.POSITION.TOP_CENTER
+                });
                 router.push(`/flashcard/${initialData.id}`);
             } else {
                 await createFlashcard({

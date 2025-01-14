@@ -9,6 +9,7 @@ import {
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import { Card } from '../types/flashcards';
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
+import { toast } from 'react-toastify';
 
 const EditCardContainer = (): JSX.Element => {
     const router = useRouter();
@@ -45,6 +46,9 @@ const EditCardContainer = (): JSX.Element => {
             }).unwrap();
 
             setHasChanges(false);
+            toast.success('Flashcard berhasil disimpan', {
+                position: toast.POSITION.TOP_CENTER
+            });
         } catch (error) {
             console.error('Failed to save card:', error);
         }

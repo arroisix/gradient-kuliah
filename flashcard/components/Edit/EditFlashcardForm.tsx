@@ -9,6 +9,7 @@ import { Menu, Transition } from '@headlessui/react';
 import { useDeleteCardMutation } from 'flashcard/redux/api/flashcardsApi';
 import DeleteModal from '../Detail/DeleteModal';
 import { Fragment } from 'react';
+import { toast } from 'react-toastify';
 
 interface EditFlashcardFormProps {
     flashcardData: {
@@ -60,6 +61,9 @@ const EditFlashcardForm = ({
                 card_id: currentCard.id
             }).unwrap();
             setIsDeleteModalOpen(false);
+            toast.success('Card berhasil dihapus', {
+                position: toast.POSITION.TOP_CENTER
+            });
             router.push(`/flashcard/${router.query.id}`);
         } catch (error) {
             console.error('Failed to delete card:', error);

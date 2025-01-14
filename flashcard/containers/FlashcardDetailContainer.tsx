@@ -13,6 +13,7 @@ import FlashcardActions from '../components/Detail/FlashcardActions';
 import EmptyState from '../components/Detail/EmptyState';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
+import { toast } from 'react-toastify';
 
 const FlashcardDetailContainer = (): JSX.Element => {
     const router = useRouter();
@@ -71,6 +72,9 @@ const FlashcardDetailContainer = (): JSX.Element => {
                     flashcard_id: id as string
                 }).unwrap();
                 setIsDeleteModalOpen(false);
+                toast.success('Flashcard berhasil dihapus', {
+                    position: toast.POSITION.TOP_CENTER
+                });
                 router.push('/flashcard');
             }
         } catch (error) {
