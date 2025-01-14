@@ -2,6 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import CreateFlashcardForm from '../components/Create/CreateFlashcardForm';
 import { useGetFlashcardDetailQuery } from '../redux/api/flashcardsApi';
+import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 
 const EditFlashcardContainer = (): JSX.Element => {
     const router = useRouter();
@@ -13,7 +14,7 @@ const EditFlashcardContainer = (): JSX.Element => {
     );
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <LoadingBackdrop />;
     }
 
     if (!flashcardDetail) {

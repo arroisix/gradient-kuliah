@@ -12,6 +12,7 @@ import FlashcardDescription from '../components/Detail/FlashcardDescription';
 import FlashcardActions from '../components/Detail/FlashcardActions';
 import EmptyState from '../components/Detail/EmptyState';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
+import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 
 const FlashcardDetailContainer = (): JSX.Element => {
     const router = useRouter();
@@ -92,7 +93,7 @@ const FlashcardDetailContainer = (): JSX.Element => {
     };
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <LoadingBackdrop />;
     }
 
     if (!flashcard) {
@@ -109,22 +110,25 @@ const FlashcardDetailContainer = (): JSX.Element => {
 
     return (
         <div className="w-full">
-            <div className="px-16">
+            <div className="md:px-12">
                 <Breadcrumb
-                    className="w-full py-4"
+                    className="w-full md:py-4"
                     nextItem={{
                         name: flashcard.title
                     }}
                 />
             </div>
 
-            <div className="container mx-auto max-w-3xl px-4 py-6">
+            <div className="container mx-auto max-w-3xl px-0 md:px-4 py-6">
                 <FlashcardHeader
                     title={flashcard.title}
                     cardCount={flashcard.card_count}
                     isPrivate={flashcard.is_private}
                     hasCards={hasCards}
-                    onWriteCard={handleEdit}
+                    onWriteCard={
+                        flashcard.created_by_me ? handleEdit : undefined
+                    }
+                    createdByMe={flashcard.created_by_me}
                 />
 
                 {hasCards ? (
@@ -135,7 +139,10 @@ const FlashcardDetailContainer = (): JSX.Element => {
                         onNavigate={handleNavigate}
                     />
                 ) : (
-                    <EmptyState onWrite={handleEdit} />
+                    <EmptyState
+                        onWrite={handleEdit}
+                        createdByMe={flashcard.created_by_me}
+                    />
                 )}
 
                 <FlashcardDescription description={flashcard.description} />
@@ -145,6 +152,7 @@ const FlashcardDetailContainer = (): JSX.Element => {
                     userName={flashcard.created_by.name}
                     onEdit={handleEditFlashcard}
                     onDelete={handleDelete}
+                    createdByMe={flashcard.created_by_me}
                 />
 
                 <div className="h-[0.5px] bg-[#333333] mb-6" />

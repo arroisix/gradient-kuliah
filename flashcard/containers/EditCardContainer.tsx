@@ -8,6 +8,7 @@ import {
 } from '../redux/api/flashcardsApi';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import { Card } from '../types/flashcards';
+import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 
 const EditCardContainer = (): JSX.Element => {
     const router = useRouter();
@@ -95,7 +96,7 @@ const EditCardContainer = (): JSX.Element => {
         [localCards]
     );
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <LoadingBackdrop />;
     if (!flashcardDetail) return <></>;
 
     const formattedData = React.useMemo(
@@ -111,7 +112,7 @@ const EditCardContainer = (): JSX.Element => {
 
     return (
         <div className="w-full">
-            <div className="px-12">
+            <div className="md:px-12">
                 <Breadcrumb
                     className="w-full py-4"
                     nextItem={{
@@ -123,7 +124,7 @@ const EditCardContainer = (): JSX.Element => {
                     }}
                 />
             </div>
-            <div className="container mx-auto max-w-3xl px-4 py-6">
+            <div className="container mx-auto max-w-3xl md:px-4 py-6">
                 <EditFlashcardForm
                     flashcardData={formattedData}
                     currentIndex={currentIndex}

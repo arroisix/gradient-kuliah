@@ -83,8 +83,8 @@ const EditFlashcardForm = ({
     }
 
     return (
-        <div className="min-h-screen py-6">
-            <div className="max-w-4xl mx-auto px-4">
+        <div className="min-h-screen md:py-6">
+            <div className="max-w-4xl mx-auto md:px-4">
                 <div className="flex justify-between items-center mb-6">
                     <div>
                         <p className="text-neutral-400 text-sm">

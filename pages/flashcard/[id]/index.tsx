@@ -1,20 +1,11 @@
 import React from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import LearnLayout from 'commons/learnLayout';
-import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
-import { useSelector } from 'react-redux';
-import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import FlashcardDetailContainer from 'flashcard/containers/FlashcardDetailContainer';
 
 const FlashcardDetailPage = (): JSX.Element => {
-    const { isMobileBreakpoints } = useWindowBreakpoints();
-    const isAuthenticated = useSelector(getIsAuthenticated);
-
     return (
-        <LearnLayout
-            noPadding
-            hideNavbar={isAuthenticated && isMobileBreakpoints}
-            noTopPadding>
+        <LearnLayout>
             <FlashcardDetailContainer />
         </LearnLayout>
     );

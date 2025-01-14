@@ -10,6 +10,7 @@ import FlashcardHeader from 'flashcard/components/Detail/FlashcardHeader';
 import { Switch } from '@headlessui/react';
 import { cn } from 'commons/utils';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
+import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 
 interface StudyState {
     isFlipped: boolean;
@@ -71,7 +72,7 @@ const StudyFlashcardContainer = (): JSX.Element => {
         }
     };
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <LoadingBackdrop />;
     if (!flashcard) return <></>;
 
     const totalCards = flashcard.cards.length;
