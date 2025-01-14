@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { cn } from 'commons/utils';
 import { motion } from 'framer-motion';
 import HintBulb from 'flashcard/assets/HintBulb';
+import ReactMarkdown from 'react-markdown';
+import rehypeKatex from 'rehype-katex';
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
 
 interface FlashcardContentProps {
     currentIndex: number;
@@ -58,6 +62,30 @@ const FlashcardContent = ({
         }
     };
 
+    const renderMarkdownContent = (
+        content: string,
+        type: 'question' | 'answer'
+    ) => (
+        <ReactMarkdown
+            className={cn(
+                'text-white markdown-overflow-break-word markdown-blue-link font-body',
+                type === 'question' ? 'markdown-body-xl' : 'markdown-body-base'
+            )}
+            remarkPlugins={[remarkMath, remarkGfm]}
+            rehypePlugins={[rehypeKatex]}
+            components={{
+                img: ({ ...props }) => (
+                    <img
+                        {...props}
+                        className="max-h-[160px] w-auto mx-auto object-contain"
+                        alt={props.alt || ''}
+                    />
+                )
+            }}>
+            {content?.replaceAll('\n', '\n\n')}
+        </ReactMarkdown>
+    );
+
     const cardContent =
         mode === 'study' ? (
             <div className="perspective-1000">
@@ -84,7 +112,10 @@ const FlashcardContent = ({
                             {studyState?.showHint ? (
                                 <div className="space-y-4">
                                     <p className="text-white font-semibold text-xl whitespace-pre-wrap">
-                                        {cards[currentIndex].question}
+                                        {renderMarkdownContent(
+                                            cards[currentIndex].question,
+                                            'question'
+                                        )}
                                     </p>
                                     <p className="text-[#7D89CC] whitespace-pre-wrap">
                                         {getHintText(
@@ -94,7 +125,10 @@ const FlashcardContent = ({
                                 </div>
                             ) : (
                                 <p className="text-white text-xl font-semibold whitespace-pre-wrap">
-                                    {cards[currentIndex].question}
+                                    {renderMarkdownContent(
+                                        cards[currentIndex].question,
+                                        'question'
+                                    )}
                                 </p>
                             )}
                         </div>
@@ -110,7 +144,10 @@ const FlashcardContent = ({
                         }}>
                         <div className="text-center w-full h-full flex items-center justify-center">
                             <p className="text-white text-base p-4 whitespace-pre-wrap">
-                                {cards[currentIndex].answer}
+                                {renderMarkdownContent(
+                                    cards[currentIndex].answer,
+                                    'answer'
+                                )}
                             </p>
                         </div>
                     </div>
@@ -164,7 +201,10 @@ const FlashcardContent = ({
             <div className="bg-[#252246] rounded-xl p-6 min-h-[320px] flex items-center justify-center relative">
                 <div className="text-xl font-semibold text-white w-full">
                     <p className="text-center whitespace-pre-wrap">
-                        {cards[currentIndex].question}
+                        {renderMarkdownContent(
+                            cards[currentIndex].question,
+                            'question'
+                        )}
                     </p>
                 </div>
                 {onToggleFavorite && (

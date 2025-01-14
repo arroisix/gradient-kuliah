@@ -4,7 +4,6 @@ import {
     useGetFlashcardDetailQuery,
     useToggleFavoriteCardMutation
 } from '../redux/api/flashcardsApi';
-import TiptapViewer from 'courses/components/Textbook/TiptapViewer';
 import FlashcardContent from 'flashcard/components/Detail/FlashcardContent';
 import FlashcardHeader from 'flashcard/components/Detail/FlashcardHeader';
 import { Switch } from '@headlessui/react';
@@ -79,6 +78,14 @@ const StudyFlashcardContainer = (): JSX.Element => {
         } catch (error) {
             console.error('Failed to toggle favorite:', error);
         }
+    };
+
+    const getTextContent = (content: string) => {
+        return content
+            .replace(/!\[.*?\]\(.*?\)/g, '')
+            .replace(/\[.*?\]\(.*?\)/g, '')
+            .replace(/\n{2,}/g, '\n')
+            .trim();
     };
 
     if (isLoading) return <LoadingBackdrop />;
@@ -164,15 +171,10 @@ const StudyFlashcardContainer = (): JSX.Element => {
                                 )}>
                                 <div className="flex items-start justify-between">
                                     <div className="flex-1 space-y-1">
-                                        <TiptapViewer
-                                            content={card.question}
-                                            className="text-white"
-                                        />
+                                        {getTextContent(card.question)}
                                         {showAnswer && (
                                             <div className="text-sm text-[#666666]">
-                                                <TiptapViewer
-                                                    content={card.answer}
-                                                />
+                                                {getTextContent(card.answer)}
                                             </div>
                                         )}
                                     </div>

@@ -1,15 +1,13 @@
 import React from 'react';
-import TiptapViewer from 'courses/components/Textbook/TiptapViewer';
 import { cn } from 'commons/utils';
-import { type Content } from '@tiptap/react';
 
 interface DaftarIsiProps {
     onAddCard: () => void;
     canAdd: boolean;
     cards?: Array<{
         id: string;
-        question: Content;
-        answer: Content;
+        question: string;
+        answer: string;
     }>;
     currentIndex?: number;
     onSelectCard?: (index: number) => void;
@@ -22,6 +20,14 @@ const DaftarIsi = ({
     currentIndex = 0,
     onSelectCard
 }: DaftarIsiProps): JSX.Element => {
+    const getTextContent = (content: string) => {
+        return content
+            .replace(/!\[.*?\]\(.*?\)/g, '')
+            .replace(/\[.*?\]\(.*?\)/g, '')
+            .replace(/\n{2,}/g, '\n')
+            .trim();
+    };
+
     return (
         <div>
             <div className="flex items-center justify-between mb-4">
@@ -48,10 +54,7 @@ const DaftarIsi = ({
                             )}>
                             <div className="flex items-start">
                                 <div className="flex-1">
-                                    <TiptapViewer
-                                        content={card.question}
-                                        className="text-white"
-                                    />
+                                    {getTextContent(card.question)}
                                 </div>
                             </div>
                         </button>

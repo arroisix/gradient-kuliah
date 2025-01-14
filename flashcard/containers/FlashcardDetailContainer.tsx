@@ -112,6 +112,14 @@ const FlashcardDetailContainer = (): JSX.Element => {
         .slice(0, 2)
         .join('');
 
+    const getTextContent = (content: string) => {
+        return content
+            .replace(/!\[.*?\]\(.*?\)/g, '')
+            .replace(/\[.*?\]\(.*?\)/g, '')
+            .replace(/\n{2,}/g, '\n')
+            .trim();
+    };
+
     return (
         <div className="w-full">
             <div className="md:px-12">
@@ -154,6 +162,7 @@ const FlashcardDetailContainer = (): JSX.Element => {
                 <FlashcardActions
                     userInitials={userInitials}
                     userName={flashcard.created_by.name}
+                    photo_profile={flashcard.created_by.photo_profile}
                     onEdit={handleEditFlashcard}
                     onDelete={handleDelete}
                     createdByMe={flashcard.created_by_me}
@@ -174,10 +183,10 @@ const FlashcardDetailContainer = (): JSX.Element => {
                                     <div className="flex items-start justify-between">
                                         <div className="flex-1 space-y-1">
                                             <p className="text-white whitespace-pre-wrap">
-                                                {card.question}
+                                                {getTextContent(card.question)}
                                             </p>
                                             <p className="text-sm text-[#666666] whitespace-pre-wrap">
-                                                {card.answer}
+                                                {getTextContent(card.answer)}
                                             </p>
                                         </div>
                                         <span className="text-2xl flex-shrink-0 ml-2 text-[#F2C04C]">

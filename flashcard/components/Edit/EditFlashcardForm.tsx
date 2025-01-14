@@ -10,6 +10,8 @@ import { Fragment } from 'react';
 import { toast } from 'react-toastify';
 import Visibility from 'flashcard/assets/Visibility';
 import Cards from 'flashcard/assets/Cards';
+import useUploadFile from 'commons/hooks/useUploadFile';
+import ImageUploadControls from './ImageUploadControls';
 
 interface EditFlashcardFormProps {
     flashcardData: {
@@ -45,6 +47,7 @@ const EditFlashcardForm = ({
     onNavigate
 }: EditFlashcardFormProps): JSX.Element => {
     const router = useRouter();
+    const { uploadFile } = useUploadFile('qna');
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deleteCard] = useDeleteCardMutation();
     const currentCard = flashcardData.cards[currentIndex];
@@ -80,6 +83,44 @@ const EditFlashcardForm = ({
         value: string
     ) => {
         onUpdateCard(cardId, field, value);
+    };
+
+    const handleImageUpload = async (
+        file: File,
+        field: 'question' | 'answer'
+    ) => {
+        try {
+            const urls = await uploadFile([file]);
+            if (urls && urls.length > 0) {
+                const imageMarkdown = `\n\n[![image](${urls[0]})](${urls[0]})`;
+                handleTextChange(
+                    currentCard.id,
+                    field,
+                    currentCard[field] + imageMarkdown
+                );
+            }
+        } catch (error) {
+            console.error('Failed to upload image:', error);
+            toast.error('Gagal mengupload gambar', {
+                position: toast.POSITION.TOP_CENTER
+            });
+        }
+    };
+
+    const handlePaste = async (
+        e: React.ClipboardEvent,
+        field: 'question' | 'answer'
+    ) => {
+        const items = e.clipboardData.items;
+        for (const item of items) {
+            if (item.type.startsWith('image/')) {
+                const file = item.getAsFile();
+                if (file) {
+                    await handleImageUpload(file, field);
+                    break;
+                }
+            }
+        }
     };
 
     if (!currentCard) {
@@ -171,8 +212,14 @@ const EditFlashcardForm = ({
                                         e.target.value
                                     )
                                 }
+                                onPaste={(e) => handlePaste(e, 'question')}
                                 placeholder="Istilah atau pertanyaan"
-                                className="w-full min-h-[120px] bg-[#222222] rounded-lg p-3 text-white resize-none border-none outline-none placeholder:text-neutral-500"
+                                className="w-full min-h-[120px] bg-[#222222] rounded-lg p-3 pb-10 text-white resize-none border-none outline-none placeholder:text-neutral-500"
+                            />
+                            <ImageUploadControls
+                                onImageUpload={(file) =>
+                                    handleImageUpload(file, 'question')
+                                }
                             />
                         </div>
 
@@ -186,8 +233,14 @@ const EditFlashcardForm = ({
                                         e.target.value
                                     )
                                 }
+                                onPaste={(e) => handlePaste(e, 'question')}
                                 placeholder="Definisi atau jawaban"
-                                className="w-full min-h-[120px] bg-[#222222] rounded-lg p-3 text-white resize-none border-none outline-none placeholder:text-neutral-500"
+                                className="w-full min-h-[120px] bg-[#222222] rounded-lg p-3 pb-10 text-white resize-none border-none outline-none placeholder:text-neutral-500"
+                            />
+                            <ImageUploadControls
+                                onImageUpload={(file) =>
+                                    handleImageUpload(file, 'answer')
+                                }
                             />
                         </div>
                     </div>

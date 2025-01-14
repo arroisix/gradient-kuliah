@@ -8,6 +8,7 @@ import { RiShareForwardFill } from 'react-icons/ri';
 interface FlashcardActionsProps {
     userInitials: string;
     userName: string;
+    photo_profile?: string;
     onEdit: () => void;
     onDelete: () => void;
     createdByMe?: boolean;
@@ -16,6 +17,7 @@ interface FlashcardActionsProps {
 const FlashcardActions = ({
     userInitials,
     userName,
+    photo_profile,
     onEdit,
     onDelete,
     createdByMe = true
@@ -35,9 +37,17 @@ const FlashcardActions = ({
     return (
         <div className="flex gap-6 md:gap-0 md:items-center flex-col md:flex-row justify-between mb-6">
             <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-[#5F2BCE] flex items-center justify-center text-white text-sm">
-                    {userInitials}
-                </div>
+                {photo_profile ? (
+                    <img
+                        src={photo_profile}
+                        alt={userName}
+                        className="w-8 h-8 rounded-full object-cover"
+                    />
+                ) : (
+                    <div className="w-8 h-8 rounded-full bg-[#5F2BCE] flex items-center justify-center text-white text-sm">
+                        {userInitials}
+                    </div>
+                )}
                 <div>
                     <p className="text-sm text-neutral-400">Dibuat oleh</p>
                     <p className="font-medium text-white">{userName}</p>
