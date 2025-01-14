@@ -38,10 +38,7 @@ const FlashcardContent = ({
 
     const getHintText = (answer: string): string => {
         const visibleLength = Math.floor(answer.length * 0.2);
-        return (
-            answer.slice(0, visibleLength) +
-            '_'.repeat(answer.length - visibleLength)
-        );
+        return answer.slice(0, visibleLength) + '___';
     };
 
     const cardContent =
