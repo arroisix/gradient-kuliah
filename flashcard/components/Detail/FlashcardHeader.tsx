@@ -1,7 +1,7 @@
 import { BsFillPencilFill } from 'react-icons/bs';
-import { HiOutlineDocumentText } from 'react-icons/hi';
-import { IoEyeOutline } from 'react-icons/io5';
 import { useRouter } from 'next/router';
+import Cards from 'flashcard/assets/Cards';
+import Visibility from 'flashcard/assets/Visibility';
 
 interface FlashcardHeaderProps {
     title: string;
@@ -62,15 +62,12 @@ const FlashcardHeader = ({
 
             <div className="flex items-center gap-4 mb-4">
                 <div className="flex items-center gap-2">
-                    <HiOutlineDocumentText
-                        size={20}
-                        className="text-[#7D89CC]"
-                    />
+                    <Cards />
                     <span className="text-white">{cardCount} Cards</span>
                 </div>
                 <div className="text-[#333333]">|</div>
                 <div className="flex items-center gap-2">
-                    <IoEyeOutline size={20} className="text-[#7D89CC]" />
+                    <Visibility />
                     <span className="text-white">
                         {isPrivate ? 'Privat' : 'Publik'}
                     </span>

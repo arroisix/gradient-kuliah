@@ -1,9 +1,9 @@
 import React from 'react';
-import { BiShare } from 'react-icons/bi';
 import { BsThreeDots } from 'react-icons/bs';
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { toast } from 'react-toastify';
+import { RiShareForwardFill } from 'react-icons/ri';
 
 interface FlashcardActionsProps {
     userInitials: string;
@@ -47,7 +47,7 @@ const FlashcardActions = ({
                 <button
                     onClick={handleShare}
                     className="inline-flex items-center gap-2 px-4 text-sm font-semibold py-2 bg-[#333333] text-white hover:bg-opacity-80 transition-colors rounded-full">
-                    <BiShare size={20} />
+                    <RiShareForwardFill size={20} />
                     <span>Bagikan</span>
                 </button>
 

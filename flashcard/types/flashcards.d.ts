@@ -10,6 +10,7 @@ export interface Flashcard {
     is_private: boolean;
     card_count: number;
     created_by: User;
+    created_by_me: boolean;
 }
 
 export interface FlashcardSource {
@@ -26,7 +27,6 @@ export interface Card {
 }
 
 export interface FlashcardDetail extends Flashcard {
-    created_by_me: boolean;
     ai_generated: boolean;
     is_completed: boolean;
     sources: FlashcardSource[];

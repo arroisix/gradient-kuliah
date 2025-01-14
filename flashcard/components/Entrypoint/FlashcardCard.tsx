@@ -2,14 +2,19 @@ import React from 'react';
 import Link from 'next/link';
 import { cn } from 'commons/utils';
 import FlashcardTag from '../../assets/FlashcardTag';
+import Cards from 'flashcard/assets/Cards';
 
 interface FlashcardCardProps {
     id: string;
     title: string;
     totalCards: number;
-    author?: string;
+    author?: {
+        name: string;
+        photo_profile: string;
+    };
     className?: string;
     cardType?: 'myFlashcards' | 'allFlashcards';
+    createdByMe?: boolean;
 }
 
 const FlashcardCard = ({
@@ -18,7 +23,8 @@ const FlashcardCard = ({
     totalCards,
     author,
     className,
-    cardType = 'allFlashcards'
+    cardType = 'allFlashcards',
+    createdByMe
 }: FlashcardCardProps): JSX.Element => {
     return (
         <Link
@@ -46,16 +52,37 @@ const FlashcardCard = ({
                             {title}
                         </h3>
                     </div>
-                    <div className="text-sm text-neutral-400 mt-2 flex items-center justify-between">
-                        {author && (
-                            <span className="truncate max-w-[60%]">
-                                {author}
-                            </span>
-                        )}
-                        <span className="whitespace-nowrap">
-                            {totalCards} Cards
-                        </span>
-                    </div>
+                    {author && (
+                        <div className="flex items-center gap-4 mt-3">
+                            <div className="flex items-center gap-2">
+                                {author.photo_profile ? (
+                                    <img
+                                        src={author.photo_profile}
+                                        alt={author.name}
+                                        className="w-5 h-5 rounded-full"
+                                    />
+                                ) : (
+                                    <div className="w-5 h-5 rounded-full bg-[#5F2BCE] flex items-center justify-center text-white text-xs">
+                                        {author.name.charAt(0).toUpperCase()}
+                                    </div>
+                                )}
+                                <span className="text-sm text-neutral-400 truncate">
+                                    {createdByMe ? 'Kamu' : author.name}
+                                </span>
+                            </div>
+                            <div className="text-[#666666]">|</div>
+                            <div className="flex items-center gap-2 text-sm text-neutral-400">
+                                <Cards />
+                                <span>{totalCards} Cards</span>
+                            </div>
+                        </div>
+                    )}
+                    {!author && (
+                        <div className="flex items-center gap-2 text-sm text-neutral-400">
+                            <Cards />
+                            <span>{totalCards} Cards</span>
+                        </div>
+                    )}
                 </div>
             </div>
         </Link>

@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { IoEyeOutline } from 'react-icons/io5';
 import DaftarIsi from './FlashcardDaftarIsi';
-import { HiOutlineDocumentText } from 'react-icons/hi';
 import { BiSave } from 'react-icons/bi';
 import { BsThreeDots } from 'react-icons/bs';
 import { Menu, Transition } from '@headlessui/react';
@@ -10,6 +8,8 @@ import { useDeleteCardMutation } from 'flashcard/redux/api/flashcardsApi';
 import DeleteModal from '../Detail/DeleteModal';
 import { Fragment } from 'react';
 import { toast } from 'react-toastify';
+import Visibility from 'flashcard/assets/Visibility';
+import Cards from 'flashcard/assets/Cards';
 
 interface EditFlashcardFormProps {
     flashcardData: {
@@ -99,20 +99,14 @@ const EditFlashcardForm = ({
                         </h1>
                         <div className="flex items-center gap-4 mt-2">
                             <div className="flex items-center gap-2">
-                                <HiOutlineDocumentText
-                                    size={20}
-                                    className="text-[#7D89CC]"
-                                />
+                                <Cards />
                                 <span className="text-white">
                                     {totalCards} Cards
                                 </span>
                             </div>
                             <div className="text-[#333333]">|</div>
                             <div className="flex items-center gap-2">
-                                <IoEyeOutline
-                                    size={20}
-                                    className="text-[#7D89CC]"
-                                />
+                                <Visibility />
                                 <span className="text-white">
                                     {flashcardData.isPublic
                                         ? 'Publik'

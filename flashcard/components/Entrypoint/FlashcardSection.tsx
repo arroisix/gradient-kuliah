@@ -63,7 +63,8 @@ const FlashcardSection = (): JSX.Element => {
                             id={flashcard.id}
                             title={flashcard.title}
                             totalCards={flashcard.card_count}
-                            author={flashcard.created_by.name}
+                            author={flashcard.created_by}
+                            createdByMe={flashcard.created_by_me}
                         />
                     ))}
                 </div>
