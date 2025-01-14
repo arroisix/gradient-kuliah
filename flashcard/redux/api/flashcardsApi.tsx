@@ -159,7 +159,10 @@ export const flashcardApi = baseApi.injectEndpoints({
                     Accept: 'application/json'
                 },
                 body
-            })
+            }),
+            invalidatesTags: (result, error, { flashcard_id }) => [
+                { type: 'FLASHCARD', id: flashcard_id }
+            ]
         }),
 
         editCard: builder.mutation<
@@ -178,7 +181,10 @@ export const flashcardApi = baseApi.injectEndpoints({
                     Accept: 'application/json'
                 },
                 body
-            })
+            }),
+            invalidatesTags: (result, error, { card_id }) => [
+                { type: 'FLASHCARD_CARD' as const, id: card_id }
+            ]
         }),
 
         deleteCard: builder.mutation<{ message: string }, { card_id: string }>({
@@ -189,7 +195,10 @@ export const flashcardApi = baseApi.injectEndpoints({
                     'Content-Type': 'application/json',
                     Accept: 'application/json'
                 }
-            })
+            }),
+            invalidatesTags: (result, error, { card_id }) => [
+                { type: 'FLASHCARD_CARD' as const, id: card_id }
+            ]
         }),
         toggleFavoriteCard: builder.mutation<Card, { card_id: string }>({
             query: ({ card_id }) => ({
