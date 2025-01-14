@@ -31,11 +31,11 @@ const FlashcardHeader = ({
 
     return (
         <>
-            <div className="flex items-center justify-between mb-4 md:mb-0">
+            <div className="flex items-center justify-between mb-4">
                 <h1 className="text-3xl font-bold text-white">{title}</h1>
                 <div className="flex items-center gap-2">
                     {mode === 'detail' && (
-                        <div className="fixed p-4 bg-black md:bg-transparent md:static bottom-0 left-0 right-0 w-full flex gap-2 border-t border-[#222222] md:border-t-0 z-50">
+                        <div className="fixed p-4 md:p-0 bg-black md:bg-transparent md:static bottom-0 left-0 right-0 w-full flex gap-2 border-t border-[#222222] md:border-t-0 z-50">
                             {createdByMe && (
                                 <button
                                     onClick={onWriteCard}

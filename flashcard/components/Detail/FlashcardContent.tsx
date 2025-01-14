@@ -109,7 +109,7 @@ const FlashcardContent = ({
                             transition: 'opacity 0.1s'
                         }}>
                         <div className="text-center w-full h-full flex items-center justify-center">
-                            <p className="text-white text-xl font-semibold whitespace-pre-wrap">
+                            <p className="text-white text-base p-4 whitespace-pre-wrap">
                                 {cards[currentIndex].answer}
                             </p>
                         </div>
