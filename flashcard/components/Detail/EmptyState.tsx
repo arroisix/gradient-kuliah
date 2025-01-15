@@ -1,3 +1,4 @@
+import EmptyStateIcon from 'flashcard/assets/EmptyStateIcon';
 import React from 'react';
 import { BsFillPencilFill } from 'react-icons/bs';
 
@@ -11,8 +12,8 @@ const EmptyState = ({
     createdByMe = true
 }: EmptyStateProps): JSX.Element => {
     return (
-        <div className="bg-[#222222] rounded-xl p-6 mb-6">
-            <div className="flex items-center justify-between">
+        <div className="bg-[#222222] rounded-xl p-6 mb-6 overflow-hidden">
+            <div className="flex relative items-center justify-between">
                 <div>
                     <h2 className="text-base font-semibold text-white mb-4">
                         {createdByMe
@@ -28,7 +29,9 @@ const EmptyState = ({
                         </button>
                     )}
                 </div>
-                <div className="w-24 h-24"></div>
+                <div className="absolute -top-8 right-0">
+                    <EmptyStateIcon />
+                </div>
             </div>
         </div>
     );
