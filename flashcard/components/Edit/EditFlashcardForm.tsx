@@ -47,7 +47,7 @@ const EditFlashcardForm = ({
     onNavigate
 }: EditFlashcardFormProps): JSX.Element => {
     const router = useRouter();
-    const { uploadFile } = useUploadFile('qna');
+    const { uploadFile } = useUploadFile('flashcards');
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deleteCard] = useDeleteCardMutation();
     const currentCard = flashcardData.cards[currentIndex];
