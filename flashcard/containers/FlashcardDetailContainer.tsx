@@ -41,8 +41,8 @@ const FlashcardDetailContainer = (): JSX.Element => {
             try {
                 await addCard({
                     flashcard_id: id as string,
-                    question: '',
-                    answer: ''
+                    question: 'Istilah atau pertanyaan',
+                    answer: 'Definisi atau jawaban'
                 }).unwrap();
 
                 await refetch();

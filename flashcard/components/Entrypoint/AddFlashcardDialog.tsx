@@ -29,7 +29,6 @@ const AddFlashcardDialog = ({
                     <div className="fixed inset-0 bg-black/75" />
                 </Transition.Child>
 
-                {/* Mobile: Bottom Sheet */}
                 <div className="fixed left-0 right-0 -bottom-2 md:hidden">
                     <div className="flex min-h-full items-end">
                         <Transition.Child
@@ -108,7 +107,6 @@ const AddFlashcardDialog = ({
                     </div>
                 </div>
 
-                {/* Desktop: Centered Modal */}
                 <div className="fixed inset-0 overflow-y-auto hidden md:block">
                     <div className="flex min-h-full items-center justify-center p-4">
                         <Transition.Child
