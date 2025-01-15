@@ -88,7 +88,7 @@ const FlashcardContent = ({
 
     const cardContent =
         mode === 'study' ? (
-            <div className="perspective-1000">
+            <div className="perspective-1000 md:h-auto h-[85vh]">
                 <motion.div
                     initial="initial"
                     animate={studyState?.isFlipped ? 'flipped' : 'initial'}
@@ -97,7 +97,7 @@ const FlashcardContent = ({
                     onAnimationStart={handleFlipStart}
                     onAnimationComplete={handleFlipComplete}
                     className={cn(
-                        'w-full relative rounded-xl p-6 min-h-[320px] flex items-center justify-center preserve-3d cursor-pointer',
+                        'w-full relative rounded-xl p-6 min-h-[320px] h-full flex items-center justify-center preserve-3d cursor-pointer',
                         studyState?.isFlipped ? 'bg-[#181818]' : 'bg-[#252246]'
                     )}
                     onClick={onFlip}>
@@ -228,7 +228,11 @@ const FlashcardContent = ({
     return (
         <div className="mb-6">
             {cardContent}
-            <div className="flex justify-center items-center mt-4">
+            <div
+                className={cn(
+                    'flex justify-center items-center mt-4',
+                    mode === 'study' ? 'md:flex hidden' : 'flex'
+                )}>
                 <div className="flex items-center">
                     <button
                         onClick={() => onNavigate('prev')}

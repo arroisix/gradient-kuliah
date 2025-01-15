@@ -2,10 +2,15 @@ import React from 'react';
 import { GetServerSideProps } from 'next';
 import LearnLayout from 'commons/learnLayout';
 import StudyFlashcardContainer from 'flashcard/containers/StudyFlashcardContainer';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 
 const StudyFlashcardPage = (): JSX.Element => {
+    const { isMobileBreakpoints } = useWindowBreakpoints();
+
     return (
-        <LearnLayout>
+        <LearnLayout
+            hideNavbar={isMobileBreakpoints}
+            noTopPadding={isMobileBreakpoints}>
             <StudyFlashcardContainer />
         </LearnLayout>
     );

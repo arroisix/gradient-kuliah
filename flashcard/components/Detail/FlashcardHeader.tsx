@@ -1,7 +1,10 @@
-import { BsFillPencilFill } from 'react-icons/bs';
+import React from 'react';
 import { useRouter } from 'next/router';
-import Cards from 'flashcard/assets/Cards';
+import { BsFillPencilFill } from 'react-icons/bs';
+import { X } from 'lucide-react';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import Visibility from 'flashcard/assets/Visibility';
+import Cards from 'flashcard/assets/Cards';
 
 interface FlashcardHeaderProps {
     title: string;
@@ -23,16 +26,33 @@ const FlashcardHeader = ({
     createdByMe = true
 }: FlashcardHeaderProps): JSX.Element => {
     const router = useRouter();
-    const { id } = router.query;
+    const { isMobileBreakpoints } = useWindowBreakpoints();
 
-    const handleStudy = () => {
-        router.push(`/flashcard/${id}/study`);
+    const handleClose = () => {
+        router.back();
     };
 
+    const handleStudy = () => {
+        router.push(`/flashcard/${router.query.id}/study`);
+    };
+
+    if (mode === 'study' && isMobileBreakpoints) {
+        return (
+            <div className="flex items-center justify-between w-full p-3 text-white">
+                <h1 className="text-xl font-medium">{title}</h1>
+                <button
+                    onClick={handleClose}
+                    className="p-1 hover:bg-gray-800 rounded-full transition-colors">
+                    <X className="w-6 h-6" />
+                </button>
+            </div>
+        );
+    }
+
     return (
-        <>
-            <div className="flex items-center justify-between mb-4">
-                <h1 className="text-3xl font-bold text-white">{title}</h1>
+        <div className="flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+                <h1 className="text-2xl font-bold">{title}</h1>
                 <div className="flex items-center gap-2">
                     {mode === 'detail' && (
                         <div className="fixed p-4 md:p-0 bg-black md:bg-transparent md:static bottom-0 left-0 right-0 w-full flex gap-2 border-t border-[#222222] md:border-t-0 z-50">
@@ -59,7 +79,6 @@ const FlashcardHeader = ({
                     )}
                 </div>
             </div>
-
             <div className="flex items-center gap-4 mb-4">
                 <div className="flex items-center gap-2">
                     <Cards />
@@ -73,7 +92,7 @@ const FlashcardHeader = ({
                     </span>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

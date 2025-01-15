@@ -11,6 +11,9 @@ import { cn } from 'commons/utils';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import { toast } from 'react-toastify';
+import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
+import CardList from 'flashcard/components/Study/CardList';
+import { FaListUl } from 'react-icons/fa6';
 
 interface StudyState {
     isFlipped: boolean;
@@ -22,6 +25,7 @@ const StudyFlashcardContainer = (): JSX.Element => {
     const { id } = router.query;
     const [currentIndex, setCurrentIndex] = useState(0);
     const [showAnswer, setShowAnswer] = useState(false);
+    const [isListOpen, setIsListOpen] = useState(false);
     const [studyState, setStudyState] = useState<StudyState>({
         isFlipped: false,
         showHint: false
@@ -95,7 +99,7 @@ const StudyFlashcardContainer = (): JSX.Element => {
 
     return (
         <div className="w-full">
-            <div className="px-12">
+            <div className="hidden md:block md:px-12">
                 <Breadcrumb
                     className="w-full py-4"
                     nextItem={{
@@ -108,7 +112,7 @@ const StudyFlashcardContainer = (): JSX.Element => {
                 />
             </div>
 
-            <div className="container mx-auto max-w-3xl px-4 py-6">
+            <div className="container mx-auto max-w-3xl md:px-4 md:py-6">
                 <FlashcardHeader
                     title={flashcard.title}
                     cardCount={flashcard.card_count}
@@ -129,9 +133,37 @@ const StudyFlashcardContainer = (): JSX.Element => {
                     onToggleFavorite={handleToggleFavorite}
                 />
 
-                <div className="h-[0.5px] bg-[#333333] my-6" />
+                <div className="fixed bottom-0 inset-x-0 p-4 flex justify-between items-center md:hidden bg-black">
+                    <button
+                        onClick={() => setIsListOpen(true)}
+                        className="pr-2 rounded-full text-white">
+                        <FaListUl size={24} />
+                    </button>
+                    <div className="text-[#666666]">|</div>
+                    <div className="flex items-center gap-2 w-full justify-between">
+                        <span className="pl-2 text-[#999999]">
+                            {currentIndex + 1}/{totalCards}
+                        </span>
+                        <div className="flex gap-4">
+                            <button
+                                onClick={() => handleNavigate('prev')}
+                                disabled={currentIndex === 0}
+                                className="p-2 bg-[#333333] rounded-full text-white disabled:opacity-50">
+                                <HiChevronLeft size={24} />
+                            </button>
+                            <button
+                                onClick={() => handleNavigate('next')}
+                                disabled={currentIndex === totalCards - 1}
+                                className="p-2 bg-[#333333] rounded-full text-white disabled:opacity-50">
+                                <HiChevronRight size={24} />
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-                <div className="mt-12">
+                <div className="h-[0.5px] bg-[#333333] my-6 hidden md:block" />
+
+                <div className="mt-12 hidden md:block">
                     <div className="flex items-center justify-between mb-6">
                         <h2 className="text-xl font-bold text-white">
                             Daftar Isi
@@ -193,6 +225,23 @@ const StudyFlashcardContainer = (): JSX.Element => {
                     </div>
                 </div>
             </div>
+            <CardList
+                cards={flashcard.cards}
+                currentIndex={currentIndex}
+                onSelectCard={setCurrentIndex}
+                showAnswer={showAnswer}
+                onClose={() => setIsListOpen(false)}
+                isOpen={isListOpen}
+                setShowAnswer={setShowAnswer}
+                title={flashcard.title}
+                authorName={flashcard.created_by.name}
+                authorInitials={flashcard.created_by.name
+                    .split(' ')
+                    .map((n) => n[0])
+                    .slice(0, 2)
+                    .join('')}
+                photo_profile={flashcard.created_by.photo_profile}
+            />
         </div>
     );
 };
