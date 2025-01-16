@@ -19,11 +19,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-    const flashcardId = params?.id;
+    const flashcardSlug = params?.slug;
 
     return {
         props: {
-            canonical: `https://gradient.academy/flashcard/${flashcardId}`,
+            canonical: `https://gradient.academy/flashcard/${flashcardSlug}`,
             title: 'Detail Flashcard - Gradient',
             description: 'Lihat detail flashcard untuk proses belajar kamu!'
         },

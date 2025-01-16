@@ -19,7 +19,7 @@ const StudyFlashcardPage = (): JSX.Element => {
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     return {
         props: {
-            canonical: `https://gradient.academy/flashcard/${params?.id}/study`,
+            canonical: `https://gradient.academy/flashcard/${params?.slug}/study`,
             title: 'Study Flashcard - Gradient',
             description: 'Study your flashcards'
         }

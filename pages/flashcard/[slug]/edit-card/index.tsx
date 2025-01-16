@@ -14,7 +14,7 @@ const EditFlashcardPage = (): JSX.Element => {
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     return {
         props: {
-            canonical: `https://gradient.academy/flashcard/${params?.id}/edit-card`,
+            canonical: `https://gradient.academy/flashcard/${params?.slug}/edit-card`,
             title: 'Edit Flashcard - Gradient',
             description: 'Edit your flashcard'
         }
