@@ -30,6 +30,7 @@ interface CreateFlashcardFormProps {
     mode?: 'create' | 'edit';
     initialData?: {
         id: string;
+        slug: string;
         title: string;
         description: string;
         is_private: boolean;
@@ -69,7 +70,7 @@ const CreateFlashcardForm = ({
 
     const handleClose = () => {
         if (mode === 'edit' && initialData) {
-            router.push(`/flashcard/${initialData.id}`);
+            router.push(`/flashcard/${initialData.slug}`);
         } else {
             router.push('/flashcard');
         }
@@ -82,7 +83,7 @@ const CreateFlashcardForm = ({
         try {
             if (mode === 'edit' && initialData) {
                 await editFlashcard({
-                    flashcard_id: initialData.id,
+                    flashcard_slug: initialData.slug,
                     title: formData.title,
                     description: formData.description,
                     is_private: formData.isPrivate

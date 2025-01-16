@@ -79,18 +79,18 @@ export const flashcardApi = baseApi.injectEndpoints({
 
         getFlashcardDetail: builder.query<
             FlashcardDetail,
-            { flashcard_id: string }
+            { flashcard_slug: string }
         >({
-            query: ({ flashcard_id }) => ({
-                url: `${FLASHCARD_BASE_URL}${flashcard_id}/`,
+            query: ({ flashcard_slug }) => ({
+                url: `${FLASHCARD_BASE_URL}${flashcard_slug}/`,
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                     Accept: 'application/json'
                 }
             }),
-            providesTags: (result, error, { flashcard_id }) => [
-                { type: 'FLASHCARD' as const, id: flashcard_id },
+            providesTags: (result, error, { flashcard_slug }) => [
+                { type: 'FLASHCARD' as const, id: flashcard_slug },
                 ...(result?.cards?.map((card) => ({
                     type: 'FLASHCARD_CARD' as const,
                     id: card.id
@@ -101,14 +101,14 @@ export const flashcardApi = baseApi.injectEndpoints({
         editFlashcard: builder.mutation<
             FlashcardDetail,
             {
-                flashcard_id: string;
+                flashcard_slug: string;
                 title: string;
                 description: string;
                 is_private: boolean;
             }
         >({
-            query: ({ flashcard_id, ...body }) => ({
-                url: `${FLASHCARD_BASE_URL}${flashcard_id}/`,
+            query: ({ flashcard_slug, ...body }) => ({
+                url: `${FLASHCARD_BASE_URL}${flashcard_slug}/`,
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -120,10 +120,10 @@ export const flashcardApi = baseApi.injectEndpoints({
 
         deleteFlashcard: builder.mutation<
             { message: string },
-            { flashcard_id: string }
+            { flashcard_slug: string }
         >({
-            query: ({ flashcard_id }) => ({
-                url: `${FLASHCARD_BASE_URL}${flashcard_id}/`,
+            query: ({ flashcard_slug }) => ({
+                url: `${FLASHCARD_BASE_URL}${flashcard_slug}/`,
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -146,13 +146,13 @@ export const flashcardApi = baseApi.injectEndpoints({
         addCard: builder.mutation<
             Card,
             {
-                flashcard_id: string;
+                flashcard_slug: string;
                 question: string;
                 answer: string;
             }
         >({
-            query: ({ flashcard_id, ...body }) => ({
-                url: `${FLASHCARD_BASE_URL}${flashcard_id}/cards/`,
+            query: ({ flashcard_slug, ...body }) => ({
+                url: `${FLASHCARD_BASE_URL}${flashcard_slug}/cards/`,
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -160,8 +160,8 @@ export const flashcardApi = baseApi.injectEndpoints({
                 },
                 body
             }),
-            invalidatesTags: (result, error, { flashcard_id }) => [
-                { type: 'FLASHCARD', id: flashcard_id }
+            invalidatesTags: (result, error, { flashcard_slug }) => [
+                { type: 'FLASHCARD', id: flashcard_slug }
             ]
         }),
 

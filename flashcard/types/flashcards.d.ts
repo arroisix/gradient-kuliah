@@ -5,6 +5,7 @@ export interface User {
 
 export interface Flashcard {
     id: string;
+    slug: string;
     title: string;
     description: string;
     is_private: boolean;

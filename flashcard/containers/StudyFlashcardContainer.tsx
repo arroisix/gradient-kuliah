@@ -22,7 +22,7 @@ interface StudyState {
 
 const StudyFlashcardContainer = (): JSX.Element => {
     const router = useRouter();
-    const { id } = router.query;
+    const { slug } = router.query;
     const [currentIndex, setCurrentIndex] = useState(0);
     const [showAnswer, setShowAnswer] = useState(false);
     const [isListOpen, setIsListOpen] = useState(false);
@@ -32,8 +32,8 @@ const StudyFlashcardContainer = (): JSX.Element => {
     });
 
     const { data: flashcard, isLoading } = useGetFlashcardDetailQuery(
-        { flashcard_id: id as string },
-        { skip: !id }
+        { flashcard_slug: slug as string },
+        { skip: !slug }
     );
 
     const [toggleFavorite] = useToggleFavoriteCardMutation();
@@ -104,7 +104,7 @@ const StudyFlashcardContainer = (): JSX.Element => {
                     className="w-full py-4"
                     nextItem={{
                         name: flashcard.title,
-                        url: `/flashcard/${id}`,
+                        url: `/flashcard/${slug}`,
                         nextItem: {
                             name: 'Pelajari Flashcard'
                         }

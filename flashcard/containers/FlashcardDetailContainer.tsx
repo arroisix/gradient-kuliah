@@ -17,7 +17,7 @@ import { toast } from 'react-toastify';
 
 const FlashcardDetailContainer = (): JSX.Element => {
     const router = useRouter();
-    const { id } = router.query;
+    const { slug } = router.query;
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deleteFlashcard] = useDeleteFlashcardMutation();
@@ -28,9 +28,9 @@ const FlashcardDetailContainer = (): JSX.Element => {
         isLoading,
         refetch
     } = useGetFlashcardDetailQuery(
-        { flashcard_id: id as string },
+        { flashcard_slug: slug as string },
         {
-            skip: !id
+            skip: !slug
         }
     );
 
@@ -40,25 +40,25 @@ const FlashcardDetailContainer = (): JSX.Element => {
         if (!flashcard.cards || flashcard.cards.length === 0) {
             try {
                 await addCard({
-                    flashcard_id: id as string,
+                    flashcard_slug: slug as string,
                     question: 'Istilah atau pertanyaan',
                     answer: 'Definisi atau jawaban'
                 }).unwrap();
 
                 await refetch();
 
-                router.push(`/flashcard/${id}/edit-card`);
+                router.push(`/flashcard/${slug}/edit-card`);
             } catch (error) {
                 console.error('Failed to create initial card:', error);
                 return;
             }
         } else {
-            router.push(`/flashcard/${id}/edit-card`);
+            router.push(`/flashcard/${slug}/edit-card`);
         }
     };
 
     const handleEditFlashcard = () => {
-        router.push(`/flashcard/${id}/edit`);
+        router.push(`/flashcard/${slug}/edit`);
     };
 
     const handleDelete = () => {
@@ -67,9 +67,9 @@ const FlashcardDetailContainer = (): JSX.Element => {
 
     const handleDeleteConfirm = async () => {
         try {
-            if (id) {
+            if (slug) {
                 await deleteFlashcard({
-                    flashcard_id: id as string
+                    flashcard_slug: slug as string
                 }).unwrap();
                 setIsDeleteModalOpen(false);
                 toast.success('Flashcard berhasil dihapus', {

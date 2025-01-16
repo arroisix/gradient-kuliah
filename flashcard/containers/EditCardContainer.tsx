@@ -13,11 +13,11 @@ import { toast } from 'react-toastify';
 
 const EditCardContainer = (): JSX.Element => {
     const router = useRouter();
-    const { id: flashcardId } = router.query;
+    const { slug } = router.query;
 
     const { data: flashcardDetail, isLoading } = useGetFlashcardDetailQuery(
-        { flashcard_id: flashcardId as string },
-        { skip: !flashcardId }
+        { flashcard_slug: slug as string },
+        { skip: !slug }
     );
 
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -69,7 +69,7 @@ const EditCardContainer = (): JSX.Element => {
     const handleAddCard = useCallback(async () => {
         try {
             const newCard = await addCard({
-                flashcard_id: flashcardId as string,
+                flashcard_slug: slug as string,
                 question: 'Istilah atau pertanyaan',
                 answer: 'Definisi atau jawaban'
             }).unwrap();
@@ -87,7 +87,7 @@ const EditCardContainer = (): JSX.Element => {
         } catch (error) {
             console.error('Failed to add new card:', error);
         }
-    }, [addCard, flashcardId, localCards.length]);
+    }, [addCard, slug, localCards.length]);
 
     const handleNavigateCard = useCallback(
         (direction: 'prev' | 'next') => {
@@ -121,7 +121,7 @@ const EditCardContainer = (): JSX.Element => {
                     className="w-full py-4"
                     nextItem={{
                         name: flashcardDetail ? flashcardDetail?.title : '',
-                        url: `/flashcard/${flashcardId}`,
+                        url: `/flashcard/${slug}`,
                         nextItem: {
                             name: 'Edit Flashcard'
                         }

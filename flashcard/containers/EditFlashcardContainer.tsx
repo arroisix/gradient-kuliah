@@ -6,11 +6,11 @@ import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 
 const EditFlashcardContainer = (): JSX.Element => {
     const router = useRouter();
-    const { id: flashcardId } = router.query;
+    const { slug } = router.query;
 
     const { data: flashcardDetail, isLoading } = useGetFlashcardDetailQuery(
-        { flashcard_id: flashcardId as string },
-        { skip: !flashcardId }
+        { flashcard_slug: slug as string },
+        { skip: !slug }
     );
 
     if (isLoading) {
@@ -26,6 +26,7 @@ const EditFlashcardContainer = (): JSX.Element => {
             mode="edit"
             initialData={{
                 id: flashcardDetail.id,
+                slug: flashcardDetail.slug,
                 title: flashcardDetail.title,
                 description: flashcardDetail.description,
                 is_private: flashcardDetail.is_private
