@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import DaftarIsi from './FlashcardDaftarIsi';
 import { BiSave } from 'react-icons/bi';
-import { BsThreeDots } from 'react-icons/bs';
+import { BsThreeDots, BsThreeDotsVertical } from 'react-icons/bs';
 import { Menu, Transition } from '@headlessui/react';
 import { useDeleteCardMutation } from 'flashcard/redux/api/flashcardsApi';
 import DeleteModal from '../Detail/DeleteModal';
@@ -13,6 +13,12 @@ import Cards from 'flashcard/assets/Cards';
 import useUploadFile from 'commons/hooks/useUploadFile';
 import ImageUploadControls from './ImageUploadControls';
 import LoadingBackdrop from '../../../commons/components/elements/LoadingBackdrop';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
+import { cn } from 'commons/utils';
+import { ChevronLeft, Plus } from 'lucide-react';
+import { FaListUl } from 'react-icons/fa';
+import DeleteBottomSheet from './DeleteBottomSheet';
+import DeleteConfirmationBottomSheet from './DeleteConfirmationBottomSheet';
 
 interface EditFlashcardFormProps {
     flashcardData: {
@@ -52,11 +58,20 @@ const EditFlashcardForm = ({
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deleteCard] = useDeleteCardMutation();
     const currentCard = flashcardData.cards[currentIndex];
+    const { isMobileBreakpoints } = useWindowBreakpoints();
+    const [isListOpen, setIsListOpen] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
     const totalCards = flashcardData.cards.length;
 
+    const handleBack = () => {
+        router.back();
+    };
+
     const handleDelete = () => {
-        setIsDeleteModalOpen(true);
+        setIsMenuOpen(false);
+        setIsDeleteConfirmOpen(true);
     };
 
     const handleDeleteConfirm = async () => {
@@ -64,7 +79,7 @@ const EditFlashcardForm = ({
             await deleteCard({
                 card_id: currentCard.id
             }).unwrap();
-            setIsDeleteModalOpen(false);
+            setIsDeleteConfirmOpen(false);
             toast.success('Card berhasil dihapus', {
                 position: toast.POSITION.TOP_CENTER
             });
@@ -129,7 +144,36 @@ const EditFlashcardForm = ({
     }
 
     return (
-        <div className="min-h-screen md:py-6">
+        <div className="md:min-h-screen md:py-6">
+            <div
+                className={cn(
+                    'fixed top-0 left-0 right-0 bg-black z-50 px-4 py-3',
+                    'flex items-center justify-between',
+                    'md:hidden'
+                )}>
+                <button onClick={handleBack} className="text-white">
+                    <ChevronLeft size={24} />
+                </button>
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={onSave}
+                        disabled={!hasChanges}
+                        className={`inline-flex items-center gap-2 px-4 py-2 rounded-full font-semibold ${
+                            hasChanges
+                                ? 'bg-[#333333] text-white hover:bg-opacity-80'
+                                : 'bg-neutral-700 text-neutral-400 cursor-not-allowed'
+                        } transition-colors`}>
+                        <BiSave size={20} />
+                        Simpan
+                    </button>
+                    <button
+                        onClick={() => setIsMenuOpen(true)}
+                        className="p-2 rounded-full text-white">
+                        <BsThreeDotsVertical size={20} />
+                    </button>
+                </div>
+            </div>
+
             <div className="max-w-4xl mx-auto md:px-4">
                 <div className="flex justify-between items-center mb-6">
                     <div>
@@ -139,7 +183,7 @@ const EditFlashcardForm = ({
                         <h1 className="text-2xl font-bold text-white">
                             {flashcardData.title}
                         </h1>
-                        <div className="flex items-center gap-4 mt-2">
+                        <div className="hidden md:flex items-center gap-4 mt-2">
                             <div className="flex items-center gap-2">
                                 <Cards />
                                 <span className="text-white">
@@ -157,7 +201,7 @@ const EditFlashcardForm = ({
                             </div>
                         </div>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="hidden md:flex items-center gap-3">
                         <button
                             onClick={onSave}
                             disabled={!hasChanges}
@@ -201,8 +245,8 @@ const EditFlashcardForm = ({
                     </div>
                 </div>
 
-                <div className="rounded-lg bg-[#181818] p-6 mb-6">
-                    <div className="space-y-6">
+                <div className="rounded-lg md:h-auto h-[75vh] bg-[#181818] p-6 mb-6">
+                    <div className="space-y-6 h-full">
                         <div className="relative">
                             <textarea
                                 value={currentCard.question}
@@ -224,7 +268,7 @@ const EditFlashcardForm = ({
                             />
                         </div>
 
-                        <div className="relative">
+                        <div className="relative h-[73%]">
                             <textarea
                                 value={currentCard.answer}
                                 onChange={(e) =>
@@ -236,7 +280,7 @@ const EditFlashcardForm = ({
                                 }
                                 onPaste={(e) => handlePaste(e, 'question')}
                                 placeholder="Definisi atau jawaban"
-                                className="w-full min-h-[120px] bg-[#222222] rounded-lg p-3 pb-10 text-white resize-none border-none outline-none placeholder:text-neutral-500"
+                                className="w-full min-h-[120px] h-full bg-[#222222] rounded-lg p-3 pb-10 text-white resize-none border-none outline-none placeholder:text-neutral-500"
                             />
                             <ImageUploadControls
                                 onImageUpload={(file) =>
@@ -247,7 +291,7 @@ const EditFlashcardForm = ({
                     </div>
                 </div>
 
-                <div className="flex justify-center items-center mb-6">
+                <div className="hidden md:flex justify-center items-center mb-6">
                     <div className="flex items-center">
                         <button
                             onClick={() => onNavigate('prev')}
@@ -277,7 +321,7 @@ const EditFlashcardForm = ({
                     </div>
                 </div>
 
-                <div className="h-[0.5px] bg-[#333333] mb-6" />
+                <div className="hidden md:block h-[0.5px] bg-[#333333] mb-6" />
 
                 <DaftarIsi
                     onAddCard={onAddCard}
@@ -286,7 +330,28 @@ const EditFlashcardForm = ({
                     )}
                     cards={flashcardData.cards}
                     currentIndex={currentIndex}
+                    isOpen={isListOpen}
+                    onClose={() => setIsListOpen(false)}
+                    isMobile={isMobileBreakpoints}
                 />
+            </div>
+
+            <div className="fixed bottom-0 inset-x-0 p-4 flex justify-between items-center md:hidden bg-black">
+                <button
+                    onClick={() => setIsListOpen(true)}
+                    className="p-2 rounded-full text-white">
+                    <FaListUl size={24} />
+                </button>
+                <div className="text-[#666666]">|</div>
+                <span className="text-[#999999]">
+                    {currentIndex + 1}/{flashcardData.cards.length}
+                </span>
+                <div className="text-[#666666]">|</div>
+                <button
+                    onClick={onAddCard}
+                    className="p-2 rounded-full bg-[#5F2BCE] text-white">
+                    <Plus size={24} />
+                </button>
             </div>
 
             {isDeleteModalOpen && (
@@ -296,6 +361,18 @@ const EditFlashcardForm = ({
                     onCancel={handleDeleteCancel}
                 />
             )}
+
+            <DeleteBottomSheet
+                isOpen={isMenuOpen}
+                onClose={() => setIsMenuOpen(false)}
+                onDelete={handleDelete}
+            />
+
+            <DeleteConfirmationBottomSheet
+                isOpen={isDeleteConfirmOpen}
+                onClose={() => setIsDeleteConfirmOpen(false)}
+                onConfirm={handleDeleteConfirm}
+            />
         </div>
     );
 };
