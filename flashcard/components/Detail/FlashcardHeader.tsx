@@ -33,7 +33,7 @@ const FlashcardHeader = ({
     };
 
     const handleStudy = () => {
-        router.push(`/flashcard/${router.query.id}/study`);
+        router.push(`/flashcard/${router.query.slug}/study`);
     };
 
     if (mode === 'study' && isMobileBreakpoints) {
