@@ -14,6 +14,7 @@ import EmptyState from '../components/Detail/EmptyState';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import { toast } from 'react-toastify';
+import EmptyStateFavorite from '../assets/EmptyStateFavorite';
 
 const FlashcardDetailContainer = (): JSX.Element => {
     const router = useRouter();
@@ -197,11 +198,16 @@ const FlashcardDetailContainer = (): JSX.Element => {
                             ))}
                         </div>
                     ) : (
-                        <div className="flex flex-col items-center justify-center py-12">
-                            <div className="w-24 h-24 mb-4" />
-                            <p className="text-neutral-400">
-                                Belum ada flashcard favorit
-                            </p>
+                        <div className="flex flex-col items-center justify-center gap-5 pt-4">
+                            <EmptyStateFavorite />
+                            <div className="flex flex-col justify-center items-center">
+                                <p className="text-white font-semibold text-[16px]">
+                                    Belum ada flashcard
+                                </p>
+                                <p className="text-[#999999] text-[14px]">
+                                    Flashcard yang kamu buat akan muncul di sini
+                                </p>
+                            </div>
                         </div>
                     )}
                 </div>

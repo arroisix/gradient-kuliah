@@ -127,15 +127,15 @@ export const BREADCRUMB: BreadcrumbProps = {
     '/flashcard': {
         name: 'Flashcard'
     },
-    '/flashcard/[id]': {
+    '/flashcard/[slug]': {
         name: 'Flashcard',
         url: '/flashcard'
     },
-    '/flashcard/[id]/study': {
+    '/flashcard/[slug]/study': {
         name: 'Flashcard',
         url: '/flashcard'
     },
-    '/flashcard/[id]/edit-card': {
+    '/flashcard/[slug]/edit-card': {
         name: 'Flashcard',
         url: '/flashcard'
     }

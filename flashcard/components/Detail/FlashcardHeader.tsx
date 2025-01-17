@@ -63,7 +63,7 @@ const FlashcardHeader = ({
                                         hasCards
                                             ? 'bg-[#333333]'
                                             : 'bg-[#5F2BCE]'
-                                    } text-white p-4 md:p-3 rounded-full hover:opacity-90 transition-colors`}>
+                                    } text-white px-5 py-3 md:px-4 md:py-2 md:p-3 rounded-full hover:opacity-90 transition-colors`}>
                                     <BsFillPencilFill size={14} />
                                     {!hasCards && <span>Tulis Flashcard</span>}
                                 </button>

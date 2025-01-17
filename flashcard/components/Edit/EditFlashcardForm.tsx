@@ -12,6 +12,7 @@ import Visibility from 'flashcard/assets/Visibility';
 import Cards from 'flashcard/assets/Cards';
 import useUploadFile from 'commons/hooks/useUploadFile';
 import ImageUploadControls from './ImageUploadControls';
+import LoadingBackdrop from '../../../commons/components/elements/LoadingBackdrop';
 
 interface EditFlashcardFormProps {
     flashcardData: {
@@ -67,7 +68,7 @@ const EditFlashcardForm = ({
             toast.success('Card berhasil dihapus', {
                 position: toast.POSITION.TOP_CENTER
             });
-            router.push(`/flashcard/${router.query.id}`);
+            router.push(`/flashcard/${router.query.slug}`);
         } catch (error) {
             console.error('Failed to delete card:', error);
         }
@@ -124,7 +125,7 @@ const EditFlashcardForm = ({
     };
 
     if (!currentCard) {
-        return <div>Loading...</div>;
+        return <LoadingBackdrop />;
     }
 
     return (
