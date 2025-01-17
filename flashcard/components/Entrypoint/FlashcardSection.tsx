@@ -60,7 +60,7 @@ const FlashcardSection = (): JSX.Element => {
                     {flashcardsData?.data.map((flashcard) => (
                         <FlashcardCard
                             key={flashcard.id}
-                            id={flashcard.id}
+                            slug={flashcard.slug}
                             title={flashcard.title}
                             totalCards={flashcard.card_count}
                             author={flashcard.created_by}

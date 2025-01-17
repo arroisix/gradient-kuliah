@@ -22,7 +22,7 @@ const MyFlashcardsSection = (): JSX.Element => {
                 {lastSeenFlashcardsData.data.map((flashcard) => (
                     <FlashcardCard
                         key={flashcard.id}
-                        id={flashcard.id}
+                        slug={flashcard.slug}
                         title={flashcard.title}
                         totalCards={flashcard.card_count}
                         cardType="myFlashcards"

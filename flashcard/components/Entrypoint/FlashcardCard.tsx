@@ -5,7 +5,7 @@ import FlashcardTag from '../../assets/FlashcardTag';
 import Cards from 'flashcard/assets/Cards';
 
 interface FlashcardCardProps {
-    id: string;
+    slug: string;
     title: string;
     totalCards: number;
     author?: {
@@ -18,7 +18,7 @@ interface FlashcardCardProps {
 }
 
 const FlashcardCard = ({
-    id,
+    slug,
     title,
     totalCards,
     author,
@@ -28,7 +28,7 @@ const FlashcardCard = ({
 }: FlashcardCardProps): JSX.Element => {
     return (
         <Link
-            href={`/flashcard/${id}`}
+            href={`/flashcard/${slug}`}
             className={cn('relative block h-full w-full', className)}>
             {cardType !== 'myFlashcards' && (
                 <div className="absolute -top-2 left-0 right-0 mx-auto w-[95%] h-full rounded-lg bg-neutral-800" />
