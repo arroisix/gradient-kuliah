@@ -1,9 +1,7 @@
 import React from 'react';
-import { BsThreeDots } from 'react-icons/bs';
-import { Menu, Transition } from '@headlessui/react';
-import { Fragment } from 'react';
 import { toast } from 'react-toastify';
 import { RiShareForwardFill } from 'react-icons/ri';
+import ActionMenu from './ActionMenu';
 
 interface FlashcardActionsProps {
     userInitials: string;
@@ -62,44 +60,7 @@ const FlashcardActions = ({
                 </button>
 
                 {createdByMe && (
-                    <Menu as="div" className="relative">
-                        <Menu.Button className="p-2 bg-[#333333] text-white hover:bg-opacity-80 transition-colors rounded-full">
-                            <BsThreeDots size={20} />
-                        </Menu.Button>
-                        <Transition
-                            as={Fragment}
-                            enter="transition duration-100 ease-out"
-                            enterFrom="transform scale-95 opacity-0"
-                            enterTo="transform scale-100 opacity-100"
-                            leave="transition duration-75 ease-out"
-                            leaveFrom="transform scale-100 opacity-100"
-                            leaveTo="transform scale-95 opacity-0">
-                            <Menu.Items className="absolute right-0 mt-1 w-40 bg-neutral-800 rounded-lg shadow-lg py-1 z-50">
-                                <Menu.Item>
-                                    {({ active }) => (
-                                        <button
-                                            onClick={onEdit}
-                                            className={`${
-                                                active ? 'bg-neutral-700' : ''
-                                            } w-full text-left px-4 py-2 text-sm text-white`}>
-                                            Edit
-                                        </button>
-                                    )}
-                                </Menu.Item>
-                                <Menu.Item>
-                                    {({ active }) => (
-                                        <button
-                                            onClick={onDelete}
-                                            className={`${
-                                                active ? 'bg-neutral-700' : ''
-                                            } w-full text-left px-4 py-2 text-sm text-red-500`}>
-                                            Hapus
-                                        </button>
-                                    )}
-                                </Menu.Item>
-                            </Menu.Items>
-                        </Transition>
-                    </Menu>
+                    <ActionMenu onEdit={onEdit} onDelete={onDelete} />
                 )}
             </div>
         </div>

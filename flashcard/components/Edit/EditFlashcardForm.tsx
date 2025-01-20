@@ -343,9 +343,31 @@ const EditFlashcardForm = ({
                     <FaListUl size={24} />
                 </button>
                 <div className="text-[#666666]">|</div>
-                <span className="text-[#999999]">
-                    {currentIndex + 1}/{flashcardData.cards.length}
-                </span>
+                <div className="flex items-center gap-4">
+                    <button
+                        onClick={() => onNavigate('prev')}
+                        disabled={currentIndex === 0}
+                        className={`px-2 py-1 rounded-full text-white ${
+                            currentIndex === 0
+                                ? 'bg-[#333333] opacity-20 cursor-not-allowed'
+                                : 'bg-[#333333] hover:bg-opacity-80'
+                        }`}>
+                        ←
+                    </button>
+                    <span className="text-[#999999]">
+                        {currentIndex + 1}/{flashcardData.cards.length}
+                    </span>
+                    <button
+                        onClick={() => onNavigate('next')}
+                        disabled={currentIndex === totalCards - 1}
+                        className={`px-2 py-1 rounded-full text-white ${
+                            currentIndex === totalCards - 1
+                                ? 'bg-[#333333] opacity-20 cursor-not-allowed'
+                                : 'bg-[#333333] hover:bg-opacity-80'
+                        }`}>
+                        →
+                    </button>
+                </div>
                 <div className="text-[#666666]">|</div>
                 <button
                     onClick={onAddCard}

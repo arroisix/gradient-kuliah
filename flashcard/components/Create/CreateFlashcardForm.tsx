@@ -91,7 +91,7 @@ const CreateFlashcardForm = ({
                 toast.success('Detail flashcard diperbarui', {
                     position: toast.POSITION.TOP_CENTER
                 });
-                router.push(`/flashcard/${initialData.id}`);
+                router.push(`/flashcard/${initialData.slug}`);
             } else {
                 await createFlashcard({
                     title: formData.title,
