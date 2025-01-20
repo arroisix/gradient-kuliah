@@ -19,6 +19,7 @@ import { ChevronLeft, Plus } from 'lucide-react';
 import { FaListUl } from 'react-icons/fa';
 import DeleteBottomSheet from './DeleteBottomSheet';
 import DeleteConfirmationBottomSheet from './DeleteConfirmationBottomSheet';
+import FlashcardEditor from './FlashcardEditor';
 
 interface EditFlashcardFormProps {
     flashcardData: {
@@ -121,22 +122,6 @@ const EditFlashcardForm = ({
             toast.error('Gagal mengupload gambar', {
                 position: toast.POSITION.TOP_CENTER
             });
-        }
-    };
-
-    const handlePaste = async (
-        e: React.ClipboardEvent,
-        field: 'question' | 'answer'
-    ) => {
-        const items = e.clipboardData.items;
-        for (const item of items) {
-            if (item.type.startsWith('image/')) {
-                const file = item.getAsFile();
-                if (file) {
-                    await handleImageUpload(file, field);
-                    break;
-                }
-            }
         }
     };
 
@@ -249,29 +234,30 @@ const EditFlashcardForm = ({
                 <div className="rounded-lg md:h-auto h-[75vh] bg-[#181818] p-6 mb-6">
                     <div className="space-y-6 h-full">
                         <div className="relative">
-                            <textarea
+                            <FlashcardEditor
                                 value={
                                     currentCard.question ===
                                     EMPTY_CONTENT_MARKER
                                         ? ''
                                         : currentCard.question
                                 }
-                                onChange={(e) => {
+                                onChange={(value) => {
                                     if (
-                                        e.target.value ||
+                                        value ||
                                         currentCard.question !==
                                             EMPTY_CONTENT_MARKER
                                     ) {
                                         handleTextChange(
                                             currentCard.id,
                                             'question',
-                                            e.target.value
+                                            value
                                         );
                                     }
                                 }}
-                                onPaste={(e) => handlePaste(e, 'question')}
+                                onImagePaste={(file) =>
+                                    handleImageUpload(file, 'question')
+                                }
                                 placeholder="Istilah atau pertanyaan"
-                                className="w-full min-h-[120px] bg-[#222222] rounded-lg p-3 pb-10 text-white resize-none border-none outline-none placeholder:text-neutral-500"
                             />
                             <ImageUploadControls
                                 onImageUpload={(file) =>
@@ -281,28 +267,30 @@ const EditFlashcardForm = ({
                         </div>
 
                         <div className="relative h-[73%]">
-                            <textarea
+                            <FlashcardEditor
                                 value={
                                     currentCard.answer === EMPTY_CONTENT_MARKER
                                         ? ''
                                         : currentCard.answer
                                 }
-                                onChange={(e) => {
+                                onChange={(value) => {
                                     if (
-                                        e.target.value ||
+                                        value ||
                                         currentCard.answer !==
                                             EMPTY_CONTENT_MARKER
                                     ) {
                                         handleTextChange(
                                             currentCard.id,
                                             'answer',
-                                            e.target.value
+                                            value
                                         );
                                     }
                                 }}
-                                onPaste={(e) => handlePaste(e, 'question')}
+                                onImagePaste={(file) =>
+                                    handleImageUpload(file, 'answer')
+                                }
                                 placeholder="Definisi atau jawaban"
-                                className="w-full min-h-[120px] h-full bg-[#222222] rounded-lg p-3 pb-10 text-white resize-none border-none outline-none placeholder:text-neutral-500"
+                                isAnswer
                             />
                             <ImageUploadControls
                                 onImageUpload={(file) =>

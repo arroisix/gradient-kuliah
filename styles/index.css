@@ -1750,3 +1750,30 @@ math-field#tanya-mathfield::part(virtual-keyboard-toggle) {
 .backface-hidden {
     backface-visibility: hidden;
 }
+
+.ProseMirror {
+    outline: none !important;
+}
+
+.ProseMirror:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.ProseMirror * {
+    outline: none !important;
+}
+
+.prose-editor {
+    outline: none !important;
+}
+
+.prose-editor:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.ProseMirror-focused {
+    outline: none !important;
+    box-shadow: none !important;
+}
