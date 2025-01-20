@@ -258,6 +258,7 @@ const EditFlashcardForm = ({
                                     handleImageUpload(file, 'question')
                                 }
                                 placeholder="Istilah atau pertanyaan"
+                                cardId={currentCard.id}
                             />
                             <ImageUploadControls
                                 onImageUpload={(file) =>
@@ -291,6 +292,7 @@ const EditFlashcardForm = ({
                                 }
                                 placeholder="Definisi atau jawaban"
                                 isAnswer
+                                cardId={currentCard.id}
                             />
                             <ImageUploadControls
                                 onImageUpload={(file) =>

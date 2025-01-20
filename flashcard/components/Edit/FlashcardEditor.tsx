@@ -5,6 +5,7 @@ import { MathDisplay, MathInline } from 'komunitas/mathPlugin';
 import { Markdown } from 'tiptap-markdown';
 import '@benrbray/prosemirror-math/style/math.css';
 import 'prosemirror-view/style/prosemirror.css';
+import { useEffect } from 'react';
 
 interface FlashcardEditorProps {
     value: string;
@@ -12,6 +13,7 @@ interface FlashcardEditorProps {
     placeholder: string;
     isAnswer?: boolean;
     onImagePaste?: (file: File) => void;
+    cardId?: string;
 }
 
 const FlashcardEditor = ({
@@ -19,7 +21,8 @@ const FlashcardEditor = ({
     onChange,
     placeholder,
     isAnswer,
-    onImagePaste
+    onImagePaste,
+    cardId
 }: FlashcardEditorProps): JSX.Element => {
     const editor = useEditor({
         extensions: [
@@ -51,6 +54,12 @@ const FlashcardEditor = ({
             onChange(editor.storage.markdown.getMarkdown());
         }
     });
+
+    useEffect(() => {
+        if (editor) {
+            editor.commands.setContent(value);
+        }
+    }, [editor, cardId]);
 
     const baseClassName =
         'bg-[#222222] rounded-lg p-3 pb-10 text-white resize-none border-none outline-none placeholder:text-neutral-500';
