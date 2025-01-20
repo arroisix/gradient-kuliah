@@ -14,6 +14,7 @@ import { toast } from 'react-toastify';
 const EditCardContainer = (): JSX.Element => {
     const router = useRouter();
     const { slug } = router.query;
+    const EMPTY_CONTENT_MARKER = '{{EMPTY}}';
 
     const { data: flashcardDetail, isLoading } = useGetFlashcardDetailQuery(
         { flashcard_slug: slug as string },
@@ -37,6 +38,13 @@ const EditCardContainer = (): JSX.Element => {
         if (!hasChanges || !flashcardDetail) return;
 
         const currentCard = localCards[currentIndex];
+
+        if (
+            currentCard.question === EMPTY_CONTENT_MARKER ||
+            currentCard.answer === EMPTY_CONTENT_MARKER
+        ) {
+            return;
+        }
 
         try {
             await editCard({
@@ -70,8 +78,8 @@ const EditCardContainer = (): JSX.Element => {
         try {
             const newCard = await addCard({
                 flashcard_slug: slug as string,
-                question: 'Istilah atau pertanyaan',
-                answer: 'Definisi atau jawaban'
+                question: EMPTY_CONTENT_MARKER,
+                answer: EMPTY_CONTENT_MARKER
             }).unwrap();
 
             const cardToAdd: Card = {

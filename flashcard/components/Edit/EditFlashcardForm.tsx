@@ -62,6 +62,7 @@ const EditFlashcardForm = ({
     const [isListOpen, setIsListOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+    const EMPTY_CONTENT_MARKER = '{{EMPTY}}';
 
     const totalCards = flashcardData.cards.length;
 
@@ -249,14 +250,25 @@ const EditFlashcardForm = ({
                     <div className="space-y-6 h-full">
                         <div className="relative">
                             <textarea
-                                value={currentCard.question}
-                                onChange={(e) =>
-                                    handleTextChange(
-                                        currentCard.id,
-                                        'question',
-                                        e.target.value
-                                    )
+                                value={
+                                    currentCard.question ===
+                                    EMPTY_CONTENT_MARKER
+                                        ? ''
+                                        : currentCard.question
                                 }
+                                onChange={(e) => {
+                                    if (
+                                        e.target.value ||
+                                        currentCard.question !==
+                                            EMPTY_CONTENT_MARKER
+                                    ) {
+                                        handleTextChange(
+                                            currentCard.id,
+                                            'question',
+                                            e.target.value
+                                        );
+                                    }
+                                }}
                                 onPaste={(e) => handlePaste(e, 'question')}
                                 placeholder="Istilah atau pertanyaan"
                                 className="w-full min-h-[120px] bg-[#222222] rounded-lg p-3 pb-10 text-white resize-none border-none outline-none placeholder:text-neutral-500"
@@ -270,14 +282,24 @@ const EditFlashcardForm = ({
 
                         <div className="relative h-[73%]">
                             <textarea
-                                value={currentCard.answer}
-                                onChange={(e) =>
-                                    handleTextChange(
-                                        currentCard.id,
-                                        'answer',
-                                        e.target.value
-                                    )
+                                value={
+                                    currentCard.answer === EMPTY_CONTENT_MARKER
+                                        ? ''
+                                        : currentCard.answer
                                 }
+                                onChange={(e) => {
+                                    if (
+                                        e.target.value ||
+                                        currentCard.answer !==
+                                            EMPTY_CONTENT_MARKER
+                                    ) {
+                                        handleTextChange(
+                                            currentCard.id,
+                                            'answer',
+                                            e.target.value
+                                        );
+                                    }
+                                }}
                                 onPaste={(e) => handlePaste(e, 'question')}
                                 placeholder="Definisi atau jawaban"
                                 className="w-full min-h-[120px] h-full bg-[#222222] rounded-lg p-3 pb-10 text-white resize-none border-none outline-none placeholder:text-neutral-500"
