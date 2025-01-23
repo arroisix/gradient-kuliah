@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import FlashcardCard from './FlashcardCard';
 import FlashcardTabs from './FlashcardTabs';
 import Sort from 'commons/components/elements/Sort';
+import Paginator from 'commons/components/elements/Paginator';
 import { FLASHCARD_SORT_OPTIONS, FlashcardSort } from '../../constants';
 import AddFlashcardDialog from './AddFlashcardDialog';
 import { useGetFlashcardsQuery } from '../../redux/api/flashcardsApi';
@@ -10,23 +11,46 @@ import Skeleton from 'commons/components/elements/Skeleton';
 
 const FlashcardSection = (): JSX.Element => {
     const router = useRouter();
-    const { tab = 'all', sort = FlashcardSort.trending } = router.query;
+    const {
+        tab = 'all',
+        sort = FlashcardSort.trending,
+        page: pageQuery = '1'
+    } = router.query;
+
     const [activeTab, setActiveTab] = useState(tab as string);
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+    const [currentPage, setCurrentPage] = useState(Number(pageQuery));
+    const ITEMS_PER_PAGE = 6;
+
+    useEffect(() => {
+        setCurrentPage(Number(pageQuery));
+    }, [pageQuery]);
 
     const { data: flashcardsData, isLoading } = useGetFlashcardsQuery({
-        page: 1,
-        limit: 10,
+        page: currentPage,
+        limit: ITEMS_PER_PAGE,
         type: activeTab as 'all' | 'user',
         sort_by: sort as 'trending' | 'view' | 'like'
     });
 
     const handleTabChange = (newTab: string): void => {
-        router.push({ query: { ...router.query, tab: newTab } }, undefined, {
-            shallow: true
-        });
+        router.push(
+            {
+                query: {
+                    ...router.query,
+                    tab: newTab,
+                    page: 1
+                }
+            },
+            undefined,
+            { shallow: true }
+        );
         setActiveTab(newTab);
     };
+
+    const totalPages = flashcardsData
+        ? Math.ceil(flashcardsData.count_items / ITEMS_PER_PAGE)
+        : 0;
 
     return (
         <div className="w-full">
@@ -56,18 +80,30 @@ const FlashcardSection = (): JSX.Element => {
                     <Skeleton repeat={6} className="w-full h-[158px] !mb-0" />
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-                    {flashcardsData?.data.map((flashcard) => (
-                        <FlashcardCard
-                            key={flashcard.id}
-                            slug={flashcard.slug}
-                            title={flashcard.title}
-                            totalCards={flashcard.card_count}
-                            author={flashcard.created_by}
-                            createdByMe={flashcard.created_by_me}
-                        />
-                    ))}
-                </div>
+                <>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+                        {flashcardsData?.data.map((flashcard) => (
+                            <FlashcardCard
+                                key={flashcard.id}
+                                slug={flashcard.slug}
+                                title={flashcard.title}
+                                totalCards={flashcard.card_count}
+                                author={flashcard.created_by}
+                                createdByMe={flashcard.created_by_me}
+                            />
+                        ))}
+                    </div>
+
+                    {flashcardsData &&
+                        flashcardsData.count_items > ITEMS_PER_PAGE && (
+                            <Paginator
+                                totalPages={totalPages}
+                                hasNextPage={currentPage < totalPages}
+                                hasPreviousPage={currentPage > 1}
+                                className="justify-center w-full py-8"
+                            />
+                        )}
+                </>
             )}
 
             <AddFlashcardDialog
