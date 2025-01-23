@@ -95,6 +95,5 @@ interface ContentRecommendationResponse {
 
 export interface MainSectionProps {
     onSendMessage: (prompt: string, imageUrl?: string) => void;
-    onFocusPrompt: () => void;
     onImageCapture: () => void;
 }
