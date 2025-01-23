@@ -101,10 +101,6 @@ const CopilotContainer = ({
         }
     }, [flashcardData]);
 
-    const handleFocusPrompt = () => {
-        promptBarRef.current?.focus();
-    };
-
     const handleImageCapture = () => {
         if (fileInputRef.current) {
             fileInputRef.current.click();
@@ -355,7 +351,6 @@ const CopilotContainer = ({
                 ) : (
                     <MainSection
                         onSendMessage={handleSendMessage}
-                        onFocusPrompt={handleFocusPrompt}
                         onImageCapture={handleImageCapture}
                     />
                 )}
