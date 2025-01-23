@@ -18,9 +18,32 @@ export const commonApi = baseApi.injectEndpoints({
             query: () => ({
                 url: `${COMMONS_BASE_URL}config/`
             })
+        }),
+        getLearningTools: builder.query<LearningToolsResponse, void>({
+            query: () => ({
+                url: `${COMMONS_BASE_URL}learning-tools/`
+            })
+        }),
+        getLearningToolsContent: builder.query<
+            LearningToolsContentResponse,
+            {
+                page?: number;
+                limit?: number;
+                type?: 'all' | 'quiz' | 'flashcard';
+            }
+        >({
+            query: (params) => ({
+                url: `${COMMONS_BASE_URL}learning-tools/content/`,
+                params
+            })
         })
     }),
     overrideExisting: false
 });
 
-export const { useUploadFileMutation, useGetConfigQuery } = commonApi;
+export const {
+    useUploadFileMutation,
+    useGetConfigQuery,
+    useGetLearningToolsQuery,
+    useGetLearningToolsContentQuery
+} = commonApi;

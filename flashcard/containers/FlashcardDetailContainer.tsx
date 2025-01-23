@@ -167,6 +167,8 @@ const FlashcardDetailContainer = (): JSX.Element => {
                     onEdit={handleEditFlashcard}
                     onDelete={handleDelete}
                     createdByMe={flashcard.created_by_me}
+                    isLiked={flashcard.is_liked}
+                    isDisliked={flashcard.is_disliked}
                 />
 
                 <div className="h-[0.5px] bg-[#333333] mb-6" />

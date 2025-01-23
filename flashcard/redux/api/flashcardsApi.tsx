@@ -212,6 +212,39 @@ export const flashcardApi = baseApi.injectEndpoints({
             invalidatesTags: (result, error, { card_id }) => [
                 { type: 'FLASHCARD_CARD' as const, id: card_id }
             ]
+        }),
+        likeFlashcard: builder.mutation<
+            { message: string },
+            { flashcard_slug: string }
+        >({
+            query: ({ flashcard_slug }) => ({
+                url: `${FLASHCARD_BASE_URL}${flashcard_slug}/like/`,
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json'
+                }
+            }),
+            invalidatesTags: (result, error, { flashcard_slug }) => [
+                { type: 'FLASHCARD', id: flashcard_slug }
+            ]
+        }),
+
+        dislikeFlashcard: builder.mutation<
+            { message: string },
+            { flashcard_slug: string }
+        >({
+            query: ({ flashcard_slug }) => ({
+                url: `${FLASHCARD_BASE_URL}${flashcard_slug}/dislike/`,
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json'
+                }
+            }),
+            invalidatesTags: (result, error, { flashcard_slug }) => [
+                { type: 'FLASHCARD', id: flashcard_slug }
+            ]
         })
     })
 });
@@ -228,5 +261,7 @@ export const {
     useAddCardMutation,
     useEditCardMutation,
     useDeleteCardMutation,
-    useToggleFavoriteCardMutation
+    useToggleFavoriteCardMutation,
+    useLikeFlashcardMutation,
+    useDislikeFlashcardMutation
 } = flashcardApi;

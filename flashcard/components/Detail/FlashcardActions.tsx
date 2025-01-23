@@ -1,7 +1,14 @@
 import React from 'react';
 import { toast } from 'react-toastify';
 import { RiShareForwardFill } from 'react-icons/ri';
+import { FiThumbsDown, FiThumbsUp } from 'react-icons/fi';
 import ActionMenu from './ActionMenu';
+import {
+    useLikeFlashcardMutation,
+    useDislikeFlashcardMutation
+} from '../../redux/api/flashcardsApi';
+import { cn } from 'commons/utils';
+import { useRouter } from 'next/router';
 
 interface FlashcardActionsProps {
     userInitials: string;
@@ -10,6 +17,8 @@ interface FlashcardActionsProps {
     onEdit: () => void;
     onDelete: () => void;
     createdByMe?: boolean;
+    isLiked?: boolean;
+    isDisliked?: boolean;
 }
 
 const FlashcardActions = ({
@@ -18,8 +27,16 @@ const FlashcardActions = ({
     photo_profile,
     onEdit,
     onDelete,
-    createdByMe = true
+    createdByMe = true,
+    isLiked = false,
+    isDisliked = false
 }: FlashcardActionsProps): JSX.Element => {
+    const router = useRouter();
+    const { slug } = router.query;
+    const [likeFlashcard, { isLoading: isLiking }] = useLikeFlashcardMutation();
+    const [dislikeFlashcard, { isLoading: isDisliking }] =
+        useDislikeFlashcardMutation();
+
     const handleShare = async () => {
         try {
             const currentUrl = window.location.href;
@@ -29,6 +46,40 @@ const FlashcardActions = ({
             });
         } catch (error) {
             console.error('Failed to copy link:', error);
+        }
+    };
+
+    const handleLike = async () => {
+        if (!slug || isLiking) return;
+        try {
+            await likeFlashcard({
+                flashcard_slug: slug as string
+            }).unwrap();
+            toast.success('Penilaian flashcard tersimpan', {
+                position: toast.POSITION.TOP_CENTER
+            });
+        } catch (error) {
+            console.error('Failed to like flashcard:', error);
+            toast.error('Gagal melakukan like flashcard', {
+                position: toast.POSITION.TOP_CENTER
+            });
+        }
+    };
+
+    const handleDislike = async () => {
+        if (!slug || isDisliking) return;
+        try {
+            await dislikeFlashcard({
+                flashcard_slug: slug as string
+            }).unwrap();
+            toast.success('Penilaian flashcard tersimpan', {
+                position: toast.POSITION.TOP_CENTER
+            });
+        } catch (error) {
+            console.error('Failed to dislike flashcard:', error);
+            toast.error('Gagal melakukan dislike flashcard', {
+                position: toast.POSITION.TOP_CENTER
+            });
         }
     };
 
@@ -52,6 +103,42 @@ const FlashcardActions = ({
                 </div>
             </div>
             <div className="flex items-center gap-2">
+                <div className="inline-flex items-center gap-2 px-4 text-sm font-semibold py-2 bg-[#333333] text-white hover:bg-opacity-80 transition-colors rounded-full">
+                    <div className="flex items-center gap-3">
+                        <button
+                            className={cn(
+                                'flex items-center gap-2 cursor-pointer',
+                                isLiking && 'opacity-50 cursor-not-allowed'
+                            )}
+                            onClick={handleLike}>
+                            <FiThumbsUp
+                                size={20}
+                                className={cn(
+                                    'transition-colors',
+                                    isLiked && 'fill-current'
+                                )}
+                            />
+                            <span>Like</span>
+                        </button>
+                        <div className="w-[1px] h-4 bg-[#666666]" />
+                        <button
+                            className={cn(
+                                'cursor-pointer',
+                                isDisliking && 'opacity-50 cursor-not-allowed'
+                            )}
+                            onClick={handleDislike}>
+                            <FiThumbsDown
+                                size={20}
+                                className={cn(
+                                    'transition-colors',
+                                    isDisliked && 'fill-current text-white',
+                                    !isDisliked && 'text-white '
+                                )}
+                            />
+                        </button>
+                    </div>
+                </div>
+
                 <button
                     onClick={handleShare}
                     className="inline-flex items-center gap-2 px-4 text-sm font-semibold py-2 bg-[#333333] text-white hover:bg-opacity-80 transition-colors rounded-full">

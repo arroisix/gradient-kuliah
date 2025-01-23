@@ -12,6 +12,8 @@ import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import CopilotAuthPrompt from '../components/AuthPrompt/AuthPrompt';
 import HistorySection from 'copilot/components/HistorySection/HistorySection';
+import { useRouter } from 'next/router';
+import { useGetFlashcardDetailQuery } from 'flashcard/redux/api/flashcardsApi';
 
 interface CopilotContainerProps {
     sessionId?: string;
@@ -39,6 +41,65 @@ const CopilotContainer = ({
     const [isHistoryOpen, setIsHistoryOpen] = useState(false);
     const promptBarRef = useRef<HTMLInputElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const router = useRouter();
+    const [flashcardGeneration, setFlashcardGeneration] = useState<{
+        status: 'loading' | 'complete';
+        flashcard?: {
+            slug: string;
+            title: string;
+            totalCards: number;
+        };
+    }>();
+
+    const { data: flashcardData } = useGetFlashcardDetailQuery(
+        { flashcard_slug: router.query.flashcard as string },
+        {
+            pollingInterval: 2000,
+            skip: !router.query.flashcard
+        }
+    );
+
+    useEffect(() => {
+        if (router.query.flashcard) {
+            setMessages([
+                {
+                    id: 'system',
+                    role: 'User',
+                    content: 'Buat flashcard dari materi yang saya kirimkan',
+                    timestamp: new Date().toISOString()
+                },
+                {
+                    id: 'system-response',
+                    role: 'AI',
+                    content: 'Sedang menyusun flashcard',
+                    timestamp: new Date().toISOString()
+                }
+            ]);
+        }
+    }, [router.query.flashcard]);
+
+    useEffect(() => {
+        if (flashcardData?.is_completed) {
+            setFlashcardGeneration({
+                status: 'complete',
+                flashcard: {
+                    slug: flashcardData.slug,
+                    title: flashcardData.title,
+                    totalCards: flashcardData.card_count
+                }
+            });
+            setMessages((prev) => [
+                ...prev,
+                {
+                    id: 'completion',
+                    role: 'AI',
+                    content:
+                        'Yay, flashcard kamu sudah jadi!\nKamu bisa menambah konten atau mengubah isi flashcard yang dihasilkan',
+                    timestamp: new Date().toISOString()
+                }
+            ]);
+        }
+    }, [flashcardData]);
 
     const handleFocusPrompt = () => {
         promptBarRef.current?.focus();
@@ -286,6 +347,7 @@ const CopilotContainer = ({
                                 onRetry={handleRetry}
                                 isLoading={isLoadingResponse}
                                 currentSessionId={currentSessionId}
+                                flashcardGeneration={flashcardGeneration}
                             />
                             <div ref={messagesEndRef} id="dummy-bubble" />
                         </div>

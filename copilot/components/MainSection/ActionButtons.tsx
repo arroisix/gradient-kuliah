@@ -1,19 +1,17 @@
-import { BsQuestionCircleFill } from 'react-icons/bs';
 import { BiSolidCamera } from 'react-icons/bi';
 import { useRef } from 'react';
+import { useRouter } from 'next/router';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { cn } from 'commons/utils';
 import { useTracker } from 'tracker/tracker';
+import CardsActionButton from 'flashcard/assets/CardsActionButton';
 
 interface ActionButtonsProps {
-    onFocusPrompt?: () => void;
     onImageCapture?: () => void;
 }
 
-const ActionButtons = ({
-    onFocusPrompt,
-    onImageCapture
-}: ActionButtonsProps): JSX.Element => {
+const ActionButtons = ({ onImageCapture }: ActionButtonsProps): JSX.Element => {
+    const router = useRouter();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const { isMobileBreakpoints } = useWindowBreakpoints();
     const tracker = useTracker();
@@ -29,6 +27,10 @@ const ActionButtons = ({
         if (file && onImageCapture) {
             onImageCapture();
         }
+    };
+
+    const handleCreateFlashcard = () => {
+        router.push('/flashcard/create-ai');
     };
 
     return (
@@ -47,21 +49,21 @@ const ActionButtons = ({
             />
             <button
                 onClick={() => {
-                    tracker?.genericTrack('Click Tanya Soal CTA');
-                    onFocusPrompt?.();
-                }}
-                className="flex-1 flex items-center justify-center gap-2 bg-[#222222] hover:bg-neutral-800 p-4 rounded-lg transition-colors">
-                <BsQuestionCircleFill color={'#9747FF'} size={20} />
-                <span>Tanya Soal</span>
-            </button>
-            <button
-                onClick={() => {
                     tracker?.genericTrack('Click Scan Foto Soal CTA');
                     handleScanClick();
                 }}
                 className="flex-1 flex items-center justify-center gap-2 bg-[#222222] hover:bg-neutral-800 p-4 rounded-lg transition-colors">
                 <BiSolidCamera color={'#5D75FF'} size={20} />
                 <span>Scan Foto Soal</span>
+            </button>
+            <button
+                onClick={() => {
+                    tracker?.genericTrack('Click Buat Flashcard CTA');
+                    handleCreateFlashcard();
+                }}
+                className="flex-1 flex items-center justify-center gap-2 bg-[#222222] hover:bg-neutral-800 p-4 rounded-lg transition-colors">
+                <CardsActionButton />
+                <span>Buat Flashcard</span>
             </button>
         </div>
     );

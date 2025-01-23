@@ -9,10 +9,12 @@ import {
     AiOutlineFileImage
 } from 'react-icons/ai';
 import {
+    useCreateFlashcardCopilotMutation,
     useCreateFlashcardMutation,
     useEditFlashcardMutation
 } from '../../redux/api/flashcardsApi';
 import { toast } from 'react-toastify';
+import useUploadFile from 'commons/hooks/useUploadFile';
 
 interface FileWithPreview extends File {
     preview?: string;
@@ -49,6 +51,8 @@ const CreateFlashcardForm = ({
         files: [],
         isPrivate: false
     });
+    const { uploadFile } = useUploadFile('flashcards');
+    const [createFlashcardCopilot] = useCreateFlashcardCopilotMutation();
 
     const [createFlashcard, { isLoading: isCreateLoading }] =
         useCreateFlashcardMutation();
@@ -78,8 +82,7 @@ const CreateFlashcardForm = ({
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('mode', mode);
-        console.log('initial data,', initialData);
+
         try {
             if (mode === 'edit' && initialData) {
                 await editFlashcard({
@@ -88,20 +91,57 @@ const CreateFlashcardForm = ({
                     description: formData.description,
                     is_private: formData.isPrivate
                 }).unwrap();
+
                 toast.success('Detail flashcard diperbarui', {
                     position: toast.POSITION.TOP_CENTER
                 });
+
                 router.push(`/flashcard/${initialData.slug}`);
             } else {
-                await createFlashcard({
-                    title: formData.title,
-                    description: formData.description,
-                    is_private: formData.isPrivate
-                }).unwrap();
-                router.push('/flashcard');
+                if (useAi && formData.files.length > 0) {
+                    const uploadedUrls = await uploadFile(formData.files);
+
+                    if (!uploadedUrls || uploadedUrls.length === 0) {
+                        throw new Error('Failed to upload files');
+                    }
+
+                    const response = await createFlashcardCopilot({
+                        title: formData.title,
+                        description: formData.description,
+                        is_private: formData.isPrivate,
+                        file_sources: uploadedUrls
+                    }).unwrap();
+
+                    router.push(`/copilot?flashcard=${response.slug}`);
+                } else if (useAi) {
+                    toast.error('Silakan upload minimal 1 file referensi', {
+                        position: toast.POSITION.TOP_CENTER
+                    });
+                    return;
+                } else {
+                    const response = await createFlashcard({
+                        title: formData.title,
+                        description: formData.description,
+                        is_private: formData.isPrivate
+                    }).unwrap();
+
+                    toast.success('Flashcard berhasil dibuat', {
+                        position: toast.POSITION.TOP_CENTER
+                    });
+
+                    // Navigate to the created flashcard
+                    if (response?.slug) {
+                        router.push(`/flashcard/${response.slug}`);
+                    } else {
+                        router.push('/flashcard');
+                    }
+                }
             }
         } catch (error) {
             console.error('Failed to handle flashcard:', error);
+            toast.error('Terjadi kesalahan saat membuat flashcard', {
+                position: toast.POSITION.TOP_CENTER
+            });
         }
     };
 

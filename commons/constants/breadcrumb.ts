@@ -138,5 +138,8 @@ export const BREADCRUMB: BreadcrumbProps = {
     '/flashcard/[slug]/edit-card': {
         name: 'Flashcard',
         url: '/flashcard'
+    },
+    '/alat-belajar': {
+        name: 'Alat Belajar'
     }
 };

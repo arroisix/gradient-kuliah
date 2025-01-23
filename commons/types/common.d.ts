@@ -110,7 +110,8 @@ type BreadcrumbPathnames =
     | '/flashcard'
     | '/flashcard/[slug]'
     | '/flashcard/[slug]/study'
-    | '/flashcard/[slug]/edit-card';
+    | '/flashcard/[slug]/edit-card'
+    | '/alat-belajar';
 
 type BreadcrumbProps = {
     [key in BreadcrumbPathnames]: BreadcrumbItemProps;

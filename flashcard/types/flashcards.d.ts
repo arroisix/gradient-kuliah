@@ -32,6 +32,8 @@ export interface FlashcardDetail extends Flashcard {
     is_completed: boolean;
     sources: FlashcardSource[];
     cards: Card[];
+    is_liked?: boolean;
+    is_disliked?: boolean;
 }
 
 export interface FlashcardListResponse {
