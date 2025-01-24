@@ -20,7 +20,8 @@ export const flashcardApi = baseApi.injectEndpoints({
             query: (params) => ({
                 url: `${FLASHCARD_BASE_URL}public/`,
                 params
-            })
+            }),
+            providesTags: ['FLASHCARD_LIST']
         }),
 
         getFlashcards: builder.query<
@@ -35,7 +36,8 @@ export const flashcardApi = baseApi.injectEndpoints({
             query: (params) => ({
                 url: FLASHCARD_BASE_URL,
                 params
-            })
+            }),
+            providesTags: ['FLASHCARD_LIST']
         }),
 
         createFlashcard: builder.mutation<
@@ -54,7 +56,8 @@ export const flashcardApi = baseApi.injectEndpoints({
                     Accept: 'application/json'
                 },
                 body
-            })
+            }),
+            invalidatesTags: ['FLASHCARD_LIST', 'LAST_SEEN_FLASHCARDS']
         }),
 
         createFlashcardCopilot: builder.mutation<
@@ -74,7 +77,8 @@ export const flashcardApi = baseApi.injectEndpoints({
                     Accept: 'application/json'
                 },
                 body
-            })
+            }),
+            invalidatesTags: ['FLASHCARD_LIST', 'LAST_SEEN_FLASHCARDS']
         }),
 
         getFlashcardDetail: builder.query<
@@ -115,7 +119,12 @@ export const flashcardApi = baseApi.injectEndpoints({
                     Accept: 'application/json'
                 },
                 body
-            })
+            }),
+            invalidatesTags: (result, error, { flashcard_slug }) => [
+                { type: 'FLASHCARD', id: flashcard_slug },
+                'FLASHCARD_LIST',
+                'LAST_SEEN_FLASHCARDS'
+            ]
         }),
 
         deleteFlashcard: builder.mutation<
@@ -129,7 +138,8 @@ export const flashcardApi = baseApi.injectEndpoints({
                     'Content-Type': 'application/json',
                     Accept: 'application/json'
                 }
-            })
+            }),
+            invalidatesTags: ['FLASHCARD_LIST', 'LAST_SEEN_FLASHCARDS']
         }),
 
         getLastSeenFlashcards: builder.query<FlashcardListResponse, void>({
@@ -140,7 +150,8 @@ export const flashcardApi = baseApi.injectEndpoints({
                     'Content-Type': 'application/json',
                     Accept: 'application/json'
                 }
-            })
+            }),
+            providesTags: ['LAST_SEEN_FLASHCARDS']
         }),
 
         addCard: builder.mutation<

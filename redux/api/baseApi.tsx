@@ -38,7 +38,9 @@ export const baseApi = createApi({
         'TRANSACTION',
         'CHAT_HISTORY',
         'FLASHCARD',
-        'FLASHCARD_CARD'
+        'FLASHCARD_CARD',
+        'FLASHCARD_LIST',
+        'LAST_SEEN_FLASHCARDS'
     ],
     baseQuery: fetchBaseQuery({
         baseUrl: config.API_BASE_URL,
