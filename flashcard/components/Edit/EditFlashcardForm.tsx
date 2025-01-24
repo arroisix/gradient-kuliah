@@ -254,9 +254,6 @@ const EditFlashcardForm = ({
                                         );
                                     }
                                 }}
-                                onImagePaste={(file) =>
-                                    handleImageUpload(file, 'question')
-                                }
                                 placeholder="Istilah atau pertanyaan"
                                 cardId={currentCard.id}
                             />
@@ -287,9 +284,6 @@ const EditFlashcardForm = ({
                                         );
                                     }
                                 }}
-                                onImagePaste={(file) =>
-                                    handleImageUpload(file, 'answer')
-                                }
                                 placeholder="Definisi atau jawaban"
                                 isAnswer
                                 cardId={currentCard.id}

@@ -13,7 +13,6 @@ interface FlashcardEditorProps {
     onChange: (value: string) => void;
     placeholder: string;
     isAnswer?: boolean;
-    onImagePaste?: (file: File) => void;
     cardId?: string;
 }
 
@@ -22,7 +21,6 @@ const FlashcardEditor = ({
     onChange,
     placeholder,
     isAnswer,
-    onImagePaste,
     cardId
 }: FlashcardEditorProps): JSX.Element => {
     const [hasImage, setHasImage] = useState(false);
@@ -55,23 +53,6 @@ const FlashcardEditor = ({
             MathInline
         ],
         content: value.replace(/!\[.*?\]\((.*?)\)/g, ''),
-        editorProps: {
-            handlePaste: (view, event) => {
-                if (onImagePaste && event.clipboardData?.items) {
-                    const items = Array.from(event.clipboardData.items);
-                    for (const item of items) {
-                        if (item.type.startsWith('image/')) {
-                            const file = item.getAsFile();
-                            if (file) {
-                                onImagePaste(file);
-                                return true;
-                            }
-                        }
-                    }
-                }
-                return false;
-            }
-        },
         onUpdate: ({ editor }) => {
             const editorContent = editor.storage.markdown.getMarkdown();
             const newValue = hasImage
