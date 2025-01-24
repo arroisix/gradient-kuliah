@@ -105,11 +105,16 @@ const CreateFlashcardForm = ({
                         throw new Error('Failed to upload files');
                     }
 
+                    const transformedUrls = uploadedUrls.map((url) => {
+                        const match = url.match(/\.com\/(.*)/);
+                        return match ? match[1] : url;
+                    });
+
                     const response = await createFlashcardCopilot({
                         title: formData.title,
                         description: formData.description,
                         is_private: formData.isPrivate,
-                        file_sources: uploadedUrls
+                        file_sources: transformedUrls
                     }).unwrap();
 
                     if (response?.slug) {
