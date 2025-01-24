@@ -80,7 +80,7 @@ const ContentRecommendations: React.FC<ContentRecommendationsProps> = ({
                                     {content.type === 'course_video' ? (
                                         <>
                                             {content.thumbnail && (
-                                                <div className="relative aspect-video w-full">
+                                                <div className="relative aspect-video w-full h-full">
                                                     <Image
                                                         src={content.thumbnail}
                                                         alt={
