@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router'; // Add this
+import { useRouter } from 'next/router';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import LearningToolsHeader from '../components/LearningToolsHeader';
 import LearningToolsContent from '../components/LearningToolsContent';
@@ -8,10 +8,12 @@ import {
     useGetLearningToolsContentQuery
 } from 'commons/redux/api/commonApi';
 import Filter from 'commons/components/elements/Filter';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 
 const LearningToolsEntrypoint = (): JSX.Element => {
     const router = useRouter();
     const { type = 'all', page: pageQuery = '1' } = router.query;
+    const { isMobileBreakpoints } = useWindowBreakpoints();
 
     const [selectedType, setSelectedType] = useState<
         'all' | 'quiz' | 'flashcard'
@@ -72,11 +74,12 @@ const LearningToolsEntrypoint = (): JSX.Element => {
                 selectedType={selectedType}
                 onTypeChange={setSelectedType}
             />
-            <div className="flex items-center gap-4 my-4">
+            <div className="flex items-center gap-4 my-4 w-full">
                 <Filter
                     options={filterOptions}
                     defaultSelected={selectedType}
                     onChange={handleTypeChange}
+                    fullWidth={isMobileBreakpoints}
                 />
             </div>
             <LearningToolsContent

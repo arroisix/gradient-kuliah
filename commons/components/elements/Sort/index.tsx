@@ -7,12 +7,14 @@ interface SortProps {
     options: Option[];
     defaultSelected?: string;
     iconOnly?: boolean;
+    fullWidth?: boolean;
 }
 
 const Sort = ({
     options,
     defaultSelected,
     iconOnly = false,
+    fullWidth,
     className
 }: SortProps & PropsWithClassName): JSX.Element => {
     const router = useRouter();
@@ -23,7 +25,13 @@ const Sort = ({
     );
 
     return (
-        <div className={cn('dropdown', iconOnly && 'dropdown-end', className)}>
+        <div
+            className={cn(
+                'dropdown',
+                iconOnly && 'dropdown-end',
+                fullWidth && 'w-full',
+                className
+            )}>
             <button
                 tabIndex={0}
                 className={cn(

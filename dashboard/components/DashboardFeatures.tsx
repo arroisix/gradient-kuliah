@@ -8,14 +8,15 @@ import KuisIcon from '../assets/KuisIcon';
 import DiskusiIcon from '../assets/DiskusiIcon';
 import LainnyaIcon from '../assets/LainnyaIcon';
 import CopilotAIIcon from '../assets/CopilotAIIcon';
-import FlashcardIcon from '../assets/FlashcardIcon';
 import { useTracker } from 'tracker/tracker';
+import FlashcardLargeIcon from 'dashboard/assets/FlashcardLargeIcon';
+import FlashcardIcon from 'dashboard/assets/FlashcardIcon';
 
 type Feature = {
     id: string;
     title: string;
     description: string;
-    Icon: React.FC<{ width?: number; height?: number }>;
+    Icon: React.FC<{ width?: number; height?: number; isSmall?: boolean }>;
     url: string;
     isNew?: boolean;
 };
@@ -36,7 +37,12 @@ const DashboardFeatures = () => {
             id: 'flashcard',
             title: 'Flashcard',
             description: 'Hafalan kebut semalam',
-            Icon: FlashcardIcon,
+            Icon: ({ isSmall }: { isSmall?: boolean }) =>
+                isSmall ? (
+                    <FlashcardIcon width={24} height={24} />
+                ) : (
+                    <FlashcardLargeIcon />
+                ),
             url: '/flashcard',
             isNew: true
         }
@@ -85,7 +91,7 @@ const DashboardFeatures = () => {
 
     return (
         <div className="w-full mx-auto space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-2">
                 {topRowFeatures.map((feature) => (
                     <Link
                         key={feature.id}
@@ -101,16 +107,18 @@ const DashboardFeatures = () => {
                                 <h3 className="font-bold text-white flex items-center">
                                     {feature.title}
                                     {feature.isNew && (
-                                        <span className="ml-2 py-1 px-3 text-xs rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56]">
+                                        <span className="ml-2 py-1 px-3 text-xs rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] z-20">
                                             Baru
                                         </span>
                                     )}
                                 </h3>
-                                <p className="text-sm text-neutral-400">
+                                <p className="text-sm text-neutral-400 w-[80%]">
                                     {feature.description}
                                 </p>
                             </div>
-                            <feature.Icon width={48} height={48} />
+                            <div className="absolute top-1.5 right-0 z-0">
+                                <feature.Icon />
+                            </div>
                         </div>
                     </Link>
                 ))}
@@ -220,6 +228,7 @@ const DashboardFeatures = () => {
                                                         <feature.Icon
                                                             width={24}
                                                             height={24}
+                                                            isSmall
                                                         />
                                                     </div>
                                                     <div>

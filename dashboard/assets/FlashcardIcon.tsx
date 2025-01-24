@@ -1,8 +1,16 @@
-const FlashcardIcon = () => {
+interface FlashcardIconProps {
+    width?: number;
+    height?: number;
+}
+
+const FlashcardIcon: React.FC<FlashcardIconProps> = ({
+    width = 37,
+    height = 37
+}) => {
     return (
         <svg
-            width="37"
-            height="37"
+            width={width}
+            height={height}
             viewBox="0 0 37 37"
             fill="none"
             xmlns="http://www.w3.org/2000/svg">

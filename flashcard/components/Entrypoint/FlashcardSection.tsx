@@ -8,6 +8,7 @@ import { FLASHCARD_SORT_OPTIONS, FlashcardSort } from '../../constants';
 import AddFlashcardDialog from './AddFlashcardDialog';
 import { useGetFlashcardsQuery } from '../../redux/api/flashcardsApi';
 import Skeleton from 'commons/components/elements/Skeleton';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 
 const FlashcardSection = (): JSX.Element => {
     const router = useRouter();
@@ -16,6 +17,7 @@ const FlashcardSection = (): JSX.Element => {
         sort = FlashcardSort.trending,
         page: pageQuery = '1'
     } = router.query;
+    const { isMobileBreakpoints } = useWindowBreakpoints();
 
     const [activeTab, setActiveTab] = useState(tab as string);
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
@@ -56,11 +58,13 @@ const FlashcardSection = (): JSX.Element => {
         <div className="w-full">
             <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold text-white">Flashcard</h2>
-                <button
-                    onClick={() => setIsAddDialogOpen(true)}
-                    className="bg-[#5F2BCE] text-white px-6 py-2 rounded-full hover:bg-opacity-90 transition-colors">
-                    + Tambah
-                </button>
+                {!isMobileBreakpoints && (
+                    <button
+                        onClick={() => setIsAddDialogOpen(true)}
+                        className="bg-[#5F2BCE] text-white px-6 py-2 rounded-full hover:bg-opacity-90 transition-colors">
+                        + Tambah
+                    </button>
+                )}
             </div>
 
             <FlashcardTabs
@@ -68,10 +72,11 @@ const FlashcardSection = (): JSX.Element => {
                 onTabChange={handleTabChange}
             />
 
-            <div className="flex gap-4 items-center my-4">
+            <div className="flex gap-4 items-center my-4 w-full">
                 <Sort
                     options={FLASHCARD_SORT_OPTIONS}
                     defaultSelected={sort as string}
+                    fullWidth
                 />
             </div>
 
@@ -110,6 +115,15 @@ const FlashcardSection = (): JSX.Element => {
                 isOpen={isAddDialogOpen}
                 onClose={() => setIsAddDialogOpen(false)}
             />
+
+            {isMobileBreakpoints && (
+                <button
+                    onClick={() => setIsAddDialogOpen(true)}
+                    className="fixed bottom-6 right-6 bg-[#5F2BCE] text-white px-6 py-2 rounded-full hover:bg-opacity-90 transition-colors shadow-lg flex items-center gap-2 z-10">
+                    <span className="text-lg">+</span>
+                    <span>Tambah</span>
+                </button>
+            )}
         </div>
     );
 };

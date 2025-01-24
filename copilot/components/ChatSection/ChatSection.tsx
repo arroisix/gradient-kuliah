@@ -16,7 +16,6 @@ import ImageModal from '../ImageModal/ImageModal';
 import MessageObserver from './MessageObserver';
 import ContentRecommendations from './ContentRecommendations';
 import { useTracker } from 'tracker/tracker';
-import FlashcardCard from 'flashcard/components/Entrypoint/FlashcardCard';
 
 interface ChatSectionProps {
     messages: ChatMessage[];
@@ -25,14 +24,6 @@ interface ChatSectionProps {
     setMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
     isLoading?: boolean;
     currentSessionId?: string;
-    flashcardGeneration?: {
-        status: 'loading' | 'complete';
-        flashcard?: {
-            slug: string;
-            title: string;
-            totalCards: number;
-        };
-    };
 }
 
 const ChatSection = ({
@@ -41,8 +32,7 @@ const ChatSection = ({
     setMessages,
     onRetry,
     isLoading,
-    currentSessionId,
-    flashcardGeneration
+    currentSessionId
 }: ChatSectionProps): JSX.Element => {
     const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
     const [isRating, setIsRating] = useState<Record<string, boolean>>({});
@@ -396,38 +386,6 @@ const ChatSection = ({
                                 </div>
                             </div>
                         ))}
-
-                        {flashcardGeneration?.status === 'complete' &&
-                            flashcardGeneration.flashcard && (
-                                <div className="mt-4 flex w-full justify-start">
-                                    <div className="flex-shrink-0 mr-3">
-                                        <div className="w-8 h-8 rounded-full bg-[#5F2BCE] flex items-center justify-center">
-                                            <CopilotIcon />
-                                        </div>
-                                    </div>
-                                    <div className="w-full max-w-[80%]">
-                                        <FlashcardCard
-                                            slug={
-                                                flashcardGeneration.flashcard
-                                                    .slug
-                                            }
-                                            title={
-                                                flashcardGeneration.flashcard
-                                                    .title
-                                            }
-                                            totalCards={
-                                                flashcardGeneration.flashcard
-                                                    .totalCards
-                                            }
-                                            author={{
-                                                name: 'You',
-                                                photo_profile: ''
-                                            }}
-                                            createdByMe={true}
-                                        />
-                                    </div>
-                                </div>
-                            )}
 
                         {pendingMessage && (
                             <div className={cn('flex w-full justify-start')}>

@@ -60,9 +60,6 @@ const FlashcardActions = ({
             });
         } catch (error) {
             console.error('Failed to like flashcard:', error);
-            toast.error('Gagal melakukan like flashcard', {
-                position: toast.POSITION.TOP_CENTER
-            });
         }
     };
 
@@ -77,9 +74,6 @@ const FlashcardActions = ({
             });
         } catch (error) {
             console.error('Failed to dislike flashcard:', error);
-            toast.error('Gagal melakukan dislike flashcard', {
-                position: toast.POSITION.TOP_CENTER
-            });
         }
     };
 

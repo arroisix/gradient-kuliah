@@ -112,7 +112,11 @@ const CreateFlashcardForm = ({
                         file_sources: uploadedUrls
                     }).unwrap();
 
-                    router.push(`/copilot?flashcard=${response.slug}`);
+                    if (response?.slug) {
+                        router.push(`/flashcard/${response.slug}`);
+                    } else {
+                        router.push('/flashcard');
+                    }
                 } else if (useAi) {
                     toast.error('Silakan upload minimal 1 file referensi', {
                         position: toast.POSITION.TOP_CENTER
@@ -129,7 +133,6 @@ const CreateFlashcardForm = ({
                         position: toast.POSITION.TOP_CENTER
                     });
 
-                    // Navigate to the created flashcard
                     if (response?.slug) {
                         router.push(`/flashcard/${response.slug}`);
                     } else {

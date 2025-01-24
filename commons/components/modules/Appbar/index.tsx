@@ -19,7 +19,8 @@ const DISPLAYED_ROUTES = [
     '/komunitas',
     '/copilot',
     '/perpustakaan',
-    '/latihan'
+    '/latihan',
+    '/alat-belajar'
 ];
 
 const APPBAR_NAV: AppbarNav[] = [

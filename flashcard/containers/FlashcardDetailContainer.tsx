@@ -15,6 +15,8 @@ import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import { toast } from 'react-toastify';
 import EmptyStateFavorite from '../assets/EmptyStateFavorite';
+import FlashcardGeneratingContent from 'flashcard/components/Detail/Copilot/FlashcardGeneratingContent';
+import FlashcardGeneratingModal from 'flashcard/components/Detail/Copilot/FlashcardGeneratingModal';
 
 const FlashcardDetailContainer = (): JSX.Element => {
     const router = useRouter();
@@ -23,6 +25,7 @@ const FlashcardDetailContainer = (): JSX.Element => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deleteFlashcard] = useDeleteFlashcardMutation();
     const [addCard] = useAddCardMutation();
+    const [showGeneratingModal, setShowGeneratingModal] = useState(true);
 
     const {
         data: flashcard,
@@ -144,7 +147,9 @@ const FlashcardDetailContainer = (): JSX.Element => {
                     createdByMe={flashcard.created_by_me}
                 />
 
-                {hasCards ? (
+                {flashcard.ai_generated && !flashcard.is_completed ? (
+                    <FlashcardGeneratingContent />
+                ) : hasCards ? (
                     <FlashcardContent
                         currentIndex={currentIndex}
                         totalCards={flashcard.cards.length}
@@ -219,6 +224,13 @@ const FlashcardDetailContainer = (): JSX.Element => {
                         isOpen={isDeleteModalOpen}
                         onConfirm={handleDeleteConfirm}
                         onCancel={handleDeleteCancel}
+                    />
+                )}
+
+                {flashcard.ai_generated && !flashcard.is_completed && (
+                    <FlashcardGeneratingModal
+                        isOpen={showGeneratingModal}
+                        onClose={() => setShowGeneratingModal(false)}
                     />
                 )}
             </div>

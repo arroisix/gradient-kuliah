@@ -62,7 +62,7 @@ const FlashcardHeader = ({
                                     className={`inline-flex items-center gap-2 ${
                                         hasCards
                                             ? 'bg-[#333333]'
-                                            : 'bg-[#5F2BCE]'
+                                            : 'bg-[#5F2BCE] w-full justify-center'
                                     } text-white px-4 py-3 md:px-4 md:py-2 md:p-3 rounded-full hover:opacity-90 transition-colors`}>
                                     <BsFillPencilFill size={14} />
                                     {!hasCards && <span>Tulis Flashcard</span>}
