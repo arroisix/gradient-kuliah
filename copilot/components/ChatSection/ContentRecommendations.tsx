@@ -62,7 +62,7 @@ const ContentRecommendations: React.FC<ContentRecommendationsProps> = ({
         return (
             <div className="relative w-full">
                 <div className="absolute left-0 right-0">
-                    <div className="flex gap-4 overflow-x-auto no-scrollbar">
+                    <div className="flex gap-4 overflow-x-auto">
                         {isLoading ? (
                             <>
                                 <SkeletonCard />
@@ -76,7 +76,7 @@ const ContentRecommendations: React.FC<ContentRecommendationsProps> = ({
                                     href={getContentUrl(content)}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex-shrink-0 bg-[#222222] w-[280px] rounded-lg overflow-hidden flex flex-col hover:bg-[#2C2C2C] transition-colors duration-200">
+                                    className="flex-shrink-0 bg-[#222222] w-[260px] rounded-lg overflow-hidden flex flex-col hover:bg-[#2C2C2C] transition-colors duration-200">
                                     {content.type === 'course_video' ? (
                                         <>
                                             {content.thumbnail && (
