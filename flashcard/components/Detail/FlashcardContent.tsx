@@ -97,7 +97,7 @@ const FlashcardContent = ({
                     onAnimationStart={handleFlipStart}
                     onAnimationComplete={handleFlipComplete}
                     className={cn(
-                        'w-full relative rounded-xl p-6 min-h-[320px] h-full flex items-center justify-center preserve-3d cursor-pointer',
+                        'w-full relative rounded-xl min-h-[320px] h-full preserve-3d cursor-pointer',
                         studyState?.isFlipped ? 'bg-[#181818]' : 'bg-[#252246]'
                     )}
                     onClick={onFlip}>
@@ -108,29 +108,34 @@ const FlashcardContent = ({
                                 !studyState?.isFlipped && showContent ? 1 : 0,
                             transition: 'opacity 0.1s'
                         }}>
-                        <div className="text-center w-full h-full flex items-center justify-center">
-                            {studyState?.showHint ? (
-                                <div className="space-y-4">
-                                    <p className="text-white font-semibold text-xl whitespace-pre-wrap">
-                                        {renderMarkdownContent(
-                                            cards[currentIndex].question,
-                                            'question'
-                                        )}
-                                    </p>
-                                    <p className="text-[#7D89CC] whitespace-pre-wrap">
-                                        {getHintText(
-                                            cards[currentIndex].answer
-                                        )}
-                                    </p>
-                                </div>
-                            ) : (
-                                <p className="text-white text-xl font-semibold whitespace-pre-wrap">
-                                    {renderMarkdownContent(
-                                        cards[currentIndex].question,
-                                        'question'
+                        <div className="w-full h-full flex items-center justify-center overflow-y-auto">
+                            <div className="w-full max-h-full py-6 px-6">
+                                <div className="text-center">
+                                    {studyState?.showHint ? (
+                                        <div className="space-y-4">
+                                            <div className="text-white font-semibold text-xl whitespace-pre-wrap">
+                                                {renderMarkdownContent(
+                                                    cards[currentIndex]
+                                                        .question,
+                                                    'question'
+                                                )}
+                                            </div>
+                                            <div className="text-[#7D89CC] whitespace-pre-wrap">
+                                                {getHintText(
+                                                    cards[currentIndex].answer
+                                                )}
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="text-white text-xl font-semibold whitespace-pre-wrap">
+                                            {renderMarkdownContent(
+                                                cards[currentIndex].question,
+                                                'question'
+                                            )}
+                                        </div>
                                     )}
-                                </p>
-                            )}
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -142,13 +147,17 @@ const FlashcardContent = ({
                                 studyState?.isFlipped && showContent ? 1 : 0,
                             transition: 'opacity 0.1s'
                         }}>
-                        <div className="text-center w-full h-full flex items-center justify-center">
-                            <p className="text-white text-base p-4 whitespace-pre-wrap">
-                                {renderMarkdownContent(
-                                    cards[currentIndex].answer,
-                                    'answer'
-                                )}
-                            </p>
+                        <div className="w-full h-full flex items-center justify-center overflow-y-auto">
+                            <div className="w-full max-h-full py-6 px-6">
+                                <div className="text-center">
+                                    <div className="pb-6 text-white text-base whitespace-pre-wrap">
+                                        {renderMarkdownContent(
+                                            cards[currentIndex].answer,
+                                            'answer'
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -198,19 +207,23 @@ const FlashcardContent = ({
                 </motion.div>
             </div>
         ) : (
-            <div className="bg-[#252246] rounded-xl p-6 min-h-[320px] flex items-center justify-center relative">
-                <div className="text-xl font-semibold text-white w-full">
-                    <p className="text-center whitespace-pre-wrap">
-                        {renderMarkdownContent(
-                            cards[currentIndex].question,
-                            'question'
-                        )}
-                    </p>
+            <div className="min-h-[320px] max-h-[85vh] bg-[#252246] rounded-xl relative">
+                <div className="absolute inset-0 overflow-y-auto">
+                    <div className="w-full h-full flex items-center justify-center py-6 px-6">
+                        <div className="w-full text-center">
+                            <div className="text-xl font-semibold text-white whitespace-pre-wrap">
+                                {renderMarkdownContent(
+                                    cards[currentIndex].question,
+                                    'question'
+                                )}
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 {onToggleFavorite && (
                     <button
                         onClick={() => onToggleFavorite(cards[currentIndex].id)}
-                        className="absolute top-4 right-4">
+                        className="absolute top-4 right-4 z-10">
                         <span
                             className={cn(
                                 'text-2xl',

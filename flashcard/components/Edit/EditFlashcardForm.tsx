@@ -43,6 +43,7 @@ interface EditFlashcardFormProps {
     onAddCard: () => void;
     onSave: () => void;
     onNavigate: (direction: 'prev' | 'next') => void;
+    setCurrentIndex: (index: number) => void;
 }
 
 const EditFlashcardForm = ({
@@ -52,7 +53,8 @@ const EditFlashcardForm = ({
     onUpdateCard,
     onAddCard,
     onSave,
-    onNavigate
+    onNavigate,
+    setCurrentIndex
 }: EditFlashcardFormProps): JSX.Element => {
     const router = useRouter();
     const { uploadFile } = useUploadFile('flashcards');
@@ -336,6 +338,10 @@ const EditFlashcardForm = ({
                     )}
                     cards={flashcardData.cards}
                     currentIndex={currentIndex}
+                    onSelectCard={(index) => {
+                        setCurrentIndex(index);
+                        setIsListOpen(false);
+                    }}
                     isOpen={isListOpen}
                     onClose={() => setIsListOpen(false)}
                     isMobile={isMobileBreakpoints}

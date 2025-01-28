@@ -54,15 +54,15 @@ const FlashcardCard = ({
                     </div>
                     {author && (
                         <div className="flex items-center gap-4 mt-3">
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 min-w-0 flex-1">
                                 {author.photo_profile ? (
                                     <img
                                         src={author.photo_profile}
                                         alt={author.name}
-                                        className="w-5 h-5 rounded-full"
+                                        className="w-5 h-5 rounded-full flex-shrink-0"
                                     />
                                 ) : (
-                                    <div className="w-5 h-5 rounded-full bg-[#5F2BCE] flex items-center justify-center text-white text-xs">
+                                    <div className="w-5 h-5 rounded-full bg-[#5F2BCE] flex items-center justify-center text-white text-xs flex-shrink-0">
                                         {author.name.charAt(0).toUpperCase()}
                                     </div>
                                 )}
@@ -70,8 +70,10 @@ const FlashcardCard = ({
                                     {createdByMe ? 'Kamu' : author.name}
                                 </span>
                             </div>
-                            <div className="text-[#666666]">|</div>
-                            <div className="flex items-center gap-2 text-sm text-neutral-400">
+                            <div className="text-[#666666] flex-shrink-0">
+                                |
+                            </div>
+                            <div className="flex items-center gap-2 text-sm text-neutral-400 flex-shrink-0">
                                 <Cards />
                                 <span>{totalCards} Cards</span>
                             </div>

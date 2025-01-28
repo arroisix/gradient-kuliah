@@ -145,6 +145,7 @@ const EditCardContainer = (): JSX.Element => {
                     onAddCard={handleAddCard}
                     onSave={handleSave}
                     onNavigate={handleNavigateCard}
+                    setCurrentIndex={setCurrentIndex}
                 />
             </div>
         </div>
