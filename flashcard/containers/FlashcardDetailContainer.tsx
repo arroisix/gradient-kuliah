@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import {
-    useAddCardMutation,
     useDeleteFlashcardMutation,
     useGetFlashcardDetailQuery
 } from '../redux/api/flashcardsApi';
@@ -24,41 +23,18 @@ const FlashcardDetailContainer = (): JSX.Element => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deleteFlashcard] = useDeleteFlashcardMutation();
-    const [addCard] = useAddCardMutation();
     const [showGeneratingModal, setShowGeneratingModal] = useState(true);
 
-    const {
-        data: flashcard,
-        isLoading,
-        refetch
-    } = useGetFlashcardDetailQuery(
+    const { data: flashcard, isLoading } = useGetFlashcardDetailQuery(
         { flashcard_slug: slug as string },
         {
             skip: !slug
         }
     );
 
-    const handleEdit = async () => {
+    const handleEdit = () => {
         if (!flashcard) return;
-
-        if (!flashcard.cards || flashcard.cards.length === 0) {
-            try {
-                await addCard({
-                    flashcard_slug: slug as string,
-                    question: 'Istilah atau pertanyaan',
-                    answer: 'Definisi atau jawaban'
-                }).unwrap();
-
-                await refetch();
-
-                router.push(`/flashcard/${slug}/edit-card`);
-            } catch (error) {
-                console.error('Failed to create initial card:', error);
-                return;
-            }
-        } else {
-            router.push(`/flashcard/${slug}/edit-card`);
-        }
+        router.push(`/flashcard/${slug}/edit-card`);
     };
 
     const handleEditFlashcard = () => {

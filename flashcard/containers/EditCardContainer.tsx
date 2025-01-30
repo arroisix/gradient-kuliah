@@ -14,7 +14,6 @@ import { toast } from 'react-toastify';
 const EditCardContainer = (): JSX.Element => {
     const router = useRouter();
     const { slug } = router.query;
-    const EMPTY_CONTENT_MARKER = '{{EMPTY}}';
 
     const { data: flashcardDetail, isLoading } = useGetFlashcardDetailQuery(
         { flashcard_slug: slug as string },
@@ -30,7 +29,17 @@ const EditCardContainer = (): JSX.Element => {
 
     React.useEffect(() => {
         if (flashcardDetail) {
-            setLocalCards(flashcardDetail.cards || []);
+            if (!flashcardDetail.cards?.length) {
+                const tempCard: Card = {
+                    id: 'temp-' + Date.now(),
+                    question: '',
+                    answer: '',
+                    updated_at: new Date().toISOString()
+                };
+                setLocalCards([tempCard]);
+            } else {
+                setLocalCards(flashcardDetail.cards);
+            }
         }
     }, [flashcardDetail]);
 
@@ -39,19 +48,38 @@ const EditCardContainer = (): JSX.Element => {
 
         const currentCard = localCards[currentIndex];
 
-        if (
-            currentCard.question === EMPTY_CONTENT_MARKER ||
-            currentCard.answer === EMPTY_CONTENT_MARKER
-        ) {
+        if (!currentCard.question.trim() || !currentCard.answer.trim()) {
+            toast.error('Kartu tidak boleh kosong', {
+                position: toast.POSITION.TOP_CENTER
+            });
             return;
         }
 
         try {
-            await editCard({
-                card_id: currentCard.id,
-                question: currentCard.question,
-                answer: currentCard.answer
-            }).unwrap();
+            if (currentCard.id.startsWith('temp-')) {
+                const newCard = await addCard({
+                    flashcard_slug: slug as string,
+                    question: currentCard.question,
+                    answer: currentCard.answer
+                }).unwrap();
+
+                setLocalCards((prev) =>
+                    prev.map((card) =>
+                        card.id === currentCard.id
+                            ? {
+                                  ...newCard,
+                                  updated_at: newCard.updated_at
+                              }
+                            : card
+                    )
+                );
+            } else {
+                await editCard({
+                    card_id: currentCard.id,
+                    question: currentCard.question,
+                    answer: currentCard.answer
+                }).unwrap();
+            }
 
             setHasChanges(false);
             toast.success('Flashcard berhasil disimpan', {
@@ -59,8 +87,19 @@ const EditCardContainer = (): JSX.Element => {
             });
         } catch (error) {
             console.error('Failed to save card:', error);
+            toast.error('Gagal menyimpan flashcard', {
+                position: toast.POSITION.TOP_CENTER
+            });
         }
-    }, [editCard, hasChanges, currentIndex, localCards, flashcardDetail]);
+    }, [
+        editCard,
+        hasChanges,
+        currentIndex,
+        localCards,
+        flashcardDetail,
+        slug,
+        addCard
+    ]);
 
     const handleUpdateCard = useCallback(
         (cardId: string, field: 'question' | 'answer', value: string) => {
@@ -74,38 +113,35 @@ const EditCardContainer = (): JSX.Element => {
         []
     );
 
-    const handleAddCard = useCallback(async () => {
-        try {
-            const newCard = await addCard({
-                flashcard_slug: slug as string,
-                question: EMPTY_CONTENT_MARKER,
-                answer: EMPTY_CONTENT_MARKER
-            }).unwrap();
+    const handleAddCard = useCallback(() => {
+        const tempCard: Card = {
+            id: 'temp-' + Date.now(),
+            question: '',
+            answer: '',
+            updated_at: new Date().toISOString()
+        };
 
-            const cardToAdd: Card = {
-                id: newCard.id,
-                question: newCard.question,
-                answer: newCard.answer,
-                updated_at: newCard.updated_at
-            };
-
-            setLocalCards((prev) => [...prev, cardToAdd]);
-            setCurrentIndex(localCards.length);
-            setHasChanges(false);
-        } catch (error) {
-            console.error('Failed to add new card:', error);
-        }
-    }, [addCard, slug, localCards.length]);
+        setLocalCards((prev) => [...prev, tempCard]);
+        setCurrentIndex(localCards.length);
+        setHasChanges(false);
+    }, [localCards.length]);
 
     const handleNavigateCard = useCallback(
         (direction: 'prev' | 'next') => {
+            if (hasChanges) {
+                const confirm = window.confirm(
+                    'Ada perubahan yang belum tersimpan. Yakin ingin berpindah?'
+                );
+                if (!confirm) return;
+            }
+
             setCurrentIndex((prev) =>
                 direction === 'next'
                     ? Math.min(prev + 1, localCards.length - 1)
                     : Math.max(prev - 1, 0)
             );
         },
-        [localCards]
+        [localCards.length, hasChanges]
     );
 
     if (isLoading) return <LoadingBackdrop />;
