@@ -6,9 +6,16 @@ import Sort from 'commons/components/elements/Sort';
 import Paginator from 'commons/components/elements/Paginator';
 import { FLASHCARD_SORT_OPTIONS, FlashcardSort } from '../../constants';
 import AddFlashcardDialog from './AddFlashcardDialog';
-import { useGetFlashcardsQuery } from '../../redux/api/flashcardsApi';
+import {
+    useGetFlashcardsQuery,
+    useGetPublicFlashcardsQuery
+} from '../../redux/api/flashcardsApi';
 import Skeleton from 'commons/components/elements/Skeleton';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { useSelector } from 'react-redux';
+import RenewSubscriptionBanner from 'courses/components/RenewSubscriptionBanner';
+import { useGetActiveSubscriptionQuery } from 'payment/redux/api/subscriptionApi';
 
 const FlashcardSection = (): JSX.Element => {
     const router = useRouter();
@@ -18,22 +25,45 @@ const FlashcardSection = (): JSX.Element => {
         page: pageQuery = '1'
     } = router.query;
     const { isMobileBreakpoints } = useWindowBreakpoints();
+    const isAuthenticated = useSelector(getIsAuthenticated);
 
     const [activeTab, setActiveTab] = useState(tab as string);
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(Number(pageQuery));
+    const { data: activePacket } = useGetActiveSubscriptionQuery(undefined, {
+        skip: !isAuthenticated
+    });
     const ITEMS_PER_PAGE = 6;
 
     useEffect(() => {
         setCurrentPage(Number(pageQuery));
     }, [pageQuery]);
 
-    const { data: flashcardsData, isLoading } = useGetFlashcardsQuery({
-        page: currentPage,
-        limit: ITEMS_PER_PAGE,
-        type: activeTab as 'all' | 'user',
-        sort_by: sort as 'trending' | 'view' | 'like'
-    });
+    const { data: publicFlashcardsData, isLoading: isPublicLoading } =
+        useGetPublicFlashcardsQuery(
+            {
+                page: currentPage,
+                limit: ITEMS_PER_PAGE,
+                sort_by: sort as 'trending' | 'view' | 'like'
+            },
+            { skip: isAuthenticated }
+        );
+
+    const { data: privateFlashcardsData, isLoading: isPrivateLoading } =
+        useGetFlashcardsQuery(
+            {
+                page: currentPage,
+                limit: ITEMS_PER_PAGE,
+                type: activeTab as 'all' | 'user',
+                sort_by: sort as 'trending' | 'view' | 'like'
+            },
+            { skip: !isAuthenticated }
+        );
+
+    const flashcardsData = isAuthenticated
+        ? privateFlashcardsData
+        : publicFlashcardsData;
+    const isLoading = isAuthenticated ? isPrivateLoading : isPublicLoading;
 
     const handleTabChange = (newTab: string): void => {
         router.push(
@@ -58,7 +88,7 @@ const FlashcardSection = (): JSX.Element => {
         <div className="w-full">
             <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold text-white">Flashcard</h2>
-                {!isMobileBreakpoints && (
+                {!isMobileBreakpoints && isAuthenticated && (
                     <button
                         onClick={() => setIsAddDialogOpen(true)}
                         className="bg-[#5F2BCE] text-white px-6 py-2 rounded-full hover:bg-opacity-90 transition-colors">
@@ -67,10 +97,12 @@ const FlashcardSection = (): JSX.Element => {
                 )}
             </div>
 
-            <FlashcardTabs
-                activeTab={activeTab}
-                onTabChange={handleTabChange}
-            />
+            {isAuthenticated && (
+                <FlashcardTabs
+                    activeTab={activeTab}
+                    onTabChange={handleTabChange}
+                />
+            )}
 
             <div className="flex gap-4 items-center my-4 w-full">
                 <Sort
@@ -116,13 +148,17 @@ const FlashcardSection = (): JSX.Element => {
                 onClose={() => setIsAddDialogOpen(false)}
             />
 
-            {isMobileBreakpoints && (
+            {isMobileBreakpoints && isAuthenticated && (
                 <button
                     onClick={() => setIsAddDialogOpen(true)}
                     className="fixed bottom-6 right-6 bg-[#5F2BCE] text-white px-6 py-2 rounded-full hover:bg-opacity-90 transition-colors shadow-lg flex items-center gap-2 z-10">
                     <span className="text-lg">+</span>
                     <span>Tambah</span>
                 </button>
+            )}
+
+            {!(activePacket && activePacket.subscription_id) && (
+                <RenewSubscriptionBanner product="flashcard" />
             )}
         </div>
     );

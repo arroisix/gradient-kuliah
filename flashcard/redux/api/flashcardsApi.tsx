@@ -102,6 +102,27 @@ export const flashcardApi = baseApi.injectEndpoints({
             ]
         }),
 
+        getPublicFlashcardDetail: builder.query<
+            FlashcardDetail,
+            { flashcard_slug: string }
+        >({
+            query: ({ flashcard_slug }) => ({
+                url: `${FLASHCARD_BASE_URL}public/${flashcard_slug}/`,
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json'
+                }
+            }),
+            providesTags: (result, error, { flashcard_slug }) => [
+                { type: 'FLASHCARD' as const, id: flashcard_slug },
+                ...(result?.cards?.map((card) => ({
+                    type: 'FLASHCARD_CARD' as const,
+                    id: card.id
+                })) || [])
+            ]
+        }),
+
         editFlashcard: builder.mutation<
             FlashcardDetail,
             {
@@ -266,6 +287,7 @@ export const {
     useCreateFlashcardMutation,
     useCreateFlashcardCopilotMutation,
     useGetFlashcardDetailQuery,
+    useGetPublicFlashcardDetailQuery,
     useDeleteFlashcardMutation,
     useEditFlashcardMutation,
     useGetLastSeenFlashcardsQuery,

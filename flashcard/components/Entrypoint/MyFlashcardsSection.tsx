@@ -2,13 +2,22 @@ import React from 'react';
 import FlashcardCard from './FlashcardCard';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { useGetLastSeenFlashcardsQuery } from '../../redux/api/flashcardsApi';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { useSelector } from 'react-redux';
 
 const MyFlashcardsSection = (): JSX.Element => {
     const { isMobileBreakpoints } = useWindowBreakpoints();
+    const isAuthenticated = useSelector(getIsAuthenticated);
 
-    const { data: lastSeenFlashcardsData } = useGetLastSeenFlashcardsQuery();
+    const { data: lastSeenFlashcardsData } = useGetLastSeenFlashcardsQuery(
+        undefined,
+        {
+            skip: !isAuthenticated
+        }
+    );
 
     if (
+        !isAuthenticated ||
         !lastSeenFlashcardsData?.data ||
         lastSeenFlashcardsData.data.length === 0
     )

@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import {
     useDeleteFlashcardMutation,
-    useGetFlashcardDetailQuery
+    useGetFlashcardDetailQuery,
+    useGetPublicFlashcardDetailQuery
 } from '../redux/api/flashcardsApi';
 import DeleteModal from '../components/Detail/DeleteModal';
 import FlashcardHeader from '../components/Detail/FlashcardHeader';
@@ -16,21 +17,32 @@ import { toast } from 'react-toastify';
 import EmptyStateFavorite from '../assets/EmptyStateFavorite';
 import FlashcardGeneratingContent from 'flashcard/components/Detail/Copilot/FlashcardGeneratingContent';
 import FlashcardGeneratingModal from 'flashcard/components/Detail/Copilot/FlashcardGeneratingModal';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { useSelector } from 'react-redux';
 
 const FlashcardDetailContainer = (): JSX.Element => {
     const router = useRouter();
     const { slug } = router.query;
+    const isAuthenticated = useSelector(getIsAuthenticated);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deleteFlashcard] = useDeleteFlashcardMutation();
     const [showGeneratingModal, setShowGeneratingModal] = useState(true);
 
-    const { data: flashcard, isLoading } = useGetFlashcardDetailQuery(
-        { flashcard_slug: slug as string },
-        {
-            skip: !slug
-        }
-    );
+    const { data: publicFlashcard, isLoading: isPublicLoading } =
+        useGetPublicFlashcardDetailQuery(
+            { flashcard_slug: slug as string },
+            { skip: !slug || isAuthenticated }
+        );
+
+    const { data: privateFlashcard, isLoading: isPrivateLoading } =
+        useGetFlashcardDetailQuery(
+            { flashcard_slug: slug as string },
+            { skip: !slug || !isAuthenticated }
+        );
+
+    const flashcard = isAuthenticated ? privateFlashcard : publicFlashcard;
+    const isLoading = isAuthenticated ? isPrivateLoading : isPublicLoading;
 
     const handleEdit = () => {
         if (!flashcard) return;
