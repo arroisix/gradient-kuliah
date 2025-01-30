@@ -80,8 +80,46 @@ const CreateFlashcardForm = ({
         }
     };
 
+    const validateForm = (): boolean => {
+        if (!formData.title.trim()) {
+            toast.error('Judul flashcard harus diisi', {
+                position: toast.POSITION.TOP_CENTER
+            });
+            return false;
+        }
+
+        if (!formData.description.trim()) {
+            if (useAi) {
+                toast.error(
+                    'Deskripsi wajib diisi agar penyusunan flashcard sesuai konteks',
+                    {
+                        position: toast.POSITION.TOP_CENTER
+                    }
+                );
+            } else {
+                toast.error('Deskripsi flashcard harus diisi', {
+                    position: toast.POSITION.TOP_CENTER
+                });
+            }
+            return false;
+        }
+
+        if (useAi && formData.files.length === 0) {
+            toast.error('Silakan upload minimal 1 file referensi', {
+                position: toast.POSITION.TOP_CENTER
+            });
+            return false;
+        }
+
+        return true;
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!validateForm()) {
+            return;
+        }
 
         try {
             if (mode === 'edit' && initialData) {
@@ -98,7 +136,7 @@ const CreateFlashcardForm = ({
 
                 router.push(`/flashcard/${initialData.slug}`);
             } else {
-                if (useAi && formData.files.length > 0) {
+                if (useAi) {
                     const uploadedUrls = await uploadFile(formData.files);
 
                     if (!uploadedUrls || uploadedUrls.length === 0) {
@@ -122,11 +160,6 @@ const CreateFlashcardForm = ({
                     } else {
                         router.push('/flashcard');
                     }
-                } else if (useAi) {
-                    toast.error('Silakan upload minimal 1 file referensi', {
-                        position: toast.POSITION.TOP_CENTER
-                    });
-                    return;
                 } else {
                     const response = await createFlashcard({
                         title: formData.title,
@@ -146,7 +179,6 @@ const CreateFlashcardForm = ({
                 }
             }
         } catch (error) {
-            console.error('Failed to handle flashcard:', error);
             toast.error('Terjadi kesalahan saat membuat flashcard', {
                 position: toast.POSITION.TOP_CENTER
             });
@@ -256,7 +288,7 @@ const CreateFlashcardForm = ({
 
                     <div className="space-y-2">
                         <label className="block text-sm text-neutral-400">
-                            Deskripsi (Opsional)
+                            Deskripsi
                         </label>
                         <div className="relative">
                             <textarea
@@ -288,8 +320,8 @@ const CreateFlashcardForm = ({
                                         flashcard yang sesuai konteks
                                     </span>
                                     <span className="hidden md:inline">
-                                        Deskripsi grup membantu Copilot AI
-                                        memberi jawaban yang sesuai konteks
+                                        Deskripsi membantu Copilot AI menyusun
+                                        flashcard yang sesuai konteks
                                     </span>
                                 </p>
                             </div>

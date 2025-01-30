@@ -21,7 +21,7 @@ export const commonApi = baseApi.injectEndpoints({
         }),
         getLearningTools: builder.query<LearningToolsResponse, void>({
             query: () => ({
-                url: `${COMMONS_BASE_URL}learning-tools/`
+                url: `learning-tools/`
             })
         }),
         getLearningToolsContent: builder.query<
@@ -33,7 +33,7 @@ export const commonApi = baseApi.injectEndpoints({
             }
         >({
             query: (params) => ({
-                url: `${COMMONS_BASE_URL}learning-tools/content/`,
+                url: `learning-tools/content/`,
                 params
             })
         })

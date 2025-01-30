@@ -1,5 +1,5 @@
 interface LearningTool {
-    name: string;
+    name: 'Quiz' | 'Flashcard' | 'Cheatsheet' | 'Study Plan';
     is_coming_soon: boolean;
 }
 
@@ -7,19 +7,28 @@ interface LearningToolsResponse {
     learning_tools: LearningTool[];
 }
 
-interface LearningToolsContentItem {
-    type: 'Quiz' | 'Flashcard';
+interface BaseContentItem {
     slug: string;
     title: string;
-    card_count?: number;
-    problem_count?: number;
     created_by?: string;
     photo_profile?: string;
-    icon?: string;
-    course?: string;
-    in_progress?: boolean;
-    progress_percentage?: number;
 }
+
+interface FlashcardItem extends BaseContentItem {
+    type: 'Flashcard';
+    card_count: number;
+}
+
+interface QuizItem extends BaseContentItem {
+    type: 'Quiz';
+    problem_count: number;
+    icon: string;
+    course: string;
+    in_progress: boolean;
+    progress_percentage: number;
+}
+
+type LearningToolsContentItem = FlashcardItem | QuizItem;
 
 interface LearningToolsContentResponse {
     count_items: number;
