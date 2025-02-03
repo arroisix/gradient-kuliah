@@ -187,7 +187,19 @@ const CreateFlashcardForm = ({
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
+            const MAX_FILE_SIZE = 10 * 1024 * 1024;
             const newFiles = Array.from(e.target.files) as FileWithPreview[];
+
+            const oversizedFiles = newFiles.filter(
+                (file) => file.size > MAX_FILE_SIZE
+            );
+            if (oversizedFiles.length > 0) {
+                toast.error('File tidak boleh lebih dari 10MB', {
+                    position: toast.POSITION.TOP_CENTER
+                });
+                return;
+            }
+
             setFormData((prev) => ({
                 ...prev,
                 files: [...prev.files, ...newFiles].slice(0, 3)
