@@ -4,7 +4,6 @@ import ExamplePrompts from './ExamplePrompts';
 
 const MainSection = ({
     onSendMessage,
-    onFocusPrompt,
     onImageCapture
 }: MainSectionProps): JSX.Element => {
     return (
@@ -15,10 +14,7 @@ const MainSection = ({
                         Lagi butuh bantuan apa sobat?
                     </h1>
 
-                    <ActionButtons
-                        onFocusPrompt={onFocusPrompt}
-                        onImageCapture={onImageCapture}
-                    />
+                    <ActionButtons onImageCapture={onImageCapture} />
 
                     <div className="w-full md:max-w-[360px]">
                         <p className="text-neutral-400 mb-4">

@@ -36,7 +36,11 @@ export const baseApi = createApi({
         'PROBLEM_SET',
         'CONNECTED_DEVICES',
         'TRANSACTION',
-        'CHAT_HISTORY'
+        'CHAT_HISTORY',
+        'FLASHCARD',
+        'FLASHCARD_CARD',
+        'FLASHCARD_LIST',
+        'LAST_SEEN_FLASHCARDS'
     ],
     baseQuery: fetchBaseQuery({
         baseUrl: config.API_BASE_URL,

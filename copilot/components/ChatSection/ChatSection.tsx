@@ -155,7 +155,7 @@ const ChatSection = ({
                 const response = await chatApi.getContentRecommendation(
                     keyword
                 );
-                setRecommendations(response.recommendation.slice(0, 3));
+                setRecommendations(response.recommendation);
             } catch (error) {
                 console.error('Failed to fetch recommendations:', error);
                 setRecommendations([]);

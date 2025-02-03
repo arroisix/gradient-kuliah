@@ -199,9 +199,9 @@ const Navbar = ({
                         )}
                         {configData?.configs.is_exercise_config_enabled && (
                             <NavigationButton
-                                name="Exercise"
-                                title="Latihan"
-                                url="/latihan"
+                                name="Learning Tools"
+                                title="Alat Belajar"
+                                url="/alat-belajar"
                                 IconActive={PencilOnLineIconFill}
                                 IconUnactive={PencilOnLineIcon}
                             />
