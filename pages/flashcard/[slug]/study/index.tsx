@@ -17,13 +17,32 @@ const StudyFlashcardPage = (): JSX.Element => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-    return {
-        props: {
-            canonical: `https://gradient.academy/flashcard/${params?.slug}/study`,
-            title: 'Belajar Flashcard - Gradient',
-            description: 'Belajar flashcard di Gradient'
-        }
-    };
+    const flashcardSlug = params?.slug;
+
+    try {
+        const response = await fetch(
+            `https://api.gradient.academy/api/v1/flashcards/public/${flashcardSlug}/`
+        );
+        const flashcard = await response.json();
+
+        return {
+            props: {
+                canonical: `https://gradient.academy/flashcard/${flashcardSlug}/study`,
+                title: `Flashcard ${flashcard?.title}`,
+                description:
+                    flashcard?.description ||
+                    'Lihat detail flashcard untuk proses belajar kamu!'
+            }
+        };
+    } catch (error) {
+        return {
+            props: {
+                canonical: `https://gradient.academy/flashcard/${flashcardSlug}/study`,
+                title: 'Detail Flashcard - Gradient',
+                description: 'Lihat detail flashcard untuk proses belajar kamu!'
+            }
+        };
+    }
 };
 
 export default StudyFlashcardPage;
