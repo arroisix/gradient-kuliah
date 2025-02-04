@@ -13,8 +13,9 @@ const FlashcardPage = (): JSX.Element => {
 export const getStaticProps: GetStaticProps = () => {
     return {
         props: {
-            title: 'Flashcard - Learn with Gradient',
-            description: 'Study efficiently with our flashcard system',
+            title: 'Flashcard Online Tempat Belajar Kebut Semalam ',
+            description:
+                'Belajar efisien dengan sistem flashcard kami Gradient',
             canonical: 'https://gradient.academy/flashcard'
         }
     };

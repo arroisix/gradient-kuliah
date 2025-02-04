@@ -442,12 +442,20 @@ const CreateFlashcardForm = ({
                 <button
                     type="submit"
                     form="flashcardForm"
+                    disabled={isLoading}
                     className="fixed md:static bottom-4 left-4 right-4 w-[calc(100%-32px)] md:w-[140px] px-5 py-3 rounded-[14px] md:rounded-full bg-[#5F2BCE] text-white hover:opacity-90 transition-colors text-base font-semibold disabled:opacity-50">
-                    {isLoading
-                        ? 'Loading...'
-                        : mode === 'edit'
-                        ? 'Simpan'
-                        : 'Buat'}
+                    <div className="flex items-center justify-center gap-2">
+                        {isLoading && (
+                            <span className="loading loading-spinner loading-sm" />
+                        )}
+                        <span>
+                            {isLoading
+                                ? 'Loading...'
+                                : mode === 'edit'
+                                ? 'Simpan'
+                                : 'Buat'}
+                        </span>
+                    </div>
                 </button>
             </div>
         </div>

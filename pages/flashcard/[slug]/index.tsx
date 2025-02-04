@@ -21,14 +21,32 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
     const flashcardSlug = params?.slug;
 
-    return {
-        props: {
-            canonical: `https://gradient.academy/flashcard/${flashcardSlug}`,
-            title: 'Detail Flashcard - Gradient',
-            description: 'Lihat detail flashcard untuk proses belajar kamu!'
-        },
-        revalidate: 60
-    };
+    try {
+        const response = await fetch(
+            `https://api.gradient.academy/api/v1/flashcards/public/${flashcardSlug}/`
+        );
+        const flashcard = await response.json();
+
+        return {
+            props: {
+                canonical: `https://gradient.academy/flashcard/${flashcardSlug}`,
+                title: `Flashcard ${flashcard.title} - Gradient`,
+                description:
+                    flashcard.description ||
+                    'Lihat detail flashcard untuk proses belajar kamu!'
+            },
+            revalidate: 60
+        };
+    } catch (error) {
+        return {
+            props: {
+                canonical: `https://gradient.academy/flashcard/${flashcardSlug}`,
+                title: 'Detail Flashcard - Gradient',
+                description: 'Lihat detail flashcard untuk proses belajar kamu!'
+            },
+            revalidate: 60
+        };
+    }
 };
 
 export default FlashcardDetailPage;
