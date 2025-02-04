@@ -3,6 +3,8 @@ import { cn } from 'commons/utils';
 import KuisIconLarge from 'dashboard/assets/KuisIconLarge';
 import FlashcardIcon from 'dashboard/assets/FlashcardIcon';
 import { useRouter } from 'next/router';
+import { CheatsheetIcon } from '../assets/CheatsheetIcon';
+import { StudyPlanicon } from '../assets/StudyPlanicon';
 
 interface LearningTool {
     name: string;
@@ -66,8 +68,12 @@ const LearningToolsHeader: React.FC<LearningToolsHeaderProps> = ({
                             <div className="text-xl">
                                 {tool.name === 'Quiz' && <KuisIconLarge />}
                                 {tool.name === 'Flashcard' && <FlashcardIcon />}
-                                {tool.name === 'Cheatsheet' && '📄'}
-                                {tool.name === 'Study Plan' && '⏰'}
+                                {tool.name === 'Cheatsheet' && (
+                                    <CheatsheetIcon />
+                                )}
+                                {tool.name === 'Study Plan' && (
+                                    <StudyPlanicon />
+                                )}
                             </div>
                         </div>
                         <h3 className="font-semibold text-white">

@@ -18,6 +18,10 @@ import useUploadFile from 'commons/hooks/useUploadFile';
 
 interface FileWithPreview extends File {
     preview?: string;
+    s3Url?: string;
+    type: string;
+    name: string;
+    size: number;
 }
 
 interface FormData {
@@ -137,16 +141,13 @@ const CreateFlashcardForm = ({
                 router.push(`/flashcard/${initialData.slug}`);
             } else {
                 if (useAi) {
-                    const uploadedUrls = await uploadFile(formData.files);
-
-                    if (!uploadedUrls || uploadedUrls.length === 0) {
-                        throw new Error('Failed to upload files');
-                    }
-
-                    const transformedUrls = uploadedUrls.map((url) => {
-                        const match = url.match(/\.com\/(.*)/);
-                        return match ? match[1] : url;
-                    });
+                    const transformedUrls = formData.files
+                        .map((file) => file.s3Url)
+                        .filter((url): url is string => url !== undefined)
+                        .map((url) => {
+                            const match = url.match(/\.com\/(.*)/);
+                            return match ? match[1] : url;
+                        });
 
                     const response = await createFlashcardCopilot({
                         title: formData.title,
@@ -185,10 +186,19 @@ const CreateFlashcardForm = ({
         }
     };
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             const MAX_FILE_SIZE = 10 * 1024 * 1024;
-            const newFiles = Array.from(e.target.files) as FileWithPreview[];
+            const newFiles = Array.from(e.target.files).map((file) => ({
+                lastModified: file.lastModified,
+                name: file.name,
+                size: file.size,
+                type: file.type,
+                slice: file.slice,
+                stream: file.stream,
+                text: file.text,
+                arrayBuffer: file.arrayBuffer
+            })) as unknown as FileWithPreview[];
 
             const oversizedFiles = newFiles.filter(
                 (file) => file.size > MAX_FILE_SIZE
@@ -200,10 +210,42 @@ const CreateFlashcardForm = ({
                 return;
             }
 
-            setFormData((prev) => ({
-                ...prev,
-                files: [...prev.files, ...newFiles].slice(0, 3)
-            }));
+            const existingFileNames = formData.files.map((file) => file.name);
+            const duplicateFiles = newFiles.filter((file) =>
+                existingFileNames.includes(file.name)
+            );
+
+            if (duplicateFiles.length > 0) {
+                toast.error('File dengan nama yang sama tidak diperbolehkan', {
+                    position: toast.POSITION.TOP_CENTER
+                });
+                return;
+            }
+
+            try {
+                const uploadedUrls = await uploadFile(
+                    Array.from(e.target.files)
+                );
+
+                if (!uploadedUrls || uploadedUrls.length === 0) {
+                    throw new Error('Failed to upload files');
+                }
+
+                setFormData((prev) => ({
+                    ...prev,
+                    files: [
+                        ...prev.files,
+                        ...newFiles.map((file, index) => ({
+                            ...file,
+                            s3Url: uploadedUrls[index]
+                        }))
+                    ].slice(0, 3)
+                }));
+            } catch (error) {
+                toast.error('Gagal mengupload file', {
+                    position: toast.POSITION.TOP_CENTER
+                });
+            }
         }
     };
 
@@ -218,7 +260,14 @@ const CreateFlashcardForm = ({
         setFormData((prev) => ({ ...prev, isPrivate: checked }));
     };
 
-    const getFileIcon = (fileType: string) => {
+    const getFileIcon = (fileType: string | undefined) => {
+        if (!fileType) {
+            return {
+                icon: <IoAttach className="text-gray-500" size={20} />,
+                label: 'FILE'
+            };
+        }
+
         if (fileType.includes('pdf')) {
             return {
                 icon: <AiOutlineFilePdf className="text-red-500" size={20} />,
@@ -442,12 +491,20 @@ const CreateFlashcardForm = ({
                 <button
                     type="submit"
                     form="flashcardForm"
+                    disabled={isLoading}
                     className="fixed md:static bottom-4 left-4 right-4 w-[calc(100%-32px)] md:w-[140px] px-5 py-3 rounded-[14px] md:rounded-full bg-[#5F2BCE] text-white hover:opacity-90 transition-colors text-base font-semibold disabled:opacity-50">
-                    {isLoading
-                        ? 'Loading...'
-                        : mode === 'edit'
-                        ? 'Simpan'
-                        : 'Buat'}
+                    <div className="flex items-center justify-center gap-2">
+                        {isLoading && (
+                            <span className="loading loading-spinner loading-sm" />
+                        )}
+                        <span>
+                            {isLoading
+                                ? 'Loading...'
+                                : mode === 'edit'
+                                ? 'Simpan'
+                                : 'Buat'}
+                        </span>
+                    </div>
                 </button>
             </div>
         </div>

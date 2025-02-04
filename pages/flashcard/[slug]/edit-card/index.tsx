@@ -16,7 +16,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
         props: {
             canonical: `https://gradient.academy/flashcard/${params?.slug}/edit-card`,
             title: 'Edit Flashcard - Gradient',
-            description: 'Edit your flashcard'
+            description: 'Edit Flashcard'
         }
     };
 };
