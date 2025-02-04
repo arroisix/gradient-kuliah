@@ -14,6 +14,8 @@ interface FlashcardHeaderProps {
     onWriteCard?: () => void;
     mode?: 'detail' | 'study';
     createdByMe?: boolean;
+    isCompleted?: boolean;
+    isAiGenerated?: boolean;
 }
 
 const FlashcardHeader = ({
@@ -23,7 +25,9 @@ const FlashcardHeader = ({
     hasCards,
     onWriteCard,
     mode = 'detail',
-    createdByMe = true
+    createdByMe = true,
+    isCompleted = true,
+    isAiGenerated = false
 }: FlashcardHeaderProps): JSX.Element => {
     const router = useRouter();
     const { isMobileBreakpoints } = useWindowBreakpoints();
@@ -59,11 +63,12 @@ const FlashcardHeader = ({
                             {createdByMe && (
                                 <button
                                     onClick={onWriteCard}
+                                    disabled={isAiGenerated && !isCompleted}
                                     className={`inline-flex items-center gap-2 ${
                                         hasCards
                                             ? 'bg-[#333333]'
                                             : 'bg-[#5F2BCE] w-full justify-center'
-                                    } text-white px-4 py-3 md:px-4 md:py-2 md:p-3 rounded-full hover:opacity-90 transition-colors`}>
+                                    } text-white px-4 py-3 md:px-4 md:py-2 md:p-3 rounded-full hover:opacity-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}>
                                     <BsFillPencilFill size={14} />
                                     {!hasCards && <span>Tulis Flashcard</span>}
                                 </button>

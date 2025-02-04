@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import {
     useDeleteFlashcardMutation,
@@ -28,6 +28,7 @@ const FlashcardDetailContainer = (): JSX.Element => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deleteFlashcard] = useDeleteFlashcardMutation();
     const [showGeneratingModal, setShowGeneratingModal] = useState(true);
+    const [shouldPoll, setShouldPoll] = useState(false);
 
     const { data: publicFlashcard, isLoading: isPublicLoading } =
         useGetPublicFlashcardDetailQuery(
@@ -38,8 +39,19 @@ const FlashcardDetailContainer = (): JSX.Element => {
     const { data: privateFlashcard, isLoading: isPrivateLoading } =
         useGetFlashcardDetailQuery(
             { flashcard_slug: slug as string },
-            { skip: !slug || !isAuthenticated }
+            {
+                skip: !slug || !isAuthenticated,
+                pollingInterval: shouldPoll ? 5000 : 0
+            }
         );
+
+    useEffect(() => {
+        if (privateFlashcard) {
+            setShouldPoll(
+                privateFlashcard.ai_generated && !privateFlashcard.is_completed
+            );
+        }
+    }, [privateFlashcard]);
 
     const flashcard = isAuthenticated ? privateFlashcard : publicFlashcard;
     const isLoading = isAuthenticated ? isPrivateLoading : isPublicLoading;
@@ -133,6 +145,8 @@ const FlashcardDetailContainer = (): JSX.Element => {
                         flashcard.created_by_me ? handleEdit : undefined
                     }
                     createdByMe={flashcard.created_by_me}
+                    isCompleted={flashcard.is_completed}
+                    isAiGenerated={flashcard.ai_generated}
                 />
 
                 {flashcard.ai_generated && !flashcard.is_completed ? (
