@@ -19,7 +19,8 @@ const DISPLAYED_ROUTES = [
     '/komunitas',
     '/copilot',
     '/perpustakaan',
-    '/latihan'
+    '/latihan',
+    '/alat-belajar'
 ];
 
 const APPBAR_NAV: AppbarNav[] = [
@@ -59,8 +60,8 @@ const APPBAR_NAV: AppbarNav[] = [
     },
     {
         icon: <PencilOnLineIcon size={20} />,
-        href: '/latihan',
-        label: 'Latihan'
+        href: '/alat-belajar',
+        label: 'Alat Belajar'
     }
 ];
 
