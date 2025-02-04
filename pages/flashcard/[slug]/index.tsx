@@ -30,9 +30,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         return {
             props: {
                 canonical: `https://gradient.academy/flashcard/${flashcardSlug}`,
-                title: `Flashcard ${flashcard.title} - Gradient`,
+                title: `Flashcard ${flashcard?.title}`,
                 description:
-                    flashcard.description ||
+                    flashcard?.description ||
                     'Lihat detail flashcard untuk proses belajar kamu!'
             },
             revalidate: 60

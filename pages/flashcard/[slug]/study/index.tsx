@@ -20,8 +20,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     return {
         props: {
             canonical: `https://gradient.academy/flashcard/${params?.slug}/study`,
-            title: 'Study Flashcard - Gradient',
-            description: 'Study your flashcards'
+            title: 'Belajar Flashcard - Gradient',
+            description: 'Belajar flashcard di Gradient'
         }
     };
 };
