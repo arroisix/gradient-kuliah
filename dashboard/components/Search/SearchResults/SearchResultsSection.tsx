@@ -117,7 +117,7 @@ const ResultsCardFactory = ({
                         getHighlight('problem_question') ?? doc.problem_question
                     }
                     type={type}
-                    desc={getHighlight('solution') ?? ''}
+                    desc={getHighlight('problem_solution') ?? ''}
                     course={doc.course_name}
                     chapter={getHighlight('chapter_name') ?? doc.chapter_name}
                     subchapter={
