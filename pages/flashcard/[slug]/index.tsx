@@ -1,9 +1,16 @@
-import React from 'react';
-import { GetStaticProps, GetStaticPaths } from 'next';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import LearnLayout from 'commons/learnLayout';
 import FlashcardDetailContainer from 'flashcard/containers/FlashcardDetailContainer';
+import { wrapper } from 'redux/store';
+import { ThunkDispatch } from 'redux-thunk';
+import { flashcardApi } from 'flashcard/redux/api/flashcardsApi';
+import { getRunningQueriesThunk } from 'redux/api/baseApi';
+import { FlashcardDetail } from 'flashcard/types/flashcards';
 
-const FlashcardDetailPage = (): JSX.Element => {
+const FlashcardDetailPage = ({}: {
+    slug: string;
+    flashcard: FlashcardDetail;
+}): JSX.Element => {
     return (
         <LearnLayout>
             <FlashcardDetailContainer />
@@ -18,35 +25,56 @@ export const getStaticPaths: GetStaticPaths = async () => {
     };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-    const flashcardSlug = params?.slug;
+export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
+    (store) =>
+        async ({ params }) => {
+            const { slug } = params as { slug: string };
+            const dispatch = store.dispatch as ThunkDispatch<
+                RootState,
+                never,
+                never
+            >;
 
-    try {
-        const response = await fetch(
-            `https://api.gradient.academy/api/v1/flashcards/public/${flashcardSlug}/`
-        );
-        const flashcard = await response.json();
+            dispatch(
+                flashcardApi.endpoints.getPublicFlashcardDetail.initiate({
+                    flashcard_slug: slug
+                })
+            );
 
-        return {
-            props: {
-                canonical: `https://gradient.academy/flashcard/${flashcardSlug}`,
-                title: `Flashcard ${flashcard?.title}`,
-                description:
-                    flashcard?.description ||
-                    'Lihat detail flashcard untuk proses belajar kamu!'
-            },
-            revalidate: 60
-        };
-    } catch (error) {
-        return {
-            props: {
-                canonical: `https://gradient.academy/flashcard/${flashcardSlug}`,
-                title: 'Detail Flashcard - Gradient',
-                description: 'Lihat detail flashcard untuk proses belajar kamu!'
-            },
-            revalidate: 60
-        };
-    }
-};
+            const payload = await Promise.all(
+                dispatch(getRunningQueriesThunk())
+            );
+
+            if (payload[0].error) {
+                return {
+                    notFound: true
+                };
+            }
+
+            const data = payload[0].data as FlashcardDetail;
+
+            const META_TITLE = `Flashcard ${data.title}`;
+            const META_DESCRIPTION =
+                data.description ||
+                'Lihat detail flashcard untuk proses belajar kamu!';
+
+            return {
+                revalidate: 60,
+                props: {
+                    slug,
+                    flashcard: data,
+                    canonical: `https://gradient.academy/flashcard/${slug}`,
+                    title: META_TITLE,
+                    description: META_DESCRIPTION,
+                    openGraph: {
+                        type: 'website',
+                        title: META_TITLE,
+                        description: META_DESCRIPTION,
+                        url: `https://gradient.academy/flashcard/${slug}`
+                    }
+                }
+            };
+        }
+);
 
 export default FlashcardDetailPage;
