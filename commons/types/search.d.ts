@@ -33,7 +33,9 @@ interface SearchResultCardProps {
         | 'astronotes_content'
         | 'textbook_problem'
         | 'bank_soal_problem'
-        | 'community_post';
+        | 'community_post'
+        | 'exercise'
+        | 'flashcard';
     thumbnail?: string;
     title: string;
     desc: string;
@@ -56,7 +58,9 @@ interface SearchDocument {
         | 'astronotes_content'
         | 'textbook_problem'
         | 'bank_soal_problem'
-        | 'community_post';
+        | 'community_post'
+        | 'exercise'
+        | 'flashcard';
 
     /** Available for `course` and `course_video` collections */
     course_slug: string;
@@ -99,6 +103,23 @@ interface SearchDocument {
     is_answered: boolean;
     /** Comment count for `community_post` */
     popularity: number;
+
+    /** Available for `exercise` collection */
+    exercise_title?: string;
+    exercise_slug?: string;
+    exercise_question?: string;
+    problem_count?: number;
+    icon?: string;
+
+    /** Available for `flashcard` collection */
+    flashcard_title?: string;
+    flashcard_slug?: string;
+    card_question?: string;
+    card_answer?: string;
+    card_count?: number;
+    lecturers_or_authors?: string[];
+    photo_profile?: string;
+    attachments?: string[];
 }
 
 interface SearchResultsProps {
@@ -126,6 +147,8 @@ interface AdvancedSearchParams {
         | 'bank-soal'
         | 'text-book'
         | 'community'
+        | 'exercise'
+        | 'flashcard'
         | string;
     sort?: string;
     course?: string;
