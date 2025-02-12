@@ -60,7 +60,7 @@ interface SearchDocument {
         | 'bank_soal_problem'
         | 'community_post'
         | 'exercise'
-        | 'flashcard';
+        | 'flashcard_card';
 
     /** Available for `course` and `course_video` collections */
     course_slug: string;

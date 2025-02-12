@@ -210,8 +210,7 @@ const ResultsCardFactory = ({
                 />
             );
 
-        case 'flashcard':
-        case undefined:
+        case 'flashcard_card':
             if (!doc.flashcard_slug || !doc.flashcard_title) {
                 return <></>;
             }
