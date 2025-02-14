@@ -120,6 +120,7 @@ interface SearchDocument {
     lecturers_or_authors?: string[];
     photo_profile?: string;
     attachments?: string[];
+    order?: number;
 }
 
 interface SearchResultsProps {

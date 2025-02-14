@@ -22,7 +22,7 @@ const SearchResultsSection = ({
         'text-book': 'Textbook Solution',
         community: 'Diskusi',
         exercise: 'Kuis',
-        flashcard: 'Flashcard'
+        flashcard: 'Konten Flashcard'
     };
 
     if (isLoading)
@@ -217,7 +217,7 @@ const ResultsCardFactory = ({
             return (
                 <FlashcardSearchResultCard
                     key={doc.id}
-                    href={`/flashcard/${doc.flashcard_slug}`}
+                    href={`/flashcard/${doc.flashcard_slug}/study?index=${doc.order}`}
                     title={
                         getHighlight('flashcard_title') ?? doc.flashcard_title
                     }
@@ -233,6 +233,7 @@ const ResultsCardFactory = ({
                               }
                             : undefined
                     }
+                    order={doc.order}
                 />
             );
 
