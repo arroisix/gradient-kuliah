@@ -221,6 +221,7 @@ const ResultsCardFactory = ({
                     title={
                         getHighlight('flashcard_title') ?? doc.flashcard_title
                     }
+                    normal_title={doc.flashcard_title}
                     question={
                         getHighlight('card_question') ?? doc.card_question ?? ''
                     }
