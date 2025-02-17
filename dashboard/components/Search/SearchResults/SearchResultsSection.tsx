@@ -217,7 +217,9 @@ const ResultsCardFactory = ({
             return (
                 <FlashcardSearchResultCard
                     key={doc.id}
-                    href={`/flashcard/${doc.flashcard_slug}/study?index=${doc.order}`}
+                    href={`/flashcard/${doc.flashcard_slug}/study?index=${
+                        doc.order ? doc.order + 1 : 0
+                    }`}
                     title={
                         getHighlight('flashcard_title') ?? doc.flashcard_title
                     }
