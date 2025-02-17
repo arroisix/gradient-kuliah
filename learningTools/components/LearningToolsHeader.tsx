@@ -76,7 +76,7 @@ const LearningToolsHeader: React.FC<LearningToolsHeaderProps> = ({
                                 )}
                             </div>
                         </div>
-                        <h3 className="font-semibold text-white">
+                        <h3 className="font-semibold text-start text-white">
                             {tool.name}
                         </h3>
                     </button>

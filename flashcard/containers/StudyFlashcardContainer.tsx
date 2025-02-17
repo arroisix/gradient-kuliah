@@ -39,8 +39,12 @@ const StudyFlashcardContainer = (): JSX.Element => {
     useEffect(() => {
         if (index && flashcard) {
             const targetIndex = Number(index);
-            if (targetIndex >= 0 && targetIndex < flashcard.cards.length) {
+            if (targetIndex > 0 && targetIndex <= flashcard.cards.length) {
                 setCurrentIndex(targetIndex - 1);
+            } else if (targetIndex > flashcard.cards.length) {
+                setCurrentIndex(flashcard.cards.length - 1);
+            } else {
+                setCurrentIndex(0);
             }
         }
     }, [index, flashcard]);

@@ -17,6 +17,7 @@ interface FlashcardSearchResultCardProps {
     title: string;
     normal_title: string;
     question?: string;
+    answer?: string;
     attachments?: string[];
     author?: {
         name: string;
@@ -30,6 +31,7 @@ const FlashcardSearchResultCard = ({
     title,
     normal_title,
     question,
+    answer,
     attachments,
     author,
     order
@@ -77,7 +79,18 @@ const FlashcardSearchResultCard = ({
                     </span>
                 </div>
 
-                <Highlight className="text-base md:text-lg font-semibold mb-2">
+                {question && (
+                    <Highlight className="text-base md:text-lg font-semibold mb-2">
+                        {question}
+                    </Highlight>
+                )}
+                {answer && (
+                    <Highlight className="text-sm text-graphite-400 mb-4">
+                        {answer}
+                    </Highlight>
+                )}
+
+                <Highlight className="text-sm text-graphite-400 mb-2">
                     {title}
                 </Highlight>
 
@@ -90,12 +103,6 @@ const FlashcardSearchResultCard = ({
                         />
                     )}
                 </div>
-
-                {question && (
-                    <Highlight className="text-xs text-pretty text-graphite-400 mb-2 line-clamp-2">
-                        {question}
-                    </Highlight>
-                )}
 
                 <div className="flex items-center gap-2 mt-auto text-xs text-graphite-400">
                     {author && (

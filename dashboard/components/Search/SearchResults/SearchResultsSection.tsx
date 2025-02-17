@@ -227,6 +227,9 @@ const ResultsCardFactory = ({
                     question={
                         getHighlight('card_question') ?? doc.card_question ?? ''
                     }
+                    answer={
+                        getHighlight('card_answer') ?? doc.card_answer ?? ''
+                    }
                     attachments={doc.attachments}
                     author={
                         doc.lecturers_or_authors?.[0]
