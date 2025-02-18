@@ -10,7 +10,7 @@ export const COPYWRITING: LandingHeroCopywritingInterface = {
         )
     },
     description:
-        'Dapatkan akses ke video kelas, pembahasan soal, textbook, dan rangkuman untuk membantu kamu meraih IPK idaman',
+        'Akses video, pembahasan soal, rangkuman, dan alat belajar dengan dukungan AI untuk membantumu raih IPK idaman',
     primaryButton: {
         authenticated: 'Langganan',
         unauthenticated: 'Daftar'

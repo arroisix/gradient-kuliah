@@ -87,16 +87,17 @@ const Hero = (): JSX.Element => {
                         'relative w-full',
                         isAuthenticated
                             ? 'aspect-[710/325] bg-[#33354080]/[0.5] rounded-3xl overflow-hidden lg:w-3/5'
-                            : 'aspect-[625/372] lg:w-1/2'
+                            : 'aspect-[1250/744] lg:w-1/2'
                     )}>
                     <Image
                         src={
                             isAuthenticated
                                 ? `${CDN_URL}/assets/landing-registered-hero.png`
-                                : `${CDN_URL}/assets/landing-unregistered-hero.png`
+                                : `${CDN_URL}/assets/landing-hero-revamp-unregistered.png`
                         }
                         priority
                         layout="fill"
+                        className="object-cover"
                         alt="hero"
                     />
                 </div>
