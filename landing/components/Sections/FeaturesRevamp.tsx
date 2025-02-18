@@ -108,7 +108,9 @@ const FeatureCard = ({
             </div>
             <div className="p-6">
                 <h3 className="font-sans text-xl font-bold">{title}</h3>
-                <p className="text-[#CCCCCC] h-[64px] text-sm mt-2">{subtitle}</p>
+                <p className="text-[#CCCCCC] h-[64px] text-sm mt-2">
+                    {subtitle}
+                </p>
                 <div className="flex justify-end mt-2">
                     <Link
                         href={href}
