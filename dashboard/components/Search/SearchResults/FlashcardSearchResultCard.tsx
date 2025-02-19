@@ -74,35 +74,35 @@ const FlashcardSearchResultCard = ({
                             <FlashcardIcon />
                         </div>
                     </div>
-                    <span className="text-base font-medium">
-                        {normal_title}
-                    </span>
+                    <span className="text-base font-bold">{normal_title}</span>
                 </div>
 
                 {question && (
-                    <Highlight className="text-base md:text-lg font-semibold mb-2">
-                        {question}
-                    </Highlight>
+                    <>
+                        <Highlight className="text-base md:text-lg font-semibold mb-2">
+                            {question}
+                        </Highlight>
+                        {attachments?.[0] && (
+                            <div className="mb-4">
+                                <img
+                                    src={attachments[0]}
+                                    alt={title}
+                                    className="w-full aspect-[2/1] object-cover rounded"
+                                />
+                            </div>
+                        )}
+                    </>
                 )}
+
                 {answer && (
-                    <Highlight className="text-sm text-graphite-400 mb-4">
+                    <Highlight className="text-sm text-graphite-400 mb-4 line-clamp-3 overflow-hidden">
                         {answer}
                     </Highlight>
                 )}
 
-                <Highlight className="text-sm text-graphite-400 mb-2">
+                <Highlight className="text-sm text-graphite-400 font-bold mb-2">
                     {title}
                 </Highlight>
-
-                <div className="md:hidden mb-2">
-                    {attachments?.[0] && (
-                        <img
-                            src={attachments[0]}
-                            alt={title}
-                            className="w-full aspect-[2/1] object-cover rounded"
-                        />
-                    )}
-                </div>
 
                 <div className="flex items-center gap-2 mt-auto text-xs text-graphite-400">
                     {author && (
