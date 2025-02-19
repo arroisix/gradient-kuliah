@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import {
     useGetFlashcardDetailQuery,
@@ -22,7 +22,7 @@ interface StudyState {
 
 const StudyFlashcardContainer = (): JSX.Element => {
     const router = useRouter();
-    const { slug } = router.query;
+    const { slug, index } = router.query;
     const [currentIndex, setCurrentIndex] = useState(0);
     const [showAnswer, setShowAnswer] = useState(false);
     const [isListOpen, setIsListOpen] = useState(false);
@@ -35,6 +35,19 @@ const StudyFlashcardContainer = (): JSX.Element => {
         { flashcard_slug: slug as string },
         { skip: !slug }
     );
+
+    useEffect(() => {
+        if (index && flashcard) {
+            const targetIndex = Number(index);
+            if (targetIndex > 0 && targetIndex <= flashcard.cards.length) {
+                setCurrentIndex(targetIndex - 1);
+            } else if (targetIndex > flashcard.cards.length) {
+                setCurrentIndex(flashcard.cards.length - 1);
+            } else {
+                setCurrentIndex(0);
+            }
+        }
+    }, [index, flashcard]);
 
     const [toggleFavorite] = useToggleFavoriteCardMutation();
 

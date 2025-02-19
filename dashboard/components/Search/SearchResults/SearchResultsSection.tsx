@@ -5,6 +5,8 @@ import Skeleton from 'commons/components/elements/Skeleton';
 import { useRouter } from 'next/router';
 import { cn } from 'commons/utils';
 import EmptyResult from './EmptyResult';
+import LatihanCard from 'courses/components/Latihan/Entrypoint/LatihanCard';
+import FlashcardSearchResultCard from './FlashcardSearchResultCard';
 
 const SearchResultsSection = ({
     result,
@@ -18,7 +20,9 @@ const SearchResultsSection = ({
         astronotes: 'Konten Astronotes',
         'bank-soal': 'Konten Bank Soal',
         'text-book': 'Textbook Solution',
-        community: 'Diskusi'
+        community: 'Diskusi',
+        exercise: 'Kuis',
+        flashcard: 'Konten Flashcard'
     };
 
     if (isLoading)
@@ -31,7 +35,13 @@ const SearchResultsSection = ({
                     )}>
                     {headingMap[type]} Terkait
                 </p>
-                <Skeleton repeat={4} isCustomSize className="w-full h-40" />
+                {type === 'exercise' ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <Skeleton repeat={9} isCustomSize className="h-40" />
+                    </div>
+                ) : (
+                    <Skeleton repeat={4} isCustomSize className="w-full h-40" />
+                )}
             </div>
         );
 
@@ -46,9 +56,17 @@ const SearchResultsSection = ({
                 )}>
                 {headingMap[type]} Terkait
             </p>
-            {result?.hits.map((hit) => (
-                <ResultsCardFactory key={hit.document.id} hit={hit} />
-            ))}
+            {type === 'exercise' ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {result?.hits.map((hit) => (
+                        <ResultsCardFactory key={hit.document.id} hit={hit} />
+                    ))}
+                </div>
+            ) : (
+                result?.hits.map((hit) => (
+                    <ResultsCardFactory key={hit.document.id} hit={hit} />
+                ))
+            )}
         </div>
     );
 };
@@ -117,7 +135,7 @@ const ResultsCardFactory = ({
                         getHighlight('problem_question') ?? doc.problem_question
                     }
                     type={type}
-                    desc={getHighlight('solution') ?? ''}
+                    desc={getHighlight('problem_solution') ?? ''}
                     course={doc.course_name}
                     chapter={getHighlight('chapter_name') ?? doc.chapter_name}
                     subchapter={
@@ -164,6 +182,64 @@ const ResultsCardFactory = ({
                     thumbnail={doc.thumbnail}
                     isAnswered={doc.is_answered}
                     commentCount={doc.popularity}
+                />
+            );
+
+        case 'exercise':
+            if (
+                !doc.exercise_slug ||
+                !doc.exercise_title ||
+                !doc.problem_count
+            ) {
+                return <></>;
+            }
+            return (
+                <LatihanCard
+                    key={doc.id}
+                    exercise={{
+                        id: doc.id,
+                        slug: doc.exercise_slug,
+                        title: doc.exercise_title,
+                        subject: doc.course_name || '',
+                        total_questions: doc.problem_count,
+                        icon: doc.icon || '📚',
+                        status: doc.is_answered ? 'COMPLETED' : undefined,
+                        is_free: true
+                    }}
+                    cardType="allExercises"
+                />
+            );
+
+        case 'flashcard_card':
+            if (!doc.flashcard_slug || !doc.flashcard_title) {
+                return <></>;
+            }
+            return (
+                <FlashcardSearchResultCard
+                    key={doc.id}
+                    href={`/flashcard/${doc.flashcard_slug}/study?index=${
+                        doc.order ? doc.order + 1 : 0
+                    }`}
+                    title={
+                        getHighlight('flashcard_title') ?? doc.flashcard_title
+                    }
+                    normal_title={doc.flashcard_title}
+                    question={
+                        getHighlight('card_question') ?? doc.card_question ?? ''
+                    }
+                    answer={
+                        getHighlight('card_answer') ?? doc.card_answer ?? ''
+                    }
+                    attachments={doc.attachments}
+                    author={
+                        doc.lecturers_or_authors?.[0]
+                            ? {
+                                  name: doc.lecturers_or_authors[0],
+                                  photo_profile: doc.photo_profile || ''
+                              }
+                            : undefined
+                    }
+                    order={doc.order}
                 />
             );
 
