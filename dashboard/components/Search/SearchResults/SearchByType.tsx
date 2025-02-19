@@ -10,7 +10,9 @@ const TYPE_OPTIONS = [
     { value: 'astronotes', label: 'Astronotes' },
     { value: 'bank-soal', label: 'Bank Soal' },
     { value: 'text-book', label: 'Textbook Solution' },
-    { value: 'community', label: 'Komunitas' }
+    { value: 'community', label: 'Komunitas' },
+    { value: 'exercise', label: 'Kuis' },
+    { value: 'flashcard', label: 'Flashcard' }
 ];
 
 const SearchByType = (): JSX.Element => {

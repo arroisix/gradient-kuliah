@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import CourseBookResults from './CourseBookResults';
 import CourseResults from './CourseResults';
+import FlashcardResults from './FlashcardResults';
 
 const SearchResultsCarousel = (props: SearchResultsProps): JSX.Element => {
     const router = useRouter();
@@ -19,6 +20,9 @@ const SearchResultsCarousel = (props: SearchResultsProps): JSX.Element => {
 
         case 'bank-soal':
             return <CourseBookResults title="Bank Soal Terkait" {...props} />;
+
+        case 'flashcard':
+            return <FlashcardResults title="Flashcard Terkait" {...props} />;
 
         default:
             return <></>;
