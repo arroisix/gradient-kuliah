@@ -92,7 +92,7 @@ const Hero = (): JSX.Element => {
                     <Image
                         src={
                             isAuthenticated
-                                ? `${CDN_URL}/assets/landing-registered-hero.png`
+                                ? `${CDN_URL}/assets/landing-hero-revamp-unregistered.png`
                                 : `${CDN_URL}/assets/landing-hero-revamp-unregistered.png`
                         }
                         priority

@@ -9,6 +9,8 @@ import { FaInstagram } from 'react-icons/fa';
 import { IconType } from 'react-icons/lib';
 import { MdMailOutline } from 'react-icons/md';
 import moment from 'moment';
+import Image from 'next/image';
+import { CDN_URL } from 'commons/constants';
 
 type FooterItemProps = {
     title: string;
@@ -76,12 +78,20 @@ const ITEMS: FooterItemProps[] = [
                 url: '/perpustakaan/bank-soal'
             },
             {
-                content: 'Diskusi',
-                url: '/komunitas'
-            },
-            {
                 content: 'Copilot AI',
                 url: '/copilot'
+            },
+            {
+                content: 'Flashcard',
+                url: '/flashcard'
+            },
+            {
+                content: 'Quiz',
+                url: '/latihan'
+            },
+            {
+                content: 'Diskusi',
+                url: '/komunitas'
             }
         ]
     }
@@ -186,9 +196,12 @@ const Footer = (): JSX.Element => {
 
                     <div
                         className={`flex flex-col gap-${TITLE_BODY_GAP} lg:max-w-[45%] xl:max-w-[50%]`}>
-                        <span className="text-2xl font-extrabold text-white">
-                            Gradient
-                        </span>
+                        <div className="flex flex-col gap-4">
+                            <span className="text-2xl font-extrabold text-white">
+                                Gradient
+                            </span>
+                            <AppButtons />
+                        </div>
                         <div
                             className={`flex flex-col gap-${CONTACT_BODY_GAP}`}>
                             <p className="font-sans text-sm font-bold text-white">
@@ -196,8 +209,8 @@ const Footer = (): JSX.Element => {
                             </p>
                             <div className="flex flex-col gap-1">
                                 <span className="font-body text-sm text-[#BBBBBB]">
-                                    Gedung Smesco SME Tower Kontrak Hukum Office
-                                    Space Lt. 6
+                                    Smesco SME Tower Kontrak Hukum Office Space
+                                    Lt. 6
                                 </span>
                                 <span className="font-body text-sm text-[#BBBBBB]">
                                     Jl. Gatot Subroto Kav. 94, RT.11/RW.3, Kel.
@@ -251,6 +264,47 @@ const SocialMedia = ({ Icon, url }: FooterSocialMediaProps): JSX.Element => {
         <Link href={url}>
             <Icon />
         </Link>
+    );
+};
+
+const AppButtons = (): JSX.Element => {
+    return (
+        <div className="flex items-center gap-4">
+            <Link
+                href="https://play.google.com/store/apps/details?id=com.gradient.academy"
+                target="_blank"
+                className="flex items-center gap-2 bg-[#5F2BCE] rounded-xl px-4 py-3 hover:opacity-80 transition-opacity">
+                <Image
+                    src={`${CDN_URL}/assets/play-store-logo.png`}
+                    alt="Get it on Google Play"
+                    width={20}
+                    height={20}
+                />
+                <div className="flex flex-col">
+                    <span className="text-xs text-white/80">Dapatkan di</span>
+                    <span className="text-sm font-semibold text-white">
+                        Google Play
+                    </span>
+                </div>
+            </Link>
+            {/*<Link*/}
+            {/*    href="https://apps.apple.com/id/app/gradient-academy/id1607386289"*/}
+            {/*    target="_blank"*/}
+            {/*    className="flex items-center gap-2 bg-[#5F2BCE] rounded-xl px-4 py-3 hover:opacity-80 transition-opacity">*/}
+            {/*    <Image*/}
+            {/*        src={`${CDN_URL}/assets/apple-logo.png`}*/}
+            {/*        alt="Download on the App Store"*/}
+            {/*        width={16}*/}
+            {/*        height={20}*/}
+            {/*    />*/}
+            {/*    <div className="flex flex-col">*/}
+            {/*        <span className="text-xs text-white/80">Dapatkan di</span>*/}
+            {/*        <span className="text-sm font-semibold text-white">*/}
+            {/*            App Store*/}
+            {/*        </span>*/}
+            {/*    </div>*/}
+            {/*</Link>*/}
+        </div>
     );
 };
 

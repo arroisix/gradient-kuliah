@@ -31,7 +31,9 @@ const InstallGradient = () => {
                                 height={24}
                             />
                             <span className="font-bold">Gradient</span>
-                            <span className="text-xs px-2 py-0.5 bg-white/20 rounded-full">
+                            <span
+                                className="flex items-center gap-2 py-1 px-3 rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] font-semibold text-xs text-white tooltip tooltip-right"
+                                data-tip="Copilot AI gratis selama versi Beta!">
                                 Baru
                             </span>
                         </div>
@@ -42,7 +44,7 @@ const InstallGradient = () => {
                         </p>
                         <div className="flex gap-4">
                             <Link
-                                href="https://play.google.com/store/apps/details?id=com.gradientedu.android"
+                                href="https://play.google.com/store/apps/details?id=com.gradient.academy"
                                 target="_blank"
                                 className="flex items-center gap-2 bg-[#333333] rounded-full px-4 py-2 hover:opacity-80 transition-opacity">
                                 <Image
@@ -51,22 +53,22 @@ const InstallGradient = () => {
                                     width={20}
                                     height={20}
                                 />
-                                <p className="text-sm font-medium">
+                                <p className="text-sm font-semibold">
                                     Google Play
                                 </p>
                             </Link>
-                            <Link
-                                href="https://apps.apple.com/id/app/gradient-academy/id1607386289"
-                                target="_blank"
-                                className="flex items-center gap-2 bg-[#333333] rounded-full px-4 py-2 hover:opacity-80 transition-opacity">
-                                <Image
-                                    src={`${CDN_URL}/assets/apple-logo.png`}
-                                    alt="Download on the App Store"
-                                    width={16}
-                                    height={20}
-                                />
-                                <p className="text-sm font-medium">App Store</p>
-                            </Link>
+                            {/*<Link*/}
+                            {/*    href="https://apps.apple.com/id/app/gradient-academy/id1607386289"*/}
+                            {/*    target="_blank"*/}
+                            {/*    className="flex items-center gap-2 bg-[#333333] rounded-full px-4 py-2 hover:opacity-80 transition-opacity">*/}
+                            {/*    <Image*/}
+                            {/*        src={`${CDN_URL}/assets/apple-logo.png`}*/}
+                            {/*        alt="Download on the App Store"*/}
+                            {/*        width={16}*/}
+                            {/*        height={20}*/}
+                            {/*    />*/}
+                            {/*    <p className="text-sm font-medium">App Store</p>*/}
+                            {/*</Link>*/}
                         </div>
                     </div>
 

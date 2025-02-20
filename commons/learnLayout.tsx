@@ -6,6 +6,7 @@ import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import Footer from './components/modules/Footer';
 import SubscriptionReminder from './components/modules/Navbar/components/SubscriptionReminder';
 import { useThemeContext } from './contexts/ThemeProvider';
+import AppInstallBanner from './components/modules/Navbar/components/AppInstallBanner';
 
 interface LayoutProps {
     children: JSX.Element;
@@ -55,11 +56,21 @@ const LearnLayout = ({
                             fullHeightSidebar={fullHeightSidebar}
                             showSubscriptionReminder={showSubscriptionReminder}
                         />
+                        <AppInstallBanner
+                            className="top-14"
+                            showSidebar={showSidebar && isSubscribed}
+                        />
                         <SubscriptionReminder
                             show={showSubscriptionReminder}
                             showSidebar={showSidebar}
                         />
                     </>
+                )}
+                {hideNavbar && (
+                    <AppInstallBanner
+                        className="top-0"
+                        showSidebar={showSidebar && isSubscribed}
+                    />
                 )}
                 <div
                     className={cn(
