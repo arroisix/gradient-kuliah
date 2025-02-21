@@ -13,12 +13,12 @@ const AppInstallBanner = ({
     className,
     showSidebar
 }: AppInstallBannerProps) => {
-    const [isVisible, setIsVisible] = useState(true);
+    const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
         const isBannerClosed = localStorage.getItem('appBannerClosed');
-        if (isBannerClosed) {
-            setIsVisible(false);
+        if (!isBannerClosed) {
+            setIsVisible(true);
         }
     }, []);
 
@@ -39,7 +39,7 @@ const AppInstallBanner = ({
     return (
         <div
             className={cn(
-                'fixed right-0 bg-[#494BA0] px-8 transition-all duration-300 z-[100]',
+                'fixed right-0 bg-[#494BA0] md:px-8 transition-all duration-300 z-[100]',
                 showSidebar ? 'left-[250px]' : 'left-0',
                 className
             )}>
@@ -56,14 +56,14 @@ const AppInstallBanner = ({
                             height={24}
                             className="rounded"
                         />
-                        <span className="font-bold">Gradient</span>
+                        <span className="text-sm font-bold">Gradient</span>
                         <span
                             className="flex items-center gap-2 py-1 px-3 rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] font-semibold text-xs text-white tooltip tooltip-right"
                             data-tip="Copilot AI gratis selama versi Beta!">
                             Baru
                         </span>
                     </div>
-                    <p className="text-sm">
+                    <p className="text-[11px]">
                         Install di Playstore dan klaim promonya!
                     </p>
                 </div>

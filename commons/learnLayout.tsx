@@ -7,6 +7,7 @@ import Footer from './components/modules/Footer';
 import SubscriptionReminder from './components/modules/Navbar/components/SubscriptionReminder';
 import { useThemeContext } from './contexts/ThemeProvider';
 import AppInstallBanner from './components/modules/Navbar/components/AppInstallBanner';
+import useWindowBreakpoints from './hooks/useWindowBreakpoints';
 
 interface LayoutProps {
     children: JSX.Element;
@@ -37,6 +38,7 @@ const LearnLayout = ({
     const { theme } = useThemeContext();
     const lightMode = theme === 'light';
     const { is_subscribed: isSubscribed } = useCourseSubscription();
+    const { isMobileBreakpoints } = useWindowBreakpoints();
 
     return (
         <>
@@ -58,7 +60,11 @@ const LearnLayout = ({
                         />
                         <AppInstallBanner
                             className="top-14"
-                            showSidebar={showSidebar && isSubscribed}
+                            showSidebar={
+                                showSidebar &&
+                                isSubscribed &&
+                                !isMobileBreakpoints
+                            }
                         />
                         <SubscriptionReminder
                             show={showSubscriptionReminder}
