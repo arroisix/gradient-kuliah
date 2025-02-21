@@ -22,7 +22,8 @@ const AppInstallBanner = ({
         }
     }, []);
 
-    const handleClose = () => {
+    const handleClose = (e: React.MouseEvent) => {
+        e.stopPropagation();
         setIsVisible(false);
         localStorage.setItem('appBannerClosed', 'true');
     };
@@ -37,14 +38,15 @@ const AppInstallBanner = ({
     if (!isVisible) return null;
 
     return (
-        <div
+        <button
+            onClick={handleInstall}
             className={cn(
-                'fixed right-0 bg-[#494BA0] md:px-8 transition-all duration-300 z-[100]',
+                'fixed right-0 bg-[#494BA0] md:px-8 transition-all duration-300 z-[5] cursor-pointer',
                 showSidebar ? 'left-[250px]' : 'left-0',
                 className
             )}>
             <div className="flex items-center justify-between px-4 py-3">
-                <button onClick={handleClose} className="mr-4">
+                <button onClick={handleClose} className="mr-4 hover:opacity-80">
                     <MdClose size={24} />
                 </button>
                 <div className="flex flex-col items-start gap-2 flex-1">
@@ -67,9 +69,7 @@ const AppInstallBanner = ({
                         Install di Playstore dan klaim promonya!
                     </p>
                 </div>
-                <button
-                    onClick={handleInstall}
-                    className="flex items-center gap-2 bg-[#171717] rounded-[70px] px-4 py-1.5 text-sm font-medium hover:opacity-80 transition-opacity">
+                <div className="flex items-center gap-2 bg-[#171717] rounded-[70px] px-4 py-1.5 text-sm font-medium hover:opacity-80 transition-opacity">
                     <Image
                         src={`${CDN_URL}/assets/play-store-logo.png`}
                         alt="Get it on Google Play"
@@ -77,9 +77,9 @@ const AppInstallBanner = ({
                         height={16}
                     />
                     Install
-                </button>
+                </div>
             </div>
-        </div>
+        </button>
     );
 };
 

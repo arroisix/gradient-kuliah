@@ -51,7 +51,7 @@ const FeaturesRevamp = () => {
     return (
         <div className="bg-[#181818]">
             <Container className="py-16">
-                <h2 className="font-sans text-center text-2xl font-bold mb-6">
+                <h2 className="font-sans text-center text-[20px] font-bold mb-6">
                     Tingkatkan Pengalaman Belajar dengan Fitur-Fitur Gradient
                 </h2>
                 <div className="flex flex-col gap-4">
@@ -88,7 +88,7 @@ const FeaturesRevamp = () => {
             </Container>
 
             <Container className="py-16">
-                <h2 className="font-sans text-center text-2xl font-bold mb-6">
+                <h2 className="font-sans text-center text-[20px] font-bold mb-6">
                     Belajar Cepat dengan Dukungan AI dan Alat Belajar Interaktif
                 </h2>
                 <div className="flex flex-col gap-4">
@@ -131,7 +131,7 @@ const FeaturesRevamp = () => {
             </Container>
 
             <Container className="py-16">
-                <h2 className="font-sans text-center text-2xl font-bold mb-6">
+                <h2 className="font-sans text-center text-[20px] font-bold mb-6">
                     Perdalam Pemahaman dengan Soal dan Rangkuman
                 </h2>
                 <div className="flex flex-col gap-4">
@@ -191,7 +191,7 @@ const FeatureCard = ({
 }: FeatureCardProps) => {
     return (
         <div className="flex-none w-[266px] md:w-auto bg-[#272727] rounded-xl overflow-hidden">
-            <div className="relative aspect-[266/145] w-full">
+            <div className="relative aspect-[266/145] max-h-[145px] w-full">
                 <Image
                     src={`${CDN_URL}/assets/${imageName}`}
                     alt={title}
