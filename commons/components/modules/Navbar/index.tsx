@@ -204,49 +204,48 @@ const Navbar = ({
                             key={UNAUTHENTICATED_NAVBAR_BUTTONS[1].name}
                             {...UNAUTHENTICATED_NAVBAR_BUTTONS[1]}
                         />
-                        {configData?.configs.is_exercise_config_enabled && (
-                            <div className="relative">
-                                <button
-                                    onClick={() =>
-                                        setOpenToolsDropdown(!openToolsDropdown)
-                                    }
-                                    className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors whitespace-nowrap">
-                                    {openToolsDropdown ? (
-                                        <PencilOnLineIconFill />
-                                    ) : (
-                                        <PencilOnLineIcon />
-                                    )}
-                                    <span>Alat Belajar</span>
-                                    <ChevronDown
-                                        className={`w-4 h-4 transition-transform ${
-                                            openToolsDropdown
-                                                ? 'rotate-180'
-                                                : ''
-                                        }`}
-                                    />
-                                </button>
+                        <div className="relative">
+                            <button
+                                onClick={() =>
+                                    setOpenToolsDropdown(!openToolsDropdown)
+                                }
+                                className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors whitespace-nowrap">
+                                {openToolsDropdown ? (
+                                    <PencilOnLineIconFill />
+                                ) : (
+                                    <PencilOnLineIcon />
+                                )}
+                                <span>Alat Belajar</span>
+                                <ChevronDown
+                                    className={`w-4 h-4 transition-transform ${
+                                        openToolsDropdown ? 'rotate-180' : ''
+                                    }`}
+                                />
+                            </button>
 
-                                {openToolsDropdown && (
-                                    <div className="absolute top-full left-0 mt-1 w-48 bg-[#1A1A1A] rounded-lg shadow-lg py-2 z-50">
-                                        <Link
-                                            href="/alat-belajar"
-                                            className="flex items-center gap-3 px-4 py-2 text-gray-300 hover:text-white hover:bg-[#2A2A2A] transition-colors">
-                                            Semua
-                                        </Link>
-                                        <Link
-                                            href="/flashcard"
-                                            className="flex items-center gap-3 px-4 py-2 text-gray-300 hover:text-white hover:bg-[#2A2A2A] transition-colors">
-                                            Flashcard
-                                        </Link>
+                            {openToolsDropdown && (
+                                <div className="absolute top-full left-0 mt-1 w-48 bg-[#1A1A1A] rounded-lg shadow-lg py-2 z-50">
+                                    <Link
+                                        href="/alat-belajar"
+                                        className="flex items-center gap-3 px-4 py-2 text-gray-300 hover:text-white hover:bg-[#2A2A2A] transition-colors">
+                                        Semua
+                                    </Link>
+                                    <Link
+                                        href="/flashcard"
+                                        className="flex items-center gap-3 px-4 py-2 text-gray-300 hover:text-white hover:bg-[#2A2A2A] transition-colors">
+                                        Flashcard
+                                    </Link>
+                                    {configData?.configs
+                                        .is_exercise_config_enabled && (
                                         <Link
                                             href="/latihan"
                                             className="flex items-center gap-3 px-4 py-2 text-gray-300 hover:text-white hover:bg-[#2A2A2A] transition-colors">
                                             Quiz
                                         </Link>
-                                    </div>
-                                )}
-                            </div>
-                        )}
+                                    )}
+                                </div>
+                            )}
+                        </div>
                     </div>
                     {isShowSidebar && (
                         <div className="hidden md:block w-[250px] h-[64px] fixed top-0 left-0 bg-[#121212] z-[-1]" />

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { MdClose } from 'react-icons/md';
 import Image from 'next/image';
 import { cn } from 'commons/utils';
-import { CDN_URL } from '../../../../constants';
+import { CDN_URL } from 'commons/constants';
 
 interface AppInstallBannerProps {
     className?: string;

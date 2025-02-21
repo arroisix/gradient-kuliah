@@ -90,11 +90,7 @@ const Hero = (): JSX.Element => {
                             : 'aspect-[1250/744] lg:w-1/2'
                     )}>
                     <Image
-                        src={
-                            isAuthenticated
-                                ? `${CDN_URL}/assets/landing-hero-revamp-unregistered.png`
-                                : `${CDN_URL}/assets/landing-hero-revamp-unregistered.png`
-                        }
+                        src={`${CDN_URL}/assets/landing-hero-revamp-unregistered.png`}
                         priority
                         layout="fill"
                         className="object-cover"
