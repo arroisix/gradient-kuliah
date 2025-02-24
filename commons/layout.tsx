@@ -8,6 +8,8 @@ import Appbar from './components/modules/Appbar';
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useRouter } from 'next/router';
+import AppInstallBanner from './components/modules/Navbar/components/AppInstallBanner';
+import useWindowBreakpoints from './hooks/useWindowBreakpoints';
 
 interface LayoutProps {
     children?: JSX.Element;
@@ -34,6 +36,7 @@ const Layout = ({
     );
     const router = useRouter();
     const { is_subscribed } = useCourseSubscription();
+    const { isMobileBreakpoints } = useWindowBreakpoints();
 
     return (
         <div
@@ -50,6 +53,11 @@ const Layout = ({
                 paymentPage={paymentPage ?? false}
                 shouldTransparent={shouldTransparent ?? false}
                 courses={courses}
+            />
+            <AppInstallBanner
+                showSidebar={
+                    showSidebar && is_subscribed && !isMobileBreakpoints
+                }
             />
             <section
                 className={cn(

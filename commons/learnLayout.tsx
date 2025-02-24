@@ -59,7 +59,6 @@ const LearnLayout = ({
                             showSubscriptionReminder={showSubscriptionReminder}
                         />
                         <AppInstallBanner
-                            className="top-14"
                             showSidebar={
                                 showSidebar &&
                                 isSubscribed &&
@@ -74,7 +73,6 @@ const LearnLayout = ({
                 )}
                 {hideNavbar && (
                     <AppInstallBanner
-                        className="top-0"
                         showSidebar={showSidebar && isSubscribed}
                     />
                 )}

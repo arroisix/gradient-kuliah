@@ -190,8 +190,10 @@ const FeatureCard = ({
     href
 }: FeatureCardProps) => {
     return (
-        <div className="flex-none w-[266px] md:w-auto bg-[#272727] rounded-xl overflow-hidden">
-            <div className="relative aspect-[266/145] max-h-[145px] w-full">
+        <div
+            className="flex-none w-[266px] md:w-auto bg-[#272727] rounded-xl overflow-hidden"
+            id="features">
+            <div className="relative aspect-[266/145] w-full">
                 <Image
                     src={`${CDN_URL}/assets/${imageName}`}
                     alt={title}
