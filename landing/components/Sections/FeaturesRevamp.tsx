@@ -193,7 +193,7 @@ const FeatureCard = ({
         <div
             className="flex-none w-[266px] md:w-auto bg-[#272727] rounded-xl overflow-hidden"
             id="features">
-            <div className="relative aspect-[266/145] w-full">
+            <div className="relative aspect-[266/145] max-h-[200px] w-full">
                 <Image
                     src={`${CDN_URL}/assets/${imageName}`}
                     alt={title}
@@ -201,7 +201,7 @@ const FeatureCard = ({
                     className="object-cover"
                 />
             </div>
-            <div className="p-6">
+            <div className="p-4">
                 <h3 className="font-sans text-xl font-bold">{title}</h3>
                 <p className="text-[#CCCCCC] h-[64px] text-sm mt-2">
                     {subtitle}
