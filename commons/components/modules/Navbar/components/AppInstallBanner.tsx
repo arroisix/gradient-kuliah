@@ -10,12 +10,24 @@ interface AppInstallBannerProps {
 
 const AppInstallBanner = ({ showSidebar }: AppInstallBannerProps) => {
     const [isVisible, setIsVisible] = useState(false);
+    const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
     useEffect(() => {
         const isBannerClosed = localStorage.getItem('appBannerClosed');
         if (!isBannerClosed) {
             setIsVisible(true);
         }
+
+        const observer = new MutationObserver(() => {
+            const mobileSidebar = document.querySelector(
+                '.fixed.z-\\[110\\].w-screen.h-screen'
+            );
+            setIsMobileSidebarOpen(!!mobileSidebar);
+        });
+
+        observer.observe(document.body, { childList: true, subtree: true });
+
+        return () => observer.disconnect();
     }, []);
 
     const handleClose = (e: React.MouseEvent) => {
@@ -31,12 +43,12 @@ const AppInstallBanner = ({ showSidebar }: AppInstallBannerProps) => {
         );
     };
 
-    if (!isVisible) return null;
+    if (!isVisible || isMobileSidebarOpen) return null;
 
     return (
         <div
             className={cn(
-                'sticky top-14 z-10',
+                'sticky top-14 z-20',
                 showSidebar
                     ? 'md:left-[250px] md:w-[calc(100%-250px)]'
                     : 'w-full'
