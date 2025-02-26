@@ -61,13 +61,13 @@ const FeaturesRevamp = () => {
                         <FeatureCard
                             title="1500+ video dengan konsep menyeluruh"
                             subtitle="Diajarkan oleh dosen yang ahli di berbagai bidang dan jurusan"
-                            imageName="feature-video-2.png"
+                            imageName="feature-video-2.jpg"
                             href="/kelas"
                         />
                         <FeatureCard
                             title="Komunitas untuk belajar bersama"
                             subtitle="Diskusi dengan tutor terverifikasi dan sesama pelajar"
-                            imageName="feature-diskusi.png"
+                            imageName="feature-diskusi.jpg"
                             href="/komunitas"
                         />
                     </div>
@@ -98,19 +98,19 @@ const FeaturesRevamp = () => {
                         <FeatureCard
                             title="Copilot AI"
                             subtitle="Asisten belajar AI yang bisa jawab apapun, gak kalah sama Chat GPT"
-                            imageName="feature-copilot-2.png"
+                            imageName="feature-copilot-2.jpg"
                             href="/copilot"
                         />
                         <FeatureCard
                             title="Flashcard"
                             subtitle="Belajar kebut semalam dengan bantuan AI, menghafal lebih cepat"
-                            imageName="feature-flashcard.png"
+                            imageName="feature-flashcard.jpg"
                             href="/flashcard"
                         />
                         <FeatureCard
                             title="Kuis"
                             subtitle="Uji kemampuanmu dan temukan area yang perlu ditingkatkan"
-                            imageName="feature-kuis.png"
+                            imageName="feature-kuis.jpg"
                             href="/latihan"
                         />
                     </div>
@@ -141,19 +141,19 @@ const FeaturesRevamp = () => {
                         <FeatureCard
                             title="Textbook Solution"
                             subtitle="Jawaban dan pembahasan untuk soal di textbook kuliah terpopuler"
-                            imageName="feature-textbook.png"
+                            imageName="feature-textbook-solution.jpg"
                             href="/perpustakaan/textbook"
                         />
                         <FeatureCard
                             title="Bank Soal"
                             subtitle="Soal ujian dari berbagai universitas, beserta pembahasannya"
-                            imageName="feature-bank-soal.png"
+                            imageName="feature-bank-soal.jpg"
                             href="/perpustakaan/bank-soal"
                         />
                         <FeatureCard
                             title="Astronotes"
                             subtitle="Rangkuman materi, lengkap dengan rumus, ilustrasi, dan contoh"
-                            imageName="feature-astronotes-2.png"
+                            imageName="feature-astronotes-2.jpg"
                             href="/perpustakaan/astronotes"
                         />
                     </div>
