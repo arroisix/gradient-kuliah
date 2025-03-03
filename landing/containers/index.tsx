@@ -1,5 +1,5 @@
 import Hero from 'landing/components/Sections/Hero';
-import Features from 'landing/components/Sections/Features';
+import FeaturesRevamp from 'landing/components/Sections/FeaturesRevamp';
 import IndonesiaMapCTA from 'landing/components/Sections/IndonesiaMapCTA';
 import Pricing from 'landing/components/Sections/Pricing';
 import Testimony from 'landing/components/Sections/Testimony';
@@ -7,6 +7,7 @@ import Popular from 'landing/components/Sections/Popular';
 import { useState, useEffect } from 'react';
 import { useGetPublicListCoursesV2Query } from 'courses/redux/api/publicCourseV2Api';
 import { useGetLandingPopularBooksQuery } from 'courses/redux/api/astronotesApi';
+import InstallGradient from '../components/Sections/InstallGradient';
 
 const LandingContainer = ({
     classesData,
@@ -33,7 +34,8 @@ const LandingContainer = ({
     return (
         <div className="bg-black min-h-screen">
             <Hero />
-            <Features title={'Pilih fitur yang sesuai sama cara belajarmu'} />
+            <InstallGradient />
+            <FeaturesRevamp />
             <Popular
                 type="book"
                 popularBooks={popularBooks}
