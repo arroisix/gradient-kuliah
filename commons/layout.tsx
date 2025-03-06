@@ -8,8 +8,11 @@ import Appbar from './components/modules/Appbar';
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useRouter } from 'next/router';
-import AppInstallBanner from './components/modules/Navbar/components/AppInstallBanner';
 import useWindowBreakpoints from './hooks/useWindowBreakpoints';
+import dynamic from 'next/dynamic';
+const AppInstallBanner = dynamic(
+    () => import('./components/modules/Navbar/components/AppInstallBanner')
+);
 
 interface LayoutProps {
     children?: JSX.Element;

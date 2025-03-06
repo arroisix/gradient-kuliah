@@ -6,8 +6,11 @@ import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import Footer from './components/modules/Footer';
 import SubscriptionReminder from './components/modules/Navbar/components/SubscriptionReminder';
 import { useThemeContext } from './contexts/ThemeProvider';
-import AppInstallBanner from './components/modules/Navbar/components/AppInstallBanner';
 import useWindowBreakpoints from './hooks/useWindowBreakpoints';
+import dynamic from 'next/dynamic';
+const AppInstallBanner = dynamic(
+    () => import('./components/modules/Navbar/components/AppInstallBanner')
+);
 
 interface LayoutProps {
     children: JSX.Element;
