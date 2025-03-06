@@ -1,7 +1,6 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Modal from 'commons/components/modules/Modal';
 import useElementSize from 'commons/hooks/useElementSize';
-import CourseDetailBox from 'courses/components/CourseDetailBox';
 import CourseSummary from 'courses/components/CourseSummary';
 import AiTutor from 'courses/components/LearningExperience/AiTutor';
 import AiModalFeedback from 'courses/components/LearningExperience/AiTutor/AiModalFeedback';
@@ -20,6 +19,12 @@ import FreeBadge from 'commons/components/elements/FreeBadge';
 import RatingButton from 'courses/components/CourseRatingButton';
 import ShareContentButton from 'courses/components/ShareContentButton';
 import CopilotEntrypoint from '../../../../copilot/components/CopilotEntrypoint';
+import dynamic from 'next/dynamic';
+
+const CourseDetailBox = dynamic(
+    () => import('courses/components/CourseDetailBox'),
+    { ssr: false }
+);
 
 const VideoLearnContainer = ({
     subchapter: ssrSubchapterData,

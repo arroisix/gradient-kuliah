@@ -35,5 +35,3 @@ const PencilOnLineIcon: React.FC<PencilOnLineIconProps> = ({
 };
 
 export default PencilOnLineIcon;
-
-

@@ -5,10 +5,7 @@ interface KelasIconProps {
     className?: string;
 }
 
-const KelasIcon: React.FC<KelasIconProps> = ({
-    size = 20,
-    className
-}) => {
+const KelasIcon: React.FC<KelasIconProps> = ({ size = 20, className }) => {
     return (
         <svg
             width={size}
