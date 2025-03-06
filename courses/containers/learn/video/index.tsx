@@ -19,12 +19,7 @@ import FreeBadge from 'commons/components/elements/FreeBadge';
 import RatingButton from 'courses/components/CourseRatingButton';
 import ShareContentButton from 'courses/components/ShareContentButton';
 import CopilotEntrypoint from '../../../../copilot/components/CopilotEntrypoint';
-import dynamic from 'next/dynamic';
-
-const CourseDetailBox = dynamic(
-    () => import('courses/components/CourseDetailBox'),
-    { ssr: false }
-);
+import CourseDetailBox from 'courses/components/CourseDetailBox';
 
 const VideoLearnContainer = ({
     subchapter: ssrSubchapterData,
