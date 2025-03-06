@@ -39,7 +39,17 @@ import UpdateProfileNotification from 'profile/components/UpdateProfileNotificat
 
 const store = useStore();
 
-function MyApp({ Component, pageProps }: AppProps): JSX.Element {
+interface CustomPageProps {
+    title?: string;
+    description?: string;
+    canonical?: string;
+    openGraph?: Record<string, any>;
+}
+
+function MyApp({
+    Component,
+    pageProps
+}: AppProps & { pageProps: CustomPageProps }): JSX.Element {
     const router = useRouter();
 
     useEffect(() => {

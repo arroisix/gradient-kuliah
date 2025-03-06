@@ -8,6 +8,11 @@ import Appbar from './components/modules/Appbar';
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useRouter } from 'next/router';
+import useWindowBreakpoints from './hooks/useWindowBreakpoints';
+import dynamic from 'next/dynamic';
+const AppInstallBanner = dynamic(
+    () => import('./components/modules/Navbar/components/AppInstallBanner')
+);
 
 interface LayoutProps {
     children?: JSX.Element;
@@ -34,6 +39,7 @@ const Layout = ({
     );
     const router = useRouter();
     const { is_subscribed } = useCourseSubscription();
+    const { isMobileBreakpoints } = useWindowBreakpoints();
 
     return (
         <div
@@ -51,11 +57,20 @@ const Layout = ({
                 shouldTransparent={shouldTransparent ?? false}
                 courses={courses}
             />
+
+            <div className="h-14 bg-[#222222]"></div>
+
+            <AppInstallBanner
+                showSidebar={
+                    showSidebar && is_subscribed && !isMobileBreakpoints
+                }
+            />
+
             <section
                 className={cn(
                     showSidebar &&
                         isAuthenticated &&
-                        'pt-24 pb-10 px-4 md:pl-5 md:pr-[5rem] lg:pr-[7.5rem] flex gap-8 lg:gap-[6rem]',
+                        'pb-10 px-4 md:pl-5 md:pr-[5rem] lg:pr-[7.5rem] flex gap-8 lg:gap-[6rem]',
                     !paymentPage ? 'min-h-screen' : 'flex-1'
                 )}>
                 {showSidebar && isAuthenticated && (

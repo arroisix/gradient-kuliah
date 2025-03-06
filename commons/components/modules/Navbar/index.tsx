@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { FaInstagram } from 'react-icons/fa';
 import { FiMenu } from 'react-icons/fi';
+import { ChevronDown } from 'lucide-react';
 import useWindowSize from 'commons/hooks/useWindowSize';
 import MobileNavbar from './components/MobileNavbar';
 import { useSelector } from 'react-redux';
@@ -75,6 +76,7 @@ const Navbar = ({
     const { profile } = useContext(AuthContext);
     const [openMobile, setOpenMobile] = useState(false);
     const [openSidebar, setOpenSidebar] = useState(false);
+    const [openToolsDropdown, setOpenToolsDropdown] = useState(false);
     const { height } = useWindowSize();
     const router = useRouter();
     const [scrollPosition, setScrollPosition] = useState(0);
@@ -177,16 +179,10 @@ const Navbar = ({
                             'items-center gap-6 hidden lg:flex',
                             isSubscribed && showSidebar && '!hidden'
                         )}>
-                        {UNAUTHENTICATED_NAVBAR_BUTTONS.map((nav) => (
-                            <NavigationButton
-                                key={nav.name}
-                                name={nav.name}
-                                title={nav.title}
-                                url={nav.url}
-                                IconActive={nav.IconActive}
-                                IconUnactive={nav.IconUnactive}
-                            />
-                        ))}
+                        <NavigationButton
+                            key={UNAUTHENTICATED_NAVBAR_BUTTONS[0].name}
+                            {...UNAUTHENTICATED_NAVBAR_BUTTONS[0]}
+                        />
                         {configData?.configs.is_copilot_config_enabled && (
                             <NavigationButton
                                 name="Copilot AI"
@@ -197,15 +193,6 @@ const Navbar = ({
                                 tooltip="Copilot AI gratis selama versi Beta!"
                             />
                         )}
-                        {configData?.configs.is_exercise_config_enabled && (
-                            <NavigationButton
-                                name="Learning Tools"
-                                title="Alat Belajar"
-                                url="/alat-belajar"
-                                IconActive={PencilOnLineIconFill}
-                                IconUnactive={PencilOnLineIcon}
-                            />
-                        )}
                         <NavigationButton
                             name="Community"
                             title="Diskusi"
@@ -213,6 +200,52 @@ const Navbar = ({
                             IconActive={DiskusiIconFill}
                             IconUnactive={DiskusiIcon}
                         />
+                        <NavigationButton
+                            key={UNAUTHENTICATED_NAVBAR_BUTTONS[1].name}
+                            {...UNAUTHENTICATED_NAVBAR_BUTTONS[1]}
+                        />
+                        <div className="relative">
+                            <button
+                                onClick={() =>
+                                    setOpenToolsDropdown(!openToolsDropdown)
+                                }
+                                className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors whitespace-nowrap">
+                                {openToolsDropdown ? (
+                                    <PencilOnLineIconFill />
+                                ) : (
+                                    <PencilOnLineIcon />
+                                )}
+                                <span>Alat Belajar</span>
+                                <ChevronDown
+                                    className={`w-4 h-4 transition-transform ${
+                                        openToolsDropdown ? 'rotate-180' : ''
+                                    }`}
+                                />
+                            </button>
+
+                            {openToolsDropdown && (
+                                <div className="absolute top-full left-0 mt-1 w-48 bg-[#1A1A1A] rounded-lg shadow-lg py-2 z-50">
+                                    <Link
+                                        href="/alat-belajar"
+                                        className="flex items-center gap-3 px-4 py-2 text-gray-300 hover:text-white hover:bg-[#2A2A2A] transition-colors">
+                                        Semua
+                                    </Link>
+                                    <Link
+                                        href="/flashcard"
+                                        className="flex items-center gap-3 px-4 py-2 text-gray-300 hover:text-white hover:bg-[#2A2A2A] transition-colors">
+                                        Flashcard
+                                    </Link>
+                                    {configData?.configs
+                                        .is_exercise_config_enabled && (
+                                        <Link
+                                            href="/latihan"
+                                            className="flex items-center gap-3 px-4 py-2 text-gray-300 hover:text-white hover:bg-[#2A2A2A] transition-colors">
+                                            Quiz
+                                        </Link>
+                                    )}
+                                </div>
+                            )}
+                        </div>
                     </div>
                     {isShowSidebar && (
                         <div className="hidden md:block w-[250px] h-[64px] fixed top-0 left-0 bg-[#121212] z-[-1]" />

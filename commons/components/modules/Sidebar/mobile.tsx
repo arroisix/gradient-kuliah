@@ -16,13 +16,6 @@ import DiskusiIconFill from '../../elements/Icons/DiskusiFill';
 
 const MOBILE_SIDEBAR_BUTTONS: NavigationButtonInterface[] = [
     {
-        name: 'Class',
-        title: 'Kelas',
-        url: '/kelas',
-        IconActive: KelasIconFill,
-        IconUnactive: KelasIcon
-    },
-    {
         name: 'Library',
         title: 'Perpustakaan',
         url: '/perpustakaan',
@@ -77,6 +70,37 @@ const MobileSidebar = ({
                         />
                     </header>
                     <div className="flex flex-col gap-8 px-6 py-4">
+                        <NavigationButton
+                            name="Class"
+                            title="Kelas"
+                            url="/kelas"
+                            IconActive={KelasIconFill}
+                            IconUnactive={KelasIcon}
+                            setOpenSidebar={setOpenSidebar}></NavigationButton>
+                        {configData?.configs.is_copilot_config_enabled && (
+                            <NavigationButton
+                                name="Copilot"
+                                title="Copilot AI"
+                                url="/copilot"
+                                IconActive={CopilotIconFill}
+                                IconUnactive={CopilotIconLine}
+                                setOpenSidebar={setOpenSidebar}>
+                                <span
+                                    className="flex items-center gap-2 ml-2 py-1 px-3 rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] font-semibold text-xs text-white tooltip tooltip-right"
+                                    data-tip="Copilot AI gratis selama versi Beta!">
+                                    Beta
+                                </span>
+                            </NavigationButton>
+                        )}
+                        <NavigationButton
+                            name="Community"
+                            title="Diskusi"
+                            url="/komunitas"
+                            IconActive={DiskusiIconFill}
+                            IconUnactive={DiskusiIcon}
+                            setOpenSidebar={setOpenSidebar}>
+                            <CommunityNotificationBadge />
+                        </NavigationButton>
                         {MOBILE_SIDEBAR_BUTTONS.map(
                             ({
                                 name,
@@ -100,21 +124,6 @@ const MobileSidebar = ({
                                 />
                             )
                         )}
-                        {configData?.configs.is_copilot_config_enabled && (
-                            <NavigationButton
-                                name="Copilot"
-                                title="Copilot AI"
-                                url="/copilot"
-                                IconActive={CopilotIconFill}
-                                IconUnactive={CopilotIconLine}
-                                setOpenSidebar={setOpenSidebar}>
-                                <span
-                                    className="flex items-center gap-2 ml-2 py-1 px-3 rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] font-semibold text-xs text-white tooltip tooltip-right"
-                                    data-tip="Copilot AI gratis selama versi Beta!">
-                                    Beta
-                                </span>
-                            </NavigationButton>
-                        )}
                         {configData?.configs.is_exercise_config_enabled && (
                             <NavigationButton
                                 name="Learning Tools"
@@ -122,18 +131,21 @@ const MobileSidebar = ({
                                 url="/alat-belajar"
                                 IconActive={PencilOnLineIconFill}
                                 IconUnactive={PencilOnLineIcon}
+                                subMenus={[
+                                    {
+                                        name: 'Quiz',
+                                        title: 'Kuis',
+                                        url: '/alat-belajar/quiz'
+                                    },
+                                    {
+                                        name: 'Flashcard',
+                                        title: 'Flashcard',
+                                        url: '/alat-belajar/flashcard'
+                                    }
+                                ]}
                                 setOpenSidebar={setOpenSidebar}
                             />
                         )}
-                        <NavigationButton
-                            name="Community"
-                            title="Diskusi"
-                            url="/komunitas"
-                            IconActive={DiskusiIconFill}
-                            IconUnactive={DiskusiIcon}
-                            setOpenSidebar={setOpenSidebar}>
-                            <CommunityNotificationBadge />
-                        </NavigationButton>
                     </div>
                 </motion.div>
             )}
