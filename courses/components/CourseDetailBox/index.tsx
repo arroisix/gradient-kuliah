@@ -16,7 +16,7 @@ import ModalCourseFeedback from './ModalCourseFeedback';
 import ProgressBar from './ProgressBar';
 import { CourseSubchapterSearchProvider } from 'courses/hooks/useSearchSubchapter';
 import { cn } from 'commons/utils';
-import { CodeEditorProvider } from 'courses/hooks/useCodeEditor';
+// import { CodeEditorProvider } from 'courses/hooks/useCodeEditor';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 const CourseDetailBox = (): JSX.Element => {
@@ -96,17 +96,17 @@ const CourseDetailBox = (): JSX.Element => {
                             />
                         )}
 
-                        <CodeEditorProvider>
-                            <div
-                                className={cn(
-                                    'h-full lg:overflow-y-auto',
-                                    navigation != 'CODE EDITOR' &&
-                                        'px-5 md:px-16 lg:px-[14px] pt-[18px]'
-                                )}>
-                                <CourseDetailContent navigation={navigation} />
-                                <div ref={anchor}></div>
-                            </div>
-                        </CodeEditorProvider>
+                        {/* <CodeEditorProvider> */}
+                        <div
+                            className={cn(
+                                'h-full lg:overflow-y-auto',
+                                navigation != 'CODE EDITOR' &&
+                                    'px-5 md:px-16 lg:px-[14px] pt-[18px]'
+                            )}>
+                            <CourseDetailContent navigation={navigation} />
+                            <div ref={anchor}></div>
+                        </div>
+                        {/* </CodeEditorProvider> */}
                     </div>
                 </CourseSubchapterSearchProvider>
             </div>

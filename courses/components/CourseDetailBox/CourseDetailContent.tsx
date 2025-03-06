@@ -4,7 +4,7 @@ import ListBooks from './ListBooks';
 import SearchList from './SearchList';
 import { useGetCourseContentQuery } from 'courses/redux/api/courseApi';
 import { useRouter } from 'next/router';
-import CodeEditor from '../CodeEditor';
+// import CodeEditor from '../CodeEditor';
 
 type CourseDetailContentProps = {
     navigation: CourseDetailNavigation;
@@ -35,8 +35,8 @@ const CourseDetailContent = ({
             );
         case 'ON_SEARCH':
             return <SearchList />;
-        case 'CODE EDITOR':
-            return <CodeEditor />;
+        // case 'CODE EDITOR':
+        //     return <CodeEditor />;
         default:
             return <></>;
     }
