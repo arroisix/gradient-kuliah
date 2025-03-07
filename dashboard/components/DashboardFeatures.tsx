@@ -107,7 +107,7 @@ const DashboardFeatures = () => {
                                 <h3 className="font-bold text-white flex items-center">
                                     {feature.title}
                                     {feature.isNew && (
-                                        <span className="ml-2 py-1 px-3 text-xs rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] z-20">
+                                        <span className="ml-2 py-1 px-3 text-xs rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] z-[1]">
                                             Baru
                                         </span>
                                     )}
