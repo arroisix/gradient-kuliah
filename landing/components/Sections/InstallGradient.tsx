@@ -8,8 +8,8 @@ const InstallGradient = () => {
     return (
         <div className="bg-[#5F2BCE] w-full">
             <Container>
-                <div className="md:flex md:items-center md:gap-12 pt-8 md:pt-0 overflow-hidden">
-                    <div className="hidden md:block md:w-1/2 translate-y-2">
+                <div className="md:flex md:items-center md:gap-12 pt-8 md:pt-2 lg:pb-0 lg:pt-0 overflow-hidden">
+                    <div className="hidden md:block md:w-1/2 md:translate-y-8 lg:translate-y-2">
                         <Image
                             src={`${CDN_URL}/assets/landing-gradient-app-desktop.png`}
                             alt="Gradient App Desktop"
@@ -20,10 +20,10 @@ const InstallGradient = () => {
                     </div>
 
                     <div className="flex flex-col items-center md:items-start text-white text-center md:text-start mb-8 md:mb-0 md:w-1/2">
-                        <h2 className="text-2xl font-bold mb-4">
+                        <h2 className="lg:text-2xl text-xl font-bold mb-2 lg:mb-4">
                             Install Gradient Sekarang!
                         </h2>
-                        <div className="flex items-center gap-2 mb-4">
+                        <div className="flex items-center gap-2 mb-2 lg:mb-4">
                             <Image
                                 src={`${CDN_URL}/assets/gradient-G-icon.png`}
                                 alt="Gradient Icon"
@@ -37,7 +37,7 @@ const InstallGradient = () => {
                                 Baru
                             </span>
                         </div>
-                        <p className="text-gray-200 mb-6">
+                        <p className="text-gray-200 text-sm lg:text-base mb-4 lg:mb-6">
                             Gradient versi mobile app hadir buat kamu! Belajar
                             menjadi mudah dengan akses semua fitur dilengkapi
                             notifikasi hanya dalam satu aplikasi
@@ -50,10 +50,10 @@ const InstallGradient = () => {
                                 <Image
                                     src={`${CDN_URL}/assets/play-store-logo.png`}
                                     alt="Get it on Google Play"
-                                    width={20}
-                                    height={20}
+                                    width={16}
+                                    height={16}
                                 />
-                                <p className="text-sm font-semibold">
+                                <p className="text-[11px] lg:text-sm font-semibold">
                                     Google Play
                                 </p>
                             </Link>

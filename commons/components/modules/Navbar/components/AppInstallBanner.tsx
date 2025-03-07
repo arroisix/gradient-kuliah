@@ -48,7 +48,7 @@ const AppInstallBanner = ({ showSidebar }: AppInstallBannerProps) => {
     return (
         <div
             className={cn(
-                'sticky top-14 z-20',
+                'sticky top-14 z-[20]',
                 showSidebar
                     ? 'md:left-[250px] md:w-[calc(100%-250px)]'
                     : 'w-full'
@@ -79,7 +79,7 @@ const AppInstallBanner = ({ showSidebar }: AppInstallBannerProps) => {
                             </span>
                         </div>
                         <p className="text-[11px]">
-                            Install di Playstore dan klaim promonya!
+                            Install di Playstore dan mulai belajar!
                         </p>
                     </div>
                     <div className="flex items-center gap-2 bg-[#171717] rounded-[70px] px-4 py-1.5 text-sm font-medium hover:opacity-80 transition-opacity">
