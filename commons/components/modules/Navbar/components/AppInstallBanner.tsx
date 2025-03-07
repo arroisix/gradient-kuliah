@@ -79,7 +79,7 @@ const AppInstallBanner = ({ showSidebar }: AppInstallBannerProps) => {
                             </span>
                         </div>
                         <p className="text-[11px]">
-                            Install di Playstore dan klaim promonya!
+                            Install di Playstore dan mulai belajar!
                         </p>
                     </div>
                     <div className="flex items-center gap-2 bg-[#171717] rounded-[70px] px-4 py-1.5 text-sm font-medium hover:opacity-80 transition-opacity">
