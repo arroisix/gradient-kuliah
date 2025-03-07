@@ -48,7 +48,7 @@ const AppInstallBanner = ({ showSidebar }: AppInstallBannerProps) => {
     return (
         <div
             className={cn(
-                'sticky top-14 z-20',
+                'sticky top-14 z-[20]',
                 showSidebar
                     ? 'md:left-[250px] md:w-[calc(100%-250px)]'
                     : 'w-full'
