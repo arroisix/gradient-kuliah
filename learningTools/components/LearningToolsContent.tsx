@@ -1,7 +1,7 @@
 import React from 'react';
 import Paginator from 'commons/components/elements/Paginator';
 import Skeleton from 'commons/components/elements/Skeleton';
-import LatihanCard from 'courses/components/Latihan/Entrypoint/LatihanCard';
+import LatihanCard from 'latihan/components/Entrypoint/LatihanCard';
 import FlashcardCard from 'flashcard/components/Entrypoint/FlashcardCard';
 
 interface LearningToolsContentProps {

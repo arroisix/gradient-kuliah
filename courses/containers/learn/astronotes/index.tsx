@@ -13,8 +13,8 @@ import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { useGetBookRecommendationsQuery } from 'courses/redux/api/learningExperienceApi';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
-import { useGetAstronotesExercisesQuery } from 'courses/redux/api/exercisesApi';
-import AstronotesExercisesSection from 'courses/components/Latihan/Astronotes/AstronotesExercisesSection';
+import { useGetAstronotesExercisesQuery } from 'latihan/redux/api/exercisesApi';
+import AstronotesExercisesSection from 'latihan/components/Astronotes/AstronotesExercisesSection';
 
 const Astronotes = ({
     content,
@@ -57,7 +57,7 @@ const Astronotes = ({
         <AstronotesProvider>
             <section className="relative flex flex-col px-4 pt-4 text-black bg-white sm:pb-4 md:flex-row md:gap-2 dark:bg-black dark:text-white">
                 {/* TODO(angga): removed until higher in priority
-                
+
                 {highlighted && (
                     <AstronotesContextMenu
                         points={points}

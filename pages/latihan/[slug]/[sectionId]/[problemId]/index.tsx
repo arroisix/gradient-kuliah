@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import ProblemPageContent from 'courses/components/Latihan/Problem/ProblemPageContent';
+import ProblemPageContent from 'latihan/components/Problem/ProblemPageContent';
 import withAuth from 'commons/withAuth';
 
 const ProblemPage: React.FC = () => {

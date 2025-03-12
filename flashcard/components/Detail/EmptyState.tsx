@@ -17,8 +17,8 @@ const EmptyState = ({
                 <div>
                     <h2 className="text-base font-semibold text-white mb-4">
                         {createdByMe
-                            ? 'Yah... flashcard kamu masih kosong'
-                            : 'Yah... flashcard ini masih kosong'}
+                            ? 'Yah... flashcards kamu masih kosong'
+                            : 'Yah... flashcards ini masih kosong'}
                     </h2>
                     {createdByMe && (
                         <button

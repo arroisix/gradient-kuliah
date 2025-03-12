@@ -82,7 +82,7 @@ const FlashcardDetailContainer = (): JSX.Element => {
                 router.push('/flashcard');
             }
         } catch (error) {
-            console.error('Failed to delete flashcard:', error);
+            console.error('Failed to delete flashcards:', error);
         }
     };
 

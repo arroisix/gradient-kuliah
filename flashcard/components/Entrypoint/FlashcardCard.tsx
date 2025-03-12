@@ -28,7 +28,7 @@ const FlashcardCard = ({
 }: FlashcardCardProps): JSX.Element => {
     return (
         <Link
-            href={`/flashcard/${slug}`}
+            href={`/flashcards/${slug}`}
             className={cn('relative block h-[200px] w-full', className)}>
             {' '}
             {cardType !== 'myFlashcards' && (
