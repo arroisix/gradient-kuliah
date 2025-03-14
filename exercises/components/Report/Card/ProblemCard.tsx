@@ -5,7 +5,13 @@ import { Option } from '../Problem/Option';
 import Link from 'next/link';
 import React from 'react';
 
-export const ProblemCard = ({ problem, index }: { problem: any; index: number }) => {
+export const ProblemCard = ({
+    problem,
+    index
+}: {
+    problem: any;
+    index: number;
+}) => {
     const isTextBased =
         problem.question.type !== 'MULTIPLE_CHOICE' &&
         problem.question.type !== 'MULTIPLE_ANSWER';

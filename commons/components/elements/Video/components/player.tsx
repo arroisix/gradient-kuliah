@@ -1,4 +1,4 @@
-import React, { cloneElement, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaPlay } from 'react-icons/fa';
 import Spinner from '../../Spinner';
 import HlsPlayer from './hls';
@@ -11,7 +11,6 @@ const POPUP_BUFFER = 0.5;
 const Player = <T,>({
     video,
     popupData,
-    popupComponent,
     height,
     autoPlay,
     isMuxVideo,
@@ -119,12 +118,6 @@ const Player = <T,>({
         }
     }, [currentTime]);
 
-    const submitPopup = (): void => {
-        setIsPopup(false);
-        videoRef.current.play();
-        setIsPlay(true);
-    };
-
     return (
         <>
             <div
@@ -152,15 +145,6 @@ const Player = <T,>({
                                 !isBuffering &&
                                 !isPlay &&
                                 !isPopup && <FaPlay className="text-4xl" />}
-                            {popupComponent &&
-                                !isPlay &&
-                                isPopup &&
-                                cloneElement(popupComponent, {
-                                    onSubmit: submitPopup,
-                                    data: hashMapPopupArea[
-                                        popupArea[currentPopupIndex - 1]
-                                    ]
-                                })}
                         </div>
                     </>
                 )}
