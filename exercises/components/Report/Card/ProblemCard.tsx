@@ -83,7 +83,7 @@ export const ProblemCard = ({ problem, index }: { problem: any; index: number })
             )}
 
             <Link
-                href={`/latihan/${slug}/report/${exerciseProgressId}/${problem.id}`}
+                href={`/exercises/${slug}/report/${exerciseProgressId}/${problem.id}`}
                 passHref>
                 <button
                     className="bg-[#444444] hover:bg-[#666666] text-white text-sm py-2 px-4 rounded-full w-full"

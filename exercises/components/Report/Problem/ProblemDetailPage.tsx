@@ -151,7 +151,7 @@ const ProblemReportPage: React.FC = () => {
                     <Link
                         className="w-full"
                         replace
-                        href={`/latihan/${slug}/report/${exerciseProgressId}`}
+                        href={`/exercises/${slug}/report/${exerciseProgressId}`}
                         passHref>
                         <a className="w-full">
                             <button

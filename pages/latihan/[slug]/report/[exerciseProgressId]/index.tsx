@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import ExerciseReportLayout from 'latihan/components/Report/ExerciseReportLayout';
+import ExerciseReportLayout from 'exercises/components/Report/ExerciseReportLayout';
 import withAuth from 'commons/withAuth';
 
 const ExerciseReportPage: NextPage = () => {

@@ -2,7 +2,7 @@ import React from 'react';
 import { Check, X } from 'lucide-react';
 import TiptapViewer from '../../../courses/components/Textbook/TiptapViewer';
 import { cn } from 'commons/utils';
-import { Option } from 'latihan/types/exercises';
+import { Option } from 'exercises/types/exercises';
 
 interface MultipleChoiceProblemProps {
     options: Option[];

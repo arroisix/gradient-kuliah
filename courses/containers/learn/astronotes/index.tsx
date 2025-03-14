@@ -13,8 +13,8 @@ import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { useGetBookRecommendationsQuery } from 'courses/redux/api/learningExperienceApi';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
-import { useGetAstronotesExercisesQuery } from 'latihan/redux/api/exercisesApi';
-import AstronotesExercisesSection from 'latihan/components/Astronotes/AstronotesExercisesSection';
+import { useGetAstronotesExercisesQuery } from 'exercises/redux/api/exercisesApi';
+import AstronotesExercisesSection from 'exercises/components/Astronotes/AstronotesExercisesSection';
 
 const Astronotes = ({
     content,

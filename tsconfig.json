@@ -28,7 +28,7 @@
         "**/*.ts",
         "**/*.tsx",
         "library/marked-katex/index.js",
-      "latihan/components/ExerciseStart/ExerciseStartPageContent"
+        "exercises/components/ExerciseStart/ExerciseStartPageContent"
     ],
     "exclude": ["node_modules"]
 }

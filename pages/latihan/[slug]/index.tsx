@@ -1,5 +1,5 @@
 import { NextPage } from 'next';
-import ExerciseStartContent from 'latihan/containers/ExerciseStartContent';
+import ExerciseStartContent from 'exercises/containers/ExerciseStartContent';
 import withAuth from 'commons/withAuth';
 
 const ExerciseStartPage: NextPage = () => {

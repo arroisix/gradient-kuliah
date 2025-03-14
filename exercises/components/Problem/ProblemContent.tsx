@@ -6,7 +6,7 @@ import {
     useGetExerciseProgressQuery,
     useUpdateExerciseProblemProgressMutation,
     useGetExerciseProblemSolutionQuery
-} from 'latihan/redux/api/exercisesApi';
+} from 'exercises/redux/api/exercisesApi';
 import MultipleChoiceProblem from './MultipleChoiceProblem';
 import OpenEndedProblem from './OpenEndedProblem';
 import Skeleton from 'commons/components/elements/Skeleton';
@@ -362,8 +362,8 @@ const ProblemContent: React.FC<ProblemContentProps> = React.memo(
                                 replace
                                 href={
                                     problem.next_navigation.type === 'problem'
-                                        ? `/latihan/${slug}/${sectionId}/${problem.next_navigation.id}`
-                                        : `/latihan/${slug}/${problem.next_navigation.id}`
+                                        ? `/exercises/${slug}/${sectionId}/${problem.next_navigation.id}`
+                                        : `/exercises/${slug}/${problem.next_navigation.id}`
                                 }
                                 passHref
                                 onClick={handleNextQuestion}>

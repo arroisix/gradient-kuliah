@@ -7,7 +7,7 @@ import { NextPage } from 'next';
 import withAuth from 'commons/withAuth';
 
 const ProblemDetailPage = dynamic(
-    () => import('latihan/components/Report/Problem/ProblemDetailPage'),
+    () => import('exercises/components/Report/Problem/ProblemDetailPage'),
     {
         ssr: false
     }

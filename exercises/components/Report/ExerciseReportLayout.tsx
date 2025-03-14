@@ -6,7 +6,7 @@ import {
     useGetExerciseReportSummaryQuery,
     useGetExerciseHistoryQuery,
     useGetExerciseReportQuery
-} from 'latihan/redux/api/exercisesApi';
+} from 'exercises/redux/api/exercisesApi';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useTracker } from 'tracker/tracker';
@@ -192,7 +192,7 @@ const ExerciseReportLayout: React.FC<ExerciseReportLayoutProps> = ({
                         Selesai
                     </button>
                     <Link
-                        href={`/latihan/${slug}?reattempt=1`}
+                        href={`/exercises/${slug}?reattempt=1`}
                         className="w-full py-3 rounded-full font-semibold bg-[#7F56D9] text-white hover:bg-[#6941C6] transition-colors text-center"
                         passHref
                         replace

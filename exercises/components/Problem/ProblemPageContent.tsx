@@ -6,7 +6,7 @@ import {
     useGetExerciseProgressQuery,
     useUpdateExerciseProgressMutation,
     useUpdateExerciseProblemProgressMutation
-} from 'latihan/redux/api/exercisesApi';
+} from 'exercises/redux/api/exercisesApi';
 import { useRouter } from 'next/router';
 import ProblemContent from './ProblemContent';
 import LatihanLayout from '../../containers/LatihanLayout';

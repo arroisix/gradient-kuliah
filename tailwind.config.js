@@ -13,7 +13,7 @@ module.exports = {
         './legal/**/*.{ts,js,jsx,tsx}',
         './copilot/**/*.{ts,js,jsx,tsx}',
         './flashcards/**/*.{ts,js,jsx,tsx}',
-        './latihan/**/*.{ts,js,jsx,tsx}'
+        './exercises/**/*.{ts,js,jsx,tsx}'
     ],
     darkMode: 'class',
     theme: {

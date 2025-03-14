@@ -1,5 +1,5 @@
 import LearnLayout from 'commons/learnLayout';
-import LatihanEntrypoint from 'latihan/containers/LatihanEntrypoint';
+import LatihanEntrypoint from 'exercises/containers/LatihanEntrypoint';
 import { GetStaticProps } from 'next';
 import { useTracker } from '../../tracker/tracker';
 import { useEffect } from 'react';

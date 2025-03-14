@@ -3,7 +3,7 @@ import Skeleton from 'commons/components/elements/Skeleton';
 import LatihanCard from '../Entrypoint/LatihanCard';
 import { useTracker } from 'tracker/tracker';
 import { useRouter } from 'next/router';
-import { AstronotesExercise } from 'latihan/types/exercises';
+import { AstronotesExercise } from 'exercises/types/exercises';
 
 interface AstronotesExercisesSectionProps {
     exercises: AstronotesExercise[];

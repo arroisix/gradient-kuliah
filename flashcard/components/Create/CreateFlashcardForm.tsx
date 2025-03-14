@@ -86,7 +86,7 @@ const CreateFlashcardForm = ({
 
     const validateForm = (): boolean => {
         if (!formData.title.trim()) {
-            toast.error('Judul flashcards harus diisi', {
+            toast.error('Judul flashcard harus diisi', {
                 position: toast.POSITION.TOP_CENTER
             });
             return false;
@@ -95,13 +95,13 @@ const CreateFlashcardForm = ({
         if (!formData.description.trim()) {
             if (useAi) {
                 toast.error(
-                    'Deskripsi wajib diisi agar penyusunan flashcards sesuai konteks',
+                    'Deskripsi wajib diisi agar penyusunan flashcard sesuai konteks',
                     {
                         position: toast.POSITION.TOP_CENTER
                     }
                 );
             } else {
-                toast.error('Deskripsi flashcards harus diisi', {
+                toast.error('Deskripsi flashcard harus diisi', {
                     position: toast.POSITION.TOP_CENTER
                 });
             }
@@ -134,7 +134,7 @@ const CreateFlashcardForm = ({
                     is_private: formData.isPrivate
                 }).unwrap();
 
-                toast.success('Detail flashcards diperbarui', {
+                toast.success('Detail flashcard diperbarui', {
                     position: toast.POSITION.TOP_CENTER
                 });
 
@@ -180,7 +180,7 @@ const CreateFlashcardForm = ({
                 }
             }
         } catch (error) {
-            toast.error('Terjadi kesalahan saat membuat flashcards', {
+            toast.error('Terjadi kesalahan saat membuat flashcard', {
                 position: toast.POSITION.TOP_CENTER
             });
         }

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Skeleton from 'commons/components/elements/Skeleton';
-import { useGetExerciseDetailQuery } from 'latihan/redux/api/exercisesApi';
+import { useGetExerciseDetailQuery } from 'exercises/redux/api/exercisesApi';
 import LatihanLayout from './LatihanLayout';
 import LatihanStart from '../components/ExerciseStart/LatihanStart';
 
