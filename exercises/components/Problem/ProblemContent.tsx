@@ -362,8 +362,8 @@ const ProblemContent: React.FC<ProblemContentProps> = React.memo(
                                 replace
                                 href={
                                     problem.next_navigation.type === 'problem'
-                                        ? `/exercises/${slug}/${sectionId}/${problem.next_navigation.id}`
-                                        : `/exercises/${slug}/${problem.next_navigation.id}`
+                                        ? `/latihan/${slug}/${sectionId}/${problem.next_navigation.id}`
+                                        : `/latihan/${slug}/${problem.next_navigation.id}`
                                 }
                                 passHref
                                 onClick={handleNextQuestion}>

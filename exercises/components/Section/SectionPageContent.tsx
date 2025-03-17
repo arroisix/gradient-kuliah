@@ -76,7 +76,7 @@ const SectionPageContent: React.FC<SectionPageContentProps> = ({
                     <Link
                         replace
                         className="w-full"
-                        href={`/exercises/${slug}/${sectionId}/${firstProblemId}`}
+                        href={`/latihan/${slug}/${sectionId}/${firstProblemId}`}
                         onClick={handleStartSection}>
                         <button className="w-full bg-[#7F56D9] text-white py-3 rounded-full font-semibold hover:bg-[#6941C6] transition-colors">
                             Mulai Latihan

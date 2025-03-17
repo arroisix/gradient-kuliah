@@ -81,7 +81,7 @@ const QuizNavigationSidebar: React.FC<QuizNavigationSidebarProps> = ({
                     {problems.map((problem) => (
                         <Link
                             key={problem.id}
-                            href={`/exercises/${slug}/${problemSetId}/${problem.id}`}
+                            href={`/latihan/${slug}/${problemSetId}/${problem.id}`}
                             replace
                             passHref
                             onClick={() => handleQuestionClick(problem.id)}>
