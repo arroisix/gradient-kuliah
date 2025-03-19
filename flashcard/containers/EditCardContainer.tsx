@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import EditFlashcardForm from '../components/Edit/EditFlashcardForm';
 import {
@@ -10,6 +10,8 @@ import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import { Card } from '../types/flashcards';
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import { toast } from 'react-toastify';
+
+const AUTOSAVE_DELAY = 3000;
 
 const EditCardContainer = (): JSX.Element => {
     const router = useRouter();
@@ -23,11 +25,24 @@ const EditCardContainer = (): JSX.Element => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [hasChanges, setHasChanges] = useState(false);
     const [localCards, setLocalCards] = useState<Card[]>([]);
+    const [isSaving, setIsSaving] = useState(false);
+    const [lastSaved, setLastSaved] = useState('Just now');
+
+    const autosaveTimerRef = useRef<NodeJS.Timeout | null>(null);
+    const currentCardRef = useRef<Card | null>(null);
+    const currentIndexRef = useRef<number>(0);
 
     const [addCard] = useAddCardMutation();
     const [editCard] = useEditCardMutation();
 
-    React.useEffect(() => {
+    useEffect(() => {
+        if (localCards.length > 0 && currentIndex < localCards.length) {
+            currentCardRef.current = localCards[currentIndex];
+            currentIndexRef.current = currentIndex;
+        }
+    }, [localCards, currentIndex]);
+
+    useEffect(() => {
         if (flashcardDetail) {
             if (!flashcardDetail.cards?.length) {
                 const tempCard: Card = {
@@ -43,8 +58,87 @@ const EditCardContainer = (): JSX.Element => {
         }
     }, [flashcardDetail]);
 
+    const formatTimestamp = () => {
+        const now = new Date();
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        return `${hours}:${minutes}`;
+    };
+
+    const triggerAutosave = useCallback(() => {
+        if (autosaveTimerRef.current) {
+            clearTimeout(autosaveTimerRef.current);
+        }
+
+        autosaveTimerRef.current = setTimeout(async () => {
+            if (!hasChanges || !currentCardRef.current) return;
+
+            const currentCard = currentCardRef.current;
+
+            if (!currentCard.question.trim() || !currentCard.answer.trim()) {
+                return;
+            }
+
+            try {
+                setIsSaving(true);
+
+                if (currentCard.id.startsWith('temp-')) {
+                    const newCard = await addCard({
+                        flashcard_slug: slug as string,
+                        question: currentCard.question,
+                        answer: currentCard.answer
+                    }).unwrap();
+
+                    setLocalCards((prev) =>
+                        prev.map((card) =>
+                            card.id === currentCard.id
+                                ? {
+                                      ...newCard,
+                                      updated_at: newCard.updated_at
+                                  }
+                                : card
+                        )
+                    );
+                } else {
+                    await editCard({
+                        card_id: currentCard.id,
+                        question: currentCard.question,
+                        answer: currentCard.answer
+                    }).unwrap();
+                }
+
+                setHasChanges(false);
+                setLastSaved(formatTimestamp());
+                toast.success('Tersimpan otomatis', {
+                    position: toast.POSITION.BOTTOM_RIGHT,
+                    autoClose: 1500,
+                    hideProgressBar: true
+                });
+            } catch (error) {
+                console.error('Failed to autosave card:', error);
+                toast.error('Gagal menyimpan otomatis', {
+                    position: toast.POSITION.BOTTOM_RIGHT
+                });
+            } finally {
+                setIsSaving(false);
+            }
+        }, AUTOSAVE_DELAY);
+    }, [hasChanges, slug, addCard, editCard]);
+
+    useEffect(() => {
+        if (hasChanges) {
+            triggerAutosave();
+        }
+
+        return () => {
+            if (autosaveTimerRef.current) {
+                clearTimeout(autosaveTimerRef.current);
+            }
+        };
+    }, [hasChanges, triggerAutosave]);
+
     const handleSave = useCallback(async () => {
-        if (!hasChanges || !flashcardDetail) return;
+        if (!hasChanges || !flashcardDetail || isSaving) return;
 
         const currentCard = localCards[currentIndex];
 
@@ -56,6 +150,8 @@ const EditCardContainer = (): JSX.Element => {
         }
 
         try {
+            setIsSaving(true);
+
             if (currentCard.id.startsWith('temp-')) {
                 const newCard = await addCard({
                     flashcard_slug: slug as string,
@@ -82,6 +178,7 @@ const EditCardContainer = (): JSX.Element => {
             }
 
             setHasChanges(false);
+            setLastSaved(formatTimestamp());
             toast.success('Flashcard berhasil disimpan', {
                 position: toast.POSITION.TOP_CENTER
             });
@@ -90,6 +187,8 @@ const EditCardContainer = (): JSX.Element => {
             toast.error('Gagal menyimpan flashcard', {
                 position: toast.POSITION.TOP_CENTER
             });
+        } finally {
+            setIsSaving(false);
         }
     }, [
         editCard,
@@ -98,7 +197,8 @@ const EditCardContainer = (): JSX.Element => {
         localCards,
         flashcardDetail,
         slug,
-        addCard
+        addCard,
+        isSaving
     ]);
 
     const handleUpdateCard = useCallback(
@@ -114,6 +214,11 @@ const EditCardContainer = (): JSX.Element => {
     );
 
     const handleAddCard = useCallback(() => {
+        // Save current card before adding a new one
+        if (hasChanges) {
+            triggerAutosave();
+        }
+
         const tempCard: Card = {
             id: 'temp-' + Date.now(),
             question: '',
@@ -124,15 +229,13 @@ const EditCardContainer = (): JSX.Element => {
         setLocalCards((prev) => [...prev, tempCard]);
         setCurrentIndex(localCards.length);
         setHasChanges(false);
-    }, [localCards.length]);
+    }, [localCards.length, hasChanges, triggerAutosave]);
 
     const handleNavigateCard = useCallback(
         (direction: 'prev' | 'next') => {
+            // Auto-save before navigating if there are changes
             if (hasChanges) {
-                const confirm = window.confirm(
-                    'Ada perubahan yang belum tersimpan. Yakin ingin berpindah?'
-                );
-                if (!confirm) return;
+                triggerAutosave();
             }
 
             setCurrentIndex((prev) =>
@@ -141,22 +244,19 @@ const EditCardContainer = (): JSX.Element => {
                     : Math.max(prev - 1, 0)
             );
         },
-        [localCards.length, hasChanges]
+        [localCards.length, hasChanges, triggerAutosave]
     );
 
     if (isLoading) return <LoadingBackdrop />;
     if (!flashcardDetail) return <></>;
 
-    const formattedData = React.useMemo(
-        () => ({
-            title: flashcardDetail?.title ?? '',
-            lastSaved: 'Just now',
-            totalCards: localCards.length,
-            isPublic: !flashcardDetail?.is_private,
-            cards: localCards
-        }),
-        [flashcardDetail?.title, flashcardDetail?.is_private, localCards]
-    );
+    const formattedData = {
+        title: flashcardDetail?.title ?? '',
+        lastSaved: lastSaved,
+        totalCards: localCards.length,
+        isPublic: !flashcardDetail?.is_private,
+        cards: localCards
+    };
 
     return (
         <div className="w-full">
@@ -182,6 +282,7 @@ const EditCardContainer = (): JSX.Element => {
                     onSave={handleSave}
                     onNavigate={handleNavigateCard}
                     setCurrentIndex={setCurrentIndex}
+                    isSaving={isSaving}
                 />
             </div>
         </div>

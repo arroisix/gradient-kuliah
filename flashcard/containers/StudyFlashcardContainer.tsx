@@ -20,6 +20,8 @@ interface StudyState {
     showHint: boolean;
 }
 
+const STUDY_MODE_INTRO_KEY = 'flashcard_study_intro_shown';
+
 const StudyFlashcardContainer = (): JSX.Element => {
     const router = useRouter();
     const { slug, index } = router.query;
@@ -30,11 +32,19 @@ const StudyFlashcardContainer = (): JSX.Element => {
         isFlipped: false,
         showHint: false
     });
+    const [showTapKartu, setShowTapKartu] = useState(false);
 
     const { data: flashcard, isLoading } = useGetFlashcardDetailQuery(
         { flashcard_slug: slug as string },
         { skip: !slug }
     );
+
+    useEffect(() => {
+        const introShown = localStorage.getItem(STUDY_MODE_INTRO_KEY);
+        if (!introShown) {
+            setShowTapKartu(true);
+        }
+    }, []);
 
     useEffect(() => {
         if (index && flashcard) {
@@ -97,6 +107,12 @@ const StudyFlashcardContainer = (): JSX.Element => {
         }
     };
 
+    const handleTapKartuDismiss = () => {
+        setShowTapKartu(false);
+        // Save to localStorage that intro has been shown
+        localStorage.setItem(STUDY_MODE_INTRO_KEY, 'true');
+    };
+
     const getTextContent = (content: string) => {
         return content
             .replace(/!\[.*?\]\(.*?\)/g, '')
@@ -144,6 +160,8 @@ const StudyFlashcardContainer = (): JSX.Element => {
                     onFlip={handleFlip}
                     onHint={handleShowHint}
                     onToggleFavorite={handleToggleFavorite}
+                    showTapKartu={showTapKartu}
+                    onTapKartuDismiss={handleTapKartuDismiss}
                 />
 
                 <div className="fixed bottom-0 inset-x-0 p-4 flex justify-between items-center md:hidden bg-black">
