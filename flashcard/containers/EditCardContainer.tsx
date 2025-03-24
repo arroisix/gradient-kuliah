@@ -87,7 +87,7 @@ const EditCardContainer = (): JSX.Element => {
             });
         } catch (error) {
             console.error('Failed to save card:', error);
-            toast.error('Gagal menyimpan flashcard', {
+            toast.error('Gagal menyimpan flashcards', {
                 position: toast.POSITION.TOP_CENTER
             });
         }

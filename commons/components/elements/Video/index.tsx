@@ -8,7 +8,6 @@ const VideoPlayer = <T,>({
     video,
     trackProgress,
     popupData,
-    popupComponent,
     autoPlay,
     isMuxVideo,
     token
@@ -24,7 +23,6 @@ const VideoPlayer = <T,>({
                 isMuxVideo={isMuxVideo}
                 trackProgress={trackProgress}
                 popupData={popupData}
-                popupComponent={popupComponent}
             />
         </VideoProvider>
     );

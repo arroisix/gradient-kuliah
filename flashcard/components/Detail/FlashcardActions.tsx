@@ -41,7 +41,7 @@ const FlashcardActions = ({
         try {
             const currentUrl = window.location.href;
             await navigator.clipboard.writeText(currentUrl);
-            toast.success('Link ke flashcard berhasil disalin', {
+            toast.success('Link ke flashcards berhasil disalin', {
                 position: toast.POSITION.TOP_CENTER
             });
         } catch (error) {
@@ -55,11 +55,11 @@ const FlashcardActions = ({
             await likeFlashcard({
                 flashcard_slug: slug as string
             }).unwrap();
-            toast.success('Penilaian flashcard tersimpan', {
+            toast.success('Penilaian flashcards tersimpan', {
                 position: toast.POSITION.TOP_CENTER
             });
         } catch (error) {
-            console.error('Failed to like flashcard:', error);
+            console.error('Failed to like flashcards:', error);
         }
     };
 
@@ -69,11 +69,11 @@ const FlashcardActions = ({
             await dislikeFlashcard({
                 flashcard_slug: slug as string
             }).unwrap();
-            toast.success('Penilaian flashcard tersimpan', {
+            toast.success('Penilaian flashcards tersimpan', {
                 position: toast.POSITION.TOP_CENTER
             });
         } catch (error) {
-            console.error('Failed to dislike flashcard:', error);
+            console.error('Failed to dislike flashcards:', error);
         }
     };
 

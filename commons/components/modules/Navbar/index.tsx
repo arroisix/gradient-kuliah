@@ -231,7 +231,7 @@ const Navbar = ({
                                         Semua
                                     </Link>
                                     <Link
-                                        href="/flashcard"
+                                        href="/flashcards"
                                         className="flex items-center gap-3 px-4 py-2 text-gray-300 hover:text-white hover:bg-[#2A2A2A] transition-colors">
                                         Flashcard
                                     </Link>

@@ -5,7 +5,7 @@ import Skeleton from 'commons/components/elements/Skeleton';
 import { useRouter } from 'next/router';
 import { cn } from 'commons/utils';
 import EmptyResult from './EmptyResult';
-import LatihanCard from 'courses/components/Latihan/Entrypoint/LatihanCard';
+import LatihanCard from 'exercises/components/Entrypoint/LatihanCard';
 import FlashcardSearchResultCard from './FlashcardSearchResultCard';
 
 const SearchResultsSection = ({

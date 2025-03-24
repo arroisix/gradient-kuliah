@@ -111,7 +111,7 @@ interface SearchDocument {
     problem_count?: number;
     icon?: string;
 
-    /** Available for `flashcard` collection */
+    /** Available for `flashcards` collection */
     flashcard_title?: string;
     flashcard_slug?: string;
     card_question?: string;
