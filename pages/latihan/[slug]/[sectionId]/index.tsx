@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import SectionPageContent from 'courses/components/Latihan/Section/SectionPageContent';
+import SectionPageContent from 'exercises/components/Section/SectionPageContent';
 import withAuth from 'commons/withAuth';
 
 const SectionPage: React.FC = () => {
