@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import rehypeKatex from 'rehype-katex';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
+import TapKartu from 'flashcard/assets/TapKartu';
 
 interface FlashcardContentProps {
     currentIndex: number;
@@ -25,6 +26,8 @@ interface FlashcardContentProps {
     onFlip?: () => void;
     onHint?: () => void;
     onToggleFavorite?: (cardId: string) => void;
+    showTapKartu?: boolean;
+    onTapKartuDismiss?: () => void;
 }
 
 const FlashcardContent = ({
@@ -36,9 +39,12 @@ const FlashcardContent = ({
     studyState,
     onFlip,
     onHint,
-    onToggleFavorite
+    onToggleFavorite,
+    showTapKartu = false,
+    onTapKartuDismiss
 }: FlashcardContentProps): JSX.Element => {
     const [showContent, setShowContent] = useState(true);
+    const [hasClickedCard, setHasClickedCard] = useState(false);
 
     const getHintText = (answer: string): string => {
         const visibleLength = Math.floor(answer.length * 0.2);
@@ -51,6 +57,16 @@ const FlashcardContent = ({
 
     const handleFlipComplete = () => {
         setShowContent(true);
+    };
+
+    const handleCardClick = () => {
+        if (!hasClickedCard && showTapKartu && onTapKartuDismiss) {
+            setHasClickedCard(true);
+            onTapKartuDismiss();
+        }
+        if (onFlip) {
+            onFlip();
+        }
     };
 
     const cardVariants = {
@@ -100,7 +116,7 @@ const FlashcardContent = ({
                         'w-full relative rounded-xl min-h-[320px] h-full preserve-3d cursor-pointer',
                         studyState?.isFlipped ? 'bg-[#181818]' : 'bg-[#252246]'
                     )}
-                    onClick={onFlip}>
+                    onClick={handleCardClick}>
                     <div
                         className="absolute inset-0 backface-hidden"
                         style={{
@@ -160,6 +176,18 @@ const FlashcardContent = ({
                             </div>
                         </div>
                     </div>
+
+                    {showTapKartu && !studyState?.isFlipped && (
+                        <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.5 }}
+                                className="transform -translate-y-20">
+                                <TapKartu />
+                            </motion.div>
+                        </div>
+                    )}
 
                     <div
                         className={cn(

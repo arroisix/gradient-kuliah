@@ -17,6 +17,7 @@ import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { cn } from 'commons/utils';
 import { ChevronLeft, Plus } from 'lucide-react';
 import { FaListUl } from 'react-icons/fa';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import DeleteBottomSheet from './DeleteBottomSheet';
 import DeleteConfirmationBottomSheet from './DeleteConfirmationBottomSheet';
 import FlashcardEditor from './FlashcardEditor';
@@ -44,6 +45,7 @@ interface EditFlashcardFormProps {
     onSave: () => void;
     onNavigate: (direction: 'prev' | 'next') => void;
     setCurrentIndex: (index: number) => void;
+    isSaving?: boolean;
 }
 
 const EditFlashcardForm = ({
@@ -54,7 +56,8 @@ const EditFlashcardForm = ({
     onAddCard,
     onSave,
     onNavigate,
-    setCurrentIndex
+    setCurrentIndex,
+    isSaving = false
 }: EditFlashcardFormProps): JSX.Element => {
     const router = useRouter();
     const { uploadFile } = useUploadFile('flashcards');
@@ -145,14 +148,26 @@ const EditFlashcardForm = ({
                 <div className="flex items-center gap-2">
                     <button
                         onClick={onSave}
-                        disabled={!hasChanges}
+                        disabled={!hasChanges || isSaving}
                         className={`inline-flex items-center gap-2 px-4 py-2 rounded-full font-semibold ${
-                            hasChanges
+                            hasChanges && !isSaving
                                 ? 'bg-[#333333] text-white hover:bg-opacity-80'
                                 : 'bg-neutral-700 text-neutral-400 cursor-not-allowed'
                         } transition-colors`}>
-                        <BiSave size={20} />
-                        Simpan
+                        {isSaving ? (
+                            <>
+                                <AiOutlineLoading3Quarters
+                                    size={20}
+                                    className="animate-spin"
+                                />
+                                <span>Menyimpan</span>
+                            </>
+                        ) : (
+                            <>
+                                <BiSave size={20} />
+                                <span>Simpan</span>
+                            </>
+                        )}
                     </button>
                     <button
                         onClick={() => setIsMenuOpen(true)}
@@ -192,14 +207,26 @@ const EditFlashcardForm = ({
                     <div className="hidden md:flex items-center gap-3">
                         <button
                             onClick={onSave}
-                            disabled={!hasChanges}
+                            disabled={!hasChanges || isSaving}
                             className={`inline-flex items-center gap-2 px-4 py-2 rounded-full font-semibold ${
-                                hasChanges
+                                hasChanges && !isSaving
                                     ? 'bg-[#333333] text-white hover:bg-opacity-80'
                                     : 'bg-neutral-700 text-neutral-400 cursor-not-allowed'
                             } transition-colors`}>
-                            <BiSave size={20} />
-                            <span>Simpan</span>
+                            {isSaving ? (
+                                <>
+                                    <AiOutlineLoading3Quarters
+                                        size={20}
+                                        className="animate-spin"
+                                    />
+                                    <span>Menyimpan</span>
+                                </>
+                            ) : (
+                                <>
+                                    <BiSave size={20} />
+                                    <span>Simpan</span>
+                                </>
+                            )}
                         </button>
                         <Menu as="div" className="relative">
                             <Menu.Button className="p-2 rounded-full bg-[#333333] text-white hover:bg-opacity-80 transition-colors">
