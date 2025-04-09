@@ -52,6 +52,189 @@ interface ClassProgress extends Omit<LearningMaterial, 'in_progress' | 'type'> {
     latest_chapter: string;
     percentage_progress: number;
 }
+
 interface GetClassProgressResponse {
     class_progress: ClassProgress[];
 }
+
+interface PaginatedResponse<T> {
+    count_items: number;
+    next_page: number | null;
+    previous_page: number | null;
+    data: T[];
+}
+
+// User Classes
+interface UserClass {
+    id: string;
+    course_slug: string;
+    course_name: string;
+    subchapter_slug: string;
+    subchapter_name: string;
+    thumbnail: string;
+    progress_percentage: number;
+}
+
+type UserClassesResponse = PaginatedResponse<UserClass>;
+
+// User Books
+interface UserBook {
+    id: string;
+    book_title: string;
+    book_slug: string;
+    cover_url: string;
+    type: 'bank_soal' | 'textbook' | 'astronotes';
+    course_name: string;
+    progress_percentage: number;
+    latest_page: string;
+    latest_problem: string;
+    latest_chapter: string;
+}
+
+type UserBooksResponse = PaginatedResponse<UserBook>;
+
+// User Flashcards
+interface UserFlashcard {
+    id: string;
+    title: string;
+    slug: string;
+    course_name: string;
+    card_count: number;
+    total_questions: string;
+    progress_percentage: number;
+    created_by: string;
+    photo_profile: string;
+}
+
+type UserFlashcardsResponse = PaginatedResponse<UserFlashcard>;
+
+// User Quiz
+interface UserQuiz {
+    slug: string;
+    title: string;
+    course_name: string;
+    problem_count: string;
+    progress_percentage: string;
+    total_questions: number;
+}
+
+interface UserQuizResponse {
+    data: UserQuiz[];
+}
+
+interface BannerResponse {
+    data: Array<{
+        banner_url: string;
+        href: string;
+    }>;
+}
+
+interface MajorClass {
+    course_slug: string;
+    course_name: string;
+    thumbnail: string;
+}
+
+interface MajorClassesResponse {
+    major: string;
+    data: MajorClass[];
+}
+
+type ContentType =
+    | 'video'
+    | 'textbook'
+    | 'bank_soal'
+    | 'astronotes'
+    | 'quiz'
+    | 'flashcard';
+
+interface BaseMajorRecommendationItem {
+    type: ContentType;
+    id: string;
+    thumbnail: string;
+}
+
+interface VideoRecommendationItem extends BaseMajorRecommendationItem {
+    type: 'video';
+    course_name: string;
+    course_slug: string;
+    subchapter_name: string;
+    chapter_name: string;
+    chapter_slug: string;
+}
+
+interface BookRecommendationItem extends BaseMajorRecommendationItem {
+    type: 'textbook' | 'bank_soal' | 'astronotes';
+    book_title: string;
+    book_slug: string;
+    course_name: string;
+}
+
+interface QuizRecommendationItem extends BaseMajorRecommendationItem {
+    type: 'quiz';
+    exercise_title: string;
+    exercise_slug: string;
+    course_name: string;
+    problem_count: string;
+}
+
+interface FlashcardRecommendationItem extends BaseMajorRecommendationItem {
+    type: 'flashcard';
+    title: string;
+    slug: string;
+    course_name: string;
+    total_questions: string;
+}
+
+type MajorRecommendationItem =
+    | VideoRecommendationItem
+    | BookRecommendationItem
+    | QuizRecommendationItem
+    | FlashcardRecommendationItem;
+
+interface MajorRecommendationResponse {
+    major: string;
+    data: MajorRecommendationItem[];
+}
+
+interface CourseRecommendation {
+    course_name: string;
+    recommendations: MajorRecommendationItem[];
+}
+
+interface LearnRecommendationResponse {
+    data: CourseRecommendation[];
+}
+
+export type {
+    StudentLearningProgress,
+    StudentLearningProgressResponse,
+    StudentCourse,
+    StudentCourseResponse,
+    LearningMaterial,
+    GetDashboardContentResponse,
+    ClassProgress,
+    GetClassProgressResponse,
+    PaginatedResponse,
+    UserClass,
+    UserClassesResponse,
+    UserBook,
+    UserBooksResponse,
+    UserFlashcard,
+    UserFlashcardsResponse,
+    UserQuiz,
+    UserQuizResponse,
+    BannerResponse,
+    MajorClass,
+    MajorClassesResponse,
+    ContentType,
+    BaseMajorRecommendationItem,
+    VideoRecommendationItem,
+    BookRecommendationItem,
+    QuizRecommendationItem,
+    FlashcardRecommendationItem,
+    MajorRecommendationItem,
+    MajorRecommendationResponse,
+    CourseRecommendation,
+    LearnRecommendationResponse
+};

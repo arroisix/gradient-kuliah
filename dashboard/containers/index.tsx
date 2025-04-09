@@ -10,6 +10,8 @@ import DashboardPromptBar from 'copilot/components/DashboardPromptBar/DashboardP
 import EmailVerificationBanner from '../components/EmailVerification/EmailVerificationBanner';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import DashboardFeatures from '../components/DashboardFeatures';
+import LanjutBelajarSection from '../components/LanjutBelajar/LanjutBelajarSection';
+import DashboardUpdatesBanner from 'dashboard/components/DashboardBanner';
 
 const DashboardContainer = (): JSX.Element => {
     const router = useRouter();
@@ -28,8 +30,10 @@ const DashboardContainer = (): JSX.Element => {
                 <EmailVerificationBanner />
             )}
             <RenewalCard />
+            <DashboardUpdatesBanner />
             {isAuthenticated && <DashboardPromptBar />}
             <DashboardFeatures />
+            <LanjutBelajarSection />
             <DashboardBanner />
             <DashboardContent />
             <ReferralModal

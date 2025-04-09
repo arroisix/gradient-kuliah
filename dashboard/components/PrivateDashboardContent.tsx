@@ -1,15 +1,31 @@
-import { useGetDashboardContentQuery } from 'dashboard/redux/api/dashboardApi';
 import React from 'react';
-import MyClassesAccordion from './MyClassesSection';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import {
+    useGetDashboardContentQuery,
+    useGetMajorClassesQuery,
+    useGetMajorRecommendationQuery,
+    useGetLearnRecommendationQuery
+} from 'dashboard/redux/api/dashboardApi';
+import MyClassesAccordion from './MyClassesSection';
 import DashboardSection from './DashboardSection';
+import CarouselSection from './CarouselSection';
 import { getBookBaseHref } from 'courses/utils';
 import ProductCard from 'commons/components/elements/ProductCard';
+import ContentCard from './ContentCard';
+import {
+    MajorRecommendationItem,
+    VideoRecommendationItem,
+    BookRecommendationItem,
+    QuizRecommendationItem,
+    FlashcardRecommendationItem,
+    LearningMaterial
+} from 'dashboard/types/dashboard';
 
 const PrivateDashboardContent = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
 
+    // Regular dashboard content queries
     const { data: justReleased, isLoading: isLoadingJustReleased } =
         useGetDashboardContentQuery(
             { type: 'just_released' },
@@ -33,6 +49,27 @@ const PrivateDashboardContent = (): JSX.Element => {
         isLoading: isLoadingClassRecommendation
     } = useGetDashboardContentQuery(
         { type: 'class_recommendation' },
+        { skip: !isAuthenticated }
+    );
+
+    // Major-specific queries
+    const { data: majorClasses, isLoading: isLoadingMajorClasses } =
+        useGetMajorClassesQuery({ limit: 12 }, { skip: !isAuthenticated });
+
+    const {
+        data: majorRecommendation,
+        isLoading: isLoadingMajorRecommendation
+    } = useGetMajorRecommendationQuery(
+        { limit: 24 },
+        { skip: !isAuthenticated }
+    );
+
+    // Learn recommendation query
+    const {
+        data: learnRecommendation,
+        isLoading: isLoadingLearnRecommendation
+    } = useGetLearnRecommendationQuery(
+        { limit: 24 },
         { skip: !isAuthenticated }
     );
 
@@ -67,6 +104,107 @@ const PrivateDashboardContent = (): JSX.Element => {
         latestProgress: 0
     });
 
+    // Helper function for rendering major class items
+    const renderMajorClassItem = (item: any) => {
+        return (
+            <ContentCard
+                id={item.course_slug}
+                title={item.course_name}
+                category="Kelas"
+                thumbnail={item.thumbnail}
+                href={`/kelas/${item.course_slug}`}
+            />
+        );
+    };
+
+    // Helper function to prepare item data based on type
+    const prepareItemData = (item: MajorRecommendationItem) => {
+        // Prepare variables for different types of items
+        let title,
+            href,
+            category,
+            courseName,
+            chapterName,
+            cardCount,
+            problemCount;
+
+        switch (item.type) {
+            case 'video':
+                const videoItem = item as VideoRecommendationItem;
+                title = videoItem.subchapter_name || videoItem.chapter_name;
+                href = `/kelas/${videoItem.course_slug}/${videoItem.chapter_slug}`;
+                category = 'Video';
+                courseName = videoItem.course_name;
+                chapterName = videoItem.chapter_name;
+                break;
+
+            case 'textbook':
+                const textbookItem = item as BookRecommendationItem;
+                title = textbookItem.book_title;
+                href = `/textbook/${textbookItem.book_slug}`;
+                category = 'Textbook Solution';
+                courseName = textbookItem.course_name;
+                break;
+
+            case 'bank_soal':
+                const bankSoalItem = item as BookRecommendationItem;
+                title = bankSoalItem.book_title;
+                href = `/bank-soal/${bankSoalItem.book_slug}`;
+                category = 'Bank Soal';
+                courseName = bankSoalItem.course_name;
+                break;
+
+            case 'astronotes':
+                const notesItem = item as BookRecommendationItem;
+                title = notesItem.book_title;
+                href = `/astronotes/${notesItem.book_slug}`;
+                category = 'Astronotes';
+                courseName = notesItem.course_name;
+                break;
+
+            case 'quiz':
+                const quizItem = item as QuizRecommendationItem;
+                title = quizItem.exercise_title;
+                href = `/latihan/${quizItem.exercise_slug}`;
+                category = 'Kuis';
+                courseName = quizItem.course_name;
+                problemCount = quizItem.problem_count;
+                break;
+
+            case 'flashcard':
+                const flashcardItem = item as FlashcardRecommendationItem;
+                title = flashcardItem.title;
+                href = `/flashcard/${flashcardItem.slug}`;
+                category = 'Flashcard';
+                courseName = flashcardItem.course_name;
+                cardCount = flashcardItem.total_questions;
+                break;
+
+            default:
+                title = 'Unknown content';
+                href = '#';
+                category = 'Other';
+        }
+
+        return {
+            id: item.id,
+            title,
+            category,
+            thumbnail: item.thumbnail,
+            href,
+            courseName,
+            chapterName,
+            cardCount,
+            problemCount
+        };
+    };
+
+    // Helper function for rendering trending items
+    const renderTrendingItem = (item: MajorRecommendationItem) => {
+        const itemData = prepareItemData(item);
+        return <ContentCard {...itemData} isTrending={true} />;
+    };
+
     return (
         <>
             {justReleased?.just_released.length !== 0 && (
@@ -87,10 +225,49 @@ const PrivateDashboardContent = (): JSX.Element => {
                     )}
                 </DashboardSection>
             )}
+
+            {/* Major Classes section */}
+            <CarouselSection
+                title={`Kelas yang Diambil Mahasiswa ${majorClasses?.major}`}
+                items={majorClasses?.data}
+                isLoading={isLoadingMajorClasses}
+                renderItem={renderMajorClassItem}
+                eventCategory="MajorClasses"
+                showViewAll={true}
+                viewAllHref="/kelas"
+            />
+
+            {/* Trending section */}
+            <CarouselSection
+                title={`Trending untuk Mahasiswa ${majorRecommendation?.major}`}
+                items={majorRecommendation?.data}
+                isLoading={isLoadingMajorRecommendation}
+                renderItem={renderTrendingItem}
+                eventCategory="TrendingRecommendation"
+            />
+
             <MyClassesAccordion
                 isLoading={isLoadingMyClass || isFetchingMyClass}
                 courses={myClass?.my_class}
             />
+
+            {/* Learn Recommendation Sections - one per course */}
+            {learnRecommendation?.data?.map((courseRec, index) => (
+                <CarouselSection
+                    key={`learn-rec-${index}-${courseRec.course_name}`}
+                    title={`Karena Kamu Belajar ${courseRec.course_name}`}
+                    items={courseRec.recommendations}
+                    isLoading={isLoadingLearnRecommendation}
+                    renderItem={(item) => {
+                        const itemData = prepareItemData(
+                            item as MajorRecommendationItem
+                        );
+                        return <ContentCard {...itemData} />;
+                    }}
+                    eventCategory={`LearnRecommendation-${courseRec.course_name}`}
+                />
+            ))}
+
             <DashboardSection
                 isLoading={isLoadingBookRecommendation}
                 header="Bacaan Untukmu"
@@ -109,6 +286,7 @@ const PrivateDashboardContent = (): JSX.Element => {
                     />
                 )}
             </DashboardSection>
+
             <DashboardSection
                 isCourse
                 isLoading={isLoadingClassRecommendation}

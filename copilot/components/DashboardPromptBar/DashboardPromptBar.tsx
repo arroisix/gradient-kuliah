@@ -13,6 +13,7 @@ import { chatApi } from '../../redux/api/copilotApi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { SparkleIcon } from 'lucide-react';
 import { useTracker } from 'tracker/tracker';
+import DashboardQuickActions from './DashboardQuickActions';
 
 const DashboardPromptBar = (): JSX.Element => {
     const router = useRouter();
@@ -244,6 +245,7 @@ const DashboardPromptBar = (): JSX.Element => {
                                 placeholder="Tanya soal atau cari materi"
                                 className="w-full p-0 min-h-[100px] bg-transparent border-none resize-none outline-none text-white placeholder:text-gray-500 focus:ring-0 focus:outline-none"
                             />
+                            <DashboardQuickActions onImageCapture={() => fileInputRef.current?.click()}/>
                         </>
                     )}
                     <div className="flex items-center justify-between gap-3 mt-2">

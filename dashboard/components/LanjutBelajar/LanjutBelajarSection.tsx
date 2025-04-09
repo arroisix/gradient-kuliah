@@ -1,0 +1,245 @@
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { useTracker } from 'tracker/tracker';
+import TabNavigation from './TabNavigation';
+import LearningCardGrid from './LearningCardGrid';
+import {
+    useGetUserClassesQuery,
+    useGetUserBooksQuery,
+    useGetUserFlashcardsQuery,
+    useGetUserQuizQuery
+} from 'dashboard/redux/api/dashboardApi';
+import {
+    UserBook,
+    UserClass,
+    UserFlashcard,
+    UserQuiz
+} from 'dashboard/types/dashboard';
+
+export const TABS = {
+    KELAS: 'kelas',
+    BUKU: 'buku',
+    KUIS: 'kuis',
+    FLASHCARD: 'flashcard',
+    PLAYLIST: 'playlist'
+} as const;
+
+export type TabType = typeof TABS[keyof typeof TABS];
+
+export interface CardData {
+    id: string;
+    title: string;
+    subtitle?: string;
+    progress: number;
+    thumbnail: string | null;
+    category: string;
+    href: string;
+    courseBadge: string | null;
+    chapterBadge: string | null;
+    badgeColor?: string;
+    authorName?: string;
+    authorPhoto?: string;
+    cardCount?: number;
+}
+
+type BookType = 'astronotes' | 'bank_soal' | 'textbook';
+
+const LanjutBelajarSection: React.FC = () => {
+    const [activeTab, setActiveTab] = useState<TabType>(TABS.KELAS);
+    const [cardData, setCardData] = useState<CardData[]>([]);
+    const isAuthenticated = useSelector(getIsAuthenticated);
+    const tracker = useTracker();
+
+    // Query data with appropriate skip conditions
+    const { data: classData, isLoading: isLoadingClass } =
+        useGetUserClassesQuery(
+            { page: 1, limit: 6 },
+            { skip: !isAuthenticated || activeTab !== TABS.KELAS }
+        );
+
+    const { data: bookData, isLoading: isLoadingBook } = useGetUserBooksQuery(
+        { page: 1, limit: 6 },
+        { skip: !isAuthenticated || activeTab !== TABS.BUKU }
+    );
+
+    const { data: quizData, isLoading: isLoadingQuiz } = useGetUserQuizQuery(
+        { page: 1, limit: 6 },
+        { skip: !isAuthenticated || activeTab !== TABS.KUIS }
+    );
+
+    const { data: flashcardData, isLoading: isLoadingFlashcard } =
+        useGetUserFlashcardsQuery(
+            { page: 1, limit: 6 },
+            { skip: !isAuthenticated || activeTab !== TABS.FLASHCARD }
+        );
+
+    // Handle tab change
+    const handleTabChange = (tab: TabType): void => {
+        // Clear card data immediately when tab changes
+        setCardData([]);
+        setActiveTab(tab);
+        tracker?.genericTrack('Click Tab on Continue Learning Section', {
+            tab
+        });
+    };
+
+    // Update card data when active tab or data changes
+    useEffect(() => {
+        setCardData(getCardDataForActiveTab());
+    }, [
+        activeTab,
+        classData,
+        bookData,
+        quizData,
+        flashcardData,
+        isLoadingClass,
+        isLoadingBook,
+        isLoadingQuiz,
+        isLoadingFlashcard
+    ]);
+
+    const getCardDataForActiveTab = (): CardData[] => {
+        if (activeTab === TABS.KELAS && classData?.data) {
+            return classData.data.map((item: UserClass) => ({
+                id: item.id,
+                title: item.subchapter_name,
+                subtitle: item.course_name,
+                progress: item.progress_percentage,
+                thumbnail: item.thumbnail,
+                category: 'Video',
+                href: `/kelas/${item.course_slug}/${item.subchapter_slug}`,
+                courseBadge: item.course_name,
+                chapterBadge: null,
+                badgeColor: 'bg-purple-600'
+            }));
+        }
+
+        if (activeTab === TABS.BUKU && bookData?.data) {
+            return bookData.data.map((item: UserBook) => ({
+                id: item.id,
+                title: item.book_title,
+                subtitle: item.course_name,
+                progress: item.progress_percentage,
+                thumbnail: item.cover_url,
+                category: getCategoryFromType(item.type as BookType),
+                href: getBookUrl(item),
+                courseBadge: item.course_name,
+                chapterBadge: item.latest_chapter || null,
+                badgeColor: getColorForType(item.type as BookType)
+            }));
+        }
+
+        if (activeTab === TABS.KUIS && quizData?.data) {
+            return quizData.data.map((item: UserQuiz) => ({
+                id: item.slug,
+                title: item.title,
+                subtitle: item.course_name,
+                progress: parseInt(item.progress_percentage),
+                thumbnail: null,
+                category: 'Exercise',
+                href: `/latihan/${item.slug}`,
+                courseBadge: item.course_name,
+                chapterBadge: `${
+                    item.total_questions || item.problem_count
+                } Soal`,
+                badgeColor: 'bg-blue-500'
+            }));
+        }
+
+        if (activeTab === TABS.FLASHCARD && flashcardData?.data) {
+            return flashcardData.data.map((item: UserFlashcard) => ({
+                id: item.id,
+                title: item.title,
+                subtitle: item.course_name,
+                progress: item.progress_percentage,
+                thumbnail: null, // We'll use FlashcardLargeIcon in the component
+                category: 'Flashcard',
+                href: `/flashcard/${item.slug}`,
+                // Author information
+                authorName: item.created_by,
+                authorPhoto: item.photo_profile,
+                // Use card_count primarily, fall back to total_questions if needed
+                cardCount: item.card_count || parseInt(item.total_questions),
+                // Required properties
+                courseBadge: null,
+                chapterBadge: null,
+                badgeColor: 'bg-orange-500'
+            }));
+        }
+
+        return [];
+    };
+
+    // Helper functions to format data
+    const getCategoryFromType = (type: BookType): string => {
+        const typeMap: Record<BookType, string> = {
+            astronotes: 'Astronotes',
+            bank_soal: 'Bank Soal',
+            textbook: 'Textbook Solution'
+        };
+        return typeMap[type] || type;
+    };
+
+    const getColorForType = (type: BookType): string => {
+        const colorMap: Record<BookType, string> = {
+            astronotes: 'bg-[#CC009E]',
+            bank_soal: 'bg-[#0083FF]',
+            textbook: 'bg-[#00B78B]'
+        };
+        return colorMap[type] || 'bg-neutral-700';
+    };
+
+    const getBookUrl = (item: UserBook): string => {
+        const baseUrlMap: Record<BookType, string> = {
+            astronotes: '/astronotes',
+            bank_soal: '/bank-soal',
+            textbook: '/textbook'
+        };
+
+        const baseUrl = baseUrlMap[item.type as BookType] || '/perpustakaan';
+
+        if (item.latest_problem) {
+            return `${baseUrl}/${item.book_slug}/${item.latest_problem}`;
+        } else if (item.latest_page) {
+            return `${baseUrl}/${item.book_slug}/${item.latest_page}`;
+        }
+        return `${baseUrl}/${item.book_slug}`;
+    };
+
+    // Determine if we're in a loading state
+    const isLoading =
+        (activeTab === TABS.KELAS && isLoadingClass) ||
+        (activeTab === TABS.BUKU && isLoadingBook) ||
+        (activeTab === TABS.KUIS && isLoadingQuiz) ||
+        (activeTab === TABS.FLASHCARD && isLoadingFlashcard);
+
+    const handleCardClick = (card: CardData): void => {
+        tracker?.genericTrack('Click Card on Continue Learning Section', {
+            tab: activeTab,
+            cardId: card.id,
+            title: card.title
+        });
+    };
+
+    return (
+        <div className="w-full pb-8">
+            <h2 className="text-xl font-extrabold mb-4">
+                Lanjut Belajar, Yuk!
+            </h2>
+
+            <TabNavigation
+                activeTab={activeTab}
+                onTabChange={handleTabChange}
+            />
+
+            <LearningCardGrid
+                cardData={cardData}
+                isLoading={isLoading}
+                onCardClick={handleCardClick}
+            />
+        </div>
+    );
+};
+
+export default LanjutBelajarSection;
