@@ -25,7 +25,6 @@ import {
 const PrivateDashboardContent = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
 
-    // Regular dashboard content queries
     const { data: justReleased, isLoading: isLoadingJustReleased } =
         useGetDashboardContentQuery(
             { type: 'just_released' },
@@ -39,20 +38,19 @@ const PrivateDashboardContent = (): JSX.Element => {
         { type: 'user_classes' },
         { skip: !isAuthenticated }
     );
-    const { data: bookRecommendation, isLoading: isLoadingBookRecommendation } =
-        useGetDashboardContentQuery(
-            { type: 'book_recommendation' },
-            { skip: !isAuthenticated }
-        );
-    const {
-        data: classRecommendation,
-        isLoading: isLoadingClassRecommendation
-    } = useGetDashboardContentQuery(
-        { type: 'class_recommendation' },
-        { skip: !isAuthenticated }
-    );
+    // const { data: bookRecommendation, isLoading: isLoadingBookRecommendation } =
+    //     useGetDashboardContentQuery(
+    //         { type: 'book_recommendation' },
+    //         { skip: !isAuthenticated }
+    //     );
+    // const {
+    //     data: classRecommendation,
+    //     isLoading: isLoadingClassRecommendation
+    // } = useGetDashboardContentQuery(
+    //     { type: 'class_recommendation' },
+    //     { skip: !isAuthenticated }
+    // );
 
-    // Major-specific queries
     const { data: majorClasses, isLoading: isLoadingMajorClasses } =
         useGetMajorClassesQuery({ limit: 12 }, { skip: !isAuthenticated });
 
@@ -64,7 +62,6 @@ const PrivateDashboardContent = (): JSX.Element => {
         { skip: !isAuthenticated }
     );
 
-    // Learn recommendation query
     const {
         data: learnRecommendation,
         isLoading: isLoadingLearnRecommendation
@@ -104,7 +101,6 @@ const PrivateDashboardContent = (): JSX.Element => {
         latestProgress: 0
     });
 
-    // Helper function for rendering major class items
     const renderMajorClassItem = (item: any) => {
         return (
             <ContentCard
@@ -113,13 +109,12 @@ const PrivateDashboardContent = (): JSX.Element => {
                 category="Kelas"
                 thumbnail={item.thumbnail}
                 href={`/kelas/${item.course_slug}`}
+                isMajorClass={true}
             />
         );
     };
 
-    // Helper function to prepare item data based on type
     const prepareItemData = (item: MajorRecommendationItem) => {
-        // Prepare variables for different types of items
         let title,
             href,
             category,
@@ -199,7 +194,6 @@ const PrivateDashboardContent = (): JSX.Element => {
         };
     };
 
-    // Helper function for rendering trending items
     const renderTrendingItem = (item: MajorRecommendationItem) => {
         const itemData = prepareItemData(item);
         return <ContentCard {...itemData} isTrending={true} />;
@@ -226,18 +220,14 @@ const PrivateDashboardContent = (): JSX.Element => {
                 </DashboardSection>
             )}
 
-            {/* Major Classes section */}
             <CarouselSection
                 title={`Kelas yang Diambil Mahasiswa ${majorClasses?.major}`}
                 items={majorClasses?.data}
                 isLoading={isLoadingMajorClasses}
                 renderItem={renderMajorClassItem}
                 eventCategory="MajorClasses"
-                showViewAll={true}
-                viewAllHref="/kelas"
             />
 
-            {/* Trending section */}
             <CarouselSection
                 title={`Trending untuk Mahasiswa ${majorRecommendation?.major}`}
                 items={majorRecommendation?.data}
@@ -251,7 +241,6 @@ const PrivateDashboardContent = (): JSX.Element => {
                 courses={myClass?.my_class}
             />
 
-            {/* Learn Recommendation Sections - one per course */}
             {learnRecommendation?.data?.map((courseRec, index) => (
                 <CarouselSection
                     key={`learn-rec-${index}-${courseRec.course_name}`}
@@ -268,46 +257,46 @@ const PrivateDashboardContent = (): JSX.Element => {
                 />
             ))}
 
-            <DashboardSection
-                isLoading={isLoadingBookRecommendation}
-                header="Bacaan Untukmu"
-                items={bookRecommendation?.book_recommendation}
-                showButton
-                btnHref="/perpustakaan">
-                {(item) => (
-                    <ProductCard
-                        key={(item as LearningMaterial).id}
-                        orientation="vertical"
-                        category={(item as LearningMaterial)?.type}
-                        href={getHref(item as LearningMaterial)}
-                        product={getProduct(item as LearningMaterial)}
-                        eventName='User click Book Items on "Bacaan Untukmu" Section'
-                        className="w-full"
-                    />
-                )}
-            </DashboardSection>
+            {/*<DashboardSection*/}
+            {/*    isLoading={isLoadingBookRecommendation}*/}
+            {/*    header="Bacaan Untukmu"*/}
+            {/*    items={bookRecommendation?.book_recommendation}*/}
+            {/*    showButton*/}
+            {/*    btnHref="/perpustakaan">*/}
+            {/*    {(item) => (*/}
+            {/*        <ProductCard*/}
+            {/*            key={(item as LearningMaterial).id}*/}
+            {/*            orientation="vertical"*/}
+            {/*            category={(item as LearningMaterial)?.type}*/}
+            {/*            href={getHref(item as LearningMaterial)}*/}
+            {/*            product={getProduct(item as LearningMaterial)}*/}
+            {/*            eventName='User click Book Items on "Bacaan Untukmu" Section'*/}
+            {/*            className="w-full"*/}
+            {/*        />*/}
+            {/*    )}*/}
+            {/*</DashboardSection>*/}
 
-            <DashboardSection
-                isCourse
-                isLoading={isLoadingClassRecommendation}
-                header="Kelas Untukmu"
-                items={classRecommendation?.class_recommendation}
-                showButton
-                btnHref="/kelas">
-                {(item) => (
-                    <ProductCard
-                        key={(item as LearningMaterial).id}
-                        orientation="vertical"
-                        category="kelas"
-                        href={`/kelas/${
-                            (item as LearningMaterial).course_slug
-                        }`}
-                        product={getProduct(item as LearningMaterial)}
-                        eventName='User click Class Items on "Kelas Untukmu" Section'
-                        className="w-full"
-                    />
-                )}
-            </DashboardSection>
+            {/*<DashboardSection*/}
+            {/*    isCourse*/}
+            {/*    isLoading={isLoadingClassRecommendation}*/}
+            {/*    header="Kelas Untukmu"*/}
+            {/*    items={classRecommendation?.class_recommendation}*/}
+            {/*    showButton*/}
+            {/*    btnHref="/kelas">*/}
+            {/*    {(item) => (*/}
+            {/*        <ProductCard*/}
+            {/*            key={(item as LearningMaterial).id}*/}
+            {/*            orientation="vertical"*/}
+            {/*            category="kelas"*/}
+            {/*            href={`/kelas/${*/}
+            {/*                (item as LearningMaterial).course_slug*/}
+            {/*            }`}*/}
+            {/*            product={getProduct(item as LearningMaterial)}*/}
+            {/*            eventName='User click Class Items on "Kelas Untukmu" Section'*/}
+            {/*            className="w-full"*/}
+            {/*        />*/}
+            {/*    )}*/}
+            {/*</DashboardSection>*/}
         </>
     );
 };

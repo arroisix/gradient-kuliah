@@ -33,18 +33,18 @@ const LearningCard: React.FC<LearningCardProps> = ({ card, onClick }) => {
     return (
         <Link
             href={card.href}
-            className="block relative rounded-lg bg-neutral-800 hover:bg-neutral-700 transition-colors overflow-hidden h-full"
+            className="block relative rounded-lg bg-[#2C2C2C] hover:bg-neutral-700 transition-colors overflow-hidden h-full min-h-[165px] border border-[#666666] border-opacity-50"
             onClick={() => onClick(card)}>
             <div className="flex h-full">
                 {/* Left side - Thumbnail */}
                 <div
                     className={cn('relative', isVideo ? 'w-[40%]' : 'w-[30%]')}>
                     {isFlashcard ? (
-                        <div className="w-full h-full flex items-center justify-center p-4">
+                        <div className="w-full h-full flex items-center justify-center p-4 bg-[#222222]">
                             <FlashcardLargeIcon />
                         </div>
                     ) : isExercise ? (
-                        <div className="w-full h-full flex items-center justify-center p-4">
+                        <div className="w-full h-full flex items-center justify-center p-4 bg-[#222222]">
                             <KuisCover />
                         </div>
                     ) : card.thumbnail ? (
@@ -84,12 +84,12 @@ const LearningCard: React.FC<LearningCardProps> = ({ card, onClick }) => {
                     )}
 
                     {/* Title */}
-                    <h3 className="font-bold text-white text-lg mb-3">
+                    <h3 className="font-bold text-white text-base mb-3">
                         {hasNumberPrefix
                             ? card.title
                             : isVideo
-                                ? card.title
-                                : `${card.title}`}
+                            ? card.title
+                            : `${card.title}`}
                     </h3>
 
                     {/* Course info with icon */}
@@ -114,7 +114,7 @@ const LearningCard: React.FC<LearningCardProps> = ({ card, onClick }) => {
                                                 .toUpperCase()}
                                         </div>
                                     )}
-                                    <span className="text-neutral-400 text-sm">
+                                    <span className="text-neutral-400 text-xs truncate max-w-[84px]">
                                         {card.authorName}
                                     </span>
                                 </div>
@@ -125,7 +125,7 @@ const LearningCard: React.FC<LearningCardProps> = ({ card, onClick }) => {
                                             size={14}
                                             className="text-indigo-400"
                                         />
-                                        <span className="text-neutral-400 text-sm">
+                                        <span className="text-neutral-400 text-xs truncate max-w-[84px]">
                                             {card.courseBadge}
                                         </span>
                                     </div>
@@ -134,8 +134,8 @@ const LearningCard: React.FC<LearningCardProps> = ({ card, onClick }) => {
 
                             {/* Separator */}
                             {((isFlashcard &&
-                                    card.authorName &&
-                                    card.cardCount) ||
+                                card.authorName &&
+                                card.cardCount) ||
                                 (!isFlashcard &&
                                     card.courseBadge &&
                                     card.chapterBadge)) && (
@@ -146,7 +146,7 @@ const LearningCard: React.FC<LearningCardProps> = ({ card, onClick }) => {
                             {isFlashcard && card.cardCount ? (
                                 <div className="flex items-center gap-1">
                                     <Cards />
-                                    <span className="text-neutral-400 text-sm">
+                                    <span className="text-neutral-400 text-xs truncate max-w-[84px]">
                                         {card.cardCount} Cards
                                     </span>
                                 </div>
@@ -157,7 +157,7 @@ const LearningCard: React.FC<LearningCardProps> = ({ card, onClick }) => {
                                             size={14}
                                             className="text-indigo-400"
                                         />
-                                        <span className="text-neutral-400 text-sm">
+                                        <span className="text-neutral-400 text-xs truncate max-w-[84px]">
                                             {card.chapterBadge}
                                         </span>
                                     </div>

@@ -7,7 +7,6 @@ import { BiSolidStar } from 'react-icons/bi';
 import { TbCards } from 'react-icons/tb';
 import { useTracker } from 'tracker/tracker';
 
-// Define props for our content card
 interface ContentCardProps {
     id: string;
     title: string;
@@ -24,6 +23,7 @@ interface ContentCardProps {
     badgeColor?: string;
     isTrending?: boolean;
     onClick?: () => void;
+    isMajorClass?: boolean;
 }
 
 type CategoryType =
@@ -50,12 +50,12 @@ const ContentCard: React.FC<ContentCardProps> = ({
     badgeText,
     badgeColor,
     isTrending = false,
+    isMajorClass = false,
     onClick
 }) => {
     const tracker = useTracker();
     const isVideo = category === 'Video' || category === 'Kelas';
 
-    // Handle card click with tracking
     const handleClick = () => {
         tracker?.genericTrack('Click Content Card', {
             id,
@@ -71,17 +71,20 @@ const ContentCard: React.FC<ContentCardProps> = ({
     return (
         <Link
             href={href}
-            className="block relative rounded-lg bg-neutral-800 hover:bg-neutral-700 transition-colors overflow-hidden h-full"
+            className={`block relative rounded-lg transition-colors overflow-hidden h-full bg-[#121212] border border-[#666666] border-opacity-50`}
             onClick={handleClick}>
-            {/* Trending Badge (if applicable) */}
             {isTrending && (
-                <div className="absolute top-2 left-2 z-10 bg-purple-700 text-white text-xs py-1 px-3 rounded-full flex items-center gap-1">
+                <div
+                    className="absolute top-2 left-2 z-10 text-white text-xs py-1 px-3 rounded-full flex items-center gap-1"
+                    style={{
+                        background:
+                            'linear-gradient(90deg, #36236A 0%, #6C5096 65%, #494BA0 90%)'
+                    }}>
                     <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
                     Trending
                 </div>
             )}
 
-            {/* Thumbnail with proper aspect ratio */}
             <div className="relative w-full aspect-video">
                 {thumbnail ? (
                     <Image
@@ -97,18 +100,6 @@ const ContentCard: React.FC<ContentCardProps> = ({
                     </div>
                 )}
 
-                {/* Category badge */}
-                <div
-                    className="absolute bottom-2 left-2 z-10 rounded-full text-xs text-white font-semibold px-3 py-1"
-                    style={{
-                        backgroundColor:
-                            badgeColor ||
-                            getColorForCategory(category as CategoryType)
-                    }}>
-                    {badgeText || category}
-                </div>
-
-                {/* Play button for videos */}
                 {isVideo && (
                     <div className="absolute inset-0 grid place-items-center">
                         <div className="text-white border-none rounded-full w-12 h-12 flex items-center justify-center bg-black/60">
@@ -118,38 +109,56 @@ const ContentCard: React.FC<ContentCardProps> = ({
                 )}
             </div>
 
-            {/* Content */}
-            <div className="p-4 flex flex-col min-h-[120px]">
-                {/* Title */}
-                <h3 className="font-bold text-white text-lg mb-3 line-clamp-2">
+            <div
+                className={`p-4 flex flex-col ${
+                    isMajorClass ? 'min-h-[40px]' : 'min-h-[80px]'
+                }`}>
+                {!isMajorClass && (
+                    <div
+                        className="rounded-full text-xs text-white font-medium px-3 py-1 mb-3 w-fit"
+                        style={{
+                            backgroundColor:
+                                badgeColor ||
+                                getColorForCategory(category as CategoryType)
+                        }}>
+                        {badgeText || category}
+                    </div>
+                )}
+
+                <h3 className="font-semibold text-white text-base mb-3 line-clamp-2">
                     {title}
                 </h3>
 
-                {/* Course info */}
-                {courseName && (
-                    <div className="flex items-center text-sm mb-2">
-                        <FaGraduationCap
-                            size={14}
-                            className="text-indigo-400 mr-2"
-                        />
-                        <span className="text-neutral-400">{courseName}</span>
+                {(courseName || chapterName) && (
+                    <div className="flex items-center text-[12px] mb-2 text-neutral-400">
+                        {courseName && (
+                            <>
+                                <FaGraduationCap
+                                    size={14}
+                                    className="text-indigo-400 mr-2"
+                                />
+                                <span>{courseName}</span>
+                            </>
+                        )}
+
+                        {courseName && chapterName && (
+                            <span className="mx-2">|</span>
+                        )}
+
+                        {chapterName && (
+                            <>
+                                <FaBookmark
+                                    size={14}
+                                    className="text-indigo-400 mr-2"
+                                />
+                                <span>{chapterName}</span>
+                            </>
+                        )}
                     </div>
                 )}
 
-                {/* Chapter info */}
-                {chapterName && (
-                    <div className="flex items-center text-sm mb-2">
-                        <FaBookmark
-                            size={14}
-                            className="text-indigo-400 mr-2"
-                        />
-                        <span className="text-neutral-400">{chapterName}</span>
-                    </div>
-                )}
-
-                {/* Author info (for books/notes) */}
                 {authorName && (
-                    <div className="flex items-center text-sm mb-2">
+                    <div className="flex items-center text-[12px] mb-2">
                         <FaRegStickyNote
                             size={14}
                             className="text-indigo-400 mr-2"
@@ -158,9 +167,8 @@ const ContentCard: React.FC<ContentCardProps> = ({
                     </div>
                 )}
 
-                {/* Card count (for flashcards) */}
                 {cardCount && (
-                    <div className="flex items-center text-sm mb-2">
+                    <div className="flex items-center text-[12px] mb-2">
                         <TbCards size={14} className="text-indigo-400 mr-2" />
                         <span className="text-neutral-400">
                             {cardCount} Cards
@@ -168,9 +176,8 @@ const ContentCard: React.FC<ContentCardProps> = ({
                     </div>
                 )}
 
-                {/* Problem count (for quizzes/bank soal) */}
                 {problemCount && (
-                    <div className="flex items-center text-sm mb-2">
+                    <div className="flex items-center text-[12px] mb-2">
                         <TbCards size={14} className="text-indigo-400 mr-2" />
                         <span className="text-neutral-400">
                             {problemCount} Soal
@@ -178,9 +185,8 @@ const ContentCard: React.FC<ContentCardProps> = ({
                     </div>
                 )}
 
-                {/* Rating (if available) */}
                 {rating && (
-                    <div className="flex items-center text-sm mt-auto">
+                    <div className="flex items-center text-[12px] mt-auto">
                         <BiSolidStar
                             size={16}
                             className="text-yellow-400 mr-1"

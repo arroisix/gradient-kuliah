@@ -20,7 +20,6 @@ const TabNavigation: React.FC<TabNavigationProps> = ({
 }) => {
     const [startIndex, setStartIndex] = useState(0);
 
-    // Define all available tabs
     const tabs = [
         { type: TABS.PLAYLIST, label: 'Playlist' },
         { type: TABS.KELAS, label: 'Kelas' },
@@ -29,15 +28,12 @@ const TabNavigation: React.FC<TabNavigationProps> = ({
         { type: TABS.FLASHCARD, label: 'Flashcard' }
     ];
 
-    // Number of tabs to display
     const visibleTabs = 4;
     const maxStartIndex = tabs.length - visibleTabs;
 
-    // Calculate if we can go previous or next
     const canGoPrevious = startIndex > 0;
     const canGoNext = startIndex < maxStartIndex;
 
-    // Handle sliding tabs
     const slidePrevious = () => {
         if (canGoPrevious) {
             setStartIndex(startIndex - 1);
@@ -50,14 +46,11 @@ const TabNavigation: React.FC<TabNavigationProps> = ({
         }
     };
 
-    // Get the currently visible tabs
     const visibleTabsToShow = tabs.slice(startIndex, startIndex + visibleTabs);
 
     return (
         <div className="flex items-center mb-4 relative">
-            {/* Main tabs container */}
             <div className="w-full flex border-b border-neutral-800">
-                {/* Left chevron */}
                 {canGoPrevious && (
                     <div className="flex items-center justify-center p-2">
                         <button
@@ -69,7 +62,6 @@ const TabNavigation: React.FC<TabNavigationProps> = ({
                     </div>
                 )}
 
-                {/* Equal width tab containers with centered text */}
                 <div className="flex flex-1">
                     {visibleTabsToShow.map((tab) => (
                         <div
@@ -84,7 +76,6 @@ const TabNavigation: React.FC<TabNavigationProps> = ({
                     ))}
                 </div>
 
-                {/* Right chevron */}
                 {canGoNext && (
                     <div className="flex items-center justify-center p-2">
                         <button

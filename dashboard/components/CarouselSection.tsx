@@ -11,8 +11,6 @@ interface CarouselSectionProps {
     itemsPerPage?: number;
     renderItem: (item: any, index: number) => React.ReactNode;
     eventCategory: string;
-    showViewAll?: boolean;
-    viewAllHref?: string;
 }
 
 const CarouselSection: React.FC<CarouselSectionProps> = ({
@@ -22,8 +20,6 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
     itemsPerPage = 4,
     renderItem,
     eventCategory,
-    showViewAll = false,
-    viewAllHref = '#'
 }) => {
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
@@ -58,14 +54,6 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
         }
     }, [currentPage, tracker, eventCategory, title]);
 
-    // Handle view all button click
-    const handleViewAllClick = useCallback(() => {
-        tracker?.genericTrack(`Click View All`, {
-            section: title,
-            category: eventCategory
-        });
-    }, [tracker, title, eventCategory]);
-
     // Calculate current items to display based on page
     const currentItems = isLoading
         ? Array(itemsPerPage).fill(null)
@@ -84,14 +72,6 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
             <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-extrabold md:text-xl">{title}</h2>
                 <div className="flex items-center gap-2">
-                    {showViewAll && (
-                        <a
-                            href={viewAllHref}
-                            onClick={handleViewAllClick}
-                            className="text-xs px-3 py-1 text-black bg-white rounded-md hover:bg-gray-100 transition-colors">
-                            Lihat Semua
-                        </a>
-                    )}
                     {totalPages > 1 && (
                         <div className="flex gap-2">
                             <button

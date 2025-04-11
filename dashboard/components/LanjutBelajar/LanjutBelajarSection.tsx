@@ -74,9 +74,7 @@ const LanjutBelajarSection: React.FC = () => {
             { skip: !isAuthenticated || activeTab !== TABS.FLASHCARD }
         );
 
-    // Handle tab change
     const handleTabChange = (tab: TabType): void => {
-        // Clear card data immediately when tab changes
         setCardData([]);
         setActiveTab(tab);
         tracker?.genericTrack('Click Tab on Continue Learning Section', {
@@ -84,7 +82,6 @@ const LanjutBelajarSection: React.FC = () => {
         });
     };
 
-    // Update card data when active tab or data changes
     useEffect(() => {
         setCardData(getCardDataForActiveTab());
     }, [
@@ -153,15 +150,12 @@ const LanjutBelajarSection: React.FC = () => {
                 title: item.title,
                 subtitle: item.course_name,
                 progress: item.progress_percentage,
-                thumbnail: null, // We'll use FlashcardLargeIcon in the component
+                thumbnail: null,
                 category: 'Flashcard',
                 href: `/flashcard/${item.slug}`,
-                // Author information
                 authorName: item.created_by,
                 authorPhoto: item.photo_profile,
-                // Use card_count primarily, fall back to total_questions if needed
                 cardCount: item.card_count || parseInt(item.total_questions),
-                // Required properties
                 courseBadge: null,
                 chapterBadge: null,
                 badgeColor: 'bg-orange-500'
@@ -171,7 +165,6 @@ const LanjutBelajarSection: React.FC = () => {
         return [];
     };
 
-    // Helper functions to format data
     const getCategoryFromType = (type: BookType): string => {
         const typeMap: Record<BookType, string> = {
             astronotes: 'Astronotes',
@@ -207,7 +200,6 @@ const LanjutBelajarSection: React.FC = () => {
         return `${baseUrl}/${item.book_slug}`;
     };
 
-    // Determine if we're in a loading state
     const isLoading =
         (activeTab === TABS.KELAS && isLoadingClass) ||
         (activeTab === TABS.BUKU && isLoadingBook) ||

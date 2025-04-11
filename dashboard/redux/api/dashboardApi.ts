@@ -119,7 +119,7 @@ export const dashboardApi = baseApi.injectEndpoints({
             { page?: number; limit?: number }
         >({
             query: (params = { page: 1, limit: 3 }) => ({
-                url: `${LEARNING_V2_BASE_URL}dashboard/major_classes/`,
+                url: `${LEARNING_V2_BASE_URL}dashboard/major-classes/`,
                 params
             }),
             providesTags: [{ type: 'PROFILE', id: 'MAJOR_CLASSES' }]
@@ -130,7 +130,7 @@ export const dashboardApi = baseApi.injectEndpoints({
             { page?: number; limit?: number }
         >({
             query: (params = { page: 1, limit: 3 }) => ({
-                url: `${LEARNING_V2_BASE_URL}dashboard/major_recommendation/`,
+                url: `${LEARNING_V2_BASE_URL}dashboard/major-trending/`,
                 params
             }),
             providesTags: [{ type: 'PROFILE', id: 'MAJOR_RECOMMENDATION' }]
@@ -141,7 +141,7 @@ export const dashboardApi = baseApi.injectEndpoints({
             { page?: number; limit?: number }
         >({
             query: (params = { page: 1, limit: 3 }) => ({
-                url: `${LEARNING_V2_BASE_URL}dashboard/learn_recommendation/`,
+                url: `${LEARNING_V2_BASE_URL}dashboard/learn-recommendation/`,
                 params
             }),
             providesTags: [{ type: 'PROFILE', id: 'LEARN_RECOMMENDATION' }]

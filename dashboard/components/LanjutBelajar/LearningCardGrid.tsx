@@ -16,7 +16,6 @@ const LearningCardGrid: React.FC<LearningCardGridProps> = ({
 }) => {
     const scrollContainer = React.useRef<HTMLDivElement>(null);
 
-    // Reset scroll position when card data changes (e.g., when tab changes)
     useEffect(() => {
         if (scrollContainer.current) {
             scrollContainer.current.scrollLeft = 0;
@@ -25,7 +24,6 @@ const LearningCardGrid: React.FC<LearningCardGridProps> = ({
 
     return (
         <div className="relative">
-            {/* Single-row Slidable Carousel for all screen sizes */}
             <div
                 className="overflow-x-auto pb-4 hide-scrollbar"
                 ref={scrollContainer}>
