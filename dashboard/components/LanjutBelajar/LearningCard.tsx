@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { IoTime } from 'react-icons/io5';
 import { FaRegCirclePlay } from 'react-icons/fa6';
-import { FaGraduationCap, FaBookmark } from 'react-icons/fa';
+import { FaGraduationCap } from 'react-icons/fa';
 import { BiListUl } from 'react-icons/bi';
 import { CardData } from './LanjutBelajarSection';
 import { cn } from 'commons/utils';

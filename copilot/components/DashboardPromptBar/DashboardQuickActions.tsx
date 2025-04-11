@@ -30,7 +30,6 @@ const DashboardQuickActions: React.FC<DashboardQuickActionsProps> = ({
         tracker?.genericTrack('Click Cari Materi di Gradient Button');
 
         try {
-            // Create a new session with the AI greeting message
             await chatApi.chat(
                 { input_text: 'Cari Materi di Gradient' },
                 {
@@ -53,29 +52,68 @@ const DashboardQuickActions: React.FC<DashboardQuickActionsProps> = ({
     };
 
     return (
-        <div className="grid grid-cols-6 gap-2 mt-4">
-            <button
-                onClick={handleScanFotoSoal}
-                className="flex items-center gap-2 p-2 bg-[#272727] hover:bg-[#333333] rounded-lg transition-colors">
-                <CameraActionButton />
-                <span className="text-white text-sm">Scan Foto Soal</span>
-            </button>
+        <div className="mt-4">
+            <div className="flex flex-col items-center space-y-2 md:hidden">
+                <button
+                    onClick={handleScanFotoSoal}
+                    className="flex items-center justify-center gap-2 px-4 py-2 bg-[#272727] hover:bg-[#333333] rounded-lg transition-colors">
+                    <span className="text-blue-400">
+                        <CameraActionButton />
+                    </span>
+                    <span className="text-white text-sm">Scan Foto Soal</span>
+                </button>
 
-            <button
-                onClick={handleBuatFlashcard}
-                className="flex items-center gap-2 p-2 bg-[#272727] hover:bg-[#333333] rounded-lg transition-colors">
-                <CardsActionButton />
-                <span className="text-white text-sm">Buat Flashcard</span>
-            </button>
+                <button
+                    onClick={handleBuatFlashcard}
+                    className="flex items-center justify-center gap-2 px-4 py-2 bg-[#272727] hover:bg-[#333333] rounded-lg transition-colors">
+                    <span className="text-amber-400">
+                        <CardsActionButton />
+                    </span>
+                    <span className="text-white text-sm">Buat Flashcard</span>
+                </button>
 
-            <button
-                onClick={handleCariMateriDiGradient}
-                className="flex items-center gap-2 p-2 bg-[#272727] hover:bg-[#333333] rounded-lg transition-colors">
-                <SearchActionButton />
-                <span className="text-white text-sm">
-                    Cari Materi di Gradient
-                </span>
-            </button>
+                <button
+                    onClick={handleCariMateriDiGradient}
+                    className="flex items-center justify-center gap-2 px-4 py-2 bg-[#272727] hover:bg-[#333333] rounded-lg transition-colors">
+                    <span className="text-purple-400">
+                        <SearchActionButton />
+                    </span>
+                    <span className="text-white text-sm">
+                        Cari Materi di Gradient
+                    </span>
+                </button>
+            </div>
+
+            <div className="hidden md:flex md:flex-wrap md:gap-2">
+                <button
+                    onClick={handleScanFotoSoal}
+                    className="flex items-center gap-2 px-4 py-2 bg-[#272727] hover:bg-[#333333] rounded-lg transition-colors">
+                    <span className="text-blue-400">
+                        <CameraActionButton />
+                    </span>
+                    <span className="text-white text-sm">Scan Foto Soal</span>
+                </button>
+
+                <button
+                    onClick={handleBuatFlashcard}
+                    className="flex items-center gap-2 px-4 py-2 bg-[#272727] hover:bg-[#333333] rounded-lg transition-colors">
+                    <span className="text-amber-400">
+                        <CardsActionButton />
+                    </span>
+                    <span className="text-white text-sm">Buat Flashcard</span>
+                </button>
+
+                <button
+                    onClick={handleCariMateriDiGradient}
+                    className="flex items-center gap-2 px-4 py-2 bg-[#272727] hover:bg-[#333333] rounded-lg transition-colors">
+                    <span className="text-purple-400">
+                        <SearchActionButton />
+                    </span>
+                    <span className="text-white text-sm">
+                        Cari Materi di Gradient
+                    </span>
+                </button>
+            </div>
         </div>
     );
 };
