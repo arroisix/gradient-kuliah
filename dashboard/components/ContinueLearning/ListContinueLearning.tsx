@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useTracker } from 'tracker/tracker';
 import ProgressBar from '../ProgressBar';
+import { StudentLearningProgress } from '../../types/dashboard';
 
 export const ListContinueLearning = ({
     learningProgress

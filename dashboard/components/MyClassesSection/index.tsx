@@ -9,6 +9,7 @@ import EmptyState from './EmptyState';
 import AccordionItem from './AccordionItem';
 import ClassActionItem from './ClassActionItem';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { GetDashboardContentResponse } from '../../types/dashboard';
 
 const MyClassesAccordion = ({
     isLoading,

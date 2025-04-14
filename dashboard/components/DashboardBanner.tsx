@@ -16,27 +16,24 @@ const DashboardUpdatesBanner: React.FC = () => {
 
     const banners = data?.data || [];
 
-    // Auto slide function
     const autoSlide = useCallback(() => {
         if (banners.length > 1) {
             setCurrentIndex((prevIndex) => (prevIndex + 1) % banners.length);
         }
     }, [banners.length]);
 
-    // Set up auto slide interval
     useEffect(() => {
         if (banners.length > 1) {
-            const intervalId = setInterval(autoSlide, 3000); // Slide every 3 seconds
+            const intervalId = setInterval(autoSlide, 3000);
             return () => clearInterval(intervalId);
         }
+        return;
     }, [banners.length, autoSlide]);
 
-    // Handle manual navigation
     const goToSlide = (index: number) => {
         setCurrentIndex(index);
     };
 
-    // Handle tracking
     const handleBannerClick = (banner: Banner) => {
         tracker?.genericTrack('Click Dashboard Banner', {
             url: banner.href
@@ -50,7 +47,6 @@ const DashboardUpdatesBanner: React.FC = () => {
 
     return (
         <div className="w-full mb-8">
-            {/* Banner Container */}
             <div className="relative overflow-hidden rounded-xl">
                 {banners.length > 0 && (
                     <Link
@@ -72,7 +68,6 @@ const DashboardUpdatesBanner: React.FC = () => {
                 )}
             </div>
 
-            {/* Banner indicators/dots below the banner (only show if more than one banner) */}
             {banners.length > 1 && (
                 <div className="flex justify-center mt-4 gap-2">
                     {banners.map((_, index) => (
