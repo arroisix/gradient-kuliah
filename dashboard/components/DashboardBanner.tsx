@@ -3,14 +3,11 @@ import { useGetBannerQuery } from 'dashboard/redux/api/dashboardApi';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTracker } from 'tracker/tracker';
-
-interface Banner {
-    banner_url: string;
-    href: string;
-}
+import Skeleton from 'commons/components/elements/Skeleton';
+import { Banner, BannerResponse } from 'dashboard/types/dashboard';
 
 const DashboardUpdatesBanner: React.FC = () => {
-    const { data, isLoading, error } = useGetBannerQuery();
+    const { data, isLoading, error } = useGetBannerQuery<BannerResponse>();
     const [currentIndex, setCurrentIndex] = useState(0);
     const tracker = useTracker();
 
@@ -24,10 +21,10 @@ const DashboardUpdatesBanner: React.FC = () => {
 
     useEffect(() => {
         if (banners.length > 1) {
-            const intervalId = setInterval(autoSlide, 3000);
+            const intervalId = setInterval(autoSlide, 5000);
             return () => clearInterval(intervalId);
         }
-        return;
+        return undefined;
     }, [banners.length, autoSlide]);
 
     const goToSlide = (index: number) => {
@@ -36,33 +33,91 @@ const DashboardUpdatesBanner: React.FC = () => {
 
     const handleBannerClick = (banner: Banner) => {
         tracker?.genericTrack('Click Dashboard Banner', {
-            url: banner.href
+            slug: banner.slug,
+            type: banner.type
         });
     };
 
+    // Loading state
+    if (isLoading) {
+        return (
+            <div className="w-full mb-8">
+                <Skeleton className="h-40 w-full rounded-xl" />
+            </div>
+        );
+    }
+
     // Don't render anything if there are no banners or if loading failed
-    if (isLoading || error || !banners.length) {
+    if (error || !banners.length) {
         return null;
     }
+
+    const currentBanner = banners[currentIndex];
+    if (!currentBanner) return null;
 
     return (
         <div className="w-full mb-8">
             <div className="relative overflow-hidden rounded-xl">
-                {banners.length > 0 && (
+                {currentBanner.is_asset ? (
+                    // Asset banner (full image)
+                    currentBanner.banner_url && (
+                        <Link
+                            href={currentBanner.href || '#'}
+                            onClick={() => handleBannerClick(currentBanner)}
+                            className="block w-full">
+                            <div className="w-full">
+                                <Image
+                                    src={currentBanner.banner_url}
+                                    alt={`Banner ${currentBanner.slug}`}
+                                    width={1200}
+                                    height={300}
+                                    layout="responsive"
+                                    className="rounded-xl"
+                                    priority
+                                />
+                            </div>
+                        </Link>
+                    )
+                ) : (
+                    // Component banner (custom layout with text, image, etc.)
                     <Link
-                        href={banners[currentIndex].href}
-                        onClick={() => handleBannerClick(banners[currentIndex])}
+                        href={currentBanner.href || '#'}
+                        onClick={() => handleBannerClick(currentBanner)}
                         className="block w-full">
-                        <div className="w-full">
-                            <Image
-                                src={banners[currentIndex].banner_url}
-                                alt="Promo Banner"
-                                width={1200}
-                                height={300}
-                                layout="responsive"
-                                className="rounded-xl"
-                                priority
-                            />
+                        <div
+                            className="w-full py-4 px-8 rounded-xl flex items-center justify-between"
+                            style={{
+                                backgroundColor:
+                                    currentBanner.background_color || '#5F2BCE'
+                            }}>
+                            <div className="flex flex-col max-w-[60%]">
+                                {currentBanner.title_text && (
+                                    <h3 className="text-white text-lg md:text-xl font-bold mb-1">
+                                        {currentBanner.title_text}
+                                    </h3>
+                                )}
+                                {currentBanner.body_text && (
+                                    <p className="text-white text-sm mb-4">
+                                        {currentBanner.body_text}
+                                    </p>
+                                )}
+                                {currentBanner.button_text && (
+                                    <button className="bg-white text-sm text-[#5F2BCE] px-4 py-2 rounded-full font-medium w-fit">
+                                        {currentBanner.button_text}
+                                    </button>
+                                )}
+                            </div>
+                            {currentBanner.image_url && (
+                                <div className="relative w-[30%] h-32 flex-shrink-0">
+                                    <Image
+                                        src={currentBanner.image_url}
+                                        alt={`${currentBanner.slug}-illustration`}
+                                        layout="fill"
+                                        objectFit="contain"
+                                        objectPosition="right center"
+                                    />
+                                </div>
+                            )}
                         </div>
                     </Link>
                 )}

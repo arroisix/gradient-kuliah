@@ -122,11 +122,21 @@ interface UserQuizResponse {
     data: UserQuiz[];
 }
 
+interface Banner {
+    slug: string;
+    type: 'GENERAL' | 'PROMO' | 'SUBSCRIPTION' | 'ACCOUNT';
+    href: string | null;
+    is_asset: boolean;
+    banner_url: string | null;
+    title_text: string | null;
+    body_text: string | null;
+    button_text: string | null;
+    image_url: string | null;
+    background_color: string | null;
+}
+
 interface BannerResponse {
-    data: Array<{
-        banner_url: string;
-        href: string;
-    }>;
+    data: Banner[];
 }
 
 interface MajorClass {
@@ -224,6 +234,7 @@ export type {
     UserFlashcardsResponse,
     UserQuiz,
     UserQuizResponse,
+    Banner,
     BannerResponse,
     MajorClass,
     MajorClassesResponse,
