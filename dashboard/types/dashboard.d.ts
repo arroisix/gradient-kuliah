@@ -122,7 +122,7 @@ interface UserQuizResponse {
     data: UserQuiz[];
 }
 
-interface Banner {
+export interface Banner {
     slug: string;
     type: 'GENERAL' | 'PROMO' | 'SUBSCRIPTION' | 'ACCOUNT';
     href: string | null;
@@ -135,7 +135,7 @@ interface Banner {
     background_color: string | null;
 }
 
-interface BannerResponse {
+export interface BannerResponse {
     data: Banner[];
 }
 

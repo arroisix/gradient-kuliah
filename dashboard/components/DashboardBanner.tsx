@@ -4,10 +4,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useTracker } from 'tracker/tracker';
 import Skeleton from 'commons/components/elements/Skeleton';
-import { Banner, BannerResponse } from 'dashboard/types/dashboard';
+import { Banner } from 'dashboard/types/dashboard';
 
 const DashboardUpdatesBanner: React.FC = () => {
-    const { data, isLoading, error } = useGetBannerQuery<BannerResponse>();
+    const { data, isLoading, error } = useGetBannerQuery();
     const [currentIndex, setCurrentIndex] = useState(0);
     const tracker = useTracker();
 
@@ -38,7 +38,6 @@ const DashboardUpdatesBanner: React.FC = () => {
         });
     };
 
-    // Loading state
     if (isLoading) {
         return (
             <div className="w-full mb-8">
@@ -47,7 +46,6 @@ const DashboardUpdatesBanner: React.FC = () => {
         );
     }
 
-    // Don't render anything if there are no banners or if loading failed
     if (error || !banners.length) {
         return null;
     }
@@ -59,7 +57,6 @@ const DashboardUpdatesBanner: React.FC = () => {
         <div className="w-full mb-8">
             <div className="relative overflow-hidden rounded-xl">
                 {currentBanner.is_asset ? (
-                    // Asset banner (full image)
                     currentBanner.banner_url && (
                         <Link
                             href={currentBanner.href || '#'}
@@ -79,7 +76,6 @@ const DashboardUpdatesBanner: React.FC = () => {
                         </Link>
                     )
                 ) : (
-                    // Component banner (custom layout with text, image, etc.)
                     <Link
                         href={currentBanner.href || '#'}
                         onClick={() => handleBannerClick(currentBanner)}
