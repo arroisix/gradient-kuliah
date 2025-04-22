@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import Skeleton from 'commons/components/elements/Skeleton';
 import { useTracker } from 'tracker/tracker';
@@ -19,23 +19,30 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
     isLoading,
     itemsPerPage = 4,
     renderItem,
-    eventCategory,
+    eventCategory
 }) => {
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const tracker = useTracker();
+    const carouselRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         if (items?.length > 0) {
-            // Calculate total pages needed based on data length and items per page
             setTotalPages(Math.ceil(items.length / itemsPerPage));
         }
     }, [items, itemsPerPage]);
 
-    // Navigate to next page
     const nextPage = useCallback(() => {
         if (currentPage < totalPages - 1) {
             setCurrentPage((prev) => prev + 1);
+
+            if (carouselRef.current) {
+                carouselRef.current.scrollBy({
+                    left: carouselRef.current.offsetWidth,
+                    behavior: 'smooth'
+                });
+            }
+
             tracker?.genericTrack(`Navigate ${eventCategory} Carousel`, {
                 action: 'next',
                 title
@@ -43,10 +50,17 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
         }
     }, [currentPage, totalPages, tracker, eventCategory, title]);
 
-    // Navigate to previous page
     const prevPage = useCallback(() => {
         if (currentPage > 0) {
             setCurrentPage((prev) => prev - 1);
+
+            if (carouselRef.current) {
+                carouselRef.current.scrollBy({
+                    left: -carouselRef.current.offsetWidth,
+                    behavior: 'smooth'
+                });
+            }
+
             tracker?.genericTrack(`Navigate ${eventCategory} Carousel`, {
                 action: 'previous',
                 title
@@ -54,15 +68,8 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
         }
     }, [currentPage, tracker, eventCategory, title]);
 
-    // Calculate current items to display based on page
-    const currentItems = isLoading
-        ? Array(itemsPerPage).fill(null)
-        : items.slice(
-              currentPage * itemsPerPage,
-              (currentPage + 1) * itemsPerPage
-          );
+    const displayItems = isLoading ? Array(itemsPerPage).fill(null) : items;
 
-    // Don't render anything if there are no items and not loading
     if (!isLoading && (!items || items.length === 0)) {
         return null;
     }
@@ -93,10 +100,15 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
                 </div>
             </div>
 
-            {/* Cards Container */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {currentItems.map((item, index) => (
-                    <div key={`${slugify(title)}-${index}`}>
+            <div
+                ref={carouselRef}
+                className="flex overflow-x-auto gap-4 pb-4 hide-scrollbar"
+                style={{ scrollSnapType: 'x mandatory' }}>
+                {displayItems.map((item, index) => (
+                    <div
+                        key={`${slugify(title)}-${index}`}
+                        className="flex-shrink-0 w-[80%] md:w-[48%] lg:w-[23%]"
+                        style={{ scrollSnapAlign: 'start' }}>
                         {isLoading ? (
                             <Skeleton className="h-64 rounded-lg" />
                         ) : (
@@ -106,7 +118,6 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
                 ))}
             </div>
 
-            {/* Page indicator dots */}
             {totalPages > 1 && (
                 <div className="flex justify-center mt-4 gap-2">
                     {Array.from({ length: totalPages }).map((_, index) => (
@@ -118,7 +129,17 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
                                     ? 'w-6 bg-white'
                                     : 'w-1.5 bg-gray-300 hover:bg-gray-400'
                             )}
-                            onClick={() => setCurrentPage(index)}
+                            onClick={() => {
+                                setCurrentPage(index);
+                                if (carouselRef.current) {
+                                    const scrollAmount =
+                                        carouselRef.current.offsetWidth * index;
+                                    carouselRef.current.scrollTo({
+                                        left: scrollAmount,
+                                        behavior: 'smooth'
+                                    });
+                                }
+                            }}
                             aria-label={`Go to slide ${index + 1}`}
                         />
                     ))}
