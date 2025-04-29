@@ -22,8 +22,6 @@ const CourseDescription = ({
     } = useCourseSubscription(slug);
     const isAuthenticated = useSelector(getIsAuthenticated);
 
-    console.log(course);
-
     return (
         <div className="w-screen px-5 lg:w-3/12">
             <div className="flex flex-col gap-4 p-4 bg-zinc-900 rounded-xl">
