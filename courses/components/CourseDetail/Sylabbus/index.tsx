@@ -44,6 +44,18 @@ const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
         tracker?.genericTrack(`Click ${tab} Tab`);
     };
 
+    // Add this to handle tab switching with state
+    const handleTabChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const tabValue = e.target.value;
+        onChangeTracker(tabValue);
+
+        if (tabValue === 'video') {
+            setNavigation('VIDEO');
+        } else if (tabValue === 'book') {
+            setNavigation('BOOK');
+        }
+    };
+
     return (
         <div className="flex flex-col w-screen px-5 lg:w-5/12">
             <div className="flex items-center px-4 bg-[#212121] rounded-lg">
@@ -80,74 +92,106 @@ const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
             </div>
             <div
                 role="tablist"
-                className="grid-cols-2 pt-4 pb-4 tabs tabs-bordered md:pt-6">
+                className="flex flex-wrap pt-4 pb-4 tabs tabs-bordered md:pt-6">
                 {!isSearch && (
                     <>
-                        <label className="tab has-[:checked]:tab-active has-[:checked]:font-bold flex-1 text-center text-sm pb-3 uppercase">
-                            <input
-                                role="tab"
-                                type="radio"
-                                name="course-details-tab"
-                                value="video"
-                                className="hidden"
-                                defaultChecked
-                                onChange={(e) =>
-                                    onChangeTracker(e.target.value)
-                                }
-                            />
-                            <h2>Video</h2>
-                        </label>
-                        <div role="tabpanel" className="py-4 tab-content">
-                            <Accordion
-                                item={
-                                    courseContent?.chapters?.map((value) => ({
-                                        title: value.chapter_name,
-                                        isHeading: true,
-                                        jsxContent: (
-                                            <SylabbusContent
-                                                id={value.chapter_id}
-                                                slug={slug}
-                                            />
-                                        ),
-                                        onClick: () => {
-                                            tracker?.genericTrack(
-                                                'Click Chapter Accordion',
-                                                {
-                                                    'Course Slug': id,
-                                                    'Chapter Name':
-                                                        value.chapter_name
-                                                }
-                                            );
-                                        }
-                                    })) ?? []
-                                }
-                            />
-                            {isLoadingCourse && (
-                                <div className="flex flex-col w-full gap-2">
-                                    <Skeleton className="h-14" repeat={5} />
-                                </div>
-                            )}
-                        </div>
-                        {(courseContent?.books.length ?? 0) > 0 && (
-                            <label className="tab has-[:checked]:tab-active has-[:checked]:font-bold flex-1 text-center text-sm pb-3 uppercase">
+                        {/* Video Tab */}
+                        <div className="flex w-full tabs-header">
+                            <label
+                                className={`tab border-b-2 ${
+                                    navigation === 'VIDEO'
+                                        ? 'border-b-graphite-100'
+                                        : 'border-b-graphite-700'
+                                } has-[:checked]:font-bold flex-1 text-center text-sm pb-3 uppercase`}>
                                 <input
                                     role="tab"
                                     type="radio"
                                     name="course-details-tab"
-                                    value="book"
+                                    value="video"
                                     className="hidden"
-                                    onChange={(e) =>
-                                        onChangeTracker(e.target.value)
+                                    defaultChecked
+                                    onChange={(e) => handleTabChange(e)}
+                                    id="tab-video"
+                                />
+                                <h2>Video</h2>
+                            </label>
+                            {(courseContent?.books.length ?? 0) > 0 && (
+                                <label
+                                    className={`tab border-b-2 ${
+                                        navigation === 'BOOK'
+                                            ? 'border-b-graphite-100'
+                                            : 'border-b-graphite-700'
+                                    } has-[:checked]:font-bold flex-1 text-center text-sm pb-3 uppercase`}>
+                                    <input
+                                        role="tab"
+                                        type="radio"
+                                        name="course-details-tab"
+                                        value="book"
+                                        className="hidden"
+                                        onChange={(e) => handleTabChange(e)}
+                                        id="tab-book"
+                                    />
+                                    <h2>Buku</h2>
+                                </label>
+                            )}
+                        </div>
+
+                        {/* Tab Content */}
+                        <div className="w-full">
+                            {/* Video Content */}
+                            <div
+                                className="py-4 tab-content"
+                                style={{
+                                    display:
+                                        navigation === 'VIDEO'
+                                            ? 'block'
+                                            : 'none'
+                                }}>
+                                <Accordion
+                                    item={
+                                        courseContent?.chapters?.map(
+                                            (value) => ({
+                                                title: value.chapter_name,
+                                                isHeading: true,
+                                                jsxContent: (
+                                                    <SylabbusContent
+                                                        id={value.chapter_id}
+                                                        slug={slug}
+                                                    />
+                                                ),
+                                                onClick: () => {
+                                                    tracker?.genericTrack(
+                                                        'Click Chapter Accordion',
+                                                        {
+                                                            'Course Slug': id,
+                                                            'Chapter Name':
+                                                                value.chapter_name
+                                                        }
+                                                    );
+                                                }
+                                            })
+                                        ) ?? []
                                     }
                                 />
-                                <h2>Buku</h2>
-                            </label>
-                        )}
-                        <div role="tabpanel" className="py-4 tab-content">
-                            <ListBooks
-                                books={courseContent?.books as Book[]}
-                                isLoading={isLoadingCourse}
-                            />
+                                {isLoadingCourse && (
+                                    <div className="flex flex-col w-full gap-2">
+                                        <Skeleton className="h-14" repeat={5} />
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Book Content */}
+                            <div
+                                className="py-4 tab-content"
+                                style={{
+                                    display:
+                                        navigation === 'BOOK' ? 'block' : 'none'
+                                }}>
+                                <ListBooks
+                                    books={courseContent?.books as Book[]}
+                                    isLoading={isLoadingCourse}
+                                />
+                            </div>
                         </div>
                     </>
                 )}
