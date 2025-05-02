@@ -36,7 +36,6 @@ const LearningCard: React.FC<LearningCardProps> = ({ card, onClick }) => {
             className="block relative rounded-lg bg-[#2C2C2C] hover:bg-neutral-700 transition-colors overflow-hidden h-full min-h-[165px] border border-[#666666] border-opacity-50"
             onClick={() => onClick(card)}>
             <div className="flex h-full">
-                {/* Left side - Thumbnail */}
                 <div
                     className={cn('relative', isVideo ? 'w-[40%]' : 'w-[30%]')}>
                     {isFlashcard ? (
@@ -63,7 +62,6 @@ const LearningCard: React.FC<LearningCardProps> = ({ card, onClick }) => {
                         </div>
                     )}
 
-                    {/* Play button for videos */}
                     {isVideo && (
                         <div className="absolute inset-0 grid place-items-center">
                             <div className="text-white border-none rounded-full w-12 h-12 flex items-center justify-center bg-black/60">
@@ -73,9 +71,7 @@ const LearningCard: React.FC<LearningCardProps> = ({ card, onClick }) => {
                     )}
                 </div>
 
-                {/* Right side - Content */}
                 <div className="flex-1 p-4 flex flex-col">
-                    {/* Progress indicator */}
                     {card.progress > 0 && (
                         <div className="flex items-center gap-1 py-1 px-3 mb-3 rounded-full bg-[#FFCB53]/20 text-xs text-yellow-400 w-fit">
                             <IoTime size={12} />
@@ -83,21 +79,18 @@ const LearningCard: React.FC<LearningCardProps> = ({ card, onClick }) => {
                         </div>
                     )}
 
-                    {/* Title */}
-                    <h3 className="font-bold text-white text-base mb-3">
+                    <h3 className="font-bold text-white text-base mb-3 line-clamp-2">
                         {hasNumberPrefix
                             ? card.title
                             : isVideo
-                            ? card.title
-                            : `${card.title}`}
+                                ? card.title
+                                : `${card.title}`}
                     </h3>
 
-                    {/* Course info with icon */}
                     <div className="mt-auto">
-                        <div className="flex items-center flex-wrap gap-y-2 mb-3">
-                            {/* Course badge or Author name for Flashcards */}
+                        <div className="flex flex-col sm:flex-row sm:items-center flex-wrap gap-y-2 mb-3">
                             {isFlashcard && card.authorName ? (
-                                <div className="flex items-center gap-2 mr-3">
+                                <div className="flex items-center gap-2">
                                     {card.authorPhoto ? (
                                         <div className="relative w-6 h-6 rounded-full overflow-hidden">
                                             <Image
@@ -120,7 +113,7 @@ const LearningCard: React.FC<LearningCardProps> = ({ card, onClick }) => {
                                 </div>
                             ) : (
                                 card.courseBadge && (
-                                    <div className="flex items-center gap-1 mr-3">
+                                    <div className="flex items-center gap-1">
                                         <FaGraduationCap
                                             size={14}
                                             className="text-indigo-400"
@@ -132,17 +125,18 @@ const LearningCard: React.FC<LearningCardProps> = ({ card, onClick }) => {
                                 )
                             )}
 
-                            {/* Separator */}
+                            {/* Separator - only visible on desktop */}
                             {((isFlashcard &&
-                                card.authorName &&
-                                card.cardCount) ||
+                                    card.authorName &&
+                                    card.cardCount) ||
                                 (!isFlashcard &&
                                     card.courseBadge &&
                                     card.chapterBadge)) && (
-                                <span className="mx-2 text-neutral-500">|</span>
+                                <span className="hidden sm:inline-block mx-2 text-neutral-500">
+                                    |
+                                </span>
                             )}
 
-                            {/* Card count for Flashcards, Problem count for Exercise, or Chapter badge for others */}
                             {isFlashcard && card.cardCount ? (
                                 <div className="flex items-center gap-1">
                                     <Cards />
@@ -165,7 +159,6 @@ const LearningCard: React.FC<LearningCardProps> = ({ card, onClick }) => {
                             )}
                         </div>
 
-                        {/* Category badge */}
                         <div>
                             <span
                                 className="text-xs text-white rounded-full px-3 py-1 inline-block"
@@ -184,7 +177,6 @@ const LearningCard: React.FC<LearningCardProps> = ({ card, onClick }) => {
     );
 };
 
-// Helper function to get the right color for each category type
 const getColorForCategory = (category: CategoryType): string => {
     const colorMap: Record<CategoryType, string> = {
         Video: '#333333',
@@ -195,7 +187,7 @@ const getColorForCategory = (category: CategoryType): string => {
         Flashcard: '#F59E0B'
     };
 
-    return colorMap[category] || '#4B5563'; // Default gray if category not found
+    return colorMap[category] || '#4B5563';
 };
 
 export default LearningCard;

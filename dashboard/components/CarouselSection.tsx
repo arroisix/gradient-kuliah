@@ -32,43 +32,48 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
         }
     }, [items, itemsPerPage]);
 
-    const nextPage = useCallback(() => {
-        if (currentPage < totalPages - 1) {
-            setCurrentPage((prev) => prev + 1);
+    const navigateToPage = useCallback(
+        (page: number) => {
+            if (page >= 0 && page < totalPages) {
+                setCurrentPage(page);
 
-            if (carouselRef.current) {
-                carouselRef.current.scrollBy({
-                    left: carouselRef.current.offsetWidth,
-                    behavior: 'smooth'
+                tracker?.genericTrack(`Navigate ${eventCategory} Carousel`, {
+                    action: page > currentPage ? 'next' : 'previous',
+                    title,
+                    page
                 });
             }
+        },
+        [totalPages, currentPage, tracker, eventCategory, title]
+    );
 
-            tracker?.genericTrack(`Navigate ${eventCategory} Carousel`, {
-                action: 'next',
-                title
-            });
+    const nextPage = useCallback(() => {
+        if (currentPage < totalPages - 1) {
+            navigateToPage(currentPage + 1);
         }
-    }, [currentPage, totalPages, tracker, eventCategory, title]);
+    }, [currentPage, navigateToPage, totalPages]);
 
     const prevPage = useCallback(() => {
         if (currentPage > 0) {
-            setCurrentPage((prev) => prev - 1);
-
-            if (carouselRef.current) {
-                carouselRef.current.scrollBy({
-                    left: -carouselRef.current.offsetWidth,
-                    behavior: 'smooth'
-                });
-            }
-
-            tracker?.genericTrack(`Navigate ${eventCategory} Carousel`, {
-                action: 'previous',
-                title
-            });
+            navigateToPage(currentPage - 1);
         }
-    }, [currentPage, tracker, eventCategory, title]);
+    }, [currentPage, navigateToPage]);
 
-    const displayItems = isLoading ? Array(itemsPerPage).fill(null) : items;
+    const getItemsForDisplay = useCallback(() => {
+        const result = [];
+        const totalItems = items.length;
+
+        for (let i = 0; i < totalItems; i += itemsPerPage) {
+            result.push(items.slice(i, i + itemsPerPage));
+        }
+
+        return result;
+    }, [items, itemsPerPage]);
+
+    const paginatedItems = getItemsForDisplay();
+    const displayItems = isLoading
+        ? Array(itemsPerPage).fill(null)
+        : paginatedItems[currentPage] || [];
 
     if (!isLoading && (!items || items.length === 0)) {
         return null;
@@ -106,13 +111,15 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
                 style={{ scrollSnapType: 'x mandatory' }}>
                 {displayItems.map((item, index) => (
                     <div
-                        key={`${slugify(title)}-${index}`}
-                        className="flex-shrink-0 w-[80%] md:w-[48%] lg:w-[23%]"
+                        key={`${slugify(title)}-${
+                            currentPage * itemsPerPage + index
+                        }`}
+                        className="flex-shrink-0 w-[80%] md:w-[48%] lg:w-[32%] xl:w-[24%] min-w-[240px] max-w-[360px]"
                         style={{ scrollSnapAlign: 'start' }}>
                         {isLoading ? (
                             <Skeleton className="h-64 rounded-lg" />
                         ) : (
-                            renderItem(item, index)
+                            renderItem(item, currentPage * itemsPerPage + index)
                         )}
                     </div>
                 ))}
@@ -129,17 +136,7 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
                                     ? 'w-6 bg-white'
                                     : 'w-1.5 bg-gray-300 hover:bg-gray-400'
                             )}
-                            onClick={() => {
-                                setCurrentPage(index);
-                                if (carouselRef.current) {
-                                    const scrollAmount =
-                                        carouselRef.current.offsetWidth * index;
-                                    carouselRef.current.scrollTo({
-                                        left: scrollAmount,
-                                        behavior: 'smooth'
-                                    });
-                                }
-                            }}
+                            onClick={() => navigateToPage(index)}
                             aria-label={`Go to slide ${index + 1}`}
                         />
                     ))}

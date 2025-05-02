@@ -16,6 +16,7 @@ import {
     UserFlashcard,
     UserQuiz
 } from 'dashboard/types/dashboard';
+import NoContentIcon from '../../assets/NoContentIcon';
 
 export const TABS = {
     KELAS: 'kelas',
@@ -45,13 +46,36 @@ export interface CardData {
 
 type BookType = 'astronotes' | 'bank_soal' | 'textbook';
 
+const EmptyState = ({ type }: { type: TabType }) => {
+    const messages = {
+        [TABS.KELAS]:
+            'Belum ada riwayat. Video yang kamu tonton akan muncul di sini',
+        [TABS.BUKU]:
+            'Belum ada riwayat. Buku yang kamu baca akan muncul di sini',
+        [TABS.KUIS]:
+            'Belum ada riwayat. Kuis yang kamu kerjakan akan muncul di sini',
+        [TABS.FLASHCARD]:
+            'Belum ada riwayat. Flashcard yang kamu pelajari akan muncul di sini',
+        [TABS.PLAYLIST]:
+            'Belum ada riwayat. Playlist yang kamu buat akan muncul di sini'
+    };
+
+    return (
+        <div className="flex flex-col items-center justify-center py-6">
+            <p className="text-center text-gray-500">{messages[type]}</p>
+            <div className="mt-4">
+                <NoContentIcon />
+            </div>
+        </div>
+    );
+};
+
 const LanjutBelajarSection: React.FC = () => {
     const [activeTab, setActiveTab] = useState<TabType>(TABS.KELAS);
     const [cardData, setCardData] = useState<CardData[]>([]);
     const isAuthenticated = useSelector(getIsAuthenticated);
     const tracker = useTracker();
 
-    // Query data with appropriate skip conditions
     const { data: classData, isLoading: isLoadingClass } =
         useGetUserClassesQuery(
             { page: 1, limit: 6 },
@@ -225,11 +249,19 @@ const LanjutBelajarSection: React.FC = () => {
                 onTabChange={handleTabChange}
             />
 
-            <LearningCardGrid
-                cardData={cardData}
-                isLoading={isLoading}
-                onCardClick={handleCardClick}
-            />
+            {isLoading ? (
+                <div className="flex justify-center items-center py-16">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-700"></div>
+                </div>
+            ) : cardData.length > 0 ? (
+                <LearningCardGrid
+                    cardData={cardData}
+                    isLoading={false}
+                    onCardClick={handleCardClick}
+                />
+            ) : (
+                <EmptyState type={activeTab} />
+            )}
         </div>
     );
 };

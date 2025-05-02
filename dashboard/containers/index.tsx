@@ -34,7 +34,7 @@ const DashboardContainer = (): JSX.Element => {
             {isAuthenticated && <DashboardPromptBar />}
             <DashboardFeatures />
             <LanjutBelajarSection />
-            <DashboardBanner />
+            {/*<DashboardBanner />*/}
             <DashboardContent />
             <ReferralModal
                 isOpen={isReferralModalOpen}

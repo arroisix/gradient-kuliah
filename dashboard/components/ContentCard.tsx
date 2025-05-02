@@ -22,6 +22,7 @@ interface ContentCardProps {
     badgeText?: string;
     badgeColor?: string;
     isTrending?: boolean;
+    isBaru?: boolean;
     onClick?: () => void;
     isMajorClass?: boolean;
 }
@@ -50,11 +51,13 @@ const ContentCard: React.FC<ContentCardProps> = ({
     badgeText,
     badgeColor,
     isTrending = false,
+    isBaru = false,
     isMajorClass = false,
     onClick
 }) => {
     const tracker = useTracker();
-    const isVideo = category === 'Video' || category === 'Kelas';
+    const isVideo =
+        (category === 'Video' || category === 'Kelas') && !isMajorClass;
 
     const handleClick = () => {
         tracker?.genericTrack('Click Content Card', {
@@ -62,7 +65,8 @@ const ContentCard: React.FC<ContentCardProps> = ({
             title,
             category,
             courseName,
-            isTrending
+            isTrending,
+            isBaru
         });
 
         if (onClick) onClick();
@@ -71,7 +75,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
     return (
         <Link
             href={href}
-            className={`block relative rounded-lg transition-colors overflow-hidden h-full bg-[#121212] border border-[#666666] border-opacity-50`}
+            className="block relative rounded-lg transition-colors overflow-hidden h-full bg-[#121212] border border-[#666666] border-opacity-50"
             onClick={handleClick}>
             {isTrending && (
                 <div
@@ -82,6 +86,14 @@ const ContentCard: React.FC<ContentCardProps> = ({
                     }}>
                     <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
                     Trending
+                </div>
+            )}
+
+            {isBaru && (
+                <div
+                    className="absolute top-2 left-2 z-10 text-white text-xs py-1 px-3 rounded-full"
+                    style={{ backgroundColor: '#E9202A' }}>
+                    Baru
                 </div>
             )}
 
@@ -110,90 +122,111 @@ const ContentCard: React.FC<ContentCardProps> = ({
             </div>
 
             <div
-                className={`p-4 flex flex-col ${
-                    isMajorClass ? 'min-h-[40px]' : 'min-h-[80px]'
-                }`}>
-                {!isMajorClass && (
-                    <div
-                        className="rounded-full text-xs text-white font-medium px-3 py-1 mb-3 w-fit"
-                        style={{
-                            backgroundColor:
-                                badgeColor ||
-                                getColorForCategory(category as CategoryType)
-                        }}>
-                        {badgeText || category}
-                    </div>
-                )}
+                className="p-4 flex flex-col justify-between"
+                style={{ height: 'calc(100% - 53%)' }}>
+                <div>
+                    {!isMajorClass && !isBaru && (
+                        <div
+                            className="rounded-full text-xs text-white font-medium px-3 py-1 mb-2 w-fit"
+                            style={{
+                                backgroundColor:
+                                    badgeColor ||
+                                    getColorForCategory(
+                                        category as CategoryType
+                                    )
+                            }}>
+                            {badgeText || category}
+                        </div>
+                    )}
 
-                <h3 className="font-semibold text-white text-base mb-3 line-clamp-2">
-                    {title}
-                </h3>
+                    <h3 className="font-semibold text-white text-base line-clamp-2">
+                        {title}
+                    </h3>
+                </div>
 
-                {(courseName || chapterName) && (
-                    <div className="flex items-center text-[12px] mb-2 text-neutral-400">
-                        {courseName && (
-                            <>
-                                <FaGraduationCap
+                {!isBaru && (
+                    <div>
+                        {(courseName || chapterName) && (
+                            <div className="flex items-center text-[12px] mb-3 text-neutral-400 overflow-hidden">
+                                {courseName && (
+                                    <>
+                                        <FaGraduationCap
+                                            size={14}
+                                            className="text-indigo-400 mr-2 flex-shrink-0"
+                                        />
+                                        <span className="truncate">
+                                            {courseName}
+                                        </span>
+                                    </>
+                                )}
+
+                                {courseName && chapterName && (
+                                    <span className="mx-2 flex-shrink-0">
+                                        |
+                                    </span>
+                                )}
+
+                                {chapterName && (
+                                    <>
+                                        <FaBookmark
+                                            size={14}
+                                            className="text-indigo-400 mr-2 flex-shrink-0"
+                                        />
+                                        <span className="truncate">
+                                            {chapterName}
+                                        </span>
+                                    </>
+                                )}
+                            </div>
+                        )}
+
+                        {authorName && (
+                            <div className="flex items-center text-[12px] mb-1">
+                                <FaRegStickyNote
                                     size={14}
-                                    className="text-indigo-400 mr-2"
+                                    className="text-indigo-400 mr-2 flex-shrink-0"
                                 />
-                                <span>{courseName}</span>
-                            </>
+                                <span className="text-neutral-400 truncate">
+                                    {authorName}
+                                </span>
+                            </div>
                         )}
 
-                        {courseName && chapterName && (
-                            <span className="mx-2">|</span>
-                        )}
-
-                        {chapterName && (
-                            <>
-                                <FaBookmark
+                        {cardCount && (
+                            <div className="flex items-center text-[12px] mb-1">
+                                <TbCards
                                     size={14}
-                                    className="text-indigo-400 mr-2"
+                                    className="text-indigo-400 mr-2 flex-shrink-0"
                                 />
-                                <span>{chapterName}</span>
-                            </>
+                                <span className="text-neutral-400">
+                                    {cardCount} Cards
+                                </span>
+                            </div>
                         )}
-                    </div>
-                )}
 
-                {authorName && (
-                    <div className="flex items-center text-[12px] mb-2">
-                        <FaRegStickyNote
-                            size={14}
-                            className="text-indigo-400 mr-2"
-                        />
-                        <span className="text-neutral-400">{authorName}</span>
-                    </div>
-                )}
+                        {problemCount && (
+                            <div className="flex items-center text-[12px] mb-1">
+                                <TbCards
+                                    size={14}
+                                    className="text-indigo-400 mr-2 flex-shrink-0"
+                                />
+                                <span className="text-neutral-400">
+                                    {problemCount} Soal
+                                </span>
+                            </div>
+                        )}
 
-                {cardCount && (
-                    <div className="flex items-center text-[12px] mb-2">
-                        <TbCards size={14} className="text-indigo-400 mr-2" />
-                        <span className="text-neutral-400">
-                            {cardCount} Cards
-                        </span>
-                    </div>
-                )}
-
-                {problemCount && (
-                    <div className="flex items-center text-[12px] mb-2">
-                        <TbCards size={14} className="text-indigo-400 mr-2" />
-                        <span className="text-neutral-400">
-                            {problemCount} Soal
-                        </span>
-                    </div>
-                )}
-
-                {rating && (
-                    <div className="flex items-center text-[12px] mt-auto">
-                        <BiSolidStar
-                            size={16}
-                            className="text-yellow-400 mr-1"
-                        />
-                        <span className="text-neutral-300">
-                            {rating.toFixed(1)}
-                        </span>
+                        {rating && (
+                            <div className="flex items-center text-[12px]">
+                                <BiSolidStar
+                                    size={16}
+                                    className="text-yellow-400 mr-1 flex-shrink-0"
+                                />
+                                <span className="text-neutral-300">
+                                    {rating.toFixed(1)}
+                                </span>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>

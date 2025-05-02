@@ -81,36 +81,36 @@ const DashboardUpdatesBanner: React.FC = () => {
                         onClick={() => handleBannerClick(currentBanner)}
                         className="block w-full">
                         <div
-                            className="w-full py-4 px-8 rounded-xl flex items-center justify-between"
+                            className="rounded-xl relative flex items-center overflow-hidden h-[140px] md:h-[160px]"
                             style={{
                                 backgroundColor:
                                     currentBanner.background_color || '#5F2BCE'
                             }}>
-                            <div className="flex flex-col max-w-[60%]">
+                            <div className="py-4 px-6 md:py-6 md:px-8 max-w-[75%] md:max-w-[60%] z-10">
                                 {currentBanner.title_text && (
-                                    <h3 className="text-white text-lg md:text-xl font-bold mb-1">
+                                    <h3 className="text-white text-base md:text-xl font-bold mb-1">
                                         {currentBanner.title_text}
                                     </h3>
                                 )}
                                 {currentBanner.body_text && (
-                                    <p className="text-white text-sm mb-4">
+                                    <p className="text-white text-xs md:text-sm mb-2 md:mb-3">
                                         {currentBanner.body_text}
                                     </p>
                                 )}
                                 {currentBanner.button_text && (
-                                    <button className="bg-white text-sm text-[#5F2BCE] px-4 py-2 rounded-full font-medium w-fit">
+                                    <button className="bg-white text-xs md:text-sm text-[#5F2BCE] px-3 py-1.5 md:px-4 md:py-2 rounded-full font-medium w-fit">
                                         {currentBanner.button_text}
                                     </button>
                                 )}
                             </div>
                             {currentBanner.image_url && (
-                                <div className="relative w-[30%] h-32 flex-shrink-0">
+                                <div className="absolute -right-20 md:right-0 bottom-0 w-[60%] md:w-[30%] h-[200%] md:h-[100%]">
                                     <Image
                                         src={currentBanner.image_url}
                                         alt={`${currentBanner.slug}-illustration`}
                                         layout="fill"
                                         objectFit="contain"
-                                        objectPosition="right center"
+                                        objectPosition="right bottom"
                                     />
                                 </div>
                             )}

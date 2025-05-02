@@ -7,11 +7,8 @@ import {
     useGetMajorRecommendationQuery,
     useGetLearnRecommendationQuery
 } from 'dashboard/redux/api/dashboardApi';
-import MyClassesAccordion from './MyClassesSection';
-import DashboardSection from './DashboardSection';
 import CarouselSection from './CarouselSection';
 import { getBookBaseHref } from 'courses/utils';
-import ProductCard from 'commons/components/elements/ProductCard';
 import ContentCard from './ContentCard';
 import {
     MajorRecommendationItem,
@@ -30,26 +27,6 @@ const PrivateDashboardContent = (): JSX.Element => {
             { type: 'just_released' },
             { skip: !isAuthenticated }
         );
-    const {
-        data: myClass,
-        isLoading: isLoadingMyClass,
-        isFetching: isFetchingMyClass
-    } = useGetDashboardContentQuery(
-        { type: 'user_classes' },
-        { skip: !isAuthenticated }
-    );
-    // const { data: bookRecommendation, isLoading: isLoadingBookRecommendation } =
-    //     useGetDashboardContentQuery(
-    //         { type: 'book_recommendation' },
-    //         { skip: !isAuthenticated }
-    //     );
-    // const {
-    //     data: classRecommendation,
-    //     isLoading: isLoadingClassRecommendation
-    // } = useGetDashboardContentQuery(
-    //     { type: 'class_recommendation' },
-    //     { skip: !isAuthenticated }
-    // );
 
     const { data: majorClasses, isLoading: isLoadingMajorClasses } =
         useGetMajorClassesQuery({ limit: 12 }, { skip: !isAuthenticated });
@@ -94,13 +71,6 @@ const PrivateDashboardContent = (): JSX.Element => {
         }
     };
 
-    const getProduct = (item: LearningMaterial): Product => ({
-        title: item.title,
-        thumbnail: item.thumbnail,
-        inProgress: false,
-        latestProgress: 0
-    });
-
     const renderMajorClassItem = (item: any) => {
         return (
             <ContentCard
@@ -110,6 +80,19 @@ const PrivateDashboardContent = (): JSX.Element => {
                 thumbnail={item.thumbnail}
                 href={`/kelas/${item.course_slug}`}
                 isMajorClass={true}
+            />
+        );
+    };
+
+    const renderJustReleasedItem = (item: any) => {
+        return (
+            <ContentCard
+                id={item.id}
+                title={item.title}
+                category={item.type}
+                thumbnail={item.thumbnail}
+                href={getHref(item as LearningMaterial)}
+                isBaru={true}
             />
         );
     };
@@ -202,22 +185,13 @@ const PrivateDashboardContent = (): JSX.Element => {
     return (
         <>
             {justReleased?.just_released.length !== 0 && (
-                <DashboardSection
+                <CarouselSection
+                    title="Baru Rilis"
+                    items={justReleased?.just_released}
                     isLoading={isLoadingJustReleased}
-                    header="Baru Rilis"
-                    items={justReleased?.just_released}>
-                    {(item, i) => (
-                        <ProductCard
-                            key={justReleased?.just_released[i].id}
-                            orientation="vertical"
-                            category={(item as LearningMaterial).type}
-                            href={getHref(item as LearningMaterial)}
-                            product={getProduct(item as LearningMaterial)}
-                            eventName='User click Items on "Baru Rilis" Section'
-                            className="w-full"
-                        />
-                    )}
-                </DashboardSection>
+                    renderItem={renderJustReleasedItem}
+                    eventCategory="JustReleased"
+                />
             )}
 
             <CarouselSection
@@ -236,11 +210,6 @@ const PrivateDashboardContent = (): JSX.Element => {
                 eventCategory="TrendingRecommendation"
             />
 
-            <MyClassesAccordion
-                isLoading={isLoadingMyClass || isFetchingMyClass}
-                courses={myClass?.my_class}
-            />
-
             {learnRecommendation?.data?.map((courseRec, index) => (
                 <CarouselSection
                     key={`learn-rec-${index}-${courseRec.course_name}`}
@@ -256,47 +225,6 @@ const PrivateDashboardContent = (): JSX.Element => {
                     eventCategory={`LearnRecommendation-${courseRec.course_name}`}
                 />
             ))}
-
-            {/*<DashboardSection*/}
-            {/*    isLoading={isLoadingBookRecommendation}*/}
-            {/*    header="Bacaan Untukmu"*/}
-            {/*    items={bookRecommendation?.book_recommendation}*/}
-            {/*    showButton*/}
-            {/*    btnHref="/perpustakaan">*/}
-            {/*    {(item) => (*/}
-            {/*        <ProductCard*/}
-            {/*            key={(item as LearningMaterial).id}*/}
-            {/*            orientation="vertical"*/}
-            {/*            category={(item as LearningMaterial)?.type}*/}
-            {/*            href={getHref(item as LearningMaterial)}*/}
-            {/*            product={getProduct(item as LearningMaterial)}*/}
-            {/*            eventName='User click Book Items on "Bacaan Untukmu" Section'*/}
-            {/*            className="w-full"*/}
-            {/*        />*/}
-            {/*    )}*/}
-            {/*</DashboardSection>*/}
-
-            {/*<DashboardSection*/}
-            {/*    isCourse*/}
-            {/*    isLoading={isLoadingClassRecommendation}*/}
-            {/*    header="Kelas Untukmu"*/}
-            {/*    items={classRecommendation?.class_recommendation}*/}
-            {/*    showButton*/}
-            {/*    btnHref="/kelas">*/}
-            {/*    {(item) => (*/}
-            {/*        <ProductCard*/}
-            {/*            key={(item as LearningMaterial).id}*/}
-            {/*            orientation="vertical"*/}
-            {/*            category="kelas"*/}
-            {/*            href={`/kelas/${*/}
-            {/*                (item as LearningMaterial).course_slug*/}
-            {/*            }`}*/}
-            {/*            product={getProduct(item as LearningMaterial)}*/}
-            {/*            eventName='User click Class Items on "Kelas Untukmu" Section'*/}
-            {/*            className="w-full"*/}
-            {/*        />*/}
-            {/*    )}*/}
-            {/*</DashboardSection>*/}
         </>
     );
 };
