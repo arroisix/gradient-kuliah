@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import ReferralModal from 'referral/components/ReferralModal';
-import DashboardBanner from './dashboardBanner';
 import DashboardContent from './dashboardContent';
 import RenewalCard from 'payment/components/RenewalCard';
 import DashboardPromptBar from 'copilot/components/DashboardPromptBar/DashboardPromptBar';
