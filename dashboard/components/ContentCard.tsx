@@ -25,6 +25,7 @@ interface ContentCardProps {
     isBaru?: boolean;
     onClick?: () => void;
     isMajorClass?: boolean;
+    hasTwoLineCards?: boolean; // New prop to indicate if section has any two-line titles
 }
 
 type CategoryType =
@@ -53,6 +54,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
     isTrending = false,
     isBaru = false,
     isMajorClass = false,
+    hasTwoLineCards = false,
     onClick
 }) => {
     const tracker = useTracker();
@@ -71,6 +73,10 @@ const ContentCard: React.FC<ContentCardProps> = ({
 
         if (onClick) onClick();
     };
+
+    const isLongCourseName = courseName && courseName.length > 20;
+    const isLongChapterName = chapterName && chapterName.length > 20;
+    const shouldUseStackedLayout = isLongCourseName || isLongChapterName;
 
     return (
         <Link
@@ -112,7 +118,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
                     </div>
                 )}
 
-                {isVideo && (
+                {isVideo && !isBaru && (
                     <div className="absolute inset-0 grid place-items-center">
                         <div className="text-white border-none rounded-full w-12 h-12 flex items-center justify-center bg-black/60">
                             <FaRegCirclePlay size={28} />
@@ -121,10 +127,8 @@ const ContentCard: React.FC<ContentCardProps> = ({
                 )}
             </div>
 
-            <div
-                className="p-4 flex flex-col justify-between"
-                style={{ height: 'calc(100% - 53%)' }}>
-                <div>
+            <div className="p-4 flex flex-col justify-between">
+                <div className="flex flex-col">
                     {!isMajorClass && !isBaru && (
                         <div
                             className="rounded-full text-xs text-white font-medium px-3 py-1 mb-2 w-fit"
@@ -139,85 +143,154 @@ const ContentCard: React.FC<ContentCardProps> = ({
                         </div>
                     )}
 
-                    <h3 className="font-semibold text-white text-base line-clamp-2">
+                    <h3
+                        className={`font-semibold text-white text-base line-clamp-2 mb-4 ${
+                            hasTwoLineCards ? 'min-h-[48px]' : ''
+                        }`}>
                         {title}
                     </h3>
                 </div>
 
                 {!isBaru && (
-                    <div>
-                        {(courseName || chapterName) && (
-                            <div className="flex items-center text-[12px] mb-3 text-neutral-400 overflow-hidden">
+                    <div className="flex flex-col gap-2">
+                        {!shouldUseStackedLayout &&
+                            (courseName ||
+                                chapterName ||
+                                cardCount ||
+                                problemCount) && (
+                                <div className="flex items-center text-[12px] text-neutral-400 overflow-hidden">
+                                    {courseName && (
+                                        <>
+                                            <FaGraduationCap
+                                                size={14}
+                                                className="text-indigo-400 mr-2 flex-shrink-0"
+                                            />
+                                            <span className="truncate">
+                                                {courseName}
+                                            </span>
+                                        </>
+                                    )}
+
+                                    {courseName &&
+                                        (chapterName ||
+                                            cardCount ||
+                                            problemCount) && (
+                                            <span className="mx-2 flex-shrink-0">
+                                                |
+                                            </span>
+                                        )}
+
+                                    {chapterName && (
+                                        <>
+                                            <FaBookmark
+                                                size={14}
+                                                className="text-indigo-400 mr-2 flex-shrink-0"
+                                            />
+                                            <span className="truncate">
+                                                {chapterName}
+                                            </span>
+                                        </>
+                                    )}
+
+                                    {!chapterName && cardCount && (
+                                        <>
+                                            <TbCards
+                                                size={14}
+                                                className="text-indigo-400 mr-2 flex-shrink-0"
+                                            />
+                                            <span className="truncate">
+                                                {cardCount} Cards
+                                            </span>
+                                        </>
+                                    )}
+
+                                    {!chapterName && problemCount && (
+                                        <>
+                                            <TbCards
+                                                size={14}
+                                                className="text-indigo-400 mr-2 flex-shrink-0"
+                                            />
+                                            <span className="truncate">
+                                                {problemCount} Soal
+                                            </span>
+                                        </>
+                                    )}
+                                </div>
+                            )}
+
+                        {shouldUseStackedLayout && (
+                            <>
                                 {courseName && (
-                                    <>
+                                    <div className="flex items-center text-[12px] text-neutral-400">
                                         <FaGraduationCap
                                             size={14}
                                             className="text-indigo-400 mr-2 flex-shrink-0"
                                         />
-                                        <span className="truncate">
+                                        <span className="truncate max-w-full">
                                             {courseName}
                                         </span>
-                                    </>
-                                )}
-
-                                {courseName && chapterName && (
-                                    <span className="mx-2 flex-shrink-0">
-                                        |
-                                    </span>
+                                    </div>
                                 )}
 
                                 {chapterName && (
-                                    <>
+                                    <div className="flex items-center text-[12px] text-neutral-400">
+                                        <span className="mr-2 flex-shrink-0">
+                                            |
+                                        </span>
                                         <FaBookmark
                                             size={14}
                                             className="text-indigo-400 mr-2 flex-shrink-0"
                                         />
-                                        <span className="truncate">
+                                        <span className="truncate max-w-full">
                                             {chapterName}
                                         </span>
-                                    </>
+                                    </div>
                                 )}
-                            </div>
+                            </>
                         )}
 
-                        {authorName && (
-                            <div className="flex items-center text-[12px] mb-1">
-                                <FaRegStickyNote
-                                    size={14}
-                                    className="text-indigo-400 mr-2 flex-shrink-0"
-                                />
-                                <span className="text-neutral-400 truncate">
-                                    {authorName}
-                                </span>
-                            </div>
-                        )}
-
-                        {cardCount && (
-                            <div className="flex items-center text-[12px] mb-1">
+                        {shouldUseStackedLayout && cardCount && (
+                            <div className="flex items-center text-[12px] text-neutral-400">
+                                <span className="mr-2 flex-shrink-0">|</span>
                                 <TbCards
                                     size={14}
                                     className="text-indigo-400 mr-2 flex-shrink-0"
                                 />
-                                <span className="text-neutral-400">
+                                <span className="truncate max-w-full">
                                     {cardCount} Cards
                                 </span>
                             </div>
                         )}
 
-                        {problemCount && (
-                            <div className="flex items-center text-[12px] mb-1">
+                        {shouldUseStackedLayout && problemCount && (
+                            <div className="flex items-center text-[12px] text-neutral-400">
+                                <span className="mr-2 flex-shrink-0">|</span>
                                 <TbCards
                                     size={14}
                                     className="text-indigo-400 mr-2 flex-shrink-0"
                                 />
-                                <span className="text-neutral-400">
+                                <span className="truncate max-w-full">
                                     {problemCount} Soal
+                                </span>
+                            </div>
+                        )}
+
+                        {authorName && (
+                            <div className="flex items-center text-[12px] text-neutral-400">
+                                <span className="mr-2 flex-shrink-0">|</span>
+                                <FaRegStickyNote
+                                    size={14}
+                                    className="text-indigo-400 mr-2 flex-shrink-0"
+                                />
+                                <span className="truncate max-w-full">
+                                    {authorName}
                                 </span>
                             </div>
                         )}
 
                         {rating && (
                             <div className="flex items-center text-[12px]">
+                                <span className="mr-2 flex-shrink-0">|</span>
                                 <BiSolidStar
                                     size={16}
                                     className="text-yellow-400 mr-1 flex-shrink-0"

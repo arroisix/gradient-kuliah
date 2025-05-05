@@ -62,16 +62,19 @@ const DashboardUpdatesBanner: React.FC = () => {
                             href={currentBanner.href || '#'}
                             onClick={() => handleBannerClick(currentBanner)}
                             className="block w-full">
-                            <div className="w-full">
-                                <Image
-                                    src={currentBanner.banner_url}
-                                    alt={`Banner ${currentBanner.slug}`}
-                                    width={1200}
-                                    height={300}
-                                    layout="responsive"
-                                    className="rounded-xl"
-                                    priority
-                                />
+                            <div className="w-full overflow-hidden flex justify-center items-center rounded-xl">
+                                <div className="relative w-full">
+                                    <Image
+                                        src={currentBanner.banner_url}
+                                        alt={`Banner ${currentBanner.slug}`}
+                                        width={1248}
+                                        height={200}
+                                        layout="responsive"
+                                        objectFit="contain"
+                                        className="rounded-xl"
+                                        priority
+                                    />
+                                </div>
                             </div>
                         </Link>
                     )

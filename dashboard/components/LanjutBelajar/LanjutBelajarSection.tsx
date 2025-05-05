@@ -176,7 +176,7 @@ const LanjutBelajarSection: React.FC = () => {
                 progress: item.progress_percentage,
                 thumbnail: null,
                 category: 'Flashcard',
-                href: `/flashcard/${item.slug}`,
+                href: `/flashcards/${item.slug}`,
                 authorName: item.created_by,
                 authorPhoto: item.photo_profile,
                 cardCount: item.card_count || parseInt(item.total_questions),

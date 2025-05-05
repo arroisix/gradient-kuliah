@@ -47,6 +47,38 @@ const PrivateDashboardContent = (): JSX.Element => {
         { skip: !isAuthenticated }
     );
 
+    const checkForTwoLineTitles = (items: any[]) => {
+        if (!items || !items.length) return false;
+
+        const TITLE_WRAP_THRESHOLD = 40;
+
+        return items.some((item) => {
+            let itemTitle = '';
+
+            if (item.type === 'video') {
+                itemTitle = item.subchapter_name || item.chapter_name || '';
+            } else if (
+                item.type === 'textbook' ||
+                item.type === 'bank_soal' ||
+                item.type === 'astronotes'
+            ) {
+                itemTitle = item.book_title || '';
+            } else if (item.type === 'quiz' || item.type === 'flashcard') {
+                itemTitle = item.title || '';
+            } else {
+                itemTitle =
+                    item.title ||
+                    item.book_title ||
+                    item.course_name ||
+                    item.subchapter_name ||
+                    item.chapter_name ||
+                    '';
+            }
+
+            return itemTitle.length > TITLE_WRAP_THRESHOLD;
+        });
+    };
+
     const getHref = (item: LearningMaterial): string => {
         const baseHref = `${getBookBaseHref(item.type)}/${item.book_slug}`;
 
@@ -71,6 +103,10 @@ const PrivateDashboardContent = (): JSX.Element => {
         }
     };
 
+    const majorClassesHasTwoLineCards = checkForTwoLineTitles(
+        majorClasses?.data || []
+    );
+
     const renderMajorClassItem = (item: any) => {
         return (
             <ContentCard
@@ -80,9 +116,14 @@ const PrivateDashboardContent = (): JSX.Element => {
                 thumbnail={item.thumbnail}
                 href={`/kelas/${item.course_slug}`}
                 isMajorClass={true}
+                hasTwoLineCards={majorClassesHasTwoLineCards}
             />
         );
     };
+
+    const justReleasedHasTwoLineCards = checkForTwoLineTitles(
+        justReleased?.just_released || []
+    );
 
     const renderJustReleasedItem = (item: any) => {
         return (
@@ -93,6 +134,7 @@ const PrivateDashboardContent = (): JSX.Element => {
                 thumbnail={item.thumbnail}
                 href={getHref(item as LearningMaterial)}
                 isBaru={true}
+                hasTwoLineCards={justReleasedHasTwoLineCards}
             />
         );
     };
@@ -142,11 +184,11 @@ const PrivateDashboardContent = (): JSX.Element => {
 
             case 'quiz':
                 const quizItem = item as QuizRecommendationItem;
-                title = quizItem.exercise_title;
-                href = `/latihan/${quizItem.exercise_slug}`;
+                title = quizItem.title;
+                href = `/latihan/${quizItem.slug}`;
                 category = 'Kuis';
                 courseName = quizItem.course_name;
-                problemCount = quizItem.problem_count;
+                problemCount = quizItem.total_questions;
                 break;
 
             case 'flashcard':
@@ -177,9 +219,19 @@ const PrivateDashboardContent = (): JSX.Element => {
         };
     };
 
+    const majorRecommendationHasTwoLineCards = checkForTwoLineTitles(
+        majorRecommendation?.data || []
+    );
+
     const renderTrendingItem = (item: MajorRecommendationItem) => {
         const itemData = prepareItemData(item);
-        return <ContentCard {...itemData} isTrending={true} />;
+        return (
+            <ContentCard
+                {...itemData}
+                isTrending={true}
+                hasTwoLineCards={majorRecommendationHasTwoLineCards}
+            />
+        );
     };
 
     return (
@@ -210,21 +262,33 @@ const PrivateDashboardContent = (): JSX.Element => {
                 eventCategory="TrendingRecommendation"
             />
 
-            {learnRecommendation?.data?.map((courseRec, index) => (
-                <CarouselSection
-                    key={`learn-rec-${index}-${courseRec.course_name}`}
-                    title={`Karena Kamu Belajar ${courseRec.course_name}`}
-                    items={courseRec.recommendations}
-                    isLoading={isLoadingLearnRecommendation}
-                    renderItem={(item) => {
-                        const itemData = prepareItemData(
-                            item as MajorRecommendationItem
-                        );
-                        return <ContentCard {...itemData} />;
-                    }}
-                    eventCategory={`LearnRecommendation-${courseRec.course_name}`}
-                />
-            ))}
+            {learnRecommendation?.data?.map((courseRec, index) => {
+                const courseRecommendationHasTwoLineCards =
+                    checkForTwoLineTitles(courseRec.recommendations || []);
+
+                return (
+                    <CarouselSection
+                        key={`learn-rec-${index}-${courseRec.course_name}`}
+                        title={`Karena Kamu Belajar ${courseRec.course_name}`}
+                        items={courseRec.recommendations}
+                        isLoading={isLoadingLearnRecommendation}
+                        renderItem={(item) => {
+                            const itemData = prepareItemData(
+                                item as MajorRecommendationItem
+                            );
+                            return (
+                                <ContentCard
+                                    {...itemData}
+                                    hasTwoLineCards={
+                                        courseRecommendationHasTwoLineCards
+                                    }
+                                />
+                            );
+                        }}
+                        eventCategory={`LearnRecommendation-${courseRec.course_name}`}
+                    />
+                );
+            })}
         </>
     );
 };

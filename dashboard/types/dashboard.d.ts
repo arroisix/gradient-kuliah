@@ -182,10 +182,10 @@ interface BookRecommendationItem extends BaseMajorRecommendationItem {
 
 interface QuizRecommendationItem extends BaseMajorRecommendationItem {
     type: 'quiz';
-    exercise_title: string;
-    exercise_slug: string;
+    title: string;
+    slug: string;
     course_name: string;
-    problem_count: string;
+    total_questions: string;
 }
 
 interface FlashcardRecommendationItem extends BaseMajorRecommendationItem {

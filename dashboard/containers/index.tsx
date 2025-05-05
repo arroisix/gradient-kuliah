@@ -25,10 +25,10 @@ const DashboardContainer = (): JSX.Element => {
 
     return (
         <section className="flex flex-col w-full gap-6 pb-4 mx-auto sm:overflow-x-clip md:overflow-x-visible max-w-screen-2xl">
-            {profile && !profile.is_email_verified && (
-                <EmailVerificationBanner />
-            )}
-            <RenewalCard />
+            {/*{profile && !profile.is_email_verified && (*/}
+            {/*    <EmailVerificationBanner />*/}
+            {/*)}*/}
+            {/*<RenewalCard />*/}
             <DashboardUpdatesBanner />
             {isAuthenticated && <DashboardPromptBar />}
             <DashboardFeatures />
