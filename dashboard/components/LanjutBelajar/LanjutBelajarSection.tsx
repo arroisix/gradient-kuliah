@@ -22,8 +22,7 @@ export const TABS = {
     KELAS: 'kelas',
     BUKU: 'buku',
     KUIS: 'kuis',
-    FLASHCARD: 'flashcard',
-    PLAYLIST: 'playlist'
+    FLASHCARD: 'flashcard'
 } as const;
 
 export type TabType = typeof TABS[keyof typeof TABS];
@@ -55,9 +54,7 @@ const EmptyState = ({ type }: { type: TabType }) => {
         [TABS.KUIS]:
             'Belum ada riwayat. Kuis yang kamu kerjakan akan muncul di sini',
         [TABS.FLASHCARD]:
-            'Belum ada riwayat. Flashcard yang kamu pelajari akan muncul di sini',
-        [TABS.PLAYLIST]:
-            'Belum ada riwayat. Playlist yang kamu buat akan muncul di sini'
+            'Belum ada riwayat. Flashcard yang kamu pelajari akan muncul di sini'
     };
 
     return (

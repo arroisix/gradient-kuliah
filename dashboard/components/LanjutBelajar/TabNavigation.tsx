@@ -21,7 +21,6 @@ const TabNavigation: React.FC<TabNavigationProps> = ({
     const [startIndex, setStartIndex] = useState(0);
 
     const tabs = [
-        { type: TABS.PLAYLIST, label: 'Playlist' },
         { type: TABS.KELAS, label: 'Kelas' },
         { type: TABS.BUKU, label: 'Buku' },
         { type: TABS.KUIS, label: 'Kuis' },
