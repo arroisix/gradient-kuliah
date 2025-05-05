@@ -83,8 +83,8 @@ const LearningCard: React.FC<LearningCardProps> = ({ card, onClick }) => {
                         {hasNumberPrefix
                             ? card.title
                             : isVideo
-                                ? card.title
-                                : `${card.title}`}
+                            ? card.title
+                            : `${card.title}`}
                     </h3>
 
                     <div className="mt-auto">
@@ -125,10 +125,9 @@ const LearningCard: React.FC<LearningCardProps> = ({ card, onClick }) => {
                                 )
                             )}
 
-                            {/* Separator - only visible on desktop */}
                             {((isFlashcard &&
-                                    card.authorName &&
-                                    card.cardCount) ||
+                                card.authorName &&
+                                card.cardCount) ||
                                 (!isFlashcard &&
                                     card.courseBadge &&
                                     card.chapterBadge)) && (

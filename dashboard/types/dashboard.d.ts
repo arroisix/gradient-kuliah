@@ -169,8 +169,7 @@ interface VideoRecommendationItem extends BaseMajorRecommendationItem {
     course_name: string;
     course_slug: string;
     subchapter_name: string;
-    chapter_name: string;
-    chapter_slug: string;
+    subchapter_slug: string;
 }
 
 interface BookRecommendationItem extends BaseMajorRecommendationItem {
@@ -178,6 +177,7 @@ interface BookRecommendationItem extends BaseMajorRecommendationItem {
     book_title: string;
     book_slug: string;
     course_name: string;
+    page: number;
 }
 
 interface QuizRecommendationItem extends BaseMajorRecommendationItem {

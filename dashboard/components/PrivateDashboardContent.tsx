@@ -151,17 +151,17 @@ const PrivateDashboardContent = (): JSX.Element => {
         switch (item.type) {
             case 'video':
                 const videoItem = item as VideoRecommendationItem;
-                title = videoItem.subchapter_name || videoItem.chapter_name;
-                href = `/kelas/${videoItem.course_slug}/${videoItem.chapter_slug}`;
+                title = videoItem.subchapter_name;
+                href = `/kelas/${videoItem.course_slug}/${videoItem.subchapter_slug}`;
                 category = 'Video';
                 courseName = videoItem.course_name;
-                chapterName = videoItem.chapter_name;
+                chapterName = videoItem.subchapter_name;
                 break;
 
             case 'textbook':
                 const textbookItem = item as BookRecommendationItem;
                 title = textbookItem.book_title;
-                href = `/textbook/${textbookItem.book_slug}`;
+                href = `perpustakaan/textbook/${textbookItem.book_slug}`;
                 category = 'Textbook Solution';
                 courseName = textbookItem.course_name;
                 break;
@@ -169,7 +169,7 @@ const PrivateDashboardContent = (): JSX.Element => {
             case 'bank_soal':
                 const bankSoalItem = item as BookRecommendationItem;
                 title = bankSoalItem.book_title;
-                href = `/bank-soal/${bankSoalItem.book_slug}`;
+                href = `perpustakaan/bank-soal/${bankSoalItem.book_slug}`;
                 category = 'Bank Soal';
                 courseName = bankSoalItem.course_name;
                 break;
@@ -177,7 +177,7 @@ const PrivateDashboardContent = (): JSX.Element => {
             case 'astronotes':
                 const notesItem = item as BookRecommendationItem;
                 title = notesItem.book_title;
-                href = `/astronotes/${notesItem.book_slug}`;
+                href = `/astronotes/${notesItem.book_slug}/${notesItem.page}`;
                 category = 'Astronotes';
                 courseName = notesItem.course_name;
                 break;

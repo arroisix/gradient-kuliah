@@ -207,8 +207,8 @@ const LanjutBelajarSection: React.FC = () => {
     const getBookUrl = (item: UserBook): string => {
         const baseUrlMap: Record<BookType, string> = {
             astronotes: '/astronotes',
-            bank_soal: '/bank-soal',
-            textbook: '/textbook'
+            bank_soal: '/perpustakaan/bank-soal',
+            textbook: '/perpustakaan/textbook'
         };
 
         const baseUrl = baseUrlMap[item.type as BookType] || '/perpustakaan';
