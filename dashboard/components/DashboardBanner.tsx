@@ -84,7 +84,7 @@ const DashboardUpdatesBanner: React.FC = () => {
                         onClick={() => handleBannerClick(currentBanner)}
                         className="block w-full">
                         <div
-                            className="rounded-xl relative flex items-center overflow-hidden h-[140px] md:h-[160px]"
+                            className="rounded-xl relative flex items-center overflow-hidden md:min-h-[220px] h-[140px] md:h-[160px]"
                             style={{
                                 backgroundColor:
                                     currentBanner.background_color || '#5F2BCE'

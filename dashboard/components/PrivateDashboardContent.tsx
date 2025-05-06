@@ -176,10 +176,10 @@ const PrivateDashboardContent = (): JSX.Element => {
 
             case 'astronotes':
                 const notesItem = item as BookRecommendationItem;
-                title = notesItem.book_title;
+                title = notesItem.page_title;
                 href = `/astronotes/${notesItem.book_slug}/${notesItem.page}`;
                 category = 'Astronotes';
-                courseName = notesItem.course_name;
+                courseName = notesItem.book_title;
                 break;
 
             case 'quiz':

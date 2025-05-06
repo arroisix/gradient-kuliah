@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FaRegCirclePlay } from 'react-icons/fa6';
-import { FaGraduationCap, FaBookmark, FaRegStickyNote } from 'react-icons/fa';
+import { FaGraduationCap, FaBookmark, FaRegStickyNote, FaListUl } from 'react-icons/fa';
 import { BiSolidStar } from 'react-icons/bi';
 import { TbCards } from 'react-icons/tb';
 import { useTracker } from 'tracker/tracker';
@@ -25,7 +25,7 @@ interface ContentCardProps {
     isBaru?: boolean;
     onClick?: () => void;
     isMajorClass?: boolean;
-    hasTwoLineCards?: boolean; // New prop to indicate if section has any two-line titles
+    hasTwoLineCards?: boolean;
 }
 
 type CategoryType =
@@ -161,10 +161,12 @@ const ContentCard: React.FC<ContentCardProps> = ({
                                 <div className="flex items-center text-[12px] text-neutral-400 overflow-hidden">
                                     {courseName && (
                                         <>
-                                            <FaGraduationCap
-                                                size={14}
-                                                className="text-indigo-400 mr-2 flex-shrink-0"
-                                            />
+                                            {category != 'Astronotes' && (
+                                                <FaGraduationCap
+                                                    size={14}
+                                                    className="text-indigo-400 mr-2 flex-shrink-0"
+                                                />
+                                            )}
                                             <span className="truncate">
                                                 {courseName}
                                             </span>
@@ -206,7 +208,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
 
                                     {!chapterName && problemCount && (
                                         <>
-                                            <TbCards
+                                            <FaListUl
                                                 size={14}
                                                 className="text-indigo-400 mr-2 flex-shrink-0"
                                             />
@@ -222,10 +224,12 @@ const ContentCard: React.FC<ContentCardProps> = ({
                             <>
                                 {courseName && (
                                     <div className="flex items-center text-[12px] text-neutral-400">
-                                        <FaGraduationCap
-                                            size={14}
-                                            className="text-indigo-400 mr-2 flex-shrink-0"
-                                        />
+                                        {category != 'Astronotes' && (
+                                            <FaGraduationCap
+                                                size={14}
+                                                className="text-indigo-400 mr-2 flex-shrink-0"
+                                            />
+                                        )}
                                         <span className="truncate max-w-full">
                                             {courseName}
                                         </span>
@@ -265,7 +269,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
                         {shouldUseStackedLayout && problemCount && (
                             <div className="flex items-center text-[12px] text-neutral-400">
                                 <span className="mr-2 flex-shrink-0">|</span>
-                                <TbCards
+                                <FaListUl
                                     size={14}
                                     className="text-indigo-400 mr-2 flex-shrink-0"
                                 />

@@ -175,6 +175,7 @@ interface VideoRecommendationItem extends BaseMajorRecommendationItem {
 interface BookRecommendationItem extends BaseMajorRecommendationItem {
     type: 'textbook' | 'bank_soal' | 'astronotes';
     book_title: string;
+    page_title: string;
     book_slug: string;
     course_name: string;
     page: number;
