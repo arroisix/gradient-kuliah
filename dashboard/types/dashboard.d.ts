@@ -128,6 +128,7 @@ export interface Banner {
     href: string | null;
     is_asset: boolean;
     banner_url: string | null;
+    banner_url_mobile: string | null;
     title_text: string | null;
     body_text: string | null;
     button_text: string | null;

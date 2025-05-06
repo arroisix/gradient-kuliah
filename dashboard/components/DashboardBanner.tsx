@@ -5,11 +5,13 @@ import Link from 'next/link';
 import { useTracker } from 'tracker/tracker';
 import Skeleton from 'commons/components/elements/Skeleton';
 import { Banner } from 'dashboard/types/dashboard';
+import useWindowBreakpoints from '../../commons/hooks/useWindowBreakpoints';
 
 const DashboardUpdatesBanner: React.FC = () => {
     const { data, isLoading, error } = useGetBannerQuery();
     const [currentIndex, setCurrentIndex] = useState(0);
     const tracker = useTracker();
+    const { isMobileBreakpoints } = useWindowBreakpoints();
 
     const banners = data?.data || [];
 
@@ -53,6 +55,17 @@ const DashboardUpdatesBanner: React.FC = () => {
     const currentBanner = banners[currentIndex];
     if (!currentBanner) return null;
 
+    const getBannerUrl = () => {
+        if (isMobileBreakpoints && currentBanner.banner_url_mobile) {
+            return currentBanner.banner_url_mobile;
+        }
+        return currentBanner.banner_url || '/placeholder-banner.png';
+    };
+
+    const bannerDimensions = isMobileBreakpoints
+        ? { width: 328, height: 180 }
+        : { width: 1248, height: 200 };
+
     return (
         <div className="w-full mb-8">
             <div className="relative overflow-hidden rounded-xl">
@@ -65,10 +78,10 @@ const DashboardUpdatesBanner: React.FC = () => {
                             <div className="w-full overflow-hidden flex justify-center items-center rounded-xl">
                                 <div className="relative w-full">
                                     <Image
-                                        src={currentBanner.banner_url}
+                                        src={getBannerUrl()}
                                         alt={`Banner ${currentBanner.slug}`}
-                                        width={1248}
-                                        height={200}
+                                        width={bannerDimensions.width}
+                                        height={bannerDimensions.height}
                                         layout="responsive"
                                         objectFit="contain"
                                         className="rounded-xl"
@@ -84,24 +97,24 @@ const DashboardUpdatesBanner: React.FC = () => {
                         onClick={() => handleBannerClick(currentBanner)}
                         className="block w-full">
                         <div
-                            className="rounded-xl relative flex items-center overflow-hidden md:min-h-[220px] h-[140px] md:h-[160px]"
+                            className="rounded-xl relative flex items-center overflow-hidden md:min-h-[220px] h-[180px] md:h-[160px]"
                             style={{
                                 backgroundColor:
                                     currentBanner.background_color || '#5F2BCE'
                             }}>
-                            <div className="py-4 px-6 md:py-6 md:px-8 max-w-[75%] md:max-w-[60%] z-10">
+                            <div className="py-1 px-4 md:py-6 md:px-6 max-w-[75%] md:max-w-[60%] z-10">
                                 {currentBanner.title_text && (
-                                    <h3 className="text-white text-base md:text-xl font-bold mb-1">
+                                    <h3 className="text-white text-[18px] md:text-xl font-bold mb-1">
                                         {currentBanner.title_text}
                                     </h3>
                                 )}
                                 {currentBanner.body_text && (
-                                    <p className="text-white text-xs md:text-sm mb-2 md:mb-3">
+                                    <p className="text-white text-xs md:text-base mb-6 md:mb-16">
                                         {currentBanner.body_text}
                                     </p>
                                 )}
                                 {currentBanner.button_text && (
-                                    <button className="bg-white text-xs md:text-sm text-[#5F2BCE] px-3 py-1.5 md:px-4 md:py-2 rounded-full font-medium w-fit">
+                                    <button className="bg-white text-base md:text-[18px] text-[#5F2BCE] px-3 py-1.5 md:px-12 md:py-4 rounded-full font-medium w-fit">
                                         {currentBanner.button_text}
                                     </button>
                                 )}
