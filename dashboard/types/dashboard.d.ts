@@ -195,7 +195,8 @@ interface FlashcardRecommendationItem extends BaseMajorRecommendationItem {
     title: string;
     slug: string;
     course_name: string;
-    total_questions: string;
+    card_count: string;
+    created_by: string;
 }
 
 type MajorRecommendationItem =

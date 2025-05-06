@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FaRegCirclePlay } from 'react-icons/fa6';
-import { FaGraduationCap, FaBookmark, FaRegStickyNote, FaListUl } from 'react-icons/fa';
+import { FaGraduationCap, FaBookmark, FaListUl } from 'react-icons/fa';
 import { BiSolidStar } from 'react-icons/bi';
 import { TbCards } from 'react-icons/tb';
 import { useTracker } from 'tracker/tracker';
@@ -16,6 +16,7 @@ interface ContentCardProps {
     courseName?: string;
     chapterName?: string;
     authorName?: string;
+    authorPhoto?: string;
     cardCount?: string | number;
     problemCount?: string | number;
     rating?: number;
@@ -46,6 +47,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
     courseName,
     chapterName,
     authorName,
+    authorPhoto,
     cardCount,
     problemCount,
     rating,
@@ -60,6 +62,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
     const tracker = useTracker();
     const isVideo =
         (category === 'Video' || category === 'Kelas') && !isMajorClass;
+    const isFlashcard = category === 'Flashcard';
 
     const handleClick = () => {
         tracker?.genericTrack('Click Content Card', {
@@ -74,9 +77,11 @@ const ContentCard: React.FC<ContentCardProps> = ({
         if (onClick) onClick();
     };
 
-    const isLongCourseName = courseName && courseName.length > 20;
-    const isLongChapterName = chapterName && chapterName.length > 20;
-    const shouldUseStackedLayout = isLongCourseName || isLongChapterName;
+    const isLongCourseName = courseName && courseName.length > 30;
+    const isLongChapterName = chapterName && chapterName.length > 30;
+    const isLongAuthorName = authorName && authorName.length > 30;
+    const shouldUseStackedLayout =
+        isLongCourseName || isLongChapterName || isLongAuthorName;
 
     return (
         <Link
@@ -156,6 +161,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
                         {!shouldUseStackedLayout &&
                             (courseName ||
                                 chapterName ||
+                                authorName ||
                                 cardCount ||
                                 problemCount) && (
                                 <div className="flex items-center text-[12px] text-neutral-400 overflow-hidden">
@@ -175,6 +181,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
 
                                     {courseName &&
                                         (chapterName ||
+                                            authorName ||
                                             cardCount ||
                                             problemCount) && (
                                             <span className="mx-2 flex-shrink-0">
@@ -194,7 +201,48 @@ const ContentCard: React.FC<ContentCardProps> = ({
                                         </>
                                     )}
 
-                                    {!chapterName && cardCount && (
+                                    {chapterName &&
+                                        (authorName ||
+                                            cardCount ||
+                                            problemCount) && (
+                                            <span className="mx-2 flex-shrink-0">
+                                                |
+                                            </span>
+                                        )}
+
+                                    {!shouldUseStackedLayout &&
+                                        isFlashcard &&
+                                        authorName && (
+                                            <>
+                                                <div className="flex items-center overflow-hidden">
+                                                    {authorPhoto ? (
+                                                        <img
+                                                            src={authorPhoto}
+                                                            alt={authorName}
+                                                            className="w-5 h-5 rounded-full flex-shrink-0"
+                                                        />
+                                                    ) : (
+                                                        <div className="w-5 h-5 rounded-full bg-[#5F2BCE] flex items-center justify-center text-white text-xs flex-shrink-0">
+                                                            {authorName
+                                                                ?.charAt(0)
+                                                                ?.toUpperCase() ||
+                                                                '?'}
+                                                        </div>
+                                                    )}
+                                                    <span className="truncate ml-2">
+                                                        {authorName}
+                                                    </span>
+                                                </div>
+                                                {(cardCount ||
+                                                    problemCount) && (
+                                                    <span className="mx-2 flex-shrink-0">
+                                                        |
+                                                    </span>
+                                                )}
+                                            </>
+                                        )}
+
+                                    {!shouldUseStackedLayout && cardCount && (
                                         <>
                                             <TbCards
                                                 size={14}
@@ -206,7 +254,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
                                         </>
                                     )}
 
-                                    {!chapterName && problemCount && (
+                                    {!shouldUseStackedLayout && problemCount && (
                                         <>
                                             <FaListUl
                                                 size={14}
@@ -238,9 +286,11 @@ const ContentCard: React.FC<ContentCardProps> = ({
 
                                 {chapterName && (
                                     <div className="flex items-center text-[12px] text-neutral-400">
-                                        <span className="mr-2 flex-shrink-0">
-                                            |
-                                        </span>
+                                        {courseName && (
+                                            <span className="mr-2 flex-shrink-0">
+                                                |
+                                            </span>
+                                        )}
                                         <FaBookmark
                                             size={14}
                                             className="text-indigo-400 mr-2 flex-shrink-0"
@@ -250,46 +300,73 @@ const ContentCard: React.FC<ContentCardProps> = ({
                                         </span>
                                     </div>
                                 )}
+
+                                {isFlashcard && authorName && (
+                                    <div className="flex items-center text-[12px] text-neutral-400">
+                                        {(courseName || chapterName) && (
+                                            <span className="mr-2 flex-shrink-0">
+                                                |
+                                            </span>
+                                        )}
+                                        <div className="flex items-center">
+                                            {authorPhoto ? (
+                                                <img
+                                                    src={authorPhoto}
+                                                    alt={authorName}
+                                                    className="w-5 h-5 rounded-full flex-shrink-0"
+                                                />
+                                            ) : (
+                                                <div className="w-5 h-5 rounded-full bg-[#5F2BCE] flex items-center justify-center text-white text-xs flex-shrink-0">
+                                                    {authorName
+                                                        ?.charAt(0)
+                                                        ?.toUpperCase() || '?'}
+                                                </div>
+                                            )}
+                                            <span className="truncate ml-2 max-w-full">
+                                                {authorName}
+                                            </span>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {cardCount && (
+                                    <div className="flex items-center text-[12px] text-neutral-400">
+                                        {(courseName ||
+                                            chapterName ||
+                                            (isFlashcard && authorName)) && (
+                                            <span className="mr-2 flex-shrink-0">
+                                                |
+                                            </span>
+                                        )}
+                                        <TbCards
+                                            size={14}
+                                            className="text-indigo-400 mr-2 flex-shrink-0"
+                                        />
+                                        <span className="truncate max-w-full">
+                                            {cardCount} Cards
+                                        </span>
+                                    </div>
+                                )}
+
+                                {problemCount && (
+                                    <div className="flex items-center text-[12px] text-neutral-400">
+                                        {(courseName ||
+                                            chapterName ||
+                                            (isFlashcard && authorName)) && (
+                                            <span className="mr-2 flex-shrink-0">
+                                                |
+                                            </span>
+                                        )}
+                                        <FaListUl
+                                            size={14}
+                                            className="text-indigo-400 mr-2 flex-shrink-0"
+                                        />
+                                        <span className="truncate max-w-full">
+                                            {problemCount} Soal
+                                        </span>
+                                    </div>
+                                )}
                             </>
-                        )}
-
-                        {shouldUseStackedLayout && cardCount && (
-                            <div className="flex items-center text-[12px] text-neutral-400">
-                                <span className="mr-2 flex-shrink-0">|</span>
-                                <TbCards
-                                    size={14}
-                                    className="text-indigo-400 mr-2 flex-shrink-0"
-                                />
-                                <span className="truncate max-w-full">
-                                    {cardCount} Cards
-                                </span>
-                            </div>
-                        )}
-
-                        {shouldUseStackedLayout && problemCount && (
-                            <div className="flex items-center text-[12px] text-neutral-400">
-                                <span className="mr-2 flex-shrink-0">|</span>
-                                <FaListUl
-                                    size={14}
-                                    className="text-indigo-400 mr-2 flex-shrink-0"
-                                />
-                                <span className="truncate max-w-full">
-                                    {problemCount} Soal
-                                </span>
-                            </div>
-                        )}
-
-                        {authorName && (
-                            <div className="flex items-center text-[12px] text-neutral-400">
-                                <span className="mr-2 flex-shrink-0">|</span>
-                                <FaRegStickyNote
-                                    size={14}
-                                    className="text-indigo-400 mr-2 flex-shrink-0"
-                                />
-                                <span className="truncate max-w-full">
-                                    {authorName}
-                                </span>
-                            </div>
                         )}
 
                         {rating && (

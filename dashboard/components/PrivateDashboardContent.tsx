@@ -146,7 +146,8 @@ const PrivateDashboardContent = (): JSX.Element => {
             courseName,
             chapterName,
             cardCount,
-            problemCount;
+            problemCount,
+            authorName;
 
         switch (item.type) {
             case 'video':
@@ -197,7 +198,8 @@ const PrivateDashboardContent = (): JSX.Element => {
                 href = `/flashcards/${flashcardItem.slug}`;
                 category = 'Flashcard';
                 courseName = flashcardItem.course_name;
-                cardCount = flashcardItem.total_questions;
+                cardCount = flashcardItem.card_count;
+                authorName = flashcardItem.created_by;
                 break;
 
             default:
@@ -215,7 +217,8 @@ const PrivateDashboardContent = (): JSX.Element => {
             courseName,
             chapterName,
             cardCount,
-            problemCount
+            problemCount,
+            authorName
         };
     };
 
