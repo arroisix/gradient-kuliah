@@ -194,7 +194,7 @@ const PrivateDashboardContent = (): JSX.Element => {
             case 'flashcard':
                 const flashcardItem = item as FlashcardRecommendationItem;
                 title = flashcardItem.title;
-                href = `/flashcard/${flashcardItem.slug}`;
+                href = `/flashcards/${flashcardItem.slug}`;
                 category = 'Flashcard';
                 courseName = flashcardItem.course_name;
                 cardCount = flashcardItem.total_questions;
