@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { PercentageProgess } from './LearningProgress/PercentageProgress';
 import ShareContentButton from '../ShareContentButton';
 import RatingButton from '../CourseRatingButton';
+import Link from 'next/link';
 
 const CourseDescription = ({
     slug,
@@ -23,13 +24,29 @@ const CourseDescription = ({
 
     return (
         <div className="w-screen px-5 lg:w-3/12">
-            <div className="flex flex-col gap-2 p-4 bg-zinc-900 rounded-xl">
+            <div className="flex flex-col gap-4 p-4 bg-zinc-900 rounded-xl">
                 <h2 className="font-semibold text-gray-500">
                     Tentang Kelas {course?.course_name}
                 </h2>
                 <div className="w-full h-px bg-gray-500" />
                 <div className="text-sm">{course?.description}</div>
-                <div className="flex gap-2 w-full">
+                {course?.tags?.length > 0 && (
+                    <div className="flex flex-wrap items-center gap-2 font-semibold text-xs">
+                        {course?.tags.map((tag) => {
+                            const t = tag as Tag;
+                            return (
+                                <Link
+                                    href={`/search/results/${t.name}`}
+                                    target="_blank"
+                                    key={`tag-${t.name}`}
+                                    className="px-2 h-6 rounded-full border flex justify-center items-center">
+                                    {t.name}
+                                </Link>
+                            );
+                        })}
+                    </div>
+                )}
+                <div className="flex gap-3 w-full">
                     <RatingButton />
                     <ShareContentButton
                         typeCopy="COURSE"

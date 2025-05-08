@@ -31,7 +31,7 @@ const RatingButton = (): JSX.Element => {
                         setIsModalFeedbackOpen(true);
                     }}
                     className="text-xs w-full flex gap-2 items-center justify-center">
-                    <Star size={14} />
+                    <Star size={14} fill="white" />
                     Rating
                 </Button>
             </>
