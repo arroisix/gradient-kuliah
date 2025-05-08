@@ -6,6 +6,8 @@ import { FaGraduationCap, FaBookmark, FaListUl } from 'react-icons/fa';
 import { BiSolidStar } from 'react-icons/bi';
 import { TbCards } from 'react-icons/tb';
 import { useTracker } from 'tracker/tracker';
+import FlashcardLargeIcon from 'dashboard/assets/FlashcardLargeIcon';
+import KuisCover from '../assets/KuisCover';
 
 interface ContentCardProps {
     id: string;
@@ -63,6 +65,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
     const isVideo =
         (category === 'Video' || category === 'Kelas') && !isMajorClass;
     const isFlashcard = category === 'Flashcard';
+    const isKuis = category === 'Kuis';
 
     const handleClick = () => {
         tracker?.genericTrack('Click Content Card', {
@@ -117,6 +120,14 @@ const ContentCard: React.FC<ContentCardProps> = ({
                         objectFit="cover"
                         className="rounded-t-lg"
                     />
+                ) : isFlashcard ? (
+                    <div className="w-full h-full flex items-center justify-center p-4 bg-[#222222]">
+                        <FlashcardLargeIcon />
+                    </div>
+                ) : isKuis ? (
+                    <div className="w-full h-full flex items-center justify-center p-4 bg-[#222222]">
+                        <KuisCover />
+                    </div>
                 ) : (
                     <div className="w-full h-full bg-neutral-700 flex items-center justify-center">
                         <span className="text-neutral-400">No thumbnail</span>
