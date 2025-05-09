@@ -32,6 +32,10 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
             dispatch(getRunningQueriesThunk())
         );
 
+        const safeCoursesData = coursesResponse?.data
+            ? JSON.parse(JSON.stringify(coursesResponse.data))
+            : null;
+
         const META_TITLE =
             'Kursus & Kelas Online Bersama Dosen Terbaik Indonesia';
         const META_DESCRIPTION =
@@ -39,7 +43,7 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
 
         return {
             props: {
-                courses: coursesResponse.data,
+                courses: safeCoursesData,
                 title: META_TITLE,
                 description: META_DESCRIPTION,
                 canonical: `https://gradient.academy/kelas`,

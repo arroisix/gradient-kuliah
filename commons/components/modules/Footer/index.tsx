@@ -83,7 +83,7 @@ const ITEMS: FooterItemProps[] = [
             },
             {
                 content: 'Flashcard',
-                url: '/flashcard'
+                url: '/flashcards'
             },
             {
                 content: 'Quiz',

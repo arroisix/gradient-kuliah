@@ -25,7 +25,7 @@ const CreateFlashcardCopilotPage = (): JSX.Element => {
 export const getStaticProps: GetStaticProps = () => {
     return {
         props: {
-            canonical: 'https://gradient.academy/flashcard/create-ai',
+            canonical: 'https://gradient.academy/flashcards/create-ai',
             title: 'Buat Flashcard dengan AI - Gradient',
             description:
                 'Buat flashcards secara otomatis dengan bantuan Copilot AI!'

@@ -2,6 +2,7 @@ import ProductCard from 'commons/components/elements/ProductCard';
 import { cn } from 'commons/utils';
 import { getBookBaseHref } from 'courses/utils';
 import React from 'react';
+import { ClassProgress } from '../../types/dashboard';
 
 type ProgressItemProps = {
     progress: ClassProgress;

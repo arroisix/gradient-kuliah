@@ -107,10 +107,10 @@ type BreadcrumbPathnames =
     | '/search/results/[keywords]'
     | '/latihan'
     | '/testimonial'
-    | '/flashcard'
-    | '/flashcard/[slug]'
-    | '/flashcard/[slug]/study'
-    | '/flashcard/[slug]/edit-card'
+    | '/flashcards'
+    | '/flashcards/[slug]'
+    | '/flashcards/[slug]/study'
+    | '/flashcards/[slug]/edit-card'
     | '/alat-belajar';
 
 type BreadcrumbProps = {

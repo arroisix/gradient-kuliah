@@ -32,7 +32,7 @@ const LearningToolsHeader: React.FC<LearningToolsHeaderProps> = ({
                 router.push('/latihan');
                 break;
             case 'flashcard':
-                router.push('/flashcard');
+                router.push('/flashcards');
                 break;
             default:
                 onTypeChange(tool.name.toLowerCase() as any);

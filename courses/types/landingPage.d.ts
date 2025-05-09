@@ -3,6 +3,11 @@ type CourseFaq = {
     question: string;
 };
 
+type Tag = {
+    name: string;
+    id: string;
+};
+
 type LandingPageSectionKey =
     | 'hero'
     | 'video'
@@ -50,6 +55,7 @@ interface CourseLandingPageData {
     is_coming_soon: boolean;
     is_waiting_list: boolean;
     is_free: boolean;
+    tags: Tag[];
 }
 
 interface MajorOptions {

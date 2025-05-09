@@ -1,6 +1,7 @@
 import Skeleton from 'commons/components/elements/Skeleton';
 import { ListContinueLearning } from './ListContinueLearning';
 import { NoLearningProgress } from './NoLearningProgress';
+import { StudentLearningProgress } from '../../types/dashboard';
 
 const ContinueLearning = ({
     className,

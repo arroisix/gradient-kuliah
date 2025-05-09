@@ -15,7 +15,7 @@ export const getStaticProps: GetStaticProps = () => {
         props: {
             title: 'Flashcard Online Tempat Belajar Kebut Semalam ',
             description: 'Belajar efisien dengan sistem flashcards Gradient',
-            canonical: 'https://gradient.academy/flashcard'
+            canonical: 'https://gradient.academy/flashcards'
         }
     };
 };

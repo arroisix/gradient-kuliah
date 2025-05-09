@@ -25,7 +25,7 @@ const CreateFlashcardPage = (): JSX.Element => {
 export const getStaticProps: GetStaticProps = () => {
     return {
         props: {
-            canonical: 'https://gradient.academy/flashcard/create',
+            canonical: 'https://gradient.academy/flashcards/create',
             title: 'Buat Flashcard - Gradient',
             description: 'Buat flashcards untuk membantu proses belajar kamu!'
         }

@@ -63,14 +63,14 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                 props: {
                     slug,
                     flashcard: data,
-                    canonical: `https://gradient.academy/flashcard/${slug}`,
+                    canonical: `https://gradient.academy/flashcards/${slug}`,
                     title: META_TITLE,
                     description: META_DESCRIPTION,
                     openGraph: {
                         type: 'website',
                         title: META_TITLE,
                         description: META_DESCRIPTION,
-                        url: `https://gradient.academy/flashcard/${slug}`
+                        url: `https://gradient.academy/flashcards/${slug}`
                     }
                 }
             };

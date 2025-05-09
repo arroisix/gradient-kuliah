@@ -124,20 +124,20 @@ export const BREADCRUMB: BreadcrumbProps = {
     '/testimonial': {
         name: 'Testimonial'
     },
-    '/flashcard': {
+    '/flashcards': {
         name: 'Flashcard'
     },
-    '/flashcard/[slug]': {
+    '/flashcards/[slug]': {
         name: 'Flashcard',
-        url: '/flashcard'
+        url: '/flashcards'
     },
-    '/flashcard/[slug]/study': {
+    '/flashcards/[slug]/study': {
         name: 'Flashcard',
-        url: '/flashcard'
+        url: '/flashcards'
     },
-    '/flashcard/[slug]/edit-card': {
+    '/flashcards/[slug]/edit-card': {
         name: 'Flashcard',
-        url: '/flashcard'
+        url: '/flashcards'
     },
     '/alat-belajar': {
         name: 'Alat Belajar'
