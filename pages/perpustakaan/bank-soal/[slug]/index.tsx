@@ -51,12 +51,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         const data = bookResponse.data;
         const recommendations = recommendationsResponse.data;
 
-        if (data.book.category.toLowerCase() !== 'bank soal') {
-            return {
-                notFound: true
-            };
-        }
-
         const META_TITLE = `${data.book.title} Beserta Pembahasannya`;
         const META_DESCRIPTION = `Raih prestasi akademis lebih tinggi melalui latihan soal ${data.book.title} beserta solusi lengkap untuk setiap pertanyaan yang akan mudah untuk Kamu pahami.`;
 

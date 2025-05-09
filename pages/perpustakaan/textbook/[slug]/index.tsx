@@ -51,12 +51,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         const data = bookResponse.data;
         const recommendations = recommendationsResponse.data;
 
-        if (data.book.category.toLowerCase() !== 'textbook') {
-            return {
-                notFound: true
-            };
-        }
-
         const authors = data.book.authors.join(', ');
         const META_TITLE = `Buku ${data.book.title} by ${authors}`;
         const META_DESCRIPTION = `Temukan kunci jawaban buku ${data.book.title} dari ${authors}, solusi dan pembahasan disusun mendalam oleh dosen-dosen ternama di Indonesia.`;
