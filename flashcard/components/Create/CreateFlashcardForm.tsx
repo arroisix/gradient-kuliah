@@ -138,7 +138,7 @@ const CreateFlashcardForm = ({
                     position: toast.POSITION.TOP_CENTER
                 });
 
-                router.push(`/flashcard/${initialData.slug}`);
+                router.push(`/flashcards/${initialData.slug}`);
             } else {
                 if (useAi) {
                     const transformedUrls = formData.files

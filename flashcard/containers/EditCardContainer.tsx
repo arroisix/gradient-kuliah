@@ -265,7 +265,7 @@ const EditCardContainer = (): JSX.Element => {
                     className="w-full py-4"
                     nextItem={{
                         name: flashcardDetail ? flashcardDetail?.title : '',
-                        url: `/flashcard/${slug}`,
+                        url: `/flashcards/${slug}`,
                         nextItem: {
                             name: 'Edit Flashcard'
                         }

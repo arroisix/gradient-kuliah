@@ -58,11 +58,11 @@ const FlashcardDetailContainer = (): JSX.Element => {
 
     const handleEdit = () => {
         if (!flashcard) return;
-        router.push(`/flashcard/${slug}/edit-card`);
+        router.push(`/flashcards/${slug}/edit-card`);
     };
 
     const handleEditFlashcard = () => {
-        router.push(`/flashcard/${slug}/edit`);
+        router.push(`/flashcards/${slug}/edit`);
     };
 
     const handleDelete = () => {

@@ -90,7 +90,7 @@ const EditFlashcardForm = ({
             toast.success('Card berhasil dihapus', {
                 position: toast.POSITION.TOP_CENTER
             });
-            router.push(`/flashcard/${router.query.slug}`);
+            router.push(`/flashcards/${router.query.slug}`);
         } catch (error) {
             console.error('Failed to delete card:', error);
         }
