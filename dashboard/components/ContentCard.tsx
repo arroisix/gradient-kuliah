@@ -8,6 +8,7 @@ import Cards from 'flashcard/assets/Cards';
 import { useTracker } from 'tracker/tracker';
 import FlashcardLargeIcon from 'dashboard/assets/FlashcardLargeIcon';
 import KuisCover from '../assets/KuisCover';
+import Fire from '../assets/Fire';
 
 interface ContentCardProps {
     id: string;
@@ -102,7 +103,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
                         background:
                             'linear-gradient(90deg, #36236A 0%, #6C5096 65%, #494BA0 90%)'
                     }}>
-                    <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                    <Fire />
                     Trending
                 </div>
             )}
@@ -270,7 +271,9 @@ const ContentCard: React.FC<ContentCardProps> = ({
 
                                     {!shouldUseStackedLayout && cardCount && (
                                         <>
-                                            <Cards />
+                                            <div className="mr-1">
+                                                <Cards />
+                                            </div>
                                             <span className="truncate">
                                                 {cardCount} Cards
                                             </span>
@@ -361,7 +364,9 @@ const ContentCard: React.FC<ContentCardProps> = ({
                                                 |
                                             </span>
                                         )}
-                                        <Cards />
+                                        <div className="mr-1">
+                                            <Cards />
+                                        </div>
                                         <span className="truncate max-w-full">
                                             {cardCount} Cards
                                         </span>
