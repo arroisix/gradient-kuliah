@@ -53,7 +53,7 @@ const AddFlashcardDialog = ({
 
                                 <div className="space-y-2">
                                     <Link
-                                        href="/pages/flashcards/create"
+                                        href="/flashcards/create"
                                         className="flex items-center gap-3 p-4 rounded-xl border border-[#333333] hover:bg-neutral-800/50 transition-colors">
                                         <div className="w-10 h-10 bg-[#2C2C2C] rounded-full flex items-center justify-center">
                                             <BsPencilSquare
@@ -76,7 +76,7 @@ const AddFlashcardDialog = ({
                                     </Link>
 
                                     <Link
-                                        href="/pages/flashcards/create-ai"
+                                        href="/flashcards/create-ai"
                                         className="flex items-center gap-3 p-4 rounded-xl border border-[#333333] hover:bg-neutral-800/50 transition-colors">
                                         <div className="w-10 h-10 bg-[#2C2C2C] rounded-full flex items-center justify-center">
                                             <RiRobot2Fill

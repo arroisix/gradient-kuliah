@@ -23,7 +23,7 @@ const DashboardQuickActions: React.FC<DashboardQuickActionsProps> = ({
 
     const handleBuatFlashcard = () => {
         tracker?.genericTrack('Click Buat Flashcard Button');
-        router.push('/flashcards');
+        router.push('/flashcards/create-ai');
     };
 
     const handleCariMateriDiGradient = async () => {

@@ -179,7 +179,7 @@ interface BookRecommendationItem extends BaseMajorRecommendationItem {
     page_title: string;
     book_slug: string;
     course_name: string;
-    page: number;
+    page_number: number;
 }
 
 interface QuizRecommendationItem extends BaseMajorRecommendationItem {

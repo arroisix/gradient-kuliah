@@ -115,16 +115,15 @@ const ContentCard: React.FC<ContentCardProps> = ({
                 </div>
             )}
 
-            <div className="relative w-full aspect-video bg-[#222222] flex items-center justify-center">
+            <div className="relative w-full aspect-video bg-[#222222]">
                 {thumbnail ? (
                     isBookType ? (
-                        <div className="h-full w-auto max-h-full flex items-center justify-center">
-                            <Image
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <img
                                 src={thumbnail}
                                 alt={title}
-                                layout="fill"
-                                objectFit="contain"
-                                className="rounded-lg"
+                                className="h-[80%] w-auto object-contain"
+                                style={{ maxWidth: '60%' }}
                             />
                         </div>
                     ) : (
@@ -137,15 +136,15 @@ const ContentCard: React.FC<ContentCardProps> = ({
                         />
                     )
                 ) : isFlashcard ? (
-                    <div className="w-full h-full flex items-center justify-center p-4">
+                    <div className="absolute inset-0 flex items-center justify-center p-2">
                         <FlashcardLargeIcon />
                     </div>
                 ) : isKuis ? (
-                    <div className="w-full h-full flex items-center justify-center p-4">
+                    <div className="absolute inset-0 flex items-center justify-center p-2">
                         <KuisCover />
                     </div>
                 ) : (
-                    <div className="w-full h-full flex items-center justify-center">
+                    <div className="absolute inset-0 flex items-center justify-center">
                         <span className="text-neutral-400">No thumbnail</span>
                     </div>
                 )}
