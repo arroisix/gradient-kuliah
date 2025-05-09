@@ -9,8 +9,8 @@ const FlashcardDescription = ({
 }: FlashcardDescriptionProps): JSX.Element => {
     const [isExpanded, setIsExpanded] = useState(false);
 
-    const truncatedDesc = description.slice(0, 132);
-    const shouldTruncate = description.length > 132;
+    const truncatedDesc = description?.slice(0, 132);
+    const shouldTruncate = description?.length > 132;
 
     return (
         <div className="mb-6">

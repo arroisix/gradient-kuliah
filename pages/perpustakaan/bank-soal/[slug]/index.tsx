@@ -1,11 +1,8 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import LearnLayout from 'commons/learnLayout';
 import AstronotesDetail from 'courses/containers/learn/astronotes/detail';
-import { wrapper } from 'redux/store';
-import { ThunkDispatch } from 'redux-thunk';
-import { getBookDetail } from 'courses/redux/api/astronotesApi';
-import { getRunningQueriesThunk } from 'redux/api/baseApi';
-import { getBookRecommendations } from 'courses/redux/api/learningExperienceApi';
+import axios from 'axios';
+import config from 'redux/api/config';
 
 const BankSoalDetailPage = ({
     slug,
@@ -37,72 +34,67 @@ export const getStaticPaths: GetStaticPaths = async () => {
     };
 };
 
-export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
-    (store) =>
-        async ({ params }) => {
-            const { slug } = params as { slug: string };
-            const dispatch = store.dispatch as ThunkDispatch<
-                RootState,
-                never,
-                never
-            >;
-            dispatch(getBookDetail.initiate({ slug }));
-            dispatch(
-                getBookRecommendations.initiate({ category: 'bank-soal', slug })
-            );
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+    try {
+        const { slug } = params as { slug: string };
 
-            const payload = await Promise.all(
-                dispatch(getRunningQueriesThunk())
-            );
+        // Fetch book details and recommendations in parallel
+        const [bookResponse, recommendationsResponse] = await Promise.all([
+            axios.get<GetBookDetailResponse>(
+                `${config.API_BASE_URL}books/${slug}/detail/`
+            ),
+            axios.get<GetBookRecommendationResponse>(
+                `${config.API_BASE_URL}learning-experiences/recommendations/books/bank-soal/${slug}`
+            )
+        ]);
 
-            if (payload[0].error) {
-                return {
-                    notFound: true
-                };
-            }
+        const data = bookResponse.data;
+        const recommendations = recommendationsResponse.data;
 
-            const data = payload[0].data as GetBookDetailResponse;
-            const recommendations = payload[1]
-                .data as GetBookRecommendationResponse;
-            if (data.book.category.toLowerCase() !== 'bank soal') {
-                return {
-                    notFound: true
-                };
-            }
-
-            const META_TITLE = `${data.book.title} Beserta Pembahasannya`;
-            const META_DESCRIPTION = `Raih prestasi akademis lebih tinggi melalui latihan soal ${data.book.title} beserta solusi lengkap untuk setiap pertanyaan yang akan mudah untuk Kamu pahami.`;
-
+        if (data.book.category.toLowerCase() !== 'bank soal') {
             return {
-                revalidate: 300,
-                props: {
-                    slug: params?.slug,
-                    astronotes: data.book,
-                    recommendations,
-                    canonical: `https://gradient.academy/perpustakaan/bank-soal/${params?.slug}`,
-                    title: META_TITLE,
-                    description: META_DESCRIPTION,
-                    openGraph: {
-                        type: 'website',
-                        title: META_TITLE,
-                        description: META_DESCRIPTION,
-                        url: `https://gradient.academy/perpustakaan/bank-soal/${params?.slug}`,
-                        images: [
-                            {
-                                url: data.book.cover_url,
-                                width: 162,
-                                height: 232,
-                                alt: `${data.book.category} ${data.book.title}`
-                            },
-                            {
-                                url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
-                                width: 48,
-                                height: 48,
-                                alt: 'Gradient Academy'
-                            }
-                        ]
-                    }
-                }
+                notFound: true
             };
         }
-);
+
+        const META_TITLE = `${data.book.title} Beserta Pembahasannya`;
+        const META_DESCRIPTION = `Raih prestasi akademis lebih tinggi melalui latihan soal ${data.book.title} beserta solusi lengkap untuk setiap pertanyaan yang akan mudah untuk Kamu pahami.`;
+
+        return {
+            revalidate: 300,
+            props: {
+                slug: params?.slug,
+                astronotes: data.book,
+                recommendations,
+                canonical: `https://gradient.academy/perpustakaan/bank-soal/${params?.slug}`,
+                title: META_TITLE,
+                description: META_DESCRIPTION,
+                openGraph: {
+                    type: 'website',
+                    title: META_TITLE,
+                    description: META_DESCRIPTION,
+                    url: `https://gradient.academy/perpustakaan/bank-soal/${params?.slug}`,
+                    images: [
+                        {
+                            url: data.book.cover_url,
+                            width: 162,
+                            height: 232,
+                            alt: `${data.book.category} ${data.book.title}`
+                        },
+                        {
+                            url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
+                            width: 48,
+                            height: 48,
+                            alt: 'Gradient Academy'
+                        }
+                    ]
+                }
+            }
+        };
+    } catch (error) {
+        console.error('Error fetching bank soal details:', error);
+        return {
+            notFound: true
+        };
+    }
+};
