@@ -1,10 +1,8 @@
 import LearnLayout from 'commons/learnLayout';
 import AstronotesEntrypoint from 'courses/containers/learn/astronotes/entrypoint';
-import { getPublicEntrypointBooks } from 'courses/redux/api/astronotesApi';
 import { GetStaticProps } from 'next';
-import { ThunkDispatch } from 'redux-thunk';
-import { getRunningQueriesThunk } from 'redux/api/baseApi';
-import { wrapper } from 'redux/store';
+import axios from 'axios';
+import config from 'redux/api/config';
 
 const BankSoalPage = ({
     books
@@ -21,24 +19,19 @@ const BankSoalPage = ({
     );
 };
 
-export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
-    (store) => async () => {
-        const dispatch = store.dispatch as ThunkDispatch<
-            RootState,
-            never,
-            never
-        >;
-        dispatch(
-            getPublicEntrypointBooks.initiate({ limit: 6, type: 'bank-soal' })
+export const getStaticProps: GetStaticProps = async () => {
+    try {
+        const response = await axios.get<ListResponseData<Astronote>>(
+            `${config.API_BASE_URL}books/v2/public/entrypoint/`,
+            {
+                params: {
+                    limit: 6,
+                    type: 'bank-soal'
+                }
+            }
         );
-        const payload = await Promise.all(dispatch(getRunningQueriesThunk()));
 
-        if (payload.some((response) => response.isError)) {
-            return {
-                notFound: true
-            };
-        }
-        const books = payload[0].data as ListResponseData<Astronote>;
+        const books = response.data;
 
         const META_TITLE = 'Kumpulan Bank Soal Perkuliahan Terbaru';
         const META_DESCRIPTION =
@@ -67,8 +60,13 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                 }
             }
         };
+    } catch (error) {
+        console.error('Error fetching bank soal library data:', error);
+        return {
+            notFound: true
+        };
     }
-);
+};
 
 BankSoalPage.displayName = 'Question Bank Library';
 export default BankSoalPage;
