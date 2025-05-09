@@ -66,6 +66,10 @@ const ContentCard: React.FC<ContentCardProps> = ({
         (category === 'Video' || category === 'Kelas') && !isMajorClass;
     const isFlashcard = category === 'Flashcard';
     const isKuis = category === 'Kuis';
+    const isBookType =
+        category === 'Astronotes' ||
+        category === 'Textbook Solution' ||
+        category === 'Bank Soal';
 
     const handleClick = () => {
         tracker?.genericTrack('Click Content Card', {
@@ -111,25 +115,37 @@ const ContentCard: React.FC<ContentCardProps> = ({
                 </div>
             )}
 
-            <div className="relative w-full aspect-video">
+            <div className="relative w-full aspect-video bg-[#222222] flex items-center justify-center">
                 {thumbnail ? (
-                    <Image
-                        src={thumbnail}
-                        alt={title}
-                        layout="fill"
-                        objectFit="cover"
-                        className="rounded-t-lg"
-                    />
+                    isBookType ? (
+                        <div className="h-full w-auto max-h-full flex items-center justify-center">
+                            <Image
+                                src={thumbnail}
+                                alt={title}
+                                layout="fill"
+                                objectFit="contain"
+                                className="rounded-lg"
+                            />
+                        </div>
+                    ) : (
+                        <Image
+                            src={thumbnail}
+                            alt={title}
+                            layout="fill"
+                            objectFit="cover"
+                            className="rounded-t-lg"
+                        />
+                    )
                 ) : isFlashcard ? (
-                    <div className="w-full h-full flex items-center justify-center p-4 bg-[#222222]">
+                    <div className="w-full h-full flex items-center justify-center p-4">
                         <FlashcardLargeIcon />
                     </div>
                 ) : isKuis ? (
-                    <div className="w-full h-full flex items-center justify-center p-4 bg-[#222222]">
+                    <div className="w-full h-full flex items-center justify-center p-4">
                         <KuisCover />
                     </div>
                 ) : (
-                    <div className="w-full h-full bg-neutral-700 flex items-center justify-center">
+                    <div className="w-full h-full flex items-center justify-center">
                         <span className="text-neutral-400">No thumbnail</span>
                     </div>
                 )}
