@@ -122,7 +122,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
                             <img
                                 src={thumbnail}
                                 alt={title}
-                                className="h-[80%] w-auto object-contain"
+                                className="h-[80%] rounded-lg w-auto object-contain"
                                 style={{ maxWidth: '60%' }}
                             />
                         </div>
