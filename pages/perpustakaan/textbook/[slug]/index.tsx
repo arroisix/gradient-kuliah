@@ -44,12 +44,18 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
                 `${config.API_BASE_URL}books/${slug}/detail/`
             ),
             axios.get<GetBookRecommendationResponse>(
-                `${config.API_BASE_URL}learning-experiences/recommendations/books/textbook/${slug}`
+                `${config.API_BASE_URL}learning-experiences/recommendations/textbook/${slug}`
             )
         ]);
 
         const data = bookResponse.data;
         const recommendations = recommendationsResponse.data;
+
+        if (data.book.category.toLowerCase() !== 'textbook') {
+            return {
+                notFound: true
+            };
+        }
 
         const authors = data.book.authors.join(', ');
         const META_TITLE = `Buku ${data.book.title} by ${authors}`;

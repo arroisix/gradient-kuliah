@@ -44,12 +44,18 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
                 `${config.API_BASE_URL}books/${slug}/detail/`
             ),
             axios.get<GetBookRecommendationResponse>(
-                `${config.API_BASE_URL}learning-experiences/recommendations/books/bank-soal/${slug}`
+                `${config.API_BASE_URL}learning-experiences/recommendations/bank-soal/${slug}`
             )
         ]);
 
         const data = bookResponse.data;
         const recommendations = recommendationsResponse.data;
+
+        if (data.book.category.toLowerCase() !== 'bank soal') {
+            return {
+                notFound: true
+            };
+        }
 
         const META_TITLE = `${data.book.title} Beserta Pembahasannya`;
         const META_DESCRIPTION = `Raih prestasi akademis lebih tinggi melalui latihan soal ${data.book.title} beserta solusi lengkap untuk setiap pertanyaan yang akan mudah untuk Kamu pahami.`;
