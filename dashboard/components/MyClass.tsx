@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { HiChevronDown, HiOutlinePlusSm } from 'react-icons/hi';
 import { useSelector } from 'react-redux';
 import { useTracker } from 'tracker/tracker';
+import { StudentCourse } from '../types/dashboard';
 
 const MyClass = ({ className }: { className?: string }): JSX.Element => {
     const router = useRouter();

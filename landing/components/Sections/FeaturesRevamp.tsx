@@ -105,7 +105,7 @@ const FeaturesRevamp = () => {
                             title="Flashcard"
                             subtitle="Belajar kebut semalam dengan bantuan AI, menghafal lebih cepat"
                             imageName="feature-flashcard.jpg"
-                            href="/flashcard"
+                            href="/flashcards"
                         />
                         <FeatureCard
                             title="Kuis"

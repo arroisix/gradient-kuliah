@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { useTracker } from 'tracker/tracker';
+import { LearningMaterial } from '../types/dashboard';
 
 const DashboardCard = ({
     eventName,

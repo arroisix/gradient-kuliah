@@ -133,7 +133,7 @@ const StudyFlashcardContainer = (): JSX.Element => {
                     className="w-full py-4"
                     nextItem={{
                         name: flashcard.title,
-                        url: `/flashcard/${slug}`,
+                        url: `/flashcards/${slug}`,
                         nextItem: {
                             name: 'Pelajari Flashcard'
                         }
