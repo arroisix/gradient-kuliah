@@ -3,11 +3,8 @@ import type { GetStaticPaths, GetStaticProps } from 'next/types';
 import { ArticleJsonLd } from 'next-seo';
 import moment from 'moment';
 import BankSoalContainer from 'courses/containers/learn/astronotes/bankSoal';
-import { getBankSoal, getBookDetail } from 'courses/redux/api/astronotesApi';
-import { wrapper } from 'redux/store';
-import { ThunkDispatch } from 'redux-thunk';
-import { getRunningQueriesThunk } from 'redux/api/baseApi';
-import { getBankSoalProblemRecommendations } from 'courses/redux/api/learningExperienceApi';
+import axios from 'axios';
+import config from 'redux/api/config';
 
 const DUMMY_DATE = moment().startOf('year').format();
 
@@ -66,81 +63,76 @@ export const getStaticPaths: GetStaticPaths = async () => {
     };
 };
 
-export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
-    (store) =>
-        async ({ params }) => {
-            const { slug, problemSlug } = params as {
-                slug: string;
-                problemSlug: string;
-            };
-            const dispatch = store.dispatch as ThunkDispatch<
-                RootState,
-                never,
-                never
-            >;
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+    try {
+        const { slug, problemSlug } = params as {
+            slug: string;
+            problemSlug: string;
+        };
 
-            dispatch(getBookDetail.initiate({ slug }));
-            dispatch(getBankSoal.initiate({ slug, problemSlug }));
-            dispatch(
-                getBankSoalProblemRecommendations.initiate({
-                    slug: problemSlug
-                })
-            );
+        // Fetch book details, bank soal problem, and recommendations in parallel
+        const [bookResponse, bankSoalResponse, recommendationsResponse] =
+            await Promise.all([
+                axios.get<GetBookDetailResponse>(
+                    `${config.API_BASE_URL}books/${slug}/detail/`
+                ),
+                axios.get<BankSoal>(
+                    `${config.API_BASE_URL}books/bank-soal/${slug}/problems/${problemSlug}/`
+                ),
+                axios.get<GetProblemRecommendationsResponse>(
+                    `${config.API_BASE_URL}learning-experiences/recommendations/books/problems/${problemSlug}/`
+                )
+            ]);
 
-            const payload = await Promise.all(
-                dispatch(getRunningQueriesThunk())
-            );
+        const { book } = bookResponse.data;
 
-            if (payload.some((response) => response.isError)) {
-                return {
-                    notFound: true
-                };
-            }
-
-            const { book } = payload[0].data as GetBookDetailResponse;
-            if (book.category.toLowerCase() !== 'bank soal') {
-                return {
-                    notFound: true
-                };
-            }
-
-            const bankSoal = payload[1].data as BankSoal;
-            const recommendations = payload[2]
-                .data as GetProblemRecommendationsResponse;
-
-            const title =
-                bankSoal.problem.title.length > 70
-                    ? `${bankSoal.problem.title.substring(0, 70)} ...`
-                    : bankSoal.problem.title;
-            const description =
-                'Persiapkan diri kamu untuk menghadapi ujian dengan kumpuan soal-soal UTS, UAS, ujian, dan bank soal dari universitas ternama. Pelajari setiap soal dengan detail!';
-
+        if (book.category.toLowerCase() !== 'bank soal') {
             return {
-                revalidate: 300,
-                props: {
-                    slug,
-                    problemSlug,
-                    book,
-                    content: bankSoal,
-                    recommendations,
-                    canonical: `https://gradient.academy/perpustakaan/bank-soal/${slug}/${problemSlug}`,
-                    title,
-                    description,
-                    openGraph: {
-                        type: 'website',
-                        title,
-                        description,
-                        url: `https://gradient.academy/perpustakaan/bank-soal/${slug}/${problemSlug}`,
-                        images: [
-                            {
-                                url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
-                                width: 48,
-                                height: 48,
-                                alt: 'Gradient Academy'
-                            }
-                        ]
-                    }
-                }
+                notFound: true
             };
         }
-);
+
+        const bankSoal = bankSoalResponse.data;
+        const recommendations = recommendationsResponse.data;
+
+        const title =
+            bankSoal.problem.title.length > 70
+                ? `${bankSoal.problem.title.substring(0, 70)} ...`
+                : bankSoal.problem.title;
+        const description =
+            'Persiapkan diri kamu untuk menghadapi ujian dengan kumpuan soal-soal UTS, UAS, ujian, dan bank soal dari universitas ternama. Pelajari setiap soal dengan detail!';
+
+        return {
+            revalidate: 300,
+            props: {
+                slug,
+                problemSlug,
+                book,
+                content: bankSoal,
+                recommendations,
+                canonical: `https://gradient.academy/perpustakaan/bank-soal/${slug}/${problemSlug}`,
+                title,
+                description,
+                openGraph: {
+                    type: 'website',
+                    title,
+                    description,
+                    url: `https://gradient.academy/perpustakaan/bank-soal/${slug}/${problemSlug}`,
+                    images: [
+                        {
+                            url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
+                            width: 48,
+                            height: 48,
+                            alt: 'Gradient Academy'
+                        }
+                    ]
+                }
+            }
+        };
+    } catch (error) {
+        console.error('Error fetching bank soal problem:', error);
+        return {
+            notFound: true
+        };
+    }
+};

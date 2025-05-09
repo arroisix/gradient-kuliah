@@ -3,17 +3,11 @@ import withAnon from 'commons/withAnon';
 import DetailSection from 'komunitas/containers/DetailSection';
 import { KomunitasProvider } from 'komunitas/contexts/KomunitasProvider';
 import { GetStaticProps, GetStaticPaths } from 'next';
-import { wrapper } from 'redux/store';
-import { ThunkDispatch } from 'redux-thunk';
-import { getRunningQueriesThunk } from 'redux/api/baseApi';
-import {
-    getPublicCommunityPostDetail,
-    getCommunityPostCommentDetail,
-    getCommunityPostRecommendations
-} from 'komunitas/redux/api/komunitasApi';
 import { QAPageJsonLd } from 'next-seo';
 import moment from 'moment';
 import { useRouter } from 'next/router';
+import axios from 'axios';
+import config from 'redux/api/config';
 
 type DetailKomunitasProps = {
     postData: CommunityPostDetailResponse;
@@ -101,93 +95,79 @@ const DetailKomunitas = ({
 export const getStaticPaths: GetStaticPaths = async () => {
     return {
         paths: [],
-        fallback: true // can also be true or 'blocking'
+        fallback: 'blocking' // can also be true or 'blocking'
     };
 };
 
-export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
-    (store) =>
-        async ({ params }) => {
-            const { category, id } = params as { category: string; id: string };
-            const dispatch = store.dispatch as ThunkDispatch<
-                RootState,
-                never,
-                never
-            >;
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+    const { category, id } = params as { category: string; id: string };
 
-            dispatch(getPublicCommunityPostDetail.initiate({ slug: id }));
-            dispatch(getCommunityPostRecommendations.initiate({ slug: id }));
+    try {
+        // Make parallel API calls with axios
+        const [postResponse, recommendationsResponse] = await Promise.all([
+            axios.get<CommunityPostDetailResponse>(
+                `${config.API_BASE_URL}communities/public/post/${id}/`
+            ),
+            axios.get<GetCommunityPostRecommendationResponse>(
+                `${config.API_BASE_URL}learning-experiences/recommendations/communities/${id}/`
+            )
+        ]);
 
-            const postPayload = await Promise.all(
-                dispatch(getRunningQueriesThunk())
-            );
+        const postData = postResponse.data;
 
-            if (postPayload[0].error) {
-                return {
-                    notFound: true
-                };
-            }
-
-            const postData = postPayload[0].data as CommunityPostDetailResponse;
-
-            dispatch(
-                getCommunityPostCommentDetail.initiate({ post_id: postData.id })
-            );
-
-            const commentPayload = await Promise.all(
-                dispatch(getRunningQueriesThunk())
-            );
-
-            if (commentPayload[0].error) {
-                return {
-                    notFound: true
-                };
-            }
-
-            const recommendations = postPayload[1].data ?? null;
-            const commentData = commentPayload[0]
-                .data as CommunityPostCommentDetailResponse & {
+        // Get comments after we have the post ID
+        const commentResponse = await axios.get<
+            CommunityPostCommentDetailResponse & {
                 count_items: number;
                 next_page?: number;
                 previous_page?: number;
-            };
+            }
+        >(`${config.API_BASE_URL}communities/post/${postData.id}/comment/`);
 
-            const META_TITLE =
-                postData.content.length > 60
-                    ? `${postData.content.substring(0, 60)} ...`
-                    : postData.content;
-            const META_DESCRIPTION =
-                postData.content.length > 155
-                    ? `${postData.content.substring(0, 155)} ...`
-                    : postData.content;
+        const recommendations = recommendationsResponse.data;
+        const commentData = commentResponse.data;
 
-            return {
-                props: {
-                    postData,
-                    commentData,
-                    recommendations,
-                    canonical: `https://gradient.academy/komunitas/${category}/${id}`,
+        const META_TITLE =
+            postData.content.length > 60
+                ? `${postData.content.substring(0, 60)} ...`
+                : postData.content;
+        const META_DESCRIPTION =
+            postData.content.length > 155
+                ? `${postData.content.substring(0, 155)} ...`
+                : postData.content;
+
+        return {
+            props: {
+                postData,
+                commentData,
+                recommendations,
+                canonical: `https://gradient.academy/komunitas/${category}/${id}`,
+                title: META_TITLE,
+                description: META_DESCRIPTION,
+                openGraph: {
+                    type: 'website',
                     title: META_TITLE,
                     description: META_DESCRIPTION,
-                    openGraph: {
-                        type: 'website',
-                        title: META_TITLE,
-                        description: META_DESCRIPTION,
-                        url: `https://gradient.academy/komunitas/${category}/${id}`,
-                        images: [
-                            {
-                                url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
-                                width: 48,
-                                height: 48,
-                                alt: 'Gradient Academy'
-                            }
-                        ]
-                    }
-                },
-                revalidate: 60 * 60 * 5 // 5 hours
-            };
-        }
-);
+                    url: `https://gradient.academy/komunitas/${category}/${id}`,
+                    images: [
+                        {
+                            url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
+                            width: 48,
+                            height: 48,
+                            alt: 'Gradient Academy'
+                        }
+                    ]
+                }
+            },
+            revalidate: 60 * 60 * 5 // 5 hours
+        };
+    } catch (error) {
+        console.error('Error fetching community post:', error);
+        return {
+            notFound: true
+        };
+    }
+};
 
 DetailKomunitas.displayName = 'Community Detail';
 export default withAnon(DetailKomunitas);

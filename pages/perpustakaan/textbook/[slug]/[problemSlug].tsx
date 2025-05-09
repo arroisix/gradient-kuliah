@@ -4,14 +4,8 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import { ArticleJsonLd } from 'next-seo';
 import React from 'react';
 import TextbookSolution from 'courses/containers/learn/astronotes/textbook';
-import {
-    getBookDetail,
-    getTextbookSolution
-} from 'courses/redux/api/astronotesApi';
-import { ThunkDispatch } from 'redux-thunk';
-import { getRunningQueriesThunk } from 'redux/api/baseApi';
-import { wrapper } from 'redux/store';
-import { getTextbookProblemRecommendations } from 'courses/redux/api/learningExperienceApi';
+import axios from 'axios';
+import config from 'redux/api/config';
 
 const DUMMY_DATE = moment().startOf('year').format();
 interface TextbookSolutionProblemPageProps {
@@ -69,80 +63,75 @@ export const getStaticPaths: GetStaticPaths = async () => {
     };
 };
 
-export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
-    (store) =>
-        async ({ params }) => {
-            const { slug, problemSlug } = params as {
-                slug: string;
-                problemSlug: string;
-            };
-            const dispatch = store.dispatch as ThunkDispatch<
-                RootState,
-                never,
-                never
-            >;
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+    try {
+        const { slug, problemSlug } = params as {
+            slug: string;
+            problemSlug: string;
+        };
 
-            dispatch(getBookDetail.initiate({ slug }));
-            dispatch(getTextbookSolution.initiate({ slug, problemSlug }));
-            dispatch(
-                getTextbookProblemRecommendations.initiate({
-                    slug: problemSlug
-                })
-            );
+        // Fetch book details, textbook solution, and recommendations in parallel
+        const [bookResponse, textbookResponse, recommendationsResponse] =
+            await Promise.all([
+                axios.get<GetBookDetailResponse>(
+                    `${config.API_BASE_URL}books/${slug}/detail/`
+                ),
+                axios.get<TextbookSolution>(
+                    `${config.API_BASE_URL}books/textbook/${slug}/problems/${problemSlug}/`
+                ),
+                axios.get<GetProblemRecommendationsResponse>(
+                    `${config.API_BASE_URL}learning-experiences/recommendations/books/problems/${problemSlug}/`
+                )
+            ]);
 
-            const payload = await Promise.all(
-                dispatch(getRunningQueriesThunk())
-            );
+        const { book } = bookResponse.data;
 
-            if (payload.some((response) => response.isError)) {
-                return {
-                    notFound: true
-                };
-            }
-
-            const { book } = payload[0].data as GetBookDetailResponse;
-            if (book.category.toLowerCase() !== 'textbook') {
-                return {
-                    notFound: true
-                };
-            }
-
-            const textbook = payload[1].data as TextbookSolution;
-            const recommendations = payload[2]
-                .data as GetProblemRecommendationsResponse;
-
-            const section = textbook.problem.section
-                ? textbook.problem.section
-                : textbook.problem.chapter;
-            const title = `Pembahasan Soal & Kunci Jawaban ${section}`;
-            const description =
-                'Temukan pembahasan soal-soal dari buku ajar perkuliahan yang disusun oleh dosen-dosen terbaik. Solusi yang mendalam dan komprehensif dapat meningkatkan kemampuan kamu.';
-
+        if (book.category.toLowerCase() !== 'textbook') {
             return {
-                revalidate: 300,
-                props: {
-                    slug,
-                    problemSlug,
-                    content: textbook,
-                    recommendations,
-                    canonical: `https://gradient.academy/perpustakaan/textbook/${slug}/${problemSlug}`,
-                    title,
-                    description,
-                    openGraph: {
-                        type: 'website',
-                        title,
-                        description,
-                        url: `https://gradient.academy/perpustakaan/textbook/${slug}/${problemSlug}`,
-                        images: [
-                            {
-                                url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
-                                width: 48,
-                                height: 48,
-                                alt: 'Gradient Academy'
-                            }
-                        ]
-                    }
-                }
+                notFound: true
             };
         }
-);
+
+        const textbook = textbookResponse.data;
+        const recommendations = recommendationsResponse.data;
+
+        const section = textbook.problem.section
+            ? textbook.problem.section
+            : textbook.problem.chapter;
+        const title = `Pembahasan Soal & Kunci Jawaban ${section}`;
+        const description =
+            'Temukan pembahasan soal-soal dari buku ajar perkuliahan yang disusun oleh dosen-dosen terbaik. Solusi yang mendalam dan komprehensif dapat meningkatkan kemampuan kamu.';
+
+        return {
+            revalidate: 300,
+            props: {
+                slug,
+                problemSlug,
+                content: textbook,
+                recommendations,
+                canonical: `https://gradient.academy/perpustakaan/textbook/${slug}/${problemSlug}`,
+                title,
+                description,
+                openGraph: {
+                    type: 'website',
+                    title,
+                    description,
+                    url: `https://gradient.academy/perpustakaan/textbook/${slug}/${problemSlug}`,
+                    images: [
+                        {
+                            url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
+                            width: 48,
+                            height: 48,
+                            alt: 'Gradient Academy'
+                        }
+                    ]
+                }
+            }
+        };
+    } catch (error) {
+        console.error('Error fetching textbook solution:', error);
+        return {
+            notFound: true
+        };
+    }
+};

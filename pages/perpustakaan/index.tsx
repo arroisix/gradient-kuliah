@@ -1,10 +1,8 @@
 import LearnLayout from 'commons/learnLayout';
 import AstronotesEntrypoint from 'courses/containers/learn/astronotes/entrypoint';
-import { getPublicEntrypointBooks } from 'courses/redux/api/astronotesApi';
 import { GetStaticProps } from 'next';
-import { ThunkDispatch } from 'redux-thunk';
-import { getRunningQueriesThunk } from 'redux/api/baseApi';
-import { wrapper } from 'redux/store';
+import axios from 'axios';
+import config from 'redux/api/config';
 
 const PerpustakaanPage = ({
     books
@@ -21,23 +19,16 @@ const PerpustakaanPage = ({
     );
 };
 
-export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
-    (store) => async () => {
-        const dispatch = store.dispatch as ThunkDispatch<
-            RootState,
-            never,
-            never
-        >;
-        dispatch(getPublicEntrypointBooks.initiate({ limit: 6 }));
-        const payload = await Promise.all(dispatch(getRunningQueriesThunk()));
+export const getStaticProps: GetStaticProps = async () => {
+    try {
+        const response = await axios.get<ListResponseData<Astronote>>(
+            `${config.API_BASE_URL}books/v2/public/entrypoint/`,
+            {
+                params: { limit: 6 }
+            }
+        );
 
-        if (payload.some((response) => response.isError)) {
-            return {
-                revalidate: 30,
-                notFound: true
-            };
-        }
-        const books = payload[0].data as ListResponseData<Astronote>;
+        const books = response.data;
 
         const META_TITLE =
             'Perpustakaan Online Pusat Ruang Baca Digital Terkini';
@@ -66,8 +57,14 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
                 }
             }
         };
+    } catch (error) {
+        console.error('Error fetching perpustakaan data:', error);
+        return {
+            revalidate: 30,
+            notFound: true
+        };
     }
-);
+};
 
 PerpustakaanPage.displayName = 'Library';
 export default PerpustakaanPage;
