@@ -78,9 +78,9 @@ const CreateFlashcardForm = ({
 
     const handleClose = () => {
         if (mode === 'edit' && initialData) {
-            router.push(`/flashcard/${initialData.slug}`);
+            router.push(`/flashcards/${initialData.slug}`);
         } else {
-            router.push('/flashcard');
+            router.push('/flashcards');
         }
     };
 
@@ -157,9 +157,9 @@ const CreateFlashcardForm = ({
                     }).unwrap();
 
                     if (response?.slug) {
-                        router.push(`/flashcard/${response.slug}`);
+                        router.push(`/flashcards/${response.slug}`);
                     } else {
-                        router.push('/flashcard');
+                        router.push('/flashcards');
                     }
                 } else {
                     const response = await createFlashcard({
@@ -173,9 +173,9 @@ const CreateFlashcardForm = ({
                     });
 
                     if (response?.slug) {
-                        router.push(`/flashcard/${response.slug}`);
+                        router.push(`/flashcards/${response.slug}`);
                     } else {
-                        router.push('/flashcard');
+                        router.push('/flashcards');
                     }
                 }
             }

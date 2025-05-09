@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { FaRegCirclePlay } from 'react-icons/fa6';
 import { FaGraduationCap, FaBookmark, FaListUl } from 'react-icons/fa';
 import { BiSolidStar } from 'react-icons/bi';
-import { TbCards } from 'react-icons/tb';
+import Cards from 'flashcard/assets/Cards';
 import { useTracker } from 'tracker/tracker';
 import FlashcardLargeIcon from 'dashboard/assets/FlashcardLargeIcon';
 import KuisCover from '../assets/KuisCover';
@@ -270,10 +270,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
 
                                     {!shouldUseStackedLayout && cardCount && (
                                         <>
-                                            <TbCards
-                                                size={14}
-                                                className="text-indigo-400 mr-2 flex-shrink-0"
-                                            />
+                                            <Cards />
                                             <span className="truncate">
                                                 {cardCount} Cards
                                             </span>
@@ -364,10 +361,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
                                                 |
                                             </span>
                                         )}
-                                        <TbCards
-                                            size={14}
-                                            className="text-indigo-400 mr-2 flex-shrink-0"
-                                        />
+                                        <Cards />
                                         <span className="truncate max-w-full">
                                             {cardCount} Cards
                                         </span>

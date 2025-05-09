@@ -79,7 +79,7 @@ const FlashcardDetailContainer = (): JSX.Element => {
                 toast.success('Flashcard berhasil dihapus', {
                     position: toast.POSITION.TOP_CENTER
                 });
-                router.push('/flashcard');
+                router.push('/flashcards');
             }
         } catch (error) {
             console.error('Failed to delete flashcards:', error);

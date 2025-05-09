@@ -43,7 +43,7 @@ const DashboardFeatures = () => {
                 ) : (
                     <FlashcardLargeIcon />
                 ),
-            url: '/flashcard',
+            url: '/flashcards',
             isNew: true
         }
     ];
