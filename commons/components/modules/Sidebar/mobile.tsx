@@ -135,12 +135,12 @@ const MobileSidebar = ({
                                     {
                                         name: 'Quiz',
                                         title: 'Kuis',
-                                        url: '/alat-belajar/quiz'
+                                        url: '/latihan'
                                     },
                                     {
                                         name: 'Flashcard',
                                         title: 'Flashcard',
-                                        url: '/alat-belajar/flashcard'
+                                        url: '/flashcards'
                                     }
                                 ]}
                                 setOpenSidebar={setOpenSidebar}

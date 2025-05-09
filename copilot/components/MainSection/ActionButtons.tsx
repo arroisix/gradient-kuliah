@@ -30,7 +30,7 @@ const ActionButtons = ({ onImageCapture }: ActionButtonsProps): JSX.Element => {
     };
 
     const handleCreateFlashcard = () => {
-        router.push('/flashcard/create-ai');
+        router.push('/flashcards/create-ai');
     };
 
     return (
