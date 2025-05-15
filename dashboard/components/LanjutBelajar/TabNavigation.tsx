@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { cn } from 'commons/utils';
 import { TABS, TabType } from './LanjutBelajarSection';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { useTracker } from 'tracker/tracker';
 
 interface TabNavigationProps {
     activeTab: TabType;
@@ -19,6 +20,7 @@ const TabNavigation: React.FC<TabNavigationProps> = ({
     onTabChange
 }) => {
     const [startIndex, setStartIndex] = useState(0);
+    const tracker = useTracker();
 
     const tabs = [
         { type: TABS.KELAS, label: 'Kelas' },
@@ -36,13 +38,26 @@ const TabNavigation: React.FC<TabNavigationProps> = ({
     const slidePrevious = () => {
         if (canGoPrevious) {
             setStartIndex(startIndex - 1);
+            tracker?.genericTrack('Click Tab Navigation Arrow', {
+                direction: 'previous'
+            });
         }
     };
 
     const slideNext = () => {
         if (canGoNext) {
             setStartIndex(startIndex + 1);
+            tracker?.genericTrack('Click Tab Navigation Arrow', {
+                direction: 'next'
+            });
         }
+    };
+
+    const handleTabClick = (tabType: TabType) => {
+        tracker?.genericTrack('Click Tab on Continue Learning Section', {
+            tab: tabType
+        });
+        onTabChange(tabType);
     };
 
     const visibleTabsToShow = tabs.slice(startIndex, startIndex + visibleTabs);
@@ -68,7 +83,7 @@ const TabNavigation: React.FC<TabNavigationProps> = ({
                             className="flex-1 flex justify-center">
                             <TabButton
                                 isActive={activeTab === tab.type}
-                                onClick={() => onTabChange(tab.type)}
+                                onClick={() => handleTabClick(tab.type)}
                                 label={tab.label}
                             />
                         </div>
