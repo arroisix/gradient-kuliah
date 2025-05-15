@@ -10,6 +10,7 @@ import {
 import CarouselSection from './CarouselSection';
 import { getBookBaseHref } from 'courses/utils';
 import ContentCard from './ContentCard';
+import { useTracker } from 'tracker/tracker';
 import {
     MajorRecommendationItem,
     VideoRecommendationItem,
@@ -21,6 +22,7 @@ import {
 
 const PrivateDashboardContent = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const tracker = useTracker();
 
     const { data: justReleased, isLoading: isLoadingJustReleased } =
         useGetDashboardContentQuery(
@@ -117,6 +119,14 @@ const PrivateDashboardContent = (): JSX.Element => {
                 href={`/kelas/${item.course_slug}`}
                 isMajorClass={true}
                 hasTwoLineCards={majorClassesHasTwoLineCards}
+                onClick={() => {
+                    tracker?.genericTrack('Click Dashboard Content Card', {
+                        section: 'Kelas yang Diambil Mahasiswa',
+                        sectionMajor: majorClasses?.major,
+                        cardTitle: item.course_name,
+                        cardCategory: 'Kelas'
+                    });
+                }}
             />
         );
     };
@@ -135,6 +145,13 @@ const PrivateDashboardContent = (): JSX.Element => {
                 href={getHref(item as LearningMaterial)}
                 isBaru={true}
                 hasTwoLineCards={justReleasedHasTwoLineCards}
+                onClick={() => {
+                    tracker?.genericTrack('Click Dashboard Content Card', {
+                        section: 'Baru Rilis',
+                        cardTitle: item.title,
+                        cardCategory: item.type
+                    });
+                }}
             />
         );
     };
@@ -233,6 +250,14 @@ const PrivateDashboardContent = (): JSX.Element => {
                 {...itemData}
                 isTrending={true}
                 hasTwoLineCards={majorRecommendationHasTwoLineCards}
+                onClick={() => {
+                    tracker?.genericTrack('Click Dashboard Content Card', {
+                        section: 'Trending untuk Mahasiswa',
+                        sectionMajor: majorRecommendation?.major,
+                        cardTitle: itemData.title,
+                        cardCategory: itemData.category
+                    });
+                }}
             />
         );
     };
@@ -285,6 +310,18 @@ const PrivateDashboardContent = (): JSX.Element => {
                                     hasTwoLineCards={
                                         courseRecommendationHasTwoLineCards
                                     }
+                                    onClick={() => {
+                                        tracker?.genericTrack(
+                                            'Click Dashboard Content Card',
+                                            {
+                                                section: 'Karena Kamu Belajar',
+                                                sectionCourse:
+                                                    courseRec.course_name,
+                                                cardTitle: itemData.title,
+                                                cardCategory: itemData.category
+                                            }
+                                        );
+                                    }}
                                 />
                             );
                         }}
