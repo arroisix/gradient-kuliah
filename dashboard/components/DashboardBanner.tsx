@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useGetBannerQuery } from 'dashboard/redux/api/dashboardApi';
 import { useSelector } from 'react-redux';
 import { getCurrentUser } from 'authentication/redux/selectors/userSelector';
@@ -61,28 +61,24 @@ const DashboardUpdatesBanner: React.FC = () => {
     };
 
     const handleBannerClick = (banner: Banner) => {
-        // If the banner is verify-email-web, handle email verification
         if (banner.slug === 'verify-email-web') {
             handleVerifyEmail();
             return;
         }
 
         tracker?.genericTrack('Click Dashboard Banner', {
-            slug: banner.slug,
-            type: banner.type
+            bannerType: banner.type,
+            bannerTitle: banner.title_text,
+            bannerIndex: currentIndex
         });
     };
 
     const handleVerifyEmail = async () => {
         try {
-            tracker?.trackButtonClick(
-                'Email Verification',
-                'Verifikasi Email',
-                {
-                    email: user.email,
-                    source: 'verification_banner'
-                }
-            );
+            tracker?.genericTrack('Click Email Verification Banner', {
+                email: user.email,
+                source: 'banner'
+            });
             await requestEmailActivation().unwrap();
             setIsModalOpen(true);
         } catch (error) {
