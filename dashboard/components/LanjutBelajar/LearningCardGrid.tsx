@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Skeleton from 'commons/components/elements/Skeleton';
 import LearningCard from './LearningCard';
 import { CardData } from './LanjutBelajarSection';
+import { useTracker } from 'tracker/tracker';
 
 interface LearningCardGridProps {
     cardData: CardData[];
@@ -14,13 +15,22 @@ const LearningCardGrid: React.FC<LearningCardGridProps> = ({
     isLoading,
     onCardClick
 }) => {
-    const scrollContainer = React.useRef<HTMLDivElement>(null);
+    const scrollContainer = useRef<HTMLDivElement>(null);
+    const tracker = useTracker();
 
     useEffect(() => {
         if (scrollContainer.current) {
             scrollContainer.current.scrollLeft = 0;
         }
     }, [cardData]);
+
+    const handleCardClick = (card: CardData) => {
+        tracker?.genericTrack('Click Continue Learning Card', {
+            cardTitle: card.title,
+            cardCategory: card.category
+        });
+        onCardClick(card);
+    };
 
     return (
         <div className="relative">
@@ -37,7 +47,7 @@ const LearningCardGrid: React.FC<LearningCardGridProps> = ({
                                 className="w-72 md:w-[350px] lg:w-[380px] flex-shrink-0">
                                 <LearningCard
                                     card={card}
-                                    onClick={onCardClick}
+                                    onClick={() => handleCardClick(card)}
                                 />
                             </div>
                         ))
@@ -50,7 +60,6 @@ const LearningCardGrid: React.FC<LearningCardGridProps> = ({
     );
 };
 
-// Loading state component
 const LoadingState = () => (
     <>
         {Array(3)
@@ -75,7 +84,6 @@ const LoadingState = () => (
     </>
 );
 
-// Empty state component
 const EmptyState = () => (
     <div className="w-full flex items-center justify-center py-10 min-w-[300px]">
         <p className="text-neutral-400">Belum ada konten untuk ditampilkan</p>

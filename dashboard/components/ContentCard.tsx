@@ -5,7 +5,6 @@ import { FaRegCirclePlay } from 'react-icons/fa6';
 import { FaGraduationCap, FaBookmark, FaListUl } from 'react-icons/fa';
 import { BiSolidStar } from 'react-icons/bi';
 import Cards from 'flashcard/assets/Cards';
-import { useTracker } from 'tracker/tracker';
 import FlashcardLargeIcon from 'dashboard/assets/FlashcardLargeIcon';
 import KuisCover from '../assets/KuisCover';
 import Fire from '../assets/Fire';
@@ -42,7 +41,6 @@ type CategoryType =
     | 'Flashcard';
 
 const ContentCard: React.FC<ContentCardProps> = ({
-    id,
     title,
     category,
     thumbnail,
@@ -59,10 +57,8 @@ const ContentCard: React.FC<ContentCardProps> = ({
     isTrending = false,
     isBaru = false,
     isMajorClass = false,
-    hasTwoLineCards = false,
-    onClick
+    hasTwoLineCards = false
 }) => {
-    const tracker = useTracker();
     const isVideo =
         (category === 'Video' || category === 'Kelas') && !isMajorClass;
     const isFlashcard = category === 'Flashcard';
@@ -71,19 +67,6 @@ const ContentCard: React.FC<ContentCardProps> = ({
         category === 'Astronotes' ||
         category === 'Textbook Solution' ||
         category === 'Bank Soal';
-
-    const handleClick = () => {
-        tracker?.genericTrack('Click Content Card', {
-            id,
-            title,
-            category,
-            courseName,
-            isTrending,
-            isBaru
-        });
-
-        if (onClick) onClick();
-    };
 
     const isLongCourseName = courseName && courseName.length > 30;
     const isLongChapterName = chapterName && chapterName.length > 30;
@@ -94,8 +77,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
     return (
         <Link
             href={href}
-            className="block relative rounded-lg transition-colors overflow-hidden h-full bg-[#121212] border border-[#666666] border-opacity-50"
-            onClick={handleClick}>
+            className="block relative rounded-lg transition-colors overflow-hidden h-full bg-[#121212] border border-[#666666] border-opacity-50">
             {isTrending && (
                 <div
                     className="absolute top-2 left-2 z-10 text-white text-xs py-1 px-3 rounded-full flex items-center gap-1"
