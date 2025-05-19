@@ -7,6 +7,7 @@ import SymbolForm from './SymbolForm';
 import { FiPaperclip } from 'react-icons/fi';
 import { useTracker } from 'tracker/tracker';
 import { useCurrentEditor } from '@tiptap/react';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 type IconOption = {
     tag: keyof JSX.IntrinsicElements;
@@ -32,6 +33,8 @@ const AdvanceForm = ({
     isLoading,
     context
 }: AdvanceFormProps): JSX.Element => {
+    const {profile} = useAuth()
+
     const ICON: IconOption[] = useMemo(
         () => [
             {
@@ -45,7 +48,7 @@ const AdvanceForm = ({
                 tracker: 'Click Symbol Menu'
             },
             {
-                disabled: context === 'q',
+                disabled: context === 'q' || (profile?.email !== "business@gradient.academy" && profile?.email !== "angga@gradient.academy"),
                 tag: 'label',
                 icon: <FiPaperclip className="text-[18px] text-neutral-600" />,
                 tracker: 'Click Attachment Menu',
