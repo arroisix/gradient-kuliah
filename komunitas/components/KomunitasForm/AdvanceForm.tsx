@@ -7,6 +7,7 @@ import SymbolForm from './SymbolForm';
 import { FiPaperclip } from 'react-icons/fi';
 import { useTracker } from 'tracker/tracker';
 import { useCurrentEditor } from '@tiptap/react';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 type IconOption = {
     tag: keyof JSX.IntrinsicElements;
@@ -32,6 +33,8 @@ const AdvanceForm = ({
     isLoading,
     context
 }: AdvanceFormProps): JSX.Element => {
+    const { profile } = useAuth();
+
     const ICON: IconOption[] = useMemo(
         () => [
             {
@@ -70,7 +73,15 @@ const AdvanceForm = ({
         <div className="bg-[#242424] p-3 rounded-b-[20px]">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-[2px]">
-                    {ICON.filter((opt) => !opt.disabled).map(
+                    {ICON.filter((opt) => {
+                        if (
+                            profile?.email !== 'business@gradient.academy' &&
+                            profile?.email !== 'angga@gradient.academy'
+                        ) {
+                            return !opt.disabled;
+                        }
+                        return true;
+                    }).map(
                         (
                             {
                                 tag: Tag,
