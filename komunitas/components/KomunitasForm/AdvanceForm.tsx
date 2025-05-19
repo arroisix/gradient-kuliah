@@ -33,7 +33,7 @@ const AdvanceForm = ({
     isLoading,
     context
 }: AdvanceFormProps): JSX.Element => {
-    const {profile} = useAuth()
+    const { profile } = useAuth();
 
     const ICON: IconOption[] = useMemo(
         () => [
@@ -48,7 +48,7 @@ const AdvanceForm = ({
                 tracker: 'Click Symbol Menu'
             },
             {
-                disabled: context === 'q' || (profile?.email !== "business@gradient.academy" && profile?.email !== "angga@gradient.academy"),
+                disabled: context === 'q',
                 tag: 'label',
                 icon: <FiPaperclip className="text-[18px] text-neutral-600" />,
                 tracker: 'Click Attachment Menu',
@@ -73,7 +73,15 @@ const AdvanceForm = ({
         <div className="bg-[#242424] p-3 rounded-b-[20px]">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-[2px]">
-                    {ICON.filter((opt) => !opt.disabled).map(
+                    {ICON.filter((opt) => {
+                        if (
+                            profile?.email !== 'business@gradient.academy' &&
+                            profile?.email !== 'angga@gradient.academy'
+                        ) {
+                            return !opt.disabled;
+                        }
+                        return true;
+                    }).map(
                         (
                             {
                                 tag: Tag,
