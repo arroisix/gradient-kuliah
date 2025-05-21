@@ -20,6 +20,7 @@ import RatingButton from 'courses/components/CourseRatingButton';
 import ShareContentButton from 'courses/components/ShareContentButton';
 import CopilotEntrypoint from '../../../../copilot/components/CopilotEntrypoint';
 import CourseDetailBox from 'courses/components/CourseDetailBox';
+import DownloadVideoButton from 'courses/components/DownloadVideoButton';
 
 const VideoLearnContainer = ({
     subchapter: ssrSubchapterData,
@@ -90,6 +91,9 @@ const VideoLearnContainer = ({
                             {subchapter?.video?.is_free && (
                                 <FreeBadge className="py-4 px-5" />
                             )}
+                            <DownloadVideoButton
+                                isDownloaded={subchapter?.is_downloaded}
+                            />
                             <RatingButton />
                             <ShareContentButton
                                 typeCopy="COURSE VIDEO"

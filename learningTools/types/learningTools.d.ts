@@ -36,3 +36,36 @@ interface LearningToolsContentResponse {
     previous_page: number | null;
     data: LearningToolsContentItem[];
 }
+
+export interface Device {
+    device_id: string;
+    device_type: 'Phone' | 'Tablet';
+}
+
+export interface DevicesResponse {
+    data: Device[];
+}
+
+export interface DownloadedVideo {
+    id: string;
+    thumbnail: string;
+    course_name: string;
+    duration: string;
+    title: string;
+    chapter_title: string;
+    is_downloaded: boolean;
+}
+
+export interface DownloadHistoryResponse {
+    data: DownloadedVideo[];
+    count_items: number;
+    next_page: number;
+    previous_page: number;
+}
+
+export interface DownloadHistoryParams {
+    device_id?: string;
+    is_removed?: boolean;
+    page?: number;
+    limit?: number;
+}

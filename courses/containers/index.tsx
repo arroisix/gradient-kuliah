@@ -15,6 +15,7 @@ import CourseTabs from 'courses/components/CourseTabs';
 import React, { useState } from 'react';
 import { IoIosSearch } from 'react-icons/io';
 import { useDebounce } from 'use-debounce';
+import DownloadBanner from 'courses/components/Downloads/DownloadBanner';
 
 const SORT_OPTIONS = [
     { value: 'latest', label: 'Terakhir Rilis' },
@@ -44,6 +45,8 @@ const ClassContainer = ({
         <>
             <Breadcrumb className="w-full pb-5" />
             <div className="relative grid w-full grid-cols-1 mx-auto xl:max-w-screen-2xl">
+                <DownloadBanner />
+
                 {isAuthenticated && courseProgresses && (
                     <CourseProgress courseProgresses={courseProgresses} />
                 )}

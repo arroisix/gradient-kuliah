@@ -105,6 +105,7 @@ type SubChapter = {
     status?: 'IN_PROGRESS' | 'COMPLETED';
     minimum_score?: number;
     latest_score?: number;
+    is_downloaded?: boolean;
 };
 
 type Chapter = {
