@@ -33,7 +33,7 @@ const DownloadsContainer = (): JSX.Element => {
     const { data: downloads, isLoading: isLoadingDownloads } =
         useGetDownloadHistoryQuery(
             {
-                device_id: selectedDevice,
+                device_id: selectedDevice || undefined,
                 is_removed: false,
                 page: 1,
                 limit: 12
@@ -69,7 +69,6 @@ const DownloadsContainer = (): JSX.Element => {
     const handleDeviceFilterChange = (value: string) => {
         setDeviceFilter(value);
 
-        // If a specific device is selected from the filter, update selectedDevice
         if (value !== 'all' && devices) {
             const device = devices.data.find(
                 (d) => d.device_type.toLowerCase() === value.toLowerCase()
@@ -80,7 +79,6 @@ const DownloadsContainer = (): JSX.Element => {
         }
     };
 
-    // Filter videos based on search term and selected device type
     const filteredDownloads =
         activeTab === 0
             ? downloads?.data?.filter(
@@ -118,7 +116,6 @@ const DownloadsContainer = (): JSX.Element => {
             ? downloads?.data && downloads.data.length > 0
             : history?.data && history.data.length > 0;
 
-    // Render skeleton UI when loading
     const renderSkeleton = () => {
         return (
             <div>

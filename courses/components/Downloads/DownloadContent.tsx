@@ -11,6 +11,7 @@ interface DownloadedVideo {
     title: string;
     chapter_title: string;
     is_downloaded: boolean;
+    video_slug: string;
 }
 
 interface DownloadContentProps {
@@ -22,6 +23,17 @@ interface DownloadContentProps {
     deviceFilterOptions?: { value: string; label: string }[];
     showDeviceFilter?: boolean;
 }
+
+const slugify = (text: string): string => {
+    return text
+        .toString()
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, '-')
+        .replace(/&/g, '-and-')
+        .replace(/[^\w\-]+/g, '')
+        .replace(/\-\-+/g, '-');
+};
 
 const DownloadContent = ({
     videos,
@@ -67,19 +79,23 @@ const DownloadContent = ({
                 </div>
             ) : (
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    {videos.map((video) => (
-                        <ContentCard
-                            key={video.id}
-                            id={video.id}
-                            title={video.title}
-                            isMajorClass={true}
-                            category="Video"
-                            thumbnail={video.thumbnail}
-                            href={`/kelas/video/${video.id}`}
-                            courseName={video.course_name}
-                            chapterName={video.chapter_title}
-                        />
-                    ))}
+                    {videos.map((video) => {
+                        const slugifiedCourseName = slugify(video.course_name);
+
+                        return (
+                            <ContentCard
+                                key={video.id}
+                                id={video.id}
+                                title={video.title}
+                                isMajorClass={true}
+                                category="Video"
+                                thumbnail={video.thumbnail}
+                                href={`/kelas/${slugifiedCourseName}/${video.video_slug}`}
+                                courseName={video.course_name}
+                                chapterName={video.chapter_title}
+                            />
+                        );
+                    })}
                 </div>
             )}
         </div>

@@ -12,9 +12,7 @@ const Downloads = (): JSX.Element => {
 };
 
 export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
-    (store) => async () => {
-        // No initial data fetching needed for this page
-
+    () => async () => {
         const META_TITLE =
             'Daftar Download Video Perkuliahan - Gradient Academy';
         const META_DESCRIPTION =
