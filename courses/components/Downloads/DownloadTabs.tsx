@@ -26,12 +26,12 @@ const DownloadsTabs = ({
     return (
         <div className="sticky z-10 flex items-end w-full border-b border-gray-700 overflow-x-auto bg-black top-10 no-scrollbar">
             {TAB_OPTIONS.map((tab, index) => (
-                <div
+                <button
                     key={tab.value}
                     className={tabStyle(index)}
                     onClick={() => onTabChange(index)}>
                     {tab.label}
-                </div>
+                </button>
             ))}
 
             <div className="border-b-2 hidden md:block md:grow border-transparent">
