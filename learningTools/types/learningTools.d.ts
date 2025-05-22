@@ -54,6 +54,7 @@ export interface DownloadedVideo {
     title: string;
     chapter_title: string;
     is_downloaded: boolean;
+    video_slug: string;
 }
 
 export interface DownloadHistoryResponse {
