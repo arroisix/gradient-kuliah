@@ -7,7 +7,8 @@ import { PercentageProgess } from './LearningProgress/PercentageProgress';
 import ShareContentButton from '../ShareContentButton';
 import RatingButton from '../CourseRatingButton';
 import Link from 'next/link';
-import DownloadFolder from '../../assets/DownloadFolder';
+import Image from 'next/image';
+import { CDN_URL } from 'commons/constants';
 
 const CourseDescription = ({
     slug,
@@ -59,7 +60,12 @@ const CourseDescription = ({
                     className="flex items-center justify-between w-full py-3 px-4 bg-[#2C2C2C] rounded-full text-white text-sm font-semibold group relative overflow-hidden">
                     <span className="mr-2">Lihat Hasil Download Kamu</span>
                     <div className="absolute right-2">
-                        <DownloadFolder width={86} height={56} />
+                        <Image
+                            src={`${CDN_URL}/assets/video-downloads-folder.png`}
+                            alt="Download Folder"
+                            width={86}
+                            height={56}
+                        />
                     </div>
                 </Link>
                 <h2 className="text-sm text-gray-500 uppercase">Pengajar</h2>

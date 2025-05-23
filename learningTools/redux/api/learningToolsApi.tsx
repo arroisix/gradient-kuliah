@@ -1,11 +1,4 @@
 import { baseApi } from 'redux/api/baseApi';
-import {
-    DevicesResponse,
-    DownloadHistoryParams,
-    DownloadHistoryResponse,
-    LearningToolsContentResponse,
-    LearningToolsResponse
-} from '../../types/learningTools';
 
 const LEARNING_TOOLS_BASE_URL = 'learning-tools/';
 

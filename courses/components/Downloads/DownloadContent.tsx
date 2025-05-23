@@ -2,7 +2,6 @@ import ContentCard from 'dashboard/components/ContentCard';
 import React from 'react';
 import { IoIosSearch } from 'react-icons/io';
 import Filter from '../../../commons/components/elements/Filter';
-import { DownloadedVideo } from '../../../learningTools/types/learningTools';
 
 interface DownloadContentProps {
     videos: DownloadedVideo[];

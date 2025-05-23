@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import DownloadFolder from '../../assets/DownloadFolder';
+import Image from 'next/image';
+import { CDN_URL } from 'commons/constants';
 
 const DownloadBanner = (): JSX.Element => {
     return (
@@ -21,7 +22,12 @@ const DownloadBanner = (): JSX.Element => {
                         </p>
                     </div>
                     <div className="absolute top-1 right-1">
-                        <DownloadFolder />
+                        <Image
+                            src={`${CDN_URL}/assets/video-downloads-folder.png`}
+                            alt="Download Folder"
+                            width={86}
+                            height={56}
+                        />
                     </div>
                 </div>
             </div>

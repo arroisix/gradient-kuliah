@@ -87,7 +87,7 @@ const VideoLearnContainer = ({
                         <h1 className="text-base font-extrabold md:text-2xl">
                             {subchapter?.subchapter_name}
                         </h1>
-                        <div className="flex items-center gap-2 justify-center w-fit">
+                        <div className="flex items-center gap-2 justify-start overflow-x-auto">
                             {subchapter?.video?.is_free && (
                                 <FreeBadge className="py-4 px-5" />
                             )}

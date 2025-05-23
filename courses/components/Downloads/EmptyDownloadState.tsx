@@ -2,8 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import NoContentIcon from 'dashboard/assets/NoContentIcon';
-
-const CDN_URL = 'https://assets.gradient.academy';
+import { CDN_URL } from 'commons/constants';
 
 interface EmptyDownloadStateProps {
     title: string;

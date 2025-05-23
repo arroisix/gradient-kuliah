@@ -35,6 +35,7 @@ const DownloadsContainer = (): JSX.Element => {
             {
                 device_id: selectedDevice || undefined,
                 is_removed: false,
+                keyword: debouncedSearchTerm || undefined,
                 page: 1,
                 limit: 12
             },
@@ -46,7 +47,9 @@ const DownloadsContainer = (): JSX.Element => {
     const { data: history, isLoading: isLoadingHistory } =
         useGetDownloadHistoryQuery(
             {
+                device_id: selectedDevice || undefined,
                 is_removed: true,
+                keyword: debouncedSearchTerm || undefined,
                 page: 1,
                 limit: 12
             },
@@ -55,7 +58,6 @@ const DownloadsContainer = (): JSX.Element => {
             }
         );
 
-    // Set first device as default when data is loaded
     useEffect(() => {
         if (devices && devices.data.length > 0 && !selectedDevice) {
             setSelectedDevice(devices.data[0].device_id);
@@ -71,7 +73,8 @@ const DownloadsContainer = (): JSX.Element => {
 
         if (value !== 'all' && devices) {
             const device = devices.data.find(
-                (d) => d.device_type.toLowerCase() === value.toLowerCase()
+                (d: { device_type: string }) =>
+                    d.device_type.toLowerCase() === value.toLowerCase()
             );
             if (device) {
                 setSelectedDevice(device.device_id);
@@ -79,42 +82,13 @@ const DownloadsContainer = (): JSX.Element => {
         }
     };
 
-    const filteredDownloads =
-        activeTab === 0
-            ? downloads?.data?.filter(
-                  (video) =>
-                      debouncedSearchTerm === '' ||
-                      video.title
-                          .toLowerCase()
-                          .includes(debouncedSearchTerm.toLowerCase()) ||
-                      video.course_name
-                          .toLowerCase()
-                          .includes(debouncedSearchTerm.toLowerCase()) ||
-                      video.chapter_title
-                          .toLowerCase()
-                          .includes(debouncedSearchTerm.toLowerCase())
-              )
-            : history?.data?.filter(
-                  (video) =>
-                      debouncedSearchTerm === '' ||
-                      video.title
-                          .toLowerCase()
-                          .includes(debouncedSearchTerm.toLowerCase()) ||
-                      video.course_name
-                          .toLowerCase()
-                          .includes(debouncedSearchTerm.toLowerCase()) ||
-                      video.chapter_title
-                          .toLowerCase()
-                          .includes(debouncedSearchTerm.toLowerCase())
-              );
+    const currentVideos = activeTab === 0 ? downloads?.data : history?.data;
 
     const isLoading =
         (activeTab === 0 && isLoadingDownloads) ||
         (activeTab === 1 && isLoadingHistory);
-    const hasData =
-        activeTab === 0
-            ? downloads?.data && downloads.data.length > 0
-            : history?.data && history.data.length > 0;
+
+    const hasData = currentVideos && currentVideos.length > 0;
 
     const renderSkeleton = () => {
         return (
@@ -175,7 +149,7 @@ const DownloadsContainer = (): JSX.Element => {
                         />
                     ) : (
                         <DownloadContent
-                            videos={filteredDownloads || []}
+                            videos={currentVideos || []}
                             searchTerm={searchTerm}
                             setSearchTerm={setSearchTerm}
                             deviceFilter={deviceFilter}

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { MdHistory, MdLogout, MdPerson } from 'react-icons/md';
+import { MdFileDownload, MdHistory, MdLogout, MdPerson } from 'react-icons/md';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useLogoutMutation } from 'authentication/redux/api/authApi';
 import { useRouter } from 'next/router';
@@ -53,6 +53,18 @@ const MobileNavbar = ({
                             <MdHistory size={20} />
                             <div className="w-full ml-4">
                                 <p className="text-base">Riwayat Pembelian</p>
+                            </div>
+                        </div>
+                    </Link>
+                    <Link href="/kelas/downloads">
+                        <div
+                            className={cn(
+                                'flex hover:text-accent-blue font-normal w-full items-center mb-4',
+                                lightMode ? 'text-black' : 'text-white'
+                            )}>
+                            <MdFileDownload size={20} />
+                            <div className="w-full ml-4">
+                                <p className="text-base">Downloads</p>
                             </div>
                         </div>
                     </Link>

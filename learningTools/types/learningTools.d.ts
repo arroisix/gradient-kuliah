@@ -37,16 +37,16 @@ interface LearningToolsContentResponse {
     data: LearningToolsContentItem[];
 }
 
-export interface Device {
+interface Device {
     device_id: string;
     device_type: 'Phone' | 'Tablet';
 }
 
-export interface DevicesResponse {
+interface DevicesResponse {
     data: Device[];
 }
 
-export interface DownloadedVideo {
+interface DownloadedVideo {
     id: string;
     thumbnail: string;
     course_name: string;
@@ -57,16 +57,17 @@ export interface DownloadedVideo {
     video_slug: string;
 }
 
-export interface DownloadHistoryResponse {
+interface DownloadHistoryResponse {
     data: DownloadedVideo[];
     count_items: number;
     next_page: number;
     previous_page: number;
 }
 
-export interface DownloadHistoryParams {
+interface DownloadHistoryParams {
     device_id?: string;
     is_removed?: boolean;
     page?: number;
     limit?: number;
+    keyword?: string;
 }
