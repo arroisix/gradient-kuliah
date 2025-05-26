@@ -55,6 +55,7 @@ interface DownloadedVideo {
     chapter_title: string;
     is_downloaded: boolean;
     video_slug: string;
+    course_slug: string;
 }
 
 interface DownloadHistoryResponse {

@@ -13,17 +13,6 @@ interface DownloadContentProps {
     showDeviceFilter?: boolean;
 }
 
-const slugify = (text: string): string => {
-    return text
-        .toString()
-        .toLowerCase()
-        .trim()
-        .replace(/\s+/g, '-')
-        .replace(/&/g, '-and-')
-        .replace(/[^\w\-]+/g, '')
-        .replace(/\-\-+/g, '-');
-};
-
 const DownloadContent = ({
     videos,
     searchTerm,
@@ -69,8 +58,6 @@ const DownloadContent = ({
             ) : (
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {videos.map((video) => {
-                        const slugifiedCourseName = slugify(video.course_name);
-
                         return (
                             <ContentCard
                                 key={video.id}
@@ -79,7 +66,7 @@ const DownloadContent = ({
                                 isMajorClass={true}
                                 category="Video"
                                 thumbnail={video.thumbnail}
-                                href={`/kelas/${slugifiedCourseName}/${video.video_slug}`}
+                                href={`/kelas/${video.course_slug}/${video.video_slug}`}
                                 courseName={video.course_name}
                                 chapterName={video.chapter_title}
                             />

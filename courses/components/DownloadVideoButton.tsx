@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useMemo } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { Download } from 'lucide-react';
 import { IoClose } from 'react-icons/io5';
@@ -15,6 +15,7 @@ const DownloadVideoButton = ({
 }): JSX.Element => {
     const [isOpen, setIsOpen] = useState(false);
     const { isDesktopBreakpoints } = useWindowBreakpoints();
+
     const buttonText = isDownloaded
         ? 'Tersedia di Aplikasi'
         : 'Download di Aplikasi';
@@ -27,14 +28,14 @@ const DownloadVideoButton = ({
         ? 'Buka aplikasi untuk menontonnya tanpa internet'
         : 'Buka aplikasi untuk download video dan menontonnya tanpa internet';
 
-    const isIOS = () => {
+    const isIOS = useMemo(() => {
         if (typeof window !== 'undefined') {
             return (
                 /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
             );
         }
         return false;
-    };
+    }, []);
 
     return (
         <>
@@ -208,14 +209,14 @@ const DownloadVideoButton = ({
 
                                                 <a
                                                     href={
-                                                        isIOS()
+                                                        isIOS
                                                             ? 'https://apps.apple.com/id/app/gradient-academy/id1234567890'
                                                             : 'https://play.google.com/store/apps/details?id=com.gradient.academy'
                                                     }
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="flex items-center justify-center gap-2 py-2 px-5 rounded-full bg-[#333333] hover:bg-neutral-600 transition-colors text-white font-medium">
-                                                    {isIOS() ? (
+                                                    {isIOS ? (
                                                         <Image
                                                             src={`${CDN_URL}/assets/apple-logo.png`}
                                                             alt="Download on the App Store"
