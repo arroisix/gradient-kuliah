@@ -56,7 +56,9 @@ const CourseDescription = ({
                     />
                 </div>
                 <Link
-                    href="/kelas/downloads"
+                    href={`/downloads?search=${encodeURIComponent(
+                        course?.course_name || ''
+                    )}`}
                     className="flex items-center justify-between w-full py-3 px-4 bg-[#2C2C2C] rounded-full text-white text-sm font-semibold group relative overflow-hidden">
                     <span className="mr-2">Lihat Hasil Download Kamu</span>
                     <div className="absolute right-2">

@@ -24,6 +24,7 @@ const DownloadContent = ({
 }: DownloadContentProps): JSX.Element => {
     return (
         <div>
+            {/* Search bar and filters - always visible */}
             <div className="mb-6 flex items-center gap-4">
                 <div className="relative flex-grow">
                     <input
@@ -51,9 +52,22 @@ const DownloadContent = ({
                     )}
             </div>
 
+            {/* Content area */}
             {!videos || videos.length === 0 ? (
                 <div className="text-center text-gray-400 py-12">
-                    No videos found
+                    {searchTerm ? (
+                        <>
+                            <p>
+                                Tidak ada video yang ditemukan untuk &apos
+                                {searchTerm}&apos
+                            </p>
+                            <p className="text-sm mt-2">
+                                Coba kata kunci lain atau hapus filter
+                            </p>
+                        </>
+                    ) : (
+                        'No videos found'
+                    )}
                 </div>
             ) : (
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

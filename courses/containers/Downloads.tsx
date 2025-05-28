@@ -3,6 +3,7 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import React, { useState, useEffect } from 'react';
 import { useDebounce } from 'use-debounce';
+import { useRouter } from 'next/router';
 import {
     useGetDownloadDevicesQuery,
     useGetDownloadHistoryQuery
@@ -20,6 +21,7 @@ const DEVICE_FILTER_OPTIONS = [
 
 const DownloadsContainer = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const router = useRouter();
     const [activeTab, setActiveTab] = useState(0);
     const [searchTerm, setSearchTerm] = useState('');
     const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
@@ -57,6 +59,16 @@ const DownloadsContainer = (): JSX.Element => {
                 skip: !isAuthenticated
             }
         );
+
+    // Handle search query from URL parameters
+    useEffect(() => {
+        if (router.isReady && router.query.search) {
+            const searchQuery = Array.isArray(router.query.search)
+                ? router.query.search[0]
+                : router.query.search;
+            setSearchTerm(searchQuery);
+        }
+    }, [router.isReady, router.query.search]);
 
     useEffect(() => {
         if (devices && devices.data.length > 0 && !selectedDevice) {
