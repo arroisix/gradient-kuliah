@@ -22,15 +22,11 @@ const LiveMandiriBatch2 = (): JSX.Element => {
         <>
             <NextSeo
                 title="Kelas Online Persiapan Ujian Mandiri # Batch 2"
-                description="Untuk teman teman yang ingin mempersiapkan untuk
-                            mengikuti ujian mandiri, ini kesempatan yang bagus
-                            untuk kamu! di kelas ini kita akan belajar dan
-                            membahas soal soal ujian mandiri dari ITB, UGM dan
-                            juga SIMAK UI."
+                description="Untuk teman teman yang ingin mempersiapkan untuk mengikuti ujian mandiri, ini kesempatan yang bagus untuk kamu! di kelas ini kita akan belajar dan membahas soal soal ujian mandiri seperti Utul UGM dan juga SIMAK UI."
                 openGraph={{
                     title: 'Kelas Online Persiapan Ujian Mandiri # Batch 2',
                     description:
-                        'Untuk teman teman yang ingin mempersiapkan untuk mengikuti ujian mandiri, ini kesempatan yang bagus untuk kamu! di kelas ini kita akan belajar dan membahas soal soal ujian mandiri dari ITB, UGM dan juga SIMAK UI.',
+                        'Untuk teman teman yang ingin mempersiapkan untuk mengikuti ujian mandiri, ini kesempatan yang bagus untuk kamu! di kelas ini kita akan belajar dan membahas soal soal ujian mandiri seperti Utul UGM dan juga SIMAK UI.',
                     url: `https://gradient.academy/live-mandiri-batch2`,
                     images: [
                         {
@@ -67,8 +63,8 @@ const LiveMandiriBatch2 = (): JSX.Element => {
                             Untuk teman teman yang ingin mempersiapkan untuk
                             mengikuti ujian mandiri, ini kesempatan yang bagus
                             untuk kamu! di kelas ini kita akan belajar dan
-                            membahas soal soal ujian mandiri dari ITB, UGM dan
-                            juga SIMAK UI.
+                            membahas soal soal ujian mandiri seperti Utul UGM
+                            dan juga SIMAK UI.
                         </p>
                         <p className="text-neutral-300">
                             Yuk gas langsung daftar kelas ini, karena kuota nya
@@ -101,18 +97,24 @@ const LiveMandiriBatch2 = (): JSX.Element => {
                             <Accordion
                                 item={[
                                     {
-                                        title: 'Bagaimana cara mendaftar Webinar ini?',
+                                        title: 'Apa saja yang akan dibahas?',
                                         content:
-                                            'Kamu cukup klik tombol "Daftar Sekarang" yang ada di halaman ini lalu isi data yang diperlukan untuk registrasi. Kamu diharuskan untuk memiliki akun Gradient terlebih dahulu sebelum bisa mendaftar ke Webinar ini ya!'
+                                            'Kita akan bahas soal-soal asli SIMAK UI tahun-tahun sebelumnya.'
                                     },
                                     {
-                                        title: 'Apakah Webinar ini Gratis?',
-                                        content: 'Ya, Webinar ini 100% GRATIS'
+                                        title: 'Apakah dapat recordingnya?',
+                                        content:
+                                            'Ya, kamu akan mendapatkan recording dari semua sesi.'
                                     },
                                     {
-                                        title: 'Apakah Webinar ini akan diselenggarakan secara Online?',
+                                        title: 'Apakah akan membahas SM ITB?',
                                         content:
-                                            'Ya, Webinar ini akan 100% full Online via Google Meet. Tim Gradient akan membagikan link Google Meet kepada peserta Webinar pada saat hari H'
+                                            '<b>Tidak</b>, live tutor ini diadakan 16-20 Juni, yang mana itu adalah setelah tanggal ujian mandiri di ITB yakni 12 Juni.'
+                                    },
+                                    {
+                                        title: 'Apa saja yang akan saya dapat sebagai member Gradient?',
+                                        content:
+                                            'Kamu akan mendapat semua video belajar, latihan, bank soal, dan rangkuman yang ada di Gradient. Termasuk, bank soal dan pembahasan soal SM ITB, SIMAK UI, dan UM UGM.'
                                     }
                                 ]}
                             />
