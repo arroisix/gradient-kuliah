@@ -59,7 +59,7 @@ export default BankSoalPage;
 export const getStaticPaths: GetStaticPaths = async () => {
     return {
         paths: [],
-        fallback: 'blocking'
+        fallback: true
     };
 };
 
