@@ -1,4 +1,4 @@
-import Accordion from 'commons/components/elements/Accordion';
+// import Accordion from 'commons/components/elements/Accordion';
 import Button from 'commons/components/elements/Button';
 import { BsWhatsapp } from 'react-icons/bs';
 import Layout from 'commons/layout';
@@ -93,7 +93,7 @@ const LiveMandiriBatch2 = (): JSX.Element => {
                                 Share
                             </Button>
                         </div>
-                        <div className="h-[2px] w-full bg-neutral-500" />
+                        {/* <div className="h-[2px] w-full bg-neutral-500" />
                         <h2 className="text-lg md:text-3xl font-bold mb-4">
                             Pertanyaan yang sering ditanyakan.
                         </h2>
@@ -116,7 +116,7 @@ const LiveMandiriBatch2 = (): JSX.Element => {
                                     }
                                 ]}
                             />
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </Layout>
