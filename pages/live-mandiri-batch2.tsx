@@ -99,7 +99,7 @@ const LiveMandiriBatch2 = (): JSX.Element => {
                                     {
                                         title: 'Apa saja yang akan dibahas?',
                                         content:
-                                            'Kita akan bahas soal-soal asli SIMAK UI tahun-tahun sebelumnya.'
+                                            'Kita akan bahas soal-soal asli SIMAK UI dan UM UGM tahun-tahun sebelumnya.'
                                     },
                                     {
                                         title: 'Apakah dapat recordingnya?',
