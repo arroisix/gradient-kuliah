@@ -80,7 +80,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
                     `${config.API_BASE_URL}books/textbook/${slug}/problems/${problemSlug}/`
                 ),
                 axios.get<GetProblemRecommendationsResponse>(
-                    `${config.API_BASE_URL}learning-experiences/recommendations/books/problems/${problemSlug}/`
+                    `${config.API_BASE_URL}learning-experiences/recommendations/textbook/problems/${problemSlug}/`
                 )
             ]);
 
