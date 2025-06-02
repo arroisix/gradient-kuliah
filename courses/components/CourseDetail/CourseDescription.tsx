@@ -56,7 +56,7 @@ const CourseDescription = ({
                     />
                 </div>
                 <Link
-                    href={`/downloads?search=${encodeURIComponent(
+                    href={`/kelas/downloads?search=${encodeURIComponent(
                         course?.course_name || ''
                     )}`}
                     className="flex items-center justify-between w-full py-3 px-4 bg-[#2C2C2C] rounded-full text-white text-sm font-semibold group relative overflow-hidden">

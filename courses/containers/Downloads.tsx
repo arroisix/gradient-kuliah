@@ -60,7 +60,6 @@ const DownloadsContainer = (): JSX.Element => {
             }
         );
 
-    // Handle search query from URL parameters
     useEffect(() => {
         if (router.isReady && router.query.search) {
             const searchQuery = Array.isArray(router.query.search)
