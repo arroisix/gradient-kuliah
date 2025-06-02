@@ -91,14 +91,20 @@ const VideoLearnContainer = ({
                             {subchapter?.video?.is_free && (
                                 <FreeBadge className="py-4 px-5" />
                             )}
-                            <DownloadVideoButton
-                                isDownloaded={subchapter?.is_downloaded}
-                            />
-                            <RatingButton />
-                            <ShareContentButton
-                                typeCopy="COURSE VIDEO"
-                                shareCopy={`Coba deh nonton Video ${subchapter?.subchapter_name} dari Gradient Academy!`}
-                            />
+                            <div className="flex-shrink-0">
+                                <DownloadVideoButton
+                                    isDownloaded={subchapter?.is_downloaded}
+                                />
+                            </div>
+                            <div className="flex-shrink-0">
+                                <RatingButton />
+                            </div>
+                            <div className="flex-shrink-0">
+                                <ShareContentButton
+                                    typeCopy="COURSE VIDEO"
+                                    shareCopy={`Coba deh nonton Video ${subchapter?.subchapter_name} dari Gradient Academy!`}
+                                />
+                            </div>
                         </div>
                     </div>
                     <CopilotEntrypoint />
