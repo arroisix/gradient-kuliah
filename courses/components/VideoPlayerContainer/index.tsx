@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import VideoPaywall from './VideoPaywall';
 import VideoJS from 'commons/components/elements/Video/VideoJS';
-import BitmovinPlayer from 'commons/components/elements/Video/BitmovinPlayer'; // NEW IMPORT
+import BitmovinPlayer from 'commons/components/elements/Video/BitmovinPlayer';
 import Image from 'next/image';
 import { isNotNullAndUndefined, queryParamBuilder } from 'commons/utils';
 import { useSelector } from 'react-redux';
@@ -42,13 +42,12 @@ const VideoPlayerContainer = ({
 
     const isShowPaywall = !is_subscribed && !video?.is_free;
 
-    // NEW: Determine which player and video source to use
     const shouldUseBitmovinPlayer =
         video?.is_drm_protected &&
         process.env.NEXT_PUBLIC_USE_BITMOVIN_DRM === 'true';
 
     const videoSrc = shouldUseBitmovinPlayer
-        ? video?.drm_video_url // NEW: Use DRM URL for Bitmovin
+        ? video?.drm_video_url
         : isNotNullAndUndefined(video?.mux_playback_id)
         ? `${video?.mux_playback_id as string}?${queryParamBuilder({
               token: video?.token as string

@@ -53,6 +53,7 @@
         "abort-controller": "^3.0.0",
         "axios": "^1.2.2",
         "bitmovin-player": "^8.212.0",
+        "bitmovin-player-react": "^1.0.3",
         "clsx": "^2.0.0",
         "comlink": "^4.4.1",
         "core-js-pure": "^3.35.0",
