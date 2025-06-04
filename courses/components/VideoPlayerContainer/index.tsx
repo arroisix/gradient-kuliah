@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import VideoPaywall from './VideoPaywall';
 import VideoJS from 'commons/components/elements/Video/VideoJS';
+import BitmovinPlayer from 'commons/components/elements/Video/BitmovinPlayer'; // NEW IMPORT
 import Image from 'next/image';
 import { isNotNullAndUndefined, queryParamBuilder } from 'commons/utils';
 import { useSelector } from 'react-redux';
@@ -40,7 +41,15 @@ const VideoPlayerContainer = ({
     const isLoading = !video || isLoadingData || isLoadingSubscription;
 
     const isShowPaywall = !is_subscribed && !video?.is_free;
-    const videoSrc = isNotNullAndUndefined(video?.mux_playback_id)
+
+    // NEW: Determine which player and video source to use
+    const shouldUseBitmovinPlayer =
+        video?.is_drm_protected &&
+        process.env.NEXT_PUBLIC_USE_BITMOVIN_DRM === 'true';
+
+    const videoSrc = shouldUseBitmovinPlayer
+        ? video?.drm_video_url // NEW: Use DRM URL for Bitmovin
+        : isNotNullAndUndefined(video?.mux_playback_id)
         ? `${video?.mux_playback_id as string}?${queryParamBuilder({
               token: video?.token as string
           })}`
@@ -69,11 +78,7 @@ const VideoPlayerContainer = ({
     const setIsShowRegisterWallHandler = async (): Promise<void> => {
         if (typeof window !== 'undefined') {
             const queryParams = new URLSearchParams(window.location.search);
-
-            // Set new or modify existing page value
             queryParams.set('redirect', router.asPath);
-
-            // Replace current querystring with the new one
             history.replaceState(null, '', '?' + queryParams.toString());
         }
         setIsShowRegisterwall((data) => !data);
@@ -125,6 +130,15 @@ const VideoPlayerContainer = ({
                 <div className="md:rounded-lg md:overflow-hidden">
                     {video?.is_embed_youtube ? (
                         <YoutubeVideo key={video?.video_url} src={videoSrc} />
+                    ) : shouldUseBitmovinPlayer ? (
+                        <BitmovinPlayer
+                            key={video?.drm_video_url}
+                            src={videoSrc}
+                            drmToken={video?.drm_token as string}
+                            trackProgress={trackProgress}
+                            next_subchapter_link={nextSubchapter}
+                            autoPlay={isAuthenticated}
+                        />
                     ) : (
                         <VideoJS
                             key={video?.video_url}
