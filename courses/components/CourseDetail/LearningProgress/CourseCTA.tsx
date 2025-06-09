@@ -101,21 +101,31 @@ const CourseCTA = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
                 )
             ) : (
                 <div className="flex flex-col gap-2 sm:items-center sm:gap-4 sm:flex-row">
-                    <SubscribeButton
-                        slug={slug}
-                        className={cn(
-                            'whitespace-nowrap',
-                            isLandingPageRevampOn && '!my-0 w-auto'
-                        )}
-                        eventName={
-                            isLandingPageRevampOn
-                                ? 'Click "Akses Sekarang" Button'
-                                : undefined
-                        }
-                        label={`${
-                            isLandingPageRevampOn ? 'Akses' : 'Gabung'
-                        } Sekarang`}
-                    />
+                    {coursePreview?.is_free ? (
+                        <Button
+                            href={`/kelas/${slug}/${coursePreview?.subchapter_slug}`}
+                            variant="primary"
+                            eventName='Click Free "Akses Sekarang" Button'
+                            className="text-center my-2 z-[5] whitespace-nowrap md:w-fit min-w-[200px]">
+                            Akses Sekarang
+                        </Button>
+                    ) : (
+                        <SubscribeButton
+                            slug={slug}
+                            className={cn(
+                                'whitespace-nowrap',
+                                isLandingPageRevampOn && '!my-0 w-auto'
+                            )}
+                            eventName={
+                                isLandingPageRevampOn
+                                    ? 'Click "Akses Sekarang" Button'
+                                    : undefined
+                            }
+                            label={`${
+                                isLandingPageRevampOn ? 'Akses' : 'Gabung'
+                            } Sekarang`}
+                        />
+                    )}
                     {isLandingPageRevampOn && (
                         <Button
                             href={`/kelas/${slug}/${coursePreview?.subchapter_slug}`}

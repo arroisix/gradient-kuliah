@@ -213,6 +213,7 @@ interface FirstVideoInCourse {
     subchapter_slug: string;
     chapter_id: string;
     chapter_name: string;
+    is_free: boolean;
 }
 
 type CompletionPercentage = {
