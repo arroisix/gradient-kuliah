@@ -122,6 +122,12 @@ dependencies:
   bitmovin-player:
     specifier: ^8.212.0
     version: 8.212.0
+  bitmovin-player-react:
+    specifier: ^1.0.3
+    version: 1.0.3(bitmovin-player-ui@3.96.0)(bitmovin-player@8.212.0)(react@18.1.0)
+  bitmovin-player-ui:
+    specifier: ^3.96.0
+    version: 3.96.0
   clsx:
     specifier: ^2.0.0
     version: 2.0.0
@@ -3788,6 +3794,22 @@ packages:
   /binary-extensions@2.3.0:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
     engines: {node: '>=8'}
+
+  /bitmovin-player-react@1.0.3(bitmovin-player-ui@3.96.0)(bitmovin-player@8.212.0)(react@18.1.0):
+    resolution: {integrity: sha512-YFDRDj9Q8SefHuxYRsdq/IuEhuiBGVPIRwLyZSGeJ6L+GfYc8+RE8s06cf8LGuPHKgW2clvZ3POa0pKGnwhnbw==}
+    peerDependencies:
+      bitmovin-player: ^8.0.0
+      bitmovin-player-ui: ^3.60.0
+      react: ^17.0.0 || ^18.0.0
+    dependencies:
+      bitmovin-player: 8.212.0
+      bitmovin-player-ui: 3.96.0
+      react: 18.1.0
+    dev: false
+
+  /bitmovin-player-ui@3.96.0:
+    resolution: {integrity: sha512-Bih4x7HMYsekViSZAry8hsfcgxA1VG9EO9IdLRGEtHSXJoxdwgC9Ozk3zYea01Gtk2fDdv5Vs7MZFL6ifXPpaQ==}
+    dev: false
 
   /bitmovin-player@8.212.0:
     resolution: {integrity: sha512-xK8mWXstgpJG5t4Mf3nDjckMdtvijV63LgkDj2ErcuCzRIo/i8Src0zHn8UVqBJXmdfgWCEV8b9jRvCARYR/AA==}

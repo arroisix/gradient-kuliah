@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import VideoPaywall from './VideoPaywall';
 import VideoJS from 'commons/components/elements/Video/VideoJS';
-import BitmovinPlayer from 'commons/components/elements/Video/BitmovinPlayer';
 import Image from 'next/image';
 import { isNotNullAndUndefined, queryParamBuilder } from 'commons/utils';
 import { useSelector } from 'react-redux';
@@ -13,6 +12,19 @@ import Spinner from 'commons/components/elements/Spinner';
 import YoutubeVideo from 'commons/components/elements/Video/YoutubeVideo';
 import VideoRegisterwall from './VideoRegisterWall';
 import { FaPlay } from 'react-icons/fa';
+import dynamic from 'next/dynamic';
+
+const BitmovinPlayer = dynamic(
+    () => import('commons/components/elements/Video/BitmovinPlayer'),
+    {
+        ssr: false,
+        loading: () => (
+            <div className="relative w-full aspect-video bg-gray-900 rounded-lg flex items-center justify-center">
+                <Spinner size="medium" />
+            </div>
+        )
+    }
+);
 
 interface VideoPlayerContainerProps
     extends Pick<
