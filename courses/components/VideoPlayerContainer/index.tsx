@@ -110,7 +110,7 @@ const VideoPlayerContainer = ({
             </div>
         );
 
-    if (!isAuthenticated && video.is_free) {
+    if (!isAuthenticated && video?.is_free) {
         return (
             <>
                 <VideoRegisterwall
@@ -140,11 +140,14 @@ const VideoPlayerContainer = ({
             {!isShowPaywall ? (
                 <div className="md:rounded-lg md:overflow-hidden">
                     {video?.is_embed_youtube ? (
-                        <YoutubeVideo key={video?.video_url} src={videoSrc} />
+                        <YoutubeVideo
+                            key={video?.video_url}
+                            src={videoSrc || ''}
+                        />
                     ) : shouldUseBitmovinPlayer ? (
                         <BitmovinPlayer
                             key={video?.drm_video_url}
-                            src={videoSrc}
+                            src={videoSrc || ''}
                             drmToken={video?.drm_token as string}
                             trackProgress={trackProgress}
                             next_subchapter_link={nextSubchapter}
@@ -153,7 +156,7 @@ const VideoPlayerContainer = ({
                     ) : (
                         <VideoJS
                             key={video?.video_url}
-                            src={videoSrc}
+                            src={videoSrc || ''}
                             isMuxVideo={isNotNullAndUndefined(
                                 video?.mux_playback_id
                             )}
