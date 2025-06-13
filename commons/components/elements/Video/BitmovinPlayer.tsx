@@ -107,7 +107,7 @@ export default function BitmovinPlayer({
 
                 if (controlBar) {
                     console.log(
-                        '✅ [BitmovinPlayer] Found control bar, adding skip buttons and CC button...'
+                        '✅ [BitmovinPlayer] Found control bar, adding custom controls...'
                     );
 
                     const playButton = controlBar.querySelector(
@@ -173,6 +173,307 @@ export default function BitmovinPlayer({
                             playerInstance.seek(
                                 Math.min(duration, currentTime + 10)
                             );
+                        });
+
+                        const volumeBtn = document.createElement('div');
+                        volumeBtn.className =
+                            'bmpui-ui-button custom-volume-button';
+                        let currentVolume = playerInstance.getVolume() / 100;
+                        let volumeSliderVisible = false;
+                        let isMuted = playerInstance.isMuted();
+
+                        console.log(
+                            '🔊 [Debug] Initial player volume:',
+                            playerInstance.getVolume()
+                        );
+                        console.log(
+                            '🔊 [Debug] Normalized volume:',
+                            currentVolume
+                        );
+
+                        const getVolumeIcon = (
+                            volume: number,
+                            muted: boolean
+                        ) => {
+                            if (muted || volume === 0) {
+                                return `
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63m2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71M4.27 3L3 4.27L7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21L21 19.73l-9-9zM12 4L9.91 6.09L12 8.18z"/>
+                                    </svg>
+                                `;
+                            } else if (volume < 0.3) {
+                                return `
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="M7 9v6h4l5 5V4l-5 5H7z"/>
+                                    </svg>
+                                `;
+                            } else if (volume < 0.7) {
+                                return `
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="M18.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02M5 9v6h4l5 5V4L9 9H5z"/>
+                                    </svg>
+                                `;
+                            } else {
+                                return `
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                                    </svg>
+                                `;
+                            }
+                        };
+
+                        volumeBtn.innerHTML = getVolumeIcon(
+                            currentVolume,
+                            isMuted
+                        );
+                        volumeBtn.style.cssText = `
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            cursor: pointer !important;
+                            user-select: none !important;
+                            background: transparent !important;
+                            border: none !important;
+                            color: white !important;
+                            margin: 0 !important;
+                            opacity: 0.8 !important;
+                            position: relative !important;
+                        `;
+
+                        const volumeSlider = document.createElement('div');
+                        volumeSlider.className = 'custom-volume-slider';
+                        volumeSlider.style.cssText = `
+                            position: absolute !important;
+                            bottom: 100% !important;
+                            left: 50% !important;
+                            transform: translateX(-50%) !important;
+                            background: rgba(0, 0, 0, 0.9) !important;
+                            border-radius: 6px !important;
+                            margin-bottom: 8px !important;
+                            display: none !important;
+                            flex-direction: column !important;
+                            align-items: center !important;
+                            padding: 12px 8px !important;
+                            z-index: 1000 !important;
+                            backdrop-filter: blur(10px) !important;
+                            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+                            height: 120px !important;
+                            width: 40px !important;
+                        `;
+
+                        const volumeTrack = document.createElement('div');
+                        volumeTrack.style.cssText = `
+                            width: 4px !important;
+                            height: 80px !important;
+                            background: rgba(255, 255, 255, 0.3) !important;
+                            border-radius: 2px !important;
+                            position: relative !important;
+                            cursor: pointer !important;
+                        `;
+
+                        const volumeFill = document.createElement('div');
+                        volumeFill.style.cssText = `
+                            width: 100% !important;
+                            background: #5F2BCE !important;
+                            border-radius: 2px !important;
+                            position: absolute !important;
+                            bottom: 0 !important;
+                            height: ${
+                                isMuted ? 0 : Math.min(100, currentVolume * 100)
+                            }% !important;
+                            transition: height 0.1s ease !important;
+                        `;
+
+                        const volumeThumb = document.createElement('div');
+                        volumeThumb.style.cssText = `
+                            width: 12px !important;
+                            height: 12px !important;
+                            background: #5F2BCE !important;
+                            border-radius: 50% !important;
+                            position: absolute !important;
+                            left: 50% !important;
+                            transform: translateX(-50%) translateY(50%) !important;
+                            top: ${
+                                isMuted
+                                    ? 100
+                                    : Math.max(
+                                          0,
+                                          (1 - Math.min(1, currentVolume)) * 100
+                                      )
+                            }% !important;
+                            cursor: pointer !important;
+                            transition: top 0.1s ease !important;
+                        `;
+
+                        const volumeLabel = document.createElement('div');
+                        volumeLabel.style.cssText = `
+                            color: white !important;
+                            font-size: 10px !important;
+                            margin-top: 8px !important;
+                            text-align: center !important;
+                        `;
+                        volumeLabel.textContent = isMuted
+                            ? '0%'
+                            : `${Math.round(
+                                  Math.min(100, currentVolume * 100)
+                              )}%`;
+
+                        volumeTrack.appendChild(volumeFill);
+                        volumeTrack.appendChild(volumeThumb);
+                        volumeSlider.appendChild(volumeTrack);
+                        volumeSlider.appendChild(volumeLabel);
+                        volumeBtn.appendChild(volumeSlider);
+
+                        const updateVolumeDisplay = (
+                            volume: number,
+                            muted: boolean
+                        ) => {
+                            currentVolume = volume;
+                            isMuted = muted;
+
+                            const svgElement = volumeBtn.querySelector('svg');
+                            if (svgElement) {
+                                volumeBtn.innerHTML = getVolumeIcon(
+                                    volume,
+                                    muted
+                                );
+                                volumeBtn.appendChild(volumeSlider);
+                            }
+
+                            const displayVolume = muted ? 0 : volume;
+                            volumeFill.style.height = `${displayVolume * 100}%`;
+                            volumeThumb.style.top = `${
+                                (1 - displayVolume) * 100
+                            }%`;
+                            volumeLabel.textContent = `${Math.round(
+                                displayVolume * 100
+                            )}%`;
+                        };
+
+                        const handleVolumeSliderInteraction = (
+                            e: MouseEvent
+                        ) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+
+                            const rect = volumeTrack.getBoundingClientRect();
+                            const y = e.clientY - rect.top;
+                            const height = rect.height;
+                            const normalizedVolume = Math.max(
+                                0,
+                                Math.min(1, (height - y) / height)
+                            );
+
+                            const playerVolume = normalizedVolume * 100;
+
+                            console.log(
+                                '🔊 [Debug] Calculated normalized volume:',
+                                normalizedVolume
+                            );
+                            console.log(
+                                '🔊 [Debug] Setting player volume to:',
+                                playerVolume
+                            );
+
+                            playerInstance.setVolume(playerVolume);
+
+                            if (normalizedVolume > 0 && isMuted) {
+                                playerInstance.unmute();
+                            }
+
+                            updateVolumeDisplay(
+                                normalizedVolume,
+                                normalizedVolume === 0
+                            );
+                            console.log(
+                                `🔊 [BitmovinPlayer] Volume changed to ${Math.round(
+                                    normalizedVolume * 100
+                                )}%`
+                            );
+                        };
+
+                        let isDragging = false;
+
+                        volumeTrack.addEventListener('mousedown', (e) => {
+                            isDragging = true;
+                            handleVolumeSliderInteraction(e);
+                        });
+
+                        document.addEventListener('mousemove', (e) => {
+                            if (isDragging) {
+                                handleVolumeSliderInteraction(e);
+                            }
+                        });
+
+                        document.addEventListener('mouseup', () => {
+                            isDragging = false;
+                        });
+
+                        volumeBtn.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+
+                            const target = e.target as Element;
+
+                            if (
+                                volumeSlider.contains(target) ||
+                                volumeTrack.contains(target) ||
+                                target === volumeFill ||
+                                target === volumeThumb
+                            ) {
+                                return;
+                            }
+
+                            if (volumeSliderVisible) {
+                                if (isMuted) {
+                                    playerInstance.unmute();
+                                    updateVolumeDisplay(currentVolume, false);
+                                } else {
+                                    playerInstance.mute();
+                                    updateVolumeDisplay(currentVolume, true);
+                                }
+                                console.log(
+                                    `🔊 [BitmovinPlayer] Volume ${
+                                        isMuted ? 'unmuted' : 'muted'
+                                    }`
+                                );
+                            } else {
+                                volumeSliderVisible = true;
+                                volumeSlider.style.display = 'flex';
+                                console.log(
+                                    '🔊 [BitmovinPlayer] Volume slider shown'
+                                );
+                            }
+                        });
+
+                        const hideVolumeSlider = (e: Event) => {
+                            if (
+                                volumeSliderVisible &&
+                                !volumeBtn.contains(e.target as Node)
+                            ) {
+                                volumeSlider.style.display = 'none';
+                                volumeSliderVisible = false;
+                            }
+                        };
+
+                        document.addEventListener('click', hideVolumeSlider);
+
+                        playerInstance.on(
+                            'volumeChanged' as any,
+                            (event: any) => {
+                                updateVolumeDisplay(
+                                    event.volume,
+                                    playerInstance.isMuted()
+                                );
+                            }
+                        );
+
+                        playerInstance.on('muted' as any, () => {
+                            updateVolumeDisplay(currentVolume, true);
+                        });
+
+                        playerInstance.on('unmuted' as any, () => {
+                            updateVolumeDisplay(currentVolume, false);
                         });
 
                         const ccBtn = document.createElement('div');
@@ -434,27 +735,15 @@ export default function BitmovinPlayer({
                             nextElement
                         );
 
-                        const volumeButton =
-                            controlBar.querySelector(
-                                '.bmpui-ui-volumeslider'
-                            ) ||
-                            controlBar.querySelector(
-                                '.bmpui-ui-volumecontrolbutton'
-                            );
+                        playButton.parentElement.insertBefore(
+                            volumeBtn,
+                            nextElement
+                        );
 
-                        if (volumeButton && volumeButton.parentElement) {
-                            const volumeNextElement =
-                                volumeButton.nextElementSibling;
-                            volumeButton.parentElement.insertBefore(
-                                timeDisplay,
-                                volumeNextElement
-                            );
-                        } else {
-                            playButton.parentElement.insertBefore(
-                                timeDisplay,
-                                nextElement
-                            );
-                        }
+                        playButton.parentElement.insertBefore(
+                            timeDisplay,
+                            nextElement
+                        );
 
                         const pipButton = controlBar.querySelector(
                             '.bmpui-ui-piptogglebutton'
@@ -474,12 +763,10 @@ export default function BitmovinPlayer({
                                 ccBtn,
                                 rightSideButton
                             );
-
                             rightSideButton.parentElement.insertBefore(
                                 speedBtn,
                                 ccBtn
                             );
-
                             console.log(
                                 '✅ [BitmovinPlayer] CC and Speed buttons positioned on right side'
                             );
@@ -504,7 +791,7 @@ export default function BitmovinPlayer({
                         setTimeout(updateTimeDisplay, 100);
 
                         console.log(
-                            '✅ [BitmovinPlayer] Skip buttons, CC button, speed button, and time display added successfully'
+                            '✅ [BitmovinPlayer] All custom controls added successfully'
                         );
                     } else {
                         console.error(
@@ -519,6 +806,7 @@ export default function BitmovinPlayer({
 
                 const style = document.createElement('style');
                 style.textContent = `
+                    /* Hide default time labels */
                     .bmpui-ui-timelabel,
                     .bmpui-ui-timelabel-timeplayed,
                     .bmpui-ui-timelabel-timetotal {
@@ -537,12 +825,37 @@ export default function BitmovinPlayer({
                         display: none !important;
                     }
                     
+                    .bmpui-ui-volumeslider,
+                    .bmpui-ui-volumecontrolbutton,
+                    .bmpui-ui-volumetogglebutton,
+                    .bmpui-ui-volumecontrol {
+                        display: none !important;
+                        visibility: hidden !important;
+                        opacity: 0 !important;
+                        pointer-events: none !important;
+                    }
+                    
+                    .bmpui-ui-controlbar .bmpui-ui-volumeslider,
+                    .bmpui-ui-controlbar .bmpui-ui-volumecontrolbutton,
+                    .bmpui-ui-controlbar .bmpui-ui-volumetogglebutton,
+                    .bmpui-ui-controlbar .bmpui-ui-volumecontrol,
+                    .bmpui-container .bmpui-ui-volumeslider,
+                    .bmpui-container .bmpui-ui-volumecontrolbutton,
+                    .bmpui-container .bmpui-ui-volumetogglebutton,
+                    .bmpui-container .bmpui-ui-volumecontrol {
+                        display: none !important;
+                        visibility: hidden !important;
+                        opacity: 0 !important;
+                        pointer-events: none !important;
+                    }
+                    
                     .bmpui-ui-seekbar .bmpui-seekbar-playbackposition,
                     .bmpui-ui-seekbar .bmpui-seekbar-playbackposition-marker {
                         background-color: #5F2BCE !important;
                     }
                     
-                    .bmpui-ui-volumeslider .bmpui-seekbar .bmpui-seekbar-playbackposition-marker, .bmpui-ui-seekbar .bmpui-seekbar .bmpui-seekbar-playbackposition-marker {
+                    .bmpui-ui-volumeslider .bmpui-seekbar .bmpui-seekbar-playbackposition-marker, 
+                    .bmpui-ui-seekbar .bmpui-seekbar .bmpui-seekbar-playbackposition-marker {
                         border: none !important;
                     }
                     
@@ -550,17 +863,7 @@ export default function BitmovinPlayer({
                         background-color: rgba(255, 255, 255, 0.3) !important;
                     }
                     
-                    .bmpui-ui-volumeslider .bmpui-slider-track-playbackposition,
-                    .bmpui-ui-volumeslider .bmpui-slider-playbackposition {
-                        background-color: #5F2BCE !important;
-                    }
-                    
                     .bmpui-ui-seekbar .bmpui-seekbar-thumb {
-                        background-color: #5F2BCE !important;
-                        border-color: #5F2BCE !important;
-                    }
-                    
-                    .bmpui-ui-volumeslider .bmpui-slider-thumb {
                         background-color: #5F2BCE !important;
                         border-color: #5F2BCE !important;
                     }
@@ -589,7 +892,8 @@ export default function BitmovinPlayer({
                     .custom-skip-backward,
                     .custom-skip-forward,
                     .custom-cc-button,
-                    .custom-speed-button {
+                    .custom-speed-button,
+                    .custom-volume-button {
                         background: transparent !important;
                         border: none !important;
                         color: white !important;
@@ -600,7 +904,8 @@ export default function BitmovinPlayer({
                     .custom-skip-backward:hover,
                     .custom-skip-forward:hover,
                     .custom-cc-button:hover,
-                    .custom-speed-button:hover {
+                    .custom-speed-button:hover,
+                    .custom-volume-button:hover {
                         background: transparent !important;
                         border: none !important;
                         opacity: 1 !important;
@@ -617,7 +922,8 @@ export default function BitmovinPlayer({
                         opacity: 0.9 !important;
                     }
                     
-                    .custom-speed-menu {
+                    .custom-speed-menu,
+                    .custom-volume-slider {
                         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
                     }
                     
@@ -631,6 +937,10 @@ export default function BitmovinPlayer({
                     
                     .custom-speed-menu .speed-option:last-child {
                         border-radius: 0 0 6px 6px !important;
+                    }
+                    
+                    .custom-volume-slider {
+                        user-select: none !important;
                     }
                 `;
                 document.head.appendChild(style);
