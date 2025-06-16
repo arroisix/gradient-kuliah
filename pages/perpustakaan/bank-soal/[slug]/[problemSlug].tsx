@@ -59,7 +59,7 @@ export default BankSoalPage;
 export const getStaticPaths: GetStaticPaths = async () => {
     return {
         paths: [],
-        fallback: 'blocking'
+        fallback: true
     };
 };
 
@@ -80,7 +80,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
                     `${config.API_BASE_URL}books/bank-soal/${slug}/problems/${problemSlug}/`
                 ),
                 axios.get<GetProblemRecommendationsResponse>(
-                    `${config.API_BASE_URL}learning-experiences/recommendations/books/problems/${problemSlug}/`
+                    `${config.API_BASE_URL}learning-experiences/recommendations/bank-soal/problems/${problemSlug}/`
                 )
             ]);
 
