@@ -54,9 +54,7 @@ const VideoPlayerContainer = ({
 
     const isShowPaywall = !is_subscribed && !video?.is_free;
 
-    const shouldUseBitmovinPlayer =
-        video?.is_drm_protected &&
-        process.env.NEXT_PUBLIC_USE_BITMOVIN_DRM === 'true';
+    const shouldUseBitmovinPlayer = video?.is_drm_protected;
 
     const videoSrc = shouldUseBitmovinPlayer
         ? video?.drm_video_url

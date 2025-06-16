@@ -25,8 +25,7 @@ export default function BitmovinPlayer({
     const playerDiv = useRef<HTMLDivElement>(null);
 
     const setupPlayer = useCallback((): void => {
-        console.log('🎬 [BitmovinPlayer] Starting setupPlayer...');
-        console.log('🎬 [BitmovinPlayer] Props received (ignored for test):', {
+        console.log('Props received (ignored for test):', {
             src,
             drmToken: drmToken ? 'TOKEN_PROVIDED' : 'NO_TOKEN',
             autoPlay,
@@ -35,24 +34,13 @@ export default function BitmovinPlayer({
         });
 
         if (!playerDiv.current) {
-            console.error(
-                '❌ [BitmovinPlayer] playerDiv.current is null, returning early'
-            );
             return;
         }
-        console.log('✅ [BitmovinPlayer] playerDiv.current is available');
 
         const playerKey = process.env.NEXT_PUBLIC_BITMOVIN_PLAYER_KEY;
         if (!playerKey) {
-            console.error(
-                '❌ [BitmovinPlayer] NEXT_PUBLIC_BITMOVIN_PLAYER_KEY not found'
-            );
             return;
         }
-        console.log(
-            '✅ [BitmovinPlayer] Player key available:',
-            playerKey.substring(0, 8) + '...'
-        );
 
         const playerConfig: PlayerConfig = {
             key: playerKey,
@@ -77,39 +65,21 @@ export default function BitmovinPlayer({
             hls: 'https://streams.bitmovin.com/cv95fqu1pf7itg7cfei0/manifest.m3u8'
         };
 
-        console.log('🔧 [BitmovinPlayer] Player config:', playerConfig);
-        console.log('🔧 [BitmovinPlayer] Source config (HARDCODED TEST):', {
-            hls: 'https://streams.bitmovin.com/cv95fqu1pf7itg7cfei0/manifest.m3u8',
-            drm: 'NONE - Testing without DRM'
-        });
-
         try {
-            console.log('🏗️ [BitmovinPlayer] Creating Player instance...');
             const playerInstance = new Player(
                 playerDiv.current as HTMLDivElement,
                 playerConfig
             );
-            console.log(
-                '✅ [BitmovinPlayer] Player instance created successfully'
-            );
-
-            console.log('🎨 [BitmovinPlayer] Building custom UI...');
 
             UIFactory.buildModernUI(playerInstance);
 
             setTimeout(() => {
-                console.log('🔧 [BitmovinPlayer] Adding custom controls...');
-
                 const playerContainer = playerInstance.getContainer();
                 const controlBar = playerContainer?.querySelector(
                     '.bmpui-ui-controlbar'
                 );
 
                 if (controlBar) {
-                    console.log(
-                        '✅ [BitmovinPlayer] Found control bar, adding custom controls...'
-                    );
-
                     const playButton = controlBar.querySelector(
                         '.bmpui-ui-playbacktogglebutton'
                     );
@@ -137,9 +107,6 @@ export default function BitmovinPlayer({
                         `;
 
                         backwardBtn.addEventListener('click', () => {
-                            console.log(
-                                '⏪ [BitmovinPlayer] Skip backward 10s'
-                            );
                             const currentTime = playerInstance.getCurrentTime();
                             playerInstance.seek(Math.max(0, currentTime - 10));
                         });
@@ -167,7 +134,6 @@ export default function BitmovinPlayer({
                         `;
 
                         forwardBtn.addEventListener('click', () => {
-                            console.log('⏩ [BitmovinPlayer] Skip forward 10s');
                             const currentTime = playerInstance.getCurrentTime();
                             const duration = playerInstance.getDuration();
                             playerInstance.seek(
@@ -181,15 +147,6 @@ export default function BitmovinPlayer({
                         let currentVolume = playerInstance.getVolume() / 100;
                         let volumeSliderVisible = false;
                         let isMuted = playerInstance.isMuted();
-
-                        console.log(
-                            '🔊 [Debug] Initial player volume:',
-                            playerInstance.getVolume()
-                        );
-                        console.log(
-                            '🔊 [Debug] Normalized volume:',
-                            currentVolume
-                        );
 
                         const getVolumeIcon = (
                             volume: number,
@@ -366,15 +323,6 @@ export default function BitmovinPlayer({
 
                             const playerVolume = normalizedVolume * 100;
 
-                            console.log(
-                                '🔊 [Debug] Calculated normalized volume:',
-                                normalizedVolume
-                            );
-                            console.log(
-                                '🔊 [Debug] Setting player volume to:',
-                                playerVolume
-                            );
-
                             playerInstance.setVolume(playerVolume);
 
                             if (normalizedVolume > 0 && isMuted) {
@@ -384,11 +332,6 @@ export default function BitmovinPlayer({
                             updateVolumeDisplay(
                                 normalizedVolume,
                                 normalizedVolume === 0
-                            );
-                            console.log(
-                                `🔊 [BitmovinPlayer] Volume changed to ${Math.round(
-                                    normalizedVolume * 100
-                                )}%`
                             );
                         };
 
@@ -432,17 +375,9 @@ export default function BitmovinPlayer({
                                     playerInstance.mute();
                                     updateVolumeDisplay(currentVolume, true);
                                 }
-                                console.log(
-                                    `🔊 [BitmovinPlayer] Volume ${
-                                        isMuted ? 'unmuted' : 'muted'
-                                    }`
-                                );
                             } else {
                                 volumeSliderVisible = true;
                                 volumeSlider.style.display = 'flex';
-                                console.log(
-                                    '🔊 [BitmovinPlayer] Volume slider shown'
-                                );
                             }
                         });
 
@@ -506,22 +441,11 @@ export default function BitmovinPlayer({
                         };
 
                         ccBtn.addEventListener('click', () => {
-                            console.log(
-                                '📺 [BitmovinPlayer] CC button clicked'
-                            );
-
                             try {
                                 const subtitleTracks =
                                     playerInstance.subtitles.list();
-                                console.log(
-                                    'Available subtitle tracks:',
-                                    subtitleTracks
-                                );
 
                                 if (subtitleTracks.length === 0) {
-                                    console.warn(
-                                        '⚠️ [BitmovinPlayer] No subtitle tracks available'
-                                    );
                                     return;
                                 }
 
@@ -531,24 +455,14 @@ export default function BitmovinPlayer({
                                         firstTrack.id
                                     );
                                     ccEnabled = true;
-                                    console.log(
-                                        '✅ [BitmovinPlayer] Subtitles enabled:',
-                                        firstTrack.label || firstTrack.id
-                                    );
                                 } else {
                                     (playerInstance.subtitles.disable as any)();
                                     ccEnabled = false;
-                                    console.log(
-                                        '❌ [BitmovinPlayer] Subtitles disabled'
-                                    );
                                 }
 
                                 updateCCButtonState(ccEnabled);
                             } catch (error) {
-                                console.error(
-                                    '❌ [BitmovinPlayer] Error toggling subtitles:',
-                                    error
-                                );
+                                // Silently handle error
                             }
                         });
 
@@ -660,10 +574,6 @@ export default function BitmovinPlayer({
 
                                 speedMenu.style.display = 'none';
                                 speedMenuVisible = false;
-
-                                console.log(
-                                    `⚡ [BitmovinPlayer] Playback speed changed to ${speed}x`
-                                );
                             });
 
                             speedMenu.appendChild(speedOption);
@@ -678,10 +588,6 @@ export default function BitmovinPlayer({
                             speedMenu.style.display = speedMenuVisible
                                 ? 'flex'
                                 : 'none';
-                            console.log(
-                                '⚡ [BitmovinPlayer] Speed menu toggled:',
-                                speedMenuVisible
-                            );
                         });
 
                         const hideSpeedMenu = (e: Event) => {
@@ -767,15 +673,9 @@ export default function BitmovinPlayer({
                                 speedBtn,
                                 ccBtn
                             );
-                            console.log(
-                                '✅ [BitmovinPlayer] CC and Speed buttons positioned on right side'
-                            );
                         } else {
                             controlBar.appendChild(speedBtn);
                             controlBar.appendChild(ccBtn);
-                            console.log(
-                                '⚠️ [BitmovinPlayer] Right-side buttons not found, added to end of control bar'
-                            );
                         }
 
                         playerInstance.on(
@@ -789,19 +689,7 @@ export default function BitmovinPlayer({
                         playerInstance.on('seeked' as any, updateTimeDisplay);
 
                         setTimeout(updateTimeDisplay, 100);
-
-                        console.log(
-                            '✅ [BitmovinPlayer] All custom controls added successfully'
-                        );
-                    } else {
-                        console.error(
-                            '❌ [BitmovinPlayer] Could not find play button'
-                        );
                     }
-                } else {
-                    console.error(
-                        '❌ [BitmovinPlayer] Could not find control bar'
-                    );
                 }
 
                 const style = document.createElement('style');
@@ -944,77 +832,22 @@ export default function BitmovinPlayer({
                     }
                 `;
                 document.head.appendChild(style);
-
-                console.log(
-                    '✅ [BitmovinPlayer] Custom controls and styling applied'
-                );
             }, 100);
 
-            console.log('✅ [BitmovinPlayer] UI built successfully');
-
-            playerInstance.on('ready' as any, () => {
-                console.log('✅ [BitmovinPlayer] Player ready event fired');
+            playerInstance.load(sourceConfig).then(() => {
+                setPlayer(playerInstance);
             });
-
-            playerInstance.on('sourceLoaded' as any, () => {
-                console.log('✅ [BitmovinPlayer] Source loaded event fired');
-            });
-
-            playerInstance.on('error' as any, (event: any) => {
-                console.error('❌ [BitmovinPlayer] Player error event:', event);
-            });
-
-            playerInstance.on('warning' as any, (event: any) => {
-                console.warn('⚠️ [BitmovinPlayer] Player warning:', event);
-            });
-
-            playerInstance.on('play' as any, () => {
-                console.log('▶️ [BitmovinPlayer] Play event fired');
-            });
-
-            playerInstance.on('paused' as any, () => {
-                console.log('⏸️ [BitmovinPlayer] Pause event fired');
-            });
-
-            console.log('📥 [BitmovinPlayer] Loading source...');
-            playerInstance.load(sourceConfig).then(
-                () => {
-                    console.log(
-                        '✅ [BitmovinPlayer] Source loaded successfully'
-                    );
-                    setPlayer(playerInstance);
-                },
-                (error) => {
-                    console.error(
-                        '❌ [BitmovinPlayer] Error while loading source:',
-                        error
-                    );
-                }
-            );
-        } catch (error) {
-            console.error(
-                '❌ [BitmovinPlayer] Error during player setup:',
-                error
-            );
-        }
+        } catch (error) {}
     }, [autoPlay]);
 
     useEffect(() => {
-        console.log(
-            '🔄 [BitmovinPlayer] useEffect called, running setupPlayer'
-        );
         setupPlayer();
 
         return () => {
-            console.log('🧹 [BitmovinPlayer] Cleanup function called');
-
             function destroyPlayer(): void {
                 if (player != null) {
-                    console.log('🗑️ [BitmovinPlayer] Destroying player');
                     player.destroy();
                     setPlayer(null);
-                } else {
-                    console.log('ℹ️ [BitmovinPlayer] No player to destroy');
                 }
             }
 
