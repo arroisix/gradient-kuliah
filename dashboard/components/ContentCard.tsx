@@ -57,7 +57,8 @@ const ContentCard: React.FC<ContentCardProps> = ({
     isTrending = false,
     isBaru = false,
     isMajorClass = false,
-    hasTwoLineCards = false
+    hasTwoLineCards = false,
+    onClick
 }) => {
     const isVideo =
         (category === 'Video' || category === 'Kelas') && !isMajorClass;
@@ -74,9 +75,16 @@ const ContentCard: React.FC<ContentCardProps> = ({
     const shouldUseStackedLayout =
         isLongCourseName || isLongChapterName || isLongAuthorName;
 
+    const handleClick = () => {
+        if (onClick) {
+            onClick();
+        }
+    };
+
     return (
         <Link
             href={href}
+            onClick={handleClick}
             className="block relative rounded-lg transition-colors overflow-hidden h-full bg-[#121212] border border-[#666666] border-opacity-50">
             {isTrending && (
                 <div
