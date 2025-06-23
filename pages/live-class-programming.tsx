@@ -38,11 +38,11 @@ const LiveClassProgramming = (): JSX.Element => {
         <>
             <NextSeo
                 title="Live Class Programming Persiapan untuk CALON MABA"
-                description="Untuk teman teman yang ingin mempersiapkan untuk mengikuti ujian mandiri, ini kesempatan yang bagus untuk kamu! di kelas ini kita akan belajar dan membahas soal soal ujian mandiri seperti Utul UGM dan juga SIMAK UI."
+                description="Untuk teman teman calon mahasiswa baru yang ingin mempelajari dasar-dasar pemrograman, ini kesempatan yang bagus untuk kamu! Di kelas ini kita akan belajar dan membahas berbagai konsep dasar pemrograman yang penting untuk kamu gunakan selama masa perkuliahan kamu."
                 openGraph={{
                     title: 'Live Class Programming Persiapan untuk CALON MABA',
                     description:
-                        'Untuk teman teman yang ingin mempersiapkan untuk mengikuti ujian mandiri, ini kesempatan yang bagus untuk kamu! di kelas ini kita akan belajar dan membahas soal soal ujian mandiri seperti Utul UGM dan juga SIMAK UI.',
+                        'Untuk teman teman calon mahasiswa baru yang ingin mempelajari dasar-dasar pemrograman, ini kesempatan yang bagus untuk kamu! Di kelas ini kita akan belajar dan membahas berbagai konsep dasar pemrograman yang penting untuk kamu gunakan selama masa perkuliahan kamu.',
                     url: `https://gradient.academy/live-class-programming`,
                     images: [
                         {
