@@ -62,7 +62,8 @@ export default function BitmovinPlayer({
         };
 
         const sourceConfig: SourceConfig = {
-            hls: 'https://streams.bitmovin.com/cv95fqu1pf7itg7cfei0/manifest.m3u8'
+            // hls: 'https://streams.bitmovin.com/cv95fqu1pf7itg7cfei0/manifest.m3u8'
+            hls: src
         };
 
         try {
