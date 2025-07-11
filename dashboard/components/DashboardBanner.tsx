@@ -24,40 +24,51 @@ const DashboardUpdatesBanner: React.FC = () => {
 
     const banners = data?.data || [];
 
-    const startAutoSlide = useCallback(() => {
-        if (banners.length > 1 && !isModalOpen) {
-            intervalIdRef.current = setInterval(() => {
-                setCurrentIndex(
-                    (prevIndex) => (prevIndex + 1) % banners.length
-                );
-            }, 5000);
-        }
-
-        return () => {
-            if (intervalIdRef.current) {
-                clearInterval(intervalIdRef.current);
-                intervalIdRef.current = null;
-            }
-        };
-    }, [banners.length, isModalOpen]);
-
-    useEffect(() => {
-        const cleanup = startAutoSlide();
-
-        return cleanup;
-    }, [startAutoSlide, isModalOpen]);
-
-    useEffect(() => {
-        if (isModalOpen && intervalIdRef.current) {
+    const clearAutoSlide = useCallback(() => {
+        if (intervalIdRef.current) {
             clearInterval(intervalIdRef.current);
             intervalIdRef.current = null;
-        } else if (!isModalOpen && banners.length > 1) {
+        }
+    }, []);
+
+    const startAutoSlide = useCallback(() => {
+        clearAutoSlide();
+        
+        if (banners.length > 1 && !isModalOpen) {
+            intervalIdRef.current = setInterval(() => {
+                setCurrentIndex((prevIndex) => (prevIndex + 1) % banners.length);
+            }, 5000);
+        }
+    }, [banners.length, isModalOpen, clearAutoSlide]);
+
+    useEffect(() => {
+        startAutoSlide();
+        return clearAutoSlide;
+    }, [startAutoSlide, clearAutoSlide]);
+
+    useEffect(() => {
+        if (isModalOpen) {
+            clearAutoSlide();
+        } else if (banners.length > 1) {
             startAutoSlide();
         }
-    }, [isModalOpen, banners.length, startAutoSlide]);
+    }, [isModalOpen, banners.length, startAutoSlide, clearAutoSlide]);
+
+    useEffect(() => {
+        if (banners.length > 0 && currentIndex >= banners.length) {
+            setCurrentIndex(0);
+        }
+    }, [banners.length, currentIndex]);
 
     const goToSlide = (index: number) => {
+        clearAutoSlide();
         setCurrentIndex(index);
+        
+        setTimeout(() => {
+            if (!isModalOpen) {
+                startAutoSlide();
+            }
+        }, 3000);
     };
 
     const handleBannerClick = (banner: Banner) => {
