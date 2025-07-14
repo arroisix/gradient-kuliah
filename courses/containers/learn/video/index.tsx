@@ -18,7 +18,8 @@ import RelatedVideosSection from 'courses/components/RelatedVideosSection';
 import FreeBadge from 'commons/components/elements/FreeBadge';
 import RatingButton from 'courses/components/CourseRatingButton';
 import ShareContentButton from 'courses/components/ShareContentButton';
-import CopilotEntrypoint from '../../../../copilot/components/CopilotEntrypoint';
+import CopilotEntrypoint from 'copilot/components/CopilotEntrypoint';
+import CopilotModal from 'copilot/components/CopilotModal';
 import CourseDetailBox from 'courses/components/CourseDetailBox';
 
 const VideoLearnContainer = ({
@@ -50,6 +51,7 @@ const VideoLearnContainer = ({
     const { height: videoHeight, ref: videoRef } =
         useElementSize<HTMLDivElement>();
     const [isShowModal, setIsShowModal] = useState<boolean>(false);
+    const [isCopilotModalOpen, setIsCopilotModalOpen] = useState<boolean>(false);
     const [feedbackStatus, setFeedbackStatus] = useState<{
         status: 'NOT_HELPING' | 'HELPING' | 'NOT_SELECTED';
         answer_id: string;
@@ -60,6 +62,10 @@ const VideoLearnContainer = ({
     );
     const course = courseResponse?.course_detail ?? ssrCourseData;
     const subchapter = subchapterResponse ?? ssrSubchapterData;
+
+    const handleCopilotClick = () => {
+        setIsCopilotModalOpen(true);
+    };
 
     return (
         <section className="relative flex flex-col overflow-visible">
@@ -97,7 +103,7 @@ const VideoLearnContainer = ({
                             />
                         </div>
                     </div>
-                    <CopilotEntrypoint />
+                    <CopilotEntrypoint onClick={handleCopilotClick} />
                     <VideoPlayerContainer
                         isLoadingData={isLoading}
                         subchapter_name={subchapter?.subchapter_name}
@@ -143,6 +149,11 @@ const VideoLearnContainer = ({
                     setOpen={setIsShowModal}
                 />
             </Modal>
+
+            <CopilotModal
+                isOpen={isCopilotModalOpen}
+                setOpen={setIsCopilotModalOpen}
+            />
         </section>
     );
 };
