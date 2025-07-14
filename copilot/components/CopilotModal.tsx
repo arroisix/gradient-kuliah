@@ -19,15 +19,13 @@ const CopilotModal = ({
 
     return (
         <div 
-            className="fixed top-0 right-0 z-50 w-96 bg-[#121212] flex flex-col" 
+            className="fixed bottom-0 right-2 md:right-5 z-50 w-full max-w-md md:w-[28rem] lg:w-[32rem] bg-[#121212] flex flex-col rounded-t-lg shadow-lg"
             style={{ 
-                marginTop: '120px', 
-                marginBottom: isCollapsed ? 'auto' : '40px', 
-                marginRight: '20px',
-                height: isCollapsed ? 'auto' : undefined
+                height: isCollapsed ? 'auto' : '90vh',
+                maxHeight: '90vh'
             }}>
             
-            <div className="flex items-center justify-between py-4 px-5 bg-[#1D1D1D] border-b border-gray-700 flex-shrink-0">
+            <div className="flex items-center justify-between py-4 px-5 bg-[#1D1D1D] border-b border-gray-700 flex-shrink-0 rounded-t-lg">
                 <button 
                     onClick={() => setIsCollapsed(!isCollapsed)}
                     className="p-1 text-gray-400 hover:text-white transition-colors">
@@ -44,7 +42,7 @@ const CopilotModal = ({
             </div>
             
             {!isCollapsed && (
-                <div className="flex-1 min-h-0">
+                <div className="flex-1 min-h-0 overflow-hidden">
                     <CopilotSidebarContainer sessionId={sessionId} />
                 </div>
             )}
