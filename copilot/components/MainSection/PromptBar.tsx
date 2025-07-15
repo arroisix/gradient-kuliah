@@ -21,6 +21,7 @@ interface PromptBarProps {
     isLoading?: boolean;
     onStateChange?: (state: { isEditorOpen: boolean }) => void;
     fileInputRef?: React.RefObject<HTMLInputElement>;
+    placeholder?: string;
 }
 
 const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
@@ -29,7 +30,8 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
             onSend,
             isLoading,
             onStateChange,
-            fileInputRef: externalFileInputRef
+            fileInputRef: externalFileInputRef,
+            placeholder = 'Lagi butuh bantuan apa sobat? Jangan masukkan data pribadi kamu yaa!'
         },
         ref
     ) => {
@@ -232,9 +234,7 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
                                 onChange={(e) => setPrompt(e.target.value)}
                                 onKeyPress={handleKeyPress}
                                 onPaste={handlePaste}
-                                placeholder={
-                                    'Lagi butuh bantuan apa sobat? Jangan masukkan data pribadi kamu yaa!'
-                                }
+                                placeholder={placeholder}
                                 className="w-full bg-transparent border-none focus:ring-0 outline-none text-white md:placeholder:text-base placeholder:text-sm"
                                 disabled={isLoading}
                             />

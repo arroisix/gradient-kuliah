@@ -4,11 +4,11 @@ import ChatSection from '../components/ChatSection/ChatSection';
 import { ChatMessage } from '../types/copilot';
 import PromptBar from '../components/MainSection/PromptBar';
 import { chatApi } from '../redux/api/copilotApi';
-import { cn } from 'commons/utils';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import CopilotAuthPrompt from '../components/AuthPrompt/AuthPrompt';
+import { cn } from 'commons/utils';
 
 interface CopilotSidebarContainerProps {
     sessionId?: string;
@@ -202,7 +202,7 @@ const CopilotSidebarContainer = ({
     };
 
     return (
-        <div className="flex flex-col h-full bg-[#101010] overflow-hidden">
+        <div className="flex flex-col h-full bg-[#181818] overflow-hidden">
             {isLoadingHistory ? (
                 <div className="flex-1 flex items-center justify-center">
                     <AiOutlineLoading3Quarters size={24} className="animate-spin text-neutral-400" />
@@ -228,6 +228,9 @@ const CopilotSidebarContainer = ({
             ) : (
                 <div className="flex-1 p-4">
                     <MainSection
+                        className={cn("bg-[#181818]")}
+                        showTitle={false}
+                        showActionButtons={false}
                         onSendMessage={handleSendMessage}
                         onImageCapture={handleImageCapture}
                     />
@@ -238,6 +241,7 @@ const CopilotSidebarContainer = ({
                 <PromptBar
                     ref={promptBarRef}
                     fileInputRef={fileInputRef}
+                    placeholder="Lagi butuh bantuan apa sobat"
                     onSend={handleSendMessage}
                     isLoading={isLoadingResponse}
                     onStateChange={({ isEditorOpen }) => setIsEditorOpen(isEditorOpen)}
