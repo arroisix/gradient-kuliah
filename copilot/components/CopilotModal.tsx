@@ -31,8 +31,9 @@ const CopilotModal = ({
             className={cn(
                 "fixed bottom-0 right-0 z-50 flex flex-col rounded-t-lg shadow-lg",
                 "w-full sm:w-full md:w-full lg:w-full xl:w-[29.5rem]",
-                isCollapsed ? "h-auto" : "h-[70vh] sm:h-[90vh] md:h-[85vh] lg:h-[90vh]",
-                !isOpen && "hidden"
+                "h-auto transition-transform duration-300 ease-in-out",
+                isOpen ? "translate-y-0" : "translate-y-full",
+                !isOpen && "pointer-events-none"
             )}>
             
             <div className="flex items-center justify-between py-4 px-5 bg-[#2C2C2C] border-b border-gray-700 flex-shrink-0 rounded-t-lg">
@@ -53,8 +54,10 @@ const CopilotModal = ({
             
             <div
                 className={cn(
-                    "flex-1 min-h-0 overflow-hidden",
-                    isCollapsed && "hidden"
+                    "overflow-hidden transition-all duration-300 ease-in-out",
+                    isCollapsed 
+                        ? "h-0" 
+                        : "h-[70vh] sm:h-[90vh] md:h-[85vh] lg:h-[90vh]"
                 )}>
                 <CopilotSidebarContainer sessionId={sessionId} />
             </div>

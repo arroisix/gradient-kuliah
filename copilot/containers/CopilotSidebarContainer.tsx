@@ -229,17 +229,13 @@ const CopilotSidebarContainer = ({
                     </div>
                 </>
             ) : (
-                <div className={cn(
-                    "flex-1 overflow-y-auto min-h-0",
-                    "pt-0 sm:pt-0"
-                )}>
+                <div className="flex-1 flex items-center justify-center min-h-0 overflow-hidden pt-8">
                     <MainSection
                         className={cn(
-                            "bg-[#181818]",
-                            "h-auto sm:h-full",
-                            "pt-0 pb-1 sm:py-4 md:py-8",
-                            "px-4 sm:px-6 md:px-8",
-                            "[&>div]:pt-0 [&>div]:mt-0 sm:[&>div]:pt-0 sm:[&>div]:mt-0"
+                            "bg-[#181818] flex-none",
+                            "w-full max-w-md mx-auto",
+                            "px-4 py-0",
+                            "[&>div]:mt-0 [&>div]:mb-0 [&>div]:overflow-hidden"
                         )}
                         showTitle={false}
                         showActionButtons={false}
