@@ -301,8 +301,6 @@ const CopilotSidebarContainer = ({
                             </svg>
                         </button>
                     )}
-
-                    {!isAuthenticated && <CopilotAuthPrompt />}
                 </div>
             </div>
         </div>
