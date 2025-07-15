@@ -7,7 +7,6 @@ import { chatApi } from '../redux/api/copilotApi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
-import CopilotAuthPrompt from '../components/AuthPrompt/AuthPrompt';
 import { IoClose, IoChevronDown, IoChevronUp } from 'react-icons/io5';
 import { cn } from 'commons/utils';
 
@@ -31,7 +30,6 @@ const CopilotSidebarContainer = ({
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
     const [currentSessionId, setCurrentSessionId] = useState<string | undefined>();
-    const isAuthenticated = useSelector(getIsAuthenticated);
     const [pendingMessage, setPendingMessage] = useState<{
         content: string;
         timestamp: string;
