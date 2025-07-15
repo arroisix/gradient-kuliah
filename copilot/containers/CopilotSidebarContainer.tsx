@@ -272,7 +272,6 @@ const CopilotSidebarContainer = ({
 
                     <div className={cn(
                         "border-t border-gray-700 flex-shrink-0 bg-[#181818]",
-                        "p-2 sm:p-4"
                     )}>
                         <PromptBar
                             ref={promptBarRef}
@@ -281,6 +280,7 @@ const CopilotSidebarContainer = ({
                             onSend={handleSendMessage}
                             isLoading={isLoadingResponse}
                             onStateChange={({ isEditorOpen }) => setIsEditorOpen(isEditorOpen)}
+                            showBorder={false}
                         />
                     </div>
 

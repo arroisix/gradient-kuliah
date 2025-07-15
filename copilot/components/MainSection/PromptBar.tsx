@@ -22,6 +22,7 @@ interface PromptBarProps {
     onStateChange?: (state: { isEditorOpen: boolean }) => void;
     fileInputRef?: React.RefObject<HTMLInputElement>;
     placeholder?: string;
+    showBorder?: boolean;
 }
 
 const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
@@ -31,7 +32,8 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
             isLoading,
             onStateChange,
             fileInputRef: externalFileInputRef,
-            placeholder = 'Lagi butuh bantuan apa sobat? Jangan masukkan data pribadi kamu yaa!'
+            placeholder = 'Lagi butuh bantuan apa sobat? Jangan masukkan data pribadi kamu yaa!',
+            showBorder = true
         },
         ref
     ) => {
@@ -183,7 +185,7 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
                     <div
                         className={cn(
                             'py-2 relative',
-                            'border-t md:border-t-0 md:border-2 border-neutral-800 md:rounded-xl',
+                            showBorder && 'border-t md:border-t-0 md:border-2 border-neutral-800 md:rounded-xl',
                             isDragging && 'border-[#5F2BCE] border-2',
                             isDragging && 'ring-2 ring-[#5F2BCE]/50'
                         )}
