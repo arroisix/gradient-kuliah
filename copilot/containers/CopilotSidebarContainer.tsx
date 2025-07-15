@@ -210,10 +210,14 @@ const CopilotSidebarContainer = ({
                 </div>
             ) : messages.length > 0 ? (
                 <>
+                    {/* Chat messages area - flexible height */}
                     <div
                         ref={chatContainerRef}
                         onScroll={handleScroll}
-                        className="flex-1 overflow-y-auto p-4">
+                        className={cn(
+                            "flex-1 overflow-y-auto p-4 min-h-0",
+                            "pb-2 sm:pb-4"
+                        )}>
                         <ChatSection
                             messages={messages}
                             pendingMessage={pendingMessage}
@@ -226,9 +230,19 @@ const CopilotSidebarContainer = ({
                     </div>
                 </>
             ) : (
-                <div className="flex-1 p-4">
+                /* Main section - flexible height */
+                <div className={cn(
+                    "flex-1 overflow-y-auto min-h-0",
+                    "pt-0 sm:pt-0"
+                )}>
                     <MainSection
-                        className={cn("bg-[#181818]")}
+                        className={cn(
+                            "bg-[#181818]",
+                            "h-auto sm:h-full",
+                            "pt-0 pb-1 sm:py-4 md:py-8",
+                            "px-4 sm:px-6 md:px-8",
+                            "[&>div]:pt-0 [&>div]:mt-0 sm:[&>div]:pt-0 sm:[&>div]:mt-0"
+                        )}
                         showTitle={false}
                         showActionButtons={false}
                         onSendMessage={handleSendMessage}
@@ -237,21 +251,30 @@ const CopilotSidebarContainer = ({
                 </div>
             )}
 
-            <div className="p-4 border-t border-gray-700 flex-shrink-0">
+            {/* Prompt bar - fixed at bottom */}
+            <div className={cn(
+                "border-t border-gray-700 flex-shrink-0 bg-[#181818]",
+                "p-2 sm:p-4"
+            )}>
                 <PromptBar
                     ref={promptBarRef}
                     fileInputRef={fileInputRef}
-                    placeholder="Lagi butuh bantuan apa sobat"
+                    placeholder="Lagi butuh bantuan apa sobat?"
                     onSend={handleSendMessage}
                     isLoading={isLoadingResponse}
                     onStateChange={({ isEditorOpen }) => setIsEditorOpen(isEditorOpen)}
                 />
             </div>
 
+            {/* Scroll button - positioned relative to chat area */}
             {showScrollButton && !isEditorOpen && (
                 <button
                     onClick={scrollToBottom}
-                    className="absolute bottom-20 right-4 p-3 bg-[#5F2BCE] hover:bg-[#4f24a8] text-white rounded-full shadow-lg transition-all duration-200">
+                    className={cn(
+                        "absolute bg-[#5F2BCE] hover:bg-[#4f24a8] text-white rounded-full shadow-lg transition-all duration-200",
+                        "p-2 sm:p-3",
+                        "bottom-16 sm:bottom-20 right-2 sm:right-4"
+                    )}>
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                     </svg>
