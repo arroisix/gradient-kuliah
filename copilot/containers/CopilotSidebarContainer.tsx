@@ -5,8 +5,6 @@ import { ChatMessage } from '../types/copilot';
 import PromptBar from '../components/MainSection/PromptBar';
 import { chatApi } from '../redux/api/copilotApi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
-import { useSelector } from 'react-redux';
-import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { IoClose, IoChevronDown, IoChevronUp } from 'react-icons/io5';
 import { cn } from 'commons/utils';
 
