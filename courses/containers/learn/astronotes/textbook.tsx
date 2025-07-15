@@ -18,6 +18,7 @@ import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import RelatedProblemsSection from 'courses/components/Textbook/RelatedProblemsSection';
 import CopilotEntrypoint from 'copilot/components/CopilotEntrypoint';
 import CopilotModal from 'copilot/components/CopilotModal';
+import CopilotDrawer from 'copilot/assets/CopilotDrawer';
 
 type TextbookSolutionProps = {
     data?: TextbookSolution;
@@ -55,6 +56,9 @@ const TextbookSolution = ({
 
     return (
         <div className="drawer drawer-end lg:drawer-open">
+            <div className="relative z-50">
+                <CopilotDrawer onCopilotClick={handleCopilotClick} />
+            </div>
             <TableOfContentMenu problem={data?.problem} />
             <div className="w-full pt-8 pb-12 mx-auto space-y-4 drawer-content md:max-w-screen-2xl md:px-8 lg:px-12">
                 <Breadcrumb

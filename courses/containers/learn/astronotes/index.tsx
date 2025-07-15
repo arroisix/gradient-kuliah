@@ -5,7 +5,7 @@ import AstroNotesContent from 'courses/components/LearningExperience/AstroNotes/
 import { AstronotesProvider } from 'courses/contexts/AstronotesProvider';
 import RatingModal from 'courses/components/LearningExperience/AstroNotes/Sidebar/RatingModal';
 import FeedbackModal from 'courses/components/LearningExperience/AstroNotes/Sidebar/FeedbackModal';
-import CommunityDrawer from 'courses/components/LearningExperience/AstroNotes/Navigation/CommunityDrawer';
+import CopilotDrawer from 'copilot/assets/CopilotDrawer';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import { useRouter } from 'next/router';
 import RelatedBooksSection from 'courses/components/LearningExperience/AstroNotes/InternalLinking/RelatedBooksSection';
@@ -136,7 +136,7 @@ const Astronotes = ({
                         />
                     </div>
                 </div>
-                <CommunityDrawer />
+                <CopilotDrawer onCopilotClick={handleCopilotClick} />
                 <div
                     className="fixed inset-x-0 bottom-0 px-4 pt-2 pb-4 bg-white md:pb-6 md:pt-4 md:left-auto md:right-0 dark:bg-black"
                     style={{ minWidth: notebookWidth }}>
