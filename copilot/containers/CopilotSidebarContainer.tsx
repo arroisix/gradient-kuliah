@@ -8,14 +8,21 @@ import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import CopilotAuthPrompt from '../components/AuthPrompt/AuthPrompt';
+import { IoClose, IoChevronDown, IoChevronUp } from 'react-icons/io5';
 import { cn } from 'commons/utils';
 
 interface CopilotSidebarContainerProps {
     sessionId?: string;
+    isCollapsed?: boolean;
+    setCollapsed?: (collapsed: boolean) => void;
+    onClose?: () => void;
 }
 
 const CopilotSidebarContainer = ({
-    sessionId
+    sessionId,
+    isCollapsed = false,
+    setCollapsed,
+    onClose
 }: CopilotSidebarContainerProps): JSX.Element => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoadingHistory, setIsLoadingHistory] = useState(true);
@@ -202,78 +209,102 @@ const CopilotSidebarContainer = ({
     };
 
     return (
-        <div className="flex flex-col h-full bg-[#181818] overflow-hidden">
-            {isLoadingHistory ? (
-                <div className="flex-1 flex items-center justify-center">
-                    <AiOutlineLoading3Quarters size={24} className="animate-spin text-neutral-400" />
-                    <span className="ml-2 text-neutral-400">Loading...</span>
-                </div>
-            ) : messages.length > 0 ? (
-                <>
-                    <div
-                        ref={chatContainerRef}
-                        onScroll={handleScroll}
-                        className={cn(
-                            "flex-1 overflow-y-auto p-4 min-h-0",
-                            "pb-2 sm:pb-4"
-                        )}>
-                        <ChatSection
-                            messages={messages}
-                            pendingMessage={pendingMessage}
-                            setMessages={setMessages}
-                            onRetry={handleRetry}
-                            isLoading={isLoadingResponse}
-                            currentSessionId={currentSessionId}
-                        />
-                        <div ref={messagesEndRef} />
-                    </div>
-                </>
-            ) : (
-                <div className="flex-1 flex items-center justify-center min-h-0 overflow-hidden pt-8">
-                    <MainSection
-                        className={cn(
-                            "bg-[#181818] flex-none",
-                            "w-full max-w-md mx-auto",
-                            "px-4 py-0",
-                            "[&>div]:mt-0 [&>div]:mb-0 [&>div]:overflow-hidden"
-                        )}
-                        showTitle={false}
-                        showActionButtons={false}
-                        onSendMessage={handleSendMessage}
-                        onImageCapture={handleImageCapture}
-                    />
-                </div>
-            )}
+        <div className="flex flex-col h-full bg-[#181818] overflow-hidden rounded-t-lg">
+            <div className="flex items-center justify-between py-4 px-5 bg-[#2C2C2C] border-b border-gray-700 flex-shrink-0 rounded-t-lg">
+                <button
+                    onClick={onClose}
+                    className="p-1 text-gray-400 hover:text-white transition-colors">
+                    <IoClose size={20} />
+                </button>
 
-            <div className={cn(
-                "border-t border-gray-700 flex-shrink-0 bg-[#181818]",
-                "p-2 sm:p-4"
-            )}>
-                <PromptBar
-                    ref={promptBarRef}
-                    fileInputRef={fileInputRef}
-                    placeholder="Lagi butuh bantuan apa sobat?"
-                    onSend={handleSendMessage}
-                    isLoading={isLoadingResponse}
-                    onStateChange={({ isEditorOpen }) => setIsEditorOpen(isEditorOpen)}
-                />
+                <h3 className="text-white font-extrabold text-base xl:text-lg">Copilot AI</h3>
+
+                <button
+                    onClick={() => setCollapsed?.(!isCollapsed)}
+                    className="p-1 text-gray-400 hover:text-white transition-colors">
+                    {isCollapsed ? <IoChevronUp size={16} /> : <IoChevronDown size={16} />}
+                </button>
             </div>
 
-            {showScrollButton && !isEditorOpen && (
-                <button
-                    onClick={scrollToBottom}
-                    className={cn(
-                        "absolute bg-[#5F2BCE] hover:bg-[#4f24a8] text-white rounded-full shadow-lg transition-all duration-200",
-                        "p-2 sm:p-3",
-                        "bottom-16 sm:bottom-20 right-2 sm:right-4"
-                    )}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                    </svg>
-                </button>
-            )}
+            <div
+                className={cn(
+                    "flex-1 overflow-hidden transition-all duration-300 ease-in-out",
+                    isCollapsed
+                        ? "h-0 opacity-0"
+                        : "flex opacity-100"
+                )}>
+                <div className="flex flex-col w-full h-full">
+                    {isLoadingHistory ? (
+                        <div className="flex-1 flex items-center justify-center">
+                            <AiOutlineLoading3Quarters size={24} className="animate-spin text-neutral-400" />
+                            <span className="ml-2 text-neutral-400">Loading...</span>
+                        </div>
+                    ) : messages.length > 0 ? (
+                        <div
+                            ref={chatContainerRef}
+                            onScroll={handleScroll}
+                            className={cn(
+                                "flex-1 overflow-y-auto p-4 min-h-0",
+                                "pb-2 sm:pb-4"
+                            )}>
+                            <ChatSection
+                                messages={messages}
+                                pendingMessage={pendingMessage}
+                                setMessages={setMessages}
+                                onRetry={handleRetry}
+                                isLoading={isLoadingResponse}
+                                currentSessionId={currentSessionId}
+                            />
+                            <div ref={messagesEndRef} />
+                        </div>
+                    ) : (
+                        <div className="flex-1 flex items-center justify-center min-h-0 overflow-hidden pt-8">
+                            <MainSection
+                                className={cn(
+                                    "bg-[#181818] flex-none",
+                                    "w-full max-w-md mx-auto",
+                                    "px-4 py-0",
+                                    "[&>div]:mt-0 [&>div]:mb-0 [&>div]:overflow-hidden"
+                                )}
+                                showTitle={false}
+                                showActionButtons={false}
+                                onSendMessage={handleSendMessage}
+                                onImageCapture={handleImageCapture}
+                            />
+                        </div>
+                    )}
 
-            {!isAuthenticated && <CopilotAuthPrompt />}
+                    <div className={cn(
+                        "border-t border-gray-700 flex-shrink-0 bg-[#181818]",
+                        "p-2 sm:p-4"
+                    )}>
+                        <PromptBar
+                            ref={promptBarRef}
+                            fileInputRef={fileInputRef}
+                            placeholder="Lagi butuh bantuan apa sobat?"
+                            onSend={handleSendMessage}
+                            isLoading={isLoadingResponse}
+                            onStateChange={({ isEditorOpen }) => setIsEditorOpen(isEditorOpen)}
+                        />
+                    </div>
+
+                    {showScrollButton && !isEditorOpen && (
+                        <button
+                            onClick={scrollToBottom}
+                            className={cn(
+                                "absolute bg-[#5F2BCE] hover:bg-[#4f24a8] text-white rounded-full shadow-lg transition-all duration-200",
+                                "p-2 sm:p-3",
+                                "bottom-16 sm:bottom-20 right-2 sm:right-4"
+                            )}>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                            </svg>
+                        </button>
+                    )}
+
+                    {!isAuthenticated && <CopilotAuthPrompt />}
+                </div>
+            </div>
         </div>
     );
 };
