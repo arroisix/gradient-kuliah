@@ -210,7 +210,6 @@ const CopilotSidebarContainer = ({
                 </div>
             ) : messages.length > 0 ? (
                 <>
-                    {/* Chat messages area - flexible height */}
                     <div
                         ref={chatContainerRef}
                         onScroll={handleScroll}
@@ -230,7 +229,6 @@ const CopilotSidebarContainer = ({
                     </div>
                 </>
             ) : (
-                /* Main section - flexible height */
                 <div className={cn(
                     "flex-1 overflow-y-auto min-h-0",
                     "pt-0 sm:pt-0"
@@ -251,7 +249,6 @@ const CopilotSidebarContainer = ({
                 </div>
             )}
 
-            {/* Prompt bar - fixed at bottom */}
             <div className={cn(
                 "border-t border-gray-700 flex-shrink-0 bg-[#181818]",
                 "p-2 sm:p-4"
@@ -266,7 +263,6 @@ const CopilotSidebarContainer = ({
                 />
             </div>
 
-            {/* Scroll button - positioned relative to chat area */}
             {showScrollButton && !isEditorOpen && (
                 <button
                     onClick={scrollToBottom}
