@@ -17,6 +17,8 @@ import {
 import { getCookieValue } from 'commons/utils';
 import { IS_BOT } from 'commons/constants';
 import RelatedProblemsSection from 'courses/components/Textbook/RelatedProblemsSection';
+import CopilotEntrypoint from 'copilot/components/CopilotEntrypoint';
+import CopilotModal from 'copilot/components/CopilotModal';
 
 type BankSoalProps = {
     data?: BankSoal;
@@ -30,6 +32,7 @@ const BankSoalContainer = ({
     const router = useRouter();
     const [isCrawler, setIsCrawler] = useState<string>();
     const { is_subscribed } = useCourseSubscription();
+    const [isCopilotModalOpen, setIsCopilotModalOpen] = useState<boolean>(false);
     const { slug, problemSlug } = router.query as {
         slug: string;
         problemSlug: string;
@@ -53,6 +56,10 @@ const BankSoalContainer = ({
         nextItem: {
             name: data?.problem.title ?? ''
         }
+    };
+
+    const handleCopilotClick = () => {
+        setIsCopilotModalOpen(true);
     };
 
     return (
@@ -90,6 +97,7 @@ const BankSoalContainer = ({
                 ) : (
                     <TextbookPaywall problem={data?.problem} />
                 )}
+                <CopilotEntrypoint onClick={handleCopilotClick} />
                 <RelatedProblemsSection
                     title="Soal Terkait"
                     problems={recommendations?.related_problems}
@@ -99,6 +107,12 @@ const BankSoalContainer = ({
                     problems={recommendations?.other_problems}
                 />
             </div>
+
+            <CopilotModal
+                isOpen={isCopilotModalOpen}
+                setOpen={setIsCopilotModalOpen}
+                xlWidth="xl:w-[24rem]"
+            />
         </div>
     );
 };

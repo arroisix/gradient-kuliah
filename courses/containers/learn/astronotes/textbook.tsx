@@ -16,6 +16,8 @@ import { IS_BOT } from 'commons/constants';
 import { getCookieValue } from 'commons/utils';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import RelatedProblemsSection from 'courses/components/Textbook/RelatedProblemsSection';
+import CopilotEntrypoint from 'copilot/components/CopilotEntrypoint';
+import CopilotModal from 'copilot/components/CopilotModal';
 
 type TextbookSolutionProps = {
     data?: TextbookSolution;
@@ -29,6 +31,7 @@ const TextbookSolution = ({
     const router = useRouter();
     const [isCrawler, setIsCrawler] = useState<string>();
     const { is_subscribed } = useCourseSubscription();
+    const [isCopilotModalOpen, setIsCopilotModalOpen] = useState<boolean>(false);
     const { slug, problemSlug } = router.query as {
         slug: string;
         problemSlug: string;
@@ -45,6 +48,10 @@ const TextbookSolution = ({
     useEffect(() => {
         setIsCrawler(getCookieValue(IS_BOT));
     }, []);
+
+    const handleCopilotClick = () => {
+        setIsCopilotModalOpen(true);
+    };
 
     return (
         <div className="drawer drawer-end lg:drawer-open">
@@ -87,6 +94,7 @@ const TextbookSolution = ({
                 ) : (
                     <TextbookPaywall problem={data?.problem} />
                 )}
+                <CopilotEntrypoint onClick={handleCopilotClick} />
                 <RelatedProblemsSection
                     title="Soal Terkait"
                     problems={recommendations?.related_problems}
@@ -96,6 +104,12 @@ const TextbookSolution = ({
                     problems={recommendations?.other_problems}
                 />
             </div>
+
+            <CopilotModal
+                isOpen={isCopilotModalOpen}
+                setOpen={setIsCopilotModalOpen}
+                xlWidth="xl:w-[24rem]"
+            />
         </div>
     );
 };

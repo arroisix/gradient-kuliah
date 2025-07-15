@@ -15,6 +15,9 @@ import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { useGetAstronotesExercisesQuery } from 'exercises/redux/api/exercisesApi';
 import AstronotesExercisesSection from 'exercises/components/Astronotes/AstronotesExercisesSection';
+import CopilotEntrypoint from 'copilot/components/CopilotEntrypoint';
+import CopilotModal from 'copilot/components/CopilotModal';
+import { useState } from 'react';
 
 const Astronotes = ({
     content,
@@ -27,6 +30,7 @@ const Astronotes = ({
 }): JSX.Element => {
     const { isMobileBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const [isCopilotModalOpen, setIsCopilotModalOpen] = useState<boolean>(false);
 
     const { width: notebookWidth, ref: notebookRef } =
         useElementSize<HTMLDivElement>();
@@ -52,6 +56,10 @@ const Astronotes = ({
             { bookSlug: slug, pageNumber: page },
             { skip: !slug || !page }
         );
+
+    const handleCopilotClick = () => {
+        setIsCopilotModalOpen(true);
+    };
 
     return (
         <AstronotesProvider>
@@ -103,6 +111,7 @@ const Astronotes = ({
                             }
                         />
                         <AstroNotesContent content={content} book={book} />
+                        <CopilotEntrypoint onClick={handleCopilotClick} />
                     </div>
                     <div className="flex flex-col w-full pt-8 lg:py-8 lg:max-w-5xl xl:max-w-screen-2xl lg:mx-auto lg:gap-8">
                         <AstronotesExercisesSection
@@ -135,6 +144,11 @@ const Astronotes = ({
                 </div>
                 <RatingModal />
                 <FeedbackModal />
+                <CopilotModal
+                    isOpen={isCopilotModalOpen}
+                    setOpen={setIsCopilotModalOpen}
+                    xlWidth="xl:w-[24rem]"
+                />
             </section>
         </AstronotesProvider>
     );
