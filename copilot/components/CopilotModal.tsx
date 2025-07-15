@@ -33,7 +33,7 @@ const CopilotModal = ({ isOpen, setOpen, sessionId, xlWidth }: CopilotModalProps
         "w-full sm:w-full md:w-full lg:w-full",
         xlWidth,
         "xl:pr-4",
-        isCollapsed ? "h-[72px]" : "h-[70vh] md:h-[90vh]",
+        isCollapsed ? "h-[60px]" : "h-[70vh] md:h-[90vh]",
         "transition-all duration-300 ease-in-out",
         isOpen ? "translate-y-0" : "translate-y-full",
         !isOpen && "pointer-events-none"

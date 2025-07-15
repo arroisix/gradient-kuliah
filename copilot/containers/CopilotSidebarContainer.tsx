@@ -210,7 +210,7 @@ const CopilotSidebarContainer = ({
                 <button
                     onClick={onClose}
                     className="p-1 text-gray-400 hover:text-white transition-colors">
-                    <IoClose size={20} />
+                    <IoClose size={32} />
                 </button>
 
                 <h3 className="text-white font-extrabold text-base xl:text-lg">Copilot AI</h3>
@@ -218,7 +218,7 @@ const CopilotSidebarContainer = ({
                 <button
                     onClick={() => setCollapsed?.(!isCollapsed)}
                     className="p-1 text-gray-400 hover:text-white transition-colors">
-                    {isCollapsed ? <IoChevronUp size={16} /> : <IoChevronDown size={16} />}
+                    {isCollapsed ? <IoChevronUp size={32} /> : <IoChevronDown size={32} />}
                 </button>
             </div>
 
@@ -250,6 +250,7 @@ const CopilotSidebarContainer = ({
                                 onRetry={handleRetry}
                                 isLoading={isLoadingResponse}
                                 currentSessionId={currentSessionId}
+                                isSidebar={true}
                             />
                             <div ref={messagesEndRef} />
                         </div>

@@ -24,6 +24,7 @@ interface ChatSectionProps {
     setMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
     isLoading?: boolean;
     currentSessionId?: string;
+    isSidebar?: boolean;
 }
 
 const ChatSection = ({
@@ -32,7 +33,8 @@ const ChatSection = ({
     setMessages,
     onRetry,
     isLoading,
-    currentSessionId
+    currentSessionId,
+    isSidebar = false
 }: ChatSectionProps): JSX.Element => {
     const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
     const [isRating, setIsRating] = useState<Record<string, boolean>>({});
@@ -366,7 +368,7 @@ const ChatSection = ({
                                 className={cn(
                                     'flex w-full',
                                     message.role === 'User'
-                                        ? 'justify-end'
+                                        ? cn('justify-end', isSidebar && 'pl-16')
                                         : 'justify-start'
                                 )}>
                                 {message.role === 'AI' && (
