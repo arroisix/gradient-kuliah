@@ -89,12 +89,9 @@ const withAnon = <P extends object>(
                     } else if (
                         ['/', '/landing-revamp'].includes(router.pathname)
                     ) {
-                        if (is_subscribed || everSubscribed)
-                            router.replace('/dashboard');
-                    } else if (router.pathname === '/dashboard') {
-                        if (!is_subscribed && !everSubscribed)
-                            router.replace('/');
-                    }
+                        router.replace('/dashboard');
+                    } 
+                    
                     return <WrappedComponent {...(props as P)} />;
                 }
                 return <WrappedComponent {...(props as P)} />;
