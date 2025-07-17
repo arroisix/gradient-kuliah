@@ -6,6 +6,7 @@ import {
     ContentRecommendationResponse
 } from '../../types/copilot';
 import config from 'redux/api/config';
+import { baseApi } from 'redux/api/baseApi';
 
 const BASE_URL = config.API_BASE_URL;
 const COPILOT_BASE_URL = `${BASE_URL}copilots/`;
@@ -390,3 +391,21 @@ export const chatApi = {
         return response.json();
     }
 };
+
+export const copilotApi = baseApi.injectEndpoints({
+    endpoints: (builder) => ({
+        getContentRecommendation: builder.query<ContentRecommendationResponse, string>({
+            query: (query: string) => ({
+                url: `copilots/chat/content-recommendation/`,
+                method: 'GET',
+                params: { q: query }
+            }),
+            providesTags: ['CONTENT_RECOMMENDATION']
+        }),
+    }),
+    overrideExisting: false
+});
+
+export const {
+    useLazyGetContentRecommendationQuery
+} = copilotApi;

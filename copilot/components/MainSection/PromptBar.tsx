@@ -25,6 +25,8 @@ interface PromptBarProps {
     placeholder?: string;
     showBorder?: boolean;
     isSidebar?: boolean;
+    onOpenReferenceModal?: () => void;
+    referenceCount?: number;
 }
 
 const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
@@ -36,7 +38,9 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
             fileInputRef: externalFileInputRef,
             placeholder = 'Lagi butuh bantuan apa sobat? Jangan masukkan data pribadi kamu yaa!',
             showBorder = true,
-            isSidebar = false
+            isSidebar = false,
+            onOpenReferenceModal,
+            referenceCount = 0
         },
         ref
     ) => {
@@ -184,7 +188,7 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
         };
 
         const handleReferensiClick = () => {
-            setReferensiCount(prev => prev + 1);
+            onOpenReferenceModal?.();
         };
 
         return (
@@ -263,6 +267,7 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
                                 ) : (
                                     <div className="flex items-center gap-2">
                                         <button
+                                            onClick={handleReferensiClick}
                                             className="flex items-center justify-center w-8 h-8 rounded-full border border-neutral-600 hover:border-neutral-500 transition-colors text-neutral-300 hover:text-white"
                                             disabled={isLoading}>
                                             <Plus size={14} />

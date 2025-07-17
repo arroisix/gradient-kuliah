@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import CopilotAuthPrompt from '../components/AuthPrompt/AuthPrompt';
 import HistorySection from 'copilot/components/HistorySection/HistorySection';
+import ReferenceModal from 'copilot/components/Reference/ReferenceModal';
 
 interface CopilotContainerProps {
     sessionId?: string;
@@ -21,6 +22,8 @@ const CopilotContainer = ({
     sessionId
 }: CopilotContainerProps): JSX.Element => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const [isReferenceModalOpen, setIsReferenceModalOpen] = useState(false);
+    const [referenceCount, setReferenceCount] = useState(0);
     const [isLoadingHistory, setIsLoadingHistory] = useState(true);
     const [isLoadingResponse, setIsLoadingResponse] = useState(false);
     const [showScrollButton, setShowScrollButton] = useState(false);
@@ -226,6 +229,14 @@ const CopilotContainer = ({
         handleSendMessage(message.content, message.image || undefined);
     };
 
+    const handleOpenReferenceModal = () => {
+        setIsReferenceModalOpen(true);
+    };
+
+    const handleCloseReferenceModal = () => {
+        setIsReferenceModalOpen(false);
+    };
+
     return (
         <div
             className={cn(
@@ -273,7 +284,7 @@ const CopilotContainer = ({
                                 'mt-16 pb-16 min-h-screen',
                                 'md:mt-0 md:pt-6 md:min-h-0',
                                 messages.length <= 2 &&
-                                    'flex flex-col justify-end'
+                                'flex flex-col justify-end'
                             )}>
                             <ChatSection
                                 messages={messages}
@@ -307,6 +318,13 @@ const CopilotContainer = ({
                         onStateChange={({ isEditorOpen }) =>
                             setIsEditorOpen(isEditorOpen)
                         }
+                        onOpenReferenceModal={handleOpenReferenceModal}
+                        referenceCount={referenceCount}
+                    />
+
+                    <ReferenceModal
+                        isOpen={isReferenceModalOpen}
+                        onClose={handleCloseReferenceModal}
                     />
                 </div>
 
