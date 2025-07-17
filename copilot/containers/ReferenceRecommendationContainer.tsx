@@ -1,9 +1,9 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { useLazyGetContentRecommendationQuery } from '../redux/api/copilotApi';
 import { useGetProfileQuery } from 'authentication/redux/api/authApi';
-import { ContentRecommendation } from '../types/copilot';
+// import { ContentRecommendation } from '../types/copilot';
 import ReferenceCard from '../components/Reference/ReferenceCard';
 import { cn } from 'commons/utils';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
@@ -98,31 +98,89 @@ const ReferenceRecommendationContainer = ({
                 pages.push(i);
             }
         } else {
-            pages.push(1);
-            
-            if (currentPage > 3) {
-                pages.push('...');
-            }
-            
-            const start = Math.max(2, currentPage - 1);
-            const end = Math.min(totalPages - 1, currentPage + 1);
-            
-            for (let i = start; i <= end; i++) {
-                if (i !== 1 && i !== totalPages) {
+            if (currentPage <= 3) {
+                for (let i = 1; i <= 5; i++) {
                     pages.push(i);
                 }
-            }
-            
-            if (currentPage < totalPages - 2) {
                 pages.push('...');
-            }
-            
-            if (totalPages > 1) {
+                pages.push(totalPages);
+            } else if (currentPage >= totalPages - 2) {
+                pages.push(1);
+                pages.push('...');
+                for (let i = totalPages - 4; i <= totalPages; i++) {
+                    pages.push(i);
+                }
+            } else {
+                pages.push(1);
+                pages.push('...');
+                for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+                    pages.push(i);
+                }
+                pages.push('...');
                 pages.push(totalPages);
             }
         }
         
         return pages;
+    };
+
+    const renderPageNumbers = (isMobile = false) => (
+        <div className={cn(
+            "flex items-center",
+            isMobile ? "justify-center space-x-2 mb-4" : "space-x-2"
+        )}>
+            {getPaginationNumbers().map((page, index) => (
+                <div key={index}>
+                    {page === '...' ? (
+                        <span className={cn(
+                            "text-white/60",
+                            isMobile ? "px-1 text-sm" : "px-2"
+                        )}>...</span>
+                    ) : (
+                        <button
+                            onClick={() => handlePageChange(page as number)}
+                            className={cn(
+                                "rounded-full font-medium transition-all duration-200",
+                                isMobile ? "w-8 h-8 text-xs" : "w-10 h-10 text-sm",
+                                page === currentPage
+                                    ? "bg-white text-black"
+                                    : "bg-[#2C2C2C] text-white/80 hover:text-white hover:bg-[#3C3C3C]"
+                            )}
+                        >
+                            {page}
+                        </button>
+                    )}
+                </div>
+            ))}
+        </div>
+    );
+
+    const renderNavButton = (type: 'prev' | 'next', isMobile = false) => {
+        const isPrev = type === 'prev';
+        const isDisabled = isPrev ? currentPage === 1 : currentPage === totalPages;
+        
+        return (
+            <button 
+                className={cn(
+                    "flex items-center justify-center bg-[#2C2C2C] text-white/80 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 rounded-full",
+                    isMobile ? "flex-1 px-4 py-2" : "px-4 py-2"
+                )}
+                disabled={isDisabled}
+                onClick={() => handlePageChange(isPrev ? currentPage - 1 : currentPage + 1)}
+            >
+                {isPrev && (
+                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
+                        <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                )}
+                {isPrev ? 'Prev' : 'Next'}
+                {!isPrev && (
+                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className="ml-2">
+                        <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                )}
+            </button>
+        );
     };
 
     if (!isAuthenticated) {
@@ -190,12 +248,11 @@ const ReferenceRecommendationContainer = ({
                                     <path d="M14 26A12 12 0 1 0 14 2a12 12 0 0 0 0 24zM30 30l-6.35-6.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/40"/>
                                 </svg>
                             </div>
-                            <p className="text-white/60 mb-2">No recommendations found</p>
-                            <p className="text-white/40 text-sm">Try switching to a different tab</p>
+                            <p className="text-white/60 mb-2">Tidak ada rekomendasi yang ditemukan</p>
                         </div>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {currentRecommendations.map((recommendation, index) => (
                             <ReferenceCard
                                 key={`${recommendation.type}-${recommendation.course_slug || recommendation.book_slug}-${startIndex + index}`}
@@ -207,46 +264,28 @@ const ReferenceRecommendationContainer = ({
             </div>
 
             {filteredRecommendations.length > 0 && totalPages > 1 && (
-                <div className="flex-shrink-0 flex items-center justify-center space-x-2 p-6 border-t border-white/10">
-                    <button 
-                        className="p-2 text-white/60 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors" 
-                        disabled={currentPage === 1}
-                        onClick={() => handlePageChange(currentPage - 1)}
-                    >
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                    </button>
-                    
-                    {getPaginationNumbers().map((page, index) => (
-                        <div key={index}>
-                            {page === '...' ? (
-                                <span className="text-white/60 px-2">...</span>
-                            ) : (
-                                <button
-                                    onClick={() => handlePageChange(page as number)}
-                                    className={cn(
-                                        "w-8 h-8 rounded-full text-sm font-medium transition-colors",
-                                        page === currentPage
-                                            ? "bg-blue-500 text-white"
-                                            : "text-white/60 hover:text-white hover:bg-white/10"
-                                    )}
-                                >
-                                    {page}
-                                </button>
-                            )}
+                <div className="flex-shrink-0 border-t border-white/10 p-6">
+                    <div className="hidden md:block">
+                        <div className="flex items-center justify-between w-full">
+                            {renderNavButton('prev')}
+                            <div className="flex-1 flex justify-center">
+                                {renderPageNumbers()}
+                            </div>
+                            {renderNavButton('next')}
                         </div>
-                    ))}
-                    
-                    <button 
-                        className="p-2 text-white/60 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                        disabled={currentPage === totalPages}
-                        onClick={() => handlePageChange(currentPage + 1)}
-                    >
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                    </button>
+                    </div>
+
+                    <div className="md:hidden">
+                        <div className="grid grid-cols-1 gap-6 pb-4">
+                            {renderPageNumbers(true)}
+                        </div>
+                        <div className="grid grid-cols-1 gap-6">
+                            <div className="flex items-center space-x-3">
+                                {renderNavButton('prev', true)}
+                                {renderNavButton('next', true)}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>
