@@ -138,20 +138,7 @@ const ReferenceRecommendationContainer = ({
     return (
         <div className={cn("flex-1 flex flex-col h-full overflow-hidden", className)}>
             <div className="flex-shrink-0 pt-4 pb-6">
-                <div className="relative mb-4">
-                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM19 19l-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/50"/>
-                        </svg>
-                    </div>
-                    <input
-                        type="text"
-                        placeholder="Cari kelas atau buku"
-                        className="w-full bg-[#222222] border border-white/10 rounded-lg pl-12 pr-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-[#5F2BCE]"
-                    />
-                </div>
-                
-                <div className="flex">
+                <div className="flex mb-4">
                     {(['Semua', 'Kelas', 'Perpustakaan'] as const).map((tab) => (
                         <button
                             key={tab}
@@ -169,6 +156,19 @@ const ReferenceRecommendationContainer = ({
                             )}
                         </button>
                     ))}
+                </div>
+
+                <div className="relative">
+                    <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM19 19l-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/50"/>
+                        </svg>
+                    </div>
+                    <input
+                        type="text"
+                        placeholder="Cari kelas atau buku"
+                        className="w-full bg-[#222222] border border-white/10 rounded-2xl pl-12 pr-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-[#5F2BCE] transition-colors"
+                    />
                 </div>
             </div>
 

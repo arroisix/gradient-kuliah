@@ -7,24 +7,27 @@ import { chatApi } from '../redux/api/copilotApi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { IoClose, IoChevronDown, IoChevronUp } from 'react-icons/io5';
 import { cn } from 'commons/utils';
-import ReferenceModal from 'copilot/components/Reference/ReferenceModal';
 
 interface CopilotSidebarContainerProps {
     sessionId?: string;
     isCollapsed?: boolean;
     setCollapsed?: (collapsed: boolean) => void;
     onClose?: () => void;
+    onOpenReferenceModal?: () => void;
+    referenceCount?: number;
+    setReferenceCount?: (count: number) => void;
 }
 
 const CopilotSidebarContainer = ({
     sessionId,
     isCollapsed = false,
     setCollapsed,
-    onClose
+    onClose,
+    onOpenReferenceModal,
+    referenceCount = 0,
+    setReferenceCount
 }: CopilotSidebarContainerProps): JSX.Element => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
-    const [isReferenceModalOpen, setIsReferenceModalOpen] = useState(false);
-    const [referenceCount, setReferenceCount] = useState(0);
     const [isLoadingHistory, setIsLoadingHistory] = useState(true);
     const [isLoadingResponse, setIsLoadingResponse] = useState(false);
     const [showScrollButton, setShowScrollButton] = useState(false);
@@ -207,14 +210,6 @@ const CopilotSidebarContainer = ({
         handleSendMessage(message.content, message.image || undefined);
     };
 
-    const handleOpenReferenceModal = () => {
-        setIsReferenceModalOpen(true);
-    };
-
-    const handleCloseReferenceModal = () => {
-        setIsReferenceModalOpen(false);
-    };
-
     return (
         <div className="flex flex-col h-full bg-[#181818] overflow-hidden rounded-t-lg">
             <div className="flex items-center justify-between py-4 px-5 bg-[#2C2C2C] border-b border-gray-700 flex-shrink-0 rounded-t-lg">
@@ -294,13 +289,8 @@ const CopilotSidebarContainer = ({
                             onStateChange={({ isEditorOpen }) => setIsEditorOpen(isEditorOpen)}
                             showBorder={false}
                             isSidebar={true}
-                            onOpenReferenceModal={handleOpenReferenceModal}
+                            onOpenReferenceModal={onOpenReferenceModal}
                             referenceCount={referenceCount}
-                        />
-
-                        <ReferenceModal
-                            isOpen={isReferenceModalOpen}
-                            onClose={handleCloseReferenceModal}
                         />
                     </div>
 
