@@ -82,11 +82,15 @@ interface ContentRecommendation {
     subchapter_name: string | null;
     subchapter_slug: string | null;
     thumbnail: string | null;
+    book_cover_url?: string | null; 
     book_name: string | null;
     book_slug: string | null;
     book_page: number | null;
     problem_slug: string | null;
     snippet: string | null;
+    page_content?: string | null; 
+    problem_solution?: string | null; 
+    problem_question?: string | null; 
 }
 
 interface ContentRecommendationResponse {

@@ -25,7 +25,7 @@ const ReferenceRecommendationList = ({
     const router = useRouter();
     const { tab, page } = router.query as ReferenceQueryParams;
     const itemsPerPage = 6;
-    
+
     const prevSearchRef = useRef(search);
 
     useEffect(() => {
@@ -67,9 +67,16 @@ const ReferenceRecommendationList = ({
             return recommendation.book_name || 'Reference Material';
         };
 
+        const getThumbnail = () => {
+            if (recommendation.type === 'course_video') {
+                return recommendation.thumbnail || '';
+            }
+            return recommendation.book_cover_url || '';
+        };
+
         return {
             title: getTitle(),
-            thumbnail: recommendation.thumbnail || '',
+            thumbnail: getThumbnail(),
             inProgress: false,
             latestProgress: 0,
             isComingSoon: false,
@@ -95,15 +102,15 @@ const ReferenceRecommendationList = ({
     const getCategory = (recommendation: ContentRecommendation): string => {
         switch (recommendation.type) {
             case 'course_video':
-                return 'kelas';
+                return 'Kelas';
             case 'astronotes_content':
-                return 'astronotes';
+                return 'Catatan';
             case 'textbook_problem':
-                return 'textbook';
+                return 'Textbook';
             case 'bank_soal_problem':
-                return 'bank_soal';
+                return 'BankSoal';
             default:
-                return 'content';
+                return 'Content';
         }
     };
 
@@ -131,7 +138,7 @@ const ReferenceRecommendationList = ({
                 <div className="text-center">
                     <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/5 flex items-center justify-center">
                         <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M14 26A12 12 0 1 0 14 2a12 12 0 0 0 0 24zM30 30l-6.35-6.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/40"/>
+                            <path d="M14 26A12 12 0 1 0 14 2a12 12 0 0 0 0 24zM30 30l-6.35-6.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/40" />
                         </svg>
                     </div>
                     <p className="text-white/60 mb-2">Tidak ada rekomendasi yang ditemukan</p>
