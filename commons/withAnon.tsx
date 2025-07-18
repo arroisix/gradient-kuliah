@@ -90,8 +90,8 @@ const withAnon = <P extends object>(
                         ['/', '/landing-revamp'].includes(router.pathname)
                     ) {
                         router.replace('/dashboard');
-                    } 
-                    
+                    }
+
                     return <WrappedComponent {...(props as P)} />;
                 }
                 return <WrappedComponent {...(props as P)} />;

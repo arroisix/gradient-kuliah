@@ -13,8 +13,7 @@ const Downloads = (): JSX.Element => {
 
 export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
     () => async () => {
-        const META_TITLE =
-            'Daftar Download Video Perkuliahan Gradient Academy';
+        const META_TITLE = 'Daftar Download Video Perkuliahan Gradient Academy';
         const META_DESCRIPTION =
             'Akses dan kelola video perkuliahan yang telah kamu download melalui aplikasi mobile Gradient Academy';
 
