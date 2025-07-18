@@ -17,12 +17,8 @@ const ReferenceRecommendationContainer = ({
     className
 }: ReferenceRecommendationContainerProps): JSX.Element => {
     const [searchTerm, setSearchTerm] = useState('');
-    
     const isAuthenticated = useSelector(getIsAuthenticated);
-    
-    const { data: profileData } = useGetProfileQuery({}, { 
-        skip: !isAuthenticated 
-    });
+    const { data: profileData } = useGetProfileQuery({}, { skip: !isAuthenticated });
 
     const handleSearchSubmit = (e: React.FormEvent) => {
         e.preventDefault();
