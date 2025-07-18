@@ -91,6 +91,9 @@ interface ContentRecommendation {
 
 interface ContentRecommendationResponse {
     recommendation: ContentRecommendation[];
+    count_items?: number;
+    next_page?: number | null;
+    previous_page?: number | null;
 }
 
 export interface MainSectionProps {

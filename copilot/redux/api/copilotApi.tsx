@@ -11,6 +11,13 @@ import { baseApi } from 'redux/api/baseApi';
 const BASE_URL = config.API_BASE_URL;
 const COPILOT_BASE_URL = `${BASE_URL}copilots/`;
 
+interface ContentRecommendationParams {
+    q: string;
+    page?: number;
+    per_page?: number;
+    content_type?: string;
+}
+
 interface StreamCallbacks {
     onContent?: (content: string) => void;
     onComplete?: (
@@ -394,11 +401,11 @@ export const chatApi = {
 
 export const copilotApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        getContentRecommendation: builder.query<ContentRecommendationResponse, string>({
-            query: (query: string) => ({
-                url: `copilots/chat/content-recommendation/`,
+        getContentRecommendation: builder.query<ContentRecommendationResponse, ContentRecommendationParams>({
+            query: (params: ContentRecommendationParams) => ({
+                url: `${COPILOT_BASE_URL}chat/content-recommendation/`,
                 method: 'GET',
-                params: { q: query }
+                params
             }),
             providesTags: ['CONTENT_RECOMMENDATION']
         }),
@@ -407,5 +414,5 @@ export const copilotApi = baseApi.injectEndpoints({
 });
 
 export const {
-    useLazyGetContentRecommendationQuery
+    useGetContentRecommendationQuery,
 } = copilotApi;
