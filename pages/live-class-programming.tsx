@@ -21,13 +21,13 @@ const LiveClassProgramming = (): JSX.Element => {
 
     const carouselImages = [
         {
-            src: 'https://assets.gradient.academy/assets/liva-class-programming-slide-1.webp',
+            src: 'https://assets.gradient.academy/assets/pricing_programming_copy_2.webp',
             alt: 'Kelas Live Programming Persiapan untuk CALON MABA - Slide 1',
             width: 1080,
             height: 1350
         },
         {
-            src: 'https://assets.gradient.academy/assets/live-class-programming-slide-2.webp',
+            src: 'https://assets.gradient.academy/assets/schedule_programming_2.webp',
             alt: 'Kelas Live Programming Persiapan untuk CALON MABA - Slide 2',
             width: 1080,
             height: 1350
@@ -46,13 +46,13 @@ const LiveClassProgramming = (): JSX.Element => {
                     url: `https://gradient.academy/live-class-programming`,
                     images: [
                         {
-                            url: 'https://assets.gradient.academy/assets/live-class-programming-slide-1.webp',
+                            url: 'https://assets.gradient.academy/assets/pricing_programming_copy_2.webp',
                             width: 1350,
                             height: 1080,
                             alt: 'Live Class Programming Persiapan untuk CALON MABA'
                         },
                         {
-                            url: 'https://assets.gradient.academy/assets/live-class-programming-slide-2.webp',
+                            url: 'https://assets.gradient.academy/assets/schedule_programming_2.webp',
                             width: 1350,
                             height: 1080,
                             alt: 'Live Class Programming Persiapan untuk CALON MABA - Slide 2'
