@@ -6,6 +6,7 @@ import PromptBar from '../components/MainSection/PromptBar';
 import { chatApi } from '../redux/api/copilotApi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { IoClose, IoChevronDown, IoChevronUp } from 'react-icons/io5';
+import { MdHistory } from 'react-icons/md';
 import { cn } from 'commons/utils';
 
 interface CopilotSidebarContainerProps {
@@ -17,6 +18,7 @@ interface CopilotSidebarContainerProps {
     referenceCount?: number;
     setReferenceCount?: (count: number) => void;
     isReferenceModalOpen?: boolean;
+    onOpenHistory?: () => void;
 }
 
 const CopilotSidebarContainer = ({
@@ -27,7 +29,8 @@ const CopilotSidebarContainer = ({
     onOpenReferenceModal,
     referenceCount = 0,
     setReferenceCount,
-    isReferenceModalOpen = false
+    isReferenceModalOpen = false,
+    onOpenHistory
 }: CopilotSidebarContainerProps): JSX.Element => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoadingHistory, setIsLoadingHistory] = useState(true);
@@ -71,6 +74,12 @@ const CopilotSidebarContainer = ({
     const handleImageCapture = () => {
         if (fileInputRef.current) {
             fileInputRef.current.click();
+        }
+    };
+
+    const handleHistoryClick = () => {
+        if (onOpenHistory) {
+            onOpenHistory();
         }
     };
 
@@ -247,11 +256,20 @@ const CopilotSidebarContainer = ({
 
                 <h3 className="text-white font-extrabold text-base xl:text-lg">Copilot AI</h3>
 
-                <button
-                    onClick={() => setCollapsed?.(!isCollapsed)}
-                    className="p-1 text-gray-400 hover:text-white transition-colors">
-                    {isCollapsed ? <IoChevronUp size={32} /> : <IoChevronDown size={32} />}
-                </button>
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={handleHistoryClick}
+                        className="p-1 text-gray-400 hover:text-white transition-colors"
+                        title="Chat History">
+                        <MdHistory size={28} />
+                    </button>
+                    
+                    <button
+                        onClick={() => setCollapsed?.(!isCollapsed)}
+                        className="p-1 text-gray-400 hover:text-white transition-colors">
+                        {isCollapsed ? <IoChevronUp size={32} /> : <IoChevronDown size={32} />}
+                    </button>
+                </div>
             </div>
 
             <div

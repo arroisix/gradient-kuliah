@@ -11,6 +11,12 @@ export interface ChatInput {
     input_text: string;
     session_id?: string;
     image_url?: string;
+    context?: {
+        textbook_problem: string[];
+        book_pages: string[];
+        video: string[];
+        bank_soal_problem: string[];
+    };
 }
 
 export interface ChatHistoryResponse {
@@ -73,6 +79,7 @@ interface ToggleBookmarkInput {
 }
 
 interface ContentRecommendation {
+    id: string; 
     type:
         | 'course_video'
         | 'astronotes_content'
