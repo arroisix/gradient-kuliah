@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect, useRef } from 'react';
 import { useGetContentRecommendationQuery } from 'copilot/redux/api/copilotApi';
-import { ContentRecommendation } from 'copilot/types/copilot';
+import { ContextRecommendation } from 'copilot/types/copilot';
 import ProductCard from 'commons/components/elements/ProductCard';
 import Paginator from 'commons/components/elements/Paginator';
 import Skeleton from 'commons/components/elements/Skeleton';
@@ -59,7 +59,7 @@ const ReferenceRecommendationList = ({
         skip: !queryToUse
     });
 
-    const getProduct = (recommendation: ContentRecommendation): Product => {
+    const getProduct = (recommendation: ContextRecommendation): Product => {
         const getTitle = () => {
             if (recommendation.type === 'course_video') {
                 return recommendation.subchapter_name || 'Video Content';
@@ -84,7 +84,7 @@ const ReferenceRecommendationList = ({
         };
     };
 
-    const getHref = (recommendation: ContentRecommendation): string => {
+    const getHref = (recommendation: ContextRecommendation): string => {
         if (recommendation.type === 'course_video' && recommendation.course_slug && recommendation.subchapter_slug) {
             return `/courses/${recommendation.course_slug}/${recommendation.subchapter_slug}`;
         } else if (recommendation.type === 'textbook_problem' && recommendation.book_slug) {
@@ -98,7 +98,7 @@ const ReferenceRecommendationList = ({
         return '';
     };
 
-    const getCategory = (recommendation: ContentRecommendation): string => {
+    const getCategory = (recommendation: ContextRecommendation): string => {
         switch (recommendation.type) {
             case 'course_video':
                 return 'Kelas';

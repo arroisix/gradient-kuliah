@@ -79,6 +79,23 @@ interface ToggleBookmarkInput {
 }
 
 interface ContentRecommendation {
+    type:
+        | 'course_video'
+        | 'astronotes_content'
+        | 'textbook_problem'
+        | 'bank_soal_problem';
+    course_slug: string | null;
+    subchapter_name: string | null;
+    subchapter_slug: string | null;
+    thumbnail: string | null;
+    book_name: string | null;
+    book_slug: string | null;
+    book_page: number | null;
+    problem_slug: string | null;
+    snippet: string | null;
+}
+
+interface ContextRecommendation {
     id: string; 
     type:
         | 'course_video'
@@ -94,13 +111,17 @@ interface ContentRecommendation {
     book_page: number | null;
     problem_slug: string | null;
     snippet: string | null;
-    page_content?: string | null; 
-    problem_solution?: string | null; 
-    problem_question?: string | null; 
+    page_content: string | null; 
+    problem_solution: string | null; 
+    problem_question: string | null; 
 }
 
 interface ContentRecommendationResponse {
     recommendation: ContentRecommendation[];
+}
+
+interface ContextRecommendationResponse {
+    recommendation: ContextRecommendation[];
     count_items?: number;
     next_page?: number | null;
     previous_page?: number | null;

@@ -41,7 +41,7 @@ export const baseApi = createApi({
         'FLASHCARD_CARD',
         'FLASHCARD_LIST',
         'LAST_SEEN_FLASHCARDS',
-        'CONTENT_RECOMMENDATION',
+        'CONTEXT_RECOMMENDATION',
     ],
     baseQuery: fetchBaseQuery({
         baseUrl: config.API_BASE_URL,

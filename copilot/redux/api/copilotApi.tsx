@@ -3,7 +3,8 @@ import {
     ChatHistoryResponse,
     ChangeRatingInput,
     ToggleBookmarkInput,
-    ContentRecommendationResponse
+    ContentRecommendationResponse,
+    ContextRecommendationResponse
 } from '../../types/copilot';
 import config from 'redux/api/config';
 import { baseApi } from 'redux/api/baseApi';
@@ -11,7 +12,7 @@ import { baseApi } from 'redux/api/baseApi';
 const BASE_URL = config.API_BASE_URL;
 const COPILOT_BASE_URL = `${BASE_URL}copilots/`;
 
-interface ContentRecommendationParams {
+interface ContextRecommendationParams {
     q: string;
     page?: number;
     per_page?: number;
@@ -401,13 +402,13 @@ export const chatApi = {
 
 export const copilotApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        getContentRecommendation: builder.query<ContentRecommendationResponse, ContentRecommendationParams>({
-            query: (params: ContentRecommendationParams) => ({
-                url: `${COPILOT_BASE_URL}chat/content-recommendation/`,
+        getContentRecommendation: builder.query<ContextRecommendationResponse, ContextRecommendationParams>({
+            query: (params: ContextRecommendationParams) => ({
+                url: `${COPILOT_BASE_URL}context-recommendation/`,
                 method: 'GET',
                 params
             }),
-            providesTags: ['CONTENT_RECOMMENDATION']
+            providesTags: ['CONTEXT_RECOMMENDATION']
         }),
     }),
     overrideExisting: false
