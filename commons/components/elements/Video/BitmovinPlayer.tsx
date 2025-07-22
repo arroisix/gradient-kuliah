@@ -122,7 +122,6 @@ export default function BitmovinPlayer({
         };
 
         const sourceConfig: SourceConfig = {
-            // hls: 'https://streams.bitmovin.com/cv95fqu1pf7itg7cfei0/manifest.m3u8'
             hls: src,
             drm: {
                 widevine: {
@@ -134,7 +133,7 @@ export default function BitmovinPlayer({
                 fairplay: {
                     LA_URL: 'https://72c8bb0b.drm-fairplay-licensing.axprod.net/AcquireLicense',
                     certificateURL:
-                        'https://vtb.axinom.com/FPScert/fairplay.cer',
+                        'https://assets.gradient.academy/drm/fairplay.cer',
                     headers: {
                         'X-AxDRM-Message': drmToken as string
                     },
