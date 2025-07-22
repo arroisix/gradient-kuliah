@@ -31,7 +31,7 @@ const VerticalProductCard = ({
             href={href}
             onClick={() => tracker?.genericTrack(eventName, eventPayload)}
             className={cn(
-                'relative z-0 flex flex-col items-end overflow-hidden rounded-lg cursor-pointer bg-neutral-800 border border-graphite-600/50',
+                'relative z-0 flex flex-col items-end overflow-hidden rounded-lg cursor-pointer bg-neutral-800 border border-graphite-600/50 h-full',
                 className
             )}>
             <div

@@ -137,7 +137,7 @@ const ReferenceRecommendationList = ({
 
     return (
         <>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pb-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pb-8 items-stretch">
                 {recommendations.recommendation.map((recommendation, index) => {
                     const product = getProduct(recommendation);
                     
