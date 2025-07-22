@@ -44,7 +44,15 @@ export const baseApi = createApi({
         'CONTEXT_RECOMMENDATION',
         'TEXTBOOK_CHAPTERS',
         'TEXTBOOK_SECTIONS',
-        'TEXTBOOK_PROBLEMS'
+        'TEXTBOOK_PROBLEMS',
+        'COURSE_CHAPTERS',
+        'COURSE_SUBCHAPTERS',
+        'ASTRONOTES_CHAPTERS',
+        'ASTRONOTES_SUBCHAPTERS',
+        'ASTRONOTES_TOPICS',
+        'BANKSOAL_CHAPTERS',
+        'BANKSOAL_SECTIONS',
+        'BANKSOAL_PROBLEMS',
     ],
     baseQuery: fetchBaseQuery({
         baseUrl: config.API_BASE_URL,

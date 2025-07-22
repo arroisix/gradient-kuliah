@@ -45,10 +45,13 @@ const ReferenceModal = ({
     };
 
     const handleReferenceCardClick = (recommendation: ContextRecommendation) => {
-        if (recommendation.type === 'textbook_problem') {
+        if (recommendation.type === 'textbook_problem' || 
+            recommendation.type === 'course_video' || 
+            recommendation.type === 'astronotes_content' || 
+            recommendation.type === 'bank_soal_problem') {
             setHierarchyModal({
                 isOpen: true,
-                contentType: 'textbook_problem',
+                contentType: recommendation.type,
                 referenceData: recommendation
             });
         } else {

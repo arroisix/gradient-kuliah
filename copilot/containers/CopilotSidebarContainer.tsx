@@ -1,13 +1,19 @@
 import { useState, useRef, useEffect } from 'react';
 import MainSection from '../components/MainSection/MainSection';
 import ChatSection from '../components/ChatSection/ChatSection';
-import { ChatMessage } from '../types/copilot';
+import { ChatMessage, ChatInput, ReferenceContentType } from '../types/copilot';
 import PromptBar from '../components/MainSection/PromptBar';
 import { chatApi } from '../redux/api/copilotApi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { IoClose, IoChevronDown, IoChevronUp } from 'react-icons/io5';
 import { MdHistory } from 'react-icons/md';
 import { cn } from 'commons/utils';
+
+interface SelectedReference {
+    id: string;
+    title: string;
+    contentType: ReferenceContentType;
+}
 
 interface CopilotSidebarContainerProps {
     sessionId?: string;
@@ -19,6 +25,9 @@ interface CopilotSidebarContainerProps {
     setReferenceCount?: (count: number) => void;
     isReferenceModalOpen?: boolean;
     onOpenHistory?: () => void;
+    onReferenceSelect?: (referenceId: string, referenceTitle: string, contentType: ReferenceContentType) => void;
+    selectedReferences?: SelectedReference[];
+    setSelectedReferences?: (references: SelectedReference[]) => void;
 }
 
 const CopilotSidebarContainer = ({
@@ -30,7 +39,10 @@ const CopilotSidebarContainer = ({
     referenceCount = 0,
     setReferenceCount,
     isReferenceModalOpen = false,
-    onOpenHistory
+    onOpenHistory,
+    onReferenceSelect,
+    selectedReferences = [],
+    setSelectedReferences
 }: CopilotSidebarContainerProps): JSX.Element => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoadingHistory, setIsLoadingHistory] = useState(true);
@@ -146,6 +158,36 @@ const CopilotSidebarContainer = ({
         });
     };
 
+    const buildChatContext = (): ChatInput['context'] | undefined => {
+        if (selectedReferences.length === 0) return undefined;
+
+        const context: ChatInput['context'] = {
+            textbook_problem: [],
+            book_pages: [],
+            video: [],
+            bank_soal_problem: []
+        };
+
+        selectedReferences.forEach(ref => {
+            switch (ref.contentType) {
+                case 'textbook_problem':
+                    context.textbook_problem.push(ref.id);
+                    break;
+                case 'course_video':
+                    context.video.push(ref.id);
+                    break;
+                case 'astronotes_content':
+                    context.book_pages.push(ref.id);
+                    break;
+                case 'bank_soal_problem':
+                    context.bank_soal_problem.push(ref.id);
+                    break;
+            }
+        });
+
+        return Object.values(context).some(arr => arr.length > 0) ? context : undefined;
+    };
+
     const handleSendMessage = async (prompt: string, imageUrl?: string) => {
         if (!prompt.trim()) return;
 
@@ -173,56 +215,56 @@ const CopilotSidebarContainer = ({
         scrollToBottom();
         let currentResponse = '';
 
+        const chatInput: ChatInput = {
+            input_text: prompt,
+            session_id: currentSessionId,
+            image_url: imageUrl,
+            context: buildChatContext()
+        };
+
         try {
-            await chatApi.chat(
-                {
-                    input_text: prompt,
-                    session_id: currentSessionId,
-                    image_url: imageUrl
+            await chatApi.chat(chatInput, {
+                onContent: (content) => {
+                    currentResponse += content;
+                    setPendingMessage({
+                        content: currentResponse,
+                        timestamp: new Date().toISOString()
+                    });
+                    scrollToBottom();
                 },
-                {
-                    onContent: (content) => {
-                        currentResponse += content;
-                        setPendingMessage({
-                            content: currentResponse,
-                            timestamp: new Date().toISOString()
-                        });
-                        scrollToBottom();
-                    },
-                    onComplete: (messageId, sessionId, sessionName, keyword) => {
-                        setPendingMessage(null);
+                onComplete: (messageId, sessionId, sessionName, keyword) => {
+                    setPendingMessage(null);
 
-                        if (sessionId) {
-                            setCurrentSessionId(sessionId);
-                        }
-                        if (messageId) {
-                            setMessages((prev) => {
-                                const aiMessage: ChatMessage = {
-                                    id: messageId,
-                                    role: 'AI',
-                                    content: currentResponse,
-                                    timestamp: new Date().toISOString(),
-                                    keyword: keyword
-                                };
-                                return [...prev, aiMessage];
-                            });
-                        }
-                    },
-                    onError: (error) => {
-                        console.error('Chat error:', error);
-                        setPendingMessage(null);
-
-                        const errorMessage: ChatMessage = {
-                            id: 'error',
-                            role: 'AI',
-                            content: 'Maaf, terjadi kesalahan. Silakan coba lagi.',
-                            timestamp: new Date().toISOString()
-                        };
-                        setMessages((prev) => [...prev, errorMessage]);
-                        scrollToBottom();
+                    if (sessionId) {
+                        setCurrentSessionId(sessionId);
                     }
+                    if (messageId) {
+                        setMessages((prev) => {
+                            const aiMessage: ChatMessage = {
+                                id: messageId,
+                                role: 'AI',
+                                content: currentResponse,
+                                timestamp: new Date().toISOString(),
+                                keyword: keyword
+                            };
+                            return [...prev, aiMessage];
+                        });
+                    }
+                },
+                onError: (error) => {
+                    console.error('Chat error:', error);
+                    setPendingMessage(null);
+
+                    const errorMessage: ChatMessage = {
+                        id: 'error',
+                        role: 'AI',
+                        content: 'Maaf, terjadi kesalahan. Silakan coba lagi.',
+                        timestamp: new Date().toISOString()
+                    };
+                    setMessages((prev) => [...prev, errorMessage]);
+                    scrollToBottom();
                 }
-            );
+            });
         } catch (error) {
             console.error('Chat error:', error);
             setPendingMessage(null);
@@ -243,6 +285,17 @@ const CopilotSidebarContainer = ({
 
     const handleRetry = (message: ChatMessage) => {
         handleSendMessage(message.content, message.image || undefined);
+    };
+
+    const handleRemoveReference = (referenceId: string, contentType: ReferenceContentType) => {
+        if (setSelectedReferences) {
+            setSelectedReferences(
+                selectedReferences.filter(ref => !(ref.id === referenceId && ref.contentType === contentType))
+            );
+        }
+        if (setReferenceCount) {
+            setReferenceCount(Math.max(0, referenceCount - 1));
+        }
     };
 
     return (
@@ -280,6 +333,7 @@ const CopilotSidebarContainer = ({
                         : "flex opacity-100"
                 )}>
                 <div className="flex flex-col w-full h-full">
+
                     {isLoadingHistory ? (
                         <div className="flex-1 flex items-center justify-center">
                             <AiOutlineLoading3Quarters size={24} className="animate-spin text-neutral-400" />

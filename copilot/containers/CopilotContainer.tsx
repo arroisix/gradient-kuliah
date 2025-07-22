@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import MainSection from '../components/MainSection/MainSection';
 import ChatSection from '../components/ChatSection/ChatSection';
-import { ChatMessage } from '../types/copilot';
+import { ChatMessage, ChatInput, ReferenceContentType } from '../types/copilot';
 import PromptBar from '../components/MainSection/PromptBar';
 import { chatApi } from '../redux/api/copilotApi';
 import MobileHeader from '../components/MobileHeader/MobileHeader';
@@ -14,6 +14,12 @@ import CopilotAuthPrompt from '../components/AuthPrompt/AuthPrompt';
 import HistorySection from 'copilot/components/HistorySection/HistorySection';
 import ReferenceModal from 'copilot/components/Reference/ReferenceModal';
 
+interface SelectedReference {
+    id: string;
+    title: string;
+    contentType: ReferenceContentType;
+}
+
 interface CopilotContainerProps {
     sessionId?: string;
 }
@@ -23,15 +29,13 @@ const CopilotContainer = ({
 }: CopilotContainerProps): JSX.Element => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isReferenceModalOpen, setIsReferenceModalOpen] = useState(false);
-    const [referenceCount, setReferenceCount] = useState(0);
+    const [selectedReferences, setSelectedReferences] = useState<SelectedReference[]>([]);
     const [isLoadingHistory, setIsLoadingHistory] = useState(true);
     const [isLoadingResponse, setIsLoadingResponse] = useState(false);
     const [showScrollButton, setShowScrollButton] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
-    const [currentSessionId, setCurrentSessionId] = useState<
-        string | undefined
-    >();
+    const [currentSessionId, setCurrentSessionId] = useState<string | undefined>();
     const { isMobileBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const [pendingMessage, setPendingMessage] = useState<{
@@ -74,8 +78,6 @@ const CopilotContainer = ({
     };
 
     useEffect(() => {
-        console.log('session id,', sessionId);
-        console.log('is mobile breakpoints,', isMobileBreakpoints);
         const loadChatHistory = async () => {
             if (!sessionId) {
                 setIsLoadingHistory(false);
@@ -85,27 +87,26 @@ const CopilotContainer = ({
             try {
                 const response = await chatApi.getChatHistory(sessionId);
                 if (response.history && response.history.length > 0) {
-                    const convertedMessages: ChatMessage[] =
-                        response.history.map(
-                            (item: {
-                                role: 'AI' | 'User';
-                                message: string;
-                                message_id: string;
-                                rating: number;
-                                is_bookmarked: boolean;
-                                image?: string | null;
-                                keyword?: string | null;
-                            }) => ({
-                                id: item.message_id,
-                                role: item.role === 'AI' ? 'AI' : 'User',
-                                content: item.message,
-                                timestamp: new Date().toISOString(),
-                                rating: item.rating,
-                                isBookmarked: item.is_bookmarked,
-                                image: item.image,
-                                keyword: item.keyword
-                            })
-                        );
+                    const convertedMessages: ChatMessage[] = response.history.map(
+                        (item: {
+                            role: 'AI' | 'User';
+                            message: string;
+                            message_id: string;
+                            rating: number;
+                            is_bookmarked: boolean;
+                            image?: string | null;
+                            keyword?: string | null;
+                        }) => ({
+                            id: item.message_id,
+                            role: item.role === 'AI' ? 'AI' : 'User',
+                            content: item.message,
+                            timestamp: new Date().toISOString(),
+                            rating: item.rating,
+                            isBookmarked: item.is_bookmarked,
+                            image: item.image,
+                            keyword: item.keyword
+                        })
+                    );
                     setMessages(convertedMessages);
                     setCurrentSessionId(sessionId);
                 }
@@ -147,6 +148,36 @@ const CopilotContainer = ({
         }
     };
 
+    const buildChatContext = (): ChatInput['context'] | undefined => {
+        if (selectedReferences.length === 0) return undefined;
+
+        const context: ChatInput['context'] = {
+            textbook_problem: [],
+            book_pages: [],
+            video: [],
+            bank_soal_problem: []
+        };
+
+        selectedReferences.forEach(ref => {
+            switch (ref.contentType) {
+                case 'textbook_problem':
+                    context.textbook_problem.push(ref.id);
+                    break;
+                case 'course_video':
+                    context.video.push(ref.id);
+                    break;
+                case 'astronotes_content':
+                    context.book_pages.push(ref.id);
+                    break;
+                case 'bank_soal_problem':
+                    context.bank_soal_problem.push(ref.id);
+                    break;
+            }
+        });
+
+        return Object.values(context).some(arr => arr.length > 0) ? context : undefined;
+    };
+
     const handleSendMessage = async (prompt: string, imageUrl?: string) => {
         if (!prompt.trim()) return;
 
@@ -175,62 +206,56 @@ const CopilotContainer = ({
         scrollToBottom();
         let currentResponse = '';
 
+        const chatInput: ChatInput = {
+            input_text: prompt,
+            session_id: currentSessionId,
+            image_url: imageUrl,
+            context: buildChatContext()
+        };
+
         try {
-            await chatApi.chat(
-                {
-                    input_text: prompt,
-                    session_id: currentSessionId,
-                    image_url: imageUrl
+            await chatApi.chat(chatInput, {
+                onContent: (content) => {
+                    currentResponse += content;
+                    setPendingMessage({
+                        content: currentResponse,
+                        timestamp: new Date().toISOString()
+                    });
+                    scrollToBottom();
                 },
-                {
-                    onContent: (content) => {
-                        currentResponse += content;
-                        setPendingMessage({
-                            content: currentResponse,
-                            timestamp: new Date().toISOString()
-                        });
-                        scrollToBottom();
-                    },
-                    onComplete: (
-                        messageId,
-                        sessionId,
-                        sessionName,
-                        keyword
-                    ) => {
-                        setPendingMessage(null);
+                onComplete: (messageId, sessionId, sessionName, keyword) => {
+                    setPendingMessage(null);
 
-                        if (sessionId) {
-                            setCurrentSessionId(sessionId);
-                        }
-                        if (messageId) {
-                            setMessages((prev) => {
-                                const aiMessage: ChatMessage = {
-                                    id: messageId,
-                                    role: 'AI',
-                                    content: currentResponse,
-                                    timestamp: new Date().toISOString(),
-                                    keyword: keyword
-                                };
-                                return [...prev, aiMessage];
-                            });
-                        }
-                    },
-                    onError: (error) => {
-                        console.error('Chat error:', error);
-                        setPendingMessage(null);
-
-                        const errorMessage: ChatMessage = {
-                            id: 'error',
-                            role: 'AI',
-                            content:
-                                'Maaf, terjadi kesalahan. Silakan coba lagi.',
-                            timestamp: new Date().toISOString()
-                        };
-                        setMessages((prev) => [...prev, errorMessage]);
-                        scrollToBottom();
+                    if (sessionId) {
+                        setCurrentSessionId(sessionId);
                     }
+                    if (messageId) {
+                        setMessages((prev) => {
+                            const aiMessage: ChatMessage = {
+                                id: messageId,
+                                role: 'AI',
+                                content: currentResponse,
+                                timestamp: new Date().toISOString(),
+                                keyword: keyword
+                            };
+                            return [...prev, aiMessage];
+                        });
+                    }
+                },
+                onError: (error) => {
+                    console.error('Chat error:', error);
+                    setPendingMessage(null);
+
+                    const errorMessage: ChatMessage = {
+                        id: 'error',
+                        role: 'AI',
+                        content: 'Maaf, terjadi kesalahan. Silakan coba lagi.',
+                        timestamp: new Date().toISOString()
+                    };
+                    setMessages((prev) => [...prev, errorMessage]);
+                    scrollToBottom();
                 }
-            );
+            });
         } catch (error) {
             console.error('Chat error:', error);
             setPendingMessage(null);
@@ -259,6 +284,33 @@ const CopilotContainer = ({
 
     const handleCloseReferenceModal = () => {
         setIsReferenceModalOpen(false);
+    };
+
+    const handleReferenceSelect = (
+        referenceId: string,
+        referenceTitle: string,
+        contentType: ReferenceContentType
+    ) => {
+        const newReference: SelectedReference = {
+            id: referenceId,
+            title: referenceTitle,
+            contentType
+        };
+
+        setSelectedReferences(prev => {
+            const exists = prev.find(ref => ref.id === referenceId && ref.contentType === contentType);
+            if (exists) {
+                return prev.filter(ref => !(ref.id === referenceId && ref.contentType === contentType));
+            } else {
+                return [...prev, newReference];
+            }
+        });
+    };
+
+    const handleRemoveReference = (referenceId: string, contentType: ReferenceContentType) => {
+        setSelectedReferences(prev => 
+            prev.filter(ref => !(ref.id === referenceId && ref.contentType === contentType))
+        );
     };
 
     return (
@@ -334,6 +386,7 @@ const CopilotContainer = ({
                         'fixed bottom-8 left-0 right-0 bg-[#101010] pb-6',
                         'md:static md:mb-8 md:pb-0'
                     )}>
+                    
                     <PromptBar
                         ref={promptBarRef}
                         fileInputRef={fileInputRef}
@@ -343,12 +396,13 @@ const CopilotContainer = ({
                             setIsEditorOpen(isEditorOpen)
                         }
                         onOpenReferenceModal={handleOpenReferenceModal}
-                        referenceCount={referenceCount}
+                        referenceCount={selectedReferences.length}
                     />
 
                     <ReferenceModal
                         isOpen={isReferenceModalOpen}
                         onClose={handleCloseReferenceModal}
+                        onReferenceSelect={handleReferenceSelect}
                     />
                 </div>
 

@@ -48,7 +48,6 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
         const [imageUrl, setImageUrl] = useState<string | null>(null);
         const [imageName, setImageName] = useState<string | null>(null);
         const [isDragging, setIsDragging] = useState(false);
-        const [referensiCount, setReferensiCount] = useState(0);
         const internalFileInputRef = useRef<HTMLInputElement>(null);
         const fileInputRef = externalFileInputRef || internalFileInputRef;
         const [activeForm, setActiveForm] = useState<'math' | 'symbol' | null>(
@@ -256,7 +255,7 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
 
                         <div className="px-5 pb-4">
                             <div className={cn(isSidebar ? "mb-3" : "md:hidden mb-3")}>
-                                {referensiCount === 0 ? (
+                                {referenceCount === 0 ? (
                                     <button
                                         onClick={handleReferensiClick}
                                         className="flex items-center gap-1 px-3 py-1 rounded-full border border-neutral-600 hover:border-neutral-500 transition-colors text-sm text-neutral-300 hover:text-white"
@@ -275,7 +274,7 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
                                         <button
                                             className="flex items-center gap-1 px-3 py-1 rounded-full border border-neutral-600 hover:border-neutral-500 transition-colors text-sm text-neutral-300 hover:text-white"
                                             disabled={isLoading}>
-                                            <span>{referensiCount} Referensi ditambahkan</span>
+                                            <span>{referenceCount} Referensi ditambahkan</span>
                                             <ChevronDown size={14} className="rotate-180" />
                                         </button>
                                     </div>
@@ -329,7 +328,7 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
                                     </button>
                                     
                                     <div className={cn(isSidebar ? "hidden" : "hidden md:block")}>
-                                        {referensiCount === 0 ? (
+                                        {referenceCount === 0 ? (
                                             <button
                                                 onClick={handleReferensiClick}
                                                 className="flex items-center gap-1 px-3 py-1 rounded-full border border-neutral-600 hover:border-neutral-500 transition-colors text-sm text-neutral-300 hover:text-white"
@@ -340,6 +339,7 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
                                         ) : (
                                             <div className="flex items-center gap-2">
                                                 <button
+                                                    onClick={handleReferensiClick}
                                                     className="flex items-center justify-center w-8 h-8 rounded-full border border-neutral-600 hover:border-neutral-500 transition-colors text-neutral-300 hover:text-white"
                                                     disabled={isLoading}>
                                                     <Plus size={14} />
@@ -347,7 +347,7 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
                                                 <button
                                                     className="flex items-center gap-1 px-3 py-1 rounded-full border border-neutral-600 hover:border-neutral-500 transition-colors text-sm text-neutral-300 hover:text-white"
                                                     disabled={isLoading}>
-                                                    <span>{referensiCount} Referensi ditambahkan</span>
+                                                    <span>{referenceCount} Referensi ditambahkan</span>
                                                     <ChevronDown size={14} className="rotate-180" />
                                                 </button>
                                             </div>

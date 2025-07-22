@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import { cn } from 'commons/utils';
+import { CDN_URL } from 'commons/constants';
+import Image from 'next/image';
 import {
-    useGetTextbookChaptersQuery,
-    useGetTextbookSectionsQuery,
-    useGetTextbookProblemsQuery
+    useGetBankSoalChaptersQuery,
+    useGetBankSoalSectionsQuery,
+    useGetBankSoalProblemsQuery
 } from 'copilot/redux/api/copilotApi';
-import { TextbookChapter, TextbookProblem } from 'copilot/types/copilot';
+import { BankSoalChapter, BankSoalProblem } from 'copilot/types/copilot';
 
-interface TextbookHierarchyProps {
+interface BankSoalHierarchyProps {
     isOpen: boolean;
     onClose: () => void;
     bookSlug: string;
@@ -17,7 +19,7 @@ interface TextbookHierarchyProps {
     onProblemSelect: (problemId: string, problemTitle: string) => void;
 }
 
-const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
+const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
     isOpen,
     onClose,
     bookSlug,
@@ -34,7 +36,7 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
         data: chaptersData,
         isLoading: chaptersLoading,
         error: chaptersError
-    } = useGetTextbookChaptersQuery(bookSlug, {
+    } = useGetBankSoalChaptersQuery(bookSlug, {
         skip: !isOpen || !bookSlug
     });
 
@@ -60,7 +62,7 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
         setExpandedSections(newExpanded);
     };
 
-    const handleProblemClick = (problem: TextbookProblem) => {
+    const handleProblemClick = (problem: BankSoalProblem) => {
         if (!selectedItems.has(problem.id)) {
             const newSelected = new Set(selectedItems);
             newSelected.add(problem.id);
@@ -70,7 +72,7 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
         onClose();
     };
 
-    const renderChapter = (chapter: TextbookChapter) => {
+    const renderChapter = (chapter: BankSoalChapter) => {
         const isExpanded = expandedChapters.has(chapter.id);
         
         return (
@@ -79,34 +81,42 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
                     onClick={() => toggleChapter(chapter.id)}
                     className={cn(
                         'w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors',
-                        'hover:bg-white/5 text-left'
+                        'hover:bg-white/5 text-left min-h-[40px]'
                     )}
                 >
-                    <span className="text-[#999999] text-sm font-medium">{chapter.title}</span>
-                    {isExpanded ? (
-                        <ChevronDown size={16} className="text-white/60 flex-shrink-0" />
-                    ) : (
-                        <ChevronUp size={16} className="text-white/60 flex-shrink-0" />
-                    )}
+                    <span className="text-[#999999] text-sm font-medium leading-5">{chapter.title}</span>
+                    <div className="flex items-center justify-center w-4 h-4 flex-shrink-0">
+                        {isExpanded ? (
+                            <ChevronDown size={16} className="text-white/60" />
+                        ) : (
+                            <ChevronUp size={16} className="text-white/60" />
+                        )}
+                    </div>
                 </button>
                 
                 {isExpanded && (
                     <div className="ml-6 border-l border-white/20">
-                        <ChapterSections chapterId={chapter.id} />
+                        <ChapterContent chapterId={chapter.id} />
                     </div>
                 )}
             </div>
         );
     };
 
-    const ChapterSections: React.FC<{ chapterId: string }> = ({ chapterId }) => {
+    const ChapterContent: React.FC<{ chapterId: string }> = ({ chapterId }) => {
         const {
             data: sectionsData,
             isLoading: sectionsLoading,
             error: sectionsError
-        } = useGetTextbookSectionsQuery(chapterId);
+        } = useGetBankSoalSectionsQuery(chapterId);
 
-        if (sectionsLoading) {
+        const {
+            data: directProblemsData,
+            isLoading: directProblemsLoading,
+            error: directProblemsError
+        } = useGetBankSoalProblemsQuery({ chapterId });
+
+        if (sectionsLoading || directProblemsLoading) {
             return (
                 <div className="flex items-center justify-center py-4">
                     <div className="w-4 h-4 border-2 border-[#5F2BCE] border-t-transparent rounded-full animate-spin"></div>
@@ -114,31 +124,28 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
             );
         }
 
-        if (sectionsError || !sectionsData?.data) {
-            return (
-                <div className="text-white/60 text-sm py-2 px-4">
-                    Gagal memuat sections
-                </div>
-            );
-        }
+        const hasSections = sectionsData?.data && sectionsData.data.length > 0;
+        const hasDirectProblems = directProblemsData?.data && directProblemsData.data.length > 0;
 
         return (
             <>
-                {sectionsData.data.map(section => (
+                {hasSections && sectionsData.data.map(section => (
                     <div key={section.id} className="ml-4 mb-1">
                         <button
                             onClick={() => toggleSection(section.id)}
                             className={cn(
-                                'w-full flex items-center justify-between pr-4 py-1.5 rounded-lg transition-colors',
-                                'hover:bg-white/5 text-left'
+                                'w-full flex items-center justify-between px-4 py-1.5 rounded-lg transition-colors',
+                                'hover:bg-white/5 text-left min-h-[36px]'
                             )}
                         >
-                            <span className="text-[#999999] text-sm">{section.title}</span>
-                            {expandedSections.has(section.id) ? (
-                                <ChevronDown size={14} className="text-white/60 flex-shrink-0" />
-                            ) : (
-                                <ChevronUp size={14} className="text-white/60 flex-shrink-0" />
-                            )}
+                            <span className="text-[#999999] text-sm leading-5">{section.title}</span>
+                            <div className="flex items-center justify-center w-4 h-4 flex-shrink-0">
+                                {expandedSections.has(section.id) ? (
+                                    <ChevronDown size={16} className="text-white/60" />
+                                ) : (
+                                    <ChevronUp size={16} className="text-white/60" />
+                                )}
+                            </div>
                         </button>
                         
                         {expandedSections.has(section.id) && (
@@ -148,6 +155,26 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
                         )}
                     </div>
                 ))}
+
+                {hasDirectProblems && directProblemsData.data.map(problem => (
+                    <button
+                        key={problem.id}
+                        onClick={() => handleProblemClick(problem)}
+                        className={cn(
+                            'w-full flex items-center px-3 py-1.5 ml-4 rounded-lg transition-colors text-left',
+                            'hover:bg-white/5',
+                            selectedItems.has(problem.id) && 'bg-[#5F2BCE]/20 border border-[#5F2BCE]/50'
+                        )}
+                    >
+                        <span className="text-[#999999] text-sm leading-5">{problem.title}</span>
+                    </button>
+                ))}
+
+                {!hasSections && !hasDirectProblems && (
+                    <div className="text-white/60 text-sm py-2 px-4">
+                        Tidak ada soal ditemukan
+                    </div>
+                )}
             </>
         );
     };
@@ -157,7 +184,7 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
             data: problemsData,
             isLoading: problemsLoading,
             error: problemsError
-        } = useGetTextbookProblemsQuery(sectionId);
+        } = useGetBankSoalProblemsQuery({ sectionId });
 
         if (problemsLoading) {
             return (
@@ -187,7 +214,7 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
                             selectedItems.has(problem.id) && 'bg-[#5F2BCE]/20 border border-[#5F2BCE]/50'
                         )}
                     >
-                        <span className="text-[#999999] text-sm">{problem.title}</span>
+                        <span className="text-[#999999] text-sm leading-5">{problem.title}</span>
                     </button>
                 ))}
             </>
@@ -206,7 +233,7 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
         return (
             <div className="flex items-center justify-center py-12">
                 <div className="text-center">
-                    <p className="text-white/60">Gagal memuat chapters textbook</p>
+                    <p className="text-white/60">Gagal memuat chapters bank soal</p>
                 </div>
             </div>
         );
@@ -233,7 +260,7 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
                     </div>
                     <input
                         type="text"
-                        placeholder="Cari dalam textbook..."
+                        placeholder="Cari dalam bank soal..."
                         value={hierarchySearch}
                         onChange={(e) => setHierarchySearch(e.target.value)}
                         className="w-full bg-[#222222] border border-white/10 rounded-2xl pl-12 pr-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-[#5F2BCE] transition-colors"
@@ -247,40 +274,39 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
                 </div>
             </div>
 
-            <div className="absolute bottom-0 left-0 right-0 bg-[#101010] border-t border-white/10 p-6">
-                <div className="flex items-center gap-3 p-4 bg-[#1a1a1a] rounded-lg">
-                    <div className="w-16 h-20 bg-[#222222] rounded-lg flex-shrink-0 overflow-hidden">
-                        {bookThumbnail ? (
-                            <img 
-                                src={bookThumbnail} 
-                                alt={bookName}
-                                className="w-full h-full object-cover"
-                            />
-                        ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                                <span className="text-white/40 text-xs">No Image</span>
-                            </div>
-                        )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                        <h3 className="text-white font-medium text-sm mb-1 truncate">{bookName}</h3>
-                        <p className="text-white/60 text-xs">Textbook</p>
-                        {selectedItems.size > 0 && (
-                            <p className="text-[#5F2BCE] text-xs mt-1">
-                                {selectedItems.size} soal dipilih
-                            </p>
-                        )}
-                    </div>
-                    <button
-                        onClick={onClose}
-                        className="p-2 text-white/60 hover:text-white transition-colors"
-                    >
-                        ✕
-                    </button>
+            <div className="fixed bottom-0 left-0 right-0 bg-[#2C2C2C] border border-transparent p-4 flex items-center gap-3 md:bottom-4 md:left-4 md:right-4 md:mx-16 md:mb-8 md:rounded-xl">
+                <div className="relative aspect-[256/364] h-12 flex-shrink-0">
+                    <Image
+                        src={
+                            bookThumbnail ??
+                            `${CDN_URL}/assets/banksoal-placeholder.jpg`
+                        }
+                        alt={bookName}
+                        layout="fill"
+                        objectPosition="center"
+                        objectFit="cover"
+                        className="rounded border border-neutral-700 shadow-lg md:rounded"
+                    />
                 </div>
+                <div className="flex-1 min-w-0">
+                    <h3 className="text-sm font-bold text-[#999999] line-clamp-1 mb-1">
+                        {bookName}
+                    </h3>
+                    <div className="rounded-full text-xs w-fit text-white font-semibold px-3 py-1 bg-[#3B82F6]">
+                        Bank Soal
+                    </div>
+                </div>
+                <button
+                    onClick={onClose}
+                    className="p-1 text-white/60 hover:text-white transition-colors"
+                >
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 5L5 15M5 5l10 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                </button>
             </div>
         </div>
     );
 };
 
-export default TextbookHierarchy;
+export default BankSoalHierarchy;
