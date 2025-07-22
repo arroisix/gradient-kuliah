@@ -19,9 +19,11 @@ const VerticalProductCard = ({
     className,
     imageClassname
 }: Omit<ProductCardProps, 'orientation'>): JSX.Element => {
+    console.log('Category received:', category);
     const tracker = useTracker();
     const isVideo = category.toLowerCase() == 'video';
     const isCourse = category.toLowerCase() == 'kelas';
+    const isReference = ['Astronotes', 'Textbook Solution', 'Bank Soal'].includes(category);
     const TitleLabel = heading ?? 'p';
 
     return (
@@ -35,11 +37,11 @@ const VerticalProductCard = ({
             <div
                 className={cn(
                     'w-full grid place-items-center',
-                    isCourse || isVideo ? 'aspect-[2/1]' : 'aspect-[4/3]',
+                    isCourse || isVideo || isReference ? 'aspect-[2/1]' : 'aspect-[4/3]',
                     !(isVideo || isCourse) && 'py-2'
                 )}>
                 <div className="absolute z-10 flex items-center gap-2 top-4 left-4">
-                    {product.isComingSoon && (
+                    {product.isComingSoon && !isReference && (
                         <div
                             className={cn(
                                 'badge w-max px-3 bg-gradient-to-r from-[#F2C04C] via-[#E48E0D] to-[#E4B50D] font-bold text-white border-none'
@@ -47,19 +49,21 @@ const VerticalProductCard = ({
                             Segera Hadir
                         </div>
                     )}
-                    {!product.isComingSoon && product.isNew && (
+                    {!product.isComingSoon && product.isNew && !isReference && (
                         <div className="bg-[#E9202A] badge text-white border-[#E9202A] font-bold border-none px-3">
                             Baru
                         </div>
                     )}
-                    {product.isFree && <FreeBadge />}
+                    {product.isFree && !isReference && <FreeBadge />}
                 </div>
                 <div
                     className={cn(
                         'relative rounded-md border-neutral-700 object-center',
-                        !(isVideo || isCourse)
+                        isReference
                             ? 'aspect-[256/364] h-full shadow-lg border'
-                            : 'h-full w-full',
+                            : isCourse || isVideo
+                            ? 'h-full w-full'
+                            : 'aspect-[256/364] h-full shadow-lg border',
                         imageClassname
                     )}>
                     <Image
@@ -75,7 +79,7 @@ const VerticalProductCard = ({
                     />
                     {(isVideo ||
                         (category.toLowerCase() == 'kelas' &&
-                            product.inProgress)) && (
+                            product.inProgress)) && !isReference && (
                         <div className="absolute inset-0 grid place-items-center">
                             <div className="text-white border-none btn btn-circle bg-graphite-900/60">
                                 <FaRegCirclePlay size={32} />
@@ -87,7 +91,7 @@ const VerticalProductCard = ({
             <div className="flex flex-col w-full gap-1 px-3 py-3 lg:px-4 grow bg-graphite-900">
                 <p
                     className={cn(
-                        !product.inProgress ? 'hidden' : 'flex',
+                        !product.inProgress || isReference ? 'hidden' : 'flex',
                         'items-center text-xs mb-2',
                         product.latestProgress == 100
                             ? 'text-[#282b29]'
@@ -119,12 +123,12 @@ const VerticalProductCard = ({
                             'bg-[#CC009E]':
                                 category === 'Catatan' ||
                                 category === 'Astronotes',
-                            'bg-[#0083FF]': category === 'Bank Soal'
+                            'bg-[#0083FF]': category === 'BankSoal'
                         }
                     )}>
                     {category}
                 </div>
-                <p className={cn(!product?.courseName && 'hidden', 'text-xs')}>
+                <p className={cn((!product?.courseName || isReference) && 'hidden', 'text-xs')}>
                     {product?.courseName}
                 </p>
                 <TitleLabel
@@ -133,7 +137,7 @@ const VerticalProductCard = ({
                     )}>
                     {product.title}
                 </TitleLabel>
-                {product.latestChapter && (
+                {product.latestChapter && !isReference && (
                     <p className="text-xs text-graphite-100 line-clamp-2 text-balance">
                         Bab: {product.latestChapter}
                     </p>

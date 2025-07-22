@@ -63,10 +63,8 @@ const ReferenceRecommendationList = ({
         const getTitle = () => {
             if (recommendation.type === 'course_video') {
                 return recommendation.subchapter_name || 'Video Content';
-            } else if (recommendation.type === 'textbook_problem' || recommendation.type === 'astronotes_content') {
-                return recommendation.book_name || 'Textbook Content';
             }
-            return recommendation.problem_question || 'Question Content';
+            return recommendation.book_name || 'Book Content';
         };
 
         const getThumbnail = () => {
@@ -78,9 +76,6 @@ const ReferenceRecommendationList = ({
             thumbnail: getThumbnail(),
             inProgress: false,
             latestProgress: 0,
-            isComingSoon: false,
-            isNew: false,
-            isFree: true
         };
     };
 
@@ -149,17 +144,21 @@ const ReferenceRecommendationList = ({
     return (
         <>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-2 pb-8">
-                {recommendations.recommendation.map((recommendation, index) => (
-                    <ProductCard
-                        key={`${recommendation.type}-${recommendation.course_slug || recommendation.book_slug}-${index}`}
-                        heading="h2"
-                        orientation="vertical"
-                        category={getCategory(recommendation)}
-                        eventName="Click Reference Card"
-                        href={getHref(recommendation)}
-                        product={getProduct(recommendation)}
-                    />
-                ))}
+                {recommendations.recommendation.map((recommendation, index) => {
+                    const product = getProduct(recommendation);
+                    
+                    return (
+                        <ProductCard
+                            key={`${recommendation.type}-${recommendation.course_slug || recommendation.book_slug}-${index}`}
+                            heading="h2"
+                            orientation="vertical"
+                            category={getCategory(recommendation)}
+                            eventName="Click Reference Card"
+                            href={getHref(recommendation)}
+                            product={product}
+                        />
+                    );
+                })}
             </div>
 
             {totalPages > 1 && (
