@@ -33,10 +33,12 @@ const DashboardUpdatesBanner: React.FC = () => {
 
     const startAutoSlide = useCallback(() => {
         clearAutoSlide();
-        
+
         if (banners.length > 1 && !isModalOpen) {
             intervalIdRef.current = setInterval(() => {
-                setCurrentIndex((prevIndex) => (prevIndex + 1) % banners.length);
+                setCurrentIndex(
+                    (prevIndex) => (prevIndex + 1) % banners.length
+                );
             }, 5000);
         }
     }, [banners.length, isModalOpen, clearAutoSlide]);
@@ -63,7 +65,7 @@ const DashboardUpdatesBanner: React.FC = () => {
     const goToSlide = (index: number) => {
         clearAutoSlide();
         setCurrentIndex(index);
-        
+
         setTimeout(() => {
             if (!isModalOpen) {
                 startAutoSlide();
