@@ -131,3 +131,41 @@ export interface MainSectionProps {
     onSendMessage: (prompt: string, imageUrl?: string) => void;
     onImageCapture: () => void;
 }
+
+export interface TextbookChapter {
+    id: string;
+    title: string;
+}
+
+export interface TextbookSection {
+    id: string;
+    title: string;
+}
+
+export interface TextbookProblem {
+    id: string;
+    slug: string;
+    title: string;
+}
+
+export interface TextbookChaptersResponse {
+    data: TextbookChapter[];
+}
+
+export interface TextbookSectionsResponse {
+    data: TextbookSection[];
+}
+
+export interface TextbookProblemsResponse {
+    data: TextbookProblem[];
+}
+
+export type ReferenceContentType = 'textbook_problem' | 'course_video' | 'astronotes_content' | 'bank_soal_problem';
+
+export interface ReferenceHierarchyProps {
+    isOpen: boolean;
+    onClose: () => void;
+    contentType: ReferenceContentType;
+    referenceData: ContextRecommendation;
+    onItemSelect: (itemId: string, itemTitle: string, contentType: ReferenceContentType) => void;
+}

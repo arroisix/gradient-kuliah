@@ -4,7 +4,10 @@ import {
     ChangeRatingInput,
     ToggleBookmarkInput,
     ContentRecommendationResponse,
-    ContextRecommendationResponse
+    ContextRecommendationResponse,
+    TextbookChaptersResponse,
+    TextbookSectionsResponse,
+    TextbookProblemsResponse,
 } from '../../types/copilot';
 import config from 'redux/api/config';
 import { baseApi } from 'redux/api/baseApi';
@@ -410,10 +413,34 @@ export const copilotApi = baseApi.injectEndpoints({
             }),
             providesTags: ['CONTEXT_RECOMMENDATION']
         }),
+        getTextbookChapters: builder.query<TextbookChaptersResponse, string>({
+            query: (bookSlug: string) => ({
+                url: `${COPILOT_BASE_URL}textbook/chapter/${bookSlug}/`,
+                method: 'GET'
+            }),
+            providesTags: ['TEXTBOOK_CHAPTERS']
+        }),
+        getTextbookSections: builder.query<TextbookSectionsResponse, string>({
+            query: (chapterId: string) => ({
+                url: `${COPILOT_BASE_URL}textbook/section/${chapterId}/`,
+                method: 'GET'
+            }),
+            providesTags: ['TEXTBOOK_SECTIONS']
+        }),
+        getTextbookProblems: builder.query<TextbookProblemsResponse, string>({
+            query: (sectionId: string) => ({
+                url: `${COPILOT_BASE_URL}textbook/problem/${sectionId}/`,
+                method: 'GET'
+            }),
+            providesTags: ['TEXTBOOK_PROBLEMS']
+        })
     }),
     overrideExisting: false
 });
 
 export const {
     useGetContentRecommendationQuery,
+    useGetTextbookChaptersQuery,
+    useGetTextbookSectionsQuery,
+    useGetTextbookProblemsQuery
 } = copilotApi;

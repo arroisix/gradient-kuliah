@@ -16,11 +16,13 @@ type ReferenceQueryParams = {
 interface ReferenceRecommendationListProps {
     search?: string;
     defaultQuery: string;
+    onReferenceCardClick?: (recommendation: ContextRecommendation) => void;
 }
 
 const ReferenceRecommendationList = ({
     search,
-    defaultQuery
+    defaultQuery,
+    onReferenceCardClick
 }: ReferenceRecommendationListProps): JSX.Element => {
     const router = useRouter();
     const { tab, page } = router.query as ReferenceQueryParams;
@@ -79,19 +81,7 @@ const ReferenceRecommendationList = ({
         };
     };
 
-    const getHref = (recommendation: ContextRecommendation): string => {
-        if (recommendation.type === 'course_video' && recommendation.course_slug && recommendation.subchapter_slug) {
-            return `/courses/${recommendation.course_slug}/${recommendation.subchapter_slug}`;
-        } else if (recommendation.type === 'textbook_problem' && recommendation.book_slug) {
-            const page = recommendation.book_page ? `?page=${recommendation.book_page}` : '';
-            return `/library/${recommendation.book_slug}${page}`;
-        } else if (recommendation.type === 'astronotes_content' && recommendation.course_slug && recommendation.subchapter_slug) {
-            return `/courses/${recommendation.course_slug}/astronotes/${recommendation.subchapter_slug}`;
-        } else if (recommendation.type === 'bank_soal_problem' && recommendation.problem_slug) {
-            return `/exercises/${recommendation.problem_slug}`;
-        }
-        return '';
-    };
+
 
     const getCategory = (recommendation: ContextRecommendation): string => {
         switch (recommendation.type) {
@@ -106,6 +96,10 @@ const ReferenceRecommendationList = ({
             default:
                 return 'Content';
         }
+    };
+
+    const handleCardClick = (recommendation: ContextRecommendation) => {
+        onReferenceCardClick?.(recommendation);
     };
 
     const totalPages = Math.ceil((recommendations?.count_items ?? 0) / itemsPerPage);
@@ -143,20 +137,25 @@ const ReferenceRecommendationList = ({
 
     return (
         <>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 pb-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pb-8">
                 {recommendations.recommendation.map((recommendation, index) => {
                     const product = getProduct(recommendation);
                     
                     return (
-                        <ProductCard
+                        <div
                             key={`${recommendation.type}-${recommendation.course_slug || recommendation.book_slug}-${index}`}
-                            heading="h2"
-                            orientation="vertical"
-                            category={getCategory(recommendation)}
-                            eventName="Click Reference Card"
-                            href={getHref(recommendation)}
-                            product={product}
-                        />
+                            onClick={() => handleCardClick(recommendation)}
+                            className="cursor-pointer"
+                        >
+                            <ProductCard
+                                heading="h2"
+                                orientation="vertical"
+                                category={getCategory(recommendation)}
+                                eventName="Click Reference Card"
+                                href=""
+                                product={product}
+                            />
+                        </div>
                     );
                 })}
             </div>

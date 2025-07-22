@@ -42,6 +42,9 @@ export const baseApi = createApi({
         'FLASHCARD_LIST',
         'LAST_SEEN_FLASHCARDS',
         'CONTEXT_RECOMMENDATION',
+        'TEXTBOOK_CHAPTERS',
+        'TEXTBOOK_SECTIONS',
+        'TEXTBOOK_PROBLEMS'
     ],
     baseQuery: fetchBaseQuery({
         baseUrl: config.API_BASE_URL,
