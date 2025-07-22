@@ -61,17 +61,16 @@ const ReferenceRecommendationList = ({
 
     const getProduct = (recommendation: ContentRecommendation): Product => {
         const getTitle = () => {
-            if (recommendation.type === 'course_video' || recommendation.type === 'astronotes_content') {
-                return recommendation.subchapter_name || 'Course Content';
+            if (recommendation.type === 'course_video') {
+                return recommendation.subchapter_name || 'Video Content';
+            } else if (recommendation.type === 'textbook_problem' || recommendation.type === 'astronotes_content') {
+                return recommendation.book_name || 'Textbook Content';
             }
-            return recommendation.book_name || 'Reference Material';
+            return recommendation.problem_question || 'Question Content';
         };
 
         const getThumbnail = () => {
-            if (recommendation.type === 'course_video') {
-                return recommendation.thumbnail || '';
-            }
-            return recommendation.book_cover_url || '';
+            return recommendation.thumbnail || '';
         };
 
         return {
