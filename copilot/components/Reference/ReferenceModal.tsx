@@ -13,7 +13,7 @@ import { ContextRecommendation, ReferenceContentType } from 'copilot/types/copil
 interface ReferenceModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onReferenceSelect?: (referenceId: string, referenceTitle: string, contentType: ReferenceContentType) => void;
+    onReferenceSelect?: (referenceId: string, referenceTitle: string, contentType: ReferenceContentType, subtitle: string, header: string) => void;
 }
 
 const ReferenceModal = ({ 
@@ -45,23 +45,15 @@ const ReferenceModal = ({
     };
 
     const handleReferenceCardClick = (recommendation: ContextRecommendation) => {
-        if (recommendation.type === 'textbook_problem' || 
-            recommendation.type === 'course_video' || 
-            recommendation.type === 'astronotes_content' || 
-            recommendation.type === 'bank_soal_problem') {
-            setHierarchyModal({
-                isOpen: true,
-                contentType: recommendation.type,
-                referenceData: recommendation
-            });
-        } else {
-            onReferenceSelect?.(recommendation.id, getItemTitle(recommendation), recommendation.type);
-            onClose();
-        }
+        setHierarchyModal({
+            isOpen: true,
+            contentType: recommendation.type,
+            referenceData: recommendation
+        });
     };
 
-    const handleHierarchyItemSelect = (itemId: string, itemTitle: string, contentType: ReferenceContentType) => {
-        onReferenceSelect?.(itemId, itemTitle, contentType);
+    const handleHierarchyItemSelect = (itemId: string, itemTitle: string, contentType: ReferenceContentType, subtitle: string, header: string) => {
+        onReferenceSelect?.(itemId, itemTitle, contentType, subtitle, header);
         setHierarchyModal({
             isOpen: false,
             contentType: null,

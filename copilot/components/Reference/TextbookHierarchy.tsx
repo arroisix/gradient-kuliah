@@ -14,7 +14,7 @@ interface TextbookHierarchyProps {
     bookSlug: string;
     bookName: string;
     bookThumbnail?: string | null;
-    onProblemSelect: (problemId: string, problemTitle: string) => void;
+    onProblemSelect: (problemId: string, title: string, subtitle: string, header: string) => void;
 }
 
 const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
@@ -60,46 +60,40 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
         setExpandedSections(newExpanded);
     };
 
-    const handleProblemClick = (problem: TextbookProblem) => {
-        if (!selectedItems.has(problem.id)) {
-            const newSelected = new Set(selectedItems);
-            newSelected.add(problem.id);
-            setSelectedItems(newSelected);
-            onProblemSelect(problem.id, problem.title);
-        }
-        onClose();
-    };
-
     const renderChapter = (chapter: TextbookChapter) => {
         const isExpanded = expandedChapters.has(chapter.id);
         
         return (
             <div key={chapter.id} className="mb-1">
-                <button
-                    onClick={() => toggleChapter(chapter.id)}
+                <div
                     className={cn(
                         'w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors',
-                        'hover:bg-white/5 text-left'
+                        'text-left min-h-[40px]'
                     )}
                 >
-                    <span className="text-[#999999] text-sm font-medium">{chapter.title}</span>
-                    {isExpanded ? (
-                        <ChevronDown size={16} className="text-white/60 flex-shrink-0" />
-                    ) : (
-                        <ChevronUp size={16} className="text-white/60 flex-shrink-0" />
-                    )}
-                </button>
+                    <span className="text-[#999999] text-sm font-medium leading-5">{chapter.title}</span>
+                    <button
+                        onClick={() => toggleChapter(chapter.id)}
+                        className="flex items-center justify-center w-4 h-4 flex-shrink-0 hover:bg-white/5 rounded"
+                    >
+                        {isExpanded ? (
+                            <ChevronDown size={16} className="text-white/60" />
+                        ) : (
+                            <ChevronUp size={16} className="text-white/60" />
+                        )}
+                    </button>
+                </div>
                 
                 {isExpanded && (
                     <div className="ml-6 border-l border-white/20">
-                        <ChapterSections chapterId={chapter.id} />
+                        <ChapterSections chapterId={chapter.id} chapterTitle={chapter.title} />
                     </div>
                 )}
             </div>
         );
     };
 
-    const ChapterSections: React.FC<{ chapterId: string }> = ({ chapterId }) => {
+    const ChapterSections: React.FC<{ chapterId: string; chapterTitle: string }> = ({ chapterId, chapterTitle }) => {
         const {
             data: sectionsData,
             isLoading: sectionsLoading,
@@ -126,24 +120,32 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
             <>
                 {sectionsData.data.map(section => (
                     <div key={section.id} className="ml-4 mb-1">
-                        <button
-                            onClick={() => toggleSection(section.id)}
+                        <div
                             className={cn(
-                                'w-full flex items-center justify-between pr-4 py-1.5 rounded-lg transition-colors',
-                                'hover:bg-white/5 text-left'
+                                'w-full flex items-center justify-between px-4 py-1.5 rounded-lg transition-colors',
+                                'text-left min-h-[36px]'
                             )}
                         >
-                            <span className="text-[#999999] text-sm">{section.title}</span>
-                            {expandedSections.has(section.id) ? (
-                                <ChevronDown size={14} className="text-white/60 flex-shrink-0" />
-                            ) : (
-                                <ChevronUp size={14} className="text-white/60 flex-shrink-0" />
-                            )}
-                        </button>
+                            <span className="text-[#999999] text-sm leading-5">{section.title}</span>
+                            <button
+                                onClick={() => toggleSection(section.id)}
+                                className="flex items-center justify-center w-4 h-4 flex-shrink-0 hover:bg-white/5 rounded"
+                            >
+                                {expandedSections.has(section.id) ? (
+                                    <ChevronDown size={16} className="text-white/60" />
+                                ) : (
+                                    <ChevronUp size={16} className="text-white/60" />
+                                )}
+                            </button>
+                        </div>
                         
                         {expandedSections.has(section.id) && (
                             <div className="ml-4 border-l border-white/20">
-                                <SectionProblems sectionId={section.id} />
+                                <SectionProblems 
+                                    sectionId={section.id} 
+                                    chapterTitle={chapterTitle}
+                                    sectionTitle={section.title}
+                                />
                             </div>
                         )}
                     </div>
@@ -152,7 +154,11 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
         );
     };
 
-    const SectionProblems: React.FC<{ sectionId: string }> = ({ sectionId }) => {
+    const SectionProblems: React.FC<{ 
+        sectionId: string; 
+        chapterTitle: string; 
+        sectionTitle: string; 
+    }> = ({ sectionId, chapterTitle, sectionTitle }) => {
         const {
             data: problemsData,
             isLoading: problemsLoading,
@@ -180,14 +186,27 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
                 {problemsData.data.map(problem => (
                     <button
                         key={problem.id}
-                        onClick={() => handleProblemClick(problem)}
+                        onClick={() => {
+                            if (!selectedItems.has(problem.id)) {
+                                const newSelected = new Set(selectedItems);
+                                newSelected.add(problem.id);
+                                setSelectedItems(newSelected);
+                                onProblemSelect(
+                                    problem.id,
+                                    bookName,
+                                    chapterTitle,
+                                    sectionTitle
+                                );
+                            }
+                            onClose();
+                        }}
                         className={cn(
                             'w-full flex items-center px-3 py-1.5 ml-4 rounded-lg transition-colors text-left',
                             'hover:bg-white/5',
                             selectedItems.has(problem.id) && 'bg-[#5F2BCE]/20 border border-[#5F2BCE]/50'
                         )}
                     >
-                        <span className="text-[#999999] text-sm">{problem.title}</span>
+                        <span className="text-[#999999] text-sm leading-5">{problem.title}</span>
                     </button>
                 ))}
             </>

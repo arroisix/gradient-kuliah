@@ -63,7 +63,9 @@ const Astronotes = ({
 
     const currentAstronotesContext = page ? {
         id: page,
-        title: `Halaman ${page}`, 
+        title: book.title,
+        subtitle: 'DUMMY SUBTITLE',
+        header: 'DUMMY HEADER',
         contentType: 'astronotes_content' as const
     } : undefined;
 

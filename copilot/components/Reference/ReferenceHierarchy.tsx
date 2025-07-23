@@ -1,9 +1,17 @@
 import React from 'react';
-import { ReferenceHierarchyProps, ReferenceContentType } from 'copilot/types/copilot';
+import { ContextRecommendation, ReferenceContentType } from 'copilot/types/copilot';
 import TextbookHierarchy from './TextbookHierarchy';
 import CourseHierarchy from './CourseHierarchy';
 import AstronotesHierarchy from './AstronotesHierarchy';
 import BankSoalHierarchy from './BankSoalHierarchy';
+
+interface ReferenceHierarchyProps {
+    isOpen: boolean;
+    onClose: () => void;
+    contentType: ReferenceContentType;
+    referenceData: ContextRecommendation;
+    onItemSelect: (itemId: string, itemTitle: string, contentType: ReferenceContentType, subtitle: string, header: string) => void;
+}
 
 const ReferenceHierarchy: React.FC<ReferenceHierarchyProps> = ({
     isOpen,
@@ -13,6 +21,10 @@ const ReferenceHierarchy: React.FC<ReferenceHierarchyProps> = ({
     onItemSelect
 }) => {
     if (!isOpen) return null;
+
+    const handleItemSelect = (id: string, title: string, subtitle: string, header: string) => {
+        onItemSelect(id, title, contentType, subtitle, header);
+    };
 
     const renderHierarchyByType = () => {
         switch (contentType) {
@@ -24,9 +36,7 @@ const ReferenceHierarchy: React.FC<ReferenceHierarchyProps> = ({
                         bookSlug={referenceData.book_slug!}
                         bookName={referenceData.book_name!}
                         bookThumbnail={referenceData.thumbnail}
-                        onProblemSelect={(problemId, problemTitle) => 
-                            onItemSelect(problemId, problemTitle, 'textbook_problem')
-                        }
+                        onProblemSelect={handleItemSelect}
                     />
                 );
             case 'course_video':
@@ -37,9 +47,7 @@ const ReferenceHierarchy: React.FC<ReferenceHierarchyProps> = ({
                         courseSlug={referenceData.course_slug!}
                         courseName={referenceData.subchapter_name || 'Course'}
                         courseThumbnail={referenceData.thumbnail}
-                        onVideoSelect={(videoId, videoTitle) => 
-                            onItemSelect(videoId, videoTitle, 'course_video')
-                        }
+                        onVideoSelect={handleItemSelect}
                     />
                 );
             case 'astronotes_content':
@@ -50,9 +58,7 @@ const ReferenceHierarchy: React.FC<ReferenceHierarchyProps> = ({
                         bookSlug={referenceData.book_slug!}
                         bookName={referenceData.book_name!}
                         bookThumbnail={referenceData.thumbnail}
-                        onTopicSelect={(topicId, topicTitle) => 
-                            onItemSelect(topicId, topicTitle, 'astronotes_content')
-                        }
+                        onTopicSelect={handleItemSelect}
                     />
                 );
             case 'bank_soal_problem':
@@ -63,15 +69,11 @@ const ReferenceHierarchy: React.FC<ReferenceHierarchyProps> = ({
                         bookSlug={referenceData.book_slug!}
                         bookName={referenceData.book_name!}
                         bookThumbnail={referenceData.thumbnail}
-                        onProblemSelect={(problemId, problemTitle) => 
-                            onItemSelect(problemId, problemTitle, 'bank_soal_problem')
-                        }
+                        onProblemSelect={handleItemSelect}
                     />
                 );
             default:
-                return (
-                    <></>
-                );
+                return null;
         }
     };
 

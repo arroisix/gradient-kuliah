@@ -15,7 +15,7 @@ interface CourseHierarchyProps {
     courseSlug: string;
     courseName: string;
     courseThumbnail?: string | null;
-    onVideoSelect: (videoId: string, videoTitle: string) => void;
+    onVideoSelect: (videoId: string, title: string, subtitle: string, header: string) => void;
 }
 
 const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
@@ -50,48 +50,40 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
         setExpandedChapters(newExpanded);
     };
 
-    const handleVideoClick = (subchapter: CourseSubchapter) => {
-        if (!selectedItems.has(subchapter.video_id)) {
-            const newSelected = new Set(selectedItems);
-            newSelected.add(subchapter.video_id);
-            setSelectedItems(newSelected);
-            onVideoSelect(subchapter.video_id, subchapter.name);
-        }
-        onClose();
-    };
-
     const renderChapter = (chapter: CourseChapter) => {
         const isExpanded = expandedChapters.has(chapter.id);
         
         return (
             <div key={chapter.id} className="mb-1">
-                <button
-                    onClick={() => toggleChapter(chapter.id)}
+                <div
                     className={cn(
                         'w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors',
-                        'hover:bg-white/5 text-left min-h-[40px]'
+                        'text-left min-h-[40px]'
                     )}
                 >
                     <span className="text-[#999999] text-sm font-medium leading-5">{chapter.title}</span>
-                    <div className="flex items-center justify-center w-4 h-4 flex-shrink-0">
+                    <button
+                        onClick={() => toggleChapter(chapter.id)}
+                        className="flex items-center justify-center w-4 h-4 flex-shrink-0 hover:bg-white/5 rounded"
+                    >
                         {isExpanded ? (
                             <ChevronDown size={16} className="text-white/60" />
                         ) : (
                             <ChevronUp size={16} className="text-white/60" />
                         )}
-                    </div>
-                </button>
+                    </button>
+                </div>
                 
                 {isExpanded && (
                     <div className="ml-6 border-l border-white/20">
-                        <ChapterSubchapters chapterId={chapter.id} />
+                        <ChapterSubchapters chapterId={chapter.id} chapterTitle={chapter.title} />
                     </div>
                 )}
             </div>
         );
     };
 
-    const ChapterSubchapters: React.FC<{ chapterId: string }> = ({ chapterId }) => {
+    const ChapterSubchapters: React.FC<{ chapterId: string; chapterTitle: string }> = ({ chapterId, chapterTitle }) => {
         const {
             data: subchaptersData,
             isLoading: subchaptersLoading,
@@ -119,7 +111,20 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
                 {subchaptersData.data.map(subchapter => (
                     <button
                         key={subchapter.video_id}
-                        onClick={() => handleVideoClick(subchapter)}
+                        onClick={() => {
+                            if (!selectedItems.has(subchapter.video_id)) {
+                                const newSelected = new Set(selectedItems);
+                                newSelected.add(subchapter.video_id);
+                                setSelectedItems(newSelected);
+                                onVideoSelect(
+                                    subchapter.video_id,
+                                    courseName,
+                                    chapterTitle,
+                                    subchapter.name
+                                );
+                            }
+                            onClose();
+                        }}
                         className={cn(
                             'w-full flex items-center px-3 py-1.5 ml-4 rounded-lg transition-colors text-left',
                             'hover:bg-white/5',
@@ -189,9 +194,7 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
             <div className="fixed bottom-0 left-0 right-0 bg-[#2C2C2C] border border-transparent p-4 flex items-center gap-3 md:bottom-4 md:left-4 md:right-4 md:mx-16 md:mb-8 md:rounded-xl">
                 <div className="relative aspect-[256/364] h-12 w-24 flex-shrink-0">
                     <Image
-                        src={
-                            courseThumbnail ?? ''
-                        }
+                        src={courseThumbnail ?? ''}
                         alt={courseName}
                         layout="fill"
                         objectPosition="center"

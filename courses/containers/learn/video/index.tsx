@@ -67,9 +67,11 @@ const VideoLearnContainer = ({
         setIsCopilotModalOpen(true);
     };
 
-    const currentVideoContext = subchapter?.video && subchapter?.subchapter_name ? {
+    const currentVideoContext = subchapter?.video && subchapter?.subchapter_name && course ? {
         id: subchapter.video.id,
-        title: subchapter.subchapter_name,
+        title: course.course_name ?? '',
+        subtitle: 'Chapter',
+        header: subchapter.subchapter_name,
         contentType: 'course_video' as const
     } : undefined;
 

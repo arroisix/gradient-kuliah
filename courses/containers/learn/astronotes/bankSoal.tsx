@@ -65,7 +65,9 @@ const BankSoalContainer = ({
 
     const currentBankSoalContext = data?.problem ? {
         id: data.problem.id,
-        title: data.problem.title,
+        title: getTextbookDetail?.book.title ?? '',
+        subtitle: data.problem.chapter_name ?? '',
+        header: data.problem.section_name ?? '',
         contentType: 'bank_soal_problem' as const
     } : undefined;
 
