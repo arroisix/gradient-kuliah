@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import { cn } from 'commons/utils';
+import { CDN_URL } from 'commons/constants';
 import Image from 'next/image';
 import {
     useGetAstronotesChaptersQuery,
     useGetAstronotesSubchaptersQuery,
     useGetAstronotesTopicsQuery
 } from 'copilot/redux/api/copilotApi';
-import { AstronotesChapter, AstronotesSubchapter } from 'copilot/types/copilot';
+import { AstronotesChapter, AstronotesSubchapter, AstronotesTopic } from 'copilot/types/copilot';
 
 interface AstronotesHierarchyProps {
     isOpen: boolean;
@@ -15,7 +16,7 @@ interface AstronotesHierarchyProps {
     bookSlug: string;
     bookName: string;
     bookThumbnail?: string | null;
-    onTopicSelect: (topicId: string, title: string, subtitle: string, header: string) => void;
+    onTopicSelect: (topicId: string, topicTitle: string) => void;
 }
 
 const AstronotesHierarchy: React.FC<AstronotesHierarchyProps> = ({
@@ -61,29 +62,37 @@ const AstronotesHierarchy: React.FC<AstronotesHierarchyProps> = ({
         setExpandedSubchapters(newExpanded);
     };
 
+    const handleTopicClick = (topic: AstronotesTopic) => {
+        if (!selectedItems.has(topic.page_id)) {
+            const newSelected = new Set(selectedItems);
+            newSelected.add(topic.page_id);
+            setSelectedItems(newSelected);
+            onTopicSelect(topic.page_id, topic.value);
+        }
+        onClose();
+    };
+
     const renderChapter = (chapter: AstronotesChapter) => {
         const isExpanded = expandedChapters.has(chapter.id);
         
         return (
             <div key={chapter.id} className="mb-1">
-                <div
+                <button
+                    onClick={() => toggleChapter(chapter.id)}
                     className={cn(
                         'w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors',
-                        'text-left min-h-[40px]'
+                        'hover:bg-white/5 text-left min-h-[40px]'
                     )}
                 >
                     <span className="text-[#999999] text-sm font-medium leading-5">{chapter.value}</span>
-                    <button
-                        onClick={() => toggleChapter(chapter.id)}
-                        className="flex items-center justify-center w-4 h-4 flex-shrink-0 hover:bg-white/5 rounded"
-                    >
+                    <div className="flex items-center justify-center w-4 h-4 flex-shrink-0">
                         {isExpanded ? (
                             <ChevronDown size={16} className="text-white/60" />
                         ) : (
                             <ChevronUp size={16} className="text-white/60" />
                         )}
-                    </button>
-                </div>
+                    </div>
+                </button>
                 
                 {isExpanded && (
                     <div className="ml-6 border-l border-white/20">
@@ -125,28 +134,26 @@ const AstronotesHierarchy: React.FC<AstronotesHierarchyProps> = ({
             <>
                 {subchaptersData.data.map(subchapter => (
                     <div key={subchapter.id} className="ml-4 mb-1">
-                        <div
+                        <button
+                            onClick={() => toggleSubchapter(subchapter.id)}
                             className={cn(
                                 'w-full flex items-center justify-between px-4 py-1.5 rounded-lg transition-colors',
-                                'text-left min-h-[36px]'
+                                'hover:bg-white/5 text-left min-h-[36px]'
                             )}
                         >
                             <span className="text-[#999999] text-sm leading-5">{subchapter.value}</span>
-                            <button
-                                onClick={() => toggleSubchapter(subchapter.id)}
-                                className="flex items-center justify-center w-4 h-4 flex-shrink-0 hover:bg-white/5 rounded"
-                            >
+                            <div className="flex items-center justify-center w-4 h-4 flex-shrink-0">
                                 {expandedSubchapters.has(subchapter.id) ? (
                                     <ChevronDown size={16} className="text-white/60" />
                                 ) : (
                                     <ChevronUp size={16} className="text-white/60" />
                                 )}
-                            </button>
-                        </div>
+                            </div>
+                        </button>
                         
                         {expandedSubchapters.has(subchapter.id) && (
                             <div className="ml-4 border-l border-white/20">
-                                <SubchapterTopics subchapter={subchapter} chapterTitle={chapter.value} />
+                                <SubchapterTopics subchapter={subchapter} />
                             </div>
                         )}
                     </div>
@@ -155,10 +162,7 @@ const AstronotesHierarchy: React.FC<AstronotesHierarchyProps> = ({
         );
     };
 
-    const SubchapterTopics: React.FC<{ 
-        subchapter: AstronotesSubchapter; 
-        chapterTitle: string; 
-    }> = ({ subchapter, chapterTitle }) => {
+    const SubchapterTopics: React.FC<{ subchapter: AstronotesSubchapter }> = ({ subchapter }) => {
         const {
             data: topicsData,
             isLoading: topicsLoading,
@@ -190,24 +194,11 @@ const AstronotesHierarchy: React.FC<AstronotesHierarchyProps> = ({
                 {topicsData.data.map(topic => (
                     <button
                         key={topic.id}
-                        onClick={() => {
-                            if (!selectedItems.has(topic.id)) {
-                                const newSelected = new Set(selectedItems);
-                                newSelected.add(topic.id);
-                                setSelectedItems(newSelected);
-                                onTopicSelect(
-                                    topic.id,
-                                    bookName,        
-                                    chapterTitle,    
-                                    subchapter.value     
-                                );
-                            }
-                            onClose();
-                        }}
+                        onClick={() => handleTopicClick(topic)}
                         className={cn(
                             'w-full flex items-center px-3 py-1.5 ml-4 rounded-lg transition-colors text-left',
                             'hover:bg-white/5',
-                            selectedItems.has(topic.id) && 'bg-[#5F2BCE]/20 border border-[#5F2BCE]/50'
+                            selectedItems.has(topic.page_id) && 'bg-[#5F2BCE]/20 border border-[#5F2BCE]/50'
                         )}
                     >
                         <span className="text-[#999999] text-sm leading-5">{topic.value}</span>
@@ -273,7 +264,9 @@ const AstronotesHierarchy: React.FC<AstronotesHierarchyProps> = ({
             <div className="fixed bottom-0 left-0 right-0 bg-[#2C2C2C] border border-transparent p-4 flex items-center gap-3 md:bottom-4 md:left-4 md:right-4 md:mx-16 md:mb-8 md:rounded-xl">
                 <div className="relative aspect-[256/364] h-12 flex-shrink-0">
                     <Image
-                        src={bookThumbnail ?? ''}
+                        src={
+                            bookThumbnail ?? ''
+                        }
                         alt={bookName}
                         layout="fill"
                         objectPosition="center"

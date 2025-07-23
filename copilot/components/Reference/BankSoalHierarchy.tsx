@@ -16,7 +16,7 @@ interface BankSoalHierarchyProps {
     bookSlug: string;
     bookName: string;
     bookThumbnail?: string | null;
-    onProblemSelect: (problemId: string, title: string, subtitle: string, header: string) => void;
+    onProblemSelect: (problemId: string, problemTitle: string) => void;
 }
 
 const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
@@ -62,47 +62,61 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
         setExpandedSections(newExpanded);
     };
 
+    const handleProblemClick = (problem: BankSoalProblem) => {
+        if (!selectedItems.has(problem.id)) {
+            const newSelected = new Set(selectedItems);
+            newSelected.add(problem.id);
+            setSelectedItems(newSelected);
+            onProblemSelect(problem.id, problem.title);
+        }
+        onClose();
+    };
+
     const renderChapter = (chapter: BankSoalChapter) => {
         const isExpanded = expandedChapters.has(chapter.id);
         
         return (
             <div key={chapter.id} className="mb-1">
-                <div
+                <button
+                    onClick={() => toggleChapter(chapter.id)}
                     className={cn(
                         'w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors',
-                        'text-left min-h-[40px]'
+                        'hover:bg-white/5 text-left min-h-[40px]'
                     )}
                 >
                     <span className="text-[#999999] text-sm font-medium leading-5">{chapter.title}</span>
-                    <button
-                        onClick={() => toggleChapter(chapter.id)}
-                        className="flex items-center justify-center w-4 h-4 flex-shrink-0 hover:bg-white/5 rounded"
-                    >
+                    <div className="flex items-center justify-center w-4 h-4 flex-shrink-0">
                         {isExpanded ? (
                             <ChevronDown size={16} className="text-white/60" />
                         ) : (
                             <ChevronUp size={16} className="text-white/60" />
                         )}
-                    </button>
-                </div>
+                    </div>
+                </button>
                 
                 {isExpanded && (
                     <div className="ml-6 border-l border-white/20">
-                        <ChapterSections chapterId={chapter.id} chapterTitle={chapter.title} />
+                        <ChapterContent chapterId={chapter.id} />
                     </div>
                 )}
             </div>
         );
     };
 
-    const ChapterSections: React.FC<{ chapterId: string; chapterTitle: string }> = ({ chapterId, chapterTitle }) => {
+    const ChapterContent: React.FC<{ chapterId: string }> = ({ chapterId }) => {
         const {
             data: sectionsData,
             isLoading: sectionsLoading,
             error: sectionsError
         } = useGetBankSoalSectionsQuery(chapterId);
 
-        if (sectionsLoading) {
+        const {
+            data: directProblemsData,
+            isLoading: directProblemsLoading,
+            error: directProblemsError
+        } = useGetBankSoalProblemsQuery({ chapterId });
+
+        if (sectionsLoading || directProblemsLoading) {
             return (
                 <div className="flex items-center justify-center py-4">
                     <div className="w-4 h-4 border-2 border-[#5F2BCE] border-t-transparent rounded-full animate-spin"></div>
@@ -110,53 +124,62 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
             );
         }
 
-        if (sectionsError || !sectionsData?.data) {
-            return (
-                <div className="text-white/60 text-sm py-2 px-4">
-                    Gagal memuat sections
-                </div>
-            );
-        }
+        const hasSections = sectionsData?.data && sectionsData.data.length > 0;
+        const hasDirectProblems = directProblemsData?.data && directProblemsData.data.length > 0;
 
         return (
             <>
-                {sectionsData.data.map(section => (
+                {hasSections && sectionsData.data.map(section => (
                     <div key={section.id} className="ml-4 mb-1">
-                        <div
+                        <button
+                            onClick={() => toggleSection(section.id)}
                             className={cn(
                                 'w-full flex items-center justify-between px-4 py-1.5 rounded-lg transition-colors',
-                                'text-left min-h-[36px]'
+                                'hover:bg-white/5 text-left min-h-[36px]'
                             )}
                         >
                             <span className="text-[#999999] text-sm leading-5">{section.title}</span>
-                            <button
-                                onClick={() => toggleSection(section.id)}
-                                className="flex items-center justify-center w-4 h-4 flex-shrink-0 hover:bg-white/5 rounded"
-                            >
+                            <div className="flex items-center justify-center w-4 h-4 flex-shrink-0">
                                 {expandedSections.has(section.id) ? (
                                     <ChevronDown size={16} className="text-white/60" />
                                 ) : (
                                     <ChevronUp size={16} className="text-white/60" />
                                 )}
-                            </button>
-                        </div>
+                            </div>
+                        </button>
                         
                         {expandedSections.has(section.id) && (
                             <div className="ml-4 border-l border-white/20">
-                                <SectionProblems sectionId={section.id} chapterTitle={chapterTitle} sectionTitle={section.title} />
+                                <SectionProblems sectionId={section.id} />
                             </div>
                         )}
                     </div>
                 ))}
+
+                {hasDirectProblems && directProblemsData.data.map(problem => (
+                    <button
+                        key={problem.id}
+                        onClick={() => handleProblemClick(problem)}
+                        className={cn(
+                            'w-full flex items-center px-3 py-1.5 ml-4 rounded-lg transition-colors text-left',
+                            'hover:bg-white/5',
+                            selectedItems.has(problem.id) && 'bg-[#5F2BCE]/20 border border-[#5F2BCE]/50'
+                        )}
+                    >
+                        <span className="text-[#999999] text-sm leading-5">{problem.title}</span>
+                    </button>
+                ))}
+
+                {!hasSections && !hasDirectProblems && (
+                    <div className="text-white/60 text-sm py-2 px-4">
+                        Tidak ada soal ditemukan
+                    </div>
+                )}
             </>
         );
     };
 
-    const SectionProblems: React.FC<{ 
-        sectionId: string; 
-        chapterTitle: string; 
-        sectionTitle: string; 
-    }> = ({ sectionId, chapterTitle, sectionTitle }) => {
+    const SectionProblems: React.FC<{ sectionId: string }> = ({ sectionId }) => {
         const {
             data: problemsData,
             isLoading: problemsLoading,
@@ -184,20 +207,7 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
                 {problemsData.data.map(problem => (
                     <button
                         key={problem.id}
-                        onClick={() => {
-                            if (!selectedItems.has(problem.id)) {
-                                const newSelected = new Set(selectedItems);
-                                newSelected.add(problem.id);
-                                setSelectedItems(newSelected);
-                                onProblemSelect(
-                                    problem.id,
-                                    bookName,        
-                                    chapterTitle,    
-                                    sectionTitle     
-                                );
-                            }
-                            onClose();
-                        }}
+                        onClick={() => handleProblemClick(problem)}
                         className={cn(
                             'w-full flex items-center px-3 py-1.5 ml-4 rounded-lg transition-colors text-left',
                             'hover:bg-white/5',
@@ -267,7 +277,9 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
             <div className="fixed bottom-0 left-0 right-0 bg-[#2C2C2C] border border-transparent p-4 flex items-center gap-3 md:bottom-4 md:left-4 md:right-4 md:mx-16 md:mb-8 md:rounded-xl">
                 <div className="relative aspect-[256/364] h-12 flex-shrink-0">
                     <Image
-                        src={bookThumbnail ?? ''}
+                        src={
+                            bookThumbnail ?? ''
+                        }
                         alt={bookName}
                         layout="fill"
                         objectPosition="center"

@@ -15,12 +15,12 @@ interface CopilotModalProps {
   currentContext?: SelectedReference;
 }
 
-const CopilotModal = ({
-  isOpen,
-  setOpen,
-  sessionId,
+const CopilotModal = ({ 
+  isOpen, 
+  setOpen, 
+  sessionId, 
   xlWidth,
-  currentContext
+  currentContext 
 }: CopilotModalProps): JSX.Element => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isReferenceModalOpen, setIsReferenceModalOpen] = useState(false);
@@ -36,14 +36,14 @@ const CopilotModal = ({
   useEffect(() => {
     if (isOpen && currentContext) {
       setSelectedReferences(prev => {
-        const exists = prev.find(ref =>
+        const exists = prev.find(ref => 
           ref.id === currentContext.id && ref.contentType === currentContext.contentType
         );
-
+        
         if (!exists) {
           return [currentContext, ...prev];
         }
-
+        
         return prev;
       });
     }
@@ -64,20 +64,16 @@ const CopilotModal = ({
   const handleReferenceSelect = (
     referenceId: string,
     referenceTitle: string,
-    contentType: ReferenceContentType,
-    subtitle: string,
-    header: string
+    contentType: ReferenceContentType
   ) => {
     const newReference: SelectedReference = {
       id: referenceId,
       title: referenceTitle,
-      subtitle: subtitle,
-      header: header,
       contentType
     };
 
     setSelectedReferences(prev => {
-      const exists = prev.find(ref =>
+      const exists = prev.find(ref => 
         ref.id === referenceId && ref.contentType === contentType
       );
       return exists ? prev : [...prev, newReference];
@@ -106,13 +102,13 @@ const CopilotModal = ({
           onOpenReferenceModal={handleOpenReferenceModal}
         />
       </div>
-
+      
       <ReferenceModal
         isOpen={isReferenceModalOpen}
         onClose={handleCloseReferenceModal}
         onReferenceSelect={handleReferenceSelect}
       />
-
+      
       {isOpen && !isAuthenticated && <CopilotAuthPrompt />}
     </>
   );

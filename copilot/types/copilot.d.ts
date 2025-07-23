@@ -242,10 +242,16 @@ export interface BankSoalProblemsResponse {
 
 export type ReferenceContentType = 'textbook_problem' | 'course_video' | 'astronotes_content' | 'bank_soal_problem';
 
+export interface ReferenceHierarchyProps {
+    isOpen: boolean;
+    onClose: () => void;
+    contentType: ReferenceContentType;
+    referenceData: ContextRecommendation;
+    onItemSelect: (itemId: string, itemTitle: string, contentType: ReferenceContentType) => void;
+}
+
 interface SelectedReference {
     id: string;
     title: string;
-    subtitle: string;
-    header: string;
     contentType: ReferenceContentType;
 }
