@@ -19,7 +19,6 @@ const VerticalProductCard = ({
     className,
     imageClassname
 }: Omit<ProductCardProps, 'orientation'>): JSX.Element => {
-    console.log('Category received:', category);
     const tracker = useTracker();
     const isVideo = category.toLowerCase() == 'video';
     const isCourse = category.toLowerCase() == 'kelas';

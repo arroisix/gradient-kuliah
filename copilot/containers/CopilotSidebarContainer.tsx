@@ -251,7 +251,7 @@ const CopilotSidebarContainer = ({
 
     return (
         <div className="flex flex-col h-full bg-[#181818] overflow-hidden rounded-t-lg">
-            <div className="flex items-center justify-between py-4 px-5 bg-[#2C2C2C] border-b border-gray-700 flex-shrink-0 rounded-t-lg">
+            <div className={cn("flex items-center justify-between py-4 px-5 border-b border-gray-700 flex-shrink-0 rounded-t-lg transition-colors duration-300", isCollapsed ? "bg-[#5F2BCE]" : "bg-[#2C2C2C]")}>
                 <button
                     onClick={onClose}
                     className="p-1 text-gray-400 hover:text-white transition-colors"
