@@ -63,11 +63,11 @@ const AstronotesHierarchy: React.FC<AstronotesHierarchyProps> = ({
     };
 
     const handleTopicClick = (topic: AstronotesTopic) => {
-        if (!selectedItems.has(topic.id)) {
+        if (!selectedItems.has(topic.page_id)) {
             const newSelected = new Set(selectedItems);
-            newSelected.add(topic.id);
+            newSelected.add(topic.page_id);
             setSelectedItems(newSelected);
-            onTopicSelect(topic.id, topic.value);
+            onTopicSelect(topic.page_id, topic.value);
         }
         onClose();
     };
@@ -198,7 +198,7 @@ const AstronotesHierarchy: React.FC<AstronotesHierarchyProps> = ({
                         className={cn(
                             'w-full flex items-center px-3 py-1.5 ml-4 rounded-lg transition-colors text-left',
                             'hover:bg-white/5',
-                            selectedItems.has(topic.id) && 'bg-[#5F2BCE]/20 border border-[#5F2BCE]/50'
+                            selectedItems.has(topic.page_id) && 'bg-[#5F2BCE]/20 border border-[#5F2BCE]/50'
                         )}
                     >
                         <span className="text-[#999999] text-sm leading-5">{topic.value}</span>
@@ -265,8 +265,7 @@ const AstronotesHierarchy: React.FC<AstronotesHierarchyProps> = ({
                 <div className="relative aspect-[256/364] h-12 flex-shrink-0">
                     <Image
                         src={
-                            bookThumbnail ??
-                            `${CDN_URL}/assets/astronotes-placeholder.jpg`
+                            bookThumbnail ?? ''
                         }
                         alt={bookName}
                         layout="fill"

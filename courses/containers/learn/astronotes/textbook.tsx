@@ -54,6 +54,12 @@ const TextbookSolution = ({
         setIsCopilotModalOpen(true);
     };
 
+    const currentTextbookContext = data?.problem ? {
+        id: data.problem.id,
+        title: data.problem.title,
+        contentType: 'textbook_problem' as const
+    } : undefined;
+
     return (
         <div className="drawer drawer-end lg:drawer-open">
             <div className="relative z-50">
@@ -113,6 +119,7 @@ const TextbookSolution = ({
                 isOpen={isCopilotModalOpen}
                 setOpen={setIsCopilotModalOpen}
                 xlWidth="xl:w-[24rem]"
+                currentContext={currentTextbookContext}
             />
         </div>
     );

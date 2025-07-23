@@ -278,8 +278,7 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
                 <div className="relative aspect-[256/364] h-12 flex-shrink-0">
                     <Image
                         src={
-                            bookThumbnail ??
-                            `${CDN_URL}/assets/banksoal-placeholder.jpg`
+                            bookThumbnail ?? ''
                         }
                         alt={bookName}
                         layout="fill"

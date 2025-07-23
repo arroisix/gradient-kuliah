@@ -12,9 +12,16 @@ interface CopilotModalProps {
   setOpen: (open: boolean) => void;
   sessionId?: string;
   xlWidth?: string;
+  currentContext?: SelectedReference;
 }
 
-const CopilotModal = ({ isOpen, setOpen, sessionId, xlWidth }: CopilotModalProps): JSX.Element => {
+const CopilotModal = ({ 
+  isOpen, 
+  setOpen, 
+  sessionId, 
+  xlWidth,
+  currentContext 
+}: CopilotModalProps): JSX.Element => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isReferenceModalOpen, setIsReferenceModalOpen] = useState(false);
   const [selectedReferences, setSelectedReferences] = useState<SelectedReference[]>([]);
@@ -25,6 +32,22 @@ const CopilotModal = ({ isOpen, setOpen, sessionId, xlWidth }: CopilotModalProps
       setIsCollapsed(false);
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    if (isOpen && currentContext) {
+      setSelectedReferences(prev => {
+        const exists = prev.find(ref => 
+          ref.id === currentContext.id && ref.contentType === currentContext.contentType
+        );
+        
+        if (!exists) {
+          return [currentContext, ...prev];
+        }
+        
+        return prev;
+      });
+    }
+  }, [isOpen, currentContext]);
 
   const handleClose = () => {
     setOpen(false);

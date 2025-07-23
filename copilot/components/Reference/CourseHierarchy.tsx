@@ -187,11 +187,10 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
             </div>
 
             <div className="fixed bottom-0 left-0 right-0 bg-[#2C2C2C] border border-transparent p-4 flex items-center gap-3 md:bottom-4 md:left-4 md:right-4 md:mx-16 md:mb-8 md:rounded-xl">
-                <div className="relative aspect-[256/364] h-12 flex-shrink-0">
+                <div className="relative aspect-[256/364] h-12 w-24 flex-shrink-0">
                     <Image
                         src={
-                            courseThumbnail ??
-                            `${CDN_URL}/assets/course-placeholder.jpg`
+                            courseThumbnail ?? ''
                         }
                         alt={courseName}
                         layout="fill"
@@ -204,9 +203,6 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
                     <h3 className="text-sm font-bold text-[#999999] line-clamp-1 mb-1">
                         {courseName}
                     </h3>
-                    <div className="rounded-full text-xs w-fit text-white font-semibold px-3 py-1 bg-[#5F2BCE]">
-                        Course Video
-                    </div>
                 </div>
                 <button
                     onClick={onClose}
