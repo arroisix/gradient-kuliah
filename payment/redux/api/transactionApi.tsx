@@ -17,9 +17,20 @@ export const transactionApi = baseApi.injectEndpoints({
             providesTags: (transaction) => [
                 { type: 'TRANSACTION', id: transaction?.id }
             ]
+        }),
+        getAllPaymentMethods: builder.query<
+            ResponseData<PaymentMethodSection>,
+            void
+        >({
+            query: () => ({
+                url: `${TRANSACTION_BASE_URL}payment-methods/`
+            })
         })
     })
 });
 
-export const { useGetAllTransactionQuery, useGetTransactionQuery } =
-    transactionApi;
+export const {
+    useGetAllTransactionQuery,
+    useGetTransactionQuery,
+    useGetAllPaymentMethodsQuery
+} = transactionApi;

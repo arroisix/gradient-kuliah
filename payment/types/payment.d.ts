@@ -107,3 +107,20 @@ type GuideContent = {
         }[][];
     };
 };
+
+interface PaymentMethod {
+    id: string; // UUID
+    payment_name: string;
+    payment_code: PaymentMethod;
+    type: string;
+    order: number;
+    mobile_logo: string | null;
+    desktop_logo: string | null;
+}
+
+interface PaymentMethodSection {
+    key: string;
+    name: string;
+    order: number;
+    payment_methods: PaymentMethod[];
+}
