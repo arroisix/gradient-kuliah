@@ -66,7 +66,7 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
             const newSelected = new Set(selectedItems);
             newSelected.add(problem.id);
             setSelectedItems(newSelected);
-            onProblemSelect(problem.id, problem.title, chapterName, sectionName);
+            onProblemSelect(problem.id, bookName, chapterName, sectionName);
         }
         onClose();
     };

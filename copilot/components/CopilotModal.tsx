@@ -4,6 +4,7 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import CopilotSidebarContainer from '../containers/CopilotSidebarContainer';
 import CopilotAuthPrompt from '../components/AuthPrompt/AuthPrompt';
 import ReferenceModal from '../components/Reference/ReferenceModal';
+import ReferenceContentModal from '../components/Reference/ReferenceContentModal';
 import { ReferenceContentType, SelectedReference } from '../types/copilot';
 import { cn } from 'commons/utils';
 
@@ -24,6 +25,7 @@ const CopilotModal = ({
 }: CopilotModalProps): JSX.Element => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isReferenceModalOpen, setIsReferenceModalOpen] = useState(false);
+  const [isReferenceContentModalOpen, setIsReferenceContentModalOpen] = useState(false);
   const [selectedReferences, setSelectedReferences] = useState<SelectedReference[]>([]);
   const isAuthenticated = useSelector(getIsAuthenticated);
 
@@ -61,6 +63,14 @@ const CopilotModal = ({
     setIsReferenceModalOpen(false);
   };
 
+  const handleOpenReferenceContentModal = () => {
+    setIsReferenceContentModalOpen(true);
+  };
+
+  const handleCloseReferenceContentModal = () => {
+    setIsReferenceContentModalOpen(false);
+  };
+
   const handleReferenceSelect = (
     referenceId: string,
     referenceTitle: string,
@@ -84,6 +94,12 @@ const CopilotModal = ({
     });
   };
 
+  const handleRemoveReference = (referenceId: string, contentType: ReferenceContentType) => {
+    setSelectedReferences(prev => 
+      prev.filter(ref => !(ref.id === referenceId && ref.contentType === contentType))
+    );
+  };
+
   return (
     <>
       <div className={cn(
@@ -104,6 +120,9 @@ const CopilotModal = ({
           onCollapsedChange={setIsCollapsed}
           onClose={handleClose}
           onOpenReferenceModal={handleOpenReferenceModal}
+          onOpenReferenceContentModal={handleOpenReferenceContentModal}
+          onReferenceSelect={handleReferenceSelect}
+          onRemoveReference={handleRemoveReference}
         />
       </div>
       
@@ -111,6 +130,17 @@ const CopilotModal = ({
         isOpen={isReferenceModalOpen}
         onClose={handleCloseReferenceModal}
         onReferenceSelect={handleReferenceSelect}
+      />
+
+      <ReferenceContentModal
+        isOpen={isReferenceContentModalOpen}
+        onClose={handleCloseReferenceContentModal}
+        selectedReferences={selectedReferences}
+        onRemoveReference={handleRemoveReference}
+        onOpenReferenceModal={() => {
+          setIsReferenceContentModalOpen(false);
+          setIsReferenceModalOpen(true);
+        }}
       />
       
       {isOpen && !isAuthenticated && <CopilotAuthPrompt />}

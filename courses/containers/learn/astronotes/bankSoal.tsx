@@ -67,7 +67,7 @@ const BankSoalContainer = ({
         id: data.problem.id,
         title: getTextbookDetail.book.title,
         subtitle: data.problem.chapter_name || '',
-        header: data.problem.section_name || '',
+        header: (data.problem.section || data.problem.section_name) || '', // TODO (Steven) : Check here
         contentType: 'bank_soal_problem' as const
     } : undefined;
 

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import { cn } from 'commons/utils';
-import { CDN_URL } from 'commons/constants';
 import Image from 'next/image';
 import {
     useGetAstronotesChaptersQuery,
@@ -67,7 +66,7 @@ const AstronotesHierarchy: React.FC<AstronotesHierarchyProps> = ({
             const newSelected = new Set(selectedItems);
             newSelected.add(topic.page_id);
             setSelectedItems(newSelected);
-            onTopicSelect(topic.page_id, topic.value, chapterName, subchapterName);
+            onTopicSelect(topic.page_id, bookName, chapterName, subchapterName);
         }
         onClose();
     };

@@ -13,6 +13,7 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import CopilotAuthPrompt from '../components/AuthPrompt/AuthPrompt';
 import HistorySection from 'copilot/components/HistorySection/HistorySection';
 import ReferenceModal from 'copilot/components/Reference/ReferenceModal';
+import ReferenceContentModal from 'copilot/components/Reference/ReferenceContentModal';
 
 interface CopilotContainerProps {
     sessionId?: string;
@@ -21,6 +22,7 @@ interface CopilotContainerProps {
 const CopilotContainer = ({ sessionId }: CopilotContainerProps): JSX.Element => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isReferenceModalOpen, setIsReferenceModalOpen] = useState(false);
+    const [isReferenceContentModalOpen, setIsReferenceContentModalOpen] = useState(false);
     const [selectedReferences, setSelectedReferences] = useState<SelectedReference[]>([]);
     const [isLoadingHistory, setIsLoadingHistory] = useState(true);
     const [isLoadingResponse, setIsLoadingResponse] = useState(false);
@@ -278,6 +280,14 @@ const CopilotContainer = ({ sessionId }: CopilotContainerProps): JSX.Element => 
         setIsReferenceModalOpen(false);
     };
 
+    const handleOpenReferenceContentModal = () => {
+        setIsReferenceContentModalOpen(true);
+    };
+
+    const handleCloseReferenceContentModal = () => {
+        setIsReferenceContentModalOpen(false);
+    };
+
     const handleReferenceSelect = (
         referenceId: string,
         referenceTitle: string,
@@ -394,6 +404,7 @@ const CopilotContainer = ({ sessionId }: CopilotContainerProps): JSX.Element => 
                         isLoading={isLoadingResponse}
                         onStateChange={({ isEditorOpen }) => setIsEditorOpen(isEditorOpen)}
                         onOpenReferenceModal={handleOpenReferenceModal}
+                        onOpenReferenceContentModal={handleOpenReferenceContentModal}
                         referenceCount={selectedReferences.length}
                     />
                 </div>
@@ -431,6 +442,17 @@ const CopilotContainer = ({ sessionId }: CopilotContainerProps): JSX.Element => 
                 isOpen={isReferenceModalOpen}
                 onClose={handleCloseReferenceModal}
                 onReferenceSelect={handleReferenceSelect}
+            />
+
+            <ReferenceContentModal
+                isOpen={isReferenceContentModalOpen}
+                onClose={handleCloseReferenceContentModal}
+                selectedReferences={selectedReferences}
+                onRemoveReference={handleRemoveReference}
+                onOpenReferenceModal={() => {
+                    setIsReferenceContentModalOpen(false);
+                    setIsReferenceModalOpen(true);
+                }}
             />
         </div>
     );

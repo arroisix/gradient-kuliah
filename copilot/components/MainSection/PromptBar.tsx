@@ -26,6 +26,7 @@ interface PromptBarProps {
     showBorder?: boolean;
     isSidebar?: boolean;
     onOpenReferenceModal?: () => void;
+    onOpenReferenceContentModal?: () => void;
     referenceCount?: number;
 }
 
@@ -40,6 +41,7 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
             showBorder = true,
             isSidebar = false,
             onOpenReferenceModal,
+            onOpenReferenceContentModal,
             referenceCount = 0
         },
         ref
@@ -187,7 +189,11 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
         };
 
         const handleReferensiClick = () => {
-            onOpenReferenceModal?.();
+            if (referenceCount === 0) {
+                onOpenReferenceModal?.();
+            } else {
+                onOpenReferenceContentModal?.();
+            }
         };
 
         return (
@@ -266,12 +272,13 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
                                 ) : (
                                     <div className="flex items-center gap-2">
                                         <button
-                                            onClick={handleReferensiClick}
+                                            onClick={() => onOpenReferenceModal?.()}
                                             className="flex items-center justify-center w-8 h-8 rounded-full border border-neutral-600 hover:border-neutral-500 transition-colors text-neutral-300 hover:text-white"
                                             disabled={isLoading}>
                                             <Plus size={14} />
                                         </button>
                                         <button
+                                            onClick={handleReferensiClick}
                                             className="flex items-center gap-1 px-3 py-1 rounded-full border border-neutral-600 hover:border-neutral-500 transition-colors text-sm text-neutral-300 hover:text-white"
                                             disabled={isLoading}>
                                             <span>{referenceCount} Referensi ditambahkan</span>
@@ -339,12 +346,13 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
                                         ) : (
                                             <div className="flex items-center gap-2">
                                                 <button
-                                                    onClick={handleReferensiClick}
+                                                    onClick={() => onOpenReferenceModal?.()}
                                                     className="flex items-center justify-center w-8 h-8 rounded-full border border-neutral-600 hover:border-neutral-500 transition-colors text-neutral-300 hover:text-white"
                                                     disabled={isLoading}>
                                                     <Plus size={14} />
                                                 </button>
                                                 <button
+                                                    onClick={handleReferensiClick}
                                                     className="flex items-center gap-1 px-3 py-1 rounded-full border border-neutral-600 hover:border-neutral-500 transition-colors text-sm text-neutral-300 hover:text-white"
                                                     disabled={isLoading}>
                                                     <span>{referenceCount} Referensi ditambahkan</span>

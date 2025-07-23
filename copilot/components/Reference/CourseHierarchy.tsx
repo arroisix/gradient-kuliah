@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import { cn } from 'commons/utils';
-import { CDN_URL } from 'commons/constants';
 import Image from 'next/image';
 import {
     useGetCourseChaptersQuery,
@@ -55,7 +54,7 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
             const newSelected = new Set(selectedItems);
             newSelected.add(subchapter.video_id);
             setSelectedItems(newSelected);
-            onVideoSelect(subchapter.video_id, subchapter.name, chapterName, subchapter.name);
+            onVideoSelect(subchapter.video_id, courseName, chapterName, subchapter.name);
         }
         onClose();
     };

@@ -16,6 +16,9 @@ interface CopilotSidebarContainerProps {
     onCollapsedChange: (collapsed: boolean) => void;
     onClose: () => void;
     onOpenReferenceModal: () => void;
+    onOpenReferenceContentModal: () => void;
+    onReferenceSelect: (referenceId: string, referenceTitle: string, referenceSubtitle: string, referenceHeader: string, contentType: ReferenceContentType) => void;
+    onRemoveReference: (referenceId: string, contentType: ReferenceContentType) => void;
     onOpenHistory?: () => void;
 }
 
@@ -26,6 +29,9 @@ const CopilotSidebarContainer = ({
     onCollapsedChange,
     onClose,
     onOpenReferenceModal,
+    onOpenReferenceContentModal,
+    onReferenceSelect,
+    onRemoveReference,
     onOpenHistory
 }: CopilotSidebarContainerProps): JSX.Element => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -250,125 +256,129 @@ const CopilotSidebarContainer = ({
     };
 
     return (
-        <div className="flex flex-col h-full bg-[#181818] overflow-hidden rounded-t-lg">
-            <div className={cn("flex items-center justify-between py-4 px-5 border-b border-gray-700 flex-shrink-0 rounded-t-lg transition-colors duration-300", isCollapsed ? "bg-[#5F2BCE]" : "bg-[#2C2C2C]")}>
-                <button
-                    onClick={onClose}
-                    className="p-1 text-gray-400 hover:text-white transition-colors"
-                    aria-label="Close copilot">
-                    <IoClose size={32} />
-                </button>
-
-                <h3 className="text-white font-extrabold text-base xl:text-lg">
-                    Copilot AI
-                </h3>
-
-                <div className="flex items-center gap-2">
-                    {onOpenHistory && (
-                        <button
-                            onClick={handleHistoryClick}
-                            className="p-1 text-gray-400 hover:text-white transition-colors"
-                            title="Chat History"
-                            aria-label="Open chat history">
-                            <MdHistory size={28} />
-                        </button>
-                    )}
-                    
+        <>
+            <div className="flex flex-col h-full bg-[#181818] overflow-hidden rounded-t-lg">
+                <div className={cn("flex items-center justify-between py-4 px-5 border-b border-gray-700 flex-shrink-0 rounded-t-lg transition-colors duration-300", isCollapsed ? "bg-[#5F2BCE]" : "bg-[#2C2C2C]")}>
                     <button
-                        onClick={handleToggleCollapse}
+                        onClick={onClose}
                         className="p-1 text-gray-400 hover:text-white transition-colors"
-                        aria-label={isCollapsed ? "Expand" : "Collapse"}>
-                        {isCollapsed ? <IoChevronUp size={32} /> : <IoChevronDown size={32} />}
+                        aria-label="Close copilot">
+                        <IoClose size={32} />
                     </button>
-                </div>
-            </div>
 
-            <div
-                className={cn(
-                    "flex-1 overflow-hidden transition-all duration-300 ease-in-out",
-                    isCollapsed ? "h-0 opacity-0" : "flex opacity-100"
-                )}>
-                <div className="flex flex-col w-full h-full">
-                    {isLoadingHistory ? (
-                        <div className="flex-1 flex items-center justify-center">
-                            <AiOutlineLoading3Quarters 
-                                size={24} 
-                                className="animate-spin text-neutral-400" 
-                            />
-                            <span className="ml-2 text-neutral-400">Loading...</span>
-                        </div>
-                    ) : messages.length > 0 ? (
-                        <div
-                            ref={chatContainerRef}
-                            onScroll={handleScroll}
-                            className="flex-1 overflow-y-auto p-4 min-h-0 pb-2 sm:pb-4">
-                            <ChatSection
-                                messages={messages}
-                                pendingMessage={pendingMessage}
-                                setMessages={setMessages}
-                                onRetry={handleRetry}
-                                isLoading={isLoadingResponse}
-                                currentSessionId={currentSessionId}
-                                isSidebar={true}
-                            />
-                            <div ref={messagesEndRef} />
-                        </div>
-                    ) : (
-                        <div className="flex-1 flex items-center justify-center min-h-0 overflow-hidden pt-8">
-                            <MainSection
-                                className={cn(
-                                    "bg-[#181818] flex-none w-full max-w-md mx-auto px-4 py-0",
-                                    "[&>div]:mt-0 [&>div]:mb-0 [&>div]:overflow-hidden"
-                                )}
-                                showTitle={false}
-                                showActionButtons={false}
-                                onSendMessage={handleSendMessage}
-                                onImageCapture={handleImageCapture}
-                            />
-                        </div>
-                    )}
+                    <h3 className="text-white font-extrabold text-base xl:text-lg">
+                        Copilot AI
+                    </h3>
 
-                    <div className="border-t border-gray-700 flex-shrink-0 bg-[#181818]">
-                        <PromptBar
-                            ref={promptBarRef}
-                            fileInputRef={fileInputRef}
-                            placeholder="Lagi butuh bantuan apa sobat?"
-                            onSend={handleSendMessage}
-                            isLoading={isLoadingResponse}
-                            onStateChange={({ isEditorOpen }) => setIsEditorOpen(isEditorOpen)}
-                            showBorder={false}
-                            isSidebar={true}
-                            onOpenReferenceModal={onOpenReferenceModal}
-                            referenceCount={selectedReferences.length}
-                        />
-                    </div>
-
-                    {showScrollButton && !isEditorOpen && (
+                    <div className="flex items-center gap-2">
+                        {onOpenHistory && (
+                            <button
+                                onClick={handleHistoryClick}
+                                className="p-1 text-gray-400 hover:text-white transition-colors"
+                                title="Chat History"
+                                aria-label="Open chat history">
+                                <MdHistory size={28} />
+                            </button>
+                        )}
+                        
                         <button
-                            onClick={scrollToBottom}
-                            className={cn(
-                                "absolute bg-[#5F2BCE] hover:bg-[#4f24a8] text-white rounded-full shadow-lg transition-all duration-200",
-                                "p-2 sm:p-3 bottom-36 left-1/2 transform -translate-x-1/2"
-                            )}
-                            aria-label="Scroll to bottom">
-                            <svg 
-                                xmlns="http://www.w3.org/2000/svg" 
-                                className="h-4 w-4" 
-                                fill="none" 
-                                viewBox="0 0 24 24" 
-                                stroke="currentColor">
-                                <path 
-                                    strokeLinecap="round" 
-                                    strokeLinejoin="round" 
-                                    strokeWidth={2} 
-                                    d="M19 14l-7 7m0 0l-7-7m7 7V3" 
-                                />
-                            </svg>
+                            onClick={handleToggleCollapse}
+                            className="p-1 text-gray-400 hover:text-white transition-colors"
+                            aria-label={isCollapsed ? "Expand" : "Collapse"}>
+                            {isCollapsed ? <IoChevronUp size={32} /> : <IoChevronDown size={32} />}
                         </button>
-                    )}
+                    </div>
+                </div>
+
+                <div
+                    className={cn(
+                        "flex-1 overflow-hidden transition-all duration-300 ease-in-out",
+                        isCollapsed ? "h-0 opacity-0" : "flex opacity-100"
+                    )}>
+                    <div className="flex flex-col w-full h-full">
+                        {isLoadingHistory ? (
+                            <div className="flex-1 flex items-center justify-center">
+                                <AiOutlineLoading3Quarters 
+                                    size={24} 
+                                    className="animate-spin text-neutral-400" 
+                                />
+                                <span className="ml-2 text-neutral-400">Loading...</span>
+                            </div>
+                        ) : messages.length > 0 ? (
+                            <div
+                                ref={chatContainerRef}
+                                onScroll={handleScroll}
+                                className="flex-1 overflow-y-auto p-4 min-h-0 pb-2 sm:pb-4">
+                                <ChatSection
+                                    messages={messages}
+                                    pendingMessage={pendingMessage}
+                                    setMessages={setMessages}
+                                    onRetry={handleRetry}
+                                    isLoading={isLoadingResponse}
+                                    currentSessionId={currentSessionId}
+                                    isSidebar={true}
+                                />
+                                <div ref={messagesEndRef} />
+                            </div>
+                        ) : (
+                            <div className="flex-1 flex items-center justify-center min-h-0 overflow-hidden pt-8">
+                                <MainSection
+                                    className={cn(
+                                        "bg-[#181818] flex-none w-full max-w-md mx-auto px-4 py-0",
+                                        "[&>div]:mt-0 [&>div]:mb-0 [&>div]:overflow-hidden"
+                                    )}
+                                    showTitle={false}
+                                    showActionButtons={false}
+                                    onSendMessage={handleSendMessage}
+                                    onImageCapture={handleImageCapture}
+                                />
+                            </div>
+                        )}
+
+                        <div className="border-t border-gray-700 flex-shrink-0 bg-[#181818]">
+                            <PromptBar
+                                ref={promptBarRef}
+                                fileInputRef={fileInputRef}
+                                placeholder="Lagi butuh bantuan apa sobat?"
+                                onSend={handleSendMessage}
+                                isLoading={isLoadingResponse}
+                                onStateChange={({ isEditorOpen }) => setIsEditorOpen(isEditorOpen)}
+                                showBorder={false}
+                                isSidebar={true}
+                                onOpenReferenceModal={onOpenReferenceModal}
+                                onOpenReferenceContentModal={onOpenReferenceContentModal}
+                                referenceCount={selectedReferences.length}
+                            />
+                        </div>
+
+                        {showScrollButton && !isEditorOpen && (
+                            <button
+                                onClick={scrollToBottom}
+                                className={cn(
+                                    "absolute bg-[#5F2BCE] hover:bg-[#4f24a8] text-white rounded-full shadow-lg transition-all duration-200",
+                                    "p-2 sm:p-3 bottom-36 left-1/2 transform -translate-x-1/2"
+                                )}
+                                aria-label="Scroll to bottom">
+                                <svg 
+                                    xmlns="http://www.w3.org/2000/svg" 
+                                    className="h-4 w-4" 
+                                    fill="none" 
+                                    viewBox="0 0 24 24" 
+                                    stroke="currentColor">
+                                    <path 
+                                        strokeLinecap="round" 
+                                        strokeLinejoin="round" 
+                                        strokeWidth={2} 
+                                        d="M19 14l-7 7m0 0l-7-7m7 7V3" 
+                                    />
+                                </svg>
+                            </button>
+                        )}
+                    </div>
                 </div>
             </div>
-        </div>
+
+        </>
     );
 };
 

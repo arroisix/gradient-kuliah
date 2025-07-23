@@ -57,8 +57,8 @@ const TextbookSolution = ({
     const currentTextbookContext = data?.problem && getTextbookDetail?.book ? {
         id: data.problem.id,
         title: getTextbookDetail.book.title,
-        subtitle: data.problem.chapter_name || '',
-        header: data.problem.section_name || '',
+        subtitle: data.problem.chapter_name || '', // TODO (Steven) : Check here
+        header: data.problem.section_name || '', // TODO (Steven) : Check here
         contentType: 'textbook_problem' as const
     } : undefined;
 

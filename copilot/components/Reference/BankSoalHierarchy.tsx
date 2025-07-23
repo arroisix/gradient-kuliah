@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import { cn } from 'commons/utils';
-import { CDN_URL } from 'commons/constants';
 import Image from 'next/image';
 import {
     useGetBankSoalChaptersQuery,
@@ -67,7 +66,7 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
             const newSelected = new Set(selectedItems);
             newSelected.add(problem.id);
             setSelectedItems(newSelected);
-            onProblemSelect(problem.id, problem.title, chapterName, sectionName);
+            onProblemSelect(problem.id, bookName, chapterName, sectionName);
         }
         onClose();
     };
