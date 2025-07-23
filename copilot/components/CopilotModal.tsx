@@ -4,6 +4,7 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import CopilotSidebarContainer from '../containers/CopilotSidebarContainer';
 import CopilotAuthPrompt from '../components/AuthPrompt/AuthPrompt';
 import ReferenceModal from '../components/Reference/ReferenceModal';
+import { ReferenceContentType, SelectedReference } from '../types/copilot';
 import { cn } from 'commons/utils';
 
 interface CopilotModalProps {
@@ -16,7 +17,7 @@ interface CopilotModalProps {
 const CopilotModal = ({ isOpen, setOpen, sessionId, xlWidth }: CopilotModalProps): JSX.Element => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isReferenceModalOpen, setIsReferenceModalOpen] = useState(false);
-  const [referenceCount, setReferenceCount] = useState(0);
+  const [selectedReferences, setSelectedReferences] = useState<SelectedReference[]>([]);
   const isAuthenticated = useSelector(getIsAuthenticated);
 
   useEffect(() => {
@@ -37,6 +38,25 @@ const CopilotModal = ({ isOpen, setOpen, sessionId, xlWidth }: CopilotModalProps
     setIsReferenceModalOpen(false);
   };
 
+  const handleReferenceSelect = (
+    referenceId: string,
+    referenceTitle: string,
+    contentType: ReferenceContentType
+  ) => {
+    const newReference: SelectedReference = {
+      id: referenceId,
+      title: referenceTitle,
+      contentType
+    };
+
+    setSelectedReferences(prev => {
+      const exists = prev.find(ref => 
+        ref.id === referenceId && ref.contentType === contentType
+      );
+      return exists ? prev : [...prev, newReference];
+    });
+  };
+
   return (
     <>
       <div className={cn(
@@ -53,17 +73,17 @@ const CopilotModal = ({ isOpen, setOpen, sessionId, xlWidth }: CopilotModalProps
         <CopilotSidebarContainer
           sessionId={sessionId}
           isCollapsed={isCollapsed}
-          setCollapsed={setIsCollapsed}
+          selectedReferences={selectedReferences}
+          onCollapsedChange={setIsCollapsed}
           onClose={handleClose}
           onOpenReferenceModal={handleOpenReferenceModal}
-          referenceCount={referenceCount}
-          setReferenceCount={setReferenceCount}
         />
       </div>
       
       <ReferenceModal
         isOpen={isReferenceModalOpen}
         onClose={handleCloseReferenceModal}
+        onReferenceSelect={handleReferenceSelect}
       />
       
       {isOpen && !isAuthenticated && <CopilotAuthPrompt />}

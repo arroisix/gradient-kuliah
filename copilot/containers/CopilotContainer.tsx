@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import MainSection from '../components/MainSection/MainSection';
 import ChatSection from '../components/ChatSection/ChatSection';
-import { ChatMessage, ChatInput, ReferenceContentType } from '../types/copilot';
+import { ChatMessage, ChatInput, ReferenceContentType, SelectedReference } from '../types/copilot';
 import PromptBar from '../components/MainSection/PromptBar';
 import { chatApi } from '../redux/api/copilotApi';
 import MobileHeader from '../components/MobileHeader/MobileHeader';
@@ -14,38 +14,32 @@ import CopilotAuthPrompt from '../components/AuthPrompt/AuthPrompt';
 import HistorySection from 'copilot/components/HistorySection/HistorySection';
 import ReferenceModal from 'copilot/components/Reference/ReferenceModal';
 
-interface SelectedReference {
-    id: string;
-    title: string;
-    contentType: ReferenceContentType;
-}
-
 interface CopilotContainerProps {
     sessionId?: string;
 }
 
-const CopilotContainer = ({
-    sessionId
-}: CopilotContainerProps): JSX.Element => {
+const CopilotContainer = ({ sessionId }: CopilotContainerProps): JSX.Element => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isReferenceModalOpen, setIsReferenceModalOpen] = useState(false);
     const [selectedReferences, setSelectedReferences] = useState<SelectedReference[]>([]);
     const [isLoadingHistory, setIsLoadingHistory] = useState(true);
     const [isLoadingResponse, setIsLoadingResponse] = useState(false);
     const [showScrollButton, setShowScrollButton] = useState(false);
-    const messagesEndRef = useRef<HTMLDivElement>(null);
-    const chatContainerRef = useRef<HTMLDivElement>(null);
     const [currentSessionId, setCurrentSessionId] = useState<string | undefined>();
-    const { isMobileBreakpoints } = useWindowBreakpoints();
-    const isAuthenticated = useSelector(getIsAuthenticated);
     const [pendingMessage, setPendingMessage] = useState<{
         content: string;
         timestamp: string;
     } | null>(null);
     const [isEditorOpen, setIsEditorOpen] = useState(false);
     const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+    
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const chatContainerRef = useRef<HTMLDivElement>(null);
     const promptBarRef = useRef<HTMLInputElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    
+    const { isMobileBreakpoints } = useWindowBreakpoints();
+    const isAuthenticated = useSelector(getIsAuthenticated);
 
     useEffect(() => {
         if (isReferenceModalOpen) {
@@ -72,9 +66,7 @@ const CopilotContainer = ({
     }, [isReferenceModalOpen]);
 
     const handleImageCapture = () => {
-        if (fileInputRef.current) {
-            fileInputRef.current.click();
-        }
+        fileInputRef.current?.click();
     };
 
     useEffect(() => {
@@ -86,7 +78,7 @@ const CopilotContainer = ({
 
             try {
                 const response = await chatApi.getChatHistory(sessionId);
-                if (response.history && response.history.length > 0) {
+                if (response.history?.length > 0) {
                     const convertedMessages: ChatMessage[] = response.history.map(
                         (item: {
                             role: 'AI' | 'User';
@@ -122,7 +114,7 @@ const CopilotContainer = ({
     }, [sessionId]);
 
     useEffect(() => {
-        if (messages && messages.length > 0) {
+        if (messages.length > 0) {
             scrollToBottom();
         }
     }, [messages]);
@@ -142,7 +134,7 @@ const CopilotContainer = ({
             });
         } else {
             chatContainerRef.current?.scrollTo({
-                top: chatContainerRef.current?.scrollHeight,
+                top: chatContainerRef.current.scrollHeight,
                 behavior: 'smooth'
             });
         }
@@ -202,10 +194,10 @@ const CopilotContainer = ({
             image: imageUrl || null
         };
 
-        setMessages((prev) => [...prev, userMessage]);
+        setMessages(prev => [...prev, userMessage]);
         scrollToBottom();
+        
         let currentResponse = '';
-
         const chatInput: ChatInput = {
             input_text: prompt,
             session_id: currentSessionId,
@@ -230,7 +222,7 @@ const CopilotContainer = ({
                         setCurrentSessionId(sessionId);
                     }
                     if (messageId) {
-                        setMessages((prev) => {
+                        setMessages(prev => {
                             const aiMessage: ChatMessage = {
                                 id: messageId,
                                 role: 'AI',
@@ -252,7 +244,7 @@ const CopilotContainer = ({
                         content: 'Maaf, terjadi kesalahan. Silakan coba lagi.',
                         timestamp: new Date().toISOString()
                     };
-                    setMessages((prev) => [...prev, errorMessage]);
+                    setMessages(prev => [...prev, errorMessage]);
                     scrollToBottom();
                 }
             });
@@ -266,7 +258,7 @@ const CopilotContainer = ({
                 content: 'Maaf, terjadi kesalahan. Silakan coba lagi.',
                 timestamp: new Date().toISOString()
             };
-            setMessages((prev) => [...prev, errorMessage]);
+            setMessages(prev => [...prev, errorMessage]);
             scrollToBottom();
         } finally {
             setIsLoadingResponse(false);
@@ -298,12 +290,10 @@ const CopilotContainer = ({
         };
 
         setSelectedReferences(prev => {
-            const exists = prev.find(ref => ref.id === referenceId && ref.contentType === contentType);
-            if (exists) {
-                return prev.filter(ref => !(ref.id === referenceId && ref.contentType === contentType));
-            } else {
-                return [...prev, newReference];
-            }
+            const exists = prev.find(ref => 
+                ref.id === referenceId && ref.contentType === contentType
+            );
+            return exists ? prev : [...prev, newReference];
         });
     };
 
@@ -311,6 +301,14 @@ const CopilotContainer = ({
         setSelectedReferences(prev => 
             prev.filter(ref => !(ref.id === referenceId && ref.contentType === contentType))
         );
+    };
+
+    const handleOpenHistory = () => {
+        setIsHistoryOpen(true);
+    };
+
+    const handleCloseHistory = () => {
+        setIsHistoryOpen(false);
     };
 
     return (
@@ -323,11 +321,12 @@ const CopilotContainer = ({
             {isAuthenticated && (
                 <HistorySection
                     isOpen={isHistoryOpen}
-                    onClose={() => setIsHistoryOpen(false)}
-                    onOpen={() => setIsHistoryOpen(true)}
+                    onClose={handleCloseHistory}
+                    onOpen={handleOpenHistory}
                     isMobile={isMobileBreakpoints}
                 />
             )}
+            
             <div
                 className={cn(
                     'flex-1 flex flex-col w-full relative md:items-center',
@@ -335,9 +334,7 @@ const CopilotContainer = ({
                     messages.length === 0 ? 'h-screen md:h-auto' : 'md:h-full'
                 )}>
                 <div className="md:hidden fixed top-0 left-0 right-0 z-10 bg-[#101010]">
-                    <MobileHeader
-                        onOpenHistory={() => setIsHistoryOpen(true)}
-                    />
+                    <MobileHeader onOpenHistory={handleOpenHistory} />
                 </div>
 
                 {isLoadingHistory ? (
@@ -359,8 +356,7 @@ const CopilotContainer = ({
                                 'flex-1 pt-4 w-full max-w-4xl overflow-y-auto relative no-scrollbar',
                                 'mt-16 pb-16 min-h-screen',
                                 'md:mt-0 md:pt-6 md:min-h-0',
-                                messages.length <= 2 &&
-                                'flex flex-col justify-end'
+                                messages.length <= 2 && 'flex flex-col justify-end'
                             )}>
                             <ChatSection
                                 messages={messages}
@@ -392,17 +388,9 @@ const CopilotContainer = ({
                         fileInputRef={fileInputRef}
                         onSend={handleSendMessage}
                         isLoading={isLoadingResponse}
-                        onStateChange={({ isEditorOpen }) =>
-                            setIsEditorOpen(isEditorOpen)
-                        }
+                        onStateChange={({ isEditorOpen }) => setIsEditorOpen(isEditorOpen)}
                         onOpenReferenceModal={handleOpenReferenceModal}
                         referenceCount={selectedReferences.length}
-                    />
-
-                    <ReferenceModal
-                        isOpen={isReferenceModalOpen}
-                        onClose={handleCloseReferenceModal}
-                        onReferenceSelect={handleReferenceSelect}
                     />
                 </div>
 
@@ -411,11 +399,11 @@ const CopilotContainer = ({
                         onClick={scrollToBottom}
                         className={cn(
                             'fixed p-3 bg-[#5F2BCE] hover:bg-[#4f24a8] text-white rounded-full shadow-lg transition-all duration-200 z-10',
-                            'bottom-32',
-                            'left-1/2 -translate-x-1/2',
+                            'bottom-32 left-1/2 -translate-x-1/2',
                             'md:left-[calc(50%+144px)] md:translate-x-[-50%]',
                             !isHistoryOpen && 'md:left-1/2 md:-translate-x-1/2'
-                        )}>
+                        )}
+                        aria-label="Scroll to bottom">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             className="h-6 w-6"
@@ -434,6 +422,12 @@ const CopilotContainer = ({
 
                 {!isAuthenticated && <CopilotAuthPrompt />}
             </div>
+            
+            <ReferenceModal
+                isOpen={isReferenceModalOpen}
+                onClose={handleCloseReferenceModal}
+                onReferenceSelect={handleReferenceSelect}
+            />
         </div>
     );
 };

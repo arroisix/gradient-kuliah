@@ -152,7 +152,7 @@ const ReferenceRecommendationList = ({
                                 orientation="vertical"
                                 category={getCategory(recommendation)}
                                 eventName="Click Reference Card"
-                                href=""
+                                href="#"
                                 product={product}
                             />
                         </div>

@@ -249,3 +249,9 @@ export interface ReferenceHierarchyProps {
     referenceData: ContextRecommendation;
     onItemSelect: (itemId: string, itemTitle: string, contentType: ReferenceContentType) => void;
 }
+
+interface SelectedReference {
+    id: string;
+    title: string;
+    contentType: ReferenceContentType;
+}

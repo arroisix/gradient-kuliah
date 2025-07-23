@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import MainSection from '../components/MainSection/MainSection';
 import ChatSection from '../components/ChatSection/ChatSection';
-import { ChatMessage, ChatInput, ReferenceContentType } from '../types/copilot';
+import { ChatMessage, ChatInput, ReferenceContentType, SelectedReference } from '../types/copilot';
 import PromptBar from '../components/MainSection/PromptBar';
 import { chatApi } from '../redux/api/copilotApi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
@@ -9,90 +9,51 @@ import { IoClose, IoChevronDown, IoChevronUp } from 'react-icons/io5';
 import { MdHistory } from 'react-icons/md';
 import { cn } from 'commons/utils';
 
-interface SelectedReference {
-    id: string;
-    title: string;
-    contentType: ReferenceContentType;
-}
-
 interface CopilotSidebarContainerProps {
     sessionId?: string;
     isCollapsed?: boolean;
-    setCollapsed?: (collapsed: boolean) => void;
-    onClose?: () => void;
-    onOpenReferenceModal?: () => void;
-    referenceCount?: number;
-    setReferenceCount?: (count: number) => void;
-    isReferenceModalOpen?: boolean;
+    selectedReferences: SelectedReference[];
+    onCollapsedChange: (collapsed: boolean) => void;
+    onClose: () => void;
+    onOpenReferenceModal: () => void;
     onOpenHistory?: () => void;
-    onReferenceSelect?: (referenceId: string, referenceTitle: string, contentType: ReferenceContentType) => void;
-    selectedReferences?: SelectedReference[];
-    setSelectedReferences?: (references: SelectedReference[]) => void;
 }
 
 const CopilotSidebarContainer = ({
     sessionId,
     isCollapsed = false,
-    setCollapsed,
+    selectedReferences,
+    onCollapsedChange,
     onClose,
     onOpenReferenceModal,
-    referenceCount = 0,
-    setReferenceCount,
-    isReferenceModalOpen = false,
-    onOpenHistory,
-    onReferenceSelect,
-    selectedReferences = [],
-    setSelectedReferences
+    onOpenHistory
 }: CopilotSidebarContainerProps): JSX.Element => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoadingHistory, setIsLoadingHistory] = useState(true);
     const [isLoadingResponse, setIsLoadingResponse] = useState(false);
     const [showScrollButton, setShowScrollButton] = useState(false);
-    const messagesEndRef = useRef<HTMLDivElement>(null);
-    const chatContainerRef = useRef<HTMLDivElement>(null);
     const [currentSessionId, setCurrentSessionId] = useState<string | undefined>();
     const [pendingMessage, setPendingMessage] = useState<{
         content: string;
         timestamp: string;
     } | null>(null);
     const [isEditorOpen, setIsEditorOpen] = useState(false);
+    
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const chatContainerRef = useRef<HTMLDivElement>(null);
     const promptBarRef = useRef<HTMLInputElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    useEffect(() => {
-        if (isReferenceModalOpen) {
-            const originalBodyOverflow = document.body.style.overflow;
-            const originalHtmlOverflow = document.documentElement.style.overflow;
-            const scrollY = window.scrollY;
-            
-            document.body.style.overflow = 'hidden';
-            document.documentElement.style.overflow = 'hidden';
-            document.body.style.position = 'fixed';
-            document.body.style.top = `-${scrollY}px`;
-            document.body.style.width = '100%';
-            
-            return () => {
-                document.body.style.overflow = originalBodyOverflow;
-                document.documentElement.style.overflow = originalHtmlOverflow;
-                document.body.style.position = '';
-                document.body.style.top = '';
-                document.body.style.width = '';
-                window.scrollTo(0, scrollY);
-            };
-        }
-        return undefined;
-    }, [isReferenceModalOpen]);
-
     const handleImageCapture = () => {
-        if (fileInputRef.current) {
-            fileInputRef.current.click();
-        }
+        fileInputRef.current?.click();
     };
 
     const handleHistoryClick = () => {
-        if (onOpenHistory) {
-            onOpenHistory();
-        }
+        onOpenHistory?.();
+    };
+
+    const handleToggleCollapse = () => {
+        onCollapsedChange(!isCollapsed);
     };
 
     useEffect(() => {
@@ -104,7 +65,7 @@ const CopilotSidebarContainer = ({
 
             try {
                 const response = await chatApi.getChatHistory(sessionId);
-                if (response.history && response.history.length > 0) {
+                if (response.history?.length > 0) {
                     const convertedMessages: ChatMessage[] = response.history.map(
                         (item: {
                             role: 'AI' | 'User';
@@ -140,7 +101,7 @@ const CopilotSidebarContainer = ({
     }, [sessionId]);
 
     useEffect(() => {
-        if (messages && messages.length > 0) {
+        if (messages.length > 0) {
             scrollToBottom();
         }
     }, [messages]);
@@ -153,7 +114,7 @@ const CopilotSidebarContainer = ({
 
     const scrollToBottom = () => {
         chatContainerRef.current?.scrollTo({
-            top: chatContainerRef.current?.scrollHeight,
+            top: chatContainerRef.current.scrollHeight,
             behavior: 'smooth'
         });
     };
@@ -197,6 +158,7 @@ const CopilotSidebarContainer = ({
             lastMessage.role === 'User' &&
             Date.now() - new Date(lastMessage.timestamp).getTime() < 2000
         ) {
+            console.log('Preventing duplicate message');
             return;
         }
 
@@ -211,10 +173,10 @@ const CopilotSidebarContainer = ({
             image: imageUrl || null
         };
 
-        setMessages((prev) => [...prev, userMessage]);
+        setMessages(prev => [...prev, userMessage]);
         scrollToBottom();
+        
         let currentResponse = '';
-
         const chatInput: ChatInput = {
             input_text: prompt,
             session_id: currentSessionId,
@@ -239,7 +201,7 @@ const CopilotSidebarContainer = ({
                         setCurrentSessionId(sessionId);
                     }
                     if (messageId) {
-                        setMessages((prev) => {
+                        setMessages(prev => {
                             const aiMessage: ChatMessage = {
                                 id: messageId,
                                 role: 'AI',
@@ -261,7 +223,7 @@ const CopilotSidebarContainer = ({
                         content: 'Maaf, terjadi kesalahan. Silakan coba lagi.',
                         timestamp: new Date().toISOString()
                     };
-                    setMessages((prev) => [...prev, errorMessage]);
+                    setMessages(prev => [...prev, errorMessage]);
                     scrollToBottom();
                 }
             });
@@ -275,7 +237,7 @@ const CopilotSidebarContainer = ({
                 content: 'Maaf, terjadi kesalahan. Silakan coba lagi.',
                 timestamp: new Date().toISOString()
             };
-            setMessages((prev) => [...prev, errorMessage]);
+            setMessages(prev => [...prev, errorMessage]);
             scrollToBottom();
         } finally {
             setIsLoadingResponse(false);
@@ -287,39 +249,35 @@ const CopilotSidebarContainer = ({
         handleSendMessage(message.content, message.image || undefined);
     };
 
-    const handleRemoveReference = (referenceId: string, contentType: ReferenceContentType) => {
-        if (setSelectedReferences) {
-            setSelectedReferences(
-                selectedReferences.filter(ref => !(ref.id === referenceId && ref.contentType === contentType))
-            );
-        }
-        if (setReferenceCount) {
-            setReferenceCount(Math.max(0, referenceCount - 1));
-        }
-    };
-
     return (
         <div className="flex flex-col h-full bg-[#181818] overflow-hidden rounded-t-lg">
             <div className="flex items-center justify-between py-4 px-5 bg-[#2C2C2C] border-b border-gray-700 flex-shrink-0 rounded-t-lg">
                 <button
                     onClick={onClose}
-                    className="p-1 text-gray-400 hover:text-white transition-colors">
+                    className="p-1 text-gray-400 hover:text-white transition-colors"
+                    aria-label="Close copilot">
                     <IoClose size={32} />
                 </button>
 
-                <h3 className="text-white font-extrabold text-base xl:text-lg">Copilot AI</h3>
+                <h3 className="text-white font-extrabold text-base xl:text-lg">
+                    Copilot AI
+                </h3>
 
                 <div className="flex items-center gap-2">
-                    <button
-                        onClick={handleHistoryClick}
-                        className="p-1 text-gray-400 hover:text-white transition-colors"
-                        title="Chat History">
-                        <MdHistory size={28} />
-                    </button>
+                    {onOpenHistory && (
+                        <button
+                            onClick={handleHistoryClick}
+                            className="p-1 text-gray-400 hover:text-white transition-colors"
+                            title="Chat History"
+                            aria-label="Open chat history">
+                            <MdHistory size={28} />
+                        </button>
+                    )}
                     
                     <button
-                        onClick={() => setCollapsed?.(!isCollapsed)}
-                        className="p-1 text-gray-400 hover:text-white transition-colors">
+                        onClick={handleToggleCollapse}
+                        className="p-1 text-gray-400 hover:text-white transition-colors"
+                        aria-label={isCollapsed ? "Expand" : "Collapse"}>
                         {isCollapsed ? <IoChevronUp size={32} /> : <IoChevronDown size={32} />}
                     </button>
                 </div>
@@ -328,25 +286,22 @@ const CopilotSidebarContainer = ({
             <div
                 className={cn(
                     "flex-1 overflow-hidden transition-all duration-300 ease-in-out",
-                    isCollapsed
-                        ? "h-0 opacity-0"
-                        : "flex opacity-100"
+                    isCollapsed ? "h-0 opacity-0" : "flex opacity-100"
                 )}>
                 <div className="flex flex-col w-full h-full">
-
                     {isLoadingHistory ? (
                         <div className="flex-1 flex items-center justify-center">
-                            <AiOutlineLoading3Quarters size={24} className="animate-spin text-neutral-400" />
+                            <AiOutlineLoading3Quarters 
+                                size={24} 
+                                className="animate-spin text-neutral-400" 
+                            />
                             <span className="ml-2 text-neutral-400">Loading...</span>
                         </div>
                     ) : messages.length > 0 ? (
                         <div
                             ref={chatContainerRef}
                             onScroll={handleScroll}
-                            className={cn(
-                                "flex-1 overflow-y-auto p-4 min-h-0",
-                                "pb-2 sm:pb-4"
-                            )}>
+                            className="flex-1 overflow-y-auto p-4 min-h-0 pb-2 sm:pb-4">
                             <ChatSection
                                 messages={messages}
                                 pendingMessage={pendingMessage}
@@ -362,9 +317,7 @@ const CopilotSidebarContainer = ({
                         <div className="flex-1 flex items-center justify-center min-h-0 overflow-hidden pt-8">
                             <MainSection
                                 className={cn(
-                                    "bg-[#181818] flex-none",
-                                    "w-full max-w-md mx-auto",
-                                    "px-4 py-0",
+                                    "bg-[#181818] flex-none w-full max-w-md mx-auto px-4 py-0",
                                     "[&>div]:mt-0 [&>div]:mb-0 [&>div]:overflow-hidden"
                                 )}
                                 showTitle={false}
@@ -375,9 +328,7 @@ const CopilotSidebarContainer = ({
                         </div>
                     )}
 
-                    <div className={cn(
-                        "border-t border-gray-700 flex-shrink-0 bg-[#181818]",
-                    )}>
+                    <div className="border-t border-gray-700 flex-shrink-0 bg-[#181818]">
                         <PromptBar
                             ref={promptBarRef}
                             fileInputRef={fileInputRef}
@@ -388,7 +339,7 @@ const CopilotSidebarContainer = ({
                             showBorder={false}
                             isSidebar={true}
                             onOpenReferenceModal={onOpenReferenceModal}
-                            referenceCount={referenceCount}
+                            referenceCount={selectedReferences.length}
                         />
                     </div>
 
@@ -397,11 +348,21 @@ const CopilotSidebarContainer = ({
                             onClick={scrollToBottom}
                             className={cn(
                                 "absolute bg-[#5F2BCE] hover:bg-[#4f24a8] text-white rounded-full shadow-lg transition-all duration-200",
-                                "p-2 sm:p-3",
-                                "bottom-36 left-1/2 transform -translate-x-1/2"
-                            )}>
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                                "p-2 sm:p-3 bottom-36 left-1/2 transform -translate-x-1/2"
+                            )}
+                            aria-label="Scroll to bottom">
+                            <svg 
+                                xmlns="http://www.w3.org/2000/svg" 
+                                className="h-4 w-4" 
+                                fill="none" 
+                                viewBox="0 0 24 24" 
+                                stroke="currentColor">
+                                <path 
+                                    strokeLinecap="round" 
+                                    strokeLinejoin="round" 
+                                    strokeWidth={2} 
+                                    d="M19 14l-7 7m0 0l-7-7m7 7V3" 
+                                />
                             </svg>
                         </button>
                     )}
