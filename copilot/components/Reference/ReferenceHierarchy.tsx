@@ -29,16 +29,16 @@ const ReferenceHierarchy: React.FC<ReferenceHierarchyProps> = ({
                         }
                     />
                 );
-            case 'course_video':
+            case 'course':
                 return (
                     <CourseHierarchy
                         isOpen={isOpen}
                         onClose={onClose}
                         courseSlug={referenceData.course_slug!}
-                        courseName={referenceData.subchapter_name || 'Course'}
+                        courseName={referenceData.course_name || 'Course'}
                         courseThumbnail={referenceData.thumbnail}
                         onVideoSelect={(videoId, videoTitle) => 
-                            onItemSelect(videoId, videoTitle, 'course_video')
+                            onItemSelect(videoId, videoTitle, 'course')
                         }
                     />
                 );

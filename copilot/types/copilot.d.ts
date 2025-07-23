@@ -98,22 +98,26 @@ interface ContentRecommendation {
 interface ContextRecommendation {
     id: string; 
     type:
-        | 'course_video'
+        | 'course'
         | 'astronotes_content'
         | 'textbook_problem'
         | 'bank_soal_problem';
-    course_slug: string | null;
-    subchapter_name: string | null;
-    subchapter_slug: string | null;
     thumbnail: string | null;
+
+    snippet: string | null;
     book_name: string | null;
     book_slug: string | null;
+    
+    course_slug: string | null;
+    course_name: string | null;
+
     book_page: number | null;
-    problem_slug: string | null;
-    snippet: string | null;
     page_content: string | null; 
+    
+    problem_slug: string | null;
     problem_solution: string | null; 
     problem_question: string | null; 
+    problem_title: string | null;
 }
 
 interface ContentRecommendationResponse {
@@ -240,7 +244,7 @@ export interface BankSoalProblemsResponse {
     data: BankSoalProblem[];
 }
 
-export type ReferenceContentType = 'textbook_problem' | 'course_video' | 'astronotes_content' | 'bank_soal_problem';
+export type ReferenceContentType = 'textbook_problem' | 'course' | 'astronotes_content' | 'bank_soal_problem';
 
 export interface ReferenceHierarchyProps {
     isOpen: boolean;

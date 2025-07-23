@@ -40,7 +40,7 @@ const ReferenceRecommendationList = ({
     }, [search, router]);
 
     const getContentType = (currentTab?: string) => {
-        if (currentTab === 'kelas') return 'course_video';
+        if (currentTab === 'kelas') return 'course';
         if (currentTab === 'perpustakaan') return 'book';
         return undefined;
     };
@@ -63,8 +63,8 @@ const ReferenceRecommendationList = ({
 
     const getProduct = (recommendation: ContextRecommendation): Product => {
         const getTitle = () => {
-            if (recommendation.type === 'course_video') {
-                return recommendation.subchapter_name || 'Video Content';
+            if (recommendation.type === 'course') {
+                return recommendation.course_name || 'Video Content';
             }
             return recommendation.book_name || 'Book Content';
         };
@@ -85,7 +85,7 @@ const ReferenceRecommendationList = ({
 
     const getCategory = (recommendation: ContextRecommendation): string => {
         switch (recommendation.type) {
-            case 'course_video':
+            case 'course':
                 return 'Kelas';
             case 'astronotes_content':
                 return 'Catatan';

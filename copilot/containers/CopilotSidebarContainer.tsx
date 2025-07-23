@@ -134,7 +134,7 @@ const CopilotSidebarContainer = ({
                 case 'textbook_problem':
                     context.textbook_problem.push(ref.id);
                     break;
-                case 'course_video':
+                case 'course':
                     context.video.push(ref.id);
                     break;
                 case 'astronotes_content':

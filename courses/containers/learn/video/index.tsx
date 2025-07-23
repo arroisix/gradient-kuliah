@@ -70,7 +70,7 @@ const VideoLearnContainer = ({
     const currentVideoContext = subchapter?.video && subchapter?.subchapter_name ? {
         id: subchapter.video.id,
         title: subchapter.subchapter_name,
-        contentType: 'course_video' as const
+        contentType: 'course' as const
     } : undefined;
 
     return (

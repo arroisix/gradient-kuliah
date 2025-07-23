@@ -46,7 +46,7 @@ const ReferenceModal = ({
 
     const handleReferenceCardClick = (recommendation: ContextRecommendation) => {
         if (recommendation.type === 'textbook_problem' || 
-            recommendation.type === 'course_video' || 
+            recommendation.type === 'course' || 
             recommendation.type === 'astronotes_content' || 
             recommendation.type === 'bank_soal_problem') {
             setHierarchyModal({
@@ -79,18 +79,10 @@ const ReferenceModal = ({
     };
 
     const getItemTitle = (recommendation: ContextRecommendation): string => {
-        switch (recommendation.type) {
-            case 'course_video':
-                return recommendation.subchapter_name || 'Video Content';
-            case 'textbook_problem':
-                return recommendation.book_name || 'Book Content';
-            case 'astronotes_content':
-                return recommendation.subchapter_name || 'Astronotes Content';
-            case 'bank_soal_problem':
-                return recommendation.problem_slug || 'Bank Soal Problem';
-            default:
-                return 'Content';
+        if (recommendation.type === 'course') {
+            return recommendation.course_name || 'Video Content';
         }
+        return recommendation.book_name || 'Book Content';
     };
 
     if (!isAuthenticated) {

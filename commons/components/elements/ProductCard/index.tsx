@@ -7,6 +7,7 @@ const ProductCard = ({
     category,
     ...props
 }: ProductCardProps): JSX.Element => {
+    console.log('ProductCard category:', category);
     const categoryLabel: { [key: string]: string } = {
         [category]: category,
         Catatan: 'Astronotes',
