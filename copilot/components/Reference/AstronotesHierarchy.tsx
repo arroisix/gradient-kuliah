@@ -16,7 +16,7 @@ interface AstronotesHierarchyProps {
     bookSlug: string;
     bookName: string;
     bookThumbnail?: string | null;
-    onTopicSelect: (topicId: string, topicTitle: string) => void;
+    onTopicSelect: (topicId: string, topicTitle: string, chapterName: string, subchapterName: string) => void;
 }
 
 const AstronotesHierarchy: React.FC<AstronotesHierarchyProps> = ({
@@ -62,12 +62,12 @@ const AstronotesHierarchy: React.FC<AstronotesHierarchyProps> = ({
         setExpandedSubchapters(newExpanded);
     };
 
-    const handleTopicClick = (topic: AstronotesTopic) => {
+    const handleTopicClick = (topic: AstronotesTopic, chapterName: string, subchapterName: string) => {
         if (!selectedItems.has(topic.page_id)) {
             const newSelected = new Set(selectedItems);
             newSelected.add(topic.page_id);
             setSelectedItems(newSelected);
-            onTopicSelect(topic.page_id, topic.value);
+            onTopicSelect(topic.page_id, topic.value, chapterName, subchapterName);
         }
         onClose();
     };
@@ -153,7 +153,7 @@ const AstronotesHierarchy: React.FC<AstronotesHierarchyProps> = ({
                         
                         {expandedSubchapters.has(subchapter.id) && (
                             <div className="ml-4 border-l border-white/20">
-                                <SubchapterTopics subchapter={subchapter} />
+                                <SubchapterTopics subchapter={subchapter} chapterName={chapter.value} />
                             </div>
                         )}
                     </div>
@@ -162,7 +162,7 @@ const AstronotesHierarchy: React.FC<AstronotesHierarchyProps> = ({
         );
     };
 
-    const SubchapterTopics: React.FC<{ subchapter: AstronotesSubchapter }> = ({ subchapter }) => {
+    const SubchapterTopics: React.FC<{ subchapter: AstronotesSubchapter; chapterName: string }> = ({ subchapter, chapterName }) => {
         const {
             data: topicsData,
             isLoading: topicsLoading,
@@ -194,7 +194,7 @@ const AstronotesHierarchy: React.FC<AstronotesHierarchyProps> = ({
                 {topicsData.data.map(topic => (
                     <button
                         key={topic.id}
-                        onClick={() => handleTopicClick(topic)}
+                        onClick={() => handleTopicClick(topic, chapterName, subchapter.value)}
                         className={cn(
                             'w-full flex items-center px-3 py-1.5 ml-4 rounded-lg transition-colors text-left',
                             'hover:bg-white/5',
@@ -264,9 +264,7 @@ const AstronotesHierarchy: React.FC<AstronotesHierarchyProps> = ({
             <div className="fixed bottom-0 left-0 right-0 bg-[#2C2C2C] border border-transparent p-4 flex items-center gap-3 md:bottom-4 md:left-4 md:right-4 md:mx-16 md:mb-8 md:rounded-xl">
                 <div className="relative aspect-[256/364] h-12 flex-shrink-0">
                     <Image
-                        src={
-                            bookThumbnail ?? ''
-                        }
+                        src={bookThumbnail ?? ''}
                         alt={bookName}
                         layout="fill"
                         objectPosition="center"
@@ -278,7 +276,7 @@ const AstronotesHierarchy: React.FC<AstronotesHierarchyProps> = ({
                     <h3 className="text-sm font-bold text-[#999999] line-clamp-1 mb-1">
                         {bookName}
                     </h3>
-                    <div className="rounded-full text-xs w-fit text-white font-semibold px-3 py-1 bg-[#FF6B35]">
+                    <div className="rounded-full text-xs w-fit text-white font-semibold px-3 py-1 bg-[#CC009E]">
                         Astronotes
                     </div>
                 </div>

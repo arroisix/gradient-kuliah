@@ -15,7 +15,7 @@ interface CourseHierarchyProps {
     courseSlug: string;
     courseName: string;
     courseThumbnail?: string | null;
-    onVideoSelect: (videoId: string, videoTitle: string) => void;
+    onVideoSelect: (videoId: string, videoTitle: string, chapterName: string, subchapterName: string) => void;
 }
 
 const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
@@ -50,12 +50,12 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
         setExpandedChapters(newExpanded);
     };
 
-    const handleVideoClick = (subchapter: CourseSubchapter) => {
+    const handleVideoClick = (subchapter: CourseSubchapter, chapterName: string) => {
         if (!selectedItems.has(subchapter.video_id)) {
             const newSelected = new Set(selectedItems);
             newSelected.add(subchapter.video_id);
             setSelectedItems(newSelected);
-            onVideoSelect(subchapter.video_id, subchapter.name);
+            onVideoSelect(subchapter.video_id, subchapter.name, chapterName, subchapter.name);
         }
         onClose();
     };
@@ -84,14 +84,14 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
                 
                 {isExpanded && (
                     <div className="ml-6 border-l border-white/20">
-                        <ChapterSubchapters chapterId={chapter.id} />
+                        <ChapterSubchapters chapterId={chapter.id} chapterName={chapter.title} />
                     </div>
                 )}
             </div>
         );
     };
 
-    const ChapterSubchapters: React.FC<{ chapterId: string }> = ({ chapterId }) => {
+    const ChapterSubchapters: React.FC<{ chapterId: string; chapterName: string }> = ({ chapterId, chapterName }) => {
         const {
             data: subchaptersData,
             isLoading: subchaptersLoading,
@@ -119,7 +119,7 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
                 {subchaptersData.data.map(subchapter => (
                     <button
                         key={subchapter.video_id}
-                        onClick={() => handleVideoClick(subchapter)}
+                        onClick={() => handleVideoClick(subchapter, chapterName)}
                         className={cn(
                             'w-full flex items-center px-3 py-1.5 ml-4 rounded-lg transition-colors text-left',
                             'hover:bg-white/5',
@@ -189,9 +189,7 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
             <div className="fixed bottom-0 left-0 right-0 bg-[#2C2C2C] border border-transparent p-4 flex items-center gap-3 md:bottom-4 md:left-4 md:right-4 md:mx-16 md:mb-8 md:rounded-xl">
                 <div className="relative aspect-[256/364] h-12 w-24 flex-shrink-0">
                     <Image
-                        src={
-                            courseThumbnail ?? ''
-                        }
+                        src={courseThumbnail ?? ''}
                         alt={courseName}
                         layout="fill"
                         objectPosition="center"

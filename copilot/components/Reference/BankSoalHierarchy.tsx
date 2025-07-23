@@ -8,7 +8,7 @@ import {
     useGetBankSoalSectionsQuery,
     useGetBankSoalProblemsQuery
 } from 'copilot/redux/api/copilotApi';
-import { BankSoalChapter, BankSoalProblem } from 'copilot/types/copilot';
+import { BankSoalChapter, BankSoalSection, BankSoalProblem } from 'copilot/types/copilot';
 
 interface BankSoalHierarchyProps {
     isOpen: boolean;
@@ -16,7 +16,7 @@ interface BankSoalHierarchyProps {
     bookSlug: string;
     bookName: string;
     bookThumbnail?: string | null;
-    onProblemSelect: (problemId: string, problemTitle: string) => void;
+    onProblemSelect: (problemId: string, problemTitle: string, chapterName: string, sectionName: string) => void;
 }
 
 const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
@@ -62,12 +62,12 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
         setExpandedSections(newExpanded);
     };
 
-    const handleProblemClick = (problem: BankSoalProblem) => {
+    const handleProblemClick = (problem: BankSoalProblem, chapterName: string, sectionName: string) => {
         if (!selectedItems.has(problem.id)) {
             const newSelected = new Set(selectedItems);
             newSelected.add(problem.id);
             setSelectedItems(newSelected);
-            onProblemSelect(problem.id, problem.title);
+            onProblemSelect(problem.id, problem.title, chapterName, sectionName);
         }
         onClose();
     };
@@ -96,14 +96,14 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
                 
                 {isExpanded && (
                     <div className="ml-6 border-l border-white/20">
-                        <ChapterContent chapterId={chapter.id} />
+                        <ChapterContent chapterId={chapter.id} chapterName={chapter.title} />
                     </div>
                 )}
             </div>
         );
     };
 
-    const ChapterContent: React.FC<{ chapterId: string }> = ({ chapterId }) => {
+    const ChapterContent: React.FC<{ chapterId: string; chapterName: string }> = ({ chapterId, chapterName }) => {
         const {
             data: sectionsData,
             isLoading: sectionsLoading,
@@ -150,7 +150,7 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
                         
                         {expandedSections.has(section.id) && (
                             <div className="ml-4 border-l border-white/20">
-                                <SectionProblems sectionId={section.id} />
+                                <SectionProblems sectionId={section.id} chapterName={chapterName} sectionName={section.title} />
                             </div>
                         )}
                     </div>
@@ -159,7 +159,7 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
                 {hasDirectProblems && directProblemsData.data.map(problem => (
                     <button
                         key={problem.id}
-                        onClick={() => handleProblemClick(problem)}
+                        onClick={() => handleProblemClick(problem, chapterName, '')}
                         className={cn(
                             'w-full flex items-center px-3 py-1.5 ml-4 rounded-lg transition-colors text-left',
                             'hover:bg-white/5',
@@ -179,7 +179,7 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
         );
     };
 
-    const SectionProblems: React.FC<{ sectionId: string }> = ({ sectionId }) => {
+    const SectionProblems: React.FC<{ sectionId: string; chapterName: string; sectionName: string }> = ({ sectionId, chapterName, sectionName }) => {
         const {
             data: problemsData,
             isLoading: problemsLoading,
@@ -207,7 +207,7 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
                 {problemsData.data.map(problem => (
                     <button
                         key={problem.id}
-                        onClick={() => handleProblemClick(problem)}
+                        onClick={() => handleProblemClick(problem, chapterName, sectionName)}
                         className={cn(
                             'w-full flex items-center px-3 py-1.5 ml-4 rounded-lg transition-colors text-left',
                             'hover:bg-white/5',
@@ -277,9 +277,7 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
             <div className="fixed bottom-0 left-0 right-0 bg-[#2C2C2C] border border-transparent p-4 flex items-center gap-3 md:bottom-4 md:left-4 md:right-4 md:mx-16 md:mb-8 md:rounded-xl">
                 <div className="relative aspect-[256/364] h-12 flex-shrink-0">
                     <Image
-                        src={
-                            bookThumbnail ?? ''
-                        }
+                        src={bookThumbnail ?? ''}
                         alt={bookName}
                         layout="fill"
                         objectPosition="center"
@@ -291,7 +289,7 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
                     <h3 className="text-sm font-bold text-[#999999] line-clamp-1 mb-1">
                         {bookName}
                     </h3>
-                    <div className="rounded-full text-xs w-fit text-white font-semibold px-3 py-1 bg-[#3B82F6]">
+                    <div className="rounded-full text-xs w-fit text-white font-semibold px-3 py-1 bg-[#0083FF]">
                         Bank Soal
                     </div>
                 </div>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import { cn } from 'commons/utils';
 import {
@@ -6,7 +7,7 @@ import {
     useGetTextbookSectionsQuery,
     useGetTextbookProblemsQuery
 } from 'copilot/redux/api/copilotApi';
-import { TextbookChapter, TextbookProblem } from 'copilot/types/copilot';
+import { TextbookChapter, TextbookSection, TextbookProblem } from 'copilot/types/copilot';
 
 interface TextbookHierarchyProps {
     isOpen: boolean;
@@ -14,7 +15,7 @@ interface TextbookHierarchyProps {
     bookSlug: string;
     bookName: string;
     bookThumbnail?: string | null;
-    onProblemSelect: (problemId: string, problemTitle: string) => void;
+    onProblemSelect: (problemId: string, problemTitle: string, chapterName: string, sectionName: string) => void;
 }
 
 const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
@@ -60,12 +61,12 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
         setExpandedSections(newExpanded);
     };
 
-    const handleProblemClick = (problem: TextbookProblem) => {
+    const handleProblemClick = (problem: TextbookProblem, chapterName: string, sectionName: string) => {
         if (!selectedItems.has(problem.id)) {
             const newSelected = new Set(selectedItems);
             newSelected.add(problem.id);
             setSelectedItems(newSelected);
-            onProblemSelect(problem.id, problem.title);
+            onProblemSelect(problem.id, problem.title, chapterName, sectionName);
         }
         onClose();
     };
@@ -79,27 +80,29 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
                     onClick={() => toggleChapter(chapter.id)}
                     className={cn(
                         'w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors',
-                        'hover:bg-white/5 text-left'
+                        'hover:bg-white/5 text-left min-h-[40px]'
                     )}
                 >
-                    <span className="text-[#999999] text-sm font-medium">{chapter.title}</span>
-                    {isExpanded ? (
-                        <ChevronDown size={16} className="text-white/60 flex-shrink-0" />
-                    ) : (
-                        <ChevronUp size={16} className="text-white/60 flex-shrink-0" />
-                    )}
+                    <span className="text-[#999999] text-sm font-medium leading-5">{chapter.title}</span>
+                    <div className="flex items-center justify-center w-4 h-4 flex-shrink-0">
+                        {isExpanded ? (
+                            <ChevronDown size={16} className="text-white/60" />
+                        ) : (
+                            <ChevronUp size={16} className="text-white/60" />
+                        )}
+                    </div>
                 </button>
                 
                 {isExpanded && (
                     <div className="ml-6 border-l border-white/20">
-                        <ChapterSections chapterId={chapter.id} />
+                        <ChapterSections chapterId={chapter.id} chapterName={chapter.title} />
                     </div>
                 )}
             </div>
         );
     };
 
-    const ChapterSections: React.FC<{ chapterId: string }> = ({ chapterId }) => {
+    const ChapterSections: React.FC<{ chapterId: string; chapterName: string }> = ({ chapterId, chapterName }) => {
         const {
             data: sectionsData,
             isLoading: sectionsLoading,
@@ -129,21 +132,23 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
                         <button
                             onClick={() => toggleSection(section.id)}
                             className={cn(
-                                'w-full flex items-center justify-between pr-4 py-1.5 rounded-lg transition-colors',
-                                'hover:bg-white/5 text-left'
+                                'w-full flex items-center justify-between px-4 py-1.5 rounded-lg transition-colors',
+                                'hover:bg-white/5 text-left min-h-[36px]'
                             )}
                         >
-                            <span className="text-[#999999] text-sm">{section.title}</span>
-                            {expandedSections.has(section.id) ? (
-                                <ChevronDown size={14} className="text-white/60 flex-shrink-0" />
-                            ) : (
-                                <ChevronUp size={14} className="text-white/60 flex-shrink-0" />
-                            )}
+                            <span className="text-[#999999] text-sm leading-5">{section.title}</span>
+                            <div className="flex items-center justify-center w-4 h-4 flex-shrink-0">
+                                {expandedSections.has(section.id) ? (
+                                    <ChevronDown size={16} className="text-white/60" />
+                                ) : (
+                                    <ChevronUp size={16} className="text-white/60" />
+                                )}
+                            </div>
                         </button>
                         
                         {expandedSections.has(section.id) && (
                             <div className="ml-4 border-l border-white/20">
-                                <SectionProblems sectionId={section.id} />
+                                <SectionProblems sectionId={section.id} chapterName={chapterName} sectionName={section.title} />
                             </div>
                         )}
                     </div>
@@ -152,7 +157,7 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
         );
     };
 
-    const SectionProblems: React.FC<{ sectionId: string }> = ({ sectionId }) => {
+    const SectionProblems: React.FC<{ sectionId: string; chapterName: string; sectionName: string }> = ({ sectionId, chapterName, sectionName }) => {
         const {
             data: problemsData,
             isLoading: problemsLoading,
@@ -180,14 +185,14 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
                 {problemsData.data.map(problem => (
                     <button
                         key={problem.id}
-                        onClick={() => handleProblemClick(problem)}
+                        onClick={() => handleProblemClick(problem, chapterName, sectionName)}
                         className={cn(
                             'w-full flex items-center px-3 py-1.5 ml-4 rounded-lg transition-colors text-left',
                             'hover:bg-white/5',
                             selectedItems.has(problem.id) && 'bg-[#5F2BCE]/20 border border-[#5F2BCE]/50'
                         )}
                     >
-                        <span className="text-[#999999] text-sm">{problem.title}</span>
+                        <span className="text-[#999999] text-sm leading-5">{problem.title}</span>
                     </button>
                 ))}
             </>
@@ -247,37 +252,33 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
                 </div>
             </div>
 
-            <div className="absolute bottom-0 left-0 right-0 bg-[#101010] border-t border-white/10 p-6">
-                <div className="flex items-center gap-3 p-4 bg-[#1a1a1a] rounded-lg">
-                    <div className="w-16 h-20 bg-[#222222] rounded-lg flex-shrink-0 overflow-hidden">
-                        {bookThumbnail ? (
-                            <img 
-                                src={bookThumbnail} 
-                                alt={bookName}
-                                className="w-full h-full object-cover"
-                            />
-                        ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                                <span className="text-white/40 text-xs">No Image</span>
-                            </div>
-                        )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                        <h3 className="text-white font-medium text-sm mb-1 truncate">{bookName}</h3>
-                        <p className="text-white/60 text-xs">Textbook</p>
-                        {selectedItems.size > 0 && (
-                            <p className="text-[#5F2BCE] text-xs mt-1">
-                                {selectedItems.size} soal dipilih
-                            </p>
-                        )}
-                    </div>
-                    <button
-                        onClick={onClose}
-                        className="p-2 text-white/60 hover:text-white transition-colors"
-                    >
-                        ✕
-                    </button>
+            <div className="fixed bottom-0 left-0 right-0 bg-[#2C2C2C] border border-transparent p-4 flex items-center gap-3 md:bottom-4 md:left-4 md:right-4 md:mx-16 md:mb-8 md:rounded-xl">
+                <div className="relative aspect-[256/364] h-12 flex-shrink-0">
+                    <Image
+                        src={bookThumbnail ?? ''}
+                        alt={bookName}
+                        layout="fill"
+                        objectPosition="center"
+                        objectFit="cover"
+                        className="rounded border border-neutral-700 shadow-lg md:rounded"
+                    />
                 </div>
+                <div className="flex-1 min-w-0">
+                    <h3 className="text-sm font-bold text-[#999999] line-clamp-1 mb-1">
+                        {bookName}
+                    </h3>
+                    <div className="rounded-full text-xs w-fit text-white font-semibold px-3 py-1 bg-[#00B78B]">
+                        Textbook Solution
+                    </div>
+                </div>
+                <button
+                    onClick={onClose}
+                    className="p-1 text-white/60 hover:text-white transition-colors"
+                >
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 5L5 15M5 5l10 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                </button>
             </div>
         </div>
     );

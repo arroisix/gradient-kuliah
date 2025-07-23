@@ -13,7 +13,13 @@ import { ContextRecommendation, ReferenceContentType } from 'copilot/types/copil
 interface ReferenceModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onReferenceSelect?: (referenceId: string, referenceTitle: string, contentType: ReferenceContentType) => void;
+    onReferenceSelect?: (
+        referenceId: string, 
+        referenceTitle: string, 
+        referenceSubtitle: string, 
+        referenceHeader: string, 
+        contentType: ReferenceContentType
+    ) => void;
 }
 
 const ReferenceModal = ({ 
@@ -54,14 +60,17 @@ const ReferenceModal = ({
                 contentType: recommendation.type,
                 referenceData: recommendation
             });
-        } else {
-            onReferenceSelect?.(recommendation.id, getItemTitle(recommendation), recommendation.type);
-            onClose();
         }
     };
 
-    const handleHierarchyItemSelect = (itemId: string, itemTitle: string, contentType: ReferenceContentType) => {
-        onReferenceSelect?.(itemId, itemTitle, contentType);
+    const handleHierarchyItemSelect = (
+        itemId: string, 
+        itemTitle: string, 
+        subtitle: string, 
+        header: string,
+        contentType: ReferenceContentType
+    ) => {
+        onReferenceSelect?.(itemId, itemTitle, subtitle, header, contentType);
         setHierarchyModal({
             isOpen: false,
             contentType: null,
@@ -76,13 +85,6 @@ const ReferenceModal = ({
             contentType: null,
             referenceData: null
         });
-    };
-
-    const getItemTitle = (recommendation: ContextRecommendation): string => {
-        if (recommendation.type === 'course') {
-            return recommendation.course_name || 'Video Content';
-        }
-        return recommendation.book_name || 'Book Content';
     };
 
     if (!isAuthenticated) {

@@ -64,11 +64,15 @@ const CopilotModal = ({
   const handleReferenceSelect = (
     referenceId: string,
     referenceTitle: string,
+    referenceSubtitle: string,
+    referenceHeader: string,
     contentType: ReferenceContentType
   ) => {
     const newReference: SelectedReference = {
       id: referenceId,
       title: referenceTitle,
+      subtitle: referenceSubtitle,
+      header: referenceHeader,
       contentType
     };
 

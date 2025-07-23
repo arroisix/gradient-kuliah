@@ -54,9 +54,11 @@ const TextbookSolution = ({
         setIsCopilotModalOpen(true);
     };
 
-    const currentTextbookContext = data?.problem ? {
+    const currentTextbookContext = data?.problem && getTextbookDetail?.book ? {
         id: data.problem.id,
-        title: data.problem.title,
+        title: getTextbookDetail.book.title,
+        subtitle: data.problem.chapter_name || '',
+        header: data.problem.section_name || '',
         contentType: 'textbook_problem' as const
     } : undefined;
 
