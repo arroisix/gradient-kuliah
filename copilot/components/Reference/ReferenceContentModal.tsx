@@ -1,7 +1,8 @@
 import React from 'react';
 import { IoMdClose } from 'react-icons/io';
-import { IoPlayCircleOutline, IoDocumentTextOutline } from 'react-icons/io5';
+import { IoPlayCircleOutline, IoLibrary, IoBookmark, IoSchool } from 'react-icons/io5';
 import { IoSearchOutline } from 'react-icons/io5';
+import { BookText } from 'lucide-react';
 import { SelectedReference, ReferenceContentType } from 'copilot/types/copilot';
 
 interface ReferenceContentModalProps {
@@ -26,13 +27,13 @@ const ReferenceContentModal: React.FC<ReferenceContentModalProps> = ({
             case 'course':
                 return <IoPlayCircleOutline size={36} className="text-white" />;
             default:
-                return <IoDocumentTextOutline size={36} className="text-white" />;
+                return <BookText size={36} className="text-white" />;
         }
     };
 
     return (
         <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-            <div className="bg-[#1A1A1A] rounded-2xl w-full max-w-md max-h-[80vh] overflow-hidden">
+            <div className="bg-[#1A1A1A] rounded-2xl w-full max-w-md mt-8 max-h-[82vh] overflow-hidden">
                 <div className="flex items-center justify-between pt-6 px-6">
                     <h2 className="text-lg font-semibold text-white">Referensi Konten</h2>
                     <button
@@ -56,7 +57,7 @@ const ReferenceContentModal: React.FC<ReferenceContentModalProps> = ({
                     </div>
                 </div>
 
-                <div className="p-6 space-y-0 max-h-[400px] overflow-y-auto">
+                <div className="px-6 pt-4 space-y-0 max-h-[400px] overflow-y-auto">
                     {selectedReferences.map((reference, index) => (
                         <div key={`${reference.id}-${reference.contentType}`}>
                             <div className="rounded-lg p-4">
@@ -72,13 +73,16 @@ const ReferenceContentModal: React.FC<ReferenceContentModalProps> = ({
                                             </h3>
                                             <div className="space-y-1">
                                                 <div className="flex items-center gap-1">
-                                                    <IoDocumentTextOutline size={12} className="text-[#7D89CC]" />
+                                                    {reference.contentType === 'course' ? 
+                                                        <IoSchool size={12} className="text-[#7D89CC]" /> : 
+                                                        <IoLibrary size={12} className="text-[#7D89CC]" />
+                                                    }
                                                     <span className="text-xs text-white/60">
                                                         {reference.title}
                                                     </span>
                                                 </div>
                                                 <div className="flex items-center gap-1">
-                                                    <IoDocumentTextOutline size={12} className="text-[#7D89CC]" />
+                                                    <IoBookmark size={12} className="text-[#7D89CC]" />
                                                     <span className="text-xs text-white/60">
                                                         {reference.subtitle}
                                                     </span>
@@ -96,9 +100,7 @@ const ReferenceContentModal: React.FC<ReferenceContentModalProps> = ({
                                     </button>
                                 </div>
                             </div>
-                            {index < selectedReferences.length - 1 && (
-                                <div className="border-b border-white/10 mx-4"></div>
-                            )}
+                            <div className="border-b border-white/10 mx-4"></div>
                         </div>
                     ))}
                 </div>
