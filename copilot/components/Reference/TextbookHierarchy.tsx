@@ -95,9 +95,100 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
                 
                 {isExpanded && (
                     <div className="ml-6 border-l border-white/20">
-                        <ChapterSections chapterId={chapter.id} chapterName={chapter.title} />
+                        <ChapterContent chapterId={chapter.id} chapterName={chapter.title} />
                     </div>
                 )}
+            </div>
+        );
+    };
+
+    const ChapterContent: React.FC<{ chapterId: string; chapterName: string }> = ({ chapterId, chapterName }) => {
+        const {
+            data: sectionsData,
+            isLoading: sectionsLoading,
+            error: sectionsError
+        } = useGetTextbookSectionsQuery(chapterId);
+
+        const {
+            data: problemsData,
+            isLoading: problemsLoading,
+            error: problemsError
+        } = useGetTextbookProblemsQuery({ chapterId }, {
+            skip: sectionsLoading || (sectionsData?.data && sectionsData.data.length > 0)
+        });
+
+        if (sectionsLoading) {
+            return (
+                <div className="flex items-center justify-center py-4">
+                    <div className="w-4 h-4 border-2 border-[#5F2BCE] border-t-transparent rounded-full animate-spin"></div>
+                </div>
+            );
+        }
+
+        if (sectionsError) {
+            return null;
+        }
+
+        if (sectionsData?.data && sectionsData.data.length > 0) {
+            return (
+                <>
+                    {sectionsData.data.map(section => (
+                        <div key={section.id} className="ml-4 mb-1">
+                            <button
+                                onClick={() => toggleSection(section.id)}
+                                className={cn(
+                                    'w-full flex items-center justify-between px-4 py-1.5 rounded-lg transition-colors',
+                                    'hover:bg-white/5 text-left min-h-[36px]'
+                                )}
+                            >
+                                <span className="text-[#999999] text-sm leading-5">{section.title}</span>
+                                <div className="flex items-center justify-center w-4 h-4 flex-shrink-0">
+                                    {expandedSections.has(section.id) ? (
+                                        <ChevronDown size={16} className="text-white/60" />
+                                    ) : (
+                                        <ChevronUp size={16} className="text-white/60" />
+                                    )}
+                                </div>
+                            </button>
+                            
+                            {expandedSections.has(section.id) && (
+                                <div className="ml-4 border-l border-white/20">
+                                    <SectionProblems sectionId={section.id} chapterName={chapterName} sectionName={section.title} />
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </>
+            );
+        }
+
+        if (problemsLoading) {
+            return (
+                <div className="flex items-center justify-center py-2">
+                    <div className="w-3 h-3 border-2 border-[#5F2BCE] border-t-transparent rounded-full animate-spin"></div>
+                </div>
+            );
+        }
+
+        if (problemsError || !problemsData?.data || problemsData.data.length === 0) {
+            return null;
+        }
+
+        return (
+            <div className="ml-4">
+                {problemsData.data.map(problem => (
+                    <button
+                        key={problem.id}
+                        onClick={() => handleProblemClick(problem, chapterName, 'Chapter Level')}
+                        className={cn(
+                            'w-full flex items-center px-3 py-1.5 rounded-lg transition-colors text-left',
+                            'hover:bg-white/5',
+                            selectedItems.has(problem.id) && 'bg-[#5F2BCE]/20 border border-[#5F2BCE]/50'
+                        )}
+                    >
+                        <span className="text-[#999999] text-sm leading-5">{problem.title}</span>
+                    </button>
+                ))}
             </div>
         );
     };
@@ -118,11 +209,7 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
         }
 
         if (sectionsError || !sectionsData?.data) {
-            return (
-                <div className="text-white/60 text-sm py-2 px-4">
-                    Gagal memuat sections
-                </div>
-            );
+            return null;
         }
 
         return (
@@ -162,7 +249,7 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
             data: problemsData,
             isLoading: problemsLoading,
             error: problemsError
-        } = useGetTextbookProblemsQuery(sectionId);
+        } = useGetTextbookProblemsQuery({ sectionId });
 
         if (problemsLoading) {
             return (

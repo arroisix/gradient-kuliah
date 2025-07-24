@@ -435,10 +435,14 @@ export const copilotApi = baseApi.injectEndpoints({
             }),
             providesTags: ['TEXTBOOK_SECTIONS']
         }),
-        getTextbookProblems: builder.query<TextbookProblemsResponse, string>({
-            query: (sectionId: string) => ({
-                url: `${COPILOT_BASE_URL}textbook/problem/${sectionId}/`,
-                method: 'GET'
+        getTextbookProblems: builder.query<TextbookProblemsResponse, { sectionId?: string; chapterId?: string }>({
+            query: ({ sectionId, chapterId }) => ({
+                url: `${COPILOT_BASE_URL}textbook/problem/`,
+                method: 'GET',
+                params: {
+                    ...(sectionId && { section_id: sectionId }),
+                    ...(chapterId && { chapter_id: chapterId })
+                }
             }),
             providesTags: ['TEXTBOOK_PROBLEMS']
         }),
