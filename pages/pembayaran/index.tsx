@@ -12,6 +12,8 @@ import Image from 'next/image';
 import { CDN_URL } from 'commons/constants';
 import { useTracker } from 'tracker/tracker';
 import PaketInfo from 'payment/components/PaketInfo';
+import PaymentMethodList from 'payment/components/PaymentMethodList';
+import CheckoutBottomSheet from 'payment/components/CheckoutBottomSheet';
 
 const Payment = (): JSX.Element => {
     const router = useRouter();
@@ -65,10 +67,11 @@ const Payment = (): JSX.Element => {
                             </p>
                         </section>
                     ) : (
-                        <>
+                        <div className="min-h-screen bg-gray-900 flex flex-col">
                             <PaketInfo />
-                            <SubscriptionContainer />
-                        </>
+                            <PaymentMethodList />
+                            <CheckoutBottomSheet />
+                        </div>
                     )}
                 </PaymentProvider>
             ) : (

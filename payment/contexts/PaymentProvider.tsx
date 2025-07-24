@@ -14,6 +14,12 @@ interface PaymentContextType {
     packet?: PacketOffer;
     paymentMethod: PaymentMethod;
     setPaymentMethod: (method: PaymentMethod) => void;
+    phoneNumber?: string;
+    setPhoneNumber: (number: string) => void;
+    phoneNumberError: boolean;
+    setPhoneNumberError: (isError: boolean) => void;
+    promoCode?: string;
+    setPromoCode: (code: string) => void;
 }
 
 const PaymentContext = createContext<PaymentContextType>(
@@ -31,6 +37,9 @@ export function PaymentProvider({
         useState<boolean>(false);
     const { data: packet } = useGetDetailPacketOfferQuery(packetId);
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('VA_BNI');
+    const [phoneNumber, setPhoneNumber] = useState<string>('');
+    const [phoneNumberError, setPhoneNumberError] = useState<boolean>(false);
+    const [promoCode, setPromoCode] = useState<string>('');
 
     const selectPaymentMethod = (to: PaymentMethod): void => {
         setPaymentMethod(to);
@@ -56,9 +65,22 @@ export function PaymentProvider({
             setModalCheckoutOpen,
             packet,
             paymentMethod,
-            setPaymentMethod: selectPaymentMethod
+            setPaymentMethod: selectPaymentMethod,
+            phoneNumber,
+            setPhoneNumber,
+            phoneNumberError,
+            setPhoneNumberError,
+            promoCode,
+            setPromoCode
         }),
-        [isModalCheckoutOpen, packet, paymentMethod]
+        [
+            isModalCheckoutOpen,
+            packet,
+            paymentMethod,
+            phoneNumber,
+            phoneNumberError,
+            promoCode
+        ]
     );
 
     return (

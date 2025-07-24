@@ -108,7 +108,7 @@ type GuideContent = {
     };
 };
 
-interface PaymentMethod {
+interface PaymentMethodData {
     id: string; // UUID
     payment_name: string;
     payment_code: PaymentMethod;
@@ -122,5 +122,5 @@ interface PaymentMethodSection {
     key: string;
     name: string;
     order: number;
-    payment_methods: PaymentMethod[];
+    payment_methods: PaymentMethodData[];
 }
