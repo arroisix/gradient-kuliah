@@ -8,13 +8,12 @@ import {
     useGetAllCouponsQuery,
     useValidatePromoMutation
 } from 'referral/redux/referalApi';
-import { useTracker } from 'tracker/tracker';
 
 export const PromoCodeModal = ({
     isOpen,
     setOpen
 }: ModalBaseProps): JSX.Element => {
-    const { packet, setPromoCode, setAppliedPromoData } = usePayment();
+    const { packet, setAppliedPromo } = usePayment();
     const [inputCode, setInputCode] = useState<string>('');
     const [validationState, setValidationState] = useState<
         'idle' | 'loading' | 'success' | 'error'
@@ -22,10 +21,9 @@ export const PromoCodeModal = ({
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [showError, setShowError] = useState<boolean>(false);
 
-    const [validate] = useValidatePromoMutation();
+    const [validate, { data: validationResult }] = useValidatePromoMutation();
     const { data: couponsData, isLoading: isLoadingCoupons } =
         useGetAllCouponsQuery({ packet_id: packet?.id }, { skip: !packet?.id });
-    const tracker = useTracker();
 
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
@@ -68,7 +66,6 @@ export const PromoCodeModal = ({
             if (result.is_valid) {
                 setValidationState('success');
                 setShowError(false);
-                setAppliedPromoData(result);
             } else {
                 setValidationState('error');
                 setErrorMessage(
@@ -84,14 +81,8 @@ export const PromoCodeModal = ({
         }
     };
 
-    const handleApplyCode = (code: string) => {
-        setPromoCode(code);
-        setInputCode(code);
-        setOpen(false);
-    };
-
-    const handleCloseModal = () => {
-        tracker?.genericTrack('Close Promo Code Modal');
+    const handleApplyCode = (promo: ValidatePromoResponse): void => {
+        setAppliedPromo(promo);
         setOpen(false);
     };
 
@@ -116,7 +107,7 @@ export const PromoCodeModal = ({
     return (
         <Modal
             isOpen={isOpen}
-            setOpen={handleCloseModal}
+            setOpen={setOpen}
             variant="dark"
             className="!bg-[#1D1D1D] !max-w-md">
             <div className="flex flex-col w-full">
@@ -162,7 +153,7 @@ export const PromoCodeModal = ({
                 )}
 
                 {/* Success State for Current Input */}
-                {validationState === 'success' && inputCode && (
+                {validationState === 'success' && validationResult && (
                     <div className="mb-4 p-3 bg-green-900/20 border border-green-500/30 rounded-lg flex items-center justify-between">
                         <div className="flex items-center">
                             <Check className="w-4 h-4 text-green-400 mr-2" />
@@ -171,7 +162,7 @@ export const PromoCodeModal = ({
                             </span>
                         </div>
                         <button
-                            onClick={() => handleApplyCode(inputCode)}
+                            onClick={() => handleApplyCode(validationResult)}
                             className="px-4 py-1 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded-full transition-colors">
                             Pakai
                         </button>
@@ -195,7 +186,8 @@ export const PromoCodeModal = ({
                                 <div className="flex items-center justify-between">
                                     <div>
                                         <h3 className="text-white font-semibold text-sm mb-1">
-                                            Diskon {promo.discount_amount}
+                                            Diskon{' '}
+                                            {promo.discount_amount_original}
                                         </h3>
                                         <p className="text-gray-400 text-xs">
                                             Valid s.d.{' '}
@@ -204,7 +196,11 @@ export const PromoCodeModal = ({
                                     </div>
                                     <button
                                         onClick={() =>
-                                            handleApplyCode(promo.promo_code)
+                                            handleApplyCode({
+                                                ...promo,
+                                                is_valid: true,
+                                                message: ''
+                                            })
                                         }
                                         className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded-full transition-colors">
                                         Pakai

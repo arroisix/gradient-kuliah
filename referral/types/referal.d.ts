@@ -39,6 +39,7 @@ interface GetRefereeResponse {
 interface ValidatePromoResponse {
     promo_id: string | null;
     promo_type: string | null;
+    promo_code: string | null;
     packet_id: string | null;
     packet_name: string | null;
     is_valid: boolean;
@@ -55,12 +56,15 @@ interface CouponResponse {
     promo_code: string;
     promo_type: string;
     special_campaign_type: string;
-    discount_amount: string;
     expired_at: datetime | null;
     usage_count: number;
     max_usage: number;
-    per_packet: boolean;
     packet_name: string | null;
+    packet_id: string | null;
+    discount_amount_original: string;
+    discount_amount: number;
+    amount: number;
+    payment_amount: number;
 }
 
 interface GetCouponsResponse {

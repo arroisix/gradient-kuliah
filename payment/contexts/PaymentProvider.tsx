@@ -18,10 +18,8 @@ interface PaymentContextType {
     setPhoneNumber: (number: string) => void;
     phoneNumberError?: string;
     setPhoneNumberError: (isError: string) => void;
-    promoCode?: string;
-    setPromoCode: (code: string) => void;
-    appliedPromoData?: ValidatePromoResponse;
-    setAppliedPromoData: (data: ValidatePromoResponse) => void;
+    appliedPromo?: ValidatePromoResponse;
+    setAppliedPromo: (data?: ValidatePromoResponse) => void;
 }
 
 const PaymentContext = createContext<PaymentContextType>(
@@ -41,11 +39,16 @@ export function PaymentProvider({
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('VA_BCA');
     const [phoneNumber, setPhoneNumber] = useState<string>('');
     const [phoneNumberError, setPhoneNumberError] = useState<string>('');
-    const [promoCode, setPromoCode] = useState<string>('');
-    const [appliedPromoData, setAppliedPromoData] =
-        useState<ValidatePromoResponse>();
+    const [appliedPromo, setAppliedPromo] = useState<
+        ValidatePromoResponse | undefined
+    >(undefined);
 
     const selectPaymentMethod = (to: PaymentMethod): void => {
+        if (paymentMethod === 'ID_OVO') {
+            setPhoneNumber('');
+            setPhoneNumberError('');
+        }
+
         setPaymentMethod(to);
         sendGTMEvent({
             event: 'add_payment_info',
@@ -74,10 +77,8 @@ export function PaymentProvider({
             setPhoneNumber,
             phoneNumberError,
             setPhoneNumberError,
-            promoCode,
-            setPromoCode,
-            appliedPromoData,
-            setAppliedPromoData
+            appliedPromo,
+            setAppliedPromo
         }),
         [
             isModalCheckoutOpen,
@@ -85,8 +86,7 @@ export function PaymentProvider({
             paymentMethod,
             phoneNumber,
             phoneNumberError,
-            promoCode,
-            appliedPromoData
+            appliedPromo
         ]
     );
 
