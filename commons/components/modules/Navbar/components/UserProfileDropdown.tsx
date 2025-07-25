@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTracker } from 'tracker/tracker';
 import Link from 'next/link';
-import { MdHistory, MdLogout, MdPerson } from 'react-icons/md';
+import { MdFileDownload, MdHistory, MdLogout, MdPerson } from 'react-icons/md';
 import { cn } from 'commons/utils';
 import { useLogoutMutation } from 'authentication/redux/api/authApi';
 import { useRouter } from 'next/router';
@@ -41,6 +41,17 @@ const UserProfileDropdown = (): JSX.Element => {
                     }}>
                     <MdHistory size={16} className="mr-2" />
                     <span>Riwayat Pembelian</span>
+                </Link>
+            </li>
+            <li>
+                <Link
+                    href="/kelas/downloads"
+                    className={cn(lightMode ? 'text-black' : 'text-white')}
+                    onClick={() => {
+                        tracker?.genericTrack('Click Downloads');
+                    }}>
+                    <MdFileDownload size={16} className="mr-2" />
+                    <span>Downloads</span>
                 </Link>
             </li>
             <li>

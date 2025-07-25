@@ -20,6 +20,7 @@ import RatingButton from 'courses/components/CourseRatingButton';
 import ShareContentButton from 'courses/components/ShareContentButton';
 import CopilotEntrypoint from '../../../../copilot/components/CopilotEntrypoint';
 import CourseDetailBox from 'courses/components/CourseDetailBox';
+import DownloadVideoButton from 'courses/components/DownloadVideoButton';
 
 const VideoLearnContainer = ({
     subchapter: ssrSubchapterData,
@@ -86,15 +87,24 @@ const VideoLearnContainer = ({
                         <h1 className="text-base font-extrabold md:text-2xl">
                             {subchapter?.subchapter_name}
                         </h1>
-                        <div className="flex items-center gap-2 justify-center w-fit">
+                        <div className="flex items-center gap-2 justify-start overflow-x-auto">
                             {subchapter?.video?.is_free && (
                                 <FreeBadge className="py-4 px-5" />
                             )}
-                            <RatingButton />
-                            <ShareContentButton
-                                typeCopy="COURSE VIDEO"
-                                shareCopy={`Coba deh nonton Video ${subchapter?.subchapter_name} dari Gradient Academy!`}
-                            />
+                            <div className="flex-shrink-0">
+                                <DownloadVideoButton
+                                    isDownloaded={subchapter?.is_downloaded}
+                                />
+                            </div>
+                            <div className="flex-shrink-0">
+                                <RatingButton />
+                            </div>
+                            <div className="flex-shrink-0">
+                                <ShareContentButton
+                                    typeCopy="COURSE VIDEO"
+                                    shareCopy={`Coba deh nonton Video ${subchapter?.subchapter_name} dari Gradient Academy!`}
+                                />
+                            </div>
                         </div>
                     </div>
                     <CopilotEntrypoint />
