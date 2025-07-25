@@ -58,6 +58,9 @@ export const PromoCodeInput: React.FC<PromoCodeInputProps> = ({
         } else {
             setValidationState('idle');
             setShowError(false);
+            if (applyAfterValid && variant === 'inline') {
+                setAppliedPromo(undefined);
+            }
         }
 
         return () => {
@@ -77,11 +80,8 @@ export const PromoCodeInput: React.FC<PromoCodeInputProps> = ({
             if (result.is_valid) {
                 setValidationState('success');
                 setShowError(false);
-                if (applyAfterValid) {
+                if (applyAfterValid && variant === 'inline') {
                     setAppliedPromo(result);
-                    if (onValidPromo) {
-                        onValidPromo(result);
-                    }
                 }
             } else {
                 setValidationState('error');
@@ -90,11 +90,18 @@ export const PromoCodeInput: React.FC<PromoCodeInputProps> = ({
                         'Maaf, kode referral ini tidak dapat digunakan'
                 );
                 setShowError(true);
+                if (applyAfterValid && variant === 'inline') {
+                    // auto‐cancel on invalid
+                    setAppliedPromo(undefined);
+                }
             }
         } catch (error) {
             setValidationState('error');
             setErrorMessage('Maaf, kode referral ini tidak dapat digunakan');
             setShowError(true);
+            if (applyAfterValid && variant === 'inline') {
+                setAppliedPromo(undefined);
+            }
         }
     };
 
@@ -188,6 +195,7 @@ export const PromoCodeInput: React.FC<PromoCodeInputProps> = ({
 
             {/* Success State */}
             {validationState === 'success' &&
+                variant !== 'inline' &&
                 (validationResult || isCurrentlyApplied) && (
                     <div className={successStyles}>
                         <div className="flex items-baseline space-x-2">
