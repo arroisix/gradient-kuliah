@@ -53,70 +53,66 @@ const CheckoutBottomSheet: React.FC = () => {
     return (
         <div className="fixed inset-x-32 bottom-0 bg-graphite-900 border border-graphite-700 rounded-t-xl shadow-lg overflow-hidden">
             {/* Promo Code Section */}
-            <div className="px-4 py-3 relative overflow-visible">
-                <button
-                    onClick={handlePromoClick}
-                    className={`relative overflow-hidden w-full rounded-lg py-4 flex items-center gap-3 ${
-                        appliedPromo
-                            ? 'pl-10 bg-emerald-900'
-                            : 'pl-[50px] bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700'
-                    }`}>
-                    <>
-                        {/* half circles */}
-                        <span className="absolute w-8 h-8 bg-graphite-900 rounded-full -left-4 top-1/2 -translate-y-1/2 z-10" />
-                        <span className="absolute w-8 h-8 bg-graphite-900 rounded-full -right-4 top-1/2 -translate-y-1/2 z-10" />
+            {!isExpanded && (
+                <div className="px-4 py-3 relative overflow-visible">
+                    <button
+                        onClick={handlePromoClick}
+                        className={`relative overflow-hidden w-full rounded-lg py-4 flex items-center gap-3 ${
+                            appliedPromo
+                                ? 'pl-10 bg-emerald-900'
+                                : 'pl-[50px] bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700'
+                        }`}>
+                        <>
+                            {/* half circles */}
+                            <span className="absolute w-8 h-8 bg-graphite-900 rounded-full -left-4 top-1/2 -translate-y-1/2 z-10" />
+                            <span className="absolute w-8 h-8 bg-graphite-900 rounded-full -right-4 top-1/2 -translate-y-1/2 z-10" />
 
-                        {/* dashed lines */}
-                        <div className="absolute top-0 bottom-0 left-8 border-l-2 border-dashed border-gray-900 pointer-events-none" />
-                    </>
+                            {/* dashed lines */}
+                            <div className="absolute top-0 bottom-0 left-8 border-l-2 border-dashed border-gray-900 pointer-events-none" />
+                        </>
 
-                    {appliedPromo && (
-                        <Check className="relative w-6 h-6 text-green-500 z-10" />
-                    )}
-                    <span className="relative z-10 text-white font-bold text-sm">
-                        {getPromoButtonText()}
-                    </span>
-                </button>
-            </div>
+                        {appliedPromo && (
+                            <Check className="relative w-6 h-6 text-green-500 z-10" />
+                        )}
+                        <span className="relative z-10 text-white font-bold text-sm">
+                            {getPromoButtonText()}
+                        </span>
+                    </button>
+                </div>
+            )}
 
             {/* Checkout Section */}
             <div className="px-4 pb-4">
                 <div>
                     {/* Expanded Summary */}
                     {isExpanded && (
-                        <div className="mb-4 pb-4 border-b border-gray-700">
-                            <div className="space-y-2 text-sm">
-                                <div className="flex justify-between">
-                                    <span className="text-gray-400">
-                                        Harga Paket
+                        <div className="mb-4 mt-3 rounded-lg bg-graphite-800 p-4">
+                            <h3 className="text-neutral-50 font-semibold text-sm mb-2">
+                                Ringkasan Pembayaran
+                            </h3>
+
+                            <div className="flex justify-between items-center">
+                                <span className="text-neutral-200 text-sm font-normal">
+                                    {packet?.packet_name}
+                                </span>
+                                <span className="text-neutral-50 text-sm font-normal">
+                                    {formatCurrency(packet?.price || '0')}
+                                </span>
+                            </div>
+
+                            {appliedPromo?.is_valid && (
+                                <div className="flex justify-between items-center mt-1">
+                                    <span className="text-neutral-200 text-sm font-normal">
+                                        Diskon {appliedPromo.promo_code}
                                     </span>
-                                    <span className="text-white">
-                                        {formatCurrency(packet?.price || '0')}
-                                    </span>
-                                </div>
-                                {appliedPromo?.is_valid &&
-                                    appliedPromo?.discount_amount && (
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-400">
-                                                Diskon {appliedPromo.promo_code}
-                                            </span>
-                                            <span className="text-green-400">
-                                                -
-                                                {formatCurrency(
-                                                    appliedPromo.discount_amount.toString()
-                                                )}
-                                            </span>
-                                        </div>
-                                    )}
-                                <div className="flex justify-between font-semibold pt-2 border-t border-gray-700">
-                                    <span className="text-white">Subtotal</span>
-                                    <span className="text-white">
+                                    <span className="text-state-success text-sm font-normal">
+                                        -
                                         {formatCurrency(
-                                            calculateFinalPrice().toString()
+                                            appliedPromo.discount_amount.toString()
                                         )}
                                     </span>
                                 </div>
-                            </div>
+                            )}
                         </div>
                     )}
                 </div>
@@ -128,16 +124,16 @@ const CheckoutBottomSheet: React.FC = () => {
                             className="flex items-center cursor-pointer"
                             onClick={() => setIsExpanded(!isExpanded)}>
                             <div>
-                                <p className="text-gray-400 text-sm">
+                                <p className="text-neutral-400 text-xs font-normal">
                                     Total Bayar
                                 </p>
-                                <p className="text-white font-bold text-lg">
+                                <p className="text-neutral-50 font-bold text-xl">
                                     {formatCurrency(
                                         calculateFinalPrice().toString()
                                     )}
                                 </p>
                             </div>
-                            <div className="ml-2 text-white">
+                            <div className="ml-2 text-neutral-50">
                                 {isExpanded ? (
                                     <ChevronDown size={16} />
                                 ) : (
