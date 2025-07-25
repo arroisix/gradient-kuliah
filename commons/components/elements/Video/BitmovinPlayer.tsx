@@ -151,13 +151,13 @@ export default function BitmovinPlayer({
             hls: src,
             drm: {
                 widevine: {
-                    LA_URL: 'https://72c8bb0b.drm-widevine-licensing.axprod.net/AcquireLicense',
+                    LA_URL: process.env.NEXT_PUBLIC_WIDEVINE_DRM_LICENSE_URL,
                     headers: {
                         'X-AxDRM-Message': drmToken as string
                     }
                 },
                 fairplay: {
-                    LA_URL: 'https://72c8bb0b.drm-fairplay-licensing.axprod.net/AcquireLicense',
+                    LA_URL: process.env.NEXT_PUBLIC_FAIRPLAY_DRM_LICENSE_URL,
                     certificateURL:
                         'https://assets.gradient.academy/drm/fairplay.cer',
                     headers: {
