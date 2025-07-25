@@ -51,7 +51,7 @@ const CheckoutBottomSheet: React.FC = () => {
     };
 
     return (
-        <div className="fixed inset-x-32 bottom-0 bg-graphite-900 border border-graphite-700 rounded-t-xl shadow-lg overflow-hidden">
+        <div className="fixed inset-x-32 bottom-0 bg-graphite-900 rounded-t-xl shadow-lg overflow-hidden">
             {/* Promo Code Section */}
             {!isExpanded && (
                 <div className="px-4 py-3 relative overflow-visible">
