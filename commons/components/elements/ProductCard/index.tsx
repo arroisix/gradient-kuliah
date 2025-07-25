@@ -10,7 +10,8 @@ const ProductCard = ({
     const categoryLabel: { [key: string]: string } = {
         [category]: category,
         Catatan: 'Astronotes',
-        Textbook: 'Textbook Solution'
+        Textbook: 'Textbook Solution',
+        BankSoal: 'Bank Soal',
     };
 
     return orientation == 'horizontal' ? (

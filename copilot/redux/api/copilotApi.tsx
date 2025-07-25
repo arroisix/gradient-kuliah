@@ -3,12 +3,32 @@ import {
     ChatHistoryResponse,
     ChangeRatingInput,
     ToggleBookmarkInput,
-    ContentRecommendationResponse
+    ContentRecommendationResponse,
+    ContextRecommendationResponse,
+    TextbookChaptersResponse,
+    TextbookSectionsResponse,
+    TextbookProblemsResponse,
+    CourseChaptersResponse,
+    CourseSubchaptersResponse,
+    AstronotesChaptersResponse,
+    AstronotesSubchaptersResponse,
+    AstronotesTopicsResponse,
+    BankSoalChaptersResponse,
+    BankSoalSectionsResponse,
+    BankSoalProblemsResponse
 } from '../../types/copilot';
 import config from 'redux/api/config';
+import { baseApi } from 'redux/api/baseApi';
 
 const BASE_URL = config.API_BASE_URL;
 const COPILOT_BASE_URL = `${BASE_URL}copilots/`;
+
+interface ContextRecommendationParams {
+    q: string;
+    page?: number;
+    per_page?: number;
+    content_type?: string;
+}
 
 interface StreamCallbacks {
     onContent?: (content: string) => void;
@@ -390,3 +410,114 @@ export const chatApi = {
         return response.json();
     }
 };
+
+export const copilotApi = baseApi.injectEndpoints({
+    endpoints: (builder) => ({
+        getContentRecommendation: builder.query<ContextRecommendationResponse, ContextRecommendationParams>({
+            query: (params: ContextRecommendationParams) => ({
+                url: `${COPILOT_BASE_URL}context-recommendation/`,
+                method: 'GET',
+                params
+            }),
+            providesTags: ['CONTEXT_RECOMMENDATION']
+        }),
+        getTextbookChapters: builder.query<TextbookChaptersResponse, string>({
+            query: (bookSlug: string) => ({
+                url: `${COPILOT_BASE_URL}textbook/chapter/${bookSlug}/`,
+                method: 'GET'
+            }),
+            providesTags: ['TEXTBOOK_CHAPTERS']
+        }),
+        getTextbookSections: builder.query<TextbookSectionsResponse, string>({
+            query: (chapterId: string) => ({
+                url: `${COPILOT_BASE_URL}textbook/section/${chapterId}/`,
+                method: 'GET'
+            }),
+            providesTags: ['TEXTBOOK_SECTIONS']
+        }),
+        getTextbookProblems: builder.query<TextbookProblemsResponse, { sectionId?: string; chapterId?: string }>({
+            query: ({ sectionId, chapterId }) => ({
+                url: `${COPILOT_BASE_URL}textbook/problem/`,
+                method: 'GET',
+                params: {
+                    ...(sectionId && { section_id: sectionId }),
+                    ...(chapterId && { chapter_id: chapterId })
+                }
+            }),
+            providesTags: ['TEXTBOOK_PROBLEMS']
+        }),
+        getCourseChapters: builder.query<CourseChaptersResponse, string>({
+            query: (courseSlug: string) => ({
+                url: `${COPILOT_BASE_URL}course/chapter/${courseSlug}/`,
+                method: 'GET'
+            }),
+            providesTags: ['COURSE_CHAPTERS']
+        }),
+        getCourseSubchapters: builder.query<CourseSubchaptersResponse, string>({
+            query: (chapterId: string) => ({
+                url: `${COPILOT_BASE_URL}course/subchapter/${chapterId}/`,
+                method: 'GET'
+            }),
+            providesTags: ['COURSE_SUBCHAPTERS']
+        }),
+        getAstronotesChapters: builder.query<AstronotesChaptersResponse, string>({
+            query: (bookSlug: string) => ({
+                url: `${COPILOT_BASE_URL}astronotes/chapter/${bookSlug}/`,
+                method: 'GET'
+            }),
+            providesTags: ['ASTRONOTES_CHAPTERS']
+        }),
+        getAstronotesSubchapters: builder.query<AstronotesSubchaptersResponse, { bookSlug: string; pageOrder: number; chapterId: string }>({
+            query: ({ bookSlug, pageOrder, chapterId }) => ({
+                url: `${COPILOT_BASE_URL}astronotes/subchapter/${bookSlug}/${pageOrder}/${chapterId}/`,
+                method: 'GET'
+            }),
+            providesTags: ['ASTRONOTES_SUBCHAPTERS']
+        }),
+        getAstronotesTopics: builder.query<AstronotesTopicsResponse, { bookSlug: string; pageOrder: number; subchapterId: string }>({
+            query: ({ bookSlug, pageOrder, subchapterId }) => ({
+                url: `${COPILOT_BASE_URL}astronotes/topic/${bookSlug}/${pageOrder}/${subchapterId}/`,
+                method: 'GET'
+            }),
+            providesTags: ['ASTRONOTES_TOPICS']
+        }),
+        getBankSoalChapters: builder.query<BankSoalChaptersResponse, string>({
+            query: (bookSlug: string) => ({
+                url: `${COPILOT_BASE_URL}bank-soal/chapter/${bookSlug}/`,
+                method: 'GET'
+            }),
+            providesTags: ['BANKSOAL_CHAPTERS']
+        }),
+        getBankSoalSections: builder.query<BankSoalSectionsResponse, string>({
+            query: (chapterId: string) => ({
+                url: `${COPILOT_BASE_URL}bank-soal/section/${chapterId}/`,
+                method: 'GET'
+            }),
+            providesTags: ['BANKSOAL_SECTIONS']
+        }),
+        getBankSoalProblems: builder.query<BankSoalProblemsResponse, { sectionId?: string; chapterId?: string }>({
+            query: ({ sectionId, chapterId }) => ({
+                url: `${COPILOT_BASE_URL}bank-soal/problem/${sectionId || ''}/`,
+                method: 'GET',
+                params: sectionId ? {} : { chapter_id: chapterId }
+            }),
+            providesTags: ['BANKSOAL_PROBLEMS']
+        })
+    }),
+    overrideExisting: false
+});
+
+export const {
+    useGetContentRecommendationQuery,
+    useGetTextbookChaptersQuery,
+    useGetTextbookSectionsQuery,
+    useGetTextbookProblemsQuery,
+    useGetCourseChaptersQuery,
+    useGetCourseSubchaptersQuery,
+    useGetAstronotesChaptersQuery,
+    useGetAstronotesSubchaptersQuery,
+    useGetAstronotesTopicsQuery,
+    useGetBankSoalChaptersQuery,
+    useGetBankSoalSectionsQuery,
+    useGetBankSoalProblemsQuery
+} = copilotApi;
