@@ -17,7 +17,6 @@ interface CopilotSidebarContainerProps {
     onClose: () => void;
     onOpenReferenceModal: () => void;
     onOpenReferenceContentModal: () => void;
-    onReferenceSelect: (referenceId: string, referenceTitle: string, referenceSubtitle: string, referenceHeader: string, contentType: ReferenceContentType) => void;
     onRemoveReference: (referenceId: string, contentType: ReferenceContentType) => void;
     onOpenHistory?: () => void;
     onOpenUsedReferencesModal?: (references: SelectedReference[]) => void;
@@ -31,7 +30,6 @@ const CopilotSidebarContainer = ({
     onClose,
     onOpenReferenceModal,
     onOpenReferenceContentModal,
-    onReferenceSelect,
     onRemoveReference,
     onOpenHistory,
     onOpenUsedReferencesModal

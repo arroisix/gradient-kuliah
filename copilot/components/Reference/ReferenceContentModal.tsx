@@ -63,7 +63,7 @@ const ReferenceContentModal: React.FC<ReferenceContentModalProps> = ({
                 </div>
 
                 <div className="px-6 pt-4 space-y-0 max-h-[50vh] sm:max-h-[400px] overflow-y-auto">
-                    {selectedReferences.map((reference, index) => (
+                    {selectedReferences.map((reference) => (
                         <div key={`${reference.id}-${reference.contentType}`}>
                             <div className="rounded-lg p-4">
                                 <div className="flex items-center justify-between">

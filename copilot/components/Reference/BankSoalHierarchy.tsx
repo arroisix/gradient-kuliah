@@ -7,7 +7,7 @@ import {
     useGetBankSoalSectionsQuery,
     useGetBankSoalProblemsQuery
 } from 'copilot/redux/api/copilotApi';
-import { BankSoalChapter, BankSoalSection, BankSoalProblem } from 'copilot/types/copilot';
+import { BankSoalChapter, BankSoalProblem } from 'copilot/types/copilot';
 
 interface BankSoalHierarchyProps {
     isOpen: boolean;
@@ -106,13 +106,11 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
         const {
             data: sectionsData,
             isLoading: sectionsLoading,
-            error: sectionsError
         } = useGetBankSoalSectionsQuery(chapterId);
 
         const {
             data: directProblemsData,
             isLoading: directProblemsLoading,
-            error: directProblemsError
         } = useGetBankSoalProblemsQuery({ chapterId });
 
         if (sectionsLoading || directProblemsLoading) {

@@ -7,7 +7,7 @@ import {
     useGetTextbookSectionsQuery,
     useGetTextbookProblemsQuery
 } from 'copilot/redux/api/copilotApi';
-import { TextbookChapter, TextbookSection, TextbookProblem } from 'copilot/types/copilot';
+import { TextbookChapter, TextbookProblem } from 'copilot/types/copilot';
 
 interface TextbookHierarchyProps {
     isOpen: boolean;
@@ -190,57 +190,6 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
                     </button>
                 ))}
             </div>
-        );
-    };
-
-    const ChapterSections: React.FC<{ chapterId: string; chapterName: string }> = ({ chapterId, chapterName }) => {
-        const {
-            data: sectionsData,
-            isLoading: sectionsLoading,
-            error: sectionsError
-        } = useGetTextbookSectionsQuery(chapterId);
-
-        if (sectionsLoading) {
-            return (
-                <div className="flex items-center justify-center py-4">
-                    <div className="w-4 h-4 border-2 border-[#5F2BCE] border-t-transparent rounded-full animate-spin"></div>
-                </div>
-            );
-        }
-
-        if (sectionsError || !sectionsData?.data) {
-            return null;
-        }
-
-        return (
-            <>
-                {sectionsData.data.map(section => (
-                    <div key={section.id} className="ml-4 mb-1">
-                        <button
-                            onClick={() => toggleSection(section.id)}
-                            className={cn(
-                                'w-full flex items-center justify-between px-4 py-1.5 rounded-lg transition-colors',
-                                'hover:bg-white/5 text-left min-h-[36px]'
-                            )}
-                        >
-                            <span className="text-[#999999] text-sm leading-5">{section.title}</span>
-                            <div className="flex items-center justify-center w-4 h-4 flex-shrink-0">
-                                {expandedSections.has(section.id) ? (
-                                    <ChevronDown size={16} className="text-white/60" />
-                                ) : (
-                                    <ChevronUp size={16} className="text-white/60" />
-                                )}
-                            </div>
-                        </button>
-                        
-                        {expandedSections.has(section.id) && (
-                            <div className="ml-4 border-l border-white/20">
-                                <SectionProblems sectionId={section.id} chapterName={chapterName} sectionName={section.title} />
-                            </div>
-                        )}
-                    </div>
-                ))}
-            </>
         );
     };
 
