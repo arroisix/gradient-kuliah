@@ -4,7 +4,7 @@ import type React from 'react';
 import { useState } from 'react';
 import { usePayment } from 'payment/contexts/PaymentProvider';
 import { formatCurrency } from 'commons/utils';
-import { ChevronUp, ChevronDown } from 'lucide-react';
+import { ChevronUp, ChevronDown, Check } from 'lucide-react';
 import CheckoutButton from './CheckoutButton';
 import { BsShieldFillCheck } from 'react-icons/bs';
 import { PromoCodeModal } from './PromoCodeModal';
@@ -50,29 +50,38 @@ const CheckoutBottomSheet: React.FC = () => {
         return 'Pakai kode promo/referral';
     };
 
-    const getPromoButtonStyle = () => {
-        if (appliedPromo) {
-            return 'bg-green-600 hover:bg-green-700';
-        }
-        return 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700';
-    };
-
     return (
-        <div className="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-700">
+        <div className="fixed inset-x-32 bottom-0 bg-gray-900 border border-gray-700 rounded-t-xl shadow-lg overflow-hidden">
             {/* Promo Code Section */}
-            <div className="px-4 py-3">
-                <div className="mx-32">
-                    <button
-                        onClick={handlePromoClick}
-                        className={`w-full text-white py-3 rounded-lg font-medium text-sm transition-colors ${getPromoButtonStyle()}`}>
+            <div className="px-4 py-3 relative overflow-visible">
+                <button
+                    onClick={handlePromoClick}
+                    className={`relative overflow-hidden w-full rounded-lg py-4 flex items-center gap-3 ${
+                        appliedPromo
+                            ? 'pl-10 bg-[#03AC5C33]'
+                            : 'pl-[50px] bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700'
+                    }`}>
+                    <>
+                        {/* half circles */}
+                        <span className="absolute w-8 h-8 bg-gray-900 rounded-full -left-4 top-1/2 -translate-y-1/2 z-10" />
+                        <span className="absolute w-8 h-8 bg-gray-900 rounded-full -right-4 top-1/2 -translate-y-1/2 z-10" />
+
+                        {/* dashed lines */}
+                        <div className="absolute top-0 bottom-0 left-8 border-l-2 border-dashed border-gray-900 pointer-events-none" />
+                    </>
+
+                    {appliedPromo && (
+                        <Check className="relative w-6 h-6 text-green-500 z-10" />
+                    )}
+                    <span className="relative z-10 text-white font-bold text-sm">
                         {getPromoButtonText()}
-                    </button>
-                </div>
+                    </span>
+                </button>
             </div>
 
             {/* Checkout Section */}
             <div className="px-4 pb-4">
-                <div className="mx-32">
+                <div>
                     {/* Expanded Summary */}
                     {isExpanded && (
                         <div className="mb-4 pb-4 border-b border-gray-700">
@@ -113,7 +122,7 @@ const CheckoutBottomSheet: React.FC = () => {
                 </div>
 
                 {/* Total and Checkout Button Row */}
-                <div className="flex items-center justify-between mx-32">
+                <div className="flex items-center justify-between">
                     <div className="flex-1">
                         <div
                             className="flex items-center cursor-pointer"
