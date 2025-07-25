@@ -7,6 +7,7 @@ import { CDN_URL } from 'commons/constants';
 import { useTracker } from 'tracker/tracker';
 import { addZeroBefore, getCSChatRoom } from 'commons/utils';
 import { usePayment } from 'payment/contexts/PaymentProvider';
+import PromoCodeInput from './PromoCodeInput';
 
 interface PaymentMethodItemProps {
     method: PaymentMethodData;
@@ -130,6 +131,20 @@ const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({
                                 {phoneNumberError}
                             </p>
                         )}
+                    </div>
+                </div>
+            )}
+
+            {/* Voucher Code Input for VOUCHER */}
+            {isSelected && method.payment_code === 'VOUCHER' && (
+                <div className="px-4 pb-4">
+                    <div className="ml-11 flex items-center space-x-3">
+                        <PromoCodeInput
+                            placeholder="Masukkan kode voucher"
+                            variant="inline"
+                            className="w-full"
+                            applyAfterValid={true}
+                        />
                     </div>
                 </div>
             )}

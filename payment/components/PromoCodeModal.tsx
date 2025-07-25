@@ -1,31 +1,20 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Search, X, Check, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import Modal from 'commons/components/modules/Modal';
 import { usePayment } from 'payment/contexts/PaymentProvider';
-import {
-    useGetAllCouponsQuery,
-    useValidatePromoMutation
-} from 'referral/redux/referalApi';
+import { useGetAllCouponsQuery } from 'referral/redux/referalApi';
+import PromoCodeInput from './PromoCodeInput';
 
 export const PromoCodeModal = ({
     isOpen,
     setOpen
 }: ModalBaseProps): JSX.Element => {
-    const { packet, setAppliedPromo } = usePayment();
-    const [inputCode, setInputCode] = useState<string>('');
-    const [validationState, setValidationState] = useState<
-        'idle' | 'loading' | 'success' | 'error'
-    >('idle');
-    const [errorMessage, setErrorMessage] = useState<string>('');
-    const [showError, setShowError] = useState<boolean>(false);
-
-    const [validate, { data: validationResult }] = useValidatePromoMutation();
+    const { packet, appliedPromo, setAppliedPromo } = usePayment();
     const { data: couponsData, isLoading: isLoadingCoupons } =
         useGetAllCouponsQuery({ packet_id: packet?.id }, { skip: !packet?.id });
 
-    const formatDate = (dateString: string) => {
+    const formatDate = (dateString: string): string => {
         const date = new Date(dateString);
         return date.toLocaleString('id-ID', {
             day: 'numeric',
@@ -36,72 +25,13 @@ export const PromoCodeModal = ({
         });
     };
 
-    useEffect(() => {
-        let timeoutId: NodeJS.Timeout;
-
-        if (inputCode && inputCode.length > 0) {
-            setValidationState('loading');
-            timeoutId = setTimeout(() => {
-                handleValidateCode(inputCode);
-            }, 1000);
-        } else {
-            setValidationState('idle');
-            setShowError(false);
-        }
-
-        return () => {
-            if (timeoutId) {
-                clearTimeout(timeoutId);
-            }
-        };
-    }, [inputCode]);
-
-    const handleValidateCode = async (code: string) => {
-        try {
-            const result = await validate({
-                promo_code: code,
-                packet_id: packet?.id as string
-            }).unwrap();
-
-            if (result.is_valid) {
-                setValidationState('success');
-                setShowError(false);
-            } else {
-                setValidationState('error');
-                setErrorMessage(
-                    result.message ||
-                        'Maaf, kode referral ini tidak dapat digunakan'
-                );
-                setShowError(true);
-            }
-        } catch (error) {
-            setValidationState('error');
-            setErrorMessage('Maaf, kode referral ini tidak dapat digunakan');
-            setShowError(true);
-        }
-    };
-
     const handleApplyCode = (promo: ValidatePromoResponse): void => {
         setAppliedPromo(promo);
         setOpen(false);
     };
 
-    const handleCloseError = () => {
-        setShowError(false);
-        setErrorMessage('');
-    };
-
-    const getInputIcon = () => {
-        switch (validationState) {
-            case 'loading':
-                return (
-                    <Loader2 className="w-5 h-5 text-purple-500 animate-spin" />
-                );
-            case 'success':
-                return <Check className="w-5 h-5 text-green-500" />;
-            default:
-                return <Search className="w-5 h-5 text-purple-500" />;
-        }
+    const handleRemovePromo = (): void => {
+        setAppliedPromo(undefined);
     };
 
     return (
@@ -118,56 +48,48 @@ export const PromoCodeModal = ({
                     </h2>
                 </div>
 
+                {/* Applied Promo Info */}
+                {appliedPromo && (
+                    <div className="mb-4 p-3 bg-green-900/20 border border-green-500/30 rounded-lg">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <span className="text-green-400 text-sm font-medium">
+                                    Promo Aktif: {appliedPromo.promo_code}
+                                </span>
+                                <p className="text-green-300 text-xs mt-1">
+                                    {appliedPromo.promo_type === 'REFERRAL'
+                                        ? `Referral discount applied`
+                                        : appliedPromo.promo_type ===
+                                          'OFFLINE_VOUCHER'
+                                        ? `Voucher discount applied`
+                                        : `Coupon discount applied`}
+                                </p>
+                            </div>
+                            <button
+                                onClick={handleRemovePromo}
+                                className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-xs rounded-full transition-colors">
+                                Hapus
+                            </button>
+                        </div>
+                    </div>
+                )}
+
                 {/* Subtitle */}
                 <p className="text-sm text-gray-400 mb-6">
-                    Masukkan kode referral dari teman atau kode promo dari
-                    Gradient
+                    {appliedPromo
+                        ? 'Ganti dengan kode lain atau pilih dari kode yang tersedia'
+                        : 'Masukkan kode referral dari teman atau kode promo dari Gradient'}
                 </p>
 
-                {/* Input Field */}
-                <div className="relative mb-4">
-                    <input
-                        type="text"
-                        placeholder="Masukkan kode referral"
-                        value={inputCode}
-                        onChange={(e) => setInputCode(e.target.value)}
-                        className="w-full px-4 py-3 pr-12 bg-[#2D2D2D] border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors"
-                    />
-                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                        {getInputIcon()}
-                    </div>
-                </div>
-
-                {/* Error Message */}
-                {showError && errorMessage && (
-                    <div className="mb-4 p-3 bg-red-900/20 border border-red-500/30 rounded-lg flex items-center justify-between">
-                        <span className="text-red-400 text-sm">
-                            {errorMessage}
-                        </span>
-                        <button
-                            onClick={handleCloseError}
-                            className="text-red-400 hover:text-red-300 transition-colors ml-2">
-                            <X className="w-4 h-4" />
-                        </button>
-                    </div>
-                )}
-
-                {/* Success State for Current Input */}
-                {validationState === 'success' && validationResult && (
-                    <div className="mb-4 p-3 bg-green-900/20 border border-green-500/30 rounded-lg flex items-center justify-between">
-                        <div className="flex items-center">
-                            <Check className="w-4 h-4 text-green-400 mr-2" />
-                            <span className="text-green-400 text-sm font-medium">
-                                {inputCode}
-                            </span>
-                        </div>
-                        <button
-                            onClick={() => handleApplyCode(validationResult)}
-                            className="px-4 py-1 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded-full transition-colors">
-                            Pakai
-                        </button>
-                    </div>
-                )}
+                {/* Promo Code Input */}
+                <PromoCodeInput
+                    placeholder="Masukkan kode referral"
+                    onValidPromo={handleApplyCode}
+                    showApplyButton={true}
+                    variant="modal"
+                    className="mb-4"
+                    applyAfterValid={false}
+                />
 
                 {/* Available Promo Codes */}
                 {isLoadingCoupons ? (
@@ -179,35 +101,57 @@ export const PromoCodeModal = ({
                     </div>
                 ) : couponsData?.coupons && couponsData.coupons.length > 0 ? (
                     <div className="space-y-3 max-h-60 overflow-y-auto">
-                        {couponsData.coupons.map((promo) => (
-                            <div
-                                key={promo.promo_id}
-                                className="p-4 bg-gradient-to-r from-purple-900/40 to-purple-800/40 border border-purple-500/30 rounded-lg">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <h3 className="text-white font-semibold text-sm mb-1">
-                                            Diskon{' '}
-                                            {promo.discount_amount_original}
-                                        </h3>
-                                        <p className="text-gray-400 text-xs">
-                                            Valid s.d.{' '}
-                                            {formatDate(promo.expired_at)}
-                                        </p>
+                        {couponsData.coupons.map((promo) => {
+                            const isCurrentlyApplied =
+                                appliedPromo?.promo_code === promo.promo_code;
+
+                            return (
+                                <div
+                                    key={promo.promo_id}
+                                    className={`p-4 bg-gradient-to-r border rounded-lg ${
+                                        isCurrentlyApplied
+                                            ? 'from-green-900/40 to-green-800/40 border-green-500/30'
+                                            : 'from-purple-900/40 to-purple-800/40 border-purple-500/30'
+                                    }`}>
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <h3 className="text-white font-semibold text-sm mb-1">
+                                                Diskon{' '}
+                                                {promo.discount_amount_original}
+                                                {isCurrentlyApplied && (
+                                                    <span className="text-green-400 text-xs ml-2">
+                                                        (Aktif)
+                                                    </span>
+                                                )}
+                                            </h3>
+                                            <p className="text-gray-400 text-xs">
+                                                Valid s.d.{' '}
+                                                {formatDate(promo.expired_at)}
+                                            </p>
+                                        </div>
+                                        {isCurrentlyApplied ? (
+                                            <button
+                                                onClick={handleRemovePromo}
+                                                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm rounded-full transition-colors">
+                                                Hapus
+                                            </button>
+                                        ) : (
+                                            <button
+                                                onClick={() =>
+                                                    handleApplyCode({
+                                                        ...promo,
+                                                        is_valid: true,
+                                                        message: ''
+                                                    })
+                                                }
+                                                className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded-full transition-colors">
+                                                Pakai
+                                            </button>
+                                        )}
                                     </div>
-                                    <button
-                                        onClick={() =>
-                                            handleApplyCode({
-                                                ...promo,
-                                                is_valid: true,
-                                                message: ''
-                                            })
-                                        }
-                                        className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded-full transition-colors">
-                                        Pakai
-                                    </button>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 ) : (
                     <div className="text-center py-4 text-gray-400 text-sm">
