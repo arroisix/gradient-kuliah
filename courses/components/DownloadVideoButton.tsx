@@ -113,7 +113,7 @@ const DownloadVideoButton = ({
                                                     </span>
                                                 </a>
 
-                                                <a
+                                                {/* <a
                                                     href="https://apps.apple.com/id/app/gradient-academy/id1234567890"
                                                     target="_blank"
                                                     rel="noopener noreferrer"
@@ -138,7 +138,7 @@ const DownloadVideoButton = ({
                                                     <span className="text-[#FFFFFF]">
                                                         Appstore
                                                     </span>
-                                                </a>
+                                                </a> */}
                                             </div>
                                         </div>
                                     </Dialog.Panel>

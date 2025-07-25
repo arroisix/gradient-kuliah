@@ -8,8 +8,10 @@ import {
 } from 'bitmovin-player';
 import { UIFactory } from 'bitmovin-player-ui';
 import 'bitmovin-player-ui/dist/css/bitmovinplayer-ui.css';
+import { useLearning } from 'courses/contexts/LearningProvider';
 import { router } from 'next/client';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTracker } from 'tracker/tracker';
 import { useDebounceCallback } from 'usehooks-ts';
 
 interface BitmovinPlayerProps {
@@ -34,6 +36,8 @@ export default function BitmovinPlayer({
     trackProgress,
     next_subchapter_link
 }: BitmovinPlayerProps): JSX.Element {
+    const tracker = useTracker();
+    const { subchapter } = useLearning();
     const [player, setPlayer] = useState<PlayerAPI | null>(null);
     const playerDiv = useRef<HTMLDivElement>(null);
 
@@ -56,14 +60,6 @@ export default function BitmovinPlayer({
     );
 
     const setupPlayer = useCallback((): void => {
-        console.log('Props received (ignored for test):', {
-            src,
-            drmToken: drmToken ? 'TOKEN_PROVIDED' : 'NO_TOKEN',
-            autoPlay,
-            trackProgress: trackProgress ? 'FUNCTION_PROVIDED' : 'NO_FUNCTION',
-            next_subchapter_link
-        });
-
         if (!playerDiv.current) {
             return;
         }
@@ -94,21 +90,51 @@ export default function BitmovinPlayer({
                     if (data.time) {
                         debouncedHandleTrackProgress(data.time, false);
                     }
+                    tracker?.genericTrack('Play Video', {
+                        'Course Slug': router.query.id,
+                        'Video Title': subchapter?.subchapter_name
+                    });
                 },
                 [PlayerEvent.Paused]: (data: PlayerEventData) => {
                     if (data.time) {
                         debouncedHandleTrackProgress(data.time, false);
                     }
+                    tracker?.genericTrack('Pause Video', {
+                        'Course Slug': router.query.id,
+                        'Video Title': subchapter?.subchapter_name
+                    });
                 },
-                [PlayerEvent.PlaybackFinished]: (data: PlayerEventData) => {
+                [PlayerEvent.PlaybackFinished]: async (
+                    data: PlayerEventData
+                ) => {
                     if (data.time) {
                         debouncedHandleTrackProgress(data.time, false);
+                    }
+                    tracker?.genericTrack('Finished Video', {
+                        'Course Slug': router.query.id,
+                        'Video Title': subchapter?.subchapter_name
+                    });
+
+                    if (next_subchapter_link) {
+                        // delay 10 seconds before navigating
+                        await new Promise((resolve) =>
+                            setTimeout(resolve, 10000)
+                        );
+                        tracker?.genericTrack('Navigate to Next Subchapter', {
+                            'Course Slug': router.query.id,
+                            'Next Subchapter Link': next_subchapter_link
+                        });
+                        router.push(next_subchapter_link);
                     }
                 },
                 [PlayerEvent.Seeked]: (data: PlayerEventData) => {
                     if (data.time) {
                         debouncedHandleTrackProgress(data.time, false);
                     }
+                    tracker?.genericTrack('Seek Video', {
+                        'Course Slug': router.query.id,
+                        'Video Title': subchapter?.subchapter_name
+                    });
                 },
                 [PlayerEvent.TimeChanged]: (data: PlayerEventData) => {
                     if (data.time && Math.round(data.time) % 5 === 0) {
