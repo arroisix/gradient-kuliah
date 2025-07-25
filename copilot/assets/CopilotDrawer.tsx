@@ -5,6 +5,7 @@ import { transitionClassesOpacity } from 'courses/components/LearningExperience/
 import { cn } from 'commons/utils';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import CopilotIconFill from 'copilot/assets/CopilotIconFill';
+import { useTracker } from 'tracker/tracker';
 
 interface CopilotDrawerProps {
     onCopilotClick: () => void;
@@ -14,8 +15,11 @@ const CopilotDrawer = ({ onCopilotClick }: CopilotDrawerProps): JSX.Element => {
     const [showOnce, setShowOnce] = useState(false);
     const [isShowDrawer, setIsShowDrawer] = useState(false);
     const { isMobileBreakpoints } = useWindowBreakpoints();
+    const tracker = useTracker();
 
     const handleCopilotClick = () => {
+        tracker?.genericTrack('Click Copilot Drawer');
+        
         if (isMobileBreakpoints && !isShowDrawer) {
             setIsShowDrawer(true);
         } else {

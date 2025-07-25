@@ -61,6 +61,14 @@ const Astronotes = ({
         setIsCopilotModalOpen(true);
     };
 
+    const currentAstronotesContext = page && book ? {
+        id: page,
+        title: book.title,
+        subtitle: 'DUMMY CHAPTER', // TODO (Steven) : Check here
+        header: 'DUMMY SUBCHAPTER', // TODO (Steven) : Check here
+        contentType: 'astronotes_content' as const
+    } : undefined;
+
     return (
         <AstronotesProvider>
             <section className="relative flex flex-col px-4 pt-4 text-black bg-white sm:pb-4 md:flex-row md:gap-2 dark:bg-black dark:text-white">
@@ -148,6 +156,7 @@ const Astronotes = ({
                     isOpen={isCopilotModalOpen}
                     setOpen={setIsCopilotModalOpen}
                     xlWidth="xl:w-[24rem]"
+                    currentContext={currentAstronotesContext}
                 />
             </section>
         </AstronotesProvider>

@@ -3,12 +3,13 @@ import { BiCopy } from 'react-icons/bi';
 import { BsArrowCounterclockwise, BsBookmark, BsCheck } from 'react-icons/bs';
 import { FiThumbsDown, FiThumbsUp } from 'react-icons/fi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import { ChevronDown } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import remarkGfm from 'remark-gfm';
 import Image from 'next/image';
-import { ChatMessage, ContentRecommendation } from '../../types/copilot';
+import { ChatMessage, ContentRecommendation, SelectedReference } from '../../types/copilot';
 import { cn } from 'commons/utils';
 import CopilotIcon from '../../assets/CopilotIcon';
 import { chatApi } from '../../redux/api/copilotApi';
@@ -25,6 +26,7 @@ interface ChatSectionProps {
     isLoading?: boolean;
     currentSessionId?: string;
     isSidebar?: boolean;
+    onOpenUsedReferencesModal?: (references: SelectedReference[]) => void;
 }
 
 const ChatSection = ({
@@ -34,7 +36,8 @@ const ChatSection = ({
     onRetry,
     isLoading,
     currentSessionId,
-    isSidebar = false
+    isSidebar = false,
+    onOpenUsedReferencesModal
 }: ChatSectionProps): JSX.Element => {
     const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
     const [isRating, setIsRating] = useState<Record<string, boolean>>({});
@@ -150,6 +153,10 @@ const ChatSection = ({
         setImageError((prev) => ({ ...prev, [messageId]: true }));
     };
 
+    const handleViewUsedReferences = (references: SelectedReference[]) => {
+        onOpenUsedReferencesModal?.(references);
+    };
+
     useEffect(() => {
         const fetchRecommendations = async (keyword: string) => {
             setIsLoadingRecommendations(true);
@@ -183,6 +190,24 @@ const ChatSection = ({
                 recommendations={recommendations}
                 isLoading={isLoadingRecommendations}
             />
+        );
+    };
+
+    const renderReferenceIndicator = (message: ChatMessage) => {
+        if (!message.usedReferences || message.usedReferences.length === 0) {
+            return null;
+        }
+
+        return (
+            <div className="mt-2">
+                <button
+                    onClick={() => handleViewUsedReferences(message.usedReferences!)}
+                    className="flex items-center gap-1 pb-2 rounded-full border border-hidden hover:border-neutral-500 transition-colors text-sm text-neutral-300 hover:text-white"
+                >
+                    <span>{message.usedReferences.length} Referensi</span>
+                    <ChevronDown size={14} />
+                </button>
+            </div>
         );
     };
 
@@ -364,29 +389,37 @@ const ChatSection = ({
                     )}>
                     <div className={cn('space-y-6 w-full', 'flex-1 md:block')}>
                         {messages.map((message) => (
-                            <div
-                                key={message.id}
-                                className={cn(
-                                    'flex w-full',
-                                    message.role === 'User'
-                                        ? cn('justify-end', isSidebar && 'pl-16')
-                                        : 'justify-start'
-                                )}>
-                                {message.role === 'AI' && (
-                                    <div className="flex-shrink-0 mr-3">
-                                        <div className="w-8 h-8 rounded-full bg-[#5F2BCE] flex items-center justify-center">
-                                            <CopilotIcon />
+                            <div key={message.id} className="space-y-2">
+                                <div
+                                    className={cn(
+                                        'flex w-full',
+                                        message.role === 'User'
+                                            ? cn('justify-end', isSidebar && 'pl-16')
+                                            : 'justify-start'
+                                    )}>
+                                    {message.role === 'AI' && (
+                                        <div className="flex-shrink-0 mr-3">
+                                            <div className="w-8 h-8 rounded-full bg-[#5F2BCE] flex items-center justify-center">
+                                                <CopilotIcon />
+                                            </div>
+                                        </div>
+                                    )}
+                                    <div
+                                        className={cn(
+                                            message.role === 'User' &&
+                                                'bg-[#5F2BCE] px-4 py-3 rounded-t-2xl rounded-bl-2xl',
+                                            message.role === 'AI' && 'w-full'
+                                        )}>
+                                        {renderMessage(message)}
+                                    </div>
+                                </div>
+                                {message.role === 'User' && (
+                                    <div className={cn('flex w-full', cn('justify-end', isSidebar && 'pl-16'))}>
+                                        <div className="mr-0">
+                                            {renderReferenceIndicator(message)}
                                         </div>
                                     </div>
                                 )}
-                                <div
-                                    className={cn(
-                                        message.role === 'User' &&
-                                            'bg-[#5F2BCE] px-4 py-3 rounded-t-2xl rounded-bl-2xl',
-                                        message.role === 'AI' && 'w-full'
-                                    )}>
-                                    {renderMessage(message)}
-                                </div>
                             </div>
                         ))}
 

@@ -67,6 +67,14 @@ const VideoLearnContainer = ({
         setIsCopilotModalOpen(true);
     };
 
+    const currentVideoContext = subchapter?.video && subchapter?.subchapter_name ? {
+        id: subchapter.video.id,
+        title: course.course_name,
+        subtitle: 'DUMMY SUBTITLE', // TODO (Steven) : Check here
+        header: subchapter.subchapter_name,
+        contentType: 'course' as const
+    } : undefined;
+
     return (
         <section className="relative flex flex-col overflow-visible">
             <div className="grid grid-cols-1 gap-5 pb-px lg:pl-6 lg:grid-cols-3">
@@ -154,6 +162,7 @@ const VideoLearnContainer = ({
                 isOpen={isCopilotModalOpen}
                 setOpen={setIsCopilotModalOpen}
                 xlWidth="xl:w-[29.5rem]"
+                currentContext={currentVideoContext}
             />
         </section>
     );

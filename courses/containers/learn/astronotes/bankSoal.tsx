@@ -63,6 +63,14 @@ const BankSoalContainer = ({
         setIsCopilotModalOpen(true);
     };
 
+    const currentBankSoalContext = data?.problem && getTextbookDetail?.book ? {
+        id: data.problem.id,
+        title: getTextbookDetail.book.title,
+        subtitle: data.problem.chapter_name || '',
+        header: data.problem.title || '',
+        contentType: 'bank_soal_problem' as const
+    } : undefined;
+
     return (
         <div className="drawer drawer-end lg:drawer-open">
             <div className="relative z-50">
@@ -116,6 +124,7 @@ const BankSoalContainer = ({
                 isOpen={isCopilotModalOpen}
                 setOpen={setIsCopilotModalOpen}
                 xlWidth="xl:w-[24rem]"
+                currentContext={currentBankSoalContext}
             />
         </div>
     );

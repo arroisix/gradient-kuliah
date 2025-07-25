@@ -9,6 +9,7 @@ import {
 import { BsImage, BsArrowUpShort } from 'react-icons/bs';
 import { ImOmega } from 'react-icons/im';
 import { IoMdClose } from 'react-icons/io';
+import { Plus, ChevronDown } from 'lucide-react';
 import { cn } from 'commons/utils';
 import MathForm from 'komunitas/components/KomunitasForm/MathForm';
 import SymbolForm from 'komunitas/components/KomunitasForm/SymbolForm';
@@ -23,6 +24,10 @@ interface PromptBarProps {
     fileInputRef?: React.RefObject<HTMLInputElement>;
     placeholder?: string;
     showBorder?: boolean;
+    isSidebar?: boolean;
+    onOpenReferenceModal?: () => void;
+    onOpenReferenceContentModal?: () => void;
+    referenceCount?: number;
 }
 
 const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
@@ -33,7 +38,11 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
             onStateChange,
             fileInputRef: externalFileInputRef,
             placeholder = 'Lagi butuh bantuan apa sobat? Jangan masukkan data pribadi kamu yaa!',
-            showBorder = true
+            showBorder = true,
+            isSidebar = false,
+            onOpenReferenceModal,
+            onOpenReferenceContentModal,
+            referenceCount = 0
         },
         ref
     ) => {
@@ -179,6 +188,14 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
             }
         };
 
+        const handleReferensiClick = () => {
+            if (referenceCount === 0) {
+                onOpenReferenceModal?.();
+            } else {
+                onOpenReferenceContentModal?.();
+            }
+        };
+
         return (
             <>
                 <div className="flex flex-col gap-2">
@@ -242,71 +259,129 @@ const PromptBar = forwardRef<HTMLInputElement, PromptBarProps>(
                             />
                         </div>
 
-                        <div className="px-5 pb-4 flex items-center justify-between">
-                            <div className="flex gap-2">
-                                <input
-                                    ref={fileInputRef}
-                                    type="file"
-                                    hidden
-                                    accept="image/png,image/gif,image/jpeg,image/jpg"
-                                    capture="environment"
-                                    onChange={handleImageUpload}
-                                />
-                                <button
-                                    onClick={() => {
-                                        tracker?.genericTrack(
-                                            'Click Image Attachment'
-                                        );
-                                        fileInputRef.current?.click();
-                                    }}
-                                    disabled={isLoading}
-                                    className={cn(
-                                        'text-neutral-400 hover:text-white transition-colors',
-                                        imageUrl && 'text-white'
-                                    )}
-                                    aria-label="Upload image">
-                                    <BsImage size={20} />
-                                </button>
-                                <button
-                                    className={cn(
-                                        'text-neutral-400 hover:text-white p-2 rounded-lg transition-colors',
-                                        activeForm === 'symbol' &&
-                                            'bg-neutral-800 text-white'
-                                    )}
-                                    onClick={() => {
-                                        tracker?.genericTrack(
-                                            'Click Special Symbol Button'
-                                        );
-                                        setActiveForm(
-                                            activeForm === 'symbol'
-                                                ? null
-                                                : 'symbol'
-                                        );
-                                    }}
-                                    disabled={isLoading}
-                                    aria-label="Symbol input">
-                                    <ImOmega size={16} />
-                                </button>
+                        <div className="px-5 pb-4">
+                            <div className={cn(isSidebar ? "mb-3" : "md:hidden mb-3")}>
+                                {referenceCount === 0 ? (
+                                    <button
+                                        onClick={handleReferensiClick}
+                                        className="flex items-center gap-1 px-3 py-1 rounded-full border border-neutral-600 hover:border-neutral-500 transition-colors text-sm text-neutral-300 hover:text-white"
+                                        disabled={isLoading}>
+                                        <Plus size={14} />
+                                        <span>Tambah Referensi</span>
+                                    </button>
+                                ) : (
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            onClick={() => onOpenReferenceModal?.()}
+                                            className="flex items-center justify-center w-8 h-8 rounded-full border border-neutral-600 hover:border-neutral-500 transition-colors text-neutral-300 hover:text-white"
+                                            disabled={isLoading}>
+                                            <Plus size={14} />
+                                        </button>
+                                        <button
+                                            onClick={handleReferensiClick}
+                                            className="flex items-center gap-1 px-3 py-1 rounded-full border border-neutral-600 hover:border-neutral-500 transition-colors text-sm text-neutral-300 hover:text-white"
+                                            disabled={isLoading}>
+                                            <span>{referenceCount} Referensi ditambahkan</span>
+                                            <ChevronDown size={14} className="rotate-180" />
+                                        </button>
+                                    </div>
+                                )}
                             </div>
-                            <div className="flex items-center gap-1 md:gap-2">
-                                <span className="text-neutral-500 text-xs font-thin">
-                                    *Copilot bisa salah, tolong cek lagi yaa!
-                                </span>
-                                <button
-                                    onClick={handleSend}
-                                    disabled={isLoading || !prompt.trim()}
-                                    className={cn(
-                                        'transition-colors bg-[#5F2BCE] p-1.5 rounded-full',
-                                        prompt.trim() && !isLoading
-                                            ? 'opacity-100 hover:opacity-90'
-                                            : 'opacity-50 cursor-not-allowed'
-                                    )}
-                                    aria-label="Send message">
-                                    <BsArrowUpShort
-                                        size={24}
-                                        className="text-white"
+                            
+                            <div className="flex items-center justify-between">
+                                <div className="flex gap-2 items-center">
+                                    <input
+                                        ref={fileInputRef}
+                                        type="file"
+                                        hidden
+                                        accept="image/png,image/gif,image/jpeg,image/jpg"
+                                        capture="environment"
+                                        onChange={handleImageUpload}
                                     />
-                                </button>
+                                    <button
+                                        onClick={() => {
+                                            tracker?.genericTrack(
+                                                'Click Image Attachment'
+                                            );
+                                            fileInputRef.current?.click();
+                                        }}
+                                        disabled={isLoading}
+                                        className={cn(
+                                            'text-neutral-400 hover:text-white transition-colors',
+                                            imageUrl && 'text-white'
+                                        )}
+                                        aria-label="Upload image">
+                                        <BsImage size={20} />
+                                    </button>
+                                    <button
+                                        className={cn(
+                                            'text-neutral-400 hover:text-white p-2 rounded-lg transition-colors',
+                                            activeForm === 'symbol' &&
+                                                'bg-neutral-800 text-white'
+                                        )}
+                                        onClick={() => {
+                                            tracker?.genericTrack(
+                                                'Click Special Symbol Button'
+                                            );
+                                            setActiveForm(
+                                                activeForm === 'symbol'
+                                                    ? null
+                                                    : 'symbol'
+                                            );
+                                        }}
+                                        disabled={isLoading}
+                                        aria-label="Symbol input">
+                                        <ImOmega size={16} />
+                                    </button>
+                                    
+                                    <div className={cn(isSidebar ? "hidden" : "hidden md:block")}>
+                                        {referenceCount === 0 ? (
+                                            <button
+                                                onClick={handleReferensiClick}
+                                                className="flex items-center gap-1 px-3 py-1 rounded-full border border-neutral-600 hover:border-neutral-500 transition-colors text-sm text-neutral-300 hover:text-white"
+                                                disabled={isLoading}>
+                                                <Plus size={14} />
+                                                <span>Tambah Referensi</span>
+                                            </button>
+                                        ) : (
+                                            <div className="flex items-center gap-2">
+                                                <button
+                                                    onClick={() => onOpenReferenceModal?.()}
+                                                    className="flex items-center justify-center w-8 h-8 rounded-full border border-neutral-600 hover:border-neutral-500 transition-colors text-neutral-300 hover:text-white"
+                                                    disabled={isLoading}>
+                                                    <Plus size={14} />
+                                                </button>
+                                                <button
+                                                    onClick={handleReferensiClick}
+                                                    className="flex items-center gap-1 px-3 py-1 rounded-full border border-neutral-600 hover:border-neutral-500 transition-colors text-sm text-neutral-300 hover:text-white"
+                                                    disabled={isLoading}>
+                                                    <span>{referenceCount} Referensi ditambahkan</span>
+                                                    <ChevronDown size={14} className="rotate-180" />
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-1 md:gap-2">
+                                    <span className="text-neutral-500 text-xs font-thin">
+                                        *Copilot bisa salah, tolong cek lagi yaa!
+                                    </span>
+                                    <button
+                                        onClick={handleSend}
+                                        disabled={isLoading || !prompt.trim()}
+                                        className={cn(
+                                            'transition-colors bg-[#5F2BCE] p-1.5 rounded-full',
+                                            prompt.trim() && !isLoading
+                                                ? 'opacity-100 hover:opacity-90'
+                                                : 'opacity-50 cursor-not-allowed'
+                                        )}
+                                        aria-label="Send message">
+                                        <BsArrowUpShort
+                                            size={24}
+                                            className="text-white"
+                                        />
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
