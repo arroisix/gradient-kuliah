@@ -108,24 +108,26 @@ const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({
 
             {/* Phone Number Input for OVO */}
             {isSelected && method.payment_code === 'ID_OVO' && (
-                <div className="px-4 pb-4">
-                    <div className="ml-11 flex items-center space-x-3">
-                        <span className="text-gray-400 text-sm font-medium">
-                            +62
-                        </span>
-                        <input
-                            type="tel"
-                            value={phoneNumber}
-                            onChange={(event) =>
-                                handleSetPhoneNumber(event.target.value)
-                            }
-                            placeholder="8xxxxxxxx"
-                            className={`flex-1 bg-graphite-800 border rounded-lg px-3 py-2 text-white placeholder-graphite-500 focus:outline-none focus:ring-2 focus:ring-purple-500 ${
-                                phoneNumberError
-                                    ? 'border-red-500'
-                                    : 'border-gray-600'
-                            }`}
-                        />
+                <div className="px-4 pb-4 pt-2">
+                    <div className="ml-11">
+                        <div className="flex items-center space-x-3">
+                            <span className="text-gray-400 text-sm font-medium">
+                                +62
+                            </span>
+                            <input
+                                type="tel"
+                                value={phoneNumber}
+                                onChange={(event) =>
+                                    handleSetPhoneNumber(event.target.value)
+                                }
+                                placeholder="8xxxxxxxx"
+                                className={`flex-1 bg-graphite-800 border rounded-lg px-3 py-2 text-white placeholder-graphite-500 focus:outline-none focus:ring-2 focus:ring-purple-500 ${
+                                    phoneNumberError
+                                        ? 'border-red-500'
+                                        : 'border-gray-600'
+                                }`}
+                            />
+                        </div>
                         {phoneNumberError && (
                             <p className="text-red-500 text-xs mt-1">
                                 {phoneNumberError}
@@ -137,7 +139,7 @@ const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({
 
             {/* Voucher Code Input for VOUCHER */}
             {isSelected && method.payment_code === 'VOUCHER' && (
-                <div className="px-4 pb-4">
+                <div className="px-4 pb-4 pt-2">
                     <div className="ml-11 flex items-center space-x-3">
                         <PromoCodeInput
                             placeholder="Masukkan kode voucher"
