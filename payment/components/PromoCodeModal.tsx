@@ -41,7 +41,7 @@ export const PromoCodeModal = ({
             isOpen={isOpen}
             setOpen={setOpen}
             variant="dark"
-            className="!bg-[#1D1D1D] !max-w-md">
+            className="!bg-[#1D1D1D] fixed inset-x-0 bottom-0 w-full rounded-t-xl sm:relative sm:inset-auto sm:bottom-auto sm:w-auto sm:max-w-md sm:rounded-lg">
             <div className="flex flex-col w-full">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-4">

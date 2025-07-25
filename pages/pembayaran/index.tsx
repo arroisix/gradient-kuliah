@@ -3,7 +3,7 @@ import withAuth from 'commons/withAuth';
 import Layout from 'commons/layout';
 import { PaymentProvider } from 'payment/contexts/PaymentProvider';
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useGetDetailPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
@@ -13,6 +13,7 @@ import { useTracker } from 'tracker/tracker';
 import PaketInfo from 'payment/components/PaketInfo';
 import PaymentMethodList from 'payment/components/PaymentMethodList';
 import CheckoutBottomSheet from 'payment/components/CheckoutBottomSheet';
+import PromoCodeModal from 'payment/components/PromoCodeModal';
 
 const Payment = (): JSX.Element => {
     const router = useRouter();
@@ -23,6 +24,7 @@ const Payment = (): JSX.Element => {
         skip: !packetId
     });
     const tracker = useTracker();
+    const [isPromoModalOpen, setPromoModalOpen] = useState(false);
 
     useEffect(() => {
         if (
@@ -71,7 +73,13 @@ const Payment = (): JSX.Element => {
                         <>
                             <PaketInfo />
                             <PaymentMethodList />
-                            <CheckoutBottomSheet />
+                            <CheckoutBottomSheet
+                                onPromoClick={() => setPromoModalOpen(true)}
+                            />
+                            <PromoCodeModal
+                                isOpen={isPromoModalOpen}
+                                setOpen={setPromoModalOpen}
+                            />
                         </>
                     )}
                 </PaymentProvider>

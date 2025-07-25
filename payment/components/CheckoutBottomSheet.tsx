@@ -7,9 +7,12 @@ import { formatCurrency } from 'commons/utils';
 import { ChevronUp, ChevronDown, Check } from 'lucide-react';
 import CheckoutButton from './CheckoutButton';
 import { BsShieldFillCheck } from 'react-icons/bs';
-import { PromoCodeModal } from './PromoCodeModal';
 
-const CheckoutBottomSheet: React.FC = () => {
+interface Props {
+    onPromoClick: () => void;
+}
+
+const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
     const sheetRef = useRef<HTMLDivElement>(null);
     const {
         packet,
@@ -19,7 +22,6 @@ const CheckoutBottomSheet: React.FC = () => {
         appliedPromo
     } = usePayment();
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
-    const [isPromoModalOpen, setIsPromoModalOpen] = useState<boolean>(false);
     const [mode, setMode] = useState<'fixed' | 'absolute'>('fixed');
     const [bottomOffset, setBottomOffset] = useState(0);
 
@@ -54,10 +56,6 @@ const CheckoutBottomSheet: React.FC = () => {
         };
     }, []);
 
-    const handlePromoClick = () => {
-        setIsPromoModalOpen(true);
-    };
-
     const calculateFinalPrice = () => {
         if (appliedPromo?.is_valid && appliedPromo?.payment_amount) {
             return appliedPromo.payment_amount;
@@ -90,12 +88,12 @@ const CheckoutBottomSheet: React.FC = () => {
             style={{ bottom: mode === 'fixed' ? 0 : bottomOffset }}
             className={`${
                 mode === 'fixed' ? 'fixed' : 'absolute'
-            } z-10 inset-x-4 md:inset-x-32 bottom-0 bg-graphite-900 rounded-t-xl shadow-lg overflow-hidden`}>
+            } z-10 inset-x-4 sm:inset-x-8 lg:inset-x-32 bottom-0 bg-graphite-900 rounded-t-xl shadow-lg overflow-hidden`}>
             {/* Promo Code Section */}
             {!isExpanded && (
                 <div className="px-4 py-3 relative overflow-visible">
                     <button
-                        onClick={handlePromoClick}
+                        onClick={onPromoClick}
                         className={`relative overflow-hidden w-full rounded-lg py-4 flex items-center gap-3 ${
                             appliedPromo
                                 ? 'pl-10 bg-emerald-900'
@@ -205,10 +203,6 @@ const CheckoutBottomSheet: React.FC = () => {
                     </div>
                 </div>
             </div>
-            <PromoCodeModal
-                isOpen={isPromoModalOpen}
-                setOpen={setIsPromoModalOpen}
-            />
         </div>
     );
 };
