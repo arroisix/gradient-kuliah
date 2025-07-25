@@ -32,8 +32,8 @@ const ReferenceContentModal: React.FC<ReferenceContentModalProps> = ({
     };
 
     return (
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-            <div className="bg-[#1A1A1A] rounded-2xl w-full max-w-md mt-8 max-h-[82vh] overflow-hidden">
+        <div className="fixed inset-0 z-50 bg-black/80 flex items-end justify-center p-0 sm:items-center sm:justify-center sm:p-4">
+            <div className="bg-[#1A1A1A] rounded-t-2xl sm:rounded-2xl w-full max-w-md max-h-[90vh] sm:mt-8 sm:max-h-[82vh] overflow-hidden">
                 <div className="flex items-center justify-between pt-6 px-6">
                     <h2 className="text-lg font-semibold text-white">Referensi Konten</h2>
                     <button
@@ -57,7 +57,7 @@ const ReferenceContentModal: React.FC<ReferenceContentModalProps> = ({
                     </div>
                 </div>
 
-                <div className="px-6 pt-4 space-y-0 max-h-[400px] overflow-y-auto">
+                <div className="px-6 pt-4 space-y-0 max-h-[50vh] sm:max-h-[400px] overflow-y-auto">
                     {selectedReferences.map((reference, index) => (
                         <div key={`${reference.id}-${reference.contentType}`}>
                             <div className="rounded-lg p-4">
