@@ -110,28 +110,25 @@ const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({
             {isSelected && method.payment_code === 'ID_OVO' && (
                 <div className="px-4 pb-4 pt-2">
                     <div className="ml-11">
-                        <div className="flex items-center space-x-3">
-                            <span className="text-gray-400 text-sm font-medium">
-                                +62
-                            </span>
+                        <div className="flex justify-between items-center gap-3 w-full mt-2 px-4 bg-[#2D2D2D] rounded-[6px]">
+                            <div>
+                                <span className="text-neutral-400">+62</span>
+                            </div>
                             <input
                                 type="tel"
-                                value={phoneNumber}
+                                placeholder="8211234567"
+                                required={true}
+                                pattern="\+[1-9]\d{10,14}"
                                 onChange={(event) =>
                                     handleSetPhoneNumber(event.target.value)
                                 }
-                                placeholder="8xxxxxxxx"
-                                className={`flex-1 bg-graphite-800 border rounded-lg px-3 py-2 text-white placeholder-graphite-500 focus:outline-none focus:ring-2 focus:ring-purple-500 ${
-                                    phoneNumberError
-                                        ? 'border-red-500'
-                                        : 'border-gray-600'
-                                }`}
+                                className="w-full px-0 py-4 text-xs bg-transparent border-none placeholder:text-neutral-600 focus:outline-none focus:ring-0 focus:appearance-none"
                             />
                         </div>
                         {phoneNumberError && (
-                            <p className="text-red-500 text-xs mt-1">
+                            <div className="px-2 pt-2 text-xs font-body text-state-error">
                                 {phoneNumberError}
-                            </p>
+                            </div>
                         )}
                     </div>
                 </div>
