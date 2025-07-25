@@ -38,20 +38,20 @@ const CopilotModal = ({
   }, [isOpen]);
 
   useEffect(() => {
-    if (isOpen && currentContext) {
+    if (currentContext) {
       setSelectedReferences(prev => {
         const exists = prev.find(ref => 
           ref.id === currentContext.id && ref.contentType === currentContext.contentType
         );
         
         if (!exists) {
-          return [currentContext, ...prev];
+          return [currentContext];
         }
         
         return prev;
       });
     }
-  }, [isOpen, currentContext]);
+  }, [currentContext]);
 
   const handleClose = () => {
     setOpen(false);
