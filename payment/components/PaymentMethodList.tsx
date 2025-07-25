@@ -5,8 +5,6 @@ import { useGetAllPaymentMethodsQuery } from 'payment/redux/api/transactionApi';
 import { useEffect, useRef } from 'react';
 import { usePayment } from 'payment/contexts/PaymentProvider';
 import FreeBox from './FreeBox';
-import PaymentMethodOtherItem from './PaymentMethodOtherItem';
-import OtherPaymentBox from './OtherPayment';
 
 const PaymentMethodList: React.FC = () => {
     const otherPaymentMethodRef = useRef<HTMLDivElement>(null);
@@ -71,15 +69,9 @@ const PaymentMethodList: React.FC = () => {
                         {sortedSections.map((section) => (
                             <PaymentMethodSectionComponent
                                 key={section.key}
-                                section={section}>
-                                {section.key === 'va' && (
-                                    <PaymentMethodOtherItem
-                                        onClick={scrollToOtherPayment}
-                                    />
-                                )}
-                            </PaymentMethodSectionComponent>
+                                section={section}
+                            />
                         ))}
-                        <OtherPaymentBox ref={otherPaymentMethodRef} />
                     </>
                 )}
             </div>
