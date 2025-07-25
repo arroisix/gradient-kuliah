@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 import withAuth from 'commons/withAuth';
 import Layout from 'commons/layout';
-import SubscriptionContainer from 'payment/containers';
 import { PaymentProvider } from 'payment/contexts/PaymentProvider';
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
 import { useEffect } from 'react';

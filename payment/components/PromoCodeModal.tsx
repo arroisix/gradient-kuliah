@@ -11,8 +11,10 @@ export const PromoCodeModal = ({
     setOpen
 }: ModalBaseProps): JSX.Element => {
     const { packet, appliedPromo, setAppliedPromo } = usePayment();
+
+    const packetId = packet?.id ?? '';
     const { data: couponsData, isLoading: isLoadingCoupons } =
-        useGetAllCouponsQuery({ packet_id: packet?.id }, { skip: !packet?.id });
+        useGetAllCouponsQuery({ packet_id: packetId }, { skip: !packetId });
 
     const formatDate = (dateString: string): string => {
         const date = new Date(dateString);
