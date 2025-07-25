@@ -58,7 +58,7 @@ const CheckoutBottomSheet: React.FC = () => {
                     onClick={handlePromoClick}
                     className={`relative overflow-hidden w-full rounded-lg py-4 flex items-center gap-3 ${
                         appliedPromo
-                            ? 'pl-10 bg-[#03AC5C33]'
+                            ? 'pl-10 bg-emerald-900'
                             : 'pl-[50px] bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700'
                     }`}>
                     <>

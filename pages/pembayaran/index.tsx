@@ -68,11 +68,11 @@ const Payment = (): JSX.Element => {
                             </p>
                         </section>
                     ) : (
-                        <div className="min-h-screen bg-gray-900 flex flex-col">
+                        <>
                             <PaketInfo />
                             <PaymentMethodList />
                             <CheckoutBottomSheet />
-                        </div>
+                        </>
                     )}
                 </PaymentProvider>
             ) : (
