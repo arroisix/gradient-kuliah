@@ -35,7 +35,7 @@ const Carousel = ({
     };
 
     const CarouselContent = () => (
-        <div className="relative aspect-[1080/1350] overflow-hidden rounded-lg">
+        <div className="relative aspect-[1080/1350] overflow-hidden">
             {/* Images */}
             <div
                 className="flex transition-transform duration-300 ease-in-out h-full"
