@@ -34,11 +34,11 @@ export const PromoCodeInput: React.FC<PromoCodeInputProps> = ({
 
     // Initialize input with applied promo code
     useEffect(() => {
-        if (appliedPromo?.promo_code && !inputCode) {
+        if (appliedPromo?.promo_code) {
             setInputCode(appliedPromo.promo_code);
             setValidationState('success');
         }
-    }, [appliedPromo, inputCode]);
+    }, [appliedPromo?.promo_code]);
 
     useEffect(() => {
         let timeoutId: NodeJS.Timeout;
@@ -145,7 +145,7 @@ export const PromoCodeInput: React.FC<PromoCodeInputProps> = ({
     const successStyles =
         variant === 'modal'
             ? 'mb-4 p-3 bg-green-900/20 border border-green-500/30 rounded-lg flex items-center justify-between'
-            : 'p-2 bg-green-900/20 border border-green-500/30 rounded text-sm';
+            : 'p-2 bg-green-900/20 border border-green-500/30 rounded text-sm flex items-center justify-between';
 
     const isCurrentlyApplied = appliedPromo?.promo_code === inputCode;
 
@@ -201,7 +201,12 @@ export const PromoCodeInput: React.FC<PromoCodeInputProps> = ({
                                 </span>
                             )}
                         </div>
-                        <div className="flex gap-2">
+                        <div
+                            className={
+                                variant === 'modal'
+                                    ? 'flex gap-2'
+                                    : 'flex gap-1'
+                            }>
                             {showApplyButton &&
                                 !isCurrentlyApplied &&
                                 validationResult && (
@@ -216,7 +221,11 @@ export const PromoCodeInput: React.FC<PromoCodeInputProps> = ({
                             {isCurrentlyApplied && (
                                 <button
                                     onClick={handleRemovePromo}
-                                    className="px-4 py-1 bg-[#EA5D49] hover:bg-[#D85140] text-white text-sm rounded-full transition-colors flex items-center justify-center">
+                                    className={`bg-[#EA5D49] hover:bg-[#D85140] text-white rounded-full transition-colors flex items-center justify-center ${
+                                        variant === 'modal'
+                                            ? 'px-4 py-1 text-sm'
+                                            : 'px-3 py-0.5 text-xs'
+                                    }`}>
                                     Hapus
                                 </button>
                             )}
