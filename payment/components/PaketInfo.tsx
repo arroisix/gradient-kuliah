@@ -27,7 +27,7 @@ const PaketInfo = (): JSX.Element => {
 
     return (
         <section className="fixed inset-x-0 top-16 z-50 bg-graphite-900 border-gray-700">
-            <div className="mx-32 flex items-center justify-between px-4 py-4">
+            <div className="mx-4 md:mx-32 flex items-center justify-between px-4 py-4">
                 <div className="flex flex-col">
                     <h2 className="text-neutral-50 font-semibold text-l">
                         {packet?.packet_name}

@@ -27,8 +27,13 @@ const CheckoutBottomSheet: React.FC = () => {
         const footer = document.getElementById('footer');
         if (!footer) return;
 
-        // measure how tall the footer is
-        setBottomOffset(footer.offsetHeight);
+        const measure = () => {
+            setBottomOffset(footer.offsetHeight);
+        };
+
+        measure();
+
+        window.addEventListener('resize', measure);
 
         // when footer scrolls into view, switch to "absolute"
         const obs = new IntersectionObserver(
@@ -43,7 +48,10 @@ const CheckoutBottomSheet: React.FC = () => {
         );
 
         obs.observe(footer);
-        return () => obs.disconnect();
+        return () => {
+            obs.disconnect();
+            window.removeEventListener('resize', measure);
+        };
     }, []);
 
     const handlePromoClick = () => {
@@ -82,7 +90,7 @@ const CheckoutBottomSheet: React.FC = () => {
             style={{ bottom: mode === 'fixed' ? 0 : bottomOffset }}
             className={`${
                 mode === 'fixed' ? 'fixed' : 'absolute'
-            } z-10 bottom-0 left-0 right-0 mx-32 bg-graphite-900 rounded-t-xl shadow-lg overflow-hidden`}>
+            } z-10 inset-x-4 md:inset-x-32 bottom-0 bg-graphite-900 rounded-t-xl shadow-lg overflow-hidden`}>
             {/* Promo Code Section */}
             {!isExpanded && (
                 <div className="px-4 py-3 relative overflow-visible">

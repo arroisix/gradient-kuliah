@@ -60,7 +60,7 @@ const PaymentMethodList: React.FC = () => {
         .filter((section) => section.key !== 'retail');
 
     return (
-        <div className="flex-1 overflow-y-auto pb-32 mx-32">
+        <div className="flex-1 overflow-y-auto pb-36 mx-4 md:mx-32">
             <div className="pt-24">
                 {packet?.is_free ? (
                     <FreeBox />
