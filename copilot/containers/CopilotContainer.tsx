@@ -560,8 +560,6 @@ const CopilotContainer = ({ sessionId }: CopilotContainerProps): JSX.Element => 
                 isOpen={isUsedReferencesModalOpen}
                 onClose={handleCloseUsedReferencesModal}
                 selectedReferences={viewingUsedReferences}
-                onRemoveReference={() => {}}
-                onOpenReferenceModal={() => {}}
                 isViewOnly={true}
             />
         </div>

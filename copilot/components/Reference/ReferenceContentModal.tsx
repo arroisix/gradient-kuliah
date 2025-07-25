@@ -10,8 +10,8 @@ interface ReferenceContentModalProps {
     isOpen: boolean;
     onClose: () => void;
     selectedReferences: SelectedReference[];
-    onRemoveReference: (referenceId: string, contentType: ReferenceContentType) => void;
-    onOpenReferenceModal: () => void;
+    onRemoveReference?: (referenceId: string, contentType: ReferenceContentType) => void;
+    onOpenReferenceModal?: () => void;
     isViewOnly?: boolean;
 }
 
@@ -31,6 +31,18 @@ const ReferenceContentModal: React.FC<ReferenceContentModalProps> = ({
                 return <IoPlayCircleOutline size={36} className="text-white" />;
             default:
                 return <BookText size={36} className="text-white" />;
+        }
+    };
+
+    const handleRemoveReference = (referenceId: string, contentType: ReferenceContentType) => {
+        if (!isViewOnly && onRemoveReference) {
+            onRemoveReference(referenceId, contentType);
+        }
+    };
+
+    const handleOpenReferenceModal = () => {
+        if (!isViewOnly && onOpenReferenceModal) {
+            onOpenReferenceModal();
         }
     };
 
@@ -97,7 +109,7 @@ const ReferenceContentModal: React.FC<ReferenceContentModalProps> = ({
                                     </div>
                                     
                                     <button
-                                        onClick={() => onRemoveReference(reference.id, reference.contentType)}
+                                        onClick={() => handleRemoveReference(reference.id, reference.contentType)}
                                         className={cn(
                                             "p-1 text-white/40 hover:text-white/80 transition-colors flex-shrink-0 ml-2",
                                             isViewOnly && "hidden"
@@ -115,7 +127,7 @@ const ReferenceContentModal: React.FC<ReferenceContentModalProps> = ({
 
                 <div className={cn("p-6", isViewOnly && "hidden")}>
                     <button
-                        onClick={onOpenReferenceModal}
+                        onClick={handleOpenReferenceModal}
                         className="w-full bg-[#333333] text-white/80 hover:text-white py-3 px-4 rounded-full transition-colors flex items-center justify-center gap-2"
                     >
                         <IoSearchOutline size={16} />

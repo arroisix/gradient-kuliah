@@ -133,7 +133,6 @@ const CopilotModal = ({
           onClose={handleClose}
           onOpenReferenceModal={handleOpenReferenceModal}
           onOpenReferenceContentModal={handleOpenReferenceContentModal}
-          onReferenceSelect={handleReferenceSelect}
           onRemoveReference={handleRemoveReference}
           onOpenUsedReferencesModal={handleOpenUsedReferencesModal}
         />
@@ -161,8 +160,6 @@ const CopilotModal = ({
         isOpen={isUsedReferencesModalOpen}
         onClose={handleCloseUsedReferencesModal}
         selectedReferences={viewingUsedReferences}
-        onRemoveReference={() => {}}
-        onOpenReferenceModal={() => {}}
         isViewOnly={true}
       />
       

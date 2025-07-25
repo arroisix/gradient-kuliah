@@ -142,10 +142,11 @@ const ReferenceRecommendationList = ({
                     const product = getProduct(recommendation);
                     
                     return (
-                        <div
+                        <button
                             key={`${recommendation.type}-${recommendation.course_slug || recommendation.book_slug}-${index}`}
                             onClick={() => handleCardClick(recommendation)}
-                            className="cursor-pointer"
+                            className="cursor-pointer w-full text-left"
+                            type="button"
                         >
                             <ProductCard
                                 heading="h2"
@@ -155,7 +156,7 @@ const ReferenceRecommendationList = ({
                                 href="#"
                                 product={product}
                             />
-                        </div>
+                        </button>
                     );
                 })}
             </div>
