@@ -26,15 +26,15 @@ const PaketInfo = (): JSX.Element => {
         : null;
 
     return (
-        <section className="fixed inset-x-0 top-16 z-10 bg-graphite-900 border-gray-700">
+        <section className="fixed inset-x-0 top-16 z-50 bg-graphite-900 border-gray-700">
             <div className="mx-32 flex items-center justify-between px-4 py-4">
                 <div className="flex flex-col">
-                    <h2 className="text-neutral-50 font-semibold text-xl">
+                    <h2 className="text-neutral-50 font-semibold text-l">
                         {packet?.packet_name}
                     </h2>
                     {activeUntil && (
                         <p className="mt-1 text-neutral-400 text-sm">
-                            Aktif hingga {activeUntil.format('D MMMM YYYY')}
+                            Aktif hingga {activeUntil.format('D-MM-YYYY')}
                         </p>
                     )}
                 </div>

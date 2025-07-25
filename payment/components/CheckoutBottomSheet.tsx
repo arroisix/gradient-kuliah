@@ -1,7 +1,7 @@
 'use client';
 
 import type React from 'react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { usePayment } from 'payment/contexts/PaymentProvider';
 import { formatCurrency } from 'commons/utils';
 import { ChevronUp, ChevronDown, Check } from 'lucide-react';
@@ -10,6 +10,7 @@ import { BsShieldFillCheck } from 'react-icons/bs';
 import { PromoCodeModal } from './PromoCodeModal';
 
 const CheckoutBottomSheet: React.FC = () => {
+    const sheetRef = useRef<HTMLDivElement>(null);
     const {
         packet,
         paymentMethod,
@@ -19,6 +20,31 @@ const CheckoutBottomSheet: React.FC = () => {
     } = usePayment();
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const [isPromoModalOpen, setIsPromoModalOpen] = useState<boolean>(false);
+    const [mode, setMode] = useState<'fixed' | 'absolute'>('fixed');
+    const [bottomOffset, setBottomOffset] = useState(0);
+
+    useEffect(() => {
+        const footer = document.getElementById('footer');
+        if (!footer) return;
+
+        // measure how tall the footer is
+        setBottomOffset(footer.offsetHeight);
+
+        // when footer scrolls into view, switch to "absolute"
+        const obs = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setMode('absolute');
+                } else {
+                    setMode('fixed');
+                }
+            },
+            { root: null, threshold: 0 }
+        );
+
+        obs.observe(footer);
+        return () => obs.disconnect();
+    }, []);
 
     const handlePromoClick = () => {
         setIsPromoModalOpen(true);
@@ -51,7 +77,12 @@ const CheckoutBottomSheet: React.FC = () => {
     };
 
     return (
-        <div className="fixed inset-x-32 bottom-0 bg-graphite-900 rounded-t-xl shadow-lg overflow-hidden">
+        <div
+            ref={sheetRef}
+            style={{ bottom: mode === 'fixed' ? 0 : bottomOffset }}
+            className={`${
+                mode === 'fixed' ? 'fixed' : 'absolute'
+            } z-10 bottom-0 left-0 right-0 mx-32 bg-graphite-900 rounded-t-xl shadow-lg overflow-hidden`}>
             {/* Promo Code Section */}
             {!isExpanded && (
                 <div className="px-4 py-3 relative overflow-visible">
