@@ -87,33 +87,12 @@ const ReferenceModal = ({
         });
     };
 
-    if (!isAuthenticated) {
-        return (
-            <div className="fixed inset-0 z-50 bg-[#101010] overflow-y-auto">
-                <div className="sticky top-0 bg-[#101010] z-10 px-8 pt-20 pb-4">
-                    <div className="flex items-center justify-between">
-                        <h2 className="text-xl font-semibold text-white">Tambah Referensi</h2>
-                        <button
-                            onClick={onClose}
-                            className="p-1 text-white/60 hover:text-white transition-colors"
-                        >
-                            <IoMdClose size={24} />
-                        </button>
-                    </div>
-                </div>
-                <div className="flex items-center justify-center min-h-[50vh]">
-                    <p className="text-white/60">Login untuk melihat rekomendasi referensi!</p>
-                </div>
-            </div>
-        );
-    }
-
     const queryToUse = searchTerm || profileData?.major || '';
 
     return (
         <>
             <div className="fixed inset-0 z-50 bg-[#101010] overflow-y-auto px-0 md:px-12">
-                <div className="sticky top-0 bg-[#101010] z-10 px-8 pt-20">
+                <div className="sticky top-0 bg-[#101010] z-10 px-8 pt-8 md:pt-20">
                     <div className="flex items-center justify-between pb-4">
                         <h2 className="text-xl font-semibold text-white">Tambah Referensi</h2>
                         <button
