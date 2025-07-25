@@ -2,7 +2,7 @@
 
 import type React from 'react';
 import Image from 'next/image';
-import { LOGO_PAYMENT } from './constant';
+import { LOGO_PAYMENT, NAME_PAYMENT } from './constant';
 import { CDN_URL } from 'commons/constants';
 import { useTracker } from 'tracker/tracker';
 import { addZeroBefore, getCSChatRoom } from 'commons/utils';
@@ -73,7 +73,7 @@ const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({
                     />
                 </div>
                 <span className="text-white font-medium text-sm">
-                    {method.payment_name}
+                    {NAME_PAYMENT[method.payment_code]}
                 </span>
             </div>
 

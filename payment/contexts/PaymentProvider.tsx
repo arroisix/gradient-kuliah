@@ -20,6 +20,8 @@ interface PaymentContextType {
     setPhoneNumberError: (isError: boolean) => void;
     promoCode?: string;
     setPromoCode: (code: string) => void;
+    appliedPromoData?: ValidatePromoResponse;
+    setAppliedPromoData: (data: ValidatePromoResponse) => void;
 }
 
 const PaymentContext = createContext<PaymentContextType>(
@@ -36,10 +38,12 @@ export function PaymentProvider({
     const [isModalCheckoutOpen, setModalCheckoutOpen] =
         useState<boolean>(false);
     const { data: packet } = useGetDetailPacketOfferQuery(packetId);
-    const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('VA_BNI');
+    const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('VA_BCA');
     const [phoneNumber, setPhoneNumber] = useState<string>('');
     const [phoneNumberError, setPhoneNumberError] = useState<boolean>(false);
     const [promoCode, setPromoCode] = useState<string>('');
+    const [appliedPromoData, setAppliedPromoData] =
+        useState<ValidatePromoResponse>();
 
     const selectPaymentMethod = (to: PaymentMethod): void => {
         setPaymentMethod(to);
@@ -71,7 +75,9 @@ export function PaymentProvider({
             phoneNumberError,
             setPhoneNumberError,
             promoCode,
-            setPromoCode
+            setPromoCode,
+            appliedPromoData,
+            setAppliedPromoData
         }),
         [
             isModalCheckoutOpen,
@@ -79,7 +85,8 @@ export function PaymentProvider({
             paymentMethod,
             phoneNumber,
             phoneNumberError,
-            promoCode
+            promoCode,
+            appliedPromoData
         ]
     );
 

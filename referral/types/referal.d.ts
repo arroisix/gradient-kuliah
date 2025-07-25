@@ -47,4 +47,23 @@ interface ValidatePromoResponse {
     amount: number;
     payment_amount: number;
     discount_amount: number;
+    discount_amount_original: string;
+}
+
+interface CouponResponse {
+    promo_id: string;
+    promo_code: string;
+    promo_type: string;
+    special_campaign_type: string;
+    discount_amount: string;
+    expired_at: datetime | null;
+    usage_count: number;
+    max_usage: number;
+    per_packet: boolean;
+    packet_name: string | null;
+}
+
+interface GetCouponsResponse {
+    coupons: CouponResponse[];
+    count: number;
 }

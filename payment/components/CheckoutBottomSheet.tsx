@@ -7,15 +7,55 @@ import { formatCurrency } from 'commons/utils';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import CheckoutButton from './CheckoutButton';
 import { BsShieldFillCheck } from 'react-icons/bs';
+import { PromoCodeModal } from './PromoCodeModal';
 
 const CheckoutBottomSheet: React.FC = () => {
-    const { packet, paymentMethod, promoCode, phoneNumber, phoneNumberError } =
-        usePayment();
-    const [isExpanded, setIsExpanded] = useState(false);
+    const {
+        packet,
+        paymentMethod,
+        promoCode,
+        phoneNumber,
+        phoneNumberError,
+        appliedPromoData
+    } = usePayment();
+    const [isExpanded, setIsExpanded] = useState<boolean>(false);
+    const [isPromoModalOpen, setIsPromoModalOpen] = useState<boolean>(false);
 
     const handlePromoClick = () => {
-        // TODO: Implement promo code modal
-        console.log('Open promo modal');
+        setIsPromoModalOpen(true);
+    };
+
+    const calculateFinalPrice = () => {
+        if (appliedPromoData?.is_valid && appliedPromoData?.payment_amount) {
+            return appliedPromoData.payment_amount;
+        }
+        return packet?.price || '0';
+    };
+
+    const getPromoButtonText = () => {
+        if (appliedPromoData) {
+            if (appliedPromoData.promo_type === 'REFERRAL') {
+                return `Referral (-${formatCurrency(
+                    appliedPromoData.discount_amount
+                )})`;
+            } else {
+                if (appliedPromoData.discount_amount_original) {
+                    return `Diskon ${appliedPromoData.discount_amount_original}`;
+                } else {
+                    return `Diskon ${formatCurrency(
+                        appliedPromoData.discount_amount
+                    )}`;
+                }
+            }
+        }
+        return 'Pakai kode promo/referral';
+    };
+
+    const getPromoButtonStyle = () => {
+        if (promoCode) {
+            return 'bg-green-600 hover:bg-green-700';
+        }
+        return 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700';
     };
 
     return (
@@ -25,8 +65,8 @@ const CheckoutBottomSheet: React.FC = () => {
                 <div className="mx-32">
                     <button
                         onClick={handlePromoClick}
-                        className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg font-medium text-sm">
-                        Pakai kode promo/referral
+                        className={`w-full text-white py-3 rounded-lg font-medium text-sm transition-colors ${getPromoButtonStyle()}`}>
+                        {getPromoButtonText()}
                     </button>
                 </div>
             </div>
@@ -46,11 +86,24 @@ const CheckoutBottomSheet: React.FC = () => {
                                         {formatCurrency(packet?.price || '0')}
                                     </span>
                                 </div>
-                                {/* Add discount rows here when promo is applied */}
+                                {appliedPromoData?.is_valid &&
+                                    appliedPromoData?.discount_amount && (
+                                        <div className="flex justify-between">
+                                            <span className="text-gray-400">
+                                                Diskon {promoCode}
+                                            </span>
+                                            <span className="text-green-400">
+                                                -
+                                                {formatCurrency(
+                                                    appliedPromoData.discount_amount.toString()
+                                                )}
+                                            </span>
+                                        </div>
+                                    )}
                                 <div className="flex justify-between font-semibold pt-2 border-t border-gray-700">
                                     <span className="text-white">Subtotal</span>
                                     <span className="text-white">
-                                        {formatCurrency(packet?.price || '0')}
+                                        {formatCurrency(calculateFinalPrice())}
                                     </span>
                                 </div>
                             </div>
@@ -69,7 +122,7 @@ const CheckoutBottomSheet: React.FC = () => {
                                     Total Bayar
                                 </p>
                                 <p className="text-white font-bold text-lg">
-                                    {formatCurrency(packet?.price || '0')}
+                                    {formatCurrency(calculateFinalPrice())}
                                 </p>
                             </div>
                             <div className="ml-2 text-white">
@@ -104,6 +157,10 @@ const CheckoutBottomSheet: React.FC = () => {
                     </div>
                 </div>
             </div>
+            <PromoCodeModal
+                isOpen={isPromoModalOpen}
+                setOpen={setIsPromoModalOpen}
+            />
         </div>
     );
 };
