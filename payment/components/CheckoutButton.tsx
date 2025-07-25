@@ -37,8 +37,8 @@ const CheckoutButton = ({
                     packet_id: packetId,
                     payment_method: paymentMethod,
                     promo_code:
-                        promoCode !== '' ||
-                        promoCode !== null ||
+                        promoCode !== '' &&
+                        promoCode !== null &&
                         promoCode !== undefined
                             ? promoCode
                             : null
@@ -76,10 +76,16 @@ const CheckoutButton = ({
                 );
             }
         } else {
+            console.log(promoCode);
             const data = (await checkout({
                 packet_id: packetId,
                 payment_method: paymentMethod,
-                promo_code: promoCode !== '' ? promoCode : null,
+                promo_code:
+                    promoCode !== '' &&
+                    promoCode !== null &&
+                    promoCode !== undefined
+                        ? promoCode
+                        : null,
                 phone_number: phoneNumber
             })) as unknown as SingleResponseData<Transaction>;
 

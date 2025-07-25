@@ -20,7 +20,9 @@ const Payment = (): JSX.Element => {
     const { packetId, subscriptionId } = router.query;
     const isSubscribeViaWhatsapp = useFeatureIsOn('subscribe-via-wa');
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { data: packet } = useGetDetailPacketOfferQuery(packetId as string);
+    const { data: packet } = useGetDetailPacketOfferQuery(packetId as string, {
+        skip: !packetId
+    });
     const tracker = useTracker();
 
     useEffect(() => {
