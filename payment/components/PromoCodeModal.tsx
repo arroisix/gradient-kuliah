@@ -48,32 +48,6 @@ export const PromoCodeModal = ({
                     </h2>
                 </div>
 
-                {/* Applied Promo Info */}
-                {appliedPromo && (
-                    <div className="mb-4 p-3 bg-green-900/20 border border-green-500/30 rounded-lg">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <span className="text-green-400 text-sm font-medium">
-                                    Promo Aktif: {appliedPromo.promo_code}
-                                </span>
-                                <p className="text-green-300 text-xs mt-1">
-                                    {appliedPromo.promo_type === 'REFERRAL'
-                                        ? `Referral discount applied`
-                                        : appliedPromo.promo_type ===
-                                          'OFFLINE_VOUCHER'
-                                        ? `Voucher discount applied`
-                                        : `Coupon discount applied`}
-                                </p>
-                            </div>
-                            <button
-                                onClick={handleRemovePromo}
-                                className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-xs rounded-full transition-colors">
-                                Hapus
-                            </button>
-                        </div>
-                    </div>
-                )}
-
                 {/* Subtitle */}
                 <p className="text-sm text-gray-400 mb-6">
                     {appliedPromo
@@ -132,7 +106,7 @@ export const PromoCodeModal = ({
                                         {isCurrentlyApplied ? (
                                             <button
                                                 onClick={handleRemovePromo}
-                                                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm rounded-full transition-colors">
+                                                className="px-4 py-2 bg-[#EA5D49] hover:bg-[#D85140] text-white text-sm rounded-full transition-colors flex items-center justify-center">
                                                 Hapus
                                             </button>
                                         ) : (

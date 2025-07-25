@@ -216,7 +216,7 @@ export const PromoCodeInput: React.FC<PromoCodeInputProps> = ({
                             {isCurrentlyApplied && (
                                 <button
                                     onClick={handleRemovePromo}
-                                    className="px-4 py-1 bg-red-600 hover:bg-red-700 text-white text-sm rounded-full transition-colors">
+                                    className="px-4 py-1 bg-[#EA5D49] hover:bg-[#D85140] text-white text-sm rounded-full transition-colors flex items-center justify-center">
                                     Hapus
                                 </button>
                             )}
