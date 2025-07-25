@@ -24,7 +24,13 @@ const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({
     isLast = false
 }) => {
     const tracker = useTracker();
-    const { setPaymentMethod } = usePayment();
+    const {
+        setPaymentMethod,
+        phoneNumber,
+        setPhoneNumber,
+        phoneNumberError,
+        setPhoneNumberError
+    } = usePayment();
 
     const getLogoUrl = (): string => {
         return `${CDN_URL}/assets/payments/${
@@ -56,28 +62,35 @@ const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({
         }
     };
 
-    return (
-        <div
-            className={`flex items-center justify-between px-4 py-4 cursor-pointer hover:bg-gray-800/50 transition-colors ${
-                !isLast ? 'border-b border-gray-700/50' : ''
-            }`}
-            onClick={onClick ?? selectOption}>
-            <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 relative flex-shrink-0">
-                    <Image
-                        src={method.mobile_logo || getLogoUrl()}
-                        alt={method.payment_name}
-                        width={32}
-                        height={32}
-                        className="rounded"
-                    />
-                </div>
-                <span className="text-white font-medium text-sm">
-                    {NAME_PAYMENT[method.payment_code]}
-                </span>
-            </div>
+    function handleSetPhoneNumber(phoneNumber: string): void {
+        if (!phoneNumber.match(/^\d{1,14}$/)) {
+            setPhoneNumberError('Invalid phone number format');
+        } else {
+            setPhoneNumberError('');
+        }
+        setPhoneNumber(phoneNumber);
+    }
 
-            {!((method.payment_code as string) === 'MANUAL') && (
+    return (
+        <div className={`${!isLast ? 'border-b border-gray-700/50' : ''}`}>
+            <div
+                className="flex items-center justify-between px-4 py-4 cursor-pointer hover:bg-gray-800/50 transition-colors"
+                onClick={onClick ?? selectOption}>
+                <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 relative flex-shrink-0">
+                        <Image
+                            src={method.mobile_logo || getLogoUrl()}
+                            alt={method.payment_name}
+                            width={32}
+                            height={32}
+                            className="rounded"
+                        />
+                    </div>
+                    <span className="text-white font-medium text-sm">
+                        {NAME_PAYMENT[method.payment_code]}
+                    </span>
+                </div>
+
                 <div className="flex-shrink-0">
                     <div
                         className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
@@ -87,6 +100,35 @@ const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({
                         }`}>
                         {isSelected && (
                             <div className="w-2 h-2 bg-white rounded-full"></div>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            {/* Phone Number Input for OVO */}
+            {isSelected && method.payment_code === 'ID_OVO' && (
+                <div className="px-4 pb-4">
+                    <div className="ml-11 flex items-center space-x-3">
+                        <span className="text-gray-400 text-sm font-medium">
+                            +62
+                        </span>
+                        <input
+                            type="tel"
+                            value={phoneNumber}
+                            onChange={(event) =>
+                                handleSetPhoneNumber(event.target.value)
+                            }
+                            placeholder="8xxxxxxxx"
+                            className={`flex-1 bg-gray-800 border rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 ${
+                                phoneNumberError
+                                    ? 'border-red-500'
+                                    : 'border-gray-600'
+                            }`}
+                        />
+                        {phoneNumberError && (
+                            <p className="text-red-500 text-xs mt-1">
+                                {phoneNumberError}
+                            </p>
                         )}
                     </div>
                 </div>

@@ -16,8 +16,8 @@ interface PaymentContextType {
     setPaymentMethod: (method: PaymentMethod) => void;
     phoneNumber?: string;
     setPhoneNumber: (number: string) => void;
-    phoneNumberError: boolean;
-    setPhoneNumberError: (isError: boolean) => void;
+    phoneNumberError?: string;
+    setPhoneNumberError: (isError: string) => void;
     promoCode?: string;
     setPromoCode: (code: string) => void;
     appliedPromoData?: ValidatePromoResponse;
@@ -40,7 +40,7 @@ export function PaymentProvider({
     const { data: packet } = useGetDetailPacketOfferQuery(packetId);
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('VA_BCA');
     const [phoneNumber, setPhoneNumber] = useState<string>('');
-    const [phoneNumberError, setPhoneNumberError] = useState<boolean>(false);
+    const [phoneNumberError, setPhoneNumberError] = useState<string>('');
     const [promoCode, setPromoCode] = useState<string>('');
     const [appliedPromoData, setAppliedPromoData] =
         useState<ValidatePromoResponse>();
