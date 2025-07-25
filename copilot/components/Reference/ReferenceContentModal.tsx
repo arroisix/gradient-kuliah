@@ -4,6 +4,7 @@ import { IoPlayCircleOutline, IoLibrary, IoBookmark, IoSchool } from 'react-icon
 import { IoSearchOutline } from 'react-icons/io5';
 import { BookText } from 'lucide-react';
 import { SelectedReference, ReferenceContentType } from 'copilot/types/copilot';
+import { cn } from 'commons/utils';
 
 interface ReferenceContentModalProps {
     isOpen: boolean;
@@ -11,6 +12,7 @@ interface ReferenceContentModalProps {
     selectedReferences: SelectedReference[];
     onRemoveReference: (referenceId: string, contentType: ReferenceContentType) => void;
     onOpenReferenceModal: () => void;
+    isViewOnly?: boolean;
 }
 
 const ReferenceContentModal: React.FC<ReferenceContentModalProps> = ({
@@ -18,7 +20,8 @@ const ReferenceContentModal: React.FC<ReferenceContentModalProps> = ({
     onClose,
     selectedReferences,
     onRemoveReference,
-    onOpenReferenceModal
+    onOpenReferenceModal,
+    isViewOnly = false
 }) => {
     if (!isOpen) return null;
 
@@ -35,7 +38,9 @@ const ReferenceContentModal: React.FC<ReferenceContentModalProps> = ({
         <div className="fixed inset-0 z-50 bg-black/80 flex items-end justify-center p-0 sm:items-center sm:justify-center sm:p-4">
             <div className="bg-[#1A1A1A] rounded-t-2xl sm:rounded-2xl w-full max-w-md max-h-[90vh] sm:mt-8 sm:max-h-[82vh] overflow-hidden">
                 <div className="flex items-center justify-between pt-6 px-6">
-                    <h2 className="text-lg font-semibold text-white">Referensi Konten</h2>
+                    <h2 className="text-lg font-semibold text-white">
+                        {isViewOnly ? "Referensi Konten yang Digunakan" : "Referensi Konten"}
+                    </h2>
                     <button
                         onClick={onClose}
                         className="p-1 text-white/60 hover:text-white transition-colors"
@@ -93,7 +98,10 @@ const ReferenceContentModal: React.FC<ReferenceContentModalProps> = ({
                                     
                                     <button
                                         onClick={() => onRemoveReference(reference.id, reference.contentType)}
-                                        className="p-1 text-white/40 hover:text-white/80 transition-colors flex-shrink-0 ml-2"
+                                        className={cn(
+                                            "p-1 text-white/40 hover:text-white/80 transition-colors flex-shrink-0 ml-2",
+                                            isViewOnly && "hidden"
+                                        )}
                                         aria-label="Remove reference"
                                     >
                                         <IoMdClose size={26} />
@@ -105,7 +113,7 @@ const ReferenceContentModal: React.FC<ReferenceContentModalProps> = ({
                     ))}
                 </div>
 
-                <div className="p-6">
+                <div className={cn("p-6", isViewOnly && "hidden")}>
                     <button
                         onClick={onOpenReferenceModal}
                         className="w-full bg-[#333333] text-white/80 hover:text-white py-3 px-4 rounded-full transition-colors flex items-center justify-center gap-2"

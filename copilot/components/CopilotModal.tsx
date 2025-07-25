@@ -26,7 +26,9 @@ const CopilotModal = ({
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isReferenceModalOpen, setIsReferenceModalOpen] = useState(false);
   const [isReferenceContentModalOpen, setIsReferenceContentModalOpen] = useState(false);
+  const [isUsedReferencesModalOpen, setIsUsedReferencesModalOpen] = useState(false);
   const [selectedReferences, setSelectedReferences] = useState<SelectedReference[]>([]);
+  const [viewingUsedReferences, setViewingUsedReferences] = useState<SelectedReference[]>([]);
   const isAuthenticated = useSelector(getIsAuthenticated);
 
   useEffect(() => {
@@ -69,6 +71,16 @@ const CopilotModal = ({
 
   const handleCloseReferenceContentModal = () => {
     setIsReferenceContentModalOpen(false);
+  };
+
+  const handleOpenUsedReferencesModal = (references: SelectedReference[]) => {
+    setViewingUsedReferences(references);
+    setIsUsedReferencesModalOpen(true);
+  };
+
+  const handleCloseUsedReferencesModal = () => {
+    setIsUsedReferencesModalOpen(false);
+    setViewingUsedReferences([]);
   };
 
   const handleReferenceSelect = (
@@ -123,6 +135,7 @@ const CopilotModal = ({
           onOpenReferenceContentModal={handleOpenReferenceContentModal}
           onReferenceSelect={handleReferenceSelect}
           onRemoveReference={handleRemoveReference}
+          onOpenUsedReferencesModal={handleOpenUsedReferencesModal}
         />
       </div>
       
@@ -141,6 +154,16 @@ const CopilotModal = ({
           setIsReferenceContentModalOpen(false);
           setIsReferenceModalOpen(true);
         }}
+        isViewOnly={false}
+      />
+
+      <ReferenceContentModal
+        isOpen={isUsedReferencesModalOpen}
+        onClose={handleCloseUsedReferencesModal}
+        selectedReferences={viewingUsedReferences}
+        onRemoveReference={() => {}}
+        onOpenReferenceModal={() => {}}
+        isViewOnly={true}
       />
       
       {isOpen && !isAuthenticated && <CopilotAuthPrompt />}

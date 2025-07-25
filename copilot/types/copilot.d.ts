@@ -47,6 +47,7 @@ export interface ChatMessage {
     isBookmarked?: boolean;
     image?: string | null;
     keyword?: string | null;
+    usedReferences?: SelectedReference[];
 }
 
 interface BookmarkedChatsResponse {

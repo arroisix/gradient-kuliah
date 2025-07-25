@@ -20,6 +20,7 @@ interface CopilotSidebarContainerProps {
     onReferenceSelect: (referenceId: string, referenceTitle: string, referenceSubtitle: string, referenceHeader: string, contentType: ReferenceContentType) => void;
     onRemoveReference: (referenceId: string, contentType: ReferenceContentType) => void;
     onOpenHistory?: () => void;
+    onOpenUsedReferencesModal?: (references: SelectedReference[]) => void;
 }
 
 const CopilotSidebarContainer = ({
@@ -32,7 +33,8 @@ const CopilotSidebarContainer = ({
     onOpenReferenceContentModal,
     onReferenceSelect,
     onRemoveReference,
-    onOpenHistory
+    onOpenHistory,
+    onOpenUsedReferencesModal
 }: CopilotSidebarContainerProps): JSX.Element => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoadingHistory, setIsLoadingHistory] = useState(true);
@@ -125,8 +127,8 @@ const CopilotSidebarContainer = ({
         });
     };
 
-    const buildChatContext = (): ChatInput['context'] | undefined => {
-        if (selectedReferences.length === 0) return undefined;
+    const buildChatContextFromReferences = (references: SelectedReference[]): ChatInput['context'] | undefined => {
+        if (references.length === 0) return undefined;
 
         const context: ChatInput['context'] = {
             textbook_problem: [],
@@ -135,7 +137,7 @@ const CopilotSidebarContainer = ({
             bank_soal_problem: []
         };
 
-        selectedReferences.forEach(ref => {
+        references.forEach(ref => {
             switch (ref.contentType) {
                 case 'textbook_problem':
                     context.textbook_problem.push(ref.id);
@@ -171,15 +173,19 @@ const CopilotSidebarContainer = ({
         setIsLoadingResponse(true);
         const timestamp = new Date().toISOString();
 
+        const currentUsedReferences = [...selectedReferences];
+
         const userMessage: ChatMessage = {
             id: crypto.randomUUID(),
             role: 'User',
             content: prompt,
             timestamp,
-            image: imageUrl || null
+            image: imageUrl || null,
+            usedReferences: currentUsedReferences.length > 0 ? currentUsedReferences : undefined
         };
 
         setMessages(prev => [...prev, userMessage]);
+        handleClearReferences();
         scrollToBottom();
         
         let currentResponse = '';
@@ -187,7 +193,7 @@ const CopilotSidebarContainer = ({
             input_text: prompt,
             session_id: currentSessionId,
             image_url: imageUrl,
-            context: buildChatContext()
+            context: buildChatContextFromReferences(currentUsedReferences)
         };
 
         try {
@@ -252,7 +258,78 @@ const CopilotSidebarContainer = ({
     };
 
     const handleRetry = (message: ChatMessage) => {
-        handleSendMessage(message.content, message.image || undefined);
+        const timestamp = new Date().toISOString();
+        const userMessage: ChatMessage = {
+            id: crypto.randomUUID(),
+            role: 'User',
+            content: message.content,
+            timestamp,
+            image: message.image,
+            usedReferences: message.usedReferences
+        };
+
+        setMessages(prev => [...prev, userMessage]);
+        scrollToBottom();
+        
+        let currentResponse = '';
+        const chatInput: ChatInput = {
+            input_text: message.content,
+            session_id: currentSessionId,
+            image_url: message.image || undefined,
+            context: message.usedReferences ? buildChatContextFromReferences(message.usedReferences) : undefined
+        };
+
+        setIsLoadingResponse(true);
+
+        chatApi.chat(chatInput, {
+            onContent: (content) => {
+                currentResponse += content;
+                setPendingMessage({
+                    content: currentResponse,
+                    timestamp: new Date().toISOString()
+                });
+                scrollToBottom();
+            },
+            onComplete: (messageId, sessionId, sessionName, keyword) => {
+                setPendingMessage(null);
+
+                if (sessionId) {
+                    setCurrentSessionId(sessionId);
+                }
+                if (messageId) {
+                    setMessages(prev => {
+                        const aiMessage: ChatMessage = {
+                            id: messageId,
+                            role: 'AI',
+                            content: currentResponse,
+                            timestamp: new Date().toISOString(),
+                            keyword: keyword
+                        };
+                        return [...prev, aiMessage];
+                    });
+                }
+                setIsLoadingResponse(false);
+            },
+            onError: (error) => {
+                console.error('Chat error:', error);
+                setPendingMessage(null);
+
+                const errorMessage: ChatMessage = {
+                    id: 'error',
+                    role: 'AI',
+                    content: 'Maaf, terjadi kesalahan. Silakan coba lagi.',
+                    timestamp: new Date().toISOString()
+                };
+                setMessages(prev => [...prev, errorMessage]);
+                setIsLoadingResponse(false);
+            }
+        });
+    };
+
+    const handleClearReferences = () => {
+        selectedReferences.forEach(ref => {
+            onRemoveReference(ref.id, ref.contentType);
+        });
     };
 
     return (
@@ -317,6 +394,7 @@ const CopilotSidebarContainer = ({
                                     isLoading={isLoadingResponse}
                                     currentSessionId={currentSessionId}
                                     isSidebar={true}
+                                    onOpenUsedReferencesModal={onOpenUsedReferencesModal}
                                 />
                                 <div ref={messagesEndRef} />
                             </div>
@@ -377,7 +455,6 @@ const CopilotSidebarContainer = ({
                     </div>
                 </div>
             </div>
-
         </>
     );
 };
