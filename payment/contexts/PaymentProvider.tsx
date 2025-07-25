@@ -49,6 +49,10 @@ export function PaymentProvider({
             setPhoneNumberError('');
         }
 
+        if (paymentMethod === 'VOUCHER') {
+            setAppliedPromo(undefined);
+        }
+
         setPaymentMethod(to);
         sendGTMEvent({
             event: 'add_payment_info',
