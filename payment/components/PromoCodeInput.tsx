@@ -190,13 +190,13 @@ export const PromoCodeInput: React.FC<PromoCodeInputProps> = ({
             {validationState === 'success' &&
                 (validationResult || isCurrentlyApplied) && (
                     <div className={successStyles}>
-                        <div className="flex items-center">
-                            <Check className="w-4 h-4 text-green-400 mr-2" />
+                        <div className="flex items-baseline space-x-2">
+                            <Check className="w-4 h-4 text-green-400" />
                             <span className="text-green-400 text-sm font-medium">
                                 {inputCode}
                             </span>
                             {isCurrentlyApplied && (
-                                <span className="text-green-400 text-xs ml-2">
+                                <span className="text-green-400 text-sm font-medium">
                                     (Diterapkan)
                                 </span>
                             )}
