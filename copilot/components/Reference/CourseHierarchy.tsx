@@ -74,9 +74,9 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
                     <span className="text-[#999999] text-sm font-medium leading-5">{chapter.title}</span>
                     <div className="flex items-center justify-center w-4 h-4 flex-shrink-0">
                         {isExpanded ? (
-                            <ChevronDown size={16} className="text-white/60" />
-                        ) : (
                             <ChevronUp size={16} className="text-white/60" />
+                        ) : (
+                            <ChevronDown size={16} className="text-white/60" />
                         )}
                     </div>
                 </button>
