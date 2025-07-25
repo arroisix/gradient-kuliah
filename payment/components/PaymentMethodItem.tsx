@@ -120,7 +120,7 @@ const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({
                                 handleSetPhoneNumber(event.target.value)
                             }
                             placeholder="8xxxxxxxx"
-                            className={`flex-1 bg-gray-800 border rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 ${
+                            className={`flex-1 bg-graphite-800 border rounded-lg px-3 py-2 text-white placeholder-graphite-500 focus:outline-none focus:ring-2 focus:ring-purple-500 ${
                                 phoneNumberError
                                     ? 'border-red-500'
                                     : 'border-gray-600'

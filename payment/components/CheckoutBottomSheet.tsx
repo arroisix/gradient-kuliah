@@ -51,7 +51,7 @@ const CheckoutBottomSheet: React.FC = () => {
     };
 
     return (
-        <div className="fixed inset-x-32 bottom-0 bg-gray-900 border border-gray-700 rounded-t-xl shadow-lg overflow-hidden">
+        <div className="fixed inset-x-32 bottom-0 bg-graphite-900 border border-graphite-700 rounded-t-xl shadow-lg overflow-hidden">
             {/* Promo Code Section */}
             <div className="px-4 py-3 relative overflow-visible">
                 <button
@@ -63,8 +63,8 @@ const CheckoutBottomSheet: React.FC = () => {
                     }`}>
                     <>
                         {/* half circles */}
-                        <span className="absolute w-8 h-8 bg-gray-900 rounded-full -left-4 top-1/2 -translate-y-1/2 z-10" />
-                        <span className="absolute w-8 h-8 bg-gray-900 rounded-full -right-4 top-1/2 -translate-y-1/2 z-10" />
+                        <span className="absolute w-8 h-8 bg-graphite-900 rounded-full -left-4 top-1/2 -translate-y-1/2 z-10" />
+                        <span className="absolute w-8 h-8 bg-graphite-900 rounded-full -right-4 top-1/2 -translate-y-1/2 z-10" />
 
                         {/* dashed lines */}
                         <div className="absolute top-0 bottom-0 left-8 border-l-2 border-dashed border-gray-900 pointer-events-none" />
