@@ -22,7 +22,8 @@ export const PromoCodeInput: React.FC<PromoCodeInputProps> = ({
     variant = 'modal',
     applyAfterValid = false
 }) => {
-    const { packet, setAppliedPromo, appliedPromo } = usePayment();
+    const { packet, setAppliedPromo, appliedPromo, paymentMethod } =
+        usePayment();
     const [inputCode, setInputCode] = useState<string>('');
     const [validationState, setValidationState] = useState<
         'idle' | 'loading' | 'success' | 'error'
@@ -76,6 +77,19 @@ export const PromoCodeInput: React.FC<PromoCodeInputProps> = ({
                 promo_code: code,
                 packet_id: packet?.id as string
             }).unwrap();
+
+            if (variant === 'inline' && paymentMethod === 'VOUCHER') {
+                if (
+                    !result.is_valid ||
+                    result.promo_type !== 'OFFLINE VOUCHER'
+                ) {
+                    setValidationState('error');
+                    setErrorMessage('Kode tidak valid untuk metode voucher');
+                    setShowError(true);
+                    setAppliedPromo(undefined);
+                    return;
+                }
+            }
 
             if (result.is_valid) {
                 setValidationState('success');
