@@ -6,11 +6,13 @@ import PromptBar from '../components/MainSection/PromptBar';
 import { chatApi } from '../redux/api/copilotApi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { IoClose, IoChevronDown, IoChevronUp } from 'react-icons/io5';
+import { Maximize2 } from 'lucide-react';
 import { cn } from 'commons/utils';
 
 interface CopilotSidebarContainerProps {
     sessionId?: string;
     isCollapsed?: boolean;
+    isMobile: boolean;
     selectedReferences: SelectedReference[];
     onCollapsedChange: (collapsed: boolean) => void;
     onClose: () => void;
@@ -23,6 +25,7 @@ interface CopilotSidebarContainerProps {
 const CopilotSidebarContainer = ({
     sessionId,
     isCollapsed = false,
+    isMobile,
     selectedReferences,
     onCollapsedChange,
     onClose,
@@ -53,6 +56,13 @@ const CopilotSidebarContainer = ({
 
     const handleToggleCollapse = () => {
         onCollapsedChange(!isCollapsed);
+    };
+
+    const handleKeyDown = (event: React.KeyboardEvent) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            handleToggleCollapse();
+        }
     };
 
     useEffect(() => {
@@ -323,10 +333,16 @@ const CopilotSidebarContainer = ({
         });
     };
 
+    const isMobileFullscreen = isMobile && isCollapsed;
+
     return (
         <>
             <div className="flex flex-col h-full bg-[#181818] overflow-hidden rounded-t-lg">
-                <div className={cn("flex items-center justify-between py-4 px-5 border-b border-gray-700 flex-shrink-0 rounded-t-lg transition-colors duration-300", isCollapsed ? "bg-[#5F2BCE]" : "bg-[#2C2C2C]")}>
+                <div className={cn(
+                    "flex items-center justify-between py-4 px-5 border-b border-gray-700 flex-shrink-0 transition-colors duration-300",
+                    isMobileFullscreen ? "rounded-none" : "rounded-t-lg",
+                    isCollapsed && !isMobileFullscreen ? "bg-[#5F2BCE]" : "bg-[#2C2C2C]"
+                )}>
                     <button
                         onClick={onClose}
                         className="p-1 text-gray-400 hover:text-white transition-colors z-10"
@@ -336,6 +352,9 @@ const CopilotSidebarContainer = ({
 
                     <div 
                         onClick={handleToggleCollapse}
+                        onKeyDown={handleKeyDown}
+                        role="button"
+                        tabIndex={0}
                         className="flex items-center cursor-pointer flex-1 justify-center hover:opacity-80 transition-opacity h-full py-4 -my-4"
                         aria-label={isCollapsed ? "Expand" : "Collapse"}>
                         <h3 className="text-white font-extrabold text-base xl:text-lg">
@@ -345,6 +364,9 @@ const CopilotSidebarContainer = ({
 
                     <div 
                         onClick={handleToggleCollapse}
+                        onKeyDown={handleKeyDown}
+                        role="button"
+                        tabIndex={0}
                         className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity h-full py-4 -my-4"
                         aria-label={isCollapsed ? "Expand" : "Collapse"}>
                         
@@ -352,7 +374,11 @@ const CopilotSidebarContainer = ({
                             onClick={handleToggleCollapse}
                             className="p-1 text-gray-400 hover:text-white transition-colors"
                             aria-label={isCollapsed ? "Expand" : "Collapse"}>
-                            {isCollapsed ? <IoChevronUp size={32} /> : <IoChevronDown size={32} />}
+                            {isMobile ? (
+                                <Maximize2 size={24} />
+                            ) : (
+                                isCollapsed ? <IoChevronUp size={32} /> : <IoChevronDown size={32} />
+                            )}
                         </button>
                     </div>
                 </div>
@@ -360,7 +386,7 @@ const CopilotSidebarContainer = ({
                 <div
                     className={cn(
                         "flex-1 overflow-hidden transition-all duration-300 ease-in-out",
-                        isCollapsed ? "h-0 opacity-0" : "flex opacity-100"
+                        (isCollapsed && !isMobile) ? "h-0 opacity-0" : "flex opacity-100"
                     )}>
                     <div className="flex flex-col w-full h-full">
                         {isLoadingHistory ? (

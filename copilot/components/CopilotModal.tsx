@@ -29,7 +29,18 @@ const CopilotModal = ({
   const [isUsedReferencesModalOpen, setIsUsedReferencesModalOpen] = useState(false);
   const [selectedReferences, setSelectedReferences] = useState<SelectedReference[]>([]);
   const [viewingUsedReferences, setViewingUsedReferences] = useState<SelectedReference[]>([]);
+  const [isMobile, setIsMobile] = useState(false);
   const isAuthenticated = useSelector(getIsAuthenticated);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+        
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -112,14 +123,33 @@ const CopilotModal = ({
     );
   };
 
+  const getModalHeight = () => {
+    if (isMobile && isCollapsed) {
+      return "h-screen";
+    } else if (isCollapsed) {
+      return "h-[68px]";
+    } else {
+      return "h-[70vh] xl:h-[90vh]";
+    }
+  };
+
+  const getModalWidth = () => {
+    if (isMobile && isCollapsed) {
+      return "w-screen";
+    } else {
+      return "w-full sm:w-full md:w-full lg:w-full";
+    }
+  };
+
   return (
     <>
       <div className={cn(
-        "fixed bottom-0 right-0 z-50 rounded-t-lg shadow-lg",
-        "w-full sm:w-full md:w-full lg:w-full",
+        "fixed bottom-0 right-0 z-50 shadow-lg",
+        getModalWidth(),
         xlWidth,
-        "xl:pr-4",
-        isCollapsed ? "h-[68px]" : "h-[70vh] xl:h-[90vh]",
+        !isMobile && "xl:pr-4",
+        isMobile && isCollapsed ? "" : "rounded-t-lg",
+        getModalHeight(),
         "transition-all duration-300 ease-in-out",
         isOpen ? "translate-y-0" : "translate-y-full",
         !isOpen && "pointer-events-none",
@@ -128,6 +158,7 @@ const CopilotModal = ({
         <CopilotSidebarContainer
           sessionId={sessionId}
           isCollapsed={isCollapsed}
+          isMobile={isMobile}
           selectedReferences={selectedReferences}
           onCollapsedChange={setIsCollapsed}
           onClose={handleClose}

@@ -41,7 +41,7 @@ const HorizontalProductCard = ({
                             : 'aspect-[4/3]',
                         imageClassname
                     )}
-                    style={isReference ? { minWidth: '120px' } : undefined}>
+                    style={isReference ? { minWidth: '100px' } : undefined}>
                     <Image
                         src={
                             product.thumbnail ??
