@@ -129,11 +129,11 @@ const CopilotModal = ({
 
   const getModalHeight = () => {
     if (isMobile && isCollapsed) {
-      return "h-screen";
+      return "h-screen h-[100dvh]";
     } else if (isCollapsed) {
       return "h-[68px]";
     } else {
-      return "h-[70vh] xl:h-[90vh]";
+      return "h-[70vh] h-[70dvh] xl:h-[90vh] xl:h-[90dvh]";
     }
   };
 
