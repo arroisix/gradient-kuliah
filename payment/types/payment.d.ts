@@ -124,3 +124,18 @@ interface PaymentMethodSection {
     order: number;
     payment_methods: PaymentMethodData[];
 }
+
+type CreditCard = {
+    id: string;
+    name: string;
+    brand: string;
+    card_token?: string;
+    needs_refresh: boolean;
+    created_at: Date;
+    updated_at: Date;
+};
+
+interface CreditCardListResponse {
+    cards: CreditCard[];
+    count: number;
+}

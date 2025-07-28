@@ -25,6 +25,11 @@ export const transactionApi = baseApi.injectEndpoints({
             query: () => ({
                 url: `${TRANSACTION_BASE_URL}payment-methods/`
             })
+        }),
+        getAllUserCards: builder.query<CreditCardListResponse, void>({
+            query: () => ({
+                url: `${TRANSACTION_BASE_URL}user-cards/`
+            })
         })
     })
 });
@@ -32,5 +37,6 @@ export const transactionApi = baseApi.injectEndpoints({
 export const {
     useGetAllTransactionQuery,
     useGetTransactionQuery,
-    useGetAllPaymentMethodsQuery
+    useGetAllPaymentMethodsQuery,
+    useGetAllUserCardsQuery
 } = transactionApi;
