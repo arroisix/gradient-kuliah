@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { useGetProfileQuery } from 'authentication/redux/api/authApi';
@@ -37,6 +37,16 @@ const ReferenceModal = ({
         contentType: null,
         referenceData: null
     });
+
+    useEffect(() => {
+        if (!isOpen) {
+            setHierarchyModal({
+                isOpen: false,
+                contentType: null,
+                referenceData: null
+            });
+        }
+    }, [isOpen]);
 
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { data: profileData } = useGetProfileQuery({}, { skip: !isAuthenticated });
