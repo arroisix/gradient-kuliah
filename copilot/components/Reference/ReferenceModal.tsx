@@ -40,6 +40,7 @@ const ReferenceModal = ({
 
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { data: profileData } = useGetProfileQuery({}, { skip: !isAuthenticated });
+    const router = useRouter();
 
     if (!isOpen) return null;
 
@@ -88,6 +89,7 @@ const ReferenceModal = ({
     };
 
     const queryToUse = searchTerm || profileData?.major || '';
+    const { tab: currentTab } = router.query as { tab: string };
 
     return (
         <>
@@ -107,8 +109,6 @@ const ReferenceModal = ({
                         <div className="pt-4 pb-6">
                             <div className="flex mb-4">
                                 {(['semua', 'kelas', 'perpustakaan'] as const).map((tab) => {
-                                    const router = useRouter();
-                                    const { tab: currentTab } = router.query as { tab: string };
                                     
                                     return (
                                         <Link

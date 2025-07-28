@@ -6,7 +6,6 @@ import PromptBar from '../components/MainSection/PromptBar';
 import { chatApi } from '../redux/api/copilotApi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { IoClose, IoChevronDown, IoChevronUp } from 'react-icons/io5';
-import { MdHistory } from 'react-icons/md';
 import { cn } from 'commons/utils';
 
 interface CopilotSidebarContainerProps {
@@ -18,7 +17,6 @@ interface CopilotSidebarContainerProps {
     onOpenReferenceModal: () => void;
     onOpenReferenceContentModal: () => void;
     onRemoveReference: (referenceId: string, contentType: ReferenceContentType) => void;
-    onOpenHistory?: () => void;
     onOpenUsedReferencesModal?: (references: SelectedReference[]) => void;
 }
 
@@ -31,7 +29,6 @@ const CopilotSidebarContainer = ({
     onOpenReferenceModal,
     onOpenReferenceContentModal,
     onRemoveReference,
-    onOpenHistory,
     onOpenUsedReferencesModal
 }: CopilotSidebarContainerProps): JSX.Element => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -52,10 +49,6 @@ const CopilotSidebarContainer = ({
 
     const handleImageCapture = () => {
         fileInputRef.current?.click();
-    };
-
-    const handleHistoryClick = () => {
-        onOpenHistory?.();
     };
 
     const handleToggleCollapse = () => {
@@ -336,25 +329,24 @@ const CopilotSidebarContainer = ({
                 <div className={cn("flex items-center justify-between py-4 px-5 border-b border-gray-700 flex-shrink-0 rounded-t-lg transition-colors duration-300", isCollapsed ? "bg-[#5F2BCE]" : "bg-[#2C2C2C]")}>
                     <button
                         onClick={onClose}
-                        className="p-1 text-gray-400 hover:text-white transition-colors"
+                        className="p-1 text-gray-400 hover:text-white transition-colors z-10"
                         aria-label="Close copilot">
                         <IoClose size={32} />
                     </button>
 
-                    <h3 className="text-white font-extrabold text-base xl:text-lg">
-                        Copilot AI
-                    </h3>
+                    <div 
+                        onClick={handleToggleCollapse}
+                        className="flex items-center cursor-pointer flex-1 justify-center hover:opacity-80 transition-opacity h-full py-4 -my-4"
+                        aria-label={isCollapsed ? "Expand" : "Collapse"}>
+                        <h3 className="text-white font-extrabold text-base xl:text-lg">
+                            Copilot AI
+                        </h3>
+                    </div>
 
-                    <div className="flex items-center gap-2">
-                        {onOpenHistory && (
-                            <button
-                                onClick={handleHistoryClick}
-                                className="p-1 text-gray-400 hover:text-white transition-colors"
-                                title="Chat History"
-                                aria-label="Open chat history">
-                                <MdHistory size={28} />
-                            </button>
-                        )}
+                    <div 
+                        onClick={handleToggleCollapse}
+                        className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity h-full py-4 -my-4"
+                        aria-label={isCollapsed ? "Expand" : "Collapse"}>
                         
                         <button
                             onClick={handleToggleCollapse}
