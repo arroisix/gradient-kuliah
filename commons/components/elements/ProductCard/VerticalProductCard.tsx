@@ -17,12 +17,12 @@ const VerticalProductCard = ({
     eventName,
     eventPayload,
     className,
-    imageClassname
-}: Omit<ProductCardProps, 'orientation'>): JSX.Element => {
+    imageClassname,
+    isReference = false
+}: Omit<ProductCardProps, 'orientation'> & { isReference?: boolean }): JSX.Element => {
     const tracker = useTracker();
     const isVideo = category.toLowerCase() == 'video';
     const isCourse = category.toLowerCase() == 'kelas';
-    const isReference = ['Astronotes', 'Textbook Solution', 'Bank Soal'].includes(category);
     const TitleLabel = heading ?? 'p';
 
     return (
@@ -59,7 +59,9 @@ const VerticalProductCard = ({
                     className={cn(
                         'relative rounded-md border-neutral-700 object-center',
                         isReference
-                            ? 'aspect-[256/364] h-full shadow-lg border'
+                            ? (isCourse || isVideo) 
+                                ? 'h-full w-full'
+                                : 'aspect-[256/364] h-full shadow-lg border'
                             : isCourse || isVideo
                             ? 'h-full w-full'
                             : 'aspect-[256/364] h-full shadow-lg border',

@@ -18,8 +18,9 @@ const HorizontalProductCard = ({
     category,
     eventName,
     eventPayload,
-    product
-}: Omit<ProductCardProps, 'orientation'>): JSX.Element => {
+    product,
+    isReference = false
+}: Omit<ProductCardProps, 'orientation'> & { isReference?: boolean }): JSX.Element => {
     const tracker = useTracker();
     const TitleLabel = heading ?? 'p';
 
@@ -39,7 +40,8 @@ const HorizontalProductCard = ({
                             ? 'aspect-[256/364]'
                             : 'aspect-[4/3]',
                         imageClassname
-                    )}>
+                    )}
+                    style={isReference ? { minWidth: '120px' } : undefined}>
                     <Image
                         src={
                             product.thumbnail ??
@@ -50,7 +52,7 @@ const HorizontalProductCard = ({
                         objectFit="cover"
                         className="rounded"
                     />
-                    {category === 'Video' && (
+                    {!isReference && category === 'Video' && (
                         <div className="absolute inset-0 grid place-items-center">
                             <div className="text-white border-none btn btn-sm btn-circle bg-graphite-900/60">
                                 <FaRegCirclePlay size={24} />
@@ -62,7 +64,7 @@ const HorizontalProductCard = ({
             <div className="flex flex-col w-full overflow-hidden font-body grow">
                 <p
                     className={cn(
-                        !product.inProgress ? 'hidden' : 'flex',
+                        (!product.inProgress || isReference) ? 'hidden' : 'flex',
                         'items-center text-xs mb-2',
                         product.latestProgress == 100
                             ? 'text-[#282b29]'
@@ -80,17 +82,19 @@ const HorizontalProductCard = ({
                         </>
                     )}
                 </p>
-                {product.isFree && !product.inProgress && (
+                {!isReference && product.isFree && !product.inProgress && (
                     <FreeBadge className="mb-2 badge-sm" />
                 )}
 
                 <TitleLabel className="font-sans text-sm font-bold text-balance line-clamp-2">
                     {product.title}
                 </TitleLabel>
-                {product.inProgress ? (
+                {!isReference && product.inProgress ? (
                     <Progress product={product} />
-                ) : (
+                ) : !isReference ? (
                     <Info product={product} />
+                ) : (
+                    <div className="grow min-h-2"></div>
                 )}
                 <div
                     className={cn(
@@ -100,7 +104,7 @@ const HorizontalProductCard = ({
                             'bg-[#CC009E]':
                                 category === 'Catatan' ||
                                 category === 'Astronotes',
-                            'bg-[#0083FF]': category === 'Bank Soal'
+                            'bg-[#0083FF]': category === 'Bank Soal' || category === 'BankSoal'
                         }
                     )}>
                     {category}

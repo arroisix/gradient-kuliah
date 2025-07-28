@@ -5,8 +5,9 @@ import VerticalProductCard from './VerticalProductCard';
 const ProductCard = ({
     orientation,
     category,
+    isReference = false,
     ...props
-}: ProductCardProps): JSX.Element => {
+}: ProductCardProps & { isReference?: boolean }): JSX.Element => {
     const categoryLabel: { [key: string]: string } = {
         [category]: category,
         Catatan: 'Astronotes',
@@ -15,9 +16,17 @@ const ProductCard = ({
     };
 
     return orientation == 'horizontal' ? (
-        <HorizontalProductCard {...props} category={categoryLabel[category]} />
+        <HorizontalProductCard 
+            {...props} 
+            category={categoryLabel[category]} 
+            isReference={isReference}
+        />
     ) : (
-        <VerticalProductCard {...props} category={categoryLabel[category]} />
+        <VerticalProductCard 
+            {...props} 
+            category={categoryLabel[category]} 
+            isReference={isReference}
+        />
     );
 };
 

@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useGetContentRecommendationQuery } from 'copilot/redux/api/copilotApi';
 import { ContextRecommendation } from 'copilot/types/copilot';
 import ProductCard from 'commons/components/elements/ProductCard';
@@ -27,8 +27,19 @@ const ReferenceRecommendationList = ({
     const router = useRouter();
     const { tab, page } = router.query as ReferenceQueryParams;
     const itemsPerPage = 6;
+    const [isMobile, setIsMobile] = useState(false);
 
     const prevSearchRef = useRef(search);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+        
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     useEffect(() => {
         if (search !== prevSearchRef.current) {
@@ -81,8 +92,6 @@ const ReferenceRecommendationList = ({
         };
     };
 
-
-
     const getCategory = (recommendation: ContextRecommendation): string => {
         switch (recommendation.type) {
             case 'course':
@@ -100,6 +109,11 @@ const ReferenceRecommendationList = ({
 
     const handleCardClick = (recommendation: ContextRecommendation) => {
         onReferenceCardClick?.(recommendation);
+    };
+
+    const getOrientation = (category: string): 'horizontal' | 'vertical' => {
+        if (!isMobile) return 'vertical';
+        return category === 'Kelas' ? 'vertical' : 'horizontal';
     };
 
     const totalPages = Math.ceil((recommendations?.count_items ?? 0) / itemsPerPage);
@@ -140,6 +154,8 @@ const ReferenceRecommendationList = ({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pb-8 items-stretch">
                 {recommendations.recommendation.map((recommendation, index) => {
                     const product = getProduct(recommendation);
+                    const category = getCategory(recommendation);
+                    const orientation = getOrientation(category);
                     
                     return (
                         <button
@@ -150,11 +166,12 @@ const ReferenceRecommendationList = ({
                         >
                             <ProductCard
                                 heading="h2"
-                                orientation="vertical"
-                                category={getCategory(recommendation)}
+                                orientation={orientation}
+                                category={category}
                                 eventName="Click Reference Card"
                                 href="#"
                                 product={product}
+                                isReference={true}
                             />
                         </button>
                     );
@@ -162,14 +179,12 @@ const ReferenceRecommendationList = ({
             </div>
 
             {totalPages > 1 && (
-                <div className="flex-shrink-0 border-t border-white/10 p-6">
-                    <Paginator
-                        totalPages={totalPages}
-                        hasNextPage={!!recommendations?.next_page}
-                        hasPreviousPage={!!recommendations?.previous_page}
-                        className="justify-center w-full"
-                    />
-                </div>
+                <Paginator
+                    totalPages={totalPages}
+                    hasNextPage={!!recommendations?.next_page}
+                    hasPreviousPage={!!recommendations?.previous_page}
+                    className="justify-center w-full pb-2"
+                />
             )}
         </>
     );
