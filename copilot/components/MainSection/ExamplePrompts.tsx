@@ -4,12 +4,16 @@ import { chatApi } from '../../redux/api/copilotApi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { useTracker } from 'tracker/tracker';
 
+type ContentType = "course_video" | "textbook_problem" | "bank_soal_problem" | "astronotes_content" | null;
+
 interface ExamplePromptsProps {
     onPromptClick: (prompt: string, imageUrl?: string) => void;
+    contentType?: ContentType;
 }
 
 const ExamplePrompts = ({
-    onPromptClick
+    onPromptClick,
+    contentType
 }: ExamplePromptsProps): JSX.Element => {
     const [templates, setTemplates] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -18,7 +22,7 @@ const ExamplePrompts = ({
     useEffect(() => {
         const fetchTemplates = async () => {
             try {
-                const response = await chatApi.getTemplates();
+                const response = await chatApi.getTemplates(contentType);
                 setTemplates(response.templates);
             } catch (error) {
                 console.error('Failed to fetch templates:', error);
@@ -28,7 +32,7 @@ const ExamplePrompts = ({
         };
 
         fetchTemplates();
-    }, []);
+    }, [contentType]);
 
     if (isLoading) {
         return (

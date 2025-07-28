@@ -250,7 +250,7 @@ export type ReferenceContentType = 'textbook_problem' | 'course' | 'astronotes_c
 interface SelectedReference {
     id: string;
     title: string;
-    subtitle: string;
+    subtitle?: string;
     header: string;
     contentType: ReferenceContentType;
 }

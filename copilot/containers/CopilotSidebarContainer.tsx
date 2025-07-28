@@ -9,6 +9,8 @@ import { IoClose, IoChevronDown, IoChevronUp } from 'react-icons/io5';
 import { Maximize2 } from 'lucide-react';
 import { cn } from 'commons/utils';
 
+type ContentType = "course_video" | "textbook_problem" | "bank_soal_problem" | "astronotes_content";
+
 interface CopilotSidebarContainerProps {
     sessionId?: string;
     isCollapsed?: boolean;
@@ -20,6 +22,7 @@ interface CopilotSidebarContainerProps {
     onOpenReferenceContentModal: () => void;
     onRemoveReference: (referenceId: string, contentType: ReferenceContentType) => void;
     onOpenUsedReferencesModal?: (references: SelectedReference[]) => void;
+    contentType?: ContentType;
 }
 
 const CopilotSidebarContainer = ({
@@ -32,7 +35,8 @@ const CopilotSidebarContainer = ({
     onOpenReferenceModal,
     onOpenReferenceContentModal,
     onRemoveReference,
-    onOpenUsedReferencesModal
+    onOpenUsedReferencesModal,
+    contentType
 }: CopilotSidebarContainerProps): JSX.Element => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoadingHistory, setIsLoadingHistory] = useState(true);
@@ -425,6 +429,7 @@ const CopilotSidebarContainer = ({
                                     showActionButtons={false}
                                     onSendMessage={handleSendMessage}
                                     onImageCapture={handleImageCapture}
+                                    contentType={contentType}
                                 />
                             </div>
                         )}

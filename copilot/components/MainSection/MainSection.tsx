@@ -3,16 +3,20 @@ import ActionButtons from './ActionButtons';
 import ExamplePrompts from './ExamplePrompts';
 import { cn } from 'commons/utils';
 
+type ContentType = "course_video" | "textbook_problem" | "bank_soal_problem" | "astronotes_content" | null;
+
 const MainSection = ({
     onSendMessage,
     onImageCapture,
     className,
     showTitle = true,
-    showActionButtons = true
+    showActionButtons = true,
+    contentType
 }: MainSectionProps & { 
     className?: string; 
     showTitle?: boolean; 
     showActionButtons?: boolean;
+    contentType?: ContentType;
 }): JSX.Element => {
     return (
         <div className={cn("flex-1 flex flex-col h-full bg-[#101010] overflow-hidden", className)}>
@@ -32,7 +36,10 @@ const MainSection = ({
                         <p className="text-neutral-400 mb-4">
                             Psst... kamu bisa nanya kayak gini:
                         </p>
-                        <ExamplePrompts onPromptClick={onSendMessage} />
+                        <ExamplePrompts 
+                            onPromptClick={onSendMessage} 
+                            contentType={contentType}
+                        />
                     </div>
                 </div>
             </div>

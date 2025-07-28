@@ -123,6 +123,10 @@ const CopilotModal = ({
     );
   };
 
+  const getCurrentContentType = () => {
+    return currentContext?.contentType === 'course' ? 'course_video' : currentContext?.contentType;
+  };
+
   const getModalHeight = () => {
     if (isMobile && isCollapsed) {
       return "h-screen";
@@ -166,6 +170,7 @@ const CopilotModal = ({
           onOpenReferenceContentModal={handleOpenReferenceContentModal}
           onRemoveReference={handleRemoveReference}
           onOpenUsedReferencesModal={handleOpenUsedReferencesModal}
+          contentType={getCurrentContentType()}
         />
       </div>
       

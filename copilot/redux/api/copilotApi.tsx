@@ -392,14 +392,26 @@ export const chatApi = {
         }
     },
 
-    getTemplates: async (): Promise<{ templates: string[] }> => {
+    getTemplates: async (contentType?: "course_video" | "textbook_problem" | "bank_soal_problem" | "astronotes_content" | null): Promise<{ templates: string[] }> => {
         const token = localStorage.getItem('token');
-        const response = await fetch(`${COPILOT_BASE_URL}chat/template/`, {
+        
+        let url = `${COPILOT_BASE_URL}chat/template/`;
+        if (contentType !== undefined) {
+            const params = new URLSearchParams();
+            if (contentType === null) {
+                params.append('content_type', '');
+            } else {
+                params.append('content_type', contentType);
+            }
+            url += `?${params.toString()}`;
+        }
+        
+        const response = await fetch(url, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Token ${token}`,
-                Accept: '*/*'
+                'Accept': 'application/json',
+                Authorization: `Token ${token}`
             }
         });
 
