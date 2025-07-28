@@ -48,7 +48,7 @@ const ReferenceContentModal: React.FC<ReferenceContentModalProps> = ({
 
     return (
         <div className="fixed inset-0 z-50 bg-black/80 flex items-end justify-center p-0 sm:items-center sm:justify-center sm:p-4">
-            <div className="bg-[#1A1A1A] rounded-t-2xl sm:rounded-2xl w-full max-w-md max-h-[90vh] sm:mt-8 sm:max-h-[82vh] overflow-hidden">
+            <div className="bg-[#1A1A1A] rounded-t-2xl sm:rounded-2xl w-full sm:w-[500px] h-[60vh] sm:h-[70vh] sm:mt-8 overflow-hidden flex flex-col">
                 <div className="flex items-center justify-between pt-6 px-6">
                     <h2 className="text-lg font-semibold text-white">
                         {isViewOnly ? "Referensi Konten yang Digunakan" : "Referensi Konten"}
@@ -74,55 +74,63 @@ const ReferenceContentModal: React.FC<ReferenceContentModalProps> = ({
                     </div>
                 </div>
 
-                <div className="px-6 pt-4 space-y-0 max-h-[50vh] sm:max-h-[400px] overflow-y-auto">
-                    {selectedReferences.map((reference) => (
-                        <div key={`${reference.id}-${reference.contentType}`}>
-                            <div className="rounded-lg p-4">
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-3 flex-1">
-                                        <div className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
-                                            {getContentTypeIcon(reference.contentType)}
-                                        </div>
-                                        
-                                        <div className="flex-1 min-w-0">
-                                            <h3 className="font-medium text-white text-sm leading-tight mb-1">
-                                                {reference.header || 'Content Item'}
-                                            </h3>
-                                            <div className="space-y-1">
-                                                <div className="flex items-center gap-1">
-                                                    {reference.contentType === 'course' ? 
-                                                        <IoSchool size={12} className="text-[#7D89CC]" /> : 
-                                                        <IoLibrary size={12} className="text-[#7D89CC]" />
-                                                    }
-                                                    <span className="text-xs text-white/60">
-                                                        {reference.title}
-                                                    </span>
-                                                </div>
-                                                <div className="flex items-center gap-1">
-                                                    <IoBookmark size={12} className="text-[#7D89CC]" />
-                                                    <span className="text-xs text-white/60">
-                                                        {reference.subtitle}
-                                                    </span>
+                <div className="px-6 pt-4 space-y-0 flex-1 overflow-y-auto">
+                    {selectedReferences.length === 0 ? (
+                        <div className="flex items-center justify-center h-full">
+                            <p className="text-[#999999] text-sm">
+                                Kamu belum menambahkan referensi
+                            </p>
+                        </div>
+                    ) : (
+                        selectedReferences.map((reference) => (
+                            <div key={`${reference.id}-${reference.contentType}`}>
+                                <div className="rounded-lg p-4">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-3 flex-1">
+                                            <div className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
+                                                {getContentTypeIcon(reference.contentType)}
+                                            </div>
+                                            
+                                            <div className="flex-1 min-w-0">
+                                                <h3 className="font-medium text-white text-sm leading-tight mb-1">
+                                                    {reference.header || 'Content Item'}
+                                                </h3>
+                                                <div className="space-y-1">
+                                                    <div className="flex items-center gap-1">
+                                                        {reference.contentType === 'course' ? 
+                                                            <IoSchool size={12} className="text-[#7D89CC]" /> : 
+                                                            <IoLibrary size={12} className="text-[#7D89CC]" />
+                                                        }
+                                                        <span className="text-xs text-white/60">
+                                                            {reference.title}
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex items-center gap-1">
+                                                        <IoBookmark size={12} className="text-[#7D89CC]" />
+                                                        <span className="text-xs text-white/60">
+                                                            {reference.subtitle}
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        
+                                        <button
+                                            onClick={() => handleRemoveReference(reference.id, reference.contentType)}
+                                            className={cn(
+                                                "p-1 text-white/40 hover:text-white/80 transition-colors flex-shrink-0 ml-2",
+                                                isViewOnly && "hidden"
+                                            )}
+                                            aria-label="Remove reference"
+                                        >
+                                            <IoMdClose size={26} />
+                                        </button>
                                     </div>
-                                    
-                                    <button
-                                        onClick={() => handleRemoveReference(reference.id, reference.contentType)}
-                                        className={cn(
-                                            "p-1 text-white/40 hover:text-white/80 transition-colors flex-shrink-0 ml-2",
-                                            isViewOnly && "hidden"
-                                        )}
-                                        aria-label="Remove reference"
-                                    >
-                                        <IoMdClose size={26} />
-                                    </button>
                                 </div>
+                                <div className="border-b border-white/10 mx-4"></div>
                             </div>
-                            <div className="border-b border-white/10 mx-4"></div>
-                        </div>
-                    ))}
+                        ))
+                    )}
                 </div>
 
                 <div className={cn("p-6", isViewOnly && "hidden")}>
