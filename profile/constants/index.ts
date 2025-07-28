@@ -9,6 +9,7 @@ import { MdOutlineMail, MdOutlinePhoneAndroid } from 'react-icons/md';
 import { ChangeEmailForm } from '../components/ChangeEmailForm';
 import { FiUser } from 'react-icons/fi';
 import { FaRegAddressCard } from 'react-icons/fa6';
+import KartuKreditForm from 'profile/components/kartu-kredit/KartuKreditForm';
 
 export const PROFILE_MENUS = [
     {
@@ -66,5 +67,6 @@ export const PROFILE_MANAGEMENT_FORMS: ProfileManagementFormsInterface = {
     '/profil/data-diri': PersonalDataForm,
     '/profil/pendidikan': EducationLevelForm,
     '/profil/perangkat-terhubung': PerangkatTerhubungForm,
-    '/profil/ganti-email': ChangeEmailForm
+    '/profil/ganti-email': ChangeEmailForm,
+    '/profil/kartu-kredit': KartuKreditForm
 };
