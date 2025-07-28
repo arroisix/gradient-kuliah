@@ -4,21 +4,21 @@ import { EducationLevelForm } from 'profile/components/EducationLevelForm';
 import { GeneralProfileForm } from 'profile/components/GeneralProfileForm';
 import { PerangkatTerhubungForm } from 'profile/components/PerangkatTerhubungForm';
 import { PersonalDataForm } from 'profile/components/PersonalDataForm';
-import { CgBell } from 'react-icons/cg';
-import { GoHome } from 'react-icons/go';
-import { HiOutlineAcademicCap } from 'react-icons/hi';
+import { HiOutlineAcademicCap, HiOutlineCreditCard } from 'react-icons/hi';
 import { MdOutlineMail, MdOutlinePhoneAndroid } from 'react-icons/md';
 import { ChangeEmailForm } from '../components/ChangeEmailForm';
+import { FiUser } from 'react-icons/fi';
+import { FaRegAddressCard } from 'react-icons/fa6';
 
 export const PROFILE_MENUS = [
     {
         label: 'Profil Umum',
-        Icon: CgBell,
+        Icon: FiUser,
         url: 'profil/profil-umum'
     },
     {
         label: 'Data Diri',
-        Icon: GoHome,
+        Icon: FaRegAddressCard,
         url: 'profil/data-diri'
     },
     {
@@ -37,6 +37,11 @@ export const PROFILE_MENUS = [
         label: 'Perangkat Terhubung',
         Icon: MdOutlinePhoneAndroid,
         url: 'profil/perangkat-terhubung'
+    },
+    {
+        label: 'Kartu Kredit/Debit',
+        Icon: HiOutlineCreditCard,
+        url: 'profil/kartu-kredit'
     },
     {
         featureFlag: 'legal-pages',
