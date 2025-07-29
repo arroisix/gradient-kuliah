@@ -139,3 +139,20 @@ interface CreditCardListResponse {
     cards: CreditCard[];
     count: number;
 }
+
+interface AddCardRequestData {
+    name?: string;
+    brand: string;
+    card_token: string;
+}
+
+interface CreditCardTokenizeData {
+    card_number: string;
+    card_exp_month: string;
+    card_exp_year: string;
+    card_cvn: string;
+    card_holder_first_name: string;
+    card_holder_last_name: string;
+    card_holder_email: string;
+    card_holder_phone_number: string;
+}

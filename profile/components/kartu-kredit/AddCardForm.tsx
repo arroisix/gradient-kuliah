@@ -1,227 +1,461 @@
-'use client';
-import { useState } from 'react';
-import type React from 'react';
-
-import { Info } from 'lucide-react';
-import { HiShieldCheck } from 'react-icons/hi';
 import Button from 'commons/components/elements/Button';
+import Input from 'commons/components/elements/Form/input';
+import Script from 'next/script';
+import { HiShieldCheck } from 'react-icons/hi';
+import Link from 'next/link';
 import CardProtectionModal from './CardProtectionModal';
 import CVVInfoModal from './CVVInfoModal';
+import ConfirmAddCardModal from './ConfirmAddCardModal';
+import { useEffect, useState } from 'react';
+import { Info } from 'lucide-react';
+import { Formik } from 'formik';
+import { useCreditCardContext } from './CreditCardProvider';
+import { useRouter } from 'next/router';
+import Image from 'next/image';
+import { CDN_URL } from 'commons/constants';
 
-const AddCardForm = (): JSX.Element => {
-    const [formData, setFormData] = useState({
-        cardName: '',
-        cardNumber: '',
-        expiryDate: '',
-        cvv: ''
-    });
+const MAX_NAME_LENGTH = 20;
+
+const validate = (values) => {
+    const errors = {};
+
+    // card name
+    if (!values.cardName.trim()) errors.cardName = 'Nama kartu wajib diisi';
+    else if (values.cardName.length > MAX_NAME_LENGTH)
+        errors.cardName = `Maksimal ${MAX_NAME_LENGTH} karakter`;
+
+    // card num
+    const rawNum = values.cardNumber.replace(/\s+/g, '');
+    if (!rawNum) errors.cardNumber = 'Nomor kartu wajib diisi';
+    else if (
+        rawNum.length < 12 ||
+        !window.Xendit.card.validateCardNumber(rawNum)
+    )
+        errors.cardNumber = 'Nomor kartu tidak valid';
+
+    // expiry
+    const [mm, yy] = values.cardExp.split('/');
+    if (!mm || !yy) errors.cardExp = 'Tanggal kedaluwarsa wajib diisi';
+    else if (yy.length < 2 || !window.Xendit.card.validateExpiry(mm, `20${yy}`))
+        errors.cardExp = 'Tanggal kedaluwarsa tidak valid';
+
+    // cvv
+    if (!values.cardCVV) errors.cardCVV = 'CVV wajib diisi';
+    else if (
+        values.cardCVV.length < 3 ||
+        !window.Xendit.card.validateCvn(values.cardCVV)
+    )
+        errors.cardCVV = 'CVV tidak valid';
+
+    if (!values.cardHolderPhoneNumber) {
+        errors.cardHolderPhoneNumber = 'Nomor handphone tidak boleh kosong';
+    } else if (!values.cardHolderPhoneNumber.match(/^\d{1,14}$/)) {
+        errors.cardHolderPhoneNumber = 'Masukkan nomor handphone yang valid';
+    }
+
+    return errors;
+};
+
+const AddCardForm = () => {
+    const router = useRouter();
     const [showProtectionModal, setShowProtectionModal] = useState(false);
     const [showCVVModal, setShowCVVModal] = useState(false);
+    const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+    const [isTypingName, setIsTypingName] = useState(false);
+    const [isNameAvailable, setIsNameAvailable] = useState(false);
+    const { cardData, setCardData, saveUserCard, isSaving, successSaving } =
+        useCreditCardContext();
 
-    const formatCardNumber = (value: string) => {
-        const v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
-        const matches = v.match(/\d{4,16}/g);
-        const match = (matches && matches[0]) || '';
-        const parts = [];
-        for (let i = 0, len = match.length; i < len; i += 4) {
-            parts.push(match.substring(i, i + 4));
-        }
-        if (parts.length) {
-            return parts.join(' ');
-        } else {
-            return v;
-        }
-    };
+    useEffect(() => {
+        if (successSaving) router.push('/profil/kartu-kredit');
+    }, [successSaving, router]);
 
-    const formatExpiryDate = (value: string) => {
-        const v = value.replace(/\D/g, '');
-        if (v.length >= 2) {
-            return `${v.substring(0, 2)}/${v.substring(2, 4)}`;
+    useEffect(() => {
+        if (window.Xendit) {
+            window.Xendit.setPublishableKey(
+                process.env.NEXT_PUBLIC_XENDIT_KEY as string
+            );
         }
-        return v;
-    };
-
-    const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const formatted = formatCardNumber(e.target.value);
-        if (formatted.length <= 19) {
-            // 16 digits + 3 spaces
-            setFormData((prev) => ({ ...prev, cardNumber: formatted }));
-        }
-    };
-
-    const handleExpiryDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const formatted = formatExpiryDate(e.target.value);
-        if (formatted.length <= 5) {
-            // MM/YY
-            setFormData((prev) => ({ ...prev, expiryDate: formatted }));
-        }
-    };
-
-    const handleCVVChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value.replace(/\D/g, '');
-        if (value.length <= 4) {
-            setFormData((prev) => ({ ...prev, cvv: value }));
-        }
-    };
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        // TODO: Implement card submission logic
-        console.log('Form submitted:', formData);
-    };
+    }, []);
 
     return (
-        <div className="min-h-screen text-white">
-            <div className="max-w-2xl mx-auto px-4 py-8">
-                {/* Header */}
-                <div className="flex items-center justify-between mb-8">
+        <>
+            <Script
+                src="https://js.xendit.co/v1/xendit.min.js"
+                strategy="beforeInteractive"
+            />
+
+            <div className="flex flex-col items-center w-full">
+                <div className="px-4 py-8 space-y-4">
+                    {/* Header */}
                     <h1 className="text-2xl font-semibold">
                         Tambah Kartu Baru
                     </h1>
-                    {/* <button
-                        onClick={() => router.back()}
-                        className="p-2 hover:bg-gray-800 rounded-lg transition-colors">
-                        <X className="w-6 h-6" />
-                    </button> */}
-                </div>
 
-                {/* Protection Info */}
-                <div className="mb-8 flex items-center gap-x-3 bg-[#03AC5C]/5 p-4 rounded-lg text-green-400">
-                    <HiShieldCheck
-                        size={20}
-                        className="w-5 h-5 flex-shrink-0"
-                    />
-                    <div className="flex-1 space-y-1">
-                        <span className="font-medium">
-                            Detail Kartumu Terlindungi
-                        </span>
-                        <p className="text-sm text-green-200">
-                            CVV tidak disimpan, akan diminta setiap transaksi
-                        </p>
-                    </div>
-                    <button
-                        onClick={() => setShowProtectionModal(true)}
-                        className="p-1 flex-shrink-0 rounded hover:bg-green-800 transition-colors">
-                        <Info className="w-4 h-4" />
-                    </button>
-                </div>
-
-                {/* Card Icons */}
-                <div className="flex justify-end gap-2 mb-6">
-                    <div className="w-10 h-6 bg-orange-500 rounded flex items-center justify-center text-xs font-bold text-white">
-                        MC
-                    </div>
-                    <div className="w-10 h-6 bg-blue-600 rounded flex items-center justify-center text-xs font-bold text-white">
-                        VISA
-                    </div>
-                    <div className="w-10 h-6 bg-blue-500 rounded flex items-center justify-center text-xs font-bold text-white">
-                        AE
-                    </div>
-                    <div className="w-10 h-6 bg-red-600 rounded flex items-center justify-center text-xs font-bold text-white">
-                        JCB
-                    </div>
-                </div>
-
-                {/* Form */}
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Card Details Section */}
-                    <div className="space-y-6">
-                        <h3 className="text-lg font-bold">Rincian Kartu</h3>
-
-                        {/* Card Name */}
-                        <div>
-                            <label className="block text-sm text-graphite-400 font-medium mb-2">
-                                Nama Kartu
-                            </label>
-                            <input
-                                type="text"
-                                value={formData.cardName}
-                                placeholder="Contoh: Kartu Utama, Kartu Ibu"
-                                className="w-full px-4 py-3 bg-graphite-800 border border-graphite-700 rounded-lg focus:outline-none focus:border-blue-500 transition-colors"
-                            />
-                        </div>
-
-                        {/* Card Number */}
-                        <div>
-                            <label className="block text-sm text-graphite-400 font-medium mb-2">
-                                Nomor Kartu
-                            </label>
-                            <input
-                                type="text"
-                                value={formData.cardNumber}
-                                onChange={handleCardNumberChange}
-                                placeholder="XXXX XXXX XXXX XXXX"
-                                className="w-full px-4 py-3 bg-graphite-800 border border-graphite-700 rounded-lg focus:outline-none focus:border-blue-500 transition-colors"
-                            />
-                        </div>
-
-                        {/* Expiry Date and CVV */}
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm text-graphite-400 font-medium mb-2">
-                                    Tanggal Kedaluwarsa
-                                </label>
-                                <input
-                                    type="text"
-                                    value={formData.expiryDate}
-                                    onChange={handleExpiryDateChange}
-                                    placeholder="MM/YY"
-                                    className="w-full px-4 py-3 bg-graphite-800 border border-graphite-700 rounded-lg focus:outline-none focus:border-blue-500 transition-colors"
-                                />
-                            </div>
-                            <div>
-                                <div className="flex items-center gap-2 mb-2">
-                                    <label className="block text-sm text-graphite-400 font-medium">
-                                        CVV
-                                    </label>
-                                </div>
-                                <div className="relative">
-                                    <input
-                                        type="text"
-                                        value={formData.cvv}
-                                        onChange={handleCVVChange}
-                                        placeholder="XXX"
-                                        className="w-full px-4 py-3 bg-graphite-800 border border-graphite-700 rounded-lg focus:outline-none focus:border-blue-500 transition-colors"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowCVVModal(true)}
-                                        className="absolute inset-y-0 right-3 flex items-center justify-center p-1">
-                                        <Info className="w-4 h-4 text-accent-purple" />
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Terms */}
-                    <div className="pt-8 flex items-start gap-4">
-                        <p className="flex-1 text-sm text-gray-400 mb-6">
-                            Dengan konfirmasi, kamu menyetujui{' '}
-                            <span className="text-blue-400 hover:underline cursor-pointer">
-                                Syarat & Ketentuan
-                            </span>{' '}
-                            serta{' '}
-                            <span className="text-blue-400 hover:underline cursor-pointer">
-                                Kebijakan Privasi
+                    <div className="mb-8 flex items-center gap-x-3 bg-[#03AC5C]/10 p-4 rounded-lg text-green-400">
+                        <HiShieldCheck
+                            size={20}
+                            className="w-5 h-5 flex-shrink-0"
+                        />
+                        <div className="flex-1 space-y-1">
+                            <span className="font-medium">
+                                Detail Kartumu Terlindungi
                             </span>
-                        </p>
-
-                        {/* Submit Button */}
-                        <Button variant="primary" className="flex-shrink-0">
-                            Konfirmasi
-                        </Button>
+                            <p className="text-sm text-green-200">
+                                CVV tidak disimpan, akan diminta setiap
+                                transaksi
+                            </p>
+                        </div>
+                        <button
+                            onClick={() => setShowProtectionModal(true)}
+                            className="p-1 flex-shrink-0 rounded hover:bg-green-800 transition-colors">
+                            <Info className="w-4 h-4" />
+                        </button>
                     </div>
-                </form>
-            </div>
 
-            {/* Modals */}
+                    <div className="flex justify-end space-x-2">
+                        <div className="relative w-5 h-5 rounded bg-white overflow-hidden">
+                            <Image
+                                src={`${CDN_URL}/assets/payments/mastercard.png`}
+                                layout="fill"
+                                className="object-contain"
+                            />
+                        </div>
+                        <div className="relative w-5 h-5 rounded bg-white overflow-hidden">
+                            <Image
+                                src={`${CDN_URL}/assets/payments/visa.png`}
+                                layout="fill"
+                                className="object-contain"
+                            />
+                        </div>
+                        <div className="relative w-5 h-5 rounded bg-white overflow-hidden">
+                            <Image
+                                src={`${CDN_URL}/assets/payments/amex.png`}
+                                layout="fill"
+                                className="border rounded-md 0bject-contain"
+                            />
+                        </div>
+                        <div className="relative w-5 h-5 rounded bg-white">
+                            <Image
+                                src={`${CDN_URL}/assets/payments/jcb.png`}
+                                layout="fill"
+                                className="object-contain"
+                            />
+                        </div>
+                    </div>
+
+                    <Formik
+                        initialValues={{
+                            cardName: '',
+                            cardNumber: '',
+                            cardExp: '',
+                            cardCVV: '',
+                            cardHolderFirstName: '',
+                            cardHolderLastName: '',
+                            cardHolderEmail: '',
+                            cardHolderPhoneNumber: ''
+                        }}
+                        validate={validate}
+                        validateOnChange
+                        validateOnBlur
+                        onSubmit={async (
+                            values,
+                            { setFieldError, setSubmitting }
+                        ) => {
+                            setSubmitting(true);
+                            try {
+                                const [mm, yyPart] = values.cardExp.split('/');
+                                const year =
+                                    yyPart.length === 2
+                                        ? `20${yyPart}`
+                                        : yyPart;
+                                const rawNumber = values.cardNumber.replace(
+                                    /\s+/g,
+                                    ''
+                                );
+                                const token: any = await new Promise(
+                                    (res, rej) =>
+                                        window.Xendit.card.createToken(
+                                            {
+                                                card_number: rawNumber,
+                                                card_exp_month: mm,
+                                                card_exp_year: year,
+                                                card_cvn: values.cardCVV,
+                                                card_holder_first_name:
+                                                    values.cardHolderFirstName,
+                                                card_holder_last_name:
+                                                    values.cardHolderLastName,
+                                                card_holder_email:
+                                                    values.cardHolderEmail,
+                                                card_holder_phone_number: `+62${values.cardHolderPhoneNumber}`,
+                                                is_multiple_use: true
+                                            },
+                                            (err: any, r: any) =>
+                                                err ? rej(err) : res(r)
+                                        )
+                                );
+                                if (token.status === 'FAILED')
+                                    throw new Error(
+                                        token.failure_reason ||
+                                            'Tokenisasi gagal'
+                                    );
+
+                                setCardData({
+                                    ...token,
+                                    cardName: values.cardName
+                                });
+                                setShowConfirmationModal(true);
+                            } catch (err: any) {
+                                setFieldError(
+                                    'cardName',
+                                    err.message || 'Gagal memproses kartu'
+                                );
+                            } finally {
+                                setSubmitting(false);
+                            }
+                        }}>
+                        {({
+                            values,
+                            errors,
+                            touched,
+                            handleChange,
+                            handleBlur,
+                            handleSubmit,
+                            setFieldValue,
+                            setFieldError,
+                            isSubmitting,
+                            isValid,
+                            initialValues
+                        }) => (
+                            <form onSubmit={handleSubmit} className="space-y-6">
+                                <div className="flex flex-col space-y-4">
+                                    <h2 className="font-bold text-md">
+                                        Rincian Kartu
+                                    </h2>
+                                    <Input
+                                        type="text"
+                                        label="Nama Kartu"
+                                        name="cardName"
+                                        placeholder="Contoh: Kartu Utama"
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        value={values.cardName}
+                                        error={
+                                            touched.cardName && errors.cardName
+                                                ? errors.cardName
+                                                : undefined
+                                        }
+                                    />
+
+                                    <Input
+                                        type="text"
+                                        label="Nomor Kartu"
+                                        name="cardNumber"
+                                        placeholder="XXXX XXXX XXXX XXXX"
+                                        value={values.cardNumber}
+                                        onChange={(e) => {
+                                            const digits =
+                                                e.target.value.replace(
+                                                    /\D/g,
+                                                    ''
+                                                );
+                                            setFieldValue(
+                                                'cardNumber',
+                                                digits
+                                                    .match(/.{1,4}/g)
+                                                    ?.join(' ') ?? digits
+                                            );
+                                        }}
+                                        onBlur={handleBlur}
+                                        error={
+                                            touched.cardNumber &&
+                                            errors.cardNumber
+                                                ? errors.cardNumber
+                                                : undefined
+                                        }
+                                    />
+
+                                    <div className="flex space-x-4">
+                                        <Input
+                                            type="text"
+                                            label="Tanggal Kedaluwarsa"
+                                            name="cardExp"
+                                            placeholder="MM/YY"
+                                            value={values.cardExp}
+                                            onChange={(e) => {
+                                                const raw = e.target.value
+                                                    .replace(/\D/g, '')
+                                                    .slice(0, 4);
+                                                const formatted =
+                                                    raw.length > 2
+                                                        ? `${raw.slice(
+                                                              0,
+                                                              2
+                                                          )}/${raw.slice(2)}`
+                                                        : raw;
+                                                setFieldValue(
+                                                    'cardExp',
+                                                    formatted
+                                                );
+                                            }}
+                                            onBlur={handleBlur}
+                                            error={
+                                                touched.cardExp &&
+                                                errors.cardExp
+                                                    ? errors.cardExp
+                                                    : undefined
+                                            }
+                                        />
+
+                                        <Input
+                                            type="text"
+                                            label="CVV"
+                                            name="cardCVV"
+                                            placeholder="XXX"
+                                            value={values.cardCVV}
+                                            onChange={(e) => {
+                                                const digits = e.target.value
+                                                    .replace(/\D/g, '')
+                                                    .slice(0, 4);
+                                                setFieldValue(
+                                                    'cardCVV',
+                                                    digits
+                                                );
+                                            }}
+                                            onBlur={handleBlur}
+                                            error={
+                                                touched.cardCVV &&
+                                                errors.cardCVV
+                                                    ? errors.cardCVV
+                                                    : undefined
+                                            }
+                                            endAddorment={
+                                                <Info
+                                                    className="w-4 h-4 cursor-pointer"
+                                                    onClick={() =>
+                                                        setShowCVVModal(true)
+                                                    }
+                                                />
+                                            }
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col space-y-4">
+                                    <h2 className="font-bold text-md">
+                                        Identitas Pemilik Kartu
+                                    </h2>
+                                    <div className="flex space-x-4">
+                                        <Input
+                                            type="text"
+                                            label="Nama Depan"
+                                            name="cardHolderFirstName"
+                                            placeholder="Nama Depan"
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            value={values.cardHolderFirstName}
+                                            error={
+                                                touched.cardHolderFirstName &&
+                                                errors.cardHolderFirstName
+                                                    ? errors.cardHolderFirstName
+                                                    : undefined
+                                            }
+                                        />
+
+                                        <Input
+                                            type="text"
+                                            label="Nama Belakang"
+                                            name="cardHolderLastName"
+                                            placeholder="Nama Belakang"
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            value={values.cardHolderLastName}
+                                            error={
+                                                touched.cardHolderLastName &&
+                                                errors.cardHolderLastName
+                                                    ? errors.cardHolderLastName
+                                                    : undefined
+                                            }
+                                        />
+                                    </div>
+
+                                    <Input
+                                        type="email"
+                                        label="Email"
+                                        name="cardHolderEmail"
+                                        placeholder="Email"
+                                    />
+
+                                    <Input
+                                        type="tel"
+                                        label="Nomor Handphone"
+                                        placeholder="8211234567"
+                                        name="cardHolderPhoneNumber"
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        startAddorment={
+                                            <span className="text-neutral-400">
+                                                +62
+                                            </span>
+                                        }
+                                        error={
+                                            touched.cardHolderPhoneNumber &&
+                                            errors.cardHolderPhoneNumber
+                                                ? errors.cardHolderPhoneNumber
+                                                : undefined
+                                        }
+                                    />
+                                </div>
+                                <p className="text-xs text-center">
+                                    Dengan konfirmasi, Anda menyetujui{' '}
+                                    <Link
+                                        className="font-bold text-[#7264EB] underline cursor-pointer hover:text-[#7264EB]/75 transition-all duration-500"
+                                        href={'/syarat-dan-ketentuan'}>
+                                        Syarat &amp; Ketentuan
+                                    </Link>{' '}
+                                    dan{' '}
+                                    <Link
+                                        className="font-bold text-[#7264EB] underline cursor-pointer hover:text-[#7264EB]/75 transition-all duration-500"
+                                        href={'/kebijakan-privasi'}>
+                                        Kebijakan Privasi
+                                    </Link>{' '}
+                                    Gradient
+                                </p>
+                                <Button
+                                    type="submit"
+                                    variant="primary"
+                                    className="w-full"
+                                    disabled={
+                                        !isValid || isSubmitting || isSaving
+                                    }>
+                                    {isSubmitting || isSaving
+                                        ? 'Menyimpan...'
+                                        : 'Konfirmasi'}
+                                </Button>
+                            </form>
+                        )}
+                    </Formik>
+                </div>
+            </div>
             <CardProtectionModal
                 isOpen={showProtectionModal}
                 setOpen={setShowProtectionModal}
             />
             <CVVInfoModal isOpen={showCVVModal} setOpen={setShowCVVModal} />
-        </div>
+            <ConfirmAddCardModal
+                isOpen={showConfirmationModal}
+                setOpen={setShowConfirmationModal}
+                onConfirm={async () => {
+                    if (cardData) {
+                        await saveUserCard({
+                            name: cardData.cardName,
+                            brand: cardData.card_info.brand,
+                            card_token: cardData.id
+                        });
+                    }
+                }}
+            />
+        </>
     );
 };
 

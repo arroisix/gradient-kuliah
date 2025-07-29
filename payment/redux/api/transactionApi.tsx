@@ -29,7 +29,16 @@ export const transactionApi = baseApi.injectEndpoints({
         getAllUserCards: builder.query<CreditCardListResponse, void>({
             query: () => ({
                 url: `${TRANSACTION_BASE_URL}user-cards/`
-            })
+            }),
+            providesTags: [{ type: 'USER_CARDS', id: 'LIST' }]
+        }),
+        addUserCard: builder.mutation<CreditCard, AddCardRequestData>({
+            query: (body) => ({
+                url: `${TRANSACTION_BASE_URL}user-cards/`,
+                method: 'POST',
+                body
+            }),
+            invalidatesTags: [{ type: 'USER_CARDS', id: 'LIST' }]
         })
     })
 });
@@ -38,5 +47,6 @@ export const {
     useGetAllTransactionQuery,
     useGetTransactionQuery,
     useGetAllPaymentMethodsQuery,
-    useGetAllUserCardsQuery
+    useGetAllUserCardsQuery,
+    useAddUserCardMutation
 } = transactionApi;

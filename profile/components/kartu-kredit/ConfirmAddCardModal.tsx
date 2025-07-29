@@ -5,10 +5,15 @@ import CreditCardSmallIcon from 'commons/components/elements/Icons/CreditCardSma
 import CreditCardStackIcon from 'commons/components/elements/Icons/CreditCardStack';
 import Modal from 'commons/components/modules/Modal';
 
+interface ConfirmAddCardModalProps extends ModalBaseProps {
+    onConfirm: () => void;
+}
+
 const ConfirmAddCardModal = ({
     isOpen,
-    setOpen
-}: ModalBaseProps): JSX.Element => {
+    setOpen,
+    onConfirm
+}: ConfirmAddCardModalProps): JSX.Element => {
     return (
         <Modal
             isOpen={isOpen}
@@ -17,14 +22,14 @@ const ConfirmAddCardModal = ({
             className="!bg-[#1D1D1D]">
             {/* Header */}
             <div className="flex flex-col w-full">
-                <h1 className="font-extrabold">Info Kartu yang Disimpan</h1>
+                <h1 className="font-bold text-lg">Info Kartu yang Disimpan</h1>
             </div>
 
             {/* Content */}
             <div className="flex flex-col items-center space-y-4">
                 <CreditCardStackIcon className="mb-2" />
 
-                <div className="flex gap-3 bg-graphite-700 p-3 rounded-lg items-center">
+                <div className="flex gap-3 bg-[#2C2C2C] p-3 rounded-lg items-center">
                     <div className="w-8 h-8 rounded-full bg-[#00AA99]/15 flex items-center justify-center shrink-0">
                         <CreditCardSmallIcon />
                     </div>
@@ -40,7 +45,7 @@ const ConfirmAddCardModal = ({
                     </div>
                 </div>
 
-                <div className="flex gap-3 bg-graphite-700 p-3 rounded-lg items-center">
+                <div className="flex gap-3 bg-[#2C2C2C] p-3 rounded-lg items-center">
                     <div className="w-8 h-8 rounded-full bg-[#F505A1]/15 flex items-center justify-center shrink-0">
                         <CreditCardCVVSmallIcon />
                     </div>
@@ -57,6 +62,7 @@ const ConfirmAddCardModal = ({
                 <Button
                     variant="primary"
                     className="w-1/2"
+                    onClick={onConfirm}
                     eventName="Add new credit card">
                     Simpan
                 </Button>
