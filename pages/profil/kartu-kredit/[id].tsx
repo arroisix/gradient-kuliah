@@ -2,7 +2,7 @@ import Layout from 'commons/layout';
 import withAuth from 'commons/withAuth';
 import { ProfileContainer } from 'profile/containers';
 
-const KartuKredit = (): JSX.Element => {
+const CreditCardDetailsPage = (): JSX.Element => {
     return (
         <Layout>
             <ProfileContainer />
@@ -10,5 +10,5 @@ const KartuKredit = (): JSX.Element => {
     );
 };
 
-KartuKredit.displayName = 'Kartu Kredit';
-export default withAuth(KartuKredit);
+CreditCardDetailsPage.displayName = 'Kartu Kredit';
+export default withAuth(CreditCardDetailsPage);

@@ -4,16 +4,12 @@ import AddCardButton from './AddCardButton';
 import { useGetAllUserCardsQuery } from 'payment/redux/api/transactionApi';
 import Skeleton from 'commons/components/elements/Skeleton';
 
-export const KartuKreditForm = (): JSX.Element => {
+export const CreditCardList = (): JSX.Element => {
     const {
         data: creditCardsData,
         isLoading,
         error
     } = useGetAllUserCardsQuery();
-
-    const handleCardClick = (cardId: string) => {
-        console.log('Card clicked:', cardId);
-    };
 
     if (isLoading) {
         return <Skeleton repeat={4} />;
@@ -37,18 +33,13 @@ export const KartuKreditForm = (): JSX.Element => {
         <div>
             <div className="max-h-[70vh] overflow-y-auto">
                 {cards.map((card) => (
-                    <CreditCardItem
-                        key={card.id}
-                        card={card}
-                        onClick={() => handleCardClick(card.id)}
-                    />
+                    <CreditCardItem key={card.id} card={card} />
                 ))}
 
-                {/* Add Card Button */}
                 <AddCardButton />
             </div>
         </div>
     );
 };
 
-export default KartuKreditForm;
+export default CreditCardList;

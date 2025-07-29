@@ -3,13 +3,13 @@ import Input from 'commons/components/elements/Form/input';
 import Script from 'next/script';
 import { HiShieldCheck } from 'react-icons/hi';
 import Link from 'next/link';
-import CardProtectionModal from './CardProtectionModal';
-import CVVInfoModal from './CVVInfoModal';
-import ConfirmAddCardModal from './ConfirmAddCardModal';
+import CardProtectionModal from './modals/CardProtectionModal';
+import CVVInfoModal from './modals/CVVInfoModal';
+import ConfirmAddCardModal from './modals/ConfirmAddCardModal';
 import { useEffect, useState } from 'react';
 import { Info } from 'lucide-react';
 import { Formik } from 'formik';
-import { useCreditCardContext } from './CreditCardProvider';
+import { useCreditCardContext } from '../../contexts/CreditCardProvider';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { CDN_URL } from 'commons/constants';
@@ -75,6 +75,7 @@ const AddCardForm = () => {
             window.Xendit.setPublishableKey(
                 process.env.NEXT_PUBLIC_XENDIT_KEY as string
             );
+            console.log(process.env.NEXT_PUBLIC_XENDIT_KEY);
         }
     }, []);
 
@@ -85,13 +86,8 @@ const AddCardForm = () => {
                 strategy="beforeInteractive"
             />
 
-            <div className="flex flex-col items-center w-full">
-                <div className="px-4 py-8 space-y-4">
-                    {/* Header */}
-                    <h1 className="text-2xl font-semibold">
-                        Tambah Kartu Baru
-                    </h1>
-
+            <div className="flex flex-col items-center w-full max-h-[75vh] overflow-y-auto">
+                <div className="p-4 space-y-4">
                     <div className="mb-8 flex items-center gap-x-3 bg-[#03AC5C]/10 p-4 rounded-lg text-green-400">
                         <HiShieldCheck
                             size={20}
@@ -114,32 +110,32 @@ const AddCardForm = () => {
                     </div>
 
                     <div className="flex justify-end space-x-2">
-                        <div className="relative w-5 h-5 rounded bg-white overflow-hidden">
+                        <div className="h-5 w-5 bg-white rounded flex items-center justify-center p-[2px] overflow-hidden">
                             <Image
                                 src={`${CDN_URL}/assets/payments/mastercard.png`}
-                                layout="fill"
-                                className="object-contain"
+                                width={20}
+                                height={12}
                             />
                         </div>
-                        <div className="relative w-5 h-5 rounded bg-white overflow-hidden">
+                        <div className="h-5 w-5 bg-white rounded flex items-center justify-center p-[2px] overflow-hidden">
                             <Image
                                 src={`${CDN_URL}/assets/payments/visa.png`}
-                                layout="fill"
-                                className="object-contain"
+                                width={20}
+                                height={8}
                             />
                         </div>
-                        <div className="relative w-5 h-5 rounded bg-white overflow-hidden">
+                        <div className="h-5 w-5 bg-white rounded flex items-center justify-center p-[2px] overflow-hidden">
                             <Image
                                 src={`${CDN_URL}/assets/payments/amex.png`}
-                                layout="fill"
-                                className="border rounded-md 0bject-contain"
+                                width={20}
+                                height={20}
                             />
                         </div>
-                        <div className="relative w-5 h-5 rounded bg-white">
+                        <div className="h-5 w-5 bg-white rounded flex items-center justify-center p-[2px] overflow-hidden">
                             <Image
                                 src={`${CDN_URL}/assets/payments/jcb.png`}
-                                layout="fill"
-                                className="object-contain"
+                                width={20}
+                                height={20}
                             />
                         </div>
                     </div>
@@ -384,6 +380,15 @@ const AddCardForm = () => {
                                         label="Email"
                                         name="cardHolderEmail"
                                         placeholder="Email"
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        value={values.cardHolderEmail}
+                                        error={
+                                            touched.cardHolderEmail &&
+                                            errors.cardHolderEmail
+                                                ? errors.cardHolderEmail
+                                                : undefined
+                                        }
                                     />
 
                                     <Input

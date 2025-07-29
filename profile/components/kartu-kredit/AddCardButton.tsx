@@ -8,7 +8,7 @@ import { HiOutlineCreditCard } from 'react-icons/hi';
 const AddCardButton: React.FC = () => {
     const router = useRouter();
 
-    const handleAddCard = () => {
+    const handleAddCard = (): void => {
         router.push('/profil/kartu-kredit/tambah-kartu');
     };
 

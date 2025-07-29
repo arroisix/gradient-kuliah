@@ -1,13 +1,12 @@
-import { SerializedError } from '@reduxjs/toolkit';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query';
-import {
-    useGetProfileQuery,
-    useUpdateUserMutation
-} from 'authentication/redux/api/authApi';
-import { capitalize } from 'commons/utils';
-import { useRouter } from 'next/router';
 import { useAddUserCardMutation } from 'payment/redux/api/transactionApi';
-import { createContext, ReactNode, useCallback, useContext, useMemo, useState } from 'react';
+import {
+    createContext,
+    ReactNode,
+    useCallback,
+    useContext,
+    useMemo,
+    useState
+} from 'react';
 
 type SaveUserCardFn = (payload: AddCardRequestData) => Promise<CreditCard>;
 
