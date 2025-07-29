@@ -28,6 +28,7 @@ interface ContextRecommendationParams {
     page?: number;
     per_page?: number;
     content_type?: string;
+    is_search?: boolean;
 }
 
 interface StreamCallbacks {
@@ -429,7 +430,10 @@ export const copilotApi = baseApi.injectEndpoints({
             query: (params: ContextRecommendationParams) => ({
                 url: `${COPILOT_BASE_URL}context-recommendation/`,
                 method: 'GET',
-                params
+                params: {
+                    ...params,
+                    is_search: params.is_search ? 'True' : 'False'
+                }
             }),
             providesTags: ['CONTEXT_RECOMMENDATION']
         }),

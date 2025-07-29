@@ -64,7 +64,6 @@ const Astronotes = ({
     const currentAstronotesContext = exercisesData && book && exercisesData.page_id? {
         id: exercisesData.page_id,
         title: book.title,
-        subtitle: '',
         header: `Halaman ${page}`, 
         contentType: 'astronotes_content' as const
     } : undefined;

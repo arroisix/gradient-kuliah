@@ -57,6 +57,7 @@ const ReferenceRecommendationList = ({
     };
 
     const queryToUse = search || defaultQuery;
+    const isSearchMode = Boolean(search);
 
     const {
         data: recommendations,
@@ -67,7 +68,8 @@ const ReferenceRecommendationList = ({
         q: queryToUse,
         page: parseInt(page ?? '1'),
         per_page: itemsPerPage,
-        content_type: getContentType(VALID_TABS.includes(tab ?? '') ? tab : 'semua')
+        content_type: getContentType(VALID_TABS.includes(tab ?? '') ? tab : 'semua'),
+        is_search: isSearchMode
     }, {
         skip: !queryToUse
     });
@@ -143,7 +145,12 @@ const ReferenceRecommendationList = ({
                             <path d="M14 26A12 12 0 1 0 14 2a12 12 0 0 0 0 24zM30 30l-6.35-6.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/40" />
                         </svg>
                     </div>
-                    <p className="text-white/60 mb-2">Tidak ada rekomendasi yang ditemukan</p>
+                    <p className="text-white/60 mb-2">
+                        {isSearchMode 
+                            ? "Tidak ada hasil pencarian yang ditemukan" 
+                            : "Tidak ada rekomendasi yang ditemukan"
+                        }
+                    </p>
                 </div>
             </div>
         );
