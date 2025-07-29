@@ -157,6 +157,7 @@ const Astronotes = ({
                     setOpen={setIsCopilotModalOpen}
                     xlWidth="xl:w-[24rem]"
                     currentContext={currentAstronotesContext}
+                    bookSlug={slug}
                 />
             </section>
         </AstronotesProvider>

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import MainSection from '../components/MainSection/MainSection';
 import ChatSection from '../components/ChatSection/ChatSection';
-import { ChatMessage, ChatInput, ReferenceContentType, SelectedReference } from '../types/copilot';
+import { ChatMessage, ContextReference, ChatInput, ChatHistoryContextItem, ReferenceContentType, SelectedReference } from '../types/copilot';
 import PromptBar from '../components/MainSection/PromptBar';
 import { chatApi } from '../redux/api/copilotApi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
@@ -23,6 +23,8 @@ interface CopilotSidebarContainerProps {
     onRemoveReference: (referenceId: string, contentType: ReferenceContentType) => void;
     onOpenUsedReferencesModal?: (references: SelectedReference[]) => void;
     contentType?: ContentType;
+    bookSlug?: string;
+    chapterId?: string;
 }
 
 const CopilotSidebarContainer = ({
@@ -36,7 +38,9 @@ const CopilotSidebarContainer = ({
     onOpenReferenceContentModal,
     onRemoveReference,
     onOpenUsedReferencesModal,
-    contentType
+    contentType,
+    bookSlug,
+    chapterId
 }: CopilotSidebarContainerProps): JSX.Element => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoadingHistory, setIsLoadingHistory] = useState(true);
@@ -69,6 +73,18 @@ const CopilotSidebarContainer = ({
         }
     };
 
+    const convertHistoryContextToSelectedReferences = (historyContext?: { data: ChatHistoryContextItem[] }): SelectedReference[] => {
+        if (!historyContext?.data) return [];
+        
+        return historyContext.data.map(item => ({
+            id: item.id,
+            title: item.title,
+            subtitle: item.subtitle,
+            header: item.header,
+            contentType: item.content_type === 'course_video' ? 'course' : item.content_type as ReferenceContentType
+        }));
+    };
+
     useEffect(() => {
         const loadChatHistory = async () => {
             if (!sessionId) {
@@ -88,6 +104,9 @@ const CopilotSidebarContainer = ({
                             is_bookmarked: boolean;
                             image?: string | null;
                             keyword?: string | null;
+                            context?: {
+                                data: ChatHistoryContextItem[];
+                            };
                         }) => ({
                             id: item.message_id,
                             role: item.role === 'AI' ? 'AI' : 'User',
@@ -96,7 +115,8 @@ const CopilotSidebarContainer = ({
                             rating: item.rating,
                             isBookmarked: item.is_bookmarked,
                             image: item.image,
-                            keyword: item.keyword
+                            keyword: item.keyword,
+                            usedReferences: convertHistoryContextToSelectedReferences(item.context)
                         })
                     );
                     setMessages(convertedMessages);
@@ -132,7 +152,7 @@ const CopilotSidebarContainer = ({
         });
     };
 
-    const buildChatContextFromReferences = (references: SelectedReference[]): ChatInput['context'] | undefined => {
+    const buildChatContextFromReferences = (references: SelectedReference[]): ChatInput['context'] => {
         if (references.length === 0) return undefined;
 
         const context: ChatInput['context'] = {
@@ -143,18 +163,25 @@ const CopilotSidebarContainer = ({
         };
 
         references.forEach(ref => {
+            const contextReference: ContextReference = {
+                id: ref.id,
+                title: ref.title,
+                subtitle: ref.subtitle || '',
+                header: ref.header
+            };
+
             switch (ref.contentType) {
                 case 'textbook_problem':
-                    context.textbook_problem.push(ref.id);
+                    context.textbook_problem.push(contextReference);
                     break;
                 case 'course':
-                    context.video.push(ref.id);
+                    context.video.push(contextReference);
                     break;
                 case 'astronotes_content':
-                    context.book_pages.push(ref.id);
+                    context.book_pages.push(contextReference);
                     break;
                 case 'bank_soal_problem':
-                    context.bank_soal_problem.push(ref.id);
+                    context.bank_soal_problem.push(contextReference);
                     break;
             }
         });
@@ -198,7 +225,9 @@ const CopilotSidebarContainer = ({
             input_text: prompt,
             session_id: currentSessionId,
             image_url: imageUrl,
-            context: buildChatContextFromReferences(currentUsedReferences)
+            context: buildChatContextFromReferences(currentUsedReferences),
+            book_slug: bookSlug,     
+            chapter_id: chapterId    
         };
 
         try {
@@ -281,7 +310,9 @@ const CopilotSidebarContainer = ({
             input_text: message.content,
             session_id: currentSessionId,
             image_url: message.image || undefined,
-            context: message.usedReferences ? buildChatContextFromReferences(message.usedReferences) : undefined
+            context: message.usedReferences ? buildChatContextFromReferences(message.usedReferences) : undefined,
+            book_slug: bookSlug,     
+            chapter_id: chapterId    
         };
 
         setIsLoadingResponse(true);

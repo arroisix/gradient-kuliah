@@ -122,6 +122,7 @@ const TextbookSolution = ({
                 setOpen={setIsCopilotModalOpen}
                 xlWidth="xl:w-[24rem]"
                 currentContext={currentTextbookContext}
+                bookSlug={slug}
             />
         </div>
     );

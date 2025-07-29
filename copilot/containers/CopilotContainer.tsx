@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import MainSection from '../components/MainSection/MainSection';
 import ChatSection from '../components/ChatSection/ChatSection';
-import { ChatMessage, ChatInput, ReferenceContentType, SelectedReference } from '../types/copilot';
+import { ChatMessage, ContextReference, ChatInput, ChatHistoryContextItem, ReferenceContentType, SelectedReference } from '../types/copilot';
 import PromptBar from '../components/MainSection/PromptBar';
 import { chatApi } from '../redux/api/copilotApi';
 import MobileHeader from '../components/MobileHeader/MobileHeader';
@@ -73,6 +73,18 @@ const CopilotContainer = ({ sessionId }: CopilotContainerProps): JSX.Element => 
         fileInputRef.current?.click();
     };
 
+    const convertHistoryContextToSelectedReferences = (historyContext?: { data: ChatHistoryContextItem[] }): SelectedReference[] => {
+        if (!historyContext?.data) return [];
+        
+        return historyContext.data.map(item => ({
+            id: item.id,
+            title: item.title,
+            subtitle: item.subtitle,
+            header: item.header,
+            contentType: item.content_type === 'course_video' ? 'course' : item.content_type as ReferenceContentType
+        }));
+    };
+
     useEffect(() => {
         const loadChatHistory = async () => {
             if (!sessionId) {
@@ -92,6 +104,9 @@ const CopilotContainer = ({ sessionId }: CopilotContainerProps): JSX.Element => 
                             is_bookmarked: boolean;
                             image?: string | null;
                             keyword?: string | null;
+                            context?: {
+                                data: ChatHistoryContextItem[];
+                            };
                         }) => ({
                             id: item.message_id,
                             role: item.role === 'AI' ? 'AI' : 'User',
@@ -100,7 +115,8 @@ const CopilotContainer = ({ sessionId }: CopilotContainerProps): JSX.Element => 
                             rating: item.rating,
                             isBookmarked: item.is_bookmarked,
                             image: item.image,
-                            keyword: item.keyword
+                            keyword: item.keyword,
+                            usedReferences: convertHistoryContextToSelectedReferences(item.context)
                         })
                     );
                     setMessages(convertedMessages);
@@ -144,7 +160,7 @@ const CopilotContainer = ({ sessionId }: CopilotContainerProps): JSX.Element => 
         }
     };
 
-    const buildChatContextFromReferences = (references: SelectedReference[]): ChatInput['context'] | undefined => {
+    const buildChatContextFromReferences = (references: SelectedReference[]): ChatInput['context'] => {
         if (references.length === 0) return undefined;
 
         const context: ChatInput['context'] = {
@@ -155,18 +171,25 @@ const CopilotContainer = ({ sessionId }: CopilotContainerProps): JSX.Element => 
         };
 
         references.forEach(ref => {
+            const contextReference: ContextReference = {
+                id: ref.id,
+                title: ref.title,
+                subtitle: ref.subtitle || '',
+                header: ref.header
+            };
+
             switch (ref.contentType) {
                 case 'textbook_problem':
-                    context.textbook_problem.push(ref.id);
+                    context.textbook_problem.push(contextReference);
                     break;
                 case 'course':
-                    context.video.push(ref.id);
+                    context.video.push(contextReference);
                     break;
                 case 'astronotes_content':
-                    context.book_pages.push(ref.id);
+                    context.book_pages.push(contextReference);
                     break;
                 case 'bank_soal_problem':
-                    context.bank_soal_problem.push(ref.id);
+                    context.bank_soal_problem.push(contextReference);
                     break;
             }
         });

@@ -125,6 +125,7 @@ const BankSoalContainer = ({
                 setOpen={setIsCopilotModalOpen}
                 xlWidth="xl:w-[24rem]"
                 currentContext={currentBankSoalContext}
+                bookSlug={slug}
             />
         </div>
     );

@@ -7,16 +7,33 @@ export interface ChatResponse {
     keyword: string | null;
 }
 
+export interface ContextReference {
+    id: string;
+    title: string;
+    subtitle: string;
+    header: string;
+}
+
 export interface ChatInput {
     input_text: string;
     session_id?: string;
     image_url?: string;
     context?: {
-        textbook_problem: string[];
-        book_pages: string[];
-        video: string[];
-        bank_soal_problem: string[];
+        textbook_problem: ContextReference[];
+        book_pages: ContextReference[];
+        video: ContextReference[];
+        bank_soal_problem: ContextReference[];
     };
+    book_slug?: string;
+    chapter_id?: string;
+}
+
+export interface ChatHistoryContextItem {
+    id: string;
+    title: string;
+    subtitle: string;
+    header: string;
+    content_type: "astronotes_content" | "textbook_problem" | "bank_soal_problem" | "course_video";
 }
 
 export interface ChatHistoryResponse {
@@ -29,6 +46,7 @@ export interface ChatHistoryResponse {
         rating: number;
         is_bookmarked: boolean;
         keyword?: string | null;
+        context?: { data: ChatHistoryContextItem[]; };
     }[];
 }
 
