@@ -276,7 +276,7 @@ export const exerciseApi = baseApi.injectEndpoints({
         }),
 
         getAstronotesExercises: builder.query<
-            { exercises: AstronotesExercise[] },
+            { exercises: AstronotesExercise[]; page_id?: string },
             { bookSlug: string; pageNumber: string }
         >({
             query: ({ bookSlug, pageNumber }) => ({

@@ -61,11 +61,11 @@ const Astronotes = ({
         setIsCopilotModalOpen(true);
     };
 
-    const currentAstronotesContext = page && book ? {
-        id: page,
+    const currentAstronotesContext = exercisesData && book && exercisesData.page_id? {
+        id: exercisesData.page_id,
         title: book.title,
-        subtitle: 'DUMMY CHAPTER', // TODO (Steven) : Check here
-        header: 'DUMMY SUBCHAPTER', // TODO (Steven) : Check here
+        subtitle: '',
+        header: `Halaman ${page}`, 
         contentType: 'astronotes_content' as const
     } : undefined;
 
