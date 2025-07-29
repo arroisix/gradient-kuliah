@@ -51,6 +51,22 @@ export const transactionApi = baseApi.injectEndpoints({
                 method: 'DELETE'
             }),
             invalidatesTags: [{ type: 'USER_CARDS', id: 'LIST' }]
+        }),
+        checkUserCardNameAvailability: builder.query<
+            boolean,
+            { card_name: string }
+        >({
+            query: (params) => ({
+                url: `${TRANSACTION_BASE_URL}user-cards/availability/`,
+                method: 'HEAD',
+                validateStatus: (response) =>
+                    response.status === 204 || response.status === 409,
+                responseHandler: (response) => Promise.resolve(response.status),
+                params
+            }),
+            transformResponse: (status: number) => {
+                return status === 204;
+            }
         })
     })
 });
@@ -62,5 +78,6 @@ export const {
     useGetAllUserCardsQuery,
     useGetUserCardQuery,
     useAddUserCardMutation,
-    useDeleteUserCardMutation
+    useDeleteUserCardMutation,
+    useLazyCheckUserCardNameAvailabilityQuery
 } = transactionApi;

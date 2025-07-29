@@ -13,58 +13,24 @@ import { useCreditCardContext } from '../../contexts/CreditCardProvider';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { CDN_URL } from 'commons/constants';
+import { useDebouncedCallback } from 'use-debounce';
+import { useLazyCheckUserCardNameAvailabilityQuery } from 'payment/redux/api/transactionApi';
+import { FaCheckCircle, FaSpinner, FaTimesCircle } from 'react-icons/fa';
 
 const MAX_NAME_LENGTH = 20;
-
-const validate = (values) => {
-    const errors = {};
-
-    // card name
-    if (!values.cardName.trim()) errors.cardName = 'Nama kartu wajib diisi';
-    else if (values.cardName.length > MAX_NAME_LENGTH)
-        errors.cardName = `Maksimal ${MAX_NAME_LENGTH} karakter`;
-
-    // card num
-    const rawNum = values.cardNumber.replace(/\s+/g, '');
-    if (!rawNum) errors.cardNumber = 'Nomor kartu wajib diisi';
-    else if (
-        rawNum.length < 12 ||
-        !window.Xendit.card.validateCardNumber(rawNum)
-    )
-        errors.cardNumber = 'Nomor kartu tidak valid';
-
-    // expiry
-    const [mm, yy] = values.cardExp.split('/');
-    if (!mm || !yy) errors.cardExp = 'Tanggal kedaluwarsa wajib diisi';
-    else if (yy.length < 2 || !window.Xendit.card.validateExpiry(mm, `20${yy}`))
-        errors.cardExp = 'Tanggal kedaluwarsa tidak valid';
-
-    // cvv
-    if (!values.cardCVV) errors.cardCVV = 'CVV wajib diisi';
-    else if (
-        values.cardCVV.length < 3 ||
-        !window.Xendit.card.validateCvn(values.cardCVV)
-    )
-        errors.cardCVV = 'CVV tidak valid';
-
-    if (!values.cardHolderPhoneNumber) {
-        errors.cardHolderPhoneNumber = 'Nomor handphone tidak boleh kosong';
-    } else if (!values.cardHolderPhoneNumber.match(/^\d{1,14}$/)) {
-        errors.cardHolderPhoneNumber = 'Masukkan nomor handphone yang valid';
-    }
-
-    return errors;
-};
 
 const AddCardForm = () => {
     const router = useRouter();
     const [showProtectionModal, setShowProtectionModal] = useState(false);
     const [showCVVModal, setShowCVVModal] = useState(false);
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-    const [isTypingName, setIsTypingName] = useState(false);
     const [isNameAvailable, setIsNameAvailable] = useState(false);
+    const [isTyping, setIsTyping] = useState(false);
     const { cardData, setCardData, saveUserCard, isSaving, successSaving } =
         useCreditCardContext();
+
+    const [triggerCheckName, { isFetching: isCheckingName }] =
+        useLazyCheckUserCardNameAvailabilityQuery();
 
     useEffect(() => {
         if (successSaving) router.push('/profil/kartu-kredit');
@@ -75,9 +41,43 @@ const AddCardForm = () => {
             window.Xendit.setPublishableKey(
                 process.env.NEXT_PUBLIC_XENDIT_KEY as string
             );
-            console.log(process.env.NEXT_PUBLIC_XENDIT_KEY);
         }
     }, []);
+
+    const debouncedCheckName = useDebouncedCallback(
+        async (
+            value: string,
+            setFieldError: (f: string, msg?: string) => void
+        ) => {
+            if (!value.trim()) return;
+            const available = await triggerCheckName({
+                card_name: value
+            }).unwrap();
+            console.log({ available });
+            setIsNameAvailable(available);
+            console.log({ top: isNameAvailable });
+            setIsTyping(false);
+            if (available) {
+                setFieldError('cardName', undefined);
+            } else {
+                setFieldError('cardName', 'Nama kartu sudah pernah digunakan');
+            }
+        },
+        1000
+    );
+
+    const NameIcon =
+        isCheckingName || isTyping
+            ? FaSpinner
+            : isNameAvailable
+            ? FaCheckCircle
+            : FaTimesCircle;
+    const nameIconClass =
+        isCheckingName || isTyping
+            ? 'animate-spin text-gray-400'
+            : isNameAvailable
+            ? 'text-green-500'
+            : 'text-red-500';
 
     return (
         <>
@@ -151,7 +151,73 @@ const AddCardForm = () => {
                             cardHolderEmail: '',
                             cardHolderPhoneNumber: ''
                         }}
-                        validate={validate}
+                        validate={(values) => {
+                            const errors: Record<string, string> = {};
+
+                            // card name
+                            console.log({ isNameAvailable });
+                            if (!values.cardName.trim()) {
+                                errors.cardName = 'Nama kartu wajib diisi';
+                            } else if (
+                                values.cardName.length > MAX_NAME_LENGTH
+                            ) {
+                                errors.cardName = `Maksimal ${MAX_NAME_LENGTH} karakter`;
+                            } else if (!isTyping && !isNameAvailable) {
+                                errors.cardName =
+                                    'Nama kartu sudah pernah digunakan';
+                            }
+
+                            // card num
+                            const rawNum = values.cardNumber.replace(
+                                /\s+/g,
+                                ''
+                            );
+                            if (!rawNum)
+                                errors.cardNumber = 'Nomor kartu wajib diisi';
+                            else if (
+                                rawNum.length < 12 ||
+                                !window.Xendit.card.validateCardNumber(rawNum)
+                            )
+                                errors.cardNumber = 'Nomor kartu tidak valid';
+
+                            // expiry
+                            const [mm, yy] = values.cardExp.split('/');
+                            if (!mm || !yy)
+                                errors.cardExp =
+                                    'Tanggal kedaluwarsa wajib diisi';
+                            else if (
+                                yy.length < 2 ||
+                                !window.Xendit.card.validateExpiry(
+                                    mm,
+                                    `20${yy}`
+                                )
+                            )
+                                errors.cardExp =
+                                    'Tanggal kedaluwarsa tidak valid';
+
+                            // cvv
+                            if (!values.cardCVV)
+                                errors.cardCVV = 'CVV wajib diisi';
+                            else if (
+                                values.cardCVV.length < 3 ||
+                                !window.Xendit.card.validateCvn(values.cardCVV)
+                            )
+                                errors.cardCVV = 'CVV tidak valid';
+
+                            if (!values.cardHolderPhoneNumber) {
+                                errors.cardHolderPhoneNumber =
+                                    'Nomor handphone tidak boleh kosong';
+                            } else if (
+                                !values.cardHolderPhoneNumber.match(
+                                    /^\d{1,14}$/
+                                )
+                            ) {
+                                errors.cardHolderPhoneNumber =
+                                    'Masukkan nomor handphone yang valid';
+                            }
+
+                            return errors;
+                        }}
                         validateOnChange
                         validateOnBlur
                         onSubmit={async (
@@ -221,7 +287,7 @@ const AddCardForm = () => {
                             setFieldError,
                             isSubmitting,
                             isValid,
-                            initialValues
+                            isValidating
                         }) => (
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 <div className="flex flex-col space-y-4">
@@ -233,13 +299,28 @@ const AddCardForm = () => {
                                         label="Nama Kartu"
                                         name="cardName"
                                         placeholder="Contoh: Kartu Utama"
-                                        onChange={handleChange}
                                         onBlur={handleBlur}
                                         value={values.cardName}
+                                        onChange={(e) => {
+                                            handleChange(e);
+                                            setIsNameAvailable(false);
+                                            setIsTyping(true);
+                                            debouncedCheckName(
+                                                e.target.value,
+                                                setFieldError
+                                            );
+                                        }}
                                         error={
                                             touched.cardName && errors.cardName
                                                 ? errors.cardName
                                                 : undefined
+                                        }
+                                        endAddorment={
+                                            values.cardName !== '' ? (
+                                                <NameIcon
+                                                    className={nameIconClass}
+                                                />
+                                            ) : undefined
                                         }
                                     />
 
@@ -431,7 +512,10 @@ const AddCardForm = () => {
                                     variant="primary"
                                     className="w-full"
                                     disabled={
-                                        !isValid || isSubmitting || isSaving
+                                        isValidating ||
+                                        !isValid ||
+                                        isSubmitting ||
+                                        isSaving
                                     }>
                                     {isSubmitting || isSaving
                                         ? 'Menyimpan...'

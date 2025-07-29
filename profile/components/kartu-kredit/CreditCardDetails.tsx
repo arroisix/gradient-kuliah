@@ -57,7 +57,7 @@ const CreditCardDetails = () => {
 
     return (
         <>
-            <div className="flex flex-col w-full max-h-[75vh] min-h-screen overflow-y-auto p-4 space-y-4">
+            <div className="flex flex-col w-full max-h-[75vh] overflow-y-auto p-4 space-y-4">
                 <div className="flex items-center gap-x-3 bg-[#03AC5C]/10 p-4 rounded-lg text-green-400">
                     <HiShieldCheck
                         size={20}
