@@ -105,12 +105,14 @@ const ReferenceContentModal: React.FC<ReferenceContentModalProps> = ({
                                                             {reference.title}
                                                         </span>
                                                     </div>
-                                                    <div className="flex items-center gap-1">
-                                                        <IoBookmark size={12} className="text-[#7D89CC]" />
-                                                        <span className="text-xs text-white/60">
-                                                            {reference.subtitle}
-                                                        </span>
-                                                    </div>
+                                                    {reference.subtitle && reference.subtitle.trim() !== '' && (
+                                                        <div className="flex items-center gap-1">
+                                                            <IoBookmark size={12} className="text-[#7D89CC]" />
+                                                            <span className="text-xs text-white/60">
+                                                                {reference.subtitle}
+                                                            </span>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>
