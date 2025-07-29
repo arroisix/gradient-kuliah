@@ -163,6 +163,9 @@ export default function BitmovinPlayer({
                     headers: {
                         'X-AxDRM-Message': drmToken as string
                     },
+                    certificateHeaders: {
+                        'Access-Control-Request-Method': 'GET'
+                    },
                     prepareContentId: (uri) => {
                         return uri.substring(uri.indexOf('skd'));
                     },
