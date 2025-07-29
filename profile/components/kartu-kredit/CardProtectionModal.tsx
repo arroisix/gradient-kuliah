@@ -1,4 +1,6 @@
 'use client';
+import CommentLockedIcon from 'commons/components/elements/Icons/CommentLockedIcon';
+import CreditCardCVVSmallIcon from 'commons/components/elements/Icons/CreditCardCVVSmall';
 import Modal from 'commons/components/modules/Modal';
 
 const CardProtectionModal = ({
@@ -12,22 +14,24 @@ const CardProtectionModal = ({
             variant="dark"
             className="!bg-[#1D1D1D]">
             {/* Header */}
-            <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold text-white">
+            <div className="flex flex-col w-full mb-4">
+                <h1 className="font-bold text-lg">
                     Detail Kartumu Terlindungi
-                </h2>
+                </h1>
             </div>
 
             {/* Body cards */}
-            <div className="space-y-4 pb-2">
+            <div className="flex flex-col space-y-4 pb-2">
                 {/* CVV Protection */}
-                <div className="flex items-center gap-4 bg-graphite-700 p-4 rounded-lg">
-                    <div className="w-5 h-5 bg-pink-600 rounded-lg flex items-center justify-center flex-shrink-0"></div>
+                <div className="flex items-center gap-4 bg-[#2C2C2C] p-4 rounded-lg">
+                    <div className="w-8 h-8 rounded-full bg-[#F505A1]/15 flex items-center justify-center shrink-0">
+                        <CreditCardCVVSmallIcon />
+                    </div>
                     <div className="space-y-1">
-                        <p className="text-white font-body font-medium text-sm">
+                        <p className="text-white font-medium text-md">
                             Gradient tidak menyimpan kode CVV-mu
                         </p>
-                        <p className="text-gray-400 text-xs font-body">
+                        <p className="text-neutral-400 text-sm">
                             CVV akan diminta sesekali saat melakukan transaksi,
                             namun tidak disimpan di sistem.
                         </p>
@@ -35,13 +39,15 @@ const CardProtectionModal = ({
                 </div>
 
                 {/* 3D‑Secure */}
-                <div className="flex items-center gap-4 bg-graphite-700 p-4 rounded-lg">
-                    <div className="w-5 h-5 bg-teal-600 rounded-lg flex items-center justify-center flex-shrink-0"></div>
+                <div className="flex items-center gap-4 bg-[#2C2C2C] p-4 rounded-lg">
+                    <div className="w-8 h-8 rounded-full bg-[#00AA99]/15 flex items-center justify-center shrink-0">
+                        <CommentLockedIcon />
+                    </div>
                     <div className="space-y-1">
-                        <p className="text-white font-body font-medium text-sm">
+                        <p className="text-white font-medium text-md">
                             Pembayaran aman dengan 3D-Secure
                         </p>
-                        <p className="text-gray-400 text-xs font-body">
+                        <p className="text-gray-400 text-sm">
                             Dengan dukungan Xendit, setiap pembayaran dilindungi
                             oleh verifikasi tambahan melalui kode OTP sebelum
                             diproses.
