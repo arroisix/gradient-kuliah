@@ -81,7 +81,8 @@ export const transactionApi = baseApi.injectEndpoints({
                 body: changes
             }),
             invalidatesTags: (result, error, arg) => [
-                { type: 'USER_CARDS', id: arg.id }
+                { type: 'USER_CARDS', id: arg.id },
+                { type: 'USER_CARDS', id: 'LIST' }
             ]
         })
     })

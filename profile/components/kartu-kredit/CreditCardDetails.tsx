@@ -1,4 +1,3 @@
-import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import { Info, PenLine } from 'lucide-react';
 import { useRouter } from 'next/router';
 import {
@@ -15,6 +14,7 @@ import Button from 'commons/components/elements/Button';
 import ConfirmDeleteCardModal from './modals/ConfirmDeleteCardModal';
 import { toast } from 'react-toastify';
 import EditCardModal from './modals/EditCardModal';
+import Skeleton from 'commons/components/elements/Skeleton';
 
 const CreditCardDetails = (): JSX.Element => {
     const router = useRouter();
@@ -24,14 +24,14 @@ const CreditCardDetails = (): JSX.Element => {
     const [showEditCardModal, setShowEditCardModal] = useState(false);
 
     if (!router.isReady || typeof id !== 'string') {
-        return <LoadingBackdrop />;
+        return <Skeleton repeat={3} className="w-full h-20" />;
     }
 
     const { data, isLoading, error } = useGetUserCardQuery(id);
     const [deleteUserCard, { isLoading: isDeleting }] =
         useDeleteUserCardMutation();
 
-    if (isLoading) return <LoadingBackdrop />;
+    if (isLoading) return <Skeleton repeat={3} className="w-full h-20" />;
     if (!data || error) return <p>Gagal memuat detail kartu.</p>;
 
     const getCardLogo = (brand: string): JSX.Element => {
