@@ -78,12 +78,8 @@ const CopilotSidebarContainer = ({
         }
     };
 
-    const handleOpenHistory = () => {
-        setIsHistoryOpen(true);
-    };
-
-    const handleCloseHistory = () => {
-        setIsHistoryOpen(false);
+    const handleToggleHistory = () => {
+        setIsHistoryOpen(prev => !prev);
     };
 
     const convertHistoryContextToSelectedReferences = (historyContext?: { data: ChatHistoryContextItem[] }): SelectedReference[] => {
@@ -469,7 +465,7 @@ const CopilotSidebarContainer = ({
                     </div>
 
                     <button
-                        onClick={handleOpenHistory}
+                        onClick={handleToggleHistory}
                         className="p-1 text-gray-400 hover:text-white transition-colors"
                         aria-label="Open chat history">
                         <MdHistory size={32} />
@@ -587,7 +583,7 @@ const CopilotSidebarContainer = ({
                     {isHistoryOpen && (
                         <HistorySectionModal
                             isOpen={isHistoryOpen}
-                            onClose={handleCloseHistory}
+                            onClose={handleToggleHistory}
                             bookSlug={bookSlug}
                             chapterId={chapterId}
                             onSessionSelect={handleSessionSelect}
