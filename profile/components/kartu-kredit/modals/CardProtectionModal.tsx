@@ -15,7 +15,7 @@ const CardProtectionModal = ({
             className="!bg-[#1D1D1D]">
             {/* Header */}
             <div className="flex flex-col w-full mb-4">
-                <h1 className="font-bold text-lg">
+                <h1 className="font-extrabold text-lg font-body">
                     Detail Kartumu Terlindungi
                 </h1>
             </div>
@@ -28,12 +28,13 @@ const CardProtectionModal = ({
                         <CreditCardCVVSmallIcon />
                     </div>
                     <div className="space-y-1">
-                        <p className="text-white font-medium text-md">
-                            Gradient tidak menyimpan kode CVV-mu
+                        <p className="text-white font-bold text-md font-body">
+                            Gradient tidak menyimpan informasi sensitif
                         </p>
-                        <p className="text-neutral-400 text-sm">
-                            CVV akan diminta sesekali saat melakukan transaksi,
-                            namun tidak disimpan di sistem.
+                        <p className="text-neutral-400 text-sm font-body">
+                            Detail kartu seperti nomor, identitas pemilik, dan
+                            CVV tidak disimpan. CVV akan diminta sesekali saat
+                            melakukan transaksi.
                         </p>
                     </div>
                 </div>
@@ -44,10 +45,10 @@ const CardProtectionModal = ({
                         <CommentLockedIcon />
                     </div>
                     <div className="space-y-1">
-                        <p className="text-white font-medium text-md">
+                        <p className="text-white font-bold text-md font-body">
                             Pembayaran aman dengan 3D-Secure
                         </p>
-                        <p className="text-gray-400 text-sm">
+                        <p className="text-gray-400 text-sm font-body">
                             Dengan dukungan Xendit, setiap pembayaran dilindungi
                             oleh verifikasi tambahan melalui kode OTP sebelum
                             diproses.

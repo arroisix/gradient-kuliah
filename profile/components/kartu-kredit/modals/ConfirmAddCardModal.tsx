@@ -24,7 +24,9 @@ const ConfirmAddCardModal = ({
             className="!bg-[#1D1D1D]">
             {/* Header */}
             <div className="flex flex-col w-full">
-                <h1 className="font-bold text-lg">Info Kartu yang Disimpan</h1>
+                <h1 className="font-extrabold text-lg font-body">
+                    Info Kartu yang Disimpan
+                </h1>
             </div>
 
             {/* Content */}
@@ -36,11 +38,11 @@ const ConfirmAddCardModal = ({
                         <CreditCardSmallIcon />
                     </div>
                     <div>
-                        <h3 className="font-medium text-sm text-white mb-1">
+                        <h3 className="font-bold text-sm text-white mb-1 font-body">
                             Gradient hanya menyimpan jenis kartu (Mastercard
                             atau Visa)
                         </h3>
-                        <p className="text-xs text-neutral-400">
+                        <p className="text-xs text-neutral-400 font-body">
                             Nomor kartu dan CVV tidak disimpan sehinggga kamu
                             tetap bisa berinteraksi dengan aman.
                         </p>
@@ -52,10 +54,10 @@ const ConfirmAddCardModal = ({
                         <CreditCardCVVSmallIcon />
                     </div>
                     <div>
-                        <h3 className="font-medium text-sm text-white mb-1">
+                        <h3 className="font-bold text-sm text-white mb-1 font-body">
                             Gradient tidak menyimpan kode CVV-mu
                         </h3>
-                        <p className="text-xs text-neutral-400">
+                        <p className="text-xs text-neutral-400 font-body">
                             CVV akan diminta sekali saat melakukan transaksi,
                             tetapi tidak disimpan di sistem.
                         </p>

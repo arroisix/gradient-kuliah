@@ -1,5 +1,5 @@
-import Button from "commons/components/elements/Button";
-import Modal from "commons/components/modules/Modal";
+import Button from 'commons/components/elements/Button';
+import Modal from 'commons/components/modules/Modal';
 
 interface ConfirmDeleteCardModalProps extends ModalBaseProps {
     onConfirm: () => void;
@@ -21,7 +21,8 @@ const ConfirmDeleteCardModal: React.FC<ConfirmDeleteCardModalProps> = ({
             <div className="flex flex-col items-center space-y-4 pb-4">
                 <h1 className="font-bold text-lg">Hapus Kartu?</h1>
                 <p className="text-sm text-neutral-400 text-center mb-4">
-                    Kartu ini akan dihapus dari metode pembayaran, tetapi kamu bisa menambahkannya lagi nanti.
+                    Kartu ini akan dihapus dari metode pembayaran, tetapi kamu
+                    bisa menambahkannya lagi nanti.
                 </p>
                 <Button
                     variant="custom"

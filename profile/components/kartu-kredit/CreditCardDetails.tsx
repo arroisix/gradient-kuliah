@@ -16,7 +16,7 @@ import ConfirmDeleteCardModal from './modals/ConfirmDeleteCardModal';
 import { toast } from 'react-toastify';
 import EditCardModal from './modals/EditCardModal';
 
-const CreditCardDetails = () => {
+const CreditCardDetails = (): JSX.Element => {
     const router = useRouter();
     const { id } = router.query;
     const [showProtectionModal, setShowProtectionModal] = useState(false);
@@ -49,7 +49,7 @@ const CreditCardDetails = () => {
         }
     };
 
-    const handleDelete = async () => {
+    const handleDelete = async (): Promise<void> => {
         try {
             await deleteUserCard(id).unwrap();
             await router.push('/profil/kartu-kredit');
@@ -64,7 +64,7 @@ const CreditCardDetails = () => {
 
     return (
         <>
-            <div className="flex flex-col w-full max-h-[75vh] overflow-y-auto p-4 space-y-4">
+            <div className="flex flex-col w-full max-h-[75vh] overflow-y-auto p-4 space-y-6">
                 <div className="flex items-center gap-x-3 bg-[#03AC5C]/10 p-4 rounded-lg text-green-400">
                     <HiShieldCheck
                         size={20}
@@ -133,7 +133,7 @@ const CreditCardDetails = () => {
                 </div>
                 <Button
                     variant="custom"
-                    className="bg-[#FF3B30]"
+                    className="bg-[#FF3B30] w-1/2 self-center"
                     onClick={() => setShowConfirmDeleteModal(true)}>
                     Hapus Kartu
                 </Button>

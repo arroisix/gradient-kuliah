@@ -12,7 +12,7 @@ const CVVInfoModal = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
             className="!bg-[#1D1D1D]">
             {/* Header */}
             <div className="flex flex-col w-full mb-4">
-                <h1 className="font-bold text-lg">
+                <h1 className="font-extrabold text-lg font-body">
                     Card Verification Value (CVV)
                 </h1>
             </div>
@@ -21,7 +21,7 @@ const CVVInfoModal = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
             <div className="flex flex-col items-center space-y-4">
                 <CreditCardCVVCircled />
 
-                <p className="text-sm text-neutral-400 text-center mb-4">
+                <p className="text-sm text-neutral-400 text-center mb-4 font-body">
                     Tiga atau empat digit terakhir yang terletak di belakang
                     kartu kamu. CVV diperlukan untuk verifikasi awal.
                 </p>
@@ -32,12 +32,12 @@ const CVVInfoModal = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
                         <CreditCardCVVSmallIcon />
                     </div>
                     <div>
-                        <h3 className="font-medium text-md text-white mb-1">
+                        <h3 className="font-bold text-md text-white mb-1 font-body">
                             Gradient tidak menyimpan kode CVV-mu
                         </h3>
                         <p className="text-sm text-neutral-400 font-body">
-                            CVV diminta sesekali saat kamu melakukan transaksi
-                            dan tidak disimpan di sistem.
+                            CVV akan diminta sesekali saat melakukan transaksi,
+                            namun tidak disimpan di sistem.
                         </p>
                     </div>
                 </div>
