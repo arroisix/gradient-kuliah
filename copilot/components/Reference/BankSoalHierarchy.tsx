@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import Image from 'next/image';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import { cn } from 'commons/utils';
-import Image from 'next/image';
+import { useDebounce } from 'commons/hooks/useDebounce';
+import SearchResultCard from './SearchResultCard';
 import {
     useGetBankSoalChaptersQuery,
     useGetBankSoalSectionsQuery,
-    useGetBankSoalProblemsQuery
+    useGetBankSoalProblemsQuery,
+    useLazySearchContentQuery
 } from 'copilot/redux/api/copilotApi';
-import { BankSoalChapter, BankSoalProblem } from 'copilot/types/copilot';
+import { BankSoalChapter, BankSoalProblem, ContentSearchItem } from 'copilot/types/copilot';
 
 interface BankSoalHierarchyProps {
     isOpen: boolean;
@@ -30,14 +33,71 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
     const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
     const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
     const [hierarchySearch, setHierarchySearch] = useState('');
+    const [searchResults, setSearchResults] = useState<ContentSearchItem[]>([]);
+    const [visibleCount, setVisibleCount] = useState(10);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const debouncedSearchTerm = useDebounce(hierarchySearch, 500);
+    const [triggerSearch, { data: searchData, isLoading: searchLoading }] = useLazySearchContentQuery();
+
+    const isSearching = debouncedSearchTerm.trim().length > 0;
 
     const {
         data: chaptersData,
         isLoading: chaptersLoading,
         error: chaptersError
     } = useGetBankSoalChaptersQuery(bookSlug, {
-        skip: !isOpen || !bookSlug
+        skip: !isOpen || !bookSlug || isSearching
     });
+
+    useEffect(() => {
+        if (debouncedSearchTerm.trim()) {
+            triggerSearch({
+                q: debouncedSearchTerm,
+                content_type: 'bank_soal_problem',
+                book_slug: bookSlug
+            });
+        } else {
+            setSearchResults([]);
+        }
+        setVisibleCount(10);
+    }, [debouncedSearchTerm, bookSlug, triggerSearch]);
+
+    useEffect(() => {
+        if (searchData?.data) {
+            setSearchResults(searchData.data);
+        }
+    }, [searchData]);
+
+    const loadMoreResults = useCallback(() => {
+        if (isLoadingMore || visibleCount >= searchResults.length) return;
+        
+        setIsLoadingMore(true);
+        setTimeout(() => {
+            setVisibleCount(prev => Math.min(prev + 10, searchResults.length));
+            setIsLoadingMore(false);
+        }, 1000);
+    }, [isLoadingMore, visibleCount, searchResults.length]);
+
+    const handleScroll = useCallback(() => {
+        if (!scrollContainerRef.current) return;
+        
+        const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
+        const threshold = 100;
+        
+        if (scrollHeight - scrollTop <= clientHeight + threshold) {
+            loadMoreResults();
+        }
+    }, [loadMoreResults]);
+
+    useEffect(() => {
+        const container = scrollContainerRef.current;
+        if (!container) return;
+
+        container.addEventListener('scroll', handleScroll);
+        return () => container.removeEventListener('scroll', handleScroll);
+    }, [handleScroll]);
 
     if (!isOpen) return null;
 
@@ -61,14 +121,63 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
         setExpandedSections(newExpanded);
     };
 
-    const handleProblemClick = (problem: BankSoalProblem, chapterName: string) => {
+    const handleProblemClick = (problem: BankSoalProblem | ContentSearchItem, chapterName: string, sectionName: string) => {
         if (!selectedItems.has(problem.id)) {
             const newSelected = new Set(selectedItems);
             newSelected.add(problem.id);
             setSelectedItems(newSelected);
-            onProblemSelect(problem.id, bookName, chapterName, problem.title);
+            
+            if ('problem_question' in problem) {
+                onProblemSelect(problem.id, problem.title, problem.subtitle || '', problem.header);
+            } else {
+                onProblemSelect(problem.id, problem.title, chapterName, sectionName);
+            }
         }
         onClose();
+    };
+
+    const renderSearchResults = () => {
+        if (searchLoading) {
+            return (
+                <div className="flex items-center justify-center py-8">
+                    <div className="w-6 h-6 border-2 border-[#5F2BCE] border-t-transparent rounded-full animate-spin"></div>
+                </div>
+            );
+        }
+
+        if (searchResults.length === 0 && debouncedSearchTerm.trim()) {
+            return (
+                <div className="flex items-center justify-center py-8">
+                    <div className="text-center">
+                        <p className="text-white/60">Tidak ada hasil ditemukan untuk "{debouncedSearchTerm}"</p>
+                    </div>
+                </div>
+            );
+        }
+
+        const visibleResults = searchResults.slice(0, visibleCount);
+        const hasMore = visibleCount < searchResults.length;
+
+        return (
+            <div className="space-y-3">
+                {visibleResults.map(item => (
+                    <SearchResultCard
+                        key={item.id}
+                        header={item.problem_question || item.title}
+                        title={item.subtitle || 'Chapter Name'}
+                        subtitle=""
+                        searchTerm={debouncedSearchTerm}
+                        onClick={() => handleProblemClick(item, '', '')}
+                    />
+                ))}
+                
+                {hasMore && isLoadingMore && (
+                    <div className="flex items-center justify-center py-8">
+                        <div className="w-6 h-6 border-2 border-[#5F2BCE] border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                )}
+            </div>
+        );
     };
 
     const renderChapter = (chapter: BankSoalChapter) => {
@@ -147,7 +256,7 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
                         
                         {expandedSections.has(section.id) && (
                             <div className="ml-4 border-l border-white/20">
-                                <SectionProblems sectionId={section.id} chapterName={chapterName} />
+                                <SectionProblems sectionId={section.id} chapterName={chapterName} sectionName={section.title} />
                             </div>
                         )}
                     </div>
@@ -156,7 +265,7 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
                 {hasDirectProblems && directProblemsData.data.map(problem => (
                     <button
                         key={problem.id}
-                        onClick={() => handleProblemClick(problem, chapterName)}
+                        onClick={() => handleProblemClick(problem, chapterName, '')}
                         className={cn(
                             'w-full flex items-center px-3 py-1.5 ml-4 rounded-lg transition-colors text-left',
                             'hover:bg-white/5',
@@ -176,7 +285,7 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
         );
     };
 
-    const SectionProblems: React.FC<{ sectionId: string; chapterName: string }> = ({ sectionId, chapterName }) => {
+    const SectionProblems: React.FC<{ sectionId: string; chapterName: string; sectionName: string }> = ({ sectionId, chapterName, sectionName }) => {
         const {
             data: problemsData,
             isLoading: problemsLoading,
@@ -204,7 +313,7 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
                 {problemsData.data.map(problem => (
                     <button
                         key={problem.id}
-                        onClick={() => handleProblemClick(problem, chapterName)}
+                        onClick={() => handleProblemClick(problem, chapterName, sectionName)}
                         className={cn(
                             'w-full flex items-center px-3 py-1.5 ml-4 rounded-lg transition-colors text-left',
                             'hover:bg-white/5',
@@ -218,7 +327,7 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
         );
     };
 
-    if (chaptersLoading) {
+    if (chaptersLoading && !isSearching) {
         return (
             <div className="flex items-center justify-center py-12">
                 <div className="w-8 h-8 border-2 border-[#5F2BCE] border-t-transparent rounded-full animate-spin"></div>
@@ -226,21 +335,11 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
         );
     }
 
-    if (chaptersError || !chaptersData?.data) {
+    if (chaptersError && !isSearching) {
         return (
             <div className="flex items-center justify-center py-12">
                 <div className="text-center">
                     <p className="text-white/60">Gagal memuat chapters bank soal</p>
-                </div>
-            </div>
-        );
-    }
-
-    if (chaptersData.data.length === 0) {
-        return (
-            <div className="flex items-center justify-center py-12">
-                <div className="text-center">
-                    <p className="text-white/60">Tidak ada chapters ditemukan</p>
                 </div>
             </div>
         );
@@ -265,10 +364,25 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
                 </form>
             </div>
 
-            <div className="pb-20">
-                <div className="space-y-1">
-                    {chaptersData.data.map(renderChapter)}
-                </div>
+            <div 
+                ref={scrollContainerRef}
+                className="pb-20 overflow-y-auto md:h-[calc(100vh-280px)]"
+            >
+                {isSearching ? (
+                    renderSearchResults()
+                ) : (
+                    <div className="space-y-1">
+                        {chaptersData?.data && chaptersData.data.length > 0 ? (
+                            chaptersData.data.map(renderChapter)
+                        ) : (
+                            <div className="flex items-center justify-center py-12">
+                                <div className="text-center">
+                                    <p className="text-white/60">Tidak ada chapters ditemukan</p>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
 
             <div className="fixed bottom-0 left-0 right-0 bg-[#2C2C2C] border border-transparent p-4 flex items-center gap-3 md:bottom-4 md:left-4 md:right-4 md:mx-16 md:mb-8 md:rounded-xl">

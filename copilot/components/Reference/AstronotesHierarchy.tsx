@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import Image from 'next/image';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import { cn } from 'commons/utils';
-import Image from 'next/image';
+import { useDebounce } from 'commons/hooks/useDebounce';
+import SearchResultCard from './SearchResultCard';
 import {
     useGetAstronotesChaptersQuery,
     useGetAstronotesSubchaptersQuery,
-    useGetAstronotesTopicsQuery
+    useGetAstronotesTopicsQuery,
+    useLazySearchContentQuery
 } from 'copilot/redux/api/copilotApi';
-import { AstronotesChapter, AstronotesSubchapter, AstronotesTopic } from 'copilot/types/copilot';
+import { AstronotesChapter, AstronotesSubchapter, AstronotesTopic, ContentSearchItem } from 'copilot/types/copilot';
 
 interface AstronotesHierarchyProps {
     isOpen: boolean;
@@ -30,14 +33,71 @@ const AstronotesHierarchy: React.FC<AstronotesHierarchyProps> = ({
     const [expandedSubchapters, setExpandedSubchapters] = useState<Set<string>>(new Set());
     const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
     const [hierarchySearch, setHierarchySearch] = useState('');
+    const [searchResults, setSearchResults] = useState<ContentSearchItem[]>([]);
+    const [visibleCount, setVisibleCount] = useState(10);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const debouncedSearchTerm = useDebounce(hierarchySearch, 500);
+    const [triggerSearch, { data: searchData, isLoading: searchLoading }] = useLazySearchContentQuery();
+
+    const isSearching = debouncedSearchTerm.trim().length > 0;
 
     const {
         data: chaptersData,
         isLoading: chaptersLoading,
         error: chaptersError
     } = useGetAstronotesChaptersQuery(bookSlug, {
-        skip: !isOpen || !bookSlug
+        skip: !isOpen || !bookSlug || isSearching
     });
+
+    useEffect(() => {
+        if (debouncedSearchTerm.trim()) {
+            triggerSearch({
+                q: debouncedSearchTerm,
+                content_type: 'astronotes_content',
+                book_slug: bookSlug
+            });
+        } else {
+            setSearchResults([]);
+        }
+        setVisibleCount(10);
+    }, [debouncedSearchTerm, bookSlug, triggerSearch]);
+
+    useEffect(() => {
+        if (searchData?.data) {
+            setSearchResults(searchData.data);
+        }
+    }, [searchData]);
+
+    const loadMoreResults = useCallback(() => {
+        if (isLoadingMore || visibleCount >= searchResults.length) return;
+        
+        setIsLoadingMore(true);
+        setTimeout(() => {
+            setVisibleCount(prev => Math.min(prev + 10, searchResults.length));
+            setIsLoadingMore(false);
+        }, 1000);
+    }, [isLoadingMore, visibleCount, searchResults.length]);
+
+    const handleScroll = useCallback(() => {
+        if (!scrollContainerRef.current) return;
+        
+        const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
+        const threshold = 100;
+        
+        if (scrollHeight - scrollTop <= clientHeight + threshold) {
+            loadMoreResults();
+        }
+    }, [loadMoreResults]);
+
+    useEffect(() => {
+        const container = scrollContainerRef.current;
+        if (!container) return;
+
+        container.addEventListener('scroll', handleScroll);
+        return () => container.removeEventListener('scroll', handleScroll);
+    }, [handleScroll]);
 
     if (!isOpen) return null;
 
@@ -61,14 +121,65 @@ const AstronotesHierarchy: React.FC<AstronotesHierarchyProps> = ({
         setExpandedSubchapters(newExpanded);
     };
 
-    const handleTopicClick = (topic: AstronotesTopic, chapterName: string, subchapterName: string) => {
-        if (!selectedItems.has(topic.page_id)) {
+    const handleTopicClick = (topic: AstronotesTopic | ContentSearchItem, chapterName: string, subchapterName: string) => {
+        const topicId = 'page_id' in topic ? topic.page_id : topic.id;
+        
+        if (!selectedItems.has(topicId)) {
             const newSelected = new Set(selectedItems);
-            newSelected.add(topic.page_id);
+            newSelected.add(topicId);
             setSelectedItems(newSelected);
-            onTopicSelect(topic.page_id, bookName, chapterName, subchapterName);
+            
+            if ('header' in topic) {
+                onTopicSelect(topic.id, topic.title, topic.subtitle || '', topic.header);
+            } else {
+                onTopicSelect(topic.page_id, bookName, chapterName, subchapterName);
+            }
         }
         onClose();
+    };
+
+    const renderSearchResults = () => {
+        if (searchLoading) {
+            return (
+                <div className="flex items-center justify-center py-8">
+                    <div className="w-6 h-6 border-2 border-[#5F2BCE] border-t-transparent rounded-full animate-spin"></div>
+                </div>
+            );
+        }
+
+        if (searchResults.length === 0 && debouncedSearchTerm.trim()) {
+            return (
+                <div className="flex items-center justify-center py-8">
+                    <div className="text-center">
+                        <p className="text-white/60">Tidak ada hasil ditemukan untuk "{debouncedSearchTerm}"</p>
+                    </div>
+                </div>
+            );
+        }
+
+        const visibleResults = searchResults.slice(0, visibleCount);
+        const hasMore = visibleCount < searchResults.length;
+
+        return (
+            <div className="space-y-3">
+                {visibleResults.map(item => (
+                    <SearchResultCard
+                        key={item.id}
+                        header={item.header}
+                        title={item.subtitle || 'Chapter Name'}
+                        subtitle=""
+                        searchTerm={debouncedSearchTerm}
+                        onClick={() => handleTopicClick(item, '', '')}
+                    />
+                ))}
+                
+                {hasMore && isLoadingMore && (
+                    <div className="flex items-center justify-center py-8">
+                        <div className="w-6 h-6 border-2 border-[#5F2BCE] border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                )}
+            </div>
+        );
     };
 
     const renderChapter = (chapter: AstronotesChapter) => {
@@ -207,7 +318,7 @@ const AstronotesHierarchy: React.FC<AstronotesHierarchyProps> = ({
         );
     };
 
-    if (chaptersLoading) {
+    if (chaptersLoading && !isSearching) {
         return (
             <div className="flex items-center justify-center py-12">
                 <div className="w-8 h-8 border-2 border-[#5F2BCE] border-t-transparent rounded-full animate-spin"></div>
@@ -215,21 +326,11 @@ const AstronotesHierarchy: React.FC<AstronotesHierarchyProps> = ({
         );
     }
 
-    if (chaptersError || !chaptersData?.data) {
+    if (chaptersError && !isSearching) {
         return (
             <div className="flex items-center justify-center py-12">
                 <div className="text-center">
                     <p className="text-white/60">Gagal memuat chapters astronotes</p>
-                </div>
-            </div>
-        );
-    }
-
-    if (chaptersData.data.length === 0) {
-        return (
-            <div className="flex items-center justify-center py-12">
-                <div className="text-center">
-                    <p className="text-white/60">Tidak ada chapters ditemukan</p>
                 </div>
             </div>
         );
@@ -254,10 +355,25 @@ const AstronotesHierarchy: React.FC<AstronotesHierarchyProps> = ({
                 </form>
             </div>
 
-            <div className="pb-20">
-                <div className="space-y-1">
-                    {chaptersData.data.map(renderChapter)}
-                </div>
+            <div 
+                ref={scrollContainerRef}
+                className="pb-20 overflow-y-auto md:h-[calc(100vh-280px)]"
+            >
+                {isSearching ? (
+                    renderSearchResults()
+                ) : (
+                    <div className="space-y-1">
+                        {chaptersData?.data && chaptersData.data.length > 0 ? (
+                            chaptersData.data.map(renderChapter)
+                        ) : (
+                            <div className="flex items-center justify-center py-12">
+                                <div className="text-center">
+                                    <p className="text-white/60">Tidak ada chapters ditemukan</p>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
 
             <div className="fixed bottom-0 left-0 right-0 bg-[#2C2C2C] border border-transparent p-4 flex items-center gap-3 md:bottom-4 md:left-4 md:right-4 md:mx-16 md:mb-8 md:rounded-xl">

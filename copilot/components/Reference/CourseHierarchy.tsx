@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import Image from 'next/image';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import { cn } from 'commons/utils';
-import Image from 'next/image';
+import { useDebounce } from 'commons/hooks/useDebounce';
+import SearchResultCard from './SearchResultCard';
 import {
     useGetCourseChaptersQuery,
-    useGetCourseSubchaptersQuery
+    useGetCourseSubchaptersQuery,
+    useLazySearchContentQuery
 } from 'copilot/redux/api/copilotApi';
-import { CourseChapter, CourseSubchapter } from 'copilot/types/copilot';
+import { CourseChapter, CourseSubchapter, ContentSearchItem } from 'copilot/types/copilot';
 
 interface CourseHierarchyProps {
     isOpen: boolean;
@@ -28,14 +31,71 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
     const [expandedChapters, setExpandedChapters] = useState<Set<string>>(new Set());
     const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
     const [hierarchySearch, setHierarchySearch] = useState('');
+    const [searchResults, setSearchResults] = useState<ContentSearchItem[]>([]);
+    const [visibleCount, setVisibleCount] = useState(10);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const debouncedSearchTerm = useDebounce(hierarchySearch, 500);
+    const [triggerSearch, { data: searchData, isLoading: searchLoading }] = useLazySearchContentQuery();
+
+    const isSearching = debouncedSearchTerm.trim().length > 0;
 
     const {
         data: chaptersData,
         isLoading: chaptersLoading,
         error: chaptersError
     } = useGetCourseChaptersQuery(courseSlug, {
-        skip: !isOpen || !courseSlug
+        skip: !isOpen || !courseSlug || isSearching
     });
+
+    useEffect(() => {
+        if (debouncedSearchTerm.trim()) {
+            triggerSearch({
+                q: debouncedSearchTerm,
+                content_type: 'course_video',
+                course_slug: courseSlug
+            });
+        } else {
+            setSearchResults([]);
+        }
+        setVisibleCount(10);
+    }, [debouncedSearchTerm, courseSlug, triggerSearch]);
+
+    useEffect(() => {
+        if (searchData?.data) {
+            setSearchResults(searchData.data);
+        }
+    }, [searchData]);
+
+    const loadMoreResults = useCallback(() => {
+        if (isLoadingMore || visibleCount >= searchResults.length) return;
+        
+        setIsLoadingMore(true);
+        setTimeout(() => {
+            setVisibleCount(prev => Math.min(prev + 10, searchResults.length));
+            setIsLoadingMore(false);
+        }, 1000);
+    }, [isLoadingMore, visibleCount, searchResults.length]);
+
+    const handleScroll = useCallback(() => {
+        if (!scrollContainerRef.current) return;
+        
+        const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
+        const threshold = 100;
+        
+        if (scrollHeight - scrollTop <= clientHeight + threshold) {
+            loadMoreResults();
+        }
+    }, [loadMoreResults]);
+
+    useEffect(() => {
+        const container = scrollContainerRef.current;
+        if (!container) return;
+
+        container.addEventListener('scroll', handleScroll);
+        return () => container.removeEventListener('scroll', handleScroll);
+    }, [handleScroll]);
 
     if (!isOpen) return null;
 
@@ -49,14 +109,65 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
         setExpandedChapters(newExpanded);
     };
 
-    const handleVideoClick = (subchapter: CourseSubchapter, chapterName: string) => {
-        if (!selectedItems.has(subchapter.video_id)) {
+    const handleVideoClick = (video: CourseSubchapter | ContentSearchItem, chapterName: string) => {
+        const videoId = 'video_id' in video ? video.video_id : video.id;
+        
+        if (!selectedItems.has(videoId)) {
             const newSelected = new Set(selectedItems);
-            newSelected.add(subchapter.video_id);
+            newSelected.add(videoId);
             setSelectedItems(newSelected);
-            onVideoSelect(subchapter.video_id, courseName, chapterName, subchapter.name);
+            
+            if ('header' in video) {
+                onVideoSelect(video.id, video.title, video.subtitle || '', video.header);
+            } else {
+                onVideoSelect(video.video_id, courseName, chapterName, video.name);
+            }
         }
         onClose();
+    };
+
+    const renderSearchResults = () => {
+        if (searchLoading) {
+            return (
+                <div className="flex items-center justify-center py-8">
+                    <div className="w-6 h-6 border-2 border-[#5F2BCE] border-t-transparent rounded-full animate-spin"></div>
+                </div>
+            );
+        }
+
+        if (searchResults.length === 0 && debouncedSearchTerm.trim()) {
+            return (
+                <div className="flex items-center justify-center py-8">
+                    <div className="text-center">
+                        <p className="text-white/60">Tidak ada hasil ditemukan untuk "{debouncedSearchTerm}"</p>
+                    </div>
+                </div>
+            );
+        }
+
+        const visibleResults = searchResults.slice(0, visibleCount);
+        const hasMore = visibleCount < searchResults.length;
+
+        return (
+            <div className="space-y-3">
+                {visibleResults.map(item => (
+                    <SearchResultCard
+                        key={item.id}
+                        header={item.header}
+                        title={item.subtitle || 'Chapter Name'}
+                        subtitle=""
+                        searchTerm={debouncedSearchTerm}
+                        onClick={() => handleVideoClick(item, '')}
+                    />
+                ))}
+                
+                {hasMore && isLoadingMore && (
+                    <div className="flex items-center justify-center py-8">
+                        <div className="w-6 h-6 border-2 border-[#5F2BCE] border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                )}
+            </div>
+        );
     };
 
     const renderChapter = (chapter: CourseChapter) => {
@@ -132,7 +243,7 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
         );
     };
 
-    if (chaptersLoading) {
+    if (chaptersLoading && !isSearching) {
         return (
             <div className="flex items-center justify-center py-12">
                 <div className="w-8 h-8 border-2 border-[#5F2BCE] border-t-transparent rounded-full animate-spin"></div>
@@ -140,21 +251,11 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
         );
     }
 
-    if (chaptersError || !chaptersData?.data) {
+    if (chaptersError && !isSearching) {
         return (
             <div className="flex items-center justify-center py-12">
                 <div className="text-center">
                     <p className="text-white/60">Gagal memuat chapters course</p>
-                </div>
-            </div>
-        );
-    }
-
-    if (chaptersData.data.length === 0) {
-        return (
-            <div className="flex items-center justify-center py-12">
-                <div className="text-center">
-                    <p className="text-white/60">Tidak ada chapters ditemukan</p>
                 </div>
             </div>
         );
@@ -179,10 +280,25 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
                 </form>
             </div>
 
-            <div className="pb-20">
-                <div className="space-y-1">
-                    {chaptersData.data.map(renderChapter)}
-                </div>
+            <div 
+                ref={scrollContainerRef}
+                className="pb-20 overflow-y-auto md:h-[calc(100vh-280px)]"
+            >
+                {isSearching ? (
+                    renderSearchResults()
+                ) : (
+                    <div className="space-y-1">
+                        {chaptersData?.data && chaptersData.data.length > 0 ? (
+                            chaptersData.data.map(renderChapter)
+                        ) : (
+                            <div className="flex items-center justify-center py-12">
+                                <div className="text-center">
+                                    <p className="text-white/60">Tidak ada chapters ditemukan</p>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
 
             <div className="fixed bottom-0 left-0 right-0 bg-[#2C2C2C] border border-transparent p-4 flex items-center gap-3 md:bottom-4 md:left-4 md:right-4 md:mx-16 md:mb-8 md:rounded-xl">
