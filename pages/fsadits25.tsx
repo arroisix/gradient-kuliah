@@ -21,7 +21,7 @@ const FSADITS25 = (): JSX.Element => {
 
     const carouselImages = [
         {
-            src: 'https://assets.gradient.academy/assets/assets/FSAD+ITS+25+-+1.jpeg',
+            src: 'https://assets.gradient.academy/assets/FSAD+ITS+25+-+1.jpeg',
             alt: 'Gradient x FSAD ITS - Slide 1',
             width: 1080 / 2,
             height: 1350 / 2
