@@ -16,11 +16,11 @@ const PaymentMethodSection: React.FC<PaymentMethodSectionProps> = ({
     const { paymentMethod } = usePayment();
 
     return (
-        <div className="mb-6">
-            <h3 className="text-white font-semibold text-base mb-3 px-4">
+        <div className="flex flex-col space-y-3 mb-6">
+            <h3 className="text-white font-semibold text-base px-4">
                 {section.name}
             </h3>
-            <div className="mx-4 rounded-lg overflow-hidden">
+            <div className="flex flex-col mx-4 rounded-lg overflow-hidden">
                 {section.payment_methods
                     .filter(
                         (method) => (method.payment_code as string) !== 'MANUAL'

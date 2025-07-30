@@ -8,6 +8,7 @@ import { useTracker } from 'tracker/tracker';
 import { addZeroBefore, getCSChatRoom } from 'commons/utils';
 import { usePayment } from 'payment/contexts/PaymentProvider';
 import PromoCodeInput from './PromoCodeInput';
+import Input from 'commons/components/elements/Form/input';
 
 interface PaymentMethodItemProps {
     method: PaymentMethodData;
@@ -73,24 +74,23 @@ const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({
     }
 
     return (
-        <div className={`${!isLast ? 'border-b border-gray-700/50' : ''}`}>
-            <div
-                className="flex items-center justify-between px-4 py-4 cursor-pointer hover:bg-gray-800/50 transition-colors"
+        <div className={`${!isLast ? 'border-b border-graphite-600/50' : ''}`}>
+            <button
+                className="text-left flex items-center w-full p-4 space-x-4 cursor-pointer hover:bg-graphite-800/50 transition-colors"
                 onClick={onClick ?? selectOption}>
-                <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 relative flex-shrink-0">
-                        <Image
-                            src={method.mobile_logo || getLogoUrl()}
-                            alt={method.payment_name}
-                            width={32}
-                            height={32}
-                            className="rounded"
-                        />
-                    </div>
-                    <span className="text-white font-medium text-sm">
-                        {NAME_PAYMENT[method.payment_code]}
-                    </span>
+                <div className="relative w-8 h-8 flex-shrink-0">
+                    <Image
+                        src={method.mobile_logo || getLogoUrl()}
+                        alt={method.payment_name}
+                        layout="fill"
+                        objectFit="cover"
+                        objectPosition="center"
+                        className="rounded"
+                    />
                 </div>
+                <span className="text-white font-medium text-md flex-1">
+                    {NAME_PAYMENT[method.payment_code]}
+                </span>
 
                 <div className="flex-shrink-0">
                     <div
@@ -104,47 +104,36 @@ const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({
                         )}
                     </div>
                 </div>
-            </div>
+            </button>
 
             {/* Phone Number Input for OVO */}
             {isSelected && method.payment_code === 'ID_OVO' && (
-                <div className="px-4 pb-4 pt-2">
-                    <div className="ml-11">
-                        <div className="flex justify-between items-center gap-3 w-full mt-2 px-4 bg-[#2D2D2D] rounded-[6px]">
-                            <div>
-                                <span className="text-neutral-400">+62</span>
-                            </div>
-                            <input
-                                type="tel"
-                                placeholder="8211234567"
-                                required={true}
-                                pattern="\+[1-9]\d{10,14}"
-                                onChange={(event) =>
-                                    handleSetPhoneNumber(event.target.value)
-                                }
-                                className="w-full px-0 py-4 text-xs bg-transparent border-none placeholder:text-neutral-600 focus:outline-none focus:ring-0 focus:appearance-none"
-                            />
-                        </div>
-                        {phoneNumberError && (
-                            <div className="px-2 pt-2 text-xs font-body text-state-error">
-                                {phoneNumberError}
-                            </div>
-                        )}
-                    </div>
+                <div className="ml-16 mb-4 mr-4">
+                    <Input
+                        type="tel"
+                        name="telnum"
+                        placeholder="8211234567"
+                        onChange={(e) => handleSetPhoneNumber(e.target.value)}
+                        startAddorment={
+                            <span className="text-neutral-400">+62</span>
+                        }
+                        error={
+                            !!phoneNumberError ? phoneNumberError : undefined
+                        }
+                        className="text-sm rounded-lg border border-graphite-700"
+                    />
                 </div>
             )}
 
             {/* Voucher Code Input for VOUCHER */}
             {isSelected && method.payment_code === 'VOUCHER' && (
-                <div className="px-4 pb-4 pt-2">
-                    <div className="ml-11 flex items-center space-x-3">
-                        <PromoCodeInput
-                            placeholder="Masukkan kode voucher"
-                            variant="inline"
-                            className="w-full"
-                            applyAfterValid={true}
-                        />
-                    </div>
+                <div className="ml-16 mr-4 mb-4">
+                    <PromoCodeInput
+                        placeholder="Masukkan kode voucher"
+                        variant="inline"
+                        className="w-full"
+                        applyAfterValid={true}
+                    />
                 </div>
             )}
         </div>

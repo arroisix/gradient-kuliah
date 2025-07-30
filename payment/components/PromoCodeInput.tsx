@@ -155,8 +155,8 @@ export const PromoCodeInput: React.FC<PromoCodeInputProps> = ({
 
     const inputStyles =
         variant === 'modal'
-            ? 'w-full px-4 py-3 pr-12 bg-[#2D2D2D] border border-graphite-600 rounded-lg text-white placeholder-graphite-500 focus:outline-none focus:border-purple-500 transition-colors'
-            : 'w-full bg-graphite-800 border border-graphite-600 rounded-lg px-3 py-2 text-white placeholder-graphite-500 focus:outline-none focus:ring-2 focus:ring-purple-500';
+            ? 'w-full px-4 py-3 pr-12 bg-[#121212] border border-graphite-700 rounded-lg text-white placeholder-graphite-500 focus:outline-none focus:border-purple-500 transition-colors'
+            : 'w-full bg-[#121212] border border-graphite-700 rounded-lg px-3 py-2 text-white placeholder-graphite-500 focus:outline-none focus:ring-2 focus:ring-purple-500';
 
     const errorStyles =
         variant === 'modal'
