@@ -44,7 +44,6 @@ const CopilotSidebarContainer = ({
     contentType,
     bookSlug,
     chapterId,
-    onSessionChange
 }: CopilotSidebarContainerProps): JSX.Element => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoadingHistory, setIsLoadingHistory] = useState(true);

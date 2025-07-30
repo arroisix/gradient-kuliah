@@ -15,7 +15,8 @@ import {
     AstronotesTopicsResponse,
     BankSoalChaptersResponse,
     BankSoalSectionsResponse,
-    BankSoalProblemsResponse
+    BankSoalProblemsResponse,
+    ContentSearchResponse
 } from '../../types/copilot';
 import config from 'redux/api/config';
 import { baseApi } from 'redux/api/baseApi';
@@ -551,7 +552,25 @@ export const copilotApi = baseApi.injectEndpoints({
                 params: sectionId ? {} : { chapter_id: chapterId }
             }),
             providesTags: ['BANKSOAL_PROBLEMS']
-        })
+        }),
+        searchContent: builder.query<ContentSearchResponse, {
+            q?: string;
+            content_type: "textbook_problem" | "astronotes_content" | "course_video" | "bank_soal_problem";
+            book_slug?: string;
+            course_slug?: string;
+        }>({
+            query: (params) => ({
+                url: `${COPILOT_BASE_URL}context/search/`,
+                method: 'GET',
+                params: {
+                    q: params.q || null,
+                    content_type: params.content_type,
+                    ...(params.book_slug && { book_slug: params.book_slug }),
+                    ...(params.course_slug && { course_slug: params.course_slug })
+                }
+            }),
+            providesTags: ['CONTENT_SEARCH']
+        }),
     }),
     overrideExisting: false
 });
@@ -568,5 +587,6 @@ export const {
     useGetAstronotesTopicsQuery,
     useGetBankSoalChaptersQuery,
     useGetBankSoalSectionsQuery,
-    useGetBankSoalProblemsQuery
+    useGetBankSoalProblemsQuery,
+    useLazySearchContentQuery
 } = copilotApi;

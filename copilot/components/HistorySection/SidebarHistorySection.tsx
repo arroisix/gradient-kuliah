@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { IoClose } from 'react-icons/io5';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { HiOutlineChatAlt } from 'react-icons/hi';
 import { cn } from 'commons/utils';

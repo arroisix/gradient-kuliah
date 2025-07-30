@@ -53,6 +53,7 @@ export const baseApi = createApi({
         'BANKSOAL_CHAPTERS',
         'BANKSOAL_SECTIONS',
         'BANKSOAL_PROBLEMS',
+        'CONTENT_SEARCH'
     ],
     baseQuery: fetchBaseQuery({
         baseUrl: config.API_BASE_URL,

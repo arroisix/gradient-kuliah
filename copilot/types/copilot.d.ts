@@ -272,3 +272,17 @@ interface SelectedReference {
     header: string;
     contentType: ReferenceContentType;
 }
+
+export interface ContentSearchItem {
+    id: string;
+    title: string;
+    subtitle: string | null;
+    header: string;
+    section_name?: string | null;
+    problem_question?: string | null;
+    problem_solution?: string | null;
+}
+
+export interface ContentSearchResponse {
+    data: ContentSearchItem[];
+}
