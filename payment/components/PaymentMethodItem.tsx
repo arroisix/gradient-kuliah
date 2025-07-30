@@ -9,41 +9,77 @@ import { addZeroBefore, getCSChatRoom } from 'commons/utils';
 import { usePayment } from 'payment/contexts/PaymentProvider';
 import PromoCodeInput from './PromoCodeInput';
 import Input from 'commons/components/elements/Form/input';
+import { HiOutlineCreditCard } from 'react-icons/hi';
 
 interface PaymentMethodItemProps {
-    method: PaymentMethodData;
+    methodCode: PaymentMethod;
     isSelected: boolean;
     onClick?: () => void;
     isManual?: boolean;
     isLast?: boolean;
+    cardId?: string;
+    cardName?: string;
 }
 
 const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({
-    method,
+    methodCode,
     isSelected,
     onClick,
     isManual,
-    isLast = false
+    isLast = false,
+    cardId,
+    cardName
 }) => {
     const tracker = useTracker();
     const {
         setPaymentMethod,
-        phoneNumber,
         setPhoneNumber,
         phoneNumberError,
-        setPhoneNumberError
+        setPhoneNumberError,
+        setCardId
     } = usePayment();
 
-    const getLogoUrl = (): string => {
-        return `${CDN_URL}/assets/payments/${
-            LOGO_PAYMENT[method.payment_code as PaymentMethod]
-        }`;
+    const getLogo = (): JSX.Element => {
+        if (methodCode.startsWith('CARD_')) {
+            if (
+                ['MASTERCARD', 'VISA', 'AMEX', 'JCB'].includes(
+                    methodCode.substring('CARD_'.length)
+                )
+            ) {
+                return (
+                    <div className="relative w-7 h-7">
+                        <Image
+                            src={`${CDN_URL}/assets/payments/${
+                                LOGO_PAYMENT[methodCode as PaymentMethod]
+                            }`}
+                            layout="fill"
+                            className="object-contain"
+                        />
+                    </div>
+                );
+            } else {
+                return (
+                    <HiOutlineCreditCard className="text-[#5F2BCE]" size={24} />
+                );
+            }
+        } else {
+            return (
+                <Image
+                    src={`${CDN_URL}/assets/mobile-${
+                        LOGO_PAYMENT[methodCode as PaymentMethod]
+                    }`}
+                    alt={NAME_PAYMENT[methodCode]}
+                    layout="fill"
+                    objectFit="cover"
+                />
+            );
+        }
     };
 
     const selectOption = (): void => {
         if (isManual) {
             tracker?.genericTrack('Click Manual Payment Method', {
-                'Method Name': method.payment_code
+                'Method Name': methodCode
             });
             const currentDate = new Date();
             window.open(
@@ -58,9 +94,12 @@ const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({
             );
         } else {
             tracker?.genericTrack('Click Payment Method', {
-                'Method Name': method.payment_code
+                'Method Name': methodCode
             });
-            setPaymentMethod(method.payment_code);
+            setPaymentMethod(methodCode);
+            if (methodCode.startsWith('CARD_')) {
+                setCardId(cardId);
+            }
         }
     };
 
@@ -78,18 +117,14 @@ const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({
             <button
                 className="text-left flex items-center w-full p-4 space-x-4 cursor-pointer hover:bg-graphite-800/50 transition-colors"
                 onClick={onClick ?? selectOption}>
-                <div className="relative w-8 h-8 flex-shrink-0">
-                    <Image
-                        src={method.mobile_logo || getLogoUrl()}
-                        alt={method.payment_name}
-                        layout="fill"
-                        objectFit="cover"
-                        objectPosition="center"
-                        className="rounded"
-                    />
+                <div
+                    className={`relative w-8 h-8 shrink-0 flex rounded-md items-center justify-center ${
+                        methodCode.startsWith('CARD_') ? 'bg-white' : ''
+                    }`}>
+                    {getLogo()}
                 </div>
                 <span className="text-white font-medium text-md flex-1">
-                    {NAME_PAYMENT[method.payment_code]}
+                    {cardName ?? NAME_PAYMENT[methodCode]}
                 </span>
 
                 <div className="flex-shrink-0">
@@ -107,7 +142,7 @@ const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({
             </button>
 
             {/* Phone Number Input for OVO */}
-            {isSelected && method.payment_code === 'ID_OVO' && (
+            {isSelected && methodCode === 'ID_OVO' && (
                 <div className="ml-16 mb-4 mr-4">
                     <Input
                         type="tel"
@@ -126,7 +161,7 @@ const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({
             )}
 
             {/* Voucher Code Input for VOUCHER */}
-            {isSelected && method.payment_code === 'VOUCHER' && (
+            {isSelected && methodCode === 'VOUCHER' && (
                 <div className="ml-16 mr-4 mb-4">
                     <PromoCodeInput
                         placeholder="Masukkan kode voucher"

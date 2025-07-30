@@ -14,7 +14,7 @@ interface PaymentMethodCardProps {
 const PaymentMethodCardSection: React.FC<PaymentMethodCardProps> = ({
     children
 }) => {
-    const { paymentMethod } = usePayment();
+    const { paymentMethod, cardId } = usePayment();
     const { data: cardsData, isLoading } = useGetAllUserCardsQuery();
 
     if (isLoading || !cardsData) {
@@ -24,12 +24,25 @@ const PaymentMethodCardSection: React.FC<PaymentMethodCardProps> = ({
     const cards = cardsData.cards;
 
     return (
-        <div className="mb-6">
-            <h3 className="text-white font-semibold text-base mb-3 px-4">
+        <div className="flex flex-col space-y-3 mb-6">
+            <h3 className="text-white font-semibold text-base px-4">
                 Credit/Debit Card
             </h3>
-            <div className="mx-4 rounded-lg overflow-hidden">
-                
+            <div className="flex flex-col mx-4 rounded-lg overflow-hidden">
+                {cards.map((card) => (
+                    <PaymentMethodItem
+                        key={card.id}
+                        isSelected={
+                            paymentMethod.startsWith('CARD_') &&
+                            cardId === card.id
+                        }
+                        methodCode={
+                            `CARD_${card.brand.toUpperCase()}` as PaymentMethod
+                        }
+                        cardId={card.id}
+                        cardName={card.name}
+                    />
+                ))}
                 <AddCardButton bottomBorder={false} isTemporary={true} />
             </div>
         </div>

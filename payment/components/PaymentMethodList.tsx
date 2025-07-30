@@ -2,7 +2,7 @@ import type React from 'react';
 import PaymentMethodSectionComponent from './PaymentMethodSectionComponent';
 import Spinner from 'commons/components/elements/Spinner';
 import { useGetAllPaymentMethodsQuery } from 'payment/redux/api/transactionApi';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { usePayment } from 'payment/contexts/PaymentProvider';
 import FreeBox from './FreeBox';
 import PaymentMethodCardSection from './PaymentMethodCardSection';

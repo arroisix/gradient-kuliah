@@ -28,7 +28,7 @@ const PaymentMethodSection: React.FC<PaymentMethodSectionProps> = ({
                     .map((method, index) => (
                         <PaymentMethodItem
                             key={method.payment_code}
-                            method={method}
+                            methodCode={method.payment_code}
                             isSelected={paymentMethod === method.payment_code}
                             isLast={
                                 index === section.payment_methods.length - 1

@@ -20,6 +20,8 @@ interface PaymentContextType {
     setPhoneNumberError: (isError: string) => void;
     appliedPromo?: ValidatePromoResponse;
     setAppliedPromo: (data?: ValidatePromoResponse) => void;
+    cardId?: string;
+    setCardId: (data?: string) => void;
 }
 
 const PaymentContext = createContext<PaymentContextType>(
@@ -37,6 +39,7 @@ export function PaymentProvider({
         useState<boolean>(false);
     const { data: packet } = useGetDetailPacketOfferQuery(packetId);
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('VA_BCA');
+    const [cardId, setCardId] = useState<string | undefined>();
     const [phoneNumber, setPhoneNumber] = useState<string>('');
     const [phoneNumberError, setPhoneNumberError] = useState<string>('');
     const [appliedPromo, setAppliedPromo] = useState<
@@ -51,6 +54,10 @@ export function PaymentProvider({
 
         if (paymentMethod === 'VOUCHER') {
             setAppliedPromo(undefined);
+        }
+
+        if (paymentMethod.startsWith('CARD_')) {
+            setCardId(undefined);
         }
 
         setPaymentMethod(to);
@@ -82,15 +89,19 @@ export function PaymentProvider({
             phoneNumberError,
             setPhoneNumberError,
             appliedPromo,
-            setAppliedPromo
+            setAppliedPromo,
+            cardId,
+            setCardId
         }),
         [
             isModalCheckoutOpen,
             packet,
             paymentMethod,
+            selectPaymentMethod,
             phoneNumber,
             phoneNumberError,
-            appliedPromo
+            appliedPromo,
+            cardId
         ]
     );
 

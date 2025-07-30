@@ -18,9 +18,9 @@ export type PAYMENT_DICT = {
     CARD_JCB: string;
     ALFAMART: string;
     INDOMARET: string;
-    VOUCHER?: string | null;
+    VOUCHER: string;
     MANUAL?: string;
-    OTHER: null;
+    OTHER: undefined;
 };
 
 export const LOGO_PAYMENT: PAYMENT_DICT = {
@@ -28,10 +28,10 @@ export const LOGO_PAYMENT: PAYMENT_DICT = {
     VA_BRI: 'bri.png',
     VA_MANDIRI: 'mandiri.png',
     VA_BCA: 'bca.png',
-    VA_PERMATA: 'permata.svg',
+    VA_PERMATA: 'permata.png',
     VA_BJB: 'bjb.png',
     VA_BSI: 'bsi.png',
-    QRIS: '',
+    QRIS: 'qris.png',
     GOPAY: 'gopay.png',
     ID_DANA: 'dana.png',
     ID_OVO: 'ovo.png',
@@ -43,8 +43,8 @@ export const LOGO_PAYMENT: PAYMENT_DICT = {
     CARD_JCB: 'jcb.png',
     ALFAMART: 'alfamart.png',
     INDOMARET: 'indomaret.png',
-    OTHER: null,
-    VOUCHER: null
+    OTHER: undefined,
+    VOUCHER: 'voucher.png'
 };
 
 export const NAME_PAYMENT: PAYMENT_DICT = {
@@ -68,6 +68,6 @@ export const NAME_PAYMENT: PAYMENT_DICT = {
     ALFAMART: 'Alfamart',
     INDOMARET: 'Indomaret',
     MANUAL: 'Manual',
-    OTHER: null,
+    OTHER: undefined,
     VOUCHER: 'Kode Voucher'
 };
