@@ -153,7 +153,7 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
                             
                             {expandedSections.has(section.id) && (
                                 <div className="ml-4 border-l border-white/20">
-                                    <SectionProblems sectionId={section.id} chapterName={chapterName} sectionName={section.title} />
+                                    <SectionProblems sectionId={section.id} chapterName={chapterName} />
                                 </div>
                             )}
                         </div>
@@ -193,7 +193,7 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
         );
     };
 
-    const SectionProblems: React.FC<{ sectionId: string; chapterName: string; sectionName: string }> = ({ sectionId, chapterName, sectionName }) => {
+    const SectionProblems: React.FC<{ sectionId: string; chapterName: string }> = ({ sectionId, chapterName }) => {
         const {
             data: problemsData,
             isLoading: problemsLoading,
