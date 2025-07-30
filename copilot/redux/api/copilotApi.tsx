@@ -269,6 +269,39 @@ export const chatApi = {
         return response.json();
     },
 
+    getContentSessionHistory: async (params: {
+        book_slug?: string;
+        chapter_id?: string;
+    }) => {
+        const token = localStorage.getItem('token');
+        const queryParams = new URLSearchParams();
+        
+        if (params.book_slug) {
+            queryParams.append('book_slug', params.book_slug);
+        }
+        if (params.chapter_id) {
+            queryParams.append('chapter_id', params.chapter_id);
+        }
+
+        const response = await fetch(
+            `${COPILOT_BASE_URL}session/history/?${queryParams.toString()}`,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Token ${token}`,
+                    Accept: '*/*'
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return response.json();
+    },
+
     renameSession: async (input: {
         session_id: string;
         name: string;

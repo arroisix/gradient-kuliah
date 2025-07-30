@@ -16,6 +16,7 @@ interface CopilotModalProps {
   currentContext?: SelectedReference;
   bookSlug?: string;
   chapterId?: string;
+  onSessionChange?: (sessionId: string) => void;
 }
 
 const CopilotModal = ({ 
@@ -25,7 +26,8 @@ const CopilotModal = ({
   xlWidth,
   currentContext,
   bookSlug,
-  chapterId 
+  chapterId,
+  onSessionChange
 }: CopilotModalProps): JSX.Element => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isReferenceModalOpen, setIsReferenceModalOpen] = useState(false);
@@ -70,6 +72,12 @@ const CopilotModal = ({
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleSessionChange = (newSessionId: string) => {
+    if (onSessionChange) {
+      onSessionChange(newSessionId);
+    }
   };
 
   const handleOpenReferenceModal = () => {
@@ -177,6 +185,7 @@ const CopilotModal = ({
           contentType={getCurrentContentType()}
           bookSlug={bookSlug}
           chapterId={chapterId}
+          onSessionChange={handleSessionChange}
         />
       </div>
       
