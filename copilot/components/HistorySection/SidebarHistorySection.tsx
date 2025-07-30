@@ -38,7 +38,7 @@ const SidebarHistorySection = ({
     useEffect(() => {
         const loadContentSessionHistory = async () => {
             if (!isOpen) return;
-            
+
             try {
                 setIsLoading(true);
                 const response: SessionHistoryResponse = await chatApi.getContentSessionHistory({
@@ -107,7 +107,7 @@ const SidebarHistorySection = ({
             setSessionHistory((prev) =>
                 prev.filter((session) => session.id !== sessionId)
             );
-            
+
             if (currentSessionId === sessionId) {
                 onSessionSelect('');
             }
@@ -142,7 +142,7 @@ const SidebarHistorySection = ({
                             <button
                                 key={session.id}
                                 onClick={() => handleSessionClick(session.id)}
-                                className="group block">
+                                className="group block w-full text-left border-none bg-transparent p-0 focus:outline-none focus:ring-0">
                                 <div className={cn(
                                     "p-3 hover:bg-[#222222] cursor-pointer transition-colors",
                                     currentSessionId === session.id && "bg-[#181818]"
