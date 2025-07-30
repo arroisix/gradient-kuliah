@@ -6,10 +6,10 @@ import Layout from 'commons/layout';
 import { NextSeo } from 'next-seo';
 import { toast } from 'react-toastify';
 
-const Scientia25 = (): JSX.Element => {
+const FSADITS25 = (): JSX.Element => {
     const handleCopy = (): void => {
         navigator.clipboard.writeText(
-            `Coba deh temen2 cek disini lagi ada promo Gradient x Scientia FMIPA ITB https://gradient.academy/scientia25`
+            `Coba deh temen2 cek disini lagi ada promo Gradient x FSAD ITS https://gradient.academy/fsadits25`
         ),
             toast.success(
                 'Link berhasil di-copy, silahkan bagikan ke teman teman kamu!',
@@ -21,26 +21,20 @@ const Scientia25 = (): JSX.Element => {
 
     const carouselImages = [
         {
-            src: 'https://assets.gradient.academy/assets/scientia25-1.jpeg',
-            alt: 'Gradient x Scientia FMIPA ITB - Slide 1',
+            src: 'https://assets.gradient.academy/assets/assets/FSAD+ITS+25+-+1.jpeg',
+            alt: 'Gradient x FSAD ITS - Slide 1',
             width: 1080 / 2,
             height: 1350 / 2
         },
         {
-            src: 'https://assets.gradient.academy/assets/scientia25-2.jpeg',
-            alt: 'Gradient x Scientia FMIPA ITB - Slide 2',
+            src: 'https://assets.gradient.academy/assets/FSAD+ITS+25+-+2.jpeg',
+            alt: 'Gradient x FSAD ITS - Slide 2',
             width: 1080 / 2,
             height: 1350 / 2
         },
         {
-            src: 'https://assets.gradient.academy/assets/scientia25-3.jpeg',
-            alt: 'Gradient x Scientia FMIPA ITB - Slide 3',
-            width: 1080 / 2,
-            height: 1350 / 2
-        },
-        {
-            src: 'https://assets.gradient.academy/assets/scientia25-4.jpeg',
-            alt: 'Gradient x Scientia FMIPA ITB - Slide 4',
+            src: 'https://assets.gradient.academy/assets/FSAD+ITS+25+-+3.jpeg',
+            alt: 'Gradient x FSAD ITS - Slide 3',
             width: 1080 / 2,
             height: 1350 / 2
         }
@@ -49,35 +43,29 @@ const Scientia25 = (): JSX.Element => {
     return (
         <>
             <NextSeo
-                title="Gradient x Scientia FMIPA ITB"
-                description="Halo Teman-teman FMIPA! Dalam kolaborasi bersama Scientia, kami punya PROMO KHUSUS Massa FMIPA ITB untuk menghadapi perkuliahan bersama Gradient✨ "
+                title="Gradient x FSAD ITS"
+                description="Halo Teman-teman FSAD! Dalam kolaborasi bersama FSAD, kami punya PROMO KHUSUS Massa FSAD ITS untuk menghadapi perkuliahan bersama Gradient✨"
                 openGraph={{
-                    title: 'Gradient x Scientia FMIPA ITB',
+                    title: 'Gradient x FSAD ITS',
                     description:
-                        'Halo Teman-teman FMIPA! Dalam kolaborasi bersama Scientia, kami punya PROMO KHUSUS Massa FMIPA ITB untuk menghadapi perkuliahan bersama Gradient✨ ',
-                    url: `https://gradient.academy/scientia25`,
+                        'Halo Teman-teman FSAD! Dalam kolaborasi bersama FSAD, kami punya PROMO KHUSUS Massa FSAD ITS untuk menghadapi perkuliahan bersama Gradient✨',
+                    url: `https://gradient.academy/fsadits25`,
                     images: [
                         {
-                            url: 'https://assets.gradient.academy/assets/scientia25-1.jpeg',
-                            alt: 'Gradient x Scientia FMIPA ITB - Slide 1',
+                            url: 'https://assets.gradient.academy/assets/FSAD+ITS+25+-+1.jpeg',
+                            alt: 'Gradient x FSAD ITS - Slide 1',
                             width: 1080,
                             height: 1350
                         },
                         {
-                            url: 'https://assets.gradient.academy/assets/scientia25-2.jpeg',
-                            alt: 'Gradient x Scientia FMIPA ITB - Slide 2',
+                            url: 'https://assets.gradient.academy/assets/FSAD+ITS+25+-+2.jpeg',
+                            alt: 'Gradient x FSAD ITS - Slide 2',
                             width: 1080,
                             height: 1350
                         },
                         {
-                            url: 'https://assets.gradient.academy/assets/scientia25-3.jpeg',
-                            alt: 'Gradient x Scientia FMIPA ITB - Slide 3',
-                            width: 1080,
-                            height: 1350
-                        },
-                        {
-                            url: 'https://assets.gradient.academy/assets/scientia25-4.jpeg',
-                            alt: 'Gradient x Scientia FMIPA ITB - Slide 4',
+                            url: 'https://assets.gradient.academy/assets/FSAD+ITS+25+-+3.jpeg',
+                            alt: 'Gradient x FSAD ITS - Slide 3',
                             width: 1080,
                             height: 1350
                         }
@@ -98,15 +86,14 @@ const Scientia25 = (): JSX.Element => {
                             Gradient x Scientia FMIPA ITB
                         </h1>
                         <p className="text-neutral-300">
-                            Halo Teman-teman FMIPA! Dalam kolaborasi bersama
-                            Scientia, kami punya{' '}
-                            <b>PROMO KHUSUS Massa FMIPA ITB</b>
-                            untuk menghadapi perkuliahan bersama <b>Gradient</b>
-                            ✨
+                            Halo Teman-teman FSAD! Dalam kolaborasi bersama
+                            FSAD, kami punya{' '}
+                            <b>PROMO KHUSUS Massa FSAD ITS untuk</b>
+                            menghadapi perkuliahan bersama Gradient✨
                         </p>
                         <p className="text-neutral-300">
                             Yuk segera daftar! Karna promo ini hanya berlaku
-                            sampai tanggal <b>13 Agustus 2025</b>. Jangan sampai
+                            sampai tanggal <b>14 Agustus 2025</b>. Jangan sampai
                             ketinggalan~
                         </p>
                         <div className="flex flex-wrap gap-2 w-full md:w-auto">
@@ -114,7 +101,7 @@ const Scientia25 = (): JSX.Element => {
                                 variant="primary"
                                 size="large"
                                 className="flex items-center justify-center gap-2 w-full md:w-auto"
-                                href="https://forms.gle/9G5DU6sbuicgTPSp8"
+                                href="https://forms.gle/Lapv4Dt1nriuTKKX6"
                                 target="_blank">
                                 Klik disini untuk Daftar
                             </Button>
@@ -148,4 +135,4 @@ const Scientia25 = (): JSX.Element => {
     );
 };
 
-export default Scientia25;
+export default FSADITS25;
