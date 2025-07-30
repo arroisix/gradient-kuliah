@@ -7,12 +7,14 @@ import Modal from 'commons/components/modules/Modal';
 
 interface ConfirmAddCardModalProps extends ModalBaseProps {
     onConfirm: () => void;
+    disabled: boolean;
 }
 
 const ConfirmAddCardModal = ({
     isOpen,
     setOpen,
-    onConfirm
+    onConfirm,
+    disabled
 }: ConfirmAddCardModalProps): JSX.Element => {
     return (
         <Modal
@@ -63,6 +65,7 @@ const ConfirmAddCardModal = ({
                     variant="primary"
                     className="w-1/2"
                     onClick={onConfirm}
+                    disabled={disabled}
                     eventName="Add new credit card">
                     Simpan
                 </Button>

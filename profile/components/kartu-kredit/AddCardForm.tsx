@@ -59,7 +59,7 @@ const AddCardForm: React.FC = () => {
             if (available) {
                 setFieldError('cardName', undefined);
             } else {
-                setFieldError('cardName', 'Nama kartu sudah pernah digunakan');
+                setFieldError('cardName', 'Label kartu sudah pernah digunakan');
             }
         },
         1000
@@ -156,14 +156,14 @@ const AddCardForm: React.FC = () => {
                             // card name
                             console.log({ isNameAvailable });
                             if (!values.cardName.trim()) {
-                                errors.cardName = 'Nama kartu wajib diisi';
+                                errors.cardName = 'Label kartu wajib diisi';
                             } else if (
                                 values.cardName.length > MAX_NAME_LENGTH
                             ) {
                                 errors.cardName = `Maksimal ${MAX_NAME_LENGTH} karakter`;
                             } else if (!isTyping && !isNameAvailable) {
                                 errors.cardName =
-                                    'Nama kartu sudah pernah digunakan';
+                                    'Label kartu sudah pernah digunakan';
                             }
 
                             // card num
@@ -219,10 +219,7 @@ const AddCardForm: React.FC = () => {
                         }}
                         validateOnChange
                         validateOnBlur
-                        onSubmit={async (
-                            values,
-                            { setFieldError, setSubmitting }
-                        ) => {
+                        onSubmit={async (values, { setSubmitting }) => {
                             setSubmitting(true);
                             try {
                                 const [mm, yyPart] = values.cardExp.split('/');
@@ -294,35 +291,47 @@ const AddCardForm: React.FC = () => {
                                     <h2 className="font-bold text-md">
                                         Rincian Kartu
                                     </h2>
-                                    <Input
-                                        type="text"
-                                        label="Nama Kartu"
-                                        name="cardName"
-                                        placeholder="Contoh: Kartu Utama"
-                                        onBlur={handleBlur}
-                                        value={values.cardName}
-                                        onChange={(e) => {
-                                            handleChange(e);
-                                            setIsNameAvailable(false);
-                                            setIsTyping(true);
-                                            debouncedCheckName(
-                                                e.target.value,
-                                                setFieldError
-                                            );
-                                        }}
-                                        error={
-                                            touched.cardName && errors.cardName
-                                                ? errors.cardName
-                                                : undefined
-                                        }
-                                        endAddorment={
-                                            values.cardName !== '' ? (
-                                                <NameIcon
-                                                    className={nameIconClass}
-                                                />
-                                            ) : undefined
-                                        }
-                                    />
+                                    <div className="flex flex-col items-stretch space-y-2">
+                                        <Input
+                                            type="text"
+                                            label="Label Kartu"
+                                            name="cardName"
+                                            placeholder="Contoh: Kartu Utama, Kartu Ibu"
+                                            onBlur={handleBlur}
+                                            value={values.cardName}
+                                            onChange={(e) => {
+                                                handleChange(e);
+                                                setIsNameAvailable(false);
+                                                setIsTyping(true);
+                                                debouncedCheckName(
+                                                    e.target.value,
+                                                    setFieldError
+                                                );
+                                            }}
+                                            error={
+                                                touched.cardName &&
+                                                errors.cardName
+                                                    ? errors.cardName
+                                                    : undefined
+                                            }
+                                            endAddorment={
+                                                values.cardName !== '' ? (
+                                                    <NameIcon
+                                                        className={
+                                                            nameIconClass
+                                                        }
+                                                    />
+                                                ) : undefined
+                                            }
+                                        />
+                                        <div className="flex space-x-2">
+                                            <Info className="w-4 h-4 text-neutral-400" />
+                                            <span className="text-xs text-neutral-400 flex-1">
+                                                Isi apa saja untuk bantu kamu
+                                                mengenali kartu
+                                            </span>
+                                        </div>
+                                    </div>
 
                                     <Input
                                         type="text"
@@ -534,6 +543,7 @@ const AddCardForm: React.FC = () => {
             <ConfirmAddCardModal
                 isOpen={showConfirmationModal}
                 setOpen={setShowConfirmationModal}
+                disabled={isSaving}
                 onConfirm={async () => {
                     if (cardData) {
                         await saveUserCard({
