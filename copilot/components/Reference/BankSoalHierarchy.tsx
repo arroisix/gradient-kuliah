@@ -15,7 +15,7 @@ interface BankSoalHierarchyProps {
     bookSlug: string;
     bookName: string;
     bookThumbnail?: string | null;
-    onProblemSelect: (problemId: string, problemTitle: string, chapterName: string, sectionName: string) => void;
+    onProblemSelect: (problemId: string, title: string, subtitle: string, header: string) => void;
 }
 
 const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
@@ -66,7 +66,7 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
             const newSelected = new Set(selectedItems);
             newSelected.add(problem.id);
             setSelectedItems(newSelected);
-            onProblemSelect(problem.id, bookName, chapterName, sectionName);
+            onProblemSelect(problem.id, bookName, chapterName, problem.title);
         }
         onClose();
     };

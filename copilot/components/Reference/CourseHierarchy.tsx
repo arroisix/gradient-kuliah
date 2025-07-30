@@ -14,7 +14,7 @@ interface CourseHierarchyProps {
     courseSlug: string;
     courseName: string;
     courseThumbnail?: string | null;
-    onVideoSelect: (videoId: string, videoTitle: string, chapterName: string, subchapterName: string) => void;
+    onVideoSelect: (videoId: string, title: string, subtitle: string, header: string) => void;
 }
 
 const CourseHierarchy: React.FC<CourseHierarchyProps> = ({

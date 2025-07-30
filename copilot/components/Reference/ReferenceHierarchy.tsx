@@ -12,7 +12,7 @@ interface ReferenceHierarchyProps {
     referenceData: ContextRecommendation;
     onItemSelect: (
         itemId: string,
-        itemTitle: string,
+        title: string,
         subtitle: string,
         header: string,
         contentType: ReferenceContentType,
@@ -38,8 +38,8 @@ const ReferenceHierarchy: React.FC<ReferenceHierarchyProps> = ({
                         bookSlug={referenceData.book_slug!}
                         bookName={referenceData.book_name!}
                         bookThumbnail={referenceData.thumbnail}
-                        onProblemSelect={(problemId, problemTitle, chapterName, sectionName) => 
-                            onItemSelect(problemId, problemTitle, chapterName, sectionName, 'textbook_problem')
+                        onProblemSelect={(problemId, title, subtitle, header) => 
+                            onItemSelect(problemId, title, subtitle, header, 'textbook_problem')
                         }
                     />
                 );
@@ -51,8 +51,8 @@ const ReferenceHierarchy: React.FC<ReferenceHierarchyProps> = ({
                         courseSlug={referenceData.course_slug!}
                         courseName={referenceData.course_name || 'Course'}
                         courseThumbnail={referenceData.thumbnail}
-                        onVideoSelect={(videoId, videoTitle, chapterName, subchapterName) => 
-                            onItemSelect(videoId, videoTitle, chapterName, subchapterName, 'course')
+                        onVideoSelect={(videoId, title, subtitle, header) => 
+                            onItemSelect(videoId, title, subtitle, header, 'course')
                         }
                     />
                 );
@@ -64,8 +64,8 @@ const ReferenceHierarchy: React.FC<ReferenceHierarchyProps> = ({
                         bookSlug={referenceData.book_slug!}
                         bookName={referenceData.book_name!}
                         bookThumbnail={referenceData.thumbnail}
-                        onTopicSelect={(topicId, topicTitle, chapterName, subchapterName) => 
-                            onItemSelect(topicId, topicTitle, chapterName, subchapterName, 'astronotes_content')
+                        onTopicSelect={(topicId, title, subtitle, header) => 
+                            onItemSelect(topicId, title, subtitle, header, 'astronotes_content')
                         }
                     />
                 );
@@ -77,8 +77,8 @@ const ReferenceHierarchy: React.FC<ReferenceHierarchyProps> = ({
                         bookSlug={referenceData.book_slug!}
                         bookName={referenceData.book_name!}
                         bookThumbnail={referenceData.thumbnail}
-                        onProblemSelect={(problemId, problemTitle, chapterName, sectionName) => 
-                            onItemSelect(problemId, problemTitle, chapterName, sectionName, 'bank_soal_problem')
+                        onProblemSelect={(problemId, title, subtitle, header) => 
+                            onItemSelect(problemId, title, subtitle, header, 'bank_soal_problem')
                         }
                     />
                 );

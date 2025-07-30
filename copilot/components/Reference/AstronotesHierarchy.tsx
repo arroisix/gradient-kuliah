@@ -15,7 +15,7 @@ interface AstronotesHierarchyProps {
     bookSlug: string;
     bookName: string;
     bookThumbnail?: string | null;
-    onTopicSelect: (topicId: string, topicTitle: string, chapterName: string, subchapterName: string) => void;
+    onTopicSelect: (topicId: string, title: string, subtitle: string, header: string) => void;
 }
 
 const AstronotesHierarchy: React.FC<AstronotesHierarchyProps> = ({
