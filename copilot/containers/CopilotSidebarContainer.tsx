@@ -145,7 +145,6 @@ const CopilotSidebarContainer = ({
             }, 100);
             
         } catch (error) {
-            console.error('Error loading selected session:', error);
             setIsHistoryOpen(false);
         } finally {
             setIsLoadingHistory(false);
