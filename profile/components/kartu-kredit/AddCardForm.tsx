@@ -16,10 +16,11 @@ import { CDN_URL } from 'commons/constants';
 import { useDebouncedCallback } from 'use-debounce';
 import { useLazyCheckUserCardNameAvailabilityQuery } from 'payment/redux/api/transactionApi';
 import { FaCheckCircle, FaSpinner, FaTimesCircle } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 const MAX_NAME_LENGTH = 20;
 
-const AddCardForm = () => {
+const AddCardForm: React.FC = () => {
     const router = useRouter();
     const [showProtectionModal, setShowProtectionModal] = useState(false);
     const [showCVVModal, setShowCVVModal] = useState(false);
@@ -38,9 +39,7 @@ const AddCardForm = () => {
 
     useEffect(() => {
         if (window.Xendit) {
-            window.Xendit.setPublishableKey(
-                process.env.NEXT_PUBLIC_XENDIT_KEY as string
-            );
+            window.Xendit.setPublishableKey('asd');
         }
     }, []);
 
@@ -268,10 +267,11 @@ const AddCardForm = () => {
                                 });
                                 setShowConfirmationModal(true);
                             } catch (err: any) {
-                                setFieldError(
-                                    'cardName',
-                                    err.message || 'Gagal memproses kartu'
-                                );
+                                toast.error(err.message, {
+                                    position: 'top-center',
+                                    theme: 'colored',
+                                    toastId: 'XENDIT_ERROR'
+                                });
                             } finally {
                                 setSubmitting(false);
                             }

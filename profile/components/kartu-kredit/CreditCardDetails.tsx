@@ -13,6 +13,7 @@ import { CDN_URL } from 'commons/constants';
 import Image from 'next/image';
 import Button from 'commons/components/elements/Button';
 import ConfirmDeleteCardModal from './modals/ConfirmDeleteCardModal';
+import { toast } from 'react-toastify';
 
 const CreditCardDetails = () => {
     const router = useRouter();
@@ -49,7 +50,11 @@ const CreditCardDetails = () => {
     const handleDelete = async () => {
         try {
             await deleteUserCard(id).unwrap();
-            router.push('/profil/kartu-kredit');
+            await router.push('/profil/kartu-kredit');
+            toast.success('Kartu kredit/debit berhasil dihapus', {
+                position: 'top-center',
+                toastId: 'CARD_DELETE'
+            });
         } catch (err) {
             console.error('Failed to delete card', err);
         }
