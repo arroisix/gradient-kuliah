@@ -76,7 +76,6 @@ const CheckoutButton = ({
                 );
             }
         } else {
-            console.log(promoCode);
             const data = (await checkout({
                 packet_id: packetId,
                 payment_method: paymentMethod,
