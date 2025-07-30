@@ -139,7 +139,7 @@ const SidebarHistorySection = ({
                 ) : sessionHistory.length > 0 ? (
                     <div className="overflow-y-auto flex-1">
                         {sessionHistory.map((session) => (
-                            <div
+                            <button
                                 key={session.id}
                                 onClick={() => handleSessionClick(session.id)}
                                 className="group block">
@@ -165,17 +165,17 @@ const SidebarHistorySection = ({
                                         ) : (
                                             <span></span>
                                         )}
-                                        <div onClick={(e) => e.stopPropagation()}>
+                                        <button onClick={(e) => e.stopPropagation()}>
                                             <SessionMenuDropdown
                                                 sessionId={session.id}
                                                 onRename={handleRename}
                                                 onDelete={handleDelete}
                                             />
-                                        </div>
+                                        </button>
                                     </span>
                                 </div>
                                 <div className="border-b border-neutral-700/50"></div>
-                            </div>
+                            </button>
                         ))}
                     </div>
                 ) : (

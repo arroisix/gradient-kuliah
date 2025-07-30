@@ -61,7 +61,7 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
         setExpandedSections(newExpanded);
     };
 
-    const handleProblemClick = (problem: BankSoalProblem, chapterName: string, sectionName: string) => {
+    const handleProblemClick = (problem: BankSoalProblem, chapterName: string, _sectionName: string) => { // TODO (Steven) : Check if used later or not
         if (!selectedItems.has(problem.id)) {
             const newSelected = new Set(selectedItems);
             newSelected.add(problem.id);

@@ -61,7 +61,7 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
         setExpandedSections(newExpanded);
     };
 
-    const handleProblemClick = (problem: TextbookProblem, chapterName: string, sectionName: string) => {
+    const handleProblemClick = (problem: TextbookProblem, chapterName: string, _sectionName: string) => { // TODO (Steven): Check if used later or not
         if (!selectedItems.has(problem.id)) {
             const newSelected = new Set(selectedItems);
             newSelected.add(problem.id);
