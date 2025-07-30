@@ -5,7 +5,17 @@ import { Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { HiOutlineCreditCard } from 'react-icons/hi';
 
-const AddCardButton: React.FC = () => {
+interface AddCardButtonProps {
+    bottomBorder: boolean;
+    redirect?: string;
+    isTemporary: boolean;
+}
+
+const AddCardButton: React.FC<AddCardButtonProps> = ({
+    bottomBorder = true,
+    redirect,
+    isTemporary = false
+}) => {
     const router = useRouter();
 
     const handleAddCard = (): void => {
@@ -15,16 +25,16 @@ const AddCardButton: React.FC = () => {
     return (
         <button
             onClick={handleAddCard}
-            className="flex items-center space-x-4 p-4 hover:bg-graphite-800 transition-colors w-full text-left border-b border-graphite-600 rounded-md">
-            <div className="bg-white rounded-md flex items-center justify-center p-1">
+            className={`flex items-center space-x-4 p-4 hover:bg-graphite-800 transition-colors w-full text-left border-graphite-600 rounded-md ${
+                bottomBorder ? 'border-b' : ''
+            }`}>
+            <div className="relative w-8 h-8 shrink-0 bg-white rounded-md flex items-center justify-center">
                 <HiOutlineCreditCard className="text-[#5F2BCE]" size={24} />
             </div>
-
             <span className="text-white font-medium text-md flex-1">
                 Tambah Kartu Baru
             </span>
-
-            <Plus size={24} className="text-gray-400" />
+            <Plus size={24} className="text-gray-400 shrink-0" />
         </button>
     );
 };

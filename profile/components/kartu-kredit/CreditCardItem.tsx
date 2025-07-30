@@ -16,14 +16,15 @@ const CreditCardItem: React.FC<CreditCardItemProps> = ({ card }) => {
     const getCardLogo = (brand: string): JSX.Element => {
         if (['MASTERCARD', 'VISA', 'AMEX', 'JCB'].includes(brand)) {
             return (
-                <Image
-                    src={`${CDN_URL}/assets/payments/${
-                        LOGO_PAYMENT[`CARD_${brand}` as PaymentMethod]
-                    }`}
-                    className="object-contain"
-                    width={24}
-                    height={24}
-                />
+                <div className="relative w-7 h-7">
+                    <Image
+                        src={`${CDN_URL}/assets/payments/${
+                            LOGO_PAYMENT[`CARD_${brand}` as PaymentMethod]
+                        }`}
+                        layout="fill"
+                        className="object-contain"
+                    />
+                </div>
             );
         } else {
             return <HiOutlineCreditCard className="text-[#5F2BCE]" size={24} />;
@@ -34,17 +35,17 @@ const CreditCardItem: React.FC<CreditCardItemProps> = ({ card }) => {
         <Link
             href={`/profil/kartu-kredit/${card.id}`}
             className="flex items-center space-x-4 p-4 hover:bg-graphite-800 transition-colors w-full text-left border-b border-graphite-600 rounded-md">
-            <div className="bg-white rounded-md flex items-center justify-center p-1 overflow-hidden">
+            <div className="relative w-8 h-8 shrink-0 bg-white rounded-md flex items-center justify-center">
                 {getCardLogo(card.brand)}
             </div>
 
-            <p className="text-white font-medium">{card.brand}</p>
-            <p
+            <span className="text-white font-medium">{card.brand}</span>
+            <span
                 className={`text-gray-400 text-sm ${
                     card.needs_refresh ? '' : 'flex-1'
                 }`}>
                 {card.name}
-            </p>
+            </span>
             {card.needs_refresh && (
                 <div className="flex-1 text-red-400 text-sm">Expired</div>
             )}
