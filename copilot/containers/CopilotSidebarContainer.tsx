@@ -6,8 +6,10 @@ import PromptBar from '../components/MainSection/PromptBar';
 import { chatApi } from '../redux/api/copilotApi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { IoClose, IoChevronDown, IoChevronUp } from 'react-icons/io5';
+import { MdHistory } from 'react-icons/md';
 import { Maximize2 } from 'lucide-react';
 import { cn } from 'commons/utils';
+import SidebarHistorySection from '../components/HistorySection/SidebarHistorySection';
 
 type ContentType = "course_video" | "textbook_problem" | "bank_soal_problem" | "astronotes_content";
 
@@ -25,6 +27,7 @@ interface CopilotSidebarContainerProps {
     contentType?: ContentType;
     bookSlug?: string;
     chapterId?: string;
+    onSessionChange?: (sessionId: string) => void;
 }
 
 const CopilotSidebarContainer = ({
@@ -40,7 +43,8 @@ const CopilotSidebarContainer = ({
     onOpenUsedReferencesModal,
     contentType,
     bookSlug,
-    chapterId
+    chapterId,
+    onSessionChange
 }: CopilotSidebarContainerProps): JSX.Element => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoadingHistory, setIsLoadingHistory] = useState(true);
@@ -52,6 +56,7 @@ const CopilotSidebarContainer = ({
         timestamp: string;
     } | null>(null);
     const [isEditorOpen, setIsEditorOpen] = useState(false);
+    const [isHistoryOpen, setIsHistoryOpen] = useState(false);
     
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -73,6 +78,10 @@ const CopilotSidebarContainer = ({
         }
     };
 
+    const handleToggleHistory = () => {
+        setIsHistoryOpen(prev => !prev);
+    };
+
     const convertHistoryContextToSelectedReferences = (historyContext?: { data: ChatHistoryContextItem[] }): SelectedReference[] => {
         if (!historyContext?.data) return [];
         
@@ -83,6 +92,63 @@ const CopilotSidebarContainer = ({
             header: item.header,
             contentType: item.content_type === 'course_video' ? 'course' : item.content_type as ReferenceContentType
         }));
+    };
+
+    const handleSessionSelect = async (sessionId: string) => {
+        if (!sessionId) {
+            setMessages([]);
+            setCurrentSessionId(undefined);
+            setIsHistoryOpen(false);
+            return;
+        }
+
+        try {
+            setIsLoadingHistory(true);
+            setCurrentSessionId(sessionId);
+            
+            const response = await chatApi.getChatHistory(sessionId);
+            
+            if (response.history?.length > 0) {
+                const convertedMessages: ChatMessage[] = response.history.map(
+                    (item: {
+                        role: 'AI' | 'User';
+                        message: string;
+                        message_id: string;
+                        rating: number;
+                        is_bookmarked: boolean;
+                        image?: string | null;
+                        keyword?: string | null;
+                        context?: {
+                            data: ChatHistoryContextItem[];
+                        };
+                    }) => ({
+                        id: item.message_id,
+                        role: item.role === 'AI' ? 'AI' : 'User',
+                        content: item.message,
+                        timestamp: new Date().toISOString(),
+                        rating: item.rating,
+                        isBookmarked: item.is_bookmarked,
+                        image: item.image,
+                        keyword: item.keyword,
+                        usedReferences: convertHistoryContextToSelectedReferences(item.context)
+                    })
+                );
+                setMessages(convertedMessages);
+            } else {
+                setMessages([]);
+            }
+            
+            setIsHistoryOpen(false);
+            
+            setTimeout(() => {
+                scrollToBottom();
+            }, 100);
+            
+        } catch (error) {
+            setIsHistoryOpen(false);
+        } finally {
+            setIsLoadingHistory(false);
+        }
     };
 
     useEffect(() => {
@@ -397,6 +463,13 @@ const CopilotSidebarContainer = ({
                         </h3>
                     </div>
 
+                    <button
+                        onClick={handleToggleHistory}
+                        className="p-1 text-gray-400 hover:text-white transition-colors"
+                        aria-label="Open chat history">
+                        <MdHistory size={32} />
+                    </button>
+
                     <div 
                         onClick={handleToggleCollapse}
                         onKeyDown={handleKeyDown}
@@ -420,7 +493,7 @@ const CopilotSidebarContainer = ({
 
                 <div
                     className={cn(
-                        "flex-1 overflow-hidden transition-all duration-300 ease-in-out",
+                        "flex-1 overflow-hidden transition-all duration-300 ease-in-out relative",
                         (isCollapsed && !isMobile) ? "h-0 opacity-0" : "flex opacity-100"
                     )}>
                     <div className="flex flex-col w-full h-full">
@@ -505,6 +578,17 @@ const CopilotSidebarContainer = ({
                             </button>
                         )}
                     </div>
+
+                    {isHistoryOpen && (
+                        <SidebarHistorySection
+                            isOpen={isHistoryOpen}
+                            onClose={handleToggleHistory}
+                            bookSlug={bookSlug}
+                            chapterId={chapterId}
+                            onSessionSelect={handleSessionSelect}
+                            currentSessionId={currentSessionId}
+                        />
+                    )}
                 </div>
             </div>
         </>
