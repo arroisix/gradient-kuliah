@@ -61,7 +61,7 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
         setExpandedSections(newExpanded);
     };
 
-    const handleProblemClick = (problem: TextbookProblem, chapterName: string, _sectionName: string) => { // TODO (Steven): Check if used later or not
+    const handleProblemClick = (problem: TextbookProblem, chapterName: string) => {
         if (!selectedItems.has(problem.id)) {
             const newSelected = new Set(selectedItems);
             newSelected.add(problem.id);
@@ -179,7 +179,7 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
                 {problemsData.data.map(problem => (
                     <button
                         key={problem.id}
-                        onClick={() => handleProblemClick(problem, chapterName, 'Chapter Level')}
+                        onClick={() => handleProblemClick(problem, chapterName)}
                         className={cn(
                             'w-full flex items-center px-3 py-1.5 rounded-lg transition-colors text-left',
                             'hover:bg-white/5',
@@ -221,7 +221,7 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
                 {problemsData.data.map(problem => (
                     <button
                         key={problem.id}
-                        onClick={() => handleProblemClick(problem, chapterName, sectionName)}
+                        onClick={() => handleProblemClick(problem, chapterName)}
                         className={cn(
                             'w-full flex items-center px-3 py-1.5 ml-4 rounded-lg transition-colors text-left',
                             'hover:bg-white/5',
