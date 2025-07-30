@@ -15,6 +15,7 @@ import ConfirmDeleteCardModal from './modals/ConfirmDeleteCardModal';
 import { toast } from 'react-toastify';
 import EditCardModal from './modals/EditCardModal';
 import Skeleton from 'commons/components/elements/Skeleton';
+import { LOGO_PAYMENT } from 'payment/components/constant';
 
 const CreditCardDetails = (): JSX.Element => {
     const router = useRouter();
@@ -38,7 +39,9 @@ const CreditCardDetails = (): JSX.Element => {
         if (['MASTERCARD', 'VISA', 'AMEX', 'JCB'].includes(brand)) {
             return (
                 <Image
-                    src={`${CDN_URL}/assets/payments/${brand.toLowerCase()}.png`}
+                    src={`${CDN_URL}/assets/payments/${
+                        LOGO_PAYMENT[`CARD_${brand}` as PaymentMethod]
+                    }`}
                     className="object-contain"
                     width={24}
                     height={24}

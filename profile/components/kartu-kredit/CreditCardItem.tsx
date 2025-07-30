@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { HiOutlineCreditCard } from 'react-icons/hi';
 import { CDN_URL } from 'commons/constants';
 import Link from 'next/link';
+import { LOGO_PAYMENT } from 'payment/components/constant';
 
 interface CreditCardItemProps {
     card: CreditCard;
@@ -16,7 +17,9 @@ const CreditCardItem: React.FC<CreditCardItemProps> = ({ card }) => {
         if (['MASTERCARD', 'VISA', 'AMEX', 'JCB'].includes(brand)) {
             return (
                 <Image
-                    src={`${CDN_URL}/assets/payments/${brand.toLowerCase()}.png`}
+                    src={`${CDN_URL}/assets/payments/${
+                        LOGO_PAYMENT[`CARD_${brand}` as PaymentMethod]
+                    }`}
                     className="object-contain"
                     width={24}
                     height={24}

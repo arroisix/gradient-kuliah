@@ -12,6 +12,10 @@ export type PAYMENT_DICT = {
     ID_OVO: string;
     ID_SHOPEEPAY: string;
     ID_LINKAJA: string;
+    CARD_VISA: string;
+    CARD_MASTERCARD: string;
+    CARD_AMEX: string;
+    CARD_JCB: string;
     ALFAMART: string;
     INDOMARET: string;
     VOUCHER?: string | null;
@@ -33,6 +37,10 @@ export const LOGO_PAYMENT: PAYMENT_DICT = {
     ID_OVO: 'ovo.png',
     ID_SHOPEEPAY: 'shopeepay.png',
     ID_LINKAJA: 'linkaja.png',
+    CARD_VISA: 'visa.png',
+    CARD_MASTERCARD: 'mastercard.png',
+    CARD_AMEX: 'amex.png',
+    CARD_JCB: 'jcb.png',
     ALFAMART: 'alfamart.png',
     INDOMARET: 'indomaret.png',
     OTHER: null,
@@ -53,6 +61,10 @@ export const NAME_PAYMENT: PAYMENT_DICT = {
     ID_OVO: 'OVO',
     ID_SHOPEEPAY: 'ShopeePay',
     ID_LINKAJA: 'LinkAja',
+    CARD_VISA: 'Visa Card',
+    CARD_MASTERCARD: 'Mastercard',
+    CARD_AMEX: 'AMEX Card',
+    CARD_JCB: 'JCB Card',
     ALFAMART: 'Alfamart',
     INDOMARET: 'Indomaret',
     MANUAL: 'Manual',
