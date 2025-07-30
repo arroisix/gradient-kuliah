@@ -17,6 +17,7 @@ import { useDebouncedCallback } from 'use-debounce';
 import { useLazyCheckUserCardNameAvailabilityQuery } from 'payment/redux/api/transactionApi';
 import { FaCheckCircle, FaSpinner, FaTimesCircle } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 
 const MAX_NAME_LENGTH = 20;
 
@@ -27,6 +28,7 @@ const AddCardForm: React.FC = () => {
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
     const [isNameAvailable, setIsNameAvailable] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
+    const [isXenditReady, setXenditReady] = useState(false);
     const { cardData, setCardData, saveUserCard, isSaving, successSaving } =
         useCreditCardContext();
 
@@ -37,13 +39,14 @@ const AddCardForm: React.FC = () => {
         if (successSaving) router.push('/profil/kartu-kredit');
     }, [successSaving, router]);
 
-    useEffect(() => {
+    const handleXenditLoad = () => {
         if (window.Xendit) {
             window.Xendit.setPublishableKey(
                 process.env.NEXT_PUBLIC_XENDIT_KEY as string
             );
+            setXenditReady(true);
         }
-    }, []);
+    };
 
     const debouncedCheckName = useDebouncedCallback(
         async (
@@ -78,11 +81,25 @@ const AddCardForm: React.FC = () => {
             ? 'text-green-500'
             : 'text-red-500';
 
+    if (!isXenditReady) {
+        return (
+            <>
+                <Script
+                    src="https://js.xendit.co/v1/xendit.min.js"
+                    strategy="afterInteractive"
+                    onLoad={handleXenditLoad}
+                />
+                <LoadingBackdrop />
+            </>
+        );
+    }
+
     return (
         <>
             <Script
                 src="https://js.xendit.co/v1/xendit.min.js"
-                strategy="beforeInteractive"
+                strategy="afterInteractive"
+                onLoad={handleXenditLoad}
             />
 
             <div className="flex flex-col items-center w-full max-h-[75vh] overflow-y-auto">
