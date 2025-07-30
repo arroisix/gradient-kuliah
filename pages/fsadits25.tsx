@@ -83,7 +83,7 @@ const FSADITS25 = (): JSX.Element => {
                     </div>
                     <div className="flex flex-col items-start justify-start gap-4 w-full p-4 md:p-16 md:h-screen overflow-y-auto">
                         <h1 className="md:text-5xl text-xl font-bold">
-                            Gradient x Scientia FMIPA ITB
+                            Gradient x FSAD ITS
                         </h1>
                         <p className="text-neutral-300">
                             Halo Teman-teman FSAD! Dalam kolaborasi bersama
