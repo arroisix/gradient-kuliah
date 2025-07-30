@@ -39,7 +39,9 @@ const AddCardForm: React.FC = () => {
 
     useEffect(() => {
         if (window.Xendit) {
-            window.Xendit.setPublishableKey('asd');
+            window.Xendit.setPublishableKey(
+                process.env.NEXT_PUBLIC_XENDIT_KEY as string
+            );
         }
     }, []);
 
@@ -52,9 +54,7 @@ const AddCardForm: React.FC = () => {
             const available = await triggerCheckName({
                 card_name: value
             }).unwrap();
-            console.log({ available });
             setIsNameAvailable(available);
-            console.log({ top: isNameAvailable });
             setIsTyping(false);
             if (available) {
                 setFieldError('cardName', undefined);

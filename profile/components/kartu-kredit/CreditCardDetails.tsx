@@ -14,12 +14,14 @@ import Image from 'next/image';
 import Button from 'commons/components/elements/Button';
 import ConfirmDeleteCardModal from './modals/ConfirmDeleteCardModal';
 import { toast } from 'react-toastify';
+import EditCardModal from './modals/EditCardModal';
 
 const CreditCardDetails = () => {
     const router = useRouter();
     const { id } = router.query;
     const [showProtectionModal, setShowProtectionModal] = useState(false);
     const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false);
+    const [showEditCardModal, setShowEditCardModal] = useState(false);
 
     if (!router.isReady || typeof id !== 'string') {
         return <LoadingBackdrop />;
@@ -114,7 +116,9 @@ const CreditCardDetails = () => {
                         <span className="text-white font-semibold">
                             {data.name}
                         </span>
-                        <button className="flex justify-center items-center w-6 h-6 p-1 rounded-full bg-[#333333] text-gray-400 hover:bg-gray-400 hover:text-white transition-colors">
+                        <button
+                            className="flex justify-center items-center w-6 h-6 p-1 rounded-full bg-[#333333] text-gray-400 hover:bg-gray-400 hover:text-white transition-colors"
+                            onClick={() => setShowEditCardModal(true)}>
                             <PenLine className="w-4 h-4" />
                         </button>
                     </div>
@@ -143,6 +147,12 @@ const CreditCardDetails = () => {
                 setOpen={setShowConfirmDeleteModal}
                 confirmButtonDisabled={isDeleting}
                 onConfirm={handleDelete}
+            />
+            <EditCardModal
+                isOpen={showEditCardModal}
+                setOpen={setShowEditCardModal}
+                currentName={data.name}
+                cardId={data.id}
             />
         </>
     );

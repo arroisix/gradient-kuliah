@@ -156,3 +156,9 @@ interface CreditCardTokenizeData {
     card_holder_email: string;
     card_holder_phone_number: string;
 }
+
+interface EditCardRequestData {
+    name?: string;
+    brand?: string;
+    card_token?: string;
+}

@@ -35,7 +35,10 @@ export const transactionApi = baseApi.injectEndpoints({
         getUserCard: builder.query<CreditCard, string>({
             query: (id: string) => ({
                 url: `${TRANSACTION_BASE_URL}user-cards/${id}`
-            })
+            }),
+            providesTags: (result, error, id) => [
+                { type: 'USER_CARDS', id: id }
+            ]
         }),
         addUserCard: builder.mutation<CreditCard, AddCardRequestData>({
             query: (body) => ({
@@ -67,6 +70,19 @@ export const transactionApi = baseApi.injectEndpoints({
             transformResponse: (status: number) => {
                 return status === 204;
             }
+        }),
+        editUserCard: builder.mutation<
+            CreditCard,
+            { id: string; changes: EditCardRequestData }
+        >({
+            query: ({ id, changes }) => ({
+                url: `${TRANSACTION_BASE_URL}user-cards/${id}`,
+                method: 'PUT',
+                body: changes
+            }),
+            invalidatesTags: (result, error, arg) => [
+                { type: 'USER_CARDS', id: arg.id }
+            ]
         })
     })
 });
@@ -79,5 +95,6 @@ export const {
     useGetUserCardQuery,
     useAddUserCardMutation,
     useDeleteUserCardMutation,
-    useLazyCheckUserCardNameAvailabilityQuery
+    useLazyCheckUserCardNameAvailabilityQuery,
+    useEditUserCardMutation
 } = transactionApi;
