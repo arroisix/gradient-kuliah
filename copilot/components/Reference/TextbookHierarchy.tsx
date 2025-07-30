@@ -149,7 +149,7 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
             return (
                 <div className="flex items-center justify-center py-8">
                     <div className="text-center">
-                        <p className="text-white/60">Tidak ada hasil ditemukan untuk "{debouncedSearchTerm}"</p>
+                        <p className="text-white/60">Tidak ada hasil ditemukan untuk &quot;{debouncedSearchTerm}&quot;</p>
                     </div>
                 </div>
             );
