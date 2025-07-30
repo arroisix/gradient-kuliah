@@ -9,7 +9,7 @@ import RenameDialog from './RenameDialog';
 import { useTracker } from 'tracker/tracker';
 import { SessionHistoryResponse } from 'copilot/types/copilot';
 
-interface HistorySectionModalProps {
+interface SidebarHistorySectionProps {
     isOpen: boolean;
     onClose: () => void;
     bookSlug?: string;
@@ -18,14 +18,14 @@ interface HistorySectionModalProps {
     currentSessionId?: string;
 }
 
-const HistorySectionModal = ({
+const SidebarHistorySection = ({
     isOpen,
     onClose,
     bookSlug,
     chapterId,
     onSessionSelect,
     currentSessionId
-}: HistorySectionModalProps): JSX.Element => {
+}: SidebarHistorySectionProps): JSX.Element => {
     const [sessionHistory, setSessionHistory] = useState<SessionHistoryResponse['data']>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
@@ -207,4 +207,4 @@ const HistorySectionModal = ({
     );
 };
 
-export default HistorySectionModal;
+export default SidebarHistorySection;

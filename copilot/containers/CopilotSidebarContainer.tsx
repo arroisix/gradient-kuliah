@@ -9,7 +9,7 @@ import { IoClose, IoChevronDown, IoChevronUp } from 'react-icons/io5';
 import { MdHistory } from 'react-icons/md';
 import { Maximize2 } from 'lucide-react';
 import { cn } from 'commons/utils';
-import HistorySectionModal from '../components/HistorySection/HistorySectionModal';
+import SidebarHistorySection from '../components/HistorySection/SidebarHistorySection';
 
 type ContentType = "course_video" | "textbook_problem" | "bank_soal_problem" | "astronotes_content";
 
@@ -581,7 +581,7 @@ const CopilotSidebarContainer = ({
                     </div>
 
                     {isHistoryOpen && (
-                        <HistorySectionModal
+                        <SidebarHistorySection
                             isOpen={isHistoryOpen}
                             onClose={handleToggleHistory}
                             bookSlug={bookSlug}
