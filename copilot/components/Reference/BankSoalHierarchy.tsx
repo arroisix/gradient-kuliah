@@ -38,7 +38,7 @@ const BankSoalHierarchy: React.FC<BankSoalHierarchyProps> = ({
     const [isLoadingMore, setIsLoadingMore] = useState(false);
 
     const scrollContainerRef = useRef<HTMLDivElement>(null);
-    const debouncedSearchTerm = useDebounce(hierarchySearch, 500);
+    const debouncedSearchTerm = useDebounce(hierarchySearch, 300);
     const [triggerSearch, { data: searchData, isLoading: searchLoading }] = useLazySearchContentQuery();
 
     const isSearching = debouncedSearchTerm.trim().length > 0;
