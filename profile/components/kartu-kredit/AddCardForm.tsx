@@ -9,16 +9,24 @@ import ConfirmAddCardModal from './modals/ConfirmAddCardModal';
 import { useEffect, useState } from 'react';
 import { Info } from 'lucide-react';
 import { Field, Formik } from 'formik';
-import { useCreditCardContext } from '../../contexts/CreditCardProvider';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { CDN_URL } from 'commons/constants';
 import { useDebouncedCallback } from 'use-debounce';
-import { useLazyCheckUserCardNameAvailabilityQuery } from 'payment/redux/api/transactionApi';
+import {
+    useAddUserCardMutation,
+    useLazyCheckUserCardNameAvailabilityQuery
+} from 'payment/redux/api/transactionApi';
 import { FaCheckCircle, FaSpinner, FaTimesCircle } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 const MAX_NAME_LENGTH = 20;
+
+declare global {
+    interface Window {
+        Xendit: any;
+    }
+}
 
 const AddCardForm: React.FC = () => {
     const router = useRouter();
@@ -30,9 +38,10 @@ const AddCardForm: React.FC = () => {
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
     const [isNameAvailable, setIsNameAvailable] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
-    const [isXenditReady, setXenditReady] = useState(false);
-    const { cardData, setCardData, saveUserCard, isSaving, successSaving } =
-        useCreditCardContext();
+    const [cardData, setCardData] = useState<any>();
+
+    const [saveUserCard, { isLoading: isSaving, isSuccess: successSaving }] =
+        useAddUserCardMutation();
 
     const [triggerCheckName, { isFetching: isCheckingName }] =
         useLazyCheckUserCardNameAvailabilityQuery();
@@ -46,7 +55,6 @@ const AddCardForm: React.FC = () => {
             window.Xendit.setPublishableKey(
                 process.env.NEXT_PUBLIC_XENDIT_KEY as string
             );
-            setXenditReady(true);
         }
     };
 
@@ -87,7 +95,7 @@ const AddCardForm: React.FC = () => {
         <>
             <Script
                 src="https://js.xendit.co/v1/xendit.min.js"
-                strategy="beforeInteractive"
+                strategy="afterInteractive"
                 onLoad={handleXenditLoad}
             />
 
@@ -542,11 +550,7 @@ const AddCardForm: React.FC = () => {
                                     variant="primary"
                                     className="w-full"
                                     disabled={
-                                        isValidating ||
-                                        !isValid ||
-                                        isSubmitting ||
-                                        isSaving ||
-                                        !isXenditReady
+                                        isValidating || !isValid || isSubmitting
                                     }>
                                     {isSubmitting || isSaving
                                         ? 'Menyimpan...'
