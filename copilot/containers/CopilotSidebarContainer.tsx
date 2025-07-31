@@ -448,9 +448,9 @@ const CopilotSidebarContainer = ({
                         className="p-1 text-gray-400 hover:text-white transition-colors z-10"
                         aria-label={isHistoryOpen ? "Back to chat" : "Close copilot"}>
                         {isHistoryOpen ? (
-                            <IoArrowBack size={32} />
+                            <IoArrowBack size={24} />
                         ) : (
-                            <IoClose size={32} />
+                            <IoClose size={24} />
                         )}
                     </button>
 
@@ -470,7 +470,7 @@ const CopilotSidebarContainer = ({
                         onClick={handleToggleHistory}
                         className={`p-1 transition-colors ${isHistoryOpen ? 'text-white' : 'text-gray-400 hover:text-white'}`}
                         aria-label="Open chat history">
-                        <MdHistory size={32} />
+                        <MdHistory size={24} />
                     </button>
 
                     <div 
@@ -488,7 +488,7 @@ const CopilotSidebarContainer = ({
                             {isMobile ? (
                                 <Maximize2 size={24} />
                             ) : (
-                                isCollapsed ? <IoChevronUp size={32} /> : <IoChevronDown size={32} />
+                                isCollapsed ? <IoChevronUp size={24} /> : <IoChevronDown size={24} />
                             )}
                         </button>
                     </div>
