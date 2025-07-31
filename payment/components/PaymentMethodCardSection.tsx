@@ -10,14 +10,15 @@ import { useRouter } from 'next/router';
 
 const PaymentMethodCardSection: React.FC = () => {
     const router = useRouter();
-    const { paymentMethod, cardId } = usePayment();
+    const { paymentMethod, cardId, tempCard } = usePayment();
     const { data: cardsData, isLoading } = useGetAllUserCardsQuery();
 
     if (isLoading || !cardsData) {
         return <Spinner size="medium" />;
     }
 
-    const cards = cardsData.cards;
+    const baseCards = cardsData.cards;
+    const cards = tempCard ? [...baseCards, tempCard] : baseCards;
 
     return (
         <div className="flex flex-col space-y-3 mb-6">

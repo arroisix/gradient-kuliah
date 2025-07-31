@@ -19,6 +19,7 @@ import {
 } from 'payment/redux/api/transactionApi';
 import { FaCheckCircle, FaSpinner, FaTimesCircle } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import moment from 'moment';
 
 const MAX_NAME_LENGTH = 20;
 
@@ -272,6 +273,23 @@ const AddCardForm: React.FC = () => {
                                         token.failure_reason ||
                                             'Tokenisasi gagal'
                                     );
+
+                                if (fromCheckout && !values.saveCard) {
+                                    localStorage.setItem(
+                                        'tempCard',
+                                        JSON.stringify({
+                                            id: 'temp_card',
+                                            name: 'Temporary Card',
+                                            brand: token.card_info.brand,
+                                            token: token.id,
+                                            needs_refresh: false,
+                                            created_at: moment().toISOString(),
+                                            updated_at: moment().toISOString()
+                                        })
+                                    );
+                                    router.push(redirectUrl);
+                                    return;
+                                }
 
                                 setCardData({
                                     ...token,

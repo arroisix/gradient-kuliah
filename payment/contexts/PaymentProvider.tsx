@@ -2,6 +2,7 @@ import React, {
     createContext,
     ReactNode,
     useContext,
+    useEffect,
     useMemo,
     useState
 } from 'react';
@@ -22,6 +23,10 @@ interface PaymentContextType {
     setAppliedPromo: (data?: ValidatePromoResponse) => void;
     cardId?: string;
     setCardId: (data?: string) => void;
+    tempCard?: CreditCard;
+    setTempCard: (data?: CreditCard) => void;
+    useTempCard: boolean;
+    setUseTempCard: (data: boolean) => void;
 }
 
 const PaymentContext = createContext<PaymentContextType>(
@@ -40,6 +45,8 @@ export function PaymentProvider({
     const { data: packet } = useGetDetailPacketOfferQuery(packetId);
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('VA_BCA');
     const [cardId, setCardId] = useState<string | undefined>();
+    const [tempCard, setTempCard] = useState<CreditCard | undefined>();
+    const [useTempCard, setUseTempCard] = useState<boolean>(false);
     const [phoneNumber, setPhoneNumber] = useState<string>('');
     const [phoneNumberError, setPhoneNumberError] = useState<string>('');
     const [appliedPromo, setAppliedPromo] = useState<
@@ -77,6 +84,14 @@ export function PaymentProvider({
         });
     };
 
+    useEffect(() => {
+        const stored = localStorage.getItem('tempCard');
+        if (stored) {
+            setTempCard(JSON.parse(stored));
+            localStorage.removeItem('tempCard');
+        }
+    }, []);
+
     const memoedValue = useMemo(
         () => ({
             isModalCheckoutOpen,
@@ -91,17 +106,22 @@ export function PaymentProvider({
             appliedPromo,
             setAppliedPromo,
             cardId,
-            setCardId
+            setCardId,
+            tempCard,
+            setTempCard,
+            useTempCard,
+            setUseTempCard
         }),
         [
             isModalCheckoutOpen,
             packet,
             paymentMethod,
-            selectPaymentMethod,
             phoneNumber,
             phoneNumberError,
             appliedPromo,
-            cardId
+            cardId,
+            tempCard,
+            useTempCard
         ]
     );
 
