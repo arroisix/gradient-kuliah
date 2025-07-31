@@ -70,7 +70,7 @@ const VideoLearnContainer = ({
     const currentVideoContext = subchapter?.video && subchapter?.subchapter_name ? {
         id: subchapter.video.id,
         title: course.course_name,
-        subtitle: 'DUMMY SUBTITLE', // TODO (Steven) : Check here
+        subtitle: subchapter.chapter_name,
         header: subchapter.subchapter_name,
         contentType: 'course' as const
     } : undefined;
@@ -163,7 +163,7 @@ const VideoLearnContainer = ({
                 setOpen={setIsCopilotModalOpen}
                 xlWidth="xl:w-[29.5rem]"
                 currentContext={currentVideoContext}
-                chapterId={subchapter?.chapter_id} // TODO (Steven): Check if this is correct
+                chapterId={subchapter?.chapter_id}
             />
         </section>
     );
