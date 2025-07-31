@@ -143,6 +143,12 @@ interface CreditCardListResponse {
     count: number;
 }
 
+interface CompleteCardCheckoutInputData {
+    transaction_id: string;
+    user_card_id: string;
+    authentication_id: string;
+}
+
 interface AddCardRequestData {
     name?: string;
     brand: string;

@@ -2,10 +2,10 @@
 
 import WhiteGradientGIcon from 'commons/components/elements/Icons/WhiteGradientGIcon';
 import Skeleton from 'commons/components/elements/Skeleton';
-import Modal from 'commons/components/modules/Modal';
 import { CDN_URL } from 'commons/constants';
 import Image from 'next/image';
 import Script from 'next/script';
+import { useCompleteCardCheckoutMutation } from 'payment/redux/api/subscriptionApi';
 import { useGetUserCardQuery } from 'payment/redux/api/transactionApi';
 import { useEffect, useState } from 'react';
 import { TbArrowsLeftRight } from 'react-icons/tb';
@@ -22,11 +22,11 @@ const AuthenticateCreditCardContainer = ({
     trx: Transaction;
 }): JSX.Element => {
     const { data: card, isLoading } = useGetUserCardQuery(trx.user_card_id!);
+    const [completeCardCheckout] = useCompleteCardCheckoutMutation();
     const [isXenditReady, setIsXenditReady] = useState(false);
-    const [iframeUrl, setIframeUrl] = useState();
-    const [authStatus, setAuthStatus] = useState<string>('');
-    const [authId, setAuthId] = useState<string | null>(null);
-    const [error, setError] = useState<string | null>(null);
+    const [iframeUrl, setIframeUrl] = useState<string | undefined>();
+    const [error, setError] = useState<string | undefined>();
+    const [success, setSuccess] = useState<string | undefined>();
 
     const handleXenditLoad = (): void => {
         if (window.Xendit) {
@@ -62,17 +62,21 @@ const AuthenticateCreditCardContainer = ({
                     return setError(err.message);
                 }
 
-                setAuthId(resp.id);
-                setAuthStatus(resp.status);
-
                 if (
                     resp.status === 'IN_REVIEW' &&
                     resp.payer_authentication_url
                 ) {
                     setIframeUrl(resp.payer_authentication_url);
                 } else if (resp.status === 'VERIFIED') {
+                    setSuccess(
+                        'Verifikasi berhasil! Mohon tunggu, kamu akan diarahkan ke halaman berikutnya...'
+                    );
                     setIframeUrl(undefined);
-                    console.log('DONE');
+                    completeCardCheckout({
+                        transaction_id: trx.id,
+                        user_card_id: card.id,
+                        authentication_id: resp.id
+                    });
                 } else {
                     setError(
                         `Authentication returned unexpected status ${resp.status}`
@@ -81,13 +85,6 @@ const AuthenticateCreditCardContainer = ({
             }
         );
     }, [card, isLoading, isXenditReady]);
-
-    useEffect(() => {
-        if (authStatus === 'VERIFIED') {
-            
-        }
-        console.log({ authStatus });
-    }, [authStatus]);
 
     if (isLoading || !card) {
         return <Skeleton repeat={1} />;
@@ -130,20 +127,23 @@ const AuthenticateCreditCardContainer = ({
                 <span className="text-center text-lg font-bold text-white">
                     Kamu akan diarahkan ke halaman verifikasi
                 </span>
-                {error && <p className="mt-2 text-red-300">{error}</p>}
+                {error && <span className="mt-2 text-red-300">{error}</span>}
+                {success && (
+                    <span className="mt-2 text-green-300">{success}</span>
+                )}
             </div>
             {iframeUrl && (
-                <button
+                <div
                     className="fixed inset-0 bg-black/60 z-[9999] flex items-center justify-center"
                     onClick={() => setIframeUrl(undefined)}>
-                    <div className="bg-white w-[90%] h-[90%] md:w-[500px] md:h-[700px] shadow-lg overflow-hidden">
+                    <div className="bg-white w-[90%] h-[90%] shadow-lg overflow-hidden">
                         <iframe
                             src={iframeUrl}
                             title="3-D Secure Authentication"
                             className="w-full h-full"
                         />
                     </div>
-                </button>
+                </div>
             )}
         </>
     );
