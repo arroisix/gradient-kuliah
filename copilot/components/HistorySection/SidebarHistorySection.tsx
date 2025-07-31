@@ -201,6 +201,7 @@ const SidebarHistorySection = ({
                     onClose={() => setIsRenameDialogOpen(false)}
                     onRename={handleRenameSubmit}
                     initialName={selectedSession.name}
+                    isSpecific={true}
                 />
             )}
         </div>

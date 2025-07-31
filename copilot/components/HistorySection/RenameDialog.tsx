@@ -1,6 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
+import { toast } from 'react-toastify';
 import { useTracker } from 'tracker/tracker';
 
 interface RenameDialogProps {
@@ -8,13 +9,15 @@ interface RenameDialogProps {
     onClose: () => void;
     onRename: (name: string) => Promise<void>;
     initialName: string;
+    isSpecific?: boolean;
 }
 
 const RenameDialog = ({
     isOpen,
     onClose,
     onRename,
-    initialName
+    initialName,
+    isSpecific = false
 }: RenameDialogProps) => {
     const [name, setName] = useState(initialName);
     const [isLoading, setIsLoading] = useState(false);
@@ -31,6 +34,15 @@ const RenameDialog = ({
                 SESSION_ID: name
             });
             await onRename(name);
+            
+            if (isSpecific) {
+                toast.success('Judul percakapan berhasil diperbarui', {
+                    position: toast.POSITION.TOP_CENTER,
+                    autoClose: 3000,
+                    hideProgressBar: true
+                });
+            }
+            
             onClose();
         } catch (error) {
             console.error('Failed to rename:', error);
