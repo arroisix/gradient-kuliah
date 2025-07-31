@@ -136,7 +136,7 @@ const Scientia25 = (): JSX.Element => {
                                     {
                                         title: 'Bagaimana saya dapat mengakses Gradient setelah membeli?',
                                         content:
-                                            'Pihak Panitia akan memberikan kamu voucher yang di dalamnya terdapat kode unik yang dapat dimasukkan ke website Gradient unutk mengaktifkan langganan.'
+                                            'Pihak Panitia akan memberikan kamu voucher yang di dalamnya terdapat kode unik yang dapat dimasukkan ke website/aplikasi Gradient untuk mengaktifkan langganan.'
                                     }
                                 ]}
                             />
