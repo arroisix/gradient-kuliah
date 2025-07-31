@@ -6,14 +6,10 @@ import { usePayment } from 'payment/contexts/PaymentProvider';
 import { useGetAllUserCardsQuery } from 'payment/redux/api/transactionApi';
 import Spinner from 'commons/components/elements/Spinner';
 import AddCardButton from 'profile/components/kartu-kredit/AddCardButton';
+import { useRouter } from 'next/router';
 
-interface PaymentMethodCardProps {
-    children?: React.ReactNode;
-}
-
-const PaymentMethodCardSection: React.FC<PaymentMethodCardProps> = ({
-    children
-}) => {
+const PaymentMethodCardSection: React.FC = () => {
+    const router = useRouter();
     const { paymentMethod, cardId } = usePayment();
     const { data: cardsData, isLoading } = useGetAllUserCardsQuery();
 
@@ -43,7 +39,11 @@ const PaymentMethodCardSection: React.FC<PaymentMethodCardProps> = ({
                         cardName={card.name}
                     />
                 ))}
-                <AddCardButton bottomBorder={false} isTemporary={true} />
+                <AddCardButton
+                    bottomBorder={false}
+                    fromCheckout={true}
+                    redirect={router.asPath}
+                />
             </div>
         </div>
     );

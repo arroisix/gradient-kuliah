@@ -8,18 +8,25 @@ import { HiOutlineCreditCard } from 'react-icons/hi';
 interface AddCardButtonProps {
     bottomBorder: boolean;
     redirect?: string;
-    isTemporary: boolean;
+    fromCheckout: boolean;
 }
 
 const AddCardButton: React.FC<AddCardButtonProps> = ({
     bottomBorder = true,
     redirect,
-    isTemporary = false
+    fromCheckout = false
 }) => {
     const router = useRouter();
 
     const handleAddCard = (): void => {
-        router.push('/profil/kartu-kredit/tambah-kartu');
+        if (fromCheckout && redirect) {
+            router.push({
+                pathname: '/profil/kartu-kredit/tambah-kartu',
+                query: { redirect }
+            });
+        } else {
+            router.push('/profil/kartu-kredit/tambah-kartu');
+        }
     };
 
     return (

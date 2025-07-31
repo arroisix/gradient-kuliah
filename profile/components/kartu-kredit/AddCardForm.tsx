@@ -8,7 +8,7 @@ import CVVInfoModal from './modals/CVVInfoModal';
 import ConfirmAddCardModal from './modals/ConfirmAddCardModal';
 import { useEffect, useState } from 'react';
 import { Info } from 'lucide-react';
-import { Formik } from 'formik';
+import { Field, Formik } from 'formik';
 import { useCreditCardContext } from '../../contexts/CreditCardProvider';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
@@ -17,12 +17,14 @@ import { useDebouncedCallback } from 'use-debounce';
 import { useLazyCheckUserCardNameAvailabilityQuery } from 'payment/redux/api/transactionApi';
 import { FaCheckCircle, FaSpinner, FaTimesCircle } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 
 const MAX_NAME_LENGTH = 20;
 
 const AddCardForm: React.FC = () => {
     const router = useRouter();
+    const redirectUrl =
+        (router.query.redirect as string) || '/profil/kartu-kredit';
+    const fromCheckout = Boolean(router.query.redirect);
     const [showProtectionModal, setShowProtectionModal] = useState(false);
     const [showCVVModal, setShowCVVModal] = useState(false);
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -36,10 +38,10 @@ const AddCardForm: React.FC = () => {
         useLazyCheckUserCardNameAvailabilityQuery();
 
     useEffect(() => {
-        if (successSaving) router.push('/profil/kartu-kredit');
-    }, [successSaving, router]);
+        if (successSaving) router.push(redirectUrl);
+    }, [successSaving, router, redirectUrl]);
 
-    const handleXenditLoad = () => {
+    const handleXenditLoad = (): void => {
         if (window.Xendit) {
             window.Xendit.setPublishableKey(
                 process.env.NEXT_PUBLIC_XENDIT_KEY as string
@@ -81,24 +83,11 @@ const AddCardForm: React.FC = () => {
             ? 'text-green-500'
             : 'text-red-500';
 
-    if (!isXenditReady) {
-        return (
-            <>
-                <Script
-                    src="https://js.xendit.co/v1/xendit.min.js"
-                    strategy="afterInteractive"
-                    onLoad={handleXenditLoad}
-                />
-                <LoadingBackdrop />
-            </>
-        );
-    }
-
     return (
         <>
             <Script
                 src="https://js.xendit.co/v1/xendit.min.js"
-                strategy="afterInteractive"
+                strategy="beforeInteractive"
                 onLoad={handleXenditLoad}
             />
 
@@ -165,7 +154,8 @@ const AddCardForm: React.FC = () => {
                             cardHolderFirstName: '',
                             cardHolderLastName: '',
                             cardHolderEmail: '',
-                            cardHolderPhoneNumber: ''
+                            cardHolderPhoneNumber: '',
+                            saveCard: false
                         }}
                         validate={(values) => {
                             const errors: Record<string, string> = {};
@@ -518,6 +508,20 @@ const AddCardForm: React.FC = () => {
                                         }
                                     />
                                 </div>
+                                {fromCheckout && (
+                                    <div className="flex items-center space-x-2">
+                                        <Field
+                                            type="checkbox"
+                                            name="saveCard"
+                                            className="rounded-md text-accent-purple"
+                                        />
+                                        <span className="font-body text-white text-sm">
+                                            Simpan kartu untuk pembayaran
+                                            berikutnya
+                                        </span>
+                                    </div>
+                                )}
+
                                 <p className="text-xs text-center">
                                     Dengan konfirmasi, Anda menyetujui{' '}
                                     <Link
@@ -541,7 +545,8 @@ const AddCardForm: React.FC = () => {
                                         isValidating ||
                                         !isValid ||
                                         isSubmitting ||
-                                        isSaving
+                                        isSaving ||
+                                        !isXenditReady
                                     }>
                                     {isSubmitting || isSaving
                                         ? 'Menyimpan...'
