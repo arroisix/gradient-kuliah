@@ -27,7 +27,7 @@ const DeleteModal = ({
 
     const modalContent = (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center font-inter font-normal">
-            <div className="fixed inset-0 bg-black bg-opacity-50" onClick={onClose}></div>
+            <button className="fixed inset-0 bg-black bg-opacity-50" onClick={onClose}></button>
             <div className="relative w-full max-w-md mx-4 bg-[#222222] rounded-2xl p-6 shadow-xl transform transition-all duration-300 ease-out">
                 <h3 className="text-lg text-white font-bold mb-4 text-center">
                     {title}
