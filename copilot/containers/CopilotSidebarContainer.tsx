@@ -464,7 +464,7 @@ const CopilotSidebarContainer = ({
 
                     <button
                         onClick={handleToggleHistory}
-                        className="p-1 text-gray-400 hover:text-white transition-colors"
+                        className={`p-1 transition-colors ${isHistoryOpen ? 'text-white' : 'text-gray-400 hover:text-white'}`}
                         aria-label="Open chat history">
                         <MdHistory size={32} />
                     </button>
