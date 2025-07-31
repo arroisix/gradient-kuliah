@@ -6,6 +6,7 @@ import { cn } from 'commons/utils';
 import { IoMdClose } from 'react-icons/io';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useDebounce } from 'commons/hooks/useDebounce';
 import ReferenceRecommendationList from 'copilot/components/Reference/ReferenceRecommendationList';
 import ReferenceHierarchy from 'copilot/components/Reference/ReferenceHierarchy';
 import { ContextRecommendation, ReferenceContentType } from 'copilot/types/copilot';
@@ -37,6 +38,8 @@ const ReferenceModal = ({
         contentType: null,
         referenceData: null
     });
+
+    const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
     useEffect(() => {
         if (!isOpen) {
@@ -98,7 +101,7 @@ const ReferenceModal = ({
         });
     };
 
-    const queryToUse = searchTerm || profileData?.major || '';
+    const queryToUse = debouncedSearchTerm || profileData?.major || '';
     const { tab: currentTab } = router.query as { tab: string };
 
     return (
@@ -172,15 +175,13 @@ const ReferenceModal = ({
                         />
                     ) : (
                         <ReferenceRecommendationList 
-                            search={searchTerm}
+                            search={debouncedSearchTerm}
                             defaultQuery={queryToUse}
                             onReferenceCardClick={handleReferenceCardClick}
                         />
                     )}
                 </div>
             </div>
-
-
         </>
     );
 };
