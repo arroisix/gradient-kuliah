@@ -11,13 +11,16 @@ export const EditProfile = (): JSX.Element => {
 
     const Form = PROFILE_MANAGEMENT_FORMS[router.pathname];
 
+    const backPath =
+        router.pathname.split('/').slice(0, -1).join('/') || '/profil';
+
     if (!profile) {
         return <LoadingBackdrop />;
     } else {
         return (
             <div className="flex flex-col w-full gap-4">
                 <div className="flex items-center w-full gap-4">
-                    <Link href={'/profil'}>
+                    <Link href={backPath}>
                         <FaAngleLeft
                             size={24}
                             className="hover:text-[#7264EB] transition-all duration-500 cursor-pointer"
