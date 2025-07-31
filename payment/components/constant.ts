@@ -57,5 +57,5 @@ export const NAME_PAYMENT: PAYMENT_DICT = {
     INDOMARET: 'Indomaret',
     MANUAL: 'Manual',
     OTHER: null,
-    VOUCHER: 'Kode Voucher'
+    VOUCHER: 'Kartu Voucher'
 };
