@@ -25,7 +25,7 @@ const CheckoutButton = ({
     userCardId?: string;
 }): JSX.Element => {
     const { checkout, freeCheckout, extendCheckout } = useCheckout();
-    const { packet, setModalCheckoutOpen } = usePayment();
+    const { packet, setModalCheckoutOpen, tempCard } = usePayment();
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const { subscriptionId, redirect } = router.query;
@@ -43,10 +43,20 @@ const CheckoutButton = ({
                         promoCode !== null &&
                         promoCode !== undefined
                             ? promoCode
-                            : null
+                            : null,
+                    phone_number: phoneNumber,
+                    user_card_id:
+                        userCardId === 'temp_card' ? undefined : userCardId
                 },
                 subscriptionId: subscriptionId as string
             })) as unknown as SingleResponseData<Transaction>;
+
+            if (
+                paymentMethod.startsWith('CARD_') &&
+                userCardId === 'temp_card'
+            ) {
+                localStorage.setItem('tempCard', JSON.stringify(tempCard));
+            }
 
             if (!!data?.data) {
                 const transaction = data.data;
@@ -88,8 +98,16 @@ const CheckoutButton = ({
                         ? promoCode
                         : null,
                 phone_number: phoneNumber,
-                user_card_id: userCardId
+                user_card_id:
+                    userCardId === 'temp_card' ? undefined : userCardId
             })) as unknown as SingleResponseData<Transaction>;
+
+            if (
+                paymentMethod.startsWith('CARD_') &&
+                userCardId === 'temp_card'
+            ) {
+                localStorage.setItem('tempCard', JSON.stringify(tempCard));
+            }
 
             if (!!data?.data) {
                 const transaction = data.data;

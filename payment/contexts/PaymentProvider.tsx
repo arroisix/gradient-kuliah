@@ -25,8 +25,6 @@ interface PaymentContextType {
     setCardId: (data?: string) => void;
     tempCard?: CreditCard;
     setTempCard: (data?: CreditCard) => void;
-    useTempCard: boolean;
-    setUseTempCard: (data: boolean) => void;
 }
 
 const PaymentContext = createContext<PaymentContextType>(
@@ -46,7 +44,6 @@ export function PaymentProvider({
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('VA_BCA');
     const [cardId, setCardId] = useState<string | undefined>();
     const [tempCard, setTempCard] = useState<CreditCard | undefined>();
-    const [useTempCard, setUseTempCard] = useState<boolean>(false);
     const [phoneNumber, setPhoneNumber] = useState<string>('');
     const [phoneNumberError, setPhoneNumberError] = useState<string>('');
     const [appliedPromo, setAppliedPromo] = useState<
@@ -86,9 +83,15 @@ export function PaymentProvider({
 
     useEffect(() => {
         const stored = localStorage.getItem('tempCard');
+        console.log({stored,});
         if (stored) {
-            setTempCard(JSON.parse(stored));
+            const temp: CreditCard = JSON.parse(stored);
+            setTempCard(temp);
             localStorage.removeItem('tempCard');
+            selectPaymentMethod(
+                `CARD_${temp.brand.toUpperCase()}` as PaymentMethod
+            );
+            setCardId(temp.id);
         }
     }, []);
 
@@ -108,9 +111,7 @@ export function PaymentProvider({
             cardId,
             setCardId,
             tempCard,
-            setTempCard,
-            useTempCard,
-            setUseTempCard
+            setTempCard
         }),
         [
             isModalCheckoutOpen,
@@ -120,8 +121,7 @@ export function PaymentProvider({
             phoneNumberError,
             appliedPromo,
             cardId,
-            tempCard,
-            useTempCard
+            tempCard
         ]
     );
 

@@ -5,6 +5,7 @@ import Skeleton from 'commons/components/elements/Skeleton';
 import { CDN_URL } from 'commons/constants';
 import Image from 'next/image';
 import Script from 'next/script';
+import { usePayment } from 'payment/contexts/PaymentProvider';
 import { useCompleteCardCheckoutMutation } from 'payment/redux/api/subscriptionApi';
 import { useGetUserCardQuery } from 'payment/redux/api/transactionApi';
 import { useEffect, useState } from 'react';
@@ -21,7 +22,18 @@ const AuthenticateCreditCardContainer = ({
 }: {
     trx: Transaction;
 }): JSX.Element => {
-    const { data: card, isLoading } = useGetUserCardQuery(trx.user_card_id!);
+    const { tempCard, setTempCard } = usePayment();
+
+    // if we came in with no saved card, but have a tempCard
+    const isTemp = !trx.user_card_id && !!tempCard?.card_token;
+    const skipGet = isTemp || !trx.user_card_id;
+    const { data: storedCard, isLoading: loadingCard } = useGetUserCardQuery(
+        trx.user_card_id as string,
+        { skip: skipGet }
+    );
+    const card = isTemp ? tempCard : storedCard;
+    const isLoading = loadingCard && !isTemp;
+
     const [completeCardCheckout] = useCompleteCardCheckoutMutation();
     const [isXenditReady, setIsXenditReady] = useState(false);
     const [iframeUrl, setIframeUrl] = useState<string | undefined>();
@@ -36,6 +48,12 @@ const AuthenticateCreditCardContainer = ({
             setIsXenditReady(true);
         }
     };
+
+    useEffect(() => {
+        if (typeof window !== 'undefined' && window.Xendit && !isXenditReady) {
+            handleXenditLoad();
+        }
+    }, [isXenditReady]);
 
     useEffect(() => {
         if (!isXenditReady || !card || isLoading) return;
@@ -74,9 +92,12 @@ const AuthenticateCreditCardContainer = ({
                     setIframeUrl(undefined);
                     completeCardCheckout({
                         transaction_id: trx.id,
-                        user_card_id: card.id,
-                        authentication_id: resp.id
+                        authentication_id: resp.id,
+                        user_card_token: isTemp ? card.card_token : undefined
                     });
+                    if (isTemp) {
+                        setTempCard(undefined);
+                    }
                 } else {
                     setError(
                         `Authentication returned unexpected status ${resp.status}`
@@ -86,7 +107,7 @@ const AuthenticateCreditCardContainer = ({
         );
     }, [card, isLoading, isXenditReady]);
 
-    if (isLoading || !card) {
+    if (isLoading) {
         return <Skeleton repeat={1} />;
     }
 

@@ -145,8 +145,8 @@ interface CreditCardListResponse {
 
 interface CompleteCardCheckoutInputData {
     transaction_id: string;
-    user_card_id: string;
     authentication_id: string;
+    user_card_token?: string;
 }
 
 interface AddCardRequestData {

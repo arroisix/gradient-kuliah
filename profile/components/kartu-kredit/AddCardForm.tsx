@@ -40,6 +40,7 @@ const AddCardForm: React.FC = () => {
     const [isNameAvailable, setIsNameAvailable] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
     const [cardData, setCardData] = useState<any>();
+    const [isXenditReady, setIsXenditReady] = useState(false);
 
     const [saveUserCard, { isLoading: isSaving, isSuccess: successSaving }] =
         useAddUserCardMutation();
@@ -56,8 +57,15 @@ const AddCardForm: React.FC = () => {
             window.Xendit.setPublishableKey(
                 process.env.NEXT_PUBLIC_XENDIT_KEY as string
             );
+            setIsXenditReady(true);
         }
     };
+
+    useEffect(() => {
+        if (typeof window !== 'undefined' && window.Xendit && !isXenditReady) {
+            handleXenditLoad();
+        }
+    }, [isXenditReady]);
 
     const debouncedCheckName = useDebouncedCallback(
         async (
@@ -281,7 +289,7 @@ const AddCardForm: React.FC = () => {
                                             id: 'temp_card',
                                             name: 'Temporary Card',
                                             brand: token.card_info.brand,
-                                            token: token.id,
+                                            card_token: token.id,
                                             needs_refresh: false,
                                             created_at: moment().toISOString(),
                                             updated_at: moment().toISOString()
