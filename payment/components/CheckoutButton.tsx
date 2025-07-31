@@ -13,7 +13,8 @@ const CheckoutButton = ({
     isFree,
     promoCode,
     disabled,
-    phoneNumber
+    phoneNumber,
+    userCardId
 }: {
     packetId: string;
     paymentMethod: PaymentMethod;
@@ -21,6 +22,7 @@ const CheckoutButton = ({
     promoCode?: string | null;
     disabled?: boolean;
     phoneNumber?: string;
+    userCardId?: string;
 }): JSX.Element => {
     const { checkout, freeCheckout, extendCheckout } = useCheckout();
     const { packet, setModalCheckoutOpen } = usePayment();
@@ -85,7 +87,8 @@ const CheckoutButton = ({
                     promoCode !== undefined
                         ? promoCode
                         : null,
-                phone_number: phoneNumber
+                phone_number: phoneNumber,
+                user_card_id: userCardId
             })) as unknown as SingleResponseData<Transaction>;
 
             if (!!data?.data) {

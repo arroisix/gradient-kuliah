@@ -91,6 +91,7 @@ interface CheckoutInputData {
     payment_method: PaymentMethod;
     phone_number?: string;
     promo_code?: string | null;
+    user_card_id?: string;
 }
 
 interface OneCourseManyPacketQuery {

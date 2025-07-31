@@ -19,6 +19,7 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
         paymentMethod,
         phoneNumber,
         phoneNumberError,
+        cardId,
         appliedPromo
     } = usePayment();
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
@@ -195,6 +196,7 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
                                         !!phoneNumberError))
                             }
                             phoneNumber={phoneNumber}
+                            userCardId={cardId}
                         />
                         <span className="flex items-center mt-2 text-xs">
                             <BsShieldFillCheck className="mr-2" />
