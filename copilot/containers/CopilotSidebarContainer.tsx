@@ -5,7 +5,7 @@ import { ChatMessage, ContextReference, ChatInput, ChatHistoryContextItem, Refer
 import PromptBar from '../components/MainSection/PromptBar';
 import { chatApi } from '../redux/api/copilotApi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
-import { IoClose, IoChevronDown, IoChevronUp } from 'react-icons/io5';
+import { IoClose, IoChevronDown, IoChevronUp, IoArrowBack } from 'react-icons/io5';
 import { MdHistory } from 'react-icons/md';
 import { Maximize2 } from 'lucide-react';
 import { cn } from 'commons/utils';
@@ -444,10 +444,14 @@ const CopilotSidebarContainer = ({
                     isCollapsed && !isMobileFullscreen ? "bg-[#5F2BCE]" : "bg-[#2C2C2C]"
                 )}>
                     <button
-                        onClick={onClose}
+                        onClick={isHistoryOpen ? handleToggleHistory : onClose}
                         className="p-1 text-gray-400 hover:text-white transition-colors z-10"
-                        aria-label="Close copilot">
-                        <IoClose size={32} />
+                        aria-label={isHistoryOpen ? "Back to chat" : "Close copilot"}>
+                        {isHistoryOpen ? (
+                            <IoArrowBack size={32} />
+                        ) : (
+                            <IoClose size={32} />
+                        )}
                     </button>
 
                     <div 
