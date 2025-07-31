@@ -99,7 +99,7 @@ const Transaction = ({
     transaction: Transaction;
 }): JSX.Element => {
     if (transaction.payment_method.startsWith('CARD_')) {
-        return <AuthenticateCreditCardContainer />;
+        return <AuthenticateCreditCardContainer trx={transaction} />;
     }
 
     switch (transaction.payment_method) {

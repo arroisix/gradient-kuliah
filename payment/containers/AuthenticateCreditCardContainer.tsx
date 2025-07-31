@@ -1,9 +1,25 @@
 import WhiteGradientGIcon from 'commons/components/elements/Icons/WhiteGradientGIcon';
+import Skeleton from 'commons/components/elements/Skeleton';
 import { CDN_URL } from 'commons/constants';
 import Image from 'next/image';
+import { useGetUserCardQuery } from 'payment/redux/api/transactionApi';
 import { TbArrowsLeftRight } from 'react-icons/tb';
 
-const AuthenticateCreditCardContainer = (): JSX.Element => {
+const AuthenticateCreditCardContainer = ({
+    trx
+}: {
+    trx: Transaction;
+}): JSX.Element => {
+    if (!trx.user_card_id) {
+        return <Skeleton repeat={1} />;
+    }
+
+    const { data: card, isLoading } = useGetUserCardQuery(trx.user_card_id);
+
+    if (isLoading || !card) {
+        return <Skeleton repeat={1} />;
+    }
+
     return (
         <div className="flex flex-col items-center space-y-4 justify-center fixed inset-0">
             <div className="relative">
@@ -16,8 +32,10 @@ const AuthenticateCreditCardContainer = (): JSX.Element => {
                         <div className="flex items-center justify-center w-12 h-12 rounded-full bg-white">
                             <div className="relative w-10 h-10">
                                 <Image
-                                    src={`${CDN_URL}/assets/payments/mastercard.png`}
-                                    alt="Mastercard Logo"
+                                    src={`${CDN_URL}/assets/payments/${trx.payment_method
+                                        .substring('CARD_'.length)
+                                        .toLowerCase()}.png`}
+                                    alt={`${trx.payment_method}`}
                                     layout="fill"
                                     className="object-contain"
                                 />

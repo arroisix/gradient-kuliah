@@ -84,6 +84,8 @@ type Transaction = {
         qr_checkout_string: string | null;
     } | null;
     payment_code: string;
+    user_card_id?: string;
+    charge_id?: string;
 };
 
 interface CheckoutInputData {
