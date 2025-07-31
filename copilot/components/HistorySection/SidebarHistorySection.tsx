@@ -170,6 +170,7 @@ const SidebarHistorySection = ({
                                                 sessionId={session.id}
                                                 onRename={handleRename}
                                                 onDelete={handleDelete}
+                                                isSpecific={true}
                                             />
                                         </button>
                                     </span>
