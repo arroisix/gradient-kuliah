@@ -13,7 +13,7 @@ const PaymentMethodOtherItem: React.FC<PaymentMethodItemProps> = ({
     isLast = false
 }) => {
     return (
-        <div
+        <button
             className={`flex items-center justify-between px-4 py-4 cursor-pointer hover:bg-gray-800/50 transition-colors ${
                 !isLast ? 'border-b border-gray-700/50' : ''
             }`}
@@ -30,7 +30,7 @@ const PaymentMethodOtherItem: React.FC<PaymentMethodItemProps> = ({
                 </div>
                 <span className="text-white font-medium text-sm">Lainnya</span>
             </div>
-        </div>
+        </button>
     );
 };
 

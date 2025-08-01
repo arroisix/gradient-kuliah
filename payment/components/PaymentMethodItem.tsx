@@ -8,41 +8,78 @@ import { useTracker } from 'tracker/tracker';
 import { addZeroBefore, getCSChatRoom } from 'commons/utils';
 import { usePayment } from 'payment/contexts/PaymentProvider';
 import PromoCodeInput from './PromoCodeInput';
+import Input from 'commons/components/elements/Form/input';
+import { HiOutlineCreditCard } from 'react-icons/hi';
 
 interface PaymentMethodItemProps {
-    method: PaymentMethodData;
+    methodCode: PaymentMethod;
     isSelected: boolean;
     onClick?: () => void;
     isManual?: boolean;
     isLast?: boolean;
+    cardId?: string;
+    cardName?: string;
 }
 
 const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({
-    method,
+    methodCode,
     isSelected,
     onClick,
     isManual,
-    isLast = false
+    isLast = false,
+    cardId,
+    cardName
 }) => {
     const tracker = useTracker();
     const {
         setPaymentMethod,
-        phoneNumber,
         setPhoneNumber,
         phoneNumberError,
-        setPhoneNumberError
+        setPhoneNumberError,
+        setCardId
     } = usePayment();
 
-    const getLogoUrl = (): string => {
-        return `${CDN_URL}/assets/payments/${
-            LOGO_PAYMENT[method.payment_code as PaymentMethod]
-        }`;
+    const getLogo = (): JSX.Element => {
+        if (methodCode.startsWith('CARD_')) {
+            if (
+                ['MASTERCARD', 'VISA', 'AMEX', 'JCB'].includes(
+                    methodCode.substring('CARD_'.length)
+                )
+            ) {
+                return (
+                    <div className="relative w-7 h-7">
+                        <Image
+                            src={`${CDN_URL}/assets/payments/${
+                                LOGO_PAYMENT[methodCode as PaymentMethod]
+                            }`}
+                            layout="fill"
+                            className="object-contain"
+                        />
+                    </div>
+                );
+            } else {
+                return (
+                    <HiOutlineCreditCard className="text-[#5F2BCE]" size={24} />
+                );
+            }
+        } else {
+            return (
+                <Image
+                    src={`${CDN_URL}/assets/mobile-${
+                        LOGO_PAYMENT[methodCode as PaymentMethod]
+                    }`}
+                    alt={NAME_PAYMENT[methodCode]}
+                    layout="fill"
+                    objectFit="cover"
+                />
+            );
+        }
     };
 
     const selectOption = (): void => {
         if (isManual) {
             tracker?.genericTrack('Click Manual Payment Method', {
-                'Method Name': method.payment_code
+                'Method Name': methodCode
             });
             const currentDate = new Date();
             window.open(
@@ -57,9 +94,12 @@ const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({
             );
         } else {
             tracker?.genericTrack('Click Payment Method', {
-                'Method Name': method.payment_code
+                'Method Name': methodCode
             });
-            setPaymentMethod(method.payment_code);
+            setPaymentMethod(methodCode);
+            if (methodCode.startsWith('CARD_')) {
+                setCardId(cardId);
+            }
         }
     };
 
@@ -73,24 +113,19 @@ const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({
     }
 
     return (
-        <div className={`${!isLast ? 'border-b border-gray-700/50' : ''}`}>
-            <div
-                className="flex items-center justify-between px-4 py-4 cursor-pointer hover:bg-gray-800/50 transition-colors"
+        <div className={`${!isLast ? 'border-b border-graphite-600/50' : ''}`}>
+            <button
+                className="text-left flex items-center w-full p-4 space-x-4 cursor-pointer hover:bg-graphite-800/50 transition-colors"
                 onClick={onClick ?? selectOption}>
-                <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 relative flex-shrink-0">
-                        <Image
-                            src={method.mobile_logo || getLogoUrl()}
-                            alt={method.payment_name}
-                            width={32}
-                            height={32}
-                            className="rounded"
-                        />
-                    </div>
-                    <span className="text-white font-medium text-sm">
-                        {NAME_PAYMENT[method.payment_code]}
-                    </span>
+                <div
+                    className={`relative w-8 h-8 shrink-0 flex rounded-md items-center justify-center ${
+                        methodCode.startsWith('CARD_') ? 'bg-white' : ''
+                    }`}>
+                    {getLogo()}
                 </div>
+                <span className="text-white font-medium text-md flex-1">
+                    {cardName ?? NAME_PAYMENT[methodCode]}
+                </span>
 
                 <div className="flex-shrink-0">
                     <div
@@ -104,47 +139,36 @@ const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({
                         )}
                     </div>
                 </div>
-            </div>
+            </button>
 
             {/* Phone Number Input for OVO */}
-            {isSelected && method.payment_code === 'ID_OVO' && (
-                <div className="px-4 pb-4 pt-2">
-                    <div className="ml-11">
-                        <div className="flex justify-between items-center gap-3 w-full mt-2 px-4 bg-[#2D2D2D] rounded-[6px]">
-                            <div>
-                                <span className="text-neutral-400">+62</span>
-                            </div>
-                            <input
-                                type="tel"
-                                placeholder="8211234567"
-                                required={true}
-                                pattern="\+[1-9]\d{10,14}"
-                                onChange={(event) =>
-                                    handleSetPhoneNumber(event.target.value)
-                                }
-                                className="w-full px-0 py-4 text-xs bg-transparent border-none placeholder:text-neutral-600 focus:outline-none focus:ring-0 focus:appearance-none"
-                            />
-                        </div>
-                        {phoneNumberError && (
-                            <div className="px-2 pt-2 text-xs font-body text-state-error">
-                                {phoneNumberError}
-                            </div>
-                        )}
-                    </div>
+            {isSelected && methodCode === 'ID_OVO' && (
+                <div className="ml-16 mb-4 mr-4">
+                    <Input
+                        type="tel"
+                        name="telnum"
+                        placeholder="8211234567"
+                        onChange={(e) => handleSetPhoneNumber(e.target.value)}
+                        startAddorment={
+                            <span className="text-neutral-400">+62</span>
+                        }
+                        error={
+                            !!phoneNumberError ? phoneNumberError : undefined
+                        }
+                        className="text-sm rounded-lg border border-graphite-700"
+                    />
                 </div>
             )}
 
             {/* Voucher Code Input for VOUCHER */}
-            {isSelected && method.payment_code === 'VOUCHER' && (
-                <div className="px-4 pb-4 pt-2">
-                    <div className="ml-11 flex items-center space-x-3">
-                        <PromoCodeInput
-                            placeholder="Masukkan kode voucher"
-                            variant="inline"
-                            className="w-full"
-                            applyAfterValid={true}
-                        />
-                    </div>
+            {isSelected && methodCode === 'VOUCHER' && (
+                <div className="ml-16 mr-4 mb-4">
+                    <PromoCodeInput
+                        placeholder="Masukkan kode voucher"
+                        variant="inline"
+                        className="w-full"
+                        applyAfterValid={true}
+                    />
                 </div>
             )}
         </div>

@@ -11,6 +11,7 @@ import { CDN_URL } from 'commons/constants';
 import { queryParamBuilder } from 'commons/utils';
 import { sendGTMEvent } from '@next/third-parties/google';
 import { usePayment } from 'payment/contexts/PaymentProvider';
+import AuthenticateCreditCardContainer from './AuthenticateCreditCardContainer';
 
 const TransactionContainer = (): JSX.Element => {
     const router = useRouter();
@@ -97,6 +98,10 @@ const Transaction = ({
 }: {
     transaction: Transaction;
 }): JSX.Element => {
+    if (transaction.payment_method.startsWith('CARD_')) {
+        return <AuthenticateCreditCardContainer trx={transaction} />;
+    }
+
     switch (transaction.payment_method) {
         case 'ID_DANA':
             return (

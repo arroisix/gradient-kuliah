@@ -19,6 +19,7 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
         paymentMethod,
         phoneNumber,
         phoneNumberError,
+        cardId,
         appliedPromo
     } = usePayment();
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
@@ -157,7 +158,7 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
                 {/* Total and Checkout Button Row */}
                 <div className="flex items-center justify-between">
                     <div className="flex-1">
-                        <div
+                        <button
                             className="flex items-center cursor-pointer"
                             onClick={() => setIsExpanded(!isExpanded)}>
                             <div>
@@ -177,7 +178,7 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
                                     <ChevronUp size={16} />
                                 )}
                             </div>
-                        </div>
+                        </button>
                     </div>
 
                     {/* Checkout Button */}
@@ -195,6 +196,7 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
                                         !!phoneNumberError))
                             }
                             phoneNumber={phoneNumber}
+                            userCardId={cardId}
                         />
                         <span className="flex items-center mt-2 text-xs">
                             <BsShieldFillCheck className="mr-2" />
