@@ -60,7 +60,7 @@ const AuthenticateCreditCardContainer = ({
 
         window.Xendit.card.createAuthentication(
             {
-                amount: trx.payment_amount.toString(),
+                amount: Math.round(trx.payment_amount),
                 token_id: card.card_token,
                 external_id: trx.id
             },
