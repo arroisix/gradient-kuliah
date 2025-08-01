@@ -48,7 +48,7 @@ const Paginator = ({
         if (pageParamName === 'page') {
             return { query: { ...router.query, page: newPage } };
         } else {
-            const { [pageParamName]: currentCustomPage, ...otherQuery } = router.query;
+            const { [pageParamName]: _currentCustomPage, ...otherQuery } = router.query;
             return { query: { ...otherQuery, [pageParamName]: newPage } };
         }
     };
