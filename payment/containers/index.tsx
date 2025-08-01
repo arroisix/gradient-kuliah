@@ -84,12 +84,12 @@ const SubscriptionContainer = (): JSX.Element => {
                             <MethodBox paymentMethod="ID_LINKAJA" />
                         </MethodListBox>
                         <MethodListBox
-                            title="Redeem Voucher"
+                            title="Redeem Kartu Voucher"
                             icon={<AiFillShop className="mr-2 text-base" />}>
                             <MethodBox paymentMethod="VOUCHER">
                                 <div className="flex flex-col items-center text-neutral-900">
                                     <Ticket color="#5f2bce" size="30" />
-                                    <div className="text-sm">Kode Voucher</div>
+                                    <div className="text-sm">Kartu Voucher</div>
                                 </div>
                             </MethodBox>
                         </MethodListBox>

@@ -46,9 +46,16 @@ export const ProfileProvider: React.FC<Props> = ({ children }) => {
     );
 
     const pathArr = pathname.split('/');
-    const menuName = capitalize(
-        pathArr[pathArr.length - 1].split('-').join(' ')
-    );
+    let menuName = '';
+    if (
+        pathArr.length > 3 &&
+        pathArr[2] === 'kartu-kredit' &&
+        !pathArr[3].includes('tambah')
+    ) {
+        menuName = 'Detail Kartu';
+    } else {
+        menuName = capitalize(pathArr[pathArr.length - 1].split('-').join(' '));
+    }
 
     const memoedValue = useMemo(
         () => ({

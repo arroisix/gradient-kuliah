@@ -212,7 +212,7 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
             <div className="flex flex-col w-full mb-4">
                 <p className="text-xs font-body text-neutral-400">
                     {paymentMethod === 'VOUCHER'
-                        ? 'Kode Voucher'
+                        ? 'Kartu Voucher'
                         : 'Kode Promo/Referral'}
                 </p>
                 <div className="flex justify-between items-center gap-3 w-full mt-2 px-4 bg-[#2D2D2D] rounded-[6px]">

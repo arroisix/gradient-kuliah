@@ -107,3 +107,58 @@ type GuideContent = {
         }[][];
     };
 };
+
+interface PaymentMethodData {
+    id: string; // UUID
+    payment_name: string;
+    payment_code: PaymentMethod;
+    type: string;
+    order: number;
+    mobile_logo: string | null;
+    desktop_logo: string | null;
+}
+
+interface PaymentMethodSection {
+    key: string;
+    name: string;
+    order: number;
+    payment_methods: PaymentMethodData[];
+}
+
+type CreditCard = {
+    id: string;
+    name: string;
+    brand: string;
+    card_token?: string;
+    needs_refresh: boolean;
+    created_at: Date;
+    updated_at: Date;
+};
+
+interface CreditCardListResponse {
+    cards: CreditCard[];
+    count: number;
+}
+
+interface AddCardRequestData {
+    name?: string;
+    brand: string;
+    card_token: string;
+}
+
+interface CreditCardTokenizeData {
+    card_number: string;
+    card_exp_month: string;
+    card_exp_year: string;
+    card_cvn: string;
+    card_holder_first_name: string;
+    card_holder_last_name: string;
+    card_holder_email: string;
+    card_holder_phone_number: string;
+}
+
+interface EditCardRequestData {
+    name?: string;
+    brand?: string;
+    card_token?: string;
+}

@@ -1,4 +1,5 @@
 // import Accordion from 'commons/components/elements/Accordion';
+import Accordion from 'commons/components/elements/Accordion';
 import Button from 'commons/components/elements/Button';
 import Carousel from 'commons/components/elements/Carousel';
 import Layout from 'commons/layout';
@@ -125,7 +126,7 @@ const Scientia25 = (): JSX.Element => {
                                 Share
                             </Button>
                         </div>
-                        {/* <div className="h-[2px] w-full bg-neutral-500" />
+                        <div className="h-[2px] w-full bg-neutral-500" />
                         <h2 className="text-lg md:text-3xl font-bold mb-4">
                             Pertanyaan yang sering ditanyakan.
                         </h2>
@@ -133,22 +134,13 @@ const Scientia25 = (): JSX.Element => {
                             <Accordion
                                 item={[
                                     {
-                                        title: 'Bahasa pemrograman apa yang akan digunakan?',
-                                        content: 'Python.'
-                                    },
-                                    {
-                                        title: 'Apakah perlu laptop?',
+                                        title: 'Bagaimana saya dapat mengakses Gradient setelah membeli?',
                                         content:
-                                            'Ya, untuk mengikuti LIVE Class Programming, disarankan dengan laptop.'
-                                    },
-                                    {
-                                        title: 'Apakah bisa membeli LIVE Class Programming tanpa Paket 3 Bulan?',
-                                        content:
-                                            'Mohon maaf, untuk sementara hanya bisa dengan Paket 3 Bulan'
+                                            'Pihak Panitia akan memberikan kamu voucher yang di dalamnya terdapat kode unik yang dapat dimasukkan ke website/aplikasi Gradient untuk mengaktifkan langganan.'
                                     }
                                 ]}
                             />
-                        </div> */}
+                        </div>
                     </div>
                 </div>
             </Layout>

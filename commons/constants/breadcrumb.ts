@@ -2,6 +2,13 @@ export const BREADCRUMB: BreadcrumbProps = {
     '/kelas': {
         name: 'Kelas'
     },
+    '/kelas/downloads': {
+        name: 'Kelas',
+        url: '/kelas',
+        nextItem: {
+            name: 'Lihat Download'
+        }
+    },
     '/kelas/[id]': {
         name: 'Kelas',
         url: '/kelas'

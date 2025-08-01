@@ -106,6 +106,7 @@ type SubChapter = {
     status?: 'IN_PROGRESS' | 'COMPLETED';
     minimum_score?: number;
     latest_score?: number;
+    is_downloaded?: boolean;
 };
 
 type Chapter = {
@@ -155,6 +156,9 @@ type Video = {
     mux_playback_id?: string;
     token?: string;
     has_code_editor?: boolean;
+    is_drm_protected?: boolean;
+    drm_video_url?: string;
+    drm_token?: string;
 };
 
 type CodeEditorTemplate = {
