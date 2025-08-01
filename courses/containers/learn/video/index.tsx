@@ -169,6 +169,7 @@ const VideoLearnContainer = ({
             </Modal>
 
             <CopilotModal
+                key={subchapter?.chapter_id}
                 isOpen={isCopilotModalOpen}
                 setOpen={setIsCopilotModalOpen}
                 xlWidth="xl:w-[29.5rem]"

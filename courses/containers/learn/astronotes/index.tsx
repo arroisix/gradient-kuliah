@@ -152,6 +152,7 @@ const Astronotes = ({
                 <RatingModal />
                 <FeedbackModal />
                 <CopilotModal
+                    key={slug}
                     isOpen={isCopilotModalOpen}
                     setOpen={setIsCopilotModalOpen}
                     xlWidth="xl:w-[24rem]"
