@@ -148,11 +148,11 @@ const SidebarHistorySection = ({
                                     currentSessionId === session.id && "bg-[#181818]"
                                 )}>
                                     <div className="flex items-start justify-between gap-2">
-                                        <div>
+                                        <div className="flex-1 min-w-0">
                                             <h3 className="font-semibold text-sm mb-1">
                                                 {session.name}
                                             </h3>
-                                            <p className="text-sm text-neutral-400 line-clamp-2">
+                                            <p className="text-sm text-neutral-400 line-clamp-2 min-h-[2.5rem]">
                                                 {session.latest_chat}
                                             </p>
                                         </div>
