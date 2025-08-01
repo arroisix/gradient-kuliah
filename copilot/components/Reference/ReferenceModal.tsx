@@ -144,7 +144,7 @@ const ReferenceModal = ({
     return (
         <>
             <div className="fixed inset-0 z-50 bg-[#101010] overflow-y-auto px-0 md:px-12">
-                <div className="sticky top-0 bg-[#101010] z-10 px-8 pt-8 md:pt-20">
+                <div className="sticky top-0 bg-[#101010] z-10 px-8 pt-8 md:pt-12">
                     <div className="flex items-center justify-between pb-4">
                         <h2 className="text-xl font-semibold text-white">Tambah Referensi</h2>
                         <button
