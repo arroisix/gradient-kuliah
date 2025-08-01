@@ -166,6 +166,7 @@ const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({
                     <PromoCodeInput
                         placeholder="Masukkan kode voucher"
                         className="w-full"
+                        applyAfterValid={true}
                     />
                 </div>
             )}

@@ -1,6 +1,6 @@
 import { Check, Loader2, Search, X } from 'lucide-react';
 import { usePayment } from 'payment/contexts/PaymentProvider';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useValidatePromoMutation } from 'referral/redux/referalApi';
 
 const PromoCodeInput = ({
@@ -19,7 +19,8 @@ const PromoCodeInput = ({
         appliedPromo,
         setAppliedPromo,
         promoAppliedManually,
-        setPromoAppliedManually
+        setPromoAppliedManually,
+        paymentMethod
     } = usePayment();
     const initialCode = promoAppliedManually
         ? appliedPromo?.promo_code ?? ''
@@ -34,6 +35,24 @@ const PromoCodeInput = ({
 
     const [validate, { data: validationResult }] = useValidatePromoMutation();
 
+    // reset local code when the user manually un‐applies the promo
+    useEffect(() => {
+        if (!promoAppliedManually) {
+            setCode(''); // clear the textbox
+            setValidationState('idle'); // back to idle state
+            setError(undefined); // clear any error
+        }
+    }, [promoAppliedManually]);
+
+    // when they apply a promo manually elsewhere, reflect it inline too
+    useEffect(() => {
+        if (promoAppliedManually && appliedPromo) {
+            setCode(appliedPromo.promo_code!);
+            setValidationState('reopen');
+            setError(undefined);
+        }
+    }, [promoAppliedManually, appliedPromo]);
+
     const handleClick = async (): Promise<void> => {
         if (!code || !packet?.id) return;
 
@@ -45,8 +64,24 @@ const PromoCodeInput = ({
                     packet_id: packet.id
                 }).unwrap();
 
+                if (
+                    paymentMethod === 'VOUCHER' &&
+                    result.promo_type !== 'OFFLINE VOUCHER'
+                ) {
+                    setValidationState('error');
+                    setError('Kode tidak valid untuk metode voucher');
+                    return;
+                }
+
                 if (result.is_valid) {
-                    setValidationState('success');
+                    if (applyAfterValid) {
+                        setAppliedPromo(result);
+                        setPromoAppliedManually(true);
+                        setValidationState('reopen');
+                        onApply?.();
+                    } else {
+                        setValidationState('success');
+                    }
                 } else {
                     setValidationState('error');
                     setError(result.message || 'Kode tidak valid');
@@ -57,6 +92,15 @@ const PromoCodeInput = ({
             }
         } else if (validationState === 'success') {
             if (validationResult) {
+                if (
+                    paymentMethod === 'VOUCHER' &&
+                    validationResult.promo_type !== 'OFFLINE VOUCHER'
+                ) {
+                    setValidationState('error');
+                    setError('Kode tidak valid untuk metode voucher');
+                    return;
+                }
+
                 setAppliedPromo(validationResult);
                 setPromoAppliedManually(true);
                 if (onApply) {

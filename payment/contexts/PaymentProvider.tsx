@@ -63,6 +63,14 @@ export function PaymentProvider({
             setAppliedPromo(undefined);
         }
 
+        if (
+            to === 'VOUCHER' &&
+            appliedPromo &&
+            appliedPromo.promo_type != 'OFFLINE VOUCHER'
+        ) {
+            setAppliedPromo(undefined);
+        }
+
         if (paymentMethod.startsWith('CARD_')) {
             setCardId(undefined);
         }

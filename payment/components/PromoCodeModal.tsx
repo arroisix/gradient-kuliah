@@ -5,6 +5,7 @@ import Modal from 'commons/components/modules/Modal';
 import { usePayment } from 'payment/contexts/PaymentProvider';
 import { useGetAllCouponsQuery } from 'referral/redux/referalApi';
 import PromoCodeInput from './PromoCodeInput2';
+import { toast } from 'react-toastify';
 
 export const PromoCodeModal = ({
     isOpen,
@@ -15,7 +16,8 @@ export const PromoCodeModal = ({
         appliedPromo,
         setAppliedPromo,
         promoAppliedManually,
-        setPromoAppliedManually
+        setPromoAppliedManually,
+        paymentMethod
     } = usePayment();
 
     const packetId = packet?.id ?? '';
@@ -47,6 +49,20 @@ export const PromoCodeModal = ({
     };
 
     const handleApplyCode = (promo: ValidatePromoResponse): void => {
+        if (
+            paymentMethod === 'VOUCHER' &&
+            promo.promo_type != 'OFFLINE VOUCHER'
+        ) {
+            toast.error(
+                'Kode promo tidak valid untuk metode pembayaran voucher',
+                {
+                    position: 'top-center',
+                    theme: 'colored',
+                    toastId: 'INVALID_VOUCHER'
+                }
+            );
+            return;
+        }
         setAppliedPromo(promo);
         setPromoAppliedManually(false);
         setOpen(false);
