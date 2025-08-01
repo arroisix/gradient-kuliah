@@ -10,7 +10,7 @@ const VALID_TABS = ['semua', 'kelas', 'perpustakaan'];
 
 type ReferenceQueryParams = {
     tab?: string;
-    page?: string;
+    p?: string;
 };
 
 interface ReferenceRecommendationListProps {
@@ -25,7 +25,7 @@ const ReferenceRecommendationList = ({
     onReferenceCardClick
 }: ReferenceRecommendationListProps): JSX.Element => {
     const router = useRouter();
-    const { tab, page } = router.query as ReferenceQueryParams;
+    const { tab, p } = router.query as ReferenceQueryParams;
     const itemsPerPage = 6;
     const [isMobile, setIsMobile] = useState(false);
 
@@ -44,7 +44,7 @@ const ReferenceRecommendationList = ({
     useEffect(() => {
         if (search !== prevSearchRef.current) {
             prevSearchRef.current = search;
-            router.push({ query: { ...router.query, page: '1' } }, undefined, {
+            router.push({ query: { ...router.query, p: '1' } }, undefined, {
                 shallow: true
             });
         }
@@ -66,7 +66,7 @@ const ReferenceRecommendationList = ({
         error
     } = useGetContentRecommendationQuery({
         q: queryToUse,
-        page: parseInt(page ?? '1'),
+        page: parseInt(p ?? '1'),
         per_page: itemsPerPage,
         content_type: getContentType(VALID_TABS.includes(tab ?? '') ? tab : 'semua'),
         is_search: isSearchMode
@@ -191,6 +191,7 @@ const ReferenceRecommendationList = ({
                     hasNextPage={!!recommendations?.next_page}
                     hasPreviousPage={!!recommendations?.previous_page}
                     className="justify-center w-full pb-2"
+                    pageParamName="p"
                 />
             )}
         </>
