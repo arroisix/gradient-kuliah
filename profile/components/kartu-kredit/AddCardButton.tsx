@@ -6,9 +6,9 @@ import { useRouter } from 'next/router';
 import { HiOutlineCreditCard } from 'react-icons/hi';
 
 interface AddCardButtonProps {
-    bottomBorder: boolean;
+    bottomBorder?: boolean;
     redirect?: string;
-    fromCheckout: boolean;
+    fromCheckout?: boolean;
 }
 
 const AddCardButton: React.FC<AddCardButtonProps> = ({

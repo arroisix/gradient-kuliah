@@ -154,7 +154,7 @@ const AuthenticateCreditCardContainer = ({
                 )}
             </div>
             {iframeUrl && (
-                <div
+                <button
                     className="fixed inset-0 bg-black/60 z-[9999] flex items-center justify-center"
                     onClick={() => setIframeUrl(undefined)}>
                     <div className="bg-white w-[90%] h-[90%] shadow-lg overflow-hidden">
@@ -164,7 +164,7 @@ const AuthenticateCreditCardContainer = ({
                             className="w-full h-full"
                         />
                     </div>
-                </div>
+                </button>
             )}
         </>
     );

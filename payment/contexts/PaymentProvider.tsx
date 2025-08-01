@@ -83,7 +83,7 @@ export function PaymentProvider({
 
     useEffect(() => {
         const stored = localStorage.getItem('tempCard');
-        console.log({stored,});
+        console.log({ stored });
         if (stored) {
             const temp: CreditCard = JSON.parse(stored);
             setTempCard(temp);
