@@ -21,6 +21,8 @@ interface PaymentContextType {
     setPhoneNumberError: (isError: string) => void;
     appliedPromo?: ValidatePromoResponse;
     setAppliedPromo: (data?: ValidatePromoResponse) => void;
+    promoAppliedManually: boolean;
+    setPromoAppliedManually: (x: boolean) => void;
     cardId?: string;
     setCardId: (data?: string) => void;
     tempCard?: CreditCard;
@@ -49,6 +51,7 @@ export function PaymentProvider({
     const [appliedPromo, setAppliedPromo] = useState<
         ValidatePromoResponse | undefined
     >(undefined);
+    const [promoAppliedManually, setPromoAppliedManually] = useState(false);
 
     const selectPaymentMethod = (to: PaymentMethod): void => {
         if (paymentMethod === 'ID_OVO') {
@@ -108,6 +111,8 @@ export function PaymentProvider({
             setPhoneNumberError,
             appliedPromo,
             setAppliedPromo,
+            promoAppliedManually,
+            setPromoAppliedManually,
             cardId,
             setCardId,
             tempCard,
@@ -120,6 +125,7 @@ export function PaymentProvider({
             phoneNumber,
             phoneNumberError,
             appliedPromo,
+            promoAppliedManually,
             cardId,
             tempCard
         ]

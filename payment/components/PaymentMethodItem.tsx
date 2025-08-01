@@ -7,7 +7,7 @@ import { CDN_URL } from 'commons/constants';
 import { useTracker } from 'tracker/tracker';
 import { addZeroBefore, getCSChatRoom } from 'commons/utils';
 import { usePayment } from 'payment/contexts/PaymentProvider';
-import PromoCodeInput from './PromoCodeInput';
+import PromoCodeInput from './PromoCodeInput2';
 import Input from 'commons/components/elements/Form/input';
 import { HiOutlineCreditCard } from 'react-icons/hi';
 
@@ -165,9 +165,7 @@ const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({
                 <div className="ml-16 mr-4 mb-4">
                     <PromoCodeInput
                         placeholder="Masukkan kode voucher"
-                        variant="inline"
                         className="w-full"
-                        applyAfterValid={true}
                     />
                 </div>
             )}
