@@ -1777,3 +1777,25 @@ math-field#tanya-mathfield::part(virtual-keyboard-toggle) {
     outline: none !important;
     box-shadow: none !important;
 }
+
+.bmpui-ui-watermark {
+    display: none;
+}
+
+.bmpui-ui-volumeslider .bmpui-seekbar .bmpui-seekbar-playbackposition-marker {
+    background-color: #5f2bce !important;
+}
+
+.bmpui-ui-volumeslider .bmpui-seekbar .bmpui-seekbar-playbackposition,
+.bmpui-ui-seekbar .bmpui-seekbar .bmpui-seekbar-playbackposition {
+    background-color: #5f2bce !important;
+}
+
+.bmpui-ui-seekbar .bmpui-seekbar .bmpui-seekbar-playbackposition-marker {
+    background-color: #5f2bce73 !important;
+    border: solid #5f2bce 0.1875em !important;
+}
+
+.bmpui-ui-selectbox {
+    color: #5f2bce !important;
+}

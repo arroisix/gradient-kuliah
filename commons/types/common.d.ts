@@ -83,6 +83,7 @@ interface ConfigResponse {
 
 type BreadcrumbPathnames =
     | '/kelas'
+    | '/kelas/downloads'
     | '/kelas/[id]'
     | '/kelas/[id]/[slug]'
     | '/komunitas/public'

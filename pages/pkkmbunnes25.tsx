@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 const Scientia25 = (): JSX.Element => {
     const handleCopy = (): void => {
         navigator.clipboard.writeText(
-            `Coba deh temen2 cek disini lagi ada promo Gradient x Scientia FMIPA ITB https://gradient.academy/scientia25`
+            `Coba deh temen2 cek disini lagi ada promo Gradient x PKKMB UNNES 25 https://gradient.academy/pkkmbunnes25`
         ),
             toast.success(
                 'Link berhasil di-copy, silahkan bagikan ke teman teman kamu!',
@@ -21,26 +21,14 @@ const Scientia25 = (): JSX.Element => {
 
     const carouselImages = [
         {
-            src: 'https://assets.gradient.academy/assets/scientia25-1.jpeg',
-            alt: 'Gradient x Scientia FMIPA ITB - Slide 1',
+            src: 'https://assets.gradient.academy/assets/pkkmbunnes25-1.jpeg',
+            alt: 'Gradient x PKKMB UNNES 25 - Slide 1',
             width: 1080 / 2,
             height: 1350 / 2
         },
         {
-            src: 'https://assets.gradient.academy/assets/scientia25-2.jpeg',
-            alt: 'Gradient x Scientia FMIPA ITB - Slide 2',
-            width: 1080 / 2,
-            height: 1350 / 2
-        },
-        {
-            src: 'https://assets.gradient.academy/assets/scientia25-3.jpeg',
-            alt: 'Gradient x Scientia FMIPA ITB - Slide 3',
-            width: 1080 / 2,
-            height: 1350 / 2
-        },
-        {
-            src: 'https://assets.gradient.academy/assets/scientia25-4.jpeg',
-            alt: 'Gradient x Scientia FMIPA ITB - Slide 4',
+            src: 'https://assets.gradient.academy/assets/pkkmbunnes25-2.jpeg',
+            alt: 'Gradient x PKKMB UNNES 25 - Slide 2',
             width: 1080 / 2,
             height: 1350 / 2
         }
@@ -49,35 +37,23 @@ const Scientia25 = (): JSX.Element => {
     return (
         <>
             <NextSeo
-                title="Gradient x Scientia FMIPA ITB"
-                description="Halo Teman-teman FMIPA! Dalam kolaborasi bersama Scientia, kami punya PROMO KHUSUS Massa FMIPA ITB untuk menghadapi perkuliahan bersama Gradient✨ "
+                title="Gradient x PKKMB UNNES 25"
+                description="Halo Teman-teman Unnes! Dalam kolaborasi bersama PKKMB Unnes, kami punya PROMO KHUSUS Mahasiswa Unnes untuk menghadapi perkuliahan bersama Gradient✨ "
                 openGraph={{
-                    title: 'Gradient x Scientia FMIPA ITB',
+                    title: 'Gradient x PKKMB UNNES 25',
                     description:
-                        'Halo Teman-teman FMIPA! Dalam kolaborasi bersama Scientia, kami punya PROMO KHUSUS Massa FMIPA ITB untuk menghadapi perkuliahan bersama Gradient✨ ',
-                    url: `https://gradient.academy/scientia25`,
+                        'Halo Teman-teman Unnes! Dalam kolaborasi bersama PKKMB Unnes, kami punya PROMO KHUSUS Mahasiswa Unnes untuk menghadapi perkuliahan bersama Gradient✨ ',
+                    url: `https://gradient.academy/pkkmbunnes25`,
                     images: [
                         {
-                            url: 'https://assets.gradient.academy/assets/scientia25-1.jpeg',
-                            alt: 'Gradient x Scientia FMIPA ITB - Slide 1',
+                            url: 'https://assets.gradient.academy/assets/pkkmbunnes25-1.jpeg',
+                            alt: 'Gradient x PKKMB UNNES 25 - Slide 1',
                             width: 1080,
                             height: 1350
                         },
                         {
-                            url: 'https://assets.gradient.academy/assets/scientia25-2.jpeg',
-                            alt: 'Gradient x Scientia FMIPA ITB - Slide 2',
-                            width: 1080,
-                            height: 1350
-                        },
-                        {
-                            url: 'https://assets.gradient.academy/assets/scientia25-3.jpeg',
-                            alt: 'Gradient x Scientia FMIPA ITB - Slide 3',
-                            width: 1080,
-                            height: 1350
-                        },
-                        {
-                            url: 'https://assets.gradient.academy/assets/scientia25-4.jpeg',
-                            alt: 'Gradient x Scientia FMIPA ITB - Slide 4',
+                            url: 'https://assets.gradient.academy/assets/pkkmbunnes25-2.jpeg',
+                            alt: 'Gradient x PKKMB UNNES 25 - Slide 2',
                             width: 1080,
                             height: 1350
                         }
@@ -95,18 +71,18 @@ const Scientia25 = (): JSX.Element => {
                     </div>
                     <div className="flex flex-col items-start justify-start gap-4 w-full p-4 md:p-16 md:h-screen overflow-y-auto">
                         <h1 className="md:text-5xl text-xl font-bold">
-                            Gradient x Scientia FMIPA ITB
+                            Gradient x PKKMB UNNES 25
                         </h1>
                         <p className="text-neutral-300">
-                            Halo Teman-teman FMIPA! Dalam kolaborasi bersama
-                            Scientia, kami punya{' '}
-                            <b>PROMO KHUSUS Massa FMIPA ITB</b>
+                            Halo Teman-teman Unnes! Dalam kolaborasi bersama
+                            PKKMB Unnes, kami punya{' '}
+                            <b>PROMO KHUSUS Mahasiswa Unnes</b>
                             untuk menghadapi perkuliahan bersama <b>Gradient</b>
                             ✨
                         </p>
                         <p className="text-neutral-300">
                             Yuk segera daftar! Karna promo ini hanya berlaku
-                            sampai tanggal <b>13 Agustus 2025</b>. Jangan sampai
+                            sampai tanggal <b>10 Agustus 2025</b>. Jangan sampai
                             ketinggalan~
                         </p>
                         <div className="flex flex-wrap gap-2 w-full md:w-auto">
@@ -114,7 +90,7 @@ const Scientia25 = (): JSX.Element => {
                                 variant="primary"
                                 size="large"
                                 className="flex items-center justify-center gap-2 w-full md:w-auto"
-                                href="https://forms.gle/9G5DU6sbuicgTPSp8"
+                                href="https://forms.gle/SuY3BNiDdd55nLtE8"
                                 target="_blank">
                                 Klik disini untuk Daftar
                             </Button>

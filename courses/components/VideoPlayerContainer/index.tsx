@@ -12,6 +12,19 @@ import Spinner from 'commons/components/elements/Spinner';
 import YoutubeVideo from 'commons/components/elements/Video/YoutubeVideo';
 import VideoRegisterwall from './VideoRegisterWall';
 import { FaPlay } from 'react-icons/fa';
+import dynamic from 'next/dynamic';
+
+const BitmovinPlayer = dynamic(
+    () => import('commons/components/elements/Video/BitmovinPlayer'),
+    {
+        ssr: false,
+        loading: () => (
+            <div className="relative w-full aspect-video bg-gray-900 rounded-lg flex items-center justify-center">
+                <Spinner size="medium" />
+            </div>
+        )
+    }
+);
 
 interface VideoPlayerContainerProps
     extends Pick<
@@ -40,7 +53,12 @@ const VideoPlayerContainer = ({
     const isLoading = !video || isLoadingData || isLoadingSubscription;
 
     const isShowPaywall = !is_subscribed && !video?.is_free;
-    const videoSrc = isNotNullAndUndefined(video?.mux_playback_id)
+
+    const shouldUseBitmovinPlayer = video?.is_drm_protected;
+
+    const videoSrc = shouldUseBitmovinPlayer
+        ? video?.drm_video_url
+        : isNotNullAndUndefined(video?.mux_playback_id)
         ? `${video?.mux_playback_id as string}?${queryParamBuilder({
               token: video?.token as string
           })}`
@@ -69,11 +87,7 @@ const VideoPlayerContainer = ({
     const setIsShowRegisterWallHandler = async (): Promise<void> => {
         if (typeof window !== 'undefined') {
             const queryParams = new URLSearchParams(window.location.search);
-
-            // Set new or modify existing page value
             queryParams.set('redirect', router.asPath);
-
-            // Replace current querystring with the new one
             history.replaceState(null, '', '?' + queryParams.toString());
         }
         setIsShowRegisterwall((data) => !data);
@@ -94,7 +108,7 @@ const VideoPlayerContainer = ({
             </div>
         );
 
-    if (!isAuthenticated && video.is_free) {
+    if (!isAuthenticated && video?.is_free) {
         return (
             <>
                 <VideoRegisterwall
@@ -124,11 +138,23 @@ const VideoPlayerContainer = ({
             {!isShowPaywall ? (
                 <div className="md:rounded-lg md:overflow-hidden">
                     {video?.is_embed_youtube ? (
-                        <YoutubeVideo key={video?.video_url} src={videoSrc} />
+                        <YoutubeVideo
+                            key={video?.video_url}
+                            src={videoSrc || ''}
+                        />
+                    ) : shouldUseBitmovinPlayer ? (
+                        <BitmovinPlayer
+                            key={video?.drm_video_url}
+                            src={videoSrc || ''}
+                            drmToken={video?.drm_token as string}
+                            trackProgress={trackProgress}
+                            next_subchapter_link={nextSubchapter}
+                            autoPlay={isAuthenticated}
+                        />
                     ) : (
                         <VideoJS
                             key={video?.video_url}
-                            src={videoSrc}
+                            src={videoSrc || ''}
                             isMuxVideo={isNotNullAndUndefined(
                                 video?.mux_playback_id
                             )}

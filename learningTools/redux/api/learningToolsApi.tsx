@@ -65,6 +65,32 @@ export const learningToolsApi = baseApi.injectEndpoints({
                 },
                 params
             })
+        }),
+
+        getDownloadDevices: builder.query<DevicesResponse, void>({
+            query: () => ({
+                url: `${LEARNING_TOOLS_BASE_URL}download/devices/`,
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json'
+                }
+            })
+        }),
+
+        getDownloadHistory: builder.query<
+            DownloadHistoryResponse,
+            DownloadHistoryParams
+        >({
+            query: (params) => ({
+                url: `${LEARNING_TOOLS_BASE_URL}download/`,
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json'
+                },
+                params
+            })
         })
     }),
     overrideExisting: false
@@ -74,5 +100,7 @@ export const {
     useGetLearningToolsQuery,
     useGetLearningToolsContentQuery,
     useGetPublicLearningToolsQuery,
-    useGetPublicLearningToolsContentQuery
+    useGetPublicLearningToolsContentQuery,
+    useGetDownloadDevicesQuery,
+    useGetDownloadHistoryQuery
 } = learningToolsApi;

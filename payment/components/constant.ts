@@ -69,5 +69,5 @@ export const NAME_PAYMENT: PAYMENT_DICT = {
     INDOMARET: 'Indomaret',
     MANUAL: 'Manual',
     OTHER: undefined,
-    VOUCHER: 'Kode Voucher'
+    VOUCHER: 'Redeem Voucher'
 };
