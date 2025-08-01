@@ -2,6 +2,7 @@ import React, {
     createContext,
     ReactNode,
     useContext,
+    useEffect,
     useMemo,
     useState
 } from 'react';
@@ -20,6 +21,10 @@ interface PaymentContextType {
     setPhoneNumberError: (isError: string) => void;
     appliedPromo?: ValidatePromoResponse;
     setAppliedPromo: (data?: ValidatePromoResponse) => void;
+    cardId?: string;
+    setCardId: (data?: string) => void;
+    tempCard?: CreditCard;
+    setTempCard: (data?: CreditCard) => void;
 }
 
 const PaymentContext = createContext<PaymentContextType>(
@@ -37,6 +42,8 @@ export function PaymentProvider({
         useState<boolean>(false);
     const { data: packet } = useGetDetailPacketOfferQuery(packetId);
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('VA_BCA');
+    const [cardId, setCardId] = useState<string | undefined>();
+    const [tempCard, setTempCard] = useState<CreditCard | undefined>();
     const [phoneNumber, setPhoneNumber] = useState<string>('');
     const [phoneNumberError, setPhoneNumberError] = useState<string>('');
     const [appliedPromo, setAppliedPromo] = useState<
@@ -51,6 +58,10 @@ export function PaymentProvider({
 
         if (paymentMethod === 'VOUCHER') {
             setAppliedPromo(undefined);
+        }
+
+        if (paymentMethod.startsWith('CARD_')) {
+            setCardId(undefined);
         }
 
         setPaymentMethod(to);
@@ -70,6 +81,20 @@ export function PaymentProvider({
         });
     };
 
+    useEffect(() => {
+        const stored = localStorage.getItem('tempCard');
+        console.log({ stored });
+        if (stored) {
+            const temp: CreditCard = JSON.parse(stored);
+            setTempCard(temp);
+            localStorage.removeItem('tempCard');
+            selectPaymentMethod(
+                `CARD_${temp.brand.toUpperCase()}` as PaymentMethod
+            );
+            setCardId(temp.id);
+        }
+    }, []);
+
     const memoedValue = useMemo(
         () => ({
             isModalCheckoutOpen,
@@ -82,7 +107,11 @@ export function PaymentProvider({
             phoneNumberError,
             setPhoneNumberError,
             appliedPromo,
-            setAppliedPromo
+            setAppliedPromo,
+            cardId,
+            setCardId,
+            tempCard,
+            setTempCard
         }),
         [
             isModalCheckoutOpen,
@@ -90,7 +119,9 @@ export function PaymentProvider({
             paymentMethod,
             phoneNumber,
             phoneNumberError,
-            appliedPromo
+            appliedPromo,
+            cardId,
+            tempCard
         ]
     );
 

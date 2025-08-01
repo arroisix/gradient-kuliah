@@ -69,6 +69,16 @@ export const subscriptionApi = baseApi.injectEndpoints({
             query: (slug: string) => ({
                 url: `${SUBSCRIPTION_BASE_URL}active-subscription-by-slug/${slug}`
             })
+        }),
+        completeCardCheckout: builder.mutation<
+            { status: string },
+            CompleteCardCheckoutInputData
+        >({
+            query: (body) => ({
+                url: `${SUBSCRIPTION_BASE_URL}complete-card-checkout/`,
+                method: 'POST',
+                body
+            })
         })
     })
 });
@@ -81,5 +91,6 @@ export const {
     useGetOneCourseManyPacketQuery,
     useExtendCheckoutMutation,
     useGetDetailPacketOfferQuery,
-    useGetPacketOfferQuery
+    useGetPacketOfferQuery,
+    useCompleteCardCheckoutMutation
 } = subscriptionApi;

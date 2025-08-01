@@ -8,45 +8,64 @@ import CVVInfoModal from './modals/CVVInfoModal';
 import ConfirmAddCardModal from './modals/ConfirmAddCardModal';
 import { useEffect, useState } from 'react';
 import { Info } from 'lucide-react';
-import { Formik } from 'formik';
-import { useCreditCardContext } from '../../contexts/CreditCardProvider';
+import { Field, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { CDN_URL } from 'commons/constants';
 import { useDebouncedCallback } from 'use-debounce';
-import { useLazyCheckUserCardNameAvailabilityQuery } from 'payment/redux/api/transactionApi';
+import {
+    useAddUserCardMutation,
+    useLazyCheckUserCardNameAvailabilityQuery
+} from 'payment/redux/api/transactionApi';
 import { FaCheckCircle, FaSpinner, FaTimesCircle } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
+import moment from 'moment';
 
 const MAX_NAME_LENGTH = 20;
 
+declare global {
+    interface Window {
+        Xendit: any;
+    }
+}
+
 const AddCardForm: React.FC = () => {
     const router = useRouter();
+    const redirectUrl =
+        (router.query.redirect as string) || '/profil/kartu-kredit';
+    const fromCheckout = Boolean(router.query.redirect);
     const [showProtectionModal, setShowProtectionModal] = useState(false);
     const [showCVVModal, setShowCVVModal] = useState(false);
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
     const [isNameAvailable, setIsNameAvailable] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
-    const [isXenditReady, setXenditReady] = useState(false);
-    const { cardData, setCardData, saveUserCard, isSaving, successSaving } =
-        useCreditCardContext();
+    const [cardData, setCardData] = useState<any>();
+    const [isXenditReady, setIsXenditReady] = useState(false);
+
+    const [saveUserCard, { isLoading: isSaving, isSuccess: successSaving }] =
+        useAddUserCardMutation();
 
     const [triggerCheckName, { isFetching: isCheckingName }] =
         useLazyCheckUserCardNameAvailabilityQuery();
 
     useEffect(() => {
-        if (successSaving) router.push('/profil/kartu-kredit');
-    }, [successSaving, router]);
+        if (successSaving) router.push(redirectUrl);
+    }, [successSaving, router, redirectUrl]);
 
-    const handleXenditLoad = () => {
+    const handleXenditLoad = (): void => {
         if (window.Xendit) {
             window.Xendit.setPublishableKey(
                 process.env.NEXT_PUBLIC_XENDIT_KEY as string
             );
-            setXenditReady(true);
+            setIsXenditReady(true);
         }
     };
+
+    useEffect(() => {
+        if (typeof window !== 'undefined' && window.Xendit && !isXenditReady) {
+            handleXenditLoad();
+        }
+    }, [isXenditReady]);
 
     const debouncedCheckName = useDebouncedCallback(
         async (
@@ -80,19 +99,6 @@ const AddCardForm: React.FC = () => {
             : isNameAvailable
             ? 'text-green-500'
             : 'text-red-500';
-
-    if (!isXenditReady) {
-        return (
-            <>
-                <Script
-                    src="https://js.xendit.co/v1/xendit.min.js"
-                    strategy="afterInteractive"
-                    onLoad={handleXenditLoad}
-                />
-                <LoadingBackdrop />
-            </>
-        );
-    }
 
     return (
         <>
@@ -165,7 +171,8 @@ const AddCardForm: React.FC = () => {
                             cardHolderFirstName: '',
                             cardHolderLastName: '',
                             cardHolderEmail: '',
-                            cardHolderPhoneNumber: ''
+                            cardHolderPhoneNumber: '',
+                            saveCard: false
                         }}
                         validate={(values) => {
                             const errors: Record<string, string> = {};
@@ -274,6 +281,23 @@ const AddCardForm: React.FC = () => {
                                         token.failure_reason ||
                                             'Tokenisasi gagal'
                                     );
+
+                                if (fromCheckout && !values.saveCard) {
+                                    localStorage.setItem(
+                                        'tempCard',
+                                        JSON.stringify({
+                                            id: 'temp_card',
+                                            name: 'Temporary Card',
+                                            brand: token.card_info.brand,
+                                            card_token: token.id,
+                                            needs_refresh: false,
+                                            created_at: moment().toISOString(),
+                                            updated_at: moment().toISOString()
+                                        })
+                                    );
+                                    router.push(redirectUrl);
+                                    return;
+                                }
 
                                 setCardData({
                                     ...token,
@@ -518,6 +542,20 @@ const AddCardForm: React.FC = () => {
                                         }
                                     />
                                 </div>
+                                {fromCheckout && (
+                                    <div className="flex items-center space-x-2">
+                                        <Field
+                                            type="checkbox"
+                                            name="saveCard"
+                                            className="rounded-md text-accent-purple"
+                                        />
+                                        <span className="font-body text-white text-sm">
+                                            Simpan kartu untuk pembayaran
+                                            berikutnya
+                                        </span>
+                                    </div>
+                                )}
+
                                 <p className="text-xs text-center">
                                     Dengan konfirmasi, Anda menyetujui{' '}
                                     <Link
@@ -538,10 +576,7 @@ const AddCardForm: React.FC = () => {
                                     variant="primary"
                                     className="w-full"
                                     disabled={
-                                        isValidating ||
-                                        !isValid ||
-                                        isSubmitting ||
-                                        isSaving
+                                        isValidating || !isValid || isSubmitting
                                     }>
                                     {isSubmitting || isSaving
                                         ? 'Menyimpan...'

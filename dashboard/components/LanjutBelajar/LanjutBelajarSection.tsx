@@ -25,7 +25,7 @@ export const TABS = {
     FLASHCARD: 'flashcard'
 } as const;
 
-export type TabType = typeof TABS[keyof typeof TABS];
+export type TabType = (typeof TABS)[keyof typeof TABS];
 
 export interface CardData {
     id: string;

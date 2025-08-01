@@ -2,12 +2,12 @@ import type React from 'react';
 import PaymentMethodSectionComponent from './PaymentMethodSectionComponent';
 import Spinner from 'commons/components/elements/Spinner';
 import { useGetAllPaymentMethodsQuery } from 'payment/redux/api/transactionApi';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { usePayment } from 'payment/contexts/PaymentProvider';
 import FreeBox from './FreeBox';
+import PaymentMethodCardSection from './PaymentMethodCardSection';
 
 const PaymentMethodList: React.FC = () => {
-    const otherPaymentMethodRef = useRef<HTMLDivElement>(null);
     const { packet } = usePayment();
     const {
         data: paymentMethods,
@@ -18,17 +18,6 @@ const PaymentMethodList: React.FC = () => {
     useEffect(() => {
         localStorage.removeItem('packetId');
     }, []);
-
-    const scrollToOtherPayment = (): void => {
-        const offset = 150;
-        const elementPosition =
-            otherPaymentMethodRef.current?.getBoundingClientRect().top ?? 0;
-        const offsetPosition = elementPosition + window.scrollY - offset;
-        window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-        });
-    };
 
     if (paymentMethodsLoading) {
         return (
@@ -60,18 +49,28 @@ const PaymentMethodList: React.FC = () => {
         .filter((section) => section.key !== 'retail');
 
     return (
-        <div className="flex-1 overflow-y-auto pb-36 mx-4 md:mx-32">
+        <div className="flex flex-col overflow-y-auto pb-36 mx-4 md:mx-32">
             <div className="pt-24">
                 {packet?.is_free ? (
                     <FreeBox />
                 ) : (
                     <>
-                        {sortedSections.map((section) => (
-                            <PaymentMethodSectionComponent
-                                key={section.key}
-                                section={section}
-                            />
-                        ))}
+                        {sortedSections.map((section) => {
+                            if (section.key === 'card') {
+                                return (
+                                    <PaymentMethodCardSection
+                                        key={section.key}
+                                    />
+                                );
+                            } else {
+                                return (
+                                    <PaymentMethodSectionComponent
+                                        key={section.key}
+                                        section={section}
+                                    />
+                                );
+                            }
+                        })}
                     </>
                 )}
             </div>

@@ -84,6 +84,8 @@ type Transaction = {
         qr_checkout_string: string | null;
     } | null;
     payment_code: string;
+    user_card_id?: string;
+    charge_id?: string;
 };
 
 interface CheckoutInputData {
@@ -91,6 +93,7 @@ interface CheckoutInputData {
     payment_method: PaymentMethod;
     phone_number?: string;
     promo_code?: string | null;
+    user_card_id?: string;
 }
 
 interface OneCourseManyPacketQuery {
@@ -138,6 +141,12 @@ type CreditCard = {
 interface CreditCardListResponse {
     cards: CreditCard[];
     count: number;
+}
+
+interface CompleteCardCheckoutInputData {
+    transaction_id: string;
+    authentication_id: string;
+    user_card_token?: string;
 }
 
 interface AddCardRequestData {
