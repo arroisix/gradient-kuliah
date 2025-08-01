@@ -50,6 +50,17 @@ export const referalApi = baseApi.injectEndpoints({
                 method: 'POST',
                 body
             })
+        }),
+        getAllCoupons: builder.query<
+            GetCouponsResponse,
+            {
+                packet_id: string;
+            }
+        >({
+            query: (params) => ({
+                url: `${REFERAL_BASE_URL}coupons/`,
+                params
+            })
         })
     })
 });
@@ -58,5 +69,6 @@ export const {
     useGetReferralQuery,
     useGetVoucherQuery,
     useGetRefereeQuery,
-    useValidatePromoMutation
+    useValidatePromoMutation,
+    useGetAllCouponsQuery
 } = referalApi;

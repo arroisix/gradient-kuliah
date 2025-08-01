@@ -1,10 +1,9 @@
 import { useRouter } from 'next/router';
 import withAuth from 'commons/withAuth';
 import Layout from 'commons/layout';
-import SubscriptionContainer from 'payment/containers';
 import { PaymentProvider } from 'payment/contexts/PaymentProvider';
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useGetDetailPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
@@ -12,14 +11,20 @@ import Image from 'next/image';
 import { CDN_URL } from 'commons/constants';
 import { useTracker } from 'tracker/tracker';
 import PaketInfo from 'payment/components/PaketInfo';
+import PaymentMethodList from 'payment/components/PaymentMethodList';
+import CheckoutBottomSheet from 'payment/components/CheckoutBottomSheet';
+import PromoCodeModal from 'payment/components/PromoCodeModal';
 
 const Payment = (): JSX.Element => {
     const router = useRouter();
     const { packetId, subscriptionId } = router.query;
     const isSubscribeViaWhatsapp = useFeatureIsOn('subscribe-via-wa');
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { data: packet } = useGetDetailPacketOfferQuery(packetId as string);
+    const { data: packet } = useGetDetailPacketOfferQuery(packetId as string, {
+        skip: !packetId
+    });
     const tracker = useTracker();
+    const [isPromoModalOpen, setPromoModalOpen] = useState(false);
 
     useEffect(() => {
         if (
@@ -67,7 +72,14 @@ const Payment = (): JSX.Element => {
                     ) : (
                         <>
                             <PaketInfo />
-                            <SubscriptionContainer />
+                            <PaymentMethodList />
+                            <CheckoutBottomSheet
+                                onPromoClick={() => setPromoModalOpen(true)}
+                            />
+                            <PromoCodeModal
+                                isOpen={isPromoModalOpen}
+                                setOpen={setPromoModalOpen}
+                            />
                         </>
                     )}
                 </PaymentProvider>

@@ -18,7 +18,7 @@ const CheckoutButton = ({
     packetId: string;
     paymentMethod: PaymentMethod;
     isFree?: boolean;
-    promoCode?: string;
+    promoCode?: string | null;
     disabled?: boolean;
     phoneNumber?: string;
 }): JSX.Element => {
@@ -36,7 +36,12 @@ const CheckoutButton = ({
                 inputData: {
                     packet_id: packetId,
                     payment_method: paymentMethod,
-                    promo_code: promoCode !== '' ? promoCode : null
+                    promo_code:
+                        promoCode !== '' &&
+                        promoCode !== null &&
+                        promoCode !== undefined
+                            ? promoCode
+                            : null
                 },
                 subscriptionId: subscriptionId as string
             })) as unknown as SingleResponseData<Transaction>;
@@ -71,10 +76,16 @@ const CheckoutButton = ({
                 );
             }
         } else {
+            console.log(promoCode);
             const data = (await checkout({
                 packet_id: packetId,
                 payment_method: paymentMethod,
-                promo_code: promoCode !== '' ? promoCode : null,
+                promo_code:
+                    promoCode !== '' &&
+                    promoCode !== null &&
+                    promoCode !== undefined
+                        ? promoCode
+                        : null,
                 phone_number: phoneNumber
             })) as unknown as SingleResponseData<Transaction>;
 
