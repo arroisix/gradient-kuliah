@@ -48,30 +48,6 @@ const CopilotModal = ({
 
   useEffect(() => {
     if (isOpen) {
-      const originalBodyOverflow = document.body.style.overflow;
-      const originalHtmlOverflow = document.documentElement.style.overflow;
-      const scrollY = window.scrollY;
-      
-      document.body.style.overflow = 'hidden';
-      document.documentElement.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = '100%';
-      
-      return () => {
-        document.body.style.overflow = originalBodyOverflow;
-        document.documentElement.style.overflow = originalHtmlOverflow;
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.width = '';
-        window.scrollTo(0, scrollY);
-      };
-    }
-    return undefined;
-  }, [isOpen]);
-
-  useEffect(() => {
-    if (isOpen) {
       setIsCollapsed(false);
     }
   }, [isOpen]);
