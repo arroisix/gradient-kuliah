@@ -91,33 +91,33 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
                 mode === 'fixed' ? 'fixed' : 'absolute'
             } z-10 inset-x-4 sm:inset-x-8 lg:inset-x-32 bottom-0 bg-graphite-900 rounded-t-xl shadow-lg overflow-hidden`}>
             {/* Promo Code Section */}
-            {!isExpanded && (
-                <div className="px-4 py-3 relative overflow-visible">
-                    <button
-                        onClick={onPromoClick}
-                        className={`relative overflow-hidden w-full rounded-lg py-4 flex items-center gap-3 ${
-                            appliedPromo
-                                ? 'pl-10 bg-emerald-900'
-                                : 'pl-[50px] bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700'
-                        }`}>
-                        <>
-                            {/* half circles */}
-                            <span className="absolute w-8 h-8 bg-graphite-900 rounded-full -left-4 top-1/2 -translate-y-1/2 z-10" />
-                            <span className="absolute w-8 h-8 bg-graphite-900 rounded-full -right-4 top-1/2 -translate-y-1/2 z-10" />
+            <div className="px-4 py-3 relative overflow-visible">
+                <button
+                    onClick={onPromoClick}
+                    className={`relative overflow-hidden w-full rounded-lg py-4 flex items-center gap-3 ${
+                        appliedPromo
+                            ? 'pl-10 bg-[#03AC5C]/20'
+                            : 'pl-[50px] bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700'
+                    }`}>
+                    <>
+                        {/* half circles */}
+                        <span className="absolute w-8 h-8 bg-graphite-900 rounded-full -left-4 top-1/2 -translate-y-1/2 z-10" />
+                        <span className="absolute w-8 h-8 bg-graphite-900 rounded-full -right-4 top-1/2 -translate-y-1/2 z-10" />
 
-                            {/* dashed lines */}
-                            <div className="absolute top-0 bottom-0 left-8 border-l-2 border-dashed border-gray-900 pointer-events-none" />
-                        </>
+                        {/* dashed lines */}
+                        <div className="absolute top-0 bottom-0 left-8 border-l-2 border-dashed border-graphite-900 pointer-events-none" />
+                    </>
 
-                        {appliedPromo && (
-                            <Check className="relative w-6 h-6 text-green-500 z-10" />
-                        )}
-                        <span className="relative z-10 text-white font-bold text-sm">
-                            {getPromoButtonText()}
-                        </span>
-                    </button>
-                </div>
-            )}
+                    {appliedPromo && (
+                        <div className="relative w-5 h-5 bg-[#03AC5C] flex items-center justify-center rounded-full ml-1">
+                            <Check className="w-4 h-4 text-graphite-900 z-10" />
+                        </div>
+                    )}
+                    <span className="relative z-10 text-white text-sm font-body font-bold">
+                        {getPromoButtonText()}
+                    </span>
+                </button>
+            </div>
 
             {/* Checkout Section */}
             <div className="px-4 pb-4">
@@ -162,7 +162,7 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
                             className="flex items-center cursor-pointer"
                             onClick={() => setIsExpanded(!isExpanded)}>
                             <div>
-                                <p className="text-neutral-400 text-xs font-normal">
+                                <p className="text-neutral-400 text-xs font-normal text-left">
                                     Total Bayar
                                 </p>
                                 <p className="text-neutral-50 font-bold text-xl">
