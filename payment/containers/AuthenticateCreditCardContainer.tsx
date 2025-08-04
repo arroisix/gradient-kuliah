@@ -8,7 +8,7 @@ import Script from 'next/script';
 import { usePayment } from 'payment/contexts/PaymentProvider';
 import { useCompleteCardCheckoutMutation } from 'payment/redux/api/subscriptionApi';
 import { useGetUserCardQuery } from 'payment/redux/api/transactionApi';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { TbArrowsLeftRight } from 'react-icons/tb';
 
 declare global {
@@ -49,13 +49,7 @@ const AuthenticateCreditCardContainer = ({
         }
     };
 
-    useEffect(() => {
-        if (typeof window !== 'undefined' && window.Xendit && !isXenditReady) {
-            handleXenditLoad();
-        }
-    }, [isXenditReady]);
-
-    useEffect(() => {
+    const start3DS = useCallback((): void => {
         if (!isXenditReady || !card || isLoading) return;
 
         window.Xendit.card.createAuthentication(
@@ -105,7 +99,26 @@ const AuthenticateCreditCardContainer = ({
                 }
             }
         );
-    }, [card, isLoading, isXenditReady]);
+    }, [
+        card,
+        completeCardCheckout,
+        isLoading,
+        isTemp,
+        isXenditReady,
+        setTempCard,
+        trx.id,
+        trx.payment_amount
+    ]);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined' && window.Xendit && !isXenditReady) {
+            handleXenditLoad();
+        }
+    }, [isXenditReady]);
+
+    useEffect(() => {
+        start3DS();
+    }, [start3DS]);
 
     if (isLoading) {
         return <Skeleton repeat={1} />;
@@ -148,6 +161,11 @@ const AuthenticateCreditCardContainer = ({
                 <span className="text-center text-lg font-bold text-white">
                     Kamu akan diarahkan ke halaman verifikasi
                 </span>
+                <button
+                    onClick={start3DS}
+                    className="text-sm text-[#7264EB] underline">
+                    Atau klik di sini untuk verifikasi manual
+                </button>
                 {error && (
                     <span className="mt-2 text-red-400 text-center">
                         {error}
@@ -161,7 +179,7 @@ const AuthenticateCreditCardContainer = ({
             </div>
             {iframeUrl && (
                 <button
-                    className="fixed inset-0 bg-black/60 z-[9999] flex items-center justify-center"
+                    className="fixed inset-0 bg-black/60 z-[9999] flex items-center justify-center cursor-default"
                     onClick={() => setIframeUrl(undefined)}>
                     <div className="bg-white w-[90%] h-[90%] shadow-lg overflow-hidden">
                         <iframe
