@@ -26,36 +26,36 @@ const TransactionContainer = (): JSX.Element => {
         pollingInterval: 3000
     });
 
-    // useEffect(() => {
-    //     if (
-    //         data &&
-    //         data.status === 'WAITING' &&
-    //         data.payment_method.startsWith('ID_')
-    //     ) {
-    //         let redirectUrl: string | undefined;
-    //         const [_, paymentMerchant] = data.payment_method.split('_');
-    //         switch (paymentMerchant) {
-    //             case 'DANA':
-    //             case 'LINKAJA':
-    //                 redirectUrl = isMobile
-    //                     ? (data.ewallet_actions
-    //                           ?.mobile_web_checkout_url as string)
-    //                     : (data.ewallet_actions
-    //                           ?.desktop_web_checkout_url as string);
-    //                 break;
-    //             case 'SHOPEEPAY':
-    //                 redirectUrl = isMobile
-    //                     ? (data.ewallet_actions
-    //                           ?.mobile_deeplink_checkout_url as string)
-    //                     : undefined;
-    //                 break;
-    //         }
+    useEffect(() => {
+        if (
+            data &&
+            data.status === 'WAITING' &&
+            data.payment_method.startsWith('ID_')
+        ) {
+            let redirectUrl: string | undefined;
+            const [_, paymentMerchant] = data.payment_method.split('_');
+            switch (paymentMerchant) {
+                case 'DANA':
+                case 'LINKAJA':
+                    redirectUrl = isMobile
+                        ? (data.ewallet_actions
+                              ?.mobile_web_checkout_url as string)
+                        : (data.ewallet_actions
+                              ?.desktop_web_checkout_url as string);
+                    break;
+                case 'SHOPEEPAY':
+                    redirectUrl = isMobile
+                        ? (data.ewallet_actions
+                              ?.mobile_deeplink_checkout_url as string)
+                        : undefined;
+                    break;
+            }
 
-    //         if (redirectUrl) {
-    //             router.push(redirectUrl);
-    //         }
-    //     }
-    // }, [data]);
+            if (redirectUrl) {
+                router.push(redirectUrl);
+            }
+        }
+    }, [data]);
 
     useEffect(() => {
         if (data) {
@@ -136,7 +136,7 @@ const RedirectContainer = ({
                         <div className="flex items-center justify-center w-12 h-12 rounded-full bg-white">
                             <div className="relative w-10 h-10">
                                 <Image
-                                    src={`${CDN_URL}/assets/payments/mobile-${LOGO_PAYMENT[method]}`}
+                                    src={`${CDN_URL}/assets/payments/${LOGO_PAYMENT[method]}`}
                                     alt={`${method}`}
                                     layout="fill"
                                     className="object-contain"
