@@ -89,7 +89,7 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
             style={{ bottom: mode === 'fixed' ? 0 : bottomOffset }}
             className={`${
                 mode === 'fixed' ? 'fixed' : 'absolute'
-            } z-10 inset-x-4 sm:inset-x-8 lg:inset-x-32 bottom-0 bg-graphite-900 rounded-t-xl shadow-lg overflow-hidden`}>
+            } z-10 inset-x-4 sm:inset-x-8 lg:inset-x-32 bottom-0 bg-[#181818] rounded-t-xl shadow-lg overflow-hidden`}>
             {/* Promo Code Section */}
             <div className="px-4 py-3 relative overflow-visible">
                 <button
@@ -97,20 +97,20 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
                     className={`relative overflow-hidden w-full rounded-lg py-4 flex items-center gap-3 ${
                         appliedPromo
                             ? 'pl-10 bg-[#03AC5C]/20'
-                            : 'pl-[50px] bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700'
+                            : 'pl-[50px] bg-gradient-to-r from-[#741F86] via-[#965084] to-[#A82C56] hover:from-[#8B25A0] hover:to-[#C93467] transition-colors'
                     }`}>
                     <>
                         {/* half circles */}
-                        <span className="absolute w-8 h-8 bg-graphite-900 rounded-full -left-4 top-1/2 -translate-y-1/2 z-10" />
-                        <span className="absolute w-8 h-8 bg-graphite-900 rounded-full -right-4 top-1/2 -translate-y-1/2 z-10" />
+                        <span className="absolute w-8 h-8 bg-[#181818] rounded-full -left-4 top-1/2 -translate-y-1/2 z-10" />
+                        <span className="absolute w-8 h-8 bg-[#181818] rounded-full -right-4 top-1/2 -translate-y-1/2 z-10" />
 
                         {/* dashed lines */}
-                        <div className="absolute top-0 bottom-0 left-8 border-l-2 border-dashed border-graphite-900 pointer-events-none" />
+                        <div className="absolute top-0 bottom-0 left-8 border-l-[3px] border-dashed border-[#181818] pointer-events-none" />
                     </>
 
                     {appliedPromo && (
                         <div className="relative w-5 h-5 bg-[#03AC5C] flex items-center justify-center rounded-full ml-1">
-                            <Check className="w-4 h-4 text-graphite-900 z-10" />
+                            <Check className="w-4 h-4 text-[#181818] z-10" />
                         </div>
                     )}
                     <span className="relative z-10 text-white text-sm font-body font-bold">
@@ -124,26 +124,26 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
                 <div>
                     {/* Expanded Summary */}
                     {isExpanded && (
-                        <div className="mb-4 mt-3 rounded-lg bg-graphite-800 p-4">
-                            <h3 className="text-neutral-50 font-semibold text-sm mb-2">
+                        <div className="mb-4 rounded-lg bg-graphite-800 p-4">
+                            <h3 className="text-neutral-50 font-semibold text-sm mb-2 font-body">
                                 Ringkasan Pembayaran
                             </h3>
 
                             <div className="flex justify-between items-center">
-                                <span className="text-neutral-200 text-sm font-normal">
+                                <span className="text-neutral-200 text-sm font-body">
                                     {packet?.packet_name}
                                 </span>
-                                <span className="text-neutral-50 text-sm font-normal">
+                                <span className="text-neutral-50 text-sm font-body">
                                     {formatCurrency(packet?.price || '0')}
                                 </span>
                             </div>
 
                             {appliedPromo?.is_valid && (
                                 <div className="flex justify-between items-center mt-1">
-                                    <span className="text-neutral-200 text-sm font-normal">
+                                    <span className="text-neutral-200 text-sm font-body">
                                         Diskon {appliedPromo.promo_code}
                                     </span>
-                                    <span className="text-state-success text-sm font-normal">
+                                    <span className="text-state-success text-sm font-body">
                                         -
                                         {formatCurrency(
                                             appliedPromo.discount_amount.toString()
@@ -157,32 +157,30 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
 
                 {/* Total and Checkout Button Row */}
                 <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                        <button
-                            className="flex items-center cursor-pointer"
-                            onClick={() => setIsExpanded(!isExpanded)}>
-                            <div>
-                                <p className="text-neutral-400 text-xs font-normal text-left">
-                                    Total Bayar
-                                </p>
-                                <p className="text-neutral-50 font-bold text-xl">
-                                    {formatCurrency(
-                                        calculateFinalPrice().toString()
-                                    )}
-                                </p>
-                            </div>
-                            <div className="ml-2 text-neutral-50">
-                                {isExpanded ? (
-                                    <ChevronDown size={16} />
-                                ) : (
-                                    <ChevronUp size={16} />
+                    <button
+                        className="flex items-center cursor-pointer"
+                        onClick={() => setIsExpanded(!isExpanded)}>
+                        <div>
+                            <p className="text-neutral-400 text-xs font-normal text-left">
+                                Total Bayar
+                            </p>
+                            <p className="text-neutral-50 font-bold text-xl">
+                                {formatCurrency(
+                                    calculateFinalPrice().toString()
                                 )}
-                            </div>
-                        </button>
-                    </div>
+                            </p>
+                        </div>
+                        <div className="ml-2 text-neutral-50">
+                            {isExpanded ? (
+                                <ChevronDown size={16} />
+                            ) : (
+                                <ChevronUp size={16} />
+                            )}
+                        </div>
+                    </button>
 
                     {/* Checkout Button */}
-                    <div className="ml-4">
+                    <div className="ml-4 min-w-[12rem]">
                         <CheckoutButton
                             packetId={packet?.id as string}
                             paymentMethod={paymentMethod}
@@ -198,10 +196,6 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
                             phoneNumber={phoneNumber}
                             userCardId={cardId}
                         />
-                        <span className="flex items-center mt-2 text-xs">
-                            <BsShieldFillCheck className="mr-2" />
-                            Secure Payment
-                        </span>
                     </div>
                 </div>
             </div>
