@@ -158,7 +158,7 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
                 {/* Total and Checkout Button Row */}
                 <div className="flex gap-3 pb-2 flex-col md:flex-row md:justify-between md:items-center md:pb-0">
                     <button
-                        className="flex items-center cursor-pointer"
+                        className="flex items-center cursor-pointer hover:scale-105 transition-transform"
                         onClick={() => setIsExpanded(!isExpanded)}>
                         <div className="flex flex-row items-center md:items-start md:flex-col flex-1 min-w-0">
                             <p className="text-white md:text-neutral-400 text-xs font-normal text-left">
