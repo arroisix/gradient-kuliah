@@ -131,7 +131,7 @@ const CheckoutButton = ({
                     toast.success(`Redeem kode voucher berhasil!`, {
                         position: toast.POSITION.TOP_CENTER
                     });
-                    router.push('/checkout/sukses');
+                    router.push(`/checkout/sukses/${transaction.id}`);
                 } else {
                     toast.info(
                         `Silahkan lanjutkan proses pembayaran sesuai metode yang kamu pilih`,

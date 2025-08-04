@@ -76,7 +76,7 @@ const TransactionContainer = (): JSX.Element => {
                     position: toast.POSITION.TOP_CENTER
                 });
                 router.push(
-                    `/checkout/sukses?${queryParamBuilder({
+                    `/checkout/sukses/${data.id}?${queryParamBuilder({
                         redirect: redirect as string
                     })}`
                 );

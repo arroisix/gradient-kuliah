@@ -64,6 +64,12 @@ type PacketOffer = {
     };
 };
 
+type TransactionPromo = {
+    id: string;
+    code: string;
+    promo_type: string;
+};
+
 type Transaction = {
     created_at: string | Date;
     id: string;
@@ -86,6 +92,7 @@ type Transaction = {
     payment_code: string;
     user_card_id?: string;
     charge_id?: string;
+    promo?: TransactionPromo;
 };
 
 interface CheckoutInputData {
