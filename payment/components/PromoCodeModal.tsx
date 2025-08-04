@@ -1,6 +1,6 @@
 'use client';
 
-import { Loader2 } from 'lucide-react';
+import { Check, Loader2, X } from 'lucide-react';
 import Modal from 'commons/components/modules/Modal';
 import { usePayment } from 'payment/contexts/PaymentProvider';
 import { useGetAllCouponsQuery } from 'referral/redux/referalApi';
@@ -125,7 +125,11 @@ export const PromoCodeModal = ({
                             return (
                                 <div
                                     key={promo.promo_id}
-                                    className={`p-4 rounded-lg bg-[#2A225F]`}>
+                                    className={`p-4 rounded-lg ${
+                                        isCurrentlyAppliedInList
+                                            ? 'bg-[#03AC5C]/10'
+                                            : 'bg-[#2A225F]'
+                                    }`}>
                                     <div className="flex items-center justify-between">
                                         <div>
                                             <h3 className="text-white font-semibold text-sm mb-1 font-body">
@@ -140,8 +144,15 @@ export const PromoCodeModal = ({
                                         {isCurrentlyAppliedInList ? (
                                             <button
                                                 onClick={handleRemovePromo}
-                                                className="px-6 py-2 bg-[#FF3B30]/75 text-white text-sm rounded-full font-body">
-                                                Batal
+                                                className="w-24 h-10 bg-accent-purple text-white text-sm rounded-full font-body flex items-center justify-center">
+                                                <div className="flex items-center space-x-2">
+                                                    <div className="flex items-center space-x-2">
+                                                        <X className="w-4 h-4 text-white font-extrabold" />
+                                                        <span className="text-sm font-body">
+                                                            Batal
+                                                        </span>
+                                                    </div>
+                                                </div>
                                             </button>
                                         ) : (
                                             <button
@@ -152,7 +163,7 @@ export const PromoCodeModal = ({
                                                         message: ''
                                                     })
                                                 }
-                                                className="px-6 py-2 bg-accent-purple text-white text-sm rounded-full font-body">
+                                                className="w-24 h-10 bg-accent-purple text-white text-sm rounded-full font-body">
                                                 Pakai
                                             </button>
                                         )}
