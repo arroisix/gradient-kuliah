@@ -5,6 +5,7 @@ import { ContextRecommendation } from 'copilot/types/copilot';
 import ProductCard from 'commons/components/elements/ProductCard';
 import Paginator from 'commons/components/elements/Paginator';
 import Skeleton from 'commons/components/elements/Skeleton';
+import NotFound from 'commons/components/elements/Icons/NotFound';
 
 const VALID_TABS = ['semua', 'kelas', 'perpustakaan'];
 
@@ -140,11 +141,7 @@ const ReferenceRecommendationList = ({
         return (
             <div className="flex items-center justify-center h-full">
                 <div className="text-center">
-                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/5 flex items-center justify-center">
-                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M14 26A12 12 0 1 0 14 2a12 12 0 0 0 0 24zM30 30l-6.35-6.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/40" />
-                        </svg>
-                    </div>
+                    <NotFound className="w-48 h-48 mx-auto my-8" />
                     <p className="text-white/60 mb-2">
                         {isSearchMode 
                             ? "Tidak ada hasil pencarian yang ditemukan" 

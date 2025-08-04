@@ -11,6 +11,7 @@ import {
     useLazySearchContentQuery
 } from 'copilot/redux/api/copilotApi';
 import { TextbookChapter, TextbookProblem, ContentSearchItem } from 'copilot/types/copilot';
+import NotFound from 'commons/components/elements/Icons/NotFound';
 
 interface TextbookHierarchyProps {
     isOpen: boolean;
@@ -149,6 +150,7 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
             return (
                 <div className="flex items-center justify-center py-8">
                     <div className="text-center">
+                        <NotFound className="w-48 h-48 mx-auto my-8" />
                         <p className="text-white/60">Tidak ada hasil ditemukan untuk &quot;{debouncedSearchTerm}&quot;</p>
                     </div>
                 </div>
@@ -394,6 +396,7 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
                         ) : (
                             <div className="flex items-center justify-center py-12">
                                 <div className="text-center">
+                                    <NotFound className="w-48 h-48 mx-auto my-8" />
                                     <p className="text-white/60">Tidak ada chapters ditemukan</p>
                                 </div>
                             </div>
