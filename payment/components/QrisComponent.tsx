@@ -32,62 +32,124 @@ const QrisComponent = ({ transaction }: QrisComponentProps): JSX.Element => {
 
     // download as PNG
     const downloadQrAsPng = async (): Promise<void> => {
-        if (!qrContainerRef.current) return;
-        const svgEl = qrContainerRef.current.querySelector('svg');
-        if (!svgEl) {
-            toast.error('QR tidak ditemukan');
-            return;
-        }
+        // helper to load image with CORS
+        const loadImg = (src: string): Promise<HTMLImageElement> =>
+            new Promise((resolve, reject) => {
+                const img = new window.Image();
+                img.crossOrigin = 'anonymous';
+                img.onload = () => resolve(img);
+                img.onerror = (e) => reject(e);
+                img.src = src;
+            });
 
-        // Clone & serialize to ensure namespace is present
-        const cloned = svgEl.cloneNode(true) as SVGSVGElement;
-        if (!cloned.getAttribute('xmlns')) {
-            cloned.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-        }
-        const serializer = new XMLSerializer();
-        const svgStr = serializer.serializeToString(cloned);
-        const svgBlob = new Blob([svgStr], {
-            type: 'image/svg+xml;charset=utf-8'
-        });
-        const url = URL.createObjectURL(svgBlob);
-        const img = new window.Image();
-        img.crossOrigin = 'anonymous'; // safe since it's local serialized
-        img.onload = () => {
+        try {
+            if (!qrContainerRef.current) {
+                toast.error('QR tidak ditemukan');
+                return;
+            }
+
+            const svgEl = qrContainerRef.current.querySelector(
+                'svg'
+            ) as SVGSVGElement | null;
+            if (!svgEl) {
+                toast.error('QR tidak ditemukan');
+                return;
+            }
+
+            // serialize QR SVG
+            const cloned = svgEl.cloneNode(true) as SVGSVGElement;
+            if (!cloned.getAttribute('xmlns')) {
+                cloned.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+            }
+            const serializer = new XMLSerializer();
+            const svgStr = serializer.serializeToString(cloned);
+            const svgBlob = new Blob([svgStr], {
+                type: 'image/svg+xml;charset=utf-8'
+            });
+            const svgUrl = URL.createObjectURL(svgBlob);
+            const qrImg = await loadImg(svgUrl);
+
+            // determine brand logo
+            const isShopeepay = transaction.payment_method === 'ID_SHOPEEPAY';
+            const isGopay = transaction.payment_method === 'GOPAY';
+            const brandLogoSrc = isGopay
+                ? `${CDN_URL}/assets/payments/gopay.png`
+                : isShopeepay
+                ? `${CDN_URL}/assets/payments/shopeepay.png`
+                : '';
+            const brandLogoImg = brandLogoSrc
+                ? await loadImg(brandLogoSrc)
+                : null;
+
+            // layout metrics
+            const padding = 24;
+            const gap = 16;
+            const qrSize = Math.max(qrImg.width, qrImg.height); // assume square
+            const logoHeight = 24; // consistent brand logo height
+
+            // content width is max of QR and logo
+            const contentWidth = Math.max(
+                qrSize,
+                brandLogoImg
+                    ? (brandLogoImg.width / brandLogoImg.height) * logoHeight
+                    : 0
+            );
+            const canvasWidth = contentWidth + padding * 2;
+
+            // compute height: optional logo + gap + qr + padding
+            let height = padding;
+            if (brandLogoImg) height += logoHeight + gap;
+            height += qrSize;
+            height += padding;
+
             const scale = window.devicePixelRatio || 1;
             const canvas = document.createElement('canvas');
-            canvas.width = img.width * scale;
-            canvas.height = img.height * scale;
+            canvas.width = Math.round(canvasWidth * scale);
+            canvas.height = Math.round(height * scale);
             const ctx = canvas.getContext('2d');
-            if (!ctx) return;
+            if (!ctx) throw new Error('no 2d context');
 
-            // white background to match design
+            ctx.scale(scale, scale);
+
+            // white background
             ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillRect(0, 0, canvasWidth, height);
 
-            // scale for DPI
-            ctx.setTransform(scale, 0, 0, scale, 0, 0);
-            ctx.imageSmoothingEnabled = false;
-            ctx.drawImage(img, 0, 0);
+            let cursorY = padding;
 
+            // draw brand logo if exists
+            if (brandLogoImg) {
+                const logoW =
+                    (brandLogoImg.width / brandLogoImg.height) * logoHeight;
+                const xLogo = (canvasWidth - logoW) / 2;
+                ctx.drawImage(brandLogoImg, xLogo, cursorY, logoW, logoHeight);
+                cursorY += logoHeight + gap;
+            }
+
+            // draw QR centered
+            const xQr = (canvasWidth - qrSize) / 2;
+            ctx.drawImage(qrImg, xQr, cursorY, qrSize, qrSize);
+
+            // export PNG
             canvas.toBlob(
                 (blob) => {
-                    if (!blob) return;
+                    if (!blob) {
+                        toast.error('Gagal membuat PNG');
+                        return;
+                    }
                     const a = document.createElement('a');
                     a.href = URL.createObjectURL(blob);
                     a.download = `qr_${transaction.id}.png`;
                     a.click();
                     URL.revokeObjectURL(a.href);
+                    URL.revokeObjectURL(svgUrl);
                 },
                 'image/png',
                 1
             );
-            URL.revokeObjectURL(url);
-        };
-        img.onerror = () => {
-            toast.error('Gagal mengonversi QR ke PNG');
-            URL.revokeObjectURL(url);
-        };
-        img.src = url;
+        } catch (e) {
+            toast.error('Gagal mendownload QR PNG');
+        }
     };
 
     return (
