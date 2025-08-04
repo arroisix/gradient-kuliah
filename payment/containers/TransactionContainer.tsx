@@ -12,6 +12,7 @@ import { queryParamBuilder } from 'commons/utils';
 import { sendGTMEvent } from '@next/third-parties/google';
 import { usePayment } from 'payment/contexts/PaymentProvider';
 import AuthenticateCreditCardContainer from './AuthenticateCreditCardContainer';
+import VATransactionCard from 'payment/components/TransactionCard/VATransactionCard';
 
 const TransactionContainer = (): JSX.Element => {
     const router = useRouter();
@@ -100,6 +101,9 @@ const Transaction = ({
 }): JSX.Element => {
     if (transaction.payment_method.startsWith('CARD_')) {
         return <AuthenticateCreditCardContainer trx={transaction} />;
+    }
+    if (transaction.payment_method.startsWith('VA_')) {
+        return <VATransactionCard transaction={transaction} />;
     }
 
     switch (transaction.payment_method) {
