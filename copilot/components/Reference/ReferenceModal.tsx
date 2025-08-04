@@ -21,12 +21,16 @@ interface ReferenceModalProps {
         referenceHeader: string, 
         contentType: ReferenceContentType
     ) => void;
+    courseName?: string;
+    bookName?: string;
 }
 
 const ReferenceModal = ({ 
     isOpen, 
     onClose, 
-    onReferenceSelect 
+    onReferenceSelect,
+    courseName,
+    bookName
 }: ReferenceModalProps) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [hierarchyModal, setHierarchyModal] = useState<{
@@ -138,7 +142,13 @@ const ReferenceModal = ({
         });
     };
 
-    const queryToUse = debouncedSearchTerm || profileData?.major || '';
+    const getDefaultQuery = () => {
+        if (courseName) return courseName;
+        if (bookName) return bookName;
+        return profileData?.major || '';
+    };
+
+    const queryToUse = debouncedSearchTerm || getDefaultQuery();
     const { tab: currentTab } = router.query as { tab: string };
 
     return (

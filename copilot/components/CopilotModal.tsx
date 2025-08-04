@@ -98,6 +98,18 @@ const CopilotModal = ({
     setViewingUsedReferences([]);
   };
 
+  const getContextName = () => {
+    if (!currentContext) return undefined;
+    
+    if (currentContext.contentType === 'course') {
+      return { courseName: currentContext.title };
+    } else {
+      return { bookName: currentContext.title };
+    }
+  };
+
+  const contextNames = getContextName();
+
   const handleReferenceSelect = (
     referenceId: string,
     referenceTitle: string,
@@ -184,6 +196,7 @@ const CopilotModal = ({
         isOpen={isReferenceModalOpen}
         onClose={handleCloseReferenceModal}
         onReferenceSelect={handleReferenceSelect}
+        {...contextNames}
       />
 
       <ReferenceContentModal
