@@ -118,7 +118,7 @@ const AuthenticateCreditCardContainer = ({
                 strategy="afterInteractive"
                 onLoad={handleXenditLoad}
             />
-            <div className="flex flex-col items-center space-y-4 justify-center fixed inset-0">
+            <div className="flex flex-col items-center space-y-4 justify-center min-h-[60vh]">
                 <div className="relative">
                     <div className="flex items-center space-x-4">
                         <div className="w-24 h-24 rounded-full flex items-center justify-center shadow border border-graphite-600">
@@ -148,9 +148,15 @@ const AuthenticateCreditCardContainer = ({
                 <span className="text-center text-lg font-bold text-white">
                     Kamu akan diarahkan ke halaman verifikasi
                 </span>
-                {error && <span className="mt-2 text-red-300">{error}</span>}
+                {error && (
+                    <span className="mt-2 text-red-400 text-center">
+                        {error}
+                    </span>
+                )}
                 {success && (
-                    <span className="mt-2 text-green-300">{success}</span>
+                    <span className="mt-2 text-green-400 text-center">
+                        {success}
+                    </span>
                 )}
             </div>
             {iframeUrl && (
