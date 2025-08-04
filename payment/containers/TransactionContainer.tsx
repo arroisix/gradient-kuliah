@@ -16,6 +16,7 @@ import VATransactionCard from 'payment/components/TransactionCard/VATransactionC
 import { TbArrowsLeftRight } from 'react-icons/tb';
 import WhiteGradientGIcon from 'commons/components/elements/Icons/WhiteGradientGIcon';
 import { LOGO_PAYMENT, NAME_PAYMENT } from 'payment/components/constant';
+import QRTransactionCard from 'payment/components/TransactionCard/QRTransactionCard';
 
 const TransactionContainer = (): JSX.Element => {
     const router = useRouter();
@@ -114,6 +115,10 @@ const Transaction = ({
         case 'ID_OVO':
         case 'ID_LINKAJA':
             return <RedirectContainer method={transaction.payment_method} />;
+        case 'GOPAY':
+        case 'ID_SHOPEEPAY':
+        case 'QRIS':
+            return <QRTransactionCard transaction={transaction} />;
         default:
             return <TransactionCard transaction={transaction} />;
     }

@@ -3,8 +3,9 @@ import { CDN_URL } from 'commons/constants';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { cn, formatCurrency } from 'commons/utils';
 import Image from 'next/image';
-import React from 'react';
+import React, { useRef } from 'react';
 import QRCode from 'react-qr-code';
+import { toast } from 'react-toastify';
 
 type QrisComponentProps = {
     transaction: Transaction;
@@ -27,12 +28,74 @@ const QrisComponent = ({ transaction }: QrisComponentProps): JSX.Element => {
         return 158;
     };
 
+    const qrContainerRef = useRef<HTMLDivElement | null>(null);
+
+    // download as PNG
+    const downloadQrAsPng = async (): Promise<void> => {
+        if (!qrContainerRef.current) return;
+        const svgEl = qrContainerRef.current.querySelector('svg');
+        if (!svgEl) {
+            toast.error('QR tidak ditemukan');
+            return;
+        }
+
+        // Clone & serialize to ensure namespace is present
+        const cloned = svgEl.cloneNode(true) as SVGSVGElement;
+        if (!cloned.getAttribute('xmlns')) {
+            cloned.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+        }
+        const serializer = new XMLSerializer();
+        const svgStr = serializer.serializeToString(cloned);
+        const svgBlob = new Blob([svgStr], {
+            type: 'image/svg+xml;charset=utf-8'
+        });
+        const url = URL.createObjectURL(svgBlob);
+        const img = new window.Image();
+        img.crossOrigin = 'anonymous'; // safe since it's local serialized
+        img.onload = () => {
+            const scale = window.devicePixelRatio || 1;
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width * scale;
+            canvas.height = img.height * scale;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return;
+
+            // white background to match design
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // scale for DPI
+            ctx.setTransform(scale, 0, 0, scale, 0, 0);
+            ctx.imageSmoothingEnabled = false;
+            ctx.drawImage(img, 0, 0);
+
+            canvas.toBlob(
+                (blob) => {
+                    if (!blob) return;
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = `qr_${transaction.id}.png`;
+                    a.click();
+                    URL.revokeObjectURL(a.href);
+                },
+                'image/png',
+                1
+            );
+            URL.revokeObjectURL(url);
+        };
+        img.onerror = () => {
+            toast.error('Gagal mengonversi QR ke PNG');
+            URL.revokeObjectURL(url);
+        };
+        img.src = url;
+    };
+
     return (
         <div className="flex flex-col items-center">
             <div className="font-body text-[#cccccc] text-xs sm:text-sm mb-0.5">
                 Scan QR untuk membayar
             </div>
-            <div className="mb-3 text-lg font-bold">
+            <div className="mb-3 text-lg font-bold font-body text-[#B6A6F3]">
                 {formatCurrency(`${transaction.payment_amount}`)}
             </div>
             <div
@@ -56,15 +119,17 @@ const QrisComponent = ({ transaction }: QrisComponentProps): JSX.Element => {
                         objectFit="contain"
                     />
                 )}
-                <QRCode
-                    size={getQrCodeSize()}
-                    value={
-                        isShopeepay
-                            ? (transaction.ewallet_actions
-                                  ?.qr_checkout_string as string)
-                            : transaction.qr_string
-                    }
-                />
+                <div ref={qrContainerRef}>
+                    <QRCode
+                        size={getQrCodeSize()}
+                        value={
+                            isShopeepay
+                                ? (transaction.ewallet_actions
+                                      ?.qr_checkout_string as string)
+                                : transaction.qr_string
+                        }
+                    />
+                </div>
                 {!isShopeepay && (
                     <div className="flex items-center gap-2 mt-4 text-xs text-neutral-800">
                         Powered by{' '}
@@ -112,6 +177,12 @@ const QrisComponent = ({ transaction }: QrisComponentProps): JSX.Element => {
                     atau Klik di Sini
                 </Button>
             )}
+            <Button
+                variant="primary"
+                className="w-full mt-4"
+                onClick={downloadQrAsPng}>
+                Download QR
+            </Button>
         </div>
     );
 };
