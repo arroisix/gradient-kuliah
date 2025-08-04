@@ -146,7 +146,7 @@ const SuccessCheckoutId = (): JSX.Element => {
                         <div className="h-0 border border-[#4D5165]"></div>
 
                         {/* Price details */}
-                        <div className="grid grid-cols-2 grid-rows-2 space-y-3">
+                        <div className="grid grid-cols-2 gap-y-3">
                             <span className="text-neutral-400 text-sm text-left">
                                 Harga Paket
                             </span>
