@@ -50,7 +50,7 @@ const PaymentMethodList: React.FC = () => {
 
     return (
         <div className="flex flex-col overflow-y-auto pb-36 mx-4 sm:mx-8 md:mx-32">
-            <div className="pt-24">
+            <div className="pt-28">
                 {packet?.is_free ? (
                     <FreeBox />
                 ) : (
