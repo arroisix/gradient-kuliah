@@ -89,7 +89,7 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
             style={{ bottom: mode === 'fixed' ? 0 : bottomOffset }}
             className={`${
                 mode === 'fixed' ? 'fixed' : 'absolute'
-            } z-10 inset-x-4 sm:inset-x-8 lg:inset-x-32 bottom-0 bg-[#181818] rounded-t-xl shadow-lg overflow-hidden`}>
+            } z-10 p-2 inset-x-0 sm:inset-x-8 lg:inset-x-32 bottom-0 bg-[#181818] rounded-t-xl shadow-lg overflow-hidden`}>
             {/* Promo Code Section */}
             <div className="px-4 py-3 relative overflow-visible">
                 <button
@@ -156,15 +156,15 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
                 </div>
 
                 {/* Total and Checkout Button Row */}
-                <div className="flex items-center justify-between">
+                <div className="flex gap-3 pb-2 flex-col md:flex-row md:justify-between md:items-center md:pb-0">
                     <button
                         className="flex items-center cursor-pointer"
                         onClick={() => setIsExpanded(!isExpanded)}>
-                        <div>
-                            <p className="text-neutral-400 text-xs font-normal text-left">
+                        <div className="flex flex-row items-center md:items-start md:flex-col flex-1 min-w-0">
+                            <p className="text-white md:text-neutral-400 text-xs font-normal text-left">
                                 Total Bayar
                             </p>
-                            <p className="text-neutral-50 font-bold text-xl">
+                            <p className="text-neutral-50 text-md font-semibold md:font-bold md:text-xl flex-1 text-right">
                                 {formatCurrency(
                                     calculateFinalPrice().toString()
                                 )}
@@ -180,7 +180,7 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
                     </button>
 
                     {/* Checkout Button */}
-                    <div className="ml-4 min-w-[12rem]">
+                    <div className="min-w-[12rem]">
                         <CheckoutButton
                             packetId={packet?.id as string}
                             paymentMethod={paymentMethod}
