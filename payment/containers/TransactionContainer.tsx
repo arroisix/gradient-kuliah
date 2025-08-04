@@ -13,6 +13,9 @@ import { sendGTMEvent } from '@next/third-parties/google';
 import { usePayment } from 'payment/contexts/PaymentProvider';
 import AuthenticateCreditCardContainer from './AuthenticateCreditCardContainer';
 import VATransactionCard from 'payment/components/TransactionCard/VATransactionCard';
+import { TbArrowsLeftRight } from 'react-icons/tb';
+import WhiteGradientGIcon from 'commons/components/elements/Icons/WhiteGradientGIcon';
+import { LOGO_PAYMENT, NAME_PAYMENT } from 'payment/components/constant';
 
 const TransactionContainer = (): JSX.Element => {
     const router = useRouter();
@@ -23,36 +26,36 @@ const TransactionContainer = (): JSX.Element => {
         pollingInterval: 3000
     });
 
-    useEffect(() => {
-        if (
-            data &&
-            data.status === 'WAITING' &&
-            data.payment_method.startsWith('ID_')
-        ) {
-            let redirectUrl: string | undefined;
-            const [_, paymentMerchant] = data.payment_method.split('_');
-            switch (paymentMerchant) {
-                case 'DANA':
-                case 'LINKAJA':
-                    redirectUrl = isMobile
-                        ? (data.ewallet_actions
-                              ?.mobile_web_checkout_url as string)
-                        : (data.ewallet_actions
-                              ?.desktop_web_checkout_url as string);
-                    break;
-                case 'SHOPEEPAY':
-                    redirectUrl = isMobile
-                        ? (data.ewallet_actions
-                              ?.mobile_deeplink_checkout_url as string)
-                        : undefined;
-                    break;
-            }
+    // useEffect(() => {
+    //     if (
+    //         data &&
+    //         data.status === 'WAITING' &&
+    //         data.payment_method.startsWith('ID_')
+    //     ) {
+    //         let redirectUrl: string | undefined;
+    //         const [_, paymentMerchant] = data.payment_method.split('_');
+    //         switch (paymentMerchant) {
+    //             case 'DANA':
+    //             case 'LINKAJA':
+    //                 redirectUrl = isMobile
+    //                     ? (data.ewallet_actions
+    //                           ?.mobile_web_checkout_url as string)
+    //                     : (data.ewallet_actions
+    //                           ?.desktop_web_checkout_url as string);
+    //                 break;
+    //             case 'SHOPEEPAY':
+    //                 redirectUrl = isMobile
+    //                     ? (data.ewallet_actions
+    //                           ?.mobile_deeplink_checkout_url as string)
+    //                     : undefined;
+    //                 break;
+    //         }
 
-            if (redirectUrl) {
-                router.push(redirectUrl);
-            }
-        }
-    }, [data]);
+    //         if (redirectUrl) {
+    //             router.push(redirectUrl);
+    //         }
+    //     }
+    // }, [data]);
 
     useEffect(() => {
         if (data) {
@@ -108,57 +111,68 @@ const Transaction = ({
 
     switch (transaction.payment_method) {
         case 'ID_DANA':
-            return (
-                <div className="flex flex-col items-center justify-center h-[calc(100vh_-_10rem)] gap-6 text-center">
-                    <Image
-                        src={`${CDN_URL}/assets/redirect_asset.png`}
-                        width={197}
-                        height={118}
-                    />
-                    <p className="text-lg font-bold">
-                        Kamu akan diarahkan ke halaman checkout Dana...
-                    </p>
-                </div>
-            );
         case 'ID_OVO':
-            return (
-                <div className="flex flex-col text-center items-center justify-center h-[calc(100vh_-_10rem)] gap-6">
-                    <Image
-                        src={`${CDN_URL}/assets/waiting_asset.png`}
-                        width={116}
-                        height={116}
-                    />
-                    <p className="text-lg font-bold">
-                        Menunggu konfirmasi dari aplikasi OVO
-                    </p>
-                    <p className="text-neutral-400">
-                        Buka aplikasi OVO di HP kamu dan konfirmasi pembayaran
-                        dalam 55 detik
-                    </p>
-                </div>
-            );
         case 'ID_LINKAJA':
-            return (
-                <div className="flex flex-col text-center  items-center justify-center h-[calc(100vh_-_10rem)] gap-6">
-                    <Image
-                        src={`${CDN_URL}/assets/waiting_asset.png`}
-                        width={116}
-                        height={116}
-                    />
-                    <div className="space-y-2">
-                        <p className="text-lg font-bold">
-                            Pembayaran sedang diproses...
-                        </p>
-                        <p className="text-neutral-400">
-                            Kamu akan diarahkan secara otomatis setelah
-                            pembayaran berhasil
-                        </p>
-                    </div>
-                </div>
-            );
+            return <RedirectContainer method={transaction.payment_method} />;
         default:
             return <TransactionCard transaction={transaction} />;
     }
+};
+
+const RedirectContainer = ({
+    method
+}: {
+    method: PaymentMethod;
+}): JSX.Element => {
+    return (
+        <div className="flex flex-col items-center space-y-4 justify-center min-h-[60vh]">
+            <div className="relative">
+                <div className="flex items-center space-x-4">
+                    <div className="w-24 h-24 rounded-full flex items-center justify-center shadow border border-graphite-600">
+                        <WhiteGradientGIcon />
+                    </div>
+
+                    <div className="w-24 h-24 rounded-full flex items-center justify-center shadow border border-graphite-600">
+                        <div className="flex items-center justify-center w-12 h-12 rounded-full bg-white">
+                            <div className="relative w-10 h-10">
+                                <Image
+                                    src={`${CDN_URL}/assets/payments/mobile-${LOGO_PAYMENT[method]}`}
+                                    alt={`${method}`}
+                                    layout="fill"
+                                    className="object-contain"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-accent-purple flex items-center justify-center">
+                    <TbArrowsLeftRight className="text-white" size={24} />
+                </div>
+            </div>
+
+            {method === 'ID_OVO' ? (
+                <>
+                    <span className="text-center text-lg font-bold text-white">
+                        Buka OVO dan selesaikan transaksi
+                    </span>
+                    <span className="text-center text-md text-neutral-400">
+                        Klik notifikasi OVO di HP kamu dan konfirmasi pembayaran
+                        dalam 55 detik
+                    </span>
+                </>
+            ) : (
+                <>
+                    <span className="text-center text-lg font-bold text-white">
+                        Kamu akan diarahkan ke {NAME_PAYMENT[method]}
+                    </span>
+                    <span className="text-center text-md text-neutral-400">
+                        Lakukan pembayaran melalui {NAME_PAYMENT[method]} untuk
+                        menyelesaikan transaksi
+                    </span>
+                </>
+            )}
+        </div>
+    );
 };
 
 export default TransactionContainer;
