@@ -152,7 +152,7 @@ const CopilotModal = ({
   return (
     <>
       <div className={cn(
-        "fixed bottom-0 right-0 z-50 shadow-lg",
+        "fixed bottom-0 right-0 z-50 shadow-lg font-inter",
         getModalWidth(),
         xlWidth,
         !isMobile && "xl:pr-4",

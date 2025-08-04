@@ -16,21 +16,20 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import { useGetAstronotesExercisesQuery } from 'exercises/redux/api/exercisesApi';
 import AstronotesExercisesSection from 'exercises/components/Astronotes/AstronotesExercisesSection';
 import CopilotEntrypoint from 'copilot/components/CopilotEntrypoint';
-import CopilotModal from 'copilot/components/CopilotModal';
-import { useState } from 'react';
 
 const Astronotes = ({
     content,
     book,
-    recommendations: initialRecommendations
+    recommendations: initialRecommendations,
+    onCopilotClick
 }: {
     content: string;
     book: BookDetailInterface;
     recommendations: GetBookRecommendationResponse;
+    onCopilotClick: (pageId?: string) => void;
 }): JSX.Element => {
     const { isMobileBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const [isCopilotModalOpen, setIsCopilotModalOpen] = useState<boolean>(false);
 
     const { width: notebookWidth, ref: notebookRef } =
         useElementSize<HTMLDivElement>();
@@ -58,15 +57,9 @@ const Astronotes = ({
         );
 
     const handleCopilotClick = () => {
-        setIsCopilotModalOpen(true);
+        const pageId = exercisesData?.page_id;
+        onCopilotClick(pageId);
     };
-
-    const currentAstronotesContext = exercisesData && book && exercisesData.page_id? {
-        id: exercisesData.page_id,
-        title: book.title,
-        header: `Halaman ${page}`, 
-        contentType: 'astronotes_content' as const
-    } : undefined;
 
     return (
         <AstronotesProvider>
@@ -151,14 +144,6 @@ const Astronotes = ({
                 </div>
                 <RatingModal />
                 <FeedbackModal />
-                <CopilotModal
-                    key={slug}
-                    isOpen={isCopilotModalOpen}
-                    setOpen={setIsCopilotModalOpen}
-                    xlWidth="xl:w-[24rem]"
-                    currentContext={currentAstronotesContext}
-                    bookSlug={slug}
-                />
             </section>
         </AstronotesProvider>
     );
