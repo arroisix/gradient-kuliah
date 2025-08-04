@@ -1,12 +1,9 @@
 import { useMemo } from 'react';
 import QrisComponent from '../QrisComponent';
 import moment from 'moment';
-import { NAME_PAYMENT } from '../constant';
 import { formatCurrency } from 'commons/utils';
-import Button from 'commons/components/elements/Button';
 import SubscriptionDate from './SubscriptionDate';
 import { checkExpiry } from 'payment/utils';
-import TransactionStatus from './TransactionStatus';
 
 const STATUS_COLOR: { [key: string]: string } = {
     SUCCESS: 'bg-state-success',
