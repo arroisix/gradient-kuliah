@@ -1,6 +1,6 @@
 'use client';
 
-import { Check, Loader2, X } from 'lucide-react';
+import { Loader2, X } from 'lucide-react';
 import Modal from 'commons/components/modules/Modal';
 import { usePayment } from 'payment/contexts/PaymentProvider';
 import { useGetAllCouponsQuery } from 'referral/redux/referalApi';

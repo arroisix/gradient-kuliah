@@ -6,7 +6,6 @@ import { usePayment } from 'payment/contexts/PaymentProvider';
 import { formatCurrency } from 'commons/utils';
 import { ChevronUp, ChevronDown, Check } from 'lucide-react';
 import CheckoutButton from './CheckoutButton';
-import { BsShieldFillCheck } from 'react-icons/bs';
 
 interface Props {
     onPromoClick: () => void;
