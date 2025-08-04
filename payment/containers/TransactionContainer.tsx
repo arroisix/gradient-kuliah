@@ -3,7 +3,7 @@ import { useGetTransactionQuery } from 'payment/redux/api/transactionApi';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import TransactionCard from '../components/TransactionCard';
-import TransactionGuide from '../components/TransactionGuide';
+import TransactionGuide from '../components/TransactionGuide2';
 import { isMobile } from 'react-device-detect';
 import Skeleton from 'commons/components/elements/Skeleton';
 import Image from 'next/image';
