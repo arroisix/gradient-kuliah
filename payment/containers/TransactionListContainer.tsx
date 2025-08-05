@@ -172,34 +172,18 @@ const TransactionListContainer = (): JSX.Element => {
             </h1>
             {loading && <Skeleton className="h-[150px]" repeat={3} />}
 
-            {/* Responsive Tabs */}
-            <div
-                className={`
-      overflow-x-auto
-      -mx-4 px-4
-      sm:mx-0 sm:px-0
-      mb-8
-    `}>
-                <div
-                    className="
-        inline-flex
-        space-x-4
-        whitespace-nowrap
-      ">
+            {/* Tab bar */}
+            <div className="overflow-x-auto sm:overflow-visible mb-8">
+                <div className="flex space-x-4 whitespace-nowrap w-max sm:w-full sm:justify-center">
                     {tabs.map(({ key, label }) => (
                         <button
                             key={key}
                             onClick={() => setActiveTab(key)}
-                            className={`
-            flex-shrink-0
-            px-4 py-2 font-medium
-            ${
-                activeTab === key
-                    ? 'border-b-2 border-purple-500 text-purple-500'
-                    : 'text-gray-400'
-            }
-            text-sm sm:text-base
-          `}>
+                            className={`px-4 py-2 font-body font-medium ${
+                                activeTab === key
+                                    ? 'border-b-2 border-accent-purple text-white'
+                                    : 'text-neutral-400'
+                            }`}>
                             {label}
                         </button>
                     ))}
