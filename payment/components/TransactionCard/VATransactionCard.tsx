@@ -7,6 +7,7 @@ import { MdContentCopy } from 'react-icons/md';
 import { CDN_URL } from 'commons/constants';
 import Image from 'next/image';
 import { LOGO_PAYMENT, NAME_PAYMENT } from '../constant';
+import PaketInfo from '../PaketInfo';
 
 const formatVANumber = (va: string): string => {
     if (!va) return '';
@@ -28,6 +29,19 @@ const VATransactionCard = ({
 }): JSX.Element => {
     const tracker = useTracker();
     const [_, copy] = useCopyToClipboard();
+
+    const rawPacket = transaction.subscriber?.subscribed_packet;
+    const packetOffer = rawPacket
+        ? ({
+              ...rawPacket,
+              order: 0,
+              benefits: {
+                  data: [],
+                  info: '',
+                  feature: []
+              }
+          } as PacketOffer)
+        : undefined;
 
     const formattedVA = useMemo(
         () => formatVANumber(transaction.va_number),
@@ -51,53 +65,64 @@ const VATransactionCard = ({
     };
 
     return (
-        <div className="w-full">
-            <div className="relative bg-[#181818] rounded-2xl overflow-hidden">
-                <div className="px-6 pt-6 pb-4 flex flex-col rounded-2xl items-center">
-                    {/* header/logo */}
-                    <div className="flex flex-col items-center gap-1 mb-3">
-                        <div
-                            className={`relative w-14 h-14 shrink-0 flex rounded-md items-center justify-center`}>
-                            <Image
-                                src={`${CDN_URL}/assets/mobile-${
-                                    LOGO_PAYMENT[transaction.payment_method]
-                                }`}
-                                alt={NAME_PAYMENT[transaction.payment_method]}
-                                layout="fill"
-                                objectFit="cover"
-                            />
+        <>
+            {packetOffer && (
+                <PaketInfo
+                    packetProp={packetOffer}
+                    hideLink
+                    paymentAmount={transaction.payment_amount}
+                />
+            )}
+            <div className="w-full">
+                <div className="relative bg-[#181818] rounded-2xl overflow-hidden">
+                    <div className="px-6 pt-6 pb-4 flex flex-col rounded-2xl items-center">
+                        {/* header/logo */}
+                        <div className="flex flex-col items-center gap-1 mb-3">
+                            <div
+                                className={`relative w-14 h-14 shrink-0 flex rounded-md items-center justify-center`}>
+                                <Image
+                                    src={`${CDN_URL}/assets/mobile-${
+                                        LOGO_PAYMENT[transaction.payment_method]
+                                    }`}
+                                    alt={
+                                        NAME_PAYMENT[transaction.payment_method]
+                                    }
+                                    layout="fill"
+                                    objectFit="cover"
+                                />
+                            </div>
+                            <span className="font-medium font-body text-white">
+                                {`${transaction.payment_method.replace(
+                                    'VA_',
+                                    ''
+                                )} Virtual Account`}
+                            </span>
                         </div>
-                        <span className="font-medium font-body text-white">
-                            {`${transaction.payment_method.replace(
-                                'VA_',
-                                ''
-                            )} Virtual Account`}
-                        </span>
+
+                        {/* VA number box */}
+                        <div className="w-full bg-[#101010] rounded-2xl px-6 py-2 flex justify-between items-center gap-4">
+                            <span className="text-sm md:text-xl font-bold font-body tracking-wide text-white break-all">
+                                {formattedVA}
+                            </span>
+                            <button
+                                onClick={copyVA}
+                                aria-label="Copy virtual account number"
+                                className="flex-shrink-0 p-2 rounded hover:bg-neutral-800 transition">
+                                <MdContentCopy
+                                    size={24}
+                                    className="text-[#8c6aff]"
+                                />
+                            </button>
+                        </div>
                     </div>
 
-                    {/* VA number box */}
-                    <div className="w-full bg-[#101010] rounded-2xl px-6 py-2 flex justify-between items-center gap-4">
-                        <span className="text-sm md:text-xl font-bold font-body tracking-wide text-white break-all">
-                            {formattedVA}
-                        </span>
-                        <button
-                            onClick={copyVA}
-                            aria-label="Copy virtual account number"
-                            className="flex-shrink-0 p-2 rounded hover:bg-neutral-800 transition">
-                            <MdContentCopy
-                                size={24}
-                                className="text-[#8c6aff]"
-                            />
-                        </button>
+                    {/* footer deadline bar */}
+                    <div className="bg-[#333333] text-center text-sm text-[#999999] py-3">
+                        {deadlineText}
                     </div>
-                </div>
-
-                {/* footer deadline bar */}
-                <div className="bg-[#333333] text-center text-sm text-[#999999] py-3">
-                    {deadlineText}
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

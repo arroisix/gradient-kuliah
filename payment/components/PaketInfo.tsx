@@ -1,4 +1,5 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { formatCurrency } from 'commons/utils';
 import moment from 'moment';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -7,14 +8,24 @@ import { useGetActiveSubscriptionQuery } from 'payment/redux/api/subscriptionApi
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-const PaketInfo = (): JSX.Element => {
+const PaketInfo = ({
+    packetProp,
+    hideLink = false,
+    paymentAmount
+}: {
+    packetProp?: PacketOffer;
+    hideLink?: boolean;
+    paymentAmount?: number;
+}): JSX.Element => {
     const router = useRouter();
-    const { packet } = usePayment();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { data: activePacket } = useGetActiveSubscriptionQuery(undefined, {
         skip: !isAuthenticated
     });
     const [topOffset, setTopOffset] = useState(0);
+
+    const { packet: contextPacket } = usePayment();
+    const packet = packetProp ?? contextPacket;
 
     const deactivateAfter = activePacket?.deactivate_after
         ? moment(activePacket.deactivate_after)
@@ -74,14 +85,20 @@ const PaketInfo = (): JSX.Element => {
                     )}
                 </div>
 
-                <Link
-                    href={{
-                        pathname: '/pembayaran/ubah-paket',
-                        query: router.query
-                    }}
-                    className="text-[#7264EB] font-semibold text-sm">
-                    Ubah Paket
-                </Link>
+                {!hideLink ? (
+                    <Link
+                        href={{
+                            pathname: '/pembayaran/ubah-paket',
+                            query: router.query
+                        }}
+                        className="text-[#7264EB] font-semibold text-sm">
+                        Ubah Paket
+                    </Link>
+                ) : paymentAmount != null ? (
+                    <span className="text-neutral-50 font-semibold font-body">
+                        {formatCurrency(paymentAmount.toString())}
+                    </span>
+                ) : null}
             </div>
         </section>
     );
