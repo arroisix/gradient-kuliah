@@ -29,7 +29,7 @@ declare global {
     }
 }
 
-const AddCardForm: React.FC = () => {
+const AddCardForm = (): JSX.Element => {
     const router = useRouter();
     const redirectUrl =
         (router.query.redirect as string) || '/profil/kartu-kredit';
