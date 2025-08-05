@@ -29,7 +29,6 @@ const SuccessCheckoutId = (): JSX.Element => {
     const timerRef = useRef<number | null>(null);
 
     const performRedirect = useCallback(() => {
-        return;
         if (didRedirectRef.current) return;
         didRedirectRef.current = true;
         if (timerRef.current !== null) {

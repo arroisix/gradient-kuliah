@@ -29,7 +29,12 @@ const PaketInfo = (): JSX.Element => {
             const navbar = document.querySelector('header');
             const navbarHeight = navbar?.offsetHeight || 56;
 
-            setTopOffset(navbarHeight);
+            const appBanner = document.querySelector<HTMLElement>(
+                '.sticky.top-14.z-\\[20\\]'
+            );
+            const bannerHeight = appBanner ? appBanner.offsetHeight - 16 : 0;
+
+            setTopOffset(navbarHeight + bannerHeight);
         };
 
         calculateHeaderHeight();
