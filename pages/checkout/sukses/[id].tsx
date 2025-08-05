@@ -29,6 +29,7 @@ const SuccessCheckoutId = (): JSX.Element => {
     const timerRef = useRef<number | null>(null);
 
     const performRedirect = useCallback(() => {
+        return;
         if (didRedirectRef.current) return;
         didRedirectRef.current = true;
         if (timerRef.current !== null) {
@@ -90,11 +91,11 @@ const SuccessCheckoutId = (): JSX.Element => {
 
     return (
         <Layout isFullBlackBackground>
-            <section className="min-h-[75vh] pt-4 px-[7.5rem] flex justify-center items-center flex-col space-y-4">
+            <section className="min-h-[75vh] pt-4 px-4 md:px-[7.5rem] flex justify-center items-center flex-col space-y-4">
                 {isLoading || !transaction ? (
                     <Skeleton />
                 ) : (
-                    <div className="rounded-2xl flex-col bg-[#101010] w-full md:w-1/2 p-8 space-y-3">
+                    <div className="rounded-2xl flex-col bg-[#101010] w-full md:w-3/4 p-8 max-w-md space-y-3">
                         {/* Picutre, success, amount */}
                         <div className="flex flex-col items-center space-y-2">
                             <div className="w-[100px] h-[100px] rounded-full bg-[#222222] flex items-center justify-center">
@@ -189,7 +190,7 @@ const SuccessCheckoutId = (): JSX.Element => {
                 )}
                 <Button
                     variant="primary"
-                    className="w-full md:w-1/2"
+                    className="w-full md:w-3/4 max-w-md"
                     onClick={performRedirect}>
                     Kembali ke Halaman Utama
                 </Button>

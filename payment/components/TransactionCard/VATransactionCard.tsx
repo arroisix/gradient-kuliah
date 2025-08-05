@@ -77,7 +77,7 @@ const VATransactionCard = ({
 
                     {/* VA number box */}
                     <div className="w-full bg-[#101010] rounded-2xl px-6 py-2 flex justify-between items-center gap-4">
-                        <span className="text-xl font-bold font-body tracking-wide text-white break-all">
+                        <span className="text-sm md:text-xl font-bold font-body tracking-wide text-white break-all">
                             {formattedVA}
                         </span>
                         <button
