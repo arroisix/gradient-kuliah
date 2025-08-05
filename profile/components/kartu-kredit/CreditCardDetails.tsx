@@ -67,7 +67,7 @@ const CreditCardDetails = (): JSX.Element => {
 
     return (
         <>
-            <div className="flex flex-col w-full max-h-[75vh] overflow-y-auto p-4 space-y-6">
+            <div className="flex flex-col w-full overflow-y-auto p-4 space-y-6">
                 <div className="flex items-center gap-x-3 bg-[#03AC5C]/10 p-4 rounded-lg text-green-400">
                     <HiShieldCheck
                         size={20}
@@ -87,7 +87,9 @@ const CreditCardDetails = (): JSX.Element => {
                         <Info className="w-4 h-4" />
                     </button>
                 </div>
-                <div className="bg-[#222222] rounded-xl px-4 shadow-lg">
+
+                {/* Card visual */}
+                <div className="bg-[#222222] rounded-xl px-4 shadow-lg w-full max-w-full">
                     <div className="flex items-center justify-between mt-6">
                         <div className="w-10 h-10 rounded-full bg-[#00AA99]/15 flex items-center justify-center">
                             <CreditCardSmallIcon />
@@ -110,7 +112,7 @@ const CreditCardDetails = (): JSX.Element => {
                             </span>
                         </div>
                     </div>
-                    <div className="flex items-center space-x-4 mt-6 mx-2">
+                    <div className="flex items-center space-x-4 mt-6 mx-2 flex-shrink">
                         <div className="border-r border-gray-400 pr-4">
                             <span className="text-white font-semibold">
                                 {data.brand}
@@ -126,7 +128,7 @@ const CreditCardDetails = (): JSX.Element => {
                         </button>
                     </div>
                     <div className="flex justify-between items-center space-x-4 mx-2 my-6">
-                        <span className="text-white font-mono tracking-wider text-lg">
+                        <span className="text-white font-mono tracking-wider text-xs sm:text-lg">
                             •••• •••• •••• ••••
                         </span>
                         <div className="bg-white rounded-md flex items-center justify-center p-1 overflow-hidden">

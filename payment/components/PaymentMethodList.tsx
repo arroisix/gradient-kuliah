@@ -4,8 +4,9 @@ import Spinner from 'commons/components/elements/Spinner';
 import { useGetAllPaymentMethodsQuery } from 'payment/redux/api/transactionApi';
 import { useEffect } from 'react';
 import { usePayment } from 'payment/contexts/PaymentProvider';
-import FreeBox from './FreeBox';
 import PaymentMethodCardSection from './PaymentMethodCardSection';
+import PaymentMethodFreeSection from './PaymentMethodFreeSection';
+import { useGetConfigQuery } from 'commons/redux/api/commonApi';
 
 const PaymentMethodList: React.FC = () => {
     const { packet } = usePayment();
@@ -14,6 +15,7 @@ const PaymentMethodList: React.FC = () => {
         isLoading: paymentMethodsLoading,
         error: paymentMethodsError
     } = useGetAllPaymentMethodsQuery();
+    const { data: configData } = useGetConfigQuery();
 
     useEffect(() => {
         localStorage.removeItem('packetId');
@@ -49,19 +51,26 @@ const PaymentMethodList: React.FC = () => {
         .filter((section) => section.key !== 'retail');
 
     return (
-        <div className="flex flex-col overflow-y-auto pb-36 mx-4 md:mx-32">
-            <div className="pt-24">
+        <div className="flex flex-col overflow-y-auto pb-44 md:pb-36 mx-4 sm:mx-8 md:mx-32">
+            <div className="pt-28">
                 {packet?.is_free ? (
-                    <FreeBox />
+                    <PaymentMethodFreeSection />
                 ) : (
                     <>
                         {sortedSections.map((section) => {
                             if (section.key === 'card') {
-                                return (
-                                    <PaymentMethodCardSection
-                                        key={section.key}
-                                    />
-                                );
+                                if (
+                                    configData?.configs
+                                        .is_credit_card_config_enabled
+                                ) {
+                                    return (
+                                        <PaymentMethodCardSection
+                                            key={section.key}
+                                        />
+                                    );
+                                } else {
+                                    return <></>;
+                                }
                             } else {
                                 return (
                                     <PaymentMethodSectionComponent

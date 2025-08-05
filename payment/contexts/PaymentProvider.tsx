@@ -21,6 +21,8 @@ interface PaymentContextType {
     setPhoneNumberError: (isError: string) => void;
     appliedPromo?: ValidatePromoResponse;
     setAppliedPromo: (data?: ValidatePromoResponse) => void;
+    promoAppliedManually: boolean;
+    setPromoAppliedManually: (x: boolean) => void;
     cardId?: string;
     setCardId: (data?: string) => void;
     tempCard?: CreditCard;
@@ -49,6 +51,7 @@ export function PaymentProvider({
     const [appliedPromo, setAppliedPromo] = useState<
         ValidatePromoResponse | undefined
     >(undefined);
+    const [promoAppliedManually, setPromoAppliedManually] = useState(false);
 
     const selectPaymentMethod = (to: PaymentMethod): void => {
         if (paymentMethod === 'ID_OVO') {
@@ -57,6 +60,14 @@ export function PaymentProvider({
         }
 
         if (paymentMethod === 'VOUCHER') {
+            setAppliedPromo(undefined);
+        }
+
+        if (
+            to === 'VOUCHER' &&
+            appliedPromo &&
+            appliedPromo.promo_type != 'OFFLINE VOUCHER'
+        ) {
             setAppliedPromo(undefined);
         }
 
@@ -83,15 +94,19 @@ export function PaymentProvider({
 
     useEffect(() => {
         const stored = localStorage.getItem('tempCard');
-        console.log({ stored });
         if (stored) {
-            const temp: CreditCard = JSON.parse(stored);
-            setTempCard(temp);
-            localStorage.removeItem('tempCard');
-            selectPaymentMethod(
-                `CARD_${temp.brand.toUpperCase()}` as PaymentMethod
-            );
-            setCardId(temp.id);
+            try {
+                const temp: CreditCard = JSON.parse(stored);
+                setTempCard(temp);
+                selectPaymentMethod(
+                    `CARD_${temp.brand.toUpperCase()}` as PaymentMethod
+                );
+                setCardId(temp.id);
+            } catch {
+                // invalid JSON, skip
+            } finally {
+                localStorage.removeItem('tempCard');
+            }
         }
     }, []);
 
@@ -108,6 +123,8 @@ export function PaymentProvider({
             setPhoneNumberError,
             appliedPromo,
             setAppliedPromo,
+            promoAppliedManually,
+            setPromoAppliedManually,
             cardId,
             setCardId,
             tempCard,
@@ -120,6 +137,7 @@ export function PaymentProvider({
             phoneNumber,
             phoneNumberError,
             appliedPromo,
+            promoAppliedManually,
             cardId,
             tempCard
         ]

@@ -29,7 +29,7 @@ declare global {
     }
 }
 
-const AddCardForm: React.FC = () => {
+const AddCardForm = (): JSX.Element => {
     const router = useRouter();
     const redirectUrl =
         (router.query.redirect as string) || '/profil/kartu-kredit';
@@ -49,7 +49,17 @@ const AddCardForm: React.FC = () => {
         useLazyCheckUserCardNameAvailabilityQuery();
 
     useEffect(() => {
-        if (successSaving) router.push(redirectUrl);
+        const success = async (): Promise<void> => {
+            if (successSaving) {
+                await router.push(redirectUrl);
+                toast.success('Berhasil menghubungkan kartu kredit/debit!', {
+                    position: 'top-center',
+                    theme: 'colored',
+                    hideProgressBar: true
+                });
+            }
+        };
+        success();
     }, [successSaving, router, redirectUrl]);
 
     const handleXenditLoad = (): void => {

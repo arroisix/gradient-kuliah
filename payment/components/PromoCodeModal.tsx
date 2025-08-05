@@ -1,20 +1,41 @@
 'use client';
 
-import { Loader2 } from 'lucide-react';
+import { Loader2, X } from 'lucide-react';
 import Modal from 'commons/components/modules/Modal';
 import { usePayment } from 'payment/contexts/PaymentProvider';
 import { useGetAllCouponsQuery } from 'referral/redux/referalApi';
-import PromoCodeInput from './PromoCodeInput';
+import PromoCodeInput from './PromoCodeInput2';
+import { toast } from 'react-toastify';
 
 export const PromoCodeModal = ({
     isOpen,
     setOpen
 }: ModalBaseProps): JSX.Element => {
-    const { packet, appliedPromo, setAppliedPromo } = usePayment();
+    const {
+        packet,
+        appliedPromo,
+        setAppliedPromo,
+        promoAppliedManually,
+        setPromoAppliedManually,
+        paymentMethod
+    } = usePayment();
 
     const packetId = packet?.id ?? '';
     const { data: couponsData, isLoading: isLoadingCoupons } =
         useGetAllCouponsQuery({ packet_id: packetId }, { skip: !packetId });
+
+    // if there’s an applied promo, pull it up to the front
+    const coupons = couponsData?.coupons ?? [];
+    const sortedCoupons = appliedPromo
+        ? [
+              // first the matching coupon
+              ...coupons.filter(
+                  (c) => c.promo_code === appliedPromo.promo_code
+              ),
+              // then the rest
+              ...coupons.filter((c) => c.promo_code !== appliedPromo.promo_code)
+          ]
+        : coupons;
 
     const formatDate = (dateString: string): string => {
         const date = new Date(dateString);
@@ -28,12 +49,28 @@ export const PromoCodeModal = ({
     };
 
     const handleApplyCode = (promo: ValidatePromoResponse): void => {
+        if (
+            paymentMethod === 'VOUCHER' &&
+            promo.promo_type != 'OFFLINE VOUCHER'
+        ) {
+            toast.error(
+                'Kode promo tidak valid untuk metode pembayaran voucher',
+                {
+                    position: 'top-center',
+                    theme: 'colored',
+                    toastId: 'INVALID_VOUCHER'
+                }
+            );
+            return;
+        }
         setAppliedPromo(promo);
+        setPromoAppliedManually(false);
         setOpen(false);
     };
 
     const handleRemovePromo = (): void => {
         setAppliedPromo(undefined);
+        setPromoAppliedManually(false);
     };
 
     return (
@@ -41,30 +78,32 @@ export const PromoCodeModal = ({
             isOpen={isOpen}
             setOpen={setOpen}
             variant="dark"
-            className="!bg-[#1D1D1D] fixed inset-x-0 bottom-0 w-full rounded-t-xl sm:relative sm:inset-auto sm:bottom-auto sm:w-auto sm:max-w-md sm:rounded-lg">
-            <div className="flex flex-col w-full">
+            className="!bg-[#222222] w-full rounded-lg">
+            <div className="flex flex-col w-full space-y-4">
                 {/* Header */}
-                <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-bold text-white">
-                        Kode Promo/Referral
-                    </h2>
-                </div>
+                <h2 className="text-lg font-bold text-white font-body">
+                    Kode Promo/Referral
+                </h2>
 
                 {/* Subtitle */}
-                <p className="text-sm text-gray-400 mb-6">
+                <p className="text-sm text-white font-body">
                     {appliedPromo
                         ? 'Ganti dengan kode lain atau pilih dari kode yang tersedia'
                         : 'Masukkan kode referral dari teman atau kode promo dari Gradient'}
                 </p>
 
                 {/* Promo Code Input */}
-                <PromoCodeInput
+                {/* <PromoCodeInput
                     placeholder="Masukkan kode referral"
                     onValidPromo={handleApplyCode}
                     showApplyButton={true}
                     variant="modal"
-                    className="mb-4"
                     applyAfterValid={false}
+                /> */}
+
+                <PromoCodeInput
+                    placeholder="Masukkan kode promo/referral"
+                    onApply={() => setOpen(false)}
                 />
 
                 {/* Available Promo Codes */}
@@ -75,41 +114,44 @@ export const PromoCodeModal = ({
                             Loading promo codes...
                         </span>
                     </div>
-                ) : couponsData?.coupons && couponsData.coupons.length > 0 ? (
-                    <div className="space-y-3 max-h-60 overflow-y-auto">
-                        {couponsData.coupons.map((promo) => {
-                            const isCurrentlyApplied =
+                ) : sortedCoupons && sortedCoupons.length > 0 ? (
+                    <div className="space-y-3 max-h-40 overflow-y-auto">
+                        {sortedCoupons.map((promo) => {
+                            const isCurrentlyAppliedInList =
+                                !promoAppliedManually &&
                                 appliedPromo?.promo_code === promo.promo_code;
 
                             return (
                                 <div
                                     key={promo.promo_id}
-                                    className={`p-4 bg-gradient-to-r border rounded-lg ${
-                                        isCurrentlyApplied
-                                            ? 'from-green-900/40 to-green-800/40 border-green-500/30'
-                                            : 'from-purple-900/40 to-purple-800/40 border-purple-500/30'
+                                    className={`p-4 rounded-lg ${
+                                        isCurrentlyAppliedInList
+                                            ? 'bg-[#03AC5C]/10'
+                                            : 'bg-[#2A225F]'
                                     }`}>
                                     <div className="flex items-center justify-between">
                                         <div>
-                                            <h3 className="text-white font-semibold text-sm mb-1">
+                                            <h3 className="text-white font-semibold text-sm mb-1 font-body">
                                                 Diskon{' '}
                                                 {promo.discount_amount_original}
-                                                {isCurrentlyApplied && (
-                                                    <span className="text-green-400 text-xs ml-2">
-                                                        (Aktif)
-                                                    </span>
-                                                )}
                                             </h3>
-                                            <p className="text-gray-400 text-xs">
+                                            <p className="text-[#B6A6F3] text-xs font-body">
                                                 Valid s.d.{' '}
                                                 {formatDate(promo.expired_at)}
                                             </p>
                                         </div>
-                                        {isCurrentlyApplied ? (
+                                        {isCurrentlyAppliedInList ? (
                                             <button
                                                 onClick={handleRemovePromo}
-                                                className="px-4 py-2 bg-[#EA5D49] hover:bg-[#D85140] text-white text-sm rounded-full transition-colors flex items-center justify-center">
-                                                Hapus
+                                                className="w-24 h-10 bg-accent-purple text-white text-sm rounded-full font-body flex items-center justify-center">
+                                                <div className="flex items-center space-x-2">
+                                                    <div className="flex items-center space-x-2">
+                                                        <X className="w-4 h-4 text-white font-extrabold" />
+                                                        <span className="text-sm font-body">
+                                                            Batal
+                                                        </span>
+                                                    </div>
+                                                </div>
                                             </button>
                                         ) : (
                                             <button
@@ -120,7 +162,7 @@ export const PromoCodeModal = ({
                                                         message: ''
                                                     })
                                                 }
-                                                className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded-full transition-colors">
+                                                className="w-24 h-10 bg-accent-purple text-white text-sm rounded-full font-body">
                                                 Pakai
                                             </button>
                                         )}

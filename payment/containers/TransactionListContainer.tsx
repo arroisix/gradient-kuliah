@@ -8,6 +8,16 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import { useSelector } from 'react-redux';
 import TransactionList from 'payment/components/TransactionList';
 import EmptyState from 'payment/components/TransactionList/EmptyState';
+import { checkExpiry } from 'payment/utils';
+
+type Tab = 'SEMUA' | 'PENDING' | 'BERHASIL' | 'GAGAL';
+
+const tabs: { key: Tab; label: string }[] = [
+    { key: 'SEMUA', label: 'Semua' },
+    { key: 'PENDING', label: 'Menunggu Pembayaran' },
+    { key: 'BERHASIL', label: 'Berhasil' },
+    { key: 'GAGAL', label: 'Gagal' }
+];
 
 const TransactionListContainer = (): JSX.Element => {
     const [activeTransaction, setActiveTransaction] = useState<Transaction[]>();
@@ -15,6 +25,7 @@ const TransactionListContainer = (): JSX.Element => {
         useState<Transaction[]>();
     const [inactiveTransaction, setInactiveTransaction] =
         useState<Transaction[]>();
+    const [activeTab, setActiveTab] = useState<Tab>('SEMUA');
 
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { isLoading: loading, data } = useGetAllTransactionQuery(undefined, {
@@ -25,7 +36,6 @@ const TransactionListContainer = (): JSX.Element => {
     const router = useRouter();
     const { checkout } = router.query;
     const [isReferralModalOpen, setIsReferralModalOpen] = useState(false);
-    const isEmpty = !loading && data?.data?.length == 0;
 
     useEffect(() => {
         if (checkout === 'success') setIsReferralModalOpen(true);
@@ -59,29 +69,127 @@ const TransactionListContainer = (): JSX.Element => {
         }
     }, [data]);
 
+    const waitingTransactions = inactiveTransaction?.filter(
+        (tx) => tx.status === 'WAITING'
+    );
+    const successExpired = inactiveTransaction?.filter(
+        (tx) => tx.status === 'SUCCESS'
+    );
+    const expiredTransactions =
+        inactiveTransaction?.filter(
+            (tx) =>
+                checkExpiry(tx.deadline as string) && tx.status !== 'SUCCESS'
+        ) || [];
+
+    const renderByTab = (): JSX.Element => {
+        switch (activeTab) {
+            case 'SEMUA':
+                return (
+                    <>
+                        <TransactionList
+                            isActive
+                            header="Aktif"
+                            transactions={activeTransaction}
+                            hasUpcoming={upcomingSubscription?.length != 0}
+                        />
+                        <TransactionList
+                            isActive
+                            header="Mendatang"
+                            transactions={upcomingSubscription}
+                            hasUpcoming={upcomingSubscription?.length != 0}
+                        />
+                        <TransactionList
+                            header="Tidak Aktif"
+                            transactions={inactiveTransaction}
+                            hasUpcoming={upcomingSubscription?.length != 0}
+                        />
+                    </>
+                );
+
+            case 'PENDING':
+                return (
+                    <TransactionList
+                        header="Tidak Aktif"
+                        transactions={waitingTransactions}
+                        hasUpcoming={upcomingSubscription?.length != 0}
+                    />
+                );
+
+            case 'BERHASIL':
+                return (
+                    <>
+                        <TransactionList
+                            isActive
+                            header="Aktif"
+                            transactions={activeTransaction}
+                            hasUpcoming={upcomingSubscription?.length !== 0}
+                        />
+                        <TransactionList
+                            isActive
+                            header="Mendatang"
+                            transactions={upcomingSubscription}
+                            hasUpcoming={upcomingSubscription?.length != 0}
+                        />
+                        <TransactionList
+                            header="Tidak Aktif"
+                            transactions={successExpired}
+                            hasUpcoming={upcomingSubscription?.length != 0}
+                        />
+                    </>
+                );
+
+            case 'GAGAL':
+                return (
+                    <TransactionList
+                        header="Tidak Aktif"
+                        transactions={expiredTransactions}
+                        hasUpcoming={upcomingSubscription?.length != 0}
+                    />
+                );
+
+            default:
+                return <></>;
+        }
+    };
+
+    const isEmpty =
+        !loading &&
+        {
+            SEMUA: data?.data ?? [],
+            PENDING: waitingTransactions ?? [],
+            BERHASIL: [
+                ...(activeTransaction ?? []),
+                ...(upcomingSubscription ?? []),
+                ...(successExpired ?? [])
+            ],
+            GAGAL: expiredTransactions
+        }[activeTab].length === 0;
+
     return (
         <section className="min-h-screen py-24 space-y-6 px-4 md:px-[7.5rem]">
             <h1 className="mb-6 font-bold text-center sm:text-2xl sm:mb-8">
                 Riwayat Pembelian
             </h1>
             {loading && <Skeleton className="h-[150px]" repeat={3} />}
-            <TransactionList
-                isActive
-                header="Aktif"
-                transactions={activeTransaction}
-                hasUpcoming={upcomingSubscription?.length != 0}
-            />
-            <TransactionList
-                isActive
-                header="Mendatang"
-                transactions={upcomingSubscription}
-                hasUpcoming={upcomingSubscription?.length != 0}
-            />
-            <TransactionList
-                header="Tidak Aktif"
-                transactions={inactiveTransaction}
-                hasUpcoming={upcomingSubscription?.length != 0}
-            />
+
+            {/* Tab bar */}
+            <div className="overflow-x-auto sm:overflow-visible mb-8">
+                <div className="flex space-x-4 whitespace-nowrap w-max sm:w-full sm:justify-center">
+                    {tabs.map(({ key, label }) => (
+                        <button
+                            key={key}
+                            onClick={() => setActiveTab(key)}
+                            className={`px-4 py-2 font-body font-medium ${
+                                activeTab === key
+                                    ? 'border-b-2 border-accent-purple text-white'
+                                    : 'text-neutral-400'
+                            }`}>
+                            {label}
+                        </button>
+                    ))}
+                </div>
+            </div>
+            {!loading && renderByTab()}
             {isEmpty && <EmptyState />}
             <ReferralModal
                 isOpen={isReferralModalOpen}

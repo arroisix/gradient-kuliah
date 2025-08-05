@@ -6,7 +6,6 @@ import { usePayment } from 'payment/contexts/PaymentProvider';
 import { formatCurrency } from 'commons/utils';
 import { ChevronUp, ChevronDown, Check } from 'lucide-react';
 import CheckoutButton from './CheckoutButton';
-import { BsShieldFillCheck } from 'react-icons/bs';
 
 interface Props {
     onPromoClick: () => void;
@@ -61,7 +60,15 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
         if (appliedPromo?.is_valid && appliedPromo?.payment_amount) {
             return appliedPromo.payment_amount;
         }
-        return packet?.price || '0';
+        return packet?.price || 0;
+    };
+
+    const getDisplayPrice = (): string => {
+        const raw = calculateFinalPrice();
+        if (packet?.is_free || raw <= 0) {
+            return 'GRATIS';
+        }
+        return formatCurrency(raw.toString());
     };
 
     const getPromoButtonText = () => {
@@ -89,61 +96,63 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
             style={{ bottom: mode === 'fixed' ? 0 : bottomOffset }}
             className={`${
                 mode === 'fixed' ? 'fixed' : 'absolute'
-            } z-10 inset-x-4 sm:inset-x-8 lg:inset-x-32 bottom-0 bg-graphite-900 rounded-t-xl shadow-lg overflow-hidden`}>
+            } z-10 p-2 inset-x-0 sm:inset-x-8 lg:inset-x-32 bottom-0 bg-[#181818] rounded-t-xl shadow-lg overflow-hidden`}>
             {/* Promo Code Section */}
-            {!isExpanded && (
-                <div className="px-4 py-3 relative overflow-visible">
-                    <button
-                        onClick={onPromoClick}
-                        className={`relative overflow-hidden w-full rounded-lg py-4 flex items-center gap-3 ${
-                            appliedPromo
-                                ? 'pl-10 bg-emerald-900'
-                                : 'pl-[50px] bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700'
-                        }`}>
-                        <>
-                            {/* half circles */}
-                            <span className="absolute w-8 h-8 bg-graphite-900 rounded-full -left-4 top-1/2 -translate-y-1/2 z-10" />
-                            <span className="absolute w-8 h-8 bg-graphite-900 rounded-full -right-4 top-1/2 -translate-y-1/2 z-10" />
+            <div className="px-4 py-3 relative overflow-visible">
+                <button
+                    onClick={onPromoClick}
+                    className={`relative overflow-hidden w-full rounded-lg py-4 flex items-center gap-3 ${
+                        appliedPromo
+                            ? 'pl-10 bg-[#03AC5C]/20'
+                            : 'pl-[50px] bg-gradient-to-r from-[#741F86] via-[#965084] to-[#A82C56] hover:from-[#8B25A0] hover:to-[#C93467] transition-colors'
+                    }`}>
+                    <>
+                        {/* half circles */}
+                        <span className="absolute w-8 h-8 bg-[#181818] rounded-full -left-4 top-1/2 -translate-y-1/2 z-10" />
+                        <span className="absolute w-8 h-8 bg-[#181818] rounded-full -right-4 top-1/2 -translate-y-1/2 z-10" />
 
-                            {/* dashed lines */}
-                            <div className="absolute top-0 bottom-0 left-8 border-l-2 border-dashed border-gray-900 pointer-events-none" />
-                        </>
+                        {/* dashed lines */}
+                        <div className="absolute top-0 bottom-0 left-8 border-l-[3px] border-dashed border-[#181818] pointer-events-none" />
+                    </>
 
-                        {appliedPromo && (
-                            <Check className="relative w-6 h-6 text-green-500 z-10" />
-                        )}
-                        <span className="relative z-10 text-white font-bold text-sm">
-                            {getPromoButtonText()}
-                        </span>
-                    </button>
-                </div>
-            )}
+                    {appliedPromo && (
+                        <div className="relative w-5 h-5 bg-[#03AC5C] flex items-center justify-center rounded-full ml-1">
+                            <Check className="w-4 h-4 text-[#181818] z-10" />
+                        </div>
+                    )}
+                    <span className="relative z-10 text-white text-sm font-body font-bold">
+                        {getPromoButtonText()}
+                    </span>
+                </button>
+            </div>
 
             {/* Checkout Section */}
             <div className="px-4 pb-4">
                 <div>
                     {/* Expanded Summary */}
                     {isExpanded && (
-                        <div className="mb-4 mt-3 rounded-lg bg-graphite-800 p-4">
-                            <h3 className="text-neutral-50 font-semibold text-sm mb-2">
+                        <div className="mb-4 rounded-lg bg-graphite-800 p-4">
+                            <h3 className="text-neutral-50 font-semibold text-sm mb-2 font-body">
                                 Ringkasan Pembayaran
                             </h3>
 
                             <div className="flex justify-between items-center">
-                                <span className="text-neutral-200 text-sm font-normal">
+                                <span className="text-neutral-200 text-sm font-body">
                                     {packet?.packet_name}
                                 </span>
-                                <span className="text-neutral-50 text-sm font-normal">
-                                    {formatCurrency(packet?.price || '0')}
+                                <span className="text-neutral-50 text-sm font-body">
+                                    {packet?.is_free
+                                        ? 'GRATIS'
+                                        : formatCurrency(packet?.price || '0')}
                                 </span>
                             </div>
 
                             {appliedPromo?.is_valid && (
                                 <div className="flex justify-between items-center mt-1">
-                                    <span className="text-neutral-200 text-sm font-normal">
+                                    <span className="text-neutral-200 text-sm font-body">
                                         Diskon {appliedPromo.promo_code}
                                     </span>
-                                    <span className="text-state-success text-sm font-normal">
+                                    <span className="text-state-success text-sm font-body">
                                         -
                                         {formatCurrency(
                                             appliedPromo.discount_amount.toString()
@@ -156,33 +165,29 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
                 </div>
 
                 {/* Total and Checkout Button Row */}
-                <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                        <button
-                            className="flex items-center cursor-pointer"
-                            onClick={() => setIsExpanded(!isExpanded)}>
-                            <div>
-                                <p className="text-neutral-400 text-xs font-normal">
-                                    Total Bayar
-                                </p>
-                                <p className="text-neutral-50 font-bold text-xl">
-                                    {formatCurrency(
-                                        calculateFinalPrice().toString()
-                                    )}
-                                </p>
-                            </div>
-                            <div className="ml-2 text-neutral-50">
-                                {isExpanded ? (
-                                    <ChevronDown size={16} />
-                                ) : (
-                                    <ChevronUp size={16} />
-                                )}
-                            </div>
-                        </button>
-                    </div>
+                <div className="flex gap-3 pb-2 flex-col md:flex-row md:justify-between md:items-center md:pb-0">
+                    <button
+                        className="flex items-center cursor-pointer hover:scale-105 transition-transform"
+                        onClick={() => setIsExpanded(!isExpanded)}>
+                        <div className="flex flex-row items-center md:items-start md:flex-col flex-1 min-w-0">
+                            <p className="text-white md:text-neutral-400 text-xs font-normal text-left">
+                                Total Bayar
+                            </p>
+                            <p className="text-neutral-50 text-md font-semibold md:font-bold md:text-xl flex-1 text-right">
+                                {getDisplayPrice()}
+                            </p>
+                        </div>
+                        <div className="ml-2 text-neutral-50">
+                            {isExpanded ? (
+                                <ChevronDown size={16} />
+                            ) : (
+                                <ChevronUp size={16} />
+                            )}
+                        </div>
+                    </button>
 
                     {/* Checkout Button */}
-                    <div className="ml-4">
+                    <div className="min-w-[12rem]">
                         <CheckoutButton
                             packetId={packet?.id as string}
                             paymentMethod={paymentMethod}
@@ -197,11 +202,8 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
                             }
                             phoneNumber={phoneNumber}
                             userCardId={cardId}
+                            isFree={packet?.is_free}
                         />
-                        <span className="flex items-center mt-2 text-xs">
-                            <BsShieldFillCheck className="mr-2" />
-                            Secure Payment
-                        </span>
                     </div>
                 </div>
             </div>

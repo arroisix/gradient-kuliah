@@ -141,21 +141,19 @@ export const PromoCodeInput: React.FC<PromoCodeInputProps> = ({
     const getInputIcon = () => {
         switch (validationState) {
             case 'loading':
-                return (
-                    <Loader2 className="w-5 h-5 text-purple-500 animate-spin" />
-                );
+                return <Loader2 className="w-5 h-5 text-white animate-spin" />;
             case 'success':
                 return <Check className="w-5 h-5 text-green-500" />;
             default:
                 return variant === 'modal' ? (
-                    <Search className="w-5 h-5 text-purple-500" />
+                    <Search className="w-5 h-5 text-white" />
                 ) : null;
         }
     };
 
     const inputStyles =
         variant === 'modal'
-            ? 'w-full px-4 py-3 pr-12 bg-[#121212] border border-graphite-700 rounded-lg text-white placeholder-graphite-500 focus:outline-none focus:border-purple-500 transition-colors'
+            ? 'w-full px-4 py-3 pr-12 bg-red-600 border border-[#666666] rounded-lg text-white placeholder-[#666666] focus:outline-none focus:border-purple-500 transition-colors'
             : 'w-full bg-graphite-900 border border-graphite-700 rounded-lg px-3 py-2 text-white placeholder-graphite-500 focus:outline-none focus:ring-2 focus:ring-purple-500';
 
     const errorStyles =
@@ -173,24 +171,17 @@ export const PromoCodeInput: React.FC<PromoCodeInputProps> = ({
     return (
         <div className={className}>
             {/* Input Field */}
-            <div className="relative mb-2">
+            <div className="relative">
                 <input
                     type="text"
                     placeholder={placeholder}
                     value={inputCode}
-                    onChange={(e) => setInputCode(e.target.value)}
+                    // onChange={(e) => setInputCode(e.target.value)}
                     className={inputStyles}
                 />
-                {variant === 'modal' && (
-                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                        {getInputIcon()}
-                    </div>
-                )}
-                {variant === 'inline' && getInputIcon() && (
-                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                        {getInputIcon()}
-                    </div>
-                )}
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 bg-accent-purple p-1 rounded-lg">
+                    {getInputIcon()}
+                </div>
             </div>
 
             {/* Error Message */}

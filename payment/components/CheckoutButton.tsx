@@ -131,7 +131,7 @@ const CheckoutButton = ({
                     toast.success(`Redeem kode voucher berhasil!`, {
                         position: toast.POSITION.TOP_CENTER
                     });
-                    router.push('/checkout/sukses');
+                    router.push(`/checkout/sukses/${transaction.id}`);
                 } else {
                     toast.info(
                         `Silahkan lanjutkan proses pembayaran sesuai metode yang kamu pilih`,
@@ -175,11 +175,11 @@ const CheckoutButton = ({
         <Button
             variant="primary"
             onClick={isFree ? onClickFree : onClick}
-            className="w-full"
+            className="w-full hover:scale-105"
             disabled={disabled}
             eventName="Process Payment Button"
             eventPayload={{ 'Method Name': paymentMethod }}>
-            {loading ? 'Memproses Pembayaran...' : 'Proses Pembayaran'}
+            {loading ? 'Memproses...' : 'Bayar'}
         </Button>
     );
 };

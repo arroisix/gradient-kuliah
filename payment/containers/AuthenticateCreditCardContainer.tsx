@@ -8,7 +8,7 @@ import Script from 'next/script';
 import { usePayment } from 'payment/contexts/PaymentProvider';
 import { useCompleteCardCheckoutMutation } from 'payment/redux/api/subscriptionApi';
 import { useGetUserCardQuery } from 'payment/redux/api/transactionApi';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { TbArrowsLeftRight } from 'react-icons/tb';
 
 declare global {
@@ -49,18 +49,12 @@ const AuthenticateCreditCardContainer = ({
         }
     };
 
-    useEffect(() => {
-        if (typeof window !== 'undefined' && window.Xendit && !isXenditReady) {
-            handleXenditLoad();
-        }
-    }, [isXenditReady]);
-
-    useEffect(() => {
+    const start3DS = useCallback((): void => {
         if (!isXenditReady || !card || isLoading) return;
 
         window.Xendit.card.createAuthentication(
             {
-                amount: trx.payment_amount.toString(),
+                amount: Math.floor(trx.payment_amount),
                 token_id: card.card_token,
                 external_id: trx.id
             },
@@ -105,7 +99,26 @@ const AuthenticateCreditCardContainer = ({
                 }
             }
         );
-    }, [card, isLoading, isXenditReady]);
+    }, [
+        card,
+        completeCardCheckout,
+        isLoading,
+        isTemp,
+        isXenditReady,
+        setTempCard,
+        trx.id,
+        trx.payment_amount
+    ]);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined' && window.Xendit && !isXenditReady) {
+            handleXenditLoad();
+        }
+    }, [isXenditReady]);
+
+    useEffect(() => {
+        start3DS();
+    }, [start3DS]);
 
     if (isLoading) {
         return <Skeleton repeat={1} />;
@@ -118,7 +131,7 @@ const AuthenticateCreditCardContainer = ({
                 strategy="afterInteractive"
                 onLoad={handleXenditLoad}
             />
-            <div className="flex flex-col items-center space-y-4 justify-center fixed inset-0">
+            <div className="flex flex-col items-center space-y-4 justify-center min-h-[60vh]">
                 <div className="relative">
                     <div className="flex items-center space-x-4">
                         <div className="w-24 h-24 rounded-full flex items-center justify-center shadow border border-graphite-600">
@@ -148,14 +161,25 @@ const AuthenticateCreditCardContainer = ({
                 <span className="text-center text-lg font-bold text-white">
                     Kamu akan diarahkan ke halaman verifikasi
                 </span>
-                {error && <span className="mt-2 text-red-300">{error}</span>}
+                <button
+                    onClick={start3DS}
+                    className="text-sm text-[#7264EB] underline">
+                    Atau klik di sini untuk verifikasi manual
+                </button>
+                {error && (
+                    <span className="mt-2 text-red-400 text-center">
+                        {error}
+                    </span>
+                )}
                 {success && (
-                    <span className="mt-2 text-green-300">{success}</span>
+                    <span className="mt-2 text-green-400 text-center">
+                        {success}
+                    </span>
                 )}
             </div>
             {iframeUrl && (
                 <button
-                    className="fixed inset-0 bg-black/60 z-[9999] flex items-center justify-center"
+                    className="fixed inset-0 bg-black/60 z-[9999] flex items-center justify-center cursor-default"
                     onClick={() => setIframeUrl(undefined)}>
                     <div className="bg-white w-[90%] h-[90%] shadow-lg overflow-hidden">
                         <iframe
