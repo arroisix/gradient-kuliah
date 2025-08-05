@@ -94,15 +94,19 @@ export function PaymentProvider({
 
     useEffect(() => {
         const stored = localStorage.getItem('tempCard');
-        console.log({ stored });
         if (stored) {
-            const temp: CreditCard = JSON.parse(stored);
-            setTempCard(temp);
-            localStorage.removeItem('tempCard');
-            selectPaymentMethod(
-                `CARD_${temp.brand.toUpperCase()}` as PaymentMethod
-            );
-            setCardId(temp.id);
+            try {
+                const temp: CreditCard = JSON.parse(stored);
+                setTempCard(temp);
+                selectPaymentMethod(
+                    `CARD_${temp.brand.toUpperCase()}` as PaymentMethod
+                );
+                setCardId(temp.id);
+            } catch {
+                // invalid JSON, skip
+            } finally {
+                localStorage.removeItem('tempCard');
+            }
         }
     }, []);
 
