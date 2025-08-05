@@ -6,6 +6,8 @@ import axios from 'axios';
 import { ArticleJsonLd } from 'next-seo';
 import moment from 'moment';
 import CryptoJS from 'crypto-js';
+import CopilotModal from 'copilot/components/CopilotModal';
+import { useState } from 'react';
 
 const DUMMY_DATE = moment().startOf('year').format();
 
@@ -16,6 +18,16 @@ const AstronotesPage = ({
     content,
     recommendations
 }: AstronotesPageProps): JSX.Element => {
+    const [isCopilotModalOpen, setIsCopilotModalOpen] = useState<boolean>(false);
+    const [currentPageId, setCurrentPageId] = useState<string | undefined>();
+
+    const currentAstronotesContext = currentPageId ? {
+        id: currentPageId,
+        title: book.title,
+        header: `Halaman ${page}`, 
+        contentType: 'astronotes_content' as const
+    } : undefined;
+
     return (
         <>
             <ArticleJsonLd
@@ -41,8 +53,21 @@ const AstronotesPage = ({
                     book={book}
                     key={page}
                     recommendations={recommendations}
+                    onCopilotClick={(pageId) => {
+                        setCurrentPageId(pageId);
+                        setIsCopilotModalOpen(true);
+                    }}
                 />
             </LearnLayout>
+            
+            <CopilotModal
+                key={slug}
+                isOpen={isCopilotModalOpen}
+                setOpen={setIsCopilotModalOpen}
+                xlWidth="xl:w-[24rem]"
+                currentContext={currentAstronotesContext}
+                bookSlug={slug}
+            />
         </>
     );
 };

@@ -18,7 +18,8 @@ import RelatedVideosSection from 'courses/components/RelatedVideosSection';
 import FreeBadge from 'commons/components/elements/FreeBadge';
 import RatingButton from 'courses/components/CourseRatingButton';
 import ShareContentButton from 'courses/components/ShareContentButton';
-import CopilotEntrypoint from '../../../../copilot/components/CopilotEntrypoint';
+import CopilotEntrypoint from 'copilot/components/CopilotEntrypoint';
+import CopilotModal from 'copilot/components/CopilotModal';
 import CourseDetailBox from 'courses/components/CourseDetailBox';
 import DownloadVideoButton from 'courses/components/DownloadVideoButton';
 
@@ -51,6 +52,7 @@ const VideoLearnContainer = ({
     const { height: videoHeight, ref: videoRef } =
         useElementSize<HTMLDivElement>();
     const [isShowModal, setIsShowModal] = useState<boolean>(false);
+    const [isCopilotModalOpen, setIsCopilotModalOpen] = useState<boolean>(false);
     const [feedbackStatus, setFeedbackStatus] = useState<{
         status: 'NOT_HELPING' | 'HELPING' | 'NOT_SELECTED';
         answer_id: string;
@@ -61,6 +63,18 @@ const VideoLearnContainer = ({
     );
     const course = courseResponse?.course_detail ?? ssrCourseData;
     const subchapter = subchapterResponse ?? ssrSubchapterData;
+
+    const handleCopilotClick = () => {
+        setIsCopilotModalOpen(true);
+    };
+
+    const currentVideoContext = subchapter?.video && subchapter?.subchapter_name ? {
+        id: subchapter.video.id,
+        title: course.course_name,
+        subtitle: subchapter.chapter_name,
+        header: subchapter.subchapter_name,
+        contentType: 'course' as const
+    } : undefined;
 
     return (
         <section className="relative flex flex-col overflow-visible">
@@ -107,7 +121,7 @@ const VideoLearnContainer = ({
                             </div>
                         </div>
                     </div>
-                    <CopilotEntrypoint />
+                    <CopilotEntrypoint onClick={handleCopilotClick} />
                     <VideoPlayerContainer
                         isLoadingData={isLoading}
                         subchapter_name={subchapter?.subchapter_name}
@@ -153,6 +167,15 @@ const VideoLearnContainer = ({
                     setOpen={setIsShowModal}
                 />
             </Modal>
+
+            <CopilotModal
+                key={subchapter?.chapter_id}
+                isOpen={isCopilotModalOpen}
+                setOpen={setIsCopilotModalOpen}
+                xlWidth="xl:w-[29.5rem]"
+                currentContext={currentVideoContext}
+                chapterId={subchapter?.chapter_id}
+            />
         </section>
     );
 };

@@ -18,6 +18,7 @@ type PaginatorProps = {
     scroll?: boolean;
     eventName?: string;
     eventPayload?: { [key: string]: unknown };
+    pageParamName?: string;
 } & PropsWithClassName;
 
 const Paginator = ({
@@ -29,16 +30,28 @@ const Paginator = ({
     scroll = false,
     className,
     eventName = 'Click Pagination',
-    eventPayload
+    eventPayload,
+    pageParamName = 'page'
 }: PaginatorProps): JSX.Element => {
     const tracker = useTracker();
     const router = useRouter();
-    const { page: pageParam } = router.query as { page: string };
-    const page = parseInt(pageParam ?? 1);
+    
+    const pageParam = pageParamName === 'page' 
+        ? (router.query.page as string)
+        : (router.query[pageParamName] as string);
+    const page = parseInt(pageParam ?? '1');
 
     const PageButton = pageState !== undefined ? 'button' : Link;
-    const getHref = (newPage: number): string | UrlObject =>
-        pageState ? '?' : { query: { ...router.query, page: newPage } };
+    const getHref = (newPage: number): string | UrlObject => {
+        if (pageState) return '?';
+        
+        if (pageParamName === 'page') {
+            return { query: { ...router.query, page: newPage } };
+        } else {
+            const { [pageParamName]: _currentCustomPage, ...otherQuery } = router.query;
+            return { query: { ...otherQuery, [pageParamName]: newPage } };
+        }
+    };
 
     const trackPageChange = (to: number, eventName_?: string): void => {
         tracker?.genericTrack(eventName_ ?? eventName, {
