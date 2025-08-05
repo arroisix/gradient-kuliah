@@ -71,7 +71,6 @@ export const PromoCodeModal = ({
     const handleRemovePromo = (): void => {
         setAppliedPromo(undefined);
         setPromoAppliedManually(false);
-        setOpen(false);
     };
 
     return (
