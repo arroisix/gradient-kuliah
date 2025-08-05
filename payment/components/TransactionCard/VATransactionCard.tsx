@@ -73,7 +73,7 @@ const VATransactionCard = ({
                     paymentAmount={transaction.payment_amount}
                 />
             )}
-            <div className="w-full">
+            <div className="w-full mt-8">
                 <div className="relative bg-[#181818] rounded-2xl overflow-hidden">
                     <div className="px-6 pt-6 pb-4 flex flex-col rounded-2xl items-center">
                         {/* header/logo */}
