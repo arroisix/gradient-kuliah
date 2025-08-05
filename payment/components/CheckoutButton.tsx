@@ -13,17 +13,19 @@ const CheckoutButton = ({
     isFree,
     promoCode,
     disabled,
-    phoneNumber
+    phoneNumber,
+    userCardId
 }: {
     packetId: string;
     paymentMethod: PaymentMethod;
     isFree?: boolean;
-    promoCode?: string;
+    promoCode?: string | null;
     disabled?: boolean;
     phoneNumber?: string;
+    userCardId?: string;
 }): JSX.Element => {
     const { checkout, freeCheckout, extendCheckout } = useCheckout();
-    const { packet, setModalCheckoutOpen } = usePayment();
+    const { packet, setModalCheckoutOpen, tempCard } = usePayment();
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const { subscriptionId, redirect } = router.query;
@@ -36,10 +38,25 @@ const CheckoutButton = ({
                 inputData: {
                     packet_id: packetId,
                     payment_method: paymentMethod,
-                    promo_code: promoCode !== '' ? promoCode : null
+                    promo_code:
+                        promoCode !== '' &&
+                        promoCode !== null &&
+                        promoCode !== undefined
+                            ? promoCode
+                            : null,
+                    phone_number: phoneNumber,
+                    user_card_id:
+                        userCardId === 'temp_card' ? undefined : userCardId
                 },
                 subscriptionId: subscriptionId as string
             })) as unknown as SingleResponseData<Transaction>;
+
+            if (
+                paymentMethod.startsWith('CARD_') &&
+                userCardId === 'temp_card'
+            ) {
+                localStorage.setItem('tempCard', JSON.stringify(tempCard));
+            }
 
             if (!!data?.data) {
                 const transaction = data.data;
@@ -74,9 +91,23 @@ const CheckoutButton = ({
             const data = (await checkout({
                 packet_id: packetId,
                 payment_method: paymentMethod,
-                promo_code: promoCode !== '' ? promoCode : null,
-                phone_number: phoneNumber
+                promo_code:
+                    promoCode !== '' &&
+                    promoCode !== null &&
+                    promoCode !== undefined
+                        ? promoCode
+                        : null,
+                phone_number: phoneNumber,
+                user_card_id:
+                    userCardId === 'temp_card' ? undefined : userCardId
             })) as unknown as SingleResponseData<Transaction>;
+
+            if (
+                paymentMethod.startsWith('CARD_') &&
+                userCardId === 'temp_card'
+            ) {
+                localStorage.setItem('tempCard', JSON.stringify(tempCard));
+            }
 
             if (!!data?.data) {
                 const transaction = data.data;
@@ -100,7 +131,7 @@ const CheckoutButton = ({
                     toast.success(`Redeem kode voucher berhasil!`, {
                         position: toast.POSITION.TOP_CENTER
                     });
-                    router.push('/checkout/sukses');
+                    router.push(`/checkout/sukses/${transaction.id}`);
                 } else {
                     toast.info(
                         `Silahkan lanjutkan proses pembayaran sesuai metode yang kamu pilih`,
@@ -144,11 +175,11 @@ const CheckoutButton = ({
         <Button
             variant="primary"
             onClick={isFree ? onClickFree : onClick}
-            className="w-full"
+            className="w-full hover:scale-105"
             disabled={disabled}
             eventName="Process Payment Button"
             eventPayload={{ 'Method Name': paymentMethod }}>
-            {loading ? 'Memproses Pembayaran...' : 'Proses Pembayaran'}
+            {loading ? 'Memproses...' : 'Bayar'}
         </Button>
     );
 };

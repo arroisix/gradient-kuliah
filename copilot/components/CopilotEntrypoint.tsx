@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import CopilotIconFill from '../assets/CopilotIconFill';
 import RobotEntrypoint from '../assets/RobotEntrypoint';
 import { useTracker } from 'tracker/tracker';
@@ -6,16 +5,22 @@ import { useTracker } from 'tracker/tracker';
 interface CopilotEntrypointProps {
     text?: string;
     subtext?: string;
+    onClick?: () => void;
 }
 
 export default function CopilotEntrypoint({
     text = 'Kamu ada pertanyaan terkait materi ini?',
-    subtext
+    subtext,
+    onClick
 }: CopilotEntrypointProps) {
     const tracker = useTracker();
 
     const handleClick = () => {
         tracker?.genericTrack('User click Check on Copilot');
+        
+        if (onClick) {
+            onClick();
+        }
     };
 
     return (
@@ -35,13 +40,17 @@ export default function CopilotEntrypoint({
                             </span>
                         )}
                     </div>
-                    <Link
-                        href="/copilot"
+                    <button
                         onClick={handleClick}
-                        className="w-full bg-[#5F2BCE] hover:bg-[#4F24A8] text-white font-medium p-3 rounded-lg flex items-center justify-center gap-2 transition-colors">
+                        disabled={!onClick}
+                        className={`w-full font-medium p-3 rounded-lg flex items-center justify-center gap-2 transition-colors ${
+                            onClick 
+                                ? 'bg-[#5F2BCE] hover:bg-[#4F24A8] text-white' 
+                                : 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                        }`}>
                         <CopilotIconFill />
                         <span>Tanya Copilot AI</span>
-                    </Link>
+                    </button>
                 </div>
             </div>
         </div>

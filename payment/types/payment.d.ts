@@ -4,7 +4,8 @@ type PaymentMethod =
     | PaymentMethodOutlet
     | 'QRIS'
     | 'VOUCHER'
-    | 'OTHER';
+    | 'OTHER'
+    | 'FREE';
 
 type PaymentMethodVirtualAccount =
     | 'VA_BNI'
@@ -64,6 +65,12 @@ type PacketOffer = {
     };
 };
 
+type TransactionPromo = {
+    id: string;
+    code: string;
+    promo_type: string;
+};
+
 type Transaction = {
     created_at: string | Date;
     id: string;
@@ -84,6 +91,9 @@ type Transaction = {
         qr_checkout_string: string | null;
     } | null;
     payment_code: string;
+    user_card_id?: string;
+    charge_id?: string;
+    promo?: TransactionPromo;
 };
 
 interface CheckoutInputData {
@@ -91,6 +101,7 @@ interface CheckoutInputData {
     payment_method: PaymentMethod;
     phone_number?: string;
     promo_code?: string | null;
+    user_card_id?: string;
 }
 
 interface OneCourseManyPacketQuery {
@@ -107,3 +118,64 @@ type GuideContent = {
         }[][];
     };
 };
+
+interface PaymentMethodData {
+    id: string; // UUID
+    payment_name: string;
+    payment_code: PaymentMethod;
+    type: string;
+    order: number;
+    mobile_logo: string | null;
+    desktop_logo: string | null;
+}
+
+interface PaymentMethodSection {
+    key: string;
+    name: string;
+    order: number;
+    payment_methods: PaymentMethodData[];
+}
+
+type CreditCard = {
+    id: string;
+    name: string;
+    brand: string;
+    card_token?: string;
+    needs_refresh: boolean;
+    created_at: Date;
+    updated_at: Date;
+};
+
+interface CreditCardListResponse {
+    cards: CreditCard[];
+    count: number;
+}
+
+interface CompleteCardCheckoutInputData {
+    transaction_id: string;
+    authentication_id: string;
+    user_card_token?: string;
+}
+
+interface AddCardRequestData {
+    name?: string;
+    brand: string;
+    card_token: string;
+}
+
+interface CreditCardTokenizeData {
+    card_number: string;
+    card_exp_month: string;
+    card_exp_year: string;
+    card_cvn: string;
+    card_holder_first_name: string;
+    card_holder_last_name: string;
+    card_holder_email: string;
+    card_holder_phone_number: string;
+}
+
+interface EditCardRequestData {
+    name?: string;
+    brand?: string;
+    card_token?: string;
+}

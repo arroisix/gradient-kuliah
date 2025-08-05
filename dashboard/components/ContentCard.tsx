@@ -270,17 +270,18 @@ const ContentCard: React.FC<ContentCardProps> = ({
                                         </>
                                     )}
 
-                                    {!shouldUseStackedLayout && problemCount && (
-                                        <>
-                                            <FaListUl
-                                                size={14}
-                                                className="text-indigo-400 mr-2 flex-shrink-0"
-                                            />
-                                            <span className="truncate">
-                                                {problemCount} Soal
-                                            </span>
-                                        </>
-                                    )}
+                                    {!shouldUseStackedLayout &&
+                                        problemCount && (
+                                            <>
+                                                <FaListUl
+                                                    size={14}
+                                                    className="text-indigo-400 mr-2 flex-shrink-0"
+                                                />
+                                                <span className="truncate">
+                                                    {problemCount} Soal
+                                                </span>
+                                            </>
+                                        )}
                                 </div>
                             )}
 

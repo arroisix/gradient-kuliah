@@ -5,7 +5,7 @@ import AstroNotesContent from 'courses/components/LearningExperience/AstroNotes/
 import { AstronotesProvider } from 'courses/contexts/AstronotesProvider';
 import RatingModal from 'courses/components/LearningExperience/AstroNotes/Sidebar/RatingModal';
 import FeedbackModal from 'courses/components/LearningExperience/AstroNotes/Sidebar/FeedbackModal';
-import CommunityDrawer from 'courses/components/LearningExperience/AstroNotes/Navigation/CommunityDrawer';
+import CopilotDrawer from 'copilot/assets/CopilotDrawer';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import { useRouter } from 'next/router';
 import RelatedBooksSection from 'courses/components/LearningExperience/AstroNotes/InternalLinking/RelatedBooksSection';
@@ -15,15 +15,18 @@ import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { useGetAstronotesExercisesQuery } from 'exercises/redux/api/exercisesApi';
 import AstronotesExercisesSection from 'exercises/components/Astronotes/AstronotesExercisesSection';
+import CopilotEntrypoint from 'copilot/components/CopilotEntrypoint';
 
 const Astronotes = ({
     content,
     book,
-    recommendations: initialRecommendations
+    recommendations: initialRecommendations,
+    onCopilotClick
 }: {
     content: string;
     book: BookDetailInterface;
     recommendations: GetBookRecommendationResponse;
+    onCopilotClick: (pageId?: string) => void;
 }): JSX.Element => {
     const { isMobileBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -52,6 +55,11 @@ const Astronotes = ({
             { bookSlug: slug, pageNumber: page },
             { skip: !slug || !page }
         );
+
+    const handleCopilotClick = () => {
+        const pageId = exercisesData?.page_id;
+        onCopilotClick(pageId);
+    };
 
     return (
         <AstronotesProvider>
@@ -103,6 +111,7 @@ const Astronotes = ({
                             }
                         />
                         <AstroNotesContent content={content} book={book} />
+                        <CopilotEntrypoint onClick={handleCopilotClick} />
                     </div>
                     <div className="flex flex-col w-full pt-8 lg:py-8 lg:max-w-5xl xl:max-w-screen-2xl lg:mx-auto lg:gap-8">
                         <AstronotesExercisesSection
@@ -127,7 +136,7 @@ const Astronotes = ({
                         />
                     </div>
                 </div>
-                <CommunityDrawer />
+                <CopilotDrawer onCopilotClick={handleCopilotClick} />
                 <div
                     className="fixed inset-x-0 bottom-0 px-4 pt-2 pb-4 bg-white md:pb-6 md:pt-4 md:left-auto md:right-0 dark:bg-black"
                     style={{ minWidth: notebookWidth }}>

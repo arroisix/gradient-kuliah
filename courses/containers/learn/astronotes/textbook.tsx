@@ -16,6 +16,9 @@ import { IS_BOT } from 'commons/constants';
 import { getCookieValue } from 'commons/utils';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import RelatedProblemsSection from 'courses/components/Textbook/RelatedProblemsSection';
+import CopilotEntrypoint from 'copilot/components/CopilotEntrypoint';
+import CopilotModal from 'copilot/components/CopilotModal';
+import CopilotDrawer from 'copilot/assets/CopilotDrawer';
 
 type TextbookSolutionProps = {
     data?: TextbookSolution;
@@ -29,6 +32,7 @@ const TextbookSolution = ({
     const router = useRouter();
     const [isCrawler, setIsCrawler] = useState<string>();
     const { is_subscribed } = useCourseSubscription();
+    const [isCopilotModalOpen, setIsCopilotModalOpen] = useState<boolean>(false);
     const { slug, problemSlug } = router.query as {
         slug: string;
         problemSlug: string;
@@ -46,8 +50,23 @@ const TextbookSolution = ({
         setIsCrawler(getCookieValue(IS_BOT));
     }, []);
 
+    const handleCopilotClick = () => {
+        setIsCopilotModalOpen(true);
+    };
+
+    const currentTextbookContext = data?.problem && getTextbookDetail?.book ? {
+        id: data.problem.id,
+        title: getTextbookDetail.book.title,
+        subtitle: data.problem.chapter || '', 
+        header: data.problem.title || '',
+        contentType: 'textbook_problem' as const
+    } : undefined;
+
     return (
         <div className="drawer drawer-end lg:drawer-open">
+            <div className="relative z-50">
+                <CopilotDrawer onCopilotClick={handleCopilotClick} />
+            </div>
             <TableOfContentMenu problem={data?.problem} />
             <div className="w-full pt-8 pb-12 mx-auto space-y-4 drawer-content md:max-w-screen-2xl md:px-8 lg:px-12">
                 <Breadcrumb
@@ -87,6 +106,7 @@ const TextbookSolution = ({
                 ) : (
                     <TextbookPaywall problem={data?.problem} />
                 )}
+                <CopilotEntrypoint onClick={handleCopilotClick} />
                 <RelatedProblemsSection
                     title="Soal Terkait"
                     problems={recommendations?.related_problems}
@@ -96,6 +116,14 @@ const TextbookSolution = ({
                     problems={recommendations?.other_problems}
                 />
             </div>
+
+            <CopilotModal
+                isOpen={isCopilotModalOpen}
+                setOpen={setIsCopilotModalOpen}
+                xlWidth="xl:w-[24rem]"
+                currentContext={currentTextbookContext}
+                bookSlug={slug}
+            />
         </div>
     );
 };
