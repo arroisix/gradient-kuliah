@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { usePayment } from 'payment/contexts/PaymentProvider';
 import FreeBox from './FreeBox';
 import PaymentMethodCardSection from './PaymentMethodCardSection';
+import PaymentMethodFreeSection from './PaymentMethodFreeSection';
 
 const PaymentMethodList: React.FC = () => {
     const { packet } = usePayment();
@@ -52,7 +53,7 @@ const PaymentMethodList: React.FC = () => {
         <div className="flex flex-col overflow-y-auto pb-44 md:pb-36 mx-4 sm:mx-8 md:mx-32">
             <div className="pt-28">
                 {packet?.is_free ? (
-                    <FreeBox />
+                    <PaymentMethodFreeSection />
                 ) : (
                     <>
                         {sortedSections.map((section) => {

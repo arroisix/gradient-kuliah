@@ -60,7 +60,15 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
         if (appliedPromo?.is_valid && appliedPromo?.payment_amount) {
             return appliedPromo.payment_amount;
         }
-        return packet?.price || '0';
+        return packet?.price || 0;
+    };
+
+    const getDisplayPrice = (): string => {
+        const raw = calculateFinalPrice();
+        if (packet?.is_free || raw <= 0) {
+            return 'GRATIS';
+        }
+        return formatCurrency(raw.toString());
     };
 
     const getPromoButtonText = () => {
@@ -133,7 +141,9 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
                                     {packet?.packet_name}
                                 </span>
                                 <span className="text-neutral-50 text-sm font-body">
-                                    {formatCurrency(packet?.price || '0')}
+                                    {packet?.is_free
+                                        ? 'GRATIS'
+                                        : formatCurrency(packet?.price || '0')}
                                 </span>
                             </div>
 
@@ -164,9 +174,7 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
                                 Total Bayar
                             </p>
                             <p className="text-neutral-50 text-md font-semibold md:font-bold md:text-xl flex-1 text-right">
-                                {formatCurrency(
-                                    calculateFinalPrice().toString()
-                                )}
+                                {getDisplayPrice()}
                             </p>
                         </div>
                         <div className="ml-2 text-neutral-50">
@@ -194,6 +202,7 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
                             }
                             phoneNumber={phoneNumber}
                             userCardId={cardId}
+                            isFree={packet?.is_free}
                         />
                     </div>
                 </div>

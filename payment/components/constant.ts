@@ -21,6 +21,7 @@ export type PAYMENT_DICT = {
     VOUCHER: string;
     MANUAL?: string;
     OTHER: undefined;
+    FREE?: string;
 };
 
 export const LOGO_PAYMENT: PAYMENT_DICT = {
@@ -44,7 +45,8 @@ export const LOGO_PAYMENT: PAYMENT_DICT = {
     ALFAMART: 'alfamart.png',
     INDOMARET: 'indomaret.png',
     OTHER: undefined,
-    VOUCHER: 'voucher.png'
+    VOUCHER: 'voucher.png',
+    FREE: undefined
 };
 
 export const NAME_PAYMENT: PAYMENT_DICT = {
@@ -69,5 +71,6 @@ export const NAME_PAYMENT: PAYMENT_DICT = {
     INDOMARET: 'Indomaret',
     MANUAL: 'Manual',
     OTHER: undefined,
-    VOUCHER: 'Redeem Voucher'
+    VOUCHER: 'Redeem Voucher',
+    FREE: 'Gratis!'
 };

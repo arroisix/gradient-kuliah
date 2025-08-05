@@ -4,7 +4,8 @@ type PaymentMethod =
     | PaymentMethodOutlet
     | 'QRIS'
     | 'VOUCHER'
-    | 'OTHER';
+    | 'OTHER'
+    | 'FREE';
 
 type PaymentMethodVirtualAccount =
     | 'VA_BNI'
