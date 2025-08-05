@@ -4,9 +4,9 @@ import Spinner from 'commons/components/elements/Spinner';
 import { useGetAllPaymentMethodsQuery } from 'payment/redux/api/transactionApi';
 import { useEffect } from 'react';
 import { usePayment } from 'payment/contexts/PaymentProvider';
-import FreeBox from './FreeBox';
 import PaymentMethodCardSection from './PaymentMethodCardSection';
 import PaymentMethodFreeSection from './PaymentMethodFreeSection';
+import { useGetConfigQuery } from 'commons/redux/api/commonApi';
 
 const PaymentMethodList: React.FC = () => {
     const { packet } = usePayment();
@@ -15,6 +15,7 @@ const PaymentMethodList: React.FC = () => {
         isLoading: paymentMethodsLoading,
         error: paymentMethodsError
     } = useGetAllPaymentMethodsQuery();
+    const { data: configData } = useGetConfigQuery();
 
     useEffect(() => {
         localStorage.removeItem('packetId');
@@ -58,11 +59,18 @@ const PaymentMethodList: React.FC = () => {
                     <>
                         {sortedSections.map((section) => {
                             if (section.key === 'card') {
-                                return (
-                                    <PaymentMethodCardSection
-                                        key={section.key}
-                                    />
-                                );
+                                if (
+                                    configData?.configs
+                                        .is_credit_card_config_enabled
+                                ) {
+                                    return (
+                                        <PaymentMethodCardSection
+                                            key={section.key}
+                                        />
+                                    );
+                                } else {
+                                    return <></>;
+                                }
                             } else {
                                 return (
                                     <PaymentMethodSectionComponent
