@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Library } from 'lucide-react';
 import { FiArrowUpLeft } from 'react-icons/fi';
 import { ContentRecommendation } from '../../types/copilot';
+import DOMPurify from 'isomorphic-dompurify';
 
 interface ContentRecommendationsProps {
     keyword: string;
@@ -115,9 +116,11 @@ const ContentRecommendations: React.FC<ContentRecommendationsProps> = ({
                                                 <p
                                                     className="text-sm text-white flex-1"
                                                     dangerouslySetInnerHTML={{
-                                                        __html: content.snippet.replace(
-                                                            /<mark>(.*?)<\/mark>/g,
-                                                            '<span class="text-[#F2C04C]">$1</span>'
+                                                        __html: DOMPurify.sanitize(
+                                                            content.snippet.replace(
+                                                                /<mark>(.*?)<\/mark>/g,
+                                                                '<span class="text-[#F2C04C]">$1</span>'
+                                                            )
                                                         )
                                                     }}
                                                 />
