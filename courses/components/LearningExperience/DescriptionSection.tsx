@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { marked } from 'marked';
 import markedKatex from 'library/marked-katex';
+import DOMPurify from 'isomorphic-dompurify';
 
 const DescriptionSection = (): JSX.Element => {
     const router = useRouter();
@@ -23,10 +24,12 @@ const DescriptionSection = (): JSX.Element => {
                 <div
                     className="break-all markdown-body"
                     dangerouslySetInnerHTML={{
-                        __html: marked.parse(
-                            data?.video?.description !== '-'
-                                ? (data?.video?.description as string)
-                                : ''
+                        __html: DOMPurify.sanitize(
+                            marked.parse(
+                                data?.video?.description !== '-'
+                                    ? (data?.video?.description as string)
+                                    : ''
+                            )
                         )
                     }}
                 />

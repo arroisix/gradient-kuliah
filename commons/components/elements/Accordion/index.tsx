@@ -1,6 +1,7 @@
 import { cn } from 'commons/utils';
 import { useState } from 'react';
 import { FaChevronUp, FaChevronDown } from 'react-icons/fa';
+import DOMPurify from 'isomorphic-dompurify';
 
 interface AccordionItemProps {
     title: string;
@@ -47,7 +48,9 @@ export const AccordionItem = ({
                     'p-4 pt-1 rounded-b-lg bg-neutral-900 text-neutral-400 font-body',
                     className
                 )}
-                dangerouslySetInnerHTML={{ __html: content as string }}
+                dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(content as string)
+                }}
             />
         );
     };
