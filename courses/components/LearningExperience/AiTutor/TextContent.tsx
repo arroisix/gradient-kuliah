@@ -1,5 +1,6 @@
 import { marked } from 'marked';
 import markedKatex from 'library/marked-katex';
+import DOMPurify from 'isomorphic-dompurify';
 
 const TextContent = ({
     content,
@@ -13,6 +14,7 @@ const TextContent = ({
             throwOnError: false
         })
     );
+    const clean = DOMPurify.sanitize(content);
     return (
         <div
             className={`break-word markdown-body w-full ${
@@ -21,7 +23,7 @@ const TextContent = ({
                     : '!text-black !font-normal !font-body !leading-7'
             }`}
             dangerouslySetInnerHTML={{
-                __html: marked.parse(content)
+                __html: marked.parse(clean)
             }}
         />
     );
