@@ -56,19 +56,21 @@ export const transactionApi = baseApi.injectEndpoints({
             invalidatesTags: [{ type: 'USER_CARDS', id: 'LIST' }]
         }),
         checkUserCardNameAvailability: builder.query<
-            boolean,
+            { status: number; isAvailable: boolean },
             { card_name: string }
         >({
             query: (params) => ({
                 url: `${TRANSACTION_BASE_URL}user-cards/availability/`,
                 method: 'HEAD',
                 validateStatus: (response) =>
-                    response.status === 204 || response.status === 409,
+                    response.status === 204 ||
+                    response.status === 409 ||
+                    response.status === 406,
                 responseHandler: (response) => Promise.resolve(response.status),
                 params
             }),
             transformResponse: (status: number) => {
-                return status === 204;
+                return { status, isAvailable: status === 204 };
             }
         }),
         editUserCard: builder.mutation<

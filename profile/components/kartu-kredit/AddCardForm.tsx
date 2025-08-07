@@ -20,6 +20,7 @@ import {
 import { FaCheckCircle, FaSpinner, FaTimesCircle } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import moment from 'moment';
+import { isAlphaNumeric } from 'commons/utils';
 
 const MAX_NAME_LENGTH = 20;
 
@@ -83,15 +84,32 @@ const AddCardForm = (): JSX.Element => {
             setFieldError: (f: string, msg?: string) => void
         ) => {
             if (!value.trim()) return;
-            const available = await triggerCheckName({
+            const { status, isAvailable } = await triggerCheckName({
                 card_name: value
             }).unwrap();
-            setIsNameAvailable(available);
+            setIsNameAvailable(isAvailable);
             setIsTyping(false);
-            if (available) {
+            if (isAvailable) {
                 setFieldError('cardName', undefined);
             } else {
-                setFieldError('cardName', 'Label kartu sudah pernah digunakan');
+                if (status === 409) {
+                    setFieldError(
+                        'cardName',
+                        'Label kartu sudah pernah digunakan'
+                    );
+                } else if (status === 406) {
+                    if (value.length > MAX_NAME_LENGTH) {
+                        setFieldError(
+                            'cardName',
+                            `Maksimal ${MAX_NAME_LENGTH} karakter`
+                        );
+                    } else {
+                        setFieldError(
+                            'cardName',
+                            'Label kartu hanya boleh mengandung huruf dan angka'
+                        );
+                    }
+                }
             }
         },
         1000
@@ -188,16 +206,24 @@ const AddCardForm = (): JSX.Element => {
                             const errors: Record<string, string> = {};
 
                             // card name
-                            console.log({ isNameAvailable });
                             if (!values.cardName.trim()) {
                                 errors.cardName = 'Label kartu wajib diisi';
                             } else if (
                                 values.cardName.length > MAX_NAME_LENGTH
                             ) {
                                 errors.cardName = `Maksimal ${MAX_NAME_LENGTH} karakter`;
-                            } else if (!isTyping && !isNameAvailable) {
-                                errors.cardName =
-                                    'Label kartu sudah pernah digunakan';
+                            } else if (
+                                !isTyping &&
+                                !isCheckingName &&
+                                !isNameAvailable
+                            ) {
+                                if (!isAlphaNumeric(values.cardName, true)) {
+                                    errors.cardName =
+                                        'Label kartu hanya boleh mengandung huruf dan angka';
+                                } else {
+                                    errors.cardName =
+                                        'Label kartu sudah pernah digunakan';
+                                }
                             }
 
                             // card num
@@ -586,7 +612,10 @@ const AddCardForm = (): JSX.Element => {
                                     variant="primary"
                                     className="w-full"
                                     disabled={
-                                        isValidating || !isValid || isSubmitting
+                                        isValidating ||
+                                        !isValid ||
+                                        isSubmitting ||
+                                        isCheckingName
                                     }>
                                     {isSubmitting || isSaving
                                         ? 'Menyimpan...'

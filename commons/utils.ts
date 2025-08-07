@@ -195,3 +195,17 @@ export const formatDuration = (durationString?: string | null): string => {
 
     return `${displayHours}${formattedMinutes}:${formattedSeconds}`;
 };
+
+export const isAlphaNumeric = (str: string, includeSpace: boolean): boolean => {
+    for (let i = 0; i < str.length; i++) {
+        const code = str.charCodeAt(i);
+        const isDigit = code >= 48 && code <= 57; // 0–9
+        const isUpper = code >= 65 && code <= 90; // A–Z
+        const isLower = code >= 97 && code <= 122; // a–z
+        const isSpace = includeSpace && code === 32; // space
+        if (!(isDigit || isUpper || isLower || isSpace)) {
+            return false;
+        }
+    }
+    return true;
+};
