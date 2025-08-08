@@ -1,11 +1,10 @@
-'use client';
-
 import { Loader2, X } from 'lucide-react';
 import Modal from 'commons/components/modules/Modal';
 import { usePayment } from 'payment/contexts/PaymentProvider';
 import { useGetAllCouponsQuery } from 'referral/redux/referalApi';
 import PromoCodeInput from './PromoCodeInput2';
 import { toast } from 'react-toastify';
+import moment from 'moment';
 
 export const PromoCodeModal = ({
     isOpen,
@@ -38,14 +37,10 @@ export const PromoCodeModal = ({
         : coupons;
 
     const formatDate = (dateString: string): string => {
-        const date = new Date(dateString);
-        return date.toLocaleString('id-ID', {
-            day: 'numeric',
-            month: 'short',
-            year: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric'
-        });
+        return moment(dateString)
+            .subtract(7, 'hours')
+            .locale('id')
+            .format('D MMM YYYY HH:mm');
     };
 
     const handleApplyCode = (promo: ValidatePromoResponse): void => {
