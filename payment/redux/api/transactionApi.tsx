@@ -86,6 +86,12 @@ export const transactionApi = baseApi.injectEndpoints({
                 { type: 'USER_CARDS', id: arg.id },
                 { type: 'USER_CARDS', id: 'LIST' }
             ]
+        }),
+        getTempCardId: builder.mutation<{ id: string }, void>({
+            query: () => ({
+                url: `${TRANSACTION_BASE_URL}user-cards/temp-cards/`,
+                method: 'POST'
+            })
         })
     })
 });
@@ -99,5 +105,6 @@ export const {
     useAddUserCardMutation,
     useDeleteUserCardMutation,
     useLazyCheckUserCardNameAvailabilityQuery,
-    useEditUserCardMutation
+    useEditUserCardMutation,
+    useGetTempCardIdMutation
 } = transactionApi;

@@ -15,6 +15,7 @@ import { CDN_URL } from 'commons/constants';
 import { useDebouncedCallback } from 'use-debounce';
 import {
     useAddUserCardMutation,
+    useGetTempCardIdMutation,
     useLazyCheckUserCardNameAvailabilityQuery
 } from 'payment/redux/api/transactionApi';
 import { FaCheckCircle, FaSpinner, FaTimesCircle } from 'react-icons/fa';
@@ -48,6 +49,8 @@ const AddCardForm = (): JSX.Element => {
 
     const [triggerCheckName, { isFetching: isCheckingName }] =
         useLazyCheckUserCardNameAvailabilityQuery();
+
+    const [getTempCardId] = useGetTempCardIdMutation();
 
     useEffect(() => {
         const success = async (): Promise<void> => {
@@ -291,23 +294,41 @@ const AddCardForm = (): JSX.Element => {
                                     /\s+/g,
                                     ''
                                 );
+
+                                const payload = {
+                                    card_number: rawNumber,
+                                    card_exp_month: mm,
+                                    card_exp_year: year,
+                                    card_cvn: values.cardCVV,
+                                    card_holder_first_name:
+                                        values.cardHolderFirstName,
+                                    card_holder_last_name:
+                                        values.cardHolderLastName,
+                                    card_holder_email: values.cardHolderEmail,
+                                    card_holder_phone_number: `+62${values.cardHolderPhoneNumber}`,
+                                    is_multiple_use: true
+                                };
+
+                                if (fromCheckout && !values.saveCard) {
+                                    try {
+                                        const res =
+                                            await getTempCardId().unwrap();
+                                        (payload as any).external_id = res.id;
+                                    } catch (e) {
+                                        toast.error(
+                                            'Gagal mendapatkan ID sementara. Coba lagi.',
+                                            {
+                                                position: 'top-center',
+                                                theme: 'colored'
+                                            }
+                                        );
+                                        return;
+                                    }
+                                }
                                 const token: any = await new Promise(
                                     (res, rej) =>
                                         window.Xendit.card.createToken(
-                                            {
-                                                card_number: rawNumber,
-                                                card_exp_month: mm,
-                                                card_exp_year: year,
-                                                card_cvn: values.cardCVV,
-                                                card_holder_first_name:
-                                                    values.cardHolderFirstName,
-                                                card_holder_last_name:
-                                                    values.cardHolderLastName,
-                                                card_holder_email:
-                                                    values.cardHolderEmail,
-                                                card_holder_phone_number: `+62${values.cardHolderPhoneNumber}`,
-                                                is_multiple_use: true
-                                            },
+                                            payload,
                                             (err: any, r: any) =>
                                                 err ? rej(err) : res(r)
                                         )
