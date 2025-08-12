@@ -48,7 +48,7 @@ const SearchByType = (): JSX.Element => {
                             id={value}
                             className="flex justify-between items-center gap-3 px-[18px] py-[7.5px] border-t-[1px] border-[#373737] first:border-t-0"
                             href={{
-                                query: { ...router.query, type: value, page: 1 }
+                                query: { ...router.query, type: value, page: 1, locked: 1 }
                             }}
                             replace
                             scroll={false}
