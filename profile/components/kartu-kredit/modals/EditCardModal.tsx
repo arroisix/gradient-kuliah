@@ -9,6 +9,8 @@ import { useDebouncedCallback } from 'use-debounce';
 import { FaSpinner, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
+const MAX_NAME_LENGTH = 20;
+
 interface EditCardModalProps extends ModalBaseProps {
     currentName: string;
     cardId: string;
@@ -31,17 +33,27 @@ const EditCardModal: React.FC<EditCardModalProps> = ({
 
     const debouncedCheckName = useDebouncedCallback(async (value: string) => {
         if (!value.trim()) return;
-        const available = await triggerCheckName({
+        const { status, isAvailable } = await triggerCheckName({
             card_name: value
         }).unwrap();
 
+        setIsNameAvailable(isAvailable);
         setIsTyping(false);
-        if (value !== currentName && !available) {
-            setIsNameAvailable(false);
-            setError('Label kartu sudah pernah digunakan');
-        } else {
+        if (isAvailable || value === currentName) {
             setIsNameAvailable(true);
             setError(undefined);
+        } else {
+            if (status === 409) {
+                setError('Label kartu sudah pernah digunakan');
+            } else if (status === 406) {
+                if (value.length > MAX_NAME_LENGTH) {
+                    setError(`Maksimal ${MAX_NAME_LENGTH} karakter`);
+                } else {
+                    setError(
+                        'Label kartu hanya boleh mengandung huruf dan angka'
+                    );
+                }
+            }
         }
     }, 1000);
 
@@ -105,7 +117,7 @@ const EditCardModal: React.FC<EditCardModalProps> = ({
                         )}
                         {touched && <Icon className={iconClass} />}
                         <span className="text-sm font-light text-neutral-400">
-                            {name.length}/20
+                            {name.length}/{MAX_NAME_LENGTH}
                         </span>
                     </div>
                 </div>

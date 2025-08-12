@@ -2,12 +2,12 @@
 
 import type React from 'react';
 import Image from 'next/image';
-import { LOGO_PAYMENT, NAME_PAYMENT } from './constant';
+import { LOGO_PAYMENT, NAME_PAYMENT } from '../constant';
 import { CDN_URL } from 'commons/constants';
 import { useTracker } from 'tracker/tracker';
 import { addZeroBefore, getCSChatRoom } from 'commons/utils';
 import { usePayment } from 'payment/contexts/PaymentProvider';
-import PromoCodeInput from './PromoCodeInput2';
+import PromoCodeInput from '../Promo/PromoCodeInput2';
 import Input from 'commons/components/elements/Form/input';
 import { HiOutlineCreditCard } from 'react-icons/hi';
 import { Gift } from 'lucide-react';
