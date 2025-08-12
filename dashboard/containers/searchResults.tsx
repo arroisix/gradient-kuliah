@@ -190,25 +190,6 @@ const SearchResults = ({
         }
     }, [detectedType, router, hasRedirected]);
 
-    if (shouldDeferUI) {
-        return (
-            <div>
-                <Breadcrumb nextItem={{ name: `"${keywords ?? q}"` }} />
-                {isSummaryEmpty ? (
-                    <CopilotEntrypoint
-                        text="Mau dapet jawaban yang
-lebih akurat?"
-                    />
-                ) : (
-                    <SearchSummary onSummaryFetched={setIsSummaryEmpty} />
-                )}
-                <div className="mt-8 animate-pulse text-sm text-neutral-400">
-                    Mencari konten untuk {q}
-                </div>
-            </div>
-        );
-    }
-
     return (
         <div>
             <Breadcrumb nextItem={{ name: `"${keywords ?? q}"` }} />
@@ -223,34 +204,43 @@ lebih akurat?"
             )}
 
             <div className="flex w-full gap-4 md:w-max">
-                <SearchByType />
+                {shouldDeferUI ? (
+                    <div className="h-[42px] w-52 bg-[#2C2C2C] rounded-full animate-pulse" />
+                ) : (
+                    <SearchByType />
+                )}
                 <Sort
                     options={SORT_OPTIONS}
                     iconOnly
                     defaultSelected="relevant"
+                    className={
+                        shouldDeferUI ? 'opacity-0 pointer-events-none' : ''
+                    }
                 />
             </div>
             <SearchResultsCarousel
                 result={resultCarousel}
-                isLoading={router.isFallback || isFetching}
+                isLoading={router.isFallback || isFetching || shouldDeferUI}
             />
             <SearchResultsSection
                 result={result}
-                isLoading={router.isFallback || isFetching}
+                isLoading={router.isFallback || isFetching || shouldDeferUI}
             />
-            <Paginator
-                totalPages={totalPages}
-                hasNextPage={page < totalPages}
-                hasPreviousPage={page != 1}
-                className={cn(
-                    result?.found === 0 && 'hidden',
-                    'justify-center'
-                )}
-                scroll
-                eventPayload={{
-                    Keyword: keywords ?? q
-                }}
-            />
+            {!shouldDeferUI && (
+                <Paginator
+                    totalPages={totalPages}
+                    hasNextPage={page < totalPages}
+                    hasPreviousPage={page != 1}
+                    className={cn(
+                        result?.found === 0 && 'hidden',
+                        'justify-center'
+                    )}
+                    scroll
+                    eventPayload={{
+                        Keyword: keywords ?? q
+                    }}
+                />
+            )}
         </div>
     );
 };
