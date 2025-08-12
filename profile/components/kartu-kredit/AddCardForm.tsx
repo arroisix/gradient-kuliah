@@ -22,6 +22,8 @@ import { FaCheckCircle, FaSpinner, FaTimesCircle } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import { isAlphaNumeric } from 'commons/utils';
+import { useSelector } from 'react-redux';
+import { getCurrentUser } from 'authentication/redux/selectors/userSelector';
 
 const MAX_NAME_LENGTH = 20;
 
@@ -44,6 +46,7 @@ function sanitizeRedirectUrl(url?: string): string {
 }
 
 const AddCardForm = (): JSX.Element => {
+    const user = useSelector(getCurrentUser);
     const router = useRouter();
     const redirectUrl = sanitizeRedirectUrl(router.query.redirect as string);
     const fromCheckout = redirectUrl.startsWith('/pembayaran');
@@ -210,10 +213,6 @@ const AddCardForm = (): JSX.Element => {
                             cardNumber: '',
                             cardExp: '',
                             cardCVV: '',
-                            cardHolderFirstName: '',
-                            cardHolderLastName: '',
-                            cardHolderEmail: '',
-                            cardHolderPhoneNumber: '',
                             saveCard: false
                         }}
                         validate={(values) => {
@@ -277,18 +276,6 @@ const AddCardForm = (): JSX.Element => {
                             )
                                 errors.cardCVV = 'CVV tidak valid';
 
-                            if (!values.cardHolderPhoneNumber) {
-                                errors.cardHolderPhoneNumber =
-                                    'Nomor handphone tidak boleh kosong';
-                            } else if (
-                                !values.cardHolderPhoneNumber.match(
-                                    /^\d{1,14}$/
-                                )
-                            ) {
-                                errors.cardHolderPhoneNumber =
-                                    'Masukkan nomor handphone yang valid';
-                            }
-
                             return errors;
                         }}
                         validateOnChange
@@ -296,6 +283,13 @@ const AddCardForm = (): JSX.Element => {
                         onSubmit={async (values, { setSubmitting }) => {
                             setSubmitting(true);
                             try {
+                                if (!user?.email) {
+                                    toast.error('Email akun tidak ditemukan.', {
+                                        position: 'top-center',
+                                        theme: 'colored'
+                                    });
+                                    return;
+                                }
                                 const [mm, yyPart] = values.cardExp.split('/');
                                 const year =
                                     yyPart.length === 2
@@ -311,12 +305,7 @@ const AddCardForm = (): JSX.Element => {
                                     card_exp_month: mm,
                                     card_exp_year: year,
                                     card_cvn: values.cardCVV,
-                                    card_holder_first_name:
-                                        values.cardHolderFirstName,
-                                    card_holder_last_name:
-                                        values.cardHolderLastName,
-                                    card_holder_email: values.cardHolderEmail,
-                                    card_holder_phone_number: `+62${values.cardHolderPhoneNumber}`,
+                                    card_holder_email: user?.email,
                                     is_multiple_use: true
                                 };
 
@@ -534,81 +523,6 @@ const AddCardForm = (): JSX.Element => {
                                             }
                                         />
                                     </div>
-                                </div>
-
-                                <div className="flex flex-col space-y-4">
-                                    <h2 className="font-bold text-md">
-                                        Identitas Pemilik Kartu
-                                    </h2>
-                                    <div className="flex space-x-4">
-                                        <Input
-                                            type="text"
-                                            label="Nama Depan"
-                                            name="cardHolderFirstName"
-                                            placeholder="Nama Depan"
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            value={values.cardHolderFirstName}
-                                            error={
-                                                touched.cardHolderFirstName &&
-                                                errors.cardHolderFirstName
-                                                    ? errors.cardHolderFirstName
-                                                    : undefined
-                                            }
-                                        />
-
-                                        <Input
-                                            type="text"
-                                            label="Nama Belakang"
-                                            name="cardHolderLastName"
-                                            placeholder="Nama Belakang"
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            value={values.cardHolderLastName}
-                                            error={
-                                                touched.cardHolderLastName &&
-                                                errors.cardHolderLastName
-                                                    ? errors.cardHolderLastName
-                                                    : undefined
-                                            }
-                                        />
-                                    </div>
-
-                                    <Input
-                                        type="email"
-                                        label="Email"
-                                        name="cardHolderEmail"
-                                        placeholder="Email"
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        value={values.cardHolderEmail}
-                                        error={
-                                            touched.cardHolderEmail &&
-                                            errors.cardHolderEmail
-                                                ? errors.cardHolderEmail
-                                                : undefined
-                                        }
-                                    />
-
-                                    <Input
-                                        type="tel"
-                                        label="Nomor Handphone"
-                                        placeholder="8211234567"
-                                        name="cardHolderPhoneNumber"
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        startAddorment={
-                                            <span className="text-neutral-400">
-                                                +62
-                                            </span>
-                                        }
-                                        error={
-                                            touched.cardHolderPhoneNumber &&
-                                            errors.cardHolderPhoneNumber
-                                                ? errors.cardHolderPhoneNumber
-                                                : undefined
-                                        }
-                                    />
                                 </div>
                                 {fromCheckout && (
                                     <div className="flex items-center space-x-2">
