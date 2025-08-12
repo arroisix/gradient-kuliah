@@ -98,6 +98,19 @@ const SearchResults = ({
     const [hasRedirected, setHasRedirected] = useState(false);
     const lastClassifiedQRef = useRef<string | null>(null);
 
+    const isInitialReclassificationFlow =
+        from_search_bar === 'true' && !locked && (!type || type === 'all');
+
+    const awaitingRedirect =
+        !!detectedType &&
+        detectedType !== 'all' &&
+        router.query.type !== detectedType;
+
+    // While waiting for classification (and not resolved to 'all'), defer showing result UI
+    const shouldDeferUI =
+        isInitialReclassificationFlow &&
+        (isFetching || !detectedType || awaitingRedirect);
+
     useEffect(() => {
         if (!isFetching && detectedType) {
             // Update which query this detectedType belongs to once fetch completes
@@ -148,6 +161,13 @@ const SearchResults = ({
                 { shallow: true }
             );
             setHasRedirected(true);
+        } else if (
+            !isFetching &&
+            detectedType === 'all' &&
+            fromSearchBar === 'true'
+        ) {
+            // No redirection needed; allow UI render
+            setHasRedirected(true);
         }
     }, [detectedType, q, router, hasRedirected, isFetching]);
 
@@ -169,6 +189,25 @@ const SearchResults = ({
             router.replace({ query: data }, undefined, { shallow: true });
         }
     }, [detectedType, router, hasRedirected]);
+
+    if (shouldDeferUI) {
+        return (
+            <div>
+                <Breadcrumb nextItem={{ name: `"${keywords ?? q}"` }} />
+                {isSummaryEmpty ? (
+                    <CopilotEntrypoint
+                        text="Mau dapet jawaban yang
+lebih akurat?"
+                    />
+                ) : (
+                    <SearchSummary onSummaryFetched={setIsSummaryEmpty} />
+                )}
+                <div className="mt-8 animate-pulse text-sm text-neutral-400">
+                    Mencari konten untuk {q}
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div>
