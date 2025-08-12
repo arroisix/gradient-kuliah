@@ -86,8 +86,7 @@ const SearchResults = ({
             totalPages: getTotalPages(data),
             detectedType: data?.detected_type
         })
-    }
-);
+    });
 
     const resultCarousel = resultCarouselQuery ?? results?.results?.[0];
     const result = resultQuery ?? results?.results.slice(-1).pop();
@@ -97,6 +96,14 @@ const SearchResults = ({
 
     const prevQRef = useRef<string | undefined>(undefined);
     const [hasRedirected, setHasRedirected] = useState(false);
+    const lastClassifiedQRef = useRef<string | null>(null);
+
+    useEffect(() => {
+        if (!isFetching && detectedType) {
+            // Update which query this detectedType belongs to once fetch completes
+            lastClassifiedQRef.current = q;
+        }
+    }, [isFetching, detectedType, q]);
 
     // Track query changes but don't clean from_search_bar immediately
     useEffect(() => {
@@ -117,6 +124,8 @@ const SearchResults = ({
         const fromSearchBar = router.query.from_search_bar;
 
         if (
+            !isFetching &&
+            lastClassifiedQRef.current === q &&
             detectedType &&
             detectedType !== 'all' &&
             detectedType !== currentType &&
@@ -125,7 +134,6 @@ const SearchResults = ({
             !currentLocked &&
             !hasRedirected // Prevent multiple redirects
         ) {
-            setHasRedirected(true);
             router.replace(
                 {
                     query: {
@@ -139,8 +147,9 @@ const SearchResults = ({
                 undefined,
                 { shallow: true }
             );
+            setHasRedirected(true);
         }
-    }, [detectedType, q, router, hasRedirected]);
+    }, [detectedType, q, router, hasRedirected, isFetching]);
 
     // Clean from_search_bar flag when no reclassification is needed
     useEffect(() => {
@@ -149,6 +158,8 @@ const SearchResults = ({
 
         // If we have a response and detected type is 'all', or if type already matches, clean the flag
         if (
+            !isFetching &&
+            lastClassifiedQRef.current === q &&
             fromSearchBar === 'true' &&
             detectedType &&
             (detectedType === 'all' || detectedType === currentType) &&
