@@ -31,11 +31,22 @@ declare global {
     }
 }
 
+function sanitizeRedirectUrl(url?: string): string {
+    if (!url) return '/profil/kartu-kredit';
+
+    try {
+        const parsed = new URL(url, window.location.origin);
+        if (parsed.pathname === '/pembayaran') {
+            return parsed.pathname + parsed.search; // keep query params
+        }
+    } catch {}
+    return '/profil/kartu-kredit';
+}
+
 const AddCardForm = (): JSX.Element => {
     const router = useRouter();
-    const redirectUrl =
-        (router.query.redirect as string) || '/profil/kartu-kredit';
-    const fromCheckout = Boolean(router.query.redirect);
+    const redirectUrl = sanitizeRedirectUrl(router.query.redirect as string);
+    const fromCheckout = redirectUrl.startsWith('/pembayaran');
     const [showProtectionModal, setShowProtectionModal] = useState(false);
     const [showCVVModal, setShowCVVModal] = useState(false);
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
