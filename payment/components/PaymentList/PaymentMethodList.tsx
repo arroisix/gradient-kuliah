@@ -1,5 +1,5 @@
 import type React from 'react';
-import PaymentMethodSectionComponent from './PaymentMethodSectionComponent';
+import PaymentMethodSectionComponent from './PaymentMethodSection';
 import Spinner from 'commons/components/elements/Spinner';
 import { useGetAllPaymentMethodsQuery } from 'payment/redux/api/transactionApi';
 import { useEffect } from 'react';
