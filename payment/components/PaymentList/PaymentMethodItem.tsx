@@ -8,7 +8,6 @@ import { useTracker } from 'tracker/tracker';
 import { addZeroBefore, getCSChatRoom } from 'commons/utils';
 import { usePayment } from 'payment/contexts/PaymentProvider';
 import PromoCodeInput from '../Promo/PromoCodeInput2';
-import Input from 'commons/components/elements/Form/input';
 import { HiOutlineCreditCard } from 'react-icons/hi';
 import { Gift } from 'lucide-react';
 
