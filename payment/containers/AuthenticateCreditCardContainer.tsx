@@ -40,6 +40,25 @@ const AuthenticateCreditCardContainer = ({
     const [error, setError] = useState<string | undefined>();
     const [success, setSuccess] = useState<string | undefined>();
 
+    useEffect(() => {
+        if (!trx?.status) return;
+        const status = String(trx.status).toUpperCase();
+
+        const isFailure = status.toUpperCase() === 'FAILURE';
+
+        if (isFailure) {
+            setIframeUrl(undefined);
+            setSuccess(undefined);
+            setError(
+                `Pembayaran gagal. Silakan coba lagi atau gunakan metode pembayaran lain. ${
+                    trx.failure_code
+                        ? `Alasan: ${trx.failure_code.replaceAll('_', ' ')}`
+                        : ''
+                }`
+            );
+        }
+    }, [trx.status]);
+
     const handleXenditLoad = (): void => {
         if (window.Xendit) {
             window.Xendit.setPublishableKey(
