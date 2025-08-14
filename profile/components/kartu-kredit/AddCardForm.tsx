@@ -45,6 +45,26 @@ function sanitizeRedirectUrl(url?: string): string {
     return '/profil/kartu-kredit';
 }
 
+function toCardNameParts(fullName: string): { first: string; last: string } {
+    const clean = (s: string): string =>
+        (s || '')
+            .trim()
+            .replace(/\s+/g, ' ') // collapse spaces
+            .replace(/[^A-Za-z0-9 ]/g, '') // alphanumeric + spaces
+            .slice(0, 50)
+            .replace(/ /g, ''); // remove spaces before sending
+
+    const parts = (fullName || '').trim().split(/\s+/).filter(Boolean);
+    if (parts.length === 0) return { first: 'NA', last: 'NA' };
+    if (parts.length === 1) {
+        const mono = clean(parts[0]);
+        return { first: mono || 'NA', last: mono || 'NA' };
+    }
+    const first = clean(parts[0]);
+    const last = clean(parts.slice(1).join(' '));
+    return { first: first || 'NA', last: last || 'NA' };
+}
+
 const AddCardForm = (): JSX.Element => {
     const user = useSelector(getCurrentUser);
     const router = useRouter();
@@ -283,13 +303,6 @@ const AddCardForm = (): JSX.Element => {
                         onSubmit={async (values, { setSubmitting }) => {
                             setSubmitting(true);
                             try {
-                                if (!user?.email) {
-                                    toast.error('Email akun tidak ditemukan.', {
-                                        position: 'top-center',
-                                        theme: 'colored'
-                                    });
-                                    return;
-                                }
                                 const [mm, yyPart] = values.cardExp.split('/');
                                 const year =
                                     yyPart.length === 2
@@ -300,12 +313,17 @@ const AddCardForm = (): JSX.Element => {
                                     ''
                                 );
 
+                                const names = toCardNameParts(user.full_name);
+
                                 const payload = {
                                     card_number: rawNumber,
                                     card_exp_month: mm,
                                     card_exp_year: year,
                                     card_cvn: values.cardCVV,
-                                    card_holder_email: user?.email,
+                                    card_holder_email: user.email,
+                                    card_holder_first_name: names.first,
+                                    card_holder_last_name: names.last,
+                                    card_holder_phone_number: user.phone_number,
                                     is_multiple_use: true
                                 };
 
