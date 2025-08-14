@@ -45,6 +45,31 @@ function sanitizeRedirectUrl(url?: string): string {
     return '/profil/kartu-kredit';
 }
 
+function toCardNameParts(fullName: string): { first: string; last: string } {
+    const norm = (s: string): string => (s || '').trim().replace(/\s+/g, ' ');
+    const keepAlnumSpace = (s: string): string =>
+        s.replace(/[^A-Za-z0-9 ]/g, '');
+    const cap = (s: string): string => s.slice(0, 50);
+
+    const name = norm(fullName);
+    if (!name) return { first: 'NA', last: 'NA' };
+
+    const parts = name.split(' ').filter(Boolean);
+    if (parts.length === 1) {
+        const mono = cap(keepAlnumSpace(parts[0]));
+        return { first: mono || 'NA', last: mono || 'NA' };
+    }
+
+    const lastRaw = parts.pop(); // last word as surname
+    let first = cap(keepAlnumSpace(parts.join(' '))); // preserve spaces in given names
+    let last = cap(keepAlnumSpace(lastRaw!)); // last word, no spaces to preserve
+
+    if (!first) first = 'NA';
+    if (!last) last = 'NA';
+
+    return { first, last };
+}
+
 const AddCardForm = (): JSX.Element => {
     const user = useSelector(getCurrentUser);
     const router = useRouter();
@@ -283,13 +308,6 @@ const AddCardForm = (): JSX.Element => {
                         onSubmit={async (values, { setSubmitting }) => {
                             setSubmitting(true);
                             try {
-                                if (!user?.email) {
-                                    toast.error('Email akun tidak ditemukan.', {
-                                        position: 'top-center',
-                                        theme: 'colored'
-                                    });
-                                    return;
-                                }
                                 const [mm, yyPart] = values.cardExp.split('/');
                                 const year =
                                     yyPart.length === 2
@@ -300,12 +318,19 @@ const AddCardForm = (): JSX.Element => {
                                     ''
                                 );
 
+                                const names = toCardNameParts(user.full_name);
+
                                 const payload = {
                                     card_number: rawNumber,
                                     card_exp_month: mm,
                                     card_exp_year: year,
                                     card_cvn: values.cardCVV,
-                                    card_holder_email: user?.email,
+                                    card_holder_email: user.email,
+                                    card_holder_first_name:
+                                        names.first.toUpperCase(),
+                                    card_holder_last_name:
+                                        names.last.toUpperCase(),
+                                    card_holder_phone_number: user.phone_number,
                                     is_multiple_use: true
                                 };
 

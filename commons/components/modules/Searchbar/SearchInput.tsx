@@ -48,7 +48,10 @@ const SearchInput = ({
                 tracker?.genericTrack('User Search with Keyword', {
                     keyword: q
                 });
-                router.push({ pathname: '/search/results', query: { q } });
+                router.push({
+                    pathname: '/search/results',
+                    query: { q, from_search_bar: true }
+                });
                 onSubmit?.();
                 ref.current?.focus();
             }}>
