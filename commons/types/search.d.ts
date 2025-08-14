@@ -12,6 +12,7 @@ interface SearchResults<T = unknown> {
             collection_name: SearchResultCardProps['type'];
         };
     }[];
+    detected_type?: string;
 }
 
 interface SearchHits<T = unknown> {
@@ -153,4 +154,10 @@ interface AdvancedSearchParams {
         | string;
     sort?: string;
     course?: string;
+    reclassify?: boolean; // New parameter
+}
+
+// Update your search hook usage types as needed
+interface SearchQueryParams extends AdvancedSearchParams {
+    from_search_bar?: boolean;
 }

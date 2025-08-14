@@ -11,9 +11,9 @@ import Image from 'next/image';
 import { CDN_URL } from 'commons/constants';
 import { useTracker } from 'tracker/tracker';
 import PaketInfo from 'payment/components/PaketInfo';
-import PaymentMethodList from 'payment/components/PaymentMethodList';
+import PaymentMethodList from 'payment/components/PaymentList/PaymentMethodList';
 import CheckoutBottomSheet from 'payment/components/CheckoutBottomSheet';
-import PromoCodeModal from 'payment/components/PromoCodeModal';
+import PromoCodeModal from 'payment/components/Promo/PromoCodeModal';
 
 const Payment = (): JSX.Element => {
     const router = useRouter();
