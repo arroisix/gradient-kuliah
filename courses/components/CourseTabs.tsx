@@ -1,19 +1,32 @@
 import { cn } from 'commons/utils';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { TabStyle } from './LearningExperience/AstroNotes/constants';
 import Link from 'next/link';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import { useSelector } from 'react-redux';
 
 const TAB_OPTIONS = [
     { value: 'all', label: 'Semua' },
     { value: 'newly-released', label: 'Baru Rilis' },
-    { value: 'coming-soon', label: 'Segera Hadir' },
-    { value: 'trending', label: 'Trending' }
+    { value: 'for-you', label: 'Untuk Kamu' },
+    { value: 'trending', label: 'Trending' },
+    { value: 'coming-soon', label: 'Segera Hadir' }
 ];
 
 const CourseTabs = (): JSX.Element => {
     const router = useRouter();
     const { tab: currentTab } = router.query as { tab: string };
+    const isAuthenticated = useSelector(getIsAuthenticated);
+
+    const tabs = useMemo(() => {
+        if (!isAuthenticated) {
+            return TAB_OPTIONS.map((tab) =>
+                tab.value === 'for-you' ? { ...tab, value: 'all' } : tab
+            );
+        }
+        return TAB_OPTIONS;
+    }, [isAuthenticated]);
 
     const tabStyle = (tab: string): string =>
         cn(
@@ -25,7 +38,7 @@ const CourseTabs = (): JSX.Element => {
 
     return (
         <div className="sticky z-10 flex items-end w-full pt-5 pb-2 overflow-x-auto bg-black md:pt-6 top-10 no-scrollbar">
-            {TAB_OPTIONS.map((tab) => (
+            {tabs.map((tab) => (
                 <Link
                     key={tab.value}
                     className={tabStyle(tab.value)}
