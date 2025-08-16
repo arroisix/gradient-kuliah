@@ -7,8 +7,8 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import { useSelector } from 'react-redux';
 
 const TAB_OPTIONS = [
-    { value: 'all', label: 'Semua' },
-    { value: 'newly-released', label: 'Baru Rilis' },
+    // { value: 'all', label: 'Semua' },
+    // { value: 'newly-released', label: 'Baru Rilis' },
     { value: 'for-you', label: 'Untuk Kamu' },
     { value: 'trending', label: 'Trending' },
     { value: 'coming-soon', label: 'Segera Hadir' }
