@@ -9,7 +9,7 @@ import { cn } from 'commons/utils';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useEffect, useRef } from 'react';
 
-const VALID_SECTION = ['all', 'newly-released', 'coming-soon'];
+const VALID_SECTION = ['all', 'newly-released', 'coming-soon', 'trending'];
 const VALID_SORT = ['latest', 'popularity', 'lexicography'];
 const PAGE_SIZE = 6;
 type CourseQueryParams = Omit<FilterCourseQueryParams, 'section'> & {
@@ -18,10 +18,12 @@ type CourseQueryParams = Omit<FilterCourseQueryParams, 'section'> & {
 
 const CourseList = ({
     isLoading,
-    courses
+    courses,
+    section
 }: {
     isLoading?: boolean;
     courses?: ListResponseData<Course>;
+    section?: string;
 }): JSX.Element => {
     const { is_subscribed: isSubscribed } = useCourseSubscription();
     const totalPages = Math.ceil((courses?.count_items ?? 0) / PAGE_SIZE);
@@ -74,12 +76,14 @@ const CourseList = ({
                     />
                 ))}
             </div>
-            <Paginator
-                totalPages={totalPages}
-                hasNextPage={!!courses?.next_page}
-                hasPreviousPage={!!courses?.previous_page}
-                className="justify-center w-full pb-8"
-            />
+            {section !== 'trending' && (
+                <Paginator
+                    totalPages={totalPages}
+                    hasNextPage={!!courses?.next_page}
+                    hasPreviousPage={!!courses?.previous_page}
+                    className="justify-center w-full pb-8"
+                />
+            )}
         </>
     );
 };
@@ -111,15 +115,23 @@ export const PublicCourseList = ({
         isFetching
     } = useGetPublicListCoursesV2Query({
         section: VALID_SECTION.includes(section ?? '') ? section : 'all',
-        sort: VALID_SORT.includes(sort ?? '') ? sort : 'latest',
+        sort: VALID_SORT.includes(sort ?? '')
+            ? sort
+            : section === 'trending'
+            ? 'popularity'
+            : 'latest',
         page: parseInt(page ?? '1'),
-        limit: PAGE_SIZE,
+        limit: section === 'trending' ? 8 : PAGE_SIZE,
         search
     });
     const courses = queriedCourses ?? ssrCourses;
 
     return (
-        <CourseList courses={courses} isLoading={!isLoading && isFetching} />
+        <CourseList
+            courses={courses}
+            isLoading={!isLoading && isFetching}
+            section={section}
+        />
     );
 };
 
@@ -149,15 +161,23 @@ export const PrivateCourseList = ({
     } = useGetPrivateListCoursesV2Query(
         {
             section: VALID_SECTION.includes(section ?? '') ? section : 'all',
-            sort: VALID_SORT.includes(sort ?? '') ? sort : 'latest',
+            sort: VALID_SORT.includes(sort ?? '')
+                ? sort
+                : section === 'trending'
+                ? 'popularity'
+                : 'latest',
             page: parseInt(page ?? '1'),
-            limit: PAGE_SIZE,
+            limit: section === 'trending' ? 8 : PAGE_SIZE,
             search
         } as FilterCourseQueryParams,
         { refetchOnMountOrArgChange: true }
     );
 
     return (
-        <CourseList courses={courses} isLoading={!isLoading && isFetching} />
+        <CourseList
+            courses={courses}
+            isLoading={!isLoading && isFetching}
+            section={section}
+        />
     );
 };
