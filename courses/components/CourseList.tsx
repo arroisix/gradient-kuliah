@@ -9,7 +9,13 @@ import { cn } from 'commons/utils';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useEffect, useRef } from 'react';
 
-const VALID_SECTION = ['all', 'newly-released', 'coming-soon', 'trending'];
+const VALID_SECTION = [
+    'all',
+    'newly-released',
+    'coming-soon',
+    'trending',
+    'for-you'
+];
 const VALID_SORT = ['latest', 'popularity', 'lexicography'];
 const PAGE_SIZE = 6;
 type CourseQueryParams = Omit<FilterCourseQueryParams, 'section'> & {
