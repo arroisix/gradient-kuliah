@@ -7,7 +7,8 @@ import Link from 'next/link';
 const TAB_OPTIONS = [
     { value: 'all', label: 'Semua' },
     { value: 'newly-released', label: 'Baru Rilis' },
-    { value: 'coming-soon', label: 'Segera Hadir' }
+    { value: 'coming-soon', label: 'Segera Hadir' },
+    { value: 'trending', label: 'Trending' }
 ];
 
 const CourseTabs = (): JSX.Element => {
