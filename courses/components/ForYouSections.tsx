@@ -34,11 +34,6 @@ const Header: React.FC<{ title: string; subtitle?: string }> = ({
     </div>
 );
 
-/**
- * ForYouSections
- * - Renders "Kelas Terbaru" section with different subheader for auth/unauth
- * - Renders "Pilihan untuk Mahasiswa {major}" only for authenticated user
- */
 const ForYouSections = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const router = useRouter();
