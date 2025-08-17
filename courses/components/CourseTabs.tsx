@@ -1,6 +1,6 @@
 import { cn } from 'commons/utils';
 import { useRouter } from 'next/router';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { TabStyle } from './LearningExperience/AstroNotes/constants';
 import Link from 'next/link';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
@@ -13,6 +13,9 @@ const TAB_OPTIONS = [
     { value: 'trending', label: 'Trending' },
     { value: 'coming-soon', label: 'Segera Hadir' }
 ];
+
+const AUTH_DEFAULT_TAB_VALUE = 'for-you';
+const NON_AUTH_DEFAULT_TAB_VALUE = 'all';
 
 const CourseTabs = (): JSX.Element => {
     const router = useRouter();
@@ -28,10 +31,28 @@ const CourseTabs = (): JSX.Element => {
         return TAB_OPTIONS;
     }, [isAuthenticated]);
 
+    const defaultTab = isAuthenticated
+        ? AUTH_DEFAULT_TAB_VALUE
+        : NON_AUTH_DEFAULT_TAB_VALUE;
+
+    useEffect(() => {
+        if (!router.isReady) return;
+        if (!currentTab) {
+            router.replace(
+                {
+                    pathname: router.pathname,
+                    query: { ...router.query, page: 1, tab: defaultTab }
+                },
+                undefined,
+                { shallow: true }
+            );
+        }
+    }, [router.isReady, currentTab, defaultTab, router]);
+
     const tabStyle = (tab: string): string =>
         cn(
             'text-center text-sm py-3 border-b-2 flex-1 md:flex-none first:!px-1 whitespace-nowrap',
-            (!currentTab && tab == 'all') || currentTab == tab
+            (!currentTab && tab == defaultTab) || currentTab == tab
                 ? TabStyle.active
                 : TabStyle.default
         );
