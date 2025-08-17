@@ -16,6 +16,8 @@ import React, { useState } from 'react';
 import { IoIosSearch } from 'react-icons/io';
 import { useDebounce } from 'use-debounce';
 import DownloadBanner from 'courses/components/Downloads/DownloadBanner';
+import { useRouter } from 'next/router';
+import ForYouSections from 'courses/components/ForYouSections';
 
 const SORT_OPTIONS = [
     { value: 'latest', label: 'Terakhir Rilis' },
@@ -33,6 +35,13 @@ const ClassContainer = ({
     const [debouncedSearchTerm] = useDebounce(searchTerm, 500, {
         maxWait: 1000
     });
+
+    const router = useRouter();
+    const { tab: currentTab } = router.query as { tab?: string };
+
+    const isForYouView =
+        (isAuthenticated && currentTab === 'for-you') ||
+        (!isAuthenticated && (!currentTab || currentTab === 'all'));
 
     const { data: courseProgresses } = useGetCourseProgressV2Query(undefined, {
         skip: !isAuthenticated
@@ -76,7 +85,10 @@ const ClassContainer = ({
                         />
                     )}
                 </div>
-                {isAuthenticated ? (
+
+                {isForYouView ? (
+                    <ForYouSections />
+                ) : isAuthenticated ? (
                     <PrivateCourseList search={debouncedSearchTerm} />
                 ) : (
                     <PublicCourseList
