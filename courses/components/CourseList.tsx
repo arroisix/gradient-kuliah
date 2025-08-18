@@ -14,7 +14,8 @@ const VALID_SECTION = [
     'newly-released',
     'coming-soon',
     'trending',
-    'for-you'
+    'for-you',
+    'my-class'
 ];
 const VALID_SORT = ['latest', 'popularity', 'lexicography'];
 const PAGE_SIZE = 6;
