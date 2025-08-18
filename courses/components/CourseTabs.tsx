@@ -11,6 +11,7 @@ const TAB_OPTIONS = [
     // { value: 'newly-released', label: 'Baru Rilis' },
     { value: 'for-you', label: 'Untuk Kamu' },
     { value: 'trending', label: 'Trending' },
+    { value: 'my-class', label: 'Kelasku' },
     { value: 'coming-soon', label: 'Segera Hadir' }
 ];
 
@@ -24,8 +25,9 @@ const CourseTabs = (): JSX.Element => {
 
     const tabs = useMemo(() => {
         if (!isAuthenticated) {
-            return TAB_OPTIONS.map((tab) =>
-                tab.value === 'for-you' ? { ...tab, value: 'all' } : tab
+            return TAB_OPTIONS.filter((tab) => tab.value !== 'my-class').map(
+                (tab) =>
+                    tab.value === 'for-you' ? { ...tab, value: 'all' } : tab
             );
         }
         return TAB_OPTIONS;
@@ -37,7 +39,7 @@ const CourseTabs = (): JSX.Element => {
 
     useEffect(() => {
         if (!router.isReady) return;
-        if (!currentTab) {
+        if (!currentTab && isAuthenticated) {
             router.replace(
                 {
                     pathname: router.pathname,
@@ -47,7 +49,7 @@ const CourseTabs = (): JSX.Element => {
                 { shallow: true }
             );
         }
-    }, [router.isReady, currentTab, defaultTab, router]);
+    }, [router.isReady, currentTab, defaultTab, router, isAuthenticated]);
 
     const tabStyle = (tab: string): string =>
         cn(
