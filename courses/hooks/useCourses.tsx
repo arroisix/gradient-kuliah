@@ -7,6 +7,7 @@ const useCourses = (
         | 'coming-soon'
         | 'trending'
         | 'for-you'
+        | 'for-you-new-release'
         | 'my-class',
     sort: 'latest' | 'popularity' | 'lexicography'
 ) => {
