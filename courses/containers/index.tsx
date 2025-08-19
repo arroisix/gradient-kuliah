@@ -87,7 +87,7 @@ const ClassContainer = ({
                 </div>
 
                 {isForYouView ? (
-                    <ForYouSections />
+                    <ForYouSections search={debouncedSearchTerm} />
                 ) : isAuthenticated ? (
                     <PrivateCourseList search={debouncedSearchTerm} />
                 ) : (
