@@ -10,6 +10,9 @@ import ProductCard from 'commons/components/elements/ProductCard';
 import { cn } from 'commons/utils';
 
 import usePublicCourseInfiniteScroll from 'courses/hooks/usePublicCourseInfiniteScroll';
+import { CourseList } from './CourseList';
+import Skeleton from 'commons/components/elements/Skeleton';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 const PAGE_SIZE = 6;
 
@@ -25,6 +28,7 @@ const Header: React.FC<{ title: string; subtitle?: string }> = ({
 
 const ForYouSections = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const { is_subscribed: isSubscribed } = useCourseSubscription();
     const router = useRouter();
     const { search } = router.query as {
         search?: string;
@@ -114,77 +118,30 @@ const ForYouSections = (): JSX.Element => {
                             : 'Kelas Terbaru'
                     }
                 />
-                <div
-                    className={cn(
-                        'grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 xl:grid-cols-3 xl:gap-6'
-                    )}>
-                    {(isAuthenticated
-                        ? kelasTerbaruPrivateLoading
-                        : kelasTerbaruPublicLoading) && (
-                        <p className="text-gray-400">Memuat...</p>
-                    )}
-
-                    {!(isAuthenticated
-                        ? kelasTerbaruPrivateLoading
-                        : kelasTerbaruPublicLoading) &&
-                        (isAuthenticated
+                <CourseList
+                    courses={
+                        isAuthenticated
                             ? kelasTerbaruPrivateData
                             : kelasTerbaruPublicData
-                        )?.data?.length === 0 && (
-                            <p className="text-gray-400">
-                                Tidak ada kelas terbaru.
-                            </p>
-                        )}
-
-                    {!(isAuthenticated
-                        ? kelasTerbaruPrivateLoading
-                        : kelasTerbaruPublicLoading) &&
-                        (isAuthenticated
-                            ? kelasTerbaruPrivateData
-                            : kelasTerbaruPublicData
-                        )?.data?.map((c: Course) => (
-                            <ProductCard
-                                key={c.id}
-                                heading="h3"
-                                orientation="vertical"
-                                category="kelas"
-                                eventName="Click Class Card"
-                                href={getHref(c)}
-                                product={getProduct(c)}
-                            />
-                        ))}
-                </div>
+                    }
+                    isLoading={
+                        isAuthenticated
+                            ? kelasTerbaruPrivateLoading
+                            : kelasTerbaruPublicLoading
+                    }
+                    section="for-you-new-release"
+                />
             </div>
 
             {/* For authenticated users show Pilihan untuk Mahasiswa {major} */}
             {isAuthenticated && (
                 <div className="mt-8">
                     <Header title={`Pilihan untuk Mahasiswa ${major}`} />
-                    <div
-                        className={cn(
-                            'grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 xl:grid-cols-3 xl:gap-6'
-                        )}>
-                        {pilihanLoading && (
-                            <p className="text-gray-400">Memuat...</p>
-                        )}
-                        {!pilihanLoading && pilihanData?.data?.length === 0 && (
-                            <p className="text-gray-400">
-                                Tidak ada rekomendasi untuk jurusan ini.
-                            </p>
-                        )}
-                        {!pilihanLoading &&
-                            pilihanData?.data?.map((c: Course) => (
-                                <ProductCard
-                                    key={c.id}
-                                    heading="h3"
-                                    orientation="vertical"
-                                    category="kelas"
-                                    eventName="Click Class Card"
-                                    href={getHref(c)}
-                                    product={getProduct(c)}
-                                />
-                            ))}
-                    </div>
+                    <CourseList
+                        courses={pilihanData}
+                        isLoading={pilihanLoading}
+                        section="for-you"
+                    />
                 </div>
             )}
 
@@ -196,7 +153,16 @@ const ForYouSections = (): JSX.Element => {
                         'grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 xl:grid-cols-3 xl:gap-6'
                     )}>
                     {eksplorLoading && (
-                        <p className="text-gray-400">Memuat...</p>
+                        <div
+                            className={cn(
+                                'grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 xl:grid-cols-3 xl:gap-6',
+                                !isSubscribed && 'lg:grid-cols-3'
+                            )}>
+                            <Skeleton
+                                repeat={6}
+                                className="w-full h-56 !mb-0"
+                            />
+                        </div>
                     )}
                     {!eksplorLoading && eksplorData?.data?.length === 0 && (
                         <p className="text-gray-400">
