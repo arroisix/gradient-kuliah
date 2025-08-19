@@ -103,7 +103,7 @@ const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
         return `/kelas/${course.slug}`;
     };
 
-    const renderKelasTerbaruItem = (course: Course) => (
+    const renderKelasTerbaruItem = (course: Course): JSX.Element => (
         <ProductCard
             key={course.id}
             heading="h3"
