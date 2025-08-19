@@ -13,6 +13,7 @@ import usePublicCourseInfiniteScroll from 'courses/hooks/usePublicCourseInfinite
 import { CourseList } from './CourseList';
 import Skeleton from 'commons/components/elements/Skeleton';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import CarouselSection from 'dashboard/components/CarouselSection';
 
 const PAGE_SIZE = 6;
 
@@ -60,7 +61,7 @@ const ForYouSections = (): JSX.Element => {
             section: 'for-you-new-release',
             sort: 'latest',
             page: 1,
-            limit: PAGE_SIZE,
+            limit: PAGE_SIZE * 2,
             search
         } as any,
         {
@@ -107,29 +108,43 @@ const ForYouSections = (): JSX.Element => {
         return `/kelas/${course.slug}`;
     };
 
+    const renderKelasTerbaruItem = (course: Course) => (
+        <ProductCard
+            key={course.id}
+            heading="h3"
+            orientation="vertical"
+            category="kelas"
+            eventName="Click Class Card"
+            href={getHref(course)}
+            product={getProduct(course)}
+        />
+    );
+
     return (
         <div className="px-4 md:px-6 lg:px-8 mt-6">
             {/* Kelas Terbaru section - header differs when authenticated */}
             <div className="mb-6">
-                <Header
+                <CarouselSection
                     title={
                         isAuthenticated
                             ? 'Kelas Terbaru yang Cocok Untukmu'
                             : 'Kelas Terbaru'
                     }
-                />
-                <CourseList
-                    courses={
+                    items={
                         isAuthenticated
-                            ? kelasTerbaruPrivateData
-                            : kelasTerbaruPublicData
+                            ? kelasTerbaruPrivateData?.data ?? []
+                            : kelasTerbaruPublicData?.data ?? []
                     }
                     isLoading={
                         isAuthenticated
                             ? kelasTerbaruPrivateLoading
                             : kelasTerbaruPublicLoading
                     }
-                    section="for-you-new-release"
+                    itemsPerPage={4}
+                    renderItem={(item) =>
+                        renderKelasTerbaruItem(item as Course)
+                    }
+                    eventCategory="KelasTerbaru"
                 />
             </div>
 
@@ -159,7 +174,7 @@ const ForYouSections = (): JSX.Element => {
                                 !isSubscribed && 'lg:grid-cols-3'
                             )}>
                             <Skeleton
-                                repeat={6}
+                                repeat={3}
                                 className="w-full h-56 !mb-0"
                             />
                         </div>
