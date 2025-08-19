@@ -40,7 +40,7 @@ const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
             sort: 'latest',
             page: 1,
             limit: PAGE_SIZE * 2
-        } as any,
+        },
         {
             skip: !isAuthenticated
         }
@@ -72,7 +72,7 @@ const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
                 page: 1,
                 limit: PAGE_SIZE,
                 search: search
-            } as any,
+            },
             {
                 skip: !isAuthenticated
             }
