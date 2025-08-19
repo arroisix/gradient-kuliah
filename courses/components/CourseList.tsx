@@ -15,6 +15,7 @@ const VALID_SECTION = [
     'coming-soon',
     'trending',
     'for-you',
+    'for-you-new-release',
     'my-class'
 ];
 const VALID_SORT = ['latest', 'popularity', 'lexicography'];
