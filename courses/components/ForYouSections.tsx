@@ -57,7 +57,7 @@ const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
             sort: 'latest',
             page: 1,
             limit: PAGE_SIZE * 2
-        } as any,
+        },
         {
             skip: isAuthenticated
         }
@@ -163,16 +163,7 @@ const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
                         'grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 xl:grid-cols-3 xl:gap-6'
                     )}>
                     {eksplorLoading && (
-                        <div
-                            className={cn(
-                                'grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 xl:grid-cols-3 xl:gap-6',
-                                !isSubscribed && 'lg:grid-cols-3'
-                            )}>
-                            <Skeleton
-                                repeat={3}
-                                className="w-full h-56 !mb-0"
-                            />
-                        </div>
+                        <Skeleton repeat={6} className="w-full h-56 !mb-0" />
                     )}
                     {!eksplorLoading && eksplorData?.data?.length === 0 && (
                         <p className="text-gray-400">
