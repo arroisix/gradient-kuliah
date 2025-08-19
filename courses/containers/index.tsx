@@ -77,13 +77,13 @@ const ClassContainer = ({
                             className="absolute right-4 top-1/2 transform -translate-y-1/2 text-[#DADADA] cursor-pointer"
                         />
                     </div>
-                    {isAuthenticated && (
+                    {/* {isAuthenticated && (
                         <Sort
                             options={SORT_OPTIONS}
                             defaultSelected="latest"
                             className="sticky z-10 py-2 top-28"
                         />
-                    )}
+                    )} */}
                 </div>
 
                 {isForYouView ? (
