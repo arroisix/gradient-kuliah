@@ -11,7 +11,6 @@ import { cn } from 'commons/utils';
 import usePublicCourseInfiniteScroll from 'courses/hooks/usePublicCourseInfiniteScroll';
 import { CourseList } from './CourseList';
 import Skeleton from 'commons/components/elements/Skeleton';
-import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import CarouselSection from 'dashboard/components/CarouselSection';
 
 const PAGE_SIZE = 6;
@@ -28,7 +27,6 @@ const Header: React.FC<{ title: string; subtitle?: string }> = ({
 
 const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { is_subscribed: isSubscribed } = useCourseSubscription();
 
     // Kelas Terbaru - fetch directly depending on auth state
     const {
