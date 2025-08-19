@@ -34,9 +34,9 @@ const usePrivateCourseInfiniteScroll = (
     ] = useLazyGetPrivateListCoursesV2Query();
 
     const anchor = useRef<HTMLDivElement | null>(null);
-    const [allData, setAllData] = useState<ListResponseData<Course> | undefined>(
-        initialData
-    );
+    const [allData, setAllData] = useState<
+        ListResponseData<Course> | undefined
+    >(initialData);
     const [hasMore, setHasMore] = useState(false);
     const isLoading = isNextLoading || isFetching;
 
