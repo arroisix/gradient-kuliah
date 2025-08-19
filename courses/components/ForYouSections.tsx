@@ -1,6 +1,5 @@
 // ...existing code...
 import React from 'react';
-import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { useGetPrivateListCoursesV2Query } from 'courses/redux/api/privateCourseV2Api';
@@ -27,13 +26,9 @@ const Header: React.FC<{ title: string; subtitle?: string }> = ({
     </div>
 );
 
-const ForYouSections = (): JSX.Element => {
+const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { is_subscribed: isSubscribed } = useCourseSubscription();
-    const router = useRouter();
-    const { search } = router.query as {
-        search?: string;
-    };
 
     // Kelas Terbaru - fetch directly depending on auth state
     const {
@@ -61,8 +56,7 @@ const ForYouSections = (): JSX.Element => {
             section: 'for-you-new-release',
             sort: 'latest',
             page: 1,
-            limit: PAGE_SIZE * 2,
-            search
+            limit: PAGE_SIZE * 2
         } as any,
         {
             skip: isAuthenticated
@@ -76,7 +70,8 @@ const ForYouSections = (): JSX.Element => {
                 section: 'for-you',
                 sort: 'latest',
                 page: 1,
-                limit: PAGE_SIZE
+                limit: PAGE_SIZE,
+                search: search
             } as any,
             {
                 skip: !isAuthenticated
