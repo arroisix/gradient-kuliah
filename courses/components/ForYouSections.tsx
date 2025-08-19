@@ -39,7 +39,7 @@ const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
             section: 'for-you-new-release',
             sort: 'latest',
             page: 1,
-            limit: PAGE_SIZE
+            limit: PAGE_SIZE * 2
         } as any,
         {
             skip: !isAuthenticated
