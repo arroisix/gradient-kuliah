@@ -24,7 +24,7 @@ type CourseQueryParams = Omit<FilterCourseQueryParams, 'section'> & {
     tab?: string;
 };
 
-const CourseList = ({
+export const CourseList = ({
     isLoading,
     courses,
     section
@@ -84,7 +84,9 @@ const CourseList = ({
                     />
                 ))}
             </div>
-            {section !== 'trending' && (
+            {!['trending', 'for-you', 'for-you-new-release'].includes(
+                section ?? ''
+            ) && (
                 <Paginator
                     totalPages={totalPages}
                     hasNextPage={!!courses?.next_page}
