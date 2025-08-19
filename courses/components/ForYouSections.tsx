@@ -4,25 +4,14 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { useGetPrivateListCoursesV2Query } from 'courses/redux/api/privateCourseV2Api';
-import {
-    useGetPublicListCoursesV2Query
-} from 'courses/redux/api/publicCourseV2Api';
-import { PublicCourseList } from './CourseList';
-import { PrivateCourseList } from './CourseList';
-import { useProfileContext } from 'profile/contexts/ProfileProvider';
+import { useGetPublicListCoursesV2Query } from 'courses/redux/api/publicCourseV2Api';
 
 import ProductCard from 'commons/components/elements/ProductCard';
 import { cn } from 'commons/utils';
 
-const PAGE_SIZE = 6;
+import usePublicCourseInfiniteScroll from 'courses/hooks/usePublicCourseInfiniteScroll';
 
-// minimal empty courses object for PublicCourseList SSR prop
-const EMPTY_LIST = {
-    count_items: 0,
-    previous_page: null,
-    next_page: null,
-    data: []
-} as any;
+const PAGE_SIZE = 6;
 
 const Header: React.FC<{ title: string; subtitle?: string }> = ({
     title,
@@ -37,34 +26,66 @@ const Header: React.FC<{ title: string; subtitle?: string }> = ({
 const ForYouSections = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const router = useRouter();
-    const { profile } = useProfileContext();
     const { search } = router.query as {
         search?: string;
     };
-    const major = profile?.major || 'Jurusanmu';
+
+    // Kelas Terbaru - fetch directly depending on auth state
+    const {
+        data: kelasTerbaruPrivateData,
+        isLoading: kelasTerbaruPrivateLoading
+    } = useGetPrivateListCoursesV2Query(
+        {
+            section: 'for-you-new-release',
+            sort: 'latest',
+            page: 1,
+            limit: PAGE_SIZE
+        } as any,
+        {
+            skip: !isAuthenticated
+        }
+    );
+
+    const major = kelasTerbaruPrivateData?.major ?? '';
+
+    const {
+        data: kelasTerbaruPublicData,
+        isLoading: kelasTerbaruPublicLoading
+    } = useGetPublicListCoursesV2Query(
+        {
+            section: 'for-you-new-release',
+            sort: 'latest',
+            page: 1,
+            limit: PAGE_SIZE,
+            search
+        } as any,
+        {
+            skip: isAuthenticated
+        }
+    );
 
     // Pilihan untuk Mahasiswa (private query)
     const { data: pilihanData, isLoading: pilihanLoading } =
         useGetPrivateListCoursesV2Query(
             {
-                section: 'all',
+                section: 'for-you',
                 sort: 'latest',
                 page: 1,
-                limit: PAGE_SIZE,
-                major: major
+                limit: PAGE_SIZE
             } as any,
             {
                 skip: !isAuthenticated
             }
         );
 
-    const { data: eksplorData, isLoading: eksplorLoading } =
-        useGetPublicListCoursesV2Query({
-            section: 'all',
-            sort: 'latest',
-            page: 1,
-            limit: PAGE_SIZE
-        } as any);
+    const eksplor = usePublicCourseInfiniteScroll({
+        section: 'all',
+        sort: 'latest',
+        limit: PAGE_SIZE,
+        search
+    });
+    const eksplorData = eksplor.allData;
+    const eksplorLoading = eksplor.isAllLoading || eksplor.isLoading;
 
     const getProduct = (course: Course): Product => ({
         title: course.course_name,
@@ -93,12 +114,46 @@ const ForYouSections = (): JSX.Element => {
                             : 'Kelas Terbaru'
                     }
                 />
-                {/* Use existing wrappers - pass empty SSR data for public */}
-                {isAuthenticated ? (
-                    <PrivateCourseList search={search} />
-                ) : (
-                    <PublicCourseList courses={EMPTY_LIST} search={search} />
-                )}
+                <div
+                    className={cn(
+                        'grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 xl:grid-cols-3 xl:gap-6'
+                    )}>
+                    {(isAuthenticated
+                        ? kelasTerbaruPrivateLoading
+                        : kelasTerbaruPublicLoading) && (
+                        <p className="text-gray-400">Memuat...</p>
+                    )}
+
+                    {!(isAuthenticated
+                        ? kelasTerbaruPrivateLoading
+                        : kelasTerbaruPublicLoading) &&
+                        (isAuthenticated
+                            ? kelasTerbaruPrivateData
+                            : kelasTerbaruPublicData
+                        )?.data?.length === 0 && (
+                            <p className="text-gray-400">
+                                Tidak ada kelas terbaru.
+                            </p>
+                        )}
+
+                    {!(isAuthenticated
+                        ? kelasTerbaruPrivateLoading
+                        : kelasTerbaruPublicLoading) &&
+                        (isAuthenticated
+                            ? kelasTerbaruPrivateData
+                            : kelasTerbaruPublicData
+                        )?.data?.map((c: Course) => (
+                            <ProductCard
+                                key={c.id}
+                                heading="h3"
+                                orientation="vertical"
+                                category="kelas"
+                                eventName="Click Class Card"
+                                href={getHref(c)}
+                                product={getProduct(c)}
+                            />
+                        ))}
+                </div>
             </div>
 
             {/* For authenticated users show Pilihan untuk Mahasiswa {major} */}
@@ -161,6 +216,7 @@ const ForYouSections = (): JSX.Element => {
                             />
                         ))}
                 </div>
+                <div ref={eksplor.anchor} />
             </div>
         </div>
     );
