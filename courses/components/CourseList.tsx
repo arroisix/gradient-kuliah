@@ -8,6 +8,9 @@ import ProductCard from 'commons/components/elements/ProductCard';
 import { cn } from 'commons/utils';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useEffect, useRef } from 'react';
+import { Header } from './CourseTabHeader';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
 const VALID_SECTION = [
     'all',
@@ -35,6 +38,7 @@ export const CourseList = ({
 }): JSX.Element => {
     const { is_subscribed: isSubscribed } = useCourseSubscription();
     const totalPages = Math.ceil((courses?.count_items ?? 0) / PAGE_SIZE);
+    const isAuthenticated = useSelector(getIsAuthenticated);
     if (isLoading)
         return (
             <div
@@ -67,6 +71,17 @@ export const CourseList = ({
 
     return (
         <>
+            {section === 'trending' && (
+                <Header
+                    title={
+                        isAuthenticated
+                            ? `Kelas Favorit Mahasiswa ${
+                                  courses?.major || 'Jurusanmu'
+                              }`
+                            : 'Paling Banyak Dipelajari'
+                    }
+                />
+            )}
             <div
                 className={cn(
                     'grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 xl:grid-cols-3 xl:gap-6',
