@@ -11,6 +11,7 @@ import { useEffect, useRef } from 'react';
 import { Header } from './CourseTabHeader';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
+import ContentCard from 'dashboard/components/ContentCard';
 
 const VALID_SECTION = [
     'all',
@@ -89,17 +90,35 @@ export const CourseList = ({
                     'grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 xl:grid-cols-3 xl:gap-6',
                     !isSubscribed && 'lg:grid-cols-3'
                 )}>
-                {courses?.data.map((course: Course) => (
-                    <ProductCard
-                        key={course.id}
-                        heading="h2"
-                        orientation="vertical"
-                        category="kelas"
-                        eventName="Click Class Card"
-                        href={getHref(course)}
-                        product={getProduct(course)}
-                    />
-                ))}
+                {courses?.data.map((course: Course) => {
+                    const href = getHref(course);
+                    if (section === 'trending') {
+                        return (
+                            <ContentCard
+                                key={course.id}
+                                id={String(course.id)}
+                                title={course.course_name}
+                                category="Kelas"
+                                thumbnail={course.thumbnail ?? null}
+                                href={href}
+                                courseName={course.course_name}
+                                isTrending={true}
+                            />
+                        );
+                    }
+
+                    return (
+                        <ProductCard
+                            key={course.id}
+                            heading="h2"
+                            orientation="vertical"
+                            category="kelas"
+                            eventName="Click Class Card"
+                            href={href}
+                            product={getProduct(course)}
+                        />
+                    );
+                })}
             </div>
             {!['trending', 'for-you', 'for-you-new-release'].includes(
                 section ?? ''
