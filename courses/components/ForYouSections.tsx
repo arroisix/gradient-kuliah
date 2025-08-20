@@ -11,19 +11,11 @@ import { cn } from 'commons/utils';
 import usePublicCourseInfiniteScroll from 'courses/hooks/usePublicCourseInfiniteScroll';
 import { CourseList } from './CourseList';
 import Skeleton from 'commons/components/elements/Skeleton';
-import CarouselSection from 'dashboard/components/CarouselSection';
+import CarouselSection from './CarouselSection';
+
+import { Header } from './CourseTabHeader';
 
 const PAGE_SIZE = 6;
-
-const Header: React.FC<{ title: string; subtitle?: string }> = ({
-    title,
-    subtitle
-}) => (
-    <div className="mb-4">
-        <h3 className="text-white text-lg font-semibold">{title}</h3>
-        {subtitle && <p className="text-gray-400 text-sm mt-1">{subtitle}</p>}
-    </div>
-);
 
 const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
