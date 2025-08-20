@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import ContentCard from 'dashboard/components/ContentCard';
 import usePrivateCourseInfiniteScroll from 'courses/hooks/usePrivateCourseInfiniteScroll';
+import usePublicCourseInfiniteScroll from 'courses/hooks/usePublicCourseInfiniteScroll';
 
 const VALID_SECTION = [
     'all',
@@ -152,22 +153,61 @@ export const PublicCourseList = ({
         }
     }, [search, router]);
 
-    const {
-        data: queriedCourses,
-        isLoading,
-        isFetching
-    } = useGetPublicListCoursesV2Query({
+    const publicInfiniteParams = {
         section: VALID_SECTION.includes(section ?? '') ? section : 'all',
         sort: VALID_SORT.includes(sort ?? '')
             ? sort
             : section === 'trending'
             ? 'popularity'
             : 'latest',
-        page: parseInt(page ?? '1'),
-        limit: section === 'trending' ? 8 : PAGE_SIZE,
-        search
-    });
+        search,
+        limit: PAGE_SIZE
+    } as Omit<FilterCourseQueryParams, 'page'>;
+
+    const {
+        allData: publicAllData,
+        isAllLoading: publicIsAllLoading,
+        isLoading: publicIsLoading,
+        anchor: publicAnchor
+    } = usePublicCourseInfiniteScroll(publicInfiniteParams);
+
+    const {
+        data: queriedCourses,
+        isLoading,
+        isFetching
+    } = useGetPublicListCoursesV2Query(
+        {
+            section: VALID_SECTION.includes(section ?? '') ? section : 'all',
+            sort: VALID_SORT.includes(sort ?? '')
+                ? sort
+                : section === 'trending'
+                ? 'popularity'
+                : 'latest',
+            page: parseInt(page ?? '1'),
+            limit: section === 'trending' ? 8 : PAGE_SIZE,
+            search
+        },
+        {
+            skip: (section ?? '') === 'coming-soon'
+        }
+    );
     const courses = queriedCourses ?? ssrCourses;
+
+    if ((section ?? '') === 'coming-soon') {
+        return (
+            <>
+                <CourseList
+                    courses={publicAllData}
+                    isLoading={publicIsAllLoading}
+                    section={section}
+                />
+                <div ref={publicAnchor} />
+                {publicIsLoading && !publicIsAllLoading && (
+                    <Skeleton repeat={6} className="w-full h-56 !mb-0" />
+                )}
+            </>
+        );
+    }
 
     return (
         <CourseList
