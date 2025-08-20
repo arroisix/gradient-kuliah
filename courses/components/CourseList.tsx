@@ -3,7 +3,7 @@ import { useGetPrivateListCoursesV2Query } from 'courses/redux/api/privateCourse
 import { useGetPublicListCoursesV2Query } from 'courses/redux/api/publicCourseV2Api';
 import { useRouter } from 'next/router';
 import EmptyCourse from './EmptyCourse';
-import Paginator from 'commons/components/elements/Paginator';
+// import Paginator from 'commons/components/elements/Paginator';
 import ProductCard from 'commons/components/elements/ProductCard';
 import { cn } from 'commons/utils';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
@@ -39,7 +39,7 @@ export const CourseList = ({
     section?: string;
 }): JSX.Element => {
     const { is_subscribed: isSubscribed } = useCourseSubscription();
-    const totalPages = Math.ceil((courses?.count_items ?? 0) / PAGE_SIZE);
+    // const totalPages = Math.ceil((courses?.count_items ?? 0) / PAGE_SIZE);
     const isAuthenticated = useSelector(getIsAuthenticated);
     if (isLoading)
         return (
@@ -209,8 +209,7 @@ export const PrivateCourseList = ({
         allData,
         isAllLoading,
         isLoading: isMoreLoading,
-        anchor,
-        hasMore
+        anchor
     } = usePrivateCourseInfiniteScroll(myClassParams, {
         skip: (section ?? '') !== 'my-class'
     });
