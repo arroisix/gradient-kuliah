@@ -121,16 +121,12 @@ export const CourseList = ({
                     );
                 })}
             </div>
-            {!['trending', 'for-you', 'for-you-new-release'].includes(
-                section ?? ''
-            ) && (
-                <Paginator
-                    totalPages={totalPages}
-                    hasNextPage={!!courses?.next_page}
-                    hasPreviousPage={!!courses?.previous_page}
-                    className="justify-center w-full pb-8"
-                />
-            )}
+            {/* <Paginator
+                totalPages={totalPages}
+                hasNextPage={!!courses?.next_page}
+                hasPreviousPage={!!courses?.previous_page}
+                className="justify-center w-full pb-8"
+            /> */}
         </>
     );
 };
