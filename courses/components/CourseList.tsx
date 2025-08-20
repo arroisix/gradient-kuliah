@@ -72,15 +72,17 @@ export const CourseList = ({
     return (
         <>
             {section === 'trending' && (
-                <Header
-                    title={
-                        isAuthenticated
-                            ? `Kelas Favorit Mahasiswa ${
-                                  courses?.major || 'Jurusanmu'
-                              }`
-                            : 'Paling Banyak Dipelajari'
-                    }
-                />
+                <div className="mt-6">
+                    <Header
+                        title={
+                            isAuthenticated
+                                ? `Kelas Favorit Mahasiswa ${
+                                      courses?.major || 'Jurusanmu'
+                                  }`
+                                : 'Paling Banyak Dipelajari'
+                        }
+                    />
+                </div>
             )}
             <div
                 className={cn(
