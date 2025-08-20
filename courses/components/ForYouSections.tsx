@@ -60,8 +60,8 @@ const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
                 section: 'for-you',
                 sort: 'latest',
                 page: 1,
-                limit: PAGE_SIZE,
-                search: search
+                limit: PAGE_SIZE
+                // search: search
             },
             {
                 skip: !isAuthenticated
@@ -109,32 +109,34 @@ const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
         <div className="px-4 md:px-6 lg:px-8 mt-6">
             {/* Kelas Terbaru section - header differs when authenticated */}
             <div className="mb-6">
-                <CarouselSection
-                    title={
-                        isAuthenticated
-                            ? 'Kelas Terbaru yang Cocok Untukmu'
-                            : 'Kelas Terbaru'
-                    }
-                    items={
-                        isAuthenticated
-                            ? kelasTerbaruPrivateData?.data ?? []
-                            : kelasTerbaruPublicData?.data ?? []
-                    }
-                    isLoading={
-                        isAuthenticated
-                            ? kelasTerbaruPrivateLoading
-                            : kelasTerbaruPublicLoading
-                    }
-                    itemsPerPage={4}
-                    renderItem={(item) =>
-                        renderKelasTerbaruItem(item as Course)
-                    }
-                    eventCategory="KelasTerbaru"
-                />
+                {!search && (
+                    <CarouselSection
+                        title={
+                            isAuthenticated
+                                ? 'Kelas Terbaru yang Cocok Untukmu'
+                                : 'Kelas Terbaru'
+                        }
+                        items={
+                            isAuthenticated
+                                ? kelasTerbaruPrivateData?.data ?? []
+                                : kelasTerbaruPublicData?.data ?? []
+                        }
+                        isLoading={
+                            isAuthenticated
+                                ? kelasTerbaruPrivateLoading
+                                : kelasTerbaruPublicLoading
+                        }
+                        itemsPerPage={4}
+                        renderItem={(item) =>
+                            renderKelasTerbaruItem(item as Course)
+                        }
+                        eventCategory="KelasTerbaru"
+                    />
+                )}
             </div>
 
             {/* For authenticated users show Pilihan untuk Mahasiswa {major} */}
-            {isAuthenticated && (
+            {!search && isAuthenticated && (
                 <div className="mt-8">
                     <Header title={`Pilihan untuk Mahasiswa ${major}`} />
                     <CourseList
@@ -147,7 +149,7 @@ const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
 
             {/* Eksplor Kelas Lain di Gradient */}
             <div className="mt-8">
-                <Header title="Eksplor Kelas Lain di Gradient" />
+                {!search && <Header title="Eksplor Kelas Lain di Gradient" />}
                 <div
                     className={cn(
                         'grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 xl:grid-cols-3 xl:gap-6'
