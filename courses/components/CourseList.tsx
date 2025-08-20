@@ -12,6 +12,7 @@ import { Header } from './CourseTabHeader';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import ContentCard from 'dashboard/components/ContentCard';
+import usePrivateCourseInfiniteScroll from 'courses/hooks/usePrivateCourseInfiniteScroll';
 
 const VALID_SECTION = [
     'all',
@@ -200,24 +201,62 @@ export const PrivateCourseList = ({
         }
     }, [search, router]);
 
+    const myClassParams = {
+        section: 'my-class',
+        sort: VALID_SORT.includes(sort ?? '') ? sort : 'latest',
+        search,
+        limit: PAGE_SIZE
+    } as Omit<FilterCourseQueryParams, 'page'>;
+
+    // Always call the infinite scroll hook, but skip when not viewing "my-class"
+    const {
+        allData,
+        isAllLoading,
+        isLoading: isMoreLoading,
+        anchor,
+        hasMore
+    } = usePrivateCourseInfiniteScroll(myClassParams, {
+        skip: (section ?? '') !== 'my-class'
+    });
+
+    // params for general/private list query
+    const generalParams = {
+        section: VALID_SECTION.includes(section ?? '') ? section : 'all',
+        sort: VALID_SORT.includes(sort ?? '')
+            ? sort
+            : section === 'trending'
+            ? 'popularity'
+            : 'latest',
+        page: parseInt(page ?? '1'),
+        limit: section === 'trending' ? 8 : PAGE_SIZE,
+        search
+    } as FilterCourseQueryParams;
+
+    // Always call the query hook too, but skip it when we're on "my-class"
     const {
         isLoading,
         isFetching,
         data: courses
-    } = useGetPrivateListCoursesV2Query(
-        {
-            section: VALID_SECTION.includes(section ?? '') ? section : 'all',
-            sort: VALID_SORT.includes(sort ?? '')
-                ? sort
-                : section === 'trending'
-                ? 'popularity'
-                : 'latest',
-            page: parseInt(page ?? '1'),
-            limit: section === 'trending' ? 8 : PAGE_SIZE,
-            search
-        } as FilterCourseQueryParams,
-        { refetchOnMountOrArgChange: true }
-    );
+    } = useGetPrivateListCoursesV2Query(generalParams, {
+        refetchOnMountOrArgChange: true,
+        skip: (section ?? '') === 'my-class'
+    });
+
+    if (section === 'my-class') {
+        return (
+            <>
+                <CourseList
+                    courses={allData}
+                    isLoading={!!isAllLoading}
+                    section={section}
+                />
+                <div ref={anchor} />
+                {isMoreLoading && !isAllLoading && (
+                    <Skeleton repeat={6} className="w-full h-56 !mb-0" />
+                )}
+            </>
+        );
+    }
 
     return (
         <CourseList
