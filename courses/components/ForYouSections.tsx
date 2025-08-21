@@ -14,6 +14,7 @@ import Skeleton from 'commons/components/elements/Skeleton';
 import CarouselSection from './CarouselSection';
 
 import { Header } from './CourseTabHeader';
+import EmptyCourse from './EmptyCourse';
 
 const PAGE_SIZE = 6;
 
@@ -107,6 +108,9 @@ const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
 
     return (
         <div className="px-4 md:px-6 lg:px-8 mt-6">
+            {!eksplorLoading && eksplorData?.data?.length === 0 && (
+                <EmptyCourse />
+            )}
             {/* Kelas Terbaru section - header differs when authenticated */}
             <div className="mb-6">
                 {!search && (
@@ -156,11 +160,6 @@ const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
                     )}>
                     {eksplorLoading && (
                         <Skeleton repeat={6} className="w-full h-56 !mb-0" />
-                    )}
-                    {!eksplorLoading && eksplorData?.data?.length === 0 && (
-                        <p className="text-gray-400">
-                            Tidak ada kelas untuk ditampilkan.
-                        </p>
                     )}
                     {!eksplorLoading &&
                         eksplorData?.data?.map((c: Course) => (
