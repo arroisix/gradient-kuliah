@@ -37,7 +37,7 @@ const CourseDescription = ({
     return (
         <div className="w-screen px-5 lg:w-3/12">
             <div className="flex flex-col gap-4 p-4 bg-zinc-900 rounded-xl">
-                <h2 className="font-semibold text-gray-500">
+                <h2 className="font-semibold text-white-500">
                     Tentang Kelas {course?.course_name}
                 </h2>
                 <div className="w-full h-px bg-gray-500" />
@@ -80,7 +80,9 @@ const CourseDescription = ({
                         />
                     </div>
                 </Link>
-                <h2 className="text-sm text-gray-500 uppercase">Pengajar</h2>
+                <h2 className="text-sm font-semibold text-white-500 uppercase">
+                    Pengajar
+                </h2>
                 <div className="flex flex-col gap-2">
                     {course?.lecturers.map((lecturer: Lecturer) => (
                         <div
