@@ -9,6 +9,9 @@ import RatingButton from '../CourseRatingButton';
 import Link from 'next/link';
 import Image from 'next/image';
 import { CDN_URL } from 'commons/constants';
+import { useGetCourseContentQuery } from 'courses/redux/api/courseApi';
+import ListBooks from '../CourseDetailBox/ListBooks';
+import { HiOutlineBookOpen, HiOutlinePencilAlt } from 'react-icons/hi';
 
 const CourseDescription = ({
     slug,
@@ -23,6 +26,13 @@ const CourseDescription = ({
         first_video_in_course
     } = useCourseSubscription(slug);
     const isAuthenticated = useSelector(getIsAuthenticated);
+
+    const { data: courseContent, isLoading: isLoadingCourse } =
+        useGetCourseContentQuery({ slug: slug as string });
+
+    const rawItems = courseContent?.books || [];
+    const bukuCount = rawItems.filter((b) => b.category !== 'Kuis').length;
+    const kuisCount = rawItems.filter((b) => b.category === 'Kuis').length;
 
     return (
         <div className="w-screen px-5 lg:w-3/12">
@@ -92,6 +102,34 @@ const CourseDescription = ({
                         </div>
                     ))}
                 </div>
+
+                {(courseContent?.books?.length ?? 0) > 0 && (
+                    <div className="pt-3">
+                        <div className="flex items-center gap-2 mb-3">
+                            <h3 className="text-md font-semibold text-white">
+                                Konten Terkait
+                            </h3>
+                            {bukuCount > 0 && (
+                                <span className="flex items-center gap-1 px-3 py-1 rounded-md bg-[#2C2C2C] text-xs font-medium text-neutral-300">
+                                    <HiOutlineBookOpen size={14} />
+                                    {bukuCount} Buku
+                                </span>
+                            )}
+                            {kuisCount > 0 && (
+                                <span className="flex items-center gap-1 px-3 py-1 rounded-md bg-[#2C2C2C] text-xs font-medium text-neutral-300">
+                                    <HiOutlinePencilAlt size={14} />
+                                    {kuisCount} Kuis
+                                </span>
+                            )}
+                        </div>
+                        <ListBooks
+                            books={rawItems as Book[]}
+                            isLoading={isLoadingCourse}
+                            horizontal={true}
+                        />
+                    </div>
+                )}
+
                 <div className="flex flex-col gap-2">
                     {isAuthenticated &&
                         is_subscribed &&
