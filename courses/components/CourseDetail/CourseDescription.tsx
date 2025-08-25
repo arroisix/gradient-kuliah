@@ -10,8 +10,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { CDN_URL } from 'commons/constants';
 import { useGetCourseContentQuery } from 'courses/redux/api/courseApi';
-import ListBooks from '../CourseDetailBox/ListBooks';
-import { HiOutlineBookOpen, HiOutlinePencilAlt } from 'react-icons/hi';
+import {
+    HiOutlineBookOpen,
+    HiOutlinePencilAlt,
+    HiOutlineChevronRight
+} from 'react-icons/hi';
+import React, { useEffect, useRef, useState } from 'react';
+import { getBookBaseHref } from 'courses/utils';
+import RelatedContentModal from './RelatedContentModal';
 
 const CourseDescription = ({
     slug,
@@ -33,6 +39,53 @@ const CourseDescription = ({
     const rawItems = courseContent?.books || [];
     const bukuCount = rawItems.filter((b) => b.category !== 'Kuis').length;
     const kuisCount = rawItems.filter((b) => b.category === 'Kuis').length;
+
+    const [isRelatedOpen, setIsRelatedOpen] = useState(false);
+    const railRef = useRef<HTMLDivElement | null>(null);
+    const [visibleItems, setVisibleItems] = useState<Book[]>([]);
+    const [remaining, setRemaining] = useState(0);
+
+    useEffect(() => {
+        const TILE = 120; // width
+        const GAP = 16; // gap-4 (px)
+
+        const compute = (): void => {
+            const w = railRef.current?.clientWidth ?? 0;
+            if (!w) {
+                // Fallback to show up to 3 items if width not known yet
+                const fallbackCount = Math.min(3, rawItems.length);
+                setVisibleItems(rawItems.slice(0, fallbackCount));
+                setRemaining(Math.max(0, rawItems.length - fallbackCount));
+                return;
+            }
+
+            const slots = Math.max(1, Math.floor((w + GAP) / (TILE + GAP)));
+            const needPlus = rawItems.length > slots;
+            const itemsToShow = needPlus
+                ? Math.max(0, Math.min(rawItems.length, slots - 1))
+                : Math.min(rawItems.length, slots);
+
+            setVisibleItems(rawItems.slice(0, itemsToShow));
+            setRemaining(Math.max(0, rawItems.length - itemsToShow));
+        };
+
+        compute();
+
+        // ResizeObserver for dynamic recalculation
+        const ro =
+            typeof ResizeObserver !== 'undefined'
+                ? new ResizeObserver(() => compute())
+                : null;
+        if (railRef.current && ro) ro.observe(railRef.current);
+
+        const onResize = (): void => compute();
+        window.addEventListener('resize', onResize);
+
+        return () => {
+            if (ro && railRef.current) ro.unobserve(railRef.current);
+            window.removeEventListener('resize', onResize);
+        };
+    }, [rawItems]);
 
     return (
         <div className="w-screen px-5 lg:w-3/12">
@@ -123,11 +176,62 @@ const CourseDescription = ({
                                     {kuisCount} Kuis
                                 </span>
                             )}
+
+                            <button
+                                type="button"
+                                aria-label="Lihat semua konten terkait"
+                                className="ml-auto p-2 rounded-md hover:bg-neutral-800 text-neutral-300"
+                                onClick={() => setIsRelatedOpen(true)}>
+                                <HiOutlineChevronRight size={18} />
+                            </button>
                         </div>
-                        <ListBooks
-                            books={rawItems as Book[]}
+                        <div
+                            ref={railRef}
+                            className="flex items-center gap-4 overflow-hidden">
+                            {visibleItems.map(
+                                (
+                                    { slug, category, title, book_cover_url },
+                                    idx
+                                ) => (
+                                    <Link
+                                        key={`${slug}-${idx}`}
+                                        href={`${getBookBaseHref(
+                                            category
+                                        )}/${slug}`}
+                                        className="relative w-[120px] h-[160px] flex-none rounded-xl overflow-hidden border border-neutral-700 bg-neutral-800">
+                                        <Image
+                                            src={
+                                                book_cover_url ||
+                                                `${CDN_URL}/assets/astronotes-kalkulus2-placeholder.jpg`
+                                            }
+                                            alt={title}
+                                            layout="fill"
+                                            objectFit="cover"
+                                        />
+                                    </Link>
+                                )
+                            )}
+
+                            {remaining > 0 && (
+                                <button
+                                    type="button"
+                                    onClick={() => setIsRelatedOpen(true)}
+                                    className="relative w-[120px] h-[160px] flex-none rounded-xl border border-neutral-700 bg-neutral-800/60 text-white">
+                                    <span className="absolute inset-0 flex items-center justify-center text-2xl font-semibold">
+                                        +{remaining}
+                                    </span>
+                                </button>
+                            )}
+                        </div>
+
+                        {/* Modal with full list */}
+                        <RelatedContentModal
+                            open={isRelatedOpen}
+                            onClose={() => setIsRelatedOpen(false)}
+                            items={rawItems as Book[]}
+                            bukuCount={bukuCount}
+                            kuisCount={kuisCount}
                             isLoading={isLoadingCourse}
-                            horizontal={true}
                         />
                     </div>
                 )}
