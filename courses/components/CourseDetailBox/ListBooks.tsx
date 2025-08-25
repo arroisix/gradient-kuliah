@@ -147,8 +147,8 @@ export const ListBooks = ({
 
     // Vertical (legacy) list
     return (
-        <div className="flex flex-col gap-[14px]">
-            {isLoading && <Skeleton className="h-[60px] !m-0" repeat={3} />}
+        <div className="flex flex-col gap-[12px]">
+            {isLoading && <Skeleton className="h-[84px] !m-0" repeat={3} />}
             {books?.map(
                 ({
                     book_id,
@@ -161,7 +161,7 @@ export const ListBooks = ({
                 }) => (
                     <Link
                         href={`${getBookBaseHref(category)}/${slug}`}
-                        className="flex items-center gap-5 cursor-pointer"
+                        className="flex items-center gap-4 cursor-pointer rounded-xl border border-neutral-700 bg-[#2C2C2C] p-3 hover:border-neutral-500 transition-colors"
                         key={book_id}
                         onClick={() => {
                             tracker?.genericTrack('Click Book Item', {
@@ -169,10 +169,7 @@ export const ListBooks = ({
                                 'Book Title': title
                             });
                         }}>
-                        <div
-                            className={
-                                'relative flex-none border rounded-md border-neutral-700 aspect-[256/364] w-20'
-                            }>
+                        <div className="relative flex-none w-14 h-[84px] overflow-hidden rounded-lg border border-neutral-700 bg-neutral-800">
                             <Image
                                 src={
                                     book_cover_url ||
@@ -181,25 +178,37 @@ export const ListBooks = ({
                                 alt={title}
                                 layout="fill"
                                 objectFit="cover"
-                                className="rounded"
                             />
                         </div>
-                        <div className="flex flex-col gap-[6px]">
-                            <h3 className="inline-block text-lg font-body text-neutral-200">
+                        <div className="flex flex-col gap-[6px] min-w-0">
+                            <h3 className="text-base font-semibold text-white leading-snug line-clamp-2">
                                 {title}
                             </h3>
-                            <div>
-                                {authors && (
-                                    <span className="inline-block text-base font-body text-neutral-600">
-                                        {`oleh ${authors}`}
+                            <div className="flex flex-wrap items-center gap-2">
+                                {category && (
+                                    <span
+                                        className="text-[10px] sm:text-xs text-white font-medium px-2 sm:px-3 py-0.5 sm:py-1 rounded-full"
+                                        style={{
+                                            backgroundColor:
+                                                getColorForCategory(category)
+                                        }}>
+                                        {category}
                                     </span>
                                 )}
-                                {rating !== 0 && (
-                                    <span className="flex items-center gap-[2px] font-body text-xs text-neutral-600">
-                                        <AiFillStar />
+                                {/* {authors && (
+                                    <span className="text-[11px] text-neutral-400 line-clamp-1">
+                                        oleh {authors}
+                                    </span>
+                                )}
+                                {rating !== 0 && rating != null && (
+                                    <span className="flex items-center gap-[2px] text-[11px] text-neutral-300">
+                                        <AiFillStar
+                                            className="text-yellow-400"
+                                            size={12}
+                                        />
                                         {+rating.toFixed(1)}
                                     </span>
-                                )}
+                                )} */}
                             </div>
                         </div>
                     </Link>
