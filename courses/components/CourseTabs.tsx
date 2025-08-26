@@ -67,7 +67,7 @@ const CourseTabs = (): JSX.Element => {
         );
 
     return (
-        <div className="sticky z-20 flex items-end w-full pt-5 pb-2 overflow-x-auto bg-black md:pt-6 top-10 no-scrollbar">
+        <div className="sticky z-10 flex items-end w-full pt-5 pb-2 overflow-x-auto bg-black md:pt-6 top-10 no-scrollbar">
             {tabs.map((tab) => {
                 const Icon = tab.icon;
                 return (
