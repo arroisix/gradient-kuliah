@@ -128,24 +128,6 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
                     </div>
                 ))}
             </div>
-
-            {totalPages > 1 && (
-                <div className="flex justify-center mt-4 gap-2">
-                    {Array.from({ length: totalPages }).map((_, index) => (
-                        <button
-                            key={index}
-                            className={cn(
-                                'h-1.5 rounded-full transition-all',
-                                index === currentPage
-                                    ? 'w-6 bg-white'
-                                    : 'w-1.5 bg-gray-300 hover:bg-gray-400'
-                            )}
-                            onClick={() => navigateToPage(index)}
-                            aria-label={`Go to slide ${index + 1}`}
-                        />
-                    ))}
-                </div>
-            )}
         </div>
     );
 };
