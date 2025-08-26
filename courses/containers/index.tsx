@@ -63,7 +63,7 @@ const ClassContainer = ({
                     Kelas &amp; Video Perkuliahan Online Terbaik
                 </h1>
                 <CourseTabs />
-                <div className="sticky z-10 flex items-center justify-between py-2 bg-black top-28">
+                <div className="sticky z-30 flex items-center justify-between py-2 bg-black top-28">
                     <div className="relative flex-grow mr-4">
                         <input
                             type="text"
@@ -81,7 +81,7 @@ const ClassContainer = ({
                         <Sort
                             options={SORT_OPTIONS}
                             defaultSelected="latest"
-                            className="sticky z-10 py-2 top-28"
+                            className="sticky z-30 py-2 top-28"
                         />
                     )} */}
                 </div>
