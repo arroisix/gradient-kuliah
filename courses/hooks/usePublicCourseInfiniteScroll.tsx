@@ -114,7 +114,7 @@ const usePublicCourseInfiniteScroll = (
         allData,
         isAllLoading: isInitialLoading,
         isLoading: isInitialLoading || isLoading,
-        anchor,
+        anchor: anchor as React.MutableRefObject<HTMLDivElement>,
         loadMore,
         hasMore
     };

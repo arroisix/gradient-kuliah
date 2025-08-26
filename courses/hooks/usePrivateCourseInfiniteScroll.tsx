@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
     useGetPrivateListCoursesV2Query,
     useLazyGetPrivateListCoursesV2Query
@@ -116,7 +116,7 @@ const usePrivateCourseInfiniteScroll = (
         allData,
         isAllLoading: isInitialLoading,
         isLoading: isInitialLoading || isLoading,
-        anchor,
+        anchor: anchor as React.MutableRefObject<HTMLDivElement>,
         loadMore,
         hasMore
     };
