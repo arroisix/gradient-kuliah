@@ -11,7 +11,6 @@ import { useEffect, useRef } from 'react';
 import { Header } from './CourseTabHeader';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
-import ContentCard from 'dashboard/components/ContentCard';
 import usePrivateCourseInfiniteScroll from 'courses/hooks/usePrivateCourseInfiniteScroll';
 import usePublicCourseInfiniteScroll from 'courses/hooks/usePublicCourseInfiniteScroll';
 

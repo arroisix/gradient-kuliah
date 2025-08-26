@@ -8,7 +8,10 @@ const ProductCard = ({
     isReference = false,
     isTrending = false,
     ...props
-}: ProductCardProps & { isReference?: boolean }): JSX.Element => {
+}: ProductCardProps & {
+    isReference?: boolean;
+    isTrending?: boolean;
+}): JSX.Element => {
     const categoryLabel: { [key: string]: string } = {
         [category]: category,
         Catatan: 'Astronotes',
