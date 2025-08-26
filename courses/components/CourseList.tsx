@@ -42,6 +42,9 @@ export const CourseList = ({
     const { is_subscribed: isSubscribed } = useCourseSubscription();
     // const totalPages = Math.ceil((courses?.count_items ?? 0) / PAGE_SIZE);
     const isAuthenticated = useSelector(getIsAuthenticated);
+    const coursesMeta = courses as
+        | (ListResponseData<Course> & { major?: string })
+        | undefined;
     if (isLoading)
         return (
             <div
@@ -80,7 +83,7 @@ export const CourseList = ({
                         title={
                             isAuthenticated
                                 ? `Kelas Favorit Mahasiswa ${
-                                      courses?.major || 'Jurusanmu'
+                                      coursesMeta?.major || 'Jurusanmu'
                                   }`
                                 : 'Paling Banyak Dipelajari'
                         }

@@ -37,7 +37,11 @@ const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
         }
     );
 
-    const major = kelasTerbaruPrivateData?.major ?? '';
+    const coursesMeta = kelasTerbaruPrivateData as
+        | (ListResponseData<Course> & { major?: string })
+        | undefined;
+
+    const major = coursesMeta?.major ?? '';
 
     const {
         data: kelasTerbaruPublicData,
