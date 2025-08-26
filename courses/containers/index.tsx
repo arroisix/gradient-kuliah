@@ -18,7 +18,7 @@ import { useDebounce } from 'use-debounce';
 import DownloadBanner from 'courses/components/Downloads/DownloadBanner';
 import { useRouter } from 'next/router';
 import ForYouSections from 'courses/components/ForYouSections';
-import RegisterBanner from 'dashboard/components/RegisterBanner';
+import BuatAkunBanner from 'courses/components/BuatAkunBanner';
 
 // const SORT_OPTIONS = [
 //     { value: 'latest', label: 'Terakhir Rilis' },
@@ -89,7 +89,7 @@ const ClassContainer = ({
 
                 {!isAuthenticated && (
                     <div className="mb-4 mt-4">
-                        <RegisterBanner />
+                        <BuatAkunBanner />
                     </div>
                 )}
 
