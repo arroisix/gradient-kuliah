@@ -3,7 +3,7 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import 'react-tabs/style/react-tabs.css';
 import RenewSubscriptionBanner from 'courses/components/RenewSubscriptionBanner';
 import { useGetActiveSubscriptionQuery } from 'payment/redux/api/subscriptionApi';
-import Sort from 'commons/components/elements/Sort';
+// import Sort from 'commons/components/elements/Sort';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import CourseProgress from './courseProgress';
 import { useGetCourseProgressV2Query } from 'courses/redux/api/courseV2Api';
@@ -19,11 +19,11 @@ import DownloadBanner from 'courses/components/Downloads/DownloadBanner';
 import { useRouter } from 'next/router';
 import ForYouSections from 'courses/components/ForYouSections';
 
-const SORT_OPTIONS = [
-    { value: 'latest', label: 'Terakhir Rilis' },
-    { value: 'popularity', label: 'Terpopuler' },
-    { value: 'lexicography', label: 'A -> Z' }
-];
+// const SORT_OPTIONS = [
+//     { value: 'latest', label: 'Terakhir Rilis' },
+//     { value: 'popularity', label: 'Terpopuler' },
+//     { value: 'lexicography', label: 'A -> Z' }
+// ];
 
 const ClassContainer = ({
     courses
