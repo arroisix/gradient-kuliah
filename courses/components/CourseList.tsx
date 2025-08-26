@@ -103,14 +103,14 @@ export const CourseList = ({
                     const href = getHref(course);
                     if (section === 'trending') {
                         return (
-                            <ContentCard
+                            <ProductCard
                                 key={course.id}
-                                id={String(course.id)}
-                                title={course.course_name}
-                                category="Kelas"
-                                thumbnail={course.thumbnail ?? null}
+                                heading="h2"
+                                orientation="vertical"
+                                category="kelas"
+                                eventName="Click Class Card"
                                 href={href}
-                                courseName={course.course_name}
+                                product={getProduct(course)}
                                 isTrending={true}
                             />
                         );
