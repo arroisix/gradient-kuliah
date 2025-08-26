@@ -5,12 +5,19 @@ import { TabStyle } from './LearningExperience/AstroNotes/constants';
 import Link from 'next/link';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { useSelector } from 'react-redux';
+import { Flame, Sparkles } from 'lucide-react';
 
-const TAB_OPTIONS = [
+type TabOption = {
+    value: string;
+    label: string;
+    icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+};
+
+const TAB_OPTIONS: TabOption[] = [
     // { value: 'all', label: 'Semua' },
     // { value: 'newly-released', label: 'Baru Rilis' },
-    { value: 'for-you', label: 'Untuk Kamu' },
-    { value: 'trending', label: 'Trending' },
+    { value: 'for-you', label: 'Untuk Kamu', icon: Sparkles },
+    { value: 'trending', label: 'Trending', icon: Flame },
     { value: 'my-class', label: 'Kelasku' },
     { value: 'coming-soon', label: 'Segera Hadir' }
 ];
@@ -53,7 +60,7 @@ const CourseTabs = (): JSX.Element => {
 
     const tabStyle = (tab: string): string =>
         cn(
-            'text-center text-sm py-3 border-b-2 flex-1 md:flex-none first:!px-1 whitespace-nowrap',
+            'inline-flex items-center gap-2 justify-center md:justify-start text-center text-sm py-3 border-b-2 flex-1 md:flex-none first:!px-1 whitespace-nowrap',
             (!currentTab && tab == defaultTab) || currentTab == tab
                 ? TabStyle.active
                 : TabStyle.default
@@ -61,17 +68,26 @@ const CourseTabs = (): JSX.Element => {
 
     return (
         <div className="sticky z-20 flex items-end w-full pt-5 pb-2 overflow-x-auto bg-black md:pt-6 top-10 no-scrollbar">
-            {tabs.map((tab) => (
-                <Link
-                    key={tab.value}
-                    className={tabStyle(tab.value)}
-                    scroll={false}
-                    href={{
-                        query: { ...router.query, page: 1, tab: tab.value }
-                    }}>
-                    {tab.label}
-                </Link>
-            ))}
+            {tabs.map((tab) => {
+                const Icon = tab.icon;
+                return (
+                    <Link
+                        key={tab.value}
+                        className={tabStyle(tab.value)}
+                        scroll={false}
+                        href={{
+                            query: { ...router.query, page: 1, tab: tab.value }
+                        }}>
+                        {Icon ? (
+                            <Icon
+                                className="w-4 h-4 shrink-0"
+                                aria-hidden="true"
+                            />
+                        ) : null}
+                        <span>{tab.label}</span>
+                    </Link>
+                );
+            })}
 
             <div
                 className={cn(
