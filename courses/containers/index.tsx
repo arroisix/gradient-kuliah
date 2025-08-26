@@ -88,7 +88,7 @@ const ClassContainer = ({
                 </div>
 
                 {!isAuthenticated && (
-                    <div className="mb-4">
+                    <div className="mb-4 mt-4">
                         <RegisterBanner />
                     </div>
                 )}
