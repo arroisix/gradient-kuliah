@@ -12,15 +12,17 @@ interface CarouselSectionProps {
     itemsPerPage?: number;
     renderItem: (item: any, index: number) => React.ReactNode;
     eventCategory: string;
+    itemWrapperClassName?: string;
 }
 
 const CarouselSection: React.FC<CarouselSectionProps> = ({
     title,
     items = [],
     isLoading,
-    itemsPerPage = 4,
+    itemsPerPage = 3,
     renderItem,
-    eventCategory
+    eventCategory,
+    itemWrapperClassName
 }) => {
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
@@ -108,17 +110,18 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
 
             <div
                 ref={carouselRef}
-                className="flex overflow-x-auto gap-4 pb-4 hide-scrollbar"
-                style={{ scrollSnapType: 'x mandatory' }}>
+                className="flex overflow-x-auto gap-4 xl:gap-6 pb-4 hide-scrollbar snap-x snap-mandatory">
                 {displayItems.map((item, index) => (
                     <div
                         key={`${slugify(title)}-${
                             currentPage * itemsPerPage + index
                         }`}
-                        className="flex-shrink-0 w-[80%] md:w-[48%] lg:w-[32%] xl:w-[24%] min-w-[240px] max-w-[360px]"
-                        style={{ scrollSnapAlign: 'start' }}>
+                        className={cn(
+                            'shrink-0 min-w-0 snap-start',
+                            itemWrapperClassName
+                        )}>
                         {isLoading ? (
-                            <Skeleton className="h-64 rounded-lg" />
+                            <Skeleton className="w-full h-56 rounded-lg" />
                         ) : (
                             renderItem(item, currentPage * itemsPerPage + index)
                         )}
