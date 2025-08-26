@@ -33,11 +33,15 @@ type CourseQueryParams = Omit<FilterCourseQueryParams, 'section'> & {
 export const CourseList = ({
     isLoading,
     courses,
-    section
+    section,
+    bottomLoading,
+    anchor
 }: {
     isLoading?: boolean;
     courses?: ListResponseData<Course>;
     section?: string;
+    bottomLoading?: boolean;
+    anchor?: React.MutableRefObject<HTMLDivElement>;
 }): JSX.Element => {
     const { is_subscribed: isSubscribed } = useCourseSubscription();
     // const totalPages = Math.ceil((courses?.count_items ?? 0) / PAGE_SIZE);
@@ -125,6 +129,10 @@ export const CourseList = ({
                     );
                 })}
             </div>
+            {bottomLoading && (
+                <Skeleton repeat={6} className="w-full h-56 !mb-0" />
+            )}
+            {anchor && <div ref={anchor} />}
             {/* <Paginator
                 totalPages={totalPages}
                 hasNextPage={!!courses?.next_page}
@@ -203,11 +211,9 @@ export const PublicCourseList = ({
                     courses={publicAllData}
                     isLoading={publicIsAllLoading}
                     section={section}
+                    bottomLoading={publicIsLoading && !publicIsAllLoading}
+                    anchor={publicAnchor}
                 />
-                <div ref={publicAnchor} />
-                {publicIsLoading && !publicIsAllLoading && (
-                    <Skeleton repeat={6} className="w-full h-56 !mb-0" />
-                )}
             </>
         );
     }
@@ -287,11 +293,9 @@ export const PrivateCourseList = ({
                     courses={allData}
                     isLoading={!!isAllLoading}
                     section={section}
+                    bottomLoading={isMoreLoading && !isAllLoading}
+                    anchor={anchor}
                 />
-                <div ref={anchor} />
-                {isMoreLoading && !isAllLoading && (
-                    <Skeleton repeat={6} className="w-full h-56 !mb-0" />
-                )}
             </>
         );
     }

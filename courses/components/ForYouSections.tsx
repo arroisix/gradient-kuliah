@@ -79,7 +79,8 @@ const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
         search
     });
     const eksplorData = eksplor.allData;
-    const eksplorLoading = eksplor.isAllLoading || eksplor.isLoading;
+    const isInitialEksplorLoading = eksplor.isAllLoading;
+    const isMoreEksplorLoading = eksplor.isLoading && !eksplor.isAllLoading;
 
     const getProduct = (course: Course): Product => ({
         title: course.course_name,
@@ -111,7 +112,7 @@ const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
 
     return (
         <div className="px-4 md:px-6 lg:px-8 mt-6">
-            {!eksplorLoading && eksplorData?.data?.length === 0 && (
+            {!isInitialEksplorLoading && eksplorData?.data?.length === 0 && (
                 <EmptyCourse />
             )}
             {/* Kelas Terbaru section - header differs when authenticated */}
@@ -167,10 +168,10 @@ const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
                     className={cn(
                         'grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 xl:grid-cols-3 xl:gap-6'
                     )}>
-                    {eksplorLoading && (
+                    {isInitialEksplorLoading && (
                         <Skeleton repeat={6} className="w-full h-56 !mb-0" />
                     )}
-                    {!eksplorLoading &&
+                    {!isInitialEksplorLoading &&
                         eksplorData?.data?.map((c: Course) => (
                             <ProductCard
                                 key={c.id}
@@ -183,6 +184,12 @@ const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
                             />
                         ))}
                 </div>
+
+                {/* Show loader under already rendered items while fetching more */}
+                {isMoreEksplorLoading && (
+                    <Skeleton repeat={6} className="w-full h-56 !mb-0" />
+                )}
+
                 <div ref={eksplor.anchor} />
             </div>
         </div>
