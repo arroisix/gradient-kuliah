@@ -34,8 +34,6 @@ export const ListBooks = ({
     const getColorForCategory = (cat?: string): string =>
         (cat && categoryColorMap[cat]) || '#333333';
 
-    console.log('books', books);
-
     if (horizontal) {
         return (
             <div className="flex gap-4 overflow-x-auto pb-2 -mx-2 px-2 snap-x snap-mandatory scrollbar-thin scrollbar-track-transparent scrollbar-thumb-neutral-700">
@@ -45,102 +43,101 @@ export const ListBooks = ({
                         repeat={3}
                     />
                 )}
-                {books?.map(
-                    ({
+                {books?.map((book) => {
+                    const {
                         book_id,
                         title,
                         authors,
                         rating,
                         book_cover_url,
                         slug,
-                        category,
-                        percentage_progress
-                    }) => {
-                        const hasProgress =
-                            percentage_progress > 0 &&
-                            percentage_progress < 100;
-                        const isCompleted = percentage_progress === 100;
-                        return (
-                            <Link
-                                key={book_id}
-                                href={`${getBookBaseHref(category)}/${slug}`}
-                                onClick={() =>
-                                    tracker?.genericTrack('Click Book Item', {
-                                        'Book Title': title,
-                                        Category: category
-                                    })
-                                }
-                                className="group relative min-w-[320px] max-w-[320px] flex-none snap-start rounded-xl border border-neutral-700 bg-[#1A1A1A] p-6 hover:border-neutral-500 transition-colors">
-                                <div className="flex gap-5">
-                                    <div className="relative w-[120px] h-[160px] flex-none rounded-lg overflow-hidden bg-neutral-800 border border-neutral-700">
-                                        <Image
-                                            src={
-                                                book_cover_url ||
-                                                `${CDN_URL}/assets/astronotes-kalkulus2-placeholder.jpg`
-                                            }
-                                            alt={title}
-                                            layout="fill"
-                                            objectFit="cover"
-                                            className="transition-transform duration-300 group-hover:scale-105"
-                                        />
-                                        {/* Mini progress bar */}
-                                        {hasProgress && (
-                                            <div className="absolute bottom-0 left-0 w-full h-1 bg-neutral-700/60">
-                                                <div
-                                                    className="h-full bg-amber-400"
-                                                    style={{
-                                                        width: `${percentage_progress}%`
-                                                    }}
-                                                />
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="flex flex-col w-full">
-                                        {(hasProgress || isCompleted) && (
-                                            <div className="flex items-center gap-1 py-1 px-3 mb-2 rounded-full bg-[#FFCB53]/20 text-xs text-yellow-400 w-fit self-start">
-                                                <IoTime size={12} />
-                                                <span>
-                                                    {isCompleted
-                                                        ? 'Completed'
-                                                        : `In Progress - ${percentage_progress}%`}
-                                                </span>
-                                            </div>
-                                        )}
-                                        <h3 className="text-lg font-semibold text-white leading-snug line-clamp-3 mb-4">
-                                            {title}
-                                        </h3>
-                                        <div className="flex flex-wrap items-center gap-2">
-                                            <span
-                                                className="text-sm text-white font-medium px-4 py-2 rounded-full"
+                        category
+                    } = book as any;
+                    const percentage_progress =
+                        (book as any).percentage_progress ?? 0;
+                    const hasProgress =
+                        percentage_progress > 0 && percentage_progress < 100;
+                    const isCompleted = percentage_progress === 100;
+                    return (
+                        <Link
+                            key={book_id}
+                            href={`${getBookBaseHref(category)}/${slug}`}
+                            onClick={() =>
+                                tracker?.genericTrack('Click Book Item', {
+                                    'Book Title': title,
+                                    Category: category
+                                })
+                            }
+                            className="group relative min-w-[320px] max-w-[320px] flex-none snap-start rounded-xl border border-neutral-700 bg-[#1A1A1A] p-6 hover:border-neutral-500 transition-colors">
+                            <div className="flex gap-5">
+                                <div className="relative w-[120px] h-[160px] flex-none rounded-lg overflow-hidden bg-neutral-800 border border-neutral-700">
+                                    <Image
+                                        src={
+                                            book_cover_url ||
+                                            `${CDN_URL}/assets/astronotes-kalkulus2-placeholder.jpg`
+                                        }
+                                        alt={title}
+                                        layout="fill"
+                                        objectFit="cover"
+                                        className="transition-transform duration-300 group-hover:scale-105"
+                                    />
+                                    {/* Mini progress bar */}
+                                    {hasProgress && (
+                                        <div className="absolute bottom-0 left-0 w-full h-1 bg-neutral-700/60">
+                                            <div
+                                                className="h-full bg-amber-400"
                                                 style={{
-                                                    backgroundColor:
-                                                        getColorForCategory(
-                                                            category
-                                                        )
-                                                }}>
-                                                {category}
-                                            </span>
-                                            {authors && (
-                                                <span className="text-[11px] text-neutral-400 line-clamp-1">
-                                                    oleh {authors}
-                                                </span>
-                                            )}
-                                            {rating !== 0 && rating != null && (
-                                                <span className="flex items-center gap-1 text-[11px] text-neutral-300">
-                                                    <AiFillStar
-                                                        className="text-yellow-400"
-                                                        size={12}
-                                                    />
-                                                    {+rating.toFixed(1)}
-                                                </span>
-                                            )}
+                                                    width: `${percentage_progress}%`
+                                                }}
+                                            />
                                         </div>
+                                    )}
+                                </div>
+                                <div className="flex flex-col w-full">
+                                    {(hasProgress || isCompleted) && (
+                                        <div className="flex items-center gap-1 py-1 px-3 mb-2 rounded-full bg-[#FFCB53]/20 text-xs text-yellow-400 w-fit self-start">
+                                            <IoTime size={12} />
+                                            <span>
+                                                {isCompleted
+                                                    ? 'Completed'
+                                                    : `In Progress - ${percentage_progress}%`}
+                                            </span>
+                                        </div>
+                                    )}
+                                    <h3 className="text-lg font-semibold text-white leading-snug line-clamp-3 mb-4">
+                                        {title}
+                                    </h3>
+                                    <div className="flex flex-wrap items-center gap-2">
+                                        <span
+                                            className="text-sm text-white font-medium px-4 py-2 rounded-full"
+                                            style={{
+                                                backgroundColor:
+                                                    getColorForCategory(
+                                                        category
+                                                    )
+                                            }}>
+                                            {category}
+                                        </span>
+                                        {authors && (
+                                            <span className="text-[11px] text-neutral-400 line-clamp-1">
+                                                oleh {authors}
+                                            </span>
+                                        )}
+                                        {rating !== 0 && rating != null && (
+                                            <span className="flex items-center gap-1 text-[11px] text-neutral-300">
+                                                <AiFillStar
+                                                    className="text-yellow-400"
+                                                    size={12}
+                                                />
+                                                {+rating.toFixed(1)}
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
-                            </Link>
-                        );
-                    }
-                )}
+                            </div>
+                        </Link>
+                    );
+                })}
             </div>
         );
     }
@@ -153,8 +150,8 @@ export const ListBooks = ({
                 ({
                     book_id,
                     title,
-                    authors,
-                    rating,
+                    // authors,
+                    // rating,
                     book_cover_url,
                     slug,
                     category
