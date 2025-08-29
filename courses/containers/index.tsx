@@ -87,12 +87,6 @@ const ClassContainer = ({
                     )} */}
                 </div>
 
-                {!isAuthenticated && (
-                    <div className="mb-4 mt-4">
-                        <BuatAkunBanner />
-                    </div>
-                )}
-
                 {isForYouView ? (
                     <ForYouSections search={debouncedSearchTerm} />
                 ) : isAuthenticated ? (
