@@ -18,7 +18,6 @@ import { useDebounce } from 'use-debounce';
 import DownloadBanner from 'courses/components/Downloads/DownloadBanner';
 import { useRouter } from 'next/router';
 import ForYouSections from 'courses/components/ForYouSections';
-import BuatAkunBanner from 'courses/components/BuatAkunBanner';
 
 // const SORT_OPTIONS = [
 //     { value: 'latest', label: 'Terakhir Rilis' },
