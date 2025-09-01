@@ -5,7 +5,8 @@ import { TabStyle } from './LearningExperience/AstroNotes/constants';
 import Link from 'next/link';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import { useSelector } from 'react-redux';
-import { Flame, Sparkles } from 'lucide-react';
+import Sparkles from 'courses/assets/Sparkles';
+import Fire from 'courses/assets/Fire';
 
 type TabOption = {
     value: string;
@@ -17,7 +18,7 @@ const TAB_OPTIONS: TabOption[] = [
     // { value: 'all', label: 'Semua' },
     // { value: 'newly-released', label: 'Baru Rilis' },
     { value: 'for-you', label: 'Untuk Kamu', icon: Sparkles },
-    { value: 'trending', label: 'Trending', icon: Flame },
+    { value: 'trending', label: 'Trending', icon: Fire },
     { value: 'my-class', label: 'Kelasku' },
     { value: 'coming-soon', label: 'Segera Hadir' }
 ];
@@ -70,6 +71,9 @@ const CourseTabs = (): JSX.Element => {
         <div className="sticky z-10 flex items-end w-full pt-5 pb-2 overflow-x-auto bg-black md:pt-6 top-10 no-scrollbar">
             {tabs.map((tab) => {
                 const Icon = tab.icon;
+                const isActiveTab =
+                    (!currentTab && tab.value === defaultTab) ||
+                    currentTab === tab.value;
                 return (
                     <Link
                         key={tab.value}
@@ -80,7 +84,10 @@ const CourseTabs = (): JSX.Element => {
                         }}>
                         {Icon ? (
                             <Icon
-                                className="w-4 h-4 shrink-0"
+                                className={cn(
+                                    'w-4 h-4 shrink-0',
+                                    isActiveTab && 'text-purple-500'
+                                )}
                                 aria-hidden="true"
                             />
                         ) : null}
