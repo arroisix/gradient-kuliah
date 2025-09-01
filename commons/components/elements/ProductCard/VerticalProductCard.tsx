@@ -49,7 +49,7 @@ const VerticalProductCard = ({
                 <div className="absolute z-10 flex items-center gap-2 top-4 left-4">
                     {isTrending && !isReference && (
                         <div
-                            className="text-white text-xs py-1 px-3 rounded-full flex items-center gap-1"
+                            className="text-white text-xs font-bold py-1 px-3 rounded-full flex items-center gap-1"
                             style={{
                                 background:
                                     'linear-gradient(90deg, #36236A 0%, #6C5096 65%, #494BA0 90%)'
