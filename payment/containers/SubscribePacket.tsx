@@ -20,7 +20,11 @@ export const PacketCard = ({
 }): JSX.Element => {
     const { checkCustomBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const isHighlighted = useMemo(() => data.order === 1, [data.order]);
+    const isHighlighted = useMemo(
+        () => data.order === 1 && !data.is_free,
+        [data.order]
+    );
+    const isFree = useMemo(() => data.is_free, [data.is_free]);
     const router = useRouter();
     // const currentDate = new Date();
 
@@ -44,6 +48,8 @@ export const PacketCard = ({
             className={`relative w-[324px] flex flex-col gap-4 md:gap-6 px-6 py-6 md:py-8 rounded-[16px] md:rouded-[20px] ${
                 isHighlighted
                     ? 'bg-gradient-purple-pricing border-2 border-[#5F2BCE80] rounded-t-none border-t-0 mt-[50px] sm:mt-0'
+                    : isFree
+                    ? 'bg-gradient-green-pricing border-2 border-[#FA89C3] rounded-t-none border-t-0 mt-[50px] sm:mt-0'
                     : blackBg
                     ? 'bg-[#222222]'
                     : 'bg-[#121212]'
@@ -60,6 +66,11 @@ export const PacketCard = ({
                     PENAWARAN TERBAIK!
                 </div>
             )}
+            {isFree && (
+                <div className="absolute left-[-2px] top-[-50px] w-[101.3%] h-[50px] bg-[#FA89C3] border-2 border-[#FA89C3] border-b-0 rounded-b-none rounded-[16px] md:rouded-[20px] py-3 text-center font-bold text-[15px] animate-pulse">
+                    GRATIS
+                </div>
+            )}
             <div className="flex flex-col text-center md:gap-1">
                 <h5 className="text-xl font-extrabold md:text-2xl">
                     {data.packet_name}
@@ -74,15 +85,17 @@ export const PacketCard = ({
                             .split(',')[0]
                     }
                 </h4>
-                <h6 className="text-xl font-bold line-through lg:text-2xl decoration-2 text-stone-500 decoration-red-600">
-                    {
-                        formatter
-                            .format(
-                                data.price_before_discount as unknown as number
-                            )
-                            .split(',')[0]
-                    }
-                </h6>
+                {!isFree && (
+                    <h6 className="text-xl font-bold line-through lg:text-2xl decoration-2 text-stone-500 decoration-red-600">
+                        {
+                            formatter
+                                .format(
+                                    data.price_before_discount as unknown as number
+                                )
+                                .split(',')[0]
+                        }
+                    </h6>
+                )}
             </div>
             <div className="flex flex-col gap-[10px] md:gap-3 h-full">
                 <h5 className="text-xl font-extrabold">
@@ -91,7 +104,14 @@ export const PacketCard = ({
                 {data?.benefits?.feature?.map(
                     ({ title, description }, index) => (
                         <div key={index} className="flex items-center gap-3">
-                            <SlCheck className="text-accent-purple" size={32} />
+                            <SlCheck
+                                className={
+                                    isFree
+                                        ? 'text-[#FA89C3]'
+                                        : 'text-accent-purple'
+                                }
+                                size={32}
+                            />
                             <div className="flex flex-col">
                                 <span className="inline-block text-sm font-extrabold">
                                     {title}
@@ -106,7 +126,13 @@ export const PacketCard = ({
             </div>
             <Button
                 variant={isHighlighted || blackBg ? 'primary' : 'custom'}
-                className={`${isHighlighted || blackBg ? '' : 'bg-[#212121]'}`}
+                className={`${
+                    isHighlighted || blackBg
+                        ? ''
+                        : isFree
+                        ? 'bg-[#FA89C3]'
+                        : 'bg-[#212121]'
+                }`}
                 onClick={handleClick}>
                 {ctaText}
             </Button>
