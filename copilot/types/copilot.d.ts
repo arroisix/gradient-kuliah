@@ -33,7 +33,11 @@ export interface ChatHistoryContextItem {
     title: string;
     subtitle: string;
     header: string;
-    content_type: "astronotes_content" | "textbook_problem" | "bank_soal_problem" | "course_video";
+    content_type:
+        | 'astronotes_content'
+        | 'textbook_problem'
+        | 'bank_soal_problem'
+        | 'course_video';
 }
 
 export interface ChatHistoryResponse {
@@ -46,7 +50,7 @@ export interface ChatHistoryResponse {
         rating: number;
         is_bookmarked: boolean;
         keyword?: string | null;
-        context?: { data: ChatHistoryContextItem[]; };
+        context?: { data: ChatHistoryContextItem[] };
     }[];
 }
 
@@ -115,7 +119,7 @@ interface ContentRecommendation {
 }
 
 interface ContextRecommendation {
-    id: string; 
+    id: string;
     type:
         | 'course'
         | 'astronotes_content'
@@ -126,16 +130,16 @@ interface ContextRecommendation {
     snippet: string | null;
     book_name: string | null;
     book_slug: string | null;
-    
+
     course_slug: string | null;
     course_name: string | null;
 
     book_page: number | null;
-    page_content: string | null; 
-    
+    page_content: string | null;
+
     problem_slug: string | null;
-    problem_solution: string | null; 
-    problem_question: string | null; 
+    problem_solution: string | null;
+    problem_question: string | null;
     problem_title: string | null;
 }
 
@@ -263,7 +267,11 @@ export interface BankSoalProblemsResponse {
     data: BankSoalProblem[];
 }
 
-export type ReferenceContentType = 'textbook_problem' | 'course' | 'astronotes_content' | 'bank_soal_problem';
+export type ReferenceContentType =
+    | 'textbook_problem'
+    | 'course'
+    | 'astronotes_content'
+    | 'bank_soal_problem';
 
 interface SelectedReference {
     id: string;

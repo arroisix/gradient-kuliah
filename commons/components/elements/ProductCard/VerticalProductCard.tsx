@@ -19,7 +19,9 @@ const VerticalProductCard = ({
     className,
     imageClassname,
     isReference = false
-}: Omit<ProductCardProps, 'orientation'> & { isReference?: boolean }): JSX.Element => {
+}: Omit<ProductCardProps, 'orientation'> & {
+    isReference?: boolean;
+}): JSX.Element => {
     const tracker = useTracker();
     const isVideo = category.toLowerCase() == 'video';
     const isCourse = category.toLowerCase() == 'kelas';
@@ -36,7 +38,9 @@ const VerticalProductCard = ({
             <div
                 className={cn(
                     'w-full grid place-items-center',
-                    isCourse || isVideo || isReference ? 'aspect-[2/1]' : 'aspect-[4/3]',
+                    isCourse || isVideo || isReference
+                        ? 'aspect-[2/1]'
+                        : 'aspect-[4/3]',
                     !(isVideo || isCourse) && 'py-2'
                 )}>
                 <div className="absolute z-10 flex items-center gap-2 top-4 left-4">
@@ -59,7 +63,7 @@ const VerticalProductCard = ({
                     className={cn(
                         'relative rounded-md border-neutral-700 object-center',
                         isReference
-                            ? (isCourse || isVideo) 
+                            ? isCourse || isVideo
                                 ? 'h-full w-full'
                                 : 'aspect-[256/364] h-full shadow-lg border'
                             : isCourse || isVideo
@@ -80,13 +84,14 @@ const VerticalProductCard = ({
                     />
                     {(isVideo ||
                         (category.toLowerCase() == 'kelas' &&
-                            product.inProgress)) && !isReference && (
-                        <div className="absolute inset-0 grid place-items-center">
-                            <div className="text-white border-none btn btn-circle bg-graphite-900/60">
-                                <FaRegCirclePlay size={32} />
+                            product.inProgress)) &&
+                        !isReference && (
+                            <div className="absolute inset-0 grid place-items-center">
+                                <div className="text-white border-none btn btn-circle bg-graphite-900/60">
+                                    <FaRegCirclePlay size={32} />
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
                 </div>
             </div>
             <div className="flex flex-col w-full gap-1 px-3 py-3 lg:px-4 grow bg-graphite-900">
@@ -129,7 +134,11 @@ const VerticalProductCard = ({
                     )}>
                     {category}
                 </div>
-                <p className={cn((!product?.courseName || isReference) && 'hidden', 'text-xs')}>
+                <p
+                    className={cn(
+                        (!product?.courseName || isReference) && 'hidden',
+                        'text-xs'
+                    )}>
                     {product?.courseName}
                 </p>
                 <TitleLabel

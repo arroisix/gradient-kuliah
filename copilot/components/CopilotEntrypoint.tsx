@@ -17,7 +17,7 @@ export default function CopilotEntrypoint({
 
     const handleClick = () => {
         tracker?.genericTrack('User click Check on Copilot');
-        
+
         if (onClick) {
             onClick();
         }
@@ -44,8 +44,8 @@ export default function CopilotEntrypoint({
                         onClick={handleClick}
                         disabled={!onClick}
                         className={`w-full font-medium p-3 rounded-lg flex items-center justify-center gap-2 transition-colors ${
-                            onClick 
-                                ? 'bg-[#5F2BCE] hover:bg-[#4F24A8] text-white' 
+                            onClick
+                                ? 'bg-[#5F2BCE] hover:bg-[#4F24A8] text-white'
                                 : 'bg-gray-600 text-gray-400 cursor-not-allowed'
                         }`}>
                         <CopilotIconFill />

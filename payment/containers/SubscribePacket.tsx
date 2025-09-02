@@ -1,6 +1,7 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
+import { cn } from 'commons/utils';
 // import { getCSChatRoom } from 'commons/utils';
 import { formatter } from 'courses/utils';
 // import { addZeroBefore, formatter } from 'courses/utils';
@@ -71,8 +72,12 @@ export const PacketCard = ({
                     GRATIS
                 </div>
             )}
-            <div className="flex flex-col text-center md:gap-1">
-                <h5 className="text-xl font-extrabold md:text-2xl">
+            <div className="flex flex-col items-center text-center md:gap-1">
+                <h5
+                    className={cn(
+                        'text-xl font-extrabold md:text-2xl',
+                        isFree && 'max-w-[160px] lg:max-w-[200px]'
+                    )}>
                     {data.packet_name}
                 </h5>
                 <h4
@@ -130,7 +135,7 @@ export const PacketCard = ({
                     isHighlighted || blackBg
                         ? ''
                         : isFree
-                        ? 'bg-[#FA89C3]'
+                        ? 'bg-[#FA89C3] text-[#1E6844] font-bold'
                         : 'bg-[#212121]'
                 }`}
                 onClick={handleClick}>

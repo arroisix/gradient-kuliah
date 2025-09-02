@@ -1,5 +1,8 @@
 import React from 'react';
-import { ContextRecommendation, ReferenceContentType } from 'copilot/types/copilot';
+import {
+    ContextRecommendation,
+    ReferenceContentType
+} from 'copilot/types/copilot';
 import TextbookHierarchy from './TextbookHierarchy';
 import CourseHierarchy from './CourseHierarchy';
 import AstronotesHierarchy from './AstronotesHierarchy';
@@ -15,7 +18,7 @@ interface ReferenceHierarchyProps {
         title: string,
         subtitle: string,
         header: string,
-        contentType: ReferenceContentType,
+        contentType: ReferenceContentType
     ) => void;
 }
 
@@ -38,8 +41,14 @@ const ReferenceHierarchy: React.FC<ReferenceHierarchyProps> = ({
                         bookSlug={referenceData.book_slug!}
                         bookName={referenceData.book_name!}
                         bookThumbnail={referenceData.thumbnail}
-                        onProblemSelect={(problemId, title, subtitle, header) => 
-                            onItemSelect(problemId, title, subtitle, header, 'textbook_problem')
+                        onProblemSelect={(problemId, title, subtitle, header) =>
+                            onItemSelect(
+                                problemId,
+                                title,
+                                subtitle,
+                                header,
+                                'textbook_problem'
+                            )
                         }
                     />
                 );
@@ -51,8 +60,14 @@ const ReferenceHierarchy: React.FC<ReferenceHierarchyProps> = ({
                         courseSlug={referenceData.course_slug!}
                         courseName={referenceData.course_name || 'Course'}
                         courseThumbnail={referenceData.thumbnail}
-                        onVideoSelect={(videoId, title, subtitle, header) => 
-                            onItemSelect(videoId, title, subtitle, header, 'course')
+                        onVideoSelect={(videoId, title, subtitle, header) =>
+                            onItemSelect(
+                                videoId,
+                                title,
+                                subtitle,
+                                header,
+                                'course'
+                            )
                         }
                     />
                 );
@@ -64,8 +79,14 @@ const ReferenceHierarchy: React.FC<ReferenceHierarchyProps> = ({
                         bookSlug={referenceData.book_slug!}
                         bookName={referenceData.book_name!}
                         bookThumbnail={referenceData.thumbnail}
-                        onTopicSelect={(topicId, title, subtitle, header) => 
-                            onItemSelect(topicId, title, subtitle, header, 'astronotes_content')
+                        onTopicSelect={(topicId, title, subtitle, header) =>
+                            onItemSelect(
+                                topicId,
+                                title,
+                                subtitle,
+                                header,
+                                'astronotes_content'
+                            )
                         }
                     />
                 );
@@ -77,15 +98,19 @@ const ReferenceHierarchy: React.FC<ReferenceHierarchyProps> = ({
                         bookSlug={referenceData.book_slug!}
                         bookName={referenceData.book_name!}
                         bookThumbnail={referenceData.thumbnail}
-                        onProblemSelect={(problemId, title, subtitle, header) => 
-                            onItemSelect(problemId, title, subtitle, header, 'bank_soal_problem')
+                        onProblemSelect={(problemId, title, subtitle, header) =>
+                            onItemSelect(
+                                problemId,
+                                title,
+                                subtitle,
+                                header,
+                                'bank_soal_problem'
+                            )
                         }
                     />
                 );
             default:
-                return (
-                    <></>
-                );
+                return <></>;
         }
     };
 

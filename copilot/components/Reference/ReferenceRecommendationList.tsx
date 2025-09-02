@@ -36,7 +36,7 @@ const ReferenceRecommendationList = ({
         const checkMobile = () => {
             setIsMobile(window.innerWidth < 768);
         };
-        
+
         checkMobile();
         window.addEventListener('resize', checkMobile);
         return () => window.removeEventListener('resize', checkMobile);
@@ -65,15 +65,20 @@ const ReferenceRecommendationList = ({
         isLoading,
         isFetching,
         error
-    } = useGetContentRecommendationQuery({
-        q: queryToUse,
-        page: parseInt(p ?? '1'),
-        per_page: itemsPerPage,
-        content_type: getContentType(VALID_TABS.includes(tab ?? '') ? tab : 'semua'),
-        is_search: isSearchMode
-    }, {
-        skip: !queryToUse
-    });
+    } = useGetContentRecommendationQuery(
+        {
+            q: queryToUse,
+            page: parseInt(p ?? '1'),
+            per_page: itemsPerPage,
+            content_type: getContentType(
+                VALID_TABS.includes(tab ?? '') ? tab : 'semua'
+            ),
+            is_search: isSearchMode
+        },
+        {
+            skip: !queryToUse
+        }
+    );
 
     const getProduct = (recommendation: ContextRecommendation): Product => {
         const getTitle = () => {
@@ -91,7 +96,7 @@ const ReferenceRecommendationList = ({
             title: getTitle(),
             thumbnail: getThumbnail(),
             inProgress: false,
-            latestProgress: 0,
+            latestProgress: 0
         };
     };
 
@@ -119,7 +124,9 @@ const ReferenceRecommendationList = ({
         return category === 'Kelas' ? 'vertical' : 'horizontal';
     };
 
-    const totalPages = Math.ceil((recommendations?.count_items ?? 0) / itemsPerPage);
+    const totalPages = Math.ceil(
+        (recommendations?.count_items ?? 0) / itemsPerPage
+    );
 
     if (isLoading || isFetching) {
         return (
@@ -137,16 +144,18 @@ const ReferenceRecommendationList = ({
         );
     }
 
-    if (!recommendations?.recommendation || recommendations.recommendation.length === 0) {
+    if (
+        !recommendations?.recommendation ||
+        recommendations.recommendation.length === 0
+    ) {
         return (
             <div className="flex items-center justify-center h-full">
                 <div className="text-center">
                     <NotFound className="w-48 h-48 mx-auto my-8" />
                     <p className="text-white/60 mb-2">
-                        {isSearchMode 
-                            ? "Tidak ada hasil pencarian yang ditemukan" 
-                            : "Tidak ada rekomendasi yang ditemukan"
-                        }
+                        {isSearchMode
+                            ? 'Tidak ada hasil pencarian yang ditemukan'
+                            : 'Tidak ada rekomendasi yang ditemukan'}
                     </p>
                 </div>
             </div>
@@ -160,14 +169,16 @@ const ReferenceRecommendationList = ({
                     const product = getProduct(recommendation);
                     const category = getCategory(recommendation);
                     const orientation = getOrientation(category);
-                    
+
                     return (
                         <button
-                            key={`${recommendation.type}-${recommendation.course_slug || recommendation.book_slug}-${index}`}
+                            key={`${recommendation.type}-${
+                                recommendation.course_slug ||
+                                recommendation.book_slug
+                            }-${index}`}
                             onClick={() => handleCardClick(recommendation)}
                             className="cursor-pointer w-full text-left"
-                            type="button"
-                        >
+                            type="button">
                             <ProductCard
                                 heading="h2"
                                 orientation={orientation}

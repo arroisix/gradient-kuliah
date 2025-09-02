@@ -19,27 +19,33 @@ const SearchResultCard: React.FC<SearchResultCardProps> = ({
 }) => {
     const highlightSearchTerm = (text: string, searchTerm: string) => {
         if (!searchTerm.trim() || !text) return text;
-        
-        const regex = new RegExp('(' + searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+
+        const regex = new RegExp(
+            '(' + searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')',
+            'gi'
+        );
         const parts = text.split(regex);
-        
-        return parts.map((part, index) => 
-            regex.test(part) ? 
-                <span key={index} className="text-[#F2C04C] font-bold">{part}</span> : 
+
+        return parts.map((part, index) =>
+            regex.test(part) ? (
+                <span key={index} className="text-[#F2C04C] font-bold">
+                    {part}
+                </span>
+            ) : (
                 part
+            )
         );
     };
 
     return (
-        <button 
+        <button
             className="w-full rounded-lg p-4 cursor-pointer hover:opacity-80 transition-opacity text-left bg-[#222222]"
-            onClick={onClick}
-        >
+            onClick={onClick}>
             <div className="space-y-3">
                 <div className="text-sm leading-relaxed font-bold text-[#FFFFFF]">
                     {highlightSearchTerm(header, searchTerm)}
                 </div>
-                
+
                 <div className="flex items-center text-xs gap-2">
                     <div className="flex items-center gap-1">
                         <IoBookmark size={12} className="text-[#7D89CC]" />
@@ -47,13 +53,16 @@ const SearchResultCard: React.FC<SearchResultCardProps> = ({
                             {highlightSearchTerm(title, searchTerm)}
                         </span>
                     </div>
-                    
+
                     {subtitle && (
                         <>
                             <span className="text-[#999999]">|</span>
-                            
+
                             <div className="flex items-center gap-1">
-                                <MdFormatListBulleted size={12} className="text-[#7D89CC]" />
+                                <MdFormatListBulleted
+                                    size={12}
+                                    className="text-[#7D89CC]"
+                                />
                                 <span className="text-[#999999]">
                                     {highlightSearchTerm(subtitle, searchTerm)}
                                 </span>

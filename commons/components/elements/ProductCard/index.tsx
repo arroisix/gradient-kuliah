@@ -12,19 +12,19 @@ const ProductCard = ({
         [category]: category,
         Catatan: 'Astronotes',
         Textbook: 'Textbook Solution',
-        BankSoal: 'Bank Soal',
+        BankSoal: 'Bank Soal'
     };
 
     return orientation == 'horizontal' ? (
-        <HorizontalProductCard 
-            {...props} 
-            category={categoryLabel[category]} 
+        <HorizontalProductCard
+            {...props}
+            category={categoryLabel[category]}
             isReference={isReference}
         />
     ) : (
-        <VerticalProductCard 
-            {...props} 
-            category={categoryLabel[category]} 
+        <VerticalProductCard
+            {...props}
+            category={categoryLabel[category]}
             isReference={isReference}
         />
     );
