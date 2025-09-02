@@ -276,7 +276,7 @@ export const chatApi = {
     }) => {
         const token = localStorage.getItem('token');
         const queryParams = new URLSearchParams();
-        
+
         if (params.book_slug) {
             queryParams.append('book_slug', params.book_slug);
         }
@@ -427,9 +427,16 @@ export const chatApi = {
         }
     },
 
-    getTemplates: async (contentType?: "course_video" | "textbook_problem" | "bank_soal_problem" | "astronotes_content" | null): Promise<{ templates: string[] }> => {
+    getTemplates: async (
+        contentType?:
+            | 'course_video'
+            | 'textbook_problem'
+            | 'bank_soal_problem'
+            | 'astronotes_content'
+            | null
+    ): Promise<{ templates: string[] }> => {
         const token = localStorage.getItem('token');
-        
+
         let url = `${COPILOT_BASE_URL}chat/template/`;
         if (contentType !== undefined) {
             const params = new URLSearchParams();
@@ -440,12 +447,12 @@ export const chatApi = {
             }
             url += `?${params.toString()}`;
         }
-        
+
         const response = await fetch(url, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json',
+                Accept: 'application/json',
                 Authorization: `Token ${token}`
             }
         });
@@ -460,7 +467,10 @@ export const chatApi = {
 
 export const copilotApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        getContentRecommendation: builder.query<ContextRecommendationResponse, ContextRecommendationParams>({
+        getContentRecommendation: builder.query<
+            ContextRecommendationResponse,
+            ContextRecommendationParams
+        >({
             query: (params: ContextRecommendationParams) => ({
                 url: `${COPILOT_BASE_URL}context-recommendation/`,
                 method: 'GET',
@@ -485,7 +495,10 @@ export const copilotApi = baseApi.injectEndpoints({
             }),
             providesTags: ['TEXTBOOK_SECTIONS']
         }),
-        getTextbookProblems: builder.query<TextbookProblemsResponse, { sectionId?: string; chapterId?: string }>({
+        getTextbookProblems: builder.query<
+            TextbookProblemsResponse,
+            { sectionId?: string; chapterId?: string }
+        >({
             query: ({ sectionId, chapterId }) => ({
                 url: `${COPILOT_BASE_URL}textbook/problem/`,
                 method: 'GET',
@@ -510,21 +523,30 @@ export const copilotApi = baseApi.injectEndpoints({
             }),
             providesTags: ['COURSE_SUBCHAPTERS']
         }),
-        getAstronotesChapters: builder.query<AstronotesChaptersResponse, string>({
+        getAstronotesChapters: builder.query<
+            AstronotesChaptersResponse,
+            string
+        >({
             query: (bookSlug: string) => ({
                 url: `${COPILOT_BASE_URL}astronotes/chapter/${bookSlug}/`,
                 method: 'GET'
             }),
             providesTags: ['ASTRONOTES_CHAPTERS']
         }),
-        getAstronotesSubchapters: builder.query<AstronotesSubchaptersResponse, { bookSlug: string; pageOrder: number; chapterId: string }>({
+        getAstronotesSubchapters: builder.query<
+            AstronotesSubchaptersResponse,
+            { bookSlug: string; pageOrder: number; chapterId: string }
+        >({
             query: ({ bookSlug, pageOrder, chapterId }) => ({
                 url: `${COPILOT_BASE_URL}astronotes/subchapter/${bookSlug}/${pageOrder}/${chapterId}/`,
                 method: 'GET'
             }),
             providesTags: ['ASTRONOTES_SUBCHAPTERS']
         }),
-        getAstronotesTopics: builder.query<AstronotesTopicsResponse, { bookSlug: string; pageOrder: number; subchapterId: string }>({
+        getAstronotesTopics: builder.query<
+            AstronotesTopicsResponse,
+            { bookSlug: string; pageOrder: number; subchapterId: string }
+        >({
             query: ({ bookSlug, pageOrder, subchapterId }) => ({
                 url: `${COPILOT_BASE_URL}astronotes/topic/${bookSlug}/${pageOrder}/${subchapterId}/`,
                 method: 'GET'
@@ -545,7 +567,10 @@ export const copilotApi = baseApi.injectEndpoints({
             }),
             providesTags: ['BANKSOAL_SECTIONS']
         }),
-        getBankSoalProblems: builder.query<BankSoalProblemsResponse, { sectionId?: string; chapterId?: string }>({
+        getBankSoalProblems: builder.query<
+            BankSoalProblemsResponse,
+            { sectionId?: string; chapterId?: string }
+        >({
             query: ({ sectionId, chapterId }) => ({
                 url: `${COPILOT_BASE_URL}bank-soal/problem/${sectionId || ''}/`,
                 method: 'GET',
@@ -553,12 +578,19 @@ export const copilotApi = baseApi.injectEndpoints({
             }),
             providesTags: ['BANKSOAL_PROBLEMS']
         }),
-        searchContent: builder.query<ContentSearchResponse, {
-            q?: string;
-            content_type: "textbook_problem" | "astronotes_content" | "course_video" | "bank_soal_problem";
-            book_slug?: string;
-            course_slug?: string;
-        }>({
+        searchContent: builder.query<
+            ContentSearchResponse,
+            {
+                q?: string;
+                content_type:
+                    | 'textbook_problem'
+                    | 'astronotes_content'
+                    | 'course_video'
+                    | 'bank_soal_problem';
+                book_slug?: string;
+                course_slug?: string;
+            }
+        >({
             query: (params) => ({
                 url: `${COPILOT_BASE_URL}context/search/`,
                 method: 'GET',
@@ -566,11 +598,13 @@ export const copilotApi = baseApi.injectEndpoints({
                     q: params.q || null,
                     content_type: params.content_type,
                     ...(params.book_slug && { book_slug: params.book_slug }),
-                    ...(params.course_slug && { course_slug: params.course_slug })
+                    ...(params.course_slug && {
+                        course_slug: params.course_slug
+                    })
                 }
             }),
             providesTags: ['CONTENT_SEARCH']
-        }),
+        })
     }),
     overrideExisting: false
 });

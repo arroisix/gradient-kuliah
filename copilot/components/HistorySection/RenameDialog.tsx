@@ -34,7 +34,7 @@ const RenameDialog = ({
                 SESSION_ID: name
             });
             await onRename(name);
-            
+
             if (isSpecific) {
                 toast.success('Judul percakapan berhasil diperbarui', {
                     position: toast.POSITION.TOP_CENTER,
@@ -42,7 +42,7 @@ const RenameDialog = ({
                     hideProgressBar: true
                 });
             }
-            
+
             onClose();
         } catch (error) {
             console.error('Failed to rename:', error);

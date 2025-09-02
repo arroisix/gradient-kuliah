@@ -25,7 +25,9 @@ const SidebarHistorySection = ({
     onSessionSelect,
     currentSessionId
 }: SidebarHistorySectionProps): JSX.Element => {
-    const [sessionHistory, setSessionHistory] = useState<SessionHistoryResponse['data']>([]);
+    const [sessionHistory, setSessionHistory] = useState<
+        SessionHistoryResponse['data']
+    >([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
     const [selectedSession, setSelectedSession] = useState<{
@@ -41,10 +43,11 @@ const SidebarHistorySection = ({
 
             try {
                 setIsLoading(true);
-                const response: SessionHistoryResponse = await chatApi.getContentSessionHistory({
-                    book_slug: bookSlug,
-                    chapter_id: chapterId
-                });
+                const response: SessionHistoryResponse =
+                    await chatApi.getContentSessionHistory({
+                        book_slug: bookSlug,
+                        chapter_id: chapterId
+                    });
                 setSessionHistory(response.data || []);
             } catch (error) {
                 console.error('Failed to load content session history:', error);
@@ -143,10 +146,12 @@ const SidebarHistorySection = ({
                                 key={session.id}
                                 onClick={() => handleSessionClick(session.id)}
                                 className="group block w-full text-left border-none bg-transparent p-0 focus:outline-none focus:ring-0">
-                                <div className={cn(
-                                    "p-3 hover:bg-[#222222] cursor-pointer transition-colors",
-                                    currentSessionId === session.id && "bg-[#181818]"
-                                )}>
+                                <div
+                                    className={cn(
+                                        'p-3 hover:bg-[#222222] cursor-pointer transition-colors',
+                                        currentSessionId === session.id &&
+                                            'bg-[#181818]'
+                                    )}>
                                     <div className="flex items-start justify-between gap-2">
                                         <div className="flex-1 min-w-0">
                                             <h3 className="font-semibold text-sm mb-1">
@@ -160,12 +165,17 @@ const SidebarHistorySection = ({
                                     <span className="flex flex-row justify-between text-neutral-500 mt-2 block">
                                         {session.latest_chat_at ? (
                                             <span className="text-xs">
-                                                {formatTimestamp(session.latest_chat_at)}
+                                                {formatTimestamp(
+                                                    session.latest_chat_at
+                                                )}
                                             </span>
                                         ) : (
                                             <span></span>
                                         )}
-                                        <button onClick={(e) => e.stopPropagation()}>
+                                        <button
+                                            onClick={(e) =>
+                                                e.stopPropagation()
+                                            }>
                                             <SessionMenuDropdown
                                                 sessionId={session.id}
                                                 onRename={handleRename}
@@ -189,7 +199,8 @@ const SidebarHistorySection = ({
                             Belum ada riwayat chat untuk konten ini
                         </h3>
                         <p className="text-sm text-neutral-500">
-                            Riwayat percakapan untuk konten ini akan tersimpan di sini
+                            Riwayat percakapan untuk konten ini akan tersimpan
+                            di sini
                         </p>
                     </div>
                 )}

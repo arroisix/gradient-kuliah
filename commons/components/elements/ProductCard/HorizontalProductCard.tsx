@@ -20,7 +20,9 @@ const HorizontalProductCard = ({
     eventPayload,
     product,
     isReference = false
-}: Omit<ProductCardProps, 'orientation'> & { isReference?: boolean }): JSX.Element => {
+}: Omit<ProductCardProps, 'orientation'> & {
+    isReference?: boolean;
+}): JSX.Element => {
     const tracker = useTracker();
     const TitleLabel = heading ?? 'p';
 
@@ -64,7 +66,7 @@ const HorizontalProductCard = ({
             <div className="flex flex-col w-full overflow-hidden font-body grow">
                 <p
                     className={cn(
-                        (!product.inProgress || isReference) ? 'hidden' : 'flex',
+                        !product.inProgress || isReference ? 'hidden' : 'flex',
                         'items-center text-xs mb-2',
                         product.latestProgress == 100
                             ? 'text-[#282b29]'
@@ -104,7 +106,9 @@ const HorizontalProductCard = ({
                             'bg-[#CC009E]':
                                 category === 'Catatan' ||
                                 category === 'Astronotes',
-                            'bg-[#0083FF]': category === 'Bank Soal' || category === 'BankSoal'
+                            'bg-[#0083FF]':
+                                category === 'Bank Soal' ||
+                                category === 'BankSoal'
                         }
                     )}>
                     {category}
