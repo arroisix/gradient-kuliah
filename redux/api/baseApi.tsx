@@ -47,6 +47,24 @@ const baseQuery = fetchBaseQuery({
     }
 });
 
+const performLogout = async () => {
+    try {
+        await fetch(`${config.API_BASE_URL}identities/logout/`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Token ${localStorage.getItem('token')}`,
+            }
+        });
+    } catch (error) {
+        console.error('Logout API call failed:', error);
+    } finally {
+        localStorage.clear();
+        if (typeof window !== 'undefined') {
+            window.location.href = '/masuk';
+        }
+    }
+};
+
 const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
     let result = await baseQuery(args, api, extraOptions);
 
@@ -71,22 +89,13 @@ const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
                     
                     result = await baseQuery(args, api, extraOptions);
                 } else {
-                    localStorage.clear();
-                    if (typeof window !== 'undefined') {
-                        window.location.href = '/masuk?reason=session_expired';
-                    }
+                    await performLogout();
                 }
             } catch (error) {
-                localStorage.clear();
-                if (typeof window !== 'undefined') {
-                    window.location.href = '/masuk?reason=session_expired';
-                }
+                await performLogout();
             }
         } else {
-            localStorage.clear();
-            if (typeof window !== 'undefined') {
-                window.location.href = '/masuk?reason=session_expired';
-            }
+            await performLogout();
         }
     }
 
