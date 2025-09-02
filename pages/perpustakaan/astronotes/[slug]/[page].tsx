@@ -18,15 +18,18 @@ const AstronotesPage = ({
     content,
     recommendations
 }: AstronotesPageProps): JSX.Element => {
-    const [isCopilotModalOpen, setIsCopilotModalOpen] = useState<boolean>(false);
+    const [isCopilotModalOpen, setIsCopilotModalOpen] =
+        useState<boolean>(false);
     const [currentPageId, setCurrentPageId] = useState<string | undefined>();
 
-    const currentAstronotesContext = currentPageId ? {
-        id: currentPageId,
-        title: book.title,
-        header: `Halaman ${page}`, 
-        contentType: 'astronotes_content' as const
-    } : undefined;
+    const currentAstronotesContext = currentPageId
+        ? {
+              id: currentPageId,
+              title: book.title,
+              header: `Halaman ${page}`,
+              contentType: 'astronotes_content' as const
+          }
+        : undefined;
 
     return (
         <>
@@ -59,7 +62,7 @@ const AstronotesPage = ({
                     }}
                 />
             </LearnLayout>
-            
+
             <CopilotModal
                 key={slug}
                 isOpen={isCopilotModalOpen}

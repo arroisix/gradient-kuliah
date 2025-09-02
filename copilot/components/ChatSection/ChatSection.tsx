@@ -9,7 +9,11 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import remarkGfm from 'remark-gfm';
 import Image from 'next/image';
-import { ChatMessage, ContentRecommendation, SelectedReference } from '../../types/copilot';
+import {
+    ChatMessage,
+    ContentRecommendation,
+    SelectedReference
+} from '../../types/copilot';
 import { cn } from 'commons/utils';
 import CopilotIcon from '../../assets/CopilotIcon';
 import { chatApi } from '../../redux/api/copilotApi';
@@ -201,9 +205,10 @@ const ChatSection = ({
         return (
             <div className="mt-2">
                 <button
-                    onClick={() => handleViewUsedReferences(message.usedReferences!)}
-                    className="flex items-center gap-1 pb-2 rounded-full border border-hidden hover:border-neutral-500 transition-colors text-sm text-neutral-300 hover:text-white"
-                >
+                    onClick={() =>
+                        handleViewUsedReferences(message.usedReferences!)
+                    }
+                    className="flex items-center gap-1 pb-2 rounded-full border border-hidden hover:border-neutral-500 transition-colors text-sm text-neutral-300 hover:text-white">
                     <span>{message.usedReferences.length} Referensi</span>
                     <ChevronDown size={14} />
                 </button>
@@ -394,7 +399,10 @@ const ChatSection = ({
                                     className={cn(
                                         'flex w-full',
                                         message.role === 'User'
-                                            ? cn('justify-end', isSidebar && 'pl-16')
+                                            ? cn(
+                                                  'justify-end',
+                                                  isSidebar && 'pl-16'
+                                              )
                                             : 'justify-start'
                                     )}>
                                     {message.role === 'AI' && (
@@ -414,7 +422,14 @@ const ChatSection = ({
                                     </div>
                                 </div>
                                 {message.role === 'User' && (
-                                    <div className={cn('flex w-full', cn('justify-end', isSidebar && 'pl-16'))}>
+                                    <div
+                                        className={cn(
+                                            'flex w-full',
+                                            cn(
+                                                'justify-end',
+                                                isSidebar && 'pl-16'
+                                            )
+                                        )}>
                                         <div className="mr-0">
                                             {renderReferenceIndicator(message)}
                                         </div>

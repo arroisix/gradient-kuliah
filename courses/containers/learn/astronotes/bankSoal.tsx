@@ -33,7 +33,8 @@ const BankSoalContainer = ({
     const router = useRouter();
     const [isCrawler, setIsCrawler] = useState<string>();
     const { is_subscribed } = useCourseSubscription();
-    const [isCopilotModalOpen, setIsCopilotModalOpen] = useState<boolean>(false);
+    const [isCopilotModalOpen, setIsCopilotModalOpen] =
+        useState<boolean>(false);
     const { slug, problemSlug } = router.query as {
         slug: string;
         problemSlug: string;
@@ -63,13 +64,16 @@ const BankSoalContainer = ({
         setIsCopilotModalOpen(true);
     };
 
-    const currentBankSoalContext = data?.problem && getTextbookDetail?.book ? {
-        id: data.problem.id,
-        title: getTextbookDetail.book.title,
-        subtitle: data.problem.chapter_name || '',
-        header: data.problem.title || '',
-        contentType: 'bank_soal_problem' as const
-    } : undefined;
+    const currentBankSoalContext =
+        data?.problem && getTextbookDetail?.book
+            ? {
+                  id: data.problem.id,
+                  title: getTextbookDetail.book.title,
+                  subtitle: data.problem.chapter_name || '',
+                  header: data.problem.title || '',
+                  contentType: 'bank_soal_problem' as const
+              }
+            : undefined;
 
     return (
         <div className="drawer drawer-end lg:drawer-open">

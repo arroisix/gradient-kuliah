@@ -19,7 +19,7 @@ const CopilotDrawer = ({ onCopilotClick }: CopilotDrawerProps): JSX.Element => {
 
     const handleCopilotClick = () => {
         tracker?.genericTrack('Click Copilot Drawer');
-        
+
         if (isMobileBreakpoints && !isShowDrawer) {
             setIsShowDrawer(true);
         } else {

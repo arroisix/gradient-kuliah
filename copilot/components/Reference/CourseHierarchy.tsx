@@ -9,7 +9,11 @@ import {
     useGetCourseSubchaptersQuery,
     useLazySearchContentQuery
 } from 'copilot/redux/api/copilotApi';
-import { CourseChapter, CourseSubchapter, ContentSearchItem } from 'copilot/types/copilot';
+import {
+    CourseChapter,
+    CourseSubchapter,
+    ContentSearchItem
+} from 'copilot/types/copilot';
 import NotFound from 'commons/components/elements/Icons/NotFound';
 
 interface CourseHierarchyProps {
@@ -18,7 +22,12 @@ interface CourseHierarchyProps {
     courseSlug: string;
     courseName: string;
     courseThumbnail?: string | null;
-    onVideoSelect: (videoId: string, title: string, subtitle: string, header: string) => void;
+    onVideoSelect: (
+        videoId: string,
+        title: string,
+        subtitle: string,
+        header: string
+    ) => void;
 }
 
 const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
@@ -29,7 +38,9 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
     courseThumbnail,
     onVideoSelect
 }) => {
-    const [expandedChapters, setExpandedChapters] = useState<Set<string>>(new Set());
+    const [expandedChapters, setExpandedChapters] = useState<Set<string>>(
+        new Set()
+    );
     const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
     const [hierarchySearch, setHierarchySearch] = useState('');
     const [searchResults, setSearchResults] = useState<ContentSearchItem[]>([]);
@@ -38,7 +49,8 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
 
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const debouncedSearchTerm = useDebounce(hierarchySearch, 300);
-    const [triggerSearch, { data: searchData, isLoading: searchLoading }] = useLazySearchContentQuery();
+    const [triggerSearch, { data: searchData, isLoading: searchLoading }] =
+        useLazySearchContentQuery();
 
     const isSearching = debouncedSearchTerm.trim().length > 0;
 
@@ -71,20 +83,23 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
 
     const loadMoreResults = useCallback(() => {
         if (isLoadingMore || visibleCount >= searchResults.length) return;
-        
+
         setIsLoadingMore(true);
         setTimeout(() => {
-            setVisibleCount(prev => Math.min(prev + 10, searchResults.length));
+            setVisibleCount((prev) =>
+                Math.min(prev + 10, searchResults.length)
+            );
             setIsLoadingMore(false);
         }, 1000);
     }, [isLoadingMore, visibleCount, searchResults.length]);
 
     const handleScroll = useCallback(() => {
         if (!scrollContainerRef.current) return;
-        
-        const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
+
+        const { scrollTop, scrollHeight, clientHeight } =
+            scrollContainerRef.current;
         const threshold = 100;
-        
+
         if (scrollHeight - scrollTop <= clientHeight + threshold) {
             loadMoreResults();
         }
@@ -110,18 +125,31 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
         setExpandedChapters(newExpanded);
     };
 
-    const handleVideoClick = (video: CourseSubchapter | ContentSearchItem, chapterName: string) => {
+    const handleVideoClick = (
+        video: CourseSubchapter | ContentSearchItem,
+        chapterName: string
+    ) => {
         const videoId = 'video_id' in video ? video.video_id : video.id;
-        
+
         if (!selectedItems.has(videoId)) {
             const newSelected = new Set(selectedItems);
             newSelected.add(videoId);
             setSelectedItems(newSelected);
-            
+
             if ('header' in video) {
-                onVideoSelect(video.id, video.title, video.subtitle || '', video.header);
+                onVideoSelect(
+                    video.id,
+                    video.title,
+                    video.subtitle || '',
+                    video.header
+                );
             } else {
-                onVideoSelect(video.video_id, courseName, chapterName, video.name);
+                onVideoSelect(
+                    video.video_id,
+                    courseName,
+                    chapterName,
+                    video.name
+                );
             }
         }
         onClose();
@@ -141,7 +169,10 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
                 <div className="flex items-center justify-center py-8">
                     <div className="text-center">
                         <NotFound className="w-48 h-48 mx-auto my-8" />
-                        <p className="text-white/60">Tidak ada hasil ditemukan untuk &quot;{debouncedSearchTerm}&quot;</p>
+                        <p className="text-white/60">
+                            Tidak ada hasil ditemukan untuk &quot;
+                            {debouncedSearchTerm}&quot;
+                        </p>
                     </div>
                 </div>
             );
@@ -152,7 +183,7 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
 
         return (
             <div className="space-y-3">
-                {visibleResults.map(item => (
+                {visibleResults.map((item) => (
                     <SearchResultCard
                         key={item.id}
                         header={item.header}
@@ -162,7 +193,7 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
                         onClick={() => handleVideoClick(item, '')}
                     />
                 ))}
-                
+
                 {hasMore && isLoadingMore && (
                     <div className="flex items-center justify-center py-8">
                         <div className="w-6 h-6 border-2 border-[#5F2BCE] border-t-transparent rounded-full animate-spin"></div>
@@ -174,7 +205,7 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
 
     const renderChapter = (chapter: CourseChapter) => {
         const isExpanded = expandedChapters.has(chapter.id);
-        
+
         return (
             <div key={chapter.id} className="mb-1">
                 <button
@@ -182,9 +213,10 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
                     className={cn(
                         'w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors',
                         'hover:bg-white/5 text-left min-h-[40px]'
-                    )}
-                >
-                    <span className="text-[#999999] text-sm font-medium leading-5">{chapter.title}</span>
+                    )}>
+                    <span className="text-[#999999] text-sm font-medium leading-5">
+                        {chapter.title}
+                    </span>
                     <div className="flex items-center justify-center w-4 h-4 flex-shrink-0">
                         {isExpanded ? (
                             <ChevronUp size={16} className="text-white/60" />
@@ -193,17 +225,23 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
                         )}
                     </div>
                 </button>
-                
+
                 {isExpanded && (
                     <div className="ml-6 border-l border-white/20">
-                        <ChapterSubchapters chapterId={chapter.id} chapterName={chapter.title} />
+                        <ChapterSubchapters
+                            chapterId={chapter.id}
+                            chapterName={chapter.title}
+                        />
                     </div>
                 )}
             </div>
         );
     };
 
-    const ChapterSubchapters: React.FC<{ chapterId: string; chapterName: string }> = ({ chapterId, chapterName }) => {
+    const ChapterSubchapters: React.FC<{
+        chapterId: string;
+        chapterName: string;
+    }> = ({ chapterId, chapterName }) => {
         const {
             data: subchaptersData,
             isLoading: subchaptersLoading,
@@ -228,17 +266,21 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
 
         return (
             <>
-                {subchaptersData.data.map(subchapter => (
+                {subchaptersData.data.map((subchapter) => (
                     <button
                         key={subchapter.video_id}
-                        onClick={() => handleVideoClick(subchapter, chapterName)}
+                        onClick={() =>
+                            handleVideoClick(subchapter, chapterName)
+                        }
                         className={cn(
                             'w-full flex items-center px-3 py-1.5 ml-4 rounded-lg transition-colors text-left',
                             'hover:bg-white/5',
-                            selectedItems.has(subchapter.video_id) && 'bg-[#5F2BCE]/20 border border-[#5F2BCE]/50'
-                        )}
-                    >
-                        <span className="text-[#999999] text-sm leading-5">{subchapter.name}</span>
+                            selectedItems.has(subchapter.video_id) &&
+                                'bg-[#5F2BCE]/20 border border-[#5F2BCE]/50'
+                        )}>
+                        <span className="text-[#999999] text-sm leading-5">
+                            {subchapter.name}
+                        </span>
                     </button>
                 ))}
             </>
@@ -257,7 +299,9 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
         return (
             <div className="flex items-center justify-center py-12">
                 <div className="text-center">
-                    <p className="text-white/60">Gagal memuat chapters course</p>
+                    <p className="text-white/60">
+                        Gagal memuat chapters course
+                    </p>
                 </div>
             </div>
         );
@@ -268,8 +312,20 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
             <div className="pb-6 mb-4">
                 <form onSubmit={(e) => e.preventDefault()} className="relative">
                     <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM19 19l-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/50"/>
+                        <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM19 19l-4.35-4.35"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="text-white/50"
+                            />
                         </svg>
                     </div>
                     <input
@@ -282,10 +338,9 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
                 </form>
             </div>
 
-            <div 
+            <div
                 ref={scrollContainerRef}
-                className="pb-20 overflow-y-auto md:h-[calc(100vh-280px)]"
-            >
+                className="pb-20 overflow-y-auto md:h-[calc(100vh-280px)]">
                 {isSearching ? (
                     renderSearchResults()
                 ) : (
@@ -296,7 +351,9 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
                             <div className="flex items-center justify-center py-12">
                                 <div className="text-center">
                                     <NotFound className="w-48 h-48 mx-auto my-8" />
-                                    <p className="text-white/60">Tidak ada chapters ditemukan</p>
+                                    <p className="text-white/60">
+                                        Tidak ada chapters ditemukan
+                                    </p>
                                 </div>
                             </div>
                         )}
@@ -322,10 +379,20 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
                 </div>
                 <button
                     onClick={onClose}
-                    className="p-1 text-white/60 hover:text-white transition-colors"
-                >
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15 5L5 15M5 5l10 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    className="p-1 text-white/60 hover:text-white transition-colors">
+                    <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M15 5L5 15M5 5l10 10"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        />
                     </svg>
                 </button>
             </div>

@@ -52,7 +52,8 @@ const VideoLearnContainer = ({
     const { height: videoHeight, ref: videoRef } =
         useElementSize<HTMLDivElement>();
     const [isShowModal, setIsShowModal] = useState<boolean>(false);
-    const [isCopilotModalOpen, setIsCopilotModalOpen] = useState<boolean>(false);
+    const [isCopilotModalOpen, setIsCopilotModalOpen] =
+        useState<boolean>(false);
     const [feedbackStatus, setFeedbackStatus] = useState<{
         status: 'NOT_HELPING' | 'HELPING' | 'NOT_SELECTED';
         answer_id: string;
@@ -68,13 +69,16 @@ const VideoLearnContainer = ({
         setIsCopilotModalOpen(true);
     };
 
-    const currentVideoContext = subchapter?.video && subchapter?.subchapter_name ? {
-        id: subchapter.video.id,
-        title: course.course_name,
-        subtitle: subchapter.chapter_name,
-        header: subchapter.subchapter_name,
-        contentType: 'course' as const
-    } : undefined;
+    const currentVideoContext =
+        subchapter?.video && subchapter?.subchapter_name
+            ? {
+                  id: subchapter.video.id,
+                  title: course.course_name,
+                  subtitle: subchapter.chapter_name,
+                  header: subchapter.subchapter_name,
+                  contentType: 'course' as const
+              }
+            : undefined;
 
     return (
         <section className="relative flex flex-col overflow-visible">
