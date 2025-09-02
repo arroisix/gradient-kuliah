@@ -35,20 +35,22 @@ const Paginator = ({
 }: PaginatorProps): JSX.Element => {
     const tracker = useTracker();
     const router = useRouter();
-    
-    const pageParam = pageParamName === 'page' 
-        ? (router.query.page as string)
-        : (router.query[pageParamName] as string);
+
+    const pageParam =
+        pageParamName === 'page'
+            ? (router.query.page as string)
+            : (router.query[pageParamName] as string);
     const page = parseInt(pageParam ?? '1');
 
     const PageButton = pageState !== undefined ? 'button' : Link;
     const getHref = (newPage: number): string | UrlObject => {
         if (pageState) return '?';
-        
+
         if (pageParamName === 'page') {
             return { query: { ...router.query, page: newPage } };
         } else {
-            const { [pageParamName]: _currentCustomPage, ...otherQuery } = router.query;
+            const { [pageParamName]: _currentCustomPage, ...otherQuery } =
+                router.query;
             return { query: { ...otherQuery, [pageParamName]: newPage } };
         }
     };

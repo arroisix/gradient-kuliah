@@ -32,7 +32,8 @@ const TextbookSolution = ({
     const router = useRouter();
     const [isCrawler, setIsCrawler] = useState<string>();
     const { is_subscribed } = useCourseSubscription();
-    const [isCopilotModalOpen, setIsCopilotModalOpen] = useState<boolean>(false);
+    const [isCopilotModalOpen, setIsCopilotModalOpen] =
+        useState<boolean>(false);
     const { slug, problemSlug } = router.query as {
         slug: string;
         problemSlug: string;
@@ -54,13 +55,16 @@ const TextbookSolution = ({
         setIsCopilotModalOpen(true);
     };
 
-    const currentTextbookContext = data?.problem && getTextbookDetail?.book ? {
-        id: data.problem.id,
-        title: getTextbookDetail.book.title,
-        subtitle: data.problem.chapter || '', 
-        header: data.problem.title || '',
-        contentType: 'textbook_problem' as const
-    } : undefined;
+    const currentTextbookContext =
+        data?.problem && getTextbookDetail?.book
+            ? {
+                  id: data.problem.id,
+                  title: getTextbookDetail.book.title,
+                  subtitle: data.problem.chapter || '',
+                  header: data.problem.title || '',
+                  contentType: 'textbook_problem' as const
+              }
+            : undefined;
 
     return (
         <div className="drawer drawer-end lg:drawer-open">

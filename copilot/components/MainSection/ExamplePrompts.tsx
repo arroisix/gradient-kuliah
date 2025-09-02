@@ -4,7 +4,12 @@ import { chatApi } from '../../redux/api/copilotApi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { useTracker } from 'tracker/tracker';
 
-type ContentType = "course_video" | "textbook_problem" | "bank_soal_problem" | "astronotes_content" | null;
+type ContentType =
+    | 'course_video'
+    | 'textbook_problem'
+    | 'bank_soal_problem'
+    | 'astronotes_content'
+    | null;
 
 interface ExamplePromptsProps {
     onPromptClick: (prompt: string, imageUrl?: string) => void;

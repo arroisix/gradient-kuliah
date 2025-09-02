@@ -1,17 +1,33 @@
 import { useState, useRef, useEffect } from 'react';
 import MainSection from '../components/MainSection/MainSection';
 import ChatSection from '../components/ChatSection/ChatSection';
-import { ChatMessage, ContextReference, ChatInput, ChatHistoryContextItem, ReferenceContentType, SelectedReference } from '../types/copilot';
+import {
+    ChatMessage,
+    ContextReference,
+    ChatInput,
+    ChatHistoryContextItem,
+    ReferenceContentType,
+    SelectedReference
+} from '../types/copilot';
 import PromptBar from '../components/MainSection/PromptBar';
 import { chatApi } from '../redux/api/copilotApi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
-import { IoClose, IoChevronDown, IoChevronUp, IoArrowBack } from 'react-icons/io5';
+import {
+    IoClose,
+    IoChevronDown,
+    IoChevronUp,
+    IoArrowBack
+} from 'react-icons/io5';
 import { MdHistory } from 'react-icons/md';
 import { Maximize2 } from 'lucide-react';
 import { cn } from 'commons/utils';
 import SidebarHistorySection from '../components/HistorySection/SidebarHistorySection';
 
-type ContentType = "course_video" | "textbook_problem" | "bank_soal_problem" | "astronotes_content";
+type ContentType =
+    | 'course_video'
+    | 'textbook_problem'
+    | 'bank_soal_problem'
+    | 'astronotes_content';
 
 interface CopilotSidebarContainerProps {
     sessionId?: string;
@@ -22,7 +38,10 @@ interface CopilotSidebarContainerProps {
     onClose: () => void;
     onOpenReferenceModal: () => void;
     onOpenReferenceContentModal: () => void;
-    onRemoveReference: (referenceId: string, contentType: ReferenceContentType) => void;
+    onRemoveReference: (
+        referenceId: string,
+        contentType: ReferenceContentType
+    ) => void;
     onOpenUsedReferencesModal?: (references: SelectedReference[]) => void;
     contentType?: ContentType;
     bookSlug?: string;
@@ -43,20 +62,22 @@ const CopilotSidebarContainer = ({
     onOpenUsedReferencesModal,
     contentType,
     bookSlug,
-    chapterId,
+    chapterId
 }: CopilotSidebarContainerProps): JSX.Element => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoadingHistory, setIsLoadingHistory] = useState(true);
     const [isLoadingResponse, setIsLoadingResponse] = useState(false);
     const [showScrollButton, setShowScrollButton] = useState(false);
-    const [currentSessionId, setCurrentSessionId] = useState<string | undefined>();
+    const [currentSessionId, setCurrentSessionId] = useState<
+        string | undefined
+    >();
     const [pendingMessage, setPendingMessage] = useState<{
         content: string;
         timestamp: string;
     } | null>(null);
     const [isEditorOpen, setIsEditorOpen] = useState(false);
     const [isHistoryOpen, setIsHistoryOpen] = useState(false);
-    
+
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
     const promptBarRef = useRef<HTMLInputElement>(null);
@@ -78,18 +99,23 @@ const CopilotSidebarContainer = ({
     };
 
     const handleToggleHistory = () => {
-        setIsHistoryOpen(prev => !prev);
+        setIsHistoryOpen((prev) => !prev);
     };
 
-    const convertHistoryContextToSelectedReferences = (historyContext?: { data: ChatHistoryContextItem[] }): SelectedReference[] => {
+    const convertHistoryContextToSelectedReferences = (historyContext?: {
+        data: ChatHistoryContextItem[];
+    }): SelectedReference[] => {
         if (!historyContext?.data) return [];
-        
-        return historyContext.data.map(item => ({
+
+        return historyContext.data.map((item) => ({
             id: item.id,
             title: item.title,
             subtitle: item.subtitle,
             header: item.header,
-            contentType: item.content_type === 'course_video' ? 'course' : item.content_type as ReferenceContentType
+            contentType:
+                item.content_type === 'course_video'
+                    ? 'course'
+                    : (item.content_type as ReferenceContentType)
         }));
     };
 
@@ -104,9 +130,9 @@ const CopilotSidebarContainer = ({
         try {
             setIsLoadingHistory(true);
             setCurrentSessionId(sessionId);
-            
+
             const response = await chatApi.getChatHistory(sessionId);
-            
+
             if (response.history?.length > 0) {
                 const convertedMessages: ChatMessage[] = response.history.map(
                     (item: {
@@ -129,20 +155,22 @@ const CopilotSidebarContainer = ({
                         isBookmarked: item.is_bookmarked,
                         image: item.image,
                         keyword: item.keyword,
-                        usedReferences: convertHistoryContextToSelectedReferences(item.context)
+                        usedReferences:
+                            convertHistoryContextToSelectedReferences(
+                                item.context
+                            )
                     })
                 );
                 setMessages(convertedMessages);
             } else {
                 setMessages([]);
             }
-            
+
             setIsHistoryOpen(false);
-            
+
             setTimeout(() => {
                 scrollToBottom();
             }, 100);
-            
         } catch (error) {
             setIsHistoryOpen(false);
         } finally {
@@ -160,30 +188,34 @@ const CopilotSidebarContainer = ({
             try {
                 const response = await chatApi.getChatHistory(sessionId);
                 if (response.history?.length > 0) {
-                    const convertedMessages: ChatMessage[] = response.history.map(
-                        (item: {
-                            role: 'AI' | 'User';
-                            message: string;
-                            message_id: string;
-                            rating: number;
-                            is_bookmarked: boolean;
-                            image?: string | null;
-                            keyword?: string | null;
-                            context?: {
-                                data: ChatHistoryContextItem[];
-                            };
-                        }) => ({
-                            id: item.message_id,
-                            role: item.role === 'AI' ? 'AI' : 'User',
-                            content: item.message,
-                            timestamp: new Date().toISOString(),
-                            rating: item.rating,
-                            isBookmarked: item.is_bookmarked,
-                            image: item.image,
-                            keyword: item.keyword,
-                            usedReferences: convertHistoryContextToSelectedReferences(item.context)
-                        })
-                    );
+                    const convertedMessages: ChatMessage[] =
+                        response.history.map(
+                            (item: {
+                                role: 'AI' | 'User';
+                                message: string;
+                                message_id: string;
+                                rating: number;
+                                is_bookmarked: boolean;
+                                image?: string | null;
+                                keyword?: string | null;
+                                context?: {
+                                    data: ChatHistoryContextItem[];
+                                };
+                            }) => ({
+                                id: item.message_id,
+                                role: item.role === 'AI' ? 'AI' : 'User',
+                                content: item.message,
+                                timestamp: new Date().toISOString(),
+                                rating: item.rating,
+                                isBookmarked: item.is_bookmarked,
+                                image: item.image,
+                                keyword: item.keyword,
+                                usedReferences:
+                                    convertHistoryContextToSelectedReferences(
+                                        item.context
+                                    )
+                            })
+                        );
                     setMessages(convertedMessages);
                     setCurrentSessionId(sessionId);
                 }
@@ -206,7 +238,8 @@ const CopilotSidebarContainer = ({
 
     const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
         const target = e.target as HTMLDivElement;
-        const isNearBottom = target.scrollHeight - target.scrollTop - target.clientHeight < 100;
+        const isNearBottom =
+            target.scrollHeight - target.scrollTop - target.clientHeight < 100;
         setShowScrollButton(!isNearBottom);
     };
 
@@ -217,7 +250,9 @@ const CopilotSidebarContainer = ({
         });
     };
 
-    const buildChatContextFromReferences = (references: SelectedReference[]): ChatInput['context'] => {
+    const buildChatContextFromReferences = (
+        references: SelectedReference[]
+    ): ChatInput['context'] => {
         if (references.length === 0) return undefined;
 
         const context: ChatInput['context'] = {
@@ -227,7 +262,7 @@ const CopilotSidebarContainer = ({
             bank_soal_problem: []
         };
 
-        references.forEach(ref => {
+        references.forEach((ref) => {
             const contextReference: ContextReference = {
                 id: ref.id,
                 title: ref.title,
@@ -251,7 +286,9 @@ const CopilotSidebarContainer = ({
             }
         });
 
-        return Object.values(context).some(arr => arr.length > 0) ? context : undefined;
+        return Object.values(context).some((arr) => arr.length > 0)
+            ? context
+            : undefined;
     };
 
     const handleSendMessage = async (prompt: string, imageUrl?: string) => {
@@ -278,21 +315,24 @@ const CopilotSidebarContainer = ({
             content: prompt,
             timestamp,
             image: imageUrl || null,
-            usedReferences: currentUsedReferences.length > 0 ? currentUsedReferences : undefined
+            usedReferences:
+                currentUsedReferences.length > 0
+                    ? currentUsedReferences
+                    : undefined
         };
 
-        setMessages(prev => [...prev, userMessage]);
+        setMessages((prev) => [...prev, userMessage]);
         handleClearReferences();
         scrollToBottom();
-        
+
         let currentResponse = '';
         const chatInput: ChatInput = {
             input_text: prompt,
             session_id: currentSessionId,
             image_url: imageUrl,
             context: buildChatContextFromReferences(currentUsedReferences),
-            book_slug: bookSlug,     
-            chapter_id: chapterId    
+            book_slug: bookSlug,
+            chapter_id: chapterId
         };
 
         try {
@@ -312,7 +352,7 @@ const CopilotSidebarContainer = ({
                         setCurrentSessionId(sessionId);
                     }
                     if (messageId) {
-                        setMessages(prev => {
+                        setMessages((prev) => {
                             const aiMessage: ChatMessage = {
                                 id: messageId,
                                 role: 'AI',
@@ -334,7 +374,7 @@ const CopilotSidebarContainer = ({
                         content: 'Maaf, terjadi kesalahan. Silakan coba lagi.',
                         timestamp: new Date().toISOString()
                     };
-                    setMessages(prev => [...prev, errorMessage]);
+                    setMessages((prev) => [...prev, errorMessage]);
                     scrollToBottom();
                 }
             });
@@ -348,7 +388,7 @@ const CopilotSidebarContainer = ({
                 content: 'Maaf, terjadi kesalahan. Silakan coba lagi.',
                 timestamp: new Date().toISOString()
             };
-            setMessages(prev => [...prev, errorMessage]);
+            setMessages((prev) => [...prev, errorMessage]);
             scrollToBottom();
         } finally {
             setIsLoadingResponse(false);
@@ -367,17 +407,19 @@ const CopilotSidebarContainer = ({
             usedReferences: message.usedReferences
         };
 
-        setMessages(prev => [...prev, userMessage]);
+        setMessages((prev) => [...prev, userMessage]);
         scrollToBottom();
-        
+
         let currentResponse = '';
         const chatInput: ChatInput = {
             input_text: message.content,
             session_id: currentSessionId,
             image_url: message.image || undefined,
-            context: message.usedReferences ? buildChatContextFromReferences(message.usedReferences) : undefined,
-            book_slug: bookSlug,     
-            chapter_id: chapterId    
+            context: message.usedReferences
+                ? buildChatContextFromReferences(message.usedReferences)
+                : undefined,
+            book_slug: bookSlug,
+            chapter_id: chapterId
         };
 
         setIsLoadingResponse(true);
@@ -398,7 +440,7 @@ const CopilotSidebarContainer = ({
                     setCurrentSessionId(sessionId);
                 }
                 if (messageId) {
-                    setMessages(prev => {
+                    setMessages((prev) => {
                         const aiMessage: ChatMessage = {
                             id: messageId,
                             role: 'AI',
@@ -421,14 +463,14 @@ const CopilotSidebarContainer = ({
                     content: 'Maaf, terjadi kesalahan. Silakan coba lagi.',
                     timestamp: new Date().toISOString()
                 };
-                setMessages(prev => [...prev, errorMessage]);
+                setMessages((prev) => [...prev, errorMessage]);
                 setIsLoadingResponse(false);
             }
         });
     };
 
     const handleClearReferences = () => {
-        selectedReferences.forEach(ref => {
+        selectedReferences.forEach((ref) => {
             onRemoveReference(ref.id, ref.contentType);
         });
     };
@@ -438,15 +480,20 @@ const CopilotSidebarContainer = ({
     return (
         <>
             <div className="flex flex-col h-full bg-[#181818] overflow-hidden rounded-t-lg">
-                <div className={cn(
-                    "flex items-center justify-between py-4 px-5 border-b border-gray-700 flex-shrink-0 transition-colors duration-300",
-                    isMobileFullscreen ? "rounded-none" : "rounded-t-lg",
-                    isCollapsed && !isMobileFullscreen ? "bg-[#5F2BCE]" : "bg-[#2C2C2C]"
-                )}>
+                <div
+                    className={cn(
+                        'flex items-center justify-between py-4 px-5 border-b border-gray-700 flex-shrink-0 transition-colors duration-300',
+                        isMobileFullscreen ? 'rounded-none' : 'rounded-t-lg',
+                        isCollapsed && !isMobileFullscreen
+                            ? 'bg-[#5F2BCE]'
+                            : 'bg-[#2C2C2C]'
+                    )}>
                     <button
                         onClick={isHistoryOpen ? handleToggleHistory : onClose}
                         className="p-1 text-gray-400 hover:text-white transition-colors z-10"
-                        aria-label={isHistoryOpen ? "Back to chat" : "Close copilot"}>
+                        aria-label={
+                            isHistoryOpen ? 'Back to chat' : 'Close copilot'
+                        }>
                         {isHistoryOpen ? (
                             <IoArrowBack size={24} />
                         ) : (
@@ -454,13 +501,13 @@ const CopilotSidebarContainer = ({
                         )}
                     </button>
 
-                    <div 
+                    <div
                         onClick={handleToggleCollapse}
                         onKeyDown={handleKeyDown}
                         role="button"
                         tabIndex={0}
                         className="flex items-center cursor-pointer flex-1 justify-center hover:opacity-80 transition-opacity h-full py-4 -my-4"
-                        aria-label={isCollapsed ? "Expand" : "Collapse"}>
+                        aria-label={isCollapsed ? 'Expand' : 'Collapse'}>
                         <h3 className="text-white font-extrabold text-base xl:text-lg">
                             Copilot AI
                         </h3>
@@ -468,27 +515,32 @@ const CopilotSidebarContainer = ({
 
                     <button
                         onClick={handleToggleHistory}
-                        className={`p-1 transition-colors ${isHistoryOpen ? 'text-white' : 'text-gray-400 hover:text-white'}`}
+                        className={`p-1 transition-colors ${
+                            isHistoryOpen
+                                ? 'text-white'
+                                : 'text-gray-400 hover:text-white'
+                        }`}
                         aria-label="Open chat history">
                         <MdHistory size={24} />
                     </button>
 
-                    <div 
+                    <div
                         onClick={handleToggleCollapse}
                         onKeyDown={handleKeyDown}
                         role="button"
                         tabIndex={0}
                         className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity h-full py-4 -my-4"
-                        aria-label={isCollapsed ? "Expand" : "Collapse"}>
-                        
+                        aria-label={isCollapsed ? 'Expand' : 'Collapse'}>
                         <button
                             onClick={handleToggleCollapse}
                             className="p-1 text-gray-400 hover:text-white transition-colors"
-                            aria-label={isCollapsed ? "Expand" : "Collapse"}>
+                            aria-label={isCollapsed ? 'Expand' : 'Collapse'}>
                             {isMobile ? (
                                 <Maximize2 size={24} />
+                            ) : isCollapsed ? (
+                                <IoChevronUp size={24} />
                             ) : (
-                                isCollapsed ? <IoChevronUp size={24} /> : <IoChevronDown size={24} />
+                                <IoChevronDown size={24} />
                             )}
                         </button>
                     </div>
@@ -496,17 +548,21 @@ const CopilotSidebarContainer = ({
 
                 <div
                     className={cn(
-                        "flex-1 overflow-hidden transition-all duration-300 ease-in-out relative",
-                        (isCollapsed && !isMobile) ? "h-0 opacity-0" : "flex opacity-100"
+                        'flex-1 overflow-hidden transition-all duration-300 ease-in-out relative',
+                        isCollapsed && !isMobile
+                            ? 'h-0 opacity-0'
+                            : 'flex opacity-100'
                     )}>
                     <div className="flex flex-col w-full h-full">
                         {isLoadingHistory ? (
                             <div className="flex-1 flex items-center justify-center">
-                                <AiOutlineLoading3Quarters 
-                                    size={24} 
-                                    className="animate-spin text-neutral-400" 
+                                <AiOutlineLoading3Quarters
+                                    size={24}
+                                    className="animate-spin text-neutral-400"
                                 />
-                                <span className="ml-2 text-neutral-400">Loading...</span>
+                                <span className="ml-2 text-neutral-400">
+                                    Loading...
+                                </span>
                             </div>
                         ) : messages.length > 0 ? (
                             <div
@@ -521,7 +577,9 @@ const CopilotSidebarContainer = ({
                                     isLoading={isLoadingResponse}
                                     currentSessionId={currentSessionId}
                                     isSidebar={true}
-                                    onOpenUsedReferencesModal={onOpenUsedReferencesModal}
+                                    onOpenUsedReferencesModal={
+                                        onOpenUsedReferencesModal
+                                    }
                                 />
                                 <div ref={messagesEndRef} />
                             </div>
@@ -529,8 +587,8 @@ const CopilotSidebarContainer = ({
                             <div className="flex-1 flex items-center justify-center min-h-0 overflow-hidden pt-8">
                                 <MainSection
                                     className={cn(
-                                        "bg-[#181818] flex-none w-full max-w-md mx-auto px-4 py-0",
-                                        "[&>div]:mt-0 [&>div]:mb-0 [&>div]:overflow-hidden"
+                                        'bg-[#181818] flex-none w-full max-w-md mx-auto px-4 py-0',
+                                        '[&>div]:mt-0 [&>div]:mb-0 [&>div]:overflow-hidden'
                                     )}
                                     showTitle={false}
                                     showActionButtons={false}
@@ -548,11 +606,15 @@ const CopilotSidebarContainer = ({
                                 placeholder="Lagi butuh bantuan apa sobat?"
                                 onSend={handleSendMessage}
                                 isLoading={isLoadingResponse}
-                                onStateChange={({ isEditorOpen }) => setIsEditorOpen(isEditorOpen)}
+                                onStateChange={({ isEditorOpen }) =>
+                                    setIsEditorOpen(isEditorOpen)
+                                }
                                 showBorder={false}
                                 isSidebar={true}
                                 onOpenReferenceModal={onOpenReferenceModal}
-                                onOpenReferenceContentModal={onOpenReferenceContentModal}
+                                onOpenReferenceContentModal={
+                                    onOpenReferenceContentModal
+                                }
                                 referenceCount={selectedReferences.length}
                             />
                         </div>
@@ -561,21 +623,21 @@ const CopilotSidebarContainer = ({
                             <button
                                 onClick={scrollToBottom}
                                 className={cn(
-                                    "absolute bg-[#5F2BCE] hover:bg-[#4f24a8] text-white rounded-full shadow-lg transition-all duration-200",
-                                    "p-2 sm:p-3 bottom-36 left-1/2 transform -translate-x-1/2"
+                                    'absolute bg-[#5F2BCE] hover:bg-[#4f24a8] text-white rounded-full shadow-lg transition-all duration-200',
+                                    'p-2 sm:p-3 bottom-36 left-1/2 transform -translate-x-1/2'
                                 )}
                                 aria-label="Scroll to bottom">
-                                <svg 
-                                    xmlns="http://www.w3.org/2000/svg" 
-                                    className="h-4 w-4" 
-                                    fill="none" 
-                                    viewBox="0 0 24 24" 
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-4 w-4"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
                                     stroke="currentColor">
-                                    <path 
-                                        strokeLinecap="round" 
-                                        strokeLinejoin="round" 
-                                        strokeWidth={2} 
-                                        d="M19 14l-7 7m0 0l-7-7m7 7V3" 
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M19 14l-7 7m0 0l-7-7m7 7V3"
                                     />
                                 </svg>
                             </button>
