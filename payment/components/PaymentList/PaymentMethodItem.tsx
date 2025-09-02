@@ -2,13 +2,12 @@
 
 import type React from 'react';
 import Image from 'next/image';
-import { LOGO_PAYMENT, NAME_PAYMENT } from './constant';
+import { LOGO_PAYMENT, NAME_PAYMENT } from '../constant';
 import { CDN_URL } from 'commons/constants';
 import { useTracker } from 'tracker/tracker';
 import { addZeroBefore, getCSChatRoom } from 'commons/utils';
 import { usePayment } from 'payment/contexts/PaymentProvider';
-import PromoCodeInput from './PromoCodeInput2';
-import Input from 'commons/components/elements/Form/input';
+import PromoCodeInput from '../Promo/PromoCodeInput2';
 import { HiOutlineCreditCard } from 'react-icons/hi';
 import { Gift } from 'lucide-react';
 
@@ -35,6 +34,7 @@ const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({
     const {
         setPaymentMethod,
         setPhoneNumber,
+        phoneNumber,
         phoneNumberError,
         setPhoneNumberError,
         setCardId
@@ -148,30 +148,42 @@ const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({
 
             {/* Phone Number Input for OVO */}
             {isSelected && methodCode === 'ID_OVO' && (
-                <div className="ml-16 mb-4 mr-4">
-                    <Input
-                        type="tel"
-                        name="telnum"
-                        placeholder="8211234567"
-                        onChange={(e) => handleSetPhoneNumber(e.target.value)}
-                        startAddorment={
-                            <span className="text-neutral-400">+62</span>
-                        }
-                        error={
-                            !!phoneNumberError ? phoneNumberError : undefined
-                        }
-                        className="text-sm rounded-lg border border-graphite-700"
-                    />
+                <div className="flex flex-col space-y-2 font-body mx-4 mb-4">
+                    <div
+                        className={`flex items-center rounded-lg px-3 border border-transparent focus-within:border-purple-500 transition-colors ${
+                            phoneNumberError
+                                ? 'bg-[#FF3B30]/10'
+                                : 'bg-[#222222]'
+                        }`}>
+                        <div>
+                            <span className="text-[#999999]">+62</span>
+                        </div>
+                        <input
+                            type="tel"
+                            className={`bg-transparent border-0 my-1 rounded-lg text-white placeholder-[#666666] focus:outline-none focus:ring-0 focus:appearance-none`}
+                            placeholder="8211234567"
+                            onChange={(e) =>
+                                handleSetPhoneNumber(e.target.value)
+                            }
+                            value={phoneNumber}
+                        />
+                    </div>
+                    {phoneNumberError && (
+                        <span className="text-sm text-[#FF3B30]">
+                            {phoneNumberError}
+                        </span>
+                    )}
                 </div>
             )}
 
             {/* Voucher Code Input for VOUCHER */}
             {isSelected && methodCode === 'VOUCHER' && (
-                <div className="ml-16 mr-4 mb-4">
+                <div className="mx-4 mb-4">
                     <PromoCodeInput
-                        placeholder="Masukkan kode voucher"
+                        placeholder="Redeem kartu voucher"
                         className="w-full"
                         applyAfterValid={true}
+                        bgTransparent={false}
                     />
                 </div>
             )}

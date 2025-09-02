@@ -94,6 +94,7 @@ type Transaction = {
     user_card_id?: string;
     charge_id?: string;
     promo?: TransactionPromo;
+    failure_code?: string;
 };
 
 interface CheckoutInputData {
