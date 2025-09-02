@@ -152,9 +152,10 @@ const CheckoutButton = ({
 
     const onClickFree = async (): Promise<void> => {
         setLoading(true);
-        try {
-            await freeCheckout({ packet_id: packetId });
 
+        const result = await freeCheckout({ packet_id: packetId });
+
+        if ('data' in result) {
             toast.success(`Pembayaran Sukses!`, {
                 position: toast.POSITION.TOP_CENTER
             });
@@ -163,11 +164,8 @@ const CheckoutButton = ({
                     redirect: router.query.redirect as string
                 })}`
             );
-        } catch {
-            toast.error(`Pembayaran Gagal!`, {
-                position: toast.POSITION.TOP_CENTER
-            });
         }
+
         setLoading(false);
     };
 

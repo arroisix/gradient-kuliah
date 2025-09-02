@@ -7,7 +7,7 @@ import {
 const useCheckout = () => {
     const [checkout, { data, isLoading: loading, error }] =
         useCheckoutMutation();
-    const [freeCheckout, { isLoading: freeLoading }] =
+    const [freeCheckout, { isLoading: freeLoading, error: freeError }] =
         useFreeCheckoutMutation();
     const [extendCheckout, { isLoading: extendLoading }] =
         useExtendCheckoutMutation();
@@ -19,6 +19,7 @@ const useCheckout = () => {
         error,
         freeCheckout,
         freeLoading,
+        freeError,
         extendCheckout,
         extendLoading
     };
