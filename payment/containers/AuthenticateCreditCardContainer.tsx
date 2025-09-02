@@ -40,6 +40,25 @@ const AuthenticateCreditCardContainer = ({
     const [error, setError] = useState<string | undefined>();
     const [success, setSuccess] = useState<string | undefined>();
 
+    useEffect(() => {
+        if (!trx?.status) return;
+        const status = String(trx.status).toUpperCase();
+
+        const isFailure = status.toUpperCase() === 'FAILURE';
+
+        if (isFailure) {
+            setIframeUrl(undefined);
+            setSuccess(undefined);
+            setError(
+                `Pembayaran gagal. Silakan coba lagi atau gunakan metode pembayaran lain. ${
+                    trx.failure_code
+                        ? `Alasan: ${trx.failure_code.replaceAll('_', ' ')}`
+                        : ''
+                }`
+            );
+        }
+    }, [trx.status]);
+
     const handleXenditLoad = (): void => {
         if (window.Xendit) {
             window.Xendit.setPublishableKey(
@@ -84,14 +103,26 @@ const AuthenticateCreditCardContainer = ({
                         'Verifikasi berhasil! Mohon tunggu, kamu akan diarahkan ke halaman berikutnya...'
                     );
                     setIframeUrl(undefined);
-                    completeCardCheckout({
-                        transaction_id: trx.id,
-                        authentication_id: resp.id,
-                        user_card_token: isTemp ? card.card_token : undefined
-                    });
-                    if (isTemp) {
-                        setTempCard(undefined);
-                    }
+                    (async () => {
+                        try {
+                            await completeCardCheckout({
+                                transaction_id: trx.id,
+                                authentication_id: resp.id,
+                                user_card_token: isTemp
+                                    ? card.card_token
+                                    : undefined
+                            }).unwrap();
+
+                            if (isTemp) {
+                                setTempCard(undefined);
+                            }
+                        } catch (e: any) {
+                            setSuccess(undefined);
+                            setError(
+                                'Verifikasi berhasil, tetapi penyelesaian transaksi gagal. Silakan coba lagi.'
+                            );
+                        }
+                    })();
                 } else {
                     setError(
                         `Authentication returned unexpected status ${resp.status}`

@@ -7,12 +7,14 @@ const PromoCodeInput = ({
     placeholder,
     className,
     applyAfterValid = false,
-    onApply
+    onApply,
+    bgTransparent = true
 }: {
     placeholder: string;
     className?: string;
     applyAfterValid?: boolean;
     onApply?: () => void;
+    bgTransparent?: boolean;
 }): JSX.Element => {
     const {
         packet,
@@ -142,7 +144,11 @@ const PromoCodeInput = ({
             case 'loading':
             case 'idle':
             default:
-                return 'bg-transparent border-[#666666]';
+                if (bgTransparent) {
+                    return 'bg-transparent border-[#666666]';
+                } else {
+                    return 'bg-[#222222] border-transparent';
+                }
         }
     };
 

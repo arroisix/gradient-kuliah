@@ -71,6 +71,6 @@ export const NAME_PAYMENT: PAYMENT_DICT = {
     INDOMARET: 'Indomaret',
     MANUAL: 'Manual',
     OTHER: undefined,
-    VOUCHER: 'Redeem Voucher',
+    VOUCHER: 'Redeem Kartu Voucher',
     FREE: 'Gratis!'
 };

@@ -15,11 +15,15 @@ import { CDN_URL } from 'commons/constants';
 import { useDebouncedCallback } from 'use-debounce';
 import {
     useAddUserCardMutation,
+    useGetTempCardIdMutation,
     useLazyCheckUserCardNameAvailabilityQuery
 } from 'payment/redux/api/transactionApi';
 import { FaCheckCircle, FaSpinner, FaTimesCircle } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import moment from 'moment';
+import { isAlphaNumeric } from 'commons/utils';
+import { useSelector } from 'react-redux';
+import { getCurrentUser } from 'authentication/redux/selectors/userSelector';
 
 const MAX_NAME_LENGTH = 20;
 
@@ -29,11 +33,48 @@ declare global {
     }
 }
 
+function sanitizeRedirectUrl(url?: string): string {
+    if (!url) return '/profil/kartu-kredit';
+
+    try {
+        const parsed = new URL(url, window.location.origin);
+        if (parsed.pathname === '/pembayaran') {
+            return parsed.pathname + parsed.search; // keep query params
+        }
+    } catch {}
+    return '/profil/kartu-kredit';
+}
+
+function toCardNameParts(fullName: string): { first: string; last: string } {
+    const norm = (s: string): string => (s || '').trim().replace(/\s+/g, ' ');
+    const keepAlnumSpace = (s: string): string =>
+        s.replace(/[^A-Za-z0-9 ]/g, '');
+    const cap = (s: string): string => s.slice(0, 50);
+
+    const name = norm(fullName);
+    if (!name) return { first: 'NA', last: 'NA' };
+
+    const parts = name.split(' ').filter(Boolean);
+    if (parts.length === 1) {
+        const mono = cap(keepAlnumSpace(parts[0]));
+        return { first: mono || 'NA', last: mono || 'NA' };
+    }
+
+    const lastRaw = parts.pop(); // last word as surname
+    let first = cap(keepAlnumSpace(parts.join(' '))); // preserve spaces in given names
+    let last = cap(keepAlnumSpace(lastRaw!)); // last word, no spaces to preserve
+
+    if (!first) first = 'NA';
+    if (!last) last = 'NA';
+
+    return { first, last };
+}
+
 const AddCardForm = (): JSX.Element => {
+    const user = useSelector(getCurrentUser);
     const router = useRouter();
-    const redirectUrl =
-        (router.query.redirect as string) || '/profil/kartu-kredit';
-    const fromCheckout = Boolean(router.query.redirect);
+    const redirectUrl = sanitizeRedirectUrl(router.query.redirect as string);
+    const fromCheckout = redirectUrl.startsWith('/pembayaran');
     const [showProtectionModal, setShowProtectionModal] = useState(false);
     const [showCVVModal, setShowCVVModal] = useState(false);
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -47,6 +88,8 @@ const AddCardForm = (): JSX.Element => {
 
     const [triggerCheckName, { isFetching: isCheckingName }] =
         useLazyCheckUserCardNameAvailabilityQuery();
+
+    const [getTempCardId] = useGetTempCardIdMutation();
 
     useEffect(() => {
         const success = async (): Promise<void> => {
@@ -83,15 +126,32 @@ const AddCardForm = (): JSX.Element => {
             setFieldError: (f: string, msg?: string) => void
         ) => {
             if (!value.trim()) return;
-            const available = await triggerCheckName({
+            const { status, isAvailable } = await triggerCheckName({
                 card_name: value
             }).unwrap();
-            setIsNameAvailable(available);
+            setIsNameAvailable(isAvailable);
             setIsTyping(false);
-            if (available) {
+            if (isAvailable) {
                 setFieldError('cardName', undefined);
             } else {
-                setFieldError('cardName', 'Label kartu sudah pernah digunakan');
+                if (status === 409) {
+                    setFieldError(
+                        'cardName',
+                        'Label kartu sudah pernah digunakan'
+                    );
+                } else if (status === 406) {
+                    if (value.length > MAX_NAME_LENGTH) {
+                        setFieldError(
+                            'cardName',
+                            `Maksimal ${MAX_NAME_LENGTH} karakter`
+                        );
+                    } else {
+                        setFieldError(
+                            'cardName',
+                            'Label kartu hanya boleh mengandung huruf dan angka'
+                        );
+                    }
+                }
             }
         },
         1000
@@ -178,26 +238,30 @@ const AddCardForm = (): JSX.Element => {
                             cardNumber: '',
                             cardExp: '',
                             cardCVV: '',
-                            cardHolderFirstName: '',
-                            cardHolderLastName: '',
-                            cardHolderEmail: '',
-                            cardHolderPhoneNumber: '',
                             saveCard: false
                         }}
                         validate={(values) => {
                             const errors: Record<string, string> = {};
 
                             // card name
-                            console.log({ isNameAvailable });
                             if (!values.cardName.trim()) {
                                 errors.cardName = 'Label kartu wajib diisi';
                             } else if (
                                 values.cardName.length > MAX_NAME_LENGTH
                             ) {
                                 errors.cardName = `Maksimal ${MAX_NAME_LENGTH} karakter`;
-                            } else if (!isTyping && !isNameAvailable) {
-                                errors.cardName =
-                                    'Label kartu sudah pernah digunakan';
+                            } else if (
+                                !isTyping &&
+                                !isCheckingName &&
+                                !isNameAvailable
+                            ) {
+                                if (!isAlphaNumeric(values.cardName, true)) {
+                                    errors.cardName =
+                                        'Label kartu hanya boleh mengandung huruf dan angka';
+                                } else {
+                                    errors.cardName =
+                                        'Label kartu sudah pernah digunakan';
+                                }
                             }
 
                             // card num
@@ -237,18 +301,6 @@ const AddCardForm = (): JSX.Element => {
                             )
                                 errors.cardCVV = 'CVV tidak valid';
 
-                            if (!values.cardHolderPhoneNumber) {
-                                errors.cardHolderPhoneNumber =
-                                    'Nomor handphone tidak boleh kosong';
-                            } else if (
-                                !values.cardHolderPhoneNumber.match(
-                                    /^\d{1,14}$/
-                                )
-                            ) {
-                                errors.cardHolderPhoneNumber =
-                                    'Masukkan nomor handphone yang valid';
-                            }
-
                             return errors;
                         }}
                         validateOnChange
@@ -265,23 +317,43 @@ const AddCardForm = (): JSX.Element => {
                                     /\s+/g,
                                     ''
                                 );
+
+                                const names = toCardNameParts(user.full_name);
+
+                                const payload = {
+                                    card_number: rawNumber,
+                                    card_exp_month: mm,
+                                    card_exp_year: year,
+                                    card_cvn: values.cardCVV,
+                                    card_holder_email: user.email,
+                                    card_holder_first_name:
+                                        names.first.toUpperCase(),
+                                    card_holder_last_name:
+                                        names.last.toUpperCase(),
+                                    card_holder_phone_number: user.phone_number,
+                                    is_multiple_use: true
+                                };
+
+                                if (fromCheckout && !values.saveCard) {
+                                    try {
+                                        const res =
+                                            await getTempCardId().unwrap();
+                                        (payload as any).external_id = res.id;
+                                    } catch (e) {
+                                        toast.error(
+                                            'Gagal mendapatkan ID sementara. Coba lagi.',
+                                            {
+                                                position: 'top-center',
+                                                theme: 'colored'
+                                            }
+                                        );
+                                        return;
+                                    }
+                                }
                                 const token: any = await new Promise(
                                     (res, rej) =>
                                         window.Xendit.card.createToken(
-                                            {
-                                                card_number: rawNumber,
-                                                card_exp_month: mm,
-                                                card_exp_year: year,
-                                                card_cvn: values.cardCVV,
-                                                card_holder_first_name:
-                                                    values.cardHolderFirstName,
-                                                card_holder_last_name:
-                                                    values.cardHolderLastName,
-                                                card_holder_email:
-                                                    values.cardHolderEmail,
-                                                card_holder_phone_number: `+62${values.cardHolderPhoneNumber}`,
-                                                is_multiple_use: true
-                                            },
+                                            payload,
                                             (err: any, r: any) =>
                                                 err ? rej(err) : res(r)
                                         )
@@ -477,81 +549,6 @@ const AddCardForm = (): JSX.Element => {
                                         />
                                     </div>
                                 </div>
-
-                                <div className="flex flex-col space-y-4">
-                                    <h2 className="font-bold text-md">
-                                        Identitas Pemilik Kartu
-                                    </h2>
-                                    <div className="flex space-x-4">
-                                        <Input
-                                            type="text"
-                                            label="Nama Depan"
-                                            name="cardHolderFirstName"
-                                            placeholder="Nama Depan"
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            value={values.cardHolderFirstName}
-                                            error={
-                                                touched.cardHolderFirstName &&
-                                                errors.cardHolderFirstName
-                                                    ? errors.cardHolderFirstName
-                                                    : undefined
-                                            }
-                                        />
-
-                                        <Input
-                                            type="text"
-                                            label="Nama Belakang"
-                                            name="cardHolderLastName"
-                                            placeholder="Nama Belakang"
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            value={values.cardHolderLastName}
-                                            error={
-                                                touched.cardHolderLastName &&
-                                                errors.cardHolderLastName
-                                                    ? errors.cardHolderLastName
-                                                    : undefined
-                                            }
-                                        />
-                                    </div>
-
-                                    <Input
-                                        type="email"
-                                        label="Email"
-                                        name="cardHolderEmail"
-                                        placeholder="Email"
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        value={values.cardHolderEmail}
-                                        error={
-                                            touched.cardHolderEmail &&
-                                            errors.cardHolderEmail
-                                                ? errors.cardHolderEmail
-                                                : undefined
-                                        }
-                                    />
-
-                                    <Input
-                                        type="tel"
-                                        label="Nomor Handphone"
-                                        placeholder="8211234567"
-                                        name="cardHolderPhoneNumber"
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        startAddorment={
-                                            <span className="text-neutral-400">
-                                                +62
-                                            </span>
-                                        }
-                                        error={
-                                            touched.cardHolderPhoneNumber &&
-                                            errors.cardHolderPhoneNumber
-                                                ? errors.cardHolderPhoneNumber
-                                                : undefined
-                                        }
-                                    />
-                                </div>
                                 {fromCheckout && (
                                     <div className="flex items-center space-x-2">
                                         <Field
@@ -586,7 +583,10 @@ const AddCardForm = (): JSX.Element => {
                                     variant="primary"
                                     className="w-full"
                                     disabled={
-                                        isValidating || !isValid || isSubmitting
+                                        isValidating ||
+                                        !isValid ||
+                                        isSubmitting ||
+                                        isCheckingName
                                     }>
                                     {isSubmitting || isSaving
                                         ? 'Menyimpan...'
