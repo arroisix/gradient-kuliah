@@ -1,5 +1,5 @@
 import { H } from '@highlight-run/next/client';
-import { useGetProfileQuery } from 'authentication/redux/api/authApi';
+import { useGetProfileQuery, useLogoutMutation } from 'authentication/redux/api/authApi';
 import {
     getCurrentUser,
     getIsAuthenticated,
@@ -39,6 +39,30 @@ export function AuthProvider({
     );
     const user = useSelector(getCurrentUser);
     const router = useRouter();
+    const [logoutMutation] = useLogoutMutation();
+
+    const logout = async () => {
+        try {
+            await logoutMutation().unwrap();
+        } catch (error) {
+            console.error('Logout API call failed:', error);
+        } finally {
+            localStorage.clear();
+            if (router.pathname !== '/masuk') {
+                router.push('/masuk');
+            }
+        }
+    };
+
+    useEffect(() => {
+        const oldToken = localStorage.getItem('token');
+        const hasRefreshToken = localStorage.getItem('refresh_token');
+        
+        if (oldToken && !hasRefreshToken) {
+            logout();
+        }
+    }, [router]);
+
 
     useEffect(() => {
         if (

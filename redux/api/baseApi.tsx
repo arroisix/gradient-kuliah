@@ -22,6 +22,77 @@ async function getBrowserFingerPrint() {
     return visitorId;
 }
 
+const baseQuery = fetchBaseQuery({
+    baseUrl: config.API_BASE_URL,
+    prepareHeaders: async (headers, { getState, endpoint }) => {
+        const token = (getState() as RootState).authentication.user.token;
+        const rawToken =
+            typeof window !== 'undefined'
+                ? window.localStorage.getItem('token')
+                : null;
+
+        if (token || rawToken) {
+            headers.set('Authorization', `Token ${token ?? rawToken}`);
+        }
+
+        if (
+            endpoint === 'login' ||
+            endpoint === 'register' ||
+            endpoint === 'socialLogin'
+        ) {
+            const did = await getBrowserFingerPrint();
+            headers.set('did', did);
+        }
+        return headers;
+    }
+});
+
+const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
+    let result = await baseQuery(args, api, extraOptions);
+
+    if (result.error?.status === 401) {
+        const refreshToken = localStorage.getItem('refresh_token');
+        
+        if (refreshToken) {
+            try {
+                const refreshResult = await fetch(`${config.API_BASE_URL}identities/refresh-token/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'did': await getBrowserFingerPrint()
+                    },
+                    body: JSON.stringify({ refresh_token: refreshToken })
+                });
+
+                if (refreshResult.ok) {
+                    const refreshData = await refreshResult.json();
+                    
+                    localStorage.setItem('token', refreshData.access_token);
+                    
+                    result = await baseQuery(args, api, extraOptions);
+                } else {
+                    localStorage.clear();
+                    if (typeof window !== 'undefined') {
+                        window.location.href = '/masuk?reason=session_expired';
+                    }
+                }
+            } catch (error) {
+                localStorage.clear();
+                if (typeof window !== 'undefined') {
+                    window.location.href = '/masuk?reason=session_expired';
+                }
+            }
+        } else {
+            localStorage.clear();
+            if (typeof window !== 'undefined') {
+                window.location.href = '/masuk?reason=session_expired';
+            }
+        }
+    }
+
+    return result;
+};
+
 export const baseApi = createApi({
     tagTypes: [
         'QNA_QUESTION',
@@ -56,30 +127,7 @@ export const baseApi = createApi({
         'CONTENT_SEARCH',
         'USER_CARDS'
     ],
-    baseQuery: fetchBaseQuery({
-        baseUrl: config.API_BASE_URL,
-        prepareHeaders: async (headers, { getState, endpoint }) => {
-            const token = (getState() as RootState).authentication.user.token;
-            const rawToken =
-                typeof window !== 'undefined'
-                    ? window.localStorage.getItem('token')
-                    : null;
-
-            if (token || rawToken) {
-                headers.set('Authorization', `Token ${token ?? rawToken}`);
-            }
-
-            if (
-                endpoint === 'login' ||
-                endpoint === 'register' ||
-                endpoint === 'socialLogin'
-            ) {
-                const did = await getBrowserFingerPrint();
-                headers.set('did', did);
-            }
-            return headers;
-        }
-    }),
+    baseQuery: baseQueryWithReauth,
     extractRehydrationInfo(action, { reducerPath }) {
         if (action.type === HYDRATE) {
             return action.payload[reducerPath];
