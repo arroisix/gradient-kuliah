@@ -111,12 +111,12 @@ const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
     );
 
     return (
-        <div className="px-4 md:px-6 lg:px-8 mt-6">
+        <>
             {!isInitialEksplorLoading && eksplorData?.data?.length === 0 && (
                 <EmptyCourse />
             )}
             {/* Kelas Terbaru section - header differs when authenticated */}
-            <div className="mb-6">
+            <div className="mt-6">
                 {!search && (
                     <CarouselSection
                         title={
@@ -151,7 +151,7 @@ const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
 
             {/* For authenticated users show Pilihan untuk Mahasiswa {major} */}
             {!search && isAuthenticated && (
-                <div className="mt-8">
+                <div className="mt-4">
                     <Header title={`Pilihan untuk Mahasiswa ${major}`} />
                     <CourseList
                         courses={pilihanData}
@@ -197,7 +197,7 @@ const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
 
                 <div ref={eksplor.anchor} />
             </div>
-        </div>
+        </>
     );
 };
 
