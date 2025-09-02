@@ -187,7 +187,12 @@ const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
 
                 {/* Show loader under already rendered items while fetching more */}
                 {isMoreEksplorLoading && (
-                    <Skeleton repeat={6} className="w-full h-56 !mb-0" />
+                    <div
+                        className={cn(
+                            'grid grid-cols-1 gap-4 pt-3 pb-8 sm:grid-cols-2 xl:grid-cols-3 xl:gap-6'
+                        )}>
+                        <Skeleton repeat={6} className="w-full h-56 !mb-0" />
+                    </div>
                 )}
 
                 <div ref={eksplor.anchor} />
