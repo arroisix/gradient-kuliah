@@ -25,6 +25,8 @@ import ForYouSections from 'courses/components/ForYouSections';
 //     { value: 'lexicography', label: 'A -> Z' }
 // ];
 
+const isCourseListRevamp = true;
+
 const ClassContainer = ({
     courses
 }: {
@@ -56,7 +58,7 @@ const ClassContainer = ({
             <div className="relative grid w-full grid-cols-1 mx-auto xl:max-w-screen-2xl">
                 <DownloadBanner />
 
-                {isAuthenticated && courseProgresses && (
+                {!isCourseListRevamp && isAuthenticated && courseProgresses && (
                     <CourseProgress courseProgresses={courseProgresses} />
                 )}
                 <h1 className="text-xl font-bold md:text-2xl">
