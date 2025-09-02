@@ -71,7 +71,7 @@ const CourseDescription = ({
 
         compute();
 
-        // ResizeObserver for dynamic recalculation
+        // ResizeObserver -> dynamic recalculation
         const ro =
             typeof ResizeObserver !== 'undefined'
                 ? new ResizeObserver(() => compute())
