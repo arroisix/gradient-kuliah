@@ -26,5 +26,6 @@ export const privateCourseV2Api = baseApi.injectEndpoints({
 
 export const {
     useGetPrivateListCoursesV2Query,
+    useLazyGetPrivateListCoursesV2Query,
     useGetSubchapterDetailV2Query
 } = privateCourseV2Api;

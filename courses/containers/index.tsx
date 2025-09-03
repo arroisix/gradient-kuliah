@@ -3,7 +3,7 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import 'react-tabs/style/react-tabs.css';
 import RenewSubscriptionBanner from 'courses/components/RenewSubscriptionBanner';
 import { useGetActiveSubscriptionQuery } from 'payment/redux/api/subscriptionApi';
-import Sort from 'commons/components/elements/Sort';
+// import Sort from 'commons/components/elements/Sort';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import CourseProgress from './courseProgress';
 import { useGetCourseProgressV2Query } from 'courses/redux/api/courseV2Api';
@@ -16,12 +16,16 @@ import React, { useState } from 'react';
 import { IoIosSearch } from 'react-icons/io';
 import { useDebounce } from 'use-debounce';
 import DownloadBanner from 'courses/components/Downloads/DownloadBanner';
+import { useRouter } from 'next/router';
+import ForYouSections from 'courses/components/ForYouSections';
 
-const SORT_OPTIONS = [
-    { value: 'latest', label: 'Terakhir Rilis' },
-    { value: 'popularity', label: 'Terpopuler' },
-    { value: 'lexicography', label: 'A -> Z' }
-];
+// const SORT_OPTIONS = [
+//     { value: 'latest', label: 'Terakhir Rilis' },
+//     { value: 'popularity', label: 'Terpopuler' },
+//     { value: 'lexicography', label: 'A -> Z' }
+// ];
+
+const isCourseListRevamp = true;
 
 const ClassContainer = ({
     courses
@@ -33,6 +37,13 @@ const ClassContainer = ({
     const [debouncedSearchTerm] = useDebounce(searchTerm, 500, {
         maxWait: 1000
     });
+
+    const router = useRouter();
+    const { tab: currentTab } = router.query as { tab?: string };
+
+    const isForYouView =
+        (isAuthenticated && currentTab === 'for-you') ||
+        (!isAuthenticated && (!currentTab || currentTab === 'all'));
 
     const { data: courseProgresses } = useGetCourseProgressV2Query(undefined, {
         skip: !isAuthenticated
@@ -47,7 +58,7 @@ const ClassContainer = ({
             <div className="relative grid w-full grid-cols-1 mx-auto xl:max-w-screen-2xl">
                 <DownloadBanner />
 
-                {isAuthenticated && courseProgresses && (
+                {!isCourseListRevamp && isAuthenticated && courseProgresses && (
                     <CourseProgress courseProgresses={courseProgresses} />
                 )}
                 <h1 className="text-xl font-bold md:text-2xl">
@@ -68,15 +79,18 @@ const ClassContainer = ({
                             className="absolute right-4 top-1/2 transform -translate-y-1/2 text-[#DADADA] cursor-pointer"
                         />
                     </div>
-                    {isAuthenticated && (
+                    {/* {isAuthenticated && (
                         <Sort
                             options={SORT_OPTIONS}
                             defaultSelected="latest"
-                            className="sticky z-10 py-2 top-28"
+                            className="sticky z-30 py-2 top-28"
                         />
-                    )}
+                    )} */}
                 </div>
-                {isAuthenticated ? (
+
+                {isForYouView ? (
+                    <ForYouSections search={debouncedSearchTerm} />
+                ) : isAuthenticated ? (
                     <PrivateCourseList search={debouncedSearchTerm} />
                 ) : (
                     <PublicCourseList
