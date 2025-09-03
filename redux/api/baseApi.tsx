@@ -14,6 +14,7 @@ global.AbortController = AbortController;
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import config from './config';
 import { HYDRATE } from 'next-redux-wrapper';
+import { updateToken } from 'authentication/redux/slices/userSlice';
 import FingerPrintJS from '@fingerprintjs/fingerprintjs';
 
 async function getBrowserFingerPrint() {
@@ -86,6 +87,7 @@ const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
                     const refreshData = await refreshResult.json();
                     
                     localStorage.setItem('token', refreshData.access_token);
+                    api.dispatch(updateToken(refreshData.access_token));
                     
                     result = await baseQuery(args, api, extraOptions);
                 } else {

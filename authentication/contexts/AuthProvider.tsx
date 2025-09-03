@@ -55,11 +55,22 @@ export function AuthProvider({
     };
 
     useEffect(() => {
-        const oldToken = localStorage.getItem('token');
-        const hasRefreshToken = localStorage.getItem('refresh_token');
-        
-        if (oldToken && !hasRefreshToken) {
-            logout();
+        const persistData = localStorage.getItem('persist:user');
+        if (persistData) {
+            try {
+                const parsed = JSON.parse(persistData);
+                const hasRefreshToken = parsed.refresh_token && parsed.refresh_token !== '"null"';
+                
+                if (!hasRefreshToken) {
+                    logout();
+                    localStorage.removeItem('persist:user');
+                    localStorage.clear();
+                }
+            } catch (error) {
+                logout();
+                localStorage.removeItem('persist:user');
+                localStorage.clear();
+            }
         }
     }, [router]);
 

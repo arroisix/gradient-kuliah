@@ -31,6 +31,10 @@ const userSlice = createSlice({
                 photo_profile: null
             };
         },
+        updateToken: (state: UserSliceState, { payload }: PayloadAction<string>) => {
+            state.token = payload;
+            window.localStorage.setItem('token', payload);
+        },
         setNewUserFlag: (
             state: UserSliceState,
             { payload }: PayloadAction<boolean>
@@ -134,6 +138,6 @@ const userSlice = createSlice({
     }
 });
 
-export const { removeUser, clearCache } = userSlice.actions;
+export const { removeUser, clearCache, updateToken } = userSlice.actions;
 
 export default userSlice.reducer;
