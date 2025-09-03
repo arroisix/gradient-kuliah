@@ -78,6 +78,19 @@ const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
         limit: PAGE_SIZE,
         search
     });
+
+    const kelasTerbaruItems =
+        (isAuthenticated
+            ? kelasTerbaruPrivateData?.data
+            : kelasTerbaruPublicData?.data) ?? [];
+
+    const kelasTerbaruLoading = isAuthenticated
+        ? kelasTerbaruPrivateLoading
+        : kelasTerbaruPublicLoading;
+
+    const showKelasTerbaru =
+        !search && (kelasTerbaruLoading || kelasTerbaruItems.length > 0);
+
     const eksplorData = eksplor.allData;
     const isInitialEksplorLoading = eksplor.isAllLoading;
     const isMoreEksplorLoading = eksplor.isLoading && !eksplor.isAllLoading;
@@ -116,38 +129,30 @@ const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
                 <EmptyCourse />
             )}
             {/* Kelas Terbaru section - header differs when authenticated */}
-            <div className="mt-6">
-                {!search && (
+            {showKelasTerbaru && (
+                <div className="mt-6">
                     <CarouselSection
                         title={
                             isAuthenticated
                                 ? 'Kelas Terbaru yang Cocok Untukmu'
                                 : 'Kelas Terbaru'
                         }
-                        items={
-                            isAuthenticated
-                                ? kelasTerbaruPrivateData?.data ?? []
-                                : kelasTerbaruPublicData?.data ?? []
-                        }
-                        isLoading={
-                            isAuthenticated
-                                ? kelasTerbaruPrivateLoading
-                                : kelasTerbaruPublicLoading
-                        }
+                        items={kelasTerbaruItems}
+                        isLoading={kelasTerbaruLoading}
                         itemsPerPage={3}
                         renderItem={(item) =>
                             renderKelasTerbaruItem(item as Course)
                         }
                         eventCategory="KelasTerbaru"
                         itemWrapperClassName="
-                            w-full
+                            w-[calc(100%-2rem)]
                             sm:w-[calc((100%-1rem)/2)]     /* gap-4 => 1rem, 2-up */
                             lg:w-[calc((100%-2rem)/3)]     /* gap-4 => 1rem, 3-up */
                             xl:w-[calc((100%-3rem)/3)]     /* gap-6 => 1.5rem, 3-up */
                         "
                     />
-                )}
-            </div>
+                </div>
+            )}
 
             {/* For authenticated users show Pilihan untuk Mahasiswa {major} */}
             {!search && isAuthenticated && (
