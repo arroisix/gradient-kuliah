@@ -8,6 +8,7 @@ import { IoTime } from 'react-icons/io5';
 import { TbCircleCheckFilled } from 'react-icons/tb';
 import { useTracker } from 'tracker/tracker';
 import FreeBadge from '../FreeBadge';
+import Fire from 'dashboard/assets/Fire';
 
 const VerticalProductCard = ({
     href,
@@ -18,9 +19,11 @@ const VerticalProductCard = ({
     eventPayload,
     className,
     imageClassname,
-    isReference = false
+    isReference = false,
+    isTrending = false
 }: Omit<ProductCardProps, 'orientation'> & {
     isReference?: boolean;
+    isTrending?: boolean;
 }): JSX.Element => {
     const tracker = useTracker();
     const isVideo = category.toLowerCase() == 'video';
@@ -44,6 +47,17 @@ const VerticalProductCard = ({
                     !(isVideo || isCourse) && 'py-2'
                 )}>
                 <div className="absolute z-10 flex items-center gap-2 top-4 left-4">
+                    {isTrending && !isReference && (
+                        <div
+                            className="text-white text-xs font-bold py-1 px-3 rounded-full flex items-center gap-1"
+                            style={{
+                                background:
+                                    'linear-gradient(90deg, #36236A 0%, #6C5096 65%, #494BA0 90%)'
+                            }}>
+                            <Fire />
+                            Trending
+                        </div>
+                    )}
                     {product.isComingSoon && !isReference && (
                         <div
                             className={cn(
@@ -52,12 +66,17 @@ const VerticalProductCard = ({
                             Segera Hadir
                         </div>
                     )}
-                    {!product.isComingSoon && product.isNew && !isReference && (
-                        <div className="bg-[#E9202A] badge text-white border-[#E9202A] font-bold border-none px-3">
-                            Baru
-                        </div>
+                    {!product.isComingSoon &&
+                        product.isNew &&
+                        !isReference &&
+                        !isTrending && (
+                            <div className="bg-[#E9202A] badge text-white border-[#E9202A] font-bold border-none px-3">
+                                Baru
+                            </div>
+                        )}
+                    {product.isFree && !isReference && !isTrending && (
+                        <FreeBadge />
                     )}
-                    {product.isFree && !isReference && <FreeBadge />}
                 </div>
                 <div
                     className={cn(
