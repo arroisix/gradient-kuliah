@@ -24,59 +24,76 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
     eventCategory,
     itemWrapperClassName
 }) => {
-    const [currentPage, setCurrentPage] = useState(0);
-    const [totalPages, setTotalPages] = useState(0);
     const tracker = useTracker();
     const carouselRef = useRef<HTMLDivElement>(null);
 
+    const [canScrollLeft, setCanScrollLeft] = useState(false);
+    const [canScrollRight, setCanScrollRight] = useState(false);
+
+    const updateScrollButtons = useCallback(() => {
+        const el = carouselRef.current;
+        if (!el) return;
+        setCanScrollLeft(el.scrollLeft > 0);
+        setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 1);
+    }, []);
+
     useEffect(() => {
-        if (items?.length > 0) {
-            setTotalPages(Math.ceil(items.length / itemsPerPage));
-        }
-    }, [items, itemsPerPage]);
+        updateScrollButtons();
+        const el = carouselRef.current;
+        if (!el) return;
 
-    const navigateToPage = useCallback(
-        (page: number) => {
-            if (page >= 0 && page < totalPages) {
-                setCurrentPage(page);
+        const onScroll = (): void => {
+            // use rAF for smoother updates
+            requestAnimationFrame(updateScrollButtons);
+        };
+        el.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', updateScrollButtons);
 
-                tracker?.genericTrack(`Navigate ${eventCategory} Carousel`, {
-                    action: page > currentPage ? 'next' : 'previous',
-                    title,
-                    page
-                });
-            }
-        },
-        [totalPages, currentPage, tracker, eventCategory, title]
-    );
+        // update after render to account for dynamic widths
+        requestAnimationFrame(updateScrollButtons);
 
-    const nextPage = useCallback(() => {
-        if (currentPage < totalPages - 1) {
-            navigateToPage(currentPage + 1);
-        }
-    }, [currentPage, navigateToPage, totalPages]);
+        return () => {
+            el.removeEventListener('scroll', onScroll);
+            window.removeEventListener('resize', updateScrollButtons);
+        };
+    }, [items, updateScrollButtons]);
 
-    const prevPage = useCallback(() => {
-        if (currentPage > 0) {
-            navigateToPage(currentPage - 1);
-        }
-    }, [currentPage, navigateToPage]);
+    // Determine one-card scroll distance (card width + gap)
+    const getAdvance = useCallback(() => {
+        const el = carouselRef.current;
+        if (!el) return 0;
+        const first = el.firstElementChild as HTMLElement | null;
+        if (!first) return el.clientWidth * 0.9;
+        const firstWidth = first.getBoundingClientRect().width;
+        const styles = getComputedStyle(el);
+        const gap =
+            parseFloat((styles as any).columnGap || styles.gap || '0') || 0;
+        return Math.max(1, Math.round(firstWidth + gap));
+    }, []);
 
-    const getItemsForDisplay = useCallback(() => {
-        const result = [];
-        const totalItems = items.length;
+    const next = useCallback(() => {
+        const el = carouselRef.current;
+        if (!el) return;
+        const dx = getAdvance();
+        el.scrollBy({ left: dx, behavior: 'smooth' });
+        tracker?.genericTrack(`Navigate ${eventCategory} Carousel`, {
+            action: 'next',
+            title
+        });
+    }, [getAdvance, tracker, eventCategory, title]);
 
-        for (let i = 0; i < totalItems; i += itemsPerPage) {
-            result.push(items.slice(i, i + itemsPerPage));
-        }
+    const prev = useCallback(() => {
+        const el = carouselRef.current;
+        if (!el) return;
+        const dx = getAdvance();
+        el.scrollBy({ left: -dx, behavior: 'smooth' });
+        tracker?.genericTrack(`Navigate ${eventCategory} Carousel`, {
+            action: 'previous',
+            title
+        });
+    }, [getAdvance, tracker, eventCategory, title]);
 
-        return result;
-    }, [items, itemsPerPage]);
-
-    const paginatedItems = getItemsForDisplay();
-    const displayItems = isLoading
-        ? Array(itemsPerPage).fill(null)
-        : paginatedItems[currentPage] || [];
+    const displayItems = isLoading ? Array(itemsPerPage).fill(null) : items;
 
     if (!isLoading && (!items || items.length === 0)) {
         return null;
@@ -87,36 +104,31 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
             <div className="flex items-center justify-between mb-4">
                 <Header title={title} />
                 <div className="flex items-center gap-2">
-                    {totalPages > 1 && (
-                        <div className="flex gap-2">
-                            <button
-                                onClick={prevPage}
-                                disabled={currentPage === 0}
-                                className="p-2 rounded-full bg-neutral-800 hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed"
-                                aria-label="Previous page">
-                                <FiChevronLeft size={20} />
-                            </button>
-                            <button
-                                onClick={nextPage}
-                                disabled={currentPage === totalPages - 1}
-                                className="p-2 rounded-full bg-neutral-800 hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed"
-                                aria-label="Next page">
-                                <FiChevronRight size={20} />
-                            </button>
-                        </div>
-                    )}
+                    <div className="flex gap-2">
+                        <button
+                            onClick={prev}
+                            disabled={!canScrollLeft}
+                            className="p-2 rounded-full bg-neutral-800 hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed"
+                            aria-label="Scroll left">
+                            <FiChevronLeft size={20} />
+                        </button>
+                        <button
+                            onClick={next}
+                            disabled={!canScrollRight}
+                            className="p-2 rounded-full bg-neutral-800 hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed"
+                            aria-label="Scroll right">
+                            <FiChevronRight size={20} />
+                        </button>
+                    </div>
                 </div>
             </div>
 
             <div
                 ref={carouselRef}
                 className="flex overflow-x-auto gap-4 xl:gap-6 pr-4 pb-4 hide-scrollbar snap-x snap-mandatory">
-                {/*                                  ^ add pr-4 so last card has breathing room */}
                 {displayItems.map((item, index) => (
                     <div
-                        key={`${slugify(title)}-${
-                            currentPage * itemsPerPage + index
-                        }`}
+                        key={`${slugify(title)}-${index}`}
                         className={cn(
                             'shrink-0 min-w-0 snap-start',
                             itemWrapperClassName
@@ -124,7 +136,7 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
                         {isLoading ? (
                             <Skeleton className="w-full h-56 rounded-lg" />
                         ) : (
-                            renderItem(item, currentPage * itemsPerPage + index)
+                            renderItem(item, index)
                         )}
                     </div>
                 ))}
