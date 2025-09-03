@@ -110,7 +110,8 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
 
             <div
                 ref={carouselRef}
-                className="flex overflow-x-auto gap-4 xl:gap-6 pb-4 hide-scrollbar snap-x snap-mandatory">
+                className="flex overflow-x-auto gap-4 xl:gap-6 pr-4 pb-4 hide-scrollbar snap-x snap-mandatory">
+                {/*                                  ^ add pr-4 so last card has breathing room */}
                 {displayItems.map((item, index) => (
                     <div
                         key={`${slugify(title)}-${

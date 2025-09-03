@@ -140,7 +140,7 @@ const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
                         }
                         eventCategory="KelasTerbaru"
                         itemWrapperClassName="
-                            w-full
+                            w-[calc(100%-2rem)]
                             sm:w-[calc((100%-1rem)/2)]     /* gap-4 => 1rem, 2-up */
                             lg:w-[calc((100%-2rem)/3)]     /* gap-4 => 1rem, 3-up */
                             xl:w-[calc((100%-3rem)/3)]     /* gap-6 => 1.5rem, 3-up */
