@@ -23,7 +23,8 @@ interface SocialAuthInputData {
 
 interface LoginResponseData {
     user: User;
-    token: string;
+    access_token: string;
+    refresh_token: string;
     is_profile_complete: boolean;
     is_new_user?: boolean;
 }
