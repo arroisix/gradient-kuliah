@@ -62,11 +62,11 @@ export const transactionApi = baseApi.injectEndpoints({
             query: (params) => ({
                 url: `${TRANSACTION_BASE_URL}user-cards/availability/`,
                 method: 'HEAD',
-                validateStatus: (response) =>
+                validateStatus: (response: Response) =>
                     response.status === 204 ||
                     response.status === 409 ||
                     response.status === 406,
-                responseHandler: (response) => Promise.resolve(response.status),
+                responseHandler: (response: Response) => Promise.resolve(response.status),
                 params
             }),
             transformResponse: (status: number) => {
