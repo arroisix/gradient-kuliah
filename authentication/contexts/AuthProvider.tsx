@@ -39,6 +39,7 @@ export function AuthProvider({
     );
     const user = useSelector(getCurrentUser);
     const router = useRouter();
+    // Note: Uncomment this only if you use /login-v2 endpoint on login api
     // const [logoutMutation] = useLogoutMutation();
 
     // const logout = async () => {
