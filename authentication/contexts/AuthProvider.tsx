@@ -1,5 +1,5 @@
 import { H } from '@highlight-run/next/client';
-import { useGetProfileQuery, useLogoutMutation } from 'authentication/redux/api/authApi';
+import { useGetProfileQuery } from 'authentication/redux/api/authApi';
 import {
     getCurrentUser,
     getIsAuthenticated,
