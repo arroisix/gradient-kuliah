@@ -39,40 +39,40 @@ export function AuthProvider({
     );
     const user = useSelector(getCurrentUser);
     const router = useRouter();
-    const [logoutMutation] = useLogoutMutation();
+    // const [logoutMutation] = useLogoutMutation();
 
-    const logout = async () => {
-        try {
-            await logoutMutation().unwrap();
-        } catch (error) {
-            console.error('Logout API call failed:', error);
-        } finally {
-            localStorage.clear();
-            if (router.pathname !== '/masuk') {
-                router.push('/masuk');
-            }
-        }
-    };
+    // const logout = async () => {
+    //     try {
+    //         await logoutMutation().unwrap();
+    //     } catch (error) {
+    //         console.error('Logout API call failed:', error);
+    //     } finally {
+    //         localStorage.clear();
+    //         if (router.pathname !== '/masuk') {
+    //             router.push('/masuk');
+    //         }
+    //     }
+    // };
 
-    useEffect(() => {
-        const persistData = localStorage.getItem('persist:user');
-        if (persistData) {
-            try {
-                const parsed = JSON.parse(persistData);
-                const hasRefreshToken = parsed.refresh_token && parsed.refresh_token !== '"null"';
+    // useEffect(() => {
+    //     const persistData = localStorage.getItem('persist:user');
+    //     if (persistData) {
+    //         try {
+    //             const parsed = JSON.parse(persistData);
+    //             const hasRefreshToken = parsed.refresh_token && parsed.refresh_token !== '"null"';
                 
-                if (!hasRefreshToken) {
-                    logout();
-                    localStorage.removeItem('persist:user');
-                    localStorage.clear();
-                }
-            } catch (error) {
-                logout();
-                localStorage.removeItem('persist:user');
-                localStorage.clear();
-            }
-        }
-    }, [router]);
+    //             if (!hasRefreshToken) {
+    //                 logout();
+    //                 localStorage.removeItem('persist:user');
+    //                 localStorage.clear();
+    //             }
+    //         } catch (error) {
+    //             logout();
+    //             localStorage.removeItem('persist:user');
+    //             localStorage.clear();
+    //         }
+    //     }
+    // }, [router]);
 
 
     useEffect(() => {
