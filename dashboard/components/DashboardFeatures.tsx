@@ -87,7 +87,7 @@ const DashboardFeatures = () => {
     ];
 
     return (
-        <div className="w-full mx-auto space-y-4">
+        <div className="w-full mx-auto space-y-4 mb-4">
             <div className="grid grid-cols-6 gap-2">
                 {features.map((feature) =>
                     feature.id === 'lainnya' ? (
