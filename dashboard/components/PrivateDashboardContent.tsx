@@ -2,13 +2,11 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import {
-    useGetDashboardContentQuery,
     useGetMajorClassesQuery,
     useGetMajorRecommendationQuery,
     useGetLearnRecommendationQuery
 } from 'dashboard/redux/api/dashboardApi';
 import CarouselSection from './CarouselSection';
-import { getBookBaseHref } from 'courses/utils';
 import ContentCard from './ContentCard';
 import { useTracker } from 'tracker/tracker';
 import {
@@ -16,19 +14,12 @@ import {
     VideoRecommendationItem,
     BookRecommendationItem,
     QuizRecommendationItem,
-    FlashcardRecommendationItem,
-    LearningMaterial
+    FlashcardRecommendationItem
 } from 'dashboard/types/dashboard';
 
 const PrivateDashboardContent = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const tracker = useTracker();
-
-    const { data: justReleased, isLoading: isLoadingJustReleased } =
-        useGetDashboardContentQuery(
-            { type: 'just_released' },
-            { skip: !isAuthenticated }
-        );
 
     const { data: majorClasses, isLoading: isLoadingMajorClasses } =
         useGetMajorClassesQuery({ limit: 12 }, { skip: !isAuthenticated });
@@ -81,30 +72,6 @@ const PrivateDashboardContent = (): JSX.Element => {
         });
     };
 
-    const getHref = (item: LearningMaterial): string => {
-        const baseHref = `${getBookBaseHref(item.type)}/${item.book_slug}`;
-
-        if (item.type === 'Video' || item.type === 'Kelas') {
-            if (item?.chapter_id && item.subchapter_id)
-                return `/kelas/${item.course_slug}/${item.subchapter_slug}`;
-            return `/kelas/${item.course_slug}`;
-        } else {
-            if (item.in_progress && !!item.latest_page) {
-                if (item.type === 'Astronotes' && !!item.latest_page) {
-                    return `${baseHref}/${item.latest_page}`;
-                }
-
-                if (
-                    (item.type === 'Bank Soal' || item.type === 'Textbook') &&
-                    !!item.latest_problem
-                ) {
-                    return `${baseHref}/${item.latest_problem}`;
-                }
-            }
-            return baseHref;
-        }
-    };
-
     const majorClassesHasTwoLineCards = checkForTwoLineTitles(
         majorClasses?.data || []
     );
@@ -125,31 +92,6 @@ const PrivateDashboardContent = (): JSX.Element => {
                         sectionMajor: majorClasses?.major,
                         cardTitle: item.course_name,
                         cardCategory: 'Kelas'
-                    });
-                }}
-            />
-        );
-    };
-
-    const justReleasedHasTwoLineCards = checkForTwoLineTitles(
-        justReleased?.just_released || []
-    );
-
-    const renderJustReleasedItem = (item: any) => {
-        return (
-            <ContentCard
-                id={item.id}
-                title={item.title}
-                category={item.type}
-                thumbnail={item.thumbnail}
-                href={getHref(item as LearningMaterial)}
-                isBaru={true}
-                hasTwoLineCards={justReleasedHasTwoLineCards}
-                onClick={() => {
-                    tracker?.genericTrack('Click Dashboard Content Card', {
-                        section: 'Baru Rilis',
-                        cardTitle: item.title,
-                        cardCategory: item.type
                     });
                 }}
             />
@@ -243,7 +185,7 @@ const PrivateDashboardContent = (): JSX.Element => {
         majorRecommendation?.data || []
     );
 
-    const renderTrendingItem = (item: MajorRecommendationItem) => {
+    const renderTrendingItem = (item: MajorRecommendationItem): JSX.Element => {
         const itemData = prepareItemData(item);
         return (
             <ContentCard
@@ -264,16 +206,6 @@ const PrivateDashboardContent = (): JSX.Element => {
 
     return (
         <>
-            {justReleased?.just_released.length !== 0 && (
-                <CarouselSection
-                    title="Baru Rilis"
-                    items={justReleased?.just_released}
-                    isLoading={isLoadingJustReleased}
-                    renderItem={renderJustReleasedItem}
-                    eventCategory="JustReleased"
-                />
-            )}
-
             <CarouselSection
                 title={`Kelas yang Diambil Mahasiswa ${majorClasses?.major}`}
                 items={majorClasses?.data}
