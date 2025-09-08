@@ -25,7 +25,7 @@ const DashboardFeatures = () => {
     const [isOpen, setIsOpen] = useState(false);
     const tracker = useTracker();
 
-    const topRowFeatures: Feature[] = [
+    const features: Feature[] = [
         {
             id: 'copilot',
             title: 'Copilot AI',
@@ -45,10 +45,7 @@ const DashboardFeatures = () => {
                 ),
             url: '/flashcards',
             isNew: true
-        }
-    ];
-
-    const bottomRowFeatures: Feature[] = [
+        },
         {
             id: 'kelas',
             title: 'Kelas',
@@ -91,41 +88,8 @@ const DashboardFeatures = () => {
 
     return (
         <div className="w-full mx-auto space-y-4">
-            <div className="grid grid-cols-2 gap-2">
-                {topRowFeatures.map((feature) => (
-                    <Link
-                        key={feature.id}
-                        href={feature.url}
-                        onClick={() =>
-                            tracker?.genericTrack(
-                                `Click ${feature.title} Dashboard Card`
-                            )
-                        }
-                        className="block p-4 bg-[#1D1D1D] rounded-xl hover:bg-neutral-800 transition-colors relative">
-                        <div className="flex items-start justify-between">
-                            <div>
-                                <h3 className="font-bold text-white flex items-center">
-                                    {feature.title}
-                                    {feature.isNew && (
-                                        <span className="ml-2 py-1 px-3 text-xs rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] z-[1]">
-                                            Baru
-                                        </span>
-                                    )}
-                                </h3>
-                                <p className="text-sm text-neutral-400 w-[80%]">
-                                    {feature.description}
-                                </p>
-                            </div>
-                            <div className="absolute top-1.5 right-0 z-0">
-                                <feature.Icon />
-                            </div>
-                        </div>
-                    </Link>
-                ))}
-            </div>
-
-            <div className="grid grid-cols-4 gap-2">
-                {bottomRowFeatures.map((feature) =>
+            <div className="grid grid-cols-6 gap-2">
+                {features.map((feature) =>
                     feature.id === 'lainnya' ? (
                         <button
                             key={feature.id}
@@ -209,8 +173,7 @@ const DashboardFeatures = () => {
 
                                         <div className="space-y-2">
                                             {[
-                                                ...topRowFeatures,
-                                                ...bottomRowFeatures.filter(
+                                                ...features.filter(
                                                     (f) => f.id !== 'lainnya'
                                                 ),
                                                 ...moreFeatures
