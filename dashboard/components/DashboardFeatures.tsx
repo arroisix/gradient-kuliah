@@ -50,21 +50,21 @@ const DashboardFeatures = () => {
             id: 'kelas',
             title: 'Kelas',
             description: 'Video materi dari dosen',
-            Icon: KelasIcon,
+            Icon: () => <KelasIcon width={64} height={69} />,
             url: '/kelas'
         },
         {
             id: 'perpus',
-            title: 'Perpus',
+            title: 'Perpustakaan',
             description: 'Text book, rangkuman, bank soal',
-            Icon: PerpusIcon,
+            Icon: () => <PerpusIcon width={64} height={69} />,
             url: '/perpustakaan'
         },
         {
             id: 'kuis',
             title: 'Kuis',
             description: 'Uji kemampuanmu sekarang',
-            Icon: KuisIcon,
+            Icon: () => <KuisIcon width={64} height={69} />,
             url: '/latihan'
         },
         {
@@ -118,14 +118,22 @@ const DashboardFeatures = () => {
                                     `Click ${feature.title} Dashboard Card`
                                 )
                             }
-                            className="p-3 bg-[#1D1D1D] rounded-xl hover:bg-neutral-800 transition-colors">
-                            <div className="flex flex-col items-center text-center">
-                                <div className="w-12 h-12 flex items-center justify-center mb-2">
-                                    <feature.Icon width={32} height={32} />
-                                </div>
-                                <span className="font-bold text-white text-sm">
-                                    {feature.title}
+                            className="relative p-3 bg-[#1D1D1D] rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-3">
+                            {feature.isNew && (
+                                <span className="absolute top-0 right-0 -mt-2 -mr-2 py-1 px-3 text-xs rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56]">
+                                    Baru
                                 </span>
+                            )}
+                            <div>
+                                <h3 className="font-bold text-white text-sm">
+                                    {feature.title}
+                                </h3>
+                                <p className="text-xs text-neutral-400">
+                                    {feature.description}
+                                </p>
+                            </div>
+                            <div className="flex-shrink-0">
+                                <feature.Icon />
                             </div>
                         </Link>
                     )
