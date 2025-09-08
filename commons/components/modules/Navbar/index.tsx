@@ -85,6 +85,7 @@ const Navbar = ({
         setScrollPosition(position);
     };
     const { is_subscribed: isSubscribed } = useCourseSubscription();
+    const isDashboard = router.pathname.startsWith('/dashboard');
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll, { passive: true });
@@ -255,7 +256,7 @@ const Navbar = ({
                             'w-full max-w-lg',
                             isShowSidebar && 'lg:ml-[250px] lg:pl-6 lg:absolute'
                         )}>
-                        <SearchBar />
+                        {!isDashboard && <SearchBar />}
                     </div>
                 </div>
                 {paymentPage ? (
