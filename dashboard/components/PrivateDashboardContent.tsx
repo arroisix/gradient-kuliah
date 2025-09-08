@@ -16,6 +16,7 @@ import {
     QuizRecommendationItem,
     FlashcardRecommendationItem
 } from 'dashboard/types/dashboard';
+import DashboardUpdatesBanner from './DashboardBanner';
 
 const PrivateDashboardContent = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -207,7 +208,7 @@ const PrivateDashboardContent = (): JSX.Element => {
     return (
         <>
             <CarouselSection
-                title={`Kelas yang Diambil Mahasiswa ${majorClasses?.major}`}
+                title={`Dipelajari Mahasiswa Jurusan Kamu`}
                 items={majorClasses?.data}
                 isLoading={isLoadingMajorClasses}
                 renderItem={renderMajorClassItem}
@@ -221,6 +222,11 @@ const PrivateDashboardContent = (): JSX.Element => {
                 renderItem={renderTrendingItem}
                 eventCategory="TrendingRecommendation"
             />
+
+            <h2 className="text-lg font-extrabold md:text-xl">
+                Jangan Sampai Ketinggalan!
+            </h2>
+            <DashboardUpdatesBanner />
 
             {learnRecommendation?.data?.map((courseRec, index) => {
                 const courseRecommendationHasTwoLineCards =
