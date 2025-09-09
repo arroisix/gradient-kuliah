@@ -315,57 +315,63 @@ const PrivateDashboardContent = (): JSX.Element => {
                 eventCategory="NewlyReleasedForYou"
             />
 
-            <CarouselSection
-                title={`Trending untuk Mahasiswa ${majorRecommendation?.major}`}
-                items={majorRecommendation?.data}
-                isLoading={isLoadingMajorRecommendation}
-                renderItem={renderTrendingItem}
-                eventCategory="TrendingRecommendation"
-            />
+            {!isDashboardRevamp && (
+                <CarouselSection
+                    title={`Trending untuk Mahasiswa ${majorRecommendation?.major}`}
+                    items={majorRecommendation?.data}
+                    isLoading={isLoadingMajorRecommendation}
+                    renderItem={renderTrendingItem}
+                    eventCategory="TrendingRecommendation"
+                />
+            )}
 
             <h2 className="text-lg font-extrabold md:text-xl">
                 Jangan Sampai Ketinggalan!
             </h2>
             <DashboardUpdatesBanner />
-            {learnRecommendation?.data?.map((courseRec, index) => {
-                const courseRecommendationHasTwoLineCards =
-                    checkForTwoLineTitles(courseRec.recommendations || []);
 
-                return (
-                    <CarouselSection
-                        key={`learn-rec-${index}-${courseRec.course_name}`}
-                        title={`Karena Kamu Belajar ${courseRec.course_name}`}
-                        items={courseRec.recommendations}
-                        isLoading={isLoadingLearnRecommendation}
-                        renderItem={(item) => {
-                            const itemData = prepareItemData(
-                                item as MajorRecommendationItem
-                            );
-                            return (
-                                <ContentCard
-                                    {...itemData}
-                                    hasTwoLineCards={
-                                        courseRecommendationHasTwoLineCards
-                                    }
-                                    onClick={() => {
-                                        tracker?.genericTrack(
-                                            'Click Dashboard Content Card',
-                                            {
-                                                section: 'Karena Kamu Belajar',
-                                                sectionCourse:
-                                                    courseRec.course_name,
-                                                cardTitle: itemData.title,
-                                                cardCategory: itemData.category
-                                            }
-                                        );
-                                    }}
-                                />
-                            );
-                        }}
-                        eventCategory={`LearnRecommendation-${courseRec.course_name}`}
-                    />
-                );
-            })}
+            {!isDashboardRevamp &&
+                learnRecommendation?.data?.map((courseRec, index) => {
+                    const courseRecommendationHasTwoLineCards =
+                        checkForTwoLineTitles(courseRec.recommendations || []);
+
+                    return (
+                        <CarouselSection
+                            key={`learn-rec-${index}-${courseRec.course_name}`}
+                            title={`Karena Kamu Belajar ${courseRec.course_name}`}
+                            items={courseRec.recommendations}
+                            isLoading={isLoadingLearnRecommendation}
+                            renderItem={(item) => {
+                                const itemData = prepareItemData(
+                                    item as MajorRecommendationItem
+                                );
+                                return (
+                                    <ContentCard
+                                        {...itemData}
+                                        hasTwoLineCards={
+                                            courseRecommendationHasTwoLineCards
+                                        }
+                                        onClick={() => {
+                                            tracker?.genericTrack(
+                                                'Click Dashboard Content Card',
+                                                {
+                                                    section:
+                                                        'Karena Kamu Belajar',
+                                                    sectionCourse:
+                                                        courseRec.course_name,
+                                                    cardTitle: itemData.title,
+                                                    cardCategory:
+                                                        itemData.category
+                                                }
+                                            );
+                                        }}
+                                    />
+                                );
+                            }}
+                            eventCategory={`LearnRecommendation-${courseRec.course_name}`}
+                        />
+                    );
+                })}
         </>
     );
 };
