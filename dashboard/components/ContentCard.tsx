@@ -100,7 +100,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
 
             {isBaru && (
                 <div
-                    className="absolute top-2 left-2 z-10 text-white text-xs py-1 px-3 rounded-full"
+                    className="absolute top-2 left-2 z-10 font-bold text-white text-sm py-1 px-3 rounded-full"
                     style={{ backgroundColor: '#E9202A' }}>
                     Baru
                 </div>
@@ -151,7 +151,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
 
             <div className="p-4 flex flex-col justify-between">
                 <div className="flex flex-col">
-                    {!isMajorClass && !isBaru && (
+                    {!isMajorClass && (
                         <div
                             className="rounded-full text-xs text-white font-medium px-3 py-1 mb-2 w-fit"
                             style={{
@@ -270,17 +270,18 @@ const ContentCard: React.FC<ContentCardProps> = ({
                                         </>
                                     )}
 
-                                    {!shouldUseStackedLayout && problemCount && (
-                                        <>
-                                            <FaListUl
-                                                size={14}
-                                                className="text-indigo-400 mr-2 flex-shrink-0"
-                                            />
-                                            <span className="truncate">
-                                                {problemCount} Soal
-                                            </span>
-                                        </>
-                                    )}
+                                    {!shouldUseStackedLayout &&
+                                        problemCount && (
+                                            <>
+                                                <FaListUl
+                                                    size={14}
+                                                    className="text-indigo-400 mr-2 flex-shrink-0"
+                                                />
+                                                <span className="truncate">
+                                                    {problemCount} Soal
+                                                </span>
+                                            </>
+                                        )}
                                 </div>
                             )}
 
