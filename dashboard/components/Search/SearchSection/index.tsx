@@ -33,16 +33,24 @@ const SearchSection = (): JSX.Element => {
                     placeholder="Cari topik, materi, soal apapun"
                 />
             </div>
-            <div className="flex items-center justify-center gap-2 mt-4">
-                <span className="text-graphite-400">Kamu bisa cari:</span>
-                {suggestions.map((suggestion, index) => (
-                    <button
-                        key={index}
-                        onClick={() => handleSuggestionClick(suggestion)}
-                        className="px-4 py-2 border border-gray-600 rounded-lg text-white hover:bg-gray-700 text-sm">
-                        {suggestion}
-                    </button>
-                ))}
+
+            <div className="mt-4">
+                <div
+                    className="flex items-center gap-2 overflow-x-auto md:overflow-visible -mx-4 px-4 md:mx-0 md:px-0 no-scrollbar md:justify-center"
+                    style={{ WebkitOverflowScrolling: 'touch' }}
+                    aria-label="Search suggestions">
+                    <span className="text-graphite-400 text-sm flex-shrink-0">
+                        Kamu bisa cari:
+                    </span>
+                    {suggestions.map((suggestion, index) => (
+                        <button
+                            key={index}
+                            onClick={() => handleSuggestionClick(suggestion)}
+                            className="flex-shrink-0 px-4 py-2 border border-gray-600 rounded-lg text-white hover:bg-gray-700 text-xs md:text-sm whitespace-nowrap">
+                            {suggestion}
+                        </button>
+                    ))}
+                </div>
             </div>
         </div>
     );
