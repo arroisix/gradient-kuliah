@@ -4,7 +4,8 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import {
     useGetMajorClassesQuery,
     useGetMajorRecommendationQuery,
-    useGetLearnRecommendationQuery
+    useGetLearnRecommendationQuery,
+    useGetNewlyReleasedForYouQuery
 } from 'dashboard/redux/api/dashboardApi';
 import CarouselSection from './CarouselSection';
 import ContentCard from './ContentCard';
@@ -14,13 +15,15 @@ import {
     VideoRecommendationItem,
     BookRecommendationItem,
     QuizRecommendationItem,
-    FlashcardRecommendationItem
+    FlashcardRecommendationItem,
+    NewlyReleasedForYouItem
 } from 'dashboard/types/dashboard';
 import DashboardUpdatesBanner from './DashboardBanner';
 
 const PrivateDashboardContent = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const tracker = useTracker();
+    const isDashboardRevamp = true;
 
     const { data: majorClasses, isLoading: isLoadingMajorClasses } =
         useGetMajorClassesQuery({ limit: 12 }, { skip: !isAuthenticated });
@@ -38,6 +41,14 @@ const PrivateDashboardContent = (): JSX.Element => {
         isLoading: isLoadingLearnRecommendation
     } = useGetLearnRecommendationQuery(
         { limit: 24 },
+        { skip: !isAuthenticated }
+    );
+
+    const {
+        data: newlyReleasedForYou,
+        isLoading: isLoadingNewlyReleasedForYou
+    } = useGetNewlyReleasedForYouQuery(
+        { limit: 12 },
         { skip: !isAuthenticated }
     );
 
@@ -170,15 +181,15 @@ const PrivateDashboardContent = (): JSX.Element => {
 
         return {
             id: item.id,
-            title,
+            title: title || '',
             category,
             thumbnail: item.thumbnail,
             href,
-            courseName,
+            courseName: courseName ?? undefined,
             chapterName,
-            cardCount,
-            problemCount,
-            authorName
+            cardCount: cardCount ?? undefined,
+            problemCount: problemCount ?? undefined,
+            authorName: authorName ?? undefined
         };
     };
 
@@ -205,6 +216,87 @@ const PrivateDashboardContent = (): JSX.Element => {
         );
     };
 
+    const prepareNewlyReleasedItemData = (item: NewlyReleasedForYouItem) => {
+        let title,
+            href,
+            category,
+            courseName,
+            cardCount,
+            problemCount,
+            authorName;
+
+        switch (item.type) {
+            case 'course':
+                title = item.title || item.course_name;
+                href = `/kelas/${item.course_slug}`;
+                category = 'Kelas';
+                courseName = item.course_name;
+                break;
+
+            case 'course_book':
+                if (item.book_title?.includes('Bank Soal')) {
+                    title = item.book_title;
+                    href = `/perpustakaan/bank-soal/${item.book_slug}`;
+                    category = 'Bank Soal';
+                } else if (item.book_title?.includes('Textbook')) {
+                    title = item.book_title;
+                    href = `/perpustakaan/textbook/${item.book_slug}`;
+                    category = 'Textbook Solution';
+                } else {
+                    title = item.book_title;
+                    href = `/astronotes/${item.book_slug}/`;
+                    category = 'Astronotes';
+                }
+                courseName = item.course_name;
+                cardCount = item.card_count;
+                problemCount = item.total_questions;
+                authorName = item.created_by;
+                break;
+
+            default:
+                title = item.title || 'Unknown content';
+                href = '#';
+                category = 'Other';
+        }
+
+        return {
+            id: item.id,
+            title: title || '',
+            category,
+            thumbnail: item.thumbnail,
+            href,
+            courseName: courseName ?? undefined,
+            cardCount: cardCount ?? undefined,
+            problemCount: problemCount ?? undefined,
+            authorName: authorName ?? undefined
+        };
+    };
+
+    const newlyReleasedHasTwoLineCards = checkForTwoLineTitles(
+        newlyReleasedForYou?.data || []
+    );
+
+    const renderNewlyReleasedItem = (
+        item: NewlyReleasedForYouItem
+    ): JSX.Element => {
+        const itemData = prepareNewlyReleasedItemData(item);
+        return (
+            <ContentCard
+                {...itemData}
+                hasTwoLineCards={newlyReleasedHasTwoLineCards}
+                isBaru={true}
+                onClick={() => {
+                    tracker?.genericTrack('Click Dashboard Content Card', {
+                        section: 'Terbaru yang Cocok Untukmu',
+                        cardTitle: itemData.title,
+                        cardCategory: itemData.category,
+                        cardType: item.type
+                    });
+                }}
+            />
+        );
+    };
+
     return (
         <>
             <CarouselSection
@@ -213,6 +305,14 @@ const PrivateDashboardContent = (): JSX.Element => {
                 isLoading={isLoadingMajorClasses}
                 renderItem={renderMajorClassItem}
                 eventCategory="MajorClasses"
+            />
+
+            <CarouselSection
+                title="Terbaru yang Cocok Untukmu"
+                items={newlyReleasedForYou?.data}
+                isLoading={isLoadingNewlyReleasedForYou}
+                renderItem={renderNewlyReleasedItem}
+                eventCategory="NewlyReleasedForYou"
             />
 
             <CarouselSection
@@ -227,7 +327,6 @@ const PrivateDashboardContent = (): JSX.Element => {
                 Jangan Sampai Ketinggalan!
             </h2>
             <DashboardUpdatesBanner />
-
             {learnRecommendation?.data?.map((courseRec, index) => {
                 const courseRecommendationHasTwoLineCards =
                     checkForTwoLineTitles(courseRec.recommendations || []);
