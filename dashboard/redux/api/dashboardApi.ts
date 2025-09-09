@@ -6,6 +6,7 @@ import {
     LearnRecommendationResponse,
     MajorClassesResponse,
     MajorRecommendationResponse,
+    NewlyReleasedForYouResponse,
     StudentCourseResponse,
     StudentLearningProgressResponse,
     UserBooksResponse,
@@ -145,6 +146,17 @@ export const dashboardApi = baseApi.injectEndpoints({
                 params
             }),
             providesTags: [{ type: 'PROFILE', id: 'LEARN_RECOMMENDATION' }]
+        }),
+
+        getNewlyReleasedForYou: builder.query<
+            NewlyReleasedForYouResponse,
+            { page?: number; limit?: number; search?: string }
+        >({
+            query: (params = { page: 1, limit: 6 }) => ({
+                url: `${LEARNING_V2_BASE_URL}dashboard/newly-released-for-you/`,
+                params
+            }),
+            providesTags: [{ type: 'PROFILE', id: 'NEWLY_RELEASED_FOR_YOU' }]
         })
     })
 });
@@ -162,5 +174,6 @@ export const {
     useGetUserQuizQuery,
     useGetMajorClassesQuery,
     useGetMajorRecommendationQuery,
-    useGetLearnRecommendationQuery
+    useGetLearnRecommendationQuery,
+    useGetNewlyReleasedForYouQuery
 } = dashboardApi;
