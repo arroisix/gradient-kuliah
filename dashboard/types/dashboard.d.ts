@@ -219,6 +219,36 @@ interface LearnRecommendationResponse {
     data: CourseRecommendation[];
 }
 
+export interface NewlyReleasedForYouItem {
+    id: string;
+    slug: string | null;
+    type: string;
+    title: string | null;
+    course_name: string | null;
+    course_slug: string | null;
+    thumbnail: string | null;
+    book_title: string | null;
+    book_slug: string | null;
+    chapter_name: string | null;
+    subchapter_name: string | null;
+    subchapter_slug: string | null;
+    problem_title: string | null;
+    problem_slug: string | null;
+    page_title: string | null;
+    page_number: number | null;
+    total_questions: number | null;
+    card_count: number | null;
+    created_by: string | null;
+    photo_profile: string | null;
+}
+
+export interface NewlyReleasedForYouResponse {
+    count_items: number;
+    previous_page: number | null;
+    next_page: number | null;
+    data: NewlyReleasedForYouItem[];
+}
+
 export type {
     StudentLearningProgress,
     StudentLearningProgressResponse,
@@ -250,5 +280,7 @@ export type {
     MajorRecommendationItem,
     MajorRecommendationResponse,
     CourseRecommendation,
-    LearnRecommendationResponse
+    LearnRecommendationResponse,
+    NewlyReleasedForYouItem,
+    NewlyReleasedForYouResponse
 };
