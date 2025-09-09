@@ -88,7 +88,7 @@ const DashboardFeatures = () => {
 
     return (
         <div className="w-full mx-auto space-y-4 mb-4">
-            <div className="grid grid-cols-6 gap-2">
+            <div className="grid grid-cols-3 md:grid-cols-6 gap-6 md:gap-2">
                 {features.map((feature) =>
                     feature.id === 'lainnya' ? (
                         <button
@@ -99,12 +99,12 @@ const DashboardFeatures = () => {
                                     'Click More Features Dashboard Card'
                                 );
                             }}
-                            className="p-3 bg-[#1D1D1D] rounded-xl hover:bg-neutral-800 transition-colors">
-                            <div className="flex flex-col items-center text-center">
-                                <div className="w-12 h-12 flex items-center justify-center mb-2">
-                                    <feature.Icon width={32} height={32} />
-                                </div>
-                                <span className="font-bold text-white text-sm">
+                            className="relative group flex flex-col items-center text-center gap-2 md:flex-row-reverse md:items-center md:justify-between md:gap-3 md:text-left md:p-3 rounded-xl transition-colors focus:outline-none md:bg-[#1D1D1D] md:hover:bg-neutral-800">
+                            <div className="relative w-16 h-16 rounded-full bg-[#1D1D1D] flex items-center justify-center md:w-auto md:h-auto md:rounded-none md:bg-transparent">
+                                <feature.Icon width={32} height={32} />
+                            </div>
+                            <div className="flex flex-col items-center md:items-start">
+                                <span className="font-bold text-white text-xs md:text-sm">
                                     {feature.title}
                                 </span>
                             </div>
@@ -118,22 +118,24 @@ const DashboardFeatures = () => {
                                     `Click ${feature.title} Dashboard Card`
                                 )
                             }
-                            className="relative p-3 bg-[#1D1D1D] rounded-xl hover:bg-neutral-800 transition-colors flex items-center gap-3">
-                            {feature.isNew && (
-                                <span className="absolute top-0 right-0 -mt-2 -mr-2 py-1 px-3 text-xs rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56]">
-                                    Baru
-                                </span>
-                            )}
-                            <div>
-                                <h3 className="font-bold text-white text-sm">
+                            className="relative group flex flex-col items-center text-center gap-2 md:flex-row-reverse md:items-center md:justify-between md:gap-3 md:text-left md:p-3 rounded-xl transition-colors md:bg-[#1D1D1D] md:hover:bg-neutral-800">
+                            <div className="relative w-16 h-16 rounded-full bg-[#1D1D1D] flex items-center justify-center md:w-auto md:h-auto md:rounded-none md:bg-transparent">
+                                <feature.Icon />
+                                {feature.isNew && (
+                                    <span
+                                        className="absolute -bottom-2 left-1/2 -translate-x-1/2 py-0.5 px-2 text-[10px] rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56]
+                                                   md:top-0 md:right-0 md:-mt-2 md:-mr-2 md:bottom-auto md:left-auto md:translate-x-0 md:text-xs">
+                                        Baru
+                                    </span>
+                                )}
+                            </div>
+                            <div className="flex flex-col items-center md:items-start">
+                                <h3 className="font-bold text-white text-xs md:text-sm">
                                     {feature.title}
                                 </h3>
-                                <p className="text-xs text-neutral-400">
+                                <p className="hidden md:block text-xs text-neutral-400">
                                     {feature.description}
                                 </p>
-                            </div>
-                            <div className="flex-shrink-0">
-                                <feature.Icon />
                             </div>
                         </Link>
                     )
