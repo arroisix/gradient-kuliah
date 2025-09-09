@@ -14,6 +14,7 @@ import { AiFillPlusCircle } from 'react-icons/ai';
 import { useGoogleLogin } from '@react-oauth/google';
 import useSocialLogin from 'authentication/hooks/useSocialLogin';
 import { toast } from 'react-toastify';
+import { sanitizeUrl } from 'commons/utils';
 
 export const LoginSection: React.FC = () => {
     const [reveal, setReveal] = useState(false);
@@ -200,7 +201,9 @@ export const LoginSection: React.FC = () => {
                                 id="signup-on-login-page"
                                 href={`/daftar${
                                     !!router.query.redirect
-                                        ? `?redirect=${router.query.redirect}`
+                                        ? `?redirect=${sanitizeUrl(
+                                              router.query.redirect as string
+                                          )}`
                                         : ''
                                 }`}
                                 onClick={() => {

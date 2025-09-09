@@ -1,7 +1,7 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
 import useOnScreen from 'commons/hooks/useOnScreen';
-import { cn } from 'commons/utils';
+import { cn, sanitizeUrl } from 'commons/utils';
 import { useRouter } from 'next/router';
 import React, { useRef } from 'react';
 import { useSelector } from 'react-redux';
@@ -17,7 +17,8 @@ const StartReadingButton = ({
     const isAuthenticated = useSelector(getIsAuthenticated);
     const getLink = (): string => {
         if (!first_problem_id) return '?';
-        if (!isAuthenticated) return `/daftar?redirect=${router.basePath}`;
+        if (!isAuthenticated)
+            return `/daftar?redirect=${sanitizeUrl(router.basePath)}`;
         if (!!first_problem_id)
             return `/astronotes/textbook/${slug}/${first_problem_id}`;
         return `/astronotes/${slug}/1`;
