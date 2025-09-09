@@ -26,6 +26,7 @@ export const publicCourseV2Api = baseApi.injectEndpoints({
 
 export const {
     useGetPublicListCoursesV2Query,
+    useLazyGetPublicListCoursesV2Query,
     useGetPublicSubchapterDetailV2Query
 } = publicCourseV2Api;
 

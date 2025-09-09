@@ -10,6 +10,8 @@ import SylabbusContent from './SylabbusContent';
 import ListBooks from 'courses/components/CourseDetailBox/ListBooks';
 import { useSearchSubchapter } from 'courses/hooks/useSearchSubchapter';
 
+const isCourseDetailRevamp = true;
+
 const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
     const { data: courseContent, isLoading: isLoadingCourse } =
         useGetCourseContentQuery({
@@ -96,29 +98,11 @@ const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
                 {!isSearch && (
                     <>
                         {/* Video Tab */}
-                        <div className="flex w-full tabs-header">
-                            <label
-                                className={`tab border-b-2 ${
-                                    navigation === 'VIDEO'
-                                        ? 'border-b-graphite-100'
-                                        : 'border-b-graphite-700'
-                                } has-[:checked]:font-bold flex-1 text-center text-sm pb-3 uppercase`}>
-                                <input
-                                    role="tab"
-                                    type="radio"
-                                    name="course-details-tab"
-                                    value="video"
-                                    className="hidden"
-                                    defaultChecked
-                                    onChange={(e) => handleTabChange(e)}
-                                    id="tab-video"
-                                />
-                                <h2>Video</h2>
-                            </label>
-                            {(courseContent?.books.length ?? 0) > 0 && (
+                        {!isCourseDetailRevamp && (
+                            <div className="flex w-full tabs-header">
                                 <label
                                     className={`tab border-b-2 ${
-                                        navigation === 'BOOK'
+                                        navigation === 'VIDEO'
                                             ? 'border-b-graphite-100'
                                             : 'border-b-graphite-700'
                                     } has-[:checked]:font-bold flex-1 text-center text-sm pb-3 uppercase`}>
@@ -126,15 +110,35 @@ const Sylabbus = ({ slug }: GradientBaseComponentWithSlug): JSX.Element => {
                                         role="tab"
                                         type="radio"
                                         name="course-details-tab"
-                                        value="book"
+                                        value="video"
                                         className="hidden"
+                                        defaultChecked
                                         onChange={(e) => handleTabChange(e)}
-                                        id="tab-book"
+                                        id="tab-video"
                                     />
-                                    <h2>Buku</h2>
+                                    <h2>Video</h2>
                                 </label>
-                            )}
-                        </div>
+                                {(courseContent?.books.length ?? 0) > 0 && (
+                                    <label
+                                        className={`tab border-b-2 ${
+                                            navigation === 'BOOK'
+                                                ? 'border-b-graphite-100'
+                                                : 'border-b-graphite-700'
+                                        } has-[:checked]:font-bold flex-1 text-center text-sm pb-3 uppercase`}>
+                                        <input
+                                            role="tab"
+                                            type="radio"
+                                            name="course-details-tab"
+                                            value="book"
+                                            className="hidden"
+                                            onChange={(e) => handleTabChange(e)}
+                                            id="tab-book"
+                                        />
+                                        <h2>Buku</h2>
+                                    </label>
+                                )}
+                            </div>
+                        )}
 
                         {/* Tab Content */}
                         <div className="w-full">
