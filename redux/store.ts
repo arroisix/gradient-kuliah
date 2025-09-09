@@ -22,6 +22,7 @@ import { toast } from 'react-toastify';
 
 import { clearCache, removeUser } from 'authentication/redux/slices/userSlice';
 import { authApi } from 'authentication/redux/api/authApi';
+import { sanitizeUrl } from 'commons/utils';
 
 /**
  * Log a warning and show a toast!
@@ -133,7 +134,9 @@ export const rtkQueryErrorLogger: Middleware = () => (next) => (action) => {
             if (status === 403 && action.payload.data?.device_allowed) {
                 if (!!Router.query.redirect) {
                     Router.replace(
-                        `/keluar-perangkat?redirect=${Router.query.redirect}`
+                        `/keluar-perangkat?redirect=${sanitizeUrl(
+                            Router.query.redirect as string
+                        )}`
                     );
                 } else {
                     Router.replace('/keluar-perangkat');
