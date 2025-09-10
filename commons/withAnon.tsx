@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
-import { getDisplayName } from './utils';
+import { getDisplayName, sanitizeUrl } from './utils';
 import { useGetPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
 import { sendGTMEvent } from '@next/third-parties/google';
 
@@ -38,12 +38,18 @@ const withAnon = <P extends object>(
                             router.replace(
                                 `/onboarding${
                                     !!router.query.redirect
-                                        ? `?redirect=${router.query.redirect}`
+                                        ? `?redirect=${sanitizeUrl(
+                                              router.query.redirect as string
+                                          )}`
                                         : ''
                                 }`
                             );
                         } else if (!!router.query.redirect) {
-                            router.replace(`${router.query.redirect}`);
+                            router.replace(
+                                `${sanitizeUrl(
+                                    router.query.redirect as string
+                                )}`
+                            );
                         } else {
                             if (is_subscribed) {
                                 router.replace('/dashboard');
@@ -78,7 +84,9 @@ const withAnon = <P extends object>(
                                         router.replace('/dashboard');
                                     } else if (!!router.query.redirect) {
                                         router.replace(
-                                            `${router.query.redirect}`
+                                            `${sanitizeUrl(
+                                                router.query.redirect as string
+                                            )}`
                                         );
                                     } else {
                                         router.replace('/');

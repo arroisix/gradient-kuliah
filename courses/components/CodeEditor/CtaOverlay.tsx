@@ -1,7 +1,7 @@
 import GradientIcon from 'commons/components/GradientIcon';
 import Button from 'commons/components/elements/Button';
 import { AUTHENTICATION_ROUTE } from 'commons/constants';
-import { queryParamBuilder } from 'commons/utils';
+import { queryParamBuilder, sanitizeUrl } from 'commons/utils';
 import { useRouter } from 'next/router';
 
 const CTAOverlay = (): JSX.Element => {
@@ -23,7 +23,7 @@ const CTAOverlay = (): JSX.Element => {
                         variant="custom"
                         className="text-white bg-black text-center"
                         href={`${AUTHENTICATION_ROUTE}?${queryParamBuilder({
-                            redirect: router.asPath + '?ask=true'
+                            redirect: sanitizeUrl(router.asPath) + '?ask=true'
                         })}`}>
                         Buat Program Gratis
                     </Button>

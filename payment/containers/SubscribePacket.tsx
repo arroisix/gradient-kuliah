@@ -1,7 +1,7 @@
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
-import { cn } from 'commons/utils';
+import { cn, sanitizeUrl } from 'commons/utils';
 // import { getCSChatRoom } from 'commons/utils';
 import { formatter } from 'courses/utils';
 // import { addZeroBefore, formatter } from 'courses/utils';
@@ -31,7 +31,7 @@ export const PacketCard = ({
 
     function handleClick(): void {
         if (!isAuthenticated) {
-            router.push(`/daftar?redirect=${router.asPath}`);
+            router.push(`/daftar?redirect=${sanitizeUrl(router.asPath)}`);
         } else {
             // redirect to pembayaran page
             router.push({

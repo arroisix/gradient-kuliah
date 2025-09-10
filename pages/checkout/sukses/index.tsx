@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { subscriptionApi } from 'payment/redux/api/subscriptionApi';
 import { useDispatch } from 'react-redux';
+import { sanitizeUrl } from 'commons/utils';
 
 const SuccessCheckout = (): JSX.Element => {
     const router = useRouter();
@@ -12,7 +13,7 @@ const SuccessCheckout = (): JSX.Element => {
 
     useEffect(() => {
         const timer1 = setTimeout(() => {
-            const redirectUrl = (router.query.redirect ||
+            const redirectUrl = (sanitizeUrl(router.query.redirect as string) ||
                 localStorage.getItem('redirect')) as string;
 
             if (!!redirectUrl) {

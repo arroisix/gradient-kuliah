@@ -6,6 +6,7 @@ import storage from 'redux/_sync_storage';
 const userPersistConfig = {
     key: 'user',
     storage,
+    // whitelist: ['user', 'token', 'refresh_token', 'is_profile_complete']
     whitelist: ['user', 'token', 'is_profile_complete']
 };
 

@@ -209,3 +209,73 @@ export const isAlphaNumeric = (str: string, includeSpace: boolean): boolean => {
     }
     return true;
 };
+
+export const sanitizeUrl = (url: string): string => {
+    try {
+        // Decode URL to prevent encoded bypasses
+        const decodedUrl = decodeURIComponent(url).trim().toLowerCase();
+
+        // Block all dangerous protocols
+        const dangerousProtocols = [
+            'javascript:',
+            'data:',
+            'vbscript:',
+            'file:',
+            'about:',
+            'chrome:',
+            'chrome-extension:',
+            'moz-extension:',
+            'ms-appx:',
+            'ms-appx-web:',
+            'blob:'
+        ];
+
+        // Check if URL starts with any dangerous protocol
+        for (const protocol of dangerousProtocols) {
+            if (decodedUrl.startsWith(protocol)) {
+                return '/';
+            }
+        }
+
+        // Only allow relative URLs starting with /
+        if (url.startsWith('/')) {
+            // Validate relative URL format (no dangerous characters)
+            if (/^\/[a-zA-Z0-9\-._~:/?#[\]@!$&'()*+,;=%]*$/.test(url)) {
+                return url;
+            }
+            return '/';
+        }
+
+        // For absolute URLs, validate they're same origin
+        if (typeof window !== 'undefined') {
+            try {
+                const urlObj = new URL(url, window.location.origin);
+                if (urlObj.origin === window.location.origin) {
+                    return urlObj.pathname + urlObj.search + urlObj.hash;
+                } else {
+                    // Show warning for external URLs
+                    const confirmed = window.confirm(
+                        `Anda akan diarahkan ke website: ${urlObj.origin}\n\n` +
+                            `Kami tidak dapat menjamin keamanan website tersebut. ` +
+                            `Pastikan Anda berhati-hati saat mengakses link eksternal.\n\n` +
+                            `Apakah Anda yakin ingin melanjutkan?`
+                    );
+
+                    if (confirmed) {
+                        // Open in new tab for security
+                        return url;
+                    }
+
+                    // Always return internal path regardless of user choice
+                    return '/';
+                }
+            } catch {
+                return '/';
+            }
+        }
+
+        return '/';
+    } catch {
+        return '/';
+    }
+};

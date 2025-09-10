@@ -64,7 +64,7 @@ const Button = ({
     if (target) {
         return (
             <a
-                href={href}
+                href={href as string}
                 target={target}
                 id={id}
                 onClick={handleClick}
@@ -79,7 +79,7 @@ const Button = ({
     if (href) {
         return (
             <Link
-                href={disabled ? '#' : href}
+                href={disabled ? '#' : (href as string)}
                 className={linkClass}
                 onClick={disabled ? undefined : handleClick}>
                 <div

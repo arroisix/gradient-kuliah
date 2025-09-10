@@ -18,6 +18,7 @@ import {
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { clearCache } from 'authentication/redux/slices/userSlice';
+import { sanitizeUrl } from 'commons/utils';
 
 const KeluarPerangkat = (): JSX.Element => {
     const router = useRouter();
@@ -105,7 +106,9 @@ const KeluarPerangkat = (): JSX.Element => {
 
                 <section className="flex flex-col gap-3">
                     <Button
-                        href={(router.query.redirect as string) ?? '/'}
+                        href={
+                            sanitizeUrl(router.query.redirect as string) ?? '/'
+                        }
                         variant="primary"
                         disabled={disableLogin}
                         className="!py-3 text-base !font-sans text-center">

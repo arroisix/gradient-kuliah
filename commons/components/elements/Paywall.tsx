@@ -5,7 +5,7 @@ import React from 'react';
 import { SlCheck } from 'react-icons/sl';
 import { useSelector } from 'react-redux';
 import Button from './Button';
-import { cn, queryParamBuilder, slugify } from 'commons/utils';
+import { cn, queryParamBuilder, sanitizeUrl, slugify } from 'commons/utils';
 import { sendGTMEvent } from '@next/third-parties/google';
 
 type PaywallProps = {
@@ -47,7 +47,8 @@ const Paywall = ({
     };
 
     const handleClick = (pricing: PacketOffer): void => {
-        if (redirect) localStorage.setItem('redirect', redirect as string);
+        if (redirect)
+            localStorage.setItem('redirect', sanitizeUrl(redirect) as string);
 
         const pembayaranPage = `/pembayaran?${queryParamBuilder({
             packetId: pricing.id,
