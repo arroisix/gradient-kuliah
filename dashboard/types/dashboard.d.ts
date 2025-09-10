@@ -284,9 +284,7 @@ export interface MajorBooksResponse {
 export interface MajorFlashcardItem {
     id: string;
     slug: string | null;
-    type: string;
     title: string | null;
-    thumbnail: string | null;
     card_count: number | null;
     created_by: string | null;
     photo_profile: string | null;
