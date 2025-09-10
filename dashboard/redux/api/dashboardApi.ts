@@ -4,7 +4,10 @@ import {
     GetClassProgressResponse,
     GetDashboardContentResponse,
     LearnRecommendationResponse,
+    MajorBooksResponse,
     MajorClassesResponse,
+    MajorFlashcardsResponse,
+    MajorQuizResponse,
     MajorRecommendationResponse,
     NewlyReleasedForYouResponse,
     StudentCourseResponse,
@@ -157,6 +160,38 @@ export const dashboardApi = baseApi.injectEndpoints({
                 params
             }),
             providesTags: [{ type: 'PROFILE', id: 'NEWLY_RELEASED_FOR_YOU' }]
+        }),
+        getMajorBooks: builder.query<
+            MajorBooksResponse,
+            { page?: number; limit?: number; search?: string }
+        >({
+            query: (params = { page: 1, limit: 12 }) => ({
+                url: `${LEARNING_V2_BASE_URL}dashboard/major-books/`,
+                params
+            }),
+            providesTags: [{ type: 'PROFILE', id: 'MAJOR_BOOKS' }]
+        }),
+
+        getMajorFlashcards: builder.query<
+            MajorFlashcardsResponse,
+            { page?: number; limit?: number; search?: string }
+        >({
+            query: (params = { page: 1, limit: 12 }) => ({
+                url: `${LEARNING_V2_BASE_URL}dashboard/major-flashcards/`,
+                params
+            }),
+            providesTags: [{ type: 'PROFILE', id: 'MAJOR_FLASHCARDS' }]
+        }),
+
+        getMajorQuiz: builder.query<
+            MajorQuizResponse,
+            { page?: number; limit?: number; search?: string }
+        >({
+            query: (params = { page: 1, limit: 12 }) => ({
+                url: `${LEARNING_V2_BASE_URL}dashboard/major-quiz/`,
+                params
+            }),
+            providesTags: [{ type: 'PROFILE', id: 'MAJOR_QUIZ' }]
         })
     })
 });
@@ -175,5 +210,8 @@ export const {
     useGetMajorClassesQuery,
     useGetMajorRecommendationQuery,
     useGetLearnRecommendationQuery,
-    useGetNewlyReleasedForYouQuery
+    useGetNewlyReleasedForYouQuery,
+    useGetMajorBooksQuery,
+    useGetMajorFlashcardsQuery,
+    useGetMajorQuizQuery
 } = dashboardApi;

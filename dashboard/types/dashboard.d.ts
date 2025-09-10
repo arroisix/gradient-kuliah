@@ -249,6 +249,72 @@ export interface NewlyReleasedForYouResponse {
     data: NewlyReleasedForYouItem[];
 }
 
+export interface MajorBookItem {
+    id: string;
+    slug: string | null;
+    type: string;
+    title: string | null;
+    course_name: string | null;
+    course_slug: string | null;
+    thumbnail: string | null;
+    book_title: string | null;
+    book_slug: string | null;
+    chapter_name: string | null;
+    subchapter_name: string | null;
+    subchapter_slug: string | null;
+    problem_title: string | null;
+    problem_slug: string | null;
+    page_title: string | null;
+    page_number: number | null;
+    total_questions: number | null;
+    card_count: number | null;
+    created_by: string | null;
+    photo_profile: string | null;
+    major: string | null;
+}
+
+export interface MajorBooksResponse {
+    count_items: number;
+    previous_page: number | null;
+    next_page: number | null;
+    data: MajorBookItem[];
+    major: string | null;
+}
+
+export interface MajorFlashcardItem {
+    id: string;
+    slug: string | null;
+    type: string;
+    title: string | null;
+    thumbnail: string | null;
+    card_count: number | null;
+    created_by: string | null;
+    photo_profile: string | null;
+}
+
+export interface MajorFlashcardsResponse {
+    count_items: number;
+    previous_page: number | null;
+    next_page: number | null;
+    data: MajorFlashcardItem[];
+}
+
+export interface MajorQuizItem {
+    id: string;
+    slug: string;
+    title: string;
+    course_name: string;
+    total_questions: number;
+    progress_percentage: number;
+}
+
+export interface MajorQuizResponse {
+    count_items: number;
+    previous_page: number | null;
+    next_page: number | null;
+    data: MajorQuizItem[];
+}
+
 export type {
     StudentLearningProgress,
     StudentLearningProgressResponse,
@@ -282,5 +348,11 @@ export type {
     CourseRecommendation,
     LearnRecommendationResponse,
     NewlyReleasedForYouItem,
-    NewlyReleasedForYouResponse
+    NewlyReleasedForYouResponse,
+    MajorBookItem,
+    MajorBooksResponse,
+    MajorFlashcardItem,
+    MajorFlashcardsResponse,
+    MajorQuizItem,
+    MajorQuizResponse
 };
