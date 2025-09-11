@@ -46,8 +46,7 @@ const DashboardFeatures = (): JSX.Element => {
                 ) : (
                     <FlashcardLargeIcon />
                 ),
-            url: '/flashcards',
-            isNew: true
+            url: '/flashcards'
         },
         {
             id: 'kelas',
@@ -97,7 +96,6 @@ const DashboardFeatures = (): JSX.Element => {
                     xl:grid-cols-[repeat(5,1fr)_auto]
                     gap-4 xl:gap-2
                 ">
-                {/* Core feature cards (exclude 'lainnya' placeholder) */}
                 {features
                     .filter((f) => f.id !== 'lainnya')
                     .map((feature) => (
