@@ -25,6 +25,8 @@ import {
     MajorQuizItem
 } from 'dashboard/types/dashboard';
 import DashboardUpdatesBanner from './DashboardBanner';
+import FlashcardCard from 'flashcard/components/Entrypoint/FlashcardCard';
+import LatihanCard from 'exercises/components/Entrypoint/LatihanCard';
 
 const PrivateDashboardContent = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -377,50 +379,48 @@ const PrivateDashboardContent = (): JSX.Element => {
         );
     };
 
-    const majorFlashcardsHasTwoLineCards = checkForTwoLineTitles(
-        majorFlashcards?.data || []
-    );
-
     const renderMajorFlashcardItem = (
         item: MajorFlashcardItem
     ): JSX.Element => {
-        // <- added
         const title = item.title || '';
         return (
-            <ContentCard
-                id={item.id}
+            <FlashcardCard
+                key={item.id}
+                slug={item.slug}
                 title={title}
-                category="Flashcard"
-                thumbnail={item.thumbnail}
-                href={`/flashcards/${item.slug}`}
-                cardCount={item.card_count ?? undefined}
-                authorName={item.created_by ?? undefined}
-                hasTwoLineCards={majorFlashcardsHasTwoLineCards}
-                onClick={() => {
-                    tracker?.genericTrack('Click Dashboard Content Card', {
-                        section: 'Flashcard dari Teman Sejurusan',
-                        cardTitle: title,
-                        cardCategory: 'Flashcard'
-                    });
-                }}
+                totalCards={item.card_count ?? 0}
+                author={
+                    item.created_by
+                        ? {
+                              name: item.created_by.name,
+                              photo_profile: item.created_by.photo_profile || ''
+                          }
+                        : undefined
+                }
+                cardType="allFlashcards"
             />
         );
     };
 
-    const majorQuizHasTwoLineCards = checkForTwoLineTitles(
-        majorQuiz?.data || []
-    );
-
     const renderMajorQuizItem = (item: MajorQuizItem): JSX.Element => {
+        const exercise = {
+            id: item.id,
+            slug: item.slug,
+            title: item.title,
+            icon: item.icon || '🧪',
+            subject: item.subject,
+            total_questions: item.total_questions,
+            progress: item.progress ?? undefined,
+            status: item.status ?? undefined,
+            progress_percentage: item.progress_percentage ?? undefined,
+            is_free: item.is_free ?? undefined
+        };
+
         return (
-            <ContentCard
-                id={item.slug}
-                title={item.title}
-                category="Kuis"
-                thumbnail={''}
-                href={`/latihan/${item.slug}`}
-                problemCount={item.total_questions}
-                hasTwoLineCards={majorQuizHasTwoLineCards}
+            <LatihanCard
+                key={item.id}
+                exercise={exercise as any}
+                cardType="allExercises"
                 onClick={() => {
                     tracker?.genericTrack('Click Dashboard Content Card', {
                         section: 'Kuis Populer di Jurusan Kamu',
