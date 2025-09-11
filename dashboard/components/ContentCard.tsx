@@ -29,6 +29,7 @@ interface ContentCardProps {
     onClick?: () => void;
     isMajorClass?: boolean;
     hasTwoLineCards?: boolean;
+    isFree?: boolean;
 }
 
 type CategoryType =
@@ -58,6 +59,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
     isBaru = false,
     isMajorClass = false,
     hasTwoLineCards = false,
+    isFree = false,
     onClick
 }) => {
     const isVideo =
@@ -152,16 +154,23 @@ const ContentCard: React.FC<ContentCardProps> = ({
             <div className="p-4 flex flex-col justify-between">
                 <div className="flex flex-col">
                     {!isMajorClass && (
-                        <div
-                            className="rounded-full text-xs text-white font-medium px-3 py-1 mb-2 w-fit"
-                            style={{
-                                backgroundColor:
-                                    badgeColor ||
-                                    getColorForCategory(
-                                        category as CategoryType
-                                    )
-                            }}>
-                            {badgeText || category}
+                        <div className="flex items-center gap-2 mb-2">
+                            {isFree && (
+                                <span className="rounded-full text-xs font-medium px-3 py-1 bg-[#0E3824] text-[#03AC5C]">
+                                    GRATIS
+                                </span>
+                            )}
+                            <span
+                                className="rounded-full text-xs text-white font-medium px-3 py-1"
+                                style={{
+                                    backgroundColor:
+                                        badgeColor ||
+                                        getColorForCategory(
+                                            category as CategoryType
+                                        )
+                                }}>
+                                {badgeText || category}
+                            </span>
                         </div>
                     )}
 
