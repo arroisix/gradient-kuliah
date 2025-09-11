@@ -8,7 +8,8 @@ import {
     useGetNewlyReleasedForYouQuery,
     useGetMajorBooksQuery,
     useGetMajorFlashcardsQuery,
-    useGetMajorQuizQuery
+    useGetMajorQuizQuery,
+    useGetFreeForYouContentQuery
 } from 'dashboard/redux/api/dashboardApi';
 import CarouselSection from './CarouselSection';
 import ContentCard from './ContentCard';
@@ -22,16 +23,20 @@ import {
     NewlyReleasedForYouItem,
     MajorBookItem,
     MajorFlashcardItem,
-    MajorQuizItem
+    MajorQuizItem,
+    FreeForYouItem
 } from 'dashboard/types/dashboard';
 import DashboardUpdatesBanner from './DashboardBanner';
 import FlashcardCard from 'flashcard/components/Entrypoint/FlashcardCard';
 import LatihanCard from 'exercises/components/Entrypoint/LatihanCard';
+// import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 const PrivateDashboardContent = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const tracker = useTracker();
     const isDashboardRevamp = true;
+
+    // const isSubscribed = useCourseSubscription();
 
     const { data: majorClasses, isLoading: isLoadingMajorClasses } =
         useGetMajorClassesQuery({ limit: 12 }, { skip: !isAuthenticated });
@@ -71,6 +76,9 @@ const PrivateDashboardContent = (): JSX.Element => {
 
     const { data: majorFlashcards, isLoading: isLoadingMajorFlashcards } =
         useGetMajorFlashcardsQuery({ limit: 12 }, { skip: !isAuthenticated });
+
+    const { data: freeForYouContent, isLoading: isLoadingFreeForYou } =
+        useGetFreeForYouContentQuery({ limit: 12 }, { skip: !isAuthenticated });
 
     const checkForTwoLineTitles = (items: any[]) => {
         if (!items || !items.length) return false;
@@ -432,6 +440,77 @@ const PrivateDashboardContent = (): JSX.Element => {
         );
     };
 
+    const prepareFreeForYouItemData = (item: FreeForYouItem) => {
+        const title = item.title || item.book_title || item.course_name || '';
+        let href = '#';
+        let category = item.type;
+
+        switch (item.type) {
+            case 'Kelas':
+                href = `/kelas/${item.course_slug}`;
+                category = 'Kelas';
+                break;
+            case 'Kuis':
+                href = `/latihan/${item.slug}`;
+                category = 'Kuis';
+                break;
+            case 'Flashcard':
+                href = `/flashcards/${item.slug}`;
+                category = 'Flashcard';
+                break;
+            case 'Bank Soal':
+                href = `/perpustakaan/bank-soal/${item.book_slug}`;
+                category = 'Bank Soal';
+                break;
+            case 'Textbook':
+                href = `/perpustakaan/textbook/${item.book_slug}`;
+                category = 'Textbook Solution';
+                break;
+            case 'Catatan':
+            case 'Astronotes':
+                href = `/astronotes/${item.book_slug}/`;
+                category = 'Astronotes';
+                break;
+            default:
+                // leave defaults
+                break;
+        }
+
+        return {
+            id: item.id,
+            title,
+            category,
+            thumbnail: item.thumbnail,
+            href,
+            courseName: item.course_name ?? undefined,
+            cardCount: item.card_count ?? undefined,
+            problemCount: item.total_questions ?? undefined,
+            authorName: item.created_by ?? undefined
+        };
+    };
+
+    const freeForYouHasTwoLineCards = checkForTwoLineTitles(
+        freeForYouContent?.data || []
+    );
+
+    const renderFreeForYouItem = (item: FreeForYouItem): JSX.Element => {
+        const itemData = prepareFreeForYouItemData(item);
+        return (
+            <ContentCard
+                {...itemData}
+                isFree={true}
+                hasTwoLineCards={freeForYouHasTwoLineCards}
+                onClick={() => {
+                    tracker?.genericTrack('Click Dashboard Content Card', {
+                        section: 'Gratis untuk Kamu',
+                        cardTitle: itemData.title,
+                        cardCategory: itemData.category
+                    });
+                }}
+            />
+        );
+    };
+
     return (
         <>
             <CarouselSection
@@ -464,6 +543,16 @@ const PrivateDashboardContent = (): JSX.Element => {
                 Jangan Sampai Ketinggalan!
             </h2>
             <DashboardUpdatesBanner />
+
+            {
+                <CarouselSection
+                    title="Gratis untuk Kamu"
+                    items={freeForYouContent?.data}
+                    isLoading={isLoadingFreeForYou}
+                    renderItem={renderFreeForYouItem}
+                    eventCategory="FreeForYouContent"
+                />
+            }
 
             <CarouselSection
                 title={`Buku Wajib Anak ${
