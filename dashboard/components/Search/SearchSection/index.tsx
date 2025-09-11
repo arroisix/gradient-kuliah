@@ -35,21 +35,24 @@ const SearchSection = (): JSX.Element => {
             </div>
 
             <div className="mt-4">
-                <div
-                    className="flex items-center gap-2 overflow-x-auto md:overflow-visible -mx-4 px-4 md:mx-0 md:px-0 no-scrollbar md:justify-center"
-                    style={{ WebkitOverflowScrolling: 'touch' }}
-                    aria-label="Search suggestions">
-                    <span className="text-graphite-400 text-sm flex-shrink-0">
-                        Kamu bisa cari:
-                    </span>
-                    {suggestions.map((suggestion, index) => (
-                        <button
-                            key={index}
-                            onClick={() => handleSuggestionClick(suggestion)}
-                            className="flex-shrink-0 px-4 py-2 border border-gray-600 rounded-lg text-white hover:bg-gray-700 text-xs md:text-sm whitespace-nowrap">
-                            {suggestion}
-                        </button>
-                    ))}
+                {/* Scrollable wrapper that is centered when content narrower than viewport */}
+                <div className="-mx-4 px-4 md:mx-0 md:px-0 max-w-full overflow-x-auto no-scrollbar">
+                    {/* Row shrinks to content (w-max) so it can center; when wider, user can scroll */}
+                    <div className="flex items-center gap-2 w-max mx-auto">
+                        <span className="text-graphite-400 text-sm flex-shrink-0">
+                            Kamu bisa cari:
+                        </span>
+                        {suggestions.map((suggestion, index) => (
+                            <button
+                                key={index}
+                                onClick={() =>
+                                    handleSuggestionClick(suggestion)
+                                }
+                                className="flex-shrink-0 px-4 py-2 border border-gray-600 rounded-lg text-white hover:bg-gray-700 text-xs md:text-sm whitespace-nowrap">
+                                {suggestion}
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
