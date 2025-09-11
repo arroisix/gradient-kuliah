@@ -21,9 +21,12 @@ type Feature = {
     isNew?: boolean;
 };
 
-const DashboardFeatures = () => {
+const DashboardFeatures = (): JSX.Element => {
     const [isOpen, setIsOpen] = useState(false);
     const tracker = useTracker();
+
+    const cardBaseClasses =
+        'relative group rounded-xl transition-colors md:bg-[#1D1D1D] md:hover:bg-neutral-800 min-h-[96px]';
 
     const features: Feature[] = [
         {
@@ -81,35 +84,23 @@ const DashboardFeatures = () => {
             id: 'diskusi',
             title: 'Diskusi',
             description: 'Tanya ke tutor atau user lain',
-            Icon: DiskusiIcon,
+            Icon: () => <DiskusiIcon width={64} height={69} />,
             url: '/komunitas'
         }
     ];
 
     return (
         <div className="w-full mx-auto space-y-4 mb-4">
-            <div className="grid grid-cols-3 md:grid-cols-6 gap-6 md:gap-2">
-                {features.map((feature) =>
-                    feature.id === 'lainnya' ? (
-                        <button
-                            key={feature.id}
-                            onClick={() => {
-                                setIsOpen(true);
-                                tracker?.genericTrack(
-                                    'Click More Features Dashboard Card'
-                                );
-                            }}
-                            className="relative group flex flex-col items-center text-center gap-2 md:flex-row-reverse md:items-center md:justify-between md:gap-3 md:text-left md:p-3 rounded-xl transition-colors focus:outline-none md:bg-[#1D1D1D] md:hover:bg-neutral-800">
-                            <div className="relative w-16 h-16 rounded-full bg-[#1D1D1D] flex items-center justify-center md:w-auto md:h-auto md:rounded-none md:bg-transparent">
-                                <feature.Icon width={32} height={32} />
-                            </div>
-                            <div className="flex flex-col items-center md:items-start">
-                                <span className="font-bold text-white text-xs md:text-sm">
-                                    {feature.title}
-                                </span>
-                            </div>
-                        </button>
-                    ) : (
+            <div
+                className="
+                    grid grid-cols-3
+                    xl:grid-cols-[repeat(5,1fr)_auto]
+                    gap-4 xl:gap-2
+                ">
+                {/* Core feature cards (exclude 'lainnya' placeholder) */}
+                {features
+                    .filter((f) => f.id !== 'lainnya')
+                    .map((feature) => (
                         <Link
                             key={feature.id}
                             href={feature.url}
@@ -118,28 +109,78 @@ const DashboardFeatures = () => {
                                     `Click ${feature.title} Dashboard Card`
                                 )
                             }
-                            className="relative group flex flex-col items-center text-center gap-2 md:flex-row-reverse md:items-center md:justify-between md:gap-3 md:text-left md:p-3 rounded-xl transition-colors md:bg-[#1D1D1D] md:hover:bg-neutral-800">
-                            <div className="relative w-16 h-16 rounded-full bg-[#1D1D1D] flex items-center justify-center md:w-auto md:h-auto md:rounded-none md:bg-transparent">
+                            className={`${cardBaseClasses}
+                                flex flex-col items-center text-center gap-2
+                                xl:flex-row-reverse xl:items-center xl:justify-between xl:gap-3 xl:text-left
+                                px-4 py-3 xl:p-3
+                            `}>
+                            <div className="relative w-14 h-14 rounded-full bg-[#1D1D1D] flex items-center justify-center xl:w-auto xl:h-auto xl:rounded-none xl:bg-transparent">
                                 <feature.Icon />
                                 {feature.isNew && (
                                     <span
-                                        className="absolute -bottom-2 left-1/2 -translate-x-1/2 py-0.5 px-2 text-[10px] rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56]
-                                                   md:top-0 md:right-0 md:-mt-2 md:-mr-2 md:bottom-auto md:left-auto md:translate-x-0 md:text-xs">
+                                        className="absolute -bottom-1 left-1/2 -translate-x-1/2 py-0.5 px-2 text-[10px] rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56]
+                                                   xl:top-0 xl:right-0 xl:-mt-2 xl:-mr-2 xl:bottom-auto xl:left-auto xl:translate-x-0 xl:text-xs">
                                         Baru
                                     </span>
                                 )}
                             </div>
-                            <div className="flex flex-col items-center md:items-start">
-                                <h3 className="font-bold text-white text-xs md:text-sm">
+                            <div className="flex flex-col items-center xl:items-start">
+                                <h3 className="font-bold text-white text-xs xl:text-sm">
                                     {feature.title}
                                 </h3>
-                                <p className="hidden md:block text-xs text-neutral-400">
+                                {/* Show description only on xl+ */}
+                                <p className="hidden xl:block text-[11px] xl:text-xs text-neutral-400 leading-snug">
                                     {feature.description}
                                 </p>
                             </div>
                         </Link>
-                    )
-                )}
+                    ))}
+
+                {/* Additional features shown inline below xl (merged list) */}
+                {moreFeatures.map((feature) => (
+                    <Link
+                        key={feature.id}
+                        href={feature.url}
+                        onClick={() =>
+                            tracker?.genericTrack(
+                                `Click ${feature.title} Dashboard Card`
+                            )
+                        }
+                        className={`${cardBaseClasses} flex flex-col items-center text-center gap-2 px-4 py-3 xl:hidden`}>
+                        <div className="relative w-14 h-14 rounded-full bg-[#1D1D1D] flex items-center justify-center">
+                            <feature.Icon />
+                        </div>
+                        <div className="flex flex-col items-center">
+                            <h3 className="font-bold text-white text-xs">
+                                {feature.title}
+                            </h3>
+                        </div>
+                    </Link>
+                ))}
+
+                {/* 'Lainnya' trigger only on xl (no custom narrow width anymore) */}
+                {features
+                    .filter((f) => f.id === 'lainnya')
+                    .map((feature) => (
+                        <button
+                            key={feature.id}
+                            onClick={() => {
+                                setIsOpen(true);
+                                tracker?.genericTrack(
+                                    'Click More Features Dashboard Card'
+                                );
+                            }}
+                            className={`${cardBaseClasses} hidden xl:flex flex-col items-center justify-center text-center gap-2 px-4 py-3 focus:outline-none`}>
+                            <div className="relative w-14 h-14 rounded-full bg-[#1D1D1D] flex items-center justify-center">
+                                <feature.Icon width={28} height={28} />
+                            </div>
+                            <div className="flex flex-col items-center">
+                                <span className="font-bold text-white text-xs xl:text-sm">
+                                    {feature.title}
+                                </span>
+                            </div>
+                        </button>
+                    ))}
             </div>
 
             <Transition appear show={isOpen} as={Fragment}>
