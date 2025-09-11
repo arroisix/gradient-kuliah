@@ -283,11 +283,22 @@ export interface MajorBooksResponse {
 
 export interface MajorFlashcardItem {
     id: string;
-    slug: string | null;
-    title: string | null;
-    card_count: number | null;
-    created_by: string | null;
-    photo_profile: string | null;
+    slug: string;
+    title: string;
+    description?: string | null;
+    is_private: boolean;
+    card_count: number;
+    created_by: {
+        name: string;
+        photo_profile: string | null;
+    };
+    created_by_me: boolean;
+    ai_generated: boolean;
+    is_completed: boolean;
+    sources: {
+        type: string;
+        file_name: string;
+    }[];
 }
 
 export interface MajorFlashcardsResponse {
@@ -301,9 +312,13 @@ export interface MajorQuizItem {
     id: string;
     slug: string;
     title: string;
-    course_name: string;
+    subject: string;
+    icon: string;
     total_questions: number;
-    progress_percentage: number;
+    progress: number | null;
+    status: string | null;
+    is_free: boolean | null;
+    progress_percentage: number | null;
 }
 
 export interface MajorQuizResponse {
