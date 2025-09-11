@@ -1,6 +1,7 @@
 import { baseApi } from 'redux/api/baseApi';
 import {
     BannerResponse,
+    FreeForYouResponse,
     GetClassProgressResponse,
     GetDashboardContentResponse,
     LearnRecommendationResponse,
@@ -192,6 +193,17 @@ export const dashboardApi = baseApi.injectEndpoints({
                 params
             }),
             providesTags: [{ type: 'PROFILE', id: 'MAJOR_QUIZ' }]
+        }),
+
+        getFreeForYouContent: builder.query<
+            FreeForYouResponse,
+            { page?: number; limit?: number }
+        >({
+            query: (params = { page: 1, limit: 12 }) => ({
+                url: `${LEARNING_V2_BASE_URL}dashboard/free-for-you/`,
+                params
+            }),
+            providesTags: [{ type: 'PROFILE', id: 'FREE_FOR_YOU' }]
         })
     })
 });
@@ -213,5 +225,6 @@ export const {
     useGetNewlyReleasedForYouQuery,
     useGetMajorBooksQuery,
     useGetMajorFlashcardsQuery,
-    useGetMajorQuizQuery
+    useGetMajorQuizQuery,
+    useGetFreeForYouContentQuery
 } = dashboardApi;
