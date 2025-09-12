@@ -29,14 +29,14 @@ import {
 import DashboardUpdatesBanner from './DashboardBanner';
 import FlashcardCard from 'flashcard/components/Entrypoint/FlashcardCard';
 import LatihanCard from 'exercises/components/Entrypoint/LatihanCard';
-// import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 const PrivateDashboardContent = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const tracker = useTracker();
     const isDashboardRevamp = true;
 
-    // const isSubscribed = useCourseSubscription();
+    const isSubscribed = useCourseSubscription();
 
     const { data: majorClasses, isLoading: isLoadingMajorClasses } =
         useGetMajorClassesQuery({ limit: 12 }, { skip: !isAuthenticated });
@@ -557,7 +557,7 @@ const PrivateDashboardContent = (): JSX.Element => {
             </h2>
             <DashboardUpdatesBanner />
 
-            {
+            {!isSubscribed && (
                 <CarouselSection
                     title="Gratis untuk Kamu"
                     items={freeForYouContent?.data}
@@ -565,7 +565,7 @@ const PrivateDashboardContent = (): JSX.Element => {
                     renderItem={renderFreeForYouItem}
                     eventCategory="FreeForYouContent"
                 />
-            }
+            )}
 
             <CarouselSection
                 title={`Buku Wajib Anak ${
