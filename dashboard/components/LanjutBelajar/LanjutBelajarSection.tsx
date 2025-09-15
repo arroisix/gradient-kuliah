@@ -25,7 +25,7 @@ export const TABS = {
     FLASHCARD: 'flashcard'
 } as const;
 
-export type TabType = typeof TABS[keyof typeof TABS];
+export type TabType = (typeof TABS)[keyof typeof TABS];
 
 export interface CardData {
     id: string;
@@ -226,6 +226,19 @@ const LanjutBelajarSection: React.FC = () => {
         (activeTab === TABS.BUKU && isLoadingBook) ||
         (activeTab === TABS.KUIS && isLoadingQuiz) ||
         (activeTab === TABS.FLASHCARD && isLoadingFlashcard);
+
+    const hasAnyContent = () => {
+        const hasClasses = classData?.data && classData.data.length > 0;
+        const hasBooks = bookData?.data && bookData.data.length > 0;
+        const hasQuiz = quizData?.data && quizData.data.length > 0;
+        const hasFlashcards =
+            flashcardData?.data && flashcardData.data.length > 0;
+        return hasClasses || hasBooks || hasQuiz || hasFlashcards;
+    };
+
+    if (!isLoading && !hasAnyContent()) {
+        return null;
+    }
 
     const handleCardClick = (card: CardData): void => {
         tracker?.genericTrack('Click Card on Continue Learning Section', {
