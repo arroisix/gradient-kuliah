@@ -151,7 +151,7 @@ const DashboardContent = (): JSX.Element => {
         </div>
     ) : (
         <div>
-            <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-scren">
+            <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     {isAuthenticated && (
                         <div className="flex w-full">
