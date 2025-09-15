@@ -77,7 +77,7 @@ const DashboardSearchInput = ({
                     </Field>
                     <button
                         type="submit"
-                        className="absolute right-2 flex items-center justify-center w-7 h-7 bg-purple-700 rounded-full mr-2">
+                        className="absolute right-2 flex items-center justify-center w-7 h-7 bg-[#5F2BCE] rounded-full mr-2">
                         <BiSearch size={16} className="text-white" />
                     </button>
                 </div>
