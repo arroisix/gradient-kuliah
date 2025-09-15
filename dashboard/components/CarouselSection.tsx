@@ -21,7 +21,7 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
     itemsPerPage = 4,
     renderItem,
     eventCategory,
-    itemWrapperClassName = 'w-[calc(100%-2rem)] sm:w-[calc((100%-1rem)/2)] lg:w-[calc((100%-2rem)/3)] xl:w-[calc((100%-3rem)/3)]'
+    itemWrapperClassName = 'w-80'
 }) => {
     const tracker = useTracker();
     const carouselRef = useRef<HTMLDivElement>(null);
@@ -119,23 +119,26 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
                 </div>
             </div>
 
-            <div
-                ref={carouselRef}
-                className="flex overflow-x-auto gap-4 xl:gap-6 pr-4 pb-4 no-scrollbar snap-x snap-mandatory">
-                {displayItems.map((item, index) => (
-                    <div
-                        key={`${slugify(title)}-${index}`}
-                        className={cn(
-                            'shrink-0 min-w-0 snap-start',
-                            itemWrapperClassName
-                        )}>
-                        {isLoading ? (
-                            <Skeleton className="w-full h-56 rounded-lg" />
-                        ) : (
-                            renderItem(item, index)
-                        )}
-                    </div>
-                ))}
+            <div className="relative overflow-hidden mb-8">
+                <div
+                    ref={carouselRef}
+                    className="flex overflow-x-auto gap-4 xl:gap-6 scrollbar-hide"
+                    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                    {displayItems.map((item, index) => (
+                        <div
+                            key={`${slugify(title)}-${index}`}
+                            className={cn(
+                                'flex-shrink-0 snap-start',
+                                itemWrapperClassName
+                            )}>
+                            {isLoading ? (
+                                <Skeleton className="w-full h-56 rounded-lg" />
+                            ) : (
+                                renderItem(item, index)
+                            )}
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );
