@@ -25,7 +25,7 @@ const SearchSection = (): JSX.Element => {
 
     const suggestions = [
         `Kelas untuk jurusan ${major}`,
-        `Contoh soal ${major}`,
+        `Kuis untuk ${major}`,
         `Topik terpopuler di ${major}`
     ];
 
