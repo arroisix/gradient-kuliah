@@ -1,7 +1,8 @@
-import { Check, Loader2, Search, X } from 'lucide-react';
+import { Loader2, Search, X } from 'lucide-react';
 import { usePayment } from 'payment/contexts/PaymentProvider';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useValidatePromoMutation } from 'referral/redux/referalApi';
+import { useDebounce } from 'commons/hooks/useDebounce';
 
 const PromoCodeInput = ({
     placeholder,
@@ -34,8 +35,43 @@ const PromoCodeInput = ({
         'idle' | 'loading' | 'success' | 'error' | 'reopen'
     >(initialState);
     const [error, setError] = useState<string | undefined>(undefined);
+    const [isManuallyClearing, setIsManuallyClearing] = useState(false);
+    const [validate] = useValidatePromoMutation();
+    const debouncedCode = useDebounce(code, 1000);
 
-    const [validate, { data: validationResult }] = useValidatePromoMutation();
+    const validatePromoCode = useCallback(async (promoCode: string) => {
+        if (!promoCode || !packet?.id) return;
+
+        setValidationState('loading');
+        try {
+            const result = await validate({
+                promo_code: promoCode,
+                packet_id: packet.id
+            }).unwrap();
+
+            if (
+                paymentMethod === 'VOUCHER' &&
+                result.promo_type !== 'OFFLINE VOUCHER'
+            ) {
+                setValidationState('error');
+                setError('Kode tidak valid untuk metode voucher');
+                return;
+            }
+
+            if (result.is_valid) {
+                setAppliedPromo(result);
+                setPromoAppliedManually(true);
+                setValidationState('reopen');
+                onApply?.();
+            } else {
+                setValidationState('error');
+                setError(result.message || 'Promo code does not exist');
+            }
+        } catch (e) {
+            setValidationState('error');
+            setError('Gagal memvalidasi kode');
+        }
+    }, [packet?.id, paymentMethod, validate, setAppliedPromo, setPromoAppliedManually, onApply]);
 
     // reset local code when the user manually un‐applies the promo
     useEffect(() => {
@@ -48,71 +84,27 @@ const PromoCodeInput = ({
 
     // when they apply a promo manually elsewhere, reflect it inline too
     useEffect(() => {
-        if (promoAppliedManually && appliedPromo) {
+        if (promoAppliedManually && appliedPromo && !isManuallyClearing) {
             setCode(appliedPromo.promo_code!);
             setValidationState('reopen');
             setError(undefined);
         }
-    }, [promoAppliedManually, appliedPromo]);
+    }, [promoAppliedManually, appliedPromo, isManuallyClearing]);
+
+    useEffect(() => {
+        if (debouncedCode && validationState === 'idle' && debouncedCode === code) {
+            validatePromoCode(debouncedCode);
+        }
+    }, [debouncedCode, validationState, validatePromoCode, code]);
 
     const handleClick = async (): Promise<void> => {
-        if (!code || !packet?.id) return;
-
-        if (validationState === 'idle') {
-            setValidationState('loading');
-            try {
-                const result = await validate({
-                    promo_code: code,
-                    packet_id: packet.id
-                }).unwrap();
-
-                if (
-                    paymentMethod === 'VOUCHER' &&
-                    result.promo_type !== 'OFFLINE VOUCHER'
-                ) {
-                    setValidationState('error');
-                    setError('Kode tidak valid untuk metode voucher');
-                    return;
-                }
-
-                if (result.is_valid) {
-                    if (applyAfterValid) {
-                        setAppliedPromo(result);
-                        setPromoAppliedManually(true);
-                        setValidationState('reopen');
-                        onApply?.();
-                    } else {
-                        setValidationState('success');
-                    }
-                } else {
-                    setValidationState('error');
-                    setError(result.message || 'Kode tidak valid');
-                }
-            } catch (e) {
-                setValidationState('error');
-                setError('Gagal memvalidasi kode');
-            }
-        } else if (validationState === 'success') {
-            if (validationResult) {
-                if (
-                    paymentMethod === 'VOUCHER' &&
-                    validationResult.promo_type !== 'OFFLINE VOUCHER'
-                ) {
-                    setValidationState('error');
-                    setError('Kode tidak valid untuk metode voucher');
-                    return;
-                }
-
-                setAppliedPromo(validationResult);
-                setPromoAppliedManually(true);
-                if (onApply) {
-                    onApply();
-                }
-            }
-        } else if (validationState === 'reopen') {
+        if (validationState === 'reopen') {
+            setIsManuallyClearing(true);
+            setCode('');
+            setIdle();
             setAppliedPromo(undefined);
             setPromoAppliedManually(false);
-            setIdle();
+            setTimeout(() => setIsManuallyClearing(false), 100);
         } else if (validationState === 'error') {
             setIdle();
             setCode('');
@@ -120,13 +112,30 @@ const PromoCodeInput = ({
     };
 
     const handleChange = (newCode: string): void => {
-        if (validationState !== 'idle') {
+        if (newCode === '') {
+            setCode(newCode);
+            if (validationState !== 'idle') {
+                setIdle();
+            }
+            if (error) {
+                setError(undefined);
+            }
+            if (appliedPromo && promoAppliedManually) {
+                setAppliedPromo(undefined);
+                setPromoAppliedManually(false);
+            }
+            return;
+        }
+        
+        if (validationState === 'error' || validationState === 'success' || validationState === 'reopen') {
             setIdle();
         }
-        if (appliedPromo && appliedPromo.promo_code === newCode) {
-            setValidationState('success');
-        }
+        
         setCode(newCode);
+        
+        if (error) {
+            setError(undefined);
+        }
     };
 
     const setIdle = (): void => {
@@ -154,7 +163,6 @@ const PromoCodeInput = ({
 
     const getButtonStyle = (): string => {
         switch (validationState) {
-            case 'success':
             case 'reopen':
                 return 'bg-accent-purple rounded-full';
             case 'error':
@@ -162,7 +170,7 @@ const PromoCodeInput = ({
             case 'loading':
             case 'idle':
             default:
-                return 'bg-accent-purple rounded-lg';
+                return 'bg-transparent';
         }
     };
 
@@ -170,15 +178,6 @@ const PromoCodeInput = ({
         switch (validationState) {
             case 'loading':
                 return <Loader2 className="w-5 h-5 text-white animate-spin" />;
-            case 'success':
-                return (
-                    <div className="flex items-center space-x-2 px-3 py-1">
-                        <div className="flex items-center justify-center w-3 h-3 rounded-full bg-white">
-                            <Check className="text-accent-purple" />
-                        </div>
-                        <span className="text-sm font-body">Pakai</span>
-                    </div>
-                );
             case 'reopen':
                 return (
                     <div className="flex items-center space-x-2 px-3 py-1">
@@ -187,9 +186,9 @@ const PromoCodeInput = ({
                     </div>
                 );
             case 'error':
-                return <X className="w-h h-5 text-white" />;
+                return <X className="w-5 h-5 text-white" />;
             default:
-                return <Search className="w-5 h-5 text-white" />;
+                return <Search className="w-5 h-5 text-gray-400" />;
         }
     };
 
@@ -205,9 +204,13 @@ const PromoCodeInput = ({
                     className={`w-full px-4 py-3 pr-12 border rounded-lg text-white placeholder-[#666666] focus:outline-none focus:border-purple-500 transition-colors ${getInputStyle()}`}
                 />
                 <button
-                    className={`absolute right-3 top-1/2 -translate-y-1/2 p-1 ${getButtonStyle()}`}
+                    className={`absolute right-3 top-1/2 -translate-y-1/2 p-1 ${getButtonStyle()} ${
+                        validationState === 'reopen' || validationState === 'error' 
+                            ? 'cursor-pointer' 
+                            : 'cursor-default'
+                    }`}
                     onClick={handleClick}
-                    disabled={validationState === 'loading'}>
+                    disabled={validationState === 'loading' || (validationState !== 'reopen' && validationState !== 'error')}>
                     {getInputIcon()}
                 </button>
             </div>
