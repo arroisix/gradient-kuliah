@@ -140,7 +140,10 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
             )}
 
             {/* Checkout Section */}
-            <div className={`px-4 pb-4 ${paymentMethod === 'VOUCHER' && 'pt-4'}`}>
+            <div
+                className={`px-4 pb-4 ${
+                    paymentMethod === 'VOUCHER' && 'pt-4'
+                }`}>
                 <div>
                     {/* Expanded Summary */}
                     {isExpanded && (
@@ -160,19 +163,20 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
                                 </span>
                             </div>
 
-                            {appliedPromo?.is_valid && paymentMethod !== 'VOUCHER' && (
-                                <div className="flex justify-between items-center mt-1">
-                                    <span className="text-neutral-200 text-sm font-body">
-                                        Diskon {appliedPromo.promo_code}
-                                    </span>
-                                    <span className="text-state-success text-sm font-body">
-                                        -
-                                        {formatCurrency(
-                                            appliedPromo.discount_amount.toString()
-                                        )}
-                                    </span>
-                                </div>
-                            )}
+                            {appliedPromo?.is_valid &&
+                                paymentMethod !== 'VOUCHER' && (
+                                    <div className="flex justify-between items-center mt-1">
+                                        <span className="text-neutral-200 text-sm font-body">
+                                            Diskon {appliedPromo.promo_code}
+                                        </span>
+                                        <span className="text-state-success text-sm font-body">
+                                            -
+                                            {formatCurrency(
+                                                appliedPromo.discount_amount.toString()
+                                            )}
+                                        </span>
+                                    </div>
+                                )}
                         </div>
                     )}
                 </div>
