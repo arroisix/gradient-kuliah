@@ -7,13 +7,11 @@ import { useDebounce } from 'commons/hooks/useDebounce';
 const PromoCodeInput = ({
     placeholder,
     className,
-    applyAfterValid = false,
     onApply,
     bgTransparent = true
 }: {
     placeholder: string;
     className?: string;
-    applyAfterValid?: boolean;
     onApply?: () => void;
     bgTransparent?: boolean;
 }): JSX.Element => {
@@ -39,39 +37,49 @@ const PromoCodeInput = ({
     const [validate] = useValidatePromoMutation();
     const debouncedCode = useDebounce(code, 1000);
 
-    const validatePromoCode = useCallback(async (promoCode: string) => {
-        if (!promoCode || !packet?.id) return;
+    const validatePromoCode = useCallback(
+        async (promoCode: string) => {
+            if (!promoCode || !packet?.id) return;
 
-        setValidationState('loading');
-        try {
-            const result = await validate({
-                promo_code: promoCode,
-                packet_id: packet.id
-            }).unwrap();
+            setValidationState('loading');
+            try {
+                const result = await validate({
+                    promo_code: promoCode,
+                    packet_id: packet.id
+                }).unwrap();
 
-            if (
-                paymentMethod === 'VOUCHER' &&
-                result.promo_type !== 'OFFLINE VOUCHER'
-            ) {
+                if (
+                    paymentMethod === 'VOUCHER' &&
+                    result.promo_type !== 'OFFLINE VOUCHER'
+                ) {
+                    setValidationState('error');
+                    setError('Kode tidak valid untuk metode voucher');
+                    return;
+                }
+
+                if (result.is_valid) {
+                    setAppliedPromo(result);
+                    setPromoAppliedManually(true);
+                    setValidationState('reopen');
+                    onApply?.();
+                } else {
+                    setValidationState('error');
+                    setError(result.message || 'Promo code does not exist');
+                }
+            } catch (e) {
                 setValidationState('error');
-                setError('Kode tidak valid untuk metode voucher');
-                return;
+                setError('Gagal memvalidasi kode');
             }
-
-            if (result.is_valid) {
-                setAppliedPromo(result);
-                setPromoAppliedManually(true);
-                setValidationState('reopen');
-                onApply?.();
-            } else {
-                setValidationState('error');
-                setError(result.message || 'Promo code does not exist');
-            }
-        } catch (e) {
-            setValidationState('error');
-            setError('Gagal memvalidasi kode');
-        }
-    }, [packet?.id, paymentMethod, validate, setAppliedPromo, setPromoAppliedManually, onApply]);
+        },
+        [
+            packet?.id,
+            paymentMethod,
+            validate,
+            setAppliedPromo,
+            setPromoAppliedManually,
+            onApply
+        ]
+    );
 
     // reset local code when the user manually un‐applies the promo
     useEffect(() => {
@@ -92,7 +100,11 @@ const PromoCodeInput = ({
     }, [promoAppliedManually, appliedPromo, isManuallyClearing]);
 
     useEffect(() => {
-        if (debouncedCode && validationState === 'idle' && debouncedCode === code) {
+        if (
+            debouncedCode &&
+            validationState === 'idle' &&
+            debouncedCode === code
+        ) {
             validatePromoCode(debouncedCode);
         }
     }, [debouncedCode, validationState, validatePromoCode, code]);
@@ -126,13 +138,17 @@ const PromoCodeInput = ({
             }
             return;
         }
-        
-        if (validationState === 'error' || validationState === 'success' || validationState === 'reopen') {
+
+        if (
+            validationState === 'error' ||
+            validationState === 'success' ||
+            validationState === 'reopen'
+        ) {
             setIdle();
         }
-        
+
         setCode(newCode);
-        
+
         if (error) {
             setError(undefined);
         }
@@ -205,12 +221,17 @@ const PromoCodeInput = ({
                 />
                 <button
                     className={`absolute right-3 top-1/2 -translate-y-1/2 p-1 ${getButtonStyle()} ${
-                        validationState === 'reopen' || validationState === 'error' 
-                            ? 'cursor-pointer' 
+                        validationState === 'reopen' ||
+                        validationState === 'error'
+                            ? 'cursor-pointer'
                             : 'cursor-default'
                     }`}
                     onClick={handleClick}
-                    disabled={validationState === 'loading' || (validationState !== 'reopen' && validationState !== 'error')}>
+                    disabled={
+                        validationState === 'loading' ||
+                        (validationState !== 'reopen' &&
+                            validationState !== 'error')
+                    }>
                     {getInputIcon()}
                 </button>
             </div>

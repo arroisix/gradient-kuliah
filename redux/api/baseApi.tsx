@@ -71,7 +71,7 @@ async function getBrowserFingerPrint() {
 
 //     if (result.error?.status === 401) {
 //         const refreshToken = localStorage.getItem('refresh_token');
-        
+
 //         if (refreshToken) {
 //             try {
 //                 const refreshResult = await fetch(`${config.API_BASE_URL}identities/refresh-token/`, {
@@ -85,10 +85,10 @@ async function getBrowserFingerPrint() {
 
 //                 if (refreshResult.ok) {
 //                     const refreshData = await refreshResult.json();
-                    
+
 //                     localStorage.setItem('token', refreshData.access_token);
 //                     api.dispatch(updateToken(refreshData.access_token));
-                    
+
 //                     result = await baseQuery(args, api, extraOptions);
 //                 } else {
 //                     await performLogout();

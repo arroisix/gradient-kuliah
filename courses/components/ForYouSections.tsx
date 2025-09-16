@@ -89,7 +89,9 @@ const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
         : kelasTerbaruPublicLoading;
 
     const showKelasTerbaru =
-        !search && (kelasTerbaruLoading || kelasTerbaruItems.length > 0) && isAuthenticated;
+        !search &&
+        (kelasTerbaruLoading || kelasTerbaruItems.length > 0) &&
+        isAuthenticated;
 
     const eksplorData = eksplor.allData;
     const isInitialEksplorLoading = eksplor.isAllLoading;
