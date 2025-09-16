@@ -61,7 +61,7 @@ export function AuthProvider({
     //         try {
     //             const parsed = JSON.parse(persistData);
     //             const hasRefreshToken = parsed.refresh_token && parsed.refresh_token !== '"null"';
-                
+
     //             if (!hasRefreshToken) {
     //                 logout();
     //                 localStorage.removeItem('persist:user');
@@ -74,7 +74,6 @@ export function AuthProvider({
     //         }
     //     }
     // }, [router]);
-
 
     useEffect(() => {
         if (

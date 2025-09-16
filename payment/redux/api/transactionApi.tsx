@@ -66,7 +66,8 @@ export const transactionApi = baseApi.injectEndpoints({
                     response.status === 204 ||
                     response.status === 409 ||
                     response.status === 406,
-                responseHandler: (response: Response) => Promise.resolve(response.status),
+                responseHandler: (response: Response) =>
+                    Promise.resolve(response.status),
                 params
             }),
             transformResponse: (status: number) => {

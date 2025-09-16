@@ -182,7 +182,6 @@ const PaymentMethodItem: React.FC<PaymentMethodItemProps> = ({
                     <PromoCodeInput
                         placeholder="Redeem kartu voucher"
                         className="w-full"
-                        applyAfterValid={true}
                         bgTransparent={false}
                     />
                 </div>
