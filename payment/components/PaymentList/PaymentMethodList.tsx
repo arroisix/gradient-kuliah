@@ -9,7 +9,7 @@ import PaymentMethodFreeSection from './PaymentMethodFreeSection';
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
 
 const PaymentMethodList: React.FC = () => {
-    const { packet } = usePayment();
+    const { packet, paymentMethod } = usePayment();
     const {
         data: paymentMethods,
         isLoading: paymentMethodsLoading,
@@ -51,7 +51,12 @@ const PaymentMethodList: React.FC = () => {
         .filter((section) => section.key !== 'retail');
 
     return (
-        <div className="flex flex-col overflow-y-auto pb-44 md:pb-36 mx-4 sm:mx-8 md:mx-32">
+        <div
+            className={`flex flex-col overflow-y-auto mx-4 sm:mx-8 md:mx-32 ${
+                paymentMethod === 'VOUCHER'
+                    ? 'pb-28 md:pb-20'
+                    : 'pb-44 md:pb-36'
+            }`}>
             <div className="pt-28">
                 {packet?.is_free ? (
                     <PaymentMethodFreeSection />
