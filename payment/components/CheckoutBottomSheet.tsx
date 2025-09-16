@@ -125,12 +125,16 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
                                 <Check className="w-4 h-4 text-[#181818] z-10" />
                             </div>
                         ) : (
-                            <TicketHorizontal color='#ffffff'/>
+                            <TicketHorizontal color="#ffffff" />
                         )}
                         <span className="relative z-10 text-white text-sm font-body font-bold">
                             {getPromoButtonText()}
                         </span>
-                        <HiOutlineChevronRight size={20} color='white' className='absolute right-3' />
+                        <HiOutlineChevronRight
+                            size={20}
+                            color="white"
+                            className="absolute right-3"
+                        />
                     </button>
                 </div>
             )}
