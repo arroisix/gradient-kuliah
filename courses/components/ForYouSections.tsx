@@ -89,7 +89,7 @@ const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
         : kelasTerbaruPublicLoading;
 
     const showKelasTerbaru =
-        !search && (kelasTerbaruLoading || kelasTerbaruItems.length > 0);
+        !search && (kelasTerbaruLoading || kelasTerbaruItems.length > 0) && isAuthenticated;
 
     const eksplorData = eksplor.allData;
     const isInitialEksplorLoading = eksplor.isAllLoading;
@@ -132,11 +132,7 @@ const ForYouSections = ({ search }: { search?: string }): JSX.Element => {
             {showKelasTerbaru && (
                 <div className="mt-6">
                     <CarouselSection
-                        title={
-                            isAuthenticated
-                                ? 'Kelas Terbaru yang Cocok Untukmu'
-                                : 'Kelas Terbaru'
-                        }
+                        title={'Kelas Terbaru yang Cocok Untukmu'}
                         items={kelasTerbaruItems}
                         isLoading={kelasTerbaruLoading}
                         itemsPerPage={3}
