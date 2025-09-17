@@ -81,15 +81,6 @@ const PromoCodeInput = ({
         ]
     );
 
-    // reset local code when the user manually un‐applies the promo
-    useEffect(() => {
-        if (!promoAppliedManually) {
-            setCode(''); // clear the textbox
-            setValidationState('idle'); // back to idle state
-            setError(undefined); // clear any error
-        }
-    }, [promoAppliedManually]);
-
     // when they apply a promo manually elsewhere, reflect it inline too
     useEffect(() => {
         if (promoAppliedManually && appliedPromo && !isManuallyClearing) {
