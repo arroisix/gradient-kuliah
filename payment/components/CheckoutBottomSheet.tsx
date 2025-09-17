@@ -21,20 +21,11 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
         phoneNumber,
         phoneNumberError,
         cardId,
-        appliedPromo,
-        setAppliedPromo,
-        setPromoAppliedManually
+        appliedPromo
     } = usePayment();
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const [mode, setMode] = useState<'fixed' | 'absolute'>('fixed');
     const [bottomOffset, setBottomOffset] = useState(0);
-
-    useEffect(() => {
-        if (paymentMethod === 'VOUCHER' && appliedPromo) {
-            setAppliedPromo(undefined);
-            setPromoAppliedManually(false);
-        }
-    }, [paymentMethod, appliedPromo, setAppliedPromo, setPromoAppliedManually]);
 
     useEffect(() => {
         const footer = document.getElementById('footer');
@@ -68,9 +59,6 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
     }, []);
 
     const calculateFinalPrice = () => {
-        if (paymentMethod === 'VOUCHER') {
-            return packet?.price || 0;
-        }
         if (appliedPromo?.is_valid && appliedPromo?.payment_amount) {
             return appliedPromo.payment_amount;
         }
@@ -163,20 +151,19 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
                                 </span>
                             </div>
 
-                            {appliedPromo?.is_valid &&
-                                paymentMethod !== 'VOUCHER' && (
-                                    <div className="flex justify-between items-center mt-1">
-                                        <span className="text-neutral-200 text-sm font-body">
-                                            Diskon {appliedPromo.promo_code}
-                                        </span>
-                                        <span className="text-state-success text-sm font-body">
-                                            -
-                                            {formatCurrency(
-                                                appliedPromo.discount_amount.toString()
-                                            )}
-                                        </span>
-                                    </div>
-                                )}
+                            {appliedPromo?.is_valid && (
+                                <div className="flex justify-between items-center mt-1">
+                                    <span className="text-neutral-200 text-sm font-body">
+                                        Diskon {appliedPromo.promo_code}
+                                    </span>
+                                    <span className="text-state-success text-sm font-body">
+                                        -
+                                        {formatCurrency(
+                                            appliedPromo.discount_amount.toString()
+                                        )}
+                                    </span>
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>
