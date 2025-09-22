@@ -512,9 +512,11 @@ const PrivateDashboardContent = (): JSX.Element => {
     };
 
     return (
-        <>
+        <div className="relative z-[1] overflow-x-visible flex flex-col min-h-screen bg-[#101010]">
+            <div className="absolute inset-y-0 -inset-x-full -z-[1] bg-[#101010] pointer-events-none"></div>
+
             <div className="flex w-full sm:justify-center md:justify-start">
-                <div className="inline-flex w-fit items-center gap-2 rounded-t-xl bg-[#291E4D] px-3 py-1.5 md:px-4 md:py-2">
+                <div className="inline-flex w-fit items-center gap-2 rounded-t-xl bg-[#291E4D] px-3 py-1.5 md:px/4 md:py-2">
                     <p className="inline text-sm md:text-base">✨</p>
                     <p className="inline text-white text-[10px] sm:text-sm">
                         Rekomendasi Spesial
@@ -552,7 +554,7 @@ const PrivateDashboardContent = (): JSX.Element => {
                 />
             )}
 
-            <h2 className="text-lg font-extrabold md:text-xl">
+            <h2 className="text-lg font-bold md:text-xl mb-4">
                 Jangan Sampai Ketinggalan!
             </h2>
             <DashboardUpdatesBanner />
@@ -635,7 +637,7 @@ const PrivateDashboardContent = (): JSX.Element => {
                         />
                     );
                 })}
-        </>
+        </div>
     );
 };
 
