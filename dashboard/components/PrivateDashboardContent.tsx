@@ -29,14 +29,14 @@ import {
 import DashboardUpdatesBanner from './DashboardBanner';
 import FlashcardCard from 'flashcard/components/Entrypoint/FlashcardCard';
 import LatihanCard from 'exercises/components/Entrypoint/LatihanCard';
-// import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 const PrivateDashboardContent = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const tracker = useTracker();
     const isDashboardRevamp = true;
 
-    // const isSubscribed = useCourseSubscription();
+    const isSubscribed = useCourseSubscription();
 
     const { data: majorClasses, isLoading: isLoadingMajorClasses } =
         useGetMajorClassesQuery({ limit: 12 }, { skip: !isAuthenticated });
@@ -415,7 +415,7 @@ const PrivateDashboardContent = (): JSX.Element => {
             id: item.id,
             slug: item.slug,
             title: item.title,
-            icon: item.icon,
+            icon: item.icon || '🧪',
             subject: item.subject,
             total_questions: item.total_questions,
             progress: item.progress ?? undefined,
@@ -513,74 +513,85 @@ const PrivateDashboardContent = (): JSX.Element => {
 
     return (
         <>
-            <div className="pt-6">
-                <CarouselSection
-                    title={`Dipelajari Mahasiswa Jurusan Kamu`}
-                    items={majorClasses?.data}
-                    isLoading={isLoadingMajorClasses}
-                    renderItem={renderMajorClassItem}
-                    eventCategory="MajorClasses"
-                />
+            <div className="flex w-full sm:justify-center md:justify-start">
+                <div className="inline-flex w-fit items-center gap-2 rounded-t-xl bg-[#291E4D] px-3 py-1.5 md:px-4 md:py-2">
+                    <p className="inline text-sm md:text-base">✨</p>
+                    <p className="inline text-white text-[10px] sm:text-sm">
+                        Rekomendasi Spesial
+                    </p>
 
-                <CarouselSection
-                    title="Terbaru yang Cocok Untukmu"
-                    items={newlyReleasedForYou?.data}
-                    isLoading={isLoadingNewlyReleasedForYou}
-                    renderItem={renderNewlyReleasedItem}
-                    eventCategory="NewlyReleasedForYou"
-                />
-
-                {!isDashboardRevamp && (
-                    <CarouselSection
-                        title={`Trending untuk Mahasiswa ${majorRecommendation?.major}`}
-                        items={majorRecommendation?.data}
-                        isLoading={isLoadingMajorRecommendation}
-                        renderItem={renderTrendingItem}
-                        eventCategory="TrendingRecommendation"
-                    />
-                )}
-
-                <h2 className="text-lg font-bold md:text-xl mb-4">
-                    Jangan Sampai Ketinggalan!
-                </h2>
-                <DashboardUpdatesBanner />
-
-                {/* {
-                    <CarouselSection
-                        title="Gratis untuk Kamu"
-                        items={freeForYouContent?.data}
-                        isLoading={isLoadingFreeForYou}
-                        renderItem={renderFreeForYouItem}
-                        eventCategory="FreeForYouContent"
-                    />
-                } */}
-
-                <CarouselSection
-                    title={`Buku Wajib Anak ${
-                        majorClasses?.major || 'Jurusan Kamu'
-                    }`}
-                    items={majorBooks?.data}
-                    isLoading={isLoadingMajorBooks}
-                    renderItem={renderMajorBookItem}
-                    eventCategory="MajorBooks"
-                />
-
-                <CarouselSection
-                    title="Kuis Populer di Jurusan Kamu"
-                    items={majorQuiz?.data}
-                    isLoading={isLoadingMajorQuiz}
-                    renderItem={renderMajorQuizItem}
-                    eventCategory="MajorQuiz"
-                />
-
-                <CarouselSection
-                    title="Flashcard dari Teman Sejurusan"
-                    items={majorFlashcards?.data}
-                    isLoading={isLoadingMajorFlashcards}
-                    renderItem={renderMajorFlashcardItem}
-                    eventCategory="MajorFlashcards"
-                />
+                    <p className="inline rounded-lg bg-[#363488] px-2 py-0.5 text-white text-[10px] sm:text-sm font-semibold md:px-3 md:py-1">
+                        Jurusan Ilmu Komputer
+                    </p>
+                </div>
             </div>
+
+            <CarouselSection
+                title={`Dipelajari Mahasiswa Jurusan Kamu`}
+                items={majorClasses?.data}
+                isLoading={isLoadingMajorClasses}
+                renderItem={renderMajorClassItem}
+                eventCategory="MajorClasses"
+            />
+
+            <CarouselSection
+                title="Terbaru yang Cocok Untukmu"
+                items={newlyReleasedForYou?.data}
+                isLoading={isLoadingNewlyReleasedForYou}
+                renderItem={renderNewlyReleasedItem}
+                eventCategory="NewlyReleasedForYou"
+            />
+
+            {!isDashboardRevamp && (
+                <CarouselSection
+                    title={`Trending untuk Mahasiswa ${majorRecommendation?.major}`}
+                    items={majorRecommendation?.data}
+                    isLoading={isLoadingMajorRecommendation}
+                    renderItem={renderTrendingItem}
+                    eventCategory="TrendingRecommendation"
+                />
+            )}
+
+            <h2 className="text-lg font-extrabold md:text-xl">
+                Jangan Sampai Ketinggalan!
+            </h2>
+            <DashboardUpdatesBanner />
+
+            {!isSubscribed && (
+                <CarouselSection
+                    title="Gratis untuk Kamu"
+                    items={freeForYouContent?.data}
+                    isLoading={isLoadingFreeForYou}
+                    renderItem={renderFreeForYouItem}
+                    eventCategory="FreeForYouContent"
+                />
+            )}
+
+            <CarouselSection
+                title={`Buku Wajib Anak ${
+                    majorClasses?.major || 'Jurusan Kamu'
+                }`}
+                items={majorBooks?.data}
+                isLoading={isLoadingMajorBooks}
+                renderItem={renderMajorBookItem}
+                eventCategory="MajorBooks"
+            />
+
+            <CarouselSection
+                title="Kuis Populer di Jurusan Kamu"
+                items={majorQuiz?.data}
+                isLoading={isLoadingMajorQuiz}
+                renderItem={renderMajorQuizItem}
+                eventCategory="MajorQuiz"
+            />
+
+            <CarouselSection
+                title="Flashcard dari Teman Sejurusan"
+                items={majorFlashcards?.data}
+                isLoading={isLoadingMajorFlashcards}
+                renderItem={renderMajorFlashcardItem}
+                eventCategory="MajorFlashcards"
+            />
 
             {!isDashboardRevamp &&
                 learnRecommendation?.data?.map((courseRec, index) => {
