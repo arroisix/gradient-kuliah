@@ -21,7 +21,7 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
     itemsPerPage = 4,
     renderItem,
     eventCategory,
-    itemWrapperClassName = 'w-80'
+    itemWrapperClassName = 'w-[calc(100%-2rem)] sm:w-[calc((100%-1rem)/2.5)] lg:w-[calc((100%-2rem)/3.5)] xl:w-[calc((100%-3rem)/3.5)]'
 }) => {
     const tracker = useTracker();
     const carouselRef = useRef<HTMLDivElement>(null);
