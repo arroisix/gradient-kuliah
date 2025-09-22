@@ -61,7 +61,14 @@ const SearchSection = (): JSX.Element => {
 
             {isAuthenticated && (
                 <div className="mt-4">
-                    <div className="-mx-4 px-4 md:mx-0 md:px-0 max-w-full overflow-x-auto no-scrollbar">
+                    <div
+                        className="
+                            relative z-20 isolate
+                            ml-[calc(50%-50vw)] mr-[calc(50%-50vw)] px-4
+                            md:ml-0 md:mr-0 md:px-0
+                            max-w-none
+                            overflow-x-auto overflow-y-visible no-scrollbar
+                        ">
                         <div className="flex items-center gap-2 w-max mx-auto">
                             <span className="text-graphite-400 text-sm flex-shrink-0">
                                 Kamu bisa cari:
