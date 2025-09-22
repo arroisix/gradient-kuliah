@@ -95,28 +95,32 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
         return null;
     }
 
+    const showNav = !isLoading && (items?.length ?? 0) > 3;
+
     return (
         <div className="w-full mt-6 mb-2">
             <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-bold md:text-xl">{title}</h2>
-                <div className="flex items-center gap-2">
-                    <div className="flex gap-2">
-                        <button
-                            onClick={prev}
-                            disabled={!canScrollLeft}
-                            className="p-2 rounded-full bg-neutral-800 hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed"
-                            aria-label="Scroll left">
-                            <FiChevronLeft size={20} />
-                        </button>
-                        <button
-                            onClick={next}
-                            disabled={!canScrollRight}
-                            className="p-2 rounded-full bg-neutral-800 hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed"
-                            aria-label="Scroll right">
-                            <FiChevronRight size={20} />
-                        </button>
+                {showNav && (
+                    <div className="flex items-center gap-2">
+                        <div className="flex gap-2">
+                            <button
+                                onClick={prev}
+                                disabled={!canScrollLeft}
+                                className="p-2 rounded-full bg-neutral-800 hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed"
+                                aria-label="Scroll left">
+                                <FiChevronLeft size={20} />
+                            </button>
+                            <button
+                                onClick={next}
+                                disabled={!canScrollRight}
+                                className="p-2 rounded-full bg-neutral-800 hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed"
+                                aria-label="Scroll right">
+                                <FiChevronRight size={20} />
+                            </button>
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
 
             <div className="relative overflow-hidden mb-8">
