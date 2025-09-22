@@ -541,9 +541,6 @@ const PrivateDashboardContent = (): JSX.Element => {
                 />
             )}
 
-            <h2 className="text-lg font-bold md:text-xl mb-4">
-                Jangan Sampai Ketinggalan!
-            </h2>
             <DashboardUpdatesBanner />
 
             {!isSubscribed && (
