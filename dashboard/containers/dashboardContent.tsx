@@ -17,7 +17,6 @@ import 'driver.js/dist/driver.css';
 import { FiChevronRight } from 'react-icons/fi';
 import { dashboardTourConfig } from './../constants/dashboard-tour';
 import PrivateDashboardContent from 'dashboard/components/PrivateDashboardContent';
-import { useGetMajorClassesQuery } from 'dashboard/redux/api/dashboardApi';
 
 const DashboardContent = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
@@ -33,11 +32,6 @@ const DashboardContent = (): JSX.Element => {
         isLandingPageRevampOn &&
         (!isAuthenticated || !is_subscribed) &&
         !everSubscribed;
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { data: majorClasses, isLoading: isLoadingMajorClasses } =
-        useGetMajorClassesQuery({ limit: 12 }, { skip: !isAuthenticated });
-    const major = majorClasses?.major;
 
     const [tourViewed, setTourViewed] = useLocalStorage('tourViewed', false);
     const driver = useDriver({
@@ -150,32 +144,7 @@ const DashboardContent = (): JSX.Element => {
             )}
         </div>
     ) : (
-        <div>
-            <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    {isAuthenticated && (
-                        <div className="flex w-full">
-                            <div className="inline-flex w-fit items-center gap-2 rounded-t-xl bg-[#291E4D] px-3 py-1.5 md:px-4 md:py-2">
-                                <p className="inline text-sm md:text-base">
-                                    ✨
-                                </p>
-                                <p className="inline text-white text-[10px] sm:text-sm">
-                                    Rekomendasi Spesial
-                                </p>
-                                <p className="inline rounded-lg bg-[#363488] px-2 py-0.5 text-white text-[10px] sm:text-sm font-semibold md:px-3 md:py-1">
-                                    Jurusan {major}
-                                </p>
-                            </div>
-                        </div>
-                    )}
-                </div>
-                <div className="bg-[#101010]">
-                    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                        <PrivateDashboardContent />
-                    </div>
-                </div>
-            </div>
-        </div>
+        <PrivateDashboardContent />
     );
 };
 
