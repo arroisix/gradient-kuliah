@@ -79,7 +79,7 @@ const CourseHierarchy: React.FC<CourseHierarchyProps> = ({
         if (searchData?.data) {
             setSearchResults(searchData.data);
         }
-    }, [searchData]);
+    }, [searchData, searchResults]);
 
     const loadMoreResults = useCallback(() => {
         if (isLoadingMore || visibleCount >= searchResults.length) return;
