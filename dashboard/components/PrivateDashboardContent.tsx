@@ -36,7 +36,7 @@ const PrivateDashboardContent = (): JSX.Element => {
     const tracker = useTracker();
     const isDashboardRevamp = true;
 
-    const isSubscribed = useCourseSubscription();
+    const { is_subscribed: isSubscribed } = useCourseSubscription();
 
     const { data: majorClasses, isLoading: isLoadingMajorClasses } =
         useGetMajorClassesQuery({ limit: 12 }, { skip: !isAuthenticated });
@@ -406,6 +406,7 @@ const PrivateDashboardContent = (): JSX.Element => {
                         : undefined
                 }
                 cardType="allFlashcards"
+                createdByMe={item.created_by_me}
             />
         );
     };
