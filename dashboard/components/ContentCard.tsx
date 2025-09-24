@@ -30,6 +30,7 @@ interface ContentCardProps {
     isMajorClass?: boolean;
     hasTwoLineCards?: boolean;
     isFree?: boolean;
+    className?: string;
 }
 
 type CategoryType =
@@ -60,7 +61,8 @@ const ContentCard: React.FC<ContentCardProps> = ({
     isMajorClass = false,
     hasTwoLineCards = false,
     isFree = false,
-    onClick
+    onClick,
+    className
 }) => {
     const isVideo =
         (category === 'Video' || category === 'Kelas') && !isMajorClass;
@@ -87,7 +89,9 @@ const ContentCard: React.FC<ContentCardProps> = ({
         <Link
             href={href}
             onClick={handleClick}
-            className="block relative rounded-lg transition-colors overflow-hidden h-full bg-[#121212] border border-[#666666] border-opacity-50">
+            className={`block relative rounded-lg transition-colors overflow-hidden h-full bg-[#121212] border border-[#666666] border-opacity-50 ${
+                className || ''
+            }`}>
             {isTrending && (
                 <div
                     className="absolute top-2 left-2 z-10 text-white text-xs py-1 px-3 rounded-full flex items-center gap-1"

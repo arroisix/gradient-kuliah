@@ -134,6 +134,7 @@ const PrivateDashboardContent = (): JSX.Element => {
                         cardCategory: 'Kelas'
                     });
                 }}
+                className="bg-[#181818]"
             />
         );
     };
@@ -328,6 +329,7 @@ const PrivateDashboardContent = (): JSX.Element => {
                         cardType: item.type
                     });
                 }}
+                className="bg-[#181818]"
             />
         );
     };
@@ -383,6 +385,7 @@ const PrivateDashboardContent = (): JSX.Element => {
                         cardType: item.type
                     });
                 }}
+                className="bg-[#181818]"
             />
         );
     };
