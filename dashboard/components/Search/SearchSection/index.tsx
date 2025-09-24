@@ -63,7 +63,7 @@ const SearchSection = (): JSX.Element => {
                 <div className="mt-4">
                     <div
                         className="
-                            relative z-20 isolate
+                            relative isolate
                             ml-[calc(50%-50vw)] mr-[calc(50%-50vw)] px-4
                             md:ml-0 md:mr-0 md:px-0
                             max-w-none
