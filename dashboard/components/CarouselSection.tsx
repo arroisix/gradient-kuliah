@@ -126,7 +126,7 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
             <div className="relative overflow-hidden mb-8">
                 <div
                     ref={carouselRef}
-                    className="flex overflow-x-auto gap-4 xl:gap-6 scrollbar-hide"
+                    className="flex overflow-x-auto gap-4 xl:gap-6 scrollbar-hide pt-2"
                     style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                     {displayItems.map((item, index) => (
                         <div
