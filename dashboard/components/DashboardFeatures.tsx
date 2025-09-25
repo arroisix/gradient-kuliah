@@ -109,10 +109,19 @@ const DashboardFeatures = (): JSX.Element => {
                             }
                             className={`${cardBaseClasses}
                                 flex flex-col items-center text-center gap-2
-                                xl:flex-row-reverse xl:items-center xl:justify-between xl:gap-3 xl:text-left
+                                xl:flex-row xl:items-center xl:justify-between xl:gap-3 xl:text-left
                                 px-4 py-3 xl:p-3
+                                ${feature.id === 'copilot' ? 'xl:pr-0' : ''}
+                                ${
+                                    feature.id !== 'copilot'
+                                        ? 'xl:flex-row-reverse'
+                                        : ''
+                                }
                             `}>
-                            <div className="relative w-14 h-14 rounded-full bg-[#1D1D1D] flex items-center justify-center xl:w-auto xl:h-auto xl:rounded-none xl:bg-transparent">
+                            <div
+                                className={`relative w-14 h-14 rounded-full bg-[#1D1D1D] flex items-center justify-center xl:w-auto xl:h-auto xl:rounded-none xl:bg-transparent ${
+                                    feature.id === 'copilot' ? 'xl:order-2' : ''
+                                }`}>
                                 <feature.Icon />
                                 {feature.isNew && (
                                     <span
@@ -122,7 +131,10 @@ const DashboardFeatures = (): JSX.Element => {
                                     </span>
                                 )}
                             </div>
-                            <div className="flex flex-col items-center xl:items-start">
+                            <div
+                                className={`flex flex-col items-center xl:items-start ${
+                                    feature.id === 'copilot' ? 'xl:order-1' : ''
+                                }`}>
                                 <h3 className="font-bold text-white text-xs xl:text-sm">
                                     {feature.title}
                                 </h3>
