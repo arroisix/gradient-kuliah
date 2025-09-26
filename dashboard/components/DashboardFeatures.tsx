@@ -37,7 +37,7 @@ const DashboardFeatures = (): JSX.Element => {
             description: 'Chatbot teman belajarmu',
             Icon: ({ isSmall }: { isSmall?: boolean }) =>
                 isSmall ? (
-                    <CopilotAIIcon width={24} height={24} />
+                    <CopilotAIIconFull width={24} height={24} />
                 ) : (
                     <CopilotAIIconFull width={64} height={69} />
                 ),
