@@ -33,8 +33,8 @@ const EmptyDownloadState = ({
                     />
                     Playstore
                 </Link>
-                {/* <Link
-                    href="#"
+                <Link
+                    href="https://apps.apple.com/id/app/gradient/id6749671325"
                     className="inline-flex items-center px-6 py-3 rounded-full gap-2 bg-[#5F2BCE] hover:bg-opacity-90 text-white">
                     <Image
                         src={`${CDN_URL}/assets/apple-logo.png`}
@@ -44,7 +44,7 @@ const EmptyDownloadState = ({
                         className="mr-2"
                     />
                     Appstore
-                </Link> */}
+                </Link>
             </div>
         </div>
     );

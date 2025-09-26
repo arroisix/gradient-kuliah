@@ -210,7 +210,7 @@ const DownloadVideoButton = ({
                                                 <a
                                                     href={
                                                         isIOS
-                                                            ? 'https://apps.apple.com/id/app/gradient-academy/id1234567890'
+                                                            ? 'https://apps.apple.com/id/app/gradient/id6749671325'
                                                             : 'https://play.google.com/store/apps/details?id=com.gradient.academy'
                                                     }
                                                     target="_blank"
