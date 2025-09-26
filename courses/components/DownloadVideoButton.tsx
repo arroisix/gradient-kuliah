@@ -31,7 +31,8 @@ const DownloadVideoButton = ({
     const isIOS = useMemo(() => {
         if (typeof window !== 'undefined') {
             return (
-                /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
+                /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent) &&
+                !window.MSStream
             );
         }
         return false;
@@ -113,8 +114,8 @@ const DownloadVideoButton = ({
                                                     </span>
                                                 </a>
 
-                                                {/* <a
-                                                    href="https://apps.apple.com/id/app/gradient-academy/id1234567890"
+                                                <a
+                                                    href="https://apps.apple.com/id/app/gradient/id6749671325"
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#333333] hover:bg-neutral-700 transition-colors">
@@ -138,7 +139,7 @@ const DownloadVideoButton = ({
                                                     <span className="text-[#FFFFFF]">
                                                         Appstore
                                                     </span>
-                                                </a> */}
+                                                </a>
                                             </div>
                                         </div>
                                     </Dialog.Panel>
