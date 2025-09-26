@@ -5,12 +5,14 @@ import Link from 'next/link';
 import KelasIcon from '../assets/KelasIcon';
 import PerpusIcon from '../assets/PerpusIcon';
 import KuisIcon from '../assets/KuisIcon';
-import DiskusiIcon from '../assets/DiskusiIcon';
 import LainnyaIcon from '../assets/LainnyaIcon';
 import CopilotAIIcon from '../assets/CopilotAIIcon';
 import { useTracker } from 'tracker/tracker';
 import FlashcardLargeIcon from 'dashboard/assets/FlashcardLargeIcon';
 import FlashcardIcon from 'dashboard/assets/FlashcardIcon';
+import FlashcardIconFull from 'dashboard/assets/FlashcardIconFull';
+import CopilotAIIconFull from 'dashboard/assets/CopilotAIIconFull';
+import DiskusiIconNew from 'dashboard/assets/DiskusiIconNew';
 
 type Feature = {
     id: string;
@@ -33,7 +35,12 @@ const DashboardFeatures = (): JSX.Element => {
             id: 'copilot',
             title: 'Copilot AI',
             description: 'Chatbot teman belajarmu',
-            Icon: CopilotAIIcon,
+            Icon: ({ isSmall }: { isSmall?: boolean }) =>
+                isSmall ? (
+                    <CopilotAIIcon width={24} height={24} />
+                ) : (
+                    <CopilotAIIconFull width={64} height={69} />
+                ),
             url: '/copilot'
         },
         {
@@ -44,7 +51,7 @@ const DashboardFeatures = (): JSX.Element => {
                 isSmall ? (
                     <FlashcardIcon width={24} height={24} />
                 ) : (
-                    <FlashcardLargeIcon />
+                    <FlashcardIconFull width={48} height={48} />
                 ),
             url: '/flashcards'
         },
@@ -83,7 +90,7 @@ const DashboardFeatures = (): JSX.Element => {
             id: 'diskusi',
             title: 'Diskusi',
             description: 'Tanya ke tutor atau user lain',
-            Icon: () => <DiskusiIcon width={64} height={69} />,
+            Icon: () => <DiskusiIconNew width={64} height={69} />,
             url: '/komunitas'
         }
     ];
@@ -92,10 +99,10 @@ const DashboardFeatures = (): JSX.Element => {
         <div className="w-full mx-auto space-y-4 mb-4">
             <div
                 className="
-                    grid grid-cols-3
-                    xl:grid-cols-[repeat(5,1fr)_auto]
-                    gap-4 xl:gap-2
-                ">
+                grid grid-cols-3
+                xl:grid-cols-[repeat(5,1fr)_auto]
+                gap-4 xl:gap-2
+            ">
                 {features
                     .filter((f) => f.id !== 'lainnya')
                     .map((feature) => (
@@ -108,25 +115,53 @@ const DashboardFeatures = (): JSX.Element => {
                                 )
                             }
                             className={`${cardBaseClasses}
-                                flex flex-col items-center text-center gap-2
-                                xl:flex-row xl:items-center xl:justify-between xl:gap-3 xl:text-left
-                                px-4 py-3 xl:p-3
-                                ${feature.id === 'copilot' ? 'xl:pr-0' : ''}
-                                ${
-                                    feature.id !== 'copilot'
-                                        ? 'xl:flex-row-reverse'
-                                        : ''
-                                }
-                            `}>
+                            flex flex-col items-center text-center gap-2
+                            xl:flex-row xl:items-center xl:justify-between xl:gap-3 xl:text-left
+                            px-4 py-3 xl:p-3
+                            ${
+                                feature.id === 'copilot' ||
+                                feature.id === 'flashcard'
+                                    ? 'xl:pr-0'
+                                    : ''
+                            }
+                            ${
+                                feature.id !== 'copilot'
+                                    ? 'xl:flex-row-reverse'
+                                    : ''
+                            }
+                        `}>
                             <div
                                 className={`relative w-14 h-14 rounded-full bg-[#1D1D1D] flex items-center justify-center xl:w-auto xl:h-auto xl:rounded-none xl:bg-transparent ${
                                     feature.id === 'copilot' ? 'xl:order-2' : ''
                                 }`}>
-                                <feature.Icon />
+                                <div
+                                    className={`${
+                                        feature.id === 'copilot' ||
+                                        feature.id === 'flashcard'
+                                            ? 'flex items-center justify-center w-full h-full'
+                                            : ''
+                                    }`}>
+                                    {/* Show Full icons on non-xl screens, original icons on xl screens */}
+                                    <div className="xl:hidden">
+                                        <feature.Icon />
+                                    </div>
+                                    <div className="hidden xl:block">
+                                        {feature.id === 'copilot' ? (
+                                            <CopilotAIIcon
+                                                width={64}
+                                                height={69}
+                                            />
+                                        ) : feature.id === 'flashcard' ? (
+                                            <FlashcardLargeIcon />
+                                        ) : (
+                                            <feature.Icon />
+                                        )}
+                                    </div>
+                                </div>
                                 {feature.isNew && (
                                     <span
                                         className="absolute -bottom-1 left-1/2 -translate-x-1/2 py-0.5 px-2 text-[10px] rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56]
-                                                   xl:top-0 xl:right-0 xl:-mt-2 xl:-mr-2 xl:bottom-auto xl:left-auto xl:translate-x-0 xl:text-xs">
+                   xl:top-0 xl:right-0 xl:-mt-2 xl:-mr-2 xl:bottom-auto xl:left-auto xl:translate-x-0 xl:text-xs">
                                         Baru
                                     </span>
                                 )}
