@@ -293,23 +293,23 @@ const AppButtons = (): JSX.Element => {
                     </span>
                 </div>
             </Link>
-            {/*<Link*/}
-            {/*    href="https://apps.apple.com/id/app/gradient-academy/id1607386289"*/}
-            {/*    target="_blank"*/}
-            {/*    className="flex items-center gap-2 bg-[#5F2BCE] rounded-xl px-4 py-3 hover:opacity-80 transition-opacity">*/}
-            {/*    <Image*/}
-            {/*        src={`${CDN_URL}/assets/apple-logo.png`}*/}
-            {/*        alt="Download on the App Store"*/}
-            {/*        width={16}*/}
-            {/*        height={20}*/}
-            {/*    />*/}
-            {/*    <div className="flex flex-col">*/}
-            {/*        <span className="text-xs text-white/80">Dapatkan di</span>*/}
-            {/*        <span className="text-sm font-semibold text-white">*/}
-            {/*            App Store*/}
-            {/*        </span>*/}
-            {/*    </div>*/}
-            {/*</Link>*/}
+            <Link
+                href="https://apps.apple.com/id/app/gradient/id6749671325"
+                target="_blank"
+                className="flex items-center gap-2 bg-[#5F2BCE] rounded-xl px-4 py-3 hover:opacity-80 transition-opacity">
+                <Image
+                    src={`${CDN_URL}/assets/apple-logo.png`}
+                    alt="Download on the App Store"
+                    width={16}
+                    height={20}
+                />
+                <div className="flex flex-col">
+                    <span className="text-xs text-white/80">Dapatkan di</span>
+                    <span className="text-sm font-semibold text-white">
+                        App Store
+                    </span>
+                </div>
+            </Link>
         </div>
     );
 };
