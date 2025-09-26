@@ -1,4 +1,4 @@
-import { useFeatureIsOn } from '@growthbook/growthbook-react';
+// import { useFeatureIsOn } from '@growthbook/growthbook-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import GradientIcon from 'commons/components/GradientIcon';
@@ -21,9 +21,9 @@ import { useGetMajorClassesQuery } from 'dashboard/redux/api/dashboardApi';
 
 const DashboardContent = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
-        'landing-page-revamp'
-    );
+    // const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
+    //     'landing-page-revamp'
+    // );
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { data: majorClasses, isLoading: isLoadingMajorClasses } =
@@ -36,9 +36,8 @@ const DashboardContent = (): JSX.Element => {
         useGetPacketOfferQuery(is_subscribed ? skipToken : undefined);
 
     const isShowRecommendedMaterials =
-        isLandingPageRevampOn &&
-        (!isAuthenticated || !is_subscribed) &&
-        !everSubscribed;
+        // isLandingPageRevampOn &&
+        !isAuthenticated && !is_subscribed && !everSubscribed;
 
     const [tourViewed, setTourViewed] = useLocalStorage('tourViewed', false);
     const driver = useDriver({
