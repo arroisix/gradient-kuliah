@@ -11,6 +11,7 @@ import {
     MajorQuizResponse,
     MajorRecommendationResponse,
     NewlyReleasedForYouResponse,
+    PaginatedResponse,
     StudentCourseResponse,
     StudentLearningProgressResponse,
     UserBooksResponse,
@@ -204,6 +205,57 @@ export const dashboardApi = baseApi.injectEndpoints({
                 params
             }),
             providesTags: [{ type: 'PROFILE', id: 'FREE_FOR_YOU' }]
+        }),
+
+        getPopularClassesPublic: builder.query<
+            PaginatedResponse<{
+                id: string;
+                course_slug: string;
+                course_name: string;
+                thumbnail: string;
+            }>,
+            { page?: number; limit?: number }
+        >({
+            query: (params = { page: 1, limit: 12 }) => ({
+                url: `${LEARNING_V2_BASE_URL}dashboard/popular-classes/`,
+                params
+            })
+        }),
+        getNewlyReleasedPublic: builder.query<
+            NewlyReleasedForYouResponse,
+            { page?: number; limit?: number }
+        >({
+            query: (params = { page: 1, limit: 6 }) => ({
+                url: `${LEARNING_V2_BASE_URL}dashboard/newly-released-public/`,
+                params
+            })
+        }),
+        getPublicBooks: builder.query<
+            NewlyReleasedForYouResponse,
+            { page?: number; limit?: number }
+        >({
+            query: (params = { page: 1, limit: 12 }) => ({
+                url: `${LEARNING_V2_BASE_URL}dashboard/books-and-question-banks/`,
+                params
+            })
+        }),
+        getPublicQuiz: builder.query<
+            MajorQuizResponse,
+            { page?: number; limit?: number }
+        >({
+            query: (params = { page: 1, limit: 12 }) => ({
+                url: `${LEARNING_V2_BASE_URL}dashboard/public-quiz/`,
+                params
+            })
+        }),
+        getPublicFlashcards: builder.query<
+            MajorFlashcardsResponse,
+            { page?: number; limit?: number }
+        >({
+            query: (params = { page: 1, limit: 12 }) => ({
+                url: `${LEARNING_V2_BASE_URL}dashboard/public-flashcards/`,
+                params
+            })
         })
     })
 });
@@ -226,5 +278,10 @@ export const {
     useGetMajorBooksQuery,
     useGetMajorFlashcardsQuery,
     useGetMajorQuizQuery,
-    useGetFreeForYouContentQuery
+    useGetFreeForYouContentQuery,
+    useGetPopularClassesPublicQuery,
+    useGetNewlyReleasedPublicQuery,
+    useGetPublicBooksQuery,
+    useGetPublicQuizQuery,
+    useGetPublicFlashcardsQuery
 } = dashboardApi;
