@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 type UserSliceState = {
     user: User;
     token: string | null;
+    // refresh_token: string | null;
     is_profile_complete: boolean;
     photo_profile: string | null;
 };
@@ -14,19 +15,26 @@ const userSlice = createSlice({
     initialState: {
         user: {} as User,
         token: null,
+        // refresh_token: null,
         is_profile_complete: true,
         photo_profile: null
     } as UserSliceState,
     reducers: {
         removeUser: () => {
             window.localStorage.removeItem('token');
+            // window.localStorage.removeItem('refresh_token');
             return {
                 token: null,
+                // refresh_token: null,
                 user: {} as User,
                 is_profile_complete: true,
                 photo_profile: null
             };
         },
+        // updateToken: (state: UserSliceState, { payload }: PayloadAction<string>) => {
+        //     state.token = payload;
+        //     window.localStorage.setItem('token', payload);
+        // },
         setNewUserFlag: (
             state: UserSliceState,
             { payload }: PayloadAction<boolean>
@@ -43,9 +51,13 @@ const userSlice = createSlice({
             (state, { payload }: PayloadAction<LoginResponseData>) => {
                 state.user = payload.user;
                 state.token = payload.token;
+                // state.token = payload.access_token;
+                // state.refresh_token = payload.refresh_token;
                 state.is_profile_complete = payload.is_profile_complete;
 
                 window.localStorage.setItem('token', payload.token);
+                // window.localStorage.setItem('token', payload.access_token);
+                // window.localStorage.setItem('refresh_token', payload.refresh_token);
 
                 toast.success(`Selamat datang, ${state.user.full_name}`, {
                     position: 'top-center',
@@ -61,9 +73,13 @@ const userSlice = createSlice({
             (state, { payload }: PayloadAction<LoginResponseData>) => {
                 state.user = payload.user;
                 state.token = payload.token;
+                // state.token = payload.access_token;
+                // state.refresh_token = payload.refresh_token;
                 state.is_profile_complete = payload.is_profile_complete;
 
                 window.localStorage.setItem('token', payload.token);
+                // window.localStorage.setItem('token', payload.access_token);
+                // window.localStorage.setItem('refresh_token', payload.refresh_token);
 
                 toast.success(`Selamat datang, ${state.user.full_name}`, {
                     position: 'top-center',
@@ -79,9 +95,13 @@ const userSlice = createSlice({
             (state, { payload }: PayloadAction<LoginResponseData>) => {
                 state.user = payload.user;
                 state.token = payload.token;
+                // state.token = payload.access_token;
+                // state.refresh_token = payload.refresh_token;
                 state.is_profile_complete = false;
 
                 window.localStorage.setItem('token', payload.token);
+                // window.localStorage.setItem('token', payload.access_token);
+                // window.localStorage.setItem('refresh_token', payload.refresh_token);
 
                 toast.success(`Selamat datang, ${state.user.full_name}`, {
                     position: 'top-center',
@@ -105,6 +125,7 @@ const userSlice = createSlice({
         );
         builder.addMatcher(authApi.endpoints.logout.matchFulfilled, (state) => {
             window.localStorage.removeItem('token');
+            // window.localStorage.removeItem('refresh_token');
 
             toast.success('Logout berhasil', {
                 position: 'top-center',
@@ -113,6 +134,7 @@ const userSlice = createSlice({
             });
 
             state.token = null;
+            // state.refresh_token = null;
             state.user = {} as User;
             state.is_profile_complete = true;
             state.photo_profile = null;
@@ -122,6 +144,7 @@ const userSlice = createSlice({
     }
 });
 
+// export const { removeUser, clearCache, updateToken } = userSlice.actions;
 export const { removeUser, clearCache } = userSlice.actions;
 
 export default userSlice.reducer;

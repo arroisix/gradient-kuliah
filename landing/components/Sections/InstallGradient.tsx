@@ -57,18 +57,18 @@ const InstallGradient = () => {
                                     Google Play
                                 </p>
                             </Link>
-                            {/*<Link*/}
-                            {/*    href="https://apps.apple.com/id/app/gradient-academy/id1607386289"*/}
-                            {/*    target="_blank"*/}
-                            {/*    className="flex items-center gap-2 bg-[#333333] rounded-full px-4 py-2 hover:opacity-80 transition-opacity">*/}
-                            {/*    <Image*/}
-                            {/*        src={`${CDN_URL}/assets/apple-logo.png`}*/}
-                            {/*        alt="Download on the App Store"*/}
-                            {/*        width={16}*/}
-                            {/*        height={20}*/}
-                            {/*    />*/}
-                            {/*    <p className="text-sm font-medium">App Store</p>*/}
-                            {/*</Link>*/}
+                            <Link
+                                href="https://apps.apple.com/id/app/gradient/id6749671325"
+                                target="_blank"
+                                className="flex items-center gap-2 bg-[#333333] rounded-full px-4 py-2 hover:opacity-80 transition-opacity">
+                                <Image
+                                    src={`${CDN_URL}/assets/apple-logo.png`}
+                                    alt="Download on the App Store"
+                                    width={16}
+                                    height={20}
+                                />
+                                <p className="text-sm font-medium">App Store</p>
+                            </Link>
                         </div>
                     </div>
 

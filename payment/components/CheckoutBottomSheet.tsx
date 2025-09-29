@@ -6,6 +6,8 @@ import { usePayment } from 'payment/contexts/PaymentProvider';
 import { formatCurrency } from 'commons/utils';
 import { ChevronUp, ChevronDown, Check } from 'lucide-react';
 import CheckoutButton from './CheckoutButton';
+import { HiOutlineChevronRight } from 'react-icons/hi';
+import TicketHorizontal from 'commons/components/elements/Icons/TicketHorizontal';
 
 interface Props {
     onPromoClick: () => void;
@@ -65,7 +67,7 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
 
     const getDisplayPrice = (): string => {
         const raw = calculateFinalPrice();
-        if (packet?.is_free || raw <= 0) {
+        if (packet?.is_free || Number(raw) <= 0) {
             return 'GRATIS';
         }
         return formatCurrency(raw.toString());
@@ -87,7 +89,7 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
                 }
             }
         }
-        return 'Pakai kode promo/referral';
+        return 'Lihat atau Masukkan Kode Promo';
     };
 
     return (
@@ -97,37 +99,39 @@ const CheckoutBottomSheet: React.FC<Props> = ({ onPromoClick }) => {
             className={`${
                 mode === 'fixed' ? 'fixed' : 'absolute'
             } z-10 p-2 inset-x-0 sm:inset-x-8 lg:inset-x-32 bottom-0 bg-[#181818] rounded-t-xl shadow-lg overflow-hidden`}>
-            {/* Promo Code Section */}
-            <div className="px-4 py-3 relative overflow-visible">
-                <button
-                    onClick={onPromoClick}
-                    className={`relative overflow-hidden w-full rounded-lg py-4 flex items-center gap-3 ${
-                        appliedPromo
-                            ? 'pl-10 bg-[#03AC5C]/20'
-                            : 'pl-[50px] bg-gradient-to-r from-[#741F86] via-[#965084] to-[#A82C56] hover:from-[#8B25A0] hover:to-[#C93467] transition-colors'
-                    }`}>
-                    <>
-                        {/* half circles */}
-                        <span className="absolute w-8 h-8 bg-[#181818] rounded-full -left-4 top-1/2 -translate-y-1/2 z-10" />
-                        <span className="absolute w-8 h-8 bg-[#181818] rounded-full -right-4 top-1/2 -translate-y-1/2 z-10" />
-
-                        {/* dashed lines */}
-                        <div className="absolute top-0 bottom-0 left-8 border-l-[3px] border-dashed border-[#181818] pointer-events-none" />
-                    </>
-
-                    {appliedPromo && (
-                        <div className="relative w-5 h-5 bg-[#03AC5C] flex items-center justify-center rounded-full ml-1">
-                            <Check className="w-4 h-4 text-[#181818] z-10" />
-                        </div>
-                    )}
-                    <span className="relative z-10 text-white text-sm font-body font-bold">
-                        {getPromoButtonText()}
-                    </span>
-                </button>
-            </div>
+            {paymentMethod !== 'VOUCHER' && (
+                <div className="px-4 py-3 relative overflow-visible">
+                    <button
+                        onClick={onPromoClick}
+                        className={`relative overflow-hidden w-full rounded-lg py-4 flex items-center gap-3 px-3 ${
+                            appliedPromo
+                                ? 'bg-gradient-to-r from-[#015930]/20 via-[#03AC5C]/20 to-[#014626]/20'
+                                : 'bg-gradient-to-r from-[#741F86] via-[#965084] to-[#A82C56]'
+                        }`}>
+                        {appliedPromo ? (
+                            <div className="relative w-5 h-5 bg-[#03AC5C] flex items-center justify-center rounded-full ml-1">
+                                <Check className="w-4 h-4 text-[#181818] z-10" />
+                            </div>
+                        ) : (
+                            <TicketHorizontal color="#ffffff" />
+                        )}
+                        <span className="relative z-10 text-white text-sm font-body font-bold">
+                            {getPromoButtonText()}
+                        </span>
+                        <HiOutlineChevronRight
+                            size={20}
+                            color="white"
+                            className="absolute right-3"
+                        />
+                    </button>
+                </div>
+            )}
 
             {/* Checkout Section */}
-            <div className="px-4 pb-4">
+            <div
+                className={`px-4 pb-4 ${
+                    paymentMethod === 'VOUCHER' && 'pt-4'
+                }`}>
                 <div>
                     {/* Expanded Summary */}
                     {isExpanded && (

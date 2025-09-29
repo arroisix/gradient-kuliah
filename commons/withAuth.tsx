@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import LoadingBackdrop from './components/elements/LoadingBackdrop';
 import { useRouter } from 'next/router';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
-import { getDisplayName } from './utils';
+import { getDisplayName, sanitizeUrl } from './utils';
 
 const withAuth = (WrappedComponent: React.ComponentType) => {
     const WithAuth = (
@@ -52,7 +52,9 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
                     if (packetId) {
                         router.push(`/pembayaran?packetId=${packetId}`);
                     } else if (router.query.redirect) {
-                        router.push(router.query.redirect as string);
+                        router.push(
+                            sanitizeUrl(router.query.redirect as string)
+                        );
                     } else {
                         router.push('/');
                     }
@@ -89,7 +91,9 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
 
                 return <WrappedComponent {...props} />;
             } else {
-                router.push(`/masuk?redirect=${window.location.href}`);
+                router.push(
+                    `/masuk?redirect=${sanitizeUrl(window.location.href)}`
+                );
                 return;
             }
         }

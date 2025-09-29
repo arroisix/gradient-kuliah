@@ -71,6 +71,13 @@ export default function BitmovinPlayer({
 
         const playerConfig: PlayerConfig = {
             key: playerKey,
+            tweaks: {
+                max_retries: Infinity,
+                retry_delay: 1000,
+                disable_retry_for_response_status: {
+                    media: [401, 403]
+                }
+            },
             playback: {
                 autoplay: autoPlay
             },

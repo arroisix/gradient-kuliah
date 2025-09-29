@@ -264,9 +264,10 @@ const Navbar = ({
                         variant="primary"
                         target="__blank"
                         href="https://www.instagram.com/gradient_idn/"
-                        eventName="Contact Us Button">
+                        eventName="Contact Us Button"
+                        className="text-sm">
                         <span className="flex items-center">
-                            <FaInstagram className="mr-2" /> Hubungi Kami
+                            <FaInstagram className="mr-2" /> Bantuan
                         </span>
                     </Button>
                 ) : (

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { MdClose } from 'react-icons/md';
 import Image from 'next/image';
 import { cn } from 'commons/utils';
@@ -11,6 +11,16 @@ interface AppInstallBannerProps {
 const AppInstallBanner = ({ showSidebar }: AppInstallBannerProps) => {
     const [isVisible, setIsVisible] = useState(false);
     const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+    const isIOS = useMemo(() => {
+        if (typeof window !== 'undefined') {
+            console.log(navigator.userAgent);
+            return (
+                /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent) &&
+                !window.MSStream
+            );
+        }
+        return false;
+    }, []);
 
     useEffect(() => {
         const isBannerClosed = localStorage.getItem('appBannerClosed');
@@ -37,10 +47,18 @@ const AppInstallBanner = ({ showSidebar }: AppInstallBannerProps) => {
     };
 
     const handleInstall = () => {
-        window.open(
-            'https://play.google.com/store/apps/details?id=com.gradient.academy',
-            '_blank'
-        );
+        if (isIOS) {
+            window.open(
+                'https://apps.apple.com/id/app/gradient/id6749671325',
+                '_blank'
+            );
+            return;
+        } else {
+            window.open(
+                'https://play.google.com/store/apps/details?id=com.gradient.academy',
+                '_blank'
+            );
+        }
     };
 
     if (!isVisible || isMobileSidebarOpen) return null;
@@ -78,19 +96,29 @@ const AppInstallBanner = ({ showSidebar }: AppInstallBannerProps) => {
                                 Baru
                             </span>
                         </div>
-                        <p className="text-[11px]">
-                            Install di Playstore dan mulai belajar!
+                        <p className="text-[11px] text-left">
+                            Install di {isIOS ? 'App Store' : 'Play Store'} dan
+                            mulai belajar!
                         </p>
                     </div>
-                    <div className="flex items-center gap-2 bg-[#171717] rounded-[70px] px-4 py-1.5 text-sm font-medium hover:opacity-80 transition-opacity">
+                    {isIOS ? (
                         <Image
-                            src={`${CDN_URL}/assets/play-store-logo.png`}
-                            alt="Get it on Google Play"
-                            width={16}
-                            height={16}
+                            src={`${CDN_URL}/assets/app-store-logo.svg`}
+                            alt={'Get it on App Store'}
+                            width={140}
+                            height={40}
                         />
-                        Install
-                    </div>
+                    ) : (
+                        <div className="flex items-center gap-2 bg-[#171717] rounded-[70px] px-4 py-1.5 text-sm font-medium hover:opacity-80 transition-opacity">
+                            <Image
+                                src={`${CDN_URL}/assets/play-store-logo.png`}
+                                alt={'Get it on Google Play'}
+                                width={16}
+                                height={16}
+                            />
+                            Install
+                        </div>
+                    )}
                 </div>
             </button>
         </div>

@@ -5,7 +5,7 @@ import React from 'react';
 import { SlCheck } from 'react-icons/sl';
 import { useSelector } from 'react-redux';
 import Button from './Button';
-import { cn, queryParamBuilder, slugify } from 'commons/utils';
+import { cn, queryParamBuilder, sanitizeUrl, slugify } from 'commons/utils';
 import { sendGTMEvent } from '@next/third-parties/google';
 
 type PaywallProps = {
@@ -47,7 +47,8 @@ const Paywall = ({
     };
 
     const handleClick = (pricing: PacketOffer): void => {
-        if (redirect) localStorage.setItem('redirect', redirect as string);
+        if (redirect)
+            localStorage.setItem('redirect', sanitizeUrl(redirect) as string);
 
         const pembayaranPage = `/pembayaran?${queryParamBuilder({
             packetId: pricing.id,
@@ -101,7 +102,9 @@ const Paywall = ({
                       ]
             )}>
             {pricingData?.map((pricing) => {
-                const isHighlighted: boolean = pricing.order === 1;
+                const isHighlighted: boolean =
+                    pricing.order === 1 && !pricing.is_free;
+                const isFree = pricing.is_free;
 
                 return (
                     <div
@@ -119,11 +122,18 @@ const Paywall = ({
                                       highlightedClassName
                                   ]
                                 : 'order-none bg-[#222222]',
+                            isFree &&
+                                'bg-gradient-green-pricing border-2 border-[#FA89C3]',
                             pricingClassName
                         )}>
                         {isHighlighted && (
-                            <div className="w-full py-3 font-bold text-center rounded-t-box animate-pulse bg-accent-purple/50 ">
+                            <div className="w-full py-3 font-bold text-center rounded-t-box animate-pulse bg-accent-purple/50">
                                 PENAWARAN TERBAIK!
+                            </div>
+                        )}
+                        {isFree && (
+                            <div className="w-full py-3 font-bold text-center rounded-t-box animate-pulse bg-[#FA89C3]">
+                                GRATIS
                             </div>
                         )}
                         <div className={cn('flex flex-col gap-4 pt-4')}>
@@ -139,9 +149,13 @@ const Paywall = ({
                                     )}>
                                     {formatPrice(pricing.price)}
                                 </p>
-                                <p className="text-xl font-bold line-through decoration-2 text-stone-500 decoration-red-600 font-body">
-                                    {formatPrice(pricing.price_before_discount)}
-                                </p>
+                                {!isFree && (
+                                    <p className="text-xl font-bold line-through decoration-2 text-stone-500 decoration-red-600 font-body">
+                                        {formatPrice(
+                                            pricing.price_before_discount
+                                        )}
+                                    </p>
+                                )}
                             </div>
                             <div className="flex flex-col h-full gap-2 px-5">
                                 {pricing.benefits?.feature?.map(
@@ -150,7 +164,10 @@ const Paywall = ({
                                             key={index}
                                             className="flex items-center gap-3">
                                             <SlCheck
-                                                className="flex-none text-accent-purple"
+                                                className={cn(
+                                                    'flex-none text-accent-purple',
+                                                    isFree && 'text-[#FA89C3]'
+                                                )}
                                                 size={24}
                                             />
                                             <div>
@@ -170,9 +187,13 @@ const Paywall = ({
                                     pricing.packet_name
                                 )}-${pricing.price}`}
                                 type="button"
-                                variant="primary"
+                                variant={isFree ? 'custom' : 'primary'}
                                 onClick={() => handleClick(pricing)}
-                                className="mx-5 mb-5"
+                                className={cn(
+                                    'mx-5 mb-5',
+                                    isFree &&
+                                        'bg-[#FA89C3] text-[#1E6844] font-bold'
+                                )}
                                 eventName={ctaEventName}
                                 eventPayload={{
                                     'Packet Name': pricing.packet_name,

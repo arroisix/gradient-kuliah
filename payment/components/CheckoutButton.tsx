@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import Button from 'commons/components/elements/Button';
 import useCheckout from '../hooks/useCheckout';
 import { usePayment } from 'payment/contexts/PaymentProvider';
-import { queryParamBuilder } from 'commons/utils';
+import { queryParamBuilder, sanitizeUrl } from 'commons/utils';
 import { sendGTMEvent } from '@next/third-parties/google';
 
 const CheckoutButton = ({
@@ -152,22 +152,20 @@ const CheckoutButton = ({
 
     const onClickFree = async (): Promise<void> => {
         setLoading(true);
-        try {
-            await freeCheckout({ packet_id: packetId });
 
+        const result = await freeCheckout({ packet_id: packetId });
+
+        if ('data' in result) {
             toast.success(`Pembayaran Sukses!`, {
                 position: toast.POSITION.TOP_CENTER
             });
             router.push(
                 `/checkout/sukses${queryParamBuilder({
-                    redirect: router.query.redirect as string
+                    redirect: sanitizeUrl(router.query.redirect as string)
                 })}`
             );
-        } catch {
-            toast.error(`Pembayaran Gagal!`, {
-                position: toast.POSITION.TOP_CENTER
-            });
         }
+
         setLoading(false);
     };
 

@@ -83,7 +83,7 @@ const TextbookHierarchy: React.FC<TextbookHierarchyProps> = ({
         if (searchData?.data) {
             setSearchResults(searchData.data);
         }
-    }, [searchData]);
+    }, [searchData, searchResults]);
 
     const loadMoreResults = useCallback(() => {
         if (isLoadingMore || visibleCount >= searchResults.length) return;
