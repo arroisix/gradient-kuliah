@@ -10,6 +10,7 @@ import Skeleton from 'commons/components/elements/Skeleton';
 import { Banner } from 'dashboard/types/dashboard';
 import useWindowBreakpoints from '../../commons/hooks/useWindowBreakpoints';
 import EmailVerificationModal from './EmailVerification/EmailVerificationModal';
+import { FiChevronRight, FiChevronLeft } from 'react-icons/fi';
 
 const DashboardUpdatesBanner: React.FC = () => {
     const { data, isLoading, error } = useGetBannerQuery();
@@ -73,6 +74,16 @@ const DashboardUpdatesBanner: React.FC = () => {
         }, 3000);
     };
 
+    const nextSlide = useCallback(() => {
+        if (banners.length < 2) return;
+        goToSlide((currentIndex + 1) % banners.length);
+    }, [banners.length, currentIndex]); // goToSlide closes over clearAutoSlide/start; safe to call
+
+    const prevSlide = useCallback(() => {
+        if (banners.length < 2) return;
+        goToSlide((currentIndex - 1 + banners.length) % banners.length);
+    }, [banners.length, currentIndex]);
+
     const handleBannerClick = (banner: Banner) => {
         if (banner.slug === 'verify-email-web') {
             handleVerifyEmail();
@@ -134,6 +145,29 @@ const DashboardUpdatesBanner: React.FC = () => {
     return (
         <>
             <div className="w-full mb-8">
+                <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-lg font-bold md:text-xl">
+                        Jangan Sampai Ketinggalan!
+                    </h2>
+                    {banners.length > 1 && (
+                        <div className="flex items-center gap-2">
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={prevSlide}
+                                    className="p-2 rounded-full bg-neutral-800 hover:bg-neutral-700"
+                                    aria-label="Previous banner">
+                                    <FiChevronLeft size={20} />
+                                </button>
+                                <button
+                                    onClick={nextSlide}
+                                    className="p-2 rounded-full bg-neutral-800 hover:bg-neutral-700"
+                                    aria-label="Next banner">
+                                    <FiChevronRight size={20} />
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
                 <div className="relative overflow-hidden rounded-xl">
                     {currentBanner.is_asset ? (
                         currentBanner.banner_url && (

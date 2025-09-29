@@ -2,13 +2,16 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import {
-    useGetDashboardContentQuery,
     useGetMajorClassesQuery,
     useGetMajorRecommendationQuery,
-    useGetLearnRecommendationQuery
+    useGetLearnRecommendationQuery,
+    useGetNewlyReleasedForYouQuery,
+    useGetMajorBooksQuery,
+    useGetMajorFlashcardsQuery,
+    useGetMajorQuizQuery,
+    useGetFreeForYouContentQuery
 } from 'dashboard/redux/api/dashboardApi';
 import CarouselSection from './CarouselSection';
-import { getBookBaseHref } from 'courses/utils';
 import ContentCard from './ContentCard';
 import { useTracker } from 'tracker/tracker';
 import {
@@ -17,18 +20,23 @@ import {
     BookRecommendationItem,
     QuizRecommendationItem,
     FlashcardRecommendationItem,
-    LearningMaterial
+    NewlyReleasedForYouItem,
+    MajorBookItem,
+    MajorFlashcardItem,
+    MajorQuizItem,
+    FreeForYouItem
 } from 'dashboard/types/dashboard';
+import DashboardUpdatesBanner from './DashboardBanner';
+import FlashcardCard from 'flashcard/components/Entrypoint/FlashcardCard';
+import LatihanCard from 'exercises/components/Entrypoint/LatihanCard';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 const PrivateDashboardContent = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const tracker = useTracker();
+    const isDashboardRevamp = true;
 
-    const { data: justReleased, isLoading: isLoadingJustReleased } =
-        useGetDashboardContentQuery(
-            { type: 'just_released' },
-            { skip: !isAuthenticated }
-        );
+    const { is_subscribed: isSubscribed } = useCourseSubscription();
 
     const { data: majorClasses, isLoading: isLoadingMajorClasses } =
         useGetMajorClassesQuery({ limit: 12 }, { skip: !isAuthenticated });
@@ -48,6 +56,29 @@ const PrivateDashboardContent = (): JSX.Element => {
         { limit: 24 },
         { skip: !isAuthenticated }
     );
+
+    const {
+        data: newlyReleasedForYou,
+        isLoading: isLoadingNewlyReleasedForYou
+    } = useGetNewlyReleasedForYouQuery(
+        { limit: 12 },
+        { skip: !isAuthenticated }
+    );
+
+    const { data: majorBooks, isLoading: isLoadingMajorBooks } =
+        useGetMajorBooksQuery({ limit: 12 }, { skip: !isAuthenticated });
+
+    const {
+        data: majorQuiz,
+        isLoading: isLoadingMajorQuiz
+    } = // <- added
+        useGetMajorQuizQuery({ limit: 12 }, { skip: !isAuthenticated });
+
+    const { data: majorFlashcards, isLoading: isLoadingMajorFlashcards } =
+        useGetMajorFlashcardsQuery({ limit: 12 }, { skip: !isAuthenticated });
+
+    const { data: freeForYouContent, isLoading: isLoadingFreeForYou } =
+        useGetFreeForYouContentQuery({ limit: 12 }, { skip: !isAuthenticated });
 
     const checkForTwoLineTitles = (items: any[]) => {
         if (!items || !items.length) return false;
@@ -81,30 +112,6 @@ const PrivateDashboardContent = (): JSX.Element => {
         });
     };
 
-    const getHref = (item: LearningMaterial): string => {
-        const baseHref = `${getBookBaseHref(item.type)}/${item.book_slug}`;
-
-        if (item.type === 'Video' || item.type === 'Kelas') {
-            if (item?.chapter_id && item.subchapter_id)
-                return `/kelas/${item.course_slug}/${item.subchapter_slug}`;
-            return `/kelas/${item.course_slug}`;
-        } else {
-            if (item.in_progress && !!item.latest_page) {
-                if (item.type === 'Astronotes' && !!item.latest_page) {
-                    return `${baseHref}/${item.latest_page}`;
-                }
-
-                if (
-                    (item.type === 'Bank Soal' || item.type === 'Textbook') &&
-                    !!item.latest_problem
-                ) {
-                    return `${baseHref}/${item.latest_problem}`;
-                }
-            }
-            return baseHref;
-        }
-    };
-
     const majorClassesHasTwoLineCards = checkForTwoLineTitles(
         majorClasses?.data || []
     );
@@ -127,31 +134,7 @@ const PrivateDashboardContent = (): JSX.Element => {
                         cardCategory: 'Kelas'
                     });
                 }}
-            />
-        );
-    };
-
-    const justReleasedHasTwoLineCards = checkForTwoLineTitles(
-        justReleased?.just_released || []
-    );
-
-    const renderJustReleasedItem = (item: any) => {
-        return (
-            <ContentCard
-                id={item.id}
-                title={item.title}
-                category={item.type}
-                thumbnail={item.thumbnail}
-                href={getHref(item as LearningMaterial)}
-                isBaru={true}
-                hasTwoLineCards={justReleasedHasTwoLineCards}
-                onClick={() => {
-                    tracker?.genericTrack('Click Dashboard Content Card', {
-                        section: 'Baru Rilis',
-                        cardTitle: item.title,
-                        cardCategory: item.type
-                    });
-                }}
+                className="bg-[#181818]"
             />
         );
     };
@@ -227,15 +210,15 @@ const PrivateDashboardContent = (): JSX.Element => {
 
         return {
             id: item.id,
-            title,
+            title: title || '',
             category,
             thumbnail: item.thumbnail,
             href,
-            courseName,
+            courseName: courseName ?? undefined,
             chapterName,
-            cardCount,
-            problemCount,
-            authorName
+            cardCount: cardCount ?? undefined,
+            problemCount: problemCount ?? undefined,
+            authorName: authorName ?? undefined
         };
     };
 
@@ -243,7 +226,7 @@ const PrivateDashboardContent = (): JSX.Element => {
         majorRecommendation?.data || []
     );
 
-    const renderTrendingItem = (item: MajorRecommendationItem) => {
+    const renderTrendingItem = (item: MajorRecommendationItem): JSX.Element => {
         const itemData = prepareItemData(item);
         return (
             <ContentCard
@@ -262,20 +245,283 @@ const PrivateDashboardContent = (): JSX.Element => {
         );
     };
 
+    const prepareNewlyReleasedItemData = (item: NewlyReleasedForYouItem) => {
+        let title,
+            href,
+            category,
+            courseName,
+            cardCount,
+            problemCount,
+            authorName;
+
+        switch (item.type) {
+            case 'course':
+                title = item.title || item.course_name;
+                href = `/kelas/${item.course_slug}`;
+                category = 'Kelas';
+                courseName = item.course_name;
+                break;
+
+            case 'Bank Soal':
+                title = item.book_title;
+                href = `/perpustakaan/bank-soal/${item.book_slug}`;
+                category = 'Bank Soal';
+                courseName = item.course_name;
+                problemCount = item.total_questions;
+                cardCount = item.card_count;
+                authorName = item.created_by;
+                break;
+
+            case 'Textbook':
+                title = item.book_title;
+                href = `/perpustakaan/textbook/${item.book_slug}`;
+                category = 'Textbook Solution';
+                courseName = item.course_name;
+                authorName = item.created_by;
+                break;
+
+            case 'Catatan': // Astronotes
+                title = item.book_title;
+                href = `/astronotes/${item.book_slug}/`;
+                category = 'Astronotes';
+                courseName = item.course_name;
+                authorName = item.created_by;
+                break;
+
+            default:
+                // fallback for unexpected type
+                title = item.title || item.book_title || 'Unknown content';
+                href = '#';
+                category = 'Other';
+        }
+
+        return {
+            id: item.id,
+            title: title || '',
+            category,
+            thumbnail: item.thumbnail,
+            href,
+            courseName: courseName ?? undefined,
+            cardCount: cardCount ?? undefined,
+            problemCount: problemCount ?? undefined,
+            authorName: authorName ?? undefined
+        };
+    };
+
+    const newlyReleasedHasTwoLineCards = checkForTwoLineTitles(
+        newlyReleasedForYou?.data || []
+    );
+
+    const renderNewlyReleasedItem = (
+        item: NewlyReleasedForYouItem
+    ): JSX.Element => {
+        const itemData = prepareNewlyReleasedItemData(item);
+        return (
+            <ContentCard
+                {...itemData}
+                hasTwoLineCards={newlyReleasedHasTwoLineCards}
+                isBaru={true}
+                onClick={() => {
+                    tracker?.genericTrack('Click Dashboard Content Card', {
+                        section: 'Terbaru yang Cocok Untukmu',
+                        cardTitle: itemData.title,
+                        cardCategory: itemData.category,
+                        cardType: item.type
+                    });
+                }}
+                className="bg-[#181818]"
+            />
+        );
+    };
+
+    const prepareMajorBookItemData = (item: MajorBookItem) => {
+        const title = item.book_title || item.title || '';
+        let href = '#';
+        let category = 'Other';
+
+        switch (item.type) {
+            case 'Bank Soal':
+                category = 'Bank Soal';
+                href = `/perpustakaan/bank-soal/${item.book_slug}`;
+                break;
+            case 'Textbook':
+                category = 'Textbook Solution';
+                href = `/perpustakaan/textbook/${item.book_slug}`;
+                break;
+            case 'Catatan': // Astronotes
+                category = 'Astronotes';
+                href = `/astronotes/${item.book_slug}/`;
+                break;
+            default:
+                // leave defaults
+                break;
+        }
+
+        return {
+            id: item.id,
+            title,
+            category,
+            thumbnail: item.thumbnail,
+            href
+        };
+    };
+
+    const majorBooksHasTwoLineCards = checkForTwoLineTitles(
+        majorBooks?.data || []
+    );
+
+    const renderMajorBookItem = (item: MajorBookItem): JSX.Element => {
+        const itemData = prepareMajorBookItemData(item);
+        return (
+            <ContentCard
+                {...itemData}
+                hasTwoLineCards={majorBooksHasTwoLineCards}
+                onClick={() => {
+                    tracker?.genericTrack('Click Dashboard Content Card', {
+                        section: 'Buku Wajib Jurusan',
+                        sectionMajor: majorBooks?.major,
+                        cardTitle: itemData.title,
+                        cardCategory: itemData.category,
+                        cardType: item.type
+                    });
+                }}
+                className="bg-[#181818]"
+            />
+        );
+    };
+
+    const renderMajorFlashcardItem = (
+        item: MajorFlashcardItem
+    ): JSX.Element => {
+        const title = item.title || '';
+        return (
+            <FlashcardCard
+                key={item.id}
+                slug={item.slug}
+                title={title}
+                totalCards={item.card_count ?? 0}
+                author={
+                    item.created_by
+                        ? {
+                              name: item.created_by.name,
+                              photo_profile: item.created_by.photo_profile || ''
+                          }
+                        : undefined
+                }
+                cardType="allFlashcards"
+                createdByMe={item.created_by_me}
+            />
+        );
+    };
+
+    const renderMajorQuizItem = (item: MajorQuizItem): JSX.Element => {
+        const exercise = {
+            id: item.id,
+            slug: item.slug,
+            title: item.title,
+            icon: item.icon || '🧪',
+            subject: item.subject,
+            total_questions: item.total_questions,
+            progress: item.progress ?? undefined,
+            status: item.status ?? undefined,
+            progress_percentage: item.progress_percentage ?? undefined,
+            is_free: item.is_free ?? undefined
+        };
+
+        return (
+            <LatihanCard
+                key={item.id}
+                exercise={exercise as any}
+                cardType="allExercises"
+                onClick={() => {
+                    tracker?.genericTrack('Click Dashboard Content Card', {
+                        section: 'Kuis Populer di Jurusan Kamu',
+                        cardTitle: item.title,
+                        cardCategory: 'Kuis'
+                    });
+                }}
+            />
+        );
+    };
+
+    const prepareFreeForYouItemData = (item: FreeForYouItem) => {
+        const title = item.title || item.book_title || item.course_name || '';
+        let href = '#';
+        let category = item.type;
+
+        switch (item.type) {
+            case 'Kelas':
+                href = `/kelas/${item.course_slug}`;
+                category = 'Kelas';
+                break;
+            case 'Kuis':
+                href = `/latihan/${item.slug}`;
+                category = 'Kuis';
+                break;
+            case 'Flashcard':
+                href = `/flashcards/${item.slug}`;
+                category = 'Flashcard';
+                break;
+            case 'Bank Soal':
+                href = `/perpustakaan/bank-soal/${item.book_slug}`;
+                category = 'Bank Soal';
+                break;
+            case 'Textbook':
+                href = `/perpustakaan/textbook/${item.book_slug}`;
+                category = 'Textbook Solution';
+                break;
+            case 'Catatan':
+            case 'Astronotes':
+                href = `/astronotes/${item.book_slug}/`;
+                category = 'Astronotes';
+                break;
+            default:
+                // leave defaults
+                break;
+        }
+
+        return {
+            id: item.id,
+            title,
+            category,
+            thumbnail: item.thumbnail,
+            href,
+            courseName: item.course_name ?? undefined,
+            cardCount: item.card_count ?? undefined,
+            problemCount: item.total_questions ?? undefined,
+            authorName: item.created_by ?? undefined
+        };
+    };
+
+    const freeForYouHasTwoLineCards = checkForTwoLineTitles(
+        freeForYouContent?.data || []
+    );
+
+    const renderFreeForYouItem = (item: FreeForYouItem): JSX.Element => {
+        const itemData = prepareFreeForYouItemData(item);
+        return (
+            <ContentCard
+                {...itemData}
+                isFree={true}
+                hasTwoLineCards={freeForYouHasTwoLineCards}
+                onClick={() => {
+                    tracker?.genericTrack('Click Dashboard Content Card', {
+                        section: 'Gratis untuk Kamu',
+                        cardTitle: itemData.title,
+                        cardCategory: itemData.category
+                    });
+                }}
+            />
+        );
+    };
+
     return (
-        <>
-            {justReleased?.just_released.length !== 0 && (
-                <CarouselSection
-                    title="Baru Rilis"
-                    items={justReleased?.just_released}
-                    isLoading={isLoadingJustReleased}
-                    renderItem={renderJustReleasedItem}
-                    eventCategory="JustReleased"
-                />
-            )}
+        <div className="relative z-[1] overflow-x-visible flex flex-col min-h-screen bg-[#101010]">
+            <div className="absolute inset-y-0 -inset-x-full -z-[1] bg-[#101010] pointer-events-none"></div>
+            <div className="absolute bottom-0 -inset-x-full h-20 bg-[#101010] translate-y-full -z-[1]"></div>
 
             <CarouselSection
-                title={`Kelas yang Diambil Mahasiswa ${majorClasses?.major}`}
+                title={`Dipelajari Mahasiswa Jurusan Kamu`}
                 items={majorClasses?.data}
                 isLoading={isLoadingMajorClasses}
                 renderItem={renderMajorClassItem}
@@ -283,53 +529,104 @@ const PrivateDashboardContent = (): JSX.Element => {
             />
 
             <CarouselSection
-                title={`Trending untuk Mahasiswa ${majorRecommendation?.major}`}
-                items={majorRecommendation?.data}
-                isLoading={isLoadingMajorRecommendation}
-                renderItem={renderTrendingItem}
-                eventCategory="TrendingRecommendation"
+                title="Terbaru yang Cocok Untukmu"
+                items={newlyReleasedForYou?.data}
+                isLoading={isLoadingNewlyReleasedForYou}
+                renderItem={renderNewlyReleasedItem}
+                eventCategory="NewlyReleasedForYou"
             />
 
-            {learnRecommendation?.data?.map((courseRec, index) => {
-                const courseRecommendationHasTwoLineCards =
-                    checkForTwoLineTitles(courseRec.recommendations || []);
+            {!isDashboardRevamp && (
+                <CarouselSection
+                    title={`Trending untuk Mahasiswa ${majorRecommendation?.major}`}
+                    items={majorRecommendation?.data}
+                    isLoading={isLoadingMajorRecommendation}
+                    renderItem={renderTrendingItem}
+                    eventCategory="TrendingRecommendation"
+                />
+            )}
 
-                return (
-                    <CarouselSection
-                        key={`learn-rec-${index}-${courseRec.course_name}`}
-                        title={`Karena Kamu Belajar ${courseRec.course_name}`}
-                        items={courseRec.recommendations}
-                        isLoading={isLoadingLearnRecommendation}
-                        renderItem={(item) => {
-                            const itemData = prepareItemData(
-                                item as MajorRecommendationItem
-                            );
-                            return (
-                                <ContentCard
-                                    {...itemData}
-                                    hasTwoLineCards={
-                                        courseRecommendationHasTwoLineCards
-                                    }
-                                    onClick={() => {
-                                        tracker?.genericTrack(
-                                            'Click Dashboard Content Card',
-                                            {
-                                                section: 'Karena Kamu Belajar',
-                                                sectionCourse:
-                                                    courseRec.course_name,
-                                                cardTitle: itemData.title,
-                                                cardCategory: itemData.category
-                                            }
-                                        );
-                                    }}
-                                />
-                            );
-                        }}
-                        eventCategory={`LearnRecommendation-${courseRec.course_name}`}
-                    />
-                );
-            })}
-        </>
+            <DashboardUpdatesBanner />
+
+            {!isSubscribed && (
+                <CarouselSection
+                    title="Gratis untuk Kamu"
+                    items={freeForYouContent?.data}
+                    isLoading={isLoadingFreeForYou}
+                    renderItem={renderFreeForYouItem}
+                    eventCategory="FreeForYouContent"
+                />
+            )}
+
+            <CarouselSection
+                title={`Buku Wajib Anak ${
+                    majorClasses?.major || 'Jurusan Kamu'
+                }`}
+                items={majorBooks?.data}
+                isLoading={isLoadingMajorBooks}
+                renderItem={renderMajorBookItem}
+                eventCategory="MajorBooks"
+            />
+
+            <CarouselSection
+                title="Kuis Populer di Jurusan Kamu"
+                items={majorQuiz?.data}
+                isLoading={isLoadingMajorQuiz}
+                renderItem={renderMajorQuizItem}
+                eventCategory="MajorQuiz"
+            />
+
+            <CarouselSection
+                title="Flashcard dari Teman Sejurusan"
+                items={majorFlashcards?.data}
+                isLoading={isLoadingMajorFlashcards}
+                renderItem={renderMajorFlashcardItem}
+                eventCategory="MajorFlashcards"
+            />
+
+            {!isDashboardRevamp &&
+                learnRecommendation?.data?.map((courseRec, index) => {
+                    const courseRecommendationHasTwoLineCards =
+                        checkForTwoLineTitles(courseRec.recommendations || []);
+
+                    return (
+                        <CarouselSection
+                            key={`learn-rec-${index}-${courseRec.course_name}`}
+                            title={`Karena Kamu Belajar ${courseRec.course_name}`}
+                            items={courseRec.recommendations}
+                            isLoading={isLoadingLearnRecommendation}
+                            renderItem={(item) => {
+                                const itemData = prepareItemData(
+                                    item as MajorRecommendationItem
+                                );
+                                return (
+                                    <ContentCard
+                                        {...itemData}
+                                        hasTwoLineCards={
+                                            courseRecommendationHasTwoLineCards
+                                        }
+                                        onClick={() => {
+                                            tracker?.genericTrack(
+                                                'Click Dashboard Content Card',
+                                                {
+                                                    section:
+                                                        'Karena Kamu Belajar',
+                                                    sectionCourse:
+                                                        courseRec.course_name,
+                                                    cardTitle: itemData.title,
+                                                    cardCategory:
+                                                        itemData.category
+                                                }
+                                            );
+                                        }}
+                                    />
+                                );
+                            }}
+                            eventCategory={`LearnRecommendation-${courseRec.course_name}`}
+                        />
+                    );
+                })}
+        </div>
     );
 };
 

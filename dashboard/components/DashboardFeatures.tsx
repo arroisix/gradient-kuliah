@@ -5,12 +5,14 @@ import Link from 'next/link';
 import KelasIcon from '../assets/KelasIcon';
 import PerpusIcon from '../assets/PerpusIcon';
 import KuisIcon from '../assets/KuisIcon';
-import DiskusiIcon from '../assets/DiskusiIcon';
 import LainnyaIcon from '../assets/LainnyaIcon';
 import CopilotAIIcon from '../assets/CopilotAIIcon';
 import { useTracker } from 'tracker/tracker';
 import FlashcardLargeIcon from 'dashboard/assets/FlashcardLargeIcon';
 import FlashcardIcon from 'dashboard/assets/FlashcardIcon';
+import FlashcardIconFull from 'dashboard/assets/FlashcardIconFull';
+import CopilotAIIconFull from 'dashboard/assets/CopilotAIIconFull';
+import DiskusiIconNew from 'dashboard/assets/DiskusiIconNew';
 
 type Feature = {
     id: string;
@@ -21,16 +23,24 @@ type Feature = {
     isNew?: boolean;
 };
 
-const DashboardFeatures = () => {
+const DashboardFeatures = (): JSX.Element => {
     const [isOpen, setIsOpen] = useState(false);
     const tracker = useTracker();
 
-    const topRowFeatures: Feature[] = [
+    const cardBaseClasses =
+        'relative group rounded-xl transition-colors md:bg-[#1D1D1D] md:hover:bg-neutral-800 min-h-[96px]';
+
+    const features: Feature[] = [
         {
             id: 'copilot',
             title: 'Copilot AI',
             description: 'Chatbot teman belajarmu',
-            Icon: CopilotAIIcon,
+            Icon: ({ isSmall }: { isSmall?: boolean }) =>
+                isSmall ? (
+                    <CopilotAIIconFull width={24} height={24} />
+                ) : (
+                    <CopilotAIIconFull width={64} height={69} />
+                ),
             url: '/copilot'
         },
         {
@@ -41,33 +51,29 @@ const DashboardFeatures = () => {
                 isSmall ? (
                     <FlashcardIcon width={24} height={24} />
                 ) : (
-                    <FlashcardLargeIcon />
+                    <FlashcardIconFull width={48} height={48} />
                 ),
-            url: '/flashcards',
-            isNew: true
-        }
-    ];
-
-    const bottomRowFeatures: Feature[] = [
+            url: '/flashcards'
+        },
         {
             id: 'kelas',
             title: 'Kelas',
             description: 'Video materi dari dosen',
-            Icon: KelasIcon,
+            Icon: () => <KelasIcon width={64} height={69} />,
             url: '/kelas'
         },
         {
             id: 'perpus',
-            title: 'Perpus',
+            title: 'Perpustakaan',
             description: 'Text book, rangkuman, bank soal',
-            Icon: PerpusIcon,
+            Icon: () => <PerpusIcon width={64} height={69} />,
             url: '/perpustakaan'
         },
         {
             id: 'kuis',
             title: 'Kuis',
             description: 'Uji kemampuanmu sekarang',
-            Icon: KuisIcon,
+            Icon: () => <KuisIcon width={64} height={69} />,
             url: '/latihan'
         },
         {
@@ -84,68 +90,22 @@ const DashboardFeatures = () => {
             id: 'diskusi',
             title: 'Diskusi',
             description: 'Tanya ke tutor atau user lain',
-            Icon: DiskusiIcon,
+            Icon: () => <DiskusiIconNew width={64} height={69} />,
             url: '/komunitas'
         }
     ];
 
     return (
-        <div className="w-full mx-auto space-y-4">
-            <div className="grid grid-cols-2 gap-2">
-                {topRowFeatures.map((feature) => (
-                    <Link
-                        key={feature.id}
-                        href={feature.url}
-                        onClick={() =>
-                            tracker?.genericTrack(
-                                `Click ${feature.title} Dashboard Card`
-                            )
-                        }
-                        className="block p-4 bg-[#1D1D1D] rounded-xl hover:bg-neutral-800 transition-colors relative">
-                        <div className="flex items-start justify-between">
-                            <div>
-                                <h3 className="font-bold text-white flex items-center">
-                                    {feature.title}
-                                    {feature.isNew && (
-                                        <span className="ml-2 py-1 px-3 text-xs rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] z-[1]">
-                                            Baru
-                                        </span>
-                                    )}
-                                </h3>
-                                <p className="text-sm text-neutral-400 w-[80%]">
-                                    {feature.description}
-                                </p>
-                            </div>
-                            <div className="absolute top-1.5 right-0 z-0">
-                                <feature.Icon />
-                            </div>
-                        </div>
-                    </Link>
-                ))}
-            </div>
-
-            <div className="grid grid-cols-4 gap-2">
-                {bottomRowFeatures.map((feature) =>
-                    feature.id === 'lainnya' ? (
-                        <button
-                            key={feature.id}
-                            onClick={() => {
-                                setIsOpen(true);
-                                tracker?.genericTrack(
-                                    'Click More Features Dashboard Card'
-                                );
-                            }}
-                            className="p-3 bg-[#1D1D1D] rounded-xl hover:bg-neutral-800 transition-colors">
-                            <div className="flex flex-col items-center text-center">
-                                <div className="w-12 h-12 flex items-center justify-center mb-2">
-                                    <feature.Icon width={32} height={32} />
-                                </div>
-                                <span className="font-bold text-white text-sm">
-                                    {feature.title}
-                                </span>
-                            </div>
-                        </button>
-                    ) : (
+        <div className="w-full mx-auto space-y-4 mb-4">
+            <div
+                className="
+                grid grid-cols-3
+                xl:grid-cols-[repeat(5,1fr)_auto]
+                gap-4 xl:gap-2
+            ">
+                {features
+                    .filter((f) => f.id !== 'lainnya')
+                    .map((feature) => (
                         <Link
                             key={feature.id}
                             href={feature.url}
@@ -154,18 +114,118 @@ const DashboardFeatures = () => {
                                     `Click ${feature.title} Dashboard Card`
                                 )
                             }
-                            className="p-3 bg-[#1D1D1D] rounded-xl hover:bg-neutral-800 transition-colors">
-                            <div className="flex flex-col items-center text-center">
-                                <div className="w-12 h-12 flex items-center justify-center mb-2">
-                                    <feature.Icon width={32} height={32} />
+                            className={`${cardBaseClasses}
+                            flex flex-col items-center text-center gap-2
+                            xl:flex-row xl:items-center xl:justify-between xl:gap-3 xl:text-left
+                            px-4 py-3 xl:p-3
+                            ${
+                                feature.id === 'copilot' ||
+                                feature.id === 'flashcard'
+                                    ? 'xl:pr-0'
+                                    : ''
+                            }
+                            ${
+                                feature.id !== 'copilot'
+                                    ? 'xl:flex-row-reverse'
+                                    : ''
+                            }
+                        `}>
+                            <div
+                                className={`relative w-14 h-14 rounded-full bg-[#1D1D1D] flex items-center justify-center xl:w-auto xl:h-auto xl:rounded-none xl:bg-transparent ${
+                                    feature.id === 'copilot' ? 'xl:order-2' : ''
+                                }`}>
+                                <div
+                                    className={`${
+                                        feature.id === 'copilot' ||
+                                        feature.id === 'flashcard'
+                                            ? 'flex items-center justify-center w-full h-full'
+                                            : ''
+                                    }`}>
+                                    {/* Show Full icons on non-xl screens, original icons on xl screens */}
+                                    <div className="xl:hidden">
+                                        <feature.Icon />
+                                    </div>
+                                    <div className="hidden xl:block">
+                                        {feature.id === 'copilot' ? (
+                                            <CopilotAIIcon
+                                                width={64}
+                                                height={69}
+                                            />
+                                        ) : feature.id === 'flashcard' ? (
+                                            <FlashcardLargeIcon />
+                                        ) : (
+                                            <feature.Icon />
+                                        )}
+                                    </div>
                                 </div>
-                                <span className="font-bold text-white text-sm">
+                                {feature.isNew && (
+                                    <span
+                                        className="absolute -bottom-1 left-1/2 -translate-x-1/2 py-0.5 px-2 text-[10px] rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56]
+                   xl:top-0 xl:right-0 xl:-mt-2 xl:-mr-2 xl:bottom-auto xl:left-auto xl:translate-x-0 xl:text-xs">
+                                        Baru
+                                    </span>
+                                )}
+                            </div>
+                            <div
+                                className={`flex flex-col items-center xl:items-start ${
+                                    feature.id === 'copilot' ? 'xl:order-1' : ''
+                                }`}>
+                                <h3 className="font-bold text-white text-xs xl:text-sm">
+                                    {feature.title}
+                                </h3>
+                                {/* Show description only on xl+ */}
+                                <p className="hidden xl:block text-[11px] xl:text-xs text-neutral-400 leading-snug">
+                                    {feature.description}
+                                </p>
+                            </div>
+                        </Link>
+                    ))}
+
+                {/* Additional features shown inline below xl (merged list) */}
+                {moreFeatures.map((feature) => (
+                    <Link
+                        key={feature.id}
+                        href={feature.url}
+                        onClick={() =>
+                            tracker?.genericTrack(
+                                `Click ${feature.title} Dashboard Card`
+                            )
+                        }
+                        className={`${cardBaseClasses} flex flex-col items-center text-center gap-2 px-4 py-3 xl:hidden`}>
+                        <div className="relative w-14 h-14 rounded-full bg-[#1D1D1D] flex items-center justify-center">
+                            <feature.Icon />
+                        </div>
+                        <div className="flex flex-col items-center">
+                            <h3 className="font-bold text-white text-xs">
+                                {feature.title}
+                            </h3>
+                        </div>
+                    </Link>
+                ))}
+
+                {/* 'Lainnya' trigger only on xl (no custom narrow width anymore) */}
+                {features
+                    .filter((f) => f.id === 'lainnya')
+                    .map((feature) => (
+                        <button
+                            key={feature.id}
+                            onClick={() => {
+                                setIsOpen(true);
+                                tracker?.genericTrack(
+                                    'Click More Features Dashboard Card'
+                                );
+                            }}
+                            className={`${cardBaseClasses} hidden xl:flex flex-col items-center justify-center text-center gap-2 px-4 py-3 focus:outline-none`}>
+                            <div className="relative w-14 h-14 rounded-full bg-[#1D1D1D] flex items-center justify-center">
+                                <feature.Icon width={28} height={28} />
+                            </div>
+                            <div className="flex flex-col items-center">
+                                <span className="font-bold text-white text-xs xl:text-sm">
                                     {feature.title}
                                 </span>
                             </div>
-                        </Link>
-                    )
-                )}
+                        </button>
+                    ))}
             </div>
 
             <Transition appear show={isOpen} as={Fragment}>
@@ -209,8 +269,7 @@ const DashboardFeatures = () => {
 
                                         <div className="space-y-2">
                                             {[
-                                                ...topRowFeatures,
-                                                ...bottomRowFeatures.filter(
+                                                ...features.filter(
                                                     (f) => f.id !== 'lainnya'
                                                 ),
                                                 ...moreFeatures

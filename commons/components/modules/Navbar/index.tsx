@@ -85,6 +85,7 @@ const Navbar = ({
         setScrollPosition(position);
     };
     const { is_subscribed: isSubscribed } = useCourseSubscription();
+    const isDashboard = router.pathname.startsWith('/dashboard');
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll, { passive: true });
@@ -255,7 +256,7 @@ const Navbar = ({
                             'w-full max-w-lg',
                             isShowSidebar && 'lg:ml-[250px] lg:pl-6 lg:absolute'
                         )}>
-                        <SearchBar />
+                        {!isDashboard && <SearchBar />}
                     </div>
                 </div>
                 {paymentPage ? (
@@ -271,9 +272,20 @@ const Navbar = ({
                     </Button>
                 ) : (
                     <>
-                        <div className="hidden font-bold md:flex">
+                        <div className="hidden font-bold md:flex md:items-center md:gap-3">
                             {isAuthenticated ? (
-                                <UserProfile />
+                                <>
+                                    {isDashboard && !isSubscribed && (
+                                        <Button
+                                            href="/langganan"
+                                            variant="custom"
+                                            className="bg-[#5F2BCE] hover:bg-[#4A1FA3] text-white rounded-full transition-colors w-[108px] h-[34px] text-sm flex items-center justify-center"
+                                            eventName="Click Langganan Button">
+                                            Langganan
+                                        </Button>
+                                    )}
+                                    <UserProfile />
+                                </>
                             ) : (
                                 <AuthButtons />
                             )}
@@ -284,6 +296,15 @@ const Navbar = ({
                                 <AuthButtons />
                             ) : (
                                 <div className="flex items-center gap-4">
+                                    {isDashboard && !isSubscribed && (
+                                        <Button
+                                            href="/langganan"
+                                            variant="custom"
+                                            className="bg-[#5F2BCE] hover:bg-[#4A1FA3] text-white rounded-full text-sm transition-colors w-[108px] h-[34px] flex items-center justify-center"
+                                            eventName="Click Langganan Button Mobile">
+                                            Langganan
+                                        </Button>
+                                    )}
                                     <button
                                         className="flex items-center text-base font-bold"
                                         onClick={() =>
