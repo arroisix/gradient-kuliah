@@ -61,11 +61,11 @@ const MultipleChoiceProblem: React.FC<MultipleChoiceProblemProps> = ({
                             ? isCorrect(option.id)
                                 ? 'bg-[#2AC27A80]'
                                 : selectedAnswers.includes(option.id)
-                                ? 'bg-[#EC5D4980]'
-                                : 'bg-[#4B4E5F]'
+                                  ? 'bg-[#EC5D4980]'
+                                  : 'bg-[#4B4E5F]'
                             : selectedAnswers.includes(option.id)
-                            ? 'bg-[#333540]'
-                            : 'bg-[#4B4E5F]',
+                              ? 'bg-[#333540]'
+                              : 'bg-[#4B4E5F]',
                         isSubmitted &&
                             showSolution === 'AFTER_PROBLEM' &&
                             'cursor-default'
@@ -89,11 +89,11 @@ const MultipleChoiceProblem: React.FC<MultipleChoiceProblemProps> = ({
                                     ? isCorrect(option.id)
                                         ? 'bg-[#2AC27A]'
                                         : selectedAnswers.includes(option.id)
-                                        ? 'bg-[#EC5D49]'
-                                        : 'bg-[#898C9E]'
+                                          ? 'bg-[#EC5D49]'
+                                          : 'bg-[#898C9E]'
                                     : selectedAnswers.includes(option.id)
-                                    ? 'bg-[#5F2BCE]'
-                                    : 'bg-[#898C9E]'
+                                      ? 'bg-[#5F2BCE]'
+                                      : 'bg-[#898C9E]'
                             )}>
                             {isSubmitted &&
                             showSolution === 'AFTER_PROBLEM' &&

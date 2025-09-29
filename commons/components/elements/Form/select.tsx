@@ -60,10 +60,10 @@ const Select: React.FC<SelectProps> = ({
         isCreatable && isAsync
             ? AsyncCreatableSelect
             : isCreatable
-            ? CreatableSelect
-            : isAsync
-            ? AsyncSelect
-            : ReactSelect;
+              ? CreatableSelect
+              : isAsync
+                ? AsyncSelect
+                : ReactSelect;
 
     return (
         <div className="flex flex-col w-full gap-1 font-body">

@@ -301,8 +301,8 @@ const ModalCheckout = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
                         (inputCode === ''
                             ? false
                             : validateResult || loadingValidate
-                            ? !!!validateResult?.is_valid || loadingValidate
-                            : false) ||
+                              ? !!!validateResult?.is_valid || loadingValidate
+                              : false) ||
                         (paymentMethod === 'ID_OVO' &&
                             (!phoneNumber ||
                                 phoneNumber === '+62' ||

@@ -501,8 +501,8 @@ const CreateFlashcardForm = ({
                             {isLoading
                                 ? 'Loading...'
                                 : mode === 'edit'
-                                ? 'Simpan'
-                                : 'Buat'}
+                                  ? 'Simpan'
+                                  : 'Buat'}
                         </span>
                     </div>
                 </button>

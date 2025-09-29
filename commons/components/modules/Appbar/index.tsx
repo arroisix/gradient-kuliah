@@ -203,9 +203,9 @@ const Appbar = (): JSX.Element | null => {
                                 ? showExpanded
                                     ? menu.label
                                     : configData?.configs
-                                          .is_copilot_config_enabled
-                                    ? menu.label
-                                    : 'Diskusi'
+                                            .is_copilot_config_enabled
+                                      ? menu.label
+                                      : 'Diskusi'
                                 : menu.label}
                         </span>
                     </Link>

@@ -194,12 +194,12 @@ const DownloadsContainer = (): JSX.Element => {
                                           deviceFilter === 'phone'
                                               ? 'handphone'
                                               : deviceFilter === 'tablet'
-                                              ? 'tablet'
-                                              : 'handphone'
+                                                ? 'tablet'
+                                                : 'handphone'
                                       } kamu`
                                     : activeTab === 0
-                                    ? 'Download kamu masih kosong'
-                                    : 'Kamu tidak memiliki riwayat download'
+                                      ? 'Download kamu masih kosong'
+                                      : 'Kamu tidak memiliki riwayat download'
                             }
                             description="Telurusi kelas dan download video materi melalui aplikasi"
                         />

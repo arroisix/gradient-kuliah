@@ -39,7 +39,7 @@ export const learningExperienceApi = baseApi.injectEndpoints({
                     ? [
                           ...result.data.map(
                               ({ id }) =>
-                                  ({ type: 'QNA_QUESTION', id } as const)
+                                  ({ type: 'QNA_QUESTION', id }) as const
                           ),
                           { type: 'QNA_QUESTION', id: 'LIST' }
                       ]
@@ -60,7 +60,7 @@ export const learningExperienceApi = baseApi.injectEndpoints({
                 result
                     ? [
                           ...result.data.map(
-                              ({ id }) => ({ type: 'QNA_ANSWER', id } as const)
+                              ({ id }) => ({ type: 'QNA_ANSWER', id }) as const
                           ),
                           { type: 'QNA_ANSWER', id: 'LIST' }
                       ]

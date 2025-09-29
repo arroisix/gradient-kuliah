@@ -22,15 +22,15 @@ const EmptyState = ({
                         isOnSearch
                             ? 'https://assets.gradient.academy/assets/empty-search-community.png'
                             : pathname === '/komunitas'
-                            ? 'https://assets.gradient.academy/assets/empty-explore-community.png'
-                            : 'https://assets.gradient.academy/assets/empty-my-question-community.png'
+                              ? 'https://assets.gradient.academy/assets/empty-explore-community.png'
+                              : 'https://assets.gradient.academy/assets/empty-my-question-community.png'
                     }
                     alt={
                         isOnSearch
                             ? 'empty-search-community'
                             : pathname === '/komunitas'
-                            ? 'empty-explore-community'
-                            : 'empty-my-question-community'
+                              ? 'empty-explore-community'
+                              : 'empty-my-question-community'
                     }
                     layout="fill"
                     className="object-contain"

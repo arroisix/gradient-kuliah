@@ -70,8 +70,8 @@ const VideoSection = ({ slug }: VideoSectionProps): JSX.Element => {
                                     width >= 1536
                                         ? '600px'
                                         : width >= 1024
-                                        ? '425px'
-                                        : ''
+                                          ? '425px'
+                                          : ''
                                 }
                                 video={videoPicked.video_url as string}
                                 thumbnail={videoPicked.thumbnail as string}

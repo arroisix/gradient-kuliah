@@ -86,8 +86,8 @@ const VerticalProductCard = ({
                                 ? 'h-full w-full'
                                 : 'aspect-[256/364] h-full shadow-lg border'
                             : isCourse || isVideo
-                            ? 'h-full w-full'
-                            : 'aspect-[256/364] h-full shadow-lg border',
+                              ? 'h-full w-full'
+                              : 'aspect-[256/364] h-full shadow-lg border',
                         imageClassname
                     )}>
                     <Image

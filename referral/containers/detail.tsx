@@ -92,8 +92,8 @@ const MyVoucher = (): JSX.Element => {
                                         fontSize: isMobileBreakpoints
                                             ? (width * 4) / 100
                                             : width >= 1063
-                                            ? (1063 * 2.5) / 100
-                                            : (width * 2.5) / 100
+                                              ? (1063 * 2.5) / 100
+                                              : (width * 2.5) / 100
                                     }}>
                                     {label}
                                 </span>
@@ -105,8 +105,8 @@ const MyVoucher = (): JSX.Element => {
                                             fontSize: isMobileBreakpoints
                                                 ? (width * 2.5) / 100
                                                 : width >= 1063
-                                                ? (1063 * 1) / 100
-                                                : (width * 1) / 100
+                                                  ? (1063 * 1) / 100
+                                                  : (width * 1) / 100
                                         }}>
                                         {`Valid till ${`${new Date(
                                             expired_at
@@ -126,13 +126,13 @@ const MyVoucher = (): JSX.Element => {
                                     left: isMobileBreakpoints
                                         ? (width * 59) / 100
                                         : width >= 1063
-                                        ? (1063 * 42) / 100
-                                        : (width * 42) / 100,
+                                          ? (1063 * 42) / 100
+                                          : (width * 42) / 100,
                                     gap: isMobileBreakpoints
                                         ? (width * 2) / 100
                                         : width >= 1063
-                                        ? (1063 * 2) / 100
-                                        : (width * 2) / 100
+                                          ? (1063 * 2) / 100
+                                          : (width * 2) / 100
                                 }}>
                                 <div
                                     className="flex flex-col"
@@ -140,8 +140,8 @@ const MyVoucher = (): JSX.Element => {
                                         gap: isMobileBreakpoints
                                             ? (width * 1) / 100
                                             : width >= 1063
-                                            ? (1063 * 1) / 100
-                                            : (width * 1) / 100
+                                              ? (1063 * 1) / 100
+                                              : (width * 1) / 100
                                     }}>
                                     <span
                                         className="inline-block font-body font-bold text-[#FFFFFF80] leading-none"
@@ -149,8 +149,8 @@ const MyVoucher = (): JSX.Element => {
                                             fontSize: isMobileBreakpoints
                                                 ? (width * 3) / 100
                                                 : width >= 1063
-                                                ? (1063 * 2) / 100
-                                                : (width * 2) / 100
+                                                  ? (1063 * 2) / 100
+                                                  : (width * 2) / 100
                                         }}>
                                         Kode Voucher
                                     </span>
@@ -160,8 +160,8 @@ const MyVoucher = (): JSX.Element => {
                                             fontSize: isMobileBreakpoints
                                                 ? (width * 3) / 100
                                                 : width >= 1063
-                                                ? (1063 * 2) / 100
-                                                : (width * 2) / 100
+                                                  ? (1063 * 2) / 100
+                                                  : (width * 2) / 100
                                         }}>
                                         {code}
                                     </span>
@@ -172,8 +172,8 @@ const MyVoucher = (): JSX.Element => {
                                         fontSize: isMobileBreakpoints
                                             ? (width * 2) / 100
                                             : width >= 1063
-                                            ? (1063 * 1.2) / 100
-                                            : (width * 1.2) / 100
+                                              ? (1063 * 1.2) / 100
+                                              : (width * 1.2) / 100
                                     }}
                                     onClick={() => handleCopy(code)}>
                                     Salin Kode

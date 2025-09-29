@@ -174,8 +174,8 @@ export const PublicCourseList = ({
         sort: VALID_SORT.includes(sort ?? '')
             ? sort
             : section === 'trending'
-            ? 'popularity'
-            : 'latest',
+              ? 'popularity'
+              : 'latest',
         search,
         limit: PAGE_SIZE
     } as Omit<FilterCourseQueryParams, 'page'>;
@@ -197,8 +197,8 @@ export const PublicCourseList = ({
             sort: VALID_SORT.includes(sort ?? '')
                 ? sort
                 : section === 'trending'
-                ? 'popularity'
-                : 'latest',
+                  ? 'popularity'
+                  : 'latest',
             page: parseInt(page ?? '1'),
             limit: section === 'trending' ? 8 : PAGE_SIZE,
             search
@@ -274,8 +274,8 @@ export const PrivateCourseList = ({
         sort: VALID_SORT.includes(sort ?? '')
             ? sort
             : section === 'trending'
-            ? 'popularity'
-            : 'latest',
+              ? 'popularity'
+              : 'latest',
         page: parseInt(page ?? '1'),
         limit: section === 'trending' ? 8 : PAGE_SIZE,
         search

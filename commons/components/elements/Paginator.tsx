@@ -87,8 +87,8 @@ const Paginator = ({
             (totalPages > 5 && page > 3 && page < totalPages - 2
                 ? page - 2
                 : totalPages > 5 && page >= totalPages - 2
-                ? totalPages - 4
-                : 2)
+                  ? totalPages - 4
+                  : 2)
     );
 
     return (

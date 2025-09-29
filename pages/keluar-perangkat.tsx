@@ -26,10 +26,13 @@ const KeluarPerangkat = (): JSX.Element => {
     const { deviceTypes } = useGetDeviceTypesQuery(undefined, {
         selectFromResult: ({ data }) => ({
             deviceTypes:
-                data?.reduce((acc, deviceType) => {
-                    acc[deviceType.id] = deviceType;
-                    return acc;
-                }, {} as Record<number, DeviceTypeResponse>) ?? {}
+                data?.reduce(
+                    (acc, deviceType) => {
+                        acc[deviceType.id] = deviceType;
+                        return acc;
+                    },
+                    {} as Record<number, DeviceTypeResponse>
+                ) ?? {}
         })
     });
     const { data: connectedDevices } = useGetConnectedDevicesQuery(undefined);

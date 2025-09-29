@@ -50,7 +50,7 @@ export const komunitasApi = baseApi.injectEndpoints({
                 result
                     ? [
                           ...result.community_posts.map(
-                              ({ id }) => ({ type: 'COMMUNITIES', id } as const)
+                              ({ id }) => ({ type: 'COMMUNITIES', id }) as const
                           ),
                           { type: 'COMMUNITIES', id: 'LIST' },
                           'COMMUNITIES'
@@ -73,7 +73,7 @@ export const komunitasApi = baseApi.injectEndpoints({
                 result
                     ? [
                           ...result.community_posts.map(
-                              ({ id }) => ({ type: 'COMMUNITIES', id } as const)
+                              ({ id }) => ({ type: 'COMMUNITIES', id }) as const
                           ),
                           { type: 'COMMUNITIES', id: 'PUBLIC_LIST' },
                           'COMMUNITIES'
@@ -182,14 +182,14 @@ export const komunitasApi = baseApi.injectEndpoints({
                                   ({
                                       type: 'COMMUNITIES',
                                       id: arg.post_id
-                                  } as const)
+                                  }) as const
                           ),
                           ...result.comments.map(
                               (value) =>
                                   ({
                                       type: 'COMMUNITIES',
                                       id: value.id
-                                  } as const)
+                                  }) as const
                           ),
                           'COMMUNITIES'
                       ]

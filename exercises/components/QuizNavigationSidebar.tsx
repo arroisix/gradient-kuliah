@@ -91,8 +91,8 @@ const QuizNavigationSidebar: React.FC<QuizNavigationSidebarProps> = ({
                                         problem.id === problemId
                                             ? 'bg-white text-[#222222]'
                                             : problem.is_answered
-                                            ? 'bg-[#4B4E5F] text-white'
-                                            : 'bg-transparent border border-[#666666] text-white'
+                                              ? 'bg-[#4B4E5F] text-white'
+                                              : 'bg-transparent border border-[#666666] text-white'
                                     }`}>
                                 {problem.order + 1}
                             </a>

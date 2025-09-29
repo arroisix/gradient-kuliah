@@ -1,0 +1,25 @@
+name: Deploy to Vercel PUSH
+
+on:
+    push:
+        branches:
+            - dev
+            - main
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+              with:
+                  ref: ${{ github.head_ref }}
+                  fetch-depth: 0
+            - name: Mock Commit to Vercel
+              run: |
+                  git config --local user.email "business@gradient.academy"
+                  git config --local user.name "gradientech"
+                  git commit -m "Deploy to Vercel" --no-verify --allow-empty
+            - name: Mock Push to Vercel
+              uses: ad-m/github-push-action@master
+              with:
+                  branch: ${{ github.ref }}

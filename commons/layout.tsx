@@ -48,8 +48,8 @@ const Layout = ({
                 isFullBlackBackground
                     ? 'bg-black'
                     : isLandingPageRevampOn
-                    ? 'bg-[#101010]'
-                    : 'bg-black',
+                      ? 'bg-[#101010]'
+                      : 'bg-black',
                 paymentPage && 'flex flex-col'
             )}>
             <Navbar
