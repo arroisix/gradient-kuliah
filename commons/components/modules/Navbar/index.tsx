@@ -111,8 +111,8 @@ const Navbar = ({
             return lightMode
                 ? 'bg-white shadow-md'
                 : isSubscribed
-                  ? 'bg-black'
-                  : 'bg-[#222222]';
+                ? 'bg-black'
+                : 'bg-[#222222]';
         }
 
         if (showSidebar && fullHeightSidebar) {
@@ -123,15 +123,15 @@ const Navbar = ({
             return shouldTransparent
                 ? ''
                 : isSubscribed
-                  ? 'bg-black'
-                  : 'bg-[#222222]';
+                ? 'bg-black'
+                : 'bg-[#222222]';
         }
 
         return lightMode
             ? 'bg-white text-black shadow-md'
             : isSubscribed
-              ? 'bg-black'
-              : 'bg-[#222222]';
+            ? 'bg-black'
+            : 'bg-[#222222]';
     };
 
     const isShowHamburgerMenu =
@@ -156,8 +156,8 @@ const Navbar = ({
                     isSubscribed && showSidebar
                         ? 'lg:px-6'
                         : noPadding
-                          ? 'lg:px-16'
-                          : 'lg:px-12'
+                        ? 'lg:px-16'
+                        : 'lg:px-12'
                 )}>
                 <div className="flex items-center flex-auto gap-4 md:flex-1 lg:flex-auto lg:gap-8">
                     {isShowHamburgerMenu && (

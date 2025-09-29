@@ -47,11 +47,11 @@ const SearchResults = ({
         !type || type === 'all'
             ? { page }
             : type === 'community'
-              ? { primary_page: page }
-              : {
-                    primary_limit: 100,
-                    secondary_page: page
-                };
+            ? { primary_page: page }
+            : {
+                  primary_limit: 100,
+                  secondary_page: page
+              };
 
     const getTotalPages = (
         data: SearchResults<SearchDocument> | undefined

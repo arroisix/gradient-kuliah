@@ -50,10 +50,10 @@ export const PacketCard = ({
                 isHighlighted
                     ? 'bg-gradient-purple-pricing border-2 border-[#5F2BCE80] rounded-t-none border-t-0 mt-[50px] sm:mt-0'
                     : isFree
-                      ? 'bg-gradient-green-pricing border-2 border-[#FA89C3] rounded-t-none border-t-0 mt-[50px] sm:mt-0'
-                      : blackBg
-                        ? 'bg-[#222222]'
-                        : 'bg-[#121212]'
+                    ? 'bg-gradient-green-pricing border-2 border-[#FA89C3] rounded-t-none border-t-0 mt-[50px] sm:mt-0'
+                    : blackBg
+                    ? 'bg-[#222222]'
+                    : 'bg-[#121212]'
             }`}
             style={{
                 order: checkCustomBreakpoints(708)
@@ -134,15 +134,15 @@ export const PacketCard = ({
                     isFree
                         ? 'custom'
                         : isHighlighted || blackBg
-                          ? 'primary'
-                          : 'custom'
+                        ? 'primary'
+                        : 'custom'
                 }
                 className={`${
                     isFree
                         ? 'bg-[#FA89C3] text-[#1E6844] font-bold'
                         : isHighlighted || blackBg
-                          ? ''
-                          : 'bg-[#212121]'
+                        ? ''
+                        : 'bg-[#212121]'
                 }`}
                 onClick={handleClick}>
                 {ctaText}

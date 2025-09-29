@@ -29,10 +29,10 @@ const AstronotesRegisterwall = ({
         book.is_public
             ? false
             : showRegisterwall
-              ? showRegisterwall
-              : Number(page) == 1
-                ? false
-                : !isAuthenticated
+            ? showRegisterwall
+            : Number(page) == 1
+            ? false
+            : !isAuthenticated
     );
     const { isTabletBreakpoints } = useWindowBreakpoints();
     const { height } = useWindowSize();

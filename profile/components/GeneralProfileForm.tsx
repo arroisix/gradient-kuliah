@@ -58,8 +58,8 @@ export const GeneralProfileForm = (): JSX.Element => {
     const Icon = isValid
         ? FaCheckCircle
         : isCheckUsernameLoading || isTyping
-          ? FaSpinner
-          : FaTimesCircle;
+        ? FaSpinner
+        : FaTimesCircle;
 
     return (
         <Formik
@@ -248,8 +248,8 @@ export const GeneralProfileForm = (): JSX.Element => {
                                             isCheckUsernameLoading || isTyping
                                                 ? 'animate-spin text-[#999999]'
                                                 : isValid
-                                                  ? 'text-green-600'
-                                                  : 'text-red-600'
+                                                ? 'text-green-600'
+                                                : 'text-red-600'
                                         }`}
                                     />
                                 ) : undefined

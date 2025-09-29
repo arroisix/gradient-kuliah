@@ -59,10 +59,10 @@ const VideoPlayerContainer = ({
     const videoSrc = shouldUseBitmovinPlayer
         ? video?.drm_video_url
         : isNotNullAndUndefined(video?.mux_playback_id)
-          ? `${video?.mux_playback_id as string}?${queryParamBuilder({
-                token: video?.token as string
-            })}`
-          : (video?.video_url as string);
+        ? `${video?.mux_playback_id as string}?${queryParamBuilder({
+              token: video?.token as string
+          })}`
+        : (video?.video_url as string);
 
     const nextSubchapter = next_subchapter_slug
         ? `/kelas/${id}/${next_subchapter_slug}`

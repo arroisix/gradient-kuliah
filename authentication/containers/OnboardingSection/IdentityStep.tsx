@@ -50,8 +50,8 @@ export const IdentityStep = (): JSX.Element => {
     const Icon = isValid
         ? FaCheckCircle
         : isCheckUsernameLoading || isTyping
-          ? FaSpinner
-          : FaTimesCircle;
+        ? FaSpinner
+        : FaTimesCircle;
 
     return (
         <div className="flex flex-col w-full">
@@ -124,8 +124,8 @@ export const IdentityStep = (): JSX.Element => {
                                                 isTyping
                                                     ? 'animate-spin text-[#999999]'
                                                     : isValid
-                                                      ? 'text-green-600'
-                                                      : 'text-red-600'
+                                                    ? 'text-green-600'
+                                                    : 'text-red-600'
                                             }`}
                                         />
                                     ) : undefined

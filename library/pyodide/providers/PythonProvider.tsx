@@ -49,8 +49,9 @@ function PythonProvider(props: PythonProviderProps): JSX.Element {
                         '../workers/service-worker',
                         import.meta.url
                     );
-                    const registration =
-                        await navigator.serviceWorker.register(url);
+                    const registration = await navigator.serviceWorker.register(
+                        url
+                    );
                     if (registration.active) {
                         console.debug('Service worker active');
                         swRef.current = registration.active;

@@ -161,14 +161,14 @@ const AddCardForm = (): JSX.Element => {
         isCheckingName || isTyping
             ? FaSpinner
             : isNameAvailable
-              ? FaCheckCircle
-              : FaTimesCircle;
+            ? FaCheckCircle
+            : FaTimesCircle;
     const nameIconClass =
         isCheckingName || isTyping
             ? 'animate-spin text-gray-400'
             : isNameAvailable
-              ? 'text-green-500'
-              : 'text-red-500';
+            ? 'text-green-500'
+            : 'text-red-500';
 
     return (
         <>

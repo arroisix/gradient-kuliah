@@ -75,8 +75,8 @@ const QrisComponent = ({ transaction }: QrisComponentProps): JSX.Element => {
             const brandLogoSrc = isGopay
                 ? `${CDN_URL}/assets/payments/gopay.png`
                 : isShopeepay
-                  ? `${CDN_URL}/assets/payments/shopeepay.png`
-                  : '';
+                ? `${CDN_URL}/assets/payments/shopeepay.png`
+                : '';
             const brandLogoImg = brandLogoSrc
                 ? await loadImg(brandLogoSrc)
                 : null;

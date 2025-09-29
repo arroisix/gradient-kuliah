@@ -83,8 +83,8 @@ const LearningCard: React.FC<LearningCardProps> = ({ card, onClick }) => {
                         {hasNumberPrefix
                             ? card.title
                             : isVideo
-                              ? card.title
-                              : `${card.title}`}
+                            ? card.title
+                            : `${card.title}`}
                     </h3>
 
                     <div className="mt-auto">

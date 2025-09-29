@@ -165,8 +165,9 @@ const ChatSection = ({
         const fetchRecommendations = async (keyword: string) => {
             setIsLoadingRecommendations(true);
             try {
-                const response =
-                    await chatApi.getContentRecommendation(keyword);
+                const response = await chatApi.getContentRecommendation(
+                    keyword
+                );
                 setRecommendations(response.recommendation);
             } catch (error) {
                 console.error('Failed to fetch recommendations:', error);

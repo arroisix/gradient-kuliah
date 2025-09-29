@@ -239,8 +239,8 @@ function SelectAccountItem({
         method == null
             ? null
             : method == 'email'
-              ? 'Login manual'
-              : 'Login dengan Google';
+            ? 'Login manual'
+            : 'Login dengan Google';
     return (
         <button
             type="button"
