@@ -10,8 +10,6 @@ interface SearchResultCardProps {
     onClick: () => void;
 }
 
-// fix SearchResultCard
-
 const SearchResultCard: React.FC<SearchResultCardProps> = ({
     header,
     title,
