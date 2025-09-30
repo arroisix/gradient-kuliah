@@ -36,7 +36,7 @@ const SearchResultThumbnail = ({
         case 'textbook_problem':
             return (
                 <div className="grid w-full h-full p-4 md:px-6 md:py-0 lg:px-12 place-items-center bg-[#333]">
-                    <div className="aspect-[256/364] relative min-w-16 h-full md:h-auto md:w-full">
+                    <div className="aspect-[256/364] relative min-w-16 h-full md:h-auto md:w-16">
                         {thumbnail && (
                             <Image
                                 src={thumbnail}
