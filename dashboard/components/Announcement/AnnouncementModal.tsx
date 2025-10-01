@@ -113,7 +113,7 @@ const AnnouncementModal = ({
             setOpen={setOpen}
             permanent={true}
             variant="dark"
-            className="text-center md:!max-w-[800px] md:w-[800px] md:h-[400px] flex flex-col md:flex-row p-4 md:p-0 gap-6 md:gap-0 relative overflow-hidden">
+            className="text-center md:!max-w-[800px] md:w-[800px] md:h-[400px] max-h-[70vh] flex flex-col md:flex-row p-4 md:p-0 gap-6 md:gap-0 relative overflow-hidden">
             <div className="w-full flex justify-start relative md:hidden">
                 {renderBadge(
                     announcements?.data[selectedAnnouncement]?.type ??
@@ -132,6 +132,7 @@ const AnnouncementModal = ({
             </div>
             <div className="flex flex-col md:flex-row overflow-auto gap-6 md:gap-0 w-full h-full pb-20 md:pb-0">
                 <Carousel
+                    key={`carousel-${selectedAnnouncement}`}
                     className="aspect-square overflow-hidden rounded-xl md:rounded-r-none md:rounded-l-xl flex items-center justify-center relative min-h-[300px] w-full md:w-[400px] md:h-[400px] md:min-w-[400px]"
                     imageLayout={'fixed'}
                     images={
@@ -168,7 +169,9 @@ const AnnouncementModal = ({
                             )}
                         </button>
                     </div>
-                    <div className="flex flex-col gap-2 text-left h-full overflow-auto">
+                    <div
+                        className="flex flex-col gap-2 text-left h-full overflow-auto"
+                        key={`content-${selectedAnnouncement}`}>
                         <h1 className="text-base font-semibold">
                             {announcements?.data[selectedAnnouncement]?.title ??
                                 ''}
