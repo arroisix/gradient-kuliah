@@ -123,11 +123,16 @@ dependencies:
         specifier: ^1.2.2
         version: 1.2.2
     bitmovin-player:
+<<<<<<< Updated upstream
         specifier: ^8.212.0
         version: 8.212.0
     bitmovin-player-react:
         specifier: ^1.0.3
         version: 1.0.3(bitmovin-player-ui@3.96.0)(bitmovin-player@8.212.0)(react@18.1.0)
+=======
+        specifier: ^8.227.0
+        version: 8.227.0
+>>>>>>> Stashed changes
     bitmovin-player-ui:
         specifier: ^3.96.0
         version: 3.96.0
@@ -5146,6 +5151,7 @@ packages:
             }
         engines: { node: '>=8' }
 
+<<<<<<< Updated upstream
     /bitmovin-player-react@1.0.3(bitmovin-player-ui@3.96.0)(bitmovin-player@8.212.0)(react@18.1.0):
         resolution:
             {
@@ -5161,6 +5167,8 @@ packages:
             react: 18.1.0
         dev: false
 
+=======
+>>>>>>> Stashed changes
     /bitmovin-player-ui@3.96.0:
         resolution:
             {
@@ -5168,10 +5176,17 @@ packages:
             }
         dev: false
 
+<<<<<<< Updated upstream
     /bitmovin-player@8.212.0:
         resolution:
             {
                 integrity: sha512-xK8mWXstgpJG5t4Mf3nDjckMdtvijV63LgkDj2ErcuCzRIo/i8Src0zHn8UVqBJXmdfgWCEV8b9jRvCARYR/AA==
+=======
+    /bitmovin-player@8.227.0:
+        resolution:
+            {
+                integrity: sha512-4V9zKOqEnHx1S113j2Ee529zJjswEluJrtdc7TZTeR23criO4ltusL6prkcSGJfHv3UCpBauCdvS2KKMhcRiIA==
+>>>>>>> Stashed changes
             }
         dev: false
 
