@@ -3,14 +3,12 @@ import Button from 'commons/components/elements/Button';
 import Coupon from 'commons/components/elements/Icons/Coupon';
 import Horn from 'commons/components/elements/Icons/Horn';
 import Modal from 'commons/components/modules/Modal';
-import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import Sparkles from 'courses/assets/Sparkles';
 import {
     useGetAnnouncementsQuery,
     useStoreUserAnnouncementMutation
 } from 'dashboard/redux/api/dashboardApi';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { MdClose } from 'react-icons/md';
 import ReactMarkdown from 'react-markdown';
@@ -20,29 +18,25 @@ import remarkGfm from 'remark-gfm';
 import { useSelector } from 'react-redux';
 import { useTracker } from 'tracker/tracker';
 import Spinner from 'commons/components/elements/Spinner';
+import { cn } from 'commons/utils';
+import Carousel from 'commons/components/elements/Carousel';
 
 const NewFeatureBadge = () => (
-    <span
-        className="flex items-center gap-2 py-1 px-3 rounded-md bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] font-semibold text-xs text-white tooltip tooltip-left"
-        data-tip="Copilot AI gratis selama versi Beta!">
+    <span className="flex items-center gap-2 py-1 px-3 rounded-md bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] font-semibold text-xs text-white">
         <Sparkles className="w-4 h-4 shrink-0" aria-hidden="true" />
         Baru
     </span>
 );
 
 const AnnouncementBadge = () => (
-    <span
-        className="flex items-center gap-2 py-1 px-3 rounded-md bg-gradient-to-r from-[#DC6D0D] to-[#C5550F] via-[#DC6D0D] font-semibold text-xs text-white tooltip tooltip-left"
-        data-tip="Copilot AI gratis selama versi Beta!">
+    <span className="flex items-center gap-2 py-1 px-3 rounded-md bg-gradient-to-r from-[#DC6D0D] to-[#C5550F] via-[#DC6D0D] font-semibold text-xs text-white">
         <Horn />
         Pengumuman
     </span>
 );
 
 const PromoBadge = () => (
-    <span
-        className="flex items-center gap-2 py-1 px-3 rounded-md bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] font-semibold text-xs text-white tooltip tooltip-left"
-        data-tip="Copilot AI gratis selama versi Beta!">
+    <span className="flex items-center gap-2 py-1 px-3 rounded-md bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] font-semibold text-xs text-white">
         <Coupon />
         Promo
     </span>
@@ -53,7 +47,6 @@ const AnnouncementModal = ({
     setOpen
 }: ModalBaseProps): JSX.Element => {
     const tracker = useTracker();
-    const { isMobileBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { data: announcements } = useGetAnnouncementsQuery(undefined, {
         skip: !isAuthenticated
@@ -120,8 +113,8 @@ const AnnouncementModal = ({
             setOpen={setOpen}
             permanent={true}
             variant="dark"
-            className="text-center md:!max-w-xl flex flex-col gap-6">
-            <div className="w-full flex justify-center items-center relative">
+            className="text-center md:!max-w-[800px] md:w-[800px] md:h-[400px] flex flex-col md:flex-row p-4 md:p-0 gap-6 md:gap-0 relative overflow-hidden">
+            <div className="w-full flex justify-start relative md:hidden">
                 {renderBadge(
                     announcements?.data[selectedAnnouncement]?.type ??
                         'GENERAL',
@@ -137,57 +130,164 @@ const AnnouncementModal = ({
                     )}
                 </button>
             </div>
-            <div className="aspect-[16/9] overflow-hidden rounded-xl w-full">
-                <Image
-                    src={
-                        announcements?.data[selectedAnnouncement]?.banners[0] ??
-                        ''
+            <div className="flex flex-col md:flex-row overflow-auto gap-6 md:gap-0 w-full h-full pb-20 md:pb-0">
+                <Carousel
+                    className="aspect-square overflow-hidden rounded-xl md:rounded-r-none md:rounded-l-xl flex items-center justify-center relative min-h-[300px] w-full md:w-[400px] md:h-[400px] md:min-w-[400px]"
+                    imageLayout={'fixed'}
+                    images={
+                        announcements?.data[selectedAnnouncement]?.banners.map(
+                            (banner) => ({
+                                src: banner,
+                                alt: `Announcement ${
+                                    selectedAnnouncement + 1
+                                } ${
+                                    announcements?.data[selectedAnnouncement]
+                                        ?.title
+                                }`,
+                                width: 400,
+                                height: 400
+                            })
+                        ) ?? []
                     }
-                    width={160 * (isMobileBreakpoints ? 2 : 3)}
-                    height={90 * (isMobileBreakpoints ? 2 : 3)}
-                    layout="responsive"
-                    className="w-full h-full object-contain"
-                    alt={`Announcement ${selectedAnnouncement + 1} ${
-                        announcements?.data[selectedAnnouncement]?.title
-                    }`}
                 />
-            </div>
-            <div className="flex flex-col gap-2">
-                <h1 className="text-xl font-bold">
-                    {announcements?.data[selectedAnnouncement]?.title ?? ''}
-                </h1>
-                <div className="max-h-[30vh] overflow-auto">
-                    <ReactMarkdown
-                        className="markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height markdown-body math-display-overflow text-white text-center"
-                        remarkPlugins={[remarkMath, remarkGfm]}
-                        rehypePlugins={[rehypeKatex]}>
-                        {announcements?.data[selectedAnnouncement]?.content ??
-                            ''}
-                    </ReactMarkdown>
+                <div className="flex flex-col gap-2 p-0 md:p-4 text-left h-full">
+                    <div className="w-full justify-start relative hidden md:flex">
+                        {renderBadge(
+                            announcements?.data[selectedAnnouncement]?.type ??
+                                'GENERAL',
+                            announcements?.data[selectedAnnouncement]
+                                ?.feature_name
+                        )}
+                        <button
+                            className="absolute top-0 right-0 cursor-pointer"
+                            onClick={onClose}>
+                            {isLoading ? (
+                                <Spinner size="small" />
+                            ) : (
+                                <MdClose size={24} />
+                            )}
+                        </button>
+                    </div>
+                    <div className="flex flex-col gap-2 text-left h-full overflow-auto">
+                        <h1 className="text-base font-semibold">
+                            {announcements?.data[selectedAnnouncement]?.title ??
+                                ''}
+                        </h1>
+                        <ReactMarkdown
+                            className="markdown-overflow-break-word markdown-blue-link font-body markdown-img-max-height markdown-body math-display-overflow text-white text-sm"
+                            remarkPlugins={[remarkMath, remarkGfm]}
+                            rehypePlugins={[rehypeKatex]}>
+                            {announcements?.data[selectedAnnouncement]
+                                ?.content ?? ''}
+                        </ReactMarkdown>
+                    </div>
+                    <div className="hidden md:flex w-full justify-between items-center">
+                        <div
+                            className={cn(
+                                announcements?.data?.length === 1 && 'w-full'
+                            )}>
+                            {announcements?.data[selectedAnnouncement]
+                                ?.cta_label && (
+                                <Button
+                                    variant="primary"
+                                    className={cn(
+                                        'my-0 text-center',
+                                        announcements?.data?.length === 1 &&
+                                            'w-full'
+                                    )}
+                                    href={
+                                        announcements?.data[
+                                            selectedAnnouncement
+                                        ]?.href_web
+                                    }
+                                    target="_blank">
+                                    {
+                                        announcements?.data[
+                                            selectedAnnouncement
+                                        ]?.cta_label
+                                    }
+                                </Button>
+                            )}
+                        </div>
+                        {announcements?.data &&
+                            announcements?.data?.length > 1 && (
+                                <div className="items-center justify-end flex flex-row gap-3">
+                                    <button
+                                        onClick={() =>
+                                            setSelectedAnnouncement(
+                                                (prev) => prev - 1
+                                            )
+                                        }
+                                        disabled={selectedAnnouncement === 0}
+                                        className="text-white bg-neutral-700 disabled:bg-neutral-900 disabled:cursor-not-allowed h-8 w-8 flex items-center justify-center rounded-full">
+                                        <ChevronLeft className="w-4 h-4" />
+                                    </button>
+                                    <button
+                                        onClick={() =>
+                                            setSelectedAnnouncement(
+                                                (prev) => prev + 1
+                                            )
+                                        }
+                                        disabled={
+                                            selectedAnnouncement ===
+                                            (announcements?.data.length ?? 1) -
+                                                1
+                                        }
+                                        className="text-white bg-neutral-700 disabled:bg-neutral-900 disabled:cursor-not-allowed h-8 w-8 text-center flex items-center justify-center rounded-full">
+                                        <ChevronRight className="w-4 h-4" />
+                                    </button>
+                                </div>
+                            )}
+                    </div>
                 </div>
             </div>
-            <div className="w-full items-center justify-center flex flex-row gap-3">
-                <Button
-                    eventName="Click Go To Referral Page"
-                    onClick={() => setSelectedAnnouncement((prev) => prev - 1)}
-                    disabled={selectedAnnouncement === 0}
-                    variant="custom"
-                    className="text-white bg-neutral-700 w-full flex flex-row items-center gap-2 justify-center disabled:bg-neutral-900 disabled:cursor-not-allowed">
-                    <ChevronLeft className="w-4 h-4" />
-                    Prev
-                </Button>
-                <Button
-                    onClick={() => setSelectedAnnouncement((prev) => prev + 1)}
-                    eventName="Click Ignore Referral Modal"
-                    variant="custom"
-                    disabled={
-                        selectedAnnouncement ===
-                        (announcements?.data.length ?? 1) - 1
-                    }
-                    className="text-white bg-neutral-700 w-full flex flex-row items-center gap-2 justify-center disabled:bg-neutral-900 disabled:cursor-not-allowed">
-                    Next
-                    <ChevronRight className="w-4 h-4" />
-                </Button>
+            <div className="md:hidden absolute bottom-0 left-0 flex w-full justify-between items-center p-4 bg-neutral-800">
+                <div
+                    className={cn(
+                        announcements?.data?.length === 1 && 'w-full'
+                    )}>
+                    {announcements?.data[selectedAnnouncement]?.cta_label && (
+                        <Button
+                            variant="primary"
+                            className={cn(
+                                'my-0 text-center',
+                                announcements?.data?.length === 1 && 'w-full'
+                            )}
+                            href={
+                                announcements?.data[selectedAnnouncement]
+                                    ?.href_web
+                            }
+                            target="_blank">
+                            {
+                                announcements?.data[selectedAnnouncement]
+                                    ?.cta_label
+                            }
+                        </Button>
+                    )}
+                </div>
+                {announcements?.data && announcements?.data?.length > 1 && (
+                    <div className="items-center justify-end flex flex-row gap-3">
+                        <button
+                            onClick={() =>
+                                setSelectedAnnouncement((prev) => prev - 1)
+                            }
+                            disabled={selectedAnnouncement === 0}
+                            className="text-white bg-neutral-700 disabled:bg-neutral-900 disabled:cursor-not-allowed h-8 w-8 flex items-center justify-center rounded-full">
+                            <ChevronLeft className="w-4 h-4" />
+                        </button>
+                        <button
+                            onClick={() =>
+                                setSelectedAnnouncement((prev) => prev + 1)
+                            }
+                            disabled={
+                                selectedAnnouncement ===
+                                (announcements?.data.length ?? 1) - 1
+                            }
+                            className="text-white bg-neutral-700 disabled:bg-neutral-900 disabled:cursor-not-allowed h-8 w-8 text-center flex items-center justify-center rounded-full">
+                            <ChevronRight className="w-4 h-4" />
+                        </button>
+                    </div>
+                )}
             </div>
         </Modal>
     );

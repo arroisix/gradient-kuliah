@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
+import { cn } from 'commons/utils';
 
 interface CarouselProps {
     images: {
@@ -12,13 +13,17 @@ interface CarouselProps {
     href?: string;
     target?: string;
     rel?: string;
+    className?: string;
+    imageLayout?: 'fixed' | 'intrinsic' | 'responsive' | 'fill' | undefined;
 }
 
 const Carousel = ({
     images,
     href,
     target,
-    rel
+    rel,
+    className,
+    imageLayout = 'responsive'
 }: CarouselProps): JSX.Element => {
     const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -35,20 +40,26 @@ const Carousel = ({
     };
 
     const CarouselContent = () => (
-        <div className="relative aspect-[1080/1350] overflow-hidden">
+        <div
+            className={cn(
+                'relative aspect-[1080/1350] overflow-hidden',
+                className
+            )}>
             {/* Images */}
             <div
                 className="flex transition-transform duration-300 ease-in-out h-full"
                 style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
                 {images.map((image, index) => (
-                    <div key={index} className="w-full h-full flex-shrink-0">
+                    <div
+                        key={index}
+                        className="w-full h-full flex-shrink-0 bg-neutral-700 flex items-center justify-center aspect-square">
                         <Image
                             src={image.src}
-                            layout="responsive"
+                            layout={imageLayout}
                             height={image.height}
                             width={image.width}
                             alt={image.alt}
-                            className="object-cover"
+                            className="object-cover w-full h-full"
                         />
                     </div>
                 ))}

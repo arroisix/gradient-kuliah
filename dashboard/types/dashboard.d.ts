@@ -367,6 +367,7 @@ export type AnnouncementItem = {
     banners: string[];
     created_at: string;
     order: number;
+    cta_label?: string;
     href_web?: string;
     href_mobile?: string;
 };
