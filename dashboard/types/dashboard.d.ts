@@ -219,6 +219,145 @@ interface LearnRecommendationResponse {
     data: CourseRecommendation[];
 }
 
+export interface NewlyReleasedForYouItem {
+    id: string;
+    slug: string | null;
+    type: string;
+    title: string | null;
+    course_name: string | null;
+    course_slug: string | null;
+    thumbnail: string | null;
+    book_title: string | null;
+    book_slug: string | null;
+    chapter_name: string | null;
+    subchapter_name: string | null;
+    subchapter_slug: string | null;
+    problem_title: string | null;
+    problem_slug: string | null;
+    page_title: string | null;
+    page_number: number | null;
+    total_questions: number | null;
+    card_count: number | null;
+    created_by: string | null;
+    photo_profile: string | null;
+}
+
+export interface NewlyReleasedForYouResponse {
+    count_items: number;
+    previous_page: number | null;
+    next_page: number | null;
+    data: NewlyReleasedForYouItem[];
+}
+
+export interface MajorBookItem {
+    id: string;
+    slug: string | null;
+    type: string;
+    title: string | null;
+    course_name: string | null;
+    course_slug: string | null;
+    thumbnail: string | null;
+    book_title: string | null;
+    book_slug: string | null;
+    chapter_name: string | null;
+    subchapter_name: string | null;
+    subchapter_slug: string | null;
+    problem_title: string | null;
+    problem_slug: string | null;
+    page_title: string | null;
+    page_number: number | null;
+    total_questions: number | null;
+    card_count: number | null;
+    created_by: string | null;
+    photo_profile: string | null;
+    major: string | null;
+}
+
+export interface MajorBooksResponse {
+    count_items: number;
+    previous_page: number | null;
+    next_page: number | null;
+    data: MajorBookItem[];
+    major: string | null;
+}
+
+export interface MajorFlashcardItem {
+    id: string;
+    slug: string;
+    title: string;
+    description?: string | null;
+    is_private: boolean;
+    card_count: number;
+    created_by: {
+        name: string;
+        photo_profile: string | null;
+    };
+    created_by_me: boolean;
+    ai_generated: boolean;
+    is_completed: boolean;
+    sources: {
+        type: string;
+        file_name: string;
+    }[];
+}
+
+export interface MajorFlashcardsResponse {
+    count_items: number;
+    previous_page: number | null;
+    next_page: number | null;
+    data: MajorFlashcardItem[];
+}
+
+export interface MajorQuizItem {
+    id: string;
+    slug: string;
+    title: string;
+    subject: string;
+    icon: string;
+    total_questions: number;
+    progress: number | null;
+    status: string | null;
+    is_free: boolean | null;
+    progress_percentage: number | null;
+}
+
+export interface MajorQuizResponse {
+    count_items: number;
+    previous_page: number | null;
+    next_page: number | null;
+    data: MajorQuizItem[];
+}
+
+export interface FreeForYouItem {
+    id: string;
+    slug: string | null;
+    type: string;
+    title: string | null;
+    course_name: string | null;
+    course_slug: string | null;
+    thumbnail: string | null;
+    book_title: string | null;
+    book_slug: string | null;
+    chapter_name: string | null;
+    subchapter_name: string | null;
+    subchapter_slug: string | null;
+    problem_title: string | null;
+    problem_slug: string | null;
+    page_title: string | null;
+    page_number: number | null;
+    total_questions: number | null;
+    card_count: number | null;
+    created_by: string | null;
+    photo_profile: string | null;
+}
+
+export interface FreeForYouResponse {
+    count_items: number;
+    previous_page: number | null;
+    next_page: number | null;
+    data: FreeForYouItem[];
+}
+
 export type {
     StudentLearningProgress,
     StudentLearningProgressResponse,
@@ -250,5 +389,15 @@ export type {
     MajorRecommendationItem,
     MajorRecommendationResponse,
     CourseRecommendation,
-    LearnRecommendationResponse
+    LearnRecommendationResponse,
+    NewlyReleasedForYouItem,
+    NewlyReleasedForYouResponse,
+    MajorBookItem,
+    MajorBooksResponse,
+    MajorFlashcardItem,
+    MajorFlashcardsResponse,
+    MajorQuizItem,
+    MajorQuizResponse,
+    FreeForYouItem,
+    FreeForYouResponse
 };

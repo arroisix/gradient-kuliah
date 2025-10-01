@@ -1,11 +1,17 @@
 import { baseApi } from 'redux/api/baseApi';
 import {
     BannerResponse,
+    FreeForYouResponse,
     GetClassProgressResponse,
     GetDashboardContentResponse,
     LearnRecommendationResponse,
+    MajorBooksResponse,
     MajorClassesResponse,
+    MajorFlashcardsResponse,
+    MajorQuizResponse,
     MajorRecommendationResponse,
+    NewlyReleasedForYouResponse,
+    PaginatedResponse,
     StudentCourseResponse,
     StudentLearningProgressResponse,
     UserBooksResponse,
@@ -145,6 +151,111 @@ export const dashboardApi = baseApi.injectEndpoints({
                 params
             }),
             providesTags: [{ type: 'PROFILE', id: 'LEARN_RECOMMENDATION' }]
+        }),
+
+        getNewlyReleasedForYou: builder.query<
+            NewlyReleasedForYouResponse,
+            { page?: number; limit?: number; search?: string }
+        >({
+            query: (params = { page: 1, limit: 6 }) => ({
+                url: `${LEARNING_V2_BASE_URL}dashboard/newly-released-for-you/`,
+                params
+            }),
+            providesTags: [{ type: 'PROFILE', id: 'NEWLY_RELEASED_FOR_YOU' }]
+        }),
+        getMajorBooks: builder.query<
+            MajorBooksResponse,
+            { page?: number; limit?: number; search?: string }
+        >({
+            query: (params = { page: 1, limit: 12 }) => ({
+                url: `${LEARNING_V2_BASE_URL}dashboard/major-books/`,
+                params
+            }),
+            providesTags: [{ type: 'PROFILE', id: 'MAJOR_BOOKS' }]
+        }),
+
+        getMajorFlashcards: builder.query<
+            MajorFlashcardsResponse,
+            { page?: number; limit?: number; search?: string }
+        >({
+            query: (params = { page: 1, limit: 12 }) => ({
+                url: `${LEARNING_V2_BASE_URL}dashboard/major-flashcards/`,
+                params
+            }),
+            providesTags: [{ type: 'PROFILE', id: 'MAJOR_FLASHCARDS' }]
+        }),
+
+        getMajorQuiz: builder.query<
+            MajorQuizResponse,
+            { page?: number; limit?: number; search?: string }
+        >({
+            query: (params = { page: 1, limit: 12 }) => ({
+                url: `${LEARNING_V2_BASE_URL}dashboard/major-quiz/`,
+                params
+            }),
+            providesTags: [{ type: 'PROFILE', id: 'MAJOR_QUIZ' }]
+        }),
+
+        getFreeForYouContent: builder.query<
+            FreeForYouResponse,
+            { page?: number; limit?: number }
+        >({
+            query: (params = { page: 1, limit: 12 }) => ({
+                url: `${LEARNING_V2_BASE_URL}dashboard/free-for-you/`,
+                params
+            }),
+            providesTags: [{ type: 'PROFILE', id: 'FREE_FOR_YOU' }]
+        }),
+
+        getPopularClassesPublic: builder.query<
+            PaginatedResponse<{
+                id: string;
+                course_slug: string;
+                course_name: string;
+                thumbnail: string;
+            }>,
+            { page?: number; limit?: number }
+        >({
+            query: (params = { page: 1, limit: 12 }) => ({
+                url: `${LEARNING_V2_BASE_URL}dashboard/popular-classes/`,
+                params
+            })
+        }),
+        getNewlyReleasedPublic: builder.query<
+            NewlyReleasedForYouResponse,
+            { page?: number; limit?: number }
+        >({
+            query: (params = { page: 1, limit: 6 }) => ({
+                url: `${LEARNING_V2_BASE_URL}dashboard/newly-released-public/`,
+                params
+            })
+        }),
+        getPublicBooks: builder.query<
+            NewlyReleasedForYouResponse,
+            { page?: number; limit?: number }
+        >({
+            query: (params = { page: 1, limit: 12 }) => ({
+                url: `${LEARNING_V2_BASE_URL}dashboard/books-and-question-banks/`,
+                params
+            })
+        }),
+        getPublicQuiz: builder.query<
+            MajorQuizResponse,
+            { page?: number; limit?: number }
+        >({
+            query: (params = { page: 1, limit: 12 }) => ({
+                url: `${LEARNING_V2_BASE_URL}dashboard/public-quiz/`,
+                params
+            })
+        }),
+        getPublicFlashcards: builder.query<
+            MajorFlashcardsResponse,
+            { page?: number; limit?: number }
+        >({
+            query: (params = { page: 1, limit: 12 }) => ({
+                url: `${LEARNING_V2_BASE_URL}dashboard/public-flashcards/`,
+                params
+            })
         })
     })
 });
@@ -162,5 +273,15 @@ export const {
     useGetUserQuizQuery,
     useGetMajorClassesQuery,
     useGetMajorRecommendationQuery,
-    useGetLearnRecommendationQuery
+    useGetLearnRecommendationQuery,
+    useGetNewlyReleasedForYouQuery,
+    useGetMajorBooksQuery,
+    useGetMajorFlashcardsQuery,
+    useGetMajorQuizQuery,
+    useGetFreeForYouContentQuery,
+    useGetPopularClassesPublicQuery,
+    useGetNewlyReleasedPublicQuery,
+    useGetPublicBooksQuery,
+    useGetPublicQuizQuery,
+    useGetPublicFlashcardsQuery
 } = dashboardApi;

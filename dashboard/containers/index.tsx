@@ -1,13 +1,12 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import ReferralModal from 'referral/components/ReferralModal';
 import DashboardContent from './dashboardContent';
-import DashboardPromptBar from 'copilot/components/DashboardPromptBar/DashboardPromptBar';
 import DashboardFeatures from '../components/DashboardFeatures';
 import LanjutBelajarSection from '../components/LanjutBelajar/LanjutBelajarSection';
-import DashboardUpdatesBanner from 'dashboard/components/DashboardBanner';
+import SearchSection from 'dashboard/components/Search/SearchSection';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
 const DashboardContainer = (): JSX.Element => {
     const router = useRouter();
@@ -21,10 +20,9 @@ const DashboardContainer = (): JSX.Element => {
 
     return (
         <section className="flex flex-col w-full gap-6 pb-4 mx-auto sm:overflow-x-clip md:overflow-x-visible max-w-screen-2xl">
-            <DashboardUpdatesBanner />
-            {isAuthenticated && <DashboardPromptBar />}
+            <SearchSection />
             <DashboardFeatures />
-            <LanjutBelajarSection />
+            {isAuthenticated && <LanjutBelajarSection />}
             <DashboardContent />
             <ReferralModal
                 isOpen={isReferralModalOpen}

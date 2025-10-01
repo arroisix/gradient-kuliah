@@ -1,8 +1,8 @@
-import { useFeatureIsOn } from '@growthbook/growthbook-react';
+// import { useFeatureIsOn } from '@growthbook/growthbook-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
-import GradientIcon from 'commons/components/GradientIcon';
-import Button from 'commons/components/elements/Button';
+// import GradientIcon from 'commons/components/GradientIcon';
+// import Button from 'commons/components/elements/Button';
 import Paywall from 'commons/components/elements/Paywall';
 import Skeleton from 'commons/components/elements/Skeleton';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
@@ -17,21 +17,27 @@ import 'driver.js/dist/driver.css';
 import { FiChevronRight } from 'react-icons/fi';
 import { dashboardTourConfig } from './../constants/dashboard-tour';
 import PrivateDashboardContent from 'dashboard/components/PrivateDashboardContent';
+import { useGetMajorClassesQuery } from 'dashboard/redux/api/dashboardApi';
 
 const DashboardContent = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
-        'landing-page-revamp'
-    );
+    // const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
+    //     'landing-page-revamp'
+    // );
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { data: majorClasses, isLoading: isLoadingMajorClasses } =
+        useGetMajorClassesQuery({ limit: 12 }, { skip: !isAuthenticated });
+
+    const major = majorClasses?.major;
 
     const { is_subscribed, everSubscribed } = useCourseSubscription();
     const { data: pricingData, isLoading: isLoadingPricingData } =
         useGetPacketOfferQuery(is_subscribed ? skipToken : undefined);
 
     const isShowRecommendedMaterials =
-        isLandingPageRevampOn &&
-        (!isAuthenticated || !is_subscribed) &&
-        !everSubscribed;
+        // isLandingPageRevampOn &&
+        !isAuthenticated && !is_subscribed && !everSubscribed;
 
     const [tourViewed, setTourViewed] = useLocalStorage('tourViewed', false);
     const driver = useDriver({
@@ -98,7 +104,7 @@ const DashboardContent = (): JSX.Element => {
     return isShowRecommendedMaterials ? (
         <div className="pb-16 space-y-12">
             <Recommendations onFinishLoading={showTutorial} />
-            <div
+            {/* <div
                 className="flex flex-col items-stretch justify-between gap-3 p-4 text-white rounded-lg md:items-center md:gap-4 lg:flex-row md:p-6 bg-accent-purple"
                 data-tour="step-4">
                 <div className="flex flex-1 gap-3 text-left">
@@ -119,8 +125,8 @@ const DashboardContent = (): JSX.Element => {
                     eventName="Click Community Card"
                     className="text-center text-white bg-black whitespace-nowrap">
                     Buat Pertanyaan Gratis
-                </Button>
-            </div>
+                </Button> */}
+            {/* </div> */}
             {!is_subscribed && (
                 <div className="w-full space-y-6">
                     <p className="text-xl font-extrabold leading-relaxed text-center">
@@ -144,7 +150,24 @@ const DashboardContent = (): JSX.Element => {
             )}
         </div>
     ) : (
-        <PrivateDashboardContent />
+        <>
+            {isAuthenticated && (
+                <div className="flex w-full justify-center lg:justify-start -mb-6">
+                    <div className="inline-flex w-fit items-center gap-2 rounded-t-md md:rounded-t-lg lg:rounded-t-xl bg-[#291E4D] px-3 py-1.5 md:px-4 md:py-2">
+                        <p className="inline text-sm md:text-base">✨</p>
+                        <p className="inline text-white text-[10px] sm:text-sm">
+                            Rekomendasi Spesial
+                        </p>
+
+                        <p className="inline rounded-lg bg-[#363488] px-2 py-0.5 text-white text-[10px] sm:text-sm font-semibold md:px-3 md:py-1">
+                            Jurusan {major}
+                        </p>
+                    </div>
+                </div>
+            )}
+
+            <PrivateDashboardContent />
+        </>
     );
 };
 
