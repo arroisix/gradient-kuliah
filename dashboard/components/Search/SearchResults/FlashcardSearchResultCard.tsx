@@ -54,7 +54,7 @@ const FlashcardSearchResultCard = ({
             onClick={track}
             href={href}
             className="w-full flex flex-col md:flex-row bg-[#222] rounded-lg border border-graphite-600/50">
-            <div className="hidden md:block md:w-auto md:aspect-[4/3] md:max-w-32 lg:min-w-48 relative">
+            <div className="hidden md:block md:aspect-[4/3] md:w-32 lg:w-40 relative">
                 {attachments?.[0] ? (
                     <img
                         src={attachments[0]}

@@ -44,8 +44,8 @@ const SearchResultCard = (props: SearchResultCardProps): JSX.Element => {
         <Link
             onClick={track}
             href={href}
-            className="w-full flex flex-col md:flex-row md:min-h-32 border rounded-lg bg-[#222] border-graphite-600/50">
-            <div className="w-full aspect-[2/1] md:aspect-[4/3] md:max-w-32 lg:min-w-48 relative">
+            className="w-full flex flex-col md:flex-row md:h-32 border rounded-lg bg-[#222] border-graphite-600/50">
+            <div className="w-full aspect-[2/1] md:aspect-[4/3] md:w-32 lg:w-40 relative">
                 <SearchResultThumbnail {...props} />
             </div>
             <div className="flex flex-col gap-2 p-4 [&_mark]:text-[#FFDD8E] [&_mark]:bg-transparent">
