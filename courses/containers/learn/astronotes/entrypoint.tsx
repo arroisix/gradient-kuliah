@@ -52,7 +52,7 @@ const AstronotesEntrypoint = ({
                     {title}
                 </h1>
                 <EntrypointTabs />
-                <div className="sticky z-10 flex items-center justify-between py-2 bg-black top-28">
+                <div className="sticky z-[5] flex items-center justify-between py-2 bg-black top-28">
                     <div className="relative flex-grow mr-4">
                         <input
                             type="text"
@@ -70,7 +70,7 @@ const AstronotesEntrypoint = ({
                         <Sort
                             options={SORT_OPTIONS}
                             defaultSelected="last-released"
-                            className="sticky z-10 py-2 top-28"
+                            className="sticky z-[5] py-2 top-28"
                         />
                     )}
                 </div>

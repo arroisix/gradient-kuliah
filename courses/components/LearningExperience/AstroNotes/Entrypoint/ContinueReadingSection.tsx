@@ -82,7 +82,7 @@ const ContinueReadingSection = (): JSX.Element => {
                                 )}
                                 eventName="Click Book Item on Library Page"
                                 eventPayload={{ 'Book Slug': book.slug }}
-                                imageClassname="sm:min-w-20"
+                                imageClassname="sm:w-20"
                             />
                         </div>
                     ) : (
