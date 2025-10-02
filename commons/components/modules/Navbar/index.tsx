@@ -191,7 +191,6 @@ const Navbar = ({
                                 url="/copilot"
                                 IconActive={CopilotIconFill}
                                 IconUnactive={CopilotIconLine}
-                                tooltip="Copilot AI gratis selama versi Beta!"
                             />
                         )}
                         <NavigationButton

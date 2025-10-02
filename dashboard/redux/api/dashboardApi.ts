@@ -1,5 +1,6 @@
 import { baseApi } from 'redux/api/baseApi';
 import {
+    AnnouncementItem,
     BannerResponse,
     FreeForYouResponse,
     GetClassProgressResponse,
@@ -256,6 +257,23 @@ export const dashboardApi = baseApi.injectEndpoints({
                 url: `${LEARNING_V2_BASE_URL}dashboard/public-flashcards/`,
                 params
             })
+        }),
+        getAnnouncements: builder.query<ResponseData<AnnouncementItem>, void>({
+            query: () => ({
+                url: `${LEARNING_BASE_URL}announcements/`
+            }),
+            providesTags: ['ANNOUNCEMENTS']
+        }),
+        storeUserAnnouncement: builder.mutation<
+            void,
+            { announcement_ids: string[] }
+        >({
+            query: (body) => ({
+                url: `${LEARNING_BASE_URL}announcements/store/`,
+                method: 'POST',
+                body
+            }),
+            invalidatesTags: ['ANNOUNCEMENTS']
         })
     })
 });
@@ -283,5 +301,7 @@ export const {
     useGetNewlyReleasedPublicQuery,
     useGetPublicBooksQuery,
     useGetPublicQuizQuery,
-    useGetPublicFlashcardsQuery
+    useGetPublicFlashcardsQuery,
+    useGetAnnouncementsQuery,
+    useStoreUserAnnouncementMutation
 } = dashboardApi;

@@ -23,7 +23,7 @@ const RevampedLandingPage = ({
     return (
         <>
             <GridProvider>
-                <Layout shouldTransparent>
+                <Layout>
                     <LandingContainer
                         classesData={classesData?.data}
                         popularBooksData={popularBooksData?.books}

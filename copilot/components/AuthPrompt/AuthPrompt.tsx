@@ -25,7 +25,7 @@ const CopilotAuthPrompt = ({ className }: CopilotAuthPromptProps) => {
                 <div className="w-full px-4 md:px-12 lg:px-24 md:pt-8">
                     <div className="max-w-md mx-auto w-full bg-[#1D1D1D] rounded-2xl p-6 md:p-8 shadow-2xl">
                         <h1 className="text-xl md:text-2xl font-bold text-center mb-2">
-                            Masuk untuk bertanya Gratis ke Copilot AI (Beta)
+                            Masuk untuk bertanya Gratis ke Copilot AI
                         </h1>
                         <p className="text-neutral-400 text-center text-sm md:text-base mb-8">
                             Chatbot untuk segala kebutuhan belajar
