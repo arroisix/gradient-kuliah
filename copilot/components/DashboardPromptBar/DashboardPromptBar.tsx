@@ -184,9 +184,7 @@ const DashboardPromptBar = (): JSX.Element => {
                 Halo, {user.full_name.split(' ')[0]}
             </h1>
             <div className="relative bg-[#1D1D1D] rounded-xl">
-                <span
-                    className="absolute -top-3 -right-1 flex items-center gap-2 py-1 px-3 rounded-md bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] font-semibold text-sm md:text-base text-white tooltip tooltip-left"
-                    data-tip="Copilot AI gratis selama versi Beta!">
+                <span className="absolute -top-3 -right-1 flex items-center gap-2 py-1 px-3 rounded-md bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] font-semibold text-sm md:text-base text-white">
                     <SparkleIcon size={16} fill="currentColor" />
                     Baru
                 </span>

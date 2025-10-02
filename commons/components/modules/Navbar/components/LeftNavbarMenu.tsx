@@ -35,8 +35,7 @@ const LeftNavbarMenu = ({
             href: '/copilot',
             label: 'Copilot AI',
             enabled: configData?.configs
-                .is_copilot_config_enabled as unknown as boolean,
-            tooltip: 'Copilot AI gratis selama versi Beta!'
+                .is_copilot_config_enabled as unknown as boolean
         },
         {
             href: '/komunitas',

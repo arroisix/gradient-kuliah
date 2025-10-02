@@ -222,7 +222,7 @@ const AnnouncementModal = ({
                                             )
                                         }
                                         disabled={selectedAnnouncement === 0}
-                                        className="text-white bg-neutral-700 disabled:bg-neutral-900 disabled:cursor-not-allowed h-8 w-8 flex items-center justify-center rounded-full">
+                                        className="text-white bg-neutral-700 disabled:bg-neutral-700/50 disabled:cursor-not-allowed h-8 w-8 flex items-center justify-center rounded-full">
                                         <ChevronLeft className="w-4 h-4" />
                                     </button>
                                     <button
@@ -236,7 +236,7 @@ const AnnouncementModal = ({
                                             (announcements?.data.length ?? 1) -
                                                 1
                                         }
-                                        className="text-white bg-neutral-700 disabled:bg-neutral-900 disabled:cursor-not-allowed h-8 w-8 text-center flex items-center justify-center rounded-full">
+                                        className="text-white bg-neutral-700 disabled:bg-neutral-700/50 disabled:cursor-not-allowed h-8 w-8 text-center flex items-center justify-center rounded-full">
                                         <ChevronRight className="w-4 h-4" />
                                     </button>
                                 </div>

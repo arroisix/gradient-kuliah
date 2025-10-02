@@ -84,13 +84,8 @@ const MobileSidebar = ({
                                 url="/copilot"
                                 IconActive={CopilotIconFill}
                                 IconUnactive={CopilotIconLine}
-                                setOpenSidebar={setOpenSidebar}>
-                                <span
-                                    className="flex items-center gap-2 ml-2 py-1 px-3 rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] font-semibold text-xs text-white tooltip tooltip-right"
-                                    data-tip="Copilot AI gratis selama versi Beta!">
-                                    Beta
-                                </span>
-                            </NavigationButton>
+                                setOpenSidebar={setOpenSidebar}
+                            />
                         )}
                         <NavigationButton
                             name="Community"
