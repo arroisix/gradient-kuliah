@@ -65,7 +65,7 @@ const ClassContainer = ({
                     Kelas &amp; Video Perkuliahan Online Terbaik
                 </h1>
                 <CourseTabs />
-                <div className="sticky z-10 flex items-center justify-between py-2 bg-black top-28">
+                <div className="sticky z-[5] flex items-center justify-between py-2 bg-black top-28">
                     <div className="relative flex-grow mr-4">
                         <input
                             type="text"

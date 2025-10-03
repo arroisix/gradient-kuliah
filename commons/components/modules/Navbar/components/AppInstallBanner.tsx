@@ -66,9 +66,9 @@ const AppInstallBanner = ({ showSidebar }: AppInstallBannerProps) => {
     return (
         <div
             className={cn(
-                'sticky top-14 z-[20]',
+                'sticky top-[54px] md:top-16 z-10',
                 showSidebar
-                    ? 'md:left-[250px] md:w-[calc(100%-250px)]'
+                    ? 'md:left-[250px] md:w-[calc(100%-250px)] md:!top-14'
                     : 'w-full'
             )}>
             <button
@@ -90,9 +90,7 @@ const AppInstallBanner = ({ showSidebar }: AppInstallBannerProps) => {
                                 className="rounded"
                             />
                             <span className="text-sm font-bold">Gradient</span>
-                            <span
-                                className="flex items-center gap-2 py-1 px-3 rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] font-semibold text-xs text-white tooltip tooltip-right"
-                                data-tip="Copilot AI gratis selama versi Beta!">
+                            <span className="flex items-center gap-2 py-1 px-3 rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] font-semibold text-xs text-white">
                                 Baru
                             </span>
                         </div>

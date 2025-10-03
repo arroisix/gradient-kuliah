@@ -60,7 +60,7 @@ export const TableOfContentMenu = ({
             />
             <label
                 htmlFor="toc-drawer"
-                className="fixed inset-x-0 z-[11] flex items-center gap-4 px-4 py-3 shadow top-14 bg-neutral-900 lg:hidden">
+                className="fixed inset-x-0 z-[5] flex items-center gap-4 px-4 py-3 shadow top-14 bg-neutral-900 lg:hidden">
                 <div
                     className={cn(
                         'relative flex-none border rounded-md border-neutral-700 w-8 aspect-[256/364] bg-neutral-600',
@@ -88,7 +88,7 @@ export const TableOfContentMenu = ({
                 </div>
                 <BiChevronRight size={24} />
             </label>
-            <div className="z-20 lg:!overflow-y-auto drawer-side top-14 lg:z-[11] lg:[scrollbar-gutter:stable]">
+            <div className="z-20 lg:!overflow-y-auto drawer-side top-14 lg:z-[5] lg:[scrollbar-gutter:stable]">
                 <label
                     htmlFor="toc-drawer"
                     className="drawer-overlay lg:hidden"></label>

@@ -358,6 +358,20 @@ export interface FreeForYouResponse {
     data: FreeForYouItem[];
 }
 
+export type AnnouncementItem = {
+    id: string;
+    type: 'GENERAL' | 'NEW_FEATURE' | 'PROMO';
+    title: string;
+    feature_name: string;
+    content: string;
+    banners: string[];
+    created_at: string;
+    order: number;
+    cta_label?: string;
+    href_web?: string;
+    href_mobile?: string;
+};
+
 export type {
     StudentLearningProgress,
     StudentLearningProgressResponse,

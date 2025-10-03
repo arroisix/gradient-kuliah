@@ -60,17 +60,13 @@ const Sidebar = ({
                             );
                         }}>
                         <span
-                            className={`flex gap-4 cursor-pointer tooltip tooltip-right ${
+                            className={`flex gap-4 cursor-pointer ${
                                 pathname.includes('/copilot')
                                     ? 'text-white'
                                     : 'text-[#666666]'
-                            } font-body text-sm hover:text-[#999999]`}
-                            data-tip="Copilot AI gratis selama versi Beta!">
+                            } font-body text-sm hover:text-[#999999]`}>
                             <CopilotIconLine />
                             Copilot AI
-                            <span className="flex items-center gap-2 ml-2 py-1 px-3 rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] font-semibold text-xs text-white">
-                                Beta
-                            </span>
                         </span>
                     </Link>
                 )}

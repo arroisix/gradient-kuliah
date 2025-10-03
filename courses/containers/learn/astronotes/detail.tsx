@@ -271,7 +271,7 @@ const Tabs = (): JSX.Element => {
         );
 
     return (
-        <div className="sticky z-10 flex items-end w-full pb-2 overflow-x-auto bg-black top-14 no-scrollbar">
+        <div className="sticky z-[5] flex items-end w-full pb-2 overflow-x-auto bg-black top-14 no-scrollbar">
             <div
                 className={cn(
                     'border-b-2 hidden md:block md:grow',

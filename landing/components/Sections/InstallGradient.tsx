@@ -31,9 +31,7 @@ const InstallGradient = () => {
                                 height={24}
                             />
                             <span className="font-bold">Gradient</span>
-                            <span
-                                className="flex items-center gap-2 py-1 px-3 rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] font-semibold text-xs text-white tooltip tooltip-right"
-                                data-tip="Copilot AI gratis selama versi Beta!">
+                            <span className="flex items-center gap-2 py-1 px-3 rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] font-semibold text-xs text-white">
                                 Baru
                             </span>
                         </div>

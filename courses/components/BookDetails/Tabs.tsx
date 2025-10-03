@@ -17,7 +17,7 @@ const Tabs = (): JSX.Element => {
         );
 
     return (
-        <div className="sticky z-10 flex items-end w-full pb-2 overflow-x-auto bg-black top-14 no-scrollbar">
+        <div className="sticky z-[5] flex items-end w-full pb-2 overflow-x-auto bg-black top-14 no-scrollbar">
             <Link className={tabStyle('details')} href="#details" replace>
                 Detail
             </Link>
