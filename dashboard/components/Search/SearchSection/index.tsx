@@ -21,7 +21,7 @@ const SearchSection = (): JSX.Element => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { data: majorClasses, isLoading: isLoadingMajorClasses } =
         useGetMajorClassesQuery({ limit: 12 }, { skip: !isAuthenticated });
-    const major = majorClasses?.major;
+    const major = majorClasses?.major || '';
 
     const suggestions = [
         `Kelas untuk jurusan ${major}`,

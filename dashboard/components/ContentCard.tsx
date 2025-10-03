@@ -5,9 +5,9 @@ import { FaRegCirclePlay } from 'react-icons/fa6';
 import { FaGraduationCap, FaBookmark, FaListUl } from 'react-icons/fa';
 import { BiSolidStar } from 'react-icons/bi';
 import Cards from 'flashcard/assets/Cards';
-import FlashcardLargeIcon from 'dashboard/assets/FlashcardLargeIcon';
 import KuisCover from '../assets/KuisCover';
 import Fire from '../assets/Fire';
+import FlashcardIconFull from 'dashboard/assets/FlashcardIconFull';
 
 interface ContentCardProps {
     id: string;
@@ -30,6 +30,7 @@ interface ContentCardProps {
     isMajorClass?: boolean;
     hasTwoLineCards?: boolean;
     isFree?: boolean;
+    isFreeForYouCards?: boolean;
     className?: string;
 }
 
@@ -61,6 +62,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
     isMajorClass = false,
     hasTwoLineCards = false,
     isFree = false,
+    isFreeForYouCards = false,
     onClick,
     className
 }) => {
@@ -134,7 +136,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
                     )
                 ) : isFlashcard ? (
                     <div className="absolute inset-0 flex items-center justify-center p-2">
-                        <FlashcardLargeIcon />
+                        <FlashcardIconFull width={120} height={131} />
                     </div>
                 ) : isKuis ? (
                     <div className="absolute inset-0 flex items-center justify-center p-2">
@@ -155,7 +157,7 @@ const ContentCard: React.FC<ContentCardProps> = ({
                 )}
             </div>
 
-            <div className="p-4 flex flex-col justify-between">
+            <div className="p-3 flex flex-col justify-between">
                 <div className="flex flex-col">
                     {!isMajorClass && (
                         <div className="flex items-center gap-2 mb-2">
@@ -179,9 +181,9 @@ const ContentCard: React.FC<ContentCardProps> = ({
                     )}
 
                     <h3
-                        className={`font-semibold text-white text-base line-clamp-2 mb-4 ${
+                        className={`font-semibold text-white text-base line-clamp-2 ${
                             hasTwoLineCards ? 'min-h-[48px]' : ''
-                        }`}>
+                        } ${isFreeForYouCards ? 'mb-4' : ''}`}>
                         {title}
                     </h3>
                 </div>
@@ -283,17 +285,18 @@ const ContentCard: React.FC<ContentCardProps> = ({
                                         </>
                                     )}
 
-                                    {!shouldUseStackedLayout && problemCount && (
-                                        <>
-                                            <FaListUl
-                                                size={14}
-                                                className="text-indigo-400 mr-2 flex-shrink-0"
-                                            />
-                                            <span className="truncate">
-                                                {problemCount} Soal
-                                            </span>
-                                        </>
-                                    )}
+                                    {!shouldUseStackedLayout &&
+                                        problemCount && (
+                                            <>
+                                                <FaListUl
+                                                    size={14}
+                                                    className="text-indigo-400 mr-2 flex-shrink-0"
+                                                />
+                                                <span className="truncate">
+                                                    {problemCount} Soal
+                                                </span>
+                                            </>
+                                        )}
                                 </div>
                             )}
 
