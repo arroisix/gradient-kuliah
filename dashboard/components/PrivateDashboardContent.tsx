@@ -450,6 +450,10 @@ const PrivateDashboardContent = (): JSX.Element => {
         let category = item.type;
 
         switch (item.type) {
+            case 'Video':
+                href = `/kelas/${item.course_slug}/${item.slug}`;
+                category = 'Video';
+                break;
             case 'Kelas':
                 href = `/kelas/${item.course_slug}`;
                 category = 'Kelas';
@@ -503,6 +507,7 @@ const PrivateDashboardContent = (): JSX.Element => {
             <ContentCard
                 {...itemData}
                 isFree={true}
+                isFreeForYouCards={true}
                 hasTwoLineCards={freeForYouHasTwoLineCards}
                 onClick={() => {
                     tracker?.genericTrack('Click Dashboard Content Card', {
