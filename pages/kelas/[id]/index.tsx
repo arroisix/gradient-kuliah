@@ -108,79 +108,132 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
     () =>
         async ({ params }) => {
-            const [
-                courseResponse,
-                pricingResponse,
-                ratingResponse,
-                recommendationResponse
-            ] = await Promise.all([
-                axios.get<CourseLandingPageData>(
-                    `${config.API_BASE_URL}courses/public/landing/${params?.id}`
-                ),
-                axios.get<ResponseData<PacketOffer>>(
-                    `${config.API_BASE_URL}subscriptions/packet-offer/`
-                ),
-                axios.get<GetCourseRatingResponse>(
-                    `${config.API_BASE_URL}courses/public/${params?.id}/rating/`
-                ),
-                axios.get<GetCourseRecommendationResponse>(
-                    `${config.API_BASE_URL}learning-experiences/recommendations/courses/${params?.id}/`
-                )
-            ]);
-            const courseData = courseResponse.data;
-            const packetOffer = pricingResponse.data.data;
-            const courseRating = ratingResponse.data;
-            const recommendations = recommendationResponse.data;
+            try {
+                const [
+                    courseResponse,
+                    pricingResponse,
+                    ratingResponse,
+                    recommendationResponse
+                ] = await Promise.all([
+                    axios.get<CourseLandingPageData>(
+                        `${config.API_BASE_URL}courses/public/landing/${params?.id}`
+                    ),
+                    axios.get<ResponseData<PacketOffer>>(
+                        `${config.API_BASE_URL}subscriptions/packet-offer/`
+                    ),
+                    axios.get<GetCourseRatingResponse>(
+                        `${config.API_BASE_URL}courses/public/${params?.id}/rating/`
+                    ),
+                    axios.get<GetCourseRecommendationResponse>(
+                        `${config.API_BASE_URL}learning-experiences/recommendations/courses/${params?.id}/`
+                    )
+                ]);
 
-            const metaTitle =
-                params?.id === 'bedah-jurusan'
-                    ? 'Program Webinar Bedah Jurusan Kuliah Bersama Expert'
-                    : `Kelas Online ${courseData?.course_name}, Materi Belajar Super Interaktif`;
-            const metaDescription =
-                params?.id === 'bedah-jurusan'
-                    ? 'Program webinar gratis! Temukan wawasan mendalam tentang jurusan kuliah favorit Kamu dari para ahli yang telah berpengalaman dan sukses berkarir dibidangnya.'
-                    : `Ikuti kelas interaktif ${courseData?.course_name} bersama dosen ternama di Indonesia. Belajar jadi mudah dengan materi video & latihan soal beserta pembahasannya.`;
+                const courseData = courseResponse.data;
+                const packetOffer = pricingResponse.data.data;
+                const courseRating = ratingResponse.data;
+                const recommendations = recommendationResponse.data;
 
-            return {
-                props: {
-                    id: params?.id,
-                    courseData,
-                    packetOffer,
-                    courseRating,
-                    recommendations,
-                    canonical: `https://gradient.academy/kelas/${courseData.course_slug}`,
-                    title: metaTitle,
-                    description: metaDescription,
-                    openGraph: {
-                        type: 'website',
+                if (!courseData) {
+                    // Resource truly missing -> permanent redirect to 404
+                    return {
+                        redirect: {
+                            destination: `/404`,
+                            permanent: true
+                        }
+                    };
+                }
+
+                const metaTitle =
+                    params?.id === 'bedah-jurusan'
+                        ? 'Program Webinar Bedah Jurusan Kuliah Bersama Expert'
+                        : `Kelas Online ${courseData?.course_name}, Materi Belajar Super Interaktif`;
+                const metaDescription =
+                    params?.id === 'bedah-jurusan'
+                        ? 'Program webinar gratis! Temukan wawasan mendalam tentang jurusan kuliah favorit Kamu dari para ahli yang telah berpengalaman dan sukses berkarir dibidangnya.'
+                        : `Ikuti kelas interaktif ${courseData?.course_name} bersama dosen ternama di Indonesia. Belajar jadi mudah dengan materi video & latihan soal beserta pembahasannya.`;
+
+                return {
+                    props: {
+                        id: params?.id,
+                        courseData,
+                        packetOffer,
+                        courseRating,
+                        recommendations,
+                        canonical: `https://gradient.academy/kelas/${courseData.course_slug}`,
                         title: metaTitle,
                         description: metaDescription,
-                        url: `https://gradient.academy/kelas/${params?.id}`,
-                        images: [
-                            {
-                                url: courseData.cover,
-                                width: 400,
-                                height: 250,
-                                alt: courseData?.course_name
-                            },
-                            ...courseData.lecturers.map(
-                                (lecturer: Lecturer) => ({
-                                    url: lecturer.photo,
-                                    width: 200,
-                                    heigth: 300,
-                                    alt: lecturer.name
-                                })
-                            ),
-                            {
-                                url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
-                                width: 48,
-                                height: 48,
-                                alt: 'Gradient Academy'
-                            }
-                        ]
-                    }
-                },
-                revalidate: 300
-            };
+                        openGraph: {
+                            type: 'website',
+                            title: metaTitle,
+                            description: metaDescription,
+                            url: `https://gradient.academy/kelas/${params?.id}`,
+                            images: [
+                                {
+                                    url: courseData.cover,
+                                    width: 400,
+                                    height: 250,
+                                    alt: courseData?.course_name
+                                },
+                                ...courseData.lecturers.map(
+                                    (lecturer: Lecturer) => ({
+                                        url: lecturer.photo,
+                                        width: 200,
+                                        heigth: 300,
+                                        alt: lecturer.name
+                                    })
+                                ),
+                                {
+                                    url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
+                                    width: 48,
+                                    height: 48,
+                                    alt: 'Gradient Academy'
+                                }
+                            ]
+                        }
+                    },
+                    revalidate: 300
+                };
+            } catch (err: any) {
+                console.error('getStaticProps error for', { params }, err);
+
+                // If API returned 404 -> permanent redirect (or notFound: true)
+                const status = err?.response?.status;
+                if (status === 404) {
+                    return {
+                        redirect: {
+                            destination: `/404`,
+                            permanent: true
+                        }
+                    };
+                }
+
+                // Auth errors -> redirect to login (non-permanent)
+                if (status === 401 || status === 403) {
+                    return {
+                        redirect: {
+                            destination: `/masuk?redirect=${encodeURIComponent(
+                                `/kelas/${params?.id}`
+                            )}`,
+                            permanent: false
+                        }
+                    };
+                }
+
+                // Transient error -> return safe fallback props and retry soon
+                return {
+                    props: {
+                        // Page component must handle these nulls (see "client handling" below)
+                        id: params?.id,
+                        courseData: null,
+                        packetOffer: null,
+                        courseRating: null,
+                        recommendations: null,
+                        __errorMessage:
+                            'Gagal memuat data. Silakan coba lagi nanti.'
+                    } as any,
+                    revalidate: 30
+                };
+            }
         }
 );
