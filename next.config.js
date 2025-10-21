@@ -36,7 +36,7 @@ module.exports = {
             },
             {
                 source: '/karir',
-                destination: 'https://career.gradien.academy/',
+                destination: 'https://career.gradient.academy/',
                 permanent: true,
                 basePath: false
             },
