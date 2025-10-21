@@ -133,7 +133,7 @@ const AnnouncementModal = ({
             <div className="flex flex-col md:flex-row overflow-auto gap-6 md:gap-0 w-full h-full pb-20 md:pb-0">
                 <Carousel
                     key={`carousel-${selectedAnnouncement}`}
-                    className="aspect-square overflow-hidden rounded-xl md:rounded-r-none md:rounded-l-xl flex items-center justify-center relative min-h-[300px] w-full md:w-[400px] md:h-[400px] md:min-w-[400px]"
+                    className="aspect-square overflow-hidden rounded-xl md:rounded-r-none md:rounded-l-xl flex items-center justify-center relative min-h-[400px] w-full md:w-[400px] md:h-[400px] md:min-w-[400px]"
                     imageLayout={'fixed'}
                     images={
                         announcements?.data[selectedAnnouncement]?.banners.map(
@@ -151,7 +151,7 @@ const AnnouncementModal = ({
                         ) ?? []
                     }
                 />
-                <div className="flex flex-col gap-2 p-0 md:p-4 text-left h-full">
+                <div className="flex flex-col gap-2 p-0 md:p-4 text-left h-full w-full">
                     <div className="w-full justify-start relative hidden md:flex">
                         {renderBadge(
                             announcements?.data[selectedAnnouncement]?.type ??
