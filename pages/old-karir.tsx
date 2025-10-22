@@ -43,8 +43,12 @@ const Career = (): JSX.Element => {
                     </p>
                 </div>
                 <div className="w-full h-full rounded-md p-4 md:p-8 bg-[#121212] mb-8 flex flex-col md:flex-row items-center md:justify-between">
-                    <h3 className="font-bold mb-2 md:mb-0">Hubungi Kami</h3>
-                    <Link href="https://wa.me/message/R7WKMDMQUUIXH1">
+                    <h3 className="font-bold mb-2 md:mb-0">
+                        Karir di Gradient
+                    </h3>
+                    <Link
+                        href="https://career.gradient.academy/"
+                        target="_blank">
                         <div className="flex rounded-full px-4 py-2 bg-[#0F460F]">
                             <span className="text-base font-bold flex items-center">
                                 <FaWhatsapp className="mr-2 text-xl" />

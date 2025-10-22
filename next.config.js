@@ -36,8 +36,7 @@ module.exports = {
             },
             {
                 source: '/karir',
-                destination:
-                    'https://www.notion.so/astronotes/Bertumbuh-Bersama-Gradient-f398f551b9f9455c88ff6e6d24d81338',
+                destination: 'https://career.gradient.academy/',
                 permanent: true,
                 basePath: false
             },
