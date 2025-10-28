@@ -53,7 +53,7 @@
         "@uiw/react-codemirror": "^4.21.21",
         "abort-controller": "^3.0.0",
         "axios": "^1.2.2",
-        "bitmovin-player": "^8.227.0",
+        "bitmovin-player": "^8.232.0",
         "bitmovin-player-ui": "^3.96.0",
         "clsx": "^2.0.0",
         "comlink": "^4.4.1",
