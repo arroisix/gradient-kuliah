@@ -74,6 +74,7 @@ export default function BitmovinPlayer({
             tweaks: {
                 max_retries: Infinity,
                 retry_delay: 1000,
+                max_mpd_retries: Infinity,
                 chunked_cmaf_streaming: true,
                 XHR_TIMEOUT: 20
             },
