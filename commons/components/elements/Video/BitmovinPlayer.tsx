@@ -74,8 +74,26 @@ export default function BitmovinPlayer({
             tweaks: {
                 max_retries: Infinity,
                 retry_delay: 1000,
-                disable_retry_for_response_status: {
-                    media: [401, 403]
+                max_mpd_retries: Infinity,
+                chunked_cmaf_streaming: true,
+                XHR_TIMEOUT: 20
+            },
+            adaptation: {
+                desktop: {
+                    bitrates: {
+                        minSelectableAudioBitrate: '128kbps',
+                        maxSelectableAudioBitrate: '320kbps',
+                        minSelectableVideoBitrate: '900kbps',
+                        maxSelectableVideoBitrate: Infinity
+                    }
+                },
+                mobile: {
+                    bitrates: {
+                        minSelectableAudioBitrate: 0,
+                        maxSelectableAudioBitrate: '256000bps',
+                        minSelectableVideoBitrate: 0,
+                        maxSelectableVideoBitrate: '2.5mbps'
+                    }
                 }
             },
             playback: {

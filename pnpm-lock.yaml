@@ -123,8 +123,8 @@ dependencies:
         specifier: ^1.2.2
         version: 1.2.2
     bitmovin-player:
-        specifier: ^8.227.0
-        version: 8.227.0
+        specifier: ^8.232.0
+        version: 8.232.0
     bitmovin-player-ui:
         specifier: ^3.96.0
         version: 3.96.0
@@ -5150,10 +5150,10 @@ packages:
             }
         dev: false
 
-    /bitmovin-player@8.227.0:
+    /bitmovin-player@8.232.0:
         resolution:
             {
-                integrity: sha512-4V9zKOqEnHx1S113j2Ee529zJjswEluJrtdc7TZTeR23criO4ltusL6prkcSGJfHv3UCpBauCdvS2KKMhcRiIA==
+                integrity: sha512-aDxSSTBGMhenfm1OdNws1mIGyuI0cbuhMDyaOGO2IGTRPE+SE4BauziLeMXgc/72GmXVdcDHw3MY6Imw38vi+Q==
             }
         dev: false
 
