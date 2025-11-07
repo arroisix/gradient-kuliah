@@ -4,23 +4,22 @@ import rehypeKatex from 'rehype-katex';
 import remarkGfm from 'remark-gfm';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import Image from 'next/image';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import Avatar from 'react-avatar';
 import { BsHexagonFill, BsCheck } from 'react-icons/bs';
 import { FaCircle, FaRegComment } from 'react-icons/fa';
 import ReplyComment from './ReplyComment';
-import KomunitasInput from './KomunitasInput';
+// import KomunitasInput from './KomunitasInput';
 import moment from 'moment';
 import {
-    useGetCommunityPostCommentDetailQuery,
-    usePostQuestionAnswerMutation
+    useGetCommunityPostCommentDetailQuery
+    // usePostQuestionAnswerMutation
 } from 'komunitas/redux/api/komunitasApi';
-import AuthContext from 'authentication/contexts/AuthProvider';
 import Skeleton from 'commons/components/elements/Skeleton';
-import { useTracker } from 'tracker/tracker';
+// import { useTracker } from 'tracker/tracker';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
-import { IoMdSend } from 'react-icons/io';
+// import { IoMdSend } from 'react-icons/io';
 
 type Student = {
     id: string;
@@ -35,10 +34,10 @@ const AnswerCard = ({
     content,
     comment_counts,
     created_at,
-    student,
-    category,
-    questionId
-}: {
+    student
+}: // category,
+// questionId
+{
     isExpert: boolean;
     id: string;
     content: string;
@@ -48,44 +47,42 @@ const AnswerCard = ({
     category: string;
     questionId: string;
 }): JSX.Element => {
-    const [comment, setComment] = useState('');
+    // const [comment, setComment] = useState('');
     const [showComment, setShowComment] = useState(true);
     const [authorImageError, setAuthorImageError] = useState(false);
-    const [myImageError, setMyImageError] = useState(false);
 
     const { checkCustomBreakpoints } = useWindowBreakpoints();
-    const { profile } = useContext(AuthContext);
 
-    const [postComment] = usePostQuestionAnswerMutation();
+    // const [postComment] = usePostQuestionAnswerMutation();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { data: replies, isLoading } = useGetCommunityPostCommentDetailQuery({
         post_id: id,
         isAuthenticated: isAuthenticated
     });
 
-    function handleChangeComment(
-        event: React.ChangeEvent<HTMLInputElement>
-    ): void {
-        setComment(event.target.value);
-    }
+    // function handleChangeComment(
+    //     event: React.ChangeEvent<HTMLInputElement>
+    // ): void {
+    //     setComment(event.target.value);
+    // }
 
-    const tracker = useTracker();
-    async function handleSubmitComment(): Promise<void> {
-        await postComment({
-            post_id: id,
-            content: comment,
-            category_id: category,
-            attachment_urls: []
-        });
+    // const tracker = useTracker();
+    // async function handleSubmitComment(): Promise<void> {
+    //     await postComment({
+    //         post_id: id,
+    //         content: comment,
+    //         category_id: category,
+    //         attachment_urls: []
+    //     });
 
-        tracker?.genericTrack('Submit Answer Comment on Community', {
-            'Post ID': questionId,
-            'Answer ID': id
-        });
+    //     tracker?.genericTrack('Submit Answer Comment on Community', {
+    //         'Post ID': questionId,
+    //         'Answer ID': id
+    //     });
 
-        setComment('');
-        setShowComment(true);
-    }
+    //     setComment('');
+    //     setShowComment(true);
+    // }
 
     return (
         <div
@@ -160,7 +157,7 @@ const AnswerCard = ({
                 </div>
             </div>
             <div className="flex flex-col gap-6 border-t-[1px] border-[#272727] pt-[18px]">
-                <div className="flex items-center gap-3">
+                {/* <div className="flex items-center gap-3">
                     <div className="relative w-[24px] h-[24px]">
                         {profile?.photo_profile != null &&
                         profile?.photo_profile.length > 0 &&
@@ -196,7 +193,7 @@ const AnswerCard = ({
                         className="self-end btn btn-circle btn-primary btn-sm">
                         <IoMdSend />
                     </button>
-                </div>
+                </div> */}
                 {showComment && comment_counts !== 0 && (
                     <div className="flex flex-col gap-[18px]">
                         {isLoading && <Skeleton className="h-[16px] !m-0" />}

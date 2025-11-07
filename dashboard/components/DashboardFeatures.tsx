@@ -12,7 +12,6 @@ import FlashcardLargeIcon from 'dashboard/assets/FlashcardLargeIcon';
 import FlashcardIcon from 'dashboard/assets/FlashcardIcon';
 import FlashcardIconFull from 'dashboard/assets/FlashcardIconFull';
 import CopilotAIIconFull from 'dashboard/assets/CopilotAIIconFull';
-import DiskusiIconNew from 'dashboard/assets/DiskusiIconNew';
 
 type Feature = {
     id: string;
@@ -32,6 +31,20 @@ const DashboardFeatures = (): JSX.Element => {
 
     const features: Feature[] = [
         {
+            id: 'kelas',
+            title: 'Kelas',
+            description: 'Video materi dari dosen',
+            Icon: () => <KelasIcon width={64} height={69} />,
+            url: '/kelas'
+        },
+        {
+            id: 'kuis',
+            title: 'Kuis',
+            description: 'Uji kemampuanmu sekarang',
+            Icon: () => <KuisIcon width={64} height={69} />,
+            url: '/latihan'
+        },
+        {
             id: 'copilot',
             title: 'Copilot AI',
             description: 'Chatbot teman belajarmu',
@@ -44,37 +57,11 @@ const DashboardFeatures = (): JSX.Element => {
             url: '/copilot'
         },
         {
-            id: 'flashcard',
-            title: 'Flashcard',
-            description: 'Hafalan kebut semalam',
-            Icon: ({ isSmall }: { isSmall?: boolean }) =>
-                isSmall ? (
-                    <FlashcardIcon width={24} height={24} />
-                ) : (
-                    <FlashcardIconFull width={48} height={48} />
-                ),
-            url: '/flashcards'
-        },
-        {
-            id: 'kelas',
-            title: 'Kelas',
-            description: 'Video materi dari dosen',
-            Icon: () => <KelasIcon width={64} height={69} />,
-            url: '/kelas'
-        },
-        {
             id: 'perpus',
             title: 'Perpustakaan',
             description: 'Text book, rangkuman, bank soal',
             Icon: () => <PerpusIcon width={64} height={69} />,
             url: '/perpustakaan'
-        },
-        {
-            id: 'kuis',
-            title: 'Kuis',
-            description: 'Uji kemampuanmu sekarang',
-            Icon: () => <KuisIcon width={64} height={69} />,
-            url: '/latihan'
         },
         {
             id: 'lainnya',
@@ -86,12 +73,24 @@ const DashboardFeatures = (): JSX.Element => {
     ];
 
     const moreFeatures: Feature[] = [
+        // {
+        //     id: 'diskusi',
+        //     title: 'Diskusi',
+        //     description: 'Tanya ke tutor atau user lain',
+        //     Icon: () => <DiskusiIconNew width={64} height={69} />,
+        //     url: '/komunitas'
+        // }
         {
-            id: 'diskusi',
-            title: 'Diskusi',
-            description: 'Tanya ke tutor atau user lain',
-            Icon: () => <DiskusiIconNew width={64} height={69} />,
-            url: '/komunitas'
+            id: 'flashcard',
+            title: 'Flashcard',
+            description: 'Hafalan kebut semalam',
+            Icon: ({ isSmall }: { isSmall?: boolean }) =>
+                isSmall ? (
+                    <FlashcardIcon width={24} height={24} />
+                ) : (
+                    <FlashcardIconFull width={48} height={48} />
+                ),
+            url: '/flashcards'
         }
     ];
 

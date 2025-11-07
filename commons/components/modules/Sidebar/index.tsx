@@ -3,12 +3,10 @@ import { useTracker } from 'tracker/tracker';
 import Link from 'next/link';
 import { cn } from 'commons/utils';
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
-import CommunityNotificationBadge from 'commons/components/elements/CommunityNotificationBadge';
 import CopilotIconLine from 'copilot/assets/CopilotIconLine';
 import BookStackIcon from '../../elements/Icons/BookStack';
 import KelasIcon from '../../elements/Icons/Kelas';
 import PencilOnLineIcon from '../../elements/Icons/PencilLine';
-import DiskusiIcon from '../../elements/Icons/Diskusi';
 import HomeIcon from '../../elements/Icons/Home';
 
 const Sidebar = ({
@@ -70,24 +68,6 @@ const Sidebar = ({
                         </span>
                     </Link>
                 )}
-                <Link
-                    href="/komunitas"
-                    className={`flex items-center gap-4 cursor-pointer ${
-                        pathname.includes('/komunitas')
-                            ? 'text-white'
-                            : 'text-[#666666]'
-                    } font-body text-sm hover:text-[#999999]`}
-                    onClick={() => {
-                        tracker?.genericTrack(
-                            `Click Community ${
-                                !fullHeight ? 'Course ' : ''
-                            }Navigation`
-                        );
-                    }}>
-                    <DiskusiIcon />
-                    Diskusi
-                    <CommunityNotificationBadge />
-                </Link>
                 <Link
                     href={'/kelas'}
                     onClick={() => {

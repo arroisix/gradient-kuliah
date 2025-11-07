@@ -192,7 +192,16 @@ const QuestionCard = ({
                                 tracker?.genericTrack('Click "Jawab" Button', {
                                     'Post Slug': slug
                                 });
-                                setIsShowForm(true);
+                                // setIsShowForm(true);
+                                toast.info(
+                                    'Fitur Diskusi sudah tidak tersedia untuk saat ini, silahkan beralih menggunakan fitur Copilot AI ya!',
+                                    {
+                                        position: 'top-center',
+                                        theme: 'colored',
+                                        hideProgressBar: true,
+                                        toastId: 'DISKUSI_DEPRECATED'
+                                    }
+                                );
                             }}>
                             Jawab
                         </button>

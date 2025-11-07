@@ -20,6 +20,7 @@ import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import { MathDisplay, MathInline } from 'komunitas/mathPlugin';
 import { Markdown } from 'tiptap-markdown';
+import { toast } from 'react-toastify';
 
 type KomunitasFormProps = {
     bucketKey?: string;
@@ -40,7 +41,6 @@ type KomunitasFormProps = {
 
 const KomunitasForm = ({
     bucketKey,
-    onSubmit,
     cancelButton,
     isUsingCategories,
     subjectCategories,
@@ -82,16 +82,19 @@ const KomunitasForm = ({
 
     async function handleSubmit(): Promise<void> {
         try {
-            await onSubmit(
-                editor?.storage.markdown.getMarkdown(),
-                category,
-                attachmentUrls,
-                attachmentNames
+            // await onSubmit(
+            //     editor?.storage.markdown.getMarkdown(),
+            //     category,
+            //     attachmentUrls,
+            //     attachmentNames
+            // );
+            // editor?.commands.setContent('');
+            // setCategory('');
+            // setAttachmentUrls([]);
+            // setAttachmentNames([]);
+            toast.info(
+                'Fitur Diskusi sudah tidak tersedia untuk saat ini, silahkan beralih menggunakan fitur Copilot AI ya!'
             );
-            editor?.commands.setContent('');
-            setCategory('');
-            setAttachmentUrls([]);
-            setAttachmentNames([]);
         } catch (e) {
             console.error(e);
         }
