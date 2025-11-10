@@ -30,8 +30,6 @@ import KelasIcon from '../../elements/Icons/Kelas';
 import BookStackIcon from '../../elements/Icons/BookStack';
 import BookStackIconFill from '../../elements/Icons/BookStackFill';
 import KelasIconFill from '../../elements/Icons/KelasFill';
-import DiskusiIconFill from '../../elements/Icons/DiskusiFill';
-import DiskusiIcon from '../../elements/Icons/Diskusi';
 
 const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
     {
@@ -193,13 +191,6 @@ const Navbar = ({
                                 IconUnactive={CopilotIconLine}
                             />
                         )}
-                        <NavigationButton
-                            name="Community"
-                            title="Diskusi"
-                            url="/komunitas"
-                            IconActive={DiskusiIconFill}
-                            IconUnactive={DiskusiIcon}
-                        />
                         <NavigationButton
                             key={UNAUTHENTICATED_NAVBAR_BUTTONS[1].name}
                             {...UNAUTHENTICATED_NAVBAR_BUTTONS[1]}
