@@ -82,16 +82,6 @@ const KomunitasForm = ({
 
     async function handleSubmit(): Promise<void> {
         try {
-            // await onSubmit(
-            //     editor?.storage.markdown.getMarkdown(),
-            //     category,
-            //     attachmentUrls,
-            //     attachmentNames
-            // );
-            // editor?.commands.setContent('');
-            // setCategory('');
-            // setAttachmentUrls([]);
-            // setAttachmentNames([]);
             toast.info(
                 'Fitur Diskusi sudah tidak tersedia untuk saat ini, silahkan beralih menggunakan fitur Copilot AI ya!'
             );

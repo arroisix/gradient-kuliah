@@ -1,8 +1,5 @@
-// import { useFeatureIsOn } from '@growthbook/growthbook-react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
-// import GradientIcon from 'commons/components/GradientIcon';
-// import Button from 'commons/components/elements/Button';
 import Paywall from 'commons/components/elements/Paywall';
 import Skeleton from 'commons/components/elements/Skeleton';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
@@ -21,9 +18,6 @@ import { useGetMajorClassesQuery } from 'dashboard/redux/api/dashboardApi';
 
 const DashboardContent = (): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
-    // const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
-    //     'landing-page-revamp'
-    // );
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { data: majorClasses, isLoading: isLoadingMajorClasses } =
@@ -36,7 +30,6 @@ const DashboardContent = (): JSX.Element => {
         useGetPacketOfferQuery(is_subscribed ? skipToken : undefined);
 
     const isShowRecommendedMaterials =
-        // isLandingPageRevampOn &&
         !isAuthenticated && !is_subscribed && !everSubscribed;
 
     const [tourViewed, setTourViewed] = useLocalStorage('tourViewed', false);
@@ -104,29 +97,6 @@ const DashboardContent = (): JSX.Element => {
     return isShowRecommendedMaterials ? (
         <div className="pb-16 space-y-12">
             <Recommendations onFinishLoading={showTutorial} />
-            {/* <div
-                className="flex flex-col items-stretch justify-between gap-3 p-4 text-white rounded-lg md:items-center md:gap-4 lg:flex-row md:p-6 bg-accent-purple"
-                data-tour="step-4">
-                <div className="flex flex-1 gap-3 text-left">
-                    <GradientIcon />
-                    <div>
-                        <p className="text-xl font-extrabold">
-                            Bingung sama materi/soal?
-                        </p>
-                        <p className="font-body">
-                            Tulis pertanyaanmu di Gradient untuk dijawab
-                            mahasiswa lain
-                        </p>
-                    </div>
-                </div>
-                <Button
-                    href="/komunitas"
-                    variant="custom"
-                    eventName="Click Community Card"
-                    className="text-center text-white bg-black whitespace-nowrap">
-                    Buat Pertanyaan Gratis
-                </Button> */}
-            {/* </div> */}
             {!is_subscribed && (
                 <div className="w-full space-y-6">
                     <p className="text-xl font-extrabold leading-relaxed text-center">
