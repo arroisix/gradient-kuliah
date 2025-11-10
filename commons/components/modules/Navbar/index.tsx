@@ -191,13 +191,6 @@ const Navbar = ({
                                 IconUnactive={CopilotIconLine}
                             />
                         )}
-                        {/* <NavigationButton
-                            name="Community"
-                            title="Diskusi"
-                            url="/komunitas"
-                            IconActive={DiskusiIconFill}
-                            IconUnactive={DiskusiIcon}
-                        /> */}
                         <NavigationButton
                             key={UNAUTHENTICATED_NAVBAR_BUTTONS[1].name}
                             {...UNAUTHENTICATED_NAVBAR_BUTTONS[1]}

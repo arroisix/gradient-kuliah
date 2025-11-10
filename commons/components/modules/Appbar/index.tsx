@@ -39,25 +39,6 @@ const APPBAR_NAV: AppbarNav[] = [
         label: 'Copilot AI',
         isExpandable: true
     },
-    // {
-    //     icon: <DiskusiIcon />,
-    //     iconAlt: <CopilotIconLine />,
-    //     href: '/komunitas',
-    //     isExpandable: true,
-    //     expandedLinks: [
-    //         {
-    //             href: '/komunitas',
-    //             label: 'Diskusi',
-    //             icon: <DiskusiIcon />
-    //         },
-    //         {
-    //             href: '/copilot',
-    //             label: 'Copilot AI',
-    //             icon: <CopilotIconLine />
-    //         }
-    //     ],
-    //     label: 'Diskusi & AI'
-    // },
     {
         icon: <BookStackIcon size={20} />,
         href: '/perpustakaan',
