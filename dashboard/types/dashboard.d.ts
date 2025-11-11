@@ -129,9 +129,12 @@ export interface Banner {
     is_asset: boolean;
     banner_url: string | null;
     banner_url_mobile: string | null;
+    banner_border_color: string | null;
     title_text: string | null;
     body_text: string | null;
     button_text: string | null;
+    button_text_color: string | null;
+    button_background_color: string | null;
     image_url: string | null;
     background_color: string | null;
 }

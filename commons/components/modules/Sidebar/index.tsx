@@ -109,7 +109,7 @@ const Sidebar = ({
                 </Link>
                 {configData?.configs.is_exercise_config_enabled && (
                     <Link
-                        href={'/alat-belajar'}
+                        href={'/latihan'}
                         onClick={() => {
                             tracker?.genericTrack(
                                 `Click Exercises ${
@@ -120,12 +120,12 @@ const Sidebar = ({
                         <span
                             className={cn(
                                 'flex gap-4 cursor-pointer  font-body text-sm hover:text-[#999999]',
-                                pathname.includes('/alat-belajar')
+                                pathname.includes('/latihan')
                                     ? 'text-white'
                                     : 'text-[#666666]'
                             )}>
                             <PencilOnLineIcon size={20} />
-                            Alat Belajar
+                            Try Out
                         </span>
                     </Link>
                 )}

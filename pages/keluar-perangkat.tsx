@@ -2,7 +2,6 @@ import {
     useGetConnectedDevicesQuery,
     useGetCurrentConnectedDeviceQuery,
     useGetDeviceTypesQuery,
-    useLogoutMutation,
     useRemoveOtherDeviceMutation
 } from 'authentication/redux/api/authApi';
 import groupBy from 'lodash.groupby';
@@ -16,13 +15,12 @@ import {
     DeviceLogoutSelection
 } from 'profile/components/DeviceLogoutSelection';
 import { useRouter } from 'next/router';
-import { useDispatch } from 'react-redux';
-import { clearCache } from 'authentication/redux/slices/userSlice';
 import { sanitizeUrl } from 'commons/utils';
+import useLogout from 'authentication/hooks/useLogout';
 
 const KeluarPerangkat = (): JSX.Element => {
     const router = useRouter();
-    const dispatch = useDispatch();
+    const { logout, isLoadingLogout } = useLogout();
     const { deviceTypes } = useGetDeviceTypesQuery(undefined, {
         selectFromResult: ({ data }) => ({
             deviceTypes:
@@ -60,8 +58,6 @@ const KeluarPerangkat = (): JSX.Element => {
     const currentDeviceType = deviceTypes[currentDevice?.device_type_id ?? 0];
 
     const [disableLogin, setDisableLogin] = useState(true);
-
-    const [logout, { isLoading: isLoadingLogout }] = useLogoutMutation();
 
     const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
     const [removeOtherDevice] = useRemoveOtherDeviceMutation();
@@ -120,10 +116,6 @@ const KeluarPerangkat = (): JSX.Element => {
                         disabled={isLoadingLogout}
                         onClick={async () => {
                             await logout();
-                            dispatch(clearCache());
-                            setTimeout(() => {
-                                router.push('/');
-                            }, 500);
                         }}>
                         {isLoadingLogout
                             ? 'Tuggu Sebentar...'

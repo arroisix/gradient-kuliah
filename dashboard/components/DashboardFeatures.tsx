@@ -275,10 +275,10 @@ const DashboardFeatures = (): JSX.Element => {
                             <button
                                 key={index}
                                 onClick={() => goToPage(index)}
-                                className={`h-2 rounded-full transition-all ${
+                                className={`h-1 rounded-full transition-all ${
                                     index === currentPage
-                                        ? 'w-6 bg-purple-500'
-                                        : 'w-2 bg-neutral-600'
+                                        ? 'w-6 bg-[#B6A6F3]'
+                                        : 'w-3 bg-[#2A225F]'
                                 }`}
                                 aria-label={`Go to page ${index + 1}`}
                             />

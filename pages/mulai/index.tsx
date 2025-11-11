@@ -1,16 +1,12 @@
 import { OnboardingSuccess } from 'authentication/containers/OnboardingSection/OnboardingSuccess';
-import { useLogoutMutation } from 'authentication/redux/api/authApi';
+import useLogout from 'authentication/hooks/useLogout';
 import { getCurrentUser } from 'authentication/redux/selectors/userSelector';
-import { clearCache } from 'authentication/redux/slices/userSlice';
 import withAuth from 'commons/withAuth';
-import { useRouter } from 'next/router';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const Mulai = (): JSX.Element => {
-    const router = useRouter();
     const user = useSelector(getCurrentUser);
-    const [logout] = useLogoutMutation();
-    const dispatch = useDispatch();
+    const { logout } = useLogout();
 
     return (
         <section className="text-white h-screen overflow-hidden">
@@ -21,8 +17,6 @@ const Mulai = (): JSX.Element => {
                 <button
                     onClick={async () => {
                         await logout();
-                        dispatch(clearCache());
-                        router.push('/');
                     }}
                     className="text-[#999999] hover:text-red-400 transition-all duration-500">
                     Sign Out
