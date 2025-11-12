@@ -453,7 +453,7 @@ const AstronotesHierarchy: React.FC<AstronotesHierarchyProps> = ({
                 )}
             </div>
 
-            <div className="fixed bottom-0 left-0 right-0 bg-[#2C2C2C] border border-transparent p-4 flex items-center gap-3 md:bottom-4 md:left-4 md:right-4 md:mx-16 md:mb-8 md:rounded-xl">
+            <div className="fixed bottom-0 left-0 right-0 bg-[#20222E] border border-transparent p-4 flex items-center gap-3 md:bottom-4 md:left-4 md:right-4 md:mx-16 md:mb-8 md:rounded-xl">
                 <div className="relative aspect-[256/364] h-12 flex-shrink-0">
                     <Image
                         src={bookThumbnail ?? ''}

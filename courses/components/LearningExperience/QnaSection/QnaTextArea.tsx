@@ -211,9 +211,9 @@ const QnaTextArea = ({
                         ({ tag: Tag, icon, props = {} }, index) => (
                             <Tag
                                 key={index}
-                                className={`block hover:bg-[#2C2C2C] px-[12px] py-[6px] rounded-[100px] cursor-pointer ${
+                                className={`block hover:bg-[#20222E] px-[12px] py-[6px] rounded-[100px] cursor-pointer ${
                                     iconClicked === index
-                                        ? 'text-white bg-[#2C2C2C]'
+                                        ? 'text-white bg-[#20222E]'
                                         : 'text-neutral-600'
                                 }`}
                                 onClick={() =>

@@ -1,9 +1,11 @@
 import { baseApi } from 'redux/api/baseApi';
 import {
     AstronotesExercise,
+    CourseFilter,
     Exercise,
     ExerciseHistory,
     ExerciseLandingPage,
+    ExerciseLandingPageV2,
     ExerciseProblem,
     ExerciseProblemProgress,
     ExerciseProblemReport,
@@ -267,7 +269,44 @@ export const exerciseApi = baseApi.injectEndpoints({
                 }
             ]
         }),
-
+        getExerciseV2LandingPage: builder.query<
+            ExerciseLandingPageV2,
+            {
+                page?: number;
+                limit?: number;
+                status?: string;
+                course_id?: string;
+                university_name?: string;
+                type?: string;
+                sort?: string;
+            }
+        >({
+            query: (params) => ({
+                url: `${EXERCISE_BASE_URL}v2/`,
+                params
+            }),
+            providesTags: () => [
+                {
+                    type: 'ASTRONOTES',
+                    id: `EXERCISE_ENTRYPOINT`
+                }
+            ]
+        }),
+        getCoursesWithExercise: builder.query<ResponseData<CourseFilter>, void>(
+            {
+                query: () => ({
+                    url: `${EXERCISE_BASE_URL}course-exercises/`
+                })
+            }
+        ),
+        getUniversitiesWithExercise: builder.query<
+            ResponseData<string> & { default_value: string | null },
+            void
+        >({
+            query: () => ({
+                url: `${EXERCISE_BASE_URL}universities-exercises/`
+            })
+        }),
         getProblemSetDetail: builder.query<ProblemSetDetail, string>({
             query: (problemSetId) => ({
                 url: `${EXERCISE_BASE_URL}problem-sets/${problemSetId}/`
@@ -304,7 +343,10 @@ export const {
     useGetProblemSetDetailQuery,
     useLazyGetProblemSetDetailQuery,
     useGetExerciseProblemSolutionQuery,
-    useGetAstronotesExercisesQuery
+    useGetAstronotesExercisesQuery,
+    useGetExerciseV2LandingPageQuery,
+    useGetCoursesWithExerciseQuery,
+    useGetUniversitiesWithExerciseQuery
 } = exerciseApi;
 
 export const {

@@ -37,7 +37,7 @@ const MyQuestions = ({ questions, askNow }: MyQuestionsProps): JSX.Element => {
                                     href={`/komunitas/${category_slug}/${slug}`}>
                                     <div
                                         key={id}
-                                        className="flex justify-between items-center gap-2 cursor-pointer z-[1] px-[10px] py-[10px] first:border-none border-t-[1px] border-t-[#2C2C2C]">
+                                        className="flex justify-between items-center gap-2 cursor-pointer z-[1] px-[10px] py-[10px] first:border-none border-t-[1px] border-t-[#20222E]">
                                         <span className="overflow-hidden text-xs whitespace-nowrap text-ellipsis">
                                             {content}
                                         </span>

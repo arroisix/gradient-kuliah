@@ -114,7 +114,7 @@ const NotationList = memo(
                     <button
                         key={index}
                         onClick={() => insertNotation(latex)}
-                        className="hover:bg-[#2C2C2C] bg-[#343434] cursor-pointer px-2 py-1 rounded-[4px] text-xs font-body"
+                        className="hover:bg-[#20222E] bg-[#343434] cursor-pointer px-2 py-1 rounded-[4px] text-xs font-body"
                         style={{
                             boxShadow: '0px 2px 0px 0px #00000040'
                         }}>

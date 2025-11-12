@@ -127,7 +127,7 @@ const KomunitasForm = ({
                         {isUsingCategories && (
                             <select
                                 className={clsx(
-                                    'pl-[18px] pr-[50px] border-none bg-[#2C2C2C] rounded-[70px] text-xs font-bold cursor-pointer focus:outline-none focus:ring-0 focus:appearance-none',
+                                    'pl-[18px] pr-[50px] border-none bg-[#20222E] rounded-[70px] text-xs font-bold cursor-pointer focus:outline-none focus:ring-0 focus:appearance-none',
                                     category === '' && 'text-neutral-600'
                                 )}
                                 onChange={handleSelectCategory}

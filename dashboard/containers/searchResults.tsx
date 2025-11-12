@@ -205,7 +205,7 @@ lebih akurat?"
 
             <div className="flex w-full gap-4 md:w-max">
                 {shouldDeferUI ? (
-                    <div className="h-[42px] w-52 bg-[#2C2C2C] rounded-full animate-pulse" />
+                    <div className="h-[42px] w-52 bg-[#20222E] rounded-full animate-pulse" />
                 ) : (
                     <SearchByType />
                 )}

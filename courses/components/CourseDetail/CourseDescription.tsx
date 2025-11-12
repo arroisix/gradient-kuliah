@@ -122,7 +122,7 @@ const CourseDescription = ({
                     href={`/kelas/downloads?search=${encodeURIComponent(
                         course?.course_name || ''
                     )}`}
-                    className="flex items-center justify-between w-full py-3 px-4 bg-[#2C2C2C] rounded-full text-white text-sm font-semibold group relative overflow-hidden">
+                    className="flex items-center justify-between w-full py-3 px-4 bg-[#20222E] rounded-full text-white text-sm font-semibold group relative overflow-hidden">
                     <span className="mr-2">Lihat Hasil Download Kamu</span>
                     <div className="absolute right-2">
                         <Image
@@ -165,13 +165,13 @@ const CourseDescription = ({
                                 Konten Terkait
                             </h3>
                             {bukuCount > 0 && (
-                                <span className="flex items-center gap-1 px-3 py-1 rounded-md bg-[#2C2C2C] text-xs font-medium text-neutral-300">
+                                <span className="flex items-center gap-1 px-3 py-1 rounded-md bg-[#20222E] text-xs font-medium text-neutral-300">
                                     <HiOutlineBookOpen size={14} />
                                     {bukuCount} Buku
                                 </span>
                             )}
                             {kuisCount > 0 && (
-                                <span className="flex items-center gap-1 px-3 py-1 rounded-md bg-[#2C2C2C] text-xs font-medium text-neutral-300">
+                                <span className="flex items-center gap-1 px-3 py-1 rounded-md bg-[#20222E] text-xs font-medium text-neutral-300">
                                     <HiOutlinePencilAlt size={14} />
                                     {kuisCount} Kuis
                                 </span>

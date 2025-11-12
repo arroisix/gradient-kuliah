@@ -40,6 +40,14 @@ interface ExerciseItem {
     progress?: number;
     status?: string;
     is_free: boolean;
+    duration?: number;
+    score?: number;
+    progress_percentage?: number;
+    type?: string;
+    exercise_code?: string;
+    tryout_type?: string;
+    university_name?: string;
+    university_color?: string;
 }
 
 interface CourseFilter {
@@ -56,6 +64,11 @@ interface ExerciseLandingPage {
     current_page: number;
     limit: number;
     course_filters: CourseFilter[];
+}
+
+interface ExerciseLandingPageV2 extends ListResponseData<ExerciseItem> {
+    current_page: number;
+    limit: number;
 }
 
 export interface ExerciseHistory {
