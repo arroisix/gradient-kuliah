@@ -4,7 +4,6 @@ import { IoClose, IoChevronForward, IoChevronBack } from 'react-icons/io5';
 import Link from 'next/link';
 import KelasIcon from '../assets/KelasIcon';
 import PerpusIcon from '../assets/PerpusIcon';
-import KuisIcon from '../assets/KuisIcon';
 import LainnyaIcon from '../assets/LainnyaIcon';
 import CopilotAIIcon from '../assets/CopilotAIIcon';
 import { useTracker } from 'tracker/tracker';
@@ -12,6 +11,7 @@ import FlashcardLargeIcon from 'dashboard/assets/FlashcardLargeIcon';
 import FlashcardIcon from 'dashboard/assets/FlashcardIcon';
 import FlashcardIconFull from 'dashboard/assets/FlashcardIconFull';
 import CopilotAIIconFull from 'dashboard/assets/CopilotAIIconFull';
+import DashboardQuizIcon from './DashboardQuizIcon';
 
 type Feature = {
     id: string;
@@ -49,7 +49,7 @@ const DashboardFeatures = (): JSX.Element => {
             id: 'kuis',
             title: 'Kuis',
             description: 'Uji kemampuanmu sekarang',
-            Icon: () => <KuisIcon width={64} height={69} />,
+            Icon: () => <DashboardQuizIcon />,
             url: '/latihan',
             gradient: 'from-purple-600 to-purple-400'
         },
@@ -194,7 +194,7 @@ const DashboardFeatures = (): JSX.Element => {
                 )}
 
                 <div
-                    className="px-6 overflow-hidden"
+                    className="px-6 overflow-x-visible overflow-y-visible"
                     onTouchStart={handleTouchStart}
                     onTouchMove={handleTouchMove}
                     onTouchEnd={handleTouchEnd}>
@@ -248,7 +248,7 @@ const DashboardFeatures = (): JSX.Element => {
                                             Baru
                                         </span>
                                     )}
-                                    <div className="w-[48px] h-[48px] aspect-square rounded-full bg-[#2C2E3A] flex items-center justify-center">
+                                    <div className="w-[48px] h-[48px] aspect-square rounded-full bg-[#2C2E3A] flex items-center justify-center overflow-visible relative">
                                         <feature.Icon width={48} height={48} />
                                     </div>
                                     <h3 className="font-semibold text-white text-xs text-center leading-tight">

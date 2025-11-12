@@ -1,3 +1,5 @@
+import { ExerciseItem } from 'exercises/types/exercises';
+
 interface StudentLearningProgress {
     course_slug: string;
     chapter_id: string;
@@ -311,7 +313,7 @@ export interface MajorFlashcardsResponse {
     data: MajorFlashcardItem[];
 }
 
-export interface MajorQuizItem {
+export interface MajorQuizItem extends ExerciseItem {
     id: string;
     slug: string;
     title: string;

@@ -425,7 +425,14 @@ const PrivateDashboardContent = (): JSX.Element => {
             progress: item.progress ?? undefined,
             status: item.status ?? undefined,
             progress_percentage: item.progress_percentage ?? undefined,
-            is_free: item.is_free ?? undefined
+            is_free: item.is_free ?? undefined,
+            duration: item.duration ?? undefined,
+            score: item.score ?? undefined,
+            type: item.type ?? undefined,
+            exercise_code: item.exercise_code ?? undefined,
+            tryout_type: item.tryout_type ?? undefined,
+            university_name: item.university_name ?? undefined,
+            university_color: item.university_color ?? undefined
         };
 
         return (

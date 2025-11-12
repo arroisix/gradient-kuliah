@@ -74,7 +74,7 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
 
     const getExerciseColorResult = (): string => {
         if (exercise.score === undefined || exercise.score === null) {
-            return '#FFFFFF'; // Default color if score is not available
+            return 'transparent'; // Default color if score is not available
         }
         if (exercise?.score >= 75) {
             return '#43B75D'; // Green for passing score
@@ -130,22 +130,29 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
     const renderMetadata = (): JSX.Element => {
         return (
             <div className="flex items-center gap-3">
-                <span className="flex items-center gap-1 flex-col py-3 flex-1 rounded-lg bg-violet-3">
-                    <Pencil />
-                    <span className="text-xs text-graphite-400">UAS</span>
-                </span>
+                {exercise.tryout_type && (
+                    <span className="flex items-center gap-1 flex-col py-3 flex-1 rounded-lg bg-violet-3">
+                        <Pencil />
+                        <span className="text-xs text-graphite-400">
+                            {exercise.tryout_type}
+                        </span>
+                    </span>
+                )}
                 <span className="flex items-center gap-1 flex-col py-3 flex-1 rounded-lg bg-violet-3">
                     <List />
                     <span className="text-xs text-graphite-400">
                         {exercise.total_questions} Soal
                     </span>
                 </span>
-                <span className="flex items-center gap-1 flex-col py-3 flex-1 rounded-lg bg-violet-3">
-                    <Clock size={14} color="#7D89CC" />
-                    <span className="text-xs text-graphite-400">
-                        {exercise.duration} Menit
+                {(exercise?.duration as number) > 0 && (
+                    <span className="flex items-center gap-1 flex-col py-3 flex-1 rounded-lg bg-violet-3">
+                        <Clock size={14} color="#7D89CC" />
+                        <span className="text-xs text-graphite-400">
+                            {((exercise?.duration as number) / 60).toFixed(0)}{' '}
+                            Menit
+                        </span>
                     </span>
-                </span>
+                )}
             </div>
         );
     };
