@@ -2,8 +2,7 @@ import { cn } from 'commons/utils';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState, useEffect } from 'react';
-import { IoClose } from 'react-icons/io5';
+import React, { useState } from 'react';
 import { useGetConfigQuery } from 'commons/redux/api/commonApi';
 import { useTracker } from 'tracker/tracker';
 import PencilOnLineIcon from '../../elements/Icons/PencilLine';
@@ -35,23 +34,10 @@ const APPBAR_NAV: AppbarNav[] = [
         label: 'Kelas'
     },
     {
-        icon: <DiskusiIcon />,
-        iconAlt: <CopilotIconLine />,
-        href: '/komunitas',
-        isExpandable: true,
-        expandedLinks: [
-            {
-                href: '/komunitas',
-                label: 'Diskusi',
-                icon: <DiskusiIcon />
-            },
-            {
-                href: '/copilot',
-                label: 'Copilot AI',
-                icon: <CopilotIconLine />
-            }
-        ],
-        label: 'Diskusi & AI'
+        icon: <CopilotIconLine />,
+        href: '/copilot',
+        label: 'Copilot AI',
+        isExpandable: true
     },
     {
         icon: <BookStackIcon size={20} />,
@@ -69,9 +55,6 @@ const Appbar = (): JSX.Element | null => {
     const router = useRouter();
     const { is_subscribed } = useCourseSubscription();
     const [showExpanded, setShowExpanded] = useState(false);
-    const [currentIcon, setCurrentIcon] = useState<'diskusi' | 'copilot'>(
-        'diskusi'
-    );
     const { data: configData } = useGetConfigQuery();
     const tracker = useTracker();
 
@@ -80,24 +63,12 @@ const Appbar = (): JSX.Element | null => {
         DISPLAYED_ROUTES.includes(router.pathname) ||
         router.pathname.startsWith('/copilot');
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentIcon((prev) =>
-                prev === 'diskusi' ? 'copilot' : 'diskusi'
-            );
-        }, 3000);
-
-        return () => clearInterval(interval);
-    }, []);
-
     const handleDiscussionClick = (e: React.MouseEvent, menu: AppbarNav) => {
         if (
             menu.isExpandable &&
             configData?.configs.is_copilot_config_enabled
         ) {
-            e.preventDefault();
             tracker?.genericTrack('Click Diskusi & AI Purple CTA');
-            setShowExpanded(!showExpanded);
         }
     };
 
@@ -106,15 +77,7 @@ const Appbar = (): JSX.Element | null => {
             return (
                 <div className="relative">
                     <div className="absolute inset-0 w-12 h-12 bg-[#5F2BCE] rounded-full -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2" />
-                    <div className="text-white relative z-10">
-                        {showExpanded ? (
-                            <IoClose size={20} className="text-white" />
-                        ) : currentIcon === 'diskusi' ? (
-                            menu.icon
-                        ) : (
-                            menu.iconAlt
-                        )}
-                    </div>
+                    <div className="text-white relative z-10">{menu.icon}</div>
                 </div>
             );
         }

@@ -199,7 +199,17 @@ const KomunitasContainer = ({
                             />
                         ) : (
                             <CommunityBanner
-                                askNow={() => setShowForm((prev) => !prev)}
+                                askNow={() =>
+                                    toast.info(
+                                        'Mohon maaf fitur Diskusi sudah tidak tersedia untuk saat ini, silahkan beralih menggunakan fitur Copilot AI ya!',
+                                        {
+                                            position: 'top-center',
+                                            theme: 'colored',
+                                            hideProgressBar: true,
+                                            toastId: 'DISKUSI_DEPRECATED'
+                                        }
+                                    )
+                                }
                             />
                         )}
                     </div>

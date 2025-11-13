@@ -1,6 +1,6 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { IoClose } from 'react-icons/io5';
+import { IoClose, IoChevronForward, IoChevronBack } from 'react-icons/io5';
 import Link from 'next/link';
 import KelasIcon from '../assets/KelasIcon';
 import PerpusIcon from '../assets/PerpusIcon';
@@ -12,7 +12,6 @@ import FlashcardLargeIcon from 'dashboard/assets/FlashcardLargeIcon';
 import FlashcardIcon from 'dashboard/assets/FlashcardIcon';
 import FlashcardIconFull from 'dashboard/assets/FlashcardIconFull';
 import CopilotAIIconFull from 'dashboard/assets/CopilotAIIconFull';
-import DiskusiIconNew from 'dashboard/assets/DiskusiIconNew';
 
 type Feature = {
     id: string;
@@ -21,16 +20,39 @@ type Feature = {
     Icon: React.FC<{ width?: number; height?: number; isSmall?: boolean }>;
     url: string;
     isNew?: boolean;
+    gradient?: string;
 };
 
 const DashboardFeatures = (): JSX.Element => {
     const [isOpen, setIsOpen] = useState(false);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [slideDirection, setSlideDirection] = useState<
+        'left' | 'right' | null
+    >(null);
     const tracker = useTracker();
+    const touchStartX = useRef<number>(0);
+    const touchEndX = useRef<number>(0);
 
     const cardBaseClasses =
         'relative group rounded-xl transition-colors md:bg-[#1D1D1D] md:hover:bg-neutral-800 min-h-[96px]';
 
     const features: Feature[] = [
+        {
+            id: 'kelas',
+            title: 'Kelas',
+            description: 'Video materi dari dosen',
+            Icon: () => <KelasIcon width={64} height={69} />,
+            url: '/kelas',
+            gradient: 'from-emerald-600 to-emerald-400'
+        },
+        {
+            id: 'kuis',
+            title: 'Kuis',
+            description: 'Uji kemampuanmu sekarang',
+            Icon: () => <KuisIcon width={64} height={69} />,
+            url: '/latihan',
+            gradient: 'from-purple-600 to-purple-400'
+        },
         {
             id: 'copilot',
             title: 'Copilot AI',
@@ -41,8 +63,28 @@ const DashboardFeatures = (): JSX.Element => {
                 ) : (
                     <CopilotAIIconFull width={64} height={69} />
                 ),
-            url: '/copilot'
+            url: '/copilot',
+            gradient: 'from-blue-600 to-indigo-500'
         },
+        {
+            id: 'perpus',
+            title: 'Perpustakaan',
+            description: 'Text book, rangkuman, bank soal',
+            Icon: () => <PerpusIcon width={64} height={69} />,
+            url: '/perpustakaan',
+            gradient: 'from-red-500 to-orange-400'
+        },
+        {
+            id: 'lainnya',
+            title: 'Lainnya',
+            description: '',
+            Icon: LainnyaIcon,
+            url: '#',
+            gradient: 'from-neutral-700 to-neutral-600'
+        }
+    ];
+
+    const moreFeatures: Feature[] = [
         {
             id: 'flashcard',
             title: 'Flashcard',
@@ -53,55 +95,203 @@ const DashboardFeatures = (): JSX.Element => {
                 ) : (
                     <FlashcardIconFull width={48} height={48} />
                 ),
-            url: '/flashcards'
-        },
-        {
-            id: 'kelas',
-            title: 'Kelas',
-            description: 'Video materi dari dosen',
-            Icon: () => <KelasIcon width={64} height={69} />,
-            url: '/kelas'
-        },
-        {
-            id: 'perpus',
-            title: 'Perpustakaan',
-            description: 'Text book, rangkuman, bank soal',
-            Icon: () => <PerpusIcon width={64} height={69} />,
-            url: '/perpustakaan'
-        },
-        {
-            id: 'kuis',
-            title: 'Kuis',
-            description: 'Uji kemampuanmu sekarang',
-            Icon: () => <KuisIcon width={64} height={69} />,
-            url: '/latihan'
-        },
-        {
-            id: 'lainnya',
-            title: 'Lainnya',
-            description: '',
-            Icon: LainnyaIcon,
-            url: '#'
+            url: '/flashcards',
+            gradient: 'from-orange-500 to-pink-500'
         }
     ];
 
-    const moreFeatures: Feature[] = [
-        {
-            id: 'diskusi',
-            title: 'Diskusi',
-            description: 'Tanya ke tutor atau user lain',
-            Icon: () => <DiskusiIconNew width={64} height={69} />,
-            url: '/komunitas'
-        }
+    const ITEMS_PER_PAGE = 4;
+    const allMobileFeatures: (
+        | Feature
+        | {
+              id: string;
+              title: string;
+              url: string;
+              Icon: typeof LainnyaIcon;
+              isNew?: boolean;
+          }
+    )[] = [
+        ...features.filter((f) => f.id !== 'lainnya'),
+        ...moreFeatures,
+        { id: 'lainnya', title: 'Lainnya', url: '#', Icon: LainnyaIcon }
     ];
+    const totalPages = Math.ceil(allMobileFeatures.length / ITEMS_PER_PAGE);
+
+    const currentPageItems = allMobileFeatures.slice(
+        currentPage * ITEMS_PER_PAGE,
+        (currentPage + 1) * ITEMS_PER_PAGE
+    );
+
+    const nextPage = () => {
+        if (currentPage < totalPages - 1) {
+            setSlideDirection('left');
+            setTimeout(() => {
+                setCurrentPage(currentPage + 1);
+                setSlideDirection(null);
+            }, 300);
+        }
+    };
+
+    const prevPage = () => {
+        if (currentPage > 0) {
+            setSlideDirection('right');
+            setTimeout(() => {
+                setCurrentPage(currentPage - 1);
+                setSlideDirection(null);
+            }, 300);
+        }
+    };
+
+    const goToPage = (page: number) => {
+        if (page > currentPage) {
+            setSlideDirection('left');
+        } else if (page < currentPage) {
+            setSlideDirection('right');
+        }
+        setTimeout(() => {
+            setCurrentPage(page);
+            setSlideDirection(null);
+        }, 300);
+    };
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+        touchStartX.current = e.touches[0].clientX;
+    };
+
+    const handleTouchMove = (e: React.TouchEvent) => {
+        touchEndX.current = e.touches[0].clientX;
+    };
+
+    const handleTouchEnd = () => {
+        if (!touchStartX.current || !touchEndX.current) return;
+
+        const distance = touchStartX.current - touchEndX.current;
+        const minSwipeDistance = 50; // Minimum distance for a swipe
+
+        if (Math.abs(distance) > minSwipeDistance) {
+            if (distance > 0) {
+                nextPage();
+            } else {
+                prevPage();
+            }
+        }
+
+        // Reset values
+        touchStartX.current = 0;
+        touchEndX.current = 0;
+    };
 
     return (
         <div className="w-full mx-auto space-y-4 mb-4">
+            <div className="lg:hidden relative">
+                {currentPage > 0 && (
+                    <button
+                        onClick={prevPage}
+                        className="absolute left-0 bottom-1/2 z-10 w-7 h-7 bg-neutral-800/90 backdrop-blur-sm rounded-full flex items-center justify-center text-white shadow-lg"
+                        aria-label="Previous">
+                        <IoChevronBack size={16} />
+                    </button>
+                )}
+
+                <div
+                    className="px-6 overflow-hidden"
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}>
+                    <div
+                        className={`grid grid-cols-4 gap-4 transition-all duration-300 ease-in-out ${
+                            slideDirection === 'left'
+                                ? 'opacity-0 -translate-x-8'
+                                : slideDirection === 'right'
+                                ? 'opacity-0 translate-x-8'
+                                : 'opacity-100 translate-x-0'
+                        }`}>
+                        {currentPageItems.map((feature) => {
+                            const isLainnya = feature.id === 'lainnya';
+
+                            if (isLainnya) {
+                                return (
+                                    <button
+                                        key={feature.id}
+                                        onClick={() => {
+                                            setIsOpen(true);
+                                            tracker?.genericTrack(
+                                                'Click More Features Dashboard Card'
+                                            );
+                                        }}
+                                        className="flex flex-col items-center gap-3">
+                                        <div className="w-[48px] h-[48px]  aspect-square rounded-full bg-[#2C2E3A] flex items-center justify-center">
+                                            <LainnyaIcon
+                                                width={48}
+                                                height={48}
+                                            />
+                                        </div>
+                                        <h3 className="font-semibold text-white text-xs text-center leading-tight">
+                                            Lainnya
+                                        </h3>
+                                    </button>
+                                );
+                            }
+
+                            return (
+                                <Link
+                                    key={feature.id}
+                                    href={feature.url}
+                                    onClick={() =>
+                                        tracker?.genericTrack(
+                                            `Click ${feature.title} Dashboard Card`
+                                        )
+                                    }
+                                    className="flex flex-col items-center gap-3 relative">
+                                    {feature.isNew && (
+                                        <span className="absolute -top-1 -right-1 py-0.5 px-1.5 text-[8px] font-semibold rounded-full bg-gradient-to-r from-[#741F86] to-[#965084] via-[#A82C56] z-10">
+                                            Baru
+                                        </span>
+                                    )}
+                                    <div className="w-[48px] h-[48px] aspect-square rounded-full bg-[#2C2E3A] flex items-center justify-center">
+                                        <feature.Icon width={48} height={48} />
+                                    </div>
+                                    <h3 className="font-semibold text-white text-xs text-center leading-tight">
+                                        {feature.title}
+                                    </h3>
+                                </Link>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                {currentPage < totalPages - 1 && (
+                    <button
+                        onClick={nextPage}
+                        className="absolute right-0 bottom-1/2 z-10 w-7 h-7 bg-neutral-800/90 backdrop-blur-sm rounded-full flex items-center justify-center text-white shadow-lg"
+                        aria-label="Next">
+                        <IoChevronForward size={16} />
+                    </button>
+                )}
+
+                {totalPages > 1 && (
+                    <div className="flex justify-center gap-2 mt-4">
+                        {Array.from({ length: totalPages }).map((_, index) => (
+                            <button
+                                key={index}
+                                onClick={() => goToPage(index)}
+                                className={`h-2 rounded-full transition-all ${
+                                    index === currentPage
+                                        ? 'w-6 bg-purple-500'
+                                        : 'w-2 bg-neutral-600'
+                                }`}
+                                aria-label={`Go to page ${index + 1}`}
+                            />
+                        ))}
+                    </div>
+                )}
+            </div>
+
+            {/* Desktop Grid View */}
             <div
                 className="
-                grid grid-cols-3
-                xl:grid-cols-[repeat(5,1fr)_auto]
-                gap-4 xl:gap-2
+                hidden lg:grid lg:grid-cols-[repeat(5,1fr)_auto]
+                gap-4 lg:gap-2
             ">
                 {features
                     .filter((f) => f.id !== 'lainnya')
@@ -181,28 +371,6 @@ const DashboardFeatures = (): JSX.Element => {
                         </Link>
                     ))}
 
-                {/* Additional features shown inline below xl (merged list) */}
-                {moreFeatures.map((feature) => (
-                    <Link
-                        key={feature.id}
-                        href={feature.url}
-                        onClick={() =>
-                            tracker?.genericTrack(
-                                `Click ${feature.title} Dashboard Card`
-                            )
-                        }
-                        className={`${cardBaseClasses} flex flex-col items-center text-center gap-2 px-4 py-3 xl:hidden`}>
-                        <div className="relative w-14 h-14 rounded-full bg-[#1D1D1D] flex items-center justify-center">
-                            <feature.Icon />
-                        </div>
-                        <div className="flex flex-col items-center">
-                            <h3 className="font-bold text-white text-xs">
-                                {feature.title}
-                            </h3>
-                        </div>
-                    </Link>
-                ))}
-
                 {/* 'Lainnya' trigger only on xl (no custom narrow width anymore) */}
                 {features
                     .filter((f) => f.id === 'lainnya')
@@ -215,7 +383,7 @@ const DashboardFeatures = (): JSX.Element => {
                                     'Click More Features Dashboard Card'
                                 );
                             }}
-                            className={`${cardBaseClasses} hidden xl:flex flex-col items-center justify-center text-center gap-2 px-4 py-3 focus:outline-none`}>
+                            className={`${cardBaseClasses} hidden lg:flex flex-col items-center justify-center text-center gap-2 px-4 py-3 focus:outline-none`}>
                             <div className="relative w-14 h-14 rounded-full bg-[#1D1D1D] flex items-center justify-center">
                                 <feature.Icon width={28} height={28} />
                             </div>
