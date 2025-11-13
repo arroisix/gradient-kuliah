@@ -26,7 +26,6 @@ const FilterEntrypoint = (): JSX.Element => {
     useEffect(() => {
         // Add any side effects or logic here if needed
         if (universityData?.default_value) {
-            console.log('Default university:', universityData.default_value);
             router.push(
                 {
                     query: {
