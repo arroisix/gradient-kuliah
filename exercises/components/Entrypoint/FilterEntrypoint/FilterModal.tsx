@@ -145,8 +145,8 @@ const FilterModal = ({
     const handleReset = () => {
         setTempCourse('');
         setTempUniversity('');
-        setTempStatus('all');
-        setTempType('all');
+        setTempStatus('');
+        setTempType('');
         setSearchQueries({
             'Mata Kuliah': '',
             Universitas: '',
