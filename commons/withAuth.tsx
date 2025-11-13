@@ -68,7 +68,8 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
                         '/transaksi',
                         '/pembayaran',
                         '/checkout',
-                        '/referral'
+                        '/referral',
+                        '/latihan'
                     ].some((value) => router.pathname.includes(value)) &&
                     !is_subscribed
                 ) {
