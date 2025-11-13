@@ -6,7 +6,7 @@ import {
     useGetUniversitiesWithExerciseQuery
 } from 'exercises/redux/api/exercisesApi';
 import { useRouter } from 'next/router';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import FilterModal from './FilterModal';
 
 const FilterEntrypoint = (): JSX.Element => {
@@ -22,6 +22,23 @@ const FilterEntrypoint = (): JSX.Element => {
 
     const { data: courseData } = useGetCoursesWithExerciseQuery();
     const { data: universityData } = useGetUniversitiesWithExerciseQuery();
+
+    useEffect(() => {
+        // Add any side effects or logic here if needed
+        if (universityData?.default_value) {
+            console.log('Default university:', universityData.default_value);
+            router.push(
+                {
+                    query: {
+                        ...router.query,
+                        university_name: universityData.default_value
+                    }
+                },
+                undefined,
+                { shallow: true }
+            );
+        }
+    }, [universityData]);
 
     const handleCourseChange = (newCourseId: string): void => {
         router.push(

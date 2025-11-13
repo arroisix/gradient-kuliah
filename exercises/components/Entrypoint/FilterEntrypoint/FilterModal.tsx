@@ -303,7 +303,7 @@ const FilterModal = ({
 
                                 {/* Accordion Content */}
                                 {isExpanded && (
-                                    <div className="space-y-3 bg-[#20222E]">
+                                    <div className="space-y-3 bg-[#20222E] py-4">
                                         {/* Search Bar */}
                                         {showSearchBar && (
                                             <div className="relative">
