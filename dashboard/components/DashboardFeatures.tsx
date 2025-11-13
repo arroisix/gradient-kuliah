@@ -222,8 +222,8 @@ const DashboardFeatures = (): JSX.Element => {
                                         className="flex flex-col items-center gap-3">
                                         <div className="w-[48px] h-[48px]  aspect-square rounded-full bg-[#2C2E3A] flex items-center justify-center">
                                             <LainnyaIcon
-                                                width={48}
-                                                height={48}
+                                                width={24}
+                                                height={24}
                                             />
                                         </div>
                                         <h3 className="font-semibold text-white text-xs text-center leading-tight">
