@@ -47,7 +47,7 @@ const DashboardFeatures = (): JSX.Element => {
         },
         {
             id: 'kuis',
-            title: 'Kuis',
+            title: 'Try Out',
             description: 'Uji kemampuanmu sekarang',
             Icon: () => <DashboardQuizIcon />,
             url: '/latihan',

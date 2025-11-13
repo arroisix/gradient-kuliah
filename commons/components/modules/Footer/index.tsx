@@ -66,6 +66,14 @@ const ITEMS: FooterItemProps[] = [
                 url: '/kelas'
             },
             {
+                content: 'Try Out',
+                url: '/latihan'
+            },
+            {
+                content: 'Copilot AI',
+                url: '/copilot'
+            },
+            {
                 content: 'Textbook Solution',
                 url: '/perpustakaan/textbook'
             },
@@ -78,20 +86,8 @@ const ITEMS: FooterItemProps[] = [
                 url: '/perpustakaan/bank-soal'
             },
             {
-                content: 'Copilot AI',
-                url: '/copilot'
-            },
-            {
                 content: 'Flashcard',
                 url: '/flashcards'
-            },
-            {
-                content: 'Quiz',
-                url: '/latihan'
-            },
-            {
-                content: 'Diskusi',
-                url: '/komunitas'
             }
         ]
     }
