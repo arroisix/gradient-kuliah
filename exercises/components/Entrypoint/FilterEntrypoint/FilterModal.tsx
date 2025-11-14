@@ -85,14 +85,14 @@ const FilterModal = ({
                 return universityOptions;
             case 'Status Pengerjaan':
                 return [
-                    { value: 'all', label: 'Semua' },
+                    { value: '', label: 'Semua' },
                     { value: 'not_started', label: 'Belum Dikerjakan' },
                     { value: 'in_progress', label: 'Sedang Dikerjakan' },
                     { value: 'completed', label: 'Selesai' }
                 ];
             case 'Tipe':
                 return [
-                    { value: 'all', label: 'Semua Tipe' },
+                    { value: '', label: 'Semua Tipe' },
                     { value: 'EXERCISE', label: 'Latihan' },
                     { value: 'TRYOUT', label: 'Try Out' }
                 ];
@@ -173,6 +173,9 @@ const FilterModal = ({
         });
         onClose();
     };
+
+    const isApplyDisabled =
+        !tempCourse && !tempUniversity && !tempStatus && !tempType;
 
     return (
         <Modal
@@ -395,6 +398,7 @@ const FilterModal = ({
                         Reset
                     </Button>
                     <Button
+                        disabled={isApplyDisabled}
                         onClick={handleApply}
                         variant="primary"
                         className="w-full md:w-auto">

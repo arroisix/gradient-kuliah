@@ -10,7 +10,10 @@ const BUTTON_THEME: { [key: string]: string } = {
     secondary: 'bg-neutral-800 rounded-full text-white font-body',
     tertiary: 'text-[#B6A6F3] font-semibold hover:bg-graphite-900 rounded',
     neutral: 'bg-neutral-700 rounded-full text-white',
-    disabled: 'bg-neutral-400 text-neutral-300 rounded-full font-body',
+    disabledPrimary:
+        'bg-accent-purple/50 text-white/50 rounded-full font-body cursor-not-allowed',
+    disabled:
+        'bg-neutral-400 text-neutral-300 rounded-full font-body cursor-not-allowed',
     custom: 'rounded-full font-body'
 };
 
@@ -56,7 +59,11 @@ const Button = ({
         return cn(
             styling,
             className,
-            disabled ? BUTTON_THEME['disabled'] : BUTTON_THEME[variant],
+            disabled
+                ? variant === 'primary'
+                    ? BUTTON_THEME['disabledPrimary']
+                    : BUTTON_THEME['disabled']
+                : BUTTON_THEME[variant],
             size ? BUTTON_SIZE[size] : BUTTON_SIZE['normal']
         );
     };

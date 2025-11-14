@@ -8,6 +8,7 @@ import {
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import FilterModal from './FilterModal';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 
 const FilterEntrypoint = (): JSX.Element => {
     const router = useRouter();
@@ -19,6 +20,7 @@ const FilterEntrypoint = (): JSX.Element => {
     } = router.query;
 
     const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+    const { isMobileBreakpoints } = useWindowBreakpoints();
 
     const { data: courseData } = useGetCoursesWithExerciseQuery();
     const { data: universityData } = useGetUniversitiesWithExerciseQuery();
@@ -116,7 +118,11 @@ const FilterEntrypoint = (): JSX.Element => {
             <h2 className="text-sm font-normal">
                 Pilih mata kuliah dan kampus :
             </h2>
-            <div className="flex gap-4 items-center justify-center md:justify-start w-full md:w-auto">
+            <div
+                className={cn(
+                    'flex gap-4 items-center justify-start w-full md:w-auto',
+                    isMobileBreakpoints ? 'overflow-x-auto' : ''
+                )}>
                 <Filter
                     key={'courses'}
                     options={courseFilterOptions}

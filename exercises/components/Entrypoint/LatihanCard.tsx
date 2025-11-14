@@ -185,12 +185,19 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
     const renderNotStarted = (): JSX.Element => {
         return (
             <div className="items-end mt-4 flex w-full h-full">
-                <div className="space-y-2 mt-4 flex flex-row items-center gap-6 w-full">
-                    {renderProgressBar(0, 'IN_PROGRESS')}
+                <div
+                    className={cn(
+                        'space-y-2 mt-4 flex flex-row items-center gap-6 w-full',
+                        isAuthenticated ? '' : 'justify-end'
+                    )}>
+                    {isAuthenticated && renderProgressBar(0, 'IN_PROGRESS')}
                     <Button
                         variant="primary"
                         size="small"
-                        className="!px-6 !py-2 !text-sm !font-semibold">
+                        className={cn(
+                            '!px-6 !py-2 !text-sm !font-semibold',
+                            isAuthenticated ? '' : 'w-full'
+                        )}>
                         Mulai
                     </Button>
                 </div>
