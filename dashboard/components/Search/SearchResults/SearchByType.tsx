@@ -29,7 +29,7 @@ const SearchByType = (): JSX.Element => {
         <div className="flex-1 dropdown md:flex-none min-w-max">
             <button
                 tabIndex={0}
-                className="flex justify-between items-center gap-2 text-xs font-bold w-full md:w-52 pl-5 pr-3 py-3 bg-[#2C2C2C] rounded-full"
+                className="flex justify-between items-center gap-2 text-xs font-bold w-full md:w-52 pl-5 pr-3 py-3 bg-[#20222E] rounded-full"
                 aria-hidden>
                 <span className="overflow-hidden whitespace-nowrap text-ellipsis">
                     {selected?.label}
@@ -40,7 +40,7 @@ const SearchByType = (): JSX.Element => {
                 tabIndex={0}
                 role="menu"
                 className={cn(
-                    'dropdown-content menu overflow-clip mt-1 [&_li>*]:rounded-none w-full p-0 md:w-max md:min-w-52 bg-[#2C2C2C] text-xs rounded-lg z-10 divide-y divide-[#373737]'
+                    'dropdown-content menu overflow-clip mt-1 [&_li>*]:rounded-none w-full p-0 md:w-max md:min-w-52 bg-[#20222E] text-xs rounded-lg z-10 divide-y divide-[#373737]'
                 )}>
                 {TYPE_OPTIONS.map(({ value, label }) => (
                     <li key={value}>

@@ -95,7 +95,7 @@ const EditCardModal: React.FC<EditCardModalProps> = ({
             <div className="flex flex-col space-y-4 pb-4 items-stretch">
                 <h1 className="font-bold self-start">Rename</h1>
                 <div
-                    className={`flex flex-col items-stretch bg-[#2C2C2C] border rounded-lg ${
+                    className={`flex flex-col items-stretch bg-[#20222E] border rounded-lg ${
                         error ? 'border-red-500' : 'border-[#333333]'
                     }`}>
                     <textarea

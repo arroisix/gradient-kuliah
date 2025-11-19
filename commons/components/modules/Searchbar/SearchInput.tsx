@@ -57,7 +57,7 @@ const SearchInput = ({
             }}>
             <>
                 <Form className={cn('peer dropdown w-full', className)}>
-                    <label className="flex items-center w-full gap-2 rounded-full input input-sm bg-[#2C2C2C] text-graphite-400">
+                    <label className="flex items-center w-full gap-2 rounded-full input input-sm bg-[#20222E] text-graphite-400">
                         <BiSearch size={20} />
                         <Field name="q">
                             {({ field }: FieldProps<string>) => (

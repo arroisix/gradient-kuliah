@@ -1,3 +1,5 @@
+import { ExerciseItem } from 'exercises/types/exercises';
+
 interface StudentLearningProgress {
     course_slug: string;
     chapter_id: string;
@@ -129,9 +131,12 @@ export interface Banner {
     is_asset: boolean;
     banner_url: string | null;
     banner_url_mobile: string | null;
+    banner_border_color: string | null;
     title_text: string | null;
     body_text: string | null;
     button_text: string | null;
+    button_text_color: string | null;
+    button_background_color: string | null;
     image_url: string | null;
     background_color: string | null;
 }
@@ -308,7 +313,7 @@ export interface MajorFlashcardsResponse {
     data: MajorFlashcardItem[];
 }
 
-export interface MajorQuizItem {
+export interface MajorQuizItem extends ExerciseItem {
     id: string;
     slug: string;
     title: string;

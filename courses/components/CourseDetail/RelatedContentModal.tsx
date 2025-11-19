@@ -58,13 +58,13 @@ const RelatedContentModal = ({
                             Konten Terkait
                         </h3>
                         {bukuCount > 0 && (
-                            <span className="flex items-center gap-1 px-3 py-1 rounded-md bg-[#2C2C2C] text-xs font-medium text-neutral-300">
+                            <span className="flex items-center gap-1 px-3 py-1 rounded-md bg-[#20222E] text-xs font-medium text-neutral-300">
                                 <HiOutlineBookOpen size={14} />
                                 {bukuCount} Buku
                             </span>
                         )}
                         {kuisCount > 0 && (
-                            <span className="flex items-center gap-1 px-3 py-1 rounded-md bg-[#2C2C2C] text-xs font-medium text-neutral-300">
+                            <span className="flex items-center gap-1 px-3 py-1 rounded-md bg-[#20222E] text-xs font-medium text-neutral-300">
                                 <HiOutlinePencilAlt size={14} />
                                 {kuisCount} Kuis
                             </span>

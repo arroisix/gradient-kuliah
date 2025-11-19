@@ -70,9 +70,13 @@ export const dashboardApi = baseApi.injectEndpoints({
             invalidatesTags: [{ type: 'PROFILE', id: 'DASHBOARD' }]
         }),
 
-        getBanner: builder.query<BannerResponse, void>({
-            query: () => ({
-                url: `${LEARNING_V2_BASE_URL}dashboard/banner/`
+        getBanner: builder.query<
+            BannerResponse,
+            { type: 'campaign' | 'general' }
+        >({
+            query: ({ type }) => ({
+                url: `${LEARNING_V2_BASE_URL}dashboard/banner/`,
+                params: { type }
             }),
             providesTags: [{ type: 'PROFILE', id: 'BANNER' }]
         }),

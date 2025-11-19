@@ -62,7 +62,7 @@ const FlashcardSearchResultCard = ({
                         className="w-full h-full object-cover md:rounded-l-lg"
                     />
                 ) : (
-                    <div className="w-full h-full bg-[#2C2C2C] md:rounded-l-lg flex items-center justify-center">
+                    <div className="w-full h-full bg-[#20222E] md:rounded-l-lg flex items-center justify-center">
                         <FlashcardLargeIcon />
                     </div>
                 )}

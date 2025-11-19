@@ -33,7 +33,7 @@ const ConfirmAddCardModal = ({
             <div className="flex flex-col items-center space-y-4">
                 <CreditCardStackIcon className="mb-2" />
 
-                <div className="flex gap-3 bg-[#2C2C2C] p-3 rounded-lg items-center">
+                <div className="flex gap-3 bg-[#20222E] p-3 rounded-lg items-center">
                     <div className="w-8 h-8 rounded-full bg-[#00AA99]/15 flex items-center justify-center shrink-0">
                         <CreditCardSmallIcon />
                     </div>
@@ -49,7 +49,7 @@ const ConfirmAddCardModal = ({
                     </div>
                 </div>
 
-                <div className="flex gap-3 bg-[#2C2C2C] p-3 rounded-lg items-center">
+                <div className="flex gap-3 bg-[#20222E] p-3 rounded-lg items-center">
                     <div className="w-8 h-8 rounded-full bg-[#F505A1]/15 flex items-center justify-center shrink-0">
                         <CreditCardCVVSmallIcon />
                     </div>

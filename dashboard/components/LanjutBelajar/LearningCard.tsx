@@ -33,7 +33,7 @@ const LearningCard: React.FC<LearningCardProps> = ({ card, onClick }) => {
     return (
         <Link
             href={card.href}
-            className="block relative rounded-lg bg-[#2C2C2C] hover:bg-neutral-700 transition-colors overflow-hidden h-full min-h-[165px] border border-[#666666] border-opacity-50"
+            className="block relative rounded-lg bg-[#20222E] hover:bg-neutral-700 transition-colors overflow-hidden h-full min-h-[165px] border border-[#666666] border-opacity-50"
             onClick={() => onClick(card)}>
             <div className="flex h-full">
                 <div

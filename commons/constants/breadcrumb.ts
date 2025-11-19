@@ -126,7 +126,7 @@ export const BREADCRUMB: BreadcrumbProps = {
         name: 'Hasil pencarian untuk'
     },
     '/latihan': {
-        name: 'Latihan'
+        name: 'Try Out'
     },
     '/testimonial': {
         name: 'Testimonial'

@@ -16,7 +16,7 @@ const SearchBar = (): JSX.Element => {
             <div>
                 <button
                     onClick={() => toggleActive((prev) => !prev)}
-                    className="flex items-center w-full gap-2 rounded-full input input-sm bg-[#2C2C2C] text-graphite-400 text-sm">
+                    className="flex items-center w-full gap-2 rounded-full input input-sm bg-[#20222E] text-graphite-400 text-sm">
                     <BiSearch size={20} />
                     <span className="text-left line-clamp-1">
                         {isAuthenticated

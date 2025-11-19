@@ -46,8 +46,8 @@ const APPBAR_NAV: AppbarNav[] = [
     },
     {
         icon: <PencilOnLineIcon size={20} />,
-        href: '/alat-belajar',
-        label: 'Alat Belajar'
+        href: '/latihan',
+        label: 'Try Out'
     }
 ];
 

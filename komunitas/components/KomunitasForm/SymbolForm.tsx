@@ -37,7 +37,7 @@ const SymbolForm = ({
                 onChange={handleSymbolTypeChange}
                 name="symbol-type"
                 id="symbol-type"
-                className="bg-[#2C2C2C] font-bold text-xs text-neutral-400 rounded-[70px] py-2 px-[18px] cursor-pointer border-none focus:outline-none focus:ring-0 focus:appearance-none">
+                className="bg-[#20222E] font-bold text-xs text-neutral-400 rounded-[70px] py-2 px-[18px] cursor-pointer border-none focus:outline-none focus:ring-0 focus:appearance-none">
                 {SYMBOL_OPTIONS.map((option) => (
                     <option key={option.key} value={option.key}>
                         {option.name}
@@ -48,7 +48,7 @@ const SymbolForm = ({
                 {SYMBOL[symbolType].map(({ display, value }, index) => (
                     <div
                         key={index}
-                        className="hover:bg-[#2C2C2C] cursor-pointer py-2 px-4 rounded-lg text-lg"
+                        className="hover:bg-[#20222E] cursor-pointer py-2 px-4 rounded-lg text-lg"
                         onClick={() => onClickSymbol(value)}
                         aria-hidden>
                         {display}

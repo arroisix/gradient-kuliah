@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import AnnouncementModal from 'dashboard/components/Announcement/AnnouncementModal';
 import { useGetAnnouncementsQuery } from 'dashboard/redux/api/dashboardApi';
+import DashboardUpdatesBanner from 'dashboard/components/DashboardBanner';
 
 const DashboardContainer = (): JSX.Element => {
     const router = useRouter();
@@ -40,6 +41,7 @@ const DashboardContainer = (): JSX.Element => {
 
     return (
         <section className="flex flex-col w-full gap-6 pb-4 mx-auto sm:overflow-x-clip md:overflow-x-visible max-w-screen-2xl">
+            <DashboardUpdatesBanner bannerType="campaign" />
             <SearchSection />
             <DashboardFeatures />
             {isAuthenticated && <LanjutBelajarSection />}

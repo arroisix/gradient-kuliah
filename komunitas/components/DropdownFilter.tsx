@@ -13,7 +13,7 @@ const DropdownFilter = ({
 
     return (
         <select
-            className={`w-1/2 md:w-fit pl-[18px] pr-[50px] border-none bg-[#2C2C2C] rounded-[70px] text-xs font-bold cursor-pointer focus:outline-none focus:ring-0 focus:appearance-none`}
+            className={`w-1/2 md:w-fit pl-[18px] pr-[50px] border-none bg-[#20222E] rounded-[70px] text-xs font-bold cursor-pointer focus:outline-none focus:ring-0 focus:appearance-none`}
             onChange={onChange}
             value={category}
             name={'name'}>
