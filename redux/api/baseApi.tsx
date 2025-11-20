@@ -137,7 +137,8 @@ export const baseApi = createApi({
         'BANKSOAL_PROBLEMS',
         'CONTENT_SEARCH',
         'USER_CARDS',
-        'ANNOUNCEMENTS'
+        'ANNOUNCEMENTS',
+        'EXERCISES'
     ],
     baseQuery: fetchBaseQuery({
         baseUrl: config.API_BASE_URL,

@@ -3,6 +3,7 @@ import {
     AstronotesExercise,
     CourseFilter,
     Exercise,
+    ExerciseDetail,
     ExerciseHistory,
     ExerciseLandingPage,
     ExerciseLandingPageV2,
@@ -12,6 +13,8 @@ import {
     ExerciseProblemSolution,
     ExerciseProgress,
     ExerciseReportSummary,
+    ProblemInProblemSet,
+    ProblemNavigationItem,
     ProblemSetDetail
 } from '../../types/exercises';
 
@@ -27,7 +30,17 @@ export const exerciseApi = baseApi.injectEndpoints({
                 { type: 'ASTRONOTES', id: `EXERCISE_${arg.exercise_slug}` }
             ]
         }),
-
+        getExerciseDetailV2: builder.query<
+            ExerciseDetail,
+            { exercise_slug: string }
+        >({
+            query: ({ exercise_slug }) => ({
+                url: `${EXERCISE_BASE_URL}v2/${exercise_slug}/`
+            }),
+            providesTags: (result, error, arg) => [
+                { type: 'EXERCISES', id: `EXERCISE_${arg.exercise_slug}` }
+            ]
+        }),
         getExerciseHistory: builder.query<
             ExerciseHistory,
             { exercise_slug: string }
@@ -313,7 +326,17 @@ export const exerciseApi = baseApi.injectEndpoints({
             }),
             providesTags: [{ type: 'PROBLEM_SET', id: `LIST` }]
         }),
-
+        getProblemInProblemSet: builder.query<
+            ProblemInProblemSet,
+            { slug: string; problemSetId: string; problemId: string }
+        >({
+            query: ({ slug, problemSetId, problemId }) => ({
+                url: `${EXERCISE_BASE_URL}v2/${slug}/problem-set/${problemSetId}/problem/${problemId}/`
+            }),
+            providesTags: (result, error, arg) => [
+                { type: 'EXERCISES', id: `PROBLEM_${arg.problemId}` }
+            ]
+        }),
         getAstronotesExercises: builder.query<
             { exercises: AstronotesExercise[]; page_id?: string },
             { bookSlug: string; pageNumber: string }
@@ -321,6 +344,31 @@ export const exerciseApi = baseApi.injectEndpoints({
             query: ({ bookSlug, pageNumber }) => ({
                 url: `${EXERCISE_BASE_URL}astronotes/${bookSlug}/page/${pageNumber}/exercises/`
             })
+        }),
+        getAllProblemInProblemSet: builder.query<
+            ListResponseData<ProblemNavigationItem>,
+            {
+                slug: string;
+                problemSetProgressId: string;
+                page: number;
+                limit: number;
+                solution?: number;
+            }
+        >({
+            query: ({ slug, problemSetProgressId, page, limit, solution }) => ({
+                url: `${EXERCISE_BASE_URL}v2/${slug}/problem-set-progress/${problemSetProgressId}/navigations/`,
+                params: {
+                    page,
+                    limit,
+                    solution
+                }
+            }),
+            providesTags: (result, error, arg) => [
+                {
+                    type: 'EXERCISES',
+                    id: `PROBLEM_SET_PROGRESS_${arg.problemSetProgressId}_NAVIGATION`
+                }
+            ]
         })
     })
 });
@@ -346,7 +394,10 @@ export const {
     useGetAstronotesExercisesQuery,
     useGetExerciseV2LandingPageQuery,
     useGetCoursesWithExerciseQuery,
-    useGetUniversitiesWithExerciseQuery
+    useGetUniversitiesWithExerciseQuery,
+    useGetExerciseDetailV2Query,
+    useGetProblemInProblemSetQuery,
+    useGetAllProblemInProblemSetQuery
 } = exerciseApi;
 
 export const {
@@ -357,5 +408,13 @@ export const {
     getExerciseProblemReport,
     getLatestExerciseProblemProgress,
     getOrCreateExerciseProblemProgress,
-    getExerciseLandingPage
+    getExerciseLandingPage,
+    getProblemSetDetail,
+    getExerciseProblemSolution,
+    getExerciseV2LandingPage,
+    getCoursesWithExercise,
+    getUniversitiesWithExercise,
+    getExerciseDetailV2,
+    getProblemInProblemSet,
+    getAllProblemInProblemSet
 } = exerciseApi.endpoints;

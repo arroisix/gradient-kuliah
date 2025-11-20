@@ -60,7 +60,8 @@ module.exports = {
                 violet: {
                     1: '#191920',
                     2: '#20222E',
-                    3: '#2C2E3E'
+                    3: '#2C2E3E',
+                    4: '#4B4E5F'
                 },
                 state: {
                     success: '#008800',
@@ -68,6 +69,10 @@ module.exports = {
                 },
                 primary: {
                     blue: '#0266D3'
+                },
+                purple: {
+                    5: '#494BA0',
+                    6: '#7D89CC'
                 }
             },
             backgroundImage: {

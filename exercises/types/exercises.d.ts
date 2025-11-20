@@ -30,6 +30,55 @@ export interface Exercise {
     };
 }
 
+export interface ExerciseDetail {
+    id: string;
+    slug: string;
+    title: string;
+    course: {
+        id: string;
+        name: string;
+        slug: string;
+    };
+    total_problems: number;
+    total_duration: number;
+    type?: string;
+    exercise_code?: string;
+    tryout_type?: string;
+    university_name?: string;
+    university_color?: string;
+    is_free: boolean;
+    // TODO make it better type
+    first_problemset: {
+        id: string;
+        name: string;
+        order: number;
+        show_solution: string | null;
+        time_constraint: string | null;
+        time_limit: number | null;
+        problem_count: number;
+        first_problem_id: string;
+    };
+    is_completed: boolean;
+    // TODO make it better type
+    latest_problemset_progress: {
+        problemset_id: string;
+        name: string;
+        order: number;
+        last_problem_id: string;
+        last_problem_title?: string;
+    };
+    latest_exercise_progress: {
+        id: string;
+        status: string;
+        completed_at: string | null;
+        score: number;
+        correct_answers: number;
+        incorrect_answers: number;
+        submitted_answers: number;
+        total_questions: number;
+    };
+}
+
 interface ExerciseItem {
     id: string;
     slug: string;
@@ -272,4 +321,45 @@ export interface AstronotesExercise {
 interface Option {
     id: string;
     answer: any;
+}
+
+export interface ProblemInProblemSet {
+    id: string;
+    problemset_id: string;
+    problemset_name: string;
+    problemset_order: number;
+    show_solution: string | null;
+    time_constraint: string | null;
+    time_limit: number | null;
+    started_at: string;
+    should_completed_at: string;
+    next_problemset_id: string | null;
+    next_problem_id: string | null;
+    previous_problem_id: string | null;
+    problem_progress: {
+        id: string;
+        problem_id: string;
+        submitted_answer_text: string | null;
+        submitted_answer_ids: string[];
+        status: string;
+        is_correct: boolean | null;
+        started_at: string;
+        completed_at: string | null;
+        should_completed_at: string | null;
+    } | null;
+    problem: {
+        id: string;
+        title: string;
+        order: number;
+        type: string;
+        question: any;
+        options: Option[];
+    };
+}
+
+export interface ProblemNavigationItem {
+    id: string;
+    order: number;
+    is_answered: boolean;
+    is_correct: boolean;
 }

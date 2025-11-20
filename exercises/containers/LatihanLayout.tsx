@@ -23,6 +23,7 @@ interface LatihanLayoutProps {
     };
     onTimeExpired?: () => void;
     isCurrentProblemSubmitted?: boolean;
+    className?: string;
 }
 
 const LatihanLayout: React.FC<LatihanLayoutProps> = ({
@@ -37,71 +38,17 @@ const LatihanLayout: React.FC<LatihanLayoutProps> = ({
     problemProgress,
     firstProblemProgress,
     onTimeExpired,
+    className,
     isCurrentProblemSubmitted = false
 }) => {
-    const tracker = useTracker();
-    const router = useRouter();
-    const [showSidebar, setShowSidebar] = useState(false);
-
-    const toggleSidebar = (): void => {
-        setShowSidebar(!showSidebar);
-        tracker?.genericTrack(
-            showSidebar ? 'Close Quiz Navigation' : 'Open Quiz Navigation',
-            {
-                EXERCISE_SLUG: router.query.slug as string,
-                SECTION_SLUG: router.query.sectionId as string
-            }
-        );
-    };
-
-    const canNavigate = timeConstraint !== 'PER_PROBLEM';
-
-    console.log(firstProblemProgress, 'FIRST PROBLEM');
-
     return (
-        <div className="flex flex-col px-4 justify-center items-center h-[100dvh] bg-black">
-            <QuizNavigationSidebar
-                onClose={toggleSidebar}
-                isOpen={showSidebar}
-            />
-            <div className="w-full h-full max-w-[520px] md:px-4">
-                <div className="w-full md:w-[520px]">
-                    <ExerciseHeader
-                        showNavigation={showNavigation && canNavigate}
-                        title={title}
-                        prevLink={canNavigate ? prevLink : null}
-                        nextLink={canNavigate ? nextLink : null}
-                        onNavigationClick={toggleSidebar}
-                    />
-                    {timeConstraint && timeConstraint !== 'NONE' && (
-                        <div className="flex justify-center">
-                            <ExerciseTimer
-                                timeConstraint={timeConstraint}
-                                timeLimit={timeLimit}
-                                currentProblemId={currentProblemId}
-                                problemProgress={problemProgress}
-                                firstProblemProgress={firstProblemProgress}
-                                onTimeExpired={onTimeExpired}
-                                isCurrentProblemSubmitted={
-                                    isCurrentProblemSubmitted
-                                }
-                            />
-                        </div>
-                    )}
-                </div>
-                <div
-                    className={cn(
-                        'relative w-full max-w-[520px] h-full md:h-[639px] mb-6 md:mb-9',
-                        timeConstraint && timeConstraint !== 'NONE'
-                            ? 'max-h-[80dvh]'
-                            : 'max-h-[90dvh]'
-                    )}>
-                    <div className="bg-[#1B2129] rounded-2xl overflow-hidden h-full">
-                        <div className="p-6 md:p-8 h-full flex flex-col">
-                            {children}
-                        </div>
-                    </div>
-                </div>
+        <div className="flex flex-col py-6 items-center h-[100dvh] bg-black px-4 w-screen relative">
+            <div
+                className={cn(
+                    'max-w-screen-xl lg:max-h-full overflow-y-auto w-full',
+                    className
+                )}>
+                {children}
             </div>
         </div>
     );
