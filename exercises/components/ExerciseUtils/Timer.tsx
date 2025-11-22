@@ -3,14 +3,13 @@ import { Timer as TimerIcon } from 'lucide-react';
 import { useTimer } from '../../hooks/useTimer';
 import { useGetProblemInProblemSetQuery } from 'exercises/redux/api/exercisesApi';
 import { useRouter } from 'next/router';
+import { ProblemInProblemSet } from 'exercises/types/exercises';
 
 interface TimerProps {
     timeConstraint?: string;
     timeLimit?: number;
     currentProblemId?: string;
-    problemProgress?: {
-        started_at: string;
-    };
+    problemProgress?: ProblemInProblemSet['problem_progress'];
     firstProblemProgress?: {
         started_at: string;
     };

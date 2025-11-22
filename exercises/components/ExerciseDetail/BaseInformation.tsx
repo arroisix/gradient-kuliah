@@ -1,5 +1,4 @@
 import List from 'commons/components/elements/Icons/List';
-import Pencil from 'commons/components/elements/Icons/Pencil';
 import UniversityIcon from 'commons/components/elements/Icons/University';
 import { cn } from 'commons/utils';
 import { useGetExerciseDetailV2Query } from 'exercises/redux/api/exercisesApi';
@@ -10,7 +9,7 @@ const BaseInformation = () => {
     const router = useRouter();
     const { slug } = router.query;
 
-    const { data: exercise, isLoading } = useGetExerciseDetailV2Query(
+    const { data: exercise } = useGetExerciseDetailV2Query(
         { exercise_slug: slug as string },
         {
             skip: !slug

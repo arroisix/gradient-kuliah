@@ -45,7 +45,7 @@ const Leaderboard = () => {
                     className="absolute left-0 right-0 bottom-0 h-1 z-[1]"
                     style={{
                         background: `radial-gradient(ellipse 150% 100% at bottom, #494BA0 0%, transparent 70%)`,
-                        height: '200px',
+                        height: '100px',
                         filter: 'blur(60px)',
                         opacity: 0.7
                     }}

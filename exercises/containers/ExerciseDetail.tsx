@@ -1,9 +1,6 @@
-import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Skeleton from 'commons/components/elements/Skeleton';
-import {
-    useGetExerciseDetailV2Query
-} from 'exercises/redux/api/exercisesApi';
+import { useGetExerciseDetailV2Query } from 'exercises/redux/api/exercisesApi';
 import LatihanLayout from './LatihanLayout';
 import ExerciseDetailHeader from 'exercises/components/Header/ExerciseDetailHeader';
 import BaseInformation from 'exercises/components/ExerciseDetail/BaseInformation';
@@ -21,12 +18,6 @@ const ExerciseDetail = () => {
         }
     );
 
-    useEffect(() => {
-        if (!isLoading && !exercise) {
-            router.back();
-        }
-    }, [isLoading, exercise, router]);
-
     if (isLoading) {
         return (
             <LatihanLayout>
@@ -42,7 +33,7 @@ const ExerciseDetail = () => {
     console.log('exercise', exercise);
 
     return (
-        <LatihanLayout>
+        <LatihanLayout className="h-full">
             <div className="flex flex-col h-full gap-6">
                 <ExerciseDetailHeader />
                 <div className="flex w-full gap-10 flex-col lg:flex-row flex-shrink-0">

@@ -15,7 +15,11 @@ import {
     ExerciseReportSummary,
     ProblemInProblemSet,
     ProblemNavigationItem,
-    ProblemSetDetail
+    ProblemSetDetail,
+    ProblemSetItem,
+    ProblemSolutionData,
+    SubmitUserAnswerData,
+    SubmitUserAnswerResponse
 } from '../../types/exercises';
 
 const EXERCISE_BASE_URL = 'exercises/';
@@ -352,7 +356,7 @@ export const exerciseApi = baseApi.injectEndpoints({
                 problemSetProgressId: string;
                 page: number;
                 limit: number;
-                solution?: number;
+                solution?: string;
             }
         >({
             query: ({ slug, problemSetProgressId, page, limit, solution }) => ({
@@ -369,6 +373,72 @@ export const exerciseApi = baseApi.injectEndpoints({
                     id: `PROBLEM_SET_PROGRESS_${arg.problemSetProgressId}_NAVIGATION`
                 }
             ]
+        }),
+        submitUserAnswer: builder.mutation<
+            SubmitUserAnswerResponse,
+            SubmitUserAnswerData
+        >({
+            query: ({
+                slug,
+                problemset_progress_id,
+                problem_progress_id,
+                ...data
+            }) => ({
+                url: `${EXERCISE_BASE_URL}v2/${slug}/problem-set/${problemset_progress_id}/problem/${problem_progress_id}/answer/`,
+                method: 'POST',
+                body: data
+            }),
+            invalidatesTags: (result, error, arg) => [
+                {
+                    type: 'EXERCISES',
+                    id: `PROBLEM_${arg.problem_id}`
+                },
+                {
+                    type: 'EXERCISES',
+                    id: `PROBLEM_SET_PROGRESS_${arg.problemset_progress_id}_NAVIGATION`
+                }
+            ]
+        }),
+        finishUserProblemSet: builder.mutation<
+            { is_show_solution: boolean; next_problemset_id: string | null },
+            { slug: string; problemset_progress_id: string }
+        >({
+            query: ({ slug, problemset_progress_id }) => ({
+                url: `${EXERCISE_BASE_URL}v2/${slug}/problem-set-progress/${problemset_progress_id}/submit/`,
+                method: 'POST'
+            }),
+            invalidatesTags: (result, error, arg) => [
+                {
+                    type: 'EXERCISES',
+                    id: `EXERCISE_${arg.slug}`
+                },
+                {
+                    type: 'EXERCISES',
+                    id: `PROBLEM_SET_INTERSTITIAL_${arg.slug}`
+                }
+            ]
+        }),
+        getProblemsetDetailInterstitial: builder.query<
+            ResponseData<ProblemSetItem>,
+            { slug: string; problemset_id: string }
+        >({
+            query: ({ slug, problemset_id }) => ({
+                url: `${EXERCISE_BASE_URL}v2/${slug}/problem-set/${problemset_id}/interstitial/`
+            }),
+            providesTags: (result, error, arg) => [
+                {
+                    type: 'EXERCISES',
+                    id: `PROBLEM_SET_INTERSTITIAL_${arg.slug}`
+                }
+            ]
+        }),
+        getProblemSolution: builder.query<
+            ProblemSolutionData,
+            { slug: string; problem_progress_id: string }
+        >({
+            query: ({ slug, problem_progress_id }) => ({
+                url: `${EXERCISE_BASE_URL}v2/${slug}/problem/${problem_progress_id}/solution/`
+            })
         })
     })
 });
@@ -397,7 +467,11 @@ export const {
     useGetUniversitiesWithExerciseQuery,
     useGetExerciseDetailV2Query,
     useGetProblemInProblemSetQuery,
-    useGetAllProblemInProblemSetQuery
+    useGetAllProblemInProblemSetQuery,
+    useSubmitUserAnswerMutation,
+    useFinishUserProblemSetMutation,
+    useGetProblemsetDetailInterstitialQuery,
+    useGetProblemSolutionQuery
 } = exerciseApi;
 
 export const {

@@ -363,3 +363,32 @@ export interface ProblemNavigationItem {
     is_answered: boolean;
     is_correct: boolean;
 }
+
+export interface SubmitUserAnswerResponse {
+    is_show_solution: boolean;
+}
+
+export interface SubmitUserAnswerData {
+    selected_answer_ids?: string[];
+    submitted_answer_text?: string;
+    problemset_progress_id: string;
+    problem_progress_id: string;
+    problem_id: string;
+    slug: string;
+}
+
+export interface ProblemSetItem {
+    id: string;
+    first_problem_id: string;
+    title: string;
+    order: number;
+    is_current: boolean;
+}
+
+export interface ProblemSolutionData {
+    solution: any;
+    user_answer_ids: string[];
+    user_answer_text: string;
+    correct_answer_ids: string[];
+    correct_answer_text: string[];
+}

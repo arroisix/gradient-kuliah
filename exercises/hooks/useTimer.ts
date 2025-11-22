@@ -1,14 +1,14 @@
+import { ProblemInProblemSet } from 'exercises/types/exercises';
 import { useEffect, useState, useRef, useCallback } from 'react';
 
 interface UseTimerProps {
     timeConstraint?: string;
     timeLimit?: number;
     currentProblemId?: string;
-    problemProgress?: {
-        started_at: string;
-    };
+    problemProgress?: ProblemInProblemSet['problem_progress'];
     firstProblemProgress?: {
         started_at: string;
+        should_completed_at?: string;
     };
     onTimeExpired?: () => void;
     isCurrentProblemSubmitted?: boolean;
@@ -59,6 +59,7 @@ export const useTimer = ({
             clearTimer();
             hasExpiredRef.current = true;
             if (onTimeExpiredRef.current) {
+                console.log('Time expired');
                 onTimeExpiredRef.current();
             }
         }
@@ -78,16 +79,38 @@ export const useTimer = ({
             return clearTimer;
         }
 
-        let startTime: Date;
+        let endTime: Date | null = null;
+
+        // Use should_completed_at if available, otherwise calculate from started_at + timeLimit
         if (timeConstraint === 'TOTAL_TIME' && firstProblemProgress) {
-            startTime = new Date(firstProblemProgress.started_at);
+            if (firstProblemProgress.should_completed_at) {
+                endTime = new Date(firstProblemProgress.should_completed_at);
+            } else {
+                const startTime = new Date(firstProblemProgress.started_at);
+                endTime = new Date(startTime.getTime() + timeLimit * 1000);
+            }
         } else if (timeConstraint === 'PER_PROBLEM' && problemProgress) {
-            startTime = new Date(problemProgress.started_at);
-        } else {
+            if (problemProgress.should_completed_at) {
+                endTime = new Date(problemProgress.should_completed_at);
+            } else {
+                const startTime = new Date(problemProgress.started_at);
+                endTime = new Date(startTime.getTime() + timeLimit * 1000);
+            }
+        }
+
+        console.log('problemProgress', problemProgress);
+        console.log('firstProblemProgress', firstProblemProgress);
+        console.log('timeConstraint', timeConstraint);
+        console.log('isCurrentProblemSubmitted', isCurrentProblemSubmitted);
+        console.log('currentProblemId', currentProblemId);
+        console.log('timeLimit', timeLimit);
+        console.log('endTime', endTime);
+
+        if (!endTime) {
             return;
         }
 
-        endTimeRef.current = startTime.getTime() + timeLimit * 1000;
+        endTimeRef.current = endTime.getTime();
         hasExpiredRef.current = false;
 
         updateTimer();

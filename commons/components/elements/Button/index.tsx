@@ -9,7 +9,7 @@ const BUTTON_THEME: { [key: string]: string } = {
     primary:
         'bg-accent-purple rounded-full text-white font-body hover:bg-accent-purple/60',
     secondary:
-        'bg-white/25 rounded-full text-white font-body hover:bg-neutral-700',
+        'bg-graphite-800 rounded-full text-white font-body hover:bg-neutral-700',
     tertiary: 'text-[#B6A6F3] font-semibold hover:bg-graphite-900 rounded',
     neutral: 'bg-neutral-700 rounded-full text-white',
     disabledPrimary:

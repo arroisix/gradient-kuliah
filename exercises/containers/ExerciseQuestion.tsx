@@ -4,7 +4,6 @@ import ExerciseWorksheetHeader from 'exercises/components/Header/ExerciseWorkshe
 import ProblemsetTitle from 'exercises/components/ExerciseQuestion/ProblemsetTitle';
 import QuestionContent from 'exercises/components/ExerciseQuestion/QuestionContent';
 import AnswerContainer from 'exercises/components/ExerciseQuestion/AnswerContainer';
-import ExerciseQuestionFooter from 'exercises/components/Footer/ExerciseQuestionFooter';
 
 const ExerciseQuestion: React.FC = () => {
     return (
@@ -17,7 +16,6 @@ const ExerciseQuestion: React.FC = () => {
                     <AnswerContainer />
                 </div>
             </div>
-            <ExerciseQuestionFooter />
         </LatihanLayout>
     );
 };

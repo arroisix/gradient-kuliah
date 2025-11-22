@@ -93,7 +93,7 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
         return {
             current: currentProgress,
             total: totalQuestions,
-            percentage: Math.round(percentage),
+            percentage: Math.min(Math.round(percentage), 100),
             fraction: `${currentProgress} / ${totalQuestions}`
         };
     };

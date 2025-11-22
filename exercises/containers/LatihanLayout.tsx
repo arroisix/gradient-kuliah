@@ -1,10 +1,5 @@
-import React, { useState } from 'react';
-import ExerciseHeader from '../components/Header/ExerciseHeader';
-import QuizNavigationSidebar from '../components/QuizNavigationSidebar';
-import ExerciseTimer from '../components/Header/ExerciseTimer';
+import React from 'react';
 import { cn } from 'commons/utils';
-import { useTracker } from 'tracker/tracker';
-import { useRouter } from 'next/router';
 
 interface LatihanLayoutProps {
     children: React.ReactNode;
@@ -28,18 +23,7 @@ interface LatihanLayoutProps {
 
 const LatihanLayout: React.FC<LatihanLayoutProps> = ({
     children,
-    showNavigation = false,
-    title,
-    prevLink,
-    nextLink,
-    timeConstraint,
-    timeLimit,
-    currentProblemId,
-    problemProgress,
-    firstProblemProgress,
-    onTimeExpired,
-    className,
-    isCurrentProblemSubmitted = false
+    className
 }) => {
     return (
         <div className="flex flex-col py-6 items-center h-[100dvh] bg-black px-4 w-screen relative">

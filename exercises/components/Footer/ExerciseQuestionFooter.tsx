@@ -4,12 +4,15 @@ import { cn } from 'commons/utils';
 import { useGetProblemInProblemSetQuery } from 'exercises/redux/api/exercisesApi';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import QuizNavigationBottomSheet from '../ExerciseUtils/QuizNavigationBottomSheet';
 
-const ExerciseQuestionFooter: React.FC = () => {
+const ExerciseQuestionFooter: React.FC<{
+    saveAnswer: () => Promise<void>;
+    isDisabled: boolean;
+}> = ({ saveAnswer, isDisabled }) => {
     const router = useRouter();
-    const { slug, sectionId, problemId } = router.query;
+    const { slug, sectionId, problemId, solution } = router.query;
     const { data: problem } = useGetProblemInProblemSetQuery(
         {
             slug: slug as string,
@@ -20,10 +23,18 @@ const ExerciseQuestionFooter: React.FC = () => {
     );
 
     const [isNavigationOpen, setIsNavigationOpen] = useState(false);
+    const isNoNeedNavigation = useMemo(() => {
+        return (
+            problem?.time_constraint === 'PER_PROBLEM' ||
+            problem?.show_solution === 'AFTER_PROBLEM'
+        );
+    }, [problem]);
 
     const handleProblemSelect = (selectedProblemId: string) => {
         router.push(
-            `/latihan/${slug}/${sectionId}/${selectedProblemId}`,
+            `/latihan/${slug}/${sectionId}/${selectedProblemId}${
+                solution ? '?solution=1' : ''
+            }`,
             undefined,
             { scroll: false, shallow: true }
         );
@@ -32,7 +43,9 @@ const ExerciseQuestionFooter: React.FC = () => {
     const handleNextProblem = () => {
         if (problem?.next_problem_id) {
             router.push(
-                `/latihan/${slug}/${sectionId}/${problem.next_problem_id}`,
+                `/latihan/${slug}/${sectionId}/${problem.next_problem_id}${
+                    solution ? '?solution=1' : ''
+                }`,
                 undefined,
                 { scroll: false, shallow: true }
             );
@@ -42,7 +55,9 @@ const ExerciseQuestionFooter: React.FC = () => {
     const handlePreviousProblem = () => {
         if (problem?.previous_problem_id) {
             router.push(
-                `/latihan/${slug}/${sectionId}/${problem.previous_problem_id}`,
+                `/latihan/${slug}/${sectionId}/${problem.previous_problem_id}${
+                    solution ? '?solution=1' : ''
+                }`,
                 undefined,
                 { scroll: false, shallow: true }
             );
@@ -59,9 +74,7 @@ const ExerciseQuestionFooter: React.FC = () => {
                         disabled={!problem?.previous_problem_id}
                         className={cn(
                             'text-center !p-0 !w-8 !h-8 items-center justify-center',
-                            problem?.time_constraint === 'PER_PROBLEM'
-                                ? 'hidden'
-                                : 'flex'
+                            isNoNeedNavigation ? 'hidden' : 'flex'
                         )}>
                         <ChevronLeft size={14} />
                     </Button>
@@ -70,9 +83,7 @@ const ExerciseQuestionFooter: React.FC = () => {
                         onClick={() => setIsNavigationOpen(true)}
                         className={cn(
                             '!rounded-[4px] text-center !p-0 !w-8 !h-8 items-center justify-center',
-                            problem?.time_constraint === 'PER_PROBLEM'
-                                ? 'hidden'
-                                : 'flex'
+                            isNoNeedNavigation ? 'hidden' : 'flex'
                         )}>
                         <SquareSettings size={14} />
                     </Button>
@@ -82,17 +93,16 @@ const ExerciseQuestionFooter: React.FC = () => {
                         disabled={!problem?.next_problem_id}
                         className={cn(
                             'text-center !p-0 !w-8 !h-8 items-center justify-center',
-                            problem?.time_constraint === 'PER_PROBLEM'
-                                ? 'hidden'
-                                : 'flex'
+                            isNoNeedNavigation ? 'hidden' : 'flex'
                         )}>
                         <ChevronRight size={14} />
                     </Button>
                 </div>
                 <Button
+                    onClick={saveAnswer}
                     variant="primary"
                     size="normal"
-                    disabled
+                    disabled={isDisabled}
                     className="w-full">
                     Selanjutnya
                 </Button>

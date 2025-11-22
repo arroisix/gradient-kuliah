@@ -8,7 +8,7 @@ const ExerciseDetailHeader = () => {
     return (
         <header className="w-full flex items-center justify-between pb-6">
             <Button
-                onClick={() => router.back()}
+                onClick={() => router.push(`/latihan/`)}
                 variant="secondary"
                 className="rounded-full text-center !p-0 !w-8 !h-8 flex items-center justify-center">
                 <ChevronLeft size={14} />

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import ProblemPageContent from 'exercises/components/Problem/ProblemPageContent';
 import withAuth from 'commons/withAuth';
 import ExerciseQuestion from 'exercises/containers/ExerciseQuestion';
 

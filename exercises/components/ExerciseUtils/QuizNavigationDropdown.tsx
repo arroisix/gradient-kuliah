@@ -43,7 +43,7 @@ const QuizNavigationDropdown: React.FC<QuizNavigationDropdownProps> = ({
     return (
         <>
             {/* Backdrop */}
-            <div className="fixed inset-0 z-40" onClick={onClose} />
+            <div className="fixed inset-0 z-40" onClick={onClose} aria-hidden />
 
             {/* Dropdown */}
             <div

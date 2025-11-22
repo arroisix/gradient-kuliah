@@ -34,7 +34,8 @@ module.exports = {
                     purple: '#5F2BCE',
                     orange: '#B73E32',
                     yellow: '#F2C04C',
-                    green: '#BCE2A4'
+                    green: '#34C759',
+                    red: '#EF7F73'
                 },
                 neutral: {
                     50: '#FFFFFF',
@@ -64,15 +65,16 @@ module.exports = {
                     4: '#4B4E5F'
                 },
                 state: {
-                    success: '#008800',
-                    error: '#FF2D55'
+                    success: '#03AC5C',
+                    error: '#DB4A3B'
                 },
                 primary: {
                     blue: '#0266D3'
                 },
                 purple: {
                     5: '#494BA0',
-                    6: '#7D89CC'
+                    6: '#505A96',
+                    7: '#7D89CC'
                 }
             },
             backgroundImage: {
