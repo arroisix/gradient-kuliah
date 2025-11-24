@@ -364,6 +364,14 @@ export interface ProblemNavigationItem {
     is_correct: boolean;
 }
 
+export interface ProblemNavigationVerboseItem
+    extends Omit<ProblemNavigationItem, 'id'> {
+    problem_id: string;
+    problem_progress_id: string;
+    problemset_id: string;
+    problemset_progress_id: string;
+}
+
 export interface SubmitUserAnswerResponse {
     is_show_solution: boolean;
 }

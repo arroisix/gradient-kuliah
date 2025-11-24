@@ -7,21 +7,34 @@ import { useRouter } from 'next/router';
 
 const SolutionContainer = () => {
     const router = useRouter();
-    const { slug, sectionId, problemId, solution } = router.query;
+    const {
+        slug,
+        exerciseProgressId,
+        sectionId,
+        problemsetId,
+        problemId,
+        solution
+    } = router.query;
     const { data: problem } = useGetProblemInProblemSetQuery(
         {
             slug: slug as string,
-            problemSetId: sectionId as string,
-            problemId: problemId as string
+            problemSetId: (sectionId as string) || (problemsetId as string),
+            problemId: problemId as string,
+            exercise_progress_id: exerciseProgressId as string
         },
-        { skip: !slug || !sectionId || !problemId }
+        { skip: !slug || (!sectionId && !problemsetId) || !problemId }
     );
     const { data: solutionData } = useGetProblemSolutionQuery(
         {
             slug: slug as string,
             problem_progress_id: problem?.problem_progress?.id as string
         },
-        { skip: !slug || !solution || !problem?.problem_progress?.id }
+        {
+            skip:
+                !slug ||
+                (!sectionId && !problemsetId) ||
+                !problem?.problem_progress?.id
+        }
     );
     return (
         <div className="flex flex-col gap-3 lg:overflow-y-auto">

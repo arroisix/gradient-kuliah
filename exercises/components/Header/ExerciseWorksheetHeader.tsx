@@ -16,12 +16,14 @@ import ExerciseFinishModal from '../Modal/ExerciseFinishModal';
 
 const ExerciseWorksheetHeader = () => {
     const router = useRouter();
-    const { slug, sectionId, problemId, solution } = router.query;
+    const { slug, exerciseProgressId, sectionId, problemId, solution } =
+        router.query;
     const { data: problem } = useGetProblemInProblemSetQuery(
         {
             slug: slug as string,
             problemSetId: sectionId as string,
-            problemId: problemId as string
+            problemId: problemId as string,
+            exercise_progress_id: exerciseProgressId as string
         },
         { skip: !slug || !sectionId || !problemId }
     );
@@ -94,6 +96,8 @@ const ExerciseWorksheetHeader = () => {
                 await new Promise((resolve) => setTimeout(resolve, 100));
             }
 
+            console.log('Time expired for problem:', problemId);
+
             alert('Waktu kamu habis!');
             await finishProblemSet();
         }
@@ -113,17 +117,20 @@ const ExerciseWorksheetHeader = () => {
                 )}
                 onClick={() => setIsModalOpen(true)}
             />
-            {problem && problem.time_constraint && !solution && (
-                <Timer
-                    timeConstraint={problem.time_constraint ?? 'NONE'}
-                    timeLimit={problem?.time_limit ?? 0}
-                    currentProblemId={problem?.problem.id ?? ''}
-                    firstProblemProgress={problem}
-                    problemProgress={problem?.problem_progress}
-                    onTimeExpired={onTimeExpired}
-                    isCurrentProblemSubmitted={!!solution}
-                />
-            )}
+            {problem &&
+                problem.time_constraint &&
+                !solution &&
+                firstProblem && (
+                    <Timer
+                        timeConstraint={problem.time_constraint ?? 'NONE'}
+                        timeLimit={problem?.time_limit ?? 0}
+                        currentProblemId={problem?.problem.id ?? ''}
+                        firstProblemProgress={problem}
+                        problemProgress={problem?.problem_progress}
+                        onTimeExpired={onTimeExpired}
+                        isCurrentProblemSubmitted={!!solution}
+                    />
+                )}
             <div
                 className={cn(
                     'flex flex-row gap-2 items-center relative',

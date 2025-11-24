@@ -1,5 +1,6 @@
 import Button from 'commons/components/elements/Button';
 import {
+    useGetExerciseDetailV2Query,
     useGetProblemInProblemSetQuery,
     useGetProblemSolutionQuery
 } from 'exercises/redux/api/exercisesApi';
@@ -10,30 +11,53 @@ import useSubmitAnswerHandler from 'exercises/hooks/useSubmitAnswerHandler';
 import ExerciseQuestionFooter from '../Footer/ExerciseQuestionFooter';
 import { cn } from 'commons/utils';
 import AnswerInformation from './AnswerInformation';
+import AnswerLegend from './AnswerLegend';
 import Book from 'commons/components/elements/Icons/Book';
 import { useEffect, useMemo, useState } from 'react';
 import SolutionContainer from './SolutionContainer';
 import ExerciseFinishModal from '../Modal/ExerciseFinishModal';
 
-const QuestionContent = () => {
+const AnswerContainer = () => {
     const router = useRouter();
-    const { slug, sectionId, problemId, solution } = router.query;
+    const {
+        slug,
+        sectionId,
+        problemsetId,
+        problemId,
+        solution,
+        exerciseProgressId
+    } = router.query;
+    const { data: exercise } = useGetExerciseDetailV2Query(
+        { exercise_slug: slug as string },
+        {
+            skip: !slug
+        }
+    );
     const { data: problem } = useGetProblemInProblemSetQuery(
         {
             slug: slug as string,
-            problemSetId: sectionId as string,
-            problemId: problemId as string
+            problemSetId: (sectionId as string) || (problemsetId as string),
+            problemId: problemId as string,
+            exercise_progress_id: exerciseProgressId as string
         },
-        { skip: !slug || !sectionId || !problemId }
+        { skip: !slug || (!sectionId && !problemsetId) || !problemId }
     );
     const { data: solutionData } = useGetProblemSolutionQuery(
         {
             slug: slug as string,
             problem_progress_id: problem?.problem_progress?.id as string
         },
-        { skip: !slug || !solution || !problem?.problem_progress?.id }
+        {
+            skip:
+                !slug ||
+                (!problemsetId && !solution) ||
+                !problem?.problem_progress?.id
+        }
     );
     const [showSolution, setShowSolution] = useState(false);
+    const isSolutionPage = useMemo(() => {
+        return problemsetId || solution;
+    }, [problemsetId, solution]);
 
     useEffect(() => {
         setShowSolution(false);
@@ -59,11 +83,14 @@ const QuestionContent = () => {
                         { scroll: false, shallow: true }
                     );
                 } else {
-                    // TODO: report page
-                    router.push(`/latihan/${slug}`, undefined, {
-                        scroll: false,
-                        shallow: true
-                    });
+                    router.push(
+                        `/latihan/${slug}/report/${exercise?.latest_exercise_progress?.id}/`,
+                        undefined,
+                        {
+                            scroll: false,
+                            shallow: true
+                        }
+                    );
                 }
             } else {
                 router.push(
@@ -131,17 +158,21 @@ const QuestionContent = () => {
         <>
             <div
                 className={cn(
-                    'flex flex-col justify-between gap-2 w-full h-full lg:h-[70vh] lg:bg-violet-1 rounded-2xl relative lg:overflow-hidden',
-                    solution ? 'lg:pb-12 lg:px-12 lg:pt-28' : 'lg:p-12'
+                    'flex flex-col justify-between gap-2 w-full h-full lg:bg-violet-1 rounded-2xl relative lg:overflow-hidden',
+                    isSolutionPage ? 'lg:pb-12 lg:px-12 lg:pt-28' : 'lg:p-12',
+                    problemsetId ? '' : 'lg:h-[70vh]'
                 )}>
-                {solution && (
+                {isSolutionPage && (
                     <AnswerInformation
                         showSolution={showSolution}
                         setShowSolution={setShowSolution}
                     />
                 )}
                 {renderAnswerType}
-                {!showSolution && (
+                {isSolutionPage && problem?.problem.type !== 'SHORT_ANSWER' && (
+                    <AnswerLegend className="mt-4" />
+                )}
+                {!showSolution && !problemsetId && (
                     <div className="w-full hidden lg:flex flex-row gap-2">
                         {solution && solutionData && (
                             <Button
@@ -192,4 +223,4 @@ const QuestionContent = () => {
     );
 };
 
-export default QuestionContent;
+export default AnswerContainer;

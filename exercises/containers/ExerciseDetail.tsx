@@ -6,6 +6,9 @@ import ExerciseDetailHeader from 'exercises/components/Header/ExerciseDetailHead
 import BaseInformation from 'exercises/components/ExerciseDetail/BaseInformation';
 import ProblemSetInformation from 'exercises/components/ExerciseDetail/ProblemSetInformation';
 import Leaderboard from 'exercises/components/ExerciseDetail/Leaderboard';
+import ExerciseCompleteHeader from 'exercises/components/Header/ExerciseCompleteHeader';
+import ResultSummary from 'exercises/components/ExerciseDetail/ResultSummary';
+import ResultSummaryPerProblem from 'exercises/components/ExerciseDetail/ResultSummaryPerProblem';
 
 const ExerciseDetail = () => {
     const router = useRouter();
@@ -31,6 +34,20 @@ const ExerciseDetail = () => {
     }
 
     console.log('exercise', exercise);
+
+    if (exercise.latest_exercise_progress.status === 'COMPLETED') {
+        return (
+            <LatihanLayout className="h-full">
+                <div className="flex flex-col h-full gap-6">
+                    <ExerciseCompleteHeader />
+                    <div className="flex w-full flex-col lg:flex-row gap-5 lg:gap-0 justify-center flex-shrink-0">
+                        <ResultSummary />
+                        <ResultSummaryPerProblem />
+                    </div>
+                </div>
+            </LatihanLayout>
+        );
+    }
 
     return (
         <LatihanLayout className="h-full">

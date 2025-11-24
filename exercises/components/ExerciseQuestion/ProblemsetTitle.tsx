@@ -3,12 +3,13 @@ import { useRouter } from 'next/router';
 
 const ProblemsetTitle = () => {
     const router = useRouter();
-    const { slug, sectionId, problemId } = router.query;
+    const { slug, exerciseProgressId, sectionId, problemId } = router.query;
     const { data: problem } = useGetProblemInProblemSetQuery(
         {
             slug: slug as string,
             problemSetId: sectionId as string,
-            problemId: problemId as string
+            problemId: problemId as string,
+            exercise_progress_id: exerciseProgressId as string
         },
         { skip: !slug || !sectionId || !problemId }
     );

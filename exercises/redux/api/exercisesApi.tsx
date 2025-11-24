@@ -15,6 +15,7 @@ import {
     ExerciseReportSummary,
     ProblemInProblemSet,
     ProblemNavigationItem,
+    ProblemNavigationVerboseItem,
     ProblemSetDetail,
     ProblemSetItem,
     ProblemSolutionData,
@@ -36,10 +37,13 @@ export const exerciseApi = baseApi.injectEndpoints({
         }),
         getExerciseDetailV2: builder.query<
             ExerciseDetail,
-            { exercise_slug: string }
+            { exercise_slug: string; exercise_progress_id?: string }
         >({
-            query: ({ exercise_slug }) => ({
-                url: `${EXERCISE_BASE_URL}v2/${exercise_slug}/`
+            query: ({ exercise_slug, exercise_progress_id }) => ({
+                url: `${EXERCISE_BASE_URL}v2/${exercise_slug}/`,
+                params: exercise_progress_id
+                    ? { exercise_progress_id }
+                    : undefined
             }),
             providesTags: (result, error, arg) => [
                 { type: 'EXERCISES', id: `EXERCISE_${arg.exercise_slug}` }
@@ -332,10 +336,23 @@ export const exerciseApi = baseApi.injectEndpoints({
         }),
         getProblemInProblemSet: builder.query<
             ProblemInProblemSet,
-            { slug: string; problemSetId: string; problemId: string }
+            {
+                slug: string;
+                problemSetId: string;
+                problemId: string;
+                exercise_progress_id?: string;
+            }
         >({
-            query: ({ slug, problemSetId, problemId }) => ({
-                url: `${EXERCISE_BASE_URL}v2/${slug}/problem-set/${problemSetId}/problem/${problemId}/`
+            query: ({
+                slug,
+                problemSetId,
+                problemId,
+                exercise_progress_id
+            }) => ({
+                url: `${EXERCISE_BASE_URL}v2/${slug}/problem-set/${problemSetId}/problem/${problemId}/`,
+                params: exercise_progress_id
+                    ? { exercise_progress_id }
+                    : undefined
             }),
             providesTags: (result, error, arg) => [
                 { type: 'EXERCISES', id: `PROBLEM_${arg.problemId}` }
@@ -371,6 +388,30 @@ export const exerciseApi = baseApi.injectEndpoints({
                 {
                     type: 'EXERCISES',
                     id: `PROBLEM_SET_PROGRESS_${arg.problemSetProgressId}_NAVIGATION`
+                }
+            ]
+        }),
+        getAllProblemInProblemSetViaExerciseProgress: builder.query<
+            ListResponseData<ProblemNavigationVerboseItem>,
+            {
+                slug: string;
+                exerciseProgress: string;
+                problemsetId: string;
+                page?: number;
+                limit?: number;
+            }
+        >({
+            query: ({ slug, exerciseProgress, problemsetId, page, limit }) => ({
+                url: `${EXERCISE_BASE_URL}v2/${slug}/exercise-progress/${exerciseProgress}/navigations/${problemsetId}/`,
+                params: {
+                    page,
+                    limit
+                }
+            }),
+            providesTags: (result, error, arg) => [
+                {
+                    type: 'EXERCISES',
+                    id: `PROBLEM_SET_PROGRESS_${arg.exerciseProgress}_NAVIGATION_ALL`
                 }
             ]
         }),
@@ -480,7 +521,8 @@ export const {
     useFinishUserProblemSetMutation,
     useGetProblemsetDetailInterstitialQuery,
     useGetProblemSolutionQuery,
-    useGetCheckProblemsetCompletenessQuery
+    useGetCheckProblemsetCompletenessQuery,
+    useGetAllProblemInProblemSetViaExerciseProgressQuery
 } = exerciseApi;
 
 export const {

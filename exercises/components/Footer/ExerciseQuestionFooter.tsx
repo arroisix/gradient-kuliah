@@ -12,12 +12,14 @@ const ExerciseQuestionFooter: React.FC<{
     isDisabled: boolean;
 }> = ({ saveAnswer, isDisabled }) => {
     const router = useRouter();
-    const { slug, sectionId, problemId, solution } = router.query;
+    const { slug, exerciseProgressId, sectionId, problemId, solution } =
+        router.query;
     const { data: problem } = useGetProblemInProblemSetQuery(
         {
             slug: slug as string,
             problemSetId: sectionId as string,
-            problemId: problemId as string
+            problemId: problemId as string,
+            exercise_progress_id: exerciseProgressId as string
         },
         { skip: !slug || !sectionId || !problemId }
     );

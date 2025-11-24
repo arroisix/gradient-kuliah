@@ -25,12 +25,14 @@ const QuizNavigationModal: React.FC<QuizNavigationModalProps> = ({
 }) => {
     const router = useRouter();
     const [currentPage, setCurrentPage] = React.useState(0);
-    const { slug, sectionId, problemId, solution } = router.query;
+    const { slug, exerciseProgressId, sectionId, problemId, solution } =
+        router.query;
     const { data: problem } = useGetProblemInProblemSetQuery(
         {
             slug: slug as string,
             problemSetId: sectionId as string,
-            problemId: problemId as string
+            problemId: problemId as string,
+            exercise_progress_id: exerciseProgressId as string
         },
         { skip: !slug || !sectionId || !problemId }
     );

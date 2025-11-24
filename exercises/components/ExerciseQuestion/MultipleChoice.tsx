@@ -6,6 +6,7 @@ import {
 } from 'exercises/redux/api/exercisesApi';
 import { Check, X } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { useMemo } from 'react';
 
 const MultipleChoiceContainer = ({
     onAnswerClicked,
@@ -15,21 +16,34 @@ const MultipleChoiceContainer = ({
     selectedAnswer: string[];
 }) => {
     const router = useRouter();
-    const { slug, sectionId, problemId, solution } = router.query;
+    const {
+        slug,
+        sectionId,
+        problemsetId,
+        problemId,
+        solution,
+        exerciseProgressId
+    } = router.query;
+    const showSolution = useMemo(() => {
+        return solution || problemsetId;
+    }, [solution, problemsetId]);
     const { data: problem } = useGetProblemInProblemSetQuery(
         {
             slug: slug as string,
-            problemSetId: sectionId as string,
-            problemId: problemId as string
+            problemSetId: (sectionId as string) || (problemsetId as string),
+            problemId: problemId as string,
+            exercise_progress_id: exerciseProgressId as string
         },
-        { skip: !slug || !sectionId || !problemId }
+        { skip: !slug || (!sectionId && !problemsetId) || !problemId }
     );
     const { data: solutionData } = useGetProblemSolutionQuery(
         {
             slug: slug as string,
             problem_progress_id: problem?.problem_progress?.id as string
         },
-        { skip: !slug || !solution || !problem?.problem_progress?.id }
+        {
+            skip: !slug || !showSolution || !problem?.problem_progress?.id
+        }
     );
 
     const decideAnswerCorrectOrNot = (optionId: string): 1 | 2 | 3 => {
@@ -48,7 +62,7 @@ const MultipleChoiceContainer = ({
 
     return (
         <div className="flex flex-col gap-3 lg:overflow-y-auto">
-            {!solution && problem?.problem.type === 'MULTIPLE_ANSWER' && (
+            {!showSolution && problem?.problem.type === 'MULTIPLE_ANSWER' && (
                 <span className="text-accent-yellow text-xs">
                     Jawaban bisa lebih dari 1
                 </span>
@@ -57,7 +71,7 @@ const MultipleChoiceContainer = ({
                 problem.problem.options.map((option, index) => (
                     <button
                         onClick={
-                            solution ||
+                            showSolution ||
                             problem.problem_progress?.status === 'COMPLETED'
                                 ? undefined
                                 : () => onAnswerClicked(option.id)
@@ -68,7 +82,7 @@ const MultipleChoiceContainer = ({
                             selectedAnswer.includes(option.id)
                                 ? 'bg-purple-6 hover:bg-purple/60'
                                 : 'bg-violet-1 hover:bg-violet-2',
-                            solution && 'cursor-not-allowed',
+                            showSolution && 'cursor-not-allowed',
                             decideAnswerCorrectOrNot(option.id) === 1 &&
                                 'bg-[#00C8B3]/30 border-[#00C8B3] hover:bg-[#00C8B3]/40',
                             decideAnswerCorrectOrNot(option.id) === 2 &&

@@ -1,6 +1,7 @@
 import {
     useFinishUserProblemSetMutation,
     useGetAllProblemInProblemSetQuery,
+    useGetExerciseDetailV2Query,
     useSubmitUserAnswerMutation
 } from 'exercises/redux/api/exercisesApi';
 import { ProblemInProblemSet } from 'exercises/types/exercises';
@@ -16,6 +17,12 @@ const useSubmitAnswerHandler = (problem: ProblemInProblemSet) => {
     const [submitAnswer, { isLoading }] = useSubmitUserAnswerMutation();
     const [submitProblemset, { isLoading: isFinishing }] =
         useFinishUserProblemSetMutation();
+    const { data: exercise } = useGetExerciseDetailV2Query(
+        { exercise_slug: slug as string },
+        {
+            skip: !slug
+        }
+    );
     const { data: firstProblem } = useGetAllProblemInProblemSetQuery(
         {
             slug: slug as string,
@@ -78,11 +85,14 @@ const useSubmitAnswerHandler = (problem: ProblemInProblemSet) => {
                     { scroll: false, shallow: true }
                 );
             } else {
-                // TODO: rediret to REPORT PAGE
-                router.push(`/latihan/${slug}`, undefined, {
-                    scroll: false,
-                    shallow: true
-                });
+                router.push(
+                    `/latihan/${slug}/report/${exercise?.latest_exercise_progress?.id}`,
+                    undefined,
+                    {
+                        scroll: false,
+                        shallow: true
+                    }
+                );
             }
         } else {
             // Handle showing solution for the problem set if needed
@@ -117,9 +127,6 @@ const useSubmitAnswerHandler = (problem: ProblemInProblemSet) => {
                     problem_id: problemId as string,
                     ...answerPayload
                 }).unwrap();
-
-                console.log('Answer saved response:', response);
-                // You can add navigation to the next question here if needed
 
                 if (!response?.is_show_solution && problem?.next_problem_id) {
                     router.push(

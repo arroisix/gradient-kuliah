@@ -34,7 +34,7 @@ const LatihanContent: React.FC<LatihanContentProps> = ({
     // Empty state
     if (exercises.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center py-16 gap-4">
+            <div className="flex flex-col items-center justify-center py-16 gap-4 xl:max-w-screen-2xl">
                 <Image
                     src="https://assets.gradient.academy/assets/exercise-not-found.png"
                     alt="No exercises found"

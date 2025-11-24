@@ -1,10 +1,9 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import ExerciseReportLayout from 'exercises/components/Report/ExerciseReportLayout';
 import withAuth from 'commons/withAuth';
-import ExerciseReport from 'exercises/containers/ExerciseReport';
+import ExerciseLeaderboard from 'exercises/containers/ExerciseLeaderboard';
 
-const ExerciseReportPage: NextPage = () => {
+const ExerciseLeaderboardPage: NextPage = () => {
     const router = useRouter();
     const { slug, exerciseProgressId } = router.query;
 
@@ -17,7 +16,7 @@ const ExerciseReportPage: NextPage = () => {
         );
     }
 
-    return <ExerciseReport />;
+    return <ExerciseLeaderboard />;
 };
 
-export default withAuth(ExerciseReportPage);
+export default withAuth(ExerciseLeaderboardPage);
