@@ -1,36 +1,60 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { useUpdateExerciseProgressMutation } from '../../redux/api/exercisesApi';
+import {
+    useGetCheckProblemsetCompletenessQuery,
+    useGetProblemInProblemSetQuery
+} from '../../redux/api/exercisesApi';
 import { useTracker } from 'tracker/tracker';
+import useSubmitAnswerHandler from 'exercises/hooks/useSubmitAnswerHandler';
+import Skeleton from 'commons/components/elements/Skeleton';
 
 interface ExerciseFinishModalProps {
     isOpen: boolean;
     onClose: () => void;
     onConfirm: () => void;
+    // TODO: deprecated, remove on next major version
     onReturnToExercise?: () => void;
-    allProblemsAnswered: boolean;
-    slug: string;
-    exerciseProgressId: string;
+    allProblemsAnswered?: boolean;
+    slug?: string;
+    exerciseProgressId?: string;
 }
 
 const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
     isOpen,
-    onClose,
-    onReturnToExercise,
-    allProblemsAnswered,
-    slug,
-    exerciseProgressId
+    onClose
 }) => {
     const tracker = useTracker();
     const router = useRouter();
-    const [updateExerciseProgress] = useUpdateExerciseProgressMutation();
+    const { slug, sectionId, problemId } = router.query;
+    const { data: problem } = useGetProblemInProblemSetQuery(
+        {
+            slug: slug as string,
+            problemSetId: sectionId as string,
+            problemId: problemId as string
+        },
+        { skip: !slug || !sectionId || !problemId }
+    );
+
+    const { data: completenessData, isLoading } =
+        useGetCheckProblemsetCompletenessQuery(
+            {
+                slug: slug as string,
+                problemset_progress_id: problem?.id as string
+            },
+            {
+                skip: !slug || !problem?.id || !isOpen,
+                refetchOnMountOrArgChange: true,
+                refetchOnFocus: true
+            }
+        );
+    const { finishProblemSet } = useSubmitAnswerHandler(problem!);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     if (!isOpen) return null;
 
     const handleSubmit = async () => {
         tracker?.genericTrack(
-            allProblemsAnswered
+            completenessData?.is_complete
                 ? 'Click Keep Finish Exercise'
                 : 'Click Skip Empty Answer and Keep Finish Exercise',
             {
@@ -38,26 +62,14 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
             }
         );
         setIsSubmitting(true);
-        try {
-            await updateExerciseProgress({
-                exercise_slug: slug,
-                progress_id: exerciseProgressId,
-                data: { status: 'COMPLETED' }
-            }).unwrap();
-
-            await router.replace(
-                `/latihan/${slug}/report/${exerciseProgressId}`
-            );
-        } catch (error) {
-            console.error('Failed to submit exercise:', error);
-        } finally {
-            setIsSubmitting(false);
-        }
+        await finishProblemSet();
+        setIsSubmitting(false);
+        onClose();
     };
 
     const handleCancel = () => {
         tracker?.genericTrack(
-            allProblemsAnswered
+            completenessData?.is_complete
                 ? 'Click Cancel Button on Confirmation Modal'
                 : 'Click Cancel Button on Confirmation Modal when Empty Answer',
             {
@@ -70,7 +82,22 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
             <div className="bg-[#1D1D1D] rounded-2xl px-6 py-8 w-full max-w-[328px] md:max-w-sm">
-                {allProblemsAnswered ? (
+                {isLoading ? (
+                    <div className="flex flex-col items-center gap-4">
+                        <Skeleton isCustomSize className="w-full h-6 !mb-2" />
+                        <Skeleton isCustomSize className="w-3/4 h-6 !mb-4" />
+                        <div className="w-full flex flex-col gap-4 mt-2">
+                            <Skeleton
+                                isCustomSize
+                                className="w-full h-10 rounded-full !mb-0"
+                            />
+                            <Skeleton
+                                isCustomSize
+                                className="w-full h-10 rounded-full !mb-0"
+                            />
+                        </div>
+                    </div>
+                ) : completenessData?.is_complete ? (
                     <>
                         <h2 className="text-xl font-semibold text-white mb-4 text-center">
                             Kamu yakin mau submit semua jawaban di latihan ini?
@@ -109,7 +136,7 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
                         </p>
                         <div className="flex flex-col gap-4">
                             <button
-                                onClick={onReturnToExercise}
+                                onClick={handleCancel}
                                 disabled={isSubmitting}
                                 className="bg-[#7F56D9] font-semibold text-white py-2 px-4 rounded-full hover:bg-opacity-90 transition-colors">
                                 Kembali ke Latihan

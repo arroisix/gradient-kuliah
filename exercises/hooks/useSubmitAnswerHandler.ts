@@ -12,6 +12,7 @@ const useSubmitAnswerHandler = (problem: ProblemInProblemSet) => {
     const { slug, sectionId, problemId } = router.query;
     const [selectedAnswer, setSelectedAnswer] = useState<string[]>([]);
     const [openEndedAnswer, setOpenEndedAnswer] = useState<string>('');
+    const [isFinishModalOpen, setIsFinishModalOpen] = useState(false);
     const [submitAnswer, { isLoading }] = useSubmitUserAnswerMutation();
     const [submitProblemset, { isLoading: isFinishing }] =
         useFinishUserProblemSetMutation();
@@ -141,7 +142,8 @@ const useSubmitAnswerHandler = (problem: ProblemInProblemSet) => {
                         { scroll: false, shallow: true }
                     );
                 } else {
-                    await finishProblemSet();
+                    console.log('No next problem to navigate to.');
+                    setIsFinishModalOpen(true);
                 }
             } catch (error) {
                 console.error('Failed to submit answer:', error);
@@ -159,7 +161,9 @@ const useSubmitAnswerHandler = (problem: ProblemInProblemSet) => {
         handleAnswerChange,
         saveAnswer,
         finishProblemSet,
-        isLoading: isLoading || isFinishing
+        isLoading: isLoading || isFinishing,
+        isFinishModalOpen,
+        setIsFinishModalOpen
     };
 };
 

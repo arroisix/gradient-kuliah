@@ -439,6 +439,14 @@ export const exerciseApi = baseApi.injectEndpoints({
             query: ({ slug, problem_progress_id }) => ({
                 url: `${EXERCISE_BASE_URL}v2/${slug}/problem/${problem_progress_id}/solution/`
             })
+        }),
+        getCheckProblemsetCompleteness: builder.query<
+            { is_complete: boolean },
+            { slug: string; problemset_progress_id: string }
+        >({
+            query: ({ slug, problemset_progress_id }) => ({
+                url: `${EXERCISE_BASE_URL}v2/${slug}/check-problem-set-completeness/${problemset_progress_id}/`
+            })
         })
     })
 });
@@ -471,7 +479,8 @@ export const {
     useSubmitUserAnswerMutation,
     useFinishUserProblemSetMutation,
     useGetProblemsetDetailInterstitialQuery,
-    useGetProblemSolutionQuery
+    useGetProblemSolutionQuery,
+    useGetCheckProblemsetCompletenessQuery
 } = exerciseApi;
 
 export const {

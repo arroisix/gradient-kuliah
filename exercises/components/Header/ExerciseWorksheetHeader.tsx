@@ -12,6 +12,7 @@ import { useState, useRef, useMemo } from 'react';
 import QuizNavigationDropdown from '../ExerciseUtils/QuizNavigationDropdown';
 import ExerciseCloseModal from '../Modal/ExerciseCloseModal';
 import useSubmitAnswerHandler from 'exercises/hooks/useSubmitAnswerHandler';
+import ExerciseFinishModal from '../Modal/ExerciseFinishModal';
 
 const ExerciseWorksheetHeader = () => {
     const router = useRouter();
@@ -37,7 +38,8 @@ const ExerciseWorksheetHeader = () => {
     const [isNavigationOpen, setIsNavigationOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const settingsButtonRef = useRef<HTMLButtonElement>(null);
-    const { finishProblemSet } = useSubmitAnswerHandler(problem!);
+    const { finishProblemSet, isFinishModalOpen, setIsFinishModalOpen } =
+        useSubmitAnswerHandler(problem!);
     const isNoNeedNavigation = useMemo(() => {
         return (
             problem?.time_constraint === 'PER_PROBLEM' ||
@@ -95,6 +97,11 @@ const ExerciseWorksheetHeader = () => {
             alert('Waktu kamu habis!');
             await finishProblemSet();
         }
+    };
+
+    const onFinishProblemset = async () => {
+        await finishProblemSet();
+        setIsFinishModalOpen(false);
     };
 
     return (
@@ -168,6 +175,11 @@ const ExerciseWorksheetHeader = () => {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onConfirm={handleConfirmClose}
+            />
+            <ExerciseFinishModal
+                isOpen={isFinishModalOpen}
+                onClose={() => setIsFinishModalOpen(false)}
+                onConfirm={onFinishProblemset}
             />
         </header>
     );

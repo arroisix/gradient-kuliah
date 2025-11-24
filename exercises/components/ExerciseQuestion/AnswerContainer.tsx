@@ -13,6 +13,7 @@ import AnswerInformation from './AnswerInformation';
 import Book from 'commons/components/elements/Icons/Book';
 import { useEffect, useMemo, useState } from 'react';
 import SolutionContainer from './SolutionContainer';
+import ExerciseFinishModal from '../Modal/ExerciseFinishModal';
 
 const QuestionContent = () => {
     const router = useRouter();
@@ -80,7 +81,10 @@ const QuestionContent = () => {
         openEndedAnswer,
         handleAnswerChange,
         saveAnswer,
-        isLoading
+        isLoading,
+        isFinishModalOpen,
+        setIsFinishModalOpen,
+        finishProblemSet
     } = useSubmitAnswerHandler(problem!);
 
     const renderAnswerType = useMemo(() => {
@@ -117,6 +121,11 @@ const QuestionContent = () => {
         handleAnswerChange,
         showSolution
     ]);
+
+    const onFinishProblemset = async () => {
+        await finishProblemSet();
+        setIsFinishModalOpen(false);
+    };
 
     return (
         <>
@@ -172,6 +181,12 @@ const QuestionContent = () => {
                     problem?.problem_progress?.completed_at === null &&
                     !isLoading
                 }
+            />
+            <ExerciseFinishModal
+                key={problemId as string}
+                isOpen={isFinishModalOpen}
+                onClose={() => setIsFinishModalOpen(false)}
+                onConfirm={onFinishProblemset}
             />
         </>
     );
