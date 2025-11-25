@@ -57,7 +57,7 @@ const Filter = ({
             {/* Desktop: Dropdown */}
             <div
                 className={cn(
-                    'hidden md:block dropdown z-10',
+                    'hidden md:block dropdown z-0',
                     fullWidth ? 'w-full' : '',
                     className
                 )}>
