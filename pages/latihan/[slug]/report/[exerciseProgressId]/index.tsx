@@ -1,6 +1,5 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import ExerciseReportLayout from 'exercises/components/Report/ExerciseReportLayout';
 import withAuth from 'commons/withAuth';
 import ExerciseReport from 'exercises/containers/ExerciseReport';
 import { ExerciseProvider } from 'exercises/contexts/ExerciseProvider';
