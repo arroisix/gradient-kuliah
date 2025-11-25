@@ -9,6 +9,7 @@ import Leaderboard from 'exercises/components/ExerciseDetail/Leaderboard';
 import ExerciseCompleteHeader from 'exercises/components/Header/ExerciseCompleteHeader';
 import ResultSummary from 'exercises/components/ExerciseDetail/ResultSummary';
 import ResultSummaryPerProblem from 'exercises/components/ExerciseDetail/ResultSummaryPerProblem';
+import ExercisePaywall from 'exercises/components/ExerciseDetail/ExercisePaywall';
 
 const ExerciseDetail = () => {
     const router = useRouter();
@@ -21,6 +22,8 @@ const ExerciseDetail = () => {
         }
     );
 
+    console.log('exercise detail data', exercise);
+
     if (isLoading) {
         return (
             <LatihanLayout>
@@ -32,8 +35,6 @@ const ExerciseDetail = () => {
     if (!exercise) {
         return null;
     }
-
-    console.log('exercise', exercise);
 
     if (exercise?.latest_exercise_progress?.status === 'COMPLETED') {
         return (
@@ -50,7 +51,8 @@ const ExerciseDetail = () => {
     }
 
     return (
-        <LatihanLayout className="h-full">
+        <LatihanLayout className="h-full relative">
+            <ExercisePaywall isFree={exercise.is_free} />
             <div className="flex flex-col h-full gap-6">
                 <ExerciseDetailHeader />
                 <div className="flex w-full gap-10 flex-col lg:flex-row flex-shrink-0">

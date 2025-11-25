@@ -7,6 +7,7 @@ import {
 import { Check, X } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
+import { FaExclamation } from 'react-icons/fa6';
 
 const MultipleChoiceContainer = ({
     onAnswerClicked,
@@ -46,18 +47,27 @@ const MultipleChoiceContainer = ({
         }
     );
 
-    const decideAnswerCorrectOrNot = (optionId: string): 1 | 2 | 3 => {
-        if (solutionData?.correct_answer_ids.includes(optionId)) {
-            return 1;
-        }
-
+    const decideAnswerCorrectOrNot = (optionId: string): 1 | 2 | 3 | 4 => {
         if (
+            solutionData?.correct_answer_ids.includes(optionId) &&
+            solutionData?.user_answer_ids.includes(optionId)
+        ) {
+            return 1;
+        } else if (
             !solutionData?.correct_answer_ids.includes(optionId) &&
             solutionData?.user_answer_ids.includes(optionId)
         ) {
             return 2;
+        } else if (
+            solutionData?.correct_answer_ids.includes(optionId) &&
+            !solutionData?.user_answer_ids.includes(optionId)
+        ) {
+            if (problem?.problem.type === 'MULTIPLE_ANSWER') {
+                return 3;
+            }
+            return 1;
         }
-        return 3;
+        return 4;
     };
 
     return (
@@ -86,29 +96,38 @@ const MultipleChoiceContainer = ({
                             decideAnswerCorrectOrNot(option.id) === 1 &&
                                 'bg-[#00C8B3]/30 border-[#00C8B3] hover:bg-[#00C8B3]/40',
                             decideAnswerCorrectOrNot(option.id) === 2 &&
-                                'bg-[#FF383C]/30 hover:bg-[#FF383C]/40 border-[#FF383C]'
+                                'bg-[#FF383C]/30 hover:bg-[#FF383C]/40 border-[#FF383C]',
+                            decideAnswerCorrectOrNot(option.id) === 3 &&
+                                'bg-[#FF8D28]/30 hover:bg-[#FF8D28]/40 border-[#FF8D28] border-dashed'
                         )}>
                         <TiptapViewer
                             content={option.answer}
                             className="text-center"
                         />
-                        {decideAnswerCorrectOrNot(option.id) < 3 && (
+                        {decideAnswerCorrectOrNot(option.id) <= 3 && (
                             <div
                                 className={cn(
                                     'absolute right-3 w-6 h-6 rounded-full flex items-center justify-center',
-                                    decideAnswerCorrectOrNot(option.id) === 1
-                                        ? 'bg-[#00C8B3]'
-                                        : 'bg-[#FF383C]'
+                                    decideAnswerCorrectOrNot(option.id) === 1 &&
+                                        'bg-[#00C8B3]',
+                                    decideAnswerCorrectOrNot(option.id) === 2 &&
+                                        'bg-[#FF383C]',
+                                    decideAnswerCorrectOrNot(option.id) === 3 &&
+                                        'bg-[#FFCC00]'
                                 )}>
-                                {decideAnswerCorrectOrNot(option.id) === 1 ? (
+                                {decideAnswerCorrectOrNot(option.id) === 1 && (
                                     <Check
                                         size={20}
-                                        className="text-graphite-900"
+                                        className="text-violet-3"
                                     />
-                                ) : (
-                                    <X
-                                        size={20}
-                                        className="text-graphite-900"
+                                )}
+                                {decideAnswerCorrectOrNot(option.id) === 2 && (
+                                    <X size={20} className="text-violet-3" />
+                                )}
+                                {decideAnswerCorrectOrNot(option.id) === 3 && (
+                                    <FaExclamation
+                                        size={12}
+                                        className="text-violet-3"
                                     />
                                 )}
                             </div>

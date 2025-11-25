@@ -4,9 +4,7 @@ import { ExerciseItem } from '../../types/exercises';
 import { cn } from 'commons/utils';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
-import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useTracker } from 'tracker/tracker';
-import { useRouter } from 'next/router';
 import Button from 'commons/components/elements/Button';
 import { Clock } from 'lucide-react';
 import Pencil from 'commons/components/elements/Icons/Pencil';
@@ -48,9 +46,7 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
     className,
     onClick
 }) => {
-    const router = useRouter();
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { is_subscribed } = useCourseSubscription();
     const tracker = useTracker();
 
     const handleClick = () => {
@@ -61,15 +57,7 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
     };
 
     const decideURLLink = (): string => {
-        if (isAuthenticated) {
-            if (exercise.is_free || is_subscribed) {
-                return `/latihan/${exercise.slug}`;
-            } else {
-                return '/langganan';
-            }
-        } else {
-            return `/masuk?redirect=${router.asPath}`;
-        }
+        return `/latihan/${exercise.slug}`;
     };
 
     const getExerciseColorResult = (): string => {

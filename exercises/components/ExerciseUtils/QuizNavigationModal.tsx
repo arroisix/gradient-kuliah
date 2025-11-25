@@ -125,7 +125,7 @@ const QuizNavigationModal: React.FC<QuizNavigationModalProps> = ({
                 </h2>
             )}
 
-            <div className="grid grid-cols-5 gap-3 mb-6">
+            <div className="grid grid-cols-5 place-self-center gap-3 mb-6">
                 {isLoading ? (
                     <Skeleton
                         repeat={5}

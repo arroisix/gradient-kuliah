@@ -169,7 +169,7 @@ const ResultSummaryPerProblem: React.FC<ResultSummaryPerProblemProps> = ({
                 </>
             )}
 
-            <div className="grid grid-cols-5 gap-3 mb-6">
+            <div className="grid grid-cols-5 gap-3 mb-6 place-self-center">
                 {isLoading ? (
                     <Skeleton
                         repeat={20}

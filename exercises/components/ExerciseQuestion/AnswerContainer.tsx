@@ -164,7 +164,9 @@ const AnswerContainer = () => {
                     problemsetId ? '' : 'lg:h-[70vh]'
                 )}>
                 {isSolutionPage && (
-                    <div className="hidden lg:absolute top-0 left-0 w-full px-4 py-4 lg:flex items-center justify-center z-[2]">
+                    <div
+                        className="hidden lg:absolute top-0 left-0 w-full px-4 py-4 lg:flex items-center justify-center z-[2]"
+                        key={`${problemId as string}-info`}>
                         <AnswerInformation
                             showSolution={showSolution}
                             setShowSolution={setShowSolution}

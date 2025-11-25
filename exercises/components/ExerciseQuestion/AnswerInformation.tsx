@@ -39,7 +39,12 @@ const AnswerInformation = ({
             slug: slug as string,
             problem_progress_id: problem?.problem_progress?.id as string
         },
-        { skip: !slug || !solution || !problem?.problem_progress?.id }
+        {
+            skip:
+                !slug ||
+                (!solution && !problemsetId) ||
+                !problem?.problem_progress?.id
+        }
     );
 
     const decideCopy = () => {

@@ -7,10 +7,12 @@ import { useRouter } from 'next/router';
 import ProblemSetVector from './ProblemSetVector';
 import { cn } from 'commons/utils';
 import { useMemo } from 'react';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 const ProblemSetInformation = () => {
     const router = useRouter();
     const { slug, sectionId } = router.query;
+    const { isAuthenticated } = useAuth();
 
     const { data: exercise } = useGetExerciseDetailV2Query(
         { exercise_slug: slug as string },
@@ -41,6 +43,10 @@ const ProblemSetInformation = () => {
     }, [exercise]);
 
     const decideCTAAction = (): string => {
+        if (!isAuthenticated) {
+            return `/masuk?redirect=/latihan/${slug}`;
+        }
+
         if (sectionId) {
             // Start or continue to the selected problem set
             const activeProblemSet = problemsets?.data.filter(
