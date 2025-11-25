@@ -14,14 +14,16 @@ const ExerciseProblemSetHeader = () => {
     };
 
     return (
-        <header className="w-full flex items-center justify-between gap-4 relative">
+        <header className="w-full flex items-center justify-between gap-4 relative px-4 lg:px-0 py-4 lg:py-0">
             <XIcon
                 size={24}
-                className={cn(
-                    'absolute lg:relative top-0 left-0 cursor-pointer'
-                )}
+                className={cn('cursor-pointer text-white')}
                 onClick={() => setIsModalOpen(true)}
             />
+            <h2 className="text-white text-lg font-semibold lg:hidden">
+                Quiz Section
+            </h2>
+            <div className="w-6 lg:hidden" />
             <ExerciseCloseModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}

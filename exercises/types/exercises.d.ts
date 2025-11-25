@@ -304,6 +304,7 @@ interface RecommendedMaterial {
     rating?: number;
     course_slug?: string;
     subchapter_slug?: string;
+    is_free?: boolean;
 }
 
 export interface AstronotesExercise {

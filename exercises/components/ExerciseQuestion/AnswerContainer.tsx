@@ -13,9 +13,10 @@ import { cn } from 'commons/utils';
 import AnswerInformation from './AnswerInformation';
 import AnswerLegend from './AnswerLegend';
 import Book from 'commons/components/elements/Icons/Book';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import SolutionContainer from './SolutionContainer';
 import ExerciseFinishModal from '../Modal/ExerciseFinishModal';
+import { useExercise } from 'exercises/contexts/ExerciseProvider';
 
 const AnswerContainer = () => {
     const router = useRouter();
@@ -54,7 +55,7 @@ const AnswerContainer = () => {
                 !problem?.problem_progress?.id
         }
     );
-    const [showSolution, setShowSolution] = useState(false);
+    const { showSolution, setShowSolution } = useExercise();
     const isSolutionPage = useMemo(() => {
         return problemsetId || solution;
     }, [problemsetId, solution]);
@@ -163,15 +164,17 @@ const AnswerContainer = () => {
                     problemsetId ? '' : 'lg:h-[70vh]'
                 )}>
                 {isSolutionPage && (
-                    <AnswerInformation
-                        showSolution={showSolution}
-                        setShowSolution={setShowSolution}
-                    />
+                    <div className="hidden lg:absolute top-0 left-0 w-full px-4 py-4 lg:flex items-center justify-center z-[2]">
+                        <AnswerInformation
+                            showSolution={showSolution}
+                            setShowSolution={setShowSolution}
+                        />
+                    </div>
                 )}
                 {renderAnswerType}
-                {isSolutionPage && problem?.problem.type !== 'SHORT_ANSWER' && (
-                    <AnswerLegend className="mt-4" />
-                )}
+                {isSolutionPage &&
+                    problem?.problem.type !== 'SHORT_ANSWER' &&
+                    !showSolution && <AnswerLegend className="mt-4" />}
                 {!showSolution && !problemsetId && (
                     <div className="w-full hidden lg:flex flex-row gap-2">
                         {solution && solutionData && (

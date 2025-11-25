@@ -35,7 +35,7 @@ const ExerciseDetail = () => {
 
     console.log('exercise', exercise);
 
-    if (exercise.latest_exercise_progress.status === 'COMPLETED') {
+    if (exercise?.latest_exercise_progress?.status === 'COMPLETED') {
         return (
             <LatihanLayout className="h-full">
                 <div className="flex flex-col h-full gap-6">

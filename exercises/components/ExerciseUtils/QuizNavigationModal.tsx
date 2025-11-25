@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from 'commons/utils';
 import Button from 'commons/components/elements/Button';
 import Skeleton from 'commons/components/elements/Skeleton';
 import {
     useGetAllProblemInProblemSetQuery,
+    useGetAllProblemInProblemSetViaExerciseProgressQuery,
     useGetProblemInProblemSetQuery
 } from 'exercises/redux/api/exercisesApi';
 import { useRouter } from 'next/router';
-import { ProblemNavigationItem } from 'exercises/types/exercises';
+import {
+    ProblemNavigationItem,
+    ProblemNavigationVerboseItem
+} from 'exercises/types/exercises';
 
 interface QuizNavigationModalProps {
     onProblemSelect: (problemId: string) => void;
@@ -25,8 +29,14 @@ const QuizNavigationModal: React.FC<QuizNavigationModalProps> = ({
 }) => {
     const router = useRouter();
     const [currentPage, setCurrentPage] = React.useState(0);
-    const { slug, exerciseProgressId, sectionId, problemId, solution } =
-        router.query;
+    const {
+        slug,
+        exerciseProgressId,
+        problemsetId,
+        sectionId,
+        problemId,
+        solution
+    } = router.query;
     const { data: problem } = useGetProblemInProblemSetQuery(
         {
             slug: slug as string,
@@ -36,13 +46,55 @@ const QuizNavigationModal: React.FC<QuizNavigationModalProps> = ({
         },
         { skip: !slug || !sectionId || !problemId }
     );
-    const { data: allProblems, isLoading } = useGetAllProblemInProblemSetQuery({
-        slug: slug as string,
-        problemSetProgressId: problem?.id as string,
-        page: currentPage + 1,
-        limit: PROBLEMS_PER_PAGE,
-        solution: solution as string
-    });
+    const { data: allProblemsInPS, isLoading: isLoadingProblems } =
+        useGetAllProblemInProblemSetQuery(
+            {
+                slug: slug as string,
+                problemSetProgressId: problem?.id as string,
+                page: currentPage + 1,
+                limit: PROBLEMS_PER_PAGE,
+                solution: solution as string
+            },
+            { skip: !slug || problemsetId !== undefined }
+        );
+    const { data: allProblemsViaProgress, isLoading: isLoadingViaProgress } =
+        useGetAllProblemInProblemSetViaExerciseProgressQuery(
+            {
+                slug: slug as string,
+                exerciseProgress: exerciseProgressId as string,
+                problemsetId: problemsetId as string,
+                page: currentPage + 1,
+                limit: PROBLEMS_PER_PAGE
+            },
+            { skip: !slug || !exerciseProgressId || !problemsetId }
+        );
+
+    const { allProblems, isLoading } = useMemo(() => {
+        if (problemsetId) {
+            return {
+                allProblems: {
+                    ...allProblemsViaProgress,
+                    data: allProblemsViaProgress?.data.map(
+                        (problem: ProblemNavigationVerboseItem) => ({
+                            ...problem,
+                            id: problem.problem_id
+                        })
+                    )
+                },
+                isLoading: isLoadingViaProgress
+            };
+        } else {
+            return {
+                allProblems: allProblemsInPS,
+                isLoading: isLoadingProblems
+            };
+        }
+    }, [
+        allProblemsInPS,
+        allProblemsViaProgress,
+        isLoadingProblems,
+        isLoadingViaProgress
+    ]);
 
     const totalPages = Math.ceil(
         (allProblems?.count_items as number) / PROBLEMS_PER_PAGE
@@ -81,7 +133,7 @@ const QuizNavigationModal: React.FC<QuizNavigationModalProps> = ({
                         className="w-12 h-12 aspect-square rounded-lg"
                     />
                 ) : (
-                    allProblems?.data.map((problem: ProblemNavigationItem) => (
+                    allProblems?.data?.map((problem: ProblemNavigationItem) => (
                         <button
                             key={problem.id}
                             onClick={() => handleProblemClick(problem.id)}

@@ -6,7 +6,6 @@ import Skeleton from 'commons/components/elements/Skeleton';
 import {
     useGetAllProblemInProblemSetViaExerciseProgressQuery,
     useGetExerciseDetailV2Query,
-    useGetProblemInProblemSetQuery,
     useGetProblemsetDetailInterstitialQuery
 } from 'exercises/redux/api/exercisesApi';
 import { useRouter } from 'next/router';
@@ -14,6 +13,7 @@ import {
     ProblemNavigationVerboseItem,
     ProblemSetItem
 } from 'exercises/types/exercises';
+import AnswerLegend from '../ExerciseQuestion/AnswerLegend';
 
 interface ResultSummaryPerProblemProps {
     onProblemSelect?: (problemId: string) => void;
@@ -68,8 +68,6 @@ const ResultSummaryPerProblem: React.FC<ResultSummaryPerProblemProps> = ({
             }
         );
 
-    console.log('selectedProblemSetId', selectedProblemSetId);
-
     const { data: allProblemset } = useGetProblemsetDetailInterstitialQuery(
         {
             slug: slug as string,
@@ -111,8 +109,6 @@ const ResultSummaryPerProblem: React.FC<ResultSummaryPerProblemProps> = ({
     const selectedProblemSet = allProblemset?.data?.find(
         (ps: ProblemSetItem) => ps.id === selectedProblemSetId
     );
-
-    console.log('allProblems', allProblems);
 
     return (
         <div
@@ -202,16 +198,7 @@ const ResultSummaryPerProblem: React.FC<ResultSummaryPerProblemProps> = ({
             </div>
 
             {/* Legend */}
-            <div className="space-y-2 mb-6">
-                <div className="flex items-center gap-3">
-                    <div className="w-5 h-5 rounded bg-[#4ADE80]" />
-                    <span className="text-white text-sm">Jawaban Benar</span>
-                </div>
-                <div className="flex items-center gap-3">
-                    <div className="w-5 h-5 rounded bg-[#EF4444]" />
-                    <span className="text-white text-sm">Jawaban Salah</span>
-                </div>
-            </div>
+            <AnswerLegend removeYellowLegend={true} className="mb-6" />
 
             {/* Pagination */}
             {totalPages > 1 && (

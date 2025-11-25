@@ -1,8 +1,6 @@
 import React from 'react';
 import { Timer as TimerIcon } from 'lucide-react';
 import { useTimer } from '../../hooks/useTimer';
-import { useGetProblemInProblemSetQuery } from 'exercises/redux/api/exercisesApi';
-import { useRouter } from 'next/router';
 import { ProblemInProblemSet } from 'exercises/types/exercises';
 
 interface TimerProps {
@@ -26,18 +24,6 @@ const Timer: React.FC<TimerProps> = ({
     onTimeExpired,
     isCurrentProblemSubmitted = false
 }) => {
-    const router = useRouter();
-    const { slug, exerciseProgressId, sectionId, problemId } = router.query;
-    const { data: problem } = useGetProblemInProblemSetQuery(
-        {
-            slug: slug as string,
-            problemSetId: sectionId as string,
-            problemId: problemId as string,
-            exercise_progress_id: exerciseProgressId as string
-        },
-        { skip: !slug || !sectionId || !problemId }
-    );
-
     const { timeLeft, progressPercentage, isLowTime, formatTime } = useTimer({
         timeConstraint,
         timeLimit,

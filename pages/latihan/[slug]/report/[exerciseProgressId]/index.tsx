@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import ExerciseReportLayout from 'exercises/components/Report/ExerciseReportLayout';
 import withAuth from 'commons/withAuth';
 import ExerciseReport from 'exercises/containers/ExerciseReport';
+import { ExerciseProvider } from 'exercises/contexts/ExerciseProvider';
 
 const ExerciseReportPage: NextPage = () => {
     const router = useRouter();
@@ -17,7 +18,11 @@ const ExerciseReportPage: NextPage = () => {
         );
     }
 
-    return <ExerciseReport />;
+    return (
+        <ExerciseProvider>
+            <ExerciseReport />
+        </ExerciseProvider>
+    );
 };
 
 export default withAuth(ExerciseReportPage);

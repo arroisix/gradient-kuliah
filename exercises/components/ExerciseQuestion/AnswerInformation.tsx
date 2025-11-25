@@ -151,10 +151,7 @@ const AnswerInformation = ({
                     variant="primary"
                     onClick={() => setShowSolution(false)}
                     className={cn(
-                        'text-center !p-0 !w-8 !h-8 items-center justify-center',
-                        problem?.time_constraint === 'PER_PROBLEM'
-                            ? 'hidden'
-                            : 'flex'
+                        'text-center !p-0 !w-8 !h-8 items-center justify-center flex'
                     )}>
                     <ChevronLeft size={14} />
                 </Button>

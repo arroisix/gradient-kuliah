@@ -35,7 +35,7 @@ const ExerciseCompleteHeader = () => {
     }, [problemId, router.pathname]);
 
     const onClose = () => {
-        router.push(`/latihan/${slug}`);
+        router.push(`/latihan/`);
     };
 
     const onTabClicked = (tab: 'Nilai' | 'Pembahasan' | 'Leaderboard') => {
@@ -78,13 +78,10 @@ const ExerciseCompleteHeader = () => {
 
     return (
         <header className="w-full flex items-center justify-center gap-4 relative">
-            <button onClick={onClose}>
-                <XIcon
-                    size={24}
-                    className={cn(
-                        'absolute top-auto bottom-auto left-0 cursor-pointer'
-                    )}
-                />
+            <button
+                onClick={onClose}
+                className="absolute top-auto bottom-auto left-0 cursor-pointer">
+                <XIcon size={24} />
             </button>
             <div className="border border-violet-4 rounded-full flex items-center justify-between px-3 py-2 relative gap-4">
                 {/* Left Arrow Button */}

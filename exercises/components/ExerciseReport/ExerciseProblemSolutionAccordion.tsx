@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronDown, ChevronUp, Minimize2 } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import { cn } from 'commons/utils';
 import TiptapViewer from 'courses/components/Textbook/TiptapViewer';
 import {
@@ -43,7 +43,7 @@ const ExerciseProblemSolutionAccordion = () => {
     }
 
     return (
-        <div className="bg-violet-1 rounded-2xl lg:relative lg:border-none">
+        <div className="bg-violet-1 rounded-2xl lg:relative">
             {/* Accordion Header */}
             <button
                 onClick={() => setIsExpanded(!isExpanded)}
@@ -64,9 +64,9 @@ const ExerciseProblemSolutionAccordion = () => {
             <div
                 className={cn(
                     'overflow-hidden transition-all duration-300 ease-in-out',
-                    isExpanded ? 'max-h-[70vh] lg:max-h-[500px]' : 'max-h-0'
+                    isExpanded ? 'h-auto' : 'max-h-0'
                 )}>
-                <div className="px-4 lg:px-6 py-6 overflow-y-auto max-h-[60vh] lg:max-h-[450px]">
+                <div className="px-4 lg:px-6 py-6">
                     <TiptapViewer
                         content={solutionData?.solution}
                         className="text-left lg:text-xl"

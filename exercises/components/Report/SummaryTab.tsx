@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 interface SummaryTabProps {
@@ -26,9 +27,6 @@ const SummaryTab: React.FC<SummaryTabProps> = ({
 }) => {
     return (
         <div className="w-full h-full flex flex-col space-y-4">
-            <div className="text-white text-base font-bold">
-                Analisis Hasil Latihan
-            </div>
             <div className="flex flex-row items-center justify-between bg-[#252A31] rounded-lg p-5 gap-2">
                 <div className="text-white text-3xl font-semibold">
                     {percentile}%
@@ -46,11 +44,15 @@ const SummaryTab: React.FC<SummaryTabProps> = ({
                     <div className="flex flex-wrap gap-2 w-full h-auto">
                         {masteredTopics.length > 0 ? (
                             masteredTopics.map((topic, index) => (
-                                <div
+                                <Link
+                                    href={`/search/results/?q=${encodeURIComponent(
+                                        topic
+                                    )}`}
+                                    target="__blank"
                                     key={index}
                                     className="bg-[#4B4E5F] text-white px-4 py-2 rounded-full text-xs sm:text-sm">
                                     {topic}
-                                </div>
+                                </Link>
                             ))
                         ) : (
                             <div className="text-white text-xs sm:text-sm">
@@ -66,11 +68,15 @@ const SummaryTab: React.FC<SummaryTabProps> = ({
                     <div className="flex flex-wrap gap-2 w-full h-auto">
                         {topicsToImprove.length > 0 ? (
                             topicsToImprove.map((topic, index) => (
-                                <div
+                                <Link
+                                    href={`/search/results/?q=${encodeURIComponent(
+                                        topic
+                                    )}`}
+                                    target="__blank"
                                     key={index}
                                     className="bg-[#4B4E5F] text-white px-4 py-2 rounded-full text-xs sm:text-sm">
                                     {topic}
-                                </div>
+                                </Link>
                             ))
                         ) : (
                             <div className="text-white text-xs sm:text-sm">
@@ -82,7 +88,7 @@ const SummaryTab: React.FC<SummaryTabProps> = ({
             </div>
 
             {performanceBreakdown.length > 0 && (
-                <div className="bg-[#252A31] rounded-lg p-5 max-w-[640px] h-auto flex flex-col gap-4">
+                <div className="bg-[#252A31] rounded-lg p-5 h-auto flex flex-col gap-4">
                     <div className="text-white text-base font-bold">
                         Urutan Kesulitanmu
                     </div>
@@ -104,9 +110,14 @@ const SummaryTab: React.FC<SummaryTabProps> = ({
                                         {index + 1}
                                     </td>
                                     <td className="py-2">
-                                        <div className="bg-[#4B4E5F] text-white px-2 py-[2px] rounded-sm text-sm inline-block break-words">
+                                        <Link
+                                            href={`/search/results/?q=${encodeURIComponent(
+                                                item.topic
+                                            )}`}
+                                            target="__blank"
+                                            className="bg-[#4B4E5F] text-white px-2 py-[2px] rounded-sm text-sm inline-block break-words">
                                             {item.topic}
-                                        </div>
+                                        </Link>
                                     </td>
                                     <td
                                         className={`text-right py-2 ${

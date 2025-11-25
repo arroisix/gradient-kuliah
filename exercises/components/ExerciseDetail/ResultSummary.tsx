@@ -7,7 +7,7 @@ const ResultSummary = ({ isReportMode }: { isReportMode?: boolean }) => {
     const router = useRouter();
     const { slug, exerciseProgressId } = router.query;
 
-    const { data: exercise, isLoading } = useGetExerciseDetailV2Query(
+    const { data: exercise } = useGetExerciseDetailV2Query(
         {
             exercise_slug: slug as string,
             exercise_progress_id: exerciseProgressId as string
@@ -40,9 +40,9 @@ const ResultSummary = ({ isReportMode }: { isReportMode?: boolean }) => {
     };
 
     return (
-        <div className="w-full max-w-2xl p-6 space-y-6 bg-violet-1 rounded-l-xl rounded-r-xl lg:rounded-r-none">
+        <div className="w-full max-w-2xl pt-6 lg:p-6 space-y-6 bg-violet-1 rounded-l-xl rounded-r-xl lg:rounded-r-none">
             {/* Title and History Link */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between lg:px-0 px-6">
                 <h1 className="font-bold text-white">Nilai Akhir Kamu</h1>
                 <button className="flex items-center gap-2 text-white/80 hover:text-white transition-colors">
                     <RefreshCcw size={16} />
@@ -51,7 +51,7 @@ const ResultSummary = ({ isReportMode }: { isReportMode?: boolean }) => {
             </div>
 
             {/* Score Display */}
-            <div className="space-y-2">
+            <div className="space-y-2 lg:px-0 px-6">
                 <div className="flex items-baseline gap-2">
                     <span className="text-[32px] font-bold text-white">
                         {score.toPrecision(4)}
@@ -61,7 +61,7 @@ const ResultSummary = ({ isReportMode }: { isReportMode?: boolean }) => {
             </div>
 
             {/* Progress Bar */}
-            <div className="space-y-3">
+            <div className="space-y-3 lg:px-0 px-6">
                 <div className="w-full h-2 bg-transparent rounded-full overflow-hidden flex gap-1">
                     {/* Correct answers - Green */}
                     <div
@@ -98,20 +98,32 @@ const ResultSummary = ({ isReportMode }: { isReportMode?: boolean }) => {
             </div>
 
             {isReportMode ? (
-                <div className="space-y-3 bg-violet-3 py-4 px-6 rounded-lg flex flex-col gap-8">
+                <div className="space-y-3 bg-violet-3 py-4 px-6 rounded-b-lg lg:rounded-lg flex flex-col gap-4 lg:gap-8">
                     <div className="flex flex-col gap-2 text-white">
-                        <h3 className="font-semibold">
-                            Kamu salah di{' '}
-                            {
-                                exercise?.latest_exercise_progress
-                                    .incorrect_answers
-                            }{' '}
-                            soal
-                        </h3>
-                        <span className="text-sm">
-                            Lihat pembahasan untuk memahami salahnya dan naikkan
-                            skor.
-                        </span>
+                        {incorrect_answers > 0 ? (
+                            <h3 className="font-semibold">
+                                Kamu salah di{' '}
+                                {
+                                    exercise?.latest_exercise_progress
+                                        .incorrect_answers
+                                }{' '}
+                                soal
+                            </h3>
+                        ) : (
+                            <h3 className="font-semibold">
+                                Luar Biasa! Skor Sempurna
+                            </h3>
+                        )}
+                        {incorrect_answers > 0 ? (
+                            <span className="text-sm">
+                                Lihat pembahasan untuk memahami salahnya dan
+                                naikkan skor.
+                            </span>
+                        ) : (
+                            <span className="text-sm">
+                                Kamu menguasai materi ini dengan baik.
+                            </span>
+                        )}
                     </div>
                     <Button
                         variant="primary"
@@ -121,7 +133,7 @@ const ResultSummary = ({ isReportMode }: { isReportMode?: boolean }) => {
                     </Button>
                 </div>
             ) : (
-                <div className="space-y-3 pt-4 flex flex-col gap-1">
+                <div className="space-y-3 pt-4 flex flex-col gap-1 p-6 lg:p-0">
                     <Button
                         variant="primary"
                         className="w-full flex items-center justify-center gap-2"

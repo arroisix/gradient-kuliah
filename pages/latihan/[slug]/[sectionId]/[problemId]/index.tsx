@@ -2,6 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import withAuth from 'commons/withAuth';
 import ExerciseQuestion from 'exercises/containers/ExerciseQuestion';
+import { ExerciseProvider } from 'exercises/contexts/ExerciseProvider';
 
 const ProblemPage: React.FC = () => {
     const router = useRouter();
@@ -16,7 +17,11 @@ const ProblemPage: React.FC = () => {
         );
     }
 
-    return <ExerciseQuestion />;
+    return (
+        <ExerciseProvider>
+            <ExerciseQuestion />
+        </ExerciseProvider>
+    );
 };
 
 export default withAuth(ProblemPage);

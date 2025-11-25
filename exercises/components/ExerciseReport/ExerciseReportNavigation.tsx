@@ -28,8 +28,7 @@ const ExerciseReportNavigation: React.FC<ExerciseReportNavigationProps> = ({
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isNavigationOpen, setIsNavigationOpen] = useState(false);
 
-    const { slug, exerciseProgressId, problemsetProgressId, problemId } =
-        router.query;
+    const { slug, exerciseProgressId, problemId } = router.query;
 
     const { data: exercise } = useGetExerciseDetailV2Query(
         {
@@ -184,10 +183,10 @@ const ExerciseReportNavigation: React.FC<ExerciseReportNavigationProps> = ({
             )}>
             {/* Section Dropdown - Only show if more than 1 section */}
             {allProblemset && allProblemset?.data?.length > 1 && (
-                <div className="absolute left-0 top-auto bottom-auto">
+                <div className="w-full lg:w-auto lg:absolute lg:left-0 lg:top-auto lg:bottom-auto">
                     <button
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        className="bg-transparent text-white px-3 py-2 rounded-lg flex items-center gap-2 hover:bg-white/5 transition-colors border border-white/10 min-w-[200px]">
+                        className="w-full bg-violet-2 lg:bg-transparent text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-white/5 transition-colors border border-white/10 min-w-[200px]">
                         <span className="text-sm font-medium truncate">
                             {selectedProblemSet
                                 ? `Section ${
@@ -233,7 +232,7 @@ const ExerciseReportNavigation: React.FC<ExerciseReportNavigationProps> = ({
             )}
 
             {/* Navigation Controls */}
-            <div className="flex items-center gap-2">
+            <div className="hidden lg:flex items-center gap-2">
                 <Button
                     variant="secondary"
                     disabled={!hasPrevious}
@@ -289,6 +288,9 @@ const ExerciseReportNavigation: React.FC<ExerciseReportNavigationProps> = ({
                     {isNavigationOpen && (
                         <>
                             <div
+                                role="button"
+                                aria-hidden
+                                tabIndex={0}
                                 className="fixed inset-0 z-40"
                                 onClick={() => setIsNavigationOpen(false)}
                             />

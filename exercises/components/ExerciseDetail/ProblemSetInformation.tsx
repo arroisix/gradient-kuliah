@@ -100,12 +100,12 @@ const ProblemSetInformation = () => {
     };
 
     return (
-        <div className="flex flex-col rounded-2xl bg-violet-3 w-full justify-between p-12 h-[290px] relative overflow-hidden">
+        <div className="flex flex-col rounded-2xl bg-violet-3 w-full justify-between p-6 lg:p-12 h-auto lg:h-[290px] relative overflow-hidden">
             <div className="flex flex-col gap-3 items-center justify-center">
-                <h1>{decideSectionTitle()}</h1>
-                <h3 className="text-[#BBBBBB] text-center">
-                    Dengan menekan ‘Mulai Latihan’ kamu akan langsung diarahkan
-                    ke soal
+                <h1 className="text-base lg:text-xl">{decideSectionTitle()}</h1>
+                <h3 className="text-[#BBBBBB] text-center text-sm lg:text-base">
+                    Dengan menekan &apos;Mulai Latihan&apos; kamu akan langsung
+                    diarahkan ke soal
                 </h3>
             </div>
             <div className="w-full z-[10] flex flex-col gap-4">

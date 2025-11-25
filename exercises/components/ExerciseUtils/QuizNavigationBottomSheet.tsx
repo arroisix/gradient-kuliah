@@ -2,6 +2,8 @@ import React from 'react';
 import QuizNavigationModal from './QuizNavigationModal';
 import Modal from 'commons/components/modules/Modal';
 import { XIcon } from 'lucide-react';
+import AnswerLegend from '../ExerciseQuestion/AnswerLegend';
+import { useRouter } from 'next/router';
 
 interface QuizNavigationBottomSheetProps {
     onProblemSelect: (problemId: string) => void;
@@ -14,6 +16,9 @@ const QuizNavigationBottomSheet: React.FC<QuizNavigationBottomSheetProps> = ({
     isOpen,
     onClose
 }) => {
+    const router = useRouter();
+    const { problemsetId, solution } = router.query;
+
     return (
         <Modal
             isOpen={isOpen}
@@ -34,6 +39,9 @@ const QuizNavigationBottomSheet: React.FC<QuizNavigationBottomSheetProps> = ({
                 onClose={onClose}
                 className="bg-transparent p-0 w-full"
             />
+            {(problemsetId || solution) && (
+                <AnswerLegend className="mt-4" removeYellowLegend />
+            )}
         </Modal>
     );
 };

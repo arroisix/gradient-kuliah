@@ -1,12 +1,16 @@
 import { cn } from 'commons/utils';
-import { Check, X, Info } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 import { FaExclamation } from 'react-icons/fa6';
 
 interface AnswerLegendProps {
     className?: string;
+    removeYellowLegend?: boolean;
 }
 
-const AnswerLegend: React.FC<AnswerLegendProps> = ({ className }) => {
+const AnswerLegend: React.FC<AnswerLegendProps> = ({
+    className,
+    removeYellowLegend
+}) => {
     return (
         <div className={cn('flex flex-col gap-2 text-sm', className)}>
             <div className="flex items-center gap-2">
@@ -25,14 +29,16 @@ const AnswerLegend: React.FC<AnswerLegendProps> = ({ className }) => {
                 </div>
                 <span className="text-white">Jawaban Salah</span>
             </div>
-            <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-full bg-yellow-500 flex items-center justify-center">
-                    <FaExclamation size={12} className="text-violet-1" />
+            {!removeYellowLegend && (
+                <div className="flex items-center gap-2">
+                    <div className="w-5 h-5 rounded-full bg-yellow-500 flex items-center justify-center">
+                        <FaExclamation size={12} className="text-violet-1" />
+                    </div>
+                    <span className="text-white">
+                        Jawaban Benar yang tidak dipilih
+                    </span>
                 </div>
-                <span className="text-white">
-                    Jawaban Benar yang tidak dipilih
-                </span>
-            </div>
+            )}
         </div>
     );
 };

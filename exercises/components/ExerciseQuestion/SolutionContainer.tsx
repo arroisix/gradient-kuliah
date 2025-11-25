@@ -7,14 +7,8 @@ import { useRouter } from 'next/router';
 
 const SolutionContainer = () => {
     const router = useRouter();
-    const {
-        slug,
-        exerciseProgressId,
-        sectionId,
-        problemsetId,
-        problemId,
-        solution
-    } = router.query;
+    const { slug, exerciseProgressId, sectionId, problemsetId, problemId } =
+        router.query;
     const { data: problem } = useGetProblemInProblemSetQuery(
         {
             slug: slug as string,

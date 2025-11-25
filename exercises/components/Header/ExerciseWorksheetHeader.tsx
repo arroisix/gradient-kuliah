@@ -13,6 +13,9 @@ import QuizNavigationDropdown from '../ExerciseUtils/QuizNavigationDropdown';
 import ExerciseCloseModal from '../Modal/ExerciseCloseModal';
 import useSubmitAnswerHandler from 'exercises/hooks/useSubmitAnswerHandler';
 import ExerciseFinishModal from '../Modal/ExerciseFinishModal';
+import { useExercise } from 'exercises/contexts/ExerciseProvider';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
+import { BsArrowLeft } from 'react-icons/bs';
 
 const ExerciseWorksheetHeader = () => {
     const router = useRouter();
@@ -36,6 +39,8 @@ const ExerciseWorksheetHeader = () => {
         },
         { skip: !slug || !sectionId || !problem }
     );
+    const { showSolution, setShowSolution } = useExercise();
+    const { isMobileBreakpoints } = useWindowBreakpoints();
 
     const [isNavigationOpen, setIsNavigationOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -109,14 +114,25 @@ const ExerciseWorksheetHeader = () => {
     };
 
     return (
-        <header className="w-full flex items-center justify-between gap-4 relative">
-            <XIcon
-                size={24}
-                className={cn(
-                    'absolute lg:relative top-0 left-0 cursor-pointer'
-                )}
-                onClick={() => setIsModalOpen(true)}
-            />
+        <header className="w-full flex items-center justify-between gap-4 relative min-h-[16px]">
+            {isMobileBreakpoints && showSolution ? (
+                <button
+                    className="flex items-center gap-2 text-white cursor-pointer"
+                    onClick={() => setShowSolution && setShowSolution(false)}>
+                    <BsArrowLeft size={20} />
+                    <span className="font-semibold">Pembahasan</span>
+                </button>
+            ) : (
+                <XIcon
+                    role="button"
+                    tabIndex={0}
+                    size={24}
+                    className={cn(
+                        'absolute lg:relative top-0 left-0 cursor-pointer'
+                    )}
+                    onClick={() => setIsModalOpen(true)}
+                />
+            )}
             {problem &&
                 problem.time_constraint &&
                 !solution &&

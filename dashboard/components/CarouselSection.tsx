@@ -12,6 +12,8 @@ interface CarouselSectionProps {
     renderItem: (item: any, index: number) => React.ReactNode;
     eventCategory: string;
     itemWrapperClassName?: string;
+    titleClassName?: string;
+    hideNavigation?: boolean;
 }
 
 const CarouselSection: React.FC<CarouselSectionProps> = ({
@@ -21,6 +23,8 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
     itemsPerPage = 4,
     renderItem,
     eventCategory,
+    titleClassName,
+    hideNavigation,
     itemWrapperClassName = 'w-[calc(100%-2rem)] sm:w-[calc((100%-1rem)/2.5)] lg:w-[calc((100%-2rem)/3.5)] xl:w-[calc((100%-3rem)/3.5)]'
 }) => {
     const tracker = useTracker();
@@ -100,8 +104,14 @@ const CarouselSection: React.FC<CarouselSectionProps> = ({
     return (
         <div className="w-full mt-6 mb-2">
             <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-bold md:text-xl">{title}</h2>
-                {showNav && (
+                <h2
+                    className={cn(
+                        'text-lg font-bold md:text-xl',
+                        titleClassName
+                    )}>
+                    {title}
+                </h2>
+                {!hideNavigation && showNav && (
                     <div className="flex items-center gap-2">
                         <div className="flex gap-2">
                             <button

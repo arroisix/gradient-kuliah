@@ -19,6 +19,7 @@ import {
     ProblemSetDetail,
     ProblemSetItem,
     ProblemSolutionData,
+    RecommendedMaterial,
     SubmitUserAnswerData,
     SubmitUserAnswerResponse
 } from '../../types/exercises';
@@ -488,6 +489,14 @@ export const exerciseApi = baseApi.injectEndpoints({
             query: ({ slug, problemset_progress_id }) => ({
                 url: `${EXERCISE_BASE_URL}v2/${slug}/check-problem-set-completeness/${problemset_progress_id}/`
             })
+        }),
+        getRecommendationMaterialFromProblem: builder.query<
+            ResponseData<RecommendedMaterial>,
+            { slug: string; problemId: string }
+        >({
+            query: ({ slug, problemId }) => ({
+                url: `${EXERCISE_BASE_URL}v2/${slug}/problem/${problemId}/recommendation/`
+            })
         })
     })
 });
@@ -522,7 +531,8 @@ export const {
     useGetProblemsetDetailInterstitialQuery,
     useGetProblemSolutionQuery,
     useGetCheckProblemsetCompletenessQuery,
-    useGetAllProblemInProblemSetViaExerciseProgressQuery
+    useGetAllProblemInProblemSetViaExerciseProgressQuery,
+    useGetRecommendationMaterialFromProblemQuery
 } = exerciseApi;
 
 export const {

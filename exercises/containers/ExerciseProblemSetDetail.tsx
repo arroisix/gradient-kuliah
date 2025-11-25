@@ -30,7 +30,16 @@ const ExerciseProblemSetDetail = () => {
 
     return (
         <LatihanLayout>
-            <div className="flex flex-col h-full gap-6 overflow-hidden">
+            {/* Mobile View */}
+            <div className="lg:hidden flex flex-col h-full bg-black">
+                <ExerciseProblemSetHeader />
+                <div className="flex-1 overflow-y-auto px-4">
+                    <ProblemSetRoadmap />
+                </div>
+            </div>
+
+            {/* Desktop View */}
+            <div className="hidden lg:flex flex-col h-full gap-6 overflow-hidden">
                 <ExerciseProblemSetHeader />
                 <div className="flex w-full gap-10 flex-col lg:flex-row flex-shrink-0 h-full">
                     <ProblemSetRoadmap />

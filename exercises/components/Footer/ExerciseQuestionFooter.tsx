@@ -6,14 +6,23 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 import QuizNavigationBottomSheet from '../ExerciseUtils/QuizNavigationBottomSheet';
+import Book from 'commons/components/elements/Icons/Book';
+import { useExercise } from 'exercises/contexts/ExerciseProvider';
+import ExerciseReportNavigationFooter from './ExerciseReportNavigationFooter';
 
 const ExerciseQuestionFooter: React.FC<{
     saveAnswer: () => Promise<void>;
     isDisabled: boolean;
 }> = ({ saveAnswer, isDisabled }) => {
     const router = useRouter();
-    const { slug, exerciseProgressId, sectionId, problemId, solution } =
-        router.query;
+    const {
+        slug,
+        exerciseProgressId,
+        sectionId,
+        problemsetId,
+        problemId,
+        solution
+    } = router.query;
     const { data: problem } = useGetProblemInProblemSetQuery(
         {
             slug: slug as string,
@@ -25,6 +34,7 @@ const ExerciseQuestionFooter: React.FC<{
     );
 
     const [isNavigationOpen, setIsNavigationOpen] = useState(false);
+    const { setShowSolution, showSolution } = useExercise();
     const isNoNeedNavigation = useMemo(() => {
         return (
             problem?.time_constraint === 'PER_PROBLEM' ||
@@ -66,49 +76,113 @@ const ExerciseQuestionFooter: React.FC<{
         }
     };
 
-    return (
-        <>
-            <div className="flex flex-row gap-2 items-center fixed bottom-0 left-0 w-full bg-black p-4 lg:hidden">
-                <div className="flex flex-row gap-2 items-center">
+    const renderOnSolutionFooter = () => {
+        if (showSolution) {
+            return (
+                <div className="flex flex-row gap-2 items-center fixed bottom-0 left-0 w-full bg-black p-4 lg:hidden">
                     <Button
+                        onClick={() =>
+                            setShowSolution && setShowSolution(!showSolution)
+                        }
                         variant="secondary"
-                        onClick={handlePreviousProblem}
-                        disabled={!problem?.previous_problem_id}
-                        className={cn(
-                            'text-center !p-0 !w-8 !h-8 items-center justify-center',
-                            isNoNeedNavigation ? 'hidden' : 'flex'
-                        )}>
-                        <ChevronLeft size={14} />
+                        size="normal"
+                        disabled={isDisabled}
+                        className="w-full flex items-center justify-center gap-2">
+                        Lihat Soal
                     </Button>
                     <Button
-                        variant="secondary"
-                        onClick={() => setIsNavigationOpen(true)}
-                        className={cn(
-                            '!rounded-[4px] text-center !p-0 !w-8 !h-8 items-center justify-center',
-                            isNoNeedNavigation ? 'hidden' : 'flex'
-                        )}>
-                        <SquareSettings size={14} />
-                    </Button>
-                    <Button
-                        variant="secondary"
-                        onClick={handleNextProblem}
-                        disabled={!problem?.next_problem_id}
-                        className={cn(
-                            'text-center !p-0 !w-8 !h-8 items-center justify-center',
-                            isNoNeedNavigation ? 'hidden' : 'flex'
-                        )}>
-                        <ChevronRight size={14} />
+                        onClick={saveAnswer}
+                        variant="primary"
+                        size="normal"
+                        className="w-full"
+                        disabled={isDisabled}>
+                        Selanjutnya
                     </Button>
                 </div>
-                <Button
-                    onClick={saveAnswer}
-                    variant="primary"
-                    size="normal"
-                    disabled={isDisabled}
-                    className="w-full">
-                    Selanjutnya
-                </Button>
-            </div>
+            );
+        } else {
+            return (
+                <div className="flex flex-row gap-2 items-center fixed bottom-0 left-0 w-full bg-black p-4 lg:hidden">
+                    <Button
+                        onClick={() =>
+                            setShowSolution && setShowSolution(!showSolution)
+                        }
+                        variant="secondary"
+                        size="normal"
+                        disabled={isDisabled}
+                        className="w-full flex items-center justify-center gap-2">
+                        Lihat Pembahasan
+                        <Book />
+                    </Button>
+                    <Button
+                        onClick={saveAnswer}
+                        variant="primary"
+                        size="normal"
+                        className="h-10"
+                        disabled={isDisabled}>
+                        <ChevronRight size={20} />
+                    </Button>
+                </div>
+            );
+        }
+    };
+
+    if (problemsetId) {
+        return (
+            <ExerciseReportNavigationFooter
+                saveAnswer={saveAnswer}
+                isDisabled={isDisabled}
+            />
+        );
+    }
+
+    return (
+        <>
+            {solution ? (
+                renderOnSolutionFooter()
+            ) : (
+                <div className="flex flex-row gap-2 items-center fixed bottom-0 left-0 w-full bg-black p-4 lg:hidden">
+                    <div className="flex flex-row gap-2 items-center">
+                        <Button
+                            variant="secondary"
+                            onClick={handlePreviousProblem}
+                            disabled={!problem?.previous_problem_id}
+                            className={cn(
+                                'text-center !p-0 !w-8 !h-8 items-center justify-center',
+                                isNoNeedNavigation ? 'hidden' : 'flex'
+                            )}>
+                            <ChevronLeft size={14} />
+                        </Button>
+                        <Button
+                            variant="secondary"
+                            onClick={() => setIsNavigationOpen(true)}
+                            className={cn(
+                                '!rounded-[4px] text-center !p-0 !w-8 !h-8 items-center justify-center',
+                                isNoNeedNavigation ? 'hidden' : 'flex'
+                            )}>
+                            <SquareSettings size={14} />
+                        </Button>
+                        <Button
+                            variant="secondary"
+                            onClick={handleNextProblem}
+                            disabled={!problem?.next_problem_id}
+                            className={cn(
+                                'text-center !p-0 !w-8 !h-8 items-center justify-center',
+                                isNoNeedNavigation ? 'hidden' : 'flex'
+                            )}>
+                            <ChevronRight size={14} />
+                        </Button>
+                    </div>
+                    <Button
+                        onClick={saveAnswer}
+                        variant="primary"
+                        size="normal"
+                        disabled={isDisabled}
+                        className="w-full">
+                        Selanjutnya
+                    </Button>
+                </div>
+            )}
 
             <QuizNavigationBottomSheet
                 onProblemSelect={handleProblemSelect}

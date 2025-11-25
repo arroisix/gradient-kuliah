@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { Check } from 'lucide-react';
 import { cn } from 'commons/utils';
 import Skeleton from 'commons/components/elements/Skeleton';
+import ProblemSetInformation from './ProblemSetInformation';
 
 const ProblemSetRoadmap = () => {
     const router = useRouter();
@@ -34,8 +35,8 @@ const ProblemSetRoadmap = () => {
     const currentIndex = problemsets.data.findIndex((item) => item.is_current);
 
     return (
-        <div className="w-full lg:w-1/2 rounded-lg p-6 overflow-y-auto">
-            <h2 className="text-white text-lg font-semibold mb-6">
+        <div className="w-full lg:w-1/2 rounded-lg lg:p-6 py-4">
+            <h2 className="text-white text-lg font-semibold mb-6 hidden lg:block">
                 Quiz Section
             </h2>
             <div className="flex flex-col">
@@ -78,7 +79,9 @@ const ProblemSetRoadmap = () => {
                                 {index < problemsets.data.length && (
                                     <div
                                         className={cn(
-                                            'w-0.5 h-[54px]',
+                                            isCurrent
+                                                ? 'w-0.5 lg:h-[54px] h-[250px]'
+                                                : 'w-0.5 h-[54px]',
                                             isCompleted
                                                 ? 'bg-[#B6A6F3]'
                                                 : 'bg-gray-600 border-dashed border-l-2 border-gray-600'
@@ -116,6 +119,13 @@ const ProblemSetRoadmap = () => {
                                     )}>
                                     {section.title}
                                 </h3>
+
+                                {/* Mobile Info Card - only show for current section */}
+                                {isCurrent && (
+                                    <div className="lg:hidden mt-4 mb-2">
+                                        <ProblemSetInformation />
+                                    </div>
+                                )}
                             </div>
                         </div>
                     );
