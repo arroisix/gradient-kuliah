@@ -65,39 +65,49 @@ const AnswerContainer = () => {
     }, [problemId]);
 
     const onNextSolution = async () => {
-        if (!problem?.next_problem_id && problem?.next_problemset_id) {
-            router.push(
-                `/latihan/${slug}/${problem?.next_problemset_id}`,
-                undefined,
-                { scroll: false, shallow: true }
-            );
-        } else {
-            if (problem?.show_solution === 'AFTER_PROBLEM') {
-                if (problem.next_problem_id) {
-                    router.push(
-                        `/latihan/${slug}/${sectionId}/${problem?.next_problem_id}`
-                    );
-                } else if (problem.next_problemset_id) {
-                    router.push(
-                        `/latihan/${slug}/${problem?.next_problemset_id}`,
-                        undefined,
-                        { scroll: false, shallow: true }
-                    );
-                } else {
-                    router.push(
-                        `/latihan/${slug}/report/${exercise?.latest_exercise_progress?.id}/`,
-                        undefined,
-                        {
-                            scroll: false,
-                            shallow: true
-                        }
-                    );
-                }
+        if (problem?.show_solution === 'AFTER_PROBLEM') {
+            if (problem.next_problem_id) {
+                router.push(
+                    `/latihan/${slug}/${sectionId}/${problem?.next_problem_id}`
+                );
+            } else if (problem.next_problemset_id) {
+                router.push(
+                    `/latihan/${slug}/${problem?.next_problemset_id}`,
+                    undefined,
+                    { scroll: false, shallow: true }
+                );
             } else {
+                router.push(
+                    `/latihan/${slug}/report/${exercise?.latest_exercise_progress?.id}/`,
+                    undefined,
+                    {
+                        scroll: false,
+                        shallow: true
+                    }
+                );
+            }
+        } else {
+            // show_solution === 'AFTER_COMPLETE'
+            if (problem?.next_problem_id) {
                 router.push(
                     `/latihan/${slug}/${sectionId}/${problem?.next_problem_id}?solution=1`,
                     undefined,
                     { scroll: false, shallow: true }
+                );
+            } else if (problem?.next_problemset_id) {
+                router.push(
+                    `/latihan/${slug}/${problem?.next_problemset_id}`,
+                    undefined,
+                    { scroll: false, shallow: true }
+                );
+            } else {
+                router.push(
+                    `/latihan/${slug}/report/${exercise?.latest_exercise_progress?.id}/`,
+                    undefined,
+                    {
+                        scroll: false,
+                        shallow: true
+                    }
                 );
             }
         }
