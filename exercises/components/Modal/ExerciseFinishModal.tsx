@@ -7,6 +7,8 @@ import {
 import { useTracker } from 'tracker/tracker';
 import useSubmitAnswerHandler from 'exercises/hooks/useSubmitAnswerHandler';
 import Skeleton from 'commons/components/elements/Skeleton';
+import { CDN_URL } from 'commons/constants';
+import Image from 'next/image';
 
 interface ExerciseFinishModalProps {
     isOpen: boolean;
@@ -35,6 +37,7 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
         },
         { skip: !slug || !sectionId || !problemId }
     );
+    console.log(problem);
 
     const { data: completenessData, isLoading } =
         useGetCheckProblemsetCompletenessQuery(
@@ -48,6 +51,7 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
                 refetchOnFocus: true
             }
         );
+    console.log('hei', completenessData);
     const { finishProblemSet } = useSubmitAnswerHandler(problem!);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -82,70 +86,132 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
-            <div className="bg-[#1D1D1D] rounded-2xl px-6 py-8 w-full max-w-[328px] md:max-w-sm">
+            <div className="bg-[#1D1D1D] rounded-t-2xl px-6 py-8 w-full max-w-[328px] md:max-w-sm lg:max-w-xl flex flex-col justify-center">
                 {isLoading ? (
-                    <div className="flex flex-col items-center gap-4">
-                        <Skeleton isCustomSize className="w-full h-6 !mb-2" />
-                        <Skeleton isCustomSize className="w-3/4 h-6 !mb-4" />
-                        <div className="w-full flex flex-col gap-4 mt-2">
+                    <div className="flex flex-col items-center gap-6">
+                        <Skeleton
+                            isCustomSize
+                            className="w-1/2 md:w-1/3 h-32 md:h-28 lg:h-36"
+                        />
+                        <div className="w-full flex flex-col gap-3">
                             <Skeleton
                                 isCustomSize
-                                className="w-full h-10 rounded-full !mb-0"
+                                className="w-full h-9 rounded-full !mb-0"
                             />
                             <Skeleton
                                 isCustomSize
-                                className="w-full h-10 rounded-full !mb-0"
+                                className="w-full h-9 rounded-full !mb-0"
+                            />
+                        </div>
+                        <div className="w-full flex flex-col lg:flex-row gap-4">
+                            <Skeleton
+                                isCustomSize
+                                className="w-full h-11 rounded-full !mb-0"
+                            />
+                            <Skeleton
+                                isCustomSize
+                                className="w-full h-11 rounded-full !mb-0"
                             />
                         </div>
                     </div>
-                ) : completenessData?.is_complete ? (
+                ) : completenessData?.is_complete &&
+                  !!problem?.next_problemset_id ? (
                     <>
-                        <h2 className="text-xl font-semibold text-white mb-4 text-center">
-                            Kamu yakin mau submit semua jawaban di latihan ini?
+                        <Image
+                            src={`${CDN_URL}/assets/mobile-confirm-submit-modal.png`}
+                            className="object-contain"
+                            alt="confirm-exit-modal"
+                            width={140}
+                            height={140}
+                        />
+                        <h2 className="text-xl font-semibold text-white mb-4 text-center mt-6">
+                            Submit dan pindah ke section berikutnya?
                         </h2>
                         <p className="text-[#999999] text-center mb-6">
-                            Setelah submit, kamu tidak bisa lagi mengubah
-                            jawaban kamu di semua soal
+                            Kamu sudah di akhir section. Setelah submit, kamu
+                            tidak akan bisa kembali lagi ke section ini
                         </p>
-                        <div className="flex flex-col gap-4">
+                        <div className="flex flex-col lg:flex-row gap-4">
                             <button
                                 onClick={handleSubmit}
                                 disabled={isSubmitting}
-                                className="w-full bg-[#7F56D9] font-semibold text-white py-2 px-4 rounded-full hover:bg-opacity-90 transition-colors flex items-center justify-center">
+                                className="w-full bg-[#5F2BCE] font-semibold text-white py-2 lg:py-3 px-6 rounded-full hover:bg-opacity-90 transition-colors flex items-center justify-center w-full order-1 lg:order-2">
                                 {isSubmitting ? (
                                     <span className="loading loading-spinner loading-sm"></span>
                                 ) : (
-                                    'Submit'
+                                    'Submit & Pindah Section'
                                 )}
                             </button>
                             <button
                                 onClick={handleCancel}
                                 disabled={isSubmitting}
-                                className="bg-[#333540] font-semibold text-white py-2 px-4 rounded-full hover:bg-opacity-90 transition-colors">
-                                Batal
+                                className="bg-white/10 font-semibold text-white py-2 lg:py-3 px-6 rounded-full hover:bg-opacity-90 transition-colors w-full order-2 lg:order-1">
+                                Kembali ke Latihan
+                            </button>
+                        </div>
+                    </>
+                ) : completenessData?.is_complete ? (
+                    <>
+                        <Image
+                            src={`${CDN_URL}/assets/mobile-confirm-submit-modal.png`}
+                            className="object-contain"
+                            alt="confirm-exit-modal"
+                            width={140}
+                            height={140}
+                        />
+                        <h2 className="text-xl font-semibold text-white mb-4 text-center mt-6">
+                            Submit dan selesaikan latihan?
+                        </h2>
+                        <p className="text-[#999999] text-center mb-6">
+                            Kamu sudah di akhir latihan. Submit untuk
+                            mendapatkan nilai latihan ini.
+                        </p>
+                        <div className="flex flex-col lg:flex-row gap-4">
+                            <button
+                                onClick={handleSubmit}
+                                disabled={isSubmitting}
+                                className="w-full bg-[#5F2BCE] font-semibold text-white py-2 lg:py-3 px-6 rounded-full hover:bg-opacity-90 transition-colors flex items-center justify-center w-full order-1 lg:order-2">
+                                {isSubmitting ? (
+                                    <span className="loading loading-spinner loading-sm"></span>
+                                ) : (
+                                    'Submit & Selesaikan'
+                                )}
+                            </button>
+                            <button
+                                onClick={handleCancel}
+                                disabled={isSubmitting}
+                                className="bg-white/10 font-semibold text-white py-2 lg:py-3 px-6 rounded-full hover:bg-opacity-90 transition-colors w-full order-2 lg:order-1">
+                                Kembali ke Latihan
                             </button>
                         </div>
                     </>
                 ) : (
                     <>
-                        <h2 className="text-xl font-semibold text-white mb-4 text-center">
-                            Masih ada soal yang belum kamu jawab di latihan ini
+                        <Image
+                            src={`${CDN_URL}/assets/blank-answer.png`}
+                            className="object-contain"
+                            alt="confirm-exit-modal"
+                            width={140}
+                            height={140}
+                        />
+                        <h2 className="text-xl font-semibold text-white mb-4 text-center mt-6">
+                            Masih ada soal yang belum diawab di latihan ini
                         </h2>
                         <p className="text-[#999999] text-center mb-6">
                             Pastikan kamu sudah menjawab semua soal di latihan
-                            ini sebelum submit
+                            ini sebelum submit.
                         </p>
-                        <div className="flex flex-col gap-4">
+                        <div className="flex flex-col lg:flex-row gap-4">
                             <button
                                 onClick={handleCancel}
                                 disabled={isSubmitting}
-                                className="bg-[#7F56D9] font-semibold text-white py-2 px-4 rounded-full hover:bg-opacity-90 transition-colors">
-                                Kembali ke Latihan
+                                className="bg-white/10 font-semibold text-white py-2 lg:py-3 px-6 rounded-full hover:bg-opacity-90 transition-colors w-full order-2 lg:order-1">
+                                Kembali Latihan
                             </button>
                             <button
                                 onClick={handleSubmit}
                                 disabled={isSubmitting}
-                                className="bg-[#EA5C49] font-semibold text-white py-2 px-4 rounded-full hover:bg-opacity-90 transition-colors flex items-center justify-center">
+                                className="bg-[#EA5C49] font-semibold text-white py-2 lg:py-3 px-6 rounded-full hover:bg-opacity-90 transition-colors flex items-center justify-center w-full order-1 lg:order-2">
                                 {isSubmitting ? (
                                     <span className="loading loading-spinner loading-sm"></span>
                                 ) : (
