@@ -26,8 +26,6 @@ const ExerciseProblemSetDetail = () => {
         );
     }
 
-    console.log('problemsets', problemsets);
-
     return (
         <LatihanLayout>
             {/* Mobile View */}

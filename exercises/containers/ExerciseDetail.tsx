@@ -22,8 +22,6 @@ const ExerciseDetail = () => {
         }
     );
 
-    console.log('exercise detail data', exercise);
-
     if (isLoading) {
         return (
             <LatihanLayout>

@@ -55,7 +55,6 @@ const ExerciseWorksheetHeader = () => {
     }, [problem]);
 
     const handleProblemSelect = (selectedProblemId: string) => {
-        console.log('Navigate to problem:', selectedProblemId);
         router.push(
             `/latihan/${slug}/${sectionId}/${selectedProblemId}${
                 solution ? '?solution=1' : ''
@@ -100,8 +99,6 @@ const ExerciseWorksheetHeader = () => {
             while (!firstProblem) {
                 await new Promise((resolve) => setTimeout(resolve, 100));
             }
-
-            console.log('Time expired for problem:', problemId);
 
             alert('Waktu kamu habis!');
             await finishProblemSet();

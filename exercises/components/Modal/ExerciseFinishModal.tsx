@@ -37,7 +37,6 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
         },
         { skip: !slug || !sectionId || !problemId }
     );
-    console.log(problem);
 
     const { data: completenessData, isLoading } =
         useGetCheckProblemsetCompletenessQuery(
@@ -51,7 +50,7 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
                 refetchOnFocus: true
             }
         );
-    console.log('hei', completenessData);
+
     const { finishProblemSet } = useSubmitAnswerHandler(problem!);
     const [isSubmitting, setIsSubmitting] = useState(false);
 

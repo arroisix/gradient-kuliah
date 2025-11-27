@@ -149,7 +149,6 @@ const useSubmitAnswerHandler = (problem: ProblemInProblemSet) => {
                         { scroll: false, shallow: true }
                     );
                 } else {
-                    console.log('No next problem to navigate to.');
                     setIsFinishModalOpen(true);
                 }
             } catch (error) {

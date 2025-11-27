@@ -24,7 +24,6 @@ const ExerciseCompleteHeader = () => {
     );
 
     useEffect(() => {
-        console.log(router.pathname);
         if (problemId) {
             setActiveTab('Pembahasan');
         } else if (router.pathname.includes('leaderboard')) {
