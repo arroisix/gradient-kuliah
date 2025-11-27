@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Check, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { cn } from 'commons/utils';
 import Button from 'commons/components/elements/Button';
 import Skeleton from 'commons/components/elements/Skeleton';
@@ -13,6 +13,7 @@ import {
     ProblemNavigationItem,
     ProblemNavigationVerboseItem
 } from 'exercises/types/exercises';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 interface QuizNavigationModalProps {
     onProblemSelect: (problemId: string) => void;
@@ -71,21 +72,29 @@ const QuizNavigationModal: React.FC<QuizNavigationModalProps> = ({
 
     const { allProblems, isLoading } = useMemo(() => {
         if (problemsetId) {
+            const mappedData = allProblemsViaProgress?.data?.map(
+                (problem: ProblemNavigationVerboseItem) => ({
+                    ...problem,
+                    id: problem.problem_id
+                })
+            );
+
             return {
                 allProblems: {
                     ...allProblemsViaProgress,
-                    data: allProblemsViaProgress?.data.map(
-                        (problem: ProblemNavigationVerboseItem) => ({
-                            ...problem,
-                            id: problem.problem_id
-                        })
-                    )
+                    data: mappedData
+                } as {
+                    count_items: number;
+                    data: ProblemNavigationItem[];
                 },
                 isLoading: isLoadingViaProgress
             };
         } else {
             return {
-                allProblems: allProblemsInPS,
+                allProblems: allProblemsInPS as {
+                    count_items: number;
+                    data: ProblemNavigationItem[];
+                },
                 isLoading: isLoadingProblems
             };
         }
@@ -97,8 +106,14 @@ const QuizNavigationModal: React.FC<QuizNavigationModalProps> = ({
     ]);
 
     const totalPages = Math.ceil(
-        (allProblems?.count_items as number) / PROBLEMS_PER_PAGE
+        (allProblems?.count_items || 0) / PROBLEMS_PER_PAGE
     );
+
+    // Calculate height based on maximum rows needed (20 problems per page in 5 columns = 4 rows)
+    const maxRowsPerPage = Math.ceil(PROBLEMS_PER_PAGE / 5); // 4 rows
+    const containerHeight = `${
+        maxRowsPerPage * 52 + (maxRowsPerPage - 1) * 12
+    }px`; // 52px per item (w-12 h-12) + 12px gap
 
     const handlePrevPage = () => {
         if (currentPage > 0) {
@@ -125,7 +140,9 @@ const QuizNavigationModal: React.FC<QuizNavigationModalProps> = ({
                 </h2>
             )}
 
-            <div className="grid grid-cols-5 place-self-center gap-3 mb-6">
+            <div
+                className="grid grid-cols-5 place-self-center gap-3 mb-6"
+                style={{ height: containerHeight }}>
                 {isLoading ? (
                     <Skeleton
                         repeat={5}
@@ -170,21 +187,21 @@ const QuizNavigationModal: React.FC<QuizNavigationModalProps> = ({
                 <div className="flex justify-end gap-2">
                     <Button
                         onClick={handlePrevPage}
-                        variant="secondary"
+                        variant="custom"
                         disabled={currentPage === 0}
                         className={cn(
-                            'text-center flex !p-0 !w-8 !h-8 items-center justify-center'
+                            'text-center flex !p-0 !w-8 !h-8 items-center justify-center  bg-white/25'
                         )}>
-                        <ChevronLeft size={14} />
+                        <FiChevronLeft size={14} color="#ffffff" />
                     </Button>
                     <Button
                         onClick={handleNextPage}
-                        variant="secondary"
+                        variant="custom"
                         disabled={currentPage === totalPages - 1}
                         className={cn(
-                            'text-center flex !p-0 !w-8 !h-8 items-center justify-center'
+                            'text-center flex !p-0 !w-8 !h-8 items-center justify-center bg-white/25'
                         )}>
-                        <ChevronRight size={14} />
+                        <FiChevronRight size={14} color="#ffffff" />
                     </Button>
                 </div>
             )}

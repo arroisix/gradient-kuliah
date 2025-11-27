@@ -364,7 +364,7 @@ export interface ProblemNavigationItem {
     id: string;
     order: number;
     is_answered: boolean;
-    is_correct: boolean;
+    is_correct: boolean | null;
 }
 
 export interface ProblemNavigationVerboseItem

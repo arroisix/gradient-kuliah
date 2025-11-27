@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { cn } from 'commons/utils';
 import Button from 'commons/components/elements/Button';
 import Skeleton from 'commons/components/elements/Skeleton';
@@ -14,6 +14,7 @@ import {
     ProblemSetItem
 } from 'exercises/types/exercises';
 import AnswerLegend from '../ExerciseQuestion/AnswerLegend';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 interface ResultSummaryPerProblemProps {
     onProblemSelect?: (problemId: string) => void;
@@ -110,6 +111,12 @@ const ResultSummaryPerProblem: React.FC<ResultSummaryPerProblemProps> = ({
         (ps: ProblemSetItem) => ps.id === selectedProblemSetId
     );
 
+    // Calculate height based on maximum rows needed (20 problems per page in 5 columns = 4 rows)
+    const maxRowsPerPage = Math.ceil(PROBLEMS_PER_PAGE / 5); // 4 rows
+    const containerHeight = `${
+        maxRowsPerPage * 60 + (maxRowsPerPage - 1) * 12
+    }px`; // 60px per item + 12px gap
+
     return (
         <div
             className={cn(
@@ -169,7 +176,9 @@ const ResultSummaryPerProblem: React.FC<ResultSummaryPerProblemProps> = ({
                 </>
             )}
 
-            <div className="grid grid-cols-5 gap-3 mb-6 place-self-center">
+            <div
+                className="grid grid-cols-5 gap-3 mb-6 place-self-center"
+                style={{ height: containerHeight }}>
                 {isLoading ? (
                     <Skeleton
                         repeat={20}
@@ -177,7 +186,7 @@ const ResultSummaryPerProblem: React.FC<ResultSummaryPerProblemProps> = ({
                         className="w-full aspect-square rounded-xl"
                     />
                 ) : (
-                    allProblems?.data.map(
+                    allProblems?.data?.map(
                         (problem: ProblemNavigationVerboseItem) => (
                             <button
                                 key={problem.problem_id}
@@ -197,32 +206,34 @@ const ResultSummaryPerProblem: React.FC<ResultSummaryPerProblemProps> = ({
                 )}
             </div>
 
-            {/* Legend */}
-            <AnswerLegend removeYellowLegend={true} className="mb-6" />
+            <div className="flex flex-row justify-between items-center">
+                {/* Legend */}
+                <AnswerLegend removeYellowLegend={true} />
 
-            {/* Pagination */}
-            {totalPages > 1 && (
-                <div className="flex justify-center gap-2">
-                    <Button
-                        onClick={handlePrevPage}
-                        variant="secondary"
-                        disabled={currentPage === 0}
-                        className={cn(
-                            'text-center flex !p-0 !w-10 !h-10 items-center justify-center rounded-full bg-[#3A3A3A] border-none hover:bg-[#4A4A4A] disabled:opacity-50 disabled:cursor-not-allowed'
-                        )}>
-                        <ChevronLeft size={20} />
-                    </Button>
-                    <Button
-                        onClick={handleNextPage}
-                        variant="secondary"
-                        disabled={currentPage === totalPages - 1}
-                        className={cn(
-                            'text-center flex !p-0 !w-10 !h-10 items-center justify-center rounded-full bg-[#3A3A3A] border-none hover:bg-[#4A4A4A] disabled:opacity-50 disabled:cursor-not-allowed'
-                        )}>
-                        <ChevronRight size={20} />
-                    </Button>
-                </div>
-            )}
+                {/* Pagination */}
+                {totalPages > 1 && (
+                    <div className="flex justify-center gap-2">
+                        <Button
+                            onClick={handlePrevPage}
+                            variant="secondary"
+                            disabled={currentPage === 0}
+                            className={cn(
+                                'text-center flex !p-0 !w-10 !h-10 items-center justify-center rounded-full bg-[#3A3A3A] border-none hover:bg-[#4A4A4A] disabled:opacity-50 disabled:cursor-not-allowed'
+                            )}>
+                            <FiChevronLeft size={20} color="#ffffff" />
+                        </Button>
+                        <Button
+                            onClick={handleNextPage}
+                            variant="secondary"
+                            disabled={currentPage === totalPages - 1}
+                            className={cn(
+                                'text-center flex !p-0 !w-10 !h-10 items-center justify-center rounded-full bg-[#3A3A3A] border-none hover:bg-[#4A4A4A] disabled:opacity-50 disabled:cursor-not-allowed'
+                            )}>
+                            <FiChevronRight size={20} color="#ffffff" />
+                        </Button>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
