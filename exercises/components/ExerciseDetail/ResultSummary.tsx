@@ -54,7 +54,7 @@ const ResultSummary = ({ isReportMode }: { isReportMode?: boolean }) => {
             <div className="space-y-2 lg:px-0 px-6">
                 <div className="flex items-baseline gap-2">
                     <span className="text-[32px] font-bold text-white">
-                        {score.toPrecision(4)}
+                        {score?.toPrecision(4)}
                     </span>
                     <span className="text-white/60">/ 100</span>
                 </div>
