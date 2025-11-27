@@ -122,13 +122,15 @@ interface ExerciseLandingPageV2 extends ListResponseData<ExerciseItem> {
 
 export interface ExerciseHistory {
     exercise_id: string;
-    history: Array<{
-        id: string;
-        attempt: number;
-        score: number;
-        date: string;
-        score_change: number | null;
-    }>;
+    history: Array<ExerciseHistoryItem>;
+}
+
+export interface ExerciseHistoryItem {
+    id: string;
+    attempt: number;
+    score: number;
+    date: string;
+    score_change: number | null;
 }
 
 export interface NavigationItem {

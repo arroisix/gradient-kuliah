@@ -40,14 +40,16 @@ const ResultSummary = ({ isReportMode }: { isReportMode?: boolean }) => {
     };
 
     return (
-        <div className="w-full max-w-2xl pt-6 lg:p-6 space-y-6 bg-violet-1 rounded-l-xl rounded-r-xl lg:rounded-r-none">
+        <div className="w-full lg:max-w-2xl pt-6 lg:p-6 space-y-6 bg-violet-1 rounded-l-xl rounded-r-xl lg:rounded-r-none">
             {/* Title and History Link */}
             <div className="flex items-center justify-between lg:px-0 px-6">
                 <h1 className="font-bold text-white">Nilai Akhir Kamu</h1>
-                <button className="flex items-center gap-2 text-white/80 hover:text-white transition-colors">
+                <a
+                    className="flex items-center gap-2 text-white/80 hover:text-white transition-colors cursor-pointer"
+                    href={`/latihan/${exercise?.slug}/report/${exercise?.latest_exercise_progress?.id}/riwayat`}>
                     <RefreshCcw size={16} />
                     <span className="text-sm font-medium">Lihat Riwayat</span>
-                </button>
+                </a>
             </div>
 
             {/* Score Display */}
@@ -133,20 +135,22 @@ const ResultSummary = ({ isReportMode }: { isReportMode?: boolean }) => {
                     </Button>
                 </div>
             ) : (
-                <div className="space-y-3 pt-4 flex flex-col gap-1 p-6 lg:p-0">
-                    <Button
-                        variant="primary"
-                        className="w-full flex items-center justify-center gap-2"
-                        onClick={onRetry}>
-                        <RefreshCcw size={20} />
-                        <span>Coba Lagi</span>
-                    </Button>
+                <div className="flex flex-col w-full px-6 py-4 gap-8 rounded-lg bg-[#282B3C]">
+                    <div className="flex flex-col gap-2">
+                        <h3 className="text-white font-semibold">
+                            Kamu salah di 5 soal
+                        </h3>
+                        <p className="text-white text-sm">
+                            Lihat pembahasan untuk memahami salahnya dan naikkan
+                            skor.
+                        </p>
+                    </div>
 
                     <Button
-                        variant="secondary"
-                        className="w-full text-center"
+                        variant="primary"
+                        className="w-full text-center px-6 py-3"
                         href={`/latihan/${exercise?.slug}/report/${exercise?.latest_exercise_progress?.id}/${exercise?.first_problemset?.id}/${exercise?.first_problemset?.first_problem_id}/`}>
-                        Lihat Pembahasan
+                        Lanjut Pembahasan
                     </Button>
                 </div>
             )}
