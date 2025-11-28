@@ -1,4 +1,6 @@
 import { CDN_URL } from 'commons/constants';
+import Modal from 'commons/components/modules/Modal';
+import { cn } from 'commons/utils';
 import Image from 'next/image';
 import React, { useState } from 'react';
 
@@ -29,8 +31,19 @@ const ExerciseCloseModal: React.FC<ExerciseCloseModalProps> = ({
     };
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
-            <div className="bg-[#1D1D1D] rounded-t-2xl px-6 py-8 w-full max-w-[328px] md:max-w-sm lg:max-w-md justify-center flex flex-col">
+        <Modal
+            isOpen={isOpen}
+            setOpen={onClose}
+            variant="dark"
+            permanent={true}
+            className={cn(
+                '!max-w-full !w-full !m-0 !rounded-t-2xl !rounded-b-none fixed bottom-0 left-0 right-0 !max-h-[70vh] md:!max-h-none md:!rounded-b-2xl md:!rounded-t-2xl flex flex-col p-0 !overflow-hidden bg-[#1D1D1D]',
+                'md:!max-w-sm lg:!max-w-md md:!static md:!w-auto md:!bottom-auto'
+            )}>
+            <div
+                className={cn(
+                    'flex flex-col w-full h-[70vh] md:h-auto md:max-h-[90vh] overflow-y-auto px-6 py-8 justify-center'
+                )}>
                 <Image
                     src={`${CDN_URL}/assets/mobile-confirm-exit-modal.png`}
                     className="object-contain"
@@ -64,7 +77,7 @@ const ExerciseCloseModal: React.FC<ExerciseCloseModalProps> = ({
                     </button>
                 </div>
             </div>
-        </div>
+        </Modal>
     );
 };
 

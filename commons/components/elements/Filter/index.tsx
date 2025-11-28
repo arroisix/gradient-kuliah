@@ -1,7 +1,7 @@
 import { cn } from 'commons/utils';
 import { useRouter } from 'next/router';
 import { BiCheck, BiChevronDown } from 'react-icons/bi';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import FilterBottomSheet from './FilterBottomSheet';
 
 interface Option {
@@ -28,15 +28,42 @@ const Filter = ({
     const router = useRouter();
     const { filter } = router.query as { filter: string };
     const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
     const selected = options.find((option) =>
         filter ? option.value == filter : option.value == defaultSelected
     );
 
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target as Node)
+            ) {
+                setIsDropdownOpen(false);
+            }
+        };
+
+        if (isDropdownOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isDropdownOpen]);
+
     const handleOptionClick = (value: string) => {
         if (onChange) {
             onChange(value);
         }
+        setIsDropdownOpen(false);
+    };
+
+    const handleDropdownToggle = () => {
+        setIsDropdownOpen(!isDropdownOpen);
     };
 
     return (
@@ -56,13 +83,14 @@ const Filter = ({
 
             {/* Desktop: Dropdown */}
             <div
+                ref={dropdownRef}
                 className={cn(
-                    'hidden md:block dropdown z-[5]',
+                    'hidden md:block dropdown z-50',
                     fullWidth ? 'w-full' : '',
                     className
                 )}>
                 <button
-                    tabIndex={0}
+                    onClick={handleDropdownToggle}
                     className={cn(
                         'flex justify-between items-center gap-2 text-xs font-bold pl-5 pr-3 py-3 bg-[#20222E] rounded-full',
                         fullWidth ? 'w-full' : 'w-full md:w-52'
@@ -72,33 +100,35 @@ const Filter = ({
                     </span>
                     <BiChevronDown size={18} />
                 </button>
-                <ul
-                    tabIndex={0}
-                    role="menu"
-                    className={cn(
-                        'dropdown-content menu overflow-clip mt-1 [&_li>*]:rounded-none p-0 bg-[#20222E] text-xs rounded-lg z-10 divide-y divide-[#373737]',
-                        fullWidth ? 'w-full' : 'w-full md:w-52'
-                    )}>
-                    {options.map(({ value, label }) => (
-                        <li key={value} className="z-10">
-                            <button
-                                id={value}
-                                className="flex justify-between items-center gap-3 px-[18px] py-[7.5px] border-t-[1px] border-[#373737] first:border-t-0 w-full text-left"
-                                onClick={() => handleOptionClick(value)}>
-                                {label}
-                                <BiCheck
-                                    size={16}
-                                    className={cn(
-                                        (!filter && value == defaultSelected) ||
-                                            filter === value
-                                            ? 'text-neutral-600'
-                                            : 'text-transparent'
-                                    )}
-                                />
-                            </button>
-                        </li>
-                    ))}
-                </ul>
+                {isDropdownOpen && (
+                    <ul
+                        role="menu"
+                        className={cn(
+                            'dropdown-content menu overflow-clip mt-1 [&_li>*]:rounded-none p-0 bg-[#20222E] text-xs rounded-lg z-50 divide-y divide-[#373737]',
+                            fullWidth ? 'w-full' : 'w-full md:w-52'
+                        )}>
+                        {options.map(({ value, label }) => (
+                            <li key={value} className="z-10">
+                                <button
+                                    id={value}
+                                    className="flex justify-between items-center gap-3 px-[18px] py-[7.5px] border-t-[1px] border-[#373737] first:border-t-0 w-full text-left"
+                                    onClick={() => handleOptionClick(value)}>
+                                    {label}
+                                    <BiCheck
+                                        size={16}
+                                        className={cn(
+                                            (!filter &&
+                                                value == defaultSelected) ||
+                                                filter === value
+                                                ? 'text-neutral-600'
+                                                : 'text-transparent'
+                                        )}
+                                    />
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                )}
             </div>
 
             {/* Mobile Bottom Sheet */}

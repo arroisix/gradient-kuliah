@@ -11,10 +11,12 @@ import { FaExclamation } from 'react-icons/fa6';
 
 const AnswerInformation = ({
     showSolution,
-    setShowSolution
+    setShowSolution,
+    className
 }: {
     showSolution: boolean;
     setShowSolution: React.Dispatch<React.SetStateAction<boolean>>;
+    className?: string;
 }) => {
     const router = useRouter();
     const {
@@ -168,7 +170,11 @@ const AnswerInformation = ({
     }
 
     return (
-        <div className="w-full bg-violet-3 h-12 rounded-lg lg:rounded-none lg:absolute top-0 left-0 flex items-center justify-center gap-2 text-white text-xs">
+        <div
+            className={cn(
+                'w-full bg-violet-3 h-12 rounded-lg lg:rounded-none lg:absolute top-0 left-0 flex items-center justify-center gap-2 text-white text-xs',
+                className
+            )}>
             {decideIcon()}
             {decideCopy()}
         </div>

@@ -7,7 +7,9 @@ import {
 import { useTracker } from 'tracker/tracker';
 import useSubmitAnswerHandler from 'exercises/hooks/useSubmitAnswerHandler';
 import Skeleton from 'commons/components/elements/Skeleton';
+import Modal from 'commons/components/modules/Modal';
 import { CDN_URL } from 'commons/constants';
+import { cn } from 'commons/utils';
 import Image from 'next/image';
 
 interface ExerciseFinishModalProps {
@@ -84,8 +86,19 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
     };
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
-            <div className="bg-[#1D1D1D] rounded-t-2xl px-6 py-8 w-full max-w-[328px] md:max-w-sm lg:max-w-xl flex flex-col justify-center">
+        <Modal
+            isOpen={isOpen}
+            setOpen={onClose}
+            variant="dark"
+            permanent={true}
+            className={cn(
+                '!max-w-full !w-full !m-0 !rounded-t-2xl !rounded-b-none fixed bottom-0 left-0 right-0 !max-h-[70vh] md:!max-h-none md:!rounded-b-2xl md:!rounded-t-2xl flex flex-col p-0 !overflow-hidden bg-[#1D1D1D]',
+                'md:!max-w-sm lg:!max-w-xl md:!static md:!w-auto md:!bottom-auto'
+            )}>
+            <div
+                className={cn(
+                    'flex flex-col w-full h-[70vh] md:h-auto md:max-h-[90vh] overflow-y-auto px-6 py-8 justify-center'
+                )}>
                 {isLoading ? (
                     <div className="flex flex-col items-center gap-6">
                         <Skeleton
@@ -221,7 +234,7 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
                     </>
                 )}
             </div>
-        </div>
+        </Modal>
     );
 };
 

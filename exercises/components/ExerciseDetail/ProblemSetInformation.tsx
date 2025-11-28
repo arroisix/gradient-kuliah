@@ -9,7 +9,11 @@ import { cn } from 'commons/utils';
 import { useMemo } from 'react';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 
-const ProblemSetInformation = () => {
+interface ProblemSetInformationProps {
+    maxWidth?: string;
+}
+
+const ProblemSetInformation = ({ maxWidth }: ProblemSetInformationProps) => {
     const router = useRouter();
     const { slug, sectionId } = router.query;
     const { isAuthenticated } = useAuth();
@@ -106,9 +110,15 @@ const ProblemSetInformation = () => {
     };
 
     return (
-        <div className="flex flex-col rounded-2xl bg-violet-3 w-full justify-between p-6 lg:p-12 h-auto lg:h-[290px] relative overflow-hidden">
+        <div
+            className={cn(
+                'flex flex-col rounded-2xl bg-violet-3 w-full justify-between p-6 lg:p-12 h-auto lg:h-[290px] relative overflow-hidden'
+            )}
+            style={maxWidth ? { maxWidth } : undefined}>
             <div className="flex flex-col gap-3 items-center justify-center">
-                <h1 className="text-base lg:text-xl">{decideSectionTitle()}</h1>
+                <h1 className="text-base lg:text-xl font-semibold text-white">
+                    {decideSectionTitle()}
+                </h1>
                 <h3 className="text-[#BBBBBB] text-center text-sm lg:text-base">
                     Dengan menekan &apos;Mulai Latihan&apos; kamu akan langsung
                     diarahkan ke soal

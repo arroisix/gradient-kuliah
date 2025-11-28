@@ -135,22 +135,20 @@ const ResultSummary = ({ isReportMode }: { isReportMode?: boolean }) => {
                     </Button>
                 </div>
             ) : (
-                <div className="flex flex-col w-full px-6 py-4 gap-8 rounded-lg bg-[#282B3C]">
-                    <div className="flex flex-col gap-2">
-                        <h3 className="text-white font-semibold">
-                            Kamu salah di 5 soal
-                        </h3>
-                        <p className="text-white text-sm">
-                            Lihat pembahasan untuk memahami salahnya dan naikkan
-                            skor.
-                        </p>
-                    </div>
-
+                <div className="space-y-3 pt-4 flex flex-col gap-1 p-6 lg:p-0">
                     <Button
                         variant="primary"
-                        className="w-full text-center px-6 py-3"
+                        className="w-full flex items-center justify-center gap-2"
+                        onClick={onRetry}>
+                        <RefreshCcw size={20} />
+                        <span>Coba Lagi</span>
+                    </Button>
+
+                    <Button
+                        variant="secondary"
+                        className="w-full text-center"
                         href={`/latihan/${exercise?.slug}/report/${exercise?.latest_exercise_progress?.id}/${exercise?.first_problemset?.id}/${exercise?.first_problemset?.first_problem_id}/`}>
-                        Lanjut Pembahasan
+                        Lihat Pembahasan
                     </Button>
                 </div>
             )}

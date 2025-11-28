@@ -60,8 +60,8 @@ const LeaderboardCard: React.FC<LeaderboardCardProps> = ({
                     {rank <= 3 && (
                         <div className="absolute -bottom-1 left-1/2 -translate-x-1/2">
                             <svg
-                                width="24"
-                                height="12"
+                                width="48"
+                                height="24"
                                 viewBox="0 0 24 12"
                                 fill="none"
                                 xmlns="http://www.w3.org/2000/svg">

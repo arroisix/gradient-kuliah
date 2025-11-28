@@ -169,9 +169,10 @@ const AnswerContainer = () => {
         <>
             <div
                 className={cn(
-                    'flex flex-col justify-between gap-2 w-full h-full lg:bg-violet-1 rounded-2xl relative lg:overflow-hidden',
-                    isSolutionPage ? 'lg:pb-12 lg:px-12 lg:pt-28' : 'lg:p-12',
-                    problemsetId ? '' : 'lg:h-[70vh]'
+                    'flex flex-col gap-8 w-full h-full lg:bg-violet-1 rounded-2xl relative',
+                    isSolutionPage
+                        ? 'lg:pb-4 xl:pb-8 lg:px-12 lg:pt-20'
+                        : 'lg:p-12'
                 )}>
                 {isSolutionPage && (
                     <div
@@ -180,13 +181,14 @@ const AnswerContainer = () => {
                         <AnswerInformation
                             showSolution={showSolution}
                             setShowSolution={setShowSolution}
+                            className="lg:rounded-t-2xl"
                         />
                     </div>
                 )}
                 {renderAnswerType}
                 {isSolutionPage &&
                     problem?.problem.type !== 'SHORT_ANSWER' &&
-                    !showSolution && <AnswerLegend className="mt-4" />}
+                    !showSolution && <AnswerLegend />}
                 {!showSolution && !problemsetId && (
                     <div className="w-full hidden lg:flex flex-row gap-2">
                         {solution && solutionData && (

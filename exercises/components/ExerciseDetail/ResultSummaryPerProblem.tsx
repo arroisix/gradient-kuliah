@@ -111,10 +111,14 @@ const ResultSummaryPerProblem: React.FC<ResultSummaryPerProblemProps> = ({
         (ps: ProblemSetItem) => ps.id === selectedProblemSetId
     );
 
-    // Calculate height based on maximum rows needed (20 problems per page in 5 columns = 4 rows)
-    const maxRowsPerPage = Math.ceil(PROBLEMS_PER_PAGE / 5); // 4 rows
+    // Calculate height based on actual problems displayed on current page
+    const startIndex = currentPage * PROBLEMS_PER_PAGE;
+    const endIndex = startIndex + PROBLEMS_PER_PAGE;
+    const problemsOnCurrentPage =
+        allProblems?.data?.slice(startIndex, endIndex) || [];
+    const rowsOnCurrentPage = Math.ceil(problemsOnCurrentPage.length / 5);
     const containerHeight = `${
-        maxRowsPerPage * 60 + (maxRowsPerPage - 1) * 12
+        rowsOnCurrentPage * 60 + Math.max(0, rowsOnCurrentPage - 1) * 12
     }px`; // 60px per item + 12px gap
 
     return (

@@ -150,36 +150,46 @@ const QuizNavigationModal: React.FC<QuizNavigationModalProps> = ({
                         className="w-12 h-12 aspect-square rounded-lg"
                     />
                 ) : (
-                    allProblems?.data?.map((problem: ProblemNavigationItem) => (
-                        <button
-                            key={problem.id}
-                            onClick={() => handleProblemClick(problem.id)}
-                            className={cn(
-                                'relative w-12 h-12 aspect-square rounded-lg flex items-center justify-center text-white text-xl font-semibold transition-all hover:opacity-50',
-                                problem.id === problemId &&
-                                    'border-2 border-yellow-500',
-                                problem.is_answered
-                                    ? 'bg-violet-4 hover:bg-purple-6'
-                                    : 'bg-transparent border-graphite-600 border-2',
-                                problem.is_correct !== null &&
-                                    problem.is_correct &&
-                                    'bg-state-success hover:bg-accent-green',
-                                problem.is_correct !== null &&
-                                    !problem.is_correct &&
-                                    'bg-state-error hover:bg-accent-red'
-                            )}>
-                            <span>{problem.order}</span>
-                            {problem.is_answered &&
-                                problem.is_correct === null && (
-                                    <div className="absolute top-1 right-1 w-[14px] h-[14px] bg-purple-7 rounded-full flex items-center justify-center">
-                                        <Check
-                                            size={8}
-                                            className="text-violet-4"
-                                        />
-                                    </div>
-                                )}
-                        </button>
-                    ))
+                    allProblems?.data?.map((problem: ProblemNavigationItem) => {
+                        const isCurrentProblem = problem.id === problemId;
+
+                        return (
+                            <button
+                                key={problem.id}
+                                onClick={() => handleProblemClick(problem.id)}
+                                className={cn(
+                                    'relative w-12 h-12 aspect-square rounded-lg flex items-center justify-center text-white text-xl font-semibold transition-all hover:opacity-50',
+                                    isCurrentProblem &&
+                                        problem.is_answered &&
+                                        'border-2 border-yellow-500 bg-violet-4 hover:bg-purple-6',
+                                    isCurrentProblem &&
+                                        !problem.is_answered &&
+                                        'border-2 border-yellow-500',
+                                    !isCurrentProblem && [
+                                        problem.is_answered
+                                            ? 'bg-violet-4 hover:bg-purple-6'
+                                            : 'bg-transparent border-graphite-600 border-2',
+                                        problem.is_correct !== null &&
+                                            problem.is_correct &&
+                                            'bg-state-success hover:bg-accent-green',
+                                        problem.is_correct !== null &&
+                                            !problem.is_correct &&
+                                            'bg-state-error hover:bg-accent-red'
+                                    ]
+                                )}>
+                                <span>{problem.order}</span>
+                                {problem.is_answered &&
+                                    problem.is_correct === null && (
+                                        <div className="absolute top-1 right-1 w-[14px] h-[14px] bg-purple-7 rounded-full flex items-center justify-center">
+                                            <Check
+                                                size={8}
+                                                className="text-violet-4"
+                                            />
+                                        </div>
+                                    )}
+                            </button>
+                        );
+                    })
                 )}
             </div>
 
