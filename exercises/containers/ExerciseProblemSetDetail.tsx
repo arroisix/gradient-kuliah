@@ -38,9 +38,13 @@ const ExerciseProblemSetDetail = () => {
             {/* Desktop View */}
             <div className="hidden lg:flex flex-col h-full gap-6 overflow-hidden">
                 <ExerciseProblemSetHeader />
-                <div className="flex w-full gap-10 flex-col lg:flex-row flex-shrink-0 h-full">
-                    <ProblemSetRoadmap />
-                    <ProblemSetInformation maxWidth="50%" />
+                <div className="flex w-full gap-10 flex-col lg:flex-row flex-shrink-0 h-full overflow-y-auto">
+                    <div className="w-1/2">
+                        <ProblemSetRoadmap />
+                    </div>
+                    <div className="w-1/2 sticky top-0 h-fit">
+                        <ProblemSetInformation maxWidth="100%" />
+                    </div>
                 </div>
             </div>
         </LatihanLayout>

@@ -7,6 +7,7 @@ import {
     ExerciseHistory,
     ExerciseLandingPage,
     ExerciseLandingPageV2,
+    ExerciseLeaderboard,
     ExerciseProblem,
     ExerciseProblemProgress,
     ExerciseProblemReport,
@@ -497,6 +498,14 @@ export const exerciseApi = baseApi.injectEndpoints({
             query: ({ slug, problemId }) => ({
                 url: `${EXERCISE_BASE_URL}v2/${slug}/problem/${problemId}/recommendation/`
             })
+        }),
+        getExerciseLeaderboard: builder.query<
+            ResponseData<ExerciseLeaderboard>,
+            { exercise_slug: string }
+        >({
+            query: ({ exercise_slug }) => ({
+                url: `${EXERCISE_BASE_URL}v2/${exercise_slug}/leaderboard/`
+            })
         })
     })
 });
@@ -532,7 +541,8 @@ export const {
     useGetProblemSolutionQuery,
     useGetCheckProblemsetCompletenessQuery,
     useGetAllProblemInProblemSetViaExerciseProgressQuery,
-    useGetRecommendationMaterialFromProblemQuery
+    useGetRecommendationMaterialFromProblemQuery,
+    useGetExerciseLeaderboardQuery
 } = exerciseApi;
 
 export const {

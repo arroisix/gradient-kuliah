@@ -403,3 +403,14 @@ export interface ProblemSolutionData {
     correct_answer_ids: string[];
     correct_answer_text: string[];
 }
+
+export interface ExerciseLeaderboard {
+    student: {
+        id: string;
+        username: string;
+    };
+    university_name: string;
+    score: number;
+    rank: number;
+    is_current_user: boolean;
+}
