@@ -150,9 +150,10 @@ const Navbar = ({
     return (
         <header
             className={cn(
-                'fixed top-0 left-0 w-full z-30 transition-all ease-in-out duration-200 flex flex-col',
+                'fixed top-0 left-0 w-full transition-all ease-in-out duration-200 flex flex-col',
                 computeBgColor()
-            )}>
+            )}
+            style={{ zIndex: 100 }}>
             <div
                 className={cn(
                     'flex items-center min-h-14 justify-between w-full px-4 py-3 md:px-8 gap-4',

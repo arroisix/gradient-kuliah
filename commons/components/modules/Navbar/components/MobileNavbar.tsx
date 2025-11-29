@@ -23,9 +23,10 @@ const MobileNavbar = ({
         <>
             <div
                 className={cn(
-                    'w-full p-4 flex justify-between md:hidden z-50',
+                    'w-full p-4 flex justify-between md:hidden',
                     lightMode ? 'bg-white' : 'bg-[#171717]'
-                )}>
+                )}
+                style={{ zIndex: 100 }}>
                 <div className="w-full">
                     <Link href={'/profil'}>
                         <div
