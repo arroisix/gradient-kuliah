@@ -8,6 +8,8 @@ import LoadingBackdrop from './components/elements/LoadingBackdrop';
 import { useRouter } from 'next/router';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { getDisplayName, sanitizeUrl } from './utils';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 const withAuth = (WrappedComponent: React.ComponentType) => {
     const WithAuth = (
@@ -19,15 +21,26 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
             const accessToken = useSelector(getToken);
             const rawToken = window.localStorage.getItem('token');
 
-            const { is_subscribed, isDoneFetchingSubcription } =
-                useCourseSubscription();
+            const {
+                is_subscribed,
+                isDoneFetchingSubcription,
+                isLoading,
+                isErrorFetchingSubscription
+            } = useCourseSubscription();
             const isProfileComplete = useSelector(getIsProfileComplete);
             const isLastOnboardingStep = localStorage.getItem(
                 'isLastOnboardingStep'
             );
-            // If there is no access token we redirect to "/" page.
-            // Also clear token from cookie and localstorage
-            if (isDoneFetchingSubcription) {
+
+            useEffect(() => {
+                if (isErrorFetchingSubscription) {
+                    toast.error('Silahkan Login untuk Explore Fitur Ini!');
+                }
+            }, [isErrorFetchingSubscription]);
+
+            if (isLoading) {
+                return <LoadingBackdrop />;
+            } else if (isDoneFetchingSubcription) {
                 if (
                     router.pathname === '/onboarding' &&
                     isProfileComplete &&

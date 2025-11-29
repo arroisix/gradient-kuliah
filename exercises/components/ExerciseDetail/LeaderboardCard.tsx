@@ -60,7 +60,7 @@ const LeaderboardCard: React.FC<LeaderboardCardProps> = ({
 
             {/* Score */}
             <div className="text-3xl font-bold text-white flex-shrink-0">
-                {parseFloat(score.toFixed(4)).toString()}
+                {parseFloat(score.toFixed(2)).toString()}
             </div>
         </div>
     );
