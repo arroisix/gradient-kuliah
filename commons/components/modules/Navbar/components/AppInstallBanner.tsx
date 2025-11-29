@@ -71,9 +71,7 @@ const AppInstallBanner = ({ showSidebar }: AppInstallBannerProps) => {
                     ? 'md:left-[250px] md:w-[calc(100%-250px)] md:!top-14'
                     : 'w-full'
             )}
-            style={{
-                zIndex: 60
-            }}>
+            style={{ zIndex: 60 }}>
             <button
                 onClick={handleInstall}
                 className="w-full bg-[#494BA0] transition-all duration-300 cursor-pointer">
