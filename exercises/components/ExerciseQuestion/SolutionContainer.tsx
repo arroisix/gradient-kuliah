@@ -31,7 +31,7 @@ const SolutionContainer = () => {
         }
     );
     return (
-        <div className="flex flex-col gap-3 lg:overflow-y-auto">
+        <div className="flex flex-col gap-3 lg:overflow-y-auto lg:max-h-[calc(100vh-240px)] lg:pr-4 ">
             <TiptapViewer
                 content={solutionData?.solution}
                 className="text-center"

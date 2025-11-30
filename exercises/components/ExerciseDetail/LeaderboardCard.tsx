@@ -6,13 +6,15 @@ interface LeaderboardCardProps {
     username: string;
     university: string;
     score: number;
+    isCurrentUser: boolean;
 }
 
 const LeaderboardCard: React.FC<LeaderboardCardProps> = ({
     rank,
     username,
     university,
-    score
+    score,
+    isCurrentUser
 }) => {
     const getBorderColor = (rank: number) => {
         switch (rank) {
@@ -30,7 +32,8 @@ const LeaderboardCard: React.FC<LeaderboardCardProps> = ({
     return (
         <div
             className={cn(
-                'flex items-center gap-4 p-4 rounded-2xl border w-full z-[2] bg-black',
+                'flex items-center gap-4 p-4 rounded-2xl border w-full z-[2]',
+                isCurrentUser ? 'bg-purple-7' : 'bg-black',
                 getBorderColor(rank)
             )}>
             {/* Rank Badge */}
@@ -38,7 +41,7 @@ const LeaderboardCard: React.FC<LeaderboardCardProps> = ({
                 {rank === 1 && <Badge1 />}
                 {rank === 2 && <Badge2 />}
                 {rank === 3 && <Badge3 />}
-                {rank > 3 && <BadgeNonTop3 />}
+                {rank > 3 && <BadgeNonTop3 rank={rank} />}
             </div>
 
             {/* User Info */}
@@ -46,12 +49,18 @@ const LeaderboardCard: React.FC<LeaderboardCardProps> = ({
                 <h3 className="font-semibold text-white text-base truncate">
                     {username}
                 </h3>
-                <p className="text-sm text-[#8B8FA3] truncate">{university}</p>
+                <p
+                    className={cn(
+                        'text-sm',
+                        isCurrentUser ? 'text-white' : 'text-[#8B8FA3]'
+                    )}>
+                    {university}
+                </p>
             </div>
 
             {/* Score */}
             <div className="text-3xl font-bold text-white flex-shrink-0">
-                {score}
+                {parseFloat(score.toFixed(4)).toString()}
             </div>
         </div>
     );
@@ -416,40 +425,22 @@ const Badge3: React.FC = () => {
     );
 };
 
-const BadgeNonTop3: React.FC = () => {
+interface BadgeNonTop3Props {
+    rank: number;
+}
+
+const BadgeNonTop3: React.FC<BadgeNonTop3Props> = ({ rank }) => {
     return (
-        <svg
-            width="35"
-            height="35"
-            viewBox="0 0 35 35"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg">
-            <rect
-                x="0.5"
-                y="0.5"
-                width="34"
-                height="34"
-                rx="17"
-                fill="url(#paint0_linear_non)"
-            />
-            <path
-                d="M8.8544 23.5V21.9773L12.8942 18.017C13.2805 17.6269 13.6025 17.2803 13.8601 16.9773C14.1177 16.6742 14.3108 16.3807 14.4396 16.0966C14.5684 15.8125 14.6328 15.5095 14.6328 15.1875C14.6328 14.8201 14.5495 14.5057 14.3828 14.2443C14.2161 13.9792 13.987 13.7746 13.6953 13.6307C13.4036 13.4867 13.0722 13.4148 12.701 13.4148C12.3184 13.4148 11.9832 13.4943 11.6953 13.6534C11.4074 13.8087 11.1839 14.0303 11.0249 14.3182C10.8696 14.6061 10.7919 14.9489 10.7919 15.3466H8.78622C8.78622 14.608 8.95478 13.9659 9.2919 13.4205C9.62902 12.875 10.093 12.4527 10.6839 12.1534C11.2786 11.8542 11.9605 11.7045 12.7294 11.7045C13.5097 11.7045 14.1953 11.8504 14.7862 12.142C15.3771 12.4337 15.8355 12.8333 16.1612 13.3409C16.4908 13.8485 16.6555 14.428 16.6555 15.0795C16.6555 15.5152 16.5722 15.9432 16.4055 16.3636C16.2389 16.7841 15.9453 17.25 15.5249 17.7614C15.1082 18.2727 14.523 18.892 13.7692 19.6193L11.7635 21.6591V21.7386H16.8317V23.5H8.8544ZM22.968 23.6591C22.1499 23.6591 21.4226 23.5189 20.7862 23.2386C20.1536 22.9583 19.6536 22.5682 19.2862 22.0682C18.9188 21.5682 18.7237 20.9905 18.701 20.3352H20.8374C20.8563 20.6496 20.9605 20.9242 21.1499 21.1591C21.3393 21.3902 21.5911 21.5701 21.9055 21.6989C22.2199 21.8277 22.5722 21.892 22.9624 21.892C23.379 21.892 23.7483 21.8201 24.0703 21.6761C24.3923 21.5284 24.6442 21.3239 24.826 21.0625C25.0078 20.8011 25.0968 20.5 25.093 20.1591C25.0968 19.8068 25.0059 19.4962 24.8203 19.2273C24.6347 18.9583 24.3658 18.7481 24.0135 18.5966C23.665 18.4451 23.2446 18.3693 22.7521 18.3693H21.7237V16.7443H22.7521C23.1574 16.7443 23.5116 16.6742 23.8146 16.5341C24.1214 16.3939 24.362 16.197 24.5362 15.9432C24.7105 15.6856 24.7957 15.3883 24.7919 15.0511C24.7957 14.7216 24.7218 14.4356 24.5703 14.1932C24.4226 13.947 24.2124 13.7557 23.9396 13.6193C23.6707 13.483 23.3544 13.4148 22.9908 13.4148C22.6347 13.4148 22.3052 13.4792 22.0021 13.608C21.6991 13.7367 21.4548 13.9205 21.2692 14.1591C21.0836 14.3939 20.9851 14.6742 20.9737 15H18.9453C18.9605 14.3485 19.148 13.7765 19.5078 13.2841C19.8714 12.7879 20.3563 12.4015 20.9624 12.125C21.5684 11.8447 22.2483 11.7045 23.0021 11.7045C23.7786 11.7045 24.4529 11.8504 25.0249 12.142C25.6006 12.4299 26.0457 12.8182 26.3601 13.3068C26.6745 13.7955 26.8317 14.3352 26.8317 14.9261C26.8355 15.5814 26.6423 16.1307 26.2521 16.5739C25.8658 17.017 25.3582 17.3068 24.7294 17.4432V17.5341C25.5476 17.6477 26.1745 17.9508 26.6101 18.4432C27.0495 18.9318 27.2673 19.5398 27.2635 20.267C27.2635 20.9186 27.0779 21.5019 26.7067 22.017C26.3393 22.5284 25.8317 22.9299 25.1839 23.2216C24.54 23.5133 23.8014 23.6591 22.968 23.6591Z"
-                fill="white"
-            />
-            <defs>
-                <linearGradient
-                    id="paint0_linear_non"
-                    x1="0.5"
-                    y1="0.5"
-                    x2="34.9876"
-                    y2="4.81223"
-                    gradientUnits="userSpaceOnUse">
-                    <stop stopColor="#36236A" />
-                    <stop offset="0.654204" stopColor="#6C5096" />
-                    <stop offset="0.903636" stopColor="#494BA0" />
-                </linearGradient>
-            </defs>
-        </svg>
+        <div
+            className="flex items-center justify-center rounded-full text-white font-bold text-sm"
+            style={{
+                background:
+                    'linear-gradient(135deg, #36236A 0%, #6C5096 65.42%, #494BA0 90.36%)',
+                width: '38px',
+                height: '38px'
+            }}>
+            {rank}
+        </div>
     );
 };
 

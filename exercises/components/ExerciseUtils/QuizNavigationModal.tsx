@@ -159,12 +159,17 @@ const QuizNavigationModal: React.FC<QuizNavigationModalProps> = ({
                                 onClick={() => handleProblemClick(problem.id)}
                                 className={cn(
                                     'relative w-12 h-12 aspect-square rounded-lg flex items-center justify-center text-white text-xl font-semibold transition-all hover:opacity-50',
-                                    isCurrentProblem &&
-                                        problem.is_answered &&
-                                        'border-2 border-yellow-500 bg-violet-4 hover:bg-purple-6',
-                                    isCurrentProblem &&
-                                        !problem.is_answered &&
-                                        'border-2 border-yellow-500',
+                                    isCurrentProblem && [
+                                        problem.is_answered
+                                            ? 'bg-violet-4 hover:bg-purple-6 border-2 border-yellow-500'
+                                            : 'bg-transparent border-2 border-yellow-500',
+                                        problem.is_correct !== null &&
+                                            problem.is_correct &&
+                                            'bg-state-success hover:bg-accent-green border-2 border-yellow-500',
+                                        problem.is_correct !== null &&
+                                            !problem.is_correct &&
+                                            'bg-state-error hover:bg-accent-red border-2 border-yellow-500'
+                                    ],
                                     !isCurrentProblem && [
                                         problem.is_answered
                                             ? 'bg-violet-4 hover:bg-purple-6'

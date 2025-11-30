@@ -8,41 +8,21 @@ import {
 import { useRouter } from 'next/router';
 import Skeleton from 'commons/components/elements/Skeleton';
 import { useWindowSize } from 'usehooks-ts';
+import { cn } from 'commons/utils';
 
 const Leaderboard = () => {
     const router = useRouter();
     const { slug } = router.query;
     const { width } = useWindowSize();
 
-    const { data, isFetching } = useGetExerciseLeaderboardQuery(
+    const { data: leaderboard, isFetching } = useGetExerciseLeaderboardQuery(
         { exercise_slug: slug as string },
         {
             skip: !slug
         }
     );
 
-    const leaderboardData = [
-        {
-            rank: 1,
-            username: 'ahmad912',
-            university: 'Institut Teknologi Bandung',
-            score: 95
-        },
-        {
-            rank: 2,
-            username: 'sarsati_',
-            university: 'Universitas Indonesia',
-            score: 90
-        },
-        {
-            rank: 3,
-            username: 'budayz',
-            university: 'Universitas Indonesia',
-            score: 85
-        }
-    ];
-
-    if (isFetching || !data) {
+    if (isFetching || !leaderboard) {
         return (
             <div className="mb-16">
                 <Skeleton
@@ -53,7 +33,7 @@ const Leaderboard = () => {
         );
     }
 
-    // if (data.data.length === 0) return null;
+    if (leaderboard.data.length === 0) return null;
 
     return (
         <div className="flex flex-col gap-4 pb-16">
@@ -64,13 +44,14 @@ const Leaderboard = () => {
                 </p>
             </div>
             <div className="flex flex-col lg:flex-row gap-3 w-full relative">
-                {leaderboardData.map((item) => (
+                {leaderboard?.data?.slice(0, 3).map((item) => (
                     <LeaderboardCard
                         key={item.rank}
                         rank={item.rank}
-                        username={item.username}
-                        university={item.university}
+                        username={item.student.username}
+                        university={item.university_name}
                         score={item.score}
+                        isCurrentUser={item.is_current_user}
                     />
                 ))}
                 <svg
@@ -131,7 +112,6 @@ const Leaderboard = () => {
 };
 
 export const LeaderboardReport = () => {
-    // Mock data - replace with actual API data later
     const router = useRouter();
     const { slug, exerciseProgressId } = router.query;
     const { width } = useWindowSize();
@@ -154,27 +134,6 @@ export const LeaderboardReport = () => {
             }
         );
 
-    const leaderboardData = [
-        {
-            rank: 1,
-            username: 'ahmad912',
-            university: 'Institut Teknologi Bandung',
-            score: 95
-        },
-        {
-            rank: 2,
-            username: 'sarsati_',
-            university: 'Universitas Indonesia',
-            score: 90
-        },
-        {
-            rank: 3,
-            username: 'budayz',
-            university: 'Universitas Indonesia',
-            score: 85
-        }
-    ];
-
     const onRetry = (): void => {
         const firstProblemId = exercise?.first_problemset?.first_problem_id;
         if (firstProblemId) {
@@ -186,76 +145,102 @@ export const LeaderboardReport = () => {
 
     return (
         <div className="flex flex-col gap-4 relative lg:w-[700px]">
-            {leaderboardData.map((item) => (
-                <LeaderboardCard
-                    key={item.rank}
-                    rank={item.rank}
-                    username={item.username}
-                    university={item.university}
-                    score={item.score}
-                />
-            ))}
-            <svg
-                className="absolute inset-0 m-auto pointer-events-none bottom-[150px] lg:bottom-[240px]"
-                width={
-                    width < 425
-                        ? '300'
-                        : width < 768
-                        ? '400'
-                        : width < 1024
-                        ? '700'
-                        : width < 1440
-                        ? '400'
-                        : '470'
-                }
-                viewBox="0 0 910 259"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                style={{ zIndex: 10 }}>
-                <g opacity="0.5" filter="url(#filter0_f_40005816_61137)">
-                    <ellipse
-                        cx="455"
-                        cy="147.5"
-                        rx="43.5"
-                        ry="351"
-                        transform="rotate(-90 455 147.5)"
-                        fill="#494BA0"
-                    />
-                </g>
-                <defs>
-                    <filter
-                        id="filter0_f_40005816_61137"
-                        x="0"
-                        y="0"
-                        width="910"
-                        height="295"
-                        filterUnits="userSpaceOnUse"
-                        colorInterpolationFilters="sRGB">
-                        <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                        <feBlend
-                            mode="normal"
-                            in="SourceGraphic"
-                            in2="BackgroundImageFix"
-                            result="shape"
-                        />
-                        <feGaussianBlur
-                            stdDeviation="52"
-                            result="effect1_foregroundBlur_40005816_61137"
-                        />
-                    </filter>
-                </defs>
-            </svg>
-            <div className="space-y-3 pt-4 flex flex-col gap-2 relative z-10">
+            {isFetchingLeaderboard || !leaderboard ? (
+                <Skeleton isCustomSize className="w-full h-80" />
+            ) : (
+                <>
+                    {leaderboard.data.length > 0 && (
+                        <>
+                            {leaderboard.data.map((item) => (
+                                <LeaderboardCard
+                                    key={item.rank}
+                                    rank={item.rank}
+                                    username={item.student.username}
+                                    university={item.university_name}
+                                    score={item.score}
+                                    isCurrentUser={item.is_current_user}
+                                />
+                            ))}
+                            <svg
+                                className="absolute inset-0 m-auto pointer-events-none bottom-[150px] lg:bottom-[240px]"
+                                width={
+                                    width < 425
+                                        ? '300'
+                                        : width < 768
+                                        ? '400'
+                                        : width < 1024
+                                        ? '700'
+                                        : width < 1440
+                                        ? '400'
+                                        : '470'
+                                }
+                                viewBox="0 0 910 259"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                                style={{ zIndex: 10 }}>
+                                <g
+                                    opacity="0.5"
+                                    filter="url(#filter0_f_40005816_61137)">
+                                    <ellipse
+                                        cx="455"
+                                        cy="147.5"
+                                        rx="43.5"
+                                        ry="351"
+                                        transform="rotate(-90 455 147.5)"
+                                        fill="#494BA0"
+                                    />
+                                </g>
+                                <defs>
+                                    <filter
+                                        id="filter0_f_40005816_61137"
+                                        x="0"
+                                        y="0"
+                                        width="910"
+                                        height="295"
+                                        filterUnits="userSpaceOnUse"
+                                        colorInterpolationFilters="sRGB">
+                                        <feFlood
+                                            floodOpacity="0"
+                                            result="BackgroundImageFix"
+                                        />
+                                        <feBlend
+                                            mode="normal"
+                                            in="SourceGraphic"
+                                            in2="BackgroundImageFix"
+                                            result="shape"
+                                        />
+                                        <feGaussianBlur
+                                            stdDeviation="52"
+                                            result="effect1_foregroundBlur_40005816_61137"
+                                        />
+                                    </filter>
+                                </defs>
+                            </svg>
+                        </>
+                    )}
+                </>
+            )}
+
+            <div
+                className={cn(
+                    'flex flex-col gap-3 relative z-10',
+                    !isFetchingLeaderboard &&
+                        !!leaderboard &&
+                        leaderboard.data.length > 0 &&
+                        'pt-4'
+                )}>
                 <Button
                     variant="primary"
                     className="w-full text-center"
-                    href={`/latihan/`}>
+                    href={`/latihan/`}
+                    size="large">
                     Selesai
                 </Button>
                 <Button
                     variant="secondary"
                     className="w-full flex items-center justify-center gap-2"
-                    onClick={onRetry}>
+                    onClick={onRetry}
+                    size="large">
                     <RefreshCcw size={20} />
                     <span>Coba Lagi</span>
                 </Button>

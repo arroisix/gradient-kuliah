@@ -28,7 +28,7 @@ const ExerciseReportNavigation: React.FC<ExerciseReportNavigationProps> = ({
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isNavigationOpen, setIsNavigationOpen] = useState(false);
 
-    const { slug, exerciseProgressId, problemId } = router.query;
+    const { slug, exerciseProgressId, problemId, problemsetId } = router.query;
 
     const { data: exercise } = useGetExerciseDetailV2Query(
         {
@@ -40,12 +40,14 @@ const ExerciseReportNavigation: React.FC<ExerciseReportNavigationProps> = ({
         }
     );
 
-    // Set initial problem set ID when exercise data loads
+    // Set initial problem set ID from URL or default to first problem set
     React.useEffect(() => {
-        if (exercise?.first_problemset?.id && !selectedProblemSetId) {
+        if (problemsetId && typeof problemsetId === 'string') {
+            setSelectedProblemSetId(problemsetId);
+        } else if (exercise?.first_problemset?.id && !selectedProblemSetId) {
             setSelectedProblemSetId(exercise.first_problemset.id);
         }
-    }, [exercise, selectedProblemSetId]);
+    }, [exercise, problemsetId, selectedProblemSetId]);
 
     const { data: allProblems, isLoading } =
         useGetAllProblemInProblemSetViaExerciseProgressQuery(

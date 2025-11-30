@@ -42,7 +42,7 @@ const ProblemSetInformation = ({ maxWidth }: ProblemSetInformationProps) => {
         }
         return Math.min(
             100,
-            Math.round((submitted_answers / total_questions) * 100)
+            Math.floor((submitted_answers / total_questions) * 100)
         );
     }, [exercise]);
 
