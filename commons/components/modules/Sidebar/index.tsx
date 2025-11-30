@@ -49,25 +49,6 @@ const Sidebar = ({
                         Home
                     </span>
                 </Link>
-                {configData?.configs.is_copilot_config_enabled && (
-                    <Link
-                        href={'/copilot'}
-                        onClick={() => {
-                            tracker?.genericTrack(
-                                'Click Copilot Sidebar Navigation'
-                            );
-                        }}>
-                        <span
-                            className={`flex gap-4 cursor-pointer ${
-                                pathname.includes('/copilot')
-                                    ? 'text-white'
-                                    : 'text-[#666666]'
-                            } font-body text-sm hover:text-[#999999]`}>
-                            <CopilotIconLine />
-                            Copilot AI
-                        </span>
-                    </Link>
-                )}
                 <Link
                     href={'/kelas'}
                     onClick={() => {
@@ -85,26 +66,6 @@ const Sidebar = ({
                         } font-body text-sm hover:text-[#999999]`}>
                         <KelasIcon size={20} />
                         Kelas
-                    </span>
-                </Link>
-                <Link
-                    href={'/perpustakaan'}
-                    onClick={() => {
-                        tracker?.genericTrack(
-                            `Click Library ${
-                                !fullHeight ? 'Course ' : ''
-                            }Navigation`
-                        );
-                    }}>
-                    <span
-                        className={cn(
-                            'flex gap-4 cursor-pointer  font-body text-sm hover:text-[#999999]',
-                            pathname.includes('/perpustakaan')
-                                ? 'text-white'
-                                : 'text-[#666666]'
-                        )}>
-                        <BookStackIcon size={20} />
-                        Perpustakaan
                     </span>
                 </Link>
                 {configData?.configs.is_exercise_config_enabled && (
@@ -129,6 +90,45 @@ const Sidebar = ({
                         </span>
                     </Link>
                 )}
+                {configData?.configs.is_copilot_config_enabled && (
+                    <Link
+                        href={'/copilot'}
+                        onClick={() => {
+                            tracker?.genericTrack(
+                                'Click Copilot Sidebar Navigation'
+                            );
+                        }}>
+                        <span
+                            className={`flex gap-4 cursor-pointer ${
+                                pathname.includes('/copilot')
+                                    ? 'text-white'
+                                    : 'text-[#666666]'
+                            } font-body text-sm hover:text-[#999999]`}>
+                            <CopilotIconLine />
+                            Copilot AI
+                        </span>
+                    </Link>
+                )}
+                <Link
+                    href={'/perpustakaan'}
+                    onClick={() => {
+                        tracker?.genericTrack(
+                            `Click Library ${
+                                !fullHeight ? 'Course ' : ''
+                            }Navigation`
+                        );
+                    }}>
+                    <span
+                        className={cn(
+                            'flex gap-4 cursor-pointer  font-body text-sm hover:text-[#999999]',
+                            pathname.includes('/perpustakaan')
+                                ? 'text-white'
+                                : 'text-[#666666]'
+                        )}>
+                        <BookStackIcon size={20} />
+                        Perpustakaan
+                    </span>
+                </Link>
             </div>
         </aside>
     );

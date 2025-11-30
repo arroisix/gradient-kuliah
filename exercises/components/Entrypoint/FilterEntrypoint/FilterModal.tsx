@@ -2,7 +2,7 @@ import Modal from 'commons/components/modules/Modal';
 import { cn } from 'commons/utils';
 import { MdClose } from 'react-icons/md';
 import { BiSearch, BiChevronDown, BiChevronUp } from 'react-icons/bi';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Button from 'commons/components/elements/Button';
 
 interface Option {
@@ -57,6 +57,7 @@ const FilterModal = ({
             Tipe: ''
         }
     );
+    const modalRef = useRef<HTMLDivElement>(null);
 
     const tabs: TabType[] = [
         'Mata Kuliah',
@@ -64,6 +65,51 @@ const FilterModal = ({
         'Status Pengerjaan',
         'Tipe'
     ];
+
+    // Sync temp state with selected values when modal opens
+    useEffect(() => {
+        if (isOpen) {
+            setTempCourse(selectedCourse);
+            setTempUniversity(selectedUniversity);
+            setTempStatus(selectedStatus);
+            setTempType(selectedType);
+            setSearchQueries({
+                'Mata Kuliah': '',
+                Universitas: '',
+                'Status Pengerjaan': '',
+                Tipe: ''
+            });
+        }
+    }, [
+        isOpen,
+        selectedCourse,
+        selectedUniversity,
+        selectedStatus,
+        selectedType
+    ]);
+
+    // Close modal when clicking outside (only on desktop)
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            // Only close on desktop (md breakpoint and above)
+            const isDesktop = window.innerWidth >= 768;
+            if (
+                isDesktop &&
+                modalRef.current &&
+                !modalRef.current.contains(event.target as Node)
+            ) {
+                handleClose();
+            }
+        };
+
+        if (isOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isOpen]);
 
     const toggleSection = (tab: TabType) => {
         setExpandedSections((prev) =>
@@ -174,8 +220,14 @@ const FilterModal = ({
         onClose();
     };
 
-    const isApplyDisabled =
-        !tempCourse && !tempUniversity && !tempStatus && !tempType;
+    // Check if any value has changed from the selected values
+    const hasChanged =
+        tempCourse !== selectedCourse ||
+        tempUniversity !== selectedUniversity ||
+        tempStatus !== selectedStatus ||
+        tempType !== selectedType;
+
+    const isApplyDisabled = !hasChanged;
 
     return (
         <Modal
@@ -184,7 +236,7 @@ const FilterModal = ({
             variant="dark"
             permanent={true}
             className="!max-w-[700px] !w-full md:!w-[60vw] h-[80vh] md:h-[460px] !rounded-t-2xl md:!rounded-2xl !rounded-b-none md:!rounded-b-2xl fixed bottom-0 md:relative left-0 right-0 !max-h-[80vh] flex flex-col !overflow-hidden bg-[#20222E] p-4">
-            <div className="flex flex-col w-full h-full gap-4">
+            <div ref={modalRef} className="flex flex-col w-full h-full gap-4">
                 {/* Header */}
                 <div className="flex items-center justify-between py-4 md:border-b border-[#282B3C] flex-shrink-0">
                     <h2 className="text-base font-semibold">Filter</h2>

@@ -37,20 +37,21 @@ const LatihanEntrypoint = (): JSX.Element => {
     return (
         <>
             <Breadcrumb className="w-full pb-5" />
+            <div className="relative grid w-full grid-cols-1 mx-auto xl:max-w-screen-2xl">
+                <h1 className="text-xl font-bold md:text-2xl text-balance">
+                    Try Out
+                </h1>
+                <FilterEntrypoint />
 
-            <h1 className="text-xl font-bold md:text-2xl text-balance">
-                Try Out
-            </h1>
-            <FilterEntrypoint />
-
-            <LatihanContent
-                isLoading={isLoading || isFetching}
-                exercises={data?.data || []}
-                myExercises={[]}
-                totalItems={data?.count_items || 0}
-                currentPage={data?.current_page || 1}
-                limit={data?.limit || 6}
-            />
+                <LatihanContent
+                    isLoading={isLoading || isFetching}
+                    exercises={data?.data || []}
+                    myExercises={[]}
+                    totalItems={data?.count_items || 0}
+                    currentPage={data?.current_page || 1}
+                    limit={data?.limit || 6}
+                />
+            </div>
             {!is_subscribed && <RenewSubscriptionBanner product="latihan" />}
         </>
     );

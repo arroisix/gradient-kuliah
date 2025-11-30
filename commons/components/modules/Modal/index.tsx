@@ -32,7 +32,7 @@ const Modal = ({
                         className={cn(
                             'relative modal-box',
                             dialog || variant == 'dark'
-                                ? 'bg-neutral-800 text-white'
+                                ? 'bg-violet-2 text-white'
                                 : 'bg-white text-black ',
                             isPopup && 'md:max-w-[365px]',
                             className

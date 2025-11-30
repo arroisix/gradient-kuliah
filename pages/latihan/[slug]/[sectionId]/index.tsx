@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import SectionPageContent from 'exercises/components/Section/SectionPageContent';
 import withAuth from 'commons/withAuth';
+import ExerciseProblemSetDetail from 'exercises/containers/ExerciseProblemSetDetail';
 
 const SectionPage: React.FC = () => {
     const router = useRouter();
@@ -16,12 +16,7 @@ const SectionPage: React.FC = () => {
         );
     }
 
-    return (
-        <SectionPageContent
-            slug={slug as string}
-            sectionId={sectionId as string}
-        />
-    );
+    return <ExerciseProblemSetDetail />;
 };
 
 export default withAuth(SectionPage);

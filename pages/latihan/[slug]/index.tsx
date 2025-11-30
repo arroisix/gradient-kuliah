@@ -1,8 +1,8 @@
 import { NextPage } from 'next';
-import ExerciseStartContent from 'exercises/containers/ExerciseStartContent';
+import ExerciseDetail from 'exercises/containers/ExerciseDetail';
 
 const ExerciseStartPage: NextPage = () => {
-    return <ExerciseStartContent />;
+    return <ExerciseDetail />;
 };
 
 export default ExerciseStartPage;
