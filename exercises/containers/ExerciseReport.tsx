@@ -23,7 +23,10 @@ const ExerciseReport = () => {
     if (isLoading) {
         return (
             <LatihanLayout>
-                <Skeleton className="w-full h-full" />
+                <div className="flex flex-col lg:flex-row gap-10 h-screen w-full">
+                    <Skeleton className="w-full h-1/2" />
+                    <Skeleton className="w-full h-1/3" />
+                </div>
             </LatihanLayout>
         );
     }

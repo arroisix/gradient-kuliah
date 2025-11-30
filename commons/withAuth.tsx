@@ -21,11 +21,8 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
             const accessToken = useSelector(getToken);
             const rawToken = window.localStorage.getItem('token');
 
-            const {
-                is_subscribed,
-                isDoneFetchingSubcription,
-                isLoading
-            } = useCourseSubscription();
+            const { is_subscribed, isDoneFetchingSubcription, isLoading } =
+                useCourseSubscription();
             const isProfileComplete = useSelector(getIsProfileComplete);
             const isLastOnboardingStep = localStorage.getItem(
                 'isLastOnboardingStep'
@@ -47,7 +44,10 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
                         return;
                     }
 
-                    if (router.pathname === '/onboarding' && !isProfileComplete) {
+                    if (
+                        router.pathname === '/onboarding' &&
+                        !isProfileComplete
+                    ) {
                         return <WrappedComponent {...props} />;
                     }
 

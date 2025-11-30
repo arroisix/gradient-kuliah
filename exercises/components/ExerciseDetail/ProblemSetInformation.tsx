@@ -18,18 +18,20 @@ const ProblemSetInformation = ({ maxWidth }: ProblemSetInformationProps) => {
     const { slug, sectionId } = router.query;
     const { isAuthenticated } = useAuth();
 
-    const { data: exercise } = useGetExerciseDetailV2Query(
-        { exercise_slug: slug as string },
-        {
-            skip: !slug
-        }
-    );
-    const { data: problemsets } = useGetProblemsetDetailInterstitialQuery(
-        { slug: slug as string, problemset_id: sectionId as string },
-        {
-            skip: !slug || !sectionId
-        }
-    );
+    const { data: exercise, isLoading: isLoadingExercise } =
+        useGetExerciseDetailV2Query(
+            { exercise_slug: slug as string },
+            {
+                skip: !slug
+            }
+        );
+    const { data: problemsets, isLoading: isLoadingProblemsets } =
+        useGetProblemsetDetailInterstitialQuery(
+            { slug: slug as string, problemset_id: sectionId as string },
+            {
+                skip: !slug || !sectionId
+            }
+        );
 
     const progressPercentage = useMemo(() => {
         if (!exercise?.latest_exercise_progress) {
@@ -157,7 +159,8 @@ const ProblemSetInformation = ({ maxWidth }: ProblemSetInformationProps) => {
                 <Button
                     variant="primary"
                     className="w-full text-center"
-                    href={decideCTAAction()}>
+                    href={decideCTAAction()}
+                    disabled={isLoadingExercise || isLoadingProblemsets}>
                     {decideCTAText()}
                 </Button>
             </div>

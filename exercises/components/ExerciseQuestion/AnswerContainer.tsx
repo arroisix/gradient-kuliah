@@ -17,6 +17,7 @@ import { useEffect, useMemo } from 'react';
 import SolutionContainer from './SolutionContainer';
 import ExerciseFinishModal from '../Modal/ExerciseFinishModal';
 import { useExercise } from 'exercises/contexts/ExerciseProvider';
+import Skeleton from 'commons/components/elements/Skeleton';
 
 const AnswerContainer = () => {
     const router = useRouter();
@@ -34,15 +35,16 @@ const AnswerContainer = () => {
             skip: !slug
         }
     );
-    const { data: problem } = useGetProblemInProblemSetQuery(
-        {
-            slug: slug as string,
-            problemSetId: (sectionId as string) || (problemsetId as string),
-            problemId: problemId as string,
-            exercise_progress_id: exerciseProgressId as string
-        },
-        { skip: !slug || (!sectionId && !problemsetId) || !problemId }
-    );
+    const { data: problem, isLoading: isLoadingProblem } =
+        useGetProblemInProblemSetQuery(
+            {
+                slug: slug as string,
+                problemSetId: (sectionId as string) || (problemsetId as string),
+                problemId: problemId as string,
+                exercise_progress_id: exerciseProgressId as string
+            },
+            { skip: !slug || (!sectionId && !problemsetId) || !problemId }
+        );
     const { data: solutionData } = useGetProblemSolutionQuery(
         {
             slug: slug as string,
@@ -126,6 +128,17 @@ const AnswerContainer = () => {
     } = useSubmitAnswerHandler(problem!);
 
     const renderAnswerType = useMemo(() => {
+        if (isLoadingProblem) {
+            return (
+                <div className="flex flex-col gap-4 w-full">
+                    <Skeleton className="w-full h-10" />
+                    <Skeleton className="w-full h-10" />
+                    <Skeleton className="w-full h-10" />
+                    <Skeleton className="w-full h-10" />
+                </div>
+            );
+        }
+
         if (showSolution) {
             return <SolutionContainer />;
         } else {
@@ -169,7 +182,7 @@ const AnswerContainer = () => {
         <>
             <div
                 className={cn(
-                    'flex flex-col gap-8 w-full h-full lg:bg-violet-1 rounded-2xl relative',
+                    'flex flex-col gap-8 w-full h-fit lg:bg-violet-1 rounded-2xl relative',
                     isSolutionPage
                         ? 'lg:pb-4 xl:pb-8 lg:px-12 lg:pt-20'
                         : 'lg:p-12'

@@ -39,9 +39,11 @@ const UserProfile = (): JSX.Element => {
                     <MdArrowDropDown />
                 </div>
             </button>
-            {isOpen && typeof document !== 'undefined' &&
+            {isOpen &&
+                typeof document !== 'undefined' &&
                 createPortal(
                     <div
+                        aria-hidden
                         className={cn(
                             'fixed rounded-lg border text-sm font-medium shadow-md',
                             lightMode
@@ -51,18 +53,22 @@ const UserProfile = (): JSX.Element => {
                         style={{
                             zIndex: width < 768 ? 99999 : 9999,
                             top: buttonRef.current
-                                ? buttonRef.current.getBoundingClientRect().bottom + 16
+                                ? buttonRef.current.getBoundingClientRect()
+                                      .bottom + 16
                                 : 'auto',
-                            right: width < 768 ? 0 : buttonRef.current
-                                ? window.innerWidth -
-                                  buttonRef.current.getBoundingClientRect().right - 16
-                                : 'auto',
+                            right:
+                                width < 768
+                                    ? 0
+                                    : buttonRef.current
+                                    ? window.innerWidth -
+                                      buttonRef.current.getBoundingClientRect()
+                                          .right -
+                                      16
+                                    : 'auto',
                             minWidth: '200px'
                         }}
                         onClick={() => setIsOpen(false)}>
-                        <ul
-                            role="menubar"
-                            className="p-2 w-max menu">
+                        <ul role="menubar" className="p-2 w-max menu">
                             <UserProfileDropdown />
                         </ul>
                     </div>,

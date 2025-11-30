@@ -35,7 +35,7 @@ const ProblemSetRoadmap = () => {
     const currentIndex = problemsets.data.findIndex((item) => item.is_current);
 
     return (
-        <div className="w-full lg:w-1/2 rounded-lg lg:p-6 py-4">
+        <div className="w-full lg:w-1/2 rounded-lg lg:p-6 py-4 overflow-auto">
             <h2 className="text-white text-lg font-semibold mb-6 hidden lg:block">
                 Quiz Section
             </h2>

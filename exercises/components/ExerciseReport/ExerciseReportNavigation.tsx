@@ -108,6 +108,32 @@ const ExerciseReportNavigation: React.FC<ExerciseReportNavigationProps> = ({
             const nextProblem = allProblems.data[currentIndex + 1];
             if (nextProblem) {
                 handleProblemClick(nextProblem.problem_id);
+            } else {
+                const currentProblemsetOrder = allProblemset?.data.findIndex(
+                    (ps) => ps.id === selectedProblemSetId
+                );
+
+                if (
+                    currentProblemsetOrder !== undefined &&
+                    allProblemset?.data &&
+                    currentProblemsetOrder < allProblemset?.data.length - 1
+                ) {
+                    const nextProblemset =
+                        allProblemset?.data[currentProblemsetOrder + 1];
+                    if (nextProblemset) {
+                        router.replace(
+                            `/latihan/${slug}/report/${exerciseProgressId}/${nextProblemset.id}/${nextProblemset.first_problem_id}`,
+                            undefined,
+                            { scroll: false, shallow: true }
+                        );
+                    }
+                } else {
+                    router.replace(
+                        `/latihan/${slug}/report/${exerciseProgressId}/leaderboard/`,
+                        undefined,
+                        { scroll: false, shallow: true }
+                    );
+                }
             }
         }
     };
@@ -137,11 +163,6 @@ const ExerciseReportNavigation: React.FC<ExerciseReportNavigationProps> = ({
     );
     const hasPrevious =
         currentProblemIndex !== undefined && currentProblemIndex > 0;
-    const hasNext =
-        currentProblemIndex !== undefined &&
-        currentProblemIndex !== -1 &&
-        allProblems?.data &&
-        currentProblemIndex < allProblems.data.length - 1;
 
     // Calculate visible problems range - show 5 at a time, centered on current problem when possible
     const getVisibleProblems = () => {
@@ -346,7 +367,7 @@ const ExerciseReportNavigation: React.FC<ExerciseReportNavigationProps> = ({
                 <Button
                     variant="secondary"
                     onClick={handleNextProblem}
-                    disabled={!hasNext}
+                    // disabled={!hasNext}
                     className="text-center !p-0 !w-8 !h-8 items-center justify-center flex !rounded-lg">
                     <ChevronRight size={16} />
                 </Button>

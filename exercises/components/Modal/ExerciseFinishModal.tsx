@@ -100,7 +100,7 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
                     'flex flex-col w-full h-[70vh] md:h-auto md:max-h-[90vh] overflow-y-auto px-6 py-8 justify-center'
                 )}>
                 {isLoading ? (
-                    <div className="flex flex-col items-center gap-6">
+                    <div className="flex flex-col items-center gap-6 w-full lg:w-[30vw]">
                         <Skeleton
                             isCustomSize
                             className="w-1/2 md:w-1/3 h-32 md:h-28 lg:h-36"

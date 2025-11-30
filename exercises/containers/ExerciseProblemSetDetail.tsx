@@ -10,20 +10,32 @@ const ExerciseProblemSetDetail = () => {
     const router = useRouter();
     const { slug, sectionId } = router.query;
 
-    const { isLoading } = useGetProblemsetDetailInterstitialQuery(
-        { slug: slug as string, problemset_id: sectionId as string },
-        {
-            skip: !slug || !sectionId
-        }
-    );
+    const { data: problemsets, isLoading } =
+        useGetProblemsetDetailInterstitialQuery(
+            { slug: slug as string, problemset_id: sectionId as string },
+            {
+                skip: !slug || !sectionId
+            }
+        );
 
     if (isLoading) {
         return (
             <LatihanLayout>
-                <Skeleton className="w-full h-full" />
+                <div className="flex flex-col lg:flex-row gap-10 h-screen w-full">
+                    <div className="flex flex-col gap-4 w-full">
+                        <Skeleton className="w-full h-20" />
+                        <Skeleton className="w-full h-20" />
+                        <Skeleton className="w-full h-20" />
+                        <Skeleton className="w-full h-20" />
+                        <Skeleton className="w-full h-20" />
+                    </div>
+                    <Skeleton className="w-full h-1/3" />
+                </div>
             </LatihanLayout>
         );
     }
+
+    console.log('problemsets', problemsets);
 
     return (
         <LatihanLayout>
@@ -38,13 +50,9 @@ const ExerciseProblemSetDetail = () => {
             {/* Desktop View */}
             <div className="hidden lg:flex flex-col h-full gap-6 overflow-hidden">
                 <ExerciseProblemSetHeader />
-                <div className="flex w-full gap-10 flex-col lg:flex-row flex-shrink-0 h-full overflow-y-auto">
-                    <div className="w-1/2">
-                        <ProblemSetRoadmap />
-                    </div>
-                    <div className="w-1/2 sticky top-0 h-fit">
-                        <ProblemSetInformation maxWidth="100%" />
-                    </div>
+                <div className="flex w-full gap-10 flex-col lg:flex-row flex-shrink-0 h-full">
+                    <ProblemSetRoadmap />
+                    <ProblemSetInformation />
                 </div>
             </div>
         </LatihanLayout>

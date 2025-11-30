@@ -1,3 +1,4 @@
+import Skeleton from 'commons/components/elements/Skeleton';
 import { cn } from 'commons/utils';
 import TiptapViewer from 'courses/components/Textbook/TiptapViewer';
 import { useExercise } from 'exercises/contexts/ExerciseProvider';
@@ -12,24 +13,37 @@ const QuestionContent = () => {
     const router = useRouter();
     const { slug, sectionId, problemsetId, problemId, exerciseProgressId } =
         router.query;
-    const { data: problem } = useGetProblemInProblemSetQuery(
-        {
-            slug: slug as string,
-            problemSetId: (sectionId as string) || (problemsetId as string),
-            problemId: problemId as string,
-            exercise_progress_id: exerciseProgressId as string
-        },
-        { skip: !slug || (!sectionId && !problemsetId) || !problemId }
-    );
-    const { data: allProblemsInPS } = useGetAllProblemInProblemSetQuery(
-        {
-            slug: slug as string,
-            problemSetProgressId: problem?.id as string,
-            page: 1,
-            limit: 1
-        },
-        { skip: !slug || !problem?.id }
-    );
+    const { data: problem, isLoading: isLoadingProblem } =
+        useGetProblemInProblemSetQuery(
+            {
+                slug: slug as string,
+                problemSetId: (sectionId as string) || (problemsetId as string),
+                problemId: problemId as string,
+                exercise_progress_id: exerciseProgressId as string
+            },
+            { skip: !slug || (!sectionId && !problemsetId) || !problemId }
+        );
+    const { data: allProblemsInPS, isLoading: isLoadingAllProblems } =
+        useGetAllProblemInProblemSetQuery(
+            {
+                slug: slug as string,
+                problemSetProgressId: problem?.id as string,
+                page: 1,
+                limit: 1
+            },
+            { skip: !slug || !problem?.id }
+        );
+
+    if (isLoadingProblem || isLoadingAllProblems) {
+        return (
+            <div className="flex flex-col gap-4 w-full">
+                <Skeleton className="h-6 w-1/4" />
+                <Skeleton className="h-6 w-1/6" />
+                <Skeleton className="h-6 w-3/4" />
+                <Skeleton className="h-6 w-2/5" />
+            </div>
+        );
+    }
 
     return (
         <div
