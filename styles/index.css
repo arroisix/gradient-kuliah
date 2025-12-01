@@ -551,6 +551,10 @@ input[type='number']::-webkit-outer-spin-button {
     box-shadow: inset 0 -1px 0 #d1d5da;
 }
 
+.astronotes {
+    color: #dedede;
+}
+
 .markdown-body h1,
 .astronotes {
     color: #dedede;
