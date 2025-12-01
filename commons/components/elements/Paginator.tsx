@@ -104,11 +104,11 @@ const Paginator = ({
                 disabled={!hasPreviousPage}
                 onClick={() => {
                     if (!hasPreviousPage) return;
-                    trackPageChange(page - 1, 'Click Next Pagination');
+                    trackPageChange(page - 1, 'Click Previous Pagination');
                     setPage?.((prev) => prev - 1);
                 }}
                 className={cn(
-                    'btn sm:btn-sm rounded-full order-last sm:order-none min-w-max flex-1 sm:flex-none bg-surface-200 text-white pl-2',
+                    'btn sm:btn-sm rounded-full order-last sm:order-none min-w-max flex-1 sm:flex-none bg-neutral-800 text-white pl-2 border-none',
                     !hasPreviousPage && 'btn-disabled'
                 )}>
                 <BiChevronLeft className="w-5 h-5" /> Prev
@@ -182,11 +182,11 @@ const Paginator = ({
                 scroll={scroll}
                 onClick={() => {
                     if (!hasNextPage) return;
-                    trackPageChange(page + 1, 'Click Previous Pagination');
+                    trackPageChange(page + 1, 'Click Next Pagination');
                     setPage?.((prev) => prev + 1);
                 }}
                 className={cn(
-                    'btn sm:btn-sm rounded-full order-last sm:order-none flex-1 sm:flex-none text-white min-w-max bg-surface-200 pr-2',
+                    'btn sm:btn-sm rounded-full order-last sm:order-none flex-1 sm:flex-none text-white min-w-max bg-neutral-800 border-none pr-2',
                     !hasNextPage && 'btn-disabled'
                 )}>
                 Next <BiChevronRight className="w-5 h-5" />

@@ -27,7 +27,7 @@ const CVVInfoModal = ({ isOpen, setOpen }: ModalBaseProps): JSX.Element => {
                 </p>
 
                 {/* CVV Protection Info */}
-                <div className="flex gap-3 bg-[#2C2C2C] p-3 rounded-lg items-center">
+                <div className="flex gap-3 bg-[#20222E] p-3 rounded-lg items-center">
                     <div className="w-8 h-8 rounded-full bg-[#F505A1]/15 flex items-center justify-center shrink-0">
                         <CreditCardCVVSmallIcon />
                     </div>

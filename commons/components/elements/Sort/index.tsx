@@ -35,7 +35,7 @@ const Sort = ({
             <button
                 tabIndex={0}
                 className={cn(
-                    'flex items-center bg-[#2C2C2C] rounded-full',
+                    'flex items-center bg-[#20222E] rounded-full',
                     iconOnly
                         ? 'justify-center w-11 h-11'
                         : 'justify-between gap-2 text-xs font-bold w-full md:w-52 pl-5 pr-3 py-3'
@@ -52,7 +52,7 @@ const Sort = ({
                 tabIndex={0}
                 role="menu"
                 className={cn(
-                    'dropdown-content menu overflow-clip mt-1 [&_li>*]:rounded-none p-0 bg-[#2C2C2C] text-xs rounded-lg z-10 divide-y divide-[#373737]',
+                    'dropdown-content menu overflow-clip mt-1 [&_li>*]:rounded-none p-0 bg-[#20222E] text-xs rounded-lg z-10 divide-y divide-[#373737]',
                     iconOnly ? 'w-52' : 'w-full md:w-52'
                 )}>
                 {options.map(({ value, label }) => (

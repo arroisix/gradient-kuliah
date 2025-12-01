@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import LatihanCard from './LatihanCard';
 import Paginator from 'commons/components/elements/Paginator';
 import Skeleton from 'commons/components/elements/Skeleton';
@@ -29,6 +30,31 @@ const LatihanContent: React.FC<LatihanContentProps> = ({
     }
 
     const totalPages = Math.ceil(totalItems / limit);
+
+    // Empty state
+    if (exercises.length === 0) {
+        return (
+            <div className="flex flex-col items-center justify-center py-16 gap-4 xl:max-w-screen-2xl">
+                <Image
+                    src="https://assets.gradient.academy/assets/exercise-not-found.png"
+                    alt="No exercises found"
+                    width={200}
+                    height={200}
+                    className="mb-6"
+                />
+                <div className="flex flex-col gap-2 justify-center items-center">
+                    <h3 className="text-white text-xl font-bold mb-2 text-center">
+                        Masih belum ada soal yang tersedia
+                        <br />
+                        di tipe ini
+                    </h3>
+                    <p className="text-gray-400 text-sm text-center">
+                        Soal yang tersedia akan muncul disini.
+                    </p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div>

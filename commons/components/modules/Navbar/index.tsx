@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { FaInstagram } from 'react-icons/fa';
 import { FiMenu } from 'react-icons/fi';
-import { ChevronDown } from 'lucide-react';
 import useWindowSize from 'commons/hooks/useWindowSize';
 import MobileNavbar from './components/MobileNavbar';
 import { useSelector } from 'react-redux';
@@ -40,6 +39,13 @@ const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
         IconUnactive: KelasIcon
     },
     {
+        name: 'Try Out',
+        title: 'Try Out',
+        url: '/latihan',
+        IconActive: PencilOnLineIconFill,
+        IconUnactive: PencilOnLineIcon
+    },
+    {
         name: 'Library',
         title: 'Perpustakaan',
         url: '/perpustakaan',
@@ -74,7 +80,6 @@ const Navbar = ({
     const { profile } = useContext(AuthContext);
     const [openMobile, setOpenMobile] = useState(false);
     const [openSidebar, setOpenSidebar] = useState(false);
-    const [openToolsDropdown, setOpenToolsDropdown] = useState(false);
     const { height } = useWindowSize();
     const router = useRouter();
     const [scrollPosition, setScrollPosition] = useState(0);
@@ -145,9 +150,10 @@ const Navbar = ({
     return (
         <header
             className={cn(
-                'fixed top-0 left-0 w-full z-20 transition-all ease-in-out duration-200 flex flex-col',
+                'fixed top-0 left-0 w-full transition-all ease-in-out duration-200 flex flex-col',
                 computeBgColor()
-            )}>
+            )}
+            style={{ zIndex: 100 }}>
             <div
                 className={cn(
                     'flex items-center min-h-14 justify-between w-full px-4 py-3 md:px-8 gap-4',
@@ -182,6 +188,10 @@ const Navbar = ({
                             key={UNAUTHENTICATED_NAVBAR_BUTTONS[0].name}
                             {...UNAUTHENTICATED_NAVBAR_BUTTONS[0]}
                         />
+                        <NavigationButton
+                            key={UNAUTHENTICATED_NAVBAR_BUTTONS[1].name}
+                            {...UNAUTHENTICATED_NAVBAR_BUTTONS[1]}
+                        />
                         {configData?.configs.is_copilot_config_enabled && (
                             <NavigationButton
                                 name="Copilot AI"
@@ -192,51 +202,9 @@ const Navbar = ({
                             />
                         )}
                         <NavigationButton
-                            key={UNAUTHENTICATED_NAVBAR_BUTTONS[1].name}
-                            {...UNAUTHENTICATED_NAVBAR_BUTTONS[1]}
+                            key={UNAUTHENTICATED_NAVBAR_BUTTONS[2].name}
+                            {...UNAUTHENTICATED_NAVBAR_BUTTONS[2]}
                         />
-                        <div className="relative">
-                            <button
-                                onClick={() =>
-                                    setOpenToolsDropdown(!openToolsDropdown)
-                                }
-                                className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors whitespace-nowrap">
-                                {openToolsDropdown ? (
-                                    <PencilOnLineIconFill />
-                                ) : (
-                                    <PencilOnLineIcon />
-                                )}
-                                <span>Alat Belajar</span>
-                                <ChevronDown
-                                    className={`w-4 h-4 transition-transform ${
-                                        openToolsDropdown ? 'rotate-180' : ''
-                                    }`}
-                                />
-                            </button>
-
-                            {openToolsDropdown && (
-                                <div className="absolute top-full left-0 mt-1 w-48 bg-[#1A1A1A] rounded-lg shadow-lg py-2 z-[100]">
-                                    <Link
-                                        href="/alat-belajar"
-                                        className="flex items-center gap-3 px-4 py-2 text-gray-300 hover:text-white hover:bg-[#2A2A2A] transition-colors">
-                                        Semua
-                                    </Link>
-                                    <Link
-                                        href="/flashcards"
-                                        className="flex items-center gap-3 px-4 py-2 text-gray-300 hover:text-white hover:bg-[#2A2A2A] transition-colors">
-                                        Flashcard
-                                    </Link>
-                                    {configData?.configs
-                                        .is_exercise_config_enabled && (
-                                        <Link
-                                            href="/latihan"
-                                            className="flex items-center gap-3 px-4 py-2 text-gray-300 hover:text-white hover:bg-[#2A2A2A] transition-colors">
-                                            Quiz
-                                        </Link>
-                                    )}
-                                </div>
-                            )}
-                        </div>
                     </div>
                     {isShowSidebar && (
                         <div className="hidden md:block w-[250px] h-[64px] fixed top-0 left-0 bg-[#121212] z-[-1]" />

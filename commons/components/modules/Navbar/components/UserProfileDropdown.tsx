@@ -3,18 +3,13 @@ import { useTracker } from 'tracker/tracker';
 import Link from 'next/link';
 import { MdFileDownload, MdHistory, MdLogout, MdPerson } from 'react-icons/md';
 import { cn } from 'commons/utils';
-import { useLogoutMutation } from 'authentication/redux/api/authApi';
-import { useRouter } from 'next/router';
-import { useDispatch } from 'react-redux';
-import { clearCache } from 'authentication/redux/slices/userSlice';
 import { useThemeContext } from 'commons/contexts/ThemeProvider';
 import { FaGift } from 'react-icons/fa';
+import useLogout from 'authentication/hooks/useLogout';
 
 const UserProfileDropdown = (): JSX.Element => {
     const tracker = useTracker();
-    const router = useRouter();
-    const [logout] = useLogoutMutation();
-    const dispatch = useDispatch();
+    const { logout } = useLogout();
 
     const { theme } = useThemeContext();
     const lightMode = theme === 'light';
@@ -71,8 +66,6 @@ const UserProfileDropdown = (): JSX.Element => {
                     onClick={async () => {
                         tracker?.genericTrack('Click Logout');
                         await logout();
-                        dispatch(clearCache());
-                        router.push('/');
                     }}>
                     <MdLogout size={16} className="mr-2" />
                     <span>Logout</span>

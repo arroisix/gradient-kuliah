@@ -486,7 +486,7 @@ const CopilotSidebarContainer = ({
                         isMobileFullscreen ? 'rounded-none' : 'rounded-t-lg',
                         isCollapsed && !isMobileFullscreen
                             ? 'bg-[#5F2BCE]'
-                            : 'bg-[#2C2C2C]'
+                            : 'bg-[#20222E]'
                     )}>
                     <button
                         onClick={isHistoryOpen ? handleToggleHistory : onClose}

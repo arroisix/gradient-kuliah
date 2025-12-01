@@ -77,7 +77,7 @@ const ContentRecommendations: React.FC<ContentRecommendationsProps> = ({
                                     href={getContentUrl(content)}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex-shrink-0 bg-[#222222] w-[260px] rounded-lg overflow-hidden flex flex-col hover:bg-[#2C2C2C] transition-colors duration-200">
+                                    className="flex-shrink-0 bg-[#222222] w-[260px] rounded-lg overflow-hidden flex flex-col hover:bg-[#20222E] transition-colors duration-200">
                                     {content.type === 'course_video' ? (
                                         <>
                                             {content.thumbnail && (

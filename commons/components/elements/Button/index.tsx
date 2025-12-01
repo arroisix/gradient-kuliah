@@ -6,11 +6,16 @@ import { useTracker } from 'tracker/tracker';
 import { ButtonProps } from './button';
 
 const BUTTON_THEME: { [key: string]: string } = {
-    primary: 'bg-accent-purple rounded-full text-white font-body',
-    secondary: 'bg-accent-blue rounded-full text-primary-blue font-body',
+    primary:
+        'bg-accent-purple rounded-full text-white font-body hover:bg-accent-purple/60',
+    secondary:
+        'bg-graphite-800 rounded-full text-white font-body hover:bg-neutral-700',
     tertiary: 'text-[#B6A6F3] font-semibold hover:bg-graphite-900 rounded',
     neutral: 'bg-neutral-700 rounded-full text-white',
-    disabled: 'bg-neutral-400 text-neutral-300 rounded-full font-body',
+    disabledPrimary:
+        'bg-accent-purple/50 text-white/50 rounded-full font-body cursor-not-allowed',
+    disabled:
+        'bg-neutral-700/80 text-neutral-300/30 rounded-full font-body cursor-not-allowed',
     custom: 'rounded-full font-body'
 };
 
@@ -18,7 +23,7 @@ const BUTTON_SIZE: { [key: string]: string } = {
     large: 'py-4 px-7',
     normal: 'py-2 px-6',
     small: 'py-2 px-5',
-    extraSmall: 'py-1 px-5'
+    extraSmall: 'py-1 px-5 text-sm'
 };
 
 const Button = ({
@@ -56,7 +61,11 @@ const Button = ({
         return cn(
             styling,
             className,
-            disabled ? BUTTON_THEME['disabled'] : BUTTON_THEME[variant],
+            disabled
+                ? variant === 'primary'
+                    ? BUTTON_THEME['disabledPrimary']
+                    : BUTTON_THEME['disabled']
+                : BUTTON_THEME[variant],
             size ? BUTTON_SIZE[size] : BUTTON_SIZE['normal']
         );
     };

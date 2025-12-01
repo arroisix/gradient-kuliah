@@ -1,7 +1,16 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, {
+    useState,
+    useEffect,
+    useRef,
+    useCallback,
+    useMemo
+} from 'react';
 import { useGetBannerQuery } from 'dashboard/redux/api/dashboardApi';
-import { useSelector } from 'react-redux';
-import { getCurrentUser } from 'authentication/redux/selectors/userSelector';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    getCurrentUser,
+    getIsAuthenticated
+} from 'authentication/redux/selectors/userSelector';
 import { useRequestEmailActivationMutation } from 'authentication/redux/api/authApi';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -11,19 +20,44 @@ import { Banner } from 'dashboard/types/dashboard';
 import useWindowBreakpoints from '../../commons/hooks/useWindowBreakpoints';
 import EmailVerificationModal from './EmailVerification/EmailVerificationModal';
 import { FiChevronRight, FiChevronLeft } from 'react-icons/fi';
+import { cn } from 'commons/utils';
+import { MdClose } from 'react-icons/md';
+import { getViewedCampaignBannersSlug } from 'dashboard/redux/selectors/bannerSelector';
+import { addViewedCampaignBannerSlug } from 'dashboard/redux/slices/bannerSlice';
 
-const DashboardUpdatesBanner: React.FC = () => {
-    const { data, isLoading, error } = useGetBannerQuery();
+interface DashboardUpdatesBannerProps {
+    bannerType?: 'campaign' | 'general';
+}
+
+const DashboardUpdatesBanner = ({
+    bannerType = 'general'
+}: DashboardUpdatesBannerProps): JSX.Element => {
+    const { data, isLoading, error } = useGetBannerQuery({ type: bannerType });
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [slideDirection, setSlideDirection] = useState<
+        'left' | 'right' | null
+    >(null);
     const tracker = useTracker();
     const { isMobileBreakpoints } = useWindowBreakpoints();
+    const isAuthenticated = useSelector(getIsAuthenticated);
     const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
+    const touchStartX = useRef<number>(0);
+    const touchEndX = useRef<number>(0);
+    const viewedCampaignBanner = useSelector(getViewedCampaignBannersSlug);
+    const dispatch = useDispatch();
 
     const user = useSelector(getCurrentUser);
     const [requestEmailActivation] = useRequestEmailActivationMutation();
 
-    const banners = data?.data || [];
+    const banners = useMemo(() => {
+        if (bannerType === 'campaign' && data?.data) {
+            return data.data.filter(
+                (banner: Banner) => !viewedCampaignBanner.includes(banner.slug)
+            );
+        }
+        return data?.data || [];
+    }, [data?.data, viewedCampaignBanner]);
 
     const clearAutoSlide = useCallback(() => {
         if (intervalIdRef.current) {
@@ -74,15 +108,74 @@ const DashboardUpdatesBanner: React.FC = () => {
         }, 3000);
     };
 
+    const onCloseBanner = () => {
+        // Optionally implement close banner functionality
+        dispatch(addViewedCampaignBannerSlug(banners[currentIndex].slug));
+    };
+
     const nextSlide = useCallback(() => {
         if (banners.length < 2) return;
-        goToSlide((currentIndex + 1) % banners.length);
-    }, [banners.length, currentIndex]); // goToSlide closes over clearAutoSlide/start; safe to call
+        setSlideDirection('left');
+        setTimeout(() => {
+            setCurrentIndex((prevIndex) => (prevIndex + 1) % banners.length);
+            setSlideDirection(null);
+        }, 300);
+
+        clearAutoSlide();
+        setTimeout(() => {
+            if (!isModalOpen) {
+                startAutoSlide();
+            }
+        }, 3000);
+    }, [banners.length, isModalOpen, clearAutoSlide, startAutoSlide]);
 
     const prevSlide = useCallback(() => {
         if (banners.length < 2) return;
-        goToSlide((currentIndex - 1 + banners.length) % banners.length);
-    }, [banners.length, currentIndex]);
+        setSlideDirection('right');
+        setTimeout(() => {
+            setCurrentIndex(
+                (prevIndex) => (prevIndex - 1 + banners.length) % banners.length
+            );
+            setSlideDirection(null);
+        }, 300);
+
+        clearAutoSlide();
+        setTimeout(() => {
+            if (!isModalOpen) {
+                startAutoSlide();
+            }
+        }, 3000);
+    }, [banners.length, isModalOpen, clearAutoSlide, startAutoSlide]);
+
+    // Touch/swipe handlers
+    const handleTouchStart = (e: React.TouchEvent) => {
+        touchStartX.current = e.touches[0].clientX;
+    };
+
+    const handleTouchMove = (e: React.TouchEvent) => {
+        touchEndX.current = e.touches[0].clientX;
+    };
+
+    const handleTouchEnd = () => {
+        if (!touchStartX.current || !touchEndX.current) return;
+
+        const distance = touchStartX.current - touchEndX.current;
+        const minSwipeDistance = 50; // Minimum distance for a swipe
+
+        if (Math.abs(distance) > minSwipeDistance) {
+            if (distance > 0) {
+                // Swiped left - go to next
+                nextSlide();
+            } else {
+                // Swiped right - go to previous
+                prevSlide();
+            }
+        }
+
+        // Reset values
+        touchStartX.current = 0;
+        touchEndX.current = 0;
+    };
 
     const handleBannerClick = (banner: Banner) => {
         if (banner.slug === 'verify-email-web') {
@@ -123,11 +216,11 @@ const DashboardUpdatesBanner: React.FC = () => {
     }
 
     if (error || !banners.length) {
-        return null;
+        return <></>;
     }
 
     const currentBanner = banners[currentIndex];
-    if (!currentBanner) return null;
+    if (!currentBanner) return <></>;
 
     const getBannerUrl = () => {
         if (isMobileBreakpoints && currentBanner.banner_url_mobile) {
@@ -146,10 +239,12 @@ const DashboardUpdatesBanner: React.FC = () => {
         <>
             <div className="w-full mb-8">
                 <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-bold md:text-xl">
-                        Jangan Sampai Ketinggalan!
-                    </h2>
-                    {banners.length > 1 && (
+                    {bannerType === 'general' && (
+                        <h2 className="text-lg font-bold md:text-xl">
+                            Jangan Sampai Ketinggalan!
+                        </h2>
+                    )}
+                    {banners.length > 1 && bannerType === 'general' && (
                         <div className="flex items-center gap-2">
                             <div className="flex gap-2">
                                 <button
@@ -168,91 +263,135 @@ const DashboardUpdatesBanner: React.FC = () => {
                         </div>
                     )}
                 </div>
-                <div className="relative overflow-hidden rounded-xl">
-                    {currentBanner.is_asset ? (
-                        currentBanner.banner_url && (
-                            <button
-                                className={`block w-full ${
-                                    isVerifyEmailBanner ? 'cursor-pointer' : ''
-                                }`}
-                                onClick={() =>
-                                    isVerifyEmailBanner
-                                        ? handleVerifyEmail()
-                                        : null
-                                }>
-                                <Link
-                                    href={
-                                        !isVerifyEmailBanner
-                                            ? currentBanner.href || '#'
-                                            : '#'
-                                    }
-                                    onClick={(e) => {
-                                        if (isVerifyEmailBanner) {
-                                            e.preventDefault();
+                <div
+                    className={cn(
+                        'relative rounded-xl',
+                        currentBanner.banner_border_color ? `border` : ''
+                    )}
+                    style={{
+                        borderColor:
+                            currentBanner.banner_border_color ||
+                            currentBanner.background_color ||
+                            'transparent'
+                    }}
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}>
+                    {bannerType === 'campaign' && isAuthenticated && (
+                        <button
+                            className="h-[18px] w-[18px] md:h-[30px] md:w-[30px] bg-[#333540CF] rounded-full absolute -top-1 -right-1 md:-top-2 md:-right-2 z-[10] cursor-pointer flex items-center justify-center"
+                            onClick={onCloseBanner}>
+                            <MdClose color="#B6A6F3" size={12} />
+                        </button>
+                    )}
+                    <div
+                        className={`transition-all duration-300 ease-in-out ${
+                            slideDirection === 'left'
+                                ? 'opacity-0 -translate-x-8'
+                                : slideDirection === 'right'
+                                ? 'opacity-0 translate-x-8'
+                                : 'opacity-100 translate-x-0'
+                        }`}>
+                        {currentBanner.is_asset ? (
+                            currentBanner.banner_url && (
+                                <button
+                                    className={`block w-full ${
+                                        isVerifyEmailBanner
+                                            ? 'cursor-pointer'
+                                            : ''
+                                    }`}
+                                    onClick={() =>
+                                        isVerifyEmailBanner
+                                            ? handleVerifyEmail()
+                                            : null
+                                    }>
+                                    <Link
+                                        href={
+                                            !isVerifyEmailBanner
+                                                ? currentBanner.href || '#'
+                                                : '#'
                                         }
-                                        handleBannerClick(currentBanner);
-                                    }}
-                                    className="block w-full">
-                                    <div className="w-full overflow-hidden flex justify-center items-center rounded-xl">
-                                        <div className="relative w-full">
+                                        onClick={(e) => {
+                                            if (isVerifyEmailBanner) {
+                                                e.preventDefault();
+                                            }
+                                            handleBannerClick(currentBanner);
+                                        }}
+                                        className="block w-full">
+                                        <div className="w-full overflow-hidden flex justify-center items-center rounded-xl">
+                                            <div className="relative w-full">
+                                                <Image
+                                                    src={getBannerUrl()}
+                                                    alt={`Banner ${currentBanner.slug}`}
+                                                    width={
+                                                        bannerDimensions.width
+                                                    }
+                                                    height={
+                                                        bannerDimensions.height
+                                                    }
+                                                    layout="responsive"
+                                                    objectFit="contain"
+                                                    className="rounded-xl"
+                                                    priority
+                                                />
+                                            </div>
+                                        </div>
+                                    </Link>
+                                </button>
+                            )
+                        ) : (
+                            <Link
+                                href={currentBanner.href || '#'}
+                                onClick={() => handleBannerClick(currentBanner)}
+                                className="block w-full">
+                                <div
+                                    className="rounded-xl relative flex items-center overflow-hidden md:min-h-[220px] h-[180px] md:h-[160px]"
+                                    style={{
+                                        backgroundColor:
+                                            currentBanner.background_color ||
+                                            '#5F2BCE'
+                                    }}>
+                                    <div className="py-1 px-4 md:py-6 md:px-6 max-w-[75%] md:max-w-[60%] z-10">
+                                        {currentBanner.title_text && (
+                                            <h3 className="text-white text-[18px] md:text-xl font-bold mb-1">
+                                                {currentBanner.title_text}
+                                            </h3>
+                                        )}
+                                        {currentBanner.body_text && (
+                                            <p className="text-white text-xs md:text-base mb-6 md:mb-16">
+                                                {currentBanner.body_text}
+                                            </p>
+                                        )}
+                                        {currentBanner.button_text && (
+                                            <button
+                                                className={cn(
+                                                    'bg-white text-base md:text-[18px] text-[#5F2BCE] px-3 py-1.5 md:px-12 md:py-4 rounded-full font-medium w-fit',
+                                                    currentBanner.button_background_color
+                                                        ? `bg-[${currentBanner.button_background_color}]`
+                                                        : '',
+                                                    currentBanner.button_text_color
+                                                        ? `text-[${currentBanner.button_text_color}]`
+                                                        : ''
+                                                )}>
+                                                {currentBanner.button_text}
+                                            </button>
+                                        )}
+                                    </div>
+                                    {currentBanner.image_url && (
+                                        <div className="absolute -right-16 md:right-0 bottom-0 w-full h-[200%] md:h-[100%]">
                                             <Image
-                                                src={getBannerUrl()}
-                                                alt={`Banner ${currentBanner.slug}`}
-                                                width={bannerDimensions.width}
-                                                height={bannerDimensions.height}
-                                                layout="responsive"
+                                                src={currentBanner.image_url}
+                                                alt={`${currentBanner.slug}-illustration`}
+                                                layout="fill"
                                                 objectFit="contain"
-                                                className="rounded-xl"
-                                                priority
+                                                objectPosition="right bottom"
                                             />
                                         </div>
-                                    </div>
-                                </Link>
-                            </button>
-                        )
-                    ) : (
-                        <Link
-                            href={currentBanner.href || '#'}
-                            onClick={() => handleBannerClick(currentBanner)}
-                            className="block w-full">
-                            <div
-                                className="rounded-xl relative flex items-center overflow-hidden md:min-h-[220px] h-[180px] md:h-[160px]"
-                                style={{
-                                    backgroundColor:
-                                        currentBanner.background_color ||
-                                        '#5F2BCE'
-                                }}>
-                                <div className="py-1 px-4 md:py-6 md:px-6 max-w-[75%] md:max-w-[60%] z-10">
-                                    {currentBanner.title_text && (
-                                        <h3 className="text-white text-[18px] md:text-xl font-bold mb-1">
-                                            {currentBanner.title_text}
-                                        </h3>
-                                    )}
-                                    {currentBanner.body_text && (
-                                        <p className="text-white text-xs md:text-base mb-6 md:mb-16">
-                                            {currentBanner.body_text}
-                                        </p>
-                                    )}
-                                    {currentBanner.button_text && (
-                                        <button className="bg-white text-base md:text-[18px] text-[#5F2BCE] px-3 py-1.5 md:px-12 md:py-4 rounded-full font-medium w-fit">
-                                            {currentBanner.button_text}
-                                        </button>
                                     )}
                                 </div>
-                                {currentBanner.image_url && (
-                                    <div className="absolute -right-20 md:right-0 bottom-0 w-[60%] md:w-[30%] h-[200%] md:h-[100%]">
-                                        <Image
-                                            src={currentBanner.image_url}
-                                            alt={`${currentBanner.slug}-illustration`}
-                                            layout="fill"
-                                            objectFit="contain"
-                                            objectPosition="right bottom"
-                                        />
-                                    </div>
-                                )}
-                            </div>
-                        </Link>
-                    )}
+                            </Link>
+                        )}
+                    </div>
                 </div>
 
                 {banners.length > 1 && (
@@ -260,10 +399,10 @@ const DashboardUpdatesBanner: React.FC = () => {
                         {banners.map((_, index) => (
                             <button
                                 key={index}
-                                className={`h-1.5 rounded-full transition-all ${
+                                className={`h-1 rounded-full transition-all ${
                                     index === currentIndex
-                                        ? 'w-6 bg-white'
-                                        : 'w-1.5 bg-gray-300 hover:bg-gray-400'
+                                        ? 'w-6 bg-[#B6A6F3]'
+                                        : 'w-3 bg-[#2A225F]'
                                 }`}
                                 onClick={() => goToSlide(index)}
                                 aria-label={`Go to slide ${index + 1}`}

@@ -1,7 +1,8 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import ExerciseReportLayout from 'exercises/components/Report/ExerciseReportLayout';
 import withAuth from 'commons/withAuth';
+import ExerciseReport from 'exercises/containers/ExerciseReport';
+import { ExerciseProvider } from 'exercises/contexts/ExerciseProvider';
 
 const ExerciseReportPage: NextPage = () => {
     const router = useRouter();
@@ -17,10 +18,9 @@ const ExerciseReportPage: NextPage = () => {
     }
 
     return (
-        <ExerciseReportLayout
-            slug={slug as string}
-            exerciseProgressId={exerciseProgressId as string}
-        />
+        <ExerciseProvider>
+            <ExerciseReport />
+        </ExerciseProvider>
     );
 };
 

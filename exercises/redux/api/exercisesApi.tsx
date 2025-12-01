@@ -1,16 +1,28 @@
 import { baseApi } from 'redux/api/baseApi';
 import {
     AstronotesExercise,
+    CourseFilter,
     Exercise,
+    ExerciseDetail,
     ExerciseHistory,
     ExerciseLandingPage,
+    ExerciseLandingPageV2,
+    ExerciseLeaderboard,
     ExerciseProblem,
     ExerciseProblemProgress,
     ExerciseProblemReport,
     ExerciseProblemSolution,
     ExerciseProgress,
     ExerciseReportSummary,
-    ProblemSetDetail
+    ProblemInProblemSet,
+    ProblemNavigationItem,
+    ProblemNavigationVerboseItem,
+    ProblemSetDetail,
+    ProblemSetItem,
+    ProblemSolutionData,
+    RecommendedMaterial,
+    SubmitUserAnswerData,
+    SubmitUserAnswerResponse
 } from '../../types/exercises';
 
 const EXERCISE_BASE_URL = 'exercises/';
@@ -25,7 +37,20 @@ export const exerciseApi = baseApi.injectEndpoints({
                 { type: 'ASTRONOTES', id: `EXERCISE_${arg.exercise_slug}` }
             ]
         }),
-
+        getExerciseDetailV2: builder.query<
+            ExerciseDetail,
+            { exercise_slug: string; exercise_progress_id?: string }
+        >({
+            query: ({ exercise_slug, exercise_progress_id }) => ({
+                url: `${EXERCISE_BASE_URL}v2/${exercise_slug}/`,
+                params: exercise_progress_id
+                    ? { exercise_progress_id }
+                    : undefined
+            }),
+            providesTags: (result, error, arg) => [
+                { type: 'EXERCISES', id: `EXERCISE_${arg.exercise_slug}` }
+            ]
+        }),
         getExerciseHistory: builder.query<
             ExerciseHistory,
             { exercise_slug: string }
@@ -267,20 +292,219 @@ export const exerciseApi = baseApi.injectEndpoints({
                 }
             ]
         }),
-
+        getExerciseV2LandingPage: builder.query<
+            ExerciseLandingPageV2,
+            {
+                page?: number;
+                limit?: number;
+                status?: string;
+                course_id?: string;
+                university_name?: string;
+                type?: string;
+                sort?: string;
+            }
+        >({
+            query: (params) => ({
+                url: `${EXERCISE_BASE_URL}v2/`,
+                params
+            }),
+            providesTags: () => [
+                {
+                    type: 'ASTRONOTES',
+                    id: `EXERCISE_ENTRYPOINT`
+                }
+            ]
+        }),
+        getCoursesWithExercise: builder.query<ResponseData<CourseFilter>, void>(
+            {
+                query: () => ({
+                    url: `${EXERCISE_BASE_URL}course-exercises/`
+                })
+            }
+        ),
+        getUniversitiesWithExercise: builder.query<
+            ResponseData<string> & { default_value: string | null },
+            void
+        >({
+            query: () => ({
+                url: `${EXERCISE_BASE_URL}universities-exercises/`
+            })
+        }),
         getProblemSetDetail: builder.query<ProblemSetDetail, string>({
             query: (problemSetId) => ({
                 url: `${EXERCISE_BASE_URL}problem-sets/${problemSetId}/`
             }),
             providesTags: [{ type: 'PROBLEM_SET', id: `LIST` }]
         }),
-
+        getProblemInProblemSet: builder.query<
+            ProblemInProblemSet,
+            {
+                slug: string;
+                problemSetId: string;
+                problemId: string;
+                exercise_progress_id?: string;
+            }
+        >({
+            query: ({
+                slug,
+                problemSetId,
+                problemId,
+                exercise_progress_id
+            }) => ({
+                url: `${EXERCISE_BASE_URL}v2/${slug}/problem-set/${problemSetId}/problem/${problemId}/`,
+                params: exercise_progress_id
+                    ? { exercise_progress_id }
+                    : undefined
+            }),
+            providesTags: (result, error, arg) => [
+                { type: 'EXERCISES', id: `PROBLEM_${arg.problemId}` }
+            ]
+        }),
         getAstronotesExercises: builder.query<
             { exercises: AstronotesExercise[]; page_id?: string },
             { bookSlug: string; pageNumber: string }
         >({
             query: ({ bookSlug, pageNumber }) => ({
                 url: `${EXERCISE_BASE_URL}astronotes/${bookSlug}/page/${pageNumber}/exercises/`
+            })
+        }),
+        getAllProblemInProblemSet: builder.query<
+            ListResponseData<ProblemNavigationItem>,
+            {
+                slug: string;
+                problemSetProgressId: string;
+                page: number;
+                limit: number;
+                solution?: string;
+            }
+        >({
+            query: ({ slug, problemSetProgressId, page, limit, solution }) => ({
+                url: `${EXERCISE_BASE_URL}v2/${slug}/problem-set-progress/${problemSetProgressId}/navigations/`,
+                params: {
+                    page,
+                    limit,
+                    solution
+                }
+            }),
+            providesTags: (result, error, arg) => [
+                {
+                    type: 'EXERCISES',
+                    id: `PROBLEM_SET_PROGRESS_${arg.problemSetProgressId}_NAVIGATION`
+                }
+            ]
+        }),
+        getAllProblemInProblemSetViaExerciseProgress: builder.query<
+            ListResponseData<ProblemNavigationVerboseItem>,
+            {
+                slug: string;
+                exerciseProgress: string;
+                problemsetId: string;
+                page?: number;
+                limit?: number;
+            }
+        >({
+            query: ({ slug, exerciseProgress, problemsetId, page, limit }) => ({
+                url: `${EXERCISE_BASE_URL}v2/${slug}/exercise-progress/${exerciseProgress}/navigations/${problemsetId}/`,
+                params: {
+                    page,
+                    limit
+                }
+            }),
+            providesTags: (result, error, arg) => [
+                {
+                    type: 'EXERCISES',
+                    id: `PROBLEM_SET_PROGRESS_${arg.exerciseProgress}_NAVIGATION_ALL`
+                }
+            ]
+        }),
+        submitUserAnswer: builder.mutation<
+            SubmitUserAnswerResponse,
+            SubmitUserAnswerData
+        >({
+            query: ({
+                slug,
+                problemset_progress_id,
+                problem_progress_id,
+                ...data
+            }) => ({
+                url: `${EXERCISE_BASE_URL}v2/${slug}/problem-set/${problemset_progress_id}/problem/${problem_progress_id}/answer/`,
+                method: 'POST',
+                body: data
+            }),
+            invalidatesTags: (result, error, arg) => [
+                {
+                    type: 'EXERCISES',
+                    id: `PROBLEM_${arg.problem_id}`
+                },
+                {
+                    type: 'EXERCISES',
+                    id: `PROBLEM_SET_PROGRESS_${arg.problemset_progress_id}_NAVIGATION`
+                }
+            ]
+        }),
+        finishUserProblemSet: builder.mutation<
+            { is_show_solution: boolean; next_problemset_id: string | null },
+            { slug: string; problemset_progress_id: string }
+        >({
+            query: ({ slug, problemset_progress_id }) => ({
+                url: `${EXERCISE_BASE_URL}v2/${slug}/problem-set-progress/${problemset_progress_id}/submit/`,
+                method: 'POST'
+            }),
+            invalidatesTags: (result, error, arg) => [
+                {
+                    type: 'EXERCISES',
+                    id: `EXERCISE_${arg.slug}`
+                },
+                {
+                    type: 'EXERCISES',
+                    id: `PROBLEM_SET_INTERSTITIAL_${arg.slug}`
+                }
+            ]
+        }),
+        getProblemsetDetailInterstitial: builder.query<
+            ResponseData<ProblemSetItem>,
+            { slug: string; problemset_id: string }
+        >({
+            query: ({ slug, problemset_id }) => ({
+                url: `${EXERCISE_BASE_URL}v2/${slug}/problem-set/${problemset_id}/interstitial/`
+            }),
+            providesTags: (result, error, arg) => [
+                {
+                    type: 'EXERCISES',
+                    id: `PROBLEM_SET_INTERSTITIAL_${arg.slug}`
+                }
+            ]
+        }),
+        getProblemSolution: builder.query<
+            ProblemSolutionData,
+            { slug: string; problem_progress_id: string }
+        >({
+            query: ({ slug, problem_progress_id }) => ({
+                url: `${EXERCISE_BASE_URL}v2/${slug}/problem/${problem_progress_id}/solution/`
+            })
+        }),
+        getCheckProblemsetCompleteness: builder.query<
+            { is_complete: boolean },
+            { slug: string; problemset_progress_id: string }
+        >({
+            query: ({ slug, problemset_progress_id }) => ({
+                url: `${EXERCISE_BASE_URL}v2/${slug}/check-problem-set-completeness/${problemset_progress_id}/`
+            })
+        }),
+        getRecommendationMaterialFromProblem: builder.query<
+            ResponseData<RecommendedMaterial>,
+            { slug: string; problemId: string }
+        >({
+            query: ({ slug, problemId }) => ({
+                url: `${EXERCISE_BASE_URL}v2/${slug}/problem/${problemId}/recommendation/`
+            })
+        }),
+        getExerciseLeaderboard: builder.query<
+            ResponseData<ExerciseLeaderboard>,
+            { exercise_slug: string }
+        >({
+            query: ({ exercise_slug }) => ({
+                url: `${EXERCISE_BASE_URL}v2/${exercise_slug}/leaderboard/`
             })
         })
     })
@@ -304,7 +528,21 @@ export const {
     useGetProblemSetDetailQuery,
     useLazyGetProblemSetDetailQuery,
     useGetExerciseProblemSolutionQuery,
-    useGetAstronotesExercisesQuery
+    useGetAstronotesExercisesQuery,
+    useGetExerciseV2LandingPageQuery,
+    useGetCoursesWithExerciseQuery,
+    useGetUniversitiesWithExerciseQuery,
+    useGetExerciseDetailV2Query,
+    useGetProblemInProblemSetQuery,
+    useGetAllProblemInProblemSetQuery,
+    useSubmitUserAnswerMutation,
+    useFinishUserProblemSetMutation,
+    useGetProblemsetDetailInterstitialQuery,
+    useGetProblemSolutionQuery,
+    useGetCheckProblemsetCompletenessQuery,
+    useGetAllProblemInProblemSetViaExerciseProgressQuery,
+    useGetRecommendationMaterialFromProblemQuery,
+    useGetExerciseLeaderboardQuery
 } = exerciseApi;
 
 export const {
@@ -315,5 +553,13 @@ export const {
     getExerciseProblemReport,
     getLatestExerciseProblemProgress,
     getOrCreateExerciseProblemProgress,
-    getExerciseLandingPage
+    getExerciseLandingPage,
+    getProblemSetDetail,
+    getExerciseProblemSolution,
+    getExerciseV2LandingPage,
+    getCoursesWithExercise,
+    getUniversitiesWithExercise,
+    getExerciseDetailV2,
+    getProblemInProblemSet,
+    getAllProblemInProblemSet
 } = exerciseApi.endpoints;

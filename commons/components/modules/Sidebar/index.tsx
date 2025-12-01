@@ -49,6 +49,47 @@ const Sidebar = ({
                         Home
                     </span>
                 </Link>
+                <Link
+                    href={'/kelas'}
+                    onClick={() => {
+                        tracker?.genericTrack(
+                            `Click Class ${
+                                !fullHeight ? 'Course ' : ''
+                            }Navigation`
+                        );
+                    }}>
+                    <span
+                        className={`flex gap-4 cursor-pointer ${
+                            pathname.includes('/kelas')
+                                ? 'text-white'
+                                : 'text-[#666666]'
+                        } font-body text-sm hover:text-[#999999]`}>
+                        <KelasIcon size={20} />
+                        Kelas
+                    </span>
+                </Link>
+                {configData?.configs.is_exercise_config_enabled && (
+                    <Link
+                        href={'/latihan'}
+                        onClick={() => {
+                            tracker?.genericTrack(
+                                `Click Exercises ${
+                                    !fullHeight ? 'Course ' : ''
+                                }Navigation`
+                            );
+                        }}>
+                        <span
+                            className={cn(
+                                'flex gap-4 cursor-pointer  font-body text-sm hover:text-[#999999]',
+                                pathname.includes('/latihan')
+                                    ? 'text-white'
+                                    : 'text-[#666666]'
+                            )}>
+                            <PencilOnLineIcon size={20} />
+                            Try Out
+                        </span>
+                    </Link>
+                )}
                 {configData?.configs.is_copilot_config_enabled && (
                     <Link
                         href={'/copilot'}
@@ -69,25 +110,6 @@ const Sidebar = ({
                     </Link>
                 )}
                 <Link
-                    href={'/kelas'}
-                    onClick={() => {
-                        tracker?.genericTrack(
-                            `Click Class ${
-                                !fullHeight ? 'Course ' : ''
-                            }Navigation`
-                        );
-                    }}>
-                    <span
-                        className={`flex gap-4 cursor-pointer ${
-                            pathname.includes('/kelas')
-                                ? 'text-white'
-                                : 'text-[#666666]'
-                        } font-body text-sm hover:text-[#999999]`}>
-                        <KelasIcon size={20} />
-                        Kelas
-                    </span>
-                </Link>
-                <Link
                     href={'/perpustakaan'}
                     onClick={() => {
                         tracker?.genericTrack(
@@ -107,28 +129,6 @@ const Sidebar = ({
                         Perpustakaan
                     </span>
                 </Link>
-                {configData?.configs.is_exercise_config_enabled && (
-                    <Link
-                        href={'/alat-belajar'}
-                        onClick={() => {
-                            tracker?.genericTrack(
-                                `Click Exercises ${
-                                    !fullHeight ? 'Course ' : ''
-                                }Navigation`
-                            );
-                        }}>
-                        <span
-                            className={cn(
-                                'flex gap-4 cursor-pointer  font-body text-sm hover:text-[#999999]',
-                                pathname.includes('/alat-belajar')
-                                    ? 'text-white'
-                                    : 'text-[#666666]'
-                            )}>
-                            <PencilOnLineIcon size={20} />
-                            Alat Belajar
-                        </span>
-                    </Link>
-                )}
             </div>
         </aside>
     );

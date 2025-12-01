@@ -158,7 +158,7 @@ export const ListBooks = ({
                 }) => (
                     <Link
                         href={`${getBookBaseHref(category)}/${slug}`}
-                        className="flex items-center gap-4 cursor-pointer rounded-xl border border-neutral-700 bg-[#2C2C2C] p-3 hover:border-neutral-500 transition-colors"
+                        className="flex items-center gap-4 cursor-pointer rounded-xl border border-neutral-700 bg-[#20222E] p-3 hover:border-neutral-500 transition-colors"
                         key={book_id}
                         onClick={() => {
                             tracker?.genericTrack('Click Book Item', {

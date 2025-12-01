@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
 import { MdOutlineClose } from 'react-icons/md';
-import CommunityNotificationBadge from '../../elements/CommunityNotificationBadge';
 import { AnimatePresence, motion } from 'framer-motion';
 import NavigationButton from 'commons/components/elements/NavigationButton';
 import CopilotIconFill from 'copilot/assets/CopilotIconFill';
@@ -11,8 +10,6 @@ import PencilOnLineIconFill from '../../elements/Icons/PencilLineFill';
 import KelasIcon from '../../elements/Icons/Kelas';
 import KelasIconFill from '../../elements/Icons/KelasFill';
 import BookStackIconFill from '../../elements/Icons/BookStackFill';
-import DiskusiIcon from '../../elements/Icons/Diskusi';
-import DiskusiIconFill from '../../elements/Icons/DiskusiFill';
 
 const MOBILE_SIDEBAR_BUTTONS: NavigationButtonInterface[] = [
     {
@@ -76,7 +73,18 @@ const MobileSidebar = ({
                             url="/kelas"
                             IconActive={KelasIconFill}
                             IconUnactive={KelasIcon}
-                            setOpenSidebar={setOpenSidebar}></NavigationButton>
+                            setOpenSidebar={setOpenSidebar}
+                        />
+                        {configData?.configs.is_exercise_config_enabled && (
+                            <NavigationButton
+                                name="Try Out"
+                                title="Try Out"
+                                url="/latihan"
+                                IconActive={PencilOnLineIconFill}
+                                IconUnactive={PencilOnLineIcon}
+                                setOpenSidebar={setOpenSidebar}
+                            />
+                        )}
                         {configData?.configs.is_copilot_config_enabled && (
                             <NavigationButton
                                 name="Copilot"
@@ -87,15 +95,6 @@ const MobileSidebar = ({
                                 setOpenSidebar={setOpenSidebar}
                             />
                         )}
-                        <NavigationButton
-                            name="Community"
-                            title="Diskusi"
-                            url="/komunitas"
-                            IconActive={DiskusiIconFill}
-                            IconUnactive={DiskusiIcon}
-                            setOpenSidebar={setOpenSidebar}>
-                            <CommunityNotificationBadge />
-                        </NavigationButton>
                         {MOBILE_SIDEBAR_BUTTONS.map(
                             ({
                                 name,
@@ -118,28 +117,6 @@ const MobileSidebar = ({
                                     setOpenSidebar={setOpenSidebar}
                                 />
                             )
-                        )}
-                        {configData?.configs.is_exercise_config_enabled && (
-                            <NavigationButton
-                                name="Learning Tools"
-                                title="Alat Belajar"
-                                url="/alat-belajar"
-                                IconActive={PencilOnLineIconFill}
-                                IconUnactive={PencilOnLineIcon}
-                                subMenus={[
-                                    {
-                                        name: 'Quiz',
-                                        title: 'Kuis',
-                                        url: '/latihan'
-                                    },
-                                    {
-                                        name: 'Flashcard',
-                                        title: 'Flashcard',
-                                        url: '/flashcards'
-                                    }
-                                ]}
-                                setOpenSidebar={setOpenSidebar}
-                            />
                         )}
                     </div>
                 </motion.div>

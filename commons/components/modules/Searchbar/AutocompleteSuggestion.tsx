@@ -31,7 +31,7 @@ const AutocompleteSuggestion = ({
         <ul
             tabIndex={0}
             role="menu"
-            className="dropdown-content w-screen -left-16 z-40 sm:left-auto sm:w-full sm:rounded-lg menu p-0 top-10 bg-[#2C2C2C] [&>li:nth-child(even)]:bg-[#222] [&>li>*]:rounded-none overflow-hidden sm:border border-graphite-600/50 shadow-xl">
+            className="dropdown-content w-screen -left-16 z-40 sm:left-auto sm:w-full sm:rounded-lg menu p-0 top-10 bg-[#20222E] [&>li:nth-child(even)]:bg-[#222] [&>li>*]:rounded-none overflow-hidden sm:border border-graphite-600/50 shadow-xl">
             {data.result.hits.map(({ document: suggestion }) => (
                 <li key={suggestion.id}>
                     <Link

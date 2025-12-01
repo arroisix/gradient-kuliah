@@ -38,7 +38,7 @@ const DropdownSort = ({
     return (
         <div className="w-1/2 relative cursor-pointer">
             <div
-                className="flex justify-between items-center gap-1 text-xs font-bold w-full md:w-fit pl-[18px] pr-2 py-[7.5px] md:p-[7px] bg-[#2C2C2C] rounded-full"
+                className="flex justify-between items-center gap-1 text-xs font-bold w-full md:w-fit pl-[18px] pr-2 py-[7.5px] md:p-[7px] bg-[#20222E] rounded-full"
                 onClick={() => setShowSort((prev) => !prev)}
                 aria-hidden>
                 <span className="md:hidden whitespace-nowrap text-ellipsis overflow-hidden">
@@ -47,7 +47,7 @@ const DropdownSort = ({
                 <BiFilter size={18} />
             </div>
             <div
-                className={`absolute top-[120%] right-0 w-max bg-[#2C2C2C] text-xs rounded-lg z-[9] ${
+                className={`absolute top-[120%] right-0 w-max bg-[#20222E] text-xs rounded-lg z-[9] ${
                     showSort ? '' : 'hidden'
                 }`}>
                 {SORT_OPTIONS.map(({ key, value }) => (

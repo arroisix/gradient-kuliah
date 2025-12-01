@@ -1,7 +1,8 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import ProblemPageContent from 'exercises/components/Problem/ProblemPageContent';
 import withAuth from 'commons/withAuth';
+import ExerciseQuestion from 'exercises/containers/ExerciseQuestion';
+import { ExerciseProvider } from 'exercises/contexts/ExerciseProvider';
 
 const ProblemPage: React.FC = () => {
     const router = useRouter();
@@ -17,11 +18,9 @@ const ProblemPage: React.FC = () => {
     }
 
     return (
-        <ProblemPageContent
-            slug={slug as string}
-            problemId={problemId as string}
-            sectionId={sectionId as string}
-        />
+        <ExerciseProvider>
+            <ExerciseQuestion />
+        </ExerciseProvider>
     );
 };
 
