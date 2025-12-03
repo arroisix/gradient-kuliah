@@ -208,11 +208,6 @@ const QuizNavigationModal: React.FC<QuizNavigationModalProps> = ({
     };
 
     const handleProblemClick = (clickedProblemId: string) => {
-        // Check if there's an unsaved answer (new answer or changed answer)
-        const hasNewAnswer =
-            (selectedAnswer && selectedAnswer.length > 0) ||
-            (openEndedAnswer && openEndedAnswer.trim() !== '');
-
         // Check if answer has changed from what was already submitted
         const submittedAnswerIds =
             problem?.problem_progress?.submitted_answer_ids || [];
@@ -220,14 +215,11 @@ const QuizNavigationModal: React.FC<QuizNavigationModalProps> = ({
             problem?.problem_progress?.submitted_answer_text || '';
 
         const answerHasChanged =
-            (problem?.problem.type === 'SHORT_ANSWER'
+            problem?.problem.type === 'SHORT_ANSWER'
                 ? openEndedAnswer !== submittedAnswerText
-                : !arraysEqual(selectedAnswer, submittedAnswerIds)) ||
-            (hasNewAnswer &&
-                submittedAnswerIds.length === 0 &&
-                !submittedAnswerText);
+                : !arraysEqual(selectedAnswer, submittedAnswerIds);
 
-        if (hasNewAnswer && answerHasChanged && saveAnswer) {
+        if (answerHasChanged && saveAnswer) {
             // Save answer before navigating to selected problem
             saveAnswer({
                 navigateDirection: 'custom',
