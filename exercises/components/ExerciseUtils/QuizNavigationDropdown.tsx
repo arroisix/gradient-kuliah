@@ -7,13 +7,18 @@ interface QuizNavigationDropdownProps {
     isOpen: boolean;
     onClose: () => void;
     anchorEl?: HTMLElement | null;
+    saveAnswer?: (options: {
+        navigateDirection: 'custom';
+        customProblemId: string;
+    }) => Promise<void>;
 }
 
 const QuizNavigationDropdown: React.FC<QuizNavigationDropdownProps> = ({
     onProblemSelect,
     isOpen,
     onClose,
-    anchorEl
+    anchorEl,
+    saveAnswer
 }) => {
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -55,6 +60,7 @@ const QuizNavigationDropdown: React.FC<QuizNavigationDropdownProps> = ({
                 <QuizNavigationModal
                     onProblemSelect={onProblemSelect}
                     onClose={onClose}
+                    saveAnswer={saveAnswer}
                 />
             </div>
         </>

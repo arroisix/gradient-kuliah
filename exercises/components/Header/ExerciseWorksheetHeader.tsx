@@ -39,14 +39,21 @@ const ExerciseWorksheetHeader = () => {
         },
         { skip: !slug || !sectionId || !problem }
     );
-    const { showSolution, setShowSolution } = useExercise();
+    const {
+        showSolution,
+        setShowSolution,
+        selectedAnswer,
+        openEndedAnswer,
+        isFinishModalOpen,
+        setIsFinishModalOpen,
+        isLoading
+    } = useExercise();
     const { isMobileBreakpoints } = useWindowBreakpoints();
 
     const [isNavigationOpen, setIsNavigationOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const settingsButtonRef = useRef<HTMLButtonElement>(null);
-    const { finishProblemSet, isFinishModalOpen, setIsFinishModalOpen } =
-        useSubmitAnswerHandler(problem!);
+    const { finishProblemSet, saveAnswer } = useSubmitAnswerHandler(problem!);
     const isNoNeedNavigation = useMemo(() => {
         return (
             problem?.time_constraint === 'PER_PROBLEM' ||
@@ -66,26 +73,69 @@ const ExerciseWorksheetHeader = () => {
 
     const handleNextProblem = () => {
         if (problem?.next_problem_id) {
-            router.push(
-                `/latihan/${slug}/${sectionId}/${problem.next_problem_id}${
-                    solution ? '?solution=1' : ''
-                }`,
-                undefined,
-                { scroll: false, shallow: true }
-            );
+            // Check if answer has changed from what was already submitted
+            const submittedAnswerIds =
+                problem?.problem_progress?.submitted_answer_ids || [];
+            const submittedAnswerText =
+                problem?.problem_progress?.submitted_answer_text || '';
+
+            const answerHasChanged =
+                problem?.problem.type === 'SHORT_ANSWER'
+                    ? openEndedAnswer !== submittedAnswerText
+                    : !arraysEqual(selectedAnswer, submittedAnswerIds);
+
+            if (answerHasChanged) {
+                // Save answer before navigating to next problem
+                saveAnswer({ navigateDirection: 'next' });
+            } else {
+                // No answer to save, navigate directly
+                router.push(
+                    `/latihan/${slug}/${sectionId}/${problem.next_problem_id}${
+                        solution ? '?solution=1' : ''
+                    }`,
+                    undefined,
+                    { scroll: false, shallow: true }
+                );
+            }
         }
     };
 
     const handlePreviousProblem = () => {
         if (problem?.previous_problem_id) {
-            router.push(
-                `/latihan/${slug}/${sectionId}/${problem.previous_problem_id}${
-                    solution ? '?solution=1' : ''
-                }`,
-                undefined,
-                { scroll: false, shallow: true }
-            );
+            // Check if answer has changed from what was already submitted
+            const submittedAnswerIds =
+                problem?.problem_progress?.submitted_answer_ids || [];
+            const submittedAnswerText =
+                problem?.problem_progress?.submitted_answer_text || '';
+
+            const answerHasChanged =
+                problem?.problem.type === 'SHORT_ANSWER'
+                    ? openEndedAnswer !== submittedAnswerText
+                    : !arraysEqual(selectedAnswer, submittedAnswerIds);
+
+            if (answerHasChanged) {
+                // Save answer before navigating to previous problem
+                saveAnswer({ navigateDirection: 'prev' });
+            } else {
+                // No answer to save, navigate directly
+                router.push(
+                    `/latihan/${slug}/${sectionId}/${
+                        problem.previous_problem_id
+                    }${solution ? '?solution=1' : ''}`,
+                    undefined,
+                    { scroll: false, shallow: true }
+                );
+            }
         }
+    };
+
+    // Helper function to compare arrays
+    const arraysEqual = (a: string[], b: string[]): boolean => {
+        if (a.length !== b.length) return false;
+        return (
+            a.every((item) => b.includes(item)) &&
+            b.every((item) => a.includes(item))
+        );
     };
 
     const handleConfirmClose = (): void => {
@@ -168,27 +218,36 @@ const ExerciseWorksheetHeader = () => {
                     isOpen={isNavigationOpen}
                     onClose={() => setIsNavigationOpen(false)}
                     anchorEl={settingsButtonRef.current}
+                    saveAnswer={saveAnswer}
                 />
 
                 <Button
                     variant="secondary"
-                    disabled={!problem?.previous_problem_id}
+                    disabled={!problem?.previous_problem_id || isLoading}
                     onClick={handlePreviousProblem}
                     className={cn(
                         'text-center !p-0 !w-8 !h-8 items-center justify-center',
                         isNoNeedNavigation ? 'hidden' : 'hidden lg:flex'
                     )}>
-                    <ChevronLeft size={14} />
+                    {isLoading ? (
+                        <span className="loading loading-spinner loading-sm"></span>
+                    ) : (
+                        <ChevronLeft size={14} />
+                    )}
                 </Button>
                 <Button
                     variant="secondary"
                     onClick={handleNextProblem}
-                    disabled={!problem?.next_problem_id}
+                    disabled={!problem?.next_problem_id || isLoading}
                     className={cn(
                         'text-center !p-0 !w-8 !h-8 items-center justify-center',
                         isNoNeedNavigation ? 'hidden' : 'hidden lg:flex'
                     )}>
-                    <ChevronRight size={14} />
+                    {isLoading ? (
+                        <span className="loading loading-spinner loading-sm"></span>
+                    ) : (
+                        <ChevronRight size={14} />
+                    )}
                 </Button>
             </div>
             <ExerciseCloseModal
