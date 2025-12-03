@@ -85,7 +85,8 @@ const ExerciseCompleteHeader = () => {
             <div className="border border-violet-4 rounded-full flex items-center justify-between px-3 py-2 relative gap-4">
                 {/* Left Arrow Button */}
                 <button
-                    className="w-8 h-8 border-violet-4 border rounded-full bg-transparent hover:bg-white/10 flex items-center justify-center transition-colors"
+                    disabled={activeTab === tabs[0]}
+                    className="w-8 h-8 rounded-full bg-transparent hover:bg-white/10 flex items-center justify-center transition-colors text-white disabled:text-white/30 disabled:cursor-not-allowed"
                     onClick={() => {
                         const currentIndex = tabs.indexOf(activeTab);
                         if (currentIndex > 0) {
@@ -96,7 +97,7 @@ const ExerciseCompleteHeader = () => {
                             );
                         }
                     }}>
-                    <ChevronLeft size={14} />
+                    <ChevronLeft size={20} />
                 </button>
 
                 {/* Tabs - Desktop: show all tabs, Mobile: show only active tab */}
@@ -114,9 +115,9 @@ const ExerciseCompleteHeader = () => {
                                 );
                             }}
                             className={cn(
-                                'px-6 py-2 rounded-full text-sm font-semibold transition-all',
+                                'px-6 py-2 rounded-full text-sm transition-all',
                                 activeTab === tab
-                                    ? 'bg-[#B6A6F3] text-accent-purple'
+                                    ? 'bg-graphite-800 text-white font-semibold'
                                     : 'text-white/60 hover:text-white/80 md:block hidden'
                             )}>
                             {tab}
@@ -126,7 +127,8 @@ const ExerciseCompleteHeader = () => {
 
                 {/* Right Arrow Button */}
                 <button
-                    className="w-8 h-8 border-violet-4 border rounded-full bg-transparent hover:bg-white/10 flex items-center justify-center transition-colors"
+                    disabled={activeTab === tabs[tabs.length - 1]}
+                    className="w-8 h-8 rounded-full bg-transparent hover:bg-white/10 flex items-center justify-center transition-colors text-white disabled:text-white/30 disabled:cursor-not-allowed"
                     onClick={() => {
                         const currentIndex = tabs.indexOf(activeTab);
                         if (currentIndex < tabs.length - 1) {
@@ -137,7 +139,7 @@ const ExerciseCompleteHeader = () => {
                             );
                         }
                     }}>
-                    <ChevronRight size={14} />
+                    <ChevronRight size={20} />
                 </button>
             </div>
         </header>

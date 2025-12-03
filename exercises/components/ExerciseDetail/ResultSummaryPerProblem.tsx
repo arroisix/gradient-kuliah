@@ -17,7 +17,7 @@ import AnswerLegend from '../ExerciseQuestion/AnswerLegend';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 interface ResultSummaryPerProblemProps {
-    onProblemSelect?: (problemId: string) => void;
+    onProblemSelect?: (problemId: string, selectedProblemSetId: string) => void;
     className?: string;
 }
 
@@ -97,7 +97,13 @@ const ResultSummaryPerProblem: React.FC<ResultSummaryPerProblemProps> = ({
 
     const handleProblemClick = (problemId: string) => {
         if (onProblemSelect) {
-            onProblemSelect(problemId);
+            onProblemSelect(problemId, selectedProblemSetId);
+        } else {
+            router.push(
+                `/latihan/${slug}/report/${exerciseProgressId}/${selectedProblemSetId}/${problemId}`,
+                undefined,
+                { scroll: false, shallow: true }
+            );
         }
     };
 
@@ -198,7 +204,7 @@ const ResultSummaryPerProblem: React.FC<ResultSummaryPerProblemProps> = ({
                                     handleProblemClick(problem.problem_id)
                                 }
                                 className={cn(
-                                    'aspect-square rounded-xl flex items-center justify-center text-white text-lg font-semibold transition-all hover:opacity-80 w-12 h-12',
+                                    'aspect-square rounded-xl flex items-center justify-center text-white text-lg font-semibold transition-all hover:opacity-80 w-12 h-12 hover:border-2 hover:border-yellow-500',
                                     problem.is_correct
                                         ? 'bg-[#4ADE80]'
                                         : 'bg-[#EF4444]'
