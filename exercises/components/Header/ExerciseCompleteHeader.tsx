@@ -1,3 +1,4 @@
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { cn } from 'commons/utils';
 import { useGetExerciseDetailV2Query } from 'exercises/redux/api/exercisesApi';
 import { ChevronLeft, ChevronRight, XIcon } from 'lucide-react';
@@ -7,6 +8,7 @@ import { useEffect, useState } from 'react';
 const ExerciseCompleteHeader = () => {
     const tabs = ['Nilai', 'Pembahasan', 'Leaderboard'];
     const [activeTab, setActiveTab] = useState('');
+    const { isMobileBreakpoints } = useWindowBreakpoints();
 
     const router = useRouter();
     const { slug, exerciseProgressId, problemId } = router.query;
@@ -86,7 +88,7 @@ const ExerciseCompleteHeader = () => {
                 {/* Left Arrow Button */}
                 <button
                     disabled={activeTab === tabs[0]}
-                    className="w-8 h-8 rounded-full bg-transparent hover:bg-white/10 flex items-center justify-center transition-colors text-white disabled:text-white/30 disabled:cursor-not-allowed"
+                    className="w-8 h-8 md:border-none border-violet-4 rounded-full bg-transparent hover:bg-white/10 flex items-center justify-center transition-colors text-white disabled:text-white/30 disabled:cursor-not-allowed"
                     onClick={() => {
                         const currentIndex = tabs.indexOf(activeTab);
                         if (currentIndex > 0) {
@@ -97,7 +99,7 @@ const ExerciseCompleteHeader = () => {
                             );
                         }
                     }}>
-                    <ChevronLeft size={20} />
+                    <ChevronLeft size={isMobileBreakpoints ? 14 : 20} />
                 </button>
 
                 {/* Tabs - Desktop: show all tabs, Mobile: show only active tab */}
@@ -117,7 +119,7 @@ const ExerciseCompleteHeader = () => {
                             className={cn(
                                 'px-6 py-2 rounded-full text-sm transition-all',
                                 activeTab === tab
-                                    ? 'bg-graphite-800 text-white font-semibold'
+                                    ? 'md:bg-graphite-800 text-white font-semibold'
                                     : 'text-white/60 hover:text-white/80 md:block hidden'
                             )}>
                             {tab}
@@ -128,7 +130,7 @@ const ExerciseCompleteHeader = () => {
                 {/* Right Arrow Button */}
                 <button
                     disabled={activeTab === tabs[tabs.length - 1]}
-                    className="w-8 h-8 rounded-full bg-transparent hover:bg-white/10 flex items-center justify-center transition-colors text-white disabled:text-white/30 disabled:cursor-not-allowed"
+                    className="w-8 h-8 md:border-none border-violet-4  rounded-full bg-transparent hover:bg-white/10 flex items-center justify-center transition-colors text-white disabled:text-white/30 disabled:cursor-not-allowed"
                     onClick={() => {
                         const currentIndex = tabs.indexOf(activeTab);
                         if (currentIndex < tabs.length - 1) {
@@ -139,7 +141,7 @@ const ExerciseCompleteHeader = () => {
                             );
                         }
                     }}>
-                    <ChevronRight size={20} />
+                    <ChevronRight size={isMobileBreakpoints ? 14 : 20} />
                 </button>
             </div>
         </header>
