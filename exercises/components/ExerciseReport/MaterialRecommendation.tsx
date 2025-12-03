@@ -24,7 +24,7 @@ const MaterialRecommendation = () => {
             title="Rekomendasi Materi"
             items={materials.data}
             isLoading={false}
-            titleClassName="text-white"
+            titleClassName="text-white lg:text-2xl"
             itemsPerPage={4}
             renderItem={(material, index) => (
                 <RecommendationCard key={index} material={material} />

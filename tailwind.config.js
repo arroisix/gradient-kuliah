@@ -18,11 +18,11 @@ module.exports = {
     darkMode: 'class',
     theme: {
         fontFamily: {
-            sans: ['Raleway', 'sans-serif'],
+            sans: ['Inter', 'sans-serif'],
             inter: ['Inter', 'sans-serif'],
-            body: ['Open Sans', 'Roboto'],
-            serif: ['Playfair Display', 'serif'],
-            mono: ['Roboto Mono', 'serif']
+            body: ['Inter', 'sans-serif'],
+            serif: ['Inter', 'sans-serif'],
+            mono: ['Inter', 'sans-serif']
         },
         extend: {
             boxShadow: {
