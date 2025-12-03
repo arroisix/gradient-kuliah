@@ -21,6 +21,8 @@ import Skeleton from 'commons/components/elements/Skeleton';
 
 const AnswerContainer = () => {
     const router = useRouter();
+    const { isFinishModalOpen, setIsFinishModalOpen, isLoading } =
+        useExercise();
     const {
         slug,
         sectionId,
@@ -121,9 +123,6 @@ const AnswerContainer = () => {
         openEndedAnswer,
         handleAnswerChange,
         saveAnswer,
-        isLoading,
-        isFinishModalOpen,
-        setIsFinishModalOpen,
         finishProblemSet
     } = useSubmitAnswerHandler(problem!);
 
@@ -214,7 +213,14 @@ const AnswerContainer = () => {
                             </Button>
                         )}
                         <Button
-                            onClick={solution ? onNextSolution : saveAnswer}
+                            onClick={() =>
+                                solution
+                                    ? onNextSolution()
+                                    : saveAnswer({
+                                          onFinishModalOpen: () =>
+                                              setIsFinishModalOpen(true)
+                                      })
+                            }
                             variant="primary"
                             disabled={
                                 selectedAnswer.length === 0 &&
@@ -235,7 +241,11 @@ const AnswerContainer = () => {
                 )}
             </div>
             <ExerciseQuestionFooter
-                saveAnswer={solution ? onNextSolution : saveAnswer}
+                saveAnswer={() =>
+                    saveAnswer({
+                        onFinishModalOpen: () => setIsFinishModalOpen(true)
+                    })
+                }
                 isDisabled={
                     selectedAnswer.length === 0 &&
                     openEndedAnswer === '' &&

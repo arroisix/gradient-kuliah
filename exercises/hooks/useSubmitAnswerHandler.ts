@@ -6,15 +6,28 @@ import {
 } from 'exercises/redux/api/exercisesApi';
 import { ProblemInProblemSet } from 'exercises/types/exercises';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useExercise } from 'exercises/contexts/ExerciseProvider';
+
+interface SaveAnswerOptions {
+    onFinishModalOpen?: () => void;
+    navigateDirection?: 'next' | 'prev' | 'custom' | null;
+    customProblemId?: string;
+}
 
 const useSubmitAnswerHandler = (problem: ProblemInProblemSet) => {
     const router = useRouter();
     const { slug, sectionId, problemId } = router.query;
-    const [selectedAnswer, setSelectedAnswer] = useState<string[]>([]);
-    const [openEndedAnswer, setOpenEndedAnswer] = useState<string>('');
-    const [isFinishModalOpen, setIsFinishModalOpen] = useState(false);
-    const [submitAnswer, { isLoading }] = useSubmitUserAnswerMutation();
+    const {
+        selectedAnswer,
+        setSelectedAnswer,
+        openEndedAnswer,
+        setOpenEndedAnswer,
+        isLoading,
+        setIsLoading
+    } = useExercise();
+    const [submitAnswer, { isLoading: isSubmitting }] =
+        useSubmitUserAnswerMutation();
     const [submitProblemset, { isLoading: isFinishing }] =
         useFinishUserProblemSetMutation();
     const { data: exercise } = useGetExerciseDetailV2Query(
@@ -33,8 +46,14 @@ const useSubmitAnswerHandler = (problem: ProblemInProblemSet) => {
         { skip: !slug || !sectionId || !problem }
     );
 
+    // Update context isLoading whenever mutation loading state changes
     useEffect(() => {
-        // Reset answers when problem changes
+        setIsLoading(isSubmitting || isFinishing);
+    }, [isSubmitting, isFinishing, setIsLoading]);
+
+    useEffect(() => {
+        // Only reset answers when actually navigating to a different problem
+        // Use both problemId and problem.id to detect actual changes
         if (problem && problem.problem_progress) {
             setSelectedAnswer(
                 problem.problem_progress.submitted_answer_ids || []
@@ -46,7 +65,7 @@ const useSubmitAnswerHandler = (problem: ProblemInProblemSet) => {
             setSelectedAnswer([]);
             setOpenEndedAnswer('');
         }
-    }, [problem]);
+    }, [problem?.id, setSelectedAnswer, setOpenEndedAnswer]);
 
     const onAnswerClicked = (id: string) => {
         if (problem?.problem.type === 'MULTIPLE_ANSWER') {
@@ -112,7 +131,7 @@ const useSubmitAnswerHandler = (problem: ProblemInProblemSet) => {
         }
     };
 
-    const saveAnswer = async (): Promise<void> => {
+    const saveAnswer = async (options?: SaveAnswerOptions): Promise<void> => {
         if (problem && problem.problem_progress) {
             const answerPayload =
                 problem.problem.type === 'SHORT_ANSWER'
@@ -128,7 +147,40 @@ const useSubmitAnswerHandler = (problem: ProblemInProblemSet) => {
                     ...answerPayload
                 }).unwrap();
 
-                if (!response?.is_show_solution && problem?.next_problem_id) {
+                if (
+                    !response?.is_show_solution &&
+                    options?.navigateDirection === 'custom'
+                ) {
+                    // Navigate to custom problem
+                    if (options.customProblemId) {
+                        router.push(
+                            `/latihan/${slug}/${sectionId}/${options.customProblemId}`,
+                            undefined,
+                            { scroll: false, shallow: true }
+                        );
+                    }
+                } else if (
+                    !response?.is_show_solution &&
+                    options?.navigateDirection
+                ) {
+                    // Navigate based on direction
+                    const targetProblemId =
+                        options.navigateDirection === 'next'
+                            ? problem?.next_problem_id
+                            : problem?.previous_problem_id;
+
+                    if (targetProblemId) {
+                        router.push(
+                            `/latihan/${slug}/${sectionId}/${targetProblemId}`,
+                            undefined,
+                            { scroll: false, shallow: true }
+                        );
+                    }
+                } else if (
+                    !response?.is_show_solution &&
+                    problem?.next_problem_id
+                ) {
+                    // Default behavior: navigate to next problem
                     router.push(
                         `/latihan/${slug}/${sectionId}/${problem.next_problem_id}`,
                         undefined,
@@ -149,7 +201,8 @@ const useSubmitAnswerHandler = (problem: ProblemInProblemSet) => {
                         { scroll: false, shallow: true }
                     );
                 } else {
-                    setIsFinishModalOpen(true);
+                    // Open finish modal if callback provided
+                    options?.onFinishModalOpen?.();
                 }
             } catch (error) {
                 console.error('Failed to submit answer:', error);
@@ -167,9 +220,7 @@ const useSubmitAnswerHandler = (problem: ProblemInProblemSet) => {
         handleAnswerChange,
         saveAnswer,
         finishProblemSet,
-        isLoading: isLoading || isFinishing,
-        isFinishModalOpen,
-        setIsFinishModalOpen
+        isLoading
     };
 };
 

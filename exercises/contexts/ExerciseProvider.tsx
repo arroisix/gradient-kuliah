@@ -1,9 +1,16 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface ExerciseContextType {
-    // Add your state and methods here
     showSolution: boolean;
     setShowSolution: React.Dispatch<React.SetStateAction<boolean>>;
+    selectedAnswer: string[];
+    setSelectedAnswer: React.Dispatch<React.SetStateAction<string[]>>;
+    openEndedAnswer: string;
+    setOpenEndedAnswer: React.Dispatch<React.SetStateAction<string>>;
+    isFinishModalOpen: boolean;
+    setIsFinishModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    isLoading: boolean;
+    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ExerciseContext = createContext<ExerciseContextType | undefined>(
@@ -18,10 +25,22 @@ export const ExerciseProvider: React.FC<ExerciseProviderProps> = ({
     children
 }) => {
     const [showSolution, setShowSolution] = useState(false);
+    const [selectedAnswer, setSelectedAnswer] = useState<string[]>([]);
+    const [openEndedAnswer, setOpenEndedAnswer] = useState<string>('');
+    const [isFinishModalOpen, setIsFinishModalOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const value: ExerciseContextType = {
         showSolution,
-        setShowSolution
+        setShowSolution,
+        selectedAnswer,
+        setSelectedAnswer,
+        openEndedAnswer,
+        setOpenEndedAnswer,
+        isFinishModalOpen,
+        setIsFinishModalOpen,
+        isLoading,
+        setIsLoading
     };
 
     return (

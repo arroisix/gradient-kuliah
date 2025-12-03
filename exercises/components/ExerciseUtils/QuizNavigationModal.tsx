@@ -14,22 +14,75 @@ import {
     ProblemNavigationVerboseItem
 } from 'exercises/types/exercises';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { useExercise } from 'exercises/contexts/ExerciseProvider';
 
 interface QuizNavigationModalProps {
     onProblemSelect: (problemId: string) => void;
     onClose: () => void;
     className?: string;
+    saveAnswer?: (options: {
+        navigateDirection: 'custom';
+        customProblemId: string;
+    }) => Promise<void>;
 }
 
 const PROBLEMS_PER_PAGE = 20;
 
+// Mock data for testing different row configurations
+// Uncomment one of these to test spacing
+const MOCK_DATA_1_ROW = Array.from({ length: 3 }, (_, i) => ({
+    id: `problem-${i + 1}`,
+    order: i + 1,
+    is_answered: i === 0,
+    is_correct: i === 0 ? true : null,
+    problem_id: `problem-${i + 1}`
+}));
+
+const MOCK_DATA_2_ROWS = Array.from({ length: 10 }, (_, i) => ({
+    id: `problem-${i + 1}`,
+    order: i + 1,
+    is_answered: i < 3,
+    is_correct: i < 3 ? (i % 2 === 0 ? true : false) : null,
+    problem_id: `problem-${i + 1}`
+}));
+
+const MOCK_DATA_3_ROWS = Array.from({ length: 15 }, (_, i) => ({
+    id: `problem-${i + 1}`,
+    order: i + 1,
+    is_answered: i < 5,
+    is_correct: i < 5 ? (i % 2 === 0 ? true : false) : null,
+    problem_id: `problem-${i + 1}`
+}));
+
+const MOCK_DATA_4_ROWS = Array.from({ length: 20 }, (_, i) => ({
+    id: `problem-${i + 1}`,
+    order: i + 1,
+    is_answered: i < 10,
+    is_correct: i < 10 ? (i % 2 === 0 ? true : false) : null,
+    problem_id: `problem-${i + 1}`
+}));
+
+const MOCK_DATA_5_ROWS = Array.from({ length: 25 }, (_, i) => ({
+    id: `problem-${i + 1}`,
+    order: i + 1,
+    is_answered: i < 12,
+    is_correct: i < 12 ? (i % 2 === 0 ? true : false) : null,
+    problem_id: `problem-${i + 1}`
+}));
+
+// Set which mock data to use (1, 2, 3, or 4 rows)
+const USE_MOCK_DATA = false; // Set to true to use mock data
+const MOCK_TEST_ROWS = 4; // Options: 1, 2, 3, 4
+
 const QuizNavigationModal: React.FC<QuizNavigationModalProps> = ({
     onProblemSelect,
     onClose,
-    className
+    className,
+    saveAnswer
 }) => {
     const router = useRouter();
     const [currentPage, setCurrentPage] = React.useState(0);
+    const { selectedAnswer, openEndedAnswer } = useExercise();
     const {
         slug,
         exerciseProgressId,
@@ -71,6 +124,30 @@ const QuizNavigationModal: React.FC<QuizNavigationModalProps> = ({
         );
 
     const { allProblems, isLoading } = useMemo(() => {
+        if (USE_MOCK_DATA) {
+            const mockDataMap = {
+                1: MOCK_DATA_1_ROW,
+                2: MOCK_DATA_2_ROWS,
+                3: MOCK_DATA_3_ROWS,
+                4: MOCK_DATA_4_ROWS,
+                5: MOCK_DATA_5_ROWS
+            };
+            const mockData = mockDataMap[MOCK_TEST_ROWS as 1 | 2 | 3 | 4 | 5];
+            // Paginate mock data
+            const startIndex = currentPage * PROBLEMS_PER_PAGE;
+            const paginatedData = mockData.slice(
+                startIndex,
+                startIndex + PROBLEMS_PER_PAGE
+            );
+            return {
+                allProblems: {
+                    count_items: mockData.length,
+                    data: paginatedData
+                },
+                isLoading: false
+            };
+        }
+
         if (problemsetId) {
             const mappedData = allProblemsViaProgress?.data?.map(
                 (problem: ProblemNavigationVerboseItem) => ({
@@ -102,17 +179,20 @@ const QuizNavigationModal: React.FC<QuizNavigationModalProps> = ({
         allProblemsInPS,
         allProblemsViaProgress,
         isLoadingProblems,
-        isLoadingViaProgress
+        isLoadingViaProgress,
+        problemsetId,
+        currentPage
     ]);
 
     const totalPages = Math.ceil(
         (allProblems?.count_items || 0) / PROBLEMS_PER_PAGE
     );
 
-    // Calculate height based on maximum rows needed (20 problems per page in 5 columns = 4 rows)
-    const maxRowsPerPage = Math.ceil(PROBLEMS_PER_PAGE / 5); // 4 rows
+    // Calculate height based on actual items in current page
+    const itemsInCurrentPage = allProblems?.data?.length || 0;
+    const actualRowsPerPage = Math.ceil(itemsInCurrentPage / 5);
     const containerHeight = `${
-        maxRowsPerPage * 52 + (maxRowsPerPage - 1) * 12
+        actualRowsPerPage * 52 + (actualRowsPerPage - 1) * 12
     }px`; // 52px per item (w-12 h-12) + 12px gap
 
     const handlePrevPage = () => {
@@ -127,9 +207,47 @@ const QuizNavigationModal: React.FC<QuizNavigationModalProps> = ({
         }
     };
 
-    const handleProblemClick = (problemId: string) => {
-        onProblemSelect(problemId);
+    const handleProblemClick = (clickedProblemId: string) => {
+        // Check if there's an unsaved answer (new answer or changed answer)
+        const hasNewAnswer =
+            (selectedAnswer && selectedAnswer.length > 0) ||
+            (openEndedAnswer && openEndedAnswer.trim() !== '');
+
+        // Check if answer has changed from what was already submitted
+        const submittedAnswerIds =
+            problem?.problem_progress?.submitted_answer_ids || [];
+        const submittedAnswerText =
+            problem?.problem_progress?.submitted_answer_text || '';
+
+        const answerHasChanged =
+            (problem?.problem.type === 'SHORT_ANSWER'
+                ? openEndedAnswer !== submittedAnswerText
+                : !arraysEqual(selectedAnswer, submittedAnswerIds)) ||
+            (hasNewAnswer &&
+                submittedAnswerIds.length === 0 &&
+                !submittedAnswerText);
+
+        if (hasNewAnswer && answerHasChanged && saveAnswer) {
+            // Save answer before navigating to selected problem
+            saveAnswer({
+                navigateDirection: 'custom',
+                customProblemId: clickedProblemId
+            });
+        } else {
+            // No answer to save, navigate directly
+            onProblemSelect(clickedProblemId);
+        }
+
         onClose();
+    };
+
+    // Helper function to compare arrays
+    const arraysEqual = (a: string[], b: string[]): boolean => {
+        if (a.length !== b.length) return false;
+        return (
+            a.every((item) => b.includes(item)) &&
+            b.every((item) => a.includes(item))
+        );
     };
 
     return (
