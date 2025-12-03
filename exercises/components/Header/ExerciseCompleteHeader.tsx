@@ -88,7 +88,7 @@ const ExerciseCompleteHeader = () => {
                 {/* Left Arrow Button */}
                 <button
                     disabled={activeTab === tabs[0]}
-                    className="w-8 h-8 md:border-none border-violet-4 rounded-full bg-transparent hover:bg-white/10 flex items-center justify-center transition-colors text-white disabled:text-white/30 disabled:cursor-not-allowed"
+                    className="w-8 h-8 border md:border-none border-violet-4 rounded-full bg-transparent hover:bg-white/10 flex items-center justify-center transition-colors text-white disabled:text-white/30 disabled:cursor-not-allowed"
                     onClick={() => {
                         const currentIndex = tabs.indexOf(activeTab);
                         if (currentIndex > 0) {
@@ -130,7 +130,7 @@ const ExerciseCompleteHeader = () => {
                 {/* Right Arrow Button */}
                 <button
                     disabled={activeTab === tabs[tabs.length - 1]}
-                    className="w-8 h-8 md:border-none border-violet-4  rounded-full bg-transparent hover:bg-white/10 flex items-center justify-center transition-colors text-white disabled:text-white/30 disabled:cursor-not-allowed"
+                    className="w-8 h-8 border md:border-none border-violet-4  rounded-full bg-transparent hover:bg-white/10 flex items-center justify-center transition-colors text-white disabled:text-white/30 disabled:cursor-not-allowed"
                     onClick={() => {
                         const currentIndex = tabs.indexOf(activeTab);
                         if (currentIndex < tabs.length - 1) {
