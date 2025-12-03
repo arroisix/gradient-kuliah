@@ -73,11 +73,6 @@ const ExerciseWorksheetHeader = () => {
 
     const handleNextProblem = () => {
         if (problem?.next_problem_id) {
-            // Check if there's an unsaved answer (new answer or changed answer)
-            const hasNewAnswer =
-                (selectedAnswer && selectedAnswer.length > 0) ||
-                (openEndedAnswer && openEndedAnswer.trim() !== '');
-
             // Check if answer has changed from what was already submitted
             const submittedAnswerIds =
                 problem?.problem_progress?.submitted_answer_ids || [];
@@ -85,14 +80,11 @@ const ExerciseWorksheetHeader = () => {
                 problem?.problem_progress?.submitted_answer_text || '';
 
             const answerHasChanged =
-                (problem?.problem.type === 'SHORT_ANSWER'
+                problem?.problem.type === 'SHORT_ANSWER'
                     ? openEndedAnswer !== submittedAnswerText
-                    : !arraysEqual(selectedAnswer, submittedAnswerIds)) ||
-                (hasNewAnswer &&
-                    submittedAnswerIds.length === 0 &&
-                    !submittedAnswerText);
+                    : !arraysEqual(selectedAnswer, submittedAnswerIds);
 
-            if (hasNewAnswer && answerHasChanged) {
+            if (answerHasChanged) {
                 // Save answer before navigating to next problem
                 saveAnswer({ navigateDirection: 'next' });
             } else {
@@ -110,11 +102,6 @@ const ExerciseWorksheetHeader = () => {
 
     const handlePreviousProblem = () => {
         if (problem?.previous_problem_id) {
-            // Check if there's an unsaved answer (new answer or changed answer)
-            const hasNewAnswer =
-                (selectedAnswer && selectedAnswer.length > 0) ||
-                (openEndedAnswer && openEndedAnswer.trim() !== '');
-
             // Check if answer has changed from what was already submitted
             const submittedAnswerIds =
                 problem?.problem_progress?.submitted_answer_ids || [];
@@ -122,14 +109,11 @@ const ExerciseWorksheetHeader = () => {
                 problem?.problem_progress?.submitted_answer_text || '';
 
             const answerHasChanged =
-                (problem?.problem.type === 'SHORT_ANSWER'
+                problem?.problem.type === 'SHORT_ANSWER'
                     ? openEndedAnswer !== submittedAnswerText
-                    : !arraysEqual(selectedAnswer, submittedAnswerIds)) ||
-                (hasNewAnswer &&
-                    submittedAnswerIds.length === 0 &&
-                    !submittedAnswerText);
+                    : !arraysEqual(selectedAnswer, submittedAnswerIds);
 
-            if (hasNewAnswer && answerHasChanged) {
+            if (answerHasChanged) {
                 // Save answer before navigating to previous problem
                 saveAnswer({ navigateDirection: 'prev' });
             } else {
