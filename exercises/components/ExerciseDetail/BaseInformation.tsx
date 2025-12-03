@@ -69,7 +69,7 @@ const BaseInformation = () => {
                             size={width < 768 ? 14 : 18}
                         />
                         <span className="text-xs md:text-sm text-purple-6 text-center">
-                            {exercise.course.name} asda asdad asdad
+                            {exercise.course.name}
                         </span>
                     </span>
                 )}
