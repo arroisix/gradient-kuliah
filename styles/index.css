@@ -552,6 +552,9 @@ input[type='number']::-webkit-outer-spin-button {
 }
 
 .astronotes {
+    letter-spacing: 0.5px;
+    font-weight: 100;
+    text-align: justify;
     color: #dedede;
 }
 

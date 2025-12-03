@@ -48,7 +48,7 @@ const ExerciseProblemSolutionAccordion = () => {
             <button
                 onClick={() => setIsExpanded(!isExpanded)}
                 className="w-full px-4 lg:px-6 py-4 flex items-center justify-between hover:bg-white/5 transition-colors">
-                <h3 className="text-white font-semibold text-base lg:text-lg">
+                <h3 className="text-white font-semibold text-base lg:text-2xl">
                     Pembahasan Detail
                 </h3>
                 <div className="flex items-center gap-2">
