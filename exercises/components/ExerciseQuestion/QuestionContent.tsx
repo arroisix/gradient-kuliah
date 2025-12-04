@@ -63,6 +63,30 @@ const QuestionContent = () => {
                 content={problem?.problem.question}
                 className="lg:!text-xl text-white"
             />
+            <TiptapViewer
+                content={problem?.problem.question}
+                className="lg:!text-xl text-white"
+            />
+            <TiptapViewer
+                content={problem?.problem.question}
+                className="lg:!text-xl text-white"
+            />
+            <TiptapViewer
+                content={problem?.problem.question}
+                className="lg:!text-xl text-white"
+            />
+            <TiptapViewer
+                content={problem?.problem.question}
+                className="lg:!text-xl text-white"
+            />
+            <TiptapViewer
+                content={problem?.problem.question}
+                className="lg:!text-xl text-white"
+            />
+            <TiptapViewer
+                content={problem?.problem.question}
+                className="lg:!text-xl text-white"
+            />
         </div>
     );
 };
