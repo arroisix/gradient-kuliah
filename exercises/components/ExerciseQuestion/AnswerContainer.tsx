@@ -242,9 +242,12 @@ const AnswerContainer = () => {
             </div>
             <ExerciseQuestionFooter
                 saveAnswer={() =>
-                    saveAnswer({
-                        onFinishModalOpen: () => setIsFinishModalOpen(true)
-                    })
+                    solution
+                        ? onNextSolution()
+                        : saveAnswer({
+                              onFinishModalOpen: () =>
+                                  setIsFinishModalOpen(true)
+                          })
                 }
                 isDisabled={
                     selectedAnswer.length === 0 &&
