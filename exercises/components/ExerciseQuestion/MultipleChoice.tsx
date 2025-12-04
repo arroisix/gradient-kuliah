@@ -71,7 +71,7 @@ const MultipleChoiceContainer = ({
     };
 
     return (
-        <div className="flex flex-col gap-3 ">
+        <div className="flex flex-col gap-3">
             {!showSolution && problem?.problem.type === 'MULTIPLE_ANSWER' && (
                 <span className="text-accent-yellow text-xs">
                     Jawaban bisa lebih dari 1
