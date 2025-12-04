@@ -17,6 +17,7 @@ const QuestionContent = () => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [isOverflowing, setIsOverflowing] = useState(false);
     const contentRef = useRef<HTMLDivElement>(null);
+    const isReportPage = router.pathname.includes('/report/');
     const { slug, sectionId, problemsetId, problemId, exerciseProgressId } =
         router.query;
 
