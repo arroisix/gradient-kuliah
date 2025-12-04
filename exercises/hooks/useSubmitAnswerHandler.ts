@@ -104,14 +104,21 @@ const useSubmitAnswerHandler = (problem: ProblemInProblemSet) => {
                     { scroll: false, shallow: true }
                 );
             } else {
-                router.push(
-                    `/latihan/${slug}/report/${exercise?.latest_exercise_progress?.id}`,
-                    undefined,
-                    {
+                if (!exercise?.latest_exercise_progress?.id) {
+                    router.push(`/latihan/${slug}/`, undefined, {
                         scroll: false,
                         shallow: true
-                    }
-                );
+                    });
+                } else {
+                    router.push(
+                        `/latihan/${slug}/report/${exercise?.latest_exercise_progress?.id}`,
+                        undefined,
+                        {
+                            scroll: false,
+                            shallow: true
+                        }
+                    );
+                }
             }
         } else {
             // Handle showing solution for the problem set if needed
