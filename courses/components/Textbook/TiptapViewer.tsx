@@ -59,9 +59,11 @@ const extensions = [
 
 const TiptapViewer = ({
     content,
-    className
+    className,
+    onContentReady
 }: {
     content: Content;
+    onContentReady?: () => void;
 } & PropsWithClassName): JSX.Element => {
     const editor = useEditor({
         content,
@@ -70,8 +72,14 @@ const TiptapViewer = ({
     });
 
     useEffect(() => {
-        editor?.commands.setContent(content);
-    }, [content]);
+        if (editor) {
+            editor.commands.setContent(content);
+            // Trigger callback setelah konten di-set
+            setTimeout(() => {
+                onContentReady?.();
+            }, 50);
+        }
+    }, [content, editor, onContentReady]);
 
     return (
         <div className="grid w-full grid-cols-1">
