@@ -9,12 +9,17 @@ interface QuizNavigationBottomSheetProps {
     onProblemSelect: (problemId: string) => void;
     isOpen: boolean;
     onClose: () => void;
+    saveAnswer?: (options: {
+        navigateDirection: 'custom';
+        customProblemId: string;
+    }) => Promise<void>;
 }
 
 const QuizNavigationBottomSheet: React.FC<QuizNavigationBottomSheetProps> = ({
     onProblemSelect,
     isOpen,
-    onClose
+    onClose,
+    saveAnswer
 }) => {
     const router = useRouter();
     const { problemsetId, solution } = router.query;
@@ -38,6 +43,7 @@ const QuizNavigationBottomSheet: React.FC<QuizNavigationBottomSheetProps> = ({
                 onProblemSelect={onProblemSelect}
                 onClose={onClose}
                 className="bg-transparent p-0 w-full"
+                saveAnswer={saveAnswer}
             />
             {(problemsetId || solution) && (
                 <AnswerLegend className="mt-4" removeYellowLegend />

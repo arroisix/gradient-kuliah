@@ -8,8 +8,8 @@ import {
     useGetProblemInProblemSetQuery
 } from 'exercises/redux/api/exercisesApi';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
-import { BiChevronDown } from 'react-icons/bi';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { BiChevronDown, BiChevronUp } from 'react-icons/bi';
 
 const QuestionContent = () => {
     const { showSolution } = useExercise();
@@ -17,9 +17,12 @@ const QuestionContent = () => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [isOverflowing, setIsOverflowing] = useState(false);
     const contentRef = useRef<HTMLDivElement>(null);
-    const isReportPage = router.pathname.includes('/report/');
     const { slug, sectionId, problemsetId, problemId, exerciseProgressId } =
         router.query;
+
+    const isSolutionPage = useMemo(() => {
+        return problemsetId;
+    }, [problemsetId]);
 
     const { data: problem, isLoading: isLoadingProblem } =
         useGetProblemInProblemSetQuery(
@@ -83,7 +86,7 @@ const QuestionContent = () => {
         );
     }
 
-    if (isReportPage)
+    if (isSolutionPage)
         return (
             <div
                 className={cn(
@@ -113,13 +116,22 @@ const QuestionContent = () => {
                         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black pointer-events-none" />
                     )}
                 </div>
-                {!isExpanded && isOverflowing && (
+                {isOverflowing && (
                     <Button
-                        variant="secondary"
-                        onClick={() => setIsExpanded(true)}
-                        className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors w-fit flex flex-row items-center gap-2 self-center">
-                        Lihat Semua
-                        <BiChevronDown size={24} />
+                        variant="custom"
+                        onClick={() => setIsExpanded(!isExpanded)}
+                        className={cn(
+                            'mt-4 px-4 py-2 bg-blue-600 hover:bg-neutral-700 text-white rounded-lg font-medium transition-colors w-fit flex flex-row items-center gap-2 self-center',
+                            isExpanded
+                                ? 'bg-tranparent border-[1px] border-[#999999]'
+                                : 'bg-[#4B4E5F]'
+                        )}>
+                        {isExpanded ? 'Tutup' : 'Lihat Semua'}
+                        {isExpanded ? (
+                            <BiChevronUp size={24} />
+                        ) : (
+                            <BiChevronDown size={24} />
+                        )}
                     </Button>
                 )}
             </div>
