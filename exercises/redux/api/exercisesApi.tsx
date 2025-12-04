@@ -434,6 +434,10 @@ export const exerciseApi = baseApi.injectEndpoints({
             invalidatesTags: (result, error, arg) => [
                 {
                     type: 'EXERCISES',
+                    id: `EXERCISE_${arg.slug}`
+                },
+                {
+                    type: 'EXERCISES',
                     id: `PROBLEM_${arg.problem_id}`
                 },
                 {
@@ -533,6 +537,7 @@ export const {
     useGetCoursesWithExerciseQuery,
     useGetUniversitiesWithExerciseQuery,
     useGetExerciseDetailV2Query,
+    useLazyGetExerciseDetailV2Query,
     useGetProblemInProblemSetQuery,
     useGetAllProblemInProblemSetQuery,
     useSubmitUserAnswerMutation,
