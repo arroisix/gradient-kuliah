@@ -100,7 +100,9 @@ const ResultSummaryPerProblem: React.FC<ResultSummaryPerProblemProps> = ({
             onProblemSelect(problemId, selectedProblemSetId);
         } else {
             router.push(
-                `/latihan/${slug}/report/${exerciseProgressId}/${selectedProblemSetId}/${problemId}`,
+                `/latihan/${slug}/report/${
+                    exerciseProgressId ?? exercise?.latest_exercise_progress?.id
+                }/${selectedProblemSetId}/${problemId}`,
                 undefined,
                 { scroll: false, shallow: true }
             );
