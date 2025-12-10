@@ -153,7 +153,7 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
 
         return (
             <div className="space-y-2 w-full">
-                <div className="flex items-center justify-between text-xs">
+                <div className="flex items-center justify-between text-sm">
                     <span className="text-graphite-400">Progress</span>
                     <span className={colors.text}>{percentage}%</span>
                 </div>

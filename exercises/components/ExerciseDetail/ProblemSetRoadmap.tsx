@@ -4,10 +4,12 @@ import { Check } from 'lucide-react';
 import { cn } from 'commons/utils';
 import Skeleton from 'commons/components/elements/Skeleton';
 import ProblemSetInformation from './ProblemSetInformation';
+import { useWindowSize } from 'usehooks-ts';
 
 const ProblemSetRoadmap = () => {
     const router = useRouter();
     const { slug, sectionId } = router.query;
+    const { width } = useWindowSize();
 
     const { data: problemsets, isLoading } =
         useGetProblemsetDetailInterstitialQuery(
@@ -121,8 +123,8 @@ const ProblemSetRoadmap = () => {
                                 </h3>
 
                                 {/* Mobile Info Card - only show for current section */}
-                                {isCurrent && (
-                                    <div className="lg:hidden mt-4 mb-2">
+                                {isCurrent && width < 1024 && (
+                                    <div className="mt-4 mb-2">
                                         <ProblemSetInformation />
                                     </div>
                                 )}

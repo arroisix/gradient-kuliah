@@ -63,7 +63,7 @@ const BaseInformation = () => {
             </div>
             <div className="flex items-stretch gap-3 w-full">
                 {exercise?.course.name && (
-                    <span className="flex items-center justify-center flex-col py-3 flex-1 rounded-lg bg-violet-3">
+                    <span className="flex items-center justify-center flex-col py-3 flex-1 rounded-lg bg-violet-3 gap-1">
                         <GraduationCap
                             className="text-purple-6"
                             size={width < 768 ? 14 : 18}
@@ -73,14 +73,14 @@ const BaseInformation = () => {
                         </span>
                     </span>
                 )}
-                <span className="flex items-center justify-center flex-col py-3 flex-1 rounded-lg bg-violet-3">
+                <span className="flex items-center justify-center flex-col py-3 flex-1 rounded-lg bg-violet-3 gap-1">
                     <List color="#7D89CC" size={width < 768 ? 14 : 18} />
                     <span className="text-xs md:text-sm text-purple-6 text-center">
                         {exercise?.total_problems} Soal
                     </span>
                 </span>
                 {(exercise?.total_duration as number) > 0 && (
-                    <span className="flex items-center justify-center flex-col py-3 flex-1 rounded-lg bg-violet-3">
+                    <span className="flex items-center justify-center flex-col py-3 flex-1 rounded-lg bg-violet-3 gap-1">
                         <Clock size={width < 768 ? 14 : 18} color="#7D89CC" />
                         <span className="text-xs md:text-sm text-purple-6 text-center">
                             {(

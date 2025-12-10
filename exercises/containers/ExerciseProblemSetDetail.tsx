@@ -10,13 +10,12 @@ const ExerciseProblemSetDetail = () => {
     const router = useRouter();
     const { slug, sectionId } = router.query;
 
-    const { data: problemsets, isLoading } =
-        useGetProblemsetDetailInterstitialQuery(
-            { slug: slug as string, problemset_id: sectionId as string },
-            {
-                skip: !slug || !sectionId
-            }
-        );
+    const { isLoading } = useGetProblemsetDetailInterstitialQuery(
+        { slug: slug as string, problemset_id: sectionId as string },
+        {
+            skip: !slug || !sectionId
+        }
+    );
 
     if (isLoading) {
         return (
@@ -34,8 +33,6 @@ const ExerciseProblemSetDetail = () => {
             </LatihanLayout>
         );
     }
-
-    console.log('problemsets', problemsets);
 
     return (
         <LatihanLayout>
