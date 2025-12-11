@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { IoClose } from 'react-icons/io5';
-import {
-    useRequestEmailActivationMutation,
-    useGetProfileQuery
-} from 'authentication/redux/api/authApi';
+import { useEmailVerification } from 'authentication/hooks/useEmailVerification';
 
 interface EmailVerificationModalProps {
     isOpen: boolean;
@@ -16,48 +13,11 @@ const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({
     onClose,
     email
 }) => {
-    const [countdown, setCountdown] = useState<number>(30);
-    const [canResend, setCanResend] = useState<boolean>(false);
-    const [requestEmailActivation] = useRequestEmailActivationMutation();
-
-    const { data: profile } = useGetProfileQuery(
-        {},
-        {
-            pollingInterval: 5000,
-            skip: !isOpen
-        }
-    );
-
-    useEffect(() => {
-        if (profile?.is_email_verified) {
-            onClose();
-        }
-    }, [profile?.is_email_verified, onClose]);
-
-    useEffect(() => {
-        let timer: NodeJS.Timeout;
-        if (isOpen && countdown > 0) {
-            timer = setInterval(() => {
-                setCountdown((prev) => prev - 1);
-            }, 1000);
-        }
-        if (countdown === 0) {
-            setCanResend(true);
-        }
-        return () => {
-            if (timer) clearInterval(timer);
-        };
-    }, [isOpen, countdown]);
-
-    const handleResend = async () => {
-        try {
-            await requestEmailActivation().unwrap();
-            setCountdown(30);
-            setCanResend(false);
-        } catch (error) {
-            console.error('Failed to resend verification email:', error);
-        }
-    };
+    const { countdown, canResend, handleResend } = useEmailVerification({
+        countdownValue: 30,
+        disable: !isOpen,
+        onEmailVerified: onClose
+    });
 
     if (!isOpen) return null;
 

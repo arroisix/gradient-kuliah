@@ -55,6 +55,7 @@ interface UpdateUserResponseData {
     display_update_data_notification: boolean;
     provider: 'basic' | 'google';
     is_email_verified: boolean;
+    current_role: 'COLLEGE_STUDENT' | 'K12';
 }
 
 interface UpdateGeneralProfileInputData extends UpdateUserResponseData {

@@ -9,6 +9,7 @@ import LoadingBackdrop from './components/elements/LoadingBackdrop';
 import { useRouter } from 'next/router';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { getDisplayName, sanitizeUrl } from './utils';
+import { useLocalStorage } from 'usehooks-ts';
 
 const withAuth = (WrappedComponent: React.ComponentType) => {
     const WithAuth = (
@@ -24,8 +25,9 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
             const { is_subscribed, isDoneFetchingSubcription, isLoading } =
                 useCourseSubscription();
             const isProfileComplete = useSelector(getIsProfileComplete);
-            const isLastOnboardingStep = localStorage.getItem(
-                'isLastOnboardingStep'
+            const [showEmailVerification] = useLocalStorage(
+                'showEmailVerification',
+                false
             );
 
             if (!!rawToken && !accessToken) {
@@ -37,7 +39,6 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
                     if (
                         router.pathname === '/onboarding' &&
                         isProfileComplete &&
-                        !(isLastOnboardingStep === 'true') &&
                         is_subscribed
                     ) {
                         router.push('/dashboard');
@@ -46,28 +47,9 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
 
                     if (
                         router.pathname === '/onboarding' &&
-                        !isProfileComplete
+                        (!isProfileComplete || showEmailVerification)
                     ) {
                         return <WrappedComponent {...props} />;
-                    }
-
-                    if (
-                        router.pathname === '/onboarding' &&
-                        isProfileComplete &&
-                        isLastOnboardingStep === 'true' &&
-                        !is_subscribed
-                    ) {
-                        const packetId = localStorage.getItem('packetId');
-                        if (packetId) {
-                            router.push(`/pembayaran?packetId=${packetId}`);
-                        } else if (router.query.redirect) {
-                            router.push(
-                                sanitizeUrl(router.query.redirect as string)
-                            );
-                        } else {
-                            router.push('/');
-                        }
-                        return;
                     }
 
                     if (
@@ -78,7 +60,8 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
                             '/pembayaran',
                             '/checkout',
                             '/referral',
-                            '/latihan'
+                            '/latihan',
+                            '/onboarding/jenis-akun'
                         ].some((value) => router.pathname.includes(value)) &&
                         !is_subscribed
                     ) {

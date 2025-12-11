@@ -35,15 +35,15 @@ const Input: React.FC<InputProps> = ({
     autoComplete
 }) => (
     <div className="flex flex-col w-full gap-1 font-body">
-        {label && <span className="text-[#999999] text-sm">{label}</span>}
+        {label && <span className="text-white text-sm">{label}</span>}
         <div
-            className={`flex w-full items-center rounded-lg px-2 h-[48px] bg-[#121212] border ${
-                error ? 'border-red-500' : 'border-[#242424]'
+            className={`flex gap-2 w-full items-center rounded-lg px-4 h-[48px] bg-violet-2 border ${
+                error ? 'border-red-500' : 'border-transparent'
             } ${className}`}>
-            <div>{startAddorment}</div>
+            {startAddorment ? <div>{startAddorment}</div> : null}
             <input
                 type={type}
-                className={`form-input bg-transparent border-0 w-full  focus:outline-none focus:ring-0 focus:appearance-none placeholder:text-neutral-400`}
+                className={`p-0 bg-transparent border-0 w-full focus:outline-none focus:ring-0 focus:appearance-none placeholder:text-graphite-600`}
                 placeholder={placeholder}
                 onChange={onChange}
                 onWheel={(e) => (e.target as HTMLElement).blur()}
@@ -54,7 +54,7 @@ const Input: React.FC<InputProps> = ({
                 required={required}
                 autoComplete={autoComplete}
             />
-            <div>{endAddorment}</div>
+            {endAddorment ? <div>{endAddorment}</div> : null}
         </div>
         {error && <span className="mt-2 text-sm text-red-500">{error}</span>}
     </div>

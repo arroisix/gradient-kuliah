@@ -15,6 +15,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 import useSocialLogin from 'authentication/hooks/useSocialLogin';
 import { toast } from 'react-toastify';
 import { sanitizeUrl } from 'commons/utils';
+import { useIsMounted } from 'usehooks-ts';
 
 export const LoginSection: React.FC = () => {
     const [reveal, setReveal] = useState(false);
@@ -23,6 +24,9 @@ export const LoginSection: React.FC = () => {
     const { setLastLogin, lastLogin } = useLastLogin();
     const [showLastLogin, setShowLastLogin] = useState(!!lastLogin.email);
     const tracker = useTracker();
+
+    const isMounted = useIsMounted();
+    const showLastLoginHydrated = showLastLogin && isMounted();
 
     const { googleLogin } = useSocialLogin();
     const gLogin = useGoogleLogin({
@@ -85,7 +89,54 @@ export const LoginSection: React.FC = () => {
                 <form
                     onSubmit={handleSubmit}
                     className="container flex flex-col gap-[14px] h-full">
-                    {!showLastLogin ? (
+                    {showLastLoginHydrated ? (
+                        <section className="flex flex-col">
+                            <SelectAccountItem
+                                emailOrText={lastLogin.email}
+                                icon={() => (
+                                    <MdAccountCircle
+                                        size={24}
+                                        color="#B9B9B9"
+                                    />
+                                )}
+                                method={lastLogin.method}
+                                onClick={() => {
+                                    tracker?.genericTrack(
+                                        'Click Last Used Account',
+                                        { Method: lastLogin.method }
+                                    );
+                                    if (
+                                        lastLogin.email &&
+                                        lastLogin.method == 'email'
+                                    ) {
+                                        setShowLastLogin(false);
+                                        setValues({
+                                            email: lastLogin.email,
+                                            password: ''
+                                        });
+                                    } else if (
+                                        lastLogin.method == 'google' &&
+                                        gLogin
+                                    ) {
+                                        gLogin();
+                                    }
+                                }}
+                            />
+                            <SelectAccountItem
+                                emailOrText="Gunakan akun lain"
+                                icon={() => (
+                                    <AiFillPlusCircle
+                                        size={24}
+                                        color="#666666"
+                                    />
+                                )}
+                                method={null}
+                                onClick={() => {
+                                    setShowLastLogin(false);
+                                }}
+                            />
+                        </section>
+                    ) : (
                         <>
                             <div className="flex flex-col gap-4">
                                 <Input
@@ -135,57 +186,10 @@ export const LoginSection: React.FC = () => {
                                 Lupa kata sandi?
                             </Link>
                         </>
-                    ) : (
-                        <section className="flex flex-col">
-                            <SelectAccountItem
-                                emailOrText={lastLogin.email}
-                                icon={() => (
-                                    <MdAccountCircle
-                                        size={24}
-                                        color="#B9B9B9"
-                                    />
-                                )}
-                                method={lastLogin.method}
-                                onClick={() => {
-                                    tracker?.genericTrack(
-                                        'Click Last Used Account',
-                                        { Method: lastLogin.method }
-                                    );
-                                    if (
-                                        lastLogin.email &&
-                                        lastLogin.method == 'email'
-                                    ) {
-                                        setShowLastLogin(false);
-                                        setValues({
-                                            email: lastLogin.email,
-                                            password: ''
-                                        });
-                                    } else if (
-                                        lastLogin.method == 'google' &&
-                                        gLogin
-                                    ) {
-                                        gLogin();
-                                    }
-                                }}
-                            />
-                            <SelectAccountItem
-                                emailOrText="Gunakan akun lain"
-                                icon={() => (
-                                    <AiFillPlusCircle
-                                        size={24}
-                                        color="#666666"
-                                    />
-                                )}
-                                method={null}
-                                onClick={() => {
-                                    setShowLastLogin(false);
-                                }}
-                            />
-                        </section>
                     )}
 
                     <div className="flex flex-col gap-[14px] flex-grow justify-start">
-                        {!showLastLogin && (
+                        {!showLastLoginHydrated && (
                             <Button
                                 variant="custom"
                                 className="w-full text-white bg-accent-purple"

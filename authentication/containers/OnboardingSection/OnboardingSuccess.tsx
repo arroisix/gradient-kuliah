@@ -7,22 +7,10 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useTracker } from 'tracker/tracker';
 
-type HandleIsLastOnboardingStep = () => void;
-
 export const OnboardingSuccess = (): JSX.Element => {
     const router = useRouter();
     // const currentDate = new Date();
     const { isMobileBreakpoints } = useWindowBreakpoints();
-    const handleIsLastOnboardingStep: HandleIsLastOnboardingStep = () => {
-        localStorage.removeItem('isLastOnboardingStep');
-        // redirect to langganan page
-        router.push('/langganan');
-
-        // redirect to WhatsApp
-        // window.open(
-        //     getCSChatRoom("WA")
-        // );
-    };
 
     const tracker = useTracker();
 
@@ -42,7 +30,7 @@ export const OnboardingSuccess = (): JSX.Element => {
                 </span>
                 <Button
                     id={'checkout-cta'}
-                    onClick={handleIsLastOnboardingStep}
+                    onClick={() => router.push('/langganan')}
                     variant="primary"
                     size="small"
                     className="!px-[76px] !mt-[14px] !md:mt-3 !font-extrabold">

@@ -11,6 +11,7 @@ import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { getDisplayName, sanitizeUrl } from './utils';
 import { useGetPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
 import { sendGTMEvent } from '@next/third-parties/google';
+import { useLocalStorage } from 'usehooks-ts';
 
 const withAnon = <P extends object>(
     WrappedComponent: React.ComponentType<P>
@@ -31,8 +32,21 @@ const withAnon = <P extends object>(
                 useGetPacketOfferQuery();
             const router = useRouter();
 
+            const [showAccountTypePrompt] = useLocalStorage(
+                'showAccountTypePrompt',
+                false
+            );
+
             if (!!accessToken) {
                 if (!isLoadingSubscribed && !isLoadingPricing) {
+                    if (
+                        router.pathname !== '/onboarding/jenis-akun' &&
+                        showAccountTypePrompt
+                    ) {
+                        router.push('/onboarding/jenis-akun');
+                        return;
+                    }
+
                     if (['/masuk', '/daftar'].includes(router.pathname)) {
                         if (!isProfileComplete) {
                             router.replace(

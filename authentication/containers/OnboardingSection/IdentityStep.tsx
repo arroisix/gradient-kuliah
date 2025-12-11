@@ -54,7 +54,8 @@ export const IdentityStep = (): JSX.Element => {
         : FaTimesCircle;
 
     return (
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full max-w-[360px]">
+            <h1 className="mb-10 text-2xl font-bold">Lengkapi Profil</h1>
             <Formik
                 initialValues={
                     {
@@ -94,7 +95,7 @@ export const IdentityStep = (): JSX.Element => {
                     isValid: isFormValid
                 }) => (
                     <form onSubmit={handleSubmit}>
-                        <div className="flex flex-col gap-4">
+                        <div className="flex flex-col gap-6">
                             <Input
                                 label="Nama Lengkap"
                                 type="text"
@@ -178,7 +179,7 @@ export const IdentityStep = (): JSX.Element => {
                                 }
                             />
                         </div>
-                        <div className="fixed left-0 md:left-auto bottom-[52px] px-[16px] md:px-0 w-full md:w-[400px]">
+                        <div>
                             <Button
                                 disabled={
                                     !values.full_name ||
@@ -189,7 +190,7 @@ export const IdentityStep = (): JSX.Element => {
                                     !isFormValid
                                 }
                                 variant="custom"
-                                className="w-full mt-4 text-white bg-accent-purple"
+                                className="w-full mt-10 text-white bg-accent-purple h-[46px]"
                                 type="submit">
                                 Selanjutnya
                             </Button>

@@ -3,13 +3,16 @@ import { useGoogleLogin } from '@react-oauth/google';
 import { AUTH_SECTION } from 'authentication/constants';
 import { RegistrationProvider } from 'authentication/contexts/RegistrationProvider';
 import { useLastLogin } from 'authentication/hooks/useLastLogin';
+import useLogout from 'authentication/hooks/useLogout';
 import useSocialLogin from 'authentication/hooks/useSocialLogin';
 import { getCurrentUser } from 'authentication/redux/selectors/userSelector';
 import Button from 'commons/components/elements/Button';
+import { cn } from 'commons/utils';
 import { useRouter } from 'next/router';
 import { AiOutlineGoogle } from 'react-icons/ai';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { useLocalStorage } from 'usehooks-ts';
 
 export const AuthenticationContainer: React.FC = () => {
     const { pathname } = useRouter();
@@ -38,18 +41,17 @@ export const AuthenticationContainer: React.FC = () => {
         }
     });
 
+    const { logout, isLoadingLogout } = useLogout(0, false);
+
     const isLogin = pathname === '/masuk';
+
+    const [showEmailVerification] = useLocalStorage(
+        'showEmailVerification',
+        false
+    );
 
     return (
         <section className="flex items-stretch justify-center w-screen min-h-screen text-white bg-neutral-1000">
-            {pathname === '/onboarding' && (
-                <div className="fixed top-[16px] flex justify-center px-[16px] md:px-0 w-full md:w-[400px]">
-                    <p className="text-[#666666]">
-                        Terdaftar sebagai {user.email}
-                    </p>
-                </div>
-            )}
-
             {pathname !== '/onboarding' ? (
                 <div className="max-w-[360px] w-full px-[18px] py-12 flex flex-col gap-10 justify-center items-center">
                     <div className="flex items-end flex-grow">
@@ -87,7 +89,23 @@ export const AuthenticationContainer: React.FC = () => {
                 </div>
             ) : (
                 <RegistrationProvider>
-                    <AuthSection />
+                    <div
+                        className={cn(
+                            'relative flex justify-center h-max w-full',
+                            showEmailVerification && 'self-center'
+                        )}>
+                        <AuthSection />
+                        <p className="text-graphite-600 absolute -bottom-12 w-full text-center translate-y-full text-xs">
+                            Terdaftar sebagai {user.email}{' '}
+                            <button
+                                className="text-graphite-400"
+                                type="button"
+                                onClick={logout}
+                                disabled={isLoadingLogout}>
+                                Sign out
+                            </button>
+                        </p>
+                    </div>
                 </RegistrationProvider>
             )}
         </section>

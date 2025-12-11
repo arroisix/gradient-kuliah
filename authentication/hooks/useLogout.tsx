@@ -4,7 +4,7 @@ import { removeAllViewedCampaignBannerSlugs } from 'dashboard/redux/slices/banne
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 
-const useLogout = () => {
+const useLogout = (delay = 500, redirect = true) => {
     const dispatch = useDispatch();
     const router = useRouter();
     const [handleLogout, { isLoading: isLoadingLogout }] = useLogoutMutation();
@@ -13,9 +13,11 @@ const useLogout = () => {
         await handleLogout();
         dispatch(clearCache());
         dispatch(removeAllViewedCampaignBannerSlugs());
-        setTimeout(() => {
-            router.push('/');
-        }, 500);
+        if (redirect) {
+            setTimeout(() => {
+                router.push('/');
+            }, delay);
+        }
     };
 
     return { logout, isLoadingLogout };

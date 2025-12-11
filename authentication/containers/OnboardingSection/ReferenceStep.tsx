@@ -6,11 +6,16 @@ import { useGetRegisterReferenceQuery } from 'authentication/redux/api/authApi';
 import Radio from 'commons/components/elements/Form/radio';
 import TextArea from 'commons/components/elements/Form/TextArea';
 import { useTracker } from 'tracker/tracker';
+import { useLocalStorage } from 'usehooks-ts';
 
 export const ReferenceStep = (): JSX.Element => {
     const { formData, updateUser } = useContext(RegistrationContext);
     const { data: registerReferences, isLoading: isLoadingReferences } =
         useGetRegisterReferenceQuery({});
+    const [_, setShowEmailVerification] = useLocalStorage(
+        'showEmailVerification',
+        false
+    );
 
     const tracker = useTracker();
 
@@ -19,7 +24,7 @@ export const ReferenceStep = (): JSX.Element => {
     }, []);
 
     return (
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full max-w-[458px]">
             {!isLoadingReferences && registerReferences ? (
                 <Formik
                     initialValues={
@@ -31,8 +36,7 @@ export const ReferenceStep = (): JSX.Element => {
                     }
                     onSubmit={async (values, { setSubmitting }) => {
                         setSubmitting(true);
-                        localStorage.setItem('isLastOnboardingStep', `true`);
-
+                        setShowEmailVerification(true);
                         await updateUser({ ...formData, ...values });
                         setSubmitting(false);
                     }}
@@ -59,7 +63,7 @@ export const ReferenceStep = (): JSX.Element => {
                         isValid: isFormValid
                     }) => (
                         <form onSubmit={handleSubmit}>
-                            <div className="flex flex-col gap-4">
+                            <div className="flex flex-col gap-10">
                                 <Radio
                                     onChange={handleChange}
                                     onBlur={handleBlur}
@@ -89,7 +93,7 @@ export const ReferenceStep = (): JSX.Element => {
                                     required={true}
                                 />
                             </div>
-                            <div className="fixed left-0 md:left-auto bottom-[52px] px-[16px] md:px-0 w-full md:w-[400px]">
+                            <div>
                                 <Button
                                     disabled={
                                         !values.register_reference_id ||
@@ -99,7 +103,7 @@ export const ReferenceStep = (): JSX.Element => {
                                         isSubmitting
                                     }
                                     variant="custom"
-                                    className="w-full mt-4 text-white bg-accent-purple"
+                                    className="w-full mt-10 text-white bg-accent-purple"
                                     type="submit">
                                     {isSubmitting ? 'Menyimpan...' : 'Simpan'}
                                 </Button>

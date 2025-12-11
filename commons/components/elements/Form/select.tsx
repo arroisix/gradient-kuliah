@@ -67,7 +67,7 @@ const Select: React.FC<SelectProps> = ({
 
     return (
         <div className="flex flex-col w-full gap-1 font-body">
-            {label && <span className="text-[#999999] text-sm">{label}</span>}
+            {label && <span className="text-white text-sm">{label}</span>}
             <SelectComponent
                 isClearable
                 options={option}
@@ -80,25 +80,26 @@ const Select: React.FC<SelectProps> = ({
                     control: (base) => ({
                         ...base,
                         minHeight: '48px',
-                        background: '#121212',
+                        background: '#20222E',
                         borderRadius: '0.5rem',
                         borderWidth: '1px',
-                        borderColor: error ? '#ef4444' : '#242424',
+                        borderColor: error ? '#ef4444' : 'transparent',
                         boxShadow: 'none',
+                        padding: '0px 7px',
                         '&:hover': {
-                            borderColor: error ? '#ef4444' : '#242424'
+                            borderColor: error ? '#ef4444' : 'transparent'
                         }
                     }),
                     menu: (base) => ({
                         ...base,
-                        background: '#121212',
-                        borderRadius: '0.5rem',
-                        marginTop: 0,
+                        background: '#333540',
+                        borderRadius: '0.4rem',
+                        marginTop: '0.5rem',
                         zIndex: 100
                     }),
                     option: (base, { isFocused }) => ({
                         ...base,
-                        background: isFocused ? '#242424' : undefined,
+                        background: isFocused ? '#4a4c5c' : '#333540',
                         color: 'white'
                     }),
                     singleValue: (base) => ({
@@ -115,7 +116,10 @@ const Select: React.FC<SelectProps> = ({
                     }),
                     input: (base) => ({
                         ...base,
-                        color: 'white'
+                        color: 'white',
+                        'input:focus': {
+                            boxShadow: 'none'
+                        }
                     })
                 }}
                 components={{ IndicatorSeparator: () => null }}
