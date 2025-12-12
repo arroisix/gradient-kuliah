@@ -13,7 +13,7 @@ import UniversityIcon from 'commons/components/elements/Icons/University';
 import { FaRegCalendar } from 'react-icons/fa6';
 import { IoMdMegaphone } from 'react-icons/io';
 import { GoClock } from 'react-icons/go';
-import { FaLock } from 'react-icons/fa';
+import { FaLock, FaRegClock } from 'react-icons/fa';
 
 interface LatihanCardProps {
     exercise: ExerciseItem;
@@ -369,10 +369,10 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
     const renderWorkingDateHasEnded = (): JSX.Element | null => {
         return (
             <div className="flex flex-col h-full justify-end">
-                <div className="flex flex-row items-center gap-2 bg-[#2A225F] py-2 px-4 rounded-lg w-fit">
-                    <FaLock size={12} color="#B6A6F3" />
-                    <span className="text-[#B6A6F3] text-xs font-regular">
-                        Waktu Pengerjaan Telah Berakhir
+                <div className="flex flex-row items-center gap-2 bg-[#FF3B3026] py-2 px-4 rounded-lg w-fit">
+                    <FaRegClock size={12} color="#E56052" />
+                    <span className="text-[#E56052] text-xs font-regular">
+                        Waktu Habis
                     </span>
                 </div>
             </div>
