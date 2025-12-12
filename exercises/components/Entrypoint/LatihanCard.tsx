@@ -10,6 +10,10 @@ import { Clock } from 'lucide-react';
 import Pencil from 'commons/components/elements/Icons/Pencil';
 import List from 'commons/components/elements/Icons/List';
 import UniversityIcon from 'commons/components/elements/Icons/University';
+import { FaRegCalendar } from 'react-icons/fa6';
+import { IoMdMegaphone } from 'react-icons/io';
+import { GoClock } from 'react-icons/go';
+import { FaLock } from 'react-icons/fa';
 
 interface LatihanCardProps {
     exercise: ExerciseItem;
@@ -19,6 +23,56 @@ interface LatihanCardProps {
 }
 
 type ExerciseState = 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED';
+
+// Helper function to format date range
+const formatDateRange = (dateString: string): string => {
+    try {
+        const [openDate, closeDate] = dateString
+            .split(' ~ ')
+            .map((date) => date.trim());
+
+        const formatDate = (dateStr: string): string => {
+            const date = new Date(dateStr);
+            const options: Intl.DateTimeFormatOptions = {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+            };
+            return date.toLocaleDateString('id-ID', options);
+        };
+
+        const formattedOpen = formatDate(openDate);
+        const formattedClose = formatDate(closeDate);
+
+        return `${formattedOpen} ~ ${formattedClose}`;
+    } catch (error) {
+        return dateString; // Return original string if parsing fails
+    }
+};
+
+// Helper function to format date and time
+const formatDateTime = (dateString: string): string => {
+    try {
+        const date = new Date(dateString);
+        const dateOptions: Intl.DateTimeFormatOptions = {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+        };
+        const timeOptions: Intl.DateTimeFormatOptions = {
+            hour: '2-digit',
+            minute: '2-digit',
+            timeZone: 'Asia/Jakarta'
+        };
+
+        const formattedDate = date.toLocaleDateString('id-ID', dateOptions);
+        const formattedTime = date.toLocaleTimeString('id-ID', timeOptions);
+
+        return `${formattedDate}, ${formattedTime} WIB`;
+    } catch (error) {
+        return dateString; // Return original string if parsing fails
+    }
+};
 
 const STATE_COLORS = {
     NOT_STARTED: {
@@ -46,6 +100,7 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
     className,
     onClick
 }) => {
+    const [isHovered, setIsHovered] = React.useState(false);
     const isAuthenticated = useSelector(getIsAuthenticated);
     const tracker = useTracker();
 
@@ -57,6 +112,15 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
     };
 
     const decideURLLink = (): string => {
+        if (
+            exercise.tryout_type === 'UTBK' &&
+            exercise.status !== 'COMPLETED' &&
+            (new Date() < new Date(exercise.opens_at as string) ||
+                new Date() > new Date(exercise.closes_at as string))
+        ) {
+            return '';
+        }
+
         return `/latihan/${exercise.slug}`;
     };
 
@@ -89,28 +153,60 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
     const renderBadges = (): JSX.Element | null => {
         return (
             <div className="h-full">
-                {exercise.university_name && (
-                    <div className="flex items-center gap-1 flex-wrap">
-                        <UniversityIcon
-                            color={exercise.university_color}
-                            size={14}
-                        />
-                        <span
-                            className={cn('text-xs font-medium')}
-                            style={
-                                exercise.university_color
-                                    ? {
-                                          color: exercise.university_color
-                                      }
-                                    : undefined
-                            }>
-                            {exercise.university_name}
-                        </span>
-                    </div>
-                )}
+                {exercise.university_name &&
+                    exercise.tryout_type !== 'UTBK' && (
+                        <div className="flex items-center gap-1 flex-wrap">
+                            <UniversityIcon
+                                color={exercise.university_color}
+                                size={14}
+                            />
+                            <span
+                                className={cn('text-xs font-medium')}
+                                style={
+                                    exercise.university_color
+                                        ? {
+                                              color: exercise.university_color
+                                          }
+                                        : undefined
+                                }>
+                                {exercise.university_name}
+                            </span>
+                        </div>
+                    )}
                 <h3 className="text-lg font-semibold text-white line-clamp-2">
                     {exercise.title}
                 </h3>
+            </div>
+        );
+    };
+
+    const renderWorkingDate = (): JSX.Element | null => {
+        if (exercise.tryout_type !== 'UTBK') return null;
+
+        return (
+            <div className="flex flex-row gap-1 items-center">
+                {isHovered ? (
+                    <>
+                        <IoMdMegaphone size={14} color="#B6A6F3" />
+                        <span className="text-xs text-[#B6A6F3]">
+                            Hasil diumumkan :{' '}
+                            <span className="font-bold">
+                                {formatDateTime(
+                                    exercise.score_published_at as string
+                                )}
+                            </span>
+                        </span>
+                    </>
+                ) : (
+                    <>
+                        <FaRegCalendar size={14} />
+                        <span className="text-xs">
+                            {formatDateRange(
+                                `${exercise.opens_at} ~ ${exercise.closes_at}`
+                            )}
+                        </span>
+                    </>
+                )}
             </div>
         );
     };
@@ -237,8 +333,77 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
         );
     };
 
+    const renderScoreNotPublished = (): JSX.Element => {
+        const progress = getProgressData();
+
+        return (
+            <div className="items-center mt-4 flex w-full flex-row gap-4">
+                <div className="flex-1">
+                    {renderProgressBar(progress.percentage, 'IN_PROGRESS')}
+                </div>
+                <span
+                    className={cn(
+                        'text-sm font-medium flex flex-row items-center gap-1 whitespace-nowrap text-[#B6A6F3]/50',
+                        'hover:underline cursor-pointer'
+                    )}>
+                    <GoClock size={16} color="#B6A6F380" />
+                    Nilai Dihitung
+                </span>
+            </div>
+        );
+    };
+
+    const renderWorkingDateNotStarted = (): JSX.Element | null => {
+        return (
+            <div className="flex flex-col h-full justify-end">
+                <div className="flex flex-row items-center gap-2 bg-[#2A225F] py-2 px-4 rounded-lg w-fit">
+                    <FaLock size={12} color="#B6A6F3" />
+                    <span className="text-[#B6A6F3] text-xs font-regular">
+                        Belum Dibuka
+                    </span>
+                </div>
+            </div>
+        );
+    };
+
+    const renderWorkingDateHasEnded = (): JSX.Element | null => {
+        return (
+            <div className="flex flex-col h-full justify-end">
+                <div className="flex flex-row items-center gap-2 bg-[#2A225F] py-2 px-4 rounded-lg w-fit">
+                    <FaLock size={12} color="#B6A6F3" />
+                    <span className="text-[#B6A6F3] text-xs font-regular">
+                        Waktu Pengerjaan Telah Berakhir
+                    </span>
+                </div>
+            </div>
+        );
+    };
+
     const renderActionSection = (): JSX.Element | null => {
         const state = exercise.status as ExerciseState;
+
+        if (exercise.tryout_type === 'UTBK') {
+            if (
+                exercise.status === 'COMPLETED' &&
+                new Date() < new Date(exercise.score_published_at as string)
+            ) {
+                return renderScoreNotPublished();
+            }
+
+            if (
+                exercise.status !== 'COMPLETED' &&
+                new Date() < new Date(exercise.opens_at as string)
+            ) {
+                return renderWorkingDateNotStarted();
+            }
+
+            if (
+                exercise.status !== 'COMPLETED' &&
+                new Date() > new Date(exercise.closes_at as string)
+            ) {
+                return renderWorkingDateHasEnded();
+            }
+        }
 
         switch (state) {
             case 'IN_PROGRESS':
@@ -254,11 +419,19 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
         <Link
             href={decideURLLink()}
             onClick={handleClick}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
             className={cn(
                 'flex flex-col gap-1 h-full w-full relative overflow-hidden justify-between',
                 'bg-violet-2 rounded-2xl p-5',
                 'transition-all duration-200 hover:bg-opacity-80',
                 'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500',
+                exercise.tryout_type === 'UTBK' &&
+                    exercise.status !== 'COMPLETED' &&
+                    (new Date() < new Date(exercise.opens_at as string) ||
+                        new Date() > new Date(exercise.closes_at as string))
+                    ? 'cursor-not-allowed'
+                    : 'cursor-pointer',
                 className
             )}>
             {/* Blurry gradient effect at bottom */}
@@ -283,7 +456,10 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
             )}
 
             <div className="flex flex-col h-full relative">
-                {renderBadges()}
+                <div className="flex flex-col gap-1">
+                    {renderBadges()}
+                    {renderWorkingDate()}
+                </div>
                 <div className="mt-3">{renderMetadata()}</div>
                 {renderActionSection()}
             </div>

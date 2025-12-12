@@ -45,7 +45,7 @@ export const LATIHAN_MENU = [
 export const PUBLIC_LATIHAN_MENU = [LATIHAN_MENU[0]];
 
 export enum LatihanTabStyle {
-    active = 'border-accent-purple font-bold px-4 sm:px-6 md:px-8',
+    active = 'border-accent-purple font-bold px-4 sm:px-6 md:px-8 text-white',
     activeNeutral = 'border-[#C4B9FF] font-bold px-4 sm:px-6 md:px-8',
     default = 'border-[#2D2D2D] hover:text-graphite-400 hover:border-graphite-600 font-medium text-neutral-500 px-2 sm:px-4 md:px-6'
 }
