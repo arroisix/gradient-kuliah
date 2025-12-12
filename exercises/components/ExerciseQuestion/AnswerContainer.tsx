@@ -181,10 +181,10 @@ const AnswerContainer = () => {
         <>
             <div
                 className={cn(
-                    'flex flex-col gap-8 w-full lg:bg-violet-1 rounded-2xl relative h-fit lg:h-full lg:overflow-y-auto',
+                    'flex flex-col gap-8 w-full lg:bg-violet-1 rounded-2xl relative h-fit lg:overflow-y-auto',
                     isSolutionPage
                         ? 'lg:pb-4 xl:pb-8 lg:px-12 lg:pt-20'
-                        : 'lg:p-12'
+                        : 'lg:p-12 lg:h-full '
                 )}>
                 {isSolutionPage && (
                     <div

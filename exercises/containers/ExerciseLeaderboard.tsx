@@ -22,8 +22,8 @@ const ExerciseLeaderboard: React.FC = () => {
     return (
         <LatihanLayout>
             {/* Main wrapper: Ensures spacing for the fixed header */}
-            <div className="flex flex-col gap-4 lg:gap-6 overflow-y-auto pb-12 lg:pb-0 pt-16 w-full h-full">
-                <div className="fixed top-0 left-0 w-full z-10 flex items-center justify-center px-4 py-4 bg-black">
+            <div className="flex flex-col gap-4 lg:gap-6 overflow-y-auto pb-12 lg:pb-0 pt-20 w-full h-full">
+                <div className="fixed top-0 left-0 w-full z-10 flex items-center justify-center px-4 pt-6 pb-4 bg-black">
                     <div className="flex flex-col gap-4 lg:gap-6 max-w-screen-xl w-full">
                         <ExerciseCompleteHeader />
                     </div>

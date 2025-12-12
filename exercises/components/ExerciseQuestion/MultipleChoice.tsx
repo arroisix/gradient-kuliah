@@ -1,3 +1,4 @@
+import Skeleton from 'commons/components/elements/Skeleton';
 import { cn } from 'commons/utils';
 import TiptapViewer from 'courses/components/Textbook/TiptapViewer';
 import {
@@ -37,15 +38,16 @@ const MultipleChoiceContainer = ({
         },
         { skip: !slug || (!sectionId && !problemsetId) || !problemId }
     );
-    const { data: solutionData } = useGetProblemSolutionQuery(
-        {
-            slug: slug as string,
-            problem_progress_id: problem?.problem_progress?.id as string
-        },
-        {
-            skip: !slug || !showSolution || !problem?.problem_progress?.id
-        }
-    );
+    const { data: solutionData, isFetching: isFetchingSolution } =
+        useGetProblemSolutionQuery(
+            {
+                slug: slug as string,
+                problem_progress_id: problem?.problem_progress?.id as string
+            },
+            {
+                skip: !slug || !showSolution || !problem?.problem_progress?.id
+            }
+        );
 
     const decideAnswerCorrectOrNot = (optionId: string): 1 | 2 | 3 | 4 => {
         if (
@@ -69,6 +71,8 @@ const MultipleChoiceContainer = ({
         }
         return 4;
     };
+
+    if ((showSolution && isFetchingSolution) || !problem) return <Skeleton />;
 
     return (
         <div className="flex flex-col gap-3">

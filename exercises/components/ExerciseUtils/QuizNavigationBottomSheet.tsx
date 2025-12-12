@@ -9,12 +9,17 @@ interface QuizNavigationBottomSheetProps {
     onProblemSelect: (problemId: string) => void;
     isOpen: boolean;
     onClose: () => void;
+    saveAnswer?: (options: {
+        navigateDirection: 'custom';
+        customProblemId: string;
+    }) => Promise<void>;
 }
 
 const QuizNavigationBottomSheet: React.FC<QuizNavigationBottomSheetProps> = ({
     onProblemSelect,
     isOpen,
-    onClose
+    onClose,
+    saveAnswer
 }) => {
     const router = useRouter();
     const { problemsetId, solution } = router.query;
@@ -25,7 +30,7 @@ const QuizNavigationBottomSheet: React.FC<QuizNavigationBottomSheetProps> = ({
             setOpen={onClose}
             permanent={true}
             variant="dark"
-            className="md:!max-w-[400px] flex flex-col p-6 relative overflow-hidden gap-6">
+            className="md:!max-w-[400px] flex flex-col px-4 py-6 relative overflow-hidden gap-6">
             <div className="flex w-full items-center justify-between">
                 <h2 className="text-white font-semibold">Quiz Navigation</h2>
                 <XIcon
@@ -38,6 +43,7 @@ const QuizNavigationBottomSheet: React.FC<QuizNavigationBottomSheetProps> = ({
                 onProblemSelect={onProblemSelect}
                 onClose={onClose}
                 className="bg-transparent p-0 w-full"
+                saveAnswer={saveAnswer}
             />
             {(problemsetId || solution) && (
                 <AnswerLegend className="mt-4" removeYellowLegend />
