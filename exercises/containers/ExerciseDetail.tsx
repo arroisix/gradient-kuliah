@@ -12,6 +12,7 @@ import ResultSummaryPerProblem from 'exercises/components/ExerciseDetail/ResultS
 import ExercisePaywall from 'exercises/components/ExerciseDetail/ExercisePaywall';
 import ScoreNotPublished from 'exercises/components/ExerciseDetail/ScoreNotPublished';
 import { BiChevronLeft } from 'react-icons/bi';
+import SubtestResultSummary from 'exercises/components/ExerciseDetail/SubtestResultSummary';
 
 const ExerciseDetail = () => {
     const router = useRouter();
@@ -67,6 +68,9 @@ const ExerciseDetail = () => {
                     <div className="flex w-full flex-col lg:flex-row gap-5 lg:gap-0 justify-center flex-shrink-0">
                         <ResultSummary />
                         <ResultSummaryPerProblem />
+                    </div>
+                    <div className="flex w-full justify-center">
+                        <SubtestResultSummary />
                     </div>
                 </div>
             </LatihanLayout>

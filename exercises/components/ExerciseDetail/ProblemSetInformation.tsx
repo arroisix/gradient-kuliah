@@ -84,13 +84,21 @@ const ProblemSetInformation = ({ maxWidth }: ProblemSetInformationProps) => {
 
     const decideCTAText = (): string => {
         if (sectionId) {
+            if (exercise?.tryout_type === 'UTBK') {
+                return 'Mulai Kerjakan';
+            }
             return 'Mulai Latihan';
         }
 
         if (exercise?.latest_exercise_progress?.status === 'IN_PROGRESS') {
             return 'Lanjut Mengerjakan';
         }
-        return 'Mulai Latihan';
+
+        if (exercise?.tryout_type === 'UTBK') {
+            return 'Mulai Kerjakan';
+        } else {
+            return 'Mulai Latihan';
+        }
     };
 
     const decideSectionTitle = (): string => {
@@ -114,7 +122,7 @@ const ProblemSetInformation = ({ maxWidth }: ProblemSetInformationProps) => {
     return (
         <div
             className={cn(
-                'flex flex-col rounded-2xl bg-violet-3 w-full justify-between p-6 lg:p-12 h-auto lg:h-[290px] relative overflow-hidden'
+                'flex flex-col rounded-2xl bg-violet-3 w-full justify-between p-6 lg:p-12 h-auto lg:h-[290px] relative overflow-hidden gap-2 lg:gap-0'
             )}
             style={maxWidth ? { maxWidth } : undefined}>
             <div className="flex flex-col gap-3 items-center justify-center">
@@ -122,8 +130,9 @@ const ProblemSetInformation = ({ maxWidth }: ProblemSetInformationProps) => {
                     {decideSectionTitle()}
                 </h1>
                 <h3 className="text-[#BBBBBB] text-center text-sm lg:text-base">
-                    Dengan menekan &apos;Mulai Latihan&apos; kamu akan langsung
-                    diarahkan ke soal
+                    Dengan menekan &apos;Mulai{' '}
+                    {exercise?.tryout_type === 'UTBK' ? 'Kerjakan' : 'Latihan'}
+                    &apos; kamu akan langsung diarahkan ke soal
                 </h3>
             </div>
             <div className="w-full z-[10] flex flex-col gap-4">

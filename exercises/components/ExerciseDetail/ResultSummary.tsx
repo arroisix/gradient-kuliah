@@ -2,6 +2,7 @@ import { Check, RefreshCcw, X } from 'lucide-react';
 import { useGetExerciseDetailV2Query } from 'exercises/redux/api/exercisesApi';
 import { useRouter } from 'next/router';
 import Button from 'commons/components/elements/Button';
+import { cn } from 'commons/utils';
 
 const ResultSummary = ({ isReportMode }: { isReportMode?: boolean }) => {
     const router = useRouter();
@@ -40,7 +41,11 @@ const ResultSummary = ({ isReportMode }: { isReportMode?: boolean }) => {
     };
 
     return (
-        <div className="w-full lg:max-w-2xl pt-6 lg:p-6 space-y-6 bg-violet-1 rounded-l-xl rounded-r-xl lg:rounded-r-none">
+        <div
+            className={cn(
+                'w-full lg:max-w-2xl pt-6 lg:p-6 space-y-6 bg-violet-1 rounded-l-xl rounded-r-xl',
+                exercise?.tryout_type !== 'UTBK' && 'lg:rounded-r-none'
+            )}>
             {/* Title and History Link */}
             <div className="flex items-center justify-between lg:px-0 px-6">
                 <h1 className="font-bold text-white">Nilai Akhir Kamu</h1>
@@ -63,43 +68,45 @@ const ResultSummary = ({ isReportMode }: { isReportMode?: boolean }) => {
             </div>
 
             {/* Progress Bar */}
-            <div className="space-y-3 lg:px-0 px-6">
-                <div className="w-full h-2 bg-transparent rounded-full overflow-hidden flex gap-1">
-                    {/* Correct answers - Green */}
-                    <div
-                        className="h-full bg-state-success transition-all duration-500 rounded-full"
-                        style={{ width: `${correctPercentage}%` }}
-                    />
-                    {/* Incorrect answers - Red */}
-                    <div
-                        className="h-full bg-state-error transition-all duration-500 rounded-full"
-                        style={{ width: `${incorrectPercentage}%` }}
-                    />
-                </div>
-
-                {/* Stats */}
-                <div className="flex items-center justify-between text-sm">
-                    <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded-full bg-state-success text-white flex items-center justify-center">
-                            <Check size={7} />
-                        </div>
-                        <span className="text-white font-medium text-sm">
-                            {correct_answers} Soal
-                        </span>
+            {exercise?.tryout_type !== 'UTBK' && (
+                <div className="space-y-3 lg:px-0 px-6">
+                    <div className="w-full h-2 bg-transparent rounded-full overflow-hidden flex gap-1">
+                        {/* Correct answers - Green */}
+                        <div
+                            className="h-full bg-state-success transition-all duration-500 rounded-full"
+                            style={{ width: `${correctPercentage}%` }}
+                        />
+                        {/* Incorrect answers - Red */}
+                        <div
+                            className="h-full bg-state-error transition-all duration-500 rounded-full"
+                            style={{ width: `${incorrectPercentage}%` }}
+                        />
                     </div>
 
-                    <div className="flex items-center gap-2">
-                        <span className="text-white font-medium text-sm">
-                            {incorrect_answers} Soal
-                        </span>
-                        <div className="w-3 h-3 rounded-full bg-state-error text-white flex items-center justify-center">
-                            <X size={7} />
+                    {/* Stats */}
+                    <div className="flex items-center justify-between text-sm">
+                        <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 rounded-full bg-state-success text-white flex items-center justify-center">
+                                <Check size={7} />
+                            </div>
+                            <span className="text-white font-medium text-sm">
+                                {correct_answers} Soal
+                            </span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                            <span className="text-white font-medium text-sm">
+                                {incorrect_answers} Soal
+                            </span>
+                            <div className="w-3 h-3 rounded-full bg-state-error text-white flex items-center justify-center">
+                                <X size={7} />
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            )}
 
-            {isReportMode ? (
+            {isReportMode || exercise?.tryout_type === 'UTBK' ? (
                 <div className="space-y-3 bg-violet-3 py-4 px-6 rounded-b-lg lg:rounded-lg flex flex-col gap-4 lg:gap-8">
                     <div className="flex flex-col gap-2 text-white">
                         {incorrect_answers > 0 ? (
@@ -127,12 +134,14 @@ const ResultSummary = ({ isReportMode }: { isReportMode?: boolean }) => {
                             </span>
                         )}
                     </div>
-                    <Button
-                        variant="primary"
-                        className="w-full text-center"
-                        href={`/latihan/${exercise?.slug}/report/${exercise?.latest_exercise_progress?.id}/${exercise?.first_problemset?.id}/${exercise?.first_problemset?.first_problem_id}/`}>
-                        Lihat Pembahasan
-                    </Button>
+                    {exercise?.tryout_type !== 'UTBK' && (
+                        <Button
+                            variant="primary"
+                            className="w-full text-center"
+                            href={`/latihan/${exercise?.slug}/report/${exercise?.latest_exercise_progress?.id}/${exercise?.first_problemset?.id}/${exercise?.first_problemset?.first_problem_id}/`}>
+                            Lihat Pembahasan
+                        </Button>
+                    )}
                 </div>
             ) : (
                 <div className="space-y-3 pt-4 flex flex-col gap-1 p-6 lg:p-0">

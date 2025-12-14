@@ -400,6 +400,10 @@ export interface ProblemSetItem {
     title: string;
     order: number;
     is_current: boolean;
+    correct_answers?: number;
+    total_questions?: number;
+    score?: number;
+    total_score?: number;
 }
 
 export interface ProblemSolutionData {

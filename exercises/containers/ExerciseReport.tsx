@@ -7,6 +7,7 @@ import { useGetExerciseDetailV2Query } from 'exercises/redux/api/exercisesApi';
 import { useRouter } from 'next/router';
 import { BiChevronLeft } from 'react-icons/bi';
 import ScoreNotPublished from 'exercises/components/ExerciseDetail/ScoreNotPublished';
+import SubtestResultSummary from 'exercises/components/ExerciseDetail/SubtestResultSummary';
 
 const ExerciseReport = () => {
     const router = useRouter();
@@ -67,6 +68,9 @@ const ExerciseReport = () => {
                 <div className="flex w-full flex-col lg:flex-row gap-5 lg:gap-0 justify-center flex-shrink-0">
                     <ResultSummary isReportMode />
                     <ResultSummaryPerProblem />
+                </div>
+                <div className="flex w-full justify-center">
+                    <SubtestResultSummary />
                 </div>
             </div>
         </LatihanLayout>
