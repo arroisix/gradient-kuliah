@@ -15,6 +15,7 @@ import {
     PaginatedResponse,
     StudentCourseResponse,
     StudentLearningProgressResponse,
+    StudentTargetInstitution,
     UserBooksResponse,
     UserClassesResponse,
     UserFlashcardsResponse,
@@ -278,6 +279,14 @@ export const dashboardApi = baseApi.injectEndpoints({
                 body
             }),
             invalidatesTags: ['ANNOUNCEMENTS']
+        }),
+        getStudentTargetInstitutions: builder.query<
+            StudentTargetInstitution[],
+            void
+        >({
+            query: () => ({
+                url: `${STUDENT_BASE_URL}target-institutions/`
+            })
         })
     })
 });
@@ -307,5 +316,6 @@ export const {
     useGetPublicQuizQuery,
     useGetPublicFlashcardsQuery,
     useGetAnnouncementsQuery,
-    useStoreUserAnnouncementMutation
+    useStoreUserAnnouncementMutation,
+    useGetStudentTargetInstitutionsQuery
 } = dashboardApi;
