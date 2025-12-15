@@ -61,7 +61,7 @@ const ResultSummary = ({ isReportMode }: { isReportMode?: boolean }) => {
             <div className="space-y-2 lg:px-0 px-6">
                 <div className="flex items-baseline gap-2">
                     <span className="text-[32px] font-bold text-white">
-                        {parseFloat(score?.toFixed(4)).toString()}
+                        {parseFloat(score?.toFixed(2)).toString()}
                     </span>
                     <span className="text-white/60">/ 100</span>
                 </div>

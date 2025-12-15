@@ -38,30 +38,44 @@ const formatDateRange = (dateString: string): string => {
     }
 };
 
-const ProblemSetRoadmap = () => {
+const ProblemSetRoadmap = ({
+    isExerciseDetailPage = false
+}: {
+    isExerciseDetailPage?: boolean;
+}) => {
     const router = useRouter();
     const { slug, sectionId, exerciseProgressId } = router.query;
     const { width } = useWindowSize();
 
-    const { data: problemsets, isLoading } =
-        useGetProblemsetDetailInterstitialQuery(
-            { slug: slug as string, problemset_id: sectionId as string },
+    const { data: exercise, isLoading: isLoadingExercise } =
+        useGetExerciseDetailV2Query(
             {
-                skip: !slug || !sectionId
+                exercise_slug: slug as string,
+                exercise_progress_id: exerciseProgressId as string
+            },
+            {
+                skip: !slug
             }
         );
 
-    const { data: exercise } = useGetExerciseDetailV2Query(
-        {
-            exercise_slug: slug as string,
-            exercise_progress_id: exerciseProgressId as string
-        },
-        {
-            skip: !slug
-        }
-    );
+    const { data: problemsets, isLoading: isLoadingProblemsets } =
+        useGetProblemsetDetailInterstitialQuery(
+            {
+                slug: slug as string,
+                problemset_id:
+                    exercise?.tryout_type === 'UTBK' && !sectionId
+                        ? (exercise?.first_problemset?.id as string)
+                        : (sectionId as string)
+            },
+            {
+                skip:
+                    !slug ||
+                    !exercise ||
+                    (!sectionId && exercise?.tryout_type !== 'UTBK')
+            }
+        );
 
-    if (isLoading) {
+    if (isLoadingProblemsets || isLoadingExercise) {
         return (
             <div className="w-full lg:w-1/2 bg-neutral-800 rounded-lg p-6">
                 <Skeleton className="h-6 w-32 !mb-4" />
@@ -179,7 +193,9 @@ const ProblemSetRoadmap = () => {
                     {/* Mobile Info Card - only show for current section */}
                     {isCurrent && width < 1024 && (
                         <div className="lg:hidden mt-4 mb-2">
-                            <ProblemSetInformation />
+                            <ProblemSetInformation
+                                isExerciseDetailPage={isExerciseDetailPage}
+                            />
                         </div>
                     )}
                 </div>
@@ -299,7 +315,11 @@ const ProblemSetRoadmap = () => {
                                         <div
                                             className={cn(
                                                 isCurrent
-                                                    ? 'w-0.5 lg:h-[88px] md:h-[250px] h-[280px]'
+                                                    ? isExerciseDetailPage
+                                                        ? width <= 375
+                                                            ? 'w-0.5 h-[420px]'
+                                                            : 'w-0.5 lg:h-[88px] md:h-[328px] h-[384px]'
+                                                        : 'w-0.5 lg:h-[88px] md:h-[250px] h-[280px]'
                                                     : 'w-0.5 h-[88px]',
                                                 isCompleted
                                                     ? 'bg-[#B6A6F3]'

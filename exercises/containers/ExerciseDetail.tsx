@@ -13,6 +13,8 @@ import ExercisePaywall from 'exercises/components/ExerciseDetail/ExercisePaywall
 import ScoreNotPublished from 'exercises/components/ExerciseDetail/ScoreNotPublished';
 import { BiChevronLeft } from 'react-icons/bi';
 import SubtestResultSummary from 'exercises/components/ExerciseDetail/SubtestResultSummary';
+import ProblemSetRoadmap from 'exercises/components/ExerciseDetail/ProblemSetRoadmap';
+import ExerciseProblemSetHeader from 'exercises/components/Header/ExerciseProblemSetHeader';
 
 const ExerciseDetail = () => {
     const router = useRouter();
@@ -71,6 +73,29 @@ const ExerciseDetail = () => {
                     </div>
                     <div className="flex w-full justify-center">
                         <SubtestResultSummary />
+                    </div>
+                </div>
+            </LatihanLayout>
+        );
+    }
+
+    if (exercise?.tryout_type === 'UTBK') {
+        return (
+            <LatihanLayout>
+                {/* Mobile View */}
+                <div className="lg:hidden flex flex-col h-full bg-black">
+                    <ExerciseProblemSetHeader />
+                    <div className="flex-1 overflow-y-auto px-4">
+                        <ProblemSetRoadmap isExerciseDetailPage />
+                    </div>
+                </div>
+
+                {/* Desktop View */}
+                <div className="hidden lg:flex flex-col h-full gap-6 overflow-hidden">
+                    <ExerciseProblemSetHeader isExerciseDetailPage />
+                    <div className="flex w-full gap-10 flex-col lg:flex-row flex-shrink-0 h-full">
+                        <ProblemSetRoadmap />
+                        <ProblemSetInformation isExerciseDetailPage />
                     </div>
                 </div>
             </LatihanLayout>

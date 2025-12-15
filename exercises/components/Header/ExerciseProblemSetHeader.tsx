@@ -5,7 +5,11 @@ import { useState } from 'react';
 import ExerciseCloseModal from '../Modal/ExerciseCloseModal';
 import { useGetExerciseDetailV2Query } from 'exercises/redux/api/exercisesApi';
 
-const ExerciseProblemSetHeader = () => {
+const ExerciseProblemSetHeader = ({
+    isExerciseDetailPage = false
+}: {
+    isExerciseDetailPage?: boolean;
+}) => {
     const router = useRouter();
     const { slug, exerciseProgressId } = router.query;
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,12 +28,17 @@ const ExerciseProblemSetHeader = () => {
         }
     );
 
+    const onClose = () => {
+        if (isExerciseDetailPage) router.push(`/latihan/`);
+        else setIsModalOpen(true);
+    };
+
     return (
         <header className="w-full flex items-center justify-between gap-4 relative px-4 lg:px-0 py-4 lg:py-0">
             <XIcon
                 size={24}
                 className={cn('cursor-pointer text-white')}
-                onClick={() => setIsModalOpen(true)}
+                onClick={onClose}
             />
             <div className="flex flex-col gap-1 items-center">
                 <h1 className="text-xl lg:text-2xl text-white font-bold text-center">
