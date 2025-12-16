@@ -103,6 +103,7 @@ interface ExerciseItem {
     opens_at?: string;
     closes_at?: string;
     score_published_at?: string;
+    is_time_expired?: boolean;
 }
 
 interface CourseFilter {

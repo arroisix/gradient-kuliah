@@ -14,6 +14,7 @@ import { FaRegCalendar } from 'react-icons/fa6';
 import { IoMdMegaphone } from 'react-icons/io';
 import { GoClock } from 'react-icons/go';
 import { FaLock, FaRegClock } from 'react-icons/fa';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 interface LatihanCardProps {
     exercise: ExerciseItem;
@@ -100,6 +101,7 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
     className,
     onClick
 }) => {
+    const { profile } = useAuth();
     const [isHovered, setIsHovered] = React.useState(false);
     const isAuthenticated = useSelector(getIsAuthenticated);
     const tracker = useTracker();
@@ -114,9 +116,11 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
     const decideURLLink = (): string => {
         if (
             exercise.tryout_type === 'UTBK' &&
-            exercise.status !== 'COMPLETED' &&
-            (new Date() < new Date(exercise.opens_at as string) ||
-                new Date() > new Date(exercise.closes_at as string))
+            ((exercise.status !== 'COMPLETED' && (
+                new Date() < new Date(exercise.opens_at as string) ||
+                new Date() > new Date(exercise.closes_at as string) ||
+                exercise.is_time_expired
+            )))
         ) {
             return '';
         }
@@ -397,10 +401,7 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
                 return renderWorkingDateNotStarted();
             }
 
-            if (
-                exercise.status !== 'COMPLETED' &&
-                new Date() > new Date(exercise.closes_at as string)
-            ) {
+            if (exercise.status !== 'COMPLETED' && new Date() > new Date(exercise.closes_at as string) || exercise.is_time_expired) {
                 return renderWorkingDateHasEnded();
             }
         }
@@ -429,7 +430,7 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
                 exercise.tryout_type === 'UTBK' &&
                     exercise.status !== 'COMPLETED' &&
                     (new Date() < new Date(exercise.opens_at as string) ||
-                        new Date() > new Date(exercise.closes_at as string))
+                        new Date() > new Date(exercise.closes_at as string) || exercise.is_time_expired)
                     ? 'cursor-not-allowed'
                     : 'cursor-pointer',
                 className
@@ -455,14 +456,27 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
                 </div>
             )}
 
-            <div className="flex flex-col h-full relative">
-                <div className="flex flex-col gap-1">
-                    {renderBadges()}
-                    {renderWorkingDate()}
+            {exercise.tryout_type === 'UTBK' ? (
+                <div className="flex flex-col h-full relative gap-4">
+                    <div className='flex flex-col'>
+                        <div className="flex flex-col gap-1">
+                            {renderBadges()}
+                            {renderWorkingDate()}
+                        </div>
+                        <div className="mt-3">{renderMetadata()}</div>
+                    </div>
+                    {renderActionSection()}
                 </div>
-                <div className="mt-3">{renderMetadata()}</div>
-                {renderActionSection()}
-            </div>
+            ) : (
+                <div className="flex flex-col h-full relative">
+                    <div className="flex flex-col gap-1">
+                        {renderBadges()}
+                        {renderWorkingDate()}
+                    </div>
+                    <div className="mt-3">{renderMetadata()}</div>
+                    {renderActionSection()}
+                </div>
+            )}
         </Link>
     );
 };

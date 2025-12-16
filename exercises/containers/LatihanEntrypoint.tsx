@@ -10,8 +10,10 @@ import Button from 'commons/components/elements/Button';
 import { IoMdSettings } from 'react-icons/io';
 import { useWindowSize } from 'usehooks-ts';
 import EntrypointTabs from '../components/Entrypoint/EntrypointTabs';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 const LatihanEntrypoint = (): JSX.Element => {
+    const { profile } = useAuth();
     const router = useRouter();
     const {
         status = '',
@@ -67,21 +69,25 @@ const LatihanEntrypoint = (): JSX.Element => {
                         Try Out
                     </h1>
 
-                    <Button
-                        size={width < 768 ? 'extraSmall' : 'small'}
-                        variant="custom"
-                        className="bg-graphite-700 flex flex-row gap-[6px] items-center"
-                        onClick={handleManageTargetOnClick}>
-                        <IoMdSettings />
-                        <span className="size-sm font-semibold">
-                            Atur Target
-                        </span>
-                    </Button>
+                    {profile?.current_role === 'K12' && (
+                        <Button
+                            size={width < 768 ? 'extraSmall' : 'small'}
+                            variant="custom"
+                            className="bg-graphite-700 flex flex-row gap-[6px] items-center"
+                            onClick={handleManageTargetOnClick}>
+                            <IoMdSettings />
+                            <span className="size-sm font-semibold">
+                                Atur Target
+                            </span>
+                        </Button>
+                    )}
                 </div>
-                <EntrypointTabs
-                    activeStatus={status as string}
-                    onStatusChange={onChangeTab}
-                />
+                {profile?.current_role === 'K12' && (
+                    <EntrypointTabs
+                        activeStatus={status as string}
+                        onStatusChange={onChangeTab}
+                    />
+                )}
                 <FilterEntrypoint />
 
                 <LatihanContent
