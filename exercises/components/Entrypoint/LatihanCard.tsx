@@ -13,8 +13,7 @@ import UniversityIcon from 'commons/components/elements/Icons/University';
 import { FaRegCalendar } from 'react-icons/fa6';
 import { IoMdMegaphone } from 'react-icons/io';
 import { GoClock } from 'react-icons/go';
-import { FaLock, FaRegClock } from 'react-icons/fa';
-import { useAuth } from 'authentication/contexts/AuthProvider';
+import { FaLock, FaRegClock, FaStar } from 'react-icons/fa';
 
 interface LatihanCardProps {
     exercise: ExerciseItem;
@@ -101,7 +100,6 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
     className,
     onClick
 }) => {
-    const { profile } = useAuth();
     const [isHovered, setIsHovered] = React.useState(false);
     const isAuthenticated = useSelector(getIsAuthenticated);
     const tracker = useTracker();
@@ -116,11 +114,10 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
     const decideURLLink = (): string => {
         if (
             exercise.tryout_type === 'UTBK' &&
-            ((exercise.status !== 'COMPLETED' && (
-                new Date() < new Date(exercise.opens_at as string) ||
+            exercise.status !== 'COMPLETED' &&
+            (new Date() < new Date(exercise.opens_at as string) ||
                 new Date() > new Date(exercise.closes_at as string) ||
-                exercise.is_time_expired
-            )))
+                exercise.is_time_expired)
         ) {
             return '';
         }
@@ -321,7 +318,9 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
                             className={cn('text-sm font-medium')}
                             style={{ color: getExerciseColorResult() }}>
                             {exercise.score?.toFixed(0) ?? 0}{' '}
-                            <span className="text-graphite-400">/ 100</span>
+                            <span className="text-graphite-400">
+                                / {exercise.tryout_type === 'UTBK' ? 1000 : 100}
+                            </span>
                         </span>
                     </div>
                     <span
@@ -387,10 +386,7 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
         const state = exercise.status as ExerciseState;
 
         if (exercise.tryout_type === 'UTBK') {
-            if (
-                exercise.status === 'COMPLETED' &&
-                new Date() < new Date(exercise.score_published_at as string)
-            ) {
+            if (exercise.status === 'PENDING_SCORING') {
                 return renderScoreNotPublished();
             }
 
@@ -401,7 +397,11 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
                 return renderWorkingDateNotStarted();
             }
 
-            if (exercise.status !== 'COMPLETED' && new Date() > new Date(exercise.closes_at as string) || exercise.is_time_expired) {
+            if (
+                (exercise.status !== 'COMPLETED' &&
+                    new Date() > new Date(exercise.closes_at as string)) ||
+                exercise.is_time_expired
+            ) {
                 return renderWorkingDateHasEnded();
             }
         }
@@ -430,7 +430,8 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
                 exercise.tryout_type === 'UTBK' &&
                     exercise.status !== 'COMPLETED' &&
                     (new Date() < new Date(exercise.opens_at as string) ||
-                        new Date() > new Date(exercise.closes_at as string) || exercise.is_time_expired)
+                        new Date() > new Date(exercise.closes_at as string) ||
+                        exercise.is_time_expired)
                     ? 'cursor-not-allowed'
                     : 'cursor-pointer',
                 className
@@ -448,17 +449,38 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
                 />
             )}
 
-            {exercise.exercise_code && (
-                <div className="absolute top-0 right-0 px-3 py-1 rounded-bl-lg text-xs font-medium border-l border-b border-[#333540]">
-                    <span className="text-sm">
-                        Paket {exercise.exercise_code}
-                    </span>
-                </div>
+            {exercise.tryout_type === 'UTBK' ? (
+                <>
+                    {exercise.is_free ? (
+                        <div className="absolute top-0 right-0 px-3 py-1 rounded-bl-lg border-l border-b border-[#333540]">
+                            <span className="text-sm font-bold text-white">
+                                Gratis
+                            </span>
+                        </div>
+                    ) : (
+                        <div className="absolute top-0 right-0 px-3 py-1 rounded-bl-lg border-l border-b border-[#333540] flex flex-row items-center gap-1 bg-gradient-to-r from-[#F2C04C] via-[#E48E0D] to-[#E4B50D]">
+                            <FaStar size={14} color="#FFFFFF" />
+                            <span className="text-sm font-bold text-white">
+                                Member
+                            </span>
+                        </div>
+                    )}
+                </>
+            ) : (
+                <>
+                    {exercise.exercise_code && (
+                        <div className="absolute top-0 right-0 px-3 py-1 rounded-bl-lg text-xs font-medium border-l border-b border-[#333540]">
+                            <span className="text-sm">
+                                Paket {exercise.exercise_code}
+                            </span>
+                        </div>
+                    )}
+                </>
             )}
 
             {exercise.tryout_type === 'UTBK' ? (
                 <div className="flex flex-col h-full relative gap-4">
-                    <div className='flex flex-col'>
+                    <div className="flex flex-col">
                         <div className="flex flex-col gap-1">
                             {renderBadges()}
                             {renderWorkingDate()}

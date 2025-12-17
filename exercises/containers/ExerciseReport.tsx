@@ -42,11 +42,7 @@ const ExerciseReport = () => {
         return null;
     }
 
-    if (
-        exercise?.latest_exercise_progress?.status === 'COMPLETED' &&
-        exercise.tryout_type === 'UTBK' &&
-        new Date() < new Date(exercise?.score_published_at as string)
-    ) {
+    if (exercise?.latest_exercise_progress?.status === 'PENDING_SCORING') {
         return (
             <LatihanLayout className="h-full">
                 <header className="w-full flex items-center justify-center gap-4 relative">

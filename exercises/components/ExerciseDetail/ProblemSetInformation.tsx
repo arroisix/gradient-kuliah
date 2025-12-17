@@ -124,6 +124,30 @@ const ProblemSetInformation = ({
         }`;
     };
 
+    // Helper function to format date and time
+    const formatDateTime = (dateString: string): string => {
+        try {
+            const date = new Date(dateString);
+            const dateOptions: Intl.DateTimeFormatOptions = {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+            };
+            const timeOptions: Intl.DateTimeFormatOptions = {
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZone: 'Asia/Jakarta'
+            };
+
+            const formattedDate = date.toLocaleDateString('id-ID', dateOptions);
+            const formattedTime = date.toLocaleTimeString('id-ID', timeOptions);
+
+            return `${formattedDate}, ${formattedTime} WIB`;
+        } catch (error) {
+            return dateString; // Return original string if parsing fails
+        }
+    };
+
     return (
         <div className="flex flex-col">
             {isExerciseDetailPage && (
@@ -140,7 +164,9 @@ const ProblemSetInformation = ({
                         <span className="text-xs font-regular text-[#B6A6F3]">
                             Hasil diumumkan serentak:{' '}
                             <span className="text-xs font-bold text-[#B6A6F3]">
-                                21 Desember 2025, 12:00 WIB
+                                {formatDateTime(
+                                    exercise?.score_published_at as string
+                                )}
                             </span>
                         </span>
                     </div>

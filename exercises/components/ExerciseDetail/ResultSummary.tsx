@@ -63,7 +63,9 @@ const ResultSummary = ({ isReportMode }: { isReportMode?: boolean }) => {
                     <span className="text-[32px] font-bold text-white">
                         {parseFloat(score?.toFixed(2)).toString()}
                     </span>
-                    <span className="text-white/60">/ 100</span>
+                    <span className="text-white/60">
+                        / {exercise?.tryout_type === 'UTBK' ? 1000 : 100}
+                    </span>
                 </div>
             </div>
 
