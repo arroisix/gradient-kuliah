@@ -3,6 +3,7 @@ import LatihanEntrypoint from 'exercises/containers/LatihanEntrypoint';
 import { GetStaticProps } from 'next';
 import { useTracker } from '../../tracker/tracker';
 import { useEffect } from 'react';
+import { SetTargetDrawer } from 'exercises/components/Entrypoint/SetTargetDrawer';
 
 const LatihanPage = (): JSX.Element => {
     const tracker = useTracker();
@@ -13,7 +14,9 @@ const LatihanPage = (): JSX.Element => {
 
     return (
         <LearnLayout showSidebar fullHeightSidebar>
-            <LatihanEntrypoint />
+            <SetTargetDrawer>
+                <LatihanEntrypoint />
+            </SetTargetDrawer>
         </LearnLayout>
     );
 };
