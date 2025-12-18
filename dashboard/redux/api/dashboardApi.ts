@@ -13,6 +13,7 @@ import {
     MajorRecommendationResponse,
     NewlyReleasedForYouResponse,
     PaginatedResponse,
+    SetStudentTargetInstitution,
     StudentCourseResponse,
     StudentLearningProgressResponse,
     StudentTargetInstitution,
@@ -287,6 +288,16 @@ export const dashboardApi = baseApi.injectEndpoints({
             query: () => ({
                 url: `${STUDENT_BASE_URL}target-institutions/`
             })
+        }),
+        setStudentTargetInstitutions: builder.mutation<
+            void,
+            SetStudentTargetInstitution[]
+        >({
+            query: (body) => ({
+                url: `${STUDENT_BASE_URL}target-institutions/`,
+                method: 'POST',
+                body
+            })
         })
     })
 });
@@ -317,5 +328,6 @@ export const {
     useGetPublicFlashcardsQuery,
     useGetAnnouncementsQuery,
     useStoreUserAnnouncementMutation,
-    useGetStudentTargetInstitutionsQuery
+    useGetStudentTargetInstitutionsQuery,
+    useSetStudentTargetInstitutionsMutation
 } = dashboardApi;

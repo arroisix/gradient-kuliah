@@ -233,6 +233,11 @@ interface StudentTargetInstitution {
     };
 }
 
+interface SetStudentTargetInstitution {
+    institution_id: string;
+    major_id: string;
+}
+
 export interface NewlyReleasedForYouItem {
     id: string;
     slug: string | null;
@@ -428,5 +433,6 @@ export type {
     MajorQuizResponse,
     FreeForYouItem,
     FreeForYouResponse,
-    StudentTargetInstitution
+    StudentTargetInstitution,
+    SetStudentTargetInstitution
 };
