@@ -3,20 +3,44 @@ import LatihanEntrypoint from 'exercises/containers/LatihanEntrypoint';
 import { GetStaticProps } from 'next';
 import { useTracker } from '../../tracker/tracker';
 import { useEffect } from 'react';
-import { SetTargetDrawer } from 'exercises/components/Entrypoint/SetTargetDrawer';
+import { useAuth } from 'authentication/contexts/AuthProvider';
+import dynamic from 'next/dynamic';
+
+const SetTargetDrawer = dynamic(
+    () => import('exercises/components/Entrypoint/SetTargetDrawer')
+);
 
 const LatihanPage = (): JSX.Element => {
     const tracker = useTracker();
+    const { profile } = useAuth();
 
     useEffect(() => {
         tracker?.genericTrack('Visit Latihan Landing Page');
     }, [tracker]);
 
+    // "profile" might be "undefined" during auth checking
+    // this check is necessary to prevent glitch
+    if (!profile) {
+        return (
+            <LearnLayout showSidebar fullHeightSidebar>
+                <></>
+            </LearnLayout>
+        );
+    }
+
+    if (profile.current_role === 'K12') {
+        return (
+            <LearnLayout showSidebar fullHeightSidebar>
+                <SetTargetDrawer>
+                    <LatihanEntrypoint />
+                </SetTargetDrawer>
+            </LearnLayout>
+        );
+    }
+
     return (
         <LearnLayout showSidebar fullHeightSidebar>
-            <SetTargetDrawer>
-                <LatihanEntrypoint />
-            </SetTargetDrawer>
+            <LatihanEntrypoint />
         </LearnLayout>
     );
 };
