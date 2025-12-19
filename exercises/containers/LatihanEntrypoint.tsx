@@ -9,7 +9,6 @@ import FilterEntrypoint from 'exercises/components/Entrypoint/FilterEntrypoint';
 import Button from 'commons/components/elements/Button';
 import { IoMdSettings } from 'react-icons/io';
 import { useWindowSize } from 'usehooks-ts';
-import EntrypointTabs from '../components/Entrypoint/EntrypointTabs';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 
 const LatihanEntrypoint = (): JSX.Element => {
@@ -41,21 +40,6 @@ const LatihanEntrypoint = (): JSX.Element => {
         sort: sort as string
     });
 
-    const onChangeTab = (tab: string): void => {
-        router.push(
-            {
-                pathname: router.pathname,
-                query: {
-                    ...router.query,
-                    status: tab,
-                    page: 1
-                }
-            },
-            undefined,
-            { shallow: true }
-        );
-    };
-
     const handleManageTargetOnClick = (): void => {
         console.log('Manage Target clicked');
     };
@@ -82,12 +66,6 @@ const LatihanEntrypoint = (): JSX.Element => {
                         </Button>
                     )}
                 </div>
-                {profile?.current_role === 'K12' && (
-                    <EntrypointTabs
-                        activeStatus={status as string}
-                        onStatusChange={onChangeTab}
-                    />
-                )}
                 <FilterEntrypoint />
 
                 <LatihanContent
