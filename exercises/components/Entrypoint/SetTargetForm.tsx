@@ -3,13 +3,16 @@ import { FaStar } from 'react-icons/fa';
 import { BsTrash3Fill } from 'react-icons/bs';
 import Select from 'commons/components/elements/Form/select';
 import { Formik, FormikHelpers } from 'formik';
-import { SetStateAction, useMemo } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo } from 'react';
 import { useOptionLoader } from 'authentication/hooks/useOptionLoader';
 import Button from 'commons/components/elements/Button';
 import Spinner from 'commons/components/elements/Spinner';
 import { v4 as uuidv4 } from 'uuid';
 import { useSetStudentTargetInstitutionsMutation } from 'dashboard/redux/api/dashboardApi';
-import { SetStudentTargetInstitution } from 'dashboard/types/dashboard';
+import {
+    SetStudentTargetInstitution,
+    StudentTargetInstitution
+} from 'dashboard/types/dashboard';
 import { toast } from 'react-toastify';
 
 interface Target {
@@ -20,11 +23,29 @@ interface Target {
     major: string;
 }
 
-function SetTargetForm(): JSX.Element {
+interface SetTargetFormProps {
+    targets: StudentTargetInstitution[];
+    setTargets: Dispatch<SetStateAction<StudentTargetInstitution[]>>;
+    setIsDrawerOpened: Dispatch<SetStateAction<boolean>>;
+}
+
+function SetTargetForm({
+    targets,
+    setTargets,
+    setIsDrawerOpened
+}: SetTargetFormProps): JSX.Element {
     const [submitTargetInstitutions, { isLoading }] =
         useSetStudentTargetInstitutionsMutation();
 
     const formikInitialValue = useMemo((): Target[] => {
+        if (targets.length > 0) {
+            return targets.map((target) => ({
+                id: uuidv4(),
+                institution: `${target.id}:${target.name}`,
+                major: `${target.major.id}:${target.major.name}`
+            }));
+        }
+
         return [
             {
                 id: uuidv4(),
@@ -32,15 +53,19 @@ function SetTargetForm(): JSX.Element {
                 major: ''
             }
         ];
-    }, []);
+    }, [targets]);
 
     const {
-        options: institutionOption,
+        options: institutionOptions,
+        setOptions: setInstitutionOptions,
         loadTargetOptions: loadInstitutionOption
     } = useOptionLoader('institute');
 
-    const { options: majorOption, loadTargetOptions: loadMajorOption } =
-        useOptionLoader('major');
+    const {
+        options: majorOptions,
+        setOptions: setMajorOptions,
+        loadTargetOptions: loadMajorOption
+    } = useOptionLoader('major');
 
     const selectOnChange = (
         target_id: string,
@@ -85,6 +110,27 @@ function SetTargetForm(): JSX.Element {
 
         try {
             await submitTargetInstitutions(setStudentTargetInstitutions);
+            toast.success(
+                'Target kamu sudah kami simpan! Yuk mulai persiapan UTBK',
+                {
+                    position: 'top-center',
+                    theme: 'colored',
+                    hideProgressBar: true
+                }
+            );
+            setTargets(
+                values.map((value) => {
+                    const [institution_id, institution_name] =
+                        value.institution.split(':');
+                    const [major_id, major_name] = value.major.split(':');
+                    return {
+                        id: institution_id,
+                        name: institution_name,
+                        major: { id: major_id, name: major_name }
+                    };
+                })
+            );
+            setIsDrawerOpened(false);
         } catch (error) {
             console.error(
                 new Error('failed to submit student target institutions', {
@@ -92,12 +138,39 @@ function SetTargetForm(): JSX.Element {
                 })
             );
             toast.error(
-                'Terdapat masalah saat menyimpan target kampus, mohon coba lagi'
+                'Terdapat masalah saat menyimpan target kampus, mohon coba lagi',
+                {
+                    position: 'top-center',
+                    theme: 'colored',
+                    hideProgressBar: true
+                }
             );
         } finally {
             setSubmitting(false);
         }
     };
+
+    useEffect(() => {
+        if (targets.length > 0) {
+            const institutionOptions: Option[] = [];
+            const majorOptions: Option[] = [];
+
+            for (const target of targets) {
+                institutionOptions.push({
+                    value: `${target.id}:${target.name}`,
+                    label: target.name
+                });
+
+                majorOptions.push({
+                    value: `${target.major.id}:${target.major.name}`,
+                    label: target.major.name
+                });
+            }
+
+            setInstitutionOptions(institutionOptions);
+            setMajorOptions(majorOptions);
+        }
+    }, [setInstitutionOptions, setMajorOptions, targets]);
 
     return (
         <Formik
@@ -158,7 +231,8 @@ function SetTargetForm(): JSX.Element {
                                             'institution',
                                             setValues
                                         )}
-                                        option={institutionOption}
+                                        initialValue={institution}
+                                        option={institutionOptions}
                                         loadOption={loadInstitutionOption(
                                             institution.split(':')[0],
                                             major.split(':')[0]
@@ -174,7 +248,8 @@ function SetTargetForm(): JSX.Element {
                                             'major',
                                             setValues
                                         )}
-                                        option={majorOption}
+                                        initialValue={major}
+                                        option={majorOptions}
                                         loadOption={loadMajorOption(
                                             institution.split(':')[0],
                                             major.split(':')[0]

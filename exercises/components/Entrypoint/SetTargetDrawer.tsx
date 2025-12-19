@@ -4,6 +4,7 @@ import {
     PropsWithChildren,
     SetStateAction,
     useContext,
+    useEffect,
     useMemo,
     useState
 } from 'react';
@@ -11,6 +12,7 @@ import { MdClose } from 'react-icons/md';
 import { SetTargetForm } from './SetTargetForm';
 import { useGetStudentTargetInstitutionsQuery } from 'dashboard/redux/api/dashboardApi';
 import dynamic from 'next/dynamic';
+import { StudentTargetInstitution } from 'dashboard/types/dashboard';
 
 const SetTargetInstitutionWall = dynamic(
     () => import('./SetTargetInstitutionWall')
@@ -25,6 +27,7 @@ const SetTargetDrawerContext = createContext<SetTargetDrawerContextType | null>(
 );
 
 function SetTargetDrawer({ children }: PropsWithChildren) {
+    const [targets, setTargets] = useState<StudentTargetInstitution[]>([]);
     const [isDrawerOpened, setIsDrawerOpened] = useState(false);
     const [isTargetWallHidden, setIsTargetWallHidden] = useState(false);
 
@@ -34,6 +37,12 @@ function SetTargetDrawer({ children }: PropsWithChildren) {
     const value = useMemo((): SetTargetDrawerContextType => {
         return { setIsDrawerOpened };
     }, []);
+
+    useEffect(() => {
+        if (data && data.length > 0) {
+            setTargets(data);
+        }
+    }, [data]);
 
     if (isLoading || isFetching) {
         return <></>;
@@ -82,7 +91,16 @@ function SetTargetDrawer({ children }: PropsWithChildren) {
                             </p>
                         </div>
 
-                        <SetTargetForm />
+                        {/* re-mount as "isDrawerOpened" state changed */}
+                        {isDrawerOpened ? (
+                            <SetTargetForm
+                                targets={targets}
+                                setIsDrawerOpened={setIsDrawerOpened}
+                                setTargets={setTargets}
+                            />
+                        ) : (
+                            <></>
+                        )}
                     </div>
                 </div>
             </div>
