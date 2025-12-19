@@ -109,28 +109,33 @@ function SetTargetForm({
         );
 
         try {
-            await submitTargetInstitutions(setStudentTargetInstitutions);
-            toast.success(
-                'Target kamu sudah kami simpan! Yuk mulai persiapan UTBK',
-                {
-                    position: 'top-center',
-                    theme: 'colored',
-                    hideProgressBar: true
-                }
+            const res = await submitTargetInstitutions(
+                setStudentTargetInstitutions
             );
-            setTargets(
-                values.map((value) => {
-                    const [institution_id, institution_name] =
-                        value.institution.split(':');
-                    const [major_id, major_name] = value.major.split(':');
-                    return {
-                        id: institution_id,
-                        name: institution_name,
-                        major: { id: major_id, name: major_name }
-                    };
-                })
-            );
-            setIsDrawerOpened(false);
+
+            if (!Object.hasOwn(res, 'error')) {
+                toast.success(
+                    'Target kamu sudah kami simpan! Yuk mulai persiapan UTBK',
+                    {
+                        position: 'top-center',
+                        theme: 'colored',
+                        hideProgressBar: true
+                    }
+                );
+                setTargets(
+                    values.map((value) => {
+                        const [institution_id, institution_name] =
+                            value.institution.split(':');
+                        const [major_id, major_name] = value.major.split(':');
+                        return {
+                            id: institution_id,
+                            name: institution_name,
+                            major: { id: major_id, name: major_name }
+                        };
+                    })
+                );
+                setIsDrawerOpened(false);
+            }
         } catch (error) {
             console.error(
                 new Error('failed to submit student target institutions', {
