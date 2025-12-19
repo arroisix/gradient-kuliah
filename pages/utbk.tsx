@@ -50,7 +50,7 @@ function Hero(): JSX.Element {
                     adaptif, analisis AI, dan tryout berbasis IRT dalam satu
                     ekosistem belajar.
                 </p>
-                <div className="flex flex-col gap-4 self-stretch">
+                <div className="flex flex-col gap-4 self-stretch mb-16">
                     <Button variant="primary" className="h-[52px]">
                         Coba Gratis
                     </Button>
@@ -58,6 +58,21 @@ function Hero(): JSX.Element {
                         Apa itu UTBK?
                     </Button>
                 </div>
+
+                <ul className='flex [&>li:not(:first-child)]:-ml-3 *:rounded-full *:h-[50px] *:w-[50px] *:flex list-none p-0'>
+                    <li>
+                        <img src={`${CDN_URL}/assets/testimonials/achmad-adil.jpg`} alt="" data-avatar className='w-full object-cover rounded-full border-solid border-2 border-black' />
+                    </li>
+                    <li>
+                        <img src={`${CDN_URL}/assets/testimonials/achmad-eugene-its.jpg`} alt="" data-avatar className='w-full object-cover rounded-full border-solid border-2 border-black' />
+                    </li>
+                    <li>
+                        <img src={`${CDN_URL}/assets/testimonials/novia-unbraw.jpg`} alt="" data-avatar className='w-full object-cover rounded-full border-solid border-2 border-black' />
+                    </li>
+                    <li className='bg-[#1F2937] flex items-center justify-center border-solid border-2 border-black'>
+                        <p className='text-[#9CA3AF] font-bold'>+2k</p>
+                    </li>
+                </ul>
             </div>
         </section>
     );
