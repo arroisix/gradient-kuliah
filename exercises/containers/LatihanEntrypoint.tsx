@@ -11,6 +11,7 @@ import { IoMdSettings } from 'react-icons/io';
 import { useWindowSize } from 'usehooks-ts';
 import EntrypointTabs from '../components/Entrypoint/EntrypointTabs';
 import { useAuth } from 'authentication/contexts/AuthProvider';
+import { useSetTargetDrawerContext } from 'exercises/components/Entrypoint/SetTargetDrawer';
 
 const LatihanEntrypoint = (): JSX.Element => {
     const { profile } = useAuth();
@@ -26,6 +27,7 @@ const LatihanEntrypoint = (): JSX.Element => {
     const [page, setPage] = useState(Number(pageQuery));
     const { is_subscribed } = useCourseSubscription();
     const { width } = useWindowSize();
+    const { setIsDrawerOpened } = useSetTargetDrawerContext();
 
     useEffect(() => {
         setPage(Number(pageQuery));
@@ -57,7 +59,7 @@ const LatihanEntrypoint = (): JSX.Element => {
     };
 
     const handleManageTargetOnClick = (): void => {
-        console.log('Manage Target clicked');
+        setIsDrawerOpened(true);
     };
 
     return (
