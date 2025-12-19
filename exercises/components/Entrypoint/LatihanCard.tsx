@@ -10,6 +10,10 @@ import { Clock } from 'lucide-react';
 import Pencil from 'commons/components/elements/Icons/Pencil';
 import List from 'commons/components/elements/Icons/List';
 import UniversityIcon from 'commons/components/elements/Icons/University';
+import { FaRegCalendar } from 'react-icons/fa6';
+import { IoMdMegaphone } from 'react-icons/io';
+import { GoClock } from 'react-icons/go';
+import { FaLock, FaRegClock, FaStar } from 'react-icons/fa';
 
 interface LatihanCardProps {
     exercise: ExerciseItem;
@@ -19,6 +23,56 @@ interface LatihanCardProps {
 }
 
 type ExerciseState = 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED';
+
+// Helper function to format date range
+const formatDateRange = (dateString: string): string => {
+    try {
+        const [openDate, closeDate] = dateString
+            .split(' ~ ')
+            .map((date) => date.trim());
+
+        const formatDate = (dateStr: string): string => {
+            const date = new Date(dateStr);
+            const options: Intl.DateTimeFormatOptions = {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+            };
+            return date.toLocaleDateString('id-ID', options);
+        };
+
+        const formattedOpen = formatDate(openDate);
+        const formattedClose = formatDate(closeDate);
+
+        return `${formattedOpen} ~ ${formattedClose}`;
+    } catch (error) {
+        return dateString; // Return original string if parsing fails
+    }
+};
+
+// Helper function to format date and time
+const formatDateTime = (dateString: string): string => {
+    try {
+        const date = new Date(dateString);
+        const dateOptions: Intl.DateTimeFormatOptions = {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+        };
+        const timeOptions: Intl.DateTimeFormatOptions = {
+            hour: '2-digit',
+            minute: '2-digit',
+            timeZone: 'Asia/Jakarta'
+        };
+
+        const formattedDate = date.toLocaleDateString('id-ID', dateOptions);
+        const formattedTime = date.toLocaleTimeString('id-ID', timeOptions);
+
+        return `${formattedDate}, ${formattedTime} WIB`;
+    } catch (error) {
+        return dateString; // Return original string if parsing fails
+    }
+};
 
 const STATE_COLORS = {
     NOT_STARTED: {
@@ -46,6 +100,7 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
     className,
     onClick
 }) => {
+    const [isHovered, setIsHovered] = React.useState(false);
     const isAuthenticated = useSelector(getIsAuthenticated);
     const tracker = useTracker();
 
@@ -57,6 +112,16 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
     };
 
     const decideURLLink = (): string => {
+        if (
+            exercise.tryout_type === 'UTBK' &&
+            exercise.status !== 'COMPLETED' &&
+            (new Date() < new Date(exercise.opens_at as string) ||
+                new Date() > new Date(exercise.closes_at as string) ||
+                exercise.is_time_expired)
+        ) {
+            return '';
+        }
+
         return `/latihan/${exercise.slug}`;
     };
 
@@ -89,28 +154,60 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
     const renderBadges = (): JSX.Element | null => {
         return (
             <div className="h-full">
-                {exercise.university_name && (
-                    <div className="flex items-center gap-1 flex-wrap">
-                        <UniversityIcon
-                            color={exercise.university_color}
-                            size={14}
-                        />
-                        <span
-                            className={cn('text-xs font-medium')}
-                            style={
-                                exercise.university_color
-                                    ? {
-                                          color: exercise.university_color
-                                      }
-                                    : undefined
-                            }>
-                            {exercise.university_name}
-                        </span>
-                    </div>
-                )}
+                {exercise.university_name &&
+                    exercise.tryout_type !== 'UTBK' && (
+                        <div className="flex items-center gap-1 flex-wrap">
+                            <UniversityIcon
+                                color={exercise.university_color}
+                                size={14}
+                            />
+                            <span
+                                className={cn('text-xs font-medium')}
+                                style={
+                                    exercise.university_color
+                                        ? {
+                                              color: exercise.university_color
+                                          }
+                                        : undefined
+                                }>
+                                {exercise.university_name}
+                            </span>
+                        </div>
+                    )}
                 <h3 className="text-lg font-semibold text-white line-clamp-2">
                     {exercise.title}
                 </h3>
+            </div>
+        );
+    };
+
+    const renderWorkingDate = (): JSX.Element | null => {
+        if (exercise.tryout_type !== 'UTBK') return null;
+
+        return (
+            <div className="flex flex-row gap-1 items-center">
+                {isHovered ? (
+                    <>
+                        <IoMdMegaphone size={14} color="#B6A6F3" />
+                        <span className="text-xs text-[#B6A6F3]">
+                            Hasil diumumkan :{' '}
+                            <span className="font-bold">
+                                {formatDateTime(
+                                    exercise.score_published_at as string
+                                )}
+                            </span>
+                        </span>
+                    </>
+                ) : (
+                    <>
+                        <FaRegCalendar size={14} />
+                        <span className="text-xs">
+                            {formatDateRange(
+                                `${exercise.opens_at} ~ ${exercise.closes_at}`
+                            )}
+                        </span>
+                    </>
+                )}
             </div>
         );
     };
@@ -221,7 +318,9 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
                             className={cn('text-sm font-medium')}
                             style={{ color: getExerciseColorResult() }}>
                             {exercise.score?.toFixed(0) ?? 0}{' '}
-                            <span className="text-graphite-400">/ 100</span>
+                            <span className="text-graphite-400">
+                                / {exercise.tryout_type === 'UTBK' ? 1000 : 100}
+                            </span>
                         </span>
                     </div>
                     <span
@@ -237,8 +336,75 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
         );
     };
 
+    const renderScoreNotPublished = (): JSX.Element => {
+        const progress = getProgressData();
+
+        return (
+            <div className="items-center mt-4 flex w-full flex-row gap-4">
+                <div className="flex-1">
+                    {renderProgressBar(progress.percentage, 'IN_PROGRESS')}
+                </div>
+                <span
+                    className={cn(
+                        'text-sm font-medium flex flex-row items-center gap-1 whitespace-nowrap text-[#B6A6F3]/50',
+                        'hover:underline cursor-pointer'
+                    )}>
+                    <GoClock size={16} color="#B6A6F380" />
+                    Nilai Dihitung
+                </span>
+            </div>
+        );
+    };
+
+    const renderWorkingDateNotStarted = (): JSX.Element | null => {
+        return (
+            <div className="flex flex-col h-full justify-end">
+                <div className="flex flex-row items-center gap-2 bg-[#2A225F] py-2 px-4 rounded-lg w-fit">
+                    <FaLock size={12} color="#B6A6F3" />
+                    <span className="text-[#B6A6F3] text-xs font-regular">
+                        Belum Dibuka
+                    </span>
+                </div>
+            </div>
+        );
+    };
+
+    const renderWorkingDateHasEnded = (): JSX.Element | null => {
+        return (
+            <div className="flex flex-col h-full justify-end">
+                <div className="flex flex-row items-center gap-2 bg-[#FF3B3026] py-2 px-4 rounded-lg w-fit">
+                    <FaRegClock size={12} color="#E56052" />
+                    <span className="text-[#E56052] text-xs font-regular">
+                        Waktu Habis
+                    </span>
+                </div>
+            </div>
+        );
+    };
+
     const renderActionSection = (): JSX.Element | null => {
         const state = exercise.status as ExerciseState;
+
+        if (exercise.tryout_type === 'UTBK') {
+            if (exercise.status === 'PENDING_SCORING') {
+                return renderScoreNotPublished();
+            }
+
+            if (
+                exercise.status !== 'COMPLETED' &&
+                new Date() < new Date(exercise.opens_at as string)
+            ) {
+                return renderWorkingDateNotStarted();
+            }
+
+            if (
+                (exercise.status !== 'COMPLETED' &&
+                    new Date() > new Date(exercise.closes_at as string)) ||
+                exercise.is_time_expired
+            ) {
+                return renderWorkingDateHasEnded();
+            }
+        }
 
         switch (state) {
             case 'IN_PROGRESS':
@@ -254,11 +420,20 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
         <Link
             href={decideURLLink()}
             onClick={handleClick}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
             className={cn(
                 'flex flex-col gap-1 h-full w-full relative overflow-hidden justify-between',
                 'bg-violet-2 rounded-2xl p-5',
                 'transition-all duration-200 hover:bg-opacity-80',
                 'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500',
+                exercise.tryout_type === 'UTBK' &&
+                    exercise.status !== 'COMPLETED' &&
+                    (new Date() < new Date(exercise.opens_at as string) ||
+                        new Date() > new Date(exercise.closes_at as string) ||
+                        exercise.is_time_expired)
+                    ? 'cursor-not-allowed'
+                    : 'cursor-pointer',
                 className
             )}>
             {/* Blurry gradient effect at bottom */}
@@ -274,19 +449,56 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
                 />
             )}
 
-            {exercise.exercise_code && (
-                <div className="absolute top-0 right-0 px-3 py-1 rounded-bl-lg text-xs font-medium border-l border-b border-[#333540]">
-                    <span className="text-sm">
-                        Paket {exercise.exercise_code}
-                    </span>
-                </div>
+            {exercise.tryout_type === 'UTBK' ? (
+                <>
+                    {exercise.is_free ? (
+                        <div className="absolute top-0 right-0 px-3 py-1 rounded-bl-lg border-l border-b border-[#333540]">
+                            <span className="text-sm font-bold text-white">
+                                Gratis
+                            </span>
+                        </div>
+                    ) : (
+                        <div className="absolute top-0 right-0 px-3 py-1 rounded-bl-lg border-l border-b border-[#333540] flex flex-row items-center gap-1 bg-gradient-to-r from-[#F2C04C] via-[#E48E0D] to-[#E4B50D]">
+                            <FaStar size={14} color="#FFFFFF" />
+                            <span className="text-sm font-bold text-white">
+                                Member
+                            </span>
+                        </div>
+                    )}
+                </>
+            ) : (
+                <>
+                    {exercise.exercise_code && (
+                        <div className="absolute top-0 right-0 px-3 py-1 rounded-bl-lg text-xs font-medium border-l border-b border-[#333540]">
+                            <span className="text-sm">
+                                Paket {exercise.exercise_code}
+                            </span>
+                        </div>
+                    )}
+                </>
             )}
 
-            <div className="flex flex-col h-full relative">
-                {renderBadges()}
-                <div className="mt-3">{renderMetadata()}</div>
-                {renderActionSection()}
-            </div>
+            {exercise.tryout_type === 'UTBK' ? (
+                <div className="flex flex-col h-full relative gap-4">
+                    <div className="flex flex-col">
+                        <div className="flex flex-col gap-1">
+                            {renderBadges()}
+                            {renderWorkingDate()}
+                        </div>
+                        <div className="mt-3">{renderMetadata()}</div>
+                    </div>
+                    {renderActionSection()}
+                </div>
+            ) : (
+                <div className="flex flex-col h-full relative">
+                    <div className="flex flex-col gap-1">
+                        {renderBadges()}
+                        {renderWorkingDate()}
+                    </div>
+                    <div className="mt-3">{renderMetadata()}</div>
+                    {renderActionSection()}
+                </div>
+            )}
         </Link>
     );
 };

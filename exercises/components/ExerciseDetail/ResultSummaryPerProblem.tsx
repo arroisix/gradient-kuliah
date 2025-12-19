@@ -129,6 +129,8 @@ const ResultSummaryPerProblem: React.FC<ResultSummaryPerProblemProps> = ({
         rowsOnCurrentPage * 60 + Math.max(0, rowsOnCurrentPage - 1) * 12
     }px`; // 60px per item + 12px gap
 
+    if (exercise?.tryout_type === 'UTBK') return null;
+
     return (
         <div
             className={cn(

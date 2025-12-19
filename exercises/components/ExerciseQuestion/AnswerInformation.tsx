@@ -80,7 +80,7 @@ const AnswerInformation = ({
                     ans.toLowerCase().trim()
                 ) || [];
             const userAnswerText =
-                solutionData?.user_answer_text.toLowerCase().trim() || '';
+                solutionData?.user_answer_text?.toLowerCase().trim() || '';
 
             if (correctAnswersText.includes(userAnswerText)) {
                 return 'Sempurna! Jawaban kamu benar.';
