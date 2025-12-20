@@ -1,7 +1,8 @@
+import { cn } from 'commons/utils';
 import { TESTIMONY_DATA } from 'landing/constants/Testimony';
 import Image from 'next/image';
 
-const Testimony = (): JSX.Element => {
+const Testimony = ({ className }: { className?: string }): JSX.Element => {
     const NUM_OF_TESTIMONY_LAYOUT = 5;
     const temporaryArray = Array.from(
         { length: NUM_OF_TESTIMONY_LAYOUT },
@@ -9,7 +10,9 @@ const Testimony = (): JSX.Element => {
     );
 
     return (
-        <section className="flex flex-col gap-5 py-9 md:py-16" id="testimony">
+        <section
+            className={cn('flex flex-col gap-5 py-9 md:py-16', className)}
+            id="testimony">
             <h2 className="font-sans text-xl font-extrabold text-center">
                 Kata mereka yang belajar bersama Gradient
             </h2>
