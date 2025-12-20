@@ -29,6 +29,33 @@ interface SetTargetFormProps {
     setIsDrawerOpened: Dispatch<SetStateAction<boolean>>;
 }
 
+// to check whether the old target has changed
+function isTargetsChanged(oldTargets: Target[], newTargets: Target[]) {
+    if (oldTargets.length !== newTargets.length) {
+        return true;
+    }
+
+    for (let i = 0; i < oldTargets.length; i++) {
+        const oldTarget = oldTargets[i];
+        const newTarget = newTargets[i];
+
+        const oldTargetInstitutionId = oldTarget.institution.split(':')[0];
+        const newTargetInstitutionId = newTarget.institution.split(':')[0];
+
+        const oldTargetMajorId = oldTarget.major.split(':')[0];
+        const newTargetMajorId = newTarget.major.split(':')[0];
+
+        if (
+            oldTargetInstitutionId !== newTargetInstitutionId ||
+            oldTargetMajorId !== newTargetMajorId
+        ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 function SetTargetForm({
     targets,
     setTargets,
@@ -295,6 +322,7 @@ function SetTargetForm({
                     <Button
                         disabled={
                             isLoading ||
+                            !isTargetsChanged(formikInitialValue, values) ||
                             values[values.length - 1].institution === '' ||
                             values[values.length - 1].major === ''
                         }
