@@ -3,6 +3,7 @@ import { CDN_URL } from 'commons/constants';
 import Layout from 'commons/utbkLayout';
 import Testimony from 'landing/components/Sections/Testimony';
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 
 function Hero(): JSX.Element {
@@ -127,7 +128,17 @@ function Fitur({ className }: { className?: string }): JSX.Element {
             </p>
 
             <ul className="list-none flex flex-col gap-6">
-                <li></li>
+                <li>
+                    <article className='flex flex-col gap-4 text-center'>
+                        <h3>
+                            <span>Video Learning</span>
+                            Video Materi dari Kakak Mahasiswa Universitas Top
+                        </h3>
+                        <p>Akses ratusan jam konten video yang dibawakan langsung oleh mahasiswa dari UI, ITB, dan lainnya. Penjelasan santai, mudah dimengerti, dan to-the-point.</p>
+                        <Link href="/utbk/materi" className='mb-2'>Lihat Materi</Link>
+                        <img src={`${CDN_URL}/assets/utbk/video.avif`} alt="Video learning." height={220} className='h-[220px]' />
+                    </article>
+                </li>
                 <li></li>
                 <li></li>
                 <li></li>
@@ -141,7 +152,7 @@ function Langganan({ className }: { className?: string }): JSX.Element {
         <section className={className}>
             <h2 className="flex flex-col items-center text-center gap-3 text-white text-2xl leading-[125%] font-bold mb-3">
                 Langganan untuk
-                <br /> mengakses semua materi
+                <br className='sm:hidden' /> mengakses semua materi
             </h2>
             <p className="text-[#9CA3AF] text-base leading-[150%] text-center mb-16">
                 Pilih paket yang paling pas buat target UTBK kamu.
