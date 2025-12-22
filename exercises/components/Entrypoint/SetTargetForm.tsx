@@ -258,6 +258,7 @@ function SetTargetForm({
                                     <Select
                                         isAsync
                                         isSearchTarget
+                                        isClearable={false}
                                         onChange={selectOnChange(
                                             id,
                                             'institution',
@@ -275,6 +276,7 @@ function SetTargetForm({
                                     <Select
                                         isAsync
                                         isSearchTarget
+                                        isClearable={false}
                                         onChange={selectOnChange(
                                             id,
                                             'major',
