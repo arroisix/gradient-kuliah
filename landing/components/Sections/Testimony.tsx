@@ -2,7 +2,13 @@ import { cn } from 'commons/utils';
 import { TESTIMONY_DATA } from 'landing/constants/Testimony';
 import Image from 'next/image';
 
-const Testimony = ({ className }: { className?: string }): JSX.Element => {
+const Testimony = ({
+    className,
+    headerClassName
+}: {
+    className?: string;
+    headerClassName?: string;
+}): JSX.Element => {
     const NUM_OF_TESTIMONY_LAYOUT = 5;
     const temporaryArray = Array.from(
         { length: NUM_OF_TESTIMONY_LAYOUT },
@@ -13,7 +19,11 @@ const Testimony = ({ className }: { className?: string }): JSX.Element => {
         <section
             className={cn('flex flex-col gap-5 py-9 md:py-16', className)}
             id="testimony">
-            <h2 className="font-sans text-xl font-extrabold text-center">
+            <h2
+                className={cn(
+                    'font-sans text-xl font-extrabold text-center',
+                    headerClassName
+                )}>
                 Kata mereka yang belajar bersama Gradient
             </h2>
             <div className="overflow-hidden flex group">

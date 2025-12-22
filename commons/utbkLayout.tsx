@@ -19,12 +19,12 @@ function Layout({ children }: LayoutProps): JSX.Element {
 function Navbar(): JSX.Element {
     return (
         <header className="flex fixed top-0 z-50 w-full justify-center lg:mt-[10px]">
-            <div className="flex justify-between items-center w-full px-8 bg-white bg-opacity-[3%] border-solid border-[1px] border-white border-opacity-[8%] rounded-full h-[60px] m-4 max-w-[1232px]"
+            <div
+                className="flex justify-between items-center w-full px-8 bg-white bg-opacity-[3%] border-solid border-[1px] border-white border-opacity-[8%] rounded-full h-[60px] m-4 max-w-[1232px]"
                 style={{
                     boxShadow: '0px 25px 50px -12px rgba(88, 28, 135, 0.1)',
                     backdropFilter: 'blur(8px)'
-                }}
-            >
+                }}>
                 <Link
                     href="/utbk"
                     className="text-2xl leading-6 tracking-[0.08px] font-bold font-[Urbanist] text-[#E9E9E9]">
