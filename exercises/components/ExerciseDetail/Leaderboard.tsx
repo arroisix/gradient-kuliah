@@ -236,14 +236,16 @@ export const LeaderboardReport = () => {
                     size="large">
                     Selesai
                 </Button>
-                <Button
-                    variant="secondary"
-                    className="w-full flex items-center justify-center gap-2"
-                    onClick={onRetry}
-                    size="large">
-                    <RefreshCcw size={20} />
-                    <span>Coba Lagi</span>
-                </Button>
+                {exercise?.tryout_type !== 'UTBK' && (
+                    <Button
+                        variant="secondary"
+                        className="w-full flex items-center justify-center gap-2"
+                        onClick={onRetry}
+                        size="large">
+                        <RefreshCcw size={20} />
+                        <span>Coba Lagi</span>
+                    </Button>
+                )}
             </div>
         </div>
     );

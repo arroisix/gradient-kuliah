@@ -17,7 +17,7 @@ const LatihanTabs: React.FC<LatihanTabsProps> = ({
     const tabStyle = (status: string): string =>
         cn(
             'text-center text-sm py-3 border-b-2 flex-1 md:flex-none first:!px-1 whitespace-nowrap cursor-pointer',
-            activeStatus === status
+            activeStatus === status || (activeStatus === '' && status === 'all')
                 ? LatihanTabStyle.active
                 : LatihanTabStyle.default
         );
@@ -43,6 +43,12 @@ const LatihanTabs: React.FC<LatihanTabsProps> = ({
                         onClick={() => onStatusChange('completed')}
                         aria-pressed={activeStatus === 'completed'}>
                         Completed
+                    </button>
+                    <button
+                        className={tabStyle('in_progress')}
+                        onClick={() => onStatusChange('in_progress')}
+                        aria-pressed={activeStatus === 'in_progress'}>
+                        In Progress
                     </button>
                     <div
                         className={cn(

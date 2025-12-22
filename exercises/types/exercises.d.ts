@@ -47,6 +47,9 @@ export interface ExerciseDetail {
     university_name?: string;
     university_color?: string;
     is_free: boolean;
+    opens_at?: string;
+    closes_at?: string;
+    score_published_at?: string;
     // TODO make it better type
     first_problemset: {
         id: string;
@@ -97,6 +100,10 @@ interface ExerciseItem {
     tryout_type?: string;
     university_name?: string;
     university_color?: string;
+    opens_at?: string;
+    closes_at?: string;
+    score_published_at?: string;
+    is_time_expired?: boolean;
 }
 
 interface CourseFilter {
@@ -394,6 +401,11 @@ export interface ProblemSetItem {
     title: string;
     order: number;
     is_current: boolean;
+    correct_answers?: number;
+    total_questions?: number;
+    score?: number;
+    total_score?: number;
+    total_duration?: number;
 }
 
 export interface ProblemSolutionData {

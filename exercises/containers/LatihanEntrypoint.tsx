@@ -6,8 +6,13 @@ import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import RenewSubscriptionBanner from 'courses/components/RenewSubscriptionBanner';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import FilterEntrypoint from 'exercises/components/Entrypoint/FilterEntrypoint';
+import Button from 'commons/components/elements/Button';
+import { IoMdSettings } from 'react-icons/io';
+import { useWindowSize } from 'usehooks-ts';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 const LatihanEntrypoint = (): JSX.Element => {
+    const { profile } = useAuth();
     const router = useRouter();
     const {
         status = '',
@@ -19,6 +24,7 @@ const LatihanEntrypoint = (): JSX.Element => {
     } = router.query;
     const [page, setPage] = useState(Number(pageQuery));
     const { is_subscribed } = useCourseSubscription();
+    const { width } = useWindowSize();
 
     useEffect(() => {
         setPage(Number(pageQuery));
@@ -34,13 +40,32 @@ const LatihanEntrypoint = (): JSX.Element => {
         sort: sort as string
     });
 
+    const handleManageTargetOnClick = (): void => {
+        console.log('Manage Target clicked');
+    };
+
     return (
         <>
             <Breadcrumb className="w-full pb-5" />
             <div className="relative grid w-full grid-cols-1 mx-auto xl:max-w-screen-2xl">
-                <h1 className="text-xl font-bold md:text-2xl text-balance">
-                    Try Out
-                </h1>
+                <div className="flex flex-row justify-between">
+                    <h1 className="text-xl font-bold md:text-2xl text-balance">
+                        Try Out
+                    </h1>
+
+                    {profile?.current_role === 'K12' && (
+                        <Button
+                            size={width < 768 ? 'extraSmall' : 'small'}
+                            variant="custom"
+                            className="bg-graphite-700 flex flex-row gap-[6px] items-center"
+                            onClick={handleManageTargetOnClick}>
+                            <IoMdSettings />
+                            <span className="size-sm font-semibold">
+                                Atur Target
+                            </span>
+                        </Button>
+                    )}
+                </div>
                 <FilterEntrypoint />
 
                 <LatihanContent
