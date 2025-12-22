@@ -23,7 +23,7 @@ const RevampedLandingPage = ({
     return (
         <>
             <GridProvider>
-                <Layout>
+                <Layout withoutK12Paywall>
                     <LandingContainer
                         classesData={classesData?.data}
                         popularBooksData={popularBooksData?.books}

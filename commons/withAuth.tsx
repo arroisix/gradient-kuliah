@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { getDisplayName, sanitizeUrl } from './utils';
 import { useLocalStorage } from 'usehooks-ts';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 const withAuth = (WrappedComponent: React.ComponentType) => {
     const WithAuth = (
@@ -29,6 +30,7 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
                 'showEmailVerification',
                 false
             );
+            const { profile } = useAuth();
 
             if (!!rawToken && !accessToken) {
                 return <LoadingBackdrop />;
@@ -41,7 +43,11 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
                         isProfileComplete &&
                         is_subscribed
                     ) {
-                        router.push('/dashboard');
+                        if (profile?.current_role === 'K12') {
+                            router.replace('/latihan');
+                        } else {
+                            router.replace('/dashboard');
+                        }
                         return;
                     }
 

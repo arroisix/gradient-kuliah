@@ -51,10 +51,17 @@ const LatihanEntrypoint = (): JSX.Element => {
                     </h1>
 
                     {profile?.current_role === 'K12' && (
-                        <SetTargetDrawerButton />
+                        <div className="flex flex-row items-center gap-4">
+                            <button className="bg-graphite-700 px-5 py-2 rounded-full">
+                                Placeholder
+                            </button>
+                            <SetTargetDrawerButton />
+                        </div>
                     )}
                 </div>
-                <FilterEntrypoint />
+                {profile?.current_role === 'COLLEGE_STUDENT' && (
+                    <FilterEntrypoint />
+                )}
 
                 <LatihanContent
                     isLoading={isLoading || isFetching}

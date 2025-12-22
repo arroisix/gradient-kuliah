@@ -54,6 +54,23 @@ const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
     }
 ];
 
+const K12_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
+    {
+        name: 'Class',
+        title: 'Materi',
+        url: '/materi',
+        IconActive: KelasIconFill,
+        IconUnactive: KelasIcon
+    },
+    {
+        name: 'Try Out',
+        title: 'Try Out',
+        url: '/latihan',
+        IconActive: PencilOnLineIconFill,
+        IconUnactive: PencilOnLineIcon
+    }
+];
+
 interface NavbarProps {
     paymentPage: boolean;
     noPadding?: boolean;
@@ -138,10 +155,11 @@ const Navbar = ({
     };
 
     const isShowHamburgerMenu =
-        !LEARNING_PAGES.some((page) => router.asPath === page) ||
-        (LEARNING_PAGES.some((page) => router.asPath === page) &&
-            !isSubscribed &&
-            !isDesktopBreakpoints);
+        profile?.current_role === 'COLLEGE_STUDENT' &&
+        (!LEARNING_PAGES.some((page) => router.asPath === page) ||
+            (LEARNING_PAGES.some((page) => router.asPath === page) &&
+                !isSubscribed &&
+                !isDesktopBreakpoints));
     const isShowSidebar =
         showSidebar && fullHeightSidebar && isAuthenticated && isSubscribed;
 
@@ -184,27 +202,43 @@ const Navbar = ({
                             'items-center gap-6 hidden lg:flex',
                             isSubscribed && showSidebar && '!hidden'
                         )}>
-                        <NavigationButton
-                            key={UNAUTHENTICATED_NAVBAR_BUTTONS[0].name}
-                            {...UNAUTHENTICATED_NAVBAR_BUTTONS[0]}
-                        />
-                        <NavigationButton
-                            key={UNAUTHENTICATED_NAVBAR_BUTTONS[1].name}
-                            {...UNAUTHENTICATED_NAVBAR_BUTTONS[1]}
-                        />
-                        {configData?.configs.is_copilot_config_enabled && (
-                            <NavigationButton
-                                name="Copilot AI"
-                                title="Copilot AI"
-                                url="/copilot"
-                                IconActive={CopilotIconFill}
-                                IconUnactive={CopilotIconLine}
-                            />
+                        {profile?.current_role === 'K12' ? (
+                            <>
+                                <NavigationButton
+                                    key={K12_NAVBAR_BUTTONS[0].name}
+                                    {...K12_NAVBAR_BUTTONS[0]}
+                                />
+                                <NavigationButton
+                                    key={K12_NAVBAR_BUTTONS[1].name}
+                                    {...K12_NAVBAR_BUTTONS[1]}
+                                />
+                            </>
+                        ) : (
+                            <>
+                                <NavigationButton
+                                    key={UNAUTHENTICATED_NAVBAR_BUTTONS[0].name}
+                                    {...UNAUTHENTICATED_NAVBAR_BUTTONS[0]}
+                                />
+                                <NavigationButton
+                                    key={UNAUTHENTICATED_NAVBAR_BUTTONS[1].name}
+                                    {...UNAUTHENTICATED_NAVBAR_BUTTONS[1]}
+                                />
+                                {configData?.configs
+                                    .is_copilot_config_enabled && (
+                                    <NavigationButton
+                                        name="Copilot AI"
+                                        title="Copilot AI"
+                                        url="/copilot"
+                                        IconActive={CopilotIconFill}
+                                        IconUnactive={CopilotIconLine}
+                                    />
+                                )}
+                                <NavigationButton
+                                    key={UNAUTHENTICATED_NAVBAR_BUTTONS[2].name}
+                                    {...UNAUTHENTICATED_NAVBAR_BUTTONS[2]}
+                                />
+                            </>
                         )}
-                        <NavigationButton
-                            key={UNAUTHENTICATED_NAVBAR_BUTTONS[2].name}
-                            {...UNAUTHENTICATED_NAVBAR_BUTTONS[2]}
-                        />
                     </div>
                     {isShowSidebar && (
                         <div className="hidden md:block w-[250px] h-[64px] fixed top-0 left-0 bg-[#121212] z-[-1]" />
@@ -214,7 +248,10 @@ const Navbar = ({
                             'w-full max-w-lg',
                             isShowSidebar && 'lg:ml-[250px] lg:pl-6 lg:absolute'
                         )}>
-                        {!isDashboard && <SearchBar />}
+                        {!isDashboard &&
+                            profile?.current_role === 'COLLEGE_STUDENT' && (
+                                <SearchBar />
+                            )}
                     </div>
                 </div>
                 {paymentPage ? (

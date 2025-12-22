@@ -12,6 +12,7 @@ import { getDisplayName, sanitizeUrl } from './utils';
 import { useGetPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
 import { sendGTMEvent } from '@next/third-parties/google';
 import { useLocalStorage } from 'usehooks-ts';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 const withAnon = <P extends object>(
     WrappedComponent: React.ComponentType<P>
@@ -28,6 +29,7 @@ const withAnon = <P extends object>(
                 everSubscribed,
                 isLoading: isLoadingSubscribed
             } = useCourseSubscription();
+            const { profile } = useAuth();
             const { data: pricingData, isLoading: isLoadingPricing } =
                 useGetPacketOfferQuery();
             const router = useRouter();
@@ -36,6 +38,14 @@ const withAnon = <P extends object>(
                 'showAccountTypePrompt',
                 false
             );
+
+            const redirectToFirstPage = () => {
+                if (profile?.current_role === 'K12') {
+                    router.replace('/latihan');
+                } else {
+                    router.replace('/dashboard');
+                }
+            };
 
             if (!!accessToken) {
                 if (!isLoadingSubscribed && !isLoadingPricing) {
@@ -66,7 +76,7 @@ const withAnon = <P extends object>(
                             );
                         } else {
                             if (is_subscribed) {
-                                router.replace('/dashboard');
+                                redirectToFirstPage();
                             } else {
                                 const packetId =
                                     localStorage.getItem('packetId');
@@ -95,7 +105,7 @@ const withAnon = <P extends object>(
                                     );
                                 } else {
                                     if (everSubscribed) {
-                                        router.replace('/dashboard');
+                                        redirectToFirstPage();
                                     } else if (!!router.query.redirect) {
                                         router.replace(
                                             `${sanitizeUrl(
@@ -111,7 +121,7 @@ const withAnon = <P extends object>(
                     } else if (
                         ['/', '/landing-revamp'].includes(router.pathname)
                     ) {
-                        router.replace('/dashboard');
+                        redirectToFirstPage();
                     }
 
                     return <WrappedComponent {...(props as P)} />;
