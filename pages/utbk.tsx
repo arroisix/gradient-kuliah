@@ -1,3 +1,4 @@
+import Accordion from 'commons/components/elements/Accordion';
 import Button from 'commons/components/elements/Button';
 import { CDN_URL } from 'commons/constants';
 import Layout from 'commons/utbkLayout';
@@ -5,8 +6,10 @@ import { cn } from 'commons/utils';
 import Testimony from 'landing/components/Sections/Testimony';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useGetPacketOfferUTBKQuery } from 'payment/redux/api/subscriptionApi';
 import React from 'react';
 import { FaChevronRight } from 'react-icons/fa';
+import { FaRegCircleCheck } from 'react-icons/fa6';
 
 function Hero(): JSX.Element {
     return (
@@ -124,7 +127,7 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                 </span>
                 Semua yang kamu butuhkan untuk lulus UTBK
             </h2>
-            <p className="text-[#9CA3AF] text-base leading-[150%] text-center mb-16">
+            <p className="text-[#9CA3AF] text-sm leading-[20px] text-center mb-16">
                 Platform all-in-one dengan fitur canggih untuk memastikan kamu
                 siap tempur di hari H.
             </p>
@@ -296,16 +299,170 @@ function Fitur({ className }: { className?: string }): JSX.Element {
     );
 }
 
-function Langganan({ className }: { className?: string }): JSX.Element {
+const rupiahFormatter = new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    maximumFractionDigits: 0
+});
+function LanggananItem({
+    packet,
+    subtitle
+}: {
+    packet: PacketOfferUTBK;
+    subtitle: string;
+}): JSX.Element {
     return (
-        <section className={className}>
+        <article
+            className={cn(
+                'flex flex-col items-center border-2 border-solid border-[#36236A] rounded-2xl py-6 relative',
+                packet.benefits.best_value && 'bg-[#36236A] bg-opacity-50'
+            )}
+            style={{
+                boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.5)'
+            }}>
+            {packet.benefits.best_value ? (
+                <img
+                    src={`${CDN_URL}/assets/utbk/best_value.svg`}
+                    alt="Best value."
+                    width={88}
+                    className="absolute -top-[9px] -right-[3px]"
+                />
+            ) : null}
+
+            <h3 className="flex flex-col gap-1 text-base leading-[125%] text-white text-center font-bold mb-4">
+                {packet.packet_name}
+                <span className="font-normal text-xs leading-[140%] -tracking-[0.005em]">
+                    {subtitle}
+                </span>
+            </h3>
+            <p
+                className="mb-8 font-extrabold text-white text-[32px] leading-[125%]"
+                style={
+                    packet.benefits.best_value
+                        ? {
+                              background:
+                                  'linear-gradient(43.82deg, #CAC7E4 0%, #AB8EEC 28.4%, #DD837A 65.1%, #ECD0CD 100%)',
+                              WebkitBackgroundClip: 'text',
+                              WebkitTextFillColor: 'transparent',
+                              backgroundClip: 'text'
+                          }
+                        : undefined
+                }>
+                {rupiahFormatter.format(packet.price)}
+                {packet.active_duration ? (
+                    <span className="text-[#929292] text-xs leading-[125%] font-bold">
+                        {' '}
+                        /{packet.active_duration / 30} bln
+                    </span>
+                ) : null}
+            </p>
+            <ol className="mb-8 p-0 list-none [&>li>p]:text-white [&>li>p]:font-bold [&>li>p]:text-sm [&>li>p]:leading-[125%] [&>li.disabled>p]:text-[#333333] flex flex-col gap-4 w-full px-6">
+                <li className="flex gap-3 items-center">
+                    <FaRegCircleCheck size={24} color="#7264EB" />
+                    <p
+                        style={
+                            packet.benefits.best_value
+                                ? {
+                                      background:
+                                          'linear-gradient(43.82deg, #CAC7E4 0%, #AB8EEC 28.4%, #DD837A 65.1%, #ECD0CD 100%)',
+                                      WebkitBackgroundClip: 'text',
+                                      WebkitTextFillColor: 'transparent',
+                                      backgroundClip: 'text'
+                                  }
+                                : undefined
+                        }>
+                        {packet.benefits.try_out_count}x Tryout Eksklusif
+                    </p>
+                </li>
+                <li className="flex gap-3 items-center">
+                    <FaRegCircleCheck size={24} color="#7264EB" />
+                    <p>Pembahasan Try Out Lengkap</p>
+                </li>
+                <li
+                    className={cn(
+                        'flex gap-3 items-center',
+                        !packet.benefits.copilot && 'disabled'
+                    )}>
+                    <FaRegCircleCheck
+                        size={24}
+                        color={packet.benefits.copilot ? '#7264EB' : '#333333'}
+                    />
+                    <p>Copilot AI</p>
+                </li>
+                <li
+                    className={cn(
+                        'flex gap-3 items-center',
+                        !packet.benefits.subtest_material && 'disabled'
+                    )}>
+                    <FaRegCircleCheck
+                        size={24}
+                        color={
+                            packet.benefits.subtest_material
+                                ? '#7264EB'
+                                : '#333333'
+                        }
+                    />
+                    <p>7 Video Materi Subtest</p>
+                </li>
+            </ol>
+            {packet.is_free ? (
+                <Button
+                    variant="secondary"
+                    className="h-[49px] text-[15px] leading-[140%]">
+                    Daftar Gratis
+                </Button>
+            ) : (
+                <Button
+                    variant="primary"
+                    className="h-[49px] text-[15px] leading-[140%]">
+                    Pilih Paket
+                </Button>
+            )}
+        </article>
+    );
+}
+
+function Langganan({ className }: { className?: string }): JSX.Element {
+    const { data } = useGetPacketOfferUTBKQuery();
+    return (
+        <section className={cn('flex flex-col', className)}>
             <h2 className="flex flex-col items-center text-center gap-3 text-white text-2xl leading-[125%] font-bold mb-3">
                 Langganan untuk
                 <br className="sm:hidden" /> mengakses semua materi
             </h2>
-            <p className="text-[#9CA3AF] text-base leading-[150%] text-center mb-16">
+            <p className="text-[#9CA3AF] text-sm leading-[20px] text-center mb-10">
                 Pilih paket yang paling pas buat target UTBK kamu.
             </p>
+            <ol className="list-none flex flex-wrap gap-x-4 gap-y-4 md:gap-y-10 max-w-[1082px] justify-center self-center p-0 w-full">
+                <li className="w-full max-w-[350px]">
+                    <LanggananItem
+                        packet={{
+                            id: 'random0',
+                            packet_name: 'Starter',
+                            active_duration: 0,
+                            price: 0,
+                            is_free: true,
+                            order: 0,
+                            is_lifetime: true,
+                            benefits: {
+                                try_out_count: 2,
+                                try_out_discussion: true,
+                                copilot: false,
+                                subtest_material: false
+                            }
+                        }}
+                        subtitle="Coba Gradient dengan limit."
+                    />
+                </li>
+                {data?.data.map((packet) => (
+                    <li key={packet.id} className="w-full max-w-[350px]">
+                        <LanggananItem
+                            packet={packet}
+                            subtitle="Paket komplit materi + latihan."
+                        />
+                    </li>
+                ))}
+            </ol>
         </section>
     );
 }
@@ -316,9 +473,37 @@ function FAQ({ className }: { className?: string }): JSX.Element {
             <h2 className="flex flex-col items-center text-center gap-3 text-white text-2xl leading-[125%] font-bold mb-3">
                 Sering Ditanyakan
             </h2>
-            <p className="text-[#9CA3AF] text-base leading-[150%] text-center mb-16">
+            <p className="text-[#9CA3AF] text-sm leading-[20px] text-center mb-10">
                 Jawaban untuk pertanyaan seputar persiapan UTBK di Gradient.
             </p>
+            <Accordion
+                headerClassName="text-left text-white text-base leading-[140%] gap-2"
+                iconClassName="text-[#999999]"
+                contentClassName="text-[#DEDEDE] text-sm leading-[160%]"
+                item={[
+                    {
+                        title: 'Apa perbedaan akun Gratis dan Premium?',
+                        content:
+                            'Akun Gratis bisa digunakan untuk mencoba fitur dasar, seperti contoh soal dan try out terbatas. Akun Premium memberikan akses penuh ke try out harian dan mingguan, pembahasan lengkap, analisis hasil, serta fitur pendukung belajar lainnya.'
+                    },
+                    {
+                        title: 'Apakah sistem penilaian Tryout sesuai standar UTBK terbaru?',
+                        content: 'Lorem impsum.'
+                    },
+                    {
+                        title: 'Bagaimana cara kerja Copilot AI Assistant?',
+                        content: 'Lorem impsum.'
+                    },
+                    {
+                        title: 'Apakah materi bisa diakses lewat HP?',
+                        content: 'Lorem impsum.'
+                    },
+                    {
+                        title: 'Bagaimana jika saya ingin berhenti berlangganan?',
+                        content: 'Lorem impsum.'
+                    }
+                ]}
+            />
         </section>
     );
 }
@@ -371,7 +556,7 @@ export default function UTBK(): JSX.Element {
                 />
                 <Fitur className="mb-[40px] mx-4" />
                 <Langganan className="mb-12 mx-4" />
-                <FAQ className="mb-10 mx-4" />
+                <FAQ className="mb-10 mx-4 max-w-[736px] self-center w-[calc(100%-32px)]" />
                 <FinalCTA />
             </div>
         </Layout>
