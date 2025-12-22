@@ -6,7 +6,6 @@ import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import RenewSubscriptionBanner from 'courses/components/RenewSubscriptionBanner';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import FilterEntrypoint from 'exercises/components/Entrypoint/FilterEntrypoint';
-import EntrypointTabs from '../components/Entrypoint/EntrypointTabs';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import dynamic from 'next/dynamic';
 
@@ -42,21 +41,6 @@ const LatihanEntrypoint = (): JSX.Element => {
         sort: sort as string
     });
 
-    const onChangeTab = (tab: string): void => {
-        router.push(
-            {
-                pathname: router.pathname,
-                query: {
-                    ...router.query,
-                    status: tab,
-                    page: 1
-                }
-            },
-            undefined,
-            { shallow: true }
-        );
-    };
-
     return (
         <>
             <Breadcrumb className="w-full pb-5" />
@@ -70,12 +54,6 @@ const LatihanEntrypoint = (): JSX.Element => {
                         <SetTargetDrawerButton />
                     )}
                 </div>
-                {profile?.current_role === 'K12' && (
-                    <EntrypointTabs
-                        activeStatus={status as string}
-                        onStatusChange={onChangeTab}
-                    />
-                )}
                 <FilterEntrypoint />
 
                 <LatihanContent

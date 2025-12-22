@@ -405,6 +405,7 @@ export interface ProblemSetItem {
     total_questions?: number;
     score?: number;
     total_score?: number;
+    total_duration?: number;
 }
 
 export interface ProblemSolutionData {

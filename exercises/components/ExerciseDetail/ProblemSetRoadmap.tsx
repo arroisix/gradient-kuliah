@@ -65,7 +65,8 @@ const ProblemSetRoadmap = ({
                 problemset_id:
                     exercise?.tryout_type === 'UTBK' && !sectionId
                         ? (exercise?.first_problemset?.id as string)
-                        : (sectionId as string)
+                        : (sectionId as string),
+                with_score: exercise?.tryout_type === 'UTBK'
             },
             {
                 skip:
@@ -144,7 +145,9 @@ const ProblemSetRoadmap = ({
         isCompleted: boolean,
         isCurrent: boolean,
         sectionTitle: string,
-        sectionOrder: number
+        sectionOrder: number,
+        total_questions?: number,
+        total_duration?: number
     ): JSX.Element | null => {
         if (exercise?.tryout_type === 'UTBK') {
             return (
@@ -173,21 +176,30 @@ const ProblemSetRoadmap = ({
                             </h3>
                         </div>
 
-                        <div className="flex flex-row items-center gap-2">
-                            <div className="py-1 px-3 rounded-lg border-2 border-[#333540] flex flex-row gap-2 items-center">
-                                <GoClock size={14} color="#999999" />
-                                <span className="text-white font-regular text-xs">
-                                    30m
-                                </span>
-                            </div>
+                        {(total_duration || total_questions) && (
+                            <div className="flex flex-row items-center gap-2">
+                                {total_duration && (
+                                    <div className="py-1 px-3 rounded-lg border-2 border-[#333540] flex flex-row gap-2 items-center">
+                                        <GoClock size={14} color="#999999" />
+                                        <span className="text-white font-regular text-xs">
+                                            {(
+                                                (total_duration as number) / 60
+                                            ).toFixed(0)}
+                                            m
+                                        </span>
+                                    </div>
+                                )}
 
-                            <div className="py-1 px-3 rounded-lg border-2 border-[#333540] flex flex-row gap-2 items-center">
-                                <List size={14} color="#999999" />
-                                <span className="text-white font-regular text-xs">
-                                    20 Soal
-                                </span>
+                                {total_questions && (
+                                    <div className="py-1 px-3 rounded-lg border-2 border-[#333540] flex flex-row gap-2 items-center">
+                                        <List size={14} color="#999999" />
+                                        <span className="text-white font-regular text-xs">
+                                            {total_questions} Soal
+                                        </span>
+                                    </div>
+                                )}
                             </div>
-                        </div>
+                        )}
                     </div>
 
                     {/* Mobile Info Card - only show for current section */}
@@ -323,7 +335,7 @@ const ProblemSetRoadmap = ({
                                                     : 'w-0.5 h-[88px]',
                                                 isCompleted
                                                     ? 'bg-[#B6A6F3]'
-                                                    : 'bg-gray-600 border-dashed border-l-2 border-gray-600'
+                                                    : 'bg-gray-600 border-dashed border-l-[1px] border-gray-600'
                                             )}
                                             style={{
                                                 borderStyle: !(
@@ -341,7 +353,9 @@ const ProblemSetRoadmap = ({
                                     isCompleted,
                                     isCurrent,
                                     section.title,
-                                    section.order
+                                    section.order,
+                                    section.total_questions,
+                                    section.total_duration
                                 )}
                             </div>
                         );
