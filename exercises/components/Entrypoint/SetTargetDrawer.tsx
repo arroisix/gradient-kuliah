@@ -29,7 +29,6 @@ const SetTargetDrawerContext = createContext<SetTargetDrawerContextType | null>(
 function SetTargetDrawer({ children }: PropsWithChildren) {
     const [targets, setTargets] = useState<StudentTargetInstitution[]>([]);
     const [isDrawerOpened, setIsDrawerOpened] = useState(false);
-    const [isTargetWallHidden, setIsTargetWallHidden] = useState(false);
 
     const { data, isLoading, isFetching } =
         useGetStudentTargetInstitutionsQuery();
@@ -58,10 +57,8 @@ function SetTargetDrawer({ children }: PropsWithChildren) {
                 />
 
                 <div className="drawer-content">
-                    {data?.length === 0 && !isTargetWallHidden ? (
-                        <SetTargetInstitutionWall
-                            setIsTargetWallHidden={setIsTargetWallHidden}
-                        />
+                    {targets.length === 0 ? (
+                        <SetTargetInstitutionWall />
                     ) : (
                         children
                     )}

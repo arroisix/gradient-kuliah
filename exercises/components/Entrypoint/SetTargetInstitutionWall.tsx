@@ -1,15 +1,8 @@
 import Button from 'commons/components/elements/Button';
 import Image from 'next/image';
-import { Dispatch, SetStateAction } from 'react';
 import { useSetTargetDrawerContext } from './SetTargetDrawer';
 
-interface SetTargetInstitutionWallProps {
-    setIsTargetWallHidden: Dispatch<SetStateAction<boolean>>;
-}
-
-function SetTargetInstitutionWall({
-    setIsTargetWallHidden
-}: SetTargetInstitutionWallProps): JSX.Element {
+function SetTargetInstitutionWall(): JSX.Element {
     const { setIsDrawerOpened } = useSetTargetDrawerContext();
 
     return (
@@ -41,10 +34,7 @@ function SetTargetInstitutionWall({
                     variant="primary"
                     size="large"
                     className="w-full max-w-[328px] block mx-auto !py-3"
-                    onClick={() => {
-                        setIsDrawerOpened(true);
-                        setIsTargetWallHidden(true);
-                    }}>
+                    onClick={() => setIsDrawerOpened(true)}>
                     Tentukan Target
                 </Button>
             </section>
