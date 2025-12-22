@@ -48,11 +48,11 @@ function Hero(): JSX.Element {
                     }}>
                     Platform Belajar No. 1 Untuk UTBK
                 </p>
-                <h1 className="text-[32px] -tracking-[2.4px] text-white font-extrabold max-w-[238px] text-center mb-4">
+                <h1 className="text-[32px] -tracking-[2.4px] text-white font-extrabold max-w-[238px] md:max-w-[703px] text-center mb-4 md:text-[96px] md:leading-[96px]">
                     Masuk Kampus Impian
                     <br /> Mulai dari Sini.
                 </h1>
-                <p className="text-center text-[#DEDEDE] text-base leading-[140%] font-semibold max-w-[327px] mb-10">
+                <p className="text-center text-[#DEDEDE] text-base md:text-xl leading-[140%] font-semibold max-w-[327px] md:max-w-[664px] mb-10">
                     Sistem persiapan UTBK cerdas yang menghubungkan materi
                     adaptif, analisis AI, dan tryout berbasis IRT dalam satu
                     ekosistem belajar.
@@ -66,53 +66,57 @@ function Hero(): JSX.Element {
                     </Button>
                 </div>
 
-                <ul className="flex [&>li:not(:first-child)]:-ml-3 *:rounded-full *:h-[50px] *:w-[50px] *:flex list-none p-0 mb-6">
-                    <li>
-                        <Image
-                            src={`${CDN_URL}/assets/testimonials/achmad-adil.jpg`}
-                            data-avatar
-                            className="w-full object-cover rounded-full !border-solid !border-2 !border-black"
-                            height={50}
-                            width={50}
-                            loading="lazy"
-                        />
-                    </li>
-                    <li>
-                        <Image
-                            src={`${CDN_URL}/assets/testimonials/achmad-eugene-its.jpg`}
-                            data-avatar
-                            className="w-full object-cover rounded-full !border-solid !border-2 !border-black"
-                            height={50}
-                            width={50}
-                            loading="lazy"
-                        />
-                    </li>
-                    <li>
-                        <Image
-                            src={`${CDN_URL}/assets/testimonials/novia-unbraw.jpg`}
-                            data-avatar
-                            className="w-full object-cover rounded-full !border-solid !border-2 !border-black"
-                            height={50}
-                            width={50}
-                            loading="lazy"
-                        />
-                    </li>
-                    <li className="bg-[#1F2937] flex items-center justify-center border-solid border-2 border-black">
-                        <p className="text-[#9CA3AF] font-bold">+2k</p>
-                    </li>
-                </ul>
+                <div className="flex flex-col items-center md:flex-row gap-6">
+                    <ul className="flex [&>li:not(:first-child)]:-ml-3 *:rounded-full *:h-[50px] *:w-[50px] *:flex list-none p-0">
+                        <li>
+                            <Image
+                                src={`${CDN_URL}/assets/testimonials/achmad-adil.jpg`}
+                                data-avatar
+                                className="w-full object-cover rounded-full !border-solid !border-2 !border-black"
+                                height={50}
+                                width={50}
+                                loading="lazy"
+                            />
+                        </li>
+                        <li>
+                            <Image
+                                src={`${CDN_URL}/assets/testimonials/achmad-eugene-its.jpg`}
+                                data-avatar
+                                className="w-full object-cover rounded-full !border-solid !border-2 !border-black"
+                                height={50}
+                                width={50}
+                                loading="lazy"
+                            />
+                        </li>
+                        <li>
+                            <Image
+                                src={`${CDN_URL}/assets/testimonials/novia-unbraw.jpg`}
+                                data-avatar
+                                className="w-full object-cover rounded-full !border-solid !border-2 !border-black"
+                                height={50}
+                                width={50}
+                                loading="lazy"
+                            />
+                        </li>
+                        <li className="bg-[#1F2937] flex items-center justify-center border-solid border-2 border-black">
+                            <p className="text-[#9CA3AF] font-bold">+2k</p>
+                        </li>
+                    </ul>
 
-                <img
-                    src={`${CDN_URL}/assets/utbk/stars.svg`}
-                    height={24}
-                    alt=""
-                    aria-hidden
-                    className="mb-2"
-                />
+                    <div className="flex flex-col items-center md:items-start">
+                        <img
+                            src={`${CDN_URL}/assets/utbk/stars.svg`}
+                            height={24}
+                            alt=""
+                            aria-hidden
+                            className="mb-2"
+                        />
 
-                <p className="text-sm leading-4">
-                    Dipercaya <b>200k+ pelajar</b> Indonesia
-                </p>
+                        <p className="text-sm leading-4">
+                            Dipercaya <b>200k+ pelajar</b> Indonesia
+                        </p>
+                    </div>
+                </div>
             </div>
         </section>
     );
@@ -135,9 +139,8 @@ function Fitur({ className }: { className?: string }): JSX.Element {
             <ul className="list-none gap-6 max-w-[1200px] self-center p-0 grid grid-cols-1 lg:grid-cols-2">
                 <li>
                     <article
-                        className="flex flex-col gap-4 text-center bg-[#181818] rounded-[32px] border-solid border-[1px] border-white border-opacity-5 px-8 pt-8 max-w-[720px] hover:border-[#B6A6F3] hover:shadow-[0px_8px_12px_6px_rgba(0,0,0,0.15),0px_4px_4px_rgba(0,0,0,0.3)] items-center h-full"
+                        className="flex flex-col gap-4 text-center bg-[#181818] rounded-[32px] border-solid border-[1px] border-white border-opacity-5 px-4 pt-8 max-w-[720px] hover:border-[#B6A6F3] hover:shadow-[0px_8px_12px_6px_rgba(0,0,0,0.15),0px_4px_4px_rgba(0,0,0,0.3)] items-center h-full transition"
                         style={{
-                            transitionProperty: 'box-shadow, border-color',
                             backgroundImage: `url(${CDN_URL}/assets/utbk/materi-decor.svg)`,
                             backgroundPosition: 'top right',
                             backgroundRepeat: 'no-repeat'
@@ -179,9 +182,8 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                 </li>
                 <li>
                     <article
-                        className="flex items-center flex-col gap-4 text-center bg-[#181818] rounded-[32px] border-solid border-[1px] border-white border-opacity-5 px-8 pt-8 max-w-[720px] hover:border-[#B6A6F3] hover:shadow-[0px_8px_12px_6px_rgba(0,0,0,0.15),0px_4px_4px_rgba(0,0,0,0.3)] h-full"
+                        className="flex items-center flex-col gap-4 text-center bg-[#181818] rounded-[32px] border-solid border-[1px] border-white border-opacity-5 px-4 pt-8 max-w-[720px] hover:border-[#B6A6F3] hover:shadow-[0px_8px_12px_6px_rgba(0,0,0,0.15),0px_4px_4px_rgba(0,0,0,0.3)] h-full transition"
                         style={{
-                            transitionProperty: 'box-shadow, border-color',
                             backgroundImage: `url(${CDN_URL}/assets/utbk/try-out-decor.svg)`,
                             backgroundPosition: 'bottom center',
                             backgroundRepeat: 'no-repeat'
@@ -220,9 +222,8 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                 </li>
                 <li>
                     <article
-                        className="flex flex-col items-center gap-4 text-center bg-[#181818] rounded-[32px] border-solid border-[1px] border-white border-opacity-5 px-8 pt-8 max-w-[720px] hover:border-[#B6A6F3] hover:shadow-[0px_8px_12px_6px_rgba(0,0,0,0.15),0px_4px_4px_rgba(0,0,0,0.3)] h-full"
+                        className="flex flex-col items-center gap-4 text-center bg-[#181818] rounded-[32px] border-solid border-[1px] border-white border-opacity-5 px-4 pt-8 max-w-[720px] hover:border-[#B6A6F3] hover:shadow-[0px_8px_12px_6px_rgba(0,0,0,0.15),0px_4px_4px_rgba(0,0,0,0.3)] h-full transition"
                         style={{
-                            transitionProperty: 'box-shadow, border-color',
                             backgroundImage: `url(${CDN_URL}/assets/utbk/copilot-decor.svg)`,
                             backgroundPosition: 'bottom right',
                             backgroundRepeat: 'no-repeat'
@@ -253,9 +254,8 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                 </li>
                 <li>
                     <article
-                        className="flex flex-col items-center gap-4 text-center bg-[#181818] rounded-[32px] border-solid border-[1px] border-white border-opacity-5 px-8 pt-8 max-w-[720px] hover:border-[#B6A6F3] hover:shadow-[0px_8px_12px_6px_rgba(0,0,0,0.15),0px_4px_4px_rgba(0,0,0,0.3)] h-full"
+                        className="flex flex-col items-center gap-4 text-center bg-[#181818] rounded-[32px] border-solid border-[1px] border-white border-opacity-5 px-4 pt-8 max-w-[720px] hover:border-[#B6A6F3] hover:shadow-[0px_8px_12px_6px_rgba(0,0,0,0.15),0px_4px_4px_rgba(0,0,0,0.3)] h-full transition"
                         style={{
-                            transitionProperty: 'box-shadow, border-color',
                             backgroundImage: `url(${CDN_URL}/assets/utbk/analytics-decor.svg)`,
                             backgroundPosition: 'bottom center',
                             backgroundRepeat: 'no-repeat'
@@ -309,17 +309,14 @@ function LanggananItem({
     subtitle
 }: {
     packet: PacketOfferUTBK;
-    subtitle: string;
+    subtitle?: string;
 }): JSX.Element {
     return (
         <article
             className={cn(
-                'flex flex-col items-center border-2 border-solid border-[#36236A] rounded-2xl py-6 relative',
+                'flex flex-col items-center border-2 border-solid border-[#36236A] hover:border-[#5F2BCE] rounded-2xl py-6 relative shadow-[0px_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0px_8px_12px_6px_rgba(0,0,0,0.15),0px_4px_4px_rgba(0,0,0,0.3)] transition',
                 packet.benefits.best_value && 'bg-[#36236A] bg-opacity-50'
-            )}
-            style={{
-                boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.5)'
-            }}>
+            )}>
             {packet.benefits.best_value ? (
                 <img
                     src={`${CDN_URL}/assets/utbk/best_value.svg`}
@@ -332,7 +329,7 @@ function LanggananItem({
             <h3 className="flex flex-col gap-1 text-base leading-[125%] text-white text-center font-bold mb-4">
                 {packet.packet_name}
                 <span className="font-normal text-xs leading-[140%] -tracking-[0.005em]">
-                    {subtitle}
+                    {subtitle ?? packet.benefits.subtitle}
                 </span>
             </h3>
             <p
@@ -408,7 +405,8 @@ function LanggananItem({
             {packet.is_free ? (
                 <Button
                     variant="secondary"
-                    className="h-[49px] text-[15px] leading-[140%]">
+                    className="h-[49px] text-[15px] leading-[140%] flex items-center justify-center"
+                    href="/daftar">
                     Daftar Gratis
                 </Button>
             ) : (
@@ -456,10 +454,7 @@ function Langganan({ className }: { className?: string }): JSX.Element {
                 </li>
                 {data?.data.map((packet) => (
                     <li key={packet.id} className="w-full max-w-[350px]">
-                        <LanggananItem
-                            packet={packet}
-                            subtitle="Paket komplit materi + latihan."
-                        />
+                        <LanggananItem packet={packet} />
                     </li>
                 ))}
             </ol>
@@ -477,9 +472,10 @@ function FAQ({ className }: { className?: string }): JSX.Element {
                 Jawaban untuk pertanyaan seputar persiapan UTBK di Gradient.
             </p>
             <Accordion
-                headerClassName="text-left text-white text-base leading-[140%] gap-2"
+                containerClassName="shadow-[0px_8px_12px_6px_rgba(0,0,0,0.15),0px_4px_4px_rgba(0,0,0,0.3)] bg-[#181818] transition-colors hover:bg-[#222222]"
+                headerClassName="text-left text-white text-base leading-[140%] gap-2 bg-transparent"
                 iconClassName="text-[#999999]"
-                contentClassName="text-[#DEDEDE] text-sm leading-[160%]"
+                contentClassName="text-[#DEDEDE] text-sm leading-[160%] bg-transparent"
                 item={[
                     {
                         title: 'Apa perbedaan akun Gratis dan Premium?',
@@ -512,13 +508,13 @@ function FinalCTA({ className }: { className?: string }): JSX.Element {
     return (
         <section
             className={cn(
-                'rounded-3xl border-solid border-[1px] border-white border-opacity-10 py-[40px] px-[40px] max-w-[1028px] self-center w-full flex flex-col',
+                'rounded-3xl border-solid border-[1px] border-white border-opacity-10 py-[40px] px-[43px] sm:px-[29px] max-w-[1028px] self-center w-full flex flex-col',
                 className
             )}
             style={{
                 background: 'linear-gradient(90deg, #111827 0%, #000000 100%)'
             }}>
-            <div className="flex flex-col gap-8 items-center max-w-[676px] min-w-[287px] self-center">
+            <div className="flex flex-col gap-8 items-center xl:max-w-[676px] sm:max-w-[612px] min-w-[287px] self-center">
                 <img
                     src={`${CDN_URL}/assets/utbk/indonesia_asset.svg`}
                     alt="Peta pengguna Gradient di seluruh Indonesia."
@@ -536,7 +532,9 @@ function FinalCTA({ className }: { className?: string }): JSX.Element {
                     </p>
                     <Button
                         variant="primary"
-                        className="h-[52px] min-w-[160px] self-center">
+                        linkClass="h-[52px] sm:max-w-[160px] w-full self-center"
+                        className="h-full flex items-center justify-center"
+                        href="/daftar">
                         Coba Gratis
                     </Button>
                 </div>
@@ -552,12 +550,12 @@ export default function UTBK(): JSX.Element {
                 <Hero />
                 <Testimony
                     className="pt-24 pb-16 gap-[52px]"
-                    headerClassName="text-white text-2xl leading-[125%]"
+                    headerClassName="text-white text-2xl leading-[125%] md:text-3xl"
                 />
                 <Fitur className="mb-[40px] mx-4" />
                 <Langganan className="mb-12 mx-4" />
-                <FAQ className="mb-10 mx-4 max-w-[736px] self-center w-[calc(100%-32px)]" />
-                <FinalCTA />
+                <FAQ className="mb-10 mx-4 sm:mx-8 max-w-[736px] self-center w-[calc(100%-32px)] sm:w-[calc(100%-64px)]" />
+                <FinalCTA className="sm:mx-8 sm:w-[calc(100%-64px)]" />
             </div>
         </Layout>
     );

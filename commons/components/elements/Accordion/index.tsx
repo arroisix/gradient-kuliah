@@ -11,6 +11,7 @@ interface AccordionItemProps {
     className?: string;
     isOpen?: boolean;
     onClick?: () => void;
+    containerClassName?: string;
     headerClassName?: string;
     iconClassName?: string;
 }
@@ -18,6 +19,7 @@ interface AccordionItemProps {
 interface AccordionProps {
     item: AccordionItemProps[];
     className?: string;
+    containerClassName?: string;
     contentClassName?: string;
     headerClassName?: string;
     iconClassName?: string;
@@ -31,6 +33,7 @@ export const AccordionItem = ({
     className,
     isOpen,
     isHeading,
+    containerClassName,
     headerClassName,
     iconClassName
 }: AccordionItemProps): JSX.Element => {
@@ -63,10 +66,10 @@ export const AccordionItem = ({
     };
 
     return (
-        <>
+        <div className={cn('rounded-lg', containerClassName)}>
             <button
                 className={cn(
-                    'text-sm w-full md:text-base font-semibold px-4 py-3 flex justify-between items-center cursor-pointer bg-neutral-900 first:mt-0 mt-4',
+                    'text-sm w-full md:text-base font-semibold px-4 py-3 flex justify-between items-center cursor-pointer bg-neutral-900',
                     open ? 'rounded-t-lg' : 'rounded-lg',
                     headerClassName
                 )}
@@ -86,25 +89,27 @@ export const AccordionItem = ({
                 )}
             </button>
             {open && renderContent()}
-        </>
+        </div>
     );
 };
 
 const Accordion = ({
     item,
     className,
+    containerClassName,
     contentClassName,
     headerClassName,
     iconClassName
 }: AccordionProps): JSX.Element => {
     return (
-        <div className={cn(className)}>
+        <div className={cn('flex flex-col gap-4', className)}>
             {item.map(({ className, ...props }: AccordionItemProps) => (
                 <AccordionItem
                     key={props.title}
                     className={cn(className, contentClassName)}
                     headerClassName={headerClassName}
                     iconClassName={iconClassName}
+                    containerClassName={containerClassName}
                     {...props}
                 />
             ))}

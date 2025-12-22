@@ -76,6 +76,7 @@ type PacketOfferUTBK = {
     discount?: number;
     order: number;
     benefits: {
+        subtitle?: string;
         try_out_count: number;
         try_out_discussion: boolean;
         copilot: boolean;

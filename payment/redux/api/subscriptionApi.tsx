@@ -12,6 +12,7 @@ async function utbkLanggananStub(): Promise<{ data: PacketOfferUTBK[] }> {
                     price: 39000.0,
                     is_free: false,
                     benefits: {
+                        subtitle: 'Paket latihan saja.',
                         try_out_count: 4,
                         try_out_discussion: true,
                         copilot: true,
@@ -26,6 +27,7 @@ async function utbkLanggananStub(): Promise<{ data: PacketOfferUTBK[] }> {
                     price: 99000.0,
                     is_free: false,
                     benefits: {
+                        subtitle: 'Paket latihan saja.',
                         try_out_count: 12,
                         try_out_discussion: true,
                         copilot: true,
@@ -40,6 +42,7 @@ async function utbkLanggananStub(): Promise<{ data: PacketOfferUTBK[] }> {
                     price: 79000.0,
                     is_free: false,
                     benefits: {
+                        subtitle: 'Paket komplit materi + latihan.',
                         try_out_count: 4,
                         try_out_discussion: true,
                         copilot: true,
@@ -54,6 +57,7 @@ async function utbkLanggananStub(): Promise<{ data: PacketOfferUTBK[] }> {
                     price: 199000.0,
                     is_free: false,
                     benefits: {
+                        subtitle: 'Paket komplit materi + latihan.',
                         try_out_count: 4,
                         try_out_discussion: true,
                         copilot: true,
