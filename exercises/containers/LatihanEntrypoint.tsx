@@ -6,10 +6,12 @@ import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import RenewSubscriptionBanner from 'courses/components/RenewSubscriptionBanner';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import FilterEntrypoint from 'exercises/components/Entrypoint/FilterEntrypoint';
-import Button from 'commons/components/elements/Button';
-import { IoMdSettings } from 'react-icons/io';
-import { useWindowSize } from 'usehooks-ts';
 import { useAuth } from 'authentication/contexts/AuthProvider';
+import dynamic from 'next/dynamic';
+
+const SetTargetDrawerButton = dynamic(
+    () => import('exercises/components/Entrypoint/SetTargetDrawerButton')
+);
 
 const LatihanEntrypoint = (): JSX.Element => {
     const { profile } = useAuth();
@@ -24,7 +26,6 @@ const LatihanEntrypoint = (): JSX.Element => {
     } = router.query;
     const [page, setPage] = useState(Number(pageQuery));
     const { is_subscribed } = useCourseSubscription();
-    const { width } = useWindowSize();
 
     useEffect(() => {
         setPage(Number(pageQuery));
@@ -40,10 +41,6 @@ const LatihanEntrypoint = (): JSX.Element => {
         sort: sort as string
     });
 
-    const handleManageTargetOnClick = (): void => {
-        console.log('Manage Target clicked');
-    };
-
     return (
         <>
             <Breadcrumb className="w-full pb-5" />
@@ -54,16 +51,7 @@ const LatihanEntrypoint = (): JSX.Element => {
                     </h1>
 
                     {profile?.current_role === 'K12' && (
-                        <Button
-                            size={width < 768 ? 'extraSmall' : 'small'}
-                            variant="custom"
-                            className="bg-graphite-700 flex flex-row gap-[6px] items-center"
-                            onClick={handleManageTargetOnClick}>
-                            <IoMdSettings />
-                            <span className="size-sm font-semibold">
-                                Atur Target
-                            </span>
-                        </Button>
+                        <SetTargetDrawerButton />
                     )}
                 </div>
                 <FilterEntrypoint />
