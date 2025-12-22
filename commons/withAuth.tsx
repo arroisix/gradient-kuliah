@@ -37,6 +37,8 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
             } else if (isAuthenticated) {
                 if (isLoading) {
                     return <LoadingBackdrop />;
+                } else if (!profile) {
+                    return <LoadingBackdrop />;
                 } else if (isDoneFetchingSubcription) {
                     if (
                         router.pathname === '/onboarding' &&
