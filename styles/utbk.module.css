@@ -1,0 +1,40 @@
+.hero-decor::after {
+    content: '';
+    background: url('https://assets.gradient.academy/assets/utbk/hero_decor_small.svg');
+    position: absolute;
+    z-index: -1;
+    width: 119px;
+    height: 28px;
+    top: 28%;
+}
+
+.final-cta-decor::after {
+    content: '';
+    background-image: url('https://assets.gradient.academy/assets/utbk/final_cta_decor_small.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    z-index: -1;
+    width: 270px;
+    height: 37px;
+    top: 22%;
+    left: -8%;
+}
+
+@media screen and (min-width: 768px) {
+    .hero-decor::after {
+        background: url('https://assets.gradient.academy/assets/utbk/hero_decor_big2.svg');
+        width: 389px;
+        height: 77px;
+        top: 32%;
+    }
+}
+
+@media screen and (min-width: 640px) {
+    .final-cta-decor::after {
+        background-image: url('https://assets.gradient.academy/assets/utbk/final_cta_decor_big.svg');
+        width: 275px;
+        height: 38px;
+        top: 19%;
+    }
+}

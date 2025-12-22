@@ -10,6 +10,7 @@ import { useGetPacketOfferUTBKQuery } from 'payment/redux/api/subscriptionApi';
 import React from 'react';
 import { FaChevronRight } from 'react-icons/fa';
 import { FaRegCircleCheck } from 'react-icons/fa6';
+import styles from 'styles/utbk.module.css';
 
 function Hero(): JSX.Element {
     return (
@@ -49,7 +50,14 @@ function Hero(): JSX.Element {
                     Platform Belajar No. 1 Untuk UTBK
                 </p>
                 <h1 className="text-[32px] -tracking-[2.4px] text-white font-extrabold max-w-[238px] md:max-w-[703px] text-center mb-4 md:text-[96px] md:leading-[96px]">
-                    Masuk Kampus Impian
+                    Masuk Kampus{' '}
+                    <span
+                        className={cn(
+                            'relative inline-flex justify-center',
+                            styles['hero-decor']
+                        )}>
+                        Impian
+                    </span>
                     <br /> Mulai dari Sini.
                 </h1>
                 <p className="text-center text-[#DEDEDE] text-base md:text-xl leading-[140%] font-semibold max-w-[327px] md:max-w-[664px] mb-10">
@@ -58,7 +66,11 @@ function Hero(): JSX.Element {
                     ekosistem belajar.
                 </p>
                 <div className="flex flex-col md:flex-row gap-4 self-center mb-16 px-[54px] max-w-[564px] w-full">
-                    <Button variant="primary" className="h-[52px] w-full">
+                    <Button
+                        variant="primary"
+                        linkClass="h-[52px] w-full"
+                        className="h-[52px] flex items-center justify-center"
+                        href="/daftar">
                         Coba Gratis
                     </Button>
                     <Button variant="secondary" className="h-[52px] w-full">
@@ -521,9 +533,15 @@ function FinalCTA({ className }: { className?: string }): JSX.Element {
                     height={100}
                     className="w-full h-auto"
                 />
-                <div className="flex flex-col w-full text-center gap-4">
+                <div className="flex flex-col w-full text-center gap-4 z-0">
                     <h2 className="text-white text-3xl font-bold">
-                        200.000+ pelajar
+                        <span
+                            className={cn(
+                                'relative inline-flex justify-center',
+                                styles['final-cta-decor']
+                            )}>
+                            200.000+ pelajar
+                        </span>
                         <br className="sm:hidden" /> di Indonesia menggunakan
                         <br className="hidden sm:block" /> Gradient
                     </h2>
