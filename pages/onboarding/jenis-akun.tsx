@@ -39,10 +39,10 @@ const OnboardingOption = ({
             />
             <div
                 className={cn(
-                    'flex gap-4 items-center border-2 border-solid rounded-lg px-[14px] py-[18px]',
+                    'flex gap-4 items-center border-2 border-solid rounded-lg px-[14px] py-[18px] cursor-pointer',
                     selected
                         ? 'bg-purple-7 border-[#B6A6F3]'
-                        : 'bg-violet-2 border-transparent'
+                        : 'bg-violet-2 border-transparent hover:bg-neutral-700'
                 )}>
                 <img
                     src={imageURL}
