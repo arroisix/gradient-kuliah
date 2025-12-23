@@ -301,6 +301,7 @@ export const exerciseApi = baseApi.injectEndpoints({
                 course_id?: string;
                 university_name?: string;
                 type?: string;
+                tryout_type?: string;
                 sort?: string;
             }
         >({

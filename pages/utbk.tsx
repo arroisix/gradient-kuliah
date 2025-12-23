@@ -1,6 +1,7 @@
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import Accordion from 'commons/components/elements/Accordion';
 import Button from 'commons/components/elements/Button';
+import Modal from 'commons/components/modules/Modal';
 import { CDN_URL } from 'commons/constants';
 import Layout from 'commons/utbkLayout';
 import { cn } from 'commons/utils';
@@ -9,7 +10,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useGetPacketOfferUTBKQuery } from 'payment/redux/api/subscriptionApi';
-import React from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { FaChevronRight } from 'react-icons/fa';
 import { FaRegCircleCheck } from 'react-icons/fa6';
 import styles from 'styles/utbk.module.css';
@@ -136,7 +137,77 @@ function Hero(): JSX.Element {
     );
 }
 
+function IRTModal({
+    open,
+    setOpen
+}: {
+    open: boolean;
+    setOpen: Dispatch<SetStateAction<boolean>>;
+}): JSX.Element {
+    return (
+        <Modal
+            isOpen={open}
+            setOpen={setOpen}
+            variant="dark"
+            containerClassName="modal modal-open modal-middle min-h-[100px]">
+            <div className="-mt-6 gap-4 flex flex-col text-white">
+                <h3 className="text-xl leading-[140%] font-semibold">
+                    Apa itu IRT?
+                </h3>
+                <div className="text-sm leading-[160%] flex flex-col gap-6">
+                    <p>
+                        IRT adalah sistem penilaian UTBK yang{' '}
+                        <b>tidak menyamakan semua soal.</b> Nilai kamu
+                        ditentukan bukan cuma dari jumlah benar, tapi juga{' '}
+                        <b>tingkat kesulitan soal yang kamu jawab.</b>
+                    </p>
+                    <p className="p-4 bg-violet-3 rounded-2xl flex flex-col gap-4 font-semibold">
+                        🏫 Sistem Ujian Sekolah
+                        <ul className="pl-5 text-[#DEDEDE] font-normal">
+                            <li>Semua soal bernilai sama.</li>
+                            <li>
+                                Jawaban benar dihitung satu per satu, tanpa
+                                melihat soal itu mudah atau sulit.
+                            </li>
+                        </ul>
+                    </p>
+                    <p className="p-4 bg-[#5F2BCE] bg-opacity-20 rounded-2xl flex flex-col gap-4 font-semibold border-solid border-[1px] border-accent-purple">
+                        🎓 Sistem UTBK (IRT)
+                        <ul className="pl-5">
+                            <li>Setiap soal punya bobot berbeda.</li>
+                            <li>
+                                Menjawab soal yang lebih sulit memberi dampak
+                                skor lebih besar dibanding soal yang mudah.
+                            </li>
+                        </ul>
+                    </p>
+                    <p>
+                        Artinya, jika kamu bisa menjawab soal yang banyak
+                        peserta lain gagal, skormu bisa naik lebih signifikan.
+                    </p>
+                    <p>
+                        Gradient menggunakan sistem ini supaya kamu melihat{' '}
+                        <b>
+                            perkiraan skor yang lebih mendekati hasil UTBK
+                            sebenarnya, bukan sekadar jumlah jawaban benar.
+                        </b>
+                    </p>
+                    <Button
+                        href="/utbk/try-out"
+                        variant="primary"
+                        className="flex items-center justify-center text-sm leading-[125%] gap-[6px]"
+                        linkClass="w-max self-center">
+                        Cek Try Out UTBK Gradient <FaChevronRight size={12} />
+                    </Button>
+                </div>
+            </div>
+        </Modal>
+    );
+}
+
 function Fitur({ className }: { className?: string }): JSX.Element {
+    const [showIRTModal, setShowIRTModal] = useState(false);
+
     return (
         <section className={cn('flex flex-col', className)}>
             <h2 className="flex flex-col items-center text-center gap-3 text-white text-2xl leading-[125%] font-bold mb-3">
@@ -218,12 +289,13 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                             UTBK asli. Menggunakan sistem penilaian Item
                             Response Theory untuk akurasi skor tinggi.
                         </p>
-                        <Link
-                            href="/utbk/materi"
-                            className="mb-2 text-[#B6A6F3] font-semibold text-sm leading-[125%] h-[34px] flex items-center gap-1">
+                        <button
+                            className="mb-2 text-[#B6A6F3] font-semibold text-sm leading-[125%] h-[34px] flex items-center gap-1"
+                            type="button"
+                            onClick={() => setShowIRTModal(true)}>
                             Apa itu IRT
                             <FaChevronRight height={16} width={16} />
-                        </Link>
+                        </button>
                         <div className="flex-grow flex items-end">
                             <img
                                 src={`${CDN_URL}/assets/utbk/try-out.avif`}
@@ -300,6 +372,8 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                     </article>
                 </li>
             </ul>
+
+            <IRTModal open={showIRTModal} setOpen={setShowIRTModal} />
         </section>
     );
 }
