@@ -14,6 +14,7 @@ import {
     StudentTargetInstitution
 } from 'dashboard/types/dashboard';
 import { toast } from 'react-toastify';
+import { useWindowSize } from 'usehooks-ts';
 
 interface Target {
     id: string; // to differentiate between targets
@@ -26,7 +27,7 @@ interface Target {
 interface SetTargetFormProps {
     targets: StudentTargetInstitution[];
     setTargets: Dispatch<SetStateAction<StudentTargetInstitution[]>>;
-    setIsDrawerOpened: Dispatch<SetStateAction<boolean>>;
+    setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 // to check whether the old target has changed
@@ -59,8 +60,9 @@ function isTargetsChanged(oldTargets: Target[], newTargets: Target[]) {
 function SetTargetForm({
     targets,
     setTargets,
-    setIsDrawerOpened
+    setIsOpen
 }: SetTargetFormProps): JSX.Element {
+    const { width } = useWindowSize();
     const [submitTargetInstitutions, { isLoading }] =
         useSetStudentTargetInstitutionsMutation();
 
@@ -161,7 +163,7 @@ function SetTargetForm({
                         };
                     })
                 );
-                setIsDrawerOpened(false);
+                setIsOpen(false);
             }
         } catch (error) {
             console.error(
@@ -209,8 +211,14 @@ function SetTargetForm({
             initialValues={formikInitialValue}
             onSubmit={submitStudentTargets}>
             {({ values, handleSubmit, setValues }) => (
-                <form onSubmit={handleSubmit} autoComplete="off">
-                    <div className="flex flex-col gap-6 first:mt-8">
+                <form
+                    onSubmit={handleSubmit}
+                    autoComplete="off"
+                    className={width < 768 ? 'mt-6' : 'mt-8'}>
+                    <div
+                        className={`${
+                            width < 768 ? 'gap-8' : 'gap-6'
+                        } flex flex-col`}>
                         {values.map(({ id, institution, major }, index) => (
                             <div key={id} className="space-y-4">
                                 <div className="flex justify-between items-center">
@@ -254,7 +262,12 @@ function SetTargetForm({
                                     </button>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-4">
+                                <div
+                                    className={
+                                        width < 768
+                                            ? 'space-y-4'
+                                            : 'grid grid-cols-2 gap-4'
+                                    }>
                                     <Select
                                         isAsync
                                         isSearchTarget

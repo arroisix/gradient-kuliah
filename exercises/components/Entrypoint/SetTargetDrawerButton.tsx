@@ -5,14 +5,18 @@ import { useWindowSize } from 'usehooks-ts';
 
 function SetTargetDrawerButton() {
     const { width } = useWindowSize();
-    const { setIsDrawerOpened } = useSetTargetDrawerContext();
+    const { setIsDrawerOpened, setIsModalOpened } = useSetTargetDrawerContext();
+
+    const handleClickButton = () => {
+        width < 768 ? setIsModalOpened(true) : setIsDrawerOpened(true);
+    };
 
     return (
         <Button
             size={width < 768 ? 'extraSmall' : 'small'}
             variant="custom"
             className="bg-graphite-700 flex flex-row gap-[6px] items-center"
-            onClick={() => setIsDrawerOpened(true)}>
+            onClick={handleClickButton}>
             <IoMdSettings />
             <span className="size-sm font-semibold">Atur Target</span>
         </Button>

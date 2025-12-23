@@ -4,8 +4,12 @@ import { useSetTargetDrawerContext } from './SetTargetDrawer';
 import { useWindowSize } from 'usehooks-ts';
 
 function SetTargetInstitutionWall(): JSX.Element {
-    const { setIsDrawerOpened } = useSetTargetDrawerContext();
+    const { setIsDrawerOpened, setIsModalOpened } = useSetTargetDrawerContext();
     const { width } = useWindowSize();
+
+    const handleClickButton = () => {
+        width < 768 ? setIsModalOpened(true) : setIsDrawerOpened(true);
+    };
 
     return (
         <div className="min-h-[calc(100vh-64px-20px-32px)]">
@@ -39,7 +43,7 @@ function SetTargetInstitutionWall(): JSX.Element {
                     variant="primary"
                     size="large"
                     className="w-full max-w-[328px] block mx-auto !py-3"
-                    onClick={() => setIsDrawerOpened(true)}>
+                    onClick={handleClickButton}>
                     Tentukan Target
                 </Button>
             </section>
