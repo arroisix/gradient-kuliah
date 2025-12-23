@@ -124,7 +124,7 @@ function Hero(): JSX.Element {
                             className="mb-2"
                         />
 
-                        <p className="text-sm leading-4">
+                        <p className="text-sm leading-4 text-graphite-400">
                             Dipercaya <b>200k+ pelajar</b> Indonesia
                         </p>
                     </div>
@@ -569,6 +569,10 @@ export default function UTBK(): JSX.Element {
                 <Testimony
                     className="pt-24 pb-16 gap-[52px]"
                     headerClassName="text-white text-2xl leading-[125%] md:text-3xl"
+                    itemHeaderClassName="text-white font-[Raleway,sans-serif] leading-[125%]"
+                    itemSubtitleClassName="font-['Open_Sans',sans-serif] leading-[150%]"
+                    itemContentClassName="text-white !text-xs !leading-[160%]"
+                    noBorder
                 />
                 <Fitur className="mb-[40px] mx-4" />
                 <Langganan className="mb-12 mx-4" />
