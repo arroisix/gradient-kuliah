@@ -1,9 +1,11 @@
 import Button from 'commons/components/elements/Button';
 import Image from 'next/image';
 import { useSetTargetDrawerContext } from './SetTargetDrawer';
+import { useWindowSize } from 'usehooks-ts';
 
 function SetTargetInstitutionWall(): JSX.Element {
     const { setIsDrawerOpened } = useSetTargetDrawerContext();
+    const { width } = useWindowSize();
 
     return (
         <div className="min-h-[calc(100vh-64px-20px-32px)]">
@@ -18,7 +20,10 @@ function SetTargetInstitutionWall(): JSX.Element {
                     />
                 </div>
 
-                <div className="text-center space-y-3 px-[25px]">
+                <div
+                    className={`${
+                        width < 768 ? '' : 'px-[25px]'
+                    } text-center space-y-3`}>
                     <h2 className="text-white font-bold text-xl">
                         Siap untuk{' '}
                         <span className="text-[#B6A6F3]">UTBK 2026?</span>
