@@ -15,7 +15,129 @@ import { FaChevronRight } from 'react-icons/fa';
 import { FaRegCircleCheck } from 'react-icons/fa6';
 import styles from 'styles/utbk.module.css';
 
+const MATERI_UTBK_MODAL = [
+    {
+        title: 'Penalaran Umum',
+        icon: 'penalaran-umum.svg'
+    },
+    {
+        title: 'Pemahaman Bacaan',
+        icon: 'pemahaman-penalaran-umum.svg'
+    },
+    {
+        title: 'Perhitungan',
+        icon: 'penalaran-matematis.svg'
+    },
+    {
+        title: 'Literasi B.Ing dan Indo',
+        icon: 'literasi-bahasa-indonesia.svg'
+    }
+];
+
+function UTBKModal({
+    open,
+    setOpen
+}: {
+    open: boolean;
+    setOpen: Dispatch<SetStateAction<boolean>>;
+}): JSX.Element {
+    return (
+        <Modal
+            isOpen={open}
+            setOpen={setOpen}
+            variant="dark"
+            containerClassName="modal modal-open modal-middle min-h-[100px]"
+            className="md:max-w-[660px] p-4 md:p-6">
+            <div className="-mt-6 gap-4 md:gap-6 flex flex-col text-white">
+                <iframe
+                    title="UTBK Yuk"
+                    src="https://www.youtube.com/embed/tgbNymZ7vqY"
+                    className="w-[calc(100%+32px)] md:w-[calc(100%+48px)] aspect-[343/176] md:aspect-[660/370] -mx-4 -mt-4 md:-mx-6 md:-mt-6"></iframe>
+                <div className="flex flex-col gap-8">
+                    <div className="flex flex-col gap-2">
+                        <h3 className="text-xl leading-[140%] font-semibold">
+                            Kenalan dengan UTBK yuk! 👋
+                        </h3>
+                        <p className="text-[#DEDEDE] text-sm leading-[160%]">
+                            UTBK adalah tes masuk perguruan tinggi negeri. Tes
+                            ini tidak menilai seberapa banyak materi yang kamu
+                            hafal, tapi seberapa baik kamu memahami soal,
+                            berpikir logis, dan menarik jawaban yang tepat.
+                        </p>
+                    </div>
+
+                    <div className="flex flex-col gap-4">
+                        <h4 className="text-base leading-[140%] font-semibold">
+                            Apa bedanya dengan Ujian Sekolah?
+                        </h4>
+                        <div className="flex flex-col gap-6 md:flex-row">
+                            <p className="p-4 bg-violet-3 rounded-2xl flex flex-col gap-4 font-semibold basis-1/2 text-sm leading-[125%]">
+                                🏫 Ujian Sekolah
+                                <ul className="pl-5 text-[#DEDEDE] font-normal leading-[160%]">
+                                    <li>Banyak mengandalkan hafalan materi</li>
+                                    <li>
+                                        Rumus sering harus diingat di luar
+                                        kepala
+                                    </li>
+                                    <li>Fokus ke isi pelajaran di kelas</li>
+                                </ul>
+                            </p>
+                            <p className="text-sm leading-[125%] p-4 bg-[#5F2BCE] bg-opacity-20 rounded-2xl flex flex-col gap-4 font-semibold border-solid border-[1px] border-accent-purple basis-1/2">
+                                🎓 UTBK
+                                <ul className="pl-5 leading-[125%]">
+                                    <li>Menguji cara berpikir dan logika</li>
+                                    <li>
+                                        Menilai pemahaman konsep dasar, bukan
+                                        hafalan
+                                    </li>
+                                    <li>
+                                        Menguji kemampuan membaca dan memahami
+                                        teks
+                                    </li>
+                                </ul>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col gap-4">
+                        <h4 className="text-base leading-[140%] font-semibold">
+                            Apa saja yang diuji?
+                        </h4>
+                        <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 list-none p-0">
+                            {MATERI_UTBK_MODAL.map((i) => (
+                                <li
+                                    key={i.title}
+                                    className="flex gap-4 p-3 bg-violet-1 items-center rounded-lg">
+                                    <div className="h-[48px] w-[48px] flex items-center justify-center rounded-full bg-violet-3 text-white flex-shrink-0">
+                                        <img
+                                            src={`${CDN_URL}/assets/utbk/${i.icon}`}
+                                            alt={i.title}
+                                        />
+                                    </div>
+                                    <p className="text-sm leading-[125%] font-semibold">
+                                        {i.title}
+                                    </p>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    <Button
+                        href="/utbk/materi"
+                        variant="primary"
+                        className="flex items-center justify-center text-sm leading-[125%] gap-[6px] font-semibold"
+                        linkClass="w-max self-center md:self-end">
+                        Cek Materi UTBK Gradient <FaChevronRight size={12} />
+                    </Button>
+                </div>
+            </div>
+        </Modal>
+    );
+}
+
 function Hero(): JSX.Element {
+    const [showUTBKModal, setShowUTBKModal] = useState(false);
+
     return (
         <section className="max-h-[832px] min-h-[775px] w-full aspect-[20/13] relative flex justify-center">
             <picture className="absolute pointer-events-none">
@@ -76,7 +198,10 @@ function Hero(): JSX.Element {
                         href="/daftar">
                         Coba Gratis
                     </Button>
-                    <Button variant="secondary" className="h-[52px] w-full">
+                    <Button
+                        variant="secondary"
+                        className="h-[52px] w-full"
+                        onClick={() => setShowUTBKModal(true)}>
                         Apa itu UTBK?
                     </Button>
                 </div>
@@ -133,6 +258,8 @@ function Hero(): JSX.Element {
                     </div>
                 </div>
             </div>
+
+            <UTBKModal open={showUTBKModal} setOpen={setShowUTBKModal} />
         </section>
     );
 }
@@ -149,7 +276,8 @@ function IRTModal({
             isOpen={open}
             setOpen={setOpen}
             variant="dark"
-            containerClassName="modal modal-open modal-middle min-h-[100px]">
+            containerClassName="modal modal-open modal-middle min-h-[100px]"
+            className="md:max-w-[660px]">
             <div className="-mt-6 gap-4 flex flex-col text-white">
                 <h3 className="text-xl leading-[140%] font-semibold">
                     Apa itu IRT?
@@ -157,37 +285,45 @@ function IRTModal({
                 <div className="text-sm leading-[160%] flex flex-col gap-6">
                     <p>
                         IRT adalah sistem penilaian UTBK yang{' '}
-                        <b>tidak menyamakan semua soal.</b> Nilai kamu
-                        ditentukan bukan cuma dari jumlah benar, tapi juga{' '}
-                        <b>tingkat kesulitan soal yang kamu jawab.</b>
+                        <b className="font-semibold">
+                            tidak menyamakan semua soal.
+                        </b>{' '}
+                        Nilai kamu ditentukan bukan cuma dari jumlah benar, tapi
+                        juga{' '}
+                        <b className="font-semibold">
+                            tingkat kesulitan soal yang kamu jawab.
+                        </b>
                     </p>
-                    <p className="p-4 bg-violet-3 rounded-2xl flex flex-col gap-4 font-semibold">
-                        🏫 Sistem Ujian Sekolah
-                        <ul className="pl-5 text-[#DEDEDE] font-normal">
-                            <li>Semua soal bernilai sama.</li>
-                            <li>
-                                Jawaban benar dihitung satu per satu, tanpa
-                                melihat soal itu mudah atau sulit.
-                            </li>
-                        </ul>
-                    </p>
-                    <p className="p-4 bg-[#5F2BCE] bg-opacity-20 rounded-2xl flex flex-col gap-4 font-semibold border-solid border-[1px] border-accent-purple">
-                        🎓 Sistem UTBK (IRT)
-                        <ul className="pl-5">
-                            <li>Setiap soal punya bobot berbeda.</li>
-                            <li>
-                                Menjawab soal yang lebih sulit memberi dampak
-                                skor lebih besar dibanding soal yang mudah.
-                            </li>
-                        </ul>
-                    </p>
+                    <div className="flex flex-col gap-6 md:flex-row">
+                        <p className="p-4 bg-violet-3 rounded-2xl flex flex-col gap-4 font-semibold basis-1/2">
+                            🏫 Sistem Ujian Sekolah
+                            <ul className="pl-5 text-[#DEDEDE] font-normal">
+                                <li>Semua soal bernilai sama.</li>
+                                <li>
+                                    Jawaban benar dihitung satu per satu, tanpa
+                                    melihat soal itu mudah atau sulit.
+                                </li>
+                            </ul>
+                        </p>
+                        <p className="p-4 bg-[#5F2BCE] bg-opacity-20 rounded-2xl flex flex-col gap-4 font-semibold border-solid border-[1px] border-accent-purple basis-1/2">
+                            🎓 Sistem UTBK (IRT)
+                            <ul className="pl-5 leading-[125%]">
+                                <li>Setiap soal punya bobot berbeda.</li>
+                                <li>
+                                    Menjawab soal yang lebih sulit memberi
+                                    dampak skor lebih besar dibanding soal yang
+                                    mudah.
+                                </li>
+                            </ul>
+                        </p>
+                    </div>
                     <p>
                         Artinya, jika kamu bisa menjawab soal yang banyak
                         peserta lain gagal, skormu bisa naik lebih signifikan.
                     </p>
                     <p>
                         Gradient menggunakan sistem ini supaya kamu melihat{' '}
-                        <b>
+                        <b className="font-semibold">
                             perkiraan skor yang lebih mendekati hasil UTBK
                             sebenarnya, bukan sekadar jumlah jawaban benar.
                         </b>
@@ -195,8 +331,8 @@ function IRTModal({
                     <Button
                         href="/utbk/try-out"
                         variant="primary"
-                        className="flex items-center justify-center text-sm leading-[125%] gap-[6px]"
-                        linkClass="w-max self-center">
+                        className="flex items-center justify-center text-sm leading-[125%] gap-[6px] font-semibold"
+                        linkClass="w-max self-center md:self-end">
                         Cek Try Out UTBK Gradient <FaChevronRight size={12} />
                     </Button>
                 </div>
