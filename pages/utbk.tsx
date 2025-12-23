@@ -277,7 +277,7 @@ function IRTModal({
             setOpen={setOpen}
             variant="dark"
             containerClassName="modal modal-open modal-middle min-h-[100px]"
-            className="md:max-w-[660px]">
+            className="md:max-w-[660px] p-4 md:p-6">
             <div className="-mt-6 gap-4 flex flex-col text-white">
                 <h3 className="text-xl leading-[140%] font-semibold">
                     Apa itu IRT?
