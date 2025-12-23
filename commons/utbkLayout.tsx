@@ -5,12 +5,16 @@ import Button from './components/elements/Button';
 import { ChevronDownIcon } from 'lucide-react';
 import { FaArrowRight } from 'react-icons/fa';
 import { NavigationMenu } from '@base-ui/react/navigation-menu';
+import { Accordion } from '@base-ui/react/accordion';
+import React, { Dispatch, SetStateAction, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { XIcon } from 'lucide-react';
 
 interface LayoutProps {
     children?: JSX.Element;
 }
 
-function Layout({ children }: LayoutProps): JSX.Element {
+export default function Layout({ children }: LayoutProps): JSX.Element {
     return (
         <div className="bg-black">
             <Navbar />
@@ -20,7 +24,7 @@ function Layout({ children }: LayoutProps): JSX.Element {
     );
 }
 
-const solutions = [
+const MATERI = [
     {
         name: 'Penalaran Kualitatif',
         description: 'Hubungan, pola, analisis teks pendek.',
@@ -64,6 +68,214 @@ const solutions = [
         icon: 'penalaran-umum.svg'
     }
 ];
+
+function ArrowRight(props: React.ComponentProps<'svg'>): JSX.Element {
+    return (
+        <svg
+            width={24}
+            height={24}
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            {...props}>
+            <path
+                d="M15 5C14.4181 5 14 5.50476 14 6C14 6.25443 14.0865 6.48001 14.2881 6.68164L17.7539 10.1465L18.6074 11H3C2.44814 11 2 11.4481 2 12C2 12.5519 2.44814 13 3 13H18.6074L17.7539 13.8535L14.2881 17.3184C14.0865 17.52 14 17.7456 14 18C14 18.4954 14.4175 19 15 19C15.2626 19 15.4831 18.9099 15.6807 18.7119L15.6816 18.7109L21.6621 12.7314C21.7911 12.6024 21.8662 12.5127 21.916 12.416C21.9617 12.3273 22 12.2047 22 12C22 11.8089 21.9581 11.6769 21.9033 11.5742C21.845 11.4649 21.7623 11.3688 21.6504 11.2568L15.6816 5.28809H15.6807C15.4831 5.09005 15.2626 5 15 5ZM22.4893 11.8057H22.4883H22.4893ZM13.668 6.67969H13.667H13.668Z"
+                fill="white"
+            />
+        </svg>
+    );
+}
+
+function AccordionItem({
+    label,
+    children,
+    href
+}: {
+    label: string;
+    href?: string;
+    children?: JSX.Element;
+}): JSX.Element {
+    let header;
+    if (href) {
+        header = (
+            <div className="flex items-center w-full text-white h-[78px] md:h-[86px]">
+                <span className="flex-grow text-left text-2xl md:text-3xl leading-[125%] font-bold">
+                    {label}
+                </span>
+                <ArrowRight />
+            </div>
+        );
+    } else {
+        header = (
+            <Accordion.Trigger className="group flex items-center w-full text-white h-[78px] md:h-[86px]">
+                <span className="flex-grow text-left text-2xl md:text-3xl leading-[125%] font-bold">
+                    {label}
+                </span>
+                <ChevronDownIcon
+                    size={24}
+                    className="group-data-[panel-open]:rotate-180 group-data-[panel-open]:text-[#B6A6F3]"
+                />
+            </Accordion.Trigger>
+        );
+    }
+
+    const body = (
+        <Accordion.Header>
+            {header}
+            {children ? (
+                <Accordion.Panel className="pb-6 pt-2 md:pt-4">
+                    {children}
+                </Accordion.Panel>
+            ) : null}
+        </Accordion.Header>
+    );
+
+    return (
+        <Accordion.Item className="border-b-[1px] border-white border-opacity-10">
+            {href ? <Link href={href}>{body}</Link> : body}
+        </Accordion.Item>
+    );
+}
+
+const MobileSidebar = ({
+    open,
+    setOpen
+}: {
+    open: boolean;
+    setOpen: Dispatch<SetStateAction<boolean>>;
+    configData?: ConfigResponse;
+}): JSX.Element => {
+    return (
+        <AnimatePresence>
+            {open && (
+                <motion.div
+                    initial={{ x: '-100%' }}
+                    animate={{ x: 0 }}
+                    exit={{ x: '-100%' }}
+                    transition={{ duration: 0.35 }}
+                    className="fixed z-[110] top-0 left-0 w-screen h-screen bg-black flex flex-col gap-12">
+                    <header className="flex items-center justify-between w-full px-6 pt-6 md:px-8">
+                        <span className="text-2xl font-bold cursor-pointer font-[Urbanist] text-neutral-50">
+                            Gradient
+                        </span>
+                        <XIcon
+                            size={24}
+                            onClick={() => setOpen(false)}
+                            className="text-[#ffffff]"
+                        />
+                    </header>
+                    <div className="flex flex-col gap-8 md:gap-12 px-6 pb-6 flex-grow overflow-auto md:max-w-[738px] self-center w-full">
+                        <Accordion.Root className="flex flex-col flex-grow md:flex-grow-0">
+                            <AccordionItem label="Materi">
+                                <ul className="flex flex-col gap-8 list-none p-0 md:pl-8">
+                                    {MATERI.map((item) => (
+                                        <li key={item.name}>
+                                            <Link
+                                                href={item.href}
+                                                className="flex gap-4">
+                                                <div className="flex-shrink-0 flex items-center justify-center rounded-full h-[48px] w-[48px] bg-[#333333]">
+                                                    <img
+                                                        src={`${CDN_URL}/assets/utbk/${item.icon}`}
+                                                        alt={item.name}
+                                                        className="flex-shrink-0 object-contain"
+                                                    />
+                                                </div>
+                                                <div className="flex flex-col gap-1">
+                                                    <h5 className="text-white font-semibold text-base leading-[140%]">
+                                                        {item.name}
+                                                    </h5>
+                                                    <p className="text-[#999999] text-sm leading-[160%]">
+                                                        {item.description}
+                                                    </p>
+                                                </div>
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </AccordionItem>
+                            <AccordionItem label="Try Out">
+                                <div className="flex flex-col gap-8 md:gap-10">
+                                    <section className="flex flex-col gap-4">
+                                        <h4 className="text-xs leading-[125%] uppercase tracking-[2px] font-bold text-white">
+                                            Gratis
+                                        </h4>
+                                        <Link
+                                            href="/utbk/try-out?type=1"
+                                            className="flex flex-col gap-1 p-3">
+                                            <h5 className="text-white text-base leading-[140%] font-semibold">
+                                                Try Out Gratis
+                                            </h5>
+                                            <p className="text-[#999999] text-sm leading-[160%] whitespace-nowrap">
+                                                Coba format dan alur try out
+                                                UTBK.
+                                            </p>
+                                        </Link>
+                                    </section>
+                                    <section className="flex flex-col gap-4">
+                                        <h4
+                                            className="text-xs leading-[125%] uppercase tracking-[2px] font-bold text-white"
+                                            style={{
+                                                background:
+                                                    'linear-gradient(97.13deg, #D790DE 8.82%, #99B8DA 45.79%, #439CFB 91.57%)',
+                                                WebkitBackgroundClip: 'text',
+                                                WebkitTextFillColor:
+                                                    'transparent',
+                                                backgroundClip: 'text'
+                                            }}>
+                                            Khusus Member
+                                        </h4>
+                                        <Link
+                                            href="/utbk/try-out?type=2"
+                                            className="flex flex-col gap-1 p-3">
+                                            <h5 className="text-white text-base leading-[140%] font-semibold">
+                                                Try Out Harian
+                                            </h5>
+                                            <p className="text-[#999999] text-sm leading-[160%]">
+                                                Latihan rutin soal UTBK setiap
+                                                hari.
+                                            </p>
+                                        </Link>
+                                        <Link
+                                            href="/utbk/try-out?type=3"
+                                            className="flex flex-col gap-1 p-3">
+                                            <h5 className="text-white text-base leading-[140%] font-semibold">
+                                                Try Out Mingguan
+                                            </h5>
+                                            <p className="text-[#999999] text-sm leading-[160%] whitespace-nowrap">
+                                                Simulasi try out UTBK secara
+                                                berkala.
+                                            </p>
+                                        </Link>
+                                    </section>
+                                </div>
+                            </AccordionItem>
+                            <AccordionItem
+                                label="Prediksi PTN"
+                                href="/utbk/prediksi-ptn"
+                            />
+                        </Accordion.Root>
+                        <section className="flex flex-col md:flex-row md:justify-center md:max-w-[456px] w-full gap-4 md:self-center">
+                            <Button
+                                variant="secondary"
+                                href="/masuk"
+                                className="h-[52px] flex justify-center items-center"
+                                linkClass="md:grow md:basis-1/2">
+                                Masuk
+                            </Button>
+                            <Button
+                                variant="primary"
+                                href="/daftar"
+                                className="h-[52px] flex justify-center items-center"
+                                linkClass="md:grow md:basis-1/2">
+                                Coba Gratis
+                            </Button>
+                        </section>
+                    </div>
+                </motion.div>
+            )}
+        </AnimatePresence>
+    );
+};
 
 const contentClassName =
     'transition-[opacity,transform,translate] duration-[var(--duration)] ease-[var(--easing)] ' +
@@ -145,6 +357,8 @@ function NavigationMenuItem({
 }
 
 function Navbar(): JSX.Element {
+    const [showMobileMenu, setShowMobileMenu] = useState(false);
+
     return (
         <header className="flex fixed top-0 z-50 w-full justify-center lg:mt-[10px]">
             <div
@@ -168,7 +382,7 @@ function Navbar(): JSX.Element {
                                     backdropFilter: 'blur(32px)'
                                 }}>
                                 <ul className="p-6 grid grid-cols-2 gap-x-8 gap-y-6 m-0 list-none">
-                                    {solutions.map((item) => (
+                                    {MATERI.map((item) => (
                                         <li key={item.name}>
                                             <Link
                                                 href={item.href}
@@ -308,7 +522,10 @@ function Navbar(): JSX.Element {
                     </NavigationMenu.Portal>
                 </NavigationMenu.Root>
 
-                <button type="button" className="lg:hidden">
+                <button
+                    type="button"
+                    className="lg:hidden"
+                    onClick={() => setShowMobileMenu(true)}>
                     <img
                         src={`${CDN_URL}/assets/utbk/hamburger.svg`}
                         alt="Menu"
@@ -332,8 +549,8 @@ function Navbar(): JSX.Element {
                     </Button>
                 </section>
             </div>
+
+            <MobileSidebar open={showMobileMenu} setOpen={setShowMobileMenu} />
         </header>
     );
 }
-
-export default Layout;
