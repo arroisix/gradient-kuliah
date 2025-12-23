@@ -132,12 +132,39 @@ export const authApi = baseApi.injectEndpoints({
         }),
         getStudentRecommendation: builder.query<
             RecommendationResponse[],
-            { fieldName: string; input: string }
+            {
+                fieldName: string;
+                input: string;
+                is_search_target?: boolean;
+                institution_id?: string;
+                major_id?: string;
+            }
         >({
-            query: ({ fieldName, input }) => ({
-                url: `students/recommendation/${fieldName}`,
-                params: { name: input }
-            }),
+            query: ({
+                fieldName,
+                input,
+                is_search_target,
+                institution_id,
+                major_id
+            }) => {
+                const params: Record<string, any> = { name: input };
+                if (is_search_target) {
+                    params.is_search_target = is_search_target;
+                }
+
+                if (institution_id) {
+                    params.institution_id = institution_id;
+                }
+
+                if (major_id) {
+                    params.major_id = major_id;
+                }
+
+                return {
+                    url: `students/recommendation/${fieldName}`,
+                    params
+                };
+            },
             transformResponse: (resp: { data: RecommendationResponse[] }) =>
                 resp.data
         }),
