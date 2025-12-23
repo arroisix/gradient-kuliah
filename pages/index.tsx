@@ -43,7 +43,7 @@ const RevampedLandingPage = ({
                     'https://x.com/gradient_idn?lang=en',
                     'https://www.youtube.com/@gradient3012',
                     'https://www.linkedin.com/company/gradient-idn/',
-                    'https://www.tiktok.com/@gradientacademy'
+                    'https://www.tiktok.com/@gradient_idn'
                 ]}
                 contactPoint={[
                     {
