@@ -18,7 +18,6 @@ type Feature = {
     url: string;
 };
 
-// The dashboard component for K12 users
 const K12Dashboard = () => {
     const router = useRouter();
     const { is_subscribed: isSubscribed } = useCourseSubscription();
