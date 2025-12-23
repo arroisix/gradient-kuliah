@@ -285,18 +285,9 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                             </span>
                             Personal Analytics
                         </h3>
-                        <p className="text-white text-lg leading-[29.25px]">
+                        <p className="text-white text-lg leading-[29.25px] mb-2">
                             Pantau kekuatan dan kelemahanmu secara real-time.
                             Data driven learning untuk hasil yang maksimal.
-                        </p>
-                        <p
-                            className="text-[11px] leading-[16.5px] tracking-widest font-bold text-[#E9D5FF] border-solid border-[#A855F7] border-[1px] border-opacity-30 rounded-full bg-white bg-opacity-[3%] uppercase px-4 py-[6px] mb-2"
-                            style={{
-                                boxShadow:
-                                    '0px 0px 20px rgba(124, 58, 237, 0.2)',
-                                backdropFilter: 'blur(6px)'
-                            }}>
-                            Coming Soon
                         </p>
                         <div className="flex flex-grow items-center">
                             <img
