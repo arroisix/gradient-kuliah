@@ -11,6 +11,7 @@ import KelasIcon from '../../elements/Icons/Kelas';
 import DiskusiIcon from '../../elements/Icons/Diskusi';
 import HomeIcon from '../../elements/Icons/Home';
 import CopilotIconLine from '../../../../copilot/assets/CopilotIconLine';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 const DISPLAYED_ROUTES = [
     '/dashboard',
@@ -19,10 +20,11 @@ const DISPLAYED_ROUTES = [
     '/copilot',
     '/perpustakaan',
     '/latihan',
-    '/alat-belajar'
+    '/alat-belajar',
+    '/materi'
 ];
 
-const APPBAR_NAV: AppbarNav[] = [
+const APPBAR_NAV_COLLEGE_STUDENT: AppbarNav[] = [
     {
         icon: <HomeIcon />,
         href: '/dashboard',
@@ -51,12 +53,36 @@ const APPBAR_NAV: AppbarNav[] = [
     }
 ];
 
+const APPBAR_NAV_K12: AppbarNav[] = [
+    {
+        icon: <HomeIcon className="w-5 h-5" />,
+        href: '/dashboard',
+        label: 'Home'
+    },
+    {
+        icon: <KelasIcon size={20} />,
+        href: '/materi',
+        label: 'Materi'
+    },
+    {
+        icon: <PencilOnLineIcon size={20} />,
+        href: '/latihan',
+        label: 'Try Out'
+    }
+];
+
 const Appbar = (): JSX.Element | null => {
     const router = useRouter();
     const { is_subscribed } = useCourseSubscription();
     const [showExpanded, setShowExpanded] = useState(false);
     const { data: configData } = useGetConfigQuery();
     const tracker = useTracker();
+    const { profile } = useAuth();
+
+    const APPBAR_NAV: AppbarNav[] =
+        profile?.current_role === 'COLLEGE_STUDENT'
+            ? APPBAR_NAV_COLLEGE_STUDENT
+            : APPBAR_NAV_K12;
 
     const isShowAppbar = (): boolean =>
         DISPLAYED_ROUTES.includes(router.asPath) ||
@@ -134,7 +160,12 @@ const Appbar = (): JSX.Element | null => {
             )}
 
             <div
-                className="btm-nav bg-[#121212] md:hidden"
+                className={cn(
+                    'btm-nav md:hidden',
+                    profile?.current_role === 'COLLEGE_STUDENT'
+                        ? 'bg-[#121212]'
+                        : 'bg-[#000000] border-t border-[#222222]'
+                )}
                 style={{ zIndex: 11 }}>
                 {APPBAR_NAV.map((menu, index) => (
                     <Link
@@ -147,6 +178,7 @@ const Appbar = (): JSX.Element | null => {
                                 ? 'text-white'
                                 : 'text-[#666]',
                             index === 2 &&
+                                profile?.current_role === 'COLLEGE_STUDENT' &&
                                 configData?.configs.is_copilot_config_enabled &&
                                 'gap-3 -mt-3'
                         )}>
@@ -157,6 +189,8 @@ const Appbar = (): JSX.Element | null => {
                             className={cn(
                                 'text-xs',
                                 index === 2 &&
+                                    profile?.current_role ===
+                                        'COLLEGE_STUDENT' &&
                                     configData?.configs
                                         .is_copilot_config_enabled
                                     ? 'mt-2'

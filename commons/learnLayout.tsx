@@ -8,6 +8,7 @@ import SubscriptionReminder from './components/modules/Navbar/components/Subscri
 import { useThemeContext } from './contexts/ThemeProvider';
 import useWindowBreakpoints from './hooks/useWindowBreakpoints';
 import dynamic from 'next/dynamic';
+import K12Paywall from './components/elements/K12Paywall';
 const AppInstallBanner = dynamic(
     () => import('./components/modules/Navbar/components/AppInstallBanner')
 );
@@ -50,6 +51,7 @@ const LearnLayout = ({
                     'w-screen min-h-screen text-white overflow-clip overscroll-none',
                     lightMode ? 'bg-white' : 'bg-black'
                 )}>
+                <K12Paywall />
                 {!hideNavbar && (
                     <>
                         <Navbar

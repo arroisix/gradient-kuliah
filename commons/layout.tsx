@@ -10,6 +10,7 @@ import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useRouter } from 'next/router';
 import useWindowBreakpoints from './hooks/useWindowBreakpoints';
 import dynamic from 'next/dynamic';
+import K12Paywall from './components/elements/K12Paywall';
 const AppInstallBanner = dynamic(
     () => import('./components/modules/Navbar/components/AppInstallBanner')
 );
@@ -22,6 +23,7 @@ interface LayoutProps {
     showSidebar?: boolean;
     fullHeightSidebar?: boolean;
     isFullBlackBackground?: boolean;
+    withoutK12Paywall?: boolean;
 }
 
 const Layout = ({
@@ -31,7 +33,8 @@ const Layout = ({
     courses,
     showSidebar,
     fullHeightSidebar,
-    isFullBlackBackground
+    isFullBlackBackground,
+    withoutK12Paywall = false
 }: LayoutProps): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
@@ -52,6 +55,7 @@ const Layout = ({
                     : 'bg-black',
                 paymentPage && 'flex flex-col'
             )}>
+            {!withoutK12Paywall && <K12Paywall />}
             <Navbar
                 paymentPage={paymentPage ?? false}
                 shouldTransparent={shouldTransparent ?? false}
