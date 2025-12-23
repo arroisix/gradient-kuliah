@@ -17,7 +17,9 @@ export const EmailVerificationStep = (): JSX.Element => {
         useEmailVerification({
             countdownValue: 30,
             onEmailVerified() {
-                router.push('/onboarding/jenis-akun');
+                router.push('/onboarding/jenis-akun', {
+                    query: router.query
+                });
                 localStorage.removeItem('showEmailVerification');
             }
         });

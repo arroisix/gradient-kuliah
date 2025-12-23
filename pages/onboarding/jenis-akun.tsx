@@ -139,7 +139,7 @@ const OnboardingJenisAkun: NextPage = () => {
     function handleRedirect(): void {
         const packetId = localStorage.getItem('packetId');
         if (packetId) {
-            router.push(`/pembayaran?packetId=${packetId}`);
+            router.push(`/pembayaran?packetId=${packetId}&type=k12`);
         } else if (router.query.redirect) {
             router.push(sanitizeUrl(router.query.redirect as string));
         } else {

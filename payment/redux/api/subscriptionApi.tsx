@@ -2,77 +2,6 @@ import { baseApi } from 'redux/api/baseApi';
 
 const SUBSCRIPTION_BASE_URL = 'subscriptions/';
 
-async function utbkLanggananStub(): Promise<{ data: PacketOfferUTBK[] }> {
-    return await new Promise((resolve) => {
-        const data = {
-            data: [
-                {
-                    id: 'random1',
-                    packet_name: '1 Bulan Hanya Try Out',
-                    price: 39000.0,
-                    is_free: false,
-                    benefits: {
-                        subtitle: 'Paket latihan saja.',
-                        try_out_count: 4,
-                        try_out_discussion: true,
-                        copilot: true,
-                        subtest_material: false
-                    },
-                    order: 0,
-                    active_duration: 30
-                },
-                {
-                    id: 'random2',
-                    packet_name: '3 Bulan Hanya Try Out',
-                    price: 99000.0,
-                    is_free: false,
-                    benefits: {
-                        subtitle: 'Paket latihan saja.',
-                        try_out_count: 12,
-                        try_out_discussion: true,
-                        copilot: true,
-                        subtest_material: false
-                    },
-                    order: 1,
-                    active_duration: 90
-                },
-                {
-                    id: 'random3',
-                    packet_name: 'Full Access',
-                    price: 79000.0,
-                    is_free: false,
-                    benefits: {
-                        subtitle: 'Paket komplit materi + latihan.',
-                        try_out_count: 4,
-                        try_out_discussion: true,
-                        copilot: true,
-                        subtest_material: true
-                    },
-                    order: 2,
-                    active_duration: 30
-                },
-                {
-                    id: 'random4',
-                    packet_name: 'Full Access',
-                    price: 199000.0,
-                    is_free: false,
-                    benefits: {
-                        subtitle: 'Paket komplit materi + latihan.',
-                        try_out_count: 4,
-                        try_out_discussion: true,
-                        copilot: true,
-                        subtest_material: true,
-                        best_value: true
-                    },
-                    order: 3,
-                    active_duration: 90
-                }
-            ]
-        };
-        resolve(data);
-    });
-}
-
 export const subscriptionApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         checkout: builder.mutation<Transaction, CheckoutInputData>({
@@ -131,10 +60,13 @@ export const subscriptionApi = baseApi.injectEndpoints({
                 url: `${SUBSCRIPTION_BASE_URL}packet-offer/`
             })
         }),
-        getPacketOfferUTBK: builder.query<ResponseData<PacketOfferUTBK>, void>({
-            queryFn: async () => {
-                return { data: await utbkLanggananStub() };
-            }
+        getPacketOfferUTBK: builder.query<ResponseData<PacketOffer>, void>({
+            query: () => ({
+                url: `${SUBSCRIPTION_BASE_URL}packet-offer/`,
+                params: {
+                    type: 'k12'
+                }
+            })
         }),
         getDetailPacketOffer: builder.query<PacketOffer, string>({
             query: (packet_id: string) => ({

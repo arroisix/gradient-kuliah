@@ -1,3 +1,4 @@
+import { useAuth } from 'authentication/contexts/AuthProvider';
 import Accordion from 'commons/components/elements/Accordion';
 import Button from 'commons/components/elements/Button';
 import { CDN_URL } from 'commons/constants';
@@ -6,6 +7,7 @@ import { cn } from 'commons/utils';
 import Testimony from 'landing/components/Sections/Testimony';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useGetPacketOfferUTBKQuery } from 'payment/redux/api/subscriptionApi';
 import React from 'react';
 import { FaChevronRight } from 'react-icons/fa';
@@ -320,16 +322,31 @@ function LanggananItem({
     packet,
     subtitle
 }: {
-    packet: PacketOfferUTBK;
+    packet: PacketOffer;
     subtitle?: string;
 }): JSX.Element {
+    const { isAuthenticated } = useAuth();
+    const router = useRouter();
+
+    function handleClick(): void {
+        if (!isAuthenticated) {
+            router.push(`/daftar?redirect=/pembayaran/?packetId=${packet.id}`);
+        } else {
+            // redirect to pembayaran page
+            router.push({
+                pathname: '/pembayaran',
+                query: { ...router.query, packetId: packet.id }
+            });
+        }
+    }
+
     return (
         <article
             className={cn(
                 'flex flex-col items-center border-2 border-solid border-[#36236A] hover:border-[#5F2BCE] rounded-2xl py-6 relative shadow-[0px_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0px_8px_12px_6px_rgba(0,0,0,0.15),0px_4px_4px_rgba(0,0,0,0.3)] transition',
-                packet.benefits.best_value && 'bg-[#36236A] bg-opacity-50'
+                packet.order === 3 && 'bg-[#36236A] bg-opacity-50'
             )}>
-            {packet.benefits.best_value ? (
+            {packet.order === 3 ? (
                 <img
                     src={`${CDN_URL}/assets/utbk/best_value.svg`}
                     alt="Best value."
@@ -341,13 +358,13 @@ function LanggananItem({
             <h3 className="flex flex-col gap-1 text-base leading-[125%] text-white text-center font-bold mb-4">
                 {packet.packet_name}
                 <span className="font-normal text-xs leading-[140%] -tracking-[0.005em]">
-                    {subtitle ?? packet.benefits.subtitle}
+                    {subtitle ?? packet.benefits.info}
                 </span>
             </h3>
             <p
                 className="mb-8 font-extrabold text-white text-[32px] leading-[125%]"
                 style={
-                    packet.benefits.best_value
+                    packet.order === 3
                         ? {
                               background:
                                   'linear-gradient(43.82deg, #CAC7E4 0%, #AB8EEC 28.4%, #DD837A 65.1%, #ECD0CD 100%)',
@@ -357,7 +374,7 @@ function LanggananItem({
                           }
                         : undefined
                 }>
-                {rupiahFormatter.format(packet.price)}
+                {rupiahFormatter.format(packet.price as unknown as number)}
                 {packet.active_duration ? (
                     <span className="text-[#929292] text-xs leading-[125%] font-bold">
                         {' '}
@@ -366,53 +383,34 @@ function LanggananItem({
                 ) : null}
             </p>
             <ol className="mb-8 p-0 list-none [&>li>p]:text-white [&>li>p]:font-bold [&>li>p]:text-sm [&>li>p]:leading-[125%] [&>li.disabled>p]:text-[#333333] flex flex-col gap-4 w-full px-6">
-                <li className="flex gap-3 items-center">
-                    <FaRegCircleCheck size={24} color="#7264EB" />
-                    <p
-                        style={
-                            packet.benefits.best_value
-                                ? {
-                                      background:
-                                          'linear-gradient(43.82deg, #CAC7E4 0%, #AB8EEC 28.4%, #DD837A 65.1%, #ECD0CD 100%)',
-                                      WebkitBackgroundClip: 'text',
-                                      WebkitTextFillColor: 'transparent',
-                                      backgroundClip: 'text'
-                                  }
-                                : undefined
-                        }>
-                        {packet.benefits.try_out_count}x Tryout Eksklusif
-                    </p>
-                </li>
-                <li className="flex gap-3 items-center">
-                    <FaRegCircleCheck size={24} color="#7264EB" />
-                    <p>Pembahasan Try Out Lengkap</p>
-                </li>
-                <li
-                    className={cn(
-                        'flex gap-3 items-center',
-                        !packet.benefits.copilot && 'disabled'
-                    )}>
-                    <FaRegCircleCheck
-                        size={24}
-                        color={packet.benefits.copilot ? '#7264EB' : '#333333'}
-                    />
-                    <p>Copilot AI</p>
-                </li>
-                <li
-                    className={cn(
-                        'flex gap-3 items-center',
-                        !packet.benefits.subtest_material && 'disabled'
-                    )}>
-                    <FaRegCircleCheck
-                        size={24}
-                        color={
-                            packet.benefits.subtest_material
-                                ? '#7264EB'
-                                : '#333333'
-                        }
-                    />
-                    <p>7 Video Materi Subtest</p>
-                </li>
+                {packet.benefits.data.map((benefit, index) => (
+                    <li
+                        className="flex gap-3 items-center"
+                        key={`${packet.id}-benefit-${index}`}>
+                        <FaRegCircleCheck
+                            size={24}
+                            color={
+                                benefit.includes('_CHECK')
+                                    ? '#7264EB'
+                                    : '#333333'
+                            }
+                        />
+                        <p
+                            style={
+                                packet.order === 3 && index === 0
+                                    ? {
+                                          background:
+                                              'linear-gradient(43.82deg, #CAC7E4 0%, #AB8EEC 28.4%, #DD837A 65.1%, #ECD0CD 100%)',
+                                          WebkitBackgroundClip: 'text',
+                                          WebkitTextFillColor: 'transparent',
+                                          backgroundClip: 'text'
+                                      }
+                                    : undefined
+                            }>
+                            {benefit.split('_CHECK')[0]}
+                        </p>
+                    </li>
+                ))}
             </ol>
             {packet.is_free ? (
                 <Button
@@ -423,6 +421,7 @@ function LanggananItem({
                 </Button>
             ) : (
                 <Button
+                    onClick={handleClick}
                     variant="primary"
                     className="h-[49px] text-[15px] leading-[140%]">
                     Pilih Paket
@@ -432,7 +431,13 @@ function LanggananItem({
     );
 }
 
-function Langganan({ className }: { className?: string }): JSX.Element {
+export function Langganan({
+    className,
+    removeFree
+}: {
+    className?: string;
+    removeFree?: boolean;
+}): JSX.Element {
     const { data } = useGetPacketOfferUTBKQuery();
     return (
         <section className={cn('flex flex-col', className)}>
@@ -444,31 +449,21 @@ function Langganan({ className }: { className?: string }): JSX.Element {
                 Pilih paket yang paling pas buat target UTBK kamu.
             </p>
             <ol className="list-none flex flex-wrap gap-x-4 gap-y-4 md:gap-y-10 max-w-[1082px] justify-center self-center p-0 w-full">
-                <li className="w-full max-w-[350px]">
-                    <LanggananItem
-                        packet={{
-                            id: 'random0',
-                            packet_name: 'Starter',
-                            active_duration: 0,
-                            price: 0,
-                            is_free: true,
-                            order: 0,
-                            is_lifetime: true,
-                            benefits: {
-                                try_out_count: 2,
-                                try_out_discussion: true,
-                                copilot: false,
-                                subtest_material: false
-                            }
-                        }}
-                        subtitle="Coba Gradient dengan limit."
-                    />
-                </li>
-                {data?.data.map((packet) => (
-                    <li key={packet.id} className="w-full max-w-[350px]">
-                        <LanggananItem packet={packet} />
-                    </li>
-                ))}
+                {removeFree
+                    ? data?.data
+                          .filter((packet) => !packet.is_free)
+                          .map((packet) => (
+                              <li
+                                  key={packet.id}
+                                  className="w-full max-w-[350px]">
+                                  <LanggananItem packet={packet} />
+                              </li>
+                          ))
+                    : data?.data.map((packet) => (
+                          <li key={packet.id} className="w-full max-w-[350px]">
+                              <LanggananItem packet={packet} />
+                          </li>
+                      ))}
             </ol>
         </section>
     );
