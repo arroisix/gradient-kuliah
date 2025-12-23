@@ -287,7 +287,10 @@ export const dashboardApi = baseApi.injectEndpoints({
         >({
             query: () => ({
                 url: `${STUDENT_BASE_URL}target-institutions/`
-            })
+            }),
+            providesTags: [
+                { type: 'PROFILE', id: 'STUDENT_TARGET_INSTITUTIONS' }
+            ]
         }),
         setStudentTargetInstitutions: builder.mutation<
             void,
@@ -297,7 +300,10 @@ export const dashboardApi = baseApi.injectEndpoints({
                 url: `${STUDENT_BASE_URL}target-institutions/`,
                 method: 'POST',
                 body
-            })
+            }),
+            invalidatesTags: [
+                { type: 'PROFILE', id: 'STUDENT_TARGET_INSTITUTIONS' }
+            ]
         })
     })
 });

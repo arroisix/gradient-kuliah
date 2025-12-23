@@ -433,9 +433,11 @@ function LanggananItem({
 
 export function Langganan({
     className,
+    packetClassName,
     removeFree
 }: {
     className?: string;
+    packetClassName?: string;
     removeFree?: boolean;
 }): JSX.Element {
     const { data } = useGetPacketOfferUTBKQuery();
@@ -448,7 +450,11 @@ export function Langganan({
             <p className="text-[#9CA3AF] text-sm leading-[20px] text-center mb-10">
                 Pilih paket yang paling pas buat target UTBK kamu.
             </p>
-            <ol className="list-none flex flex-wrap gap-x-4 gap-y-4 md:gap-y-10 max-w-[1082px] justify-center self-center p-0 w-full">
+            <ol
+                className={cn(
+                    'list-none flex flex-wrap gap-x-4 gap-y-4 md:gap-y-10 max-w-[1082px] justify-center self-center p-0 w-full',
+                    packetClassName
+                )}>
                 {removeFree
                     ? data?.data
                           .filter((packet) => !packet.is_free)
