@@ -104,7 +104,15 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
     const isAuthenticated = useSelector(getIsAuthenticated);
     const tracker = useTracker();
 
-    const handleClick = () => {
+    const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        const urlLink = decideURLLink();
+
+        // Prevent navigation jika URL kosong
+        if (!urlLink) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
         tracker?.genericTrack('Click Latihan Card', {
             EXERCISE_SLUG: exercise.slug
         });
@@ -129,9 +137,15 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
         if (exercise.score === undefined || exercise.score === null) {
             return 'transparent'; // Default color if score is not available
         }
-        if (exercise?.score >= 75) {
+
+        const weight = exercise.tryout_type === 'UTBK' ? 10 : 1;
+
+        if (exercise?.score >= 75 * weight) {
             return '#43B75D'; // Green for passing score
-        } else if (exercise?.score < 75 && exercise?.score >= 50) {
+        } else if (
+            exercise?.score < 75 * weight &&
+            exercise?.score >= 50 * weight
+        ) {
             return '#FFC107'; // Yellow for failing score
         } else {
             return '#FF4C4C'; // Red for low score

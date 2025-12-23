@@ -78,6 +78,7 @@ const ExerciseDetail = () => {
     if (exercise?.tryout_type === 'UTBK') {
         return (
             <LatihanLayout>
+                <ExercisePaywall isFree={exercise.is_free} />
                 {/* Mobile View */}
                 <div className="lg:hidden flex flex-col h-full bg-black">
                     <ExerciseProblemSetHeader />
