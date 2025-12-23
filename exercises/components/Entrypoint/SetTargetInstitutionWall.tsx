@@ -1,16 +1,15 @@
 import Button from 'commons/components/elements/Button';
 import Image from 'next/image';
-import { Dispatch, SetStateAction } from 'react';
 import { useSetTargetDrawerContext } from './SetTargetDrawer';
+import { useWindowSize } from 'usehooks-ts';
 
-interface SetTargetInstitutionWallProps {
-    setIsTargetWallHidden: Dispatch<SetStateAction<boolean>>;
-}
+function SetTargetInstitutionWall(): JSX.Element {
+    const { setIsDrawerOpened, setIsModalOpened } = useSetTargetDrawerContext();
+    const { width } = useWindowSize();
 
-function SetTargetInstitutionWall({
-    setIsTargetWallHidden
-}: SetTargetInstitutionWallProps): JSX.Element {
-    const { setIsDrawerOpened } = useSetTargetDrawerContext();
+    const handleClickButton = () => {
+        width < 768 ? setIsModalOpened(true) : setIsDrawerOpened(true);
+    };
 
     return (
         <div className="min-h-[calc(100vh-64px-20px-32px)]">
@@ -25,7 +24,10 @@ function SetTargetInstitutionWall({
                     />
                 </div>
 
-                <div className="text-center space-y-3 px-[25px]">
+                <div
+                    className={`${
+                        width < 768 ? '' : 'px-[25px]'
+                    } text-center space-y-3`}>
                     <h2 className="text-white font-bold text-xl">
                         Siap untuk{' '}
                         <span className="text-[#B6A6F3]">UTBK 2026?</span>
@@ -41,10 +43,7 @@ function SetTargetInstitutionWall({
                     variant="primary"
                     size="large"
                     className="w-full max-w-[328px] block mx-auto !py-3"
-                    onClick={() => {
-                        setIsDrawerOpened(true);
-                        setIsTargetWallHidden(true);
-                    }}>
+                    onClick={handleClickButton}>
                     Tentukan Target
                 </Button>
             </section>

@@ -17,6 +17,10 @@ export interface SelectProps {
     // For async select
     isAsync?: boolean;
     isSearchTarget?: boolean;
+    // whether to show "x" button or not
+    isClearable?: boolean;
+    // custom no option message
+    noOptionsMessage?: string;
     loadOption?: AsyncProps<Option, false, GroupBase<Option>>['loadOptions'];
 }
 
@@ -31,7 +35,9 @@ const Select: React.FC<SelectProps> = ({
     isCreatable,
     isAsync,
     loadOption,
-    isSearchTarget = false
+    isSearchTarget = false,
+    isClearable = true,
+    noOptionsMessage = 'No options'
 }) => {
     const [chosen, setChosen] = useState<Option | null>(null);
 
@@ -77,13 +83,14 @@ const Select: React.FC<SelectProps> = ({
         <div className="flex flex-col w-full gap-1 font-body">
             {label && <span className="text-white text-sm">{label}</span>}
             <SelectComponent
-                isClearable
+                isClearable={isClearable}
                 options={option}
                 placeholder={placeholder && placeholder}
                 loadOptions={loadOption}
                 name={name}
                 value={chosen}
                 onChange={onOptionChange}
+                noOptionsMessage={() => noOptionsMessage}
                 styles={{
                     control: (base) => ({
                         ...base,
@@ -128,6 +135,10 @@ const Select: React.FC<SelectProps> = ({
                         'input:focus': {
                             boxShadow: 'none'
                         }
+                    }),
+                    placeholder: (base) => ({
+                        ...base,
+                        whiteSpace: 'nowrap'
                     })
                 }}
                 components={{ IndicatorSeparator: () => null }}

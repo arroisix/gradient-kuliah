@@ -13,6 +13,8 @@ import { SetTargetForm } from './SetTargetForm';
 import { useGetStudentTargetInstitutionsQuery } from 'dashboard/redux/api/dashboardApi';
 import dynamic from 'next/dynamic';
 import { StudentTargetInstitution } from 'dashboard/types/dashboard';
+import { useWindowSize } from 'usehooks-ts';
+import Modal from 'commons/components/modules/Modal';
 
 const SetTargetInstitutionWall = dynamic(
     () => import('./SetTargetInstitutionWall')
@@ -20,6 +22,7 @@ const SetTargetInstitutionWall = dynamic(
 
 interface SetTargetDrawerContextType {
     setIsDrawerOpened: Dispatch<SetStateAction<boolean>>;
+    setIsModalOpened: Dispatch<SetStateAction<boolean>>;
 }
 
 const SetTargetDrawerContext = createContext<SetTargetDrawerContextType | null>(
@@ -29,13 +32,14 @@ const SetTargetDrawerContext = createContext<SetTargetDrawerContextType | null>(
 function SetTargetDrawer({ children }: PropsWithChildren) {
     const [targets, setTargets] = useState<StudentTargetInstitution[]>([]);
     const [isDrawerOpened, setIsDrawerOpened] = useState(false);
-    const [isTargetWallHidden, setIsTargetWallHidden] = useState(false);
+    const [isModalOpened, setIsModalOpened] = useState(false);
+    const { width } = useWindowSize();
 
     const { data, isLoading, isFetching } =
         useGetStudentTargetInstitutionsQuery();
 
     const value = useMemo((): SetTargetDrawerContextType => {
-        return { setIsDrawerOpened };
+        return { setIsDrawerOpened, setIsModalOpened };
     }, []);
 
     useEffect(() => {
@@ -43,6 +47,18 @@ function SetTargetDrawer({ children }: PropsWithChildren) {
             setTargets(data);
         }
     }, [data]);
+
+    useEffect(() => {
+        if (width < 768 && isDrawerOpened) {
+            setIsModalOpened(true);
+            setIsDrawerOpened(false);
+        }
+
+        if (width >= 768 && isModalOpened) {
+            setIsDrawerOpened(true);
+            setIsModalOpened(false);
+        }
+    }, [isDrawerOpened, isModalOpened, width]);
 
     if (isLoading || isFetching) {
         return <></>;
@@ -58,51 +74,82 @@ function SetTargetDrawer({ children }: PropsWithChildren) {
                 />
 
                 <div className="drawer-content">
-                    {data?.length === 0 && !isTargetWallHidden ? (
-                        <SetTargetInstitutionWall
-                            setIsTargetWallHidden={setIsTargetWallHidden}
-                        />
+                    {targets.length === 0 ? (
+                        <SetTargetInstitutionWall />
                     ) : (
                         children
                     )}
                 </div>
 
-                <div className="drawer-side z-[9999]">
-                    <button
-                        onClick={() => setIsDrawerOpened(false)}
-                        aria-label="close sidebar"
-                        className="drawer-overlay"></button>
+                {width < 768 ? (
+                    <Modal
+                        isOpen={isModalOpened}
+                        setOpen={(value) => setIsModalOpened(value)}
+                        variant="dark"
+                        permanent={true}
+                        className="bg-[#101010] h-screen">
+                        <div>
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="font-semibold">
+                                    Tentukan Target
+                                </h2>
+                                <button
+                                    onClick={() => setIsModalOpened(false)}
+                                    aria-label="close modal">
+                                    <MdClose className="fill-[#4D5165] w-6 h-6" />
+                                </button>
+                            </div>
 
-                    <div className="bg-[#101010] min-h-full w-full max-w-[520px] px-6">
-                        <button
-                            onClick={() => setIsDrawerOpened(false)}
-                            aria-label="close sidebar"
-                            className="block pt-4">
-                            <MdClose className="w-6 h-6" />
-                        </button>
-
-                        <div className="space-y-3 mt-4">
-                            <h2 className="text-white font-bold text-xl text-center">
-                                Tentukan Target
-                            </h2>
-                            <p className="text-[#999999] text-center">
+                            <p className="text-sm">
                                 Pilih kampus dan jurusan yang kamu incar. Soal
                                 akan menyesuaikan tingkat kesulitannya.
                             </p>
-                        </div>
 
-                        {/* re-mount as "isDrawerOpened" state changed */}
-                        {isDrawerOpened ? (
                             <SetTargetForm
                                 targets={targets}
-                                setIsDrawerOpened={setIsDrawerOpened}
                                 setTargets={setTargets}
+                                setIsOpen={setIsModalOpened}
                             />
-                        ) : (
-                            <></>
-                        )}
+                        </div>
+                    </Modal>
+                ) : (
+                    <div className="drawer-side z-[9999]">
+                        <button
+                            onClick={() => setIsDrawerOpened(false)}
+                            aria-label="close sidebar"
+                            className="drawer-overlay"></button>
+
+                        <div className="bg-[#101010] min-h-full w-full max-w-[520px] px-6">
+                            <button
+                                onClick={() => setIsDrawerOpened(false)}
+                                aria-label="close sidebar"
+                                className="block pt-4">
+                                <MdClose className="w-6 h-6" />
+                            </button>
+
+                            <div className="space-y-3 mt-4">
+                                <h2 className="text-white font-bold text-xl text-center">
+                                    Tentukan Target
+                                </h2>
+                                <p className="text-[#999999] text-center">
+                                    Pilih kampus dan jurusan yang kamu incar.
+                                    Soal akan menyesuaikan tingkat kesulitannya.
+                                </p>
+                            </div>
+
+                            {/* re-mount as "isDrawerOpened" state changed */}
+                            {isDrawerOpened ? (
+                                <SetTargetForm
+                                    targets={targets}
+                                    setTargets={setTargets}
+                                    setIsOpen={setIsDrawerOpened}
+                                />
+                            ) : (
+                                <></>
+                            )}
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
         </SetTargetDrawerContext.Provider>
     );
