@@ -39,10 +39,10 @@ const OnboardingOption = ({
             />
             <div
                 className={cn(
-                    'flex gap-4 items-center border-2 border-solid rounded-lg px-[14px] py-[18px]',
+                    'flex gap-4 items-center border-2 border-solid rounded-lg px-[14px] py-[18px] cursor-pointer',
                     selected
                         ? 'bg-purple-7 border-[#B6A6F3]'
-                        : 'bg-violet-2 border-transparent'
+                        : 'bg-violet-2 border-transparent hover:bg-neutral-700'
                 )}>
                 <img
                     src={imageURL}
@@ -110,9 +110,11 @@ const jenisAkunOptions = [
         description: 'Video, kuis, dan bank soal buat ningkatin pemahamanmu.',
         imageURL: `${CDN_URL}/assets/college_student.svg`,
         details: [
-            'Mahasiswa aktif semester awal (Maba)',
-            'Butuh bantuan di mata kuliah dasar (Matdas)',
-            'Ingin mengejar IPK tinggi'
+            'Mahasiswa aktif ataupun calon mahasiswa baru',
+            'Butuh bantuan di mata kuliah yang sedang kamu ambil',
+            'Ingin mengejar IPK tinggi',
+            'Long life learner yang mau eksplor ilmu baru',
+            'Untuk yang sudah lulus kuliah tapi mau belajar lagi'
         ] as string[]
     },
     {

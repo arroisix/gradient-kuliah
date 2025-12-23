@@ -94,6 +94,7 @@ interface UserDeviceResponse {
 }
 
 interface RecommendationResponse {
+    id: string;
     name: string;
     abbreviation: string;
 }

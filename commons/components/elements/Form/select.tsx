@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { GroupBase, default as ReactSelect } from 'react-select';
+import { GroupBase, default as ReactSelect, SingleValue } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import AsyncCreatableSelect from 'react-select/async-creatable';
 import AsyncSelect, { AsyncProps } from 'react-select/async';
@@ -16,6 +16,11 @@ export interface SelectProps {
     isCreatable?: boolean;
     // For async select
     isAsync?: boolean;
+    isSearchTarget?: boolean;
+    // whether to show "x" button or not
+    isClearable?: boolean;
+    // custom no option message
+    noOptionsMessage?: string;
     loadOption?: AsyncProps<Option, false, GroupBase<Option>>['loadOptions'];
 }
 
@@ -29,7 +34,10 @@ const Select: React.FC<SelectProps> = ({
     initialValue,
     isCreatable,
     isAsync,
-    loadOption
+    loadOption,
+    isSearchTarget = false,
+    isClearable = true,
+    noOptionsMessage = 'No options'
 }) => {
     const [chosen, setChosen] = useState<Option | null>(null);
 
@@ -43,15 +51,21 @@ const Select: React.FC<SelectProps> = ({
                     setChosen(matchingOption);
                 }
             } else {
+                let label = initialValue;
+                if (isSearchTarget) {
+                    // the format of "initialValue" is "institution_id:institution_name"
+                    label = initialValue.split(':')[1];
+                }
+
                 setChosen({
                     value: initialValue,
-                    label: initialValue
+                    label
                 });
             }
         }
     }, [initialValue, option]);
 
-    const onOptionChange = (val: any) => {
+    const onOptionChange = (val: SingleValue<Option>) => {
         onChange && onChange(val ? val.value : null);
         setChosen(val);
     };
@@ -69,13 +83,14 @@ const Select: React.FC<SelectProps> = ({
         <div className="flex flex-col w-full gap-1 font-body">
             {label && <span className="text-white text-sm">{label}</span>}
             <SelectComponent
-                isClearable
+                isClearable={isClearable}
                 options={option}
                 placeholder={placeholder && placeholder}
                 loadOptions={loadOption}
                 name={name}
                 value={chosen}
                 onChange={onOptionChange}
+                noOptionsMessage={() => noOptionsMessage}
                 styles={{
                     control: (base) => ({
                         ...base,
@@ -120,6 +135,10 @@ const Select: React.FC<SelectProps> = ({
                         'input:focus': {
                             boxShadow: 'none'
                         }
+                    }),
+                    placeholder: (base) => ({
+                        ...base,
+                        whiteSpace: 'nowrap'
                     })
                 }}
                 components={{ IndicatorSeparator: () => null }}

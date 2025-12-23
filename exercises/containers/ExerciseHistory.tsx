@@ -6,14 +6,17 @@ import Button from 'commons/components/elements/Button';
 import Skeleton from 'commons/components/elements/Skeleton';
 import { RefreshCcw } from 'lucide-react';
 import {
+    exerciseApi,
     useGetExerciseDetailV2Query,
     useGetExerciseHistoryQuery
 } from 'exercises/redux/api/exercisesApi';
 import { ExerciseHistoryItem } from 'exercises/types/exercises';
 import { cn } from 'commons/utils';
+import { useDispatch } from 'react-redux';
 
 const ExerciseHistory: React.FC = () => {
     const router = useRouter();
+    const dispatch = useDispatch();
     const { slug, exerciseProgressId } = router.query;
 
     const { data, isFetching } = useGetExerciseHistoryQuery(
@@ -38,6 +41,7 @@ const ExerciseHistory: React.FC = () => {
     const onRetry = (): void => {
         const firstProblemId = exercise?.first_problemset?.first_problem_id;
         if (firstProblemId) {
+            dispatch(exerciseApi.util.invalidateTags(['EXERCISES']));
             router.push(
                 `/latihan/${slug}/${exercise.first_problemset?.id}/${firstProblemId}`
             );
@@ -88,13 +92,15 @@ const ExerciseHistory: React.FC = () => {
                 )}
             </div>
 
-            <Button
-                variant="secondary"
-                className="mt-6 w-full max-w-[350px] md:w-[450px] md:max-w-full flex flex-row gap-2 items-center justify-center"
-                onClick={onRetry}>
-                <RefreshCcw size={16} />
-                Coba Lagi
-            </Button>
+            {exercise?.tryout_type !== 'UTBK' && (
+                <Button
+                    variant="secondary"
+                    className="mt-6 w-full max-w-[350px] md:w-[450px] md:max-w-full flex flex-row gap-2 items-center justify-center"
+                    onClick={onRetry}>
+                    <RefreshCcw size={16} />
+                    Coba Lagi
+                </Button>
+            )}
         </LatihanLayout>
     );
 };

@@ -99,13 +99,16 @@ const ResultSummaryPerProblem: React.FC<ResultSummaryPerProblemProps> = ({
         if (onProblemSelect) {
             onProblemSelect(problemId, selectedProblemSetId);
         } else {
-            router.push(
-                `/latihan/${slug}/report/${
-                    exerciseProgressId ?? exercise?.latest_exercise_progress?.id
-                }/${selectedProblemSetId}/${problemId}`,
-                undefined,
-                { scroll: false, shallow: true }
-            );
+            if (exerciseProgressId || exercise?.latest_exercise_progress?.id) {
+                router.push(
+                    `/latihan/${slug}/report/${
+                        exerciseProgressId ??
+                        exercise?.latest_exercise_progress?.id
+                    }/${selectedProblemSetId}/${problemId}`,
+                    undefined,
+                    { scroll: false, shallow: true }
+                );
+            }
         }
     };
 
@@ -128,6 +131,8 @@ const ResultSummaryPerProblem: React.FC<ResultSummaryPerProblemProps> = ({
     const containerHeight = `${
         rowsOnCurrentPage * 60 + Math.max(0, rowsOnCurrentPage - 1) * 12
     }px`; // 60px per item + 12px gap
+
+    if (exercise?.tryout_type === 'UTBK') return null;
 
     return (
         <div

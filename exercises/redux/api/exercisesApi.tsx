@@ -357,7 +357,10 @@ export const exerciseApi = baseApi.injectEndpoints({
                     : undefined
             }),
             providesTags: (result, error, arg) => [
-                { type: 'EXERCISES', id: `PROBLEM_${arg.problemId}` }
+                {
+                    type: 'EXERCISES',
+                    id: `PROBLEM_${arg.problemId}`
+                }
             ]
         }),
         getAstronotesExercises: builder.query<
@@ -467,10 +470,12 @@ export const exerciseApi = baseApi.injectEndpoints({
         }),
         getProblemsetDetailInterstitial: builder.query<
             ResponseData<ProblemSetItem>,
-            { slug: string; problemset_id: string }
+            { slug: string; problemset_id: string; with_score?: boolean }
         >({
-            query: ({ slug, problemset_id }) => ({
-                url: `${EXERCISE_BASE_URL}v2/${slug}/problem-set/${problemset_id}/interstitial/`
+            query: ({ slug, problemset_id, with_score }) => ({
+                url:
+                    `${EXERCISE_BASE_URL}v2/${slug}/problem-set/${problemset_id}/interstitial/?` +
+                    (with_score ? `with_score=${with_score}` : '')
             }),
             providesTags: (result, error, arg) => [
                 {

@@ -19,6 +19,7 @@ const QuestionContent = () => {
     const contentRef = useRef<HTMLDivElement>(null);
     const { slug, sectionId, problemsetId, problemId, exerciseProgressId } =
         router.query;
+    const overflowThreshold = 20;
 
     const isSolutionPage = useMemo(() => {
         return problemsetId;
@@ -48,9 +49,10 @@ const QuestionContent = () => {
     useEffect(() => {
         const checkOverflow = () => {
             if (contentRef.current && !isExpanded) {
+                const scrollHeight = contentRef.current.scrollHeight;
+                const clientHeight = contentRef.current.clientHeight;
                 const isContentOverflowing =
-                    contentRef.current.scrollHeight >
-                    contentRef.current.clientHeight;
+                    scrollHeight > clientHeight + overflowThreshold;
                 setIsOverflowing(isContentOverflowing);
             }
         };
@@ -68,9 +70,10 @@ const QuestionContent = () => {
 
     const handleContentReady = () => {
         if (contentRef.current && !isExpanded) {
+            const scrollHeight = contentRef.current.scrollHeight;
+            const clientHeight = contentRef.current.clientHeight;
             const isContentOverflowing =
-                contentRef.current.scrollHeight >
-                contentRef.current.clientHeight;
+                scrollHeight > clientHeight + overflowThreshold;
             setIsOverflowing(isContentOverflowing);
         }
     };
