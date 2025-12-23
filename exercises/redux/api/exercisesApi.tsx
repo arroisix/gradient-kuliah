@@ -357,7 +357,10 @@ export const exerciseApi = baseApi.injectEndpoints({
                     : undefined
             }),
             providesTags: (result, error, arg) => [
-                { type: 'EXERCISES', id: `PROBLEM_${arg.problemId}` }
+                {
+                    type: 'EXERCISES',
+                    id: `PROBLEM_${arg.problemId}`
+                }
             ]
         }),
         getAstronotesExercises: builder.query<
