@@ -159,7 +159,7 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                             backgroundPosition: 'top right',
                             backgroundRepeat: 'no-repeat'
                         }}>
-                        <h3 className="flex flex-col gap-4 text-white font-bold text-2xl leading-[125%]">
+                        <h3 className="flex flex-col gap-4 text-white font-bold text-2xl md:text-3xl leading-[125%] max-w-[634px]">
                             <span className="uppercase flex gap-2 items-center justify-center font-bold text-[#B6A6F3] text-sm tracking-[0.7px]">
                                 <img
                                     src={`${CDN_URL}/assets/utbk/materi-icon.svg`}
@@ -202,7 +202,7 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                             backgroundPosition: 'bottom center',
                             backgroundRepeat: 'no-repeat'
                         }}>
-                        <h3 className="flex flex-col gap-4 text-white font-bold text-2xl leading-[125%]">
+                        <h3 className="flex flex-col gap-4 text-white font-bold text-2xl md:text-3xl leading-[125%]">
                             <span className="uppercase flex gap-2 items-center justify-center font-bold text-[#B6A6F3] text-sm tracking-[0.7px] h-9">
                                 <img
                                     src={`${CDN_URL}/assets/utbk/try-out-icon.svg`}
@@ -242,7 +242,7 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                             backgroundPosition: 'bottom right',
                             backgroundRepeat: 'no-repeat'
                         }}>
-                        <h3 className="flex flex-col gap-4 text-white font-bold text-2xl leading-[125%]">
+                        <h3 className="flex flex-col gap-4 text-white font-bold text-2xl md:text-3xl leading-[125%]">
                             <span className="uppercase flex gap-2 items-center justify-center font-bold text-[#B6A6F3] text-sm tracking-[0.7px] h-9">
                                 <img
                                     src={`${CDN_URL}/assets/utbk/copilot-icon.svg`}
@@ -274,7 +274,7 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                             backgroundPosition: 'bottom center',
                             backgroundRepeat: 'no-repeat'
                         }}>
-                        <h3 className="flex flex-col gap-4 text-white font-bold text-2xl leading-[125%]">
+                        <h3 className="flex flex-col gap-4 text-white font-bold text-2xl md:text-3xl leading-[125%]">
                             <span className="uppercase flex gap-2 items-center justify-center font-bold text-[#B6A6F3] text-sm tracking-[0.7px] h-9">
                                 <img
                                     src={`${CDN_URL}/assets/utbk/analytics-icon.svg`}

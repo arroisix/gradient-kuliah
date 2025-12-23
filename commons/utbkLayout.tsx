@@ -153,7 +153,10 @@ const MobileSidebar = ({
                     animate={{ x: 0 }}
                     exit={{ x: '-100%' }}
                     transition={{ duration: 0.35 }}
-                    className="fixed z-[110] top-0 left-0 w-screen h-screen bg-black flex flex-col gap-12">
+                    className="fixed z-[110] top-0 left-0 w-screen h-screen bg-black bg-opacity-90 flex flex-col gap-12"
+                    style={{
+                        backdropFilter: 'blur(32px)'
+                    }}>
                     <header className="flex items-center justify-between w-full px-6 pt-6 md:px-8">
                         <span className="text-2xl font-bold cursor-pointer font-[Urbanist] text-neutral-50">
                             Gradient
