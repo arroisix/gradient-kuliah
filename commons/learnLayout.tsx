@@ -2,13 +2,14 @@ import Navbar from './components/modules/Navbar';
 import Sidebar from './components/modules/Sidebar';
 import Appbar from './components/modules/Appbar';
 import { cn } from './utils';
-import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import Footer from './components/modules/Footer';
 import SubscriptionReminder from './components/modules/Navbar/components/SubscriptionReminder';
 import { useThemeContext } from './contexts/ThemeProvider';
 import useWindowBreakpoints from './hooks/useWindowBreakpoints';
 import dynamic from 'next/dynamic';
 import K12Paywall from './components/elements/K12Paywall';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 const AppInstallBanner = dynamic(
     () => import('./components/modules/Navbar/components/AppInstallBanner')
 );
@@ -25,6 +26,7 @@ interface LayoutProps {
     fullHeightSidebar?: boolean;
     lightMode?: boolean;
     showSubscriptionReminder?: boolean;
+    className?: string;
 }
 
 const LearnLayout = ({
@@ -37,19 +39,21 @@ const LearnLayout = ({
     hideNavbar,
     showSidebar,
     fullHeightSidebar,
-    showSubscriptionReminder
+    showSubscriptionReminder,
+    className
 }: LayoutProps): JSX.Element => {
     const { theme } = useThemeContext();
     const lightMode = theme === 'light';
-    const { is_subscribed: isSubscribed } = useCourseSubscription();
     const { isMobileBreakpoints } = useWindowBreakpoints();
+    const isAuthenticated = useSelector(getIsAuthenticated);
 
     return (
         <>
             <div
                 className={cn(
                     'w-screen min-h-screen text-white overflow-clip overscroll-none',
-                    lightMode ? 'bg-white' : 'bg-black'
+                    lightMode ? 'bg-white' : 'bg-black',
+                    className
                 )}>
                 <K12Paywall />
                 {!hideNavbar && (
@@ -66,7 +70,7 @@ const LearnLayout = ({
                         <AppInstallBanner
                             showSidebar={
                                 showSidebar &&
-                                isSubscribed &&
+                                isAuthenticated &&
                                 !isMobileBreakpoints
                             }
                         />
@@ -78,7 +82,7 @@ const LearnLayout = ({
                 )}
                 {hideNavbar && (
                     <AppInstallBanner
-                        showSidebar={showSidebar && isSubscribed}
+                        showSidebar={showSidebar && isAuthenticated}
                     />
                 )}
                 <div
@@ -87,18 +91,20 @@ const LearnLayout = ({
                         !noTopPadding && 'pt-16',
                         showSidebar && 'flex gap-[2rem] lg:gap-[6rem] w-full',
                         {
-                            'pb-16': isSubscribed && !noPadding,
-                            'pb-8': !isSubscribed && !noPadding,
+                            'pb-16': isAuthenticated && !noPadding,
+                            'pb-8': !isAuthenticated && !noPadding,
                             'pb-0': noPadding
                         }
                     )}>
-                    {showSidebar && isSubscribed && (
+                    {showSidebar && isAuthenticated && (
                         <Sidebar fullHeight={fullHeightSidebar} />
                     )}
                     <div
                         className={cn('w-full', {
                             'md:pl-[250px]':
-                                showSidebar && fullHeightSidebar && isSubscribed
+                                showSidebar &&
+                                fullHeightSidebar &&
+                                isAuthenticated
                         })}>
                         <div
                             className={cn(
@@ -106,14 +112,14 @@ const LearnLayout = ({
                                 {
                                     'md:px-8 lg:px-12':
                                         fullHeightSidebar &&
-                                        isSubscribed &&
+                                        isAuthenticated &&
                                         !noPadding,
                                     'md:px-8 lg:px-24':
                                         fullHeightSidebar &&
-                                        !isSubscribed &&
+                                        !isAuthenticated &&
                                         !noPadding
                                 },
-                                !isSubscribed && 'pt-5'
+                                !isAuthenticated && 'pt-5'
                             )}>
                             {children}
                         </div>
@@ -122,7 +128,7 @@ const LearnLayout = ({
                 <Appbar />
             </div>
 
-            {!isSubscribed && <Footer />}
+            {!isAuthenticated && <Footer />}
         </>
     );
 };

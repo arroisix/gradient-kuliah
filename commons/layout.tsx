@@ -66,7 +66,7 @@ const Layout = ({
 
             <AppInstallBanner
                 showSidebar={
-                    showSidebar && is_subscribed && !isMobileBreakpoints
+                    showSidebar && isAuthenticated && !isMobileBreakpoints
                 }
             />
 
@@ -88,7 +88,7 @@ const Layout = ({
                     {children}
                 </div>
             </section>
-            {(!is_subscribed || router.asPath === '/') && <Footer />}
+            {(!isAuthenticated || router.asPath === '/') && <Footer />}
             <Appbar />
         </div>
     );

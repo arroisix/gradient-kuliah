@@ -122,7 +122,7 @@ const Navbar = ({
 
         if (shouldTransparent) {
             if (height && scrollPosition >= height / 2) {
-                return isSubscribed ? 'bg-black' : 'bg-[#222222]';
+                return isAuthenticated ? 'bg-black' : 'bg-[#222222]';
             }
             return 'bg-transparent hover:bg-[#222222]';
         }
@@ -130,26 +130,26 @@ const Navbar = ({
         if (paymentPage) {
             return lightMode
                 ? 'bg-white shadow-md'
-                : isSubscribed
+                : isAuthenticated
                 ? 'bg-black'
                 : 'bg-[#222222]';
         }
 
         if (showSidebar && fullHeightSidebar) {
             if (scrollPosition >= 60) {
-                return isSubscribed ? 'bg-black' : 'bg-[#222222]';
+                return isAuthenticated ? 'bg-black' : 'bg-[#222222]';
             }
 
             return shouldTransparent
                 ? ''
-                : isSubscribed
+                : isAuthenticated
                 ? 'bg-black'
                 : 'bg-[#222222]';
         }
 
         return lightMode
             ? 'bg-white text-black shadow-md'
-            : isSubscribed
+            : isAuthenticated
             ? 'bg-black'
             : 'bg-[#222222]';
     };
@@ -158,10 +158,9 @@ const Navbar = ({
         profile?.current_role === 'COLLEGE_STUDENT' &&
         (!LEARNING_PAGES.some((page) => router.asPath === page) ||
             (LEARNING_PAGES.some((page) => router.asPath === page) &&
-                !isSubscribed &&
+                !isAuthenticated &&
                 !isDesktopBreakpoints));
-    const isShowSidebar =
-        showSidebar && fullHeightSidebar && isAuthenticated && isSubscribed;
+    const isShowSidebar = showSidebar && fullHeightSidebar && isAuthenticated;
 
     const { data: configData } = useGetConfigQuery();
 
@@ -175,7 +174,7 @@ const Navbar = ({
             <div
                 className={cn(
                     'flex items-center min-h-14 justify-between w-full px-4 py-3 md:px-8 gap-4',
-                    isSubscribed && showSidebar
+                    isAuthenticated && showSidebar
                         ? 'lg:px-6'
                         : noPadding
                         ? 'lg:px-16'
@@ -189,7 +188,7 @@ const Navbar = ({
                             onClick={() => setOpenSidebar(true)}
                         />
                     )}
-                    <Link href={isSubscribed ? '/dashboard' : '/'}>
+                    <Link href={isAuthenticated ? '/dashboard' : '/'}>
                         <span className="text-2xl font-bold cursor-pointer font-[Urbanist] lg:hidden">
                             G
                         </span>
@@ -200,9 +199,9 @@ const Navbar = ({
                     <div
                         className={cn(
                             'items-center gap-6 hidden lg:flex',
-                            isSubscribed && showSidebar && '!hidden'
+                            isAuthenticated && showSidebar && '!hidden'
                         )}>
-                        {profile?.current_role === 'K12' ? (
+                        {profile?.current_role === 'K12' && isAuthenticated ? (
                             <>
                                 <NavigationButton
                                     key={K12_NAVBAR_BUTTONS[0].name}
@@ -270,15 +269,18 @@ const Navbar = ({
                         <div className="hidden font-bold md:flex md:items-center md:gap-3">
                             {isAuthenticated ? (
                                 <>
-                                    {isDashboard && !isSubscribed && (
-                                        <Button
-                                            href="/langganan"
-                                            variant="custom"
-                                            className="bg-[#5F2BCE] hover:bg-[#4A1FA3] text-white rounded-full transition-colors w-[108px] h-[34px] text-sm flex items-center justify-center"
-                                            eventName="Click Langganan Button">
-                                            Langganan
-                                        </Button>
-                                    )}
+                                    {isDashboard &&
+                                        !isSubscribed &&
+                                        profile?.current_role ===
+                                            'COLLEGE_STUDENT' && (
+                                            <Button
+                                                href="/langganan"
+                                                variant="custom"
+                                                className="bg-[#5F2BCE] hover:bg-[#4A1FA3] text-white rounded-full transition-colors w-[108px] h-[34px] text-sm flex items-center justify-center"
+                                                eventName="Click Langganan Button">
+                                                Langganan
+                                            </Button>
+                                        )}
                                     <UserProfile />
                                 </>
                             ) : (
