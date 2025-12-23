@@ -2,6 +2,7 @@ import Button from 'commons/components/elements/Button';
 import LeaderboardCard from './LeaderboardCard';
 import { RefreshCcw } from 'lucide-react';
 import {
+    exerciseApi,
     useGetExerciseDetailV2Query,
     useGetExerciseLeaderboardQuery
 } from 'exercises/redux/api/exercisesApi';
@@ -9,6 +10,7 @@ import { useRouter } from 'next/router';
 import Skeleton from 'commons/components/elements/Skeleton';
 import { useWindowSize } from 'usehooks-ts';
 import { cn } from 'commons/utils';
+import { useDispatch } from 'react-redux';
 
 const Leaderboard = () => {
     const router = useRouter();
@@ -115,6 +117,7 @@ export const LeaderboardReport = () => {
     const router = useRouter();
     const { slug, exerciseProgressId } = router.query;
     const { width } = useWindowSize();
+    const dispatch = useDispatch();
 
     const { data: exercise } = useGetExerciseDetailV2Query(
         {
@@ -137,6 +140,7 @@ export const LeaderboardReport = () => {
     const onRetry = (): void => {
         const firstProblemId = exercise?.first_problemset?.first_problem_id;
         if (firstProblemId) {
+            dispatch(exerciseApi.util.invalidateTags(['EXERCISES']));
             router.push(
                 `/latihan/${slug}/${exercise.first_problemset?.id}/${firstProblemId}`
             );

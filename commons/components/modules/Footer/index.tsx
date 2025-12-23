@@ -140,7 +140,7 @@ const SOCIAL_MEDIAS: FooterSocialMediaProps[] = [
     },
     {
         Icon: TikTok,
-        url: 'https://www.tiktok.com/@gradientacademy'
+        url: 'https://www.tiktok.com/@gradient_idn'
     }
 ];
 

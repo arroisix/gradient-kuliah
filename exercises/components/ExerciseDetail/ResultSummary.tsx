@@ -1,11 +1,16 @@
 import { Check, RefreshCcw, X } from 'lucide-react';
-import { useGetExerciseDetailV2Query } from 'exercises/redux/api/exercisesApi';
+import {
+    exerciseApi,
+    useGetExerciseDetailV2Query
+} from 'exercises/redux/api/exercisesApi';
 import { useRouter } from 'next/router';
 import Button from 'commons/components/elements/Button';
 import { cn } from 'commons/utils';
+import { useDispatch } from 'react-redux';
 
 const ResultSummary = ({ isReportMode }: { isReportMode?: boolean }) => {
     const router = useRouter();
+    const dispatch = useDispatch();
     const { slug, exerciseProgressId } = router.query;
 
     const { data: exercise } = useGetExerciseDetailV2Query(
@@ -34,6 +39,7 @@ const ResultSummary = ({ isReportMode }: { isReportMode?: boolean }) => {
     const onRetry = (): void => {
         const firstProblemId = exercise?.first_problemset?.first_problem_id;
         if (firstProblemId) {
+            dispatch(exerciseApi.util.invalidateTags(['EXERCISES']));
             router.push(
                 `/latihan/${slug}/${exercise.first_problemset?.id}/${firstProblemId}`
             );

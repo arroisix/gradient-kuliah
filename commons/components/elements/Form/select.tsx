@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { GroupBase, default as ReactSelect } from 'react-select';
+import { GroupBase, default as ReactSelect, SingleValue } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import AsyncCreatableSelect from 'react-select/async-creatable';
 import AsyncSelect, { AsyncProps } from 'react-select/async';
@@ -16,6 +16,7 @@ export interface SelectProps {
     isCreatable?: boolean;
     // For async select
     isAsync?: boolean;
+    isSearchTarget?: boolean;
     loadOption?: AsyncProps<Option, false, GroupBase<Option>>['loadOptions'];
 }
 
@@ -29,7 +30,8 @@ const Select: React.FC<SelectProps> = ({
     initialValue,
     isCreatable,
     isAsync,
-    loadOption
+    loadOption,
+    isSearchTarget = false
 }) => {
     const [chosen, setChosen] = useState<Option | null>(null);
 
@@ -43,15 +45,21 @@ const Select: React.FC<SelectProps> = ({
                     setChosen(matchingOption);
                 }
             } else {
+                let label = initialValue;
+                if (isSearchTarget) {
+                    // the format of "initialValue" is "institution_id:institution_name"
+                    label = initialValue.split(':')[1];
+                }
+
                 setChosen({
                     value: initialValue,
-                    label: initialValue
+                    label
                 });
             }
         }
     }, [initialValue, option]);
 
-    const onOptionChange = (val: any) => {
+    const onOptionChange = (val: SingleValue<Option>) => {
         onChange && onChange(val ? val.value : null);
         setChosen(val);
     };
