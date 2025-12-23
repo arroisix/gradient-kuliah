@@ -19,6 +19,8 @@ export interface SelectProps {
     isSearchTarget?: boolean;
     // whether to show "x" button or not
     isClearable?: boolean;
+    // custom no option message
+    noOptionsMessage?: string;
     loadOption?: AsyncProps<Option, false, GroupBase<Option>>['loadOptions'];
 }
 
@@ -34,7 +36,8 @@ const Select: React.FC<SelectProps> = ({
     isAsync,
     loadOption,
     isSearchTarget = false,
-    isClearable = true
+    isClearable = true,
+    noOptionsMessage = 'No options'
 }) => {
     const [chosen, setChosen] = useState<Option | null>(null);
 
@@ -87,6 +90,7 @@ const Select: React.FC<SelectProps> = ({
                 name={name}
                 value={chosen}
                 onChange={onOptionChange}
+                noOptionsMessage={() => noOptionsMessage}
                 styles={{
                     control: (base) => ({
                         ...base,

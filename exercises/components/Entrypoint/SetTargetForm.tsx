@@ -272,6 +272,7 @@ function SetTargetForm({
                                         isAsync
                                         isSearchTarget
                                         isClearable={false}
+                                        noOptionsMessage="Ketik nama universitas"
                                         onChange={selectOnChange(
                                             id,
                                             'institution',
@@ -290,6 +291,7 @@ function SetTargetForm({
                                         isAsync
                                         isSearchTarget
                                         isClearable={false}
+                                        noOptionsMessage="Ketik jurusan yang dipilih"
                                         onChange={selectOnChange(
                                             id,
                                             'major',
