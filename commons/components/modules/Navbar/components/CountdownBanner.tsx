@@ -75,7 +75,7 @@ const CountdownBanner = (): JSX.Element => {
                         </Link>
                     ) : (
                         <div className="flex gap-2 items-center">
-                            <div className="flex flex-col items-center justify-center bg-[#1E1930] backdrop-blur-sm rounded min-w-[40px]">
+                            <div className="flex flex-col items-center justify-center backdrop-blur-sm rounded min-w-[40px]">
                                 <span className="text-sm font-bold text-white leading-none">
                                     {timeLeft.days.toString()}
                                 </span>
@@ -86,7 +86,7 @@ const CountdownBanner = (): JSX.Element => {
                             <span className="text-[10px] font-bold text-white">
                                 :
                             </span>
-                            <div className="flex flex-col items-center justify-center bg-[#1E1930] backdrop-blur-sm rounded min-w-[40px]">
+                            <div className="flex flex-col items-center justify-center backdrop-blur-sm rounded min-w-[40px]">
                                 <span className="text-sm font-bold text-white leading-none">
                                     {timeLeft.hours.toString().padStart(2, '0')}
                                 </span>
@@ -97,7 +97,7 @@ const CountdownBanner = (): JSX.Element => {
                             <span className="text-[10px] font-bold text-white">
                                 :
                             </span>
-                            <div className="flex flex-col items-center justify-center bg-[#1E1930] backdrop-blur-sm rounded min-w-[40px]">
+                            <div className="flex flex-col items-center justify-center backdrop-blur-sm rounded min-w-[40px]">
                                 <span className="text-sm font-bold text-white leading-none">
                                     {timeLeft.minutes
                                         .toString()
@@ -110,7 +110,7 @@ const CountdownBanner = (): JSX.Element => {
                             <span className="text-[10px] font-bold text-white">
                                 :
                             </span>
-                            <div className="flex flex-col items-center justify-center bg-[#1E1930] backdrop-blur-sm rounded min-w-[40px]">
+                            <div className="flex flex-col items-center justify-center backdrop-blur-sm rounded min-w-[40px]">
                                 <span className="text-sm font-bold text-[#B6A6F3] leading-none">
                                     {timeLeft.seconds
                                         .toString()
