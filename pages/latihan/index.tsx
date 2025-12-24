@@ -18,17 +18,7 @@ const LatihanPage = (): JSX.Element => {
         tracker?.genericTrack('Visit Latihan Landing Page');
     }, [tracker]);
 
-    // "profile" might be "undefined" during auth checking
-    // this check is necessary to prevent glitch
-    if (!profile) {
-        return (
-            <LearnLayout showSidebar fullHeightSidebar>
-                <></>
-            </LearnLayout>
-        );
-    }
-
-    if (profile.current_role === 'K12') {
+    if (profile?.current_role === 'K12') {
         return (
             <LearnLayout showSidebar fullHeightSidebar>
                 <SetTargetDrawer>
