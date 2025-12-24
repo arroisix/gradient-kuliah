@@ -9,6 +9,7 @@ import { Accordion } from '@base-ui/react/accordion';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { XIcon } from 'lucide-react';
+import { useRouter } from 'next/router';
 
 interface LayoutProps {
     children?: JSX.Element;
@@ -327,22 +328,29 @@ function ArrowSvg(props: React.ComponentProps<'svg'>) {
 function NavigationMenuItem({
     label,
     children,
-    href
+    href,
+    isActive = false
 }: {
     label: string;
     children?: JSX.Element;
     href?: string;
+    isActive?: boolean;
 }): JSX.Element {
     return (
         <NavigationMenu.Item>
             {href ? (
                 <Link
                     href={href}
-                    className="flex items-center gap-1 text-white text-sm leading-[125%] font-semibold hover:text-[#B6A6F3] hover:bg-black hover:bg-opacity-30 px-3 py-2 rounded-lg">
+                    className={`${
+                        isActive ? 'text-[#B6A6F3]' : 'text-white'
+                    } flex items-center gap-1 text-sm leading-[125%] font-semibold hover:text-[#B6A6F3] hover:bg-black hover:bg-opacity-30 px-3 py-2 rounded-lg`}>
                     {label}
                 </Link>
             ) : (
-                <NavigationMenu.Trigger className="flex items-center gap-1 text-white text-sm leading-[125%] font-semibold data-[popup-open]:text-[#B6A6F3] data-[popup-open]:bg-black data-[popup-open]:bg-opacity-30 px-3 py-2 rounded-lg">
+                <NavigationMenu.Trigger
+                    className={`${
+                        isActive ? 'text-[#B6A6F3]' : 'text-white'
+                    } flex items-center gap-1 text-sm leading-[125%] font-semibold data-[popup-open]:text-[#B6A6F3] data-[popup-open]:bg-black data-[popup-open]:bg-opacity-30 px-3 py-2 rounded-lg`}>
                     {label}
                     <NavigationMenu.Icon className="transition-transform duration-200 ease-in-out data-[popup-open]:rotate-180">
                         <ChevronDownIcon size={16} />
@@ -361,6 +369,7 @@ function NavigationMenuItem({
 
 function Navbar(): JSX.Element {
     const [showMobileMenu, setShowMobileMenu] = useState(false);
+    const router = useRouter();
 
     return (
         <header className="flex fixed top-0 z-[9999] w-full justify-center lg:mt-[10px]">
@@ -420,7 +429,9 @@ function Navbar(): JSX.Element {
                             </div>
                         </NavigationMenuItem>
 
-                        <NavigationMenuItem label="Try Out">
+                        <NavigationMenuItem
+                            isActive={router.pathname.includes('/utbk/try-out')}
+                            label="Try Out">
                             <div
                                 className="w-screen max-w-[618px] flex-auto overflow-hidden rounded-2xl bg-black bg-opacity-90"
                                 style={{
@@ -432,7 +443,7 @@ function Navbar(): JSX.Element {
                                             Gratis
                                         </h4>
                                         <Link
-                                            href="/utbk/try-out?type=1"
+                                            href="/utbk/try-out?access_type=free"
                                             className="flex flex-col gap-1 p-3">
                                             <h5 className="text-white text-base leading-[140%] font-semibold">
                                                 Try Out Gratis
@@ -465,7 +476,7 @@ function Navbar(): JSX.Element {
                                             Khusus Member
                                         </h4>
                                         <Link
-                                            href="/utbk/try-out?type=2"
+                                            href="/utbk/try-out?access_type=member"
                                             className="flex flex-col gap-1 p-3">
                                             <h5 className="text-white text-base leading-[140%] font-semibold">
                                                 Try Out Harian
@@ -476,7 +487,7 @@ function Navbar(): JSX.Element {
                                             </p>
                                         </Link>
                                         <Link
-                                            href="/utbk/try-out?type=3"
+                                            href="/utbk/try-out?access_type=member"
                                             className="flex flex-col gap-1 p-3">
                                             <h5 className="text-white text-base leading-[140%] font-semibold">
                                                 Try Out Mingguan
@@ -491,10 +502,10 @@ function Navbar(): JSX.Element {
                             </div>
                         </NavigationMenuItem>
 
-                        <NavigationMenuItem
+                        {/* <NavigationMenuItem
                             label="Prediksi PTN"
                             href="/utbk/prediksi-ptn"
-                        />
+                        /> */}
                     </NavigationMenu.List>
 
                     <NavigationMenu.Portal>
