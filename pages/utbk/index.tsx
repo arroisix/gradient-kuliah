@@ -143,7 +143,7 @@ function Hero(): JSX.Element {
         <section className="max-h-[832px] min-h-[775px] w-full aspect-[20/13] relative flex justify-center">
             <picture className="absolute pointer-events-none">
                 <source
-                    srcSet={`${CDN_URL}/assets/utbk/hero.avif`}
+                    srcSet={`${CDN_URL}/assets/utbk/hero6.avif`}
                     type="image/avif"
                     media="(min-width: 861px)"
                     className="max-h-[832px] min-h-[775px] object-cover"
@@ -160,7 +160,7 @@ function Hero(): JSX.Element {
                     className="max-h-[832px] min-h-[775px] object-cover"
                 />
                 <img
-                    src={`${CDN_URL}/assets/utbk/hero.avif`}
+                    src={`${CDN_URL}/assets/utbk/hero6.avif`}
                     alt=""
                     className="max-h-[832px] min-h-[775px] object-cover"
                 />
@@ -194,14 +194,14 @@ function Hero(): JSX.Element {
                 <div className="flex flex-col md:flex-row gap-4 self-center mb-16 px-[54px] max-w-[564px] w-full">
                     <Button
                         variant="primary"
-                        linkClass="h-[52px] w-full"
-                        className="h-[52px] flex items-center justify-center"
+                        linkClass="h-[52px] w-full md:basis-1/2"
+                        className="h-[52px] flex items-center justify-center font-semibold"
                         href="/daftar">
                         Coba Gratis
                     </Button>
                     <Button
                         variant="secondary"
-                        className="h-[52px] w-full"
+                        className="h-[52px] w-full font-semibold md:basis-1/2"
                         onClick={() => setShowUTBKModal(true)}>
                         Apa itu UTBK?
                     </Button>
@@ -253,8 +253,10 @@ function Hero(): JSX.Element {
                             className="mb-2"
                         />
 
-                        <p className="text-sm leading-4 text-graphite-400">
-                            Dipercaya <b>200k+ pelajar</b> Indonesia
+                        <p className="text-sm leading-4 text-graphite-400 font-medium">
+                            Dipercaya{' '}
+                            <b className="text-white">200k+ pelajar</b>{' '}
+                            Indonesia
                         </p>
                     </div>
                 </div>

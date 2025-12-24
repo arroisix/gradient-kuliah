@@ -21,35 +21,17 @@ export default function Layout({ children }: LayoutProps): JSX.Element {
         <div className="bg-black">
             <Navbar />
             {children}
-            <Footer className="!bg-black" />
+            <Footer className="!bg-black md:mt-7" />
         </div>
     );
 }
 
 const MATERI = [
     {
-        name: 'Penalaran Kualitatif',
+        name: 'Penalaran Kuantitatif',
         description: 'Hubungan, pola, analisis teks pendek.',
         href: '#',
         icon: 'penalaran-kualitatif.svg'
-    },
-    {
-        name: 'Pemahaman dan Penalaran Umum',
-        description: 'Membaca, memahami konteks, dan evaluasi.',
-        href: '#',
-        icon: 'pemahaman-penalaran-umum.svg'
-    },
-    {
-        name: 'Literasi Bahasa Indonesia',
-        description: 'Makna konteks, struktur, inferensi dalam teks.',
-        href: '#',
-        icon: 'literasi-bahasa-indonesia.svg'
-    },
-    {
-        name: 'Penalaran Matematis',
-        description: 'Logika angka, problem solving, matematika dasar.',
-        href: '#',
-        icon: 'penalaran-matematis.svg'
     },
     {
         name: 'Pemahaman Bacaan dan Menulis',
@@ -58,16 +40,34 @@ const MATERI = [
         icon: 'pemahaman-bacaan.svg'
     },
     {
-        name: 'Literasi Bahasa Inggris',
-        description: 'Reading comprehension, grammar, vocabulary.',
+        name: 'Penalaran Matematika',
+        description: 'Logika angka, problem solving, matematika dasar.',
         href: '#',
-        icon: 'literasi-bahasa-inggris.svg'
+        icon: 'penalaran-matematis.svg'
+    },
+    {
+        name: 'Pengetahuan dan Pemahaman Umum',
+        description: 'Membaca, memahami konteks, dan evaluasi.',
+        href: '#',
+        icon: 'pemahaman-penalaran-umum.svg'
     },
     {
         name: 'Penalaran Umum',
         description: 'Kemampuan analisis fakta dan logika umum.',
         href: '#',
         icon: 'penalaran-umum.svg'
+    },
+    {
+        name: 'Literasi Bahasa Indonesia',
+        description: 'Makna konteks, struktur, inferensi dalam teks.',
+        href: '#',
+        icon: 'literasi-bahasa-indonesia.svg'
+    },
+    {
+        name: 'Literasi Bahasa Inggris',
+        description: 'Reading comprehension, grammar, vocabulary.',
+        href: '#',
+        icon: 'literasi-bahasa-inggris.svg'
     }
 ];
 
@@ -411,7 +411,7 @@ function Navbar(): JSX.Element {
     return (
         <header className="flex fixed top-0 z-[9999] w-full justify-center lg:mt-[10px]">
             <div
-                className="flex justify-between items-center w-full px-8 bg-white bg-opacity-[3%] border-solid border-[1px] border-white border-opacity-[8%] rounded-full h-[60px] m-4 max-w-[1232px]"
+                className="flex justify-between items-center w-full px-8 bg-white bg-opacity-[3%] md:bg-[#040404] md:bg-opacity-[23%] border-solid border-[1px] border-white border-opacity-[8%] rounded-full h-[60px] m-4 max-w-[1232px]"
                 style={{
                     boxShadow: '0px 25px 50px -12px rgba(88, 28, 135, 0.1)',
                     backdropFilter: 'blur(8px)'
@@ -459,8 +459,15 @@ function Navbar(): JSX.Element {
                                     </div>
                                 </div>
                                 <ul className="p-6 grid grid-cols-2 gap-x-8 gap-y-6 m-0 list-none">
-                                    {MATERI.map((item) => (
-                                        <li key={item.name}>
+                                    {MATERI.map((item, i) => (
+                                        <li
+                                            key={item.name}
+                                            style={{
+                                                order:
+                                                    i === MATERI.length - 1
+                                                        ? 8
+                                                        : undefined
+                                            }}>
                                             <Link
                                                 href={item.href}
                                                 onClick={(event) =>
@@ -592,7 +599,7 @@ function Navbar(): JSX.Element {
                                 ['--easing' as string]:
                                     'cubic-bezier(0.22, 1, 0.36, 1)'
                             }}>
-                            <NavigationMenu.Popup className="data-[ending-style]:easing-[ease] relative h-[var(--popup-height)] origin-[var(--transform-origin)] transition-[opacity,transform,width,height,scale,translate] duration-[var(--duration)] ease-[var(--easing)] data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[ending-style]:duration-150 data-[starting-style]:scale-90 data-[starting-style]:opacity-0 w-[var(--popup-width)] xs:w-[var(--popup-width)]">
+                            <NavigationMenu.Popup className="data-[ending-style]:easing-[ease] relative h-[var(--popup-height)] origin-[var(--transform-origin)] transition-[opacity,transform,width,height,scale,translate] duration-[var(--duration)] ease-[var(--easing)] data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[ending-style]:duration-150 data-[starting-style]:scale-90 data-[starting-style]:opacity-0 w-[var(--popup-width)] xs:w-[var(--popup-width)] drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
                                 <NavigationMenu.Arrow
                                     className="flex transition-[left] duration-[var(--duration)] ease-[var(--easing)] data-[side=bottom]:top-0 data-[side=left]:right-[-13px] data-[side=left]:rotate-90 data-[side=right]:left-[-13px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-8px] data-[side=top]:rotate-180"
                                     style={{ transform: 'translateY(-100%)' }}>
