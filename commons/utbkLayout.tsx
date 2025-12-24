@@ -19,35 +19,17 @@ export default function Layout({ children }: LayoutProps): JSX.Element {
         <div className="bg-black">
             <Navbar />
             {children}
-            <Footer className="!bg-black" />
+            <Footer className="!bg-black md:mt-7" />
         </div>
     );
 }
 
 const MATERI = [
     {
-        name: 'Penalaran Kualitatif',
+        name: 'Penalaran Kuantitatif',
         description: 'Hubungan, pola, analisis teks pendek.',
         href: '#',
         icon: 'penalaran-kualitatif.svg'
-    },
-    {
-        name: 'Pemahaman dan Penalaran Umum',
-        description: 'Membaca, memahami konteks, dan evaluasi.',
-        href: '#',
-        icon: 'pemahaman-penalaran-umum.svg'
-    },
-    {
-        name: 'Literasi Bahasa Indonesia',
-        description: 'Makna konteks, struktur, inferensi dalam teks.',
-        href: '#',
-        icon: 'literasi-bahasa-indonesia.svg'
-    },
-    {
-        name: 'Penalaran Matematis',
-        description: 'Logika angka, problem solving, matematika dasar.',
-        href: '#',
-        icon: 'penalaran-matematis.svg'
     },
     {
         name: 'Pemahaman Bacaan dan Menulis',
@@ -56,16 +38,34 @@ const MATERI = [
         icon: 'pemahaman-bacaan.svg'
     },
     {
-        name: 'Literasi Bahasa Inggris',
-        description: 'Reading comprehension, grammar, vocabulary.',
+        name: 'Penalaran Matematika',
+        description: 'Logika angka, problem solving, matematika dasar.',
         href: '#',
-        icon: 'literasi-bahasa-inggris.svg'
+        icon: 'penalaran-matematis.svg'
+    },
+    {
+        name: 'Pengetahuan dan Pemahaman Umum',
+        description: 'Membaca, memahami konteks, dan evaluasi.',
+        href: '#',
+        icon: 'pemahaman-penalaran-umum.svg'
     },
     {
         name: 'Penalaran Umum',
         description: 'Kemampuan analisis fakta dan logika umum.',
         href: '#',
         icon: 'penalaran-umum.svg'
+    },
+    {
+        name: 'Literasi Bahasa Indonesia',
+        description: 'Makna konteks, struktur, inferensi dalam teks.',
+        href: '#',
+        icon: 'literasi-bahasa-indonesia.svg'
+    },
+    {
+        name: 'Literasi Bahasa Inggris',
+        description: 'Reading comprehension, grammar, vocabulary.',
+        href: '#',
+        icon: 'literasi-bahasa-inggris.svg'
     }
 ];
 
@@ -365,7 +365,7 @@ function Navbar(): JSX.Element {
     return (
         <header className="flex fixed top-0 z-50 w-full justify-center lg:mt-[10px]">
             <div
-                className="flex justify-between items-center w-full px-8 bg-white bg-opacity-[3%] border-solid border-[1px] border-white border-opacity-[8%] rounded-full h-[60px] m-4 max-w-[1232px]"
+                className="flex justify-between items-center w-full px-8 bg-white bg-opacity-[3%] md:bg-[#040404] md:bg-opacity-[23%] border-solid border-[1px] border-white border-opacity-[8%] rounded-full h-[60px] m-4 max-w-[1232px]"
                 style={{
                     boxShadow: '0px 25px 50px -12px rgba(88, 28, 135, 0.1)',
                     backdropFilter: 'blur(8px)'
@@ -379,17 +379,20 @@ function Navbar(): JSX.Element {
                 <NavigationMenu.Root className="hidden lg:block absolute left-1/2 -translate-x-1/2 transform">
                     <NavigationMenu.List className="relative flex gap-8 list-none p-0">
                         <NavigationMenuItem label="Materi">
-                            <div
-                                className="w-screen max-w-[889px] flex-auto overflow-hidden rounded-2xl bg-black bg-opacity-90"
-                                style={{
-                                    backdropFilter: 'blur(32px)'
-                                }}>
+                            <div className="w-screen max-w-[896px] flex-auto overflow-hidden rounded-2xl bg-black">
                                 <ul className="p-6 grid grid-cols-2 gap-x-8 gap-y-6 m-0 list-none">
-                                    {MATERI.map((item) => (
-                                        <li key={item.name}>
+                                    {MATERI.map((item, i) => (
+                                        <li
+                                            key={item.name}
+                                            style={{
+                                                order:
+                                                    i === MATERI.length - 1
+                                                        ? 8
+                                                        : undefined
+                                            }}>
                                             <Link
                                                 href={item.href}
-                                                className="flex gap-4">
+                                                className="flex gap-4 p-3">
                                                 <div className="flex items-center justify-center rounded-full h-[48px] w-[48px] bg-[#333333]">
                                                     <img
                                                         src={`${CDN_URL}/assets/utbk/${item.icon}`}
@@ -401,14 +404,14 @@ function Navbar(): JSX.Element {
                                                     <h5 className="text-white font-semibold text-base leading-[140%]">
                                                         {item.name}
                                                     </h5>
-                                                    <p className="text-[#999999] text-sm leading-[160%]">
+                                                    <p className="text-[#999999] text-sm leading-[160%] whitespace-nowrap">
                                                         {item.description}
                                                     </p>
                                                 </div>
                                             </Link>
                                         </li>
                                     ))}
-                                    <li className="flex justify-end items-center text-[#B6A6F3]">
+                                    <li className="flex justify-start items-center text-[#B6A6F3] p-3">
                                         <Link
                                             className="font-semibold text-sm flex gap-1 items-center"
                                             href="/utbk/materi">
@@ -421,11 +424,7 @@ function Navbar(): JSX.Element {
                         </NavigationMenuItem>
 
                         <NavigationMenuItem label="Try Out">
-                            <div
-                                className="w-screen max-w-[618px] flex-auto overflow-hidden rounded-2xl bg-black bg-opacity-90"
-                                style={{
-                                    backdropFilter: 'blur(32px)'
-                                }}>
+                            <div className="w-screen max-w-[618px] flex-auto overflow-hidden rounded-2xl bg-black">
                                 <div className="p-6 gap-10 flex">
                                     <section className="flex flex-col gap-4">
                                         <h4 className="text-xs leading-[125%] uppercase tracking-[2px] font-bold text-white px-3">
@@ -513,7 +512,7 @@ function Navbar(): JSX.Element {
                                 ['--easing' as string]:
                                     'cubic-bezier(0.22, 1, 0.36, 1)'
                             }}>
-                            <NavigationMenu.Popup className="data-[ending-style]:easing-[ease] relative h-[var(--popup-height)] origin-[var(--transform-origin)] transition-[opacity,transform,width,height,scale,translate] duration-[var(--duration)] ease-[var(--easing)] data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[ending-style]:duration-150 data-[starting-style]:scale-90 data-[starting-style]:opacity-0 w-[var(--popup-width)] xs:w-[var(--popup-width)]">
+                            <NavigationMenu.Popup className="data-[ending-style]:easing-[ease] relative h-[var(--popup-height)] origin-[var(--transform-origin)] transition-[opacity,transform,width,height,scale,translate] duration-[var(--duration)] ease-[var(--easing)] data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[ending-style]:duration-150 data-[starting-style]:scale-90 data-[starting-style]:opacity-0 w-[var(--popup-width)] xs:w-[var(--popup-width)] drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
                                 <NavigationMenu.Arrow
                                     className="flex transition-[left] duration-[var(--duration)] ease-[var(--easing)] data-[side=bottom]:top-0 data-[side=left]:right-[-13px] data-[side=left]:rotate-90 data-[side=right]:left-[-13px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-8px] data-[side=top]:rotate-180"
                                     style={{ transform: 'translateY(-100%)' }}>
