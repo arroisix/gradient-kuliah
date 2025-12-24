@@ -12,11 +12,19 @@ const SetTargetDrawer = dynamic(
 
 const LatihanPage = (): JSX.Element => {
     const tracker = useTracker();
-    const { profile } = useAuth();
+    const { profile, isLoadingProfile } = useAuth();
 
     useEffect(() => {
         tracker?.genericTrack('Visit Latihan Landing Page');
     }, [tracker]);
+
+    if (isLoadingProfile === undefined || isLoadingProfile) {
+        return (
+            <LearnLayout showSidebar fullHeightSidebar>
+                <></>
+            </LearnLayout>
+        );
+    }
 
     if (profile?.current_role === 'K12') {
         return (
