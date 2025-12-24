@@ -1,9 +1,7 @@
-import { useAuth } from 'authentication/contexts/AuthProvider';
 import Filter from 'commons/components/elements/Filter';
 import Layout from 'commons/utbkLayout';
+import withAnon from 'commons/withAnon';
 import LatihanContent from 'exercises/components/Entrypoint/EntrypointContent';
-import SetTargetDrawer from 'exercises/components/Entrypoint/SetTargetDrawer';
-import SetTargetDrawerButton from 'exercises/components/Entrypoint/SetTargetDrawerButton';
 import { useGetExerciseV2LandingPageQuery } from 'exercises/redux/api/exercisesApi';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
@@ -15,7 +13,6 @@ const tryoutFilterOptions: Option[] = [
 ];
 
 const TryOutPage = (): JSX.Element => {
-    const { profile } = useAuth();
     const router = useRouter();
 
     const {
@@ -43,48 +40,40 @@ const TryOutPage = (): JSX.Element => {
         router.push(
             { query: { ...router.query, access_type: type, page: 1 } },
             undefined,
-            {
-                shallow: true
-            }
+            { shallow: true }
         );
     };
 
     return (
         <Layout>
-            <SetTargetDrawer>
-                <div className="max-w-screen-lg mx-auto pt-32">
-                    <div className="flex justify-between items-center">
-                        <h1 className="text-xl font-bold md:text-2xl text-balance">
-                            Try Out
-                        </h1>
+            <div className="max-w-screen-lg mx-auto pt-32">
+                <div className="flex justify-between items-center">
+                    <h1 className="text-xl font-bold md:text-2xl text-balance">
+                        Try Out
+                    </h1>
 
-                        <div className="flex justify-between items-center gap-4">
-                            <Filter
-                                options={tryoutFilterOptions}
-                                defaultSelected={access_type as string}
-                                onChange={handleFilterTryout}
-                                title="Tipe Tryout"
-                            />
-
-                            {profile && profile.current_role === 'K12' && (
-                                <SetTargetDrawerButton />
-                            )}
-                        </div>
+                    <div className="flex justify-between items-center gap-4">
+                        <Filter
+                            options={tryoutFilterOptions}
+                            defaultSelected={access_type as string}
+                            onChange={handleFilterTryout}
+                            title="Tipe Akses Tryout"
+                        />
                     </div>
-
-                    <LatihanContent
-                        isLoading={isLoading || isFetching}
-                        exercises={data?.data || []}
-                        myExercises={[]}
-                        totalItems={data?.count_items || 0}
-                        currentPage={data?.current_page || 1}
-                        limit={data?.limit || 6}
-                    />
                 </div>
-            </SetTargetDrawer>
+
+                <LatihanContent
+                    isLoading={isLoading || isFetching}
+                    exercises={data?.data || []}
+                    myExercises={[]}
+                    totalItems={data?.count_items || 0}
+                    currentPage={data?.current_page || 1}
+                    limit={data?.limit || 6}
+                />
+            </div>
         </Layout>
     );
 };
 
 TryOutPage.displayName = 'Latihan';
-export default TryOutPage;
+export default withAnon(TryOutPage);
