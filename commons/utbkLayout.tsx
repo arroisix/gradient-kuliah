@@ -10,6 +10,7 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { XIcon } from 'lucide-react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 interface LayoutProps {
     children?: JSX.Element;
@@ -331,7 +332,7 @@ function NavigationMenuItem({
     href,
     isActive = false
 }: {
-    label: string;
+    label: string | JSX.Element;
     children?: JSX.Element;
     href?: string;
     isActive?: boolean;
@@ -386,20 +387,51 @@ function Navbar(): JSX.Element {
                 </Link>
 
                 <NavigationMenu.Root className="hidden lg:block absolute left-1/2 -translate-x-1/2 transform">
-                    <NavigationMenu.List className="relative flex gap-8 list-none p-0">
-                        <NavigationMenuItem label="Materi">
+                    <NavigationMenu.List className="relative flex items-center gap-8 list-none p-0">
+                        <NavigationMenuItem
+                            label={
+                                <div className="flex items-center gap-3">
+                                    <div className="bg-[#36236A] text-[10px] text-white/80 font-bold py-1 px-2 rounded-lg">
+                                        COMING SOON
+                                    </div>
+                                    <span>Materi</span>
+                                </div>
+                            }>
                             <div
                                 className="w-screen max-w-[889px] flex-auto overflow-hidden rounded-2xl bg-black bg-opacity-90"
                                 style={{
                                     backdropFilter: 'blur(32px)'
                                 }}>
+                                <div className="bg-[#1E1930] border-b border-b-[#36236A] flex items-center gap-4 p-4">
+                                    <Image
+                                        src={`${CDN_URL}/assets/utbk/materi_coming_soon.svg`}
+                                        alt=""
+                                        width={24}
+                                        height={24}
+                                    />
+
+                                    <div className="space-y-1">
+                                        <h4 className="text-sm font-semibold text-white">
+                                            Semua materi sedang proses
+                                            pengembangan
+                                        </h4>
+                                        <p className="text-sm text-[#DEDEDE]">
+                                            Kami sedang bekerja keras untuk
+                                            mempersiapkan konten materi
+                                            berkualitas tinggi.
+                                        </p>
+                                    </div>
+                                </div>
                                 <ul className="p-6 grid grid-cols-2 gap-x-8 gap-y-6 m-0 list-none">
                                     {MATERI.map((item) => (
                                         <li key={item.name}>
                                             <Link
                                                 href={item.href}
-                                                className="flex gap-4">
-                                                <div className="flex items-center justify-center rounded-full h-[48px] w-[48px] bg-[#333333]">
+                                                onClick={(event) =>
+                                                    event.preventDefault()
+                                                }
+                                                className="cursor-not-allowed flex gap-4">
+                                                <div className="flex items-center justify-center rounded-full h-[48px] w-[48px] bg-[#333333]/60">
                                                     <img
                                                         src={`${CDN_URL}/assets/utbk/${item.icon}`}
                                                         alt={item.name}
@@ -407,24 +439,24 @@ function Navbar(): JSX.Element {
                                                     />
                                                 </div>
                                                 <div className="flex flex-col gap-1">
-                                                    <h5 className="text-white font-semibold text-base leading-[140%]">
+                                                    <h5 className="text-[#999999] font-semibold text-base leading-[140%]">
                                                         {item.name}
                                                     </h5>
-                                                    <p className="text-[#999999] text-sm leading-[160%]">
+                                                    <p className="text-[#666666] text-sm leading-[160%]">
                                                         {item.description}
                                                     </p>
                                                 </div>
                                             </Link>
                                         </li>
                                     ))}
-                                    <li className="flex justify-end items-center text-[#B6A6F3]">
+                                    {/* <li className="flex justify-end items-center text-[#B6A6F3]">
                                         <Link
                                             className="font-semibold text-sm flex gap-1 items-center"
                                             href="/utbk/materi">
                                             Lihat Semua
                                             <FaArrowRight size={16} />
                                         </Link>
-                                    </li>
+                                    </li> */}
                                 </ul>
                             </div>
                         </NavigationMenuItem>
