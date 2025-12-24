@@ -35,8 +35,7 @@ function SetTargetDrawer({ children }: PropsWithChildren) {
     const [isModalOpened, setIsModalOpened] = useState(false);
     const { width } = useWindowSize();
 
-    const { data, isLoading, isFetching } =
-        useGetStudentTargetInstitutionsQuery();
+    const { data, isLoading } = useGetStudentTargetInstitutionsQuery();
 
     const value = useMemo((): SetTargetDrawerContextType => {
         return { setIsDrawerOpened, setIsModalOpened };
@@ -60,7 +59,7 @@ function SetTargetDrawer({ children }: PropsWithChildren) {
         }
     }, [isDrawerOpened, isModalOpened, width]);
 
-    if (isLoading || isFetching) {
+    if (isLoading) {
         return <></>;
     }
 
