@@ -93,7 +93,7 @@ function AccordionItem({
     children,
     href
 }: {
-    label: string;
+    label: string | JSX.Element;
     href?: string;
     children?: JSX.Element;
 }): JSX.Element {
@@ -171,32 +171,68 @@ const MobileSidebar = ({
                     </header>
                     <div className="flex flex-col gap-8 md:gap-12 px-6 pb-6 flex-grow overflow-auto md:max-w-[738px] self-center w-full">
                         <Accordion.Root className="flex flex-col flex-grow md:flex-grow-0">
-                            <AccordionItem label="Materi">
-                                <ul className="flex flex-col gap-8 list-none p-0 md:pl-8">
-                                    {MATERI.map((item) => (
-                                        <li key={item.name}>
-                                            <Link
-                                                href={item.href}
-                                                className="flex gap-4">
-                                                <div className="flex-shrink-0 flex items-center justify-center rounded-full h-[48px] w-[48px] bg-[#333333]">
-                                                    <img
-                                                        src={`${CDN_URL}/assets/utbk/${item.icon}`}
-                                                        alt={item.name}
-                                                        className="flex-shrink-0 object-contain"
-                                                    />
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <h5 className="text-white font-semibold text-base leading-[140%]">
-                                                        {item.name}
-                                                    </h5>
-                                                    <p className="text-[#999999] text-sm leading-[160%]">
-                                                        {item.description}
-                                                    </p>
-                                                </div>
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </ul>
+                            <AccordionItem
+                                label={
+                                    <div className="flex items-center gap-2">
+                                        <span>Materi</span>
+                                        <div className="bg-[#36236A] text-[10px] leading-normal text-white/80 font-bold py-1 px-2 rounded-lg">
+                                            COMING SOON
+                                        </div>
+                                    </div>
+                                }>
+                                <>
+                                    <div className="bg-[#1E1930] border border-[#36236A] flex gap-4 p-4 rounded-2xl mb-8">
+                                        <div className="shrink-0">
+                                            <Image
+                                                src={`${CDN_URL}/assets/utbk/materi_coming_soon.svg`}
+                                                alt=""
+                                                width={24}
+                                                height={24}
+                                            />
+                                        </div>
+
+                                        <div className="space-y-1">
+                                            <h4 className="text-sm font-semibold text-white">
+                                                Semua materi sedang proses
+                                                pengembangan
+                                            </h4>
+                                            <p className="text-sm text-[#DEDEDE]">
+                                                Kami sedang bekerja keras untuk
+                                                mempersiapkan konten materi
+                                                berkualitas tinggi.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <ul className="flex flex-col gap-8 list-none p-0 md:pl-8">
+                                        {MATERI.map((item) => (
+                                            <li key={item.name}>
+                                                <Link
+                                                    href={item.href}
+                                                    onClick={(event) =>
+                                                        event.preventDefault()
+                                                    }
+                                                    className="cursor-not-allowed flex items-center gap-4">
+                                                    <div className="flex-shrink-0 flex items-center justify-center rounded-full h-[48px] w-[48px] bg-[#333333]/60">
+                                                        <img
+                                                            src={`${CDN_URL}/assets/utbk/${item.icon}`}
+                                                            alt={item.name}
+                                                            className="flex-shrink-0 object-contain"
+                                                        />
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <h5 className="text-[#999999] font-semibold text-base leading-[140%]">
+                                                            {item.name}
+                                                        </h5>
+                                                        <p className="text-[#666666] text-sm leading-[160%]">
+                                                            {item.description}
+                                                        </p>
+                                                    </div>
+                                                </Link>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </>
                             </AccordionItem>
                             <AccordionItem label="Try Out">
                                 <div className="flex flex-col gap-8 md:gap-10">
@@ -254,10 +290,10 @@ const MobileSidebar = ({
                                     </section>
                                 </div>
                             </AccordionItem>
-                            <AccordionItem
+                            {/* <AccordionItem
                                 label="Prediksi PTN"
                                 href="/utbk/prediksi-ptn"
-                            />
+                            /> */}
                         </Accordion.Root>
                         <section className="flex flex-col md:flex-row md:justify-center md:max-w-[456px] w-full gap-4 md:self-center">
                             <Button
@@ -430,7 +466,7 @@ function Navbar(): JSX.Element {
                                                 onClick={(event) =>
                                                     event.preventDefault()
                                                 }
-                                                className="cursor-not-allowed flex gap-4">
+                                                className="cursor-not-allowed flex items-center gap-4">
                                                 <div className="flex items-center justify-center rounded-full h-[48px] w-[48px] bg-[#333333]/60">
                                                     <img
                                                         src={`${CDN_URL}/assets/utbk/${item.icon}`}
