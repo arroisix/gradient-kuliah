@@ -6,7 +6,6 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import { cn } from './utils';
 import Appbar from './components/modules/Appbar';
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
-import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useRouter } from 'next/router';
 import useWindowBreakpoints from './hooks/useWindowBreakpoints';
 import dynamic from 'next/dynamic';
@@ -42,7 +41,6 @@ const Layout = ({
         'landing-page-revamp'
     );
     const router = useRouter();
-    const { is_subscribed } = useCourseSubscription();
     const { isMobileBreakpoints } = useWindowBreakpoints();
 
     return (
@@ -63,7 +61,7 @@ const Layout = ({
                 courses={courses}
             />
 
-            <div className="h-14 bg-[#222222]"></div>
+            <div className="h-28 bg-[#222222]"></div>
 
             {!isAuthenticated && <CountdownBanner />}
 
