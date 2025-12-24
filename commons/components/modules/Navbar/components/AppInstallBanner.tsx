@@ -3,6 +3,9 @@ import { MdClose } from 'react-icons/md';
 import Image from 'next/image';
 import { cn } from 'commons/utils';
 import { CDN_URL } from 'commons/constants';
+import { useAuth } from 'authentication/contexts/AuthProvider';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
 interface AppInstallBannerProps {
     showSidebar?: boolean;
@@ -10,6 +13,8 @@ interface AppInstallBannerProps {
 
 const AppInstallBanner = ({ showSidebar }: AppInstallBannerProps) => {
     const [isVisible, setIsVisible] = useState(false);
+    const { profile } = useAuth();
+    const isAuthenticated = useSelector(getIsAuthenticated);
     const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
     const isIOS = useMemo(() => {
         if (typeof window !== 'undefined') {
@@ -24,7 +29,12 @@ const AppInstallBanner = ({ showSidebar }: AppInstallBannerProps) => {
 
     useEffect(() => {
         const isBannerClosed = localStorage.getItem('appBannerClosed');
-        if (!isBannerClosed) {
+        if (
+            !isBannerClosed &&
+            isAuthenticated &&
+            !!profile &&
+            profile.current_role === 'COLLEGE_STUDENT'
+        ) {
             setIsVisible(true);
         }
 
@@ -38,7 +48,7 @@ const AppInstallBanner = ({ showSidebar }: AppInstallBannerProps) => {
         observer.observe(document.body, { childList: true, subtree: true });
 
         return () => observer.disconnect();
-    }, []);
+    }, [isAuthenticated, profile]);
 
     const handleClose = (e: React.MouseEvent) => {
         e.stopPropagation();

@@ -77,7 +77,7 @@ const Appbar = (): JSX.Element | null => {
     const [showExpanded, setShowExpanded] = useState(false);
     const { data: configData } = useGetConfigQuery();
     const tracker = useTracker();
-    const { profile } = useAuth();
+    const { profile, isAuthenticated } = useAuth();
 
     const APPBAR_NAV: AppbarNav[] =
         profile?.current_role === 'COLLEGE_STUDENT'
@@ -111,7 +111,7 @@ const Appbar = (): JSX.Element | null => {
         return <DiskusiIcon />;
     };
 
-    return isShowAppbar() && is_subscribed ? (
+    return isShowAppbar() && isAuthenticated ? (
         <>
             {showExpanded && (
                 <div
