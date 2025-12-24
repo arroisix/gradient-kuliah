@@ -782,7 +782,7 @@ function UTBK(): JSX.Element {
                 <Fitur className="mb-[40px] mx-4" />
                 <Langganan className="mb-12 mx-4" />
                 <FAQ className="mb-10 mx-4 sm:mx-8 max-w-[736px] self-center w-[calc(100%-32px)] sm:w-[calc(100%-64px)]" />
-                <FinalCTA className="sm:mx-8 sm:w-[calc(100%-64px)]" />
+                <FinalCTA className="sm:mx-8 sm:w-[calc(100%-64px)] mb-12" />
             </div>
         </Layout>
     );
