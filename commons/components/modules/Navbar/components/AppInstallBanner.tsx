@@ -4,17 +4,18 @@ import Image from 'next/image';
 import { cn } from 'commons/utils';
 import { CDN_URL } from 'commons/constants';
 import { useAuth } from 'authentication/contexts/AuthProvider';
-import { useSelector } from 'react-redux';
-import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
 interface AppInstallBannerProps {
     showSidebar?: boolean;
+    isOnLandingPage?: boolean;
 }
 
-const AppInstallBanner = ({ showSidebar }: AppInstallBannerProps) => {
+const AppInstallBanner = ({
+    showSidebar,
+    isOnLandingPage
+}: AppInstallBannerProps) => {
     const [isVisible, setIsVisible] = useState(false);
-    const { profile } = useAuth();
-    const isAuthenticated = useSelector(getIsAuthenticated);
+    const { isAuthenticated } = useAuth();
     const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
     const isIOS = useMemo(() => {
         if (typeof window !== 'undefined') {
@@ -29,12 +30,8 @@ const AppInstallBanner = ({ showSidebar }: AppInstallBannerProps) => {
 
     useEffect(() => {
         const isBannerClosed = localStorage.getItem('appBannerClosed');
-        if (
-            !isBannerClosed &&
-            isAuthenticated &&
-            !!profile &&
-            profile.current_role === 'COLLEGE_STUDENT'
-        ) {
+        if (isBannerClosed === 'false' || typeof isBannerClosed === 'object') {
+            console.log('setIsVisible true');
             setIsVisible(true);
         }
 
@@ -48,7 +45,7 @@ const AppInstallBanner = ({ showSidebar }: AppInstallBannerProps) => {
         observer.observe(document.body, { childList: true, subtree: true });
 
         return () => observer.disconnect();
-    }, [isAuthenticated, profile]);
+    }, []);
 
     const handleClose = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -71,12 +68,19 @@ const AppInstallBanner = ({ showSidebar }: AppInstallBannerProps) => {
         }
     };
 
-    if (!isVisible || isMobileSidebarOpen) return null;
+    if (
+        !isVisible ||
+        isMobileSidebarOpen ||
+        (isAuthenticated && isOnLandingPage)
+    )
+        return null;
 
     return (
         <div
             className={cn(
-                'sticky top-[54px]',
+                isOnLandingPage
+                    ? 'w-full h-14 mb-8 md:mb-6'
+                    : 'sticky top-[54px]',
                 showSidebar
                     ? 'md:left-[250px] md:w-[calc(100%-250px)] md:!top-14'
                     : 'w-full'

@@ -9,9 +9,11 @@ const Subscribe = (): JSX.Element => {
 
     if (profile?.current_role === 'K12') {
         return (
-            <section className="py-4 lg:py-24 px-[18px] m-auto max-w-[1064px] w-full">
-                <Langganan removeFree />
-            </section>
+            <Layout paymentPage>
+                <section className="py-4 lg:py-24 px-[18px] m-auto max-w-[1064px] w-full">
+                    <Langganan removeFree />
+                </section>
+            </Layout>
         );
     }
 
