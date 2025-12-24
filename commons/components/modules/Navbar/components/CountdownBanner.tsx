@@ -18,7 +18,7 @@ const CountdownBanner = (): JSX.Element => {
 
     useEffect(() => {
         // Set target date - adjust this to your actual target date
-        const targetDate = new Date('2025-01-01T20:00:00').getTime();
+        const targetDate = new Date('2026-01-01T20:00:00').getTime();
 
         const updateCountdown = () => {
             const now = new Date().getTime();
@@ -59,7 +59,7 @@ const CountdownBanner = (): JSX.Element => {
                 'w-full bg-[#1E1930] flex items-center justify-center py-2 px-4 md:px-4 relative overflow-hidden',
                 isCountdownDone && 'cursor-pointer'
             )}>
-            {/* <div className="absolute inset-0 bg-gradient-to-r from-[#7C3AED]/20 to-[#6366F1]/20" /> */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#7C3AED]/20 to-[#6366F1]/20" />
             {/* Mobile layout: text on left, countdown on right */}
             <div className="flex md:hidden items-center justify-between w-full relative z-10 gap-4 py-2 md:py-4">
                 <div className="flex flex-col gap-4">

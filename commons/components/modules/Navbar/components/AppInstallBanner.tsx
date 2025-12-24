@@ -80,7 +80,7 @@ const AppInstallBanner = ({
             className={cn(
                 isOnLandingPage
                     ? 'w-full h-14 mb-8 md:mb-6'
-                    : 'sticky top-[54px]',
+                    : 'sticky top-[64px]',
                 showSidebar
                     ? 'md:left-[250px] md:w-[calc(100%-250px)] md:!top-14'
                     : 'w-full'

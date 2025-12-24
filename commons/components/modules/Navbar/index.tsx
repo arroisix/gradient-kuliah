@@ -29,8 +29,6 @@ import KelasIcon from '../../elements/Icons/Kelas';
 import BookStackIcon from '../../elements/Icons/BookStack';
 import BookStackIconFill from '../../elements/Icons/BookStackFill';
 import KelasIconFill from '../../elements/Icons/KelasFill';
-import AppInstallBanner from './components/AppInstallBanner';
-import CountdownBanner from './components/CountdownBanner';
 
 const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
     {
@@ -94,8 +92,7 @@ const Navbar = ({
     const { theme } = useThemeContext();
     const lightMode = theme === 'light';
 
-    const { isDesktopBreakpoints, isMobileBreakpoints } =
-        useWindowBreakpoints();
+    const { isDesktopBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { profile } = useContext(AuthContext);
     const [openMobile, setOpenMobile] = useState(false);
@@ -174,12 +171,6 @@ const Navbar = ({
                 computeBgColor()
             )}
             style={{ zIndex: 100 }}>
-            <AppInstallBanner
-                showSidebar={
-                    showSidebar && isAuthenticated && !isMobileBreakpoints
-                }
-                isOnLandingPage
-            />
             <div
                 className={cn(
                     'flex items-center min-h-14 justify-between w-full px-4 py-3 md:px-8 gap-4',
@@ -333,7 +324,6 @@ const Navbar = ({
                 setOpenSidebar={setOpenSidebar}
                 configData={configData}
             />
-            <CountdownBanner />
         </header>
     );
 };
