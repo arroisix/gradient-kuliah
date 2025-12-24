@@ -11,6 +11,7 @@ import { MdMailOutline } from 'react-icons/md';
 import moment from 'moment';
 import Image from 'next/image';
 import { CDN_URL } from 'commons/constants';
+import { cn } from 'commons/utils';
 
 type FooterItemProps = {
     title: string;
@@ -144,7 +145,7 @@ const SOCIAL_MEDIAS: FooterSocialMediaProps[] = [
     }
 ];
 
-const Footer = (): JSX.Element => {
+const Footer = ({ className }: { className?: string }): JSX.Element => {
     const TITLE_BODY_GAP = 4;
     const PRODUCT_BODY_GAP = 3;
     const CONTACT_BODY_GAP = 2;
@@ -153,7 +154,10 @@ const Footer = (): JSX.Element => {
     return (
         <footer
             id="footer"
-            className="w-screen flex flex-col bg-[#121212] gap-8 lg:gap-12 px-6 md:px-12 xl:px-24 pt-6 md:pt-8 pb-5 md:pb-6 ">
+            className={cn(
+                'w-screen flex flex-col bg-[#121212] gap-8 lg:gap-12 px-6 md:px-12 xl:px-24 pt-6 md:pt-8 pb-5 md:pb-6',
+                className
+            )}>
             <div className="flex flex-col-reverse w-full gap-8 lg:flex-row lg:gap-0">
                 <div className="flex flex-col w-full lg:flex-row gap-7 xl:gap-12">
                     {ITEMS.map((item) => (

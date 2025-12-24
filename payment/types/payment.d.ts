@@ -65,6 +65,26 @@ type PacketOffer = {
     };
 };
 
+type PacketOfferUTBK = {
+    id: string;
+    is_free: boolean;
+    packet_name: string;
+    active_duration: number;
+    is_lifetime?: boolean;
+    price: number;
+    price_before_discount?: number;
+    discount?: number;
+    order: number;
+    benefits: {
+        subtitle?: string;
+        try_out_count: number;
+        try_out_discussion: boolean;
+        copilot: boolean;
+        subtest_material: boolean;
+        best_value?: boolean;
+    };
+};
+
 type TransactionPromo = {
     id: string;
     code: string;

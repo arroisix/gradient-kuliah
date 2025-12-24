@@ -60,6 +60,14 @@ export const subscriptionApi = baseApi.injectEndpoints({
                 url: `${SUBSCRIPTION_BASE_URL}packet-offer/`
             })
         }),
+        getPacketOfferUTBK: builder.query<ResponseData<PacketOffer>, void>({
+            query: () => ({
+                url: `${SUBSCRIPTION_BASE_URL}packet-offer/`,
+                params: {
+                    type: 'k12'
+                }
+            })
+        }),
         getDetailPacketOffer: builder.query<PacketOffer, string>({
             query: (packet_id: string) => ({
                 url: `${SUBSCRIPTION_BASE_URL}packet-detail/${packet_id}/`
@@ -92,5 +100,6 @@ export const {
     useExtendCheckoutMutation,
     useGetDetailPacketOfferQuery,
     useGetPacketOfferQuery,
-    useCompleteCardCheckoutMutation
+    useCompleteCardCheckoutMutation,
+    useGetPacketOfferUTBKQuery
 } = subscriptionApi;

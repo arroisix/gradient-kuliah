@@ -5,7 +5,18 @@ import { useRouter } from 'next/router';
 import { useGetPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
 import React from 'react';
 
-const K12_ALLOWED_PREFIXES = ['/dashboard', '/materi', '/latihan'];
+const K12_ALLOWED_PREFIXES = [
+    '/dashboard',
+    '/materi',
+    '/latihan',
+    '/pembayaran',
+    '/langganan',
+    '/checkout',
+    '/profil',
+    '/aktivasi-email',
+    '/copilot',
+    '/kontak-kami'
+];
 
 const K12Paywall = (): JSX.Element => {
     const router = useRouter();

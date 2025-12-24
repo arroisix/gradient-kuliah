@@ -1810,3 +1810,7 @@ math-field#tanya-mathfield::part(virtual-keyboard-toggle) {
 .bmpui-ui-selectbox {
     color: #5f2bce !important;
 }
+
+#__next {
+    isolation: isolate;
+}
