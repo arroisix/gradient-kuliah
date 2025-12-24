@@ -23,7 +23,7 @@ const LatihanContent: React.FC<LatihanContentProps> = ({
 }) => {
     if (isLoading) {
         return (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
+            <div className="mb-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
                 <Skeleton repeat={6} className="w-full h-[158px] !mb-0" />
             </div>
         );
