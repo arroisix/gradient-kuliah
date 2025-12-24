@@ -54,7 +54,10 @@ const withAnon = <P extends object>(
                         router.pathname !== '/onboarding/jenis-akun' &&
                         showAccountTypePrompt
                     ) {
-                        router.push('/onboarding/jenis-akun');
+                        router.push({
+                            pathname: '/onboarding/jenis-akun',
+                            query: router.query
+                        });
                         return;
                     }
 

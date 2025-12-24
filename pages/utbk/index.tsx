@@ -1,6 +1,7 @@
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import Accordion from 'commons/components/elements/Accordion';
 import Button from 'commons/components/elements/Button';
+import Modal from 'commons/components/modules/Modal';
 import { CDN_URL } from 'commons/constants';
 import Layout from 'commons/utbkLayout';
 import { cn } from 'commons/utils';
@@ -9,12 +10,134 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useGetPacketOfferUTBKQuery } from 'payment/redux/api/subscriptionApi';
-import React from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { FaChevronRight } from 'react-icons/fa';
 import { FaRegCircleCheck } from 'react-icons/fa6';
 import styles from 'styles/utbk.module.css';
 
+const MATERI_UTBK_MODAL = [
+    {
+        title: 'Penalaran Umum',
+        icon: 'penalaran-umum.svg'
+    },
+    {
+        title: 'Pemahaman Bacaan',
+        icon: 'pemahaman-penalaran-umum.svg'
+    },
+    {
+        title: 'Perhitungan',
+        icon: 'penalaran-matematis.svg'
+    },
+    {
+        title: 'Literasi B.Ing dan Indo',
+        icon: 'literasi-bahasa-indonesia.svg'
+    }
+];
+
+function UTBKModal({
+    open,
+    setOpen
+}: {
+    open: boolean;
+    setOpen: Dispatch<SetStateAction<boolean>>;
+}): JSX.Element {
+    return (
+        <Modal
+            isOpen={open}
+            setOpen={setOpen}
+            variant="dark"
+            containerClassName="modal modal-open modal-middle min-h-[100px]"
+            className="md:max-w-[660px] p-4 md:p-6">
+            <div className="-mt-6 gap-4 md:gap-6 flex flex-col text-white">
+                <iframe
+                    title="UTBK Yuk"
+                    src="https://www.youtube.com/embed/tgbNymZ7vqY"
+                    className="w-[calc(100%+32px)] md:w-[calc(100%+48px)] aspect-[343/176] md:aspect-[660/370] -mx-4 -mt-4 md:-mx-6 md:-mt-6"></iframe>
+                <div className="flex flex-col gap-8">
+                    <div className="flex flex-col gap-2">
+                        <h3 className="text-xl leading-[140%] font-semibold">
+                            Kenalan dengan UTBK yuk! 👋
+                        </h3>
+                        <p className="text-[#DEDEDE] text-sm leading-[160%]">
+                            UTBK adalah tes masuk perguruan tinggi negeri. Tes
+                            ini tidak menilai seberapa banyak materi yang kamu
+                            hafal, tapi seberapa baik kamu memahami soal,
+                            berpikir logis, dan menarik jawaban yang tepat.
+                        </p>
+                    </div>
+
+                    <div className="flex flex-col gap-4">
+                        <h4 className="text-base leading-[140%] font-semibold">
+                            Apa bedanya dengan Ujian Sekolah?
+                        </h4>
+                        <div className="flex flex-col gap-6 md:flex-row">
+                            <p className="p-4 bg-violet-3 rounded-2xl flex flex-col gap-4 font-semibold basis-1/2 text-sm leading-[125%]">
+                                🏫 Ujian Sekolah
+                                <ul className="pl-5 text-[#DEDEDE] font-normal leading-[160%]">
+                                    <li>Banyak mengandalkan hafalan materi</li>
+                                    <li>
+                                        Rumus sering harus diingat di luar
+                                        kepala
+                                    </li>
+                                    <li>Fokus ke isi pelajaran di kelas</li>
+                                </ul>
+                            </p>
+                            <p className="text-sm leading-[125%] p-4 bg-[#5F2BCE] bg-opacity-20 rounded-2xl flex flex-col gap-4 font-semibold border-solid border-[1px] border-accent-purple basis-1/2">
+                                🎓 UTBK
+                                <ul className="pl-5 leading-[125%]">
+                                    <li>Menguji cara berpikir dan logika</li>
+                                    <li>
+                                        Menilai pemahaman konsep dasar, bukan
+                                        hafalan
+                                    </li>
+                                    <li>
+                                        Menguji kemampuan membaca dan memahami
+                                        teks
+                                    </li>
+                                </ul>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col gap-4">
+                        <h4 className="text-base leading-[140%] font-semibold">
+                            Apa saja yang diuji?
+                        </h4>
+                        <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 list-none p-0">
+                            {MATERI_UTBK_MODAL.map((i) => (
+                                <li
+                                    key={i.title}
+                                    className="flex gap-4 p-3 bg-violet-1 items-center rounded-lg">
+                                    <div className="h-[48px] w-[48px] flex items-center justify-center rounded-full bg-violet-3 text-white flex-shrink-0">
+                                        <img
+                                            src={`${CDN_URL}/assets/utbk/${i.icon}`}
+                                            alt={i.title}
+                                        />
+                                    </div>
+                                    <p className="text-sm leading-[125%] font-semibold">
+                                        {i.title}
+                                    </p>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    <Button
+                        href="/utbk/materi"
+                        variant="primary"
+                        className="flex items-center justify-center text-sm leading-[125%] gap-[6px] font-semibold"
+                        linkClass="w-max self-center md:self-end">
+                        Cek Materi UTBK Gradient <FaChevronRight size={12} />
+                    </Button>
+                </div>
+            </div>
+        </Modal>
+    );
+}
+
 function Hero(): JSX.Element {
+    const [showUTBKModal, setShowUTBKModal] = useState(false);
+
     return (
         <section className="max-h-[832px] min-h-[775px] w-full aspect-[20/13] relative flex justify-center">
             <picture className="absolute pointer-events-none">
@@ -75,7 +198,10 @@ function Hero(): JSX.Element {
                         href="/daftar">
                         Coba Gratis
                     </Button>
-                    <Button variant="secondary" className="h-[52px] w-full">
+                    <Button
+                        variant="secondary"
+                        className="h-[52px] w-full"
+                        onClick={() => setShowUTBKModal(true)}>
                         Apa itu UTBK?
                     </Button>
                 </div>
@@ -132,11 +258,92 @@ function Hero(): JSX.Element {
                     </div>
                 </div>
             </div>
+
+            <UTBKModal open={showUTBKModal} setOpen={setShowUTBKModal} />
         </section>
     );
 }
 
+function IRTModal({
+    open,
+    setOpen
+}: {
+    open: boolean;
+    setOpen: Dispatch<SetStateAction<boolean>>;
+}): JSX.Element {
+    return (
+        <Modal
+            isOpen={open}
+            setOpen={setOpen}
+            variant="dark"
+            containerClassName="modal modal-open modal-middle min-h-[100px]"
+            className="md:max-w-[660px] p-4 md:p-6">
+            <div className="-mt-6 gap-4 flex flex-col text-white">
+                <h3 className="text-xl leading-[140%] font-semibold">
+                    Apa itu IRT?
+                </h3>
+                <div className="text-sm leading-[160%] flex flex-col gap-6">
+                    <p>
+                        IRT adalah sistem penilaian UTBK yang{' '}
+                        <b className="font-semibold">
+                            tidak menyamakan semua soal.
+                        </b>{' '}
+                        Nilai kamu ditentukan bukan cuma dari jumlah benar, tapi
+                        juga{' '}
+                        <b className="font-semibold">
+                            tingkat kesulitan soal yang kamu jawab.
+                        </b>
+                    </p>
+                    <div className="flex flex-col gap-6 md:flex-row">
+                        <p className="p-4 bg-violet-3 rounded-2xl flex flex-col gap-4 font-semibold basis-1/2">
+                            🏫 Sistem Ujian Sekolah
+                            <ul className="pl-5 text-[#DEDEDE] font-normal">
+                                <li>Semua soal bernilai sama.</li>
+                                <li>
+                                    Jawaban benar dihitung satu per satu, tanpa
+                                    melihat soal itu mudah atau sulit.
+                                </li>
+                            </ul>
+                        </p>
+                        <p className="p-4 bg-[#5F2BCE] bg-opacity-20 rounded-2xl flex flex-col gap-4 font-semibold border-solid border-[1px] border-accent-purple basis-1/2">
+                            🎓 Sistem UTBK (IRT)
+                            <ul className="pl-5 leading-[125%]">
+                                <li>Setiap soal punya bobot berbeda.</li>
+                                <li>
+                                    Menjawab soal yang lebih sulit memberi
+                                    dampak skor lebih besar dibanding soal yang
+                                    mudah.
+                                </li>
+                            </ul>
+                        </p>
+                    </div>
+                    <p>
+                        Artinya, jika kamu bisa menjawab soal yang banyak
+                        peserta lain gagal, skormu bisa naik lebih signifikan.
+                    </p>
+                    <p>
+                        Gradient menggunakan sistem ini supaya kamu melihat{' '}
+                        <b className="font-semibold">
+                            perkiraan skor yang lebih mendekati hasil UTBK
+                            sebenarnya, bukan sekadar jumlah jawaban benar.
+                        </b>
+                    </p>
+                    <Button
+                        href="/utbk/try-out"
+                        variant="primary"
+                        className="flex items-center justify-center text-sm leading-[125%] gap-[6px] font-semibold"
+                        linkClass="w-max self-center md:self-end">
+                        Cek Try Out UTBK Gradient <FaChevronRight size={12} />
+                    </Button>
+                </div>
+            </div>
+        </Modal>
+    );
+}
+
 function Fitur({ className }: { className?: string }): JSX.Element {
+    const [showIRTModal, setShowIRTModal] = useState(false);
+
     return (
         <section className={cn('flex flex-col', className)}>
             <h2 className="flex flex-col items-center text-center gap-3 text-white text-2xl leading-[125%] font-bold mb-3">
@@ -159,7 +366,7 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                             backgroundPosition: 'top right',
                             backgroundRepeat: 'no-repeat'
                         }}>
-                        <h3 className="flex flex-col gap-4 text-white font-bold text-2xl leading-[125%]">
+                        <h3 className="flex flex-col gap-4 text-white font-bold text-2xl md:text-3xl leading-[125%] max-w-[634px]">
                             <span className="uppercase flex gap-2 items-center justify-center font-bold text-[#B6A6F3] text-sm tracking-[0.7px]">
                                 <img
                                     src={`${CDN_URL}/assets/utbk/materi-icon.svg`}
@@ -202,7 +409,7 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                             backgroundPosition: 'bottom center',
                             backgroundRepeat: 'no-repeat'
                         }}>
-                        <h3 className="flex flex-col gap-4 text-white font-bold text-2xl leading-[125%]">
+                        <h3 className="flex flex-col gap-4 text-white font-bold text-2xl md:text-3xl leading-[125%]">
                             <span className="uppercase flex gap-2 items-center justify-center font-bold text-[#B6A6F3] text-sm tracking-[0.7px] h-9">
                                 <img
                                     src={`${CDN_URL}/assets/utbk/try-out-icon.svg`}
@@ -218,12 +425,13 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                             UTBK asli. Menggunakan sistem penilaian Item
                             Response Theory untuk akurasi skor tinggi.
                         </p>
-                        <Link
-                            href="/utbk/materi"
-                            className="mb-2 text-[#B6A6F3] font-semibold text-sm leading-[125%] h-[34px] flex items-center gap-1">
+                        <button
+                            className="mb-2 text-[#B6A6F3] font-semibold text-sm leading-[125%] h-[34px] flex items-center gap-1"
+                            type="button"
+                            onClick={() => setShowIRTModal(true)}>
                             Apa itu IRT
                             <FaChevronRight height={16} width={16} />
-                        </Link>
+                        </button>
                         <div className="flex-grow flex items-end">
                             <img
                                 src={`${CDN_URL}/assets/utbk/try-out.avif`}
@@ -242,7 +450,7 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                             backgroundPosition: 'bottom right',
                             backgroundRepeat: 'no-repeat'
                         }}>
-                        <h3 className="flex flex-col gap-4 text-white font-bold text-2xl leading-[125%]">
+                        <h3 className="flex flex-col gap-4 text-white font-bold text-2xl md:text-3xl leading-[125%]">
                             <span className="uppercase flex gap-2 items-center justify-center font-bold text-[#B6A6F3] text-sm tracking-[0.7px] h-9">
                                 <img
                                     src={`${CDN_URL}/assets/utbk/copilot-icon.svg`}
@@ -274,7 +482,7 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                             backgroundPosition: 'bottom center',
                             backgroundRepeat: 'no-repeat'
                         }}>
-                        <h3 className="flex flex-col gap-4 text-white font-bold text-2xl leading-[125%]">
+                        <h3 className="flex flex-col gap-4 text-white font-bold text-2xl md:text-3xl leading-[125%]">
                             <span className="uppercase flex gap-2 items-center justify-center font-bold text-[#B6A6F3] text-sm tracking-[0.7px] h-9">
                                 <img
                                     src={`${CDN_URL}/assets/utbk/analytics-icon.svg`}
@@ -285,18 +493,9 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                             </span>
                             Personal Analytics
                         </h3>
-                        <p className="text-white text-lg leading-[29.25px]">
+                        <p className="text-white text-lg leading-[29.25px] mb-2">
                             Pantau kekuatan dan kelemahanmu secara real-time.
                             Data driven learning untuk hasil yang maksimal.
-                        </p>
-                        <p
-                            className="text-[11px] leading-[16.5px] tracking-widest font-bold text-[#E9D5FF] border-solid border-[#A855F7] border-[1px] border-opacity-30 rounded-full bg-white bg-opacity-[3%] uppercase px-4 py-[6px] mb-2"
-                            style={{
-                                boxShadow:
-                                    '0px 0px 20px rgba(124, 58, 237, 0.2)',
-                                backdropFilter: 'blur(6px)'
-                            }}>
-                            Coming Soon
                         </p>
                         <div className="flex flex-grow items-center">
                             <img
@@ -309,6 +508,8 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                     </article>
                 </li>
             </ul>
+
+            <IRTModal open={showIRTModal} setOpen={setShowIRTModal} />
         </section>
     );
 }
