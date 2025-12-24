@@ -155,11 +155,12 @@ const Navbar = ({
     };
 
     const isShowHamburgerMenu =
-        profile?.current_role === 'COLLEGE_STUDENT' &&
-        (!LEARNING_PAGES.some((page) => router.asPath === page) ||
-            (LEARNING_PAGES.some((page) => router.asPath === page) &&
-                !isAuthenticated &&
-                !isDesktopBreakpoints));
+        !isAuthenticated ||
+        (profile?.current_role === 'COLLEGE_STUDENT' &&
+            (!LEARNING_PAGES.some((page) => router.asPath === page) ||
+                (LEARNING_PAGES.some((page) => router.asPath === page) &&
+                    !isAuthenticated &&
+                    !isDesktopBreakpoints)));
     const isShowSidebar = showSidebar && fullHeightSidebar && isAuthenticated;
 
     const { data: configData } = useGetConfigQuery();
@@ -248,9 +249,9 @@ const Navbar = ({
                             isShowSidebar && 'lg:ml-[250px] lg:pl-6 lg:absolute'
                         )}>
                         {!isDashboard &&
-                            profile?.current_role === 'COLLEGE_STUDENT' && (
-                                <SearchBar />
-                            )}
+                            (!isAuthenticated ||
+                                profile?.current_role ===
+                                    'COLLEGE_STUDENT') && <SearchBar />}
                     </div>
                 </div>
                 {paymentPage ? (
