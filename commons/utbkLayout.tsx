@@ -363,7 +363,7 @@ function Navbar(): JSX.Element {
     const [showMobileMenu, setShowMobileMenu] = useState(false);
 
     return (
-        <header className="flex fixed top-0 z-50 w-full justify-center lg:mt-[10px]">
+        <header className="flex fixed top-0 z-[9999] w-full justify-center lg:mt-[10px]">
             <div
                 className="flex justify-between items-center w-full px-8 bg-white bg-opacity-[3%] border-solid border-[1px] border-white border-opacity-[8%] rounded-full h-[60px] m-4 max-w-[1232px]"
                 style={{
