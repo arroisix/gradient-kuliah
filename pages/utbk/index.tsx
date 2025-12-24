@@ -5,6 +5,7 @@ import Modal from 'commons/components/modules/Modal';
 import { CDN_URL } from 'commons/constants';
 import Layout from 'commons/utbkLayout';
 import { cn } from 'commons/utils';
+import withAnon from 'commons/withAnon';
 import Testimony from 'landing/components/Sections/Testimony';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -765,7 +766,7 @@ function FinalCTA({ className }: { className?: string }): JSX.Element {
     );
 }
 
-export default function UTBK(): JSX.Element {
+function UTBK(): JSX.Element {
     return (
         <Layout>
             <div className="flex flex-col w-full">
@@ -781,8 +782,10 @@ export default function UTBK(): JSX.Element {
                 <Fitur className="mb-[40px] mx-4" />
                 <Langganan className="mb-12 mx-4" />
                 <FAQ className="mb-10 mx-4 sm:mx-8 max-w-[736px] self-center w-[calc(100%-32px)] sm:w-[calc(100%-64px)]" />
-                <FinalCTA className="sm:mx-8 sm:w-[calc(100%-64px)]" />
+                <FinalCTA className="sm:mx-8 sm:w-[calc(100%-64px)] mb-12" />
             </div>
         </Layout>
     );
 }
+
+export default withAnon(UTBK);

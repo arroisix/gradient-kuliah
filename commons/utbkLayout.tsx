@@ -19,7 +19,7 @@ export default function Layout({ children }: LayoutProps): JSX.Element {
         <div className="bg-black">
             <Navbar />
             {children}
-            <Footer className="!bg-black md:mt-7" />
+            <Footer className="!bg-black md:mt-7" isUtbk />
         </div>
     );
 }

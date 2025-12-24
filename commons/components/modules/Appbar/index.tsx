@@ -1,5 +1,4 @@
 import { cn } from 'commons/utils';
-import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -73,7 +72,6 @@ const APPBAR_NAV_K12: AppbarNav[] = [
 
 const Appbar = (): JSX.Element | null => {
     const router = useRouter();
-    const { is_subscribed } = useCourseSubscription();
     const [showExpanded, setShowExpanded] = useState(false);
     const { data: configData } = useGetConfigQuery();
     const tracker = useTracker();
