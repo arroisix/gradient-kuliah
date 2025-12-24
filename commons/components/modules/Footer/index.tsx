@@ -56,11 +56,11 @@ const ITEMS: FooterItemProps[] = [
             {
                 content: 'Kebijakan Privasi',
                 url: '/kebijakan-privasi'
-            },
-            {
-                content: 'Gradient UTBK',
-                url: '/utbk'
             }
+            // {
+            //     content: 'Gradient UTBK',
+            //     url: '/utbk'
+            // }
         ]
     },
     {
