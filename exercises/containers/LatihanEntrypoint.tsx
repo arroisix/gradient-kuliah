@@ -74,6 +74,7 @@ const LatihanEntrypoint = (): JSX.Element => {
                                 defaultSelected={access_type as string}
                                 onChange={handleFilterTryout}
                                 title="Tipe Akses Tryout"
+                                className="[&>button]:px-4 [&>button]:py-2 [&>button]:text-sm [&>button]:font-bold [&>button]:w-fit"
                             />
 
                             <SetTargetDrawerButton />

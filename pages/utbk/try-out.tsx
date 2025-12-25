@@ -46,18 +46,19 @@ const TryOutPage = (): JSX.Element => {
 
     return (
         <Layout>
-            <div className="max-w-screen-lg mx-auto pt-32">
+            <div className="max-w-screen-lg mx-auto pt-32 px-4 md:px-0">
                 <div className="flex justify-between items-center">
-                    <h1 className="text-xl font-bold md:text-2xl text-balance">
+                    <h1 className="text-white text-xl font-bold md:text-2xl text-balance">
                         Try Out
                     </h1>
 
-                    <div className="flex justify-between items-center gap-4">
+                    <div>
                         <Filter
                             options={tryoutFilterOptions}
                             defaultSelected={access_type as string}
                             onChange={handleFilterTryout}
                             title="Tipe Akses Tryout"
+                            className="[&>button]:px-4 [&>button]:py-2 [&>button]:text-sm [&>button]:font-bold [&>button]:w-fit"
                         />
                     </div>
                 </div>
