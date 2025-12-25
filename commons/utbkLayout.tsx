@@ -241,7 +241,7 @@ const MobileSidebar = ({
                                             Gratis
                                         </h4>
                                         <Link
-                                            href="/utbk/try-out?type=1"
+                                            href="/utbk/try-out?access_type=free"
                                             className="flex flex-col gap-1 p-3">
                                             <h5 className="text-white text-base leading-[140%] font-semibold">
                                                 Try Out Gratis
@@ -266,7 +266,7 @@ const MobileSidebar = ({
                                             Khusus Member
                                         </h4>
                                         <Link
-                                            href="/utbk/try-out?type=2"
+                                            href="/utbk/try-out?access_type=member"
                                             className="flex flex-col gap-1 p-3">
                                             <h5 className="text-white text-base leading-[140%] font-semibold">
                                                 Try Out Harian
@@ -277,7 +277,7 @@ const MobileSidebar = ({
                                             </p>
                                         </Link>
                                         <Link
-                                            href="/utbk/try-out?type=3"
+                                            href="/utbk/try-out?access_type=member"
                                             className="flex flex-col gap-1 p-3">
                                             <h5 className="text-white text-base leading-[140%] font-semibold">
                                                 Try Out Mingguan
