@@ -108,8 +108,10 @@ const Paginator = ({
                     setPage?.((prev) => prev - 1);
                 }}
                 className={cn(
-                    'btn sm:btn-sm rounded-full order-last sm:order-none min-w-max flex-1 sm:flex-none bg-neutral-800 text-white pl-2 border-none',
-                    !hasPreviousPage && 'btn-disabled'
+                    'btn sm:btn-sm rounded-full order-last sm:order-none min-w-max flex-1 sm:flex-none !text-white pl-2 border-none',
+                    hasPreviousPage
+                        ? '!bg-[#333333]'
+                        : '!bg-[#333333]/50 btn-disabled'
                 )}>
                 <BiChevronLeft className="w-5 h-5" /> Prev
             </PageButton>
@@ -186,8 +188,10 @@ const Paginator = ({
                     setPage?.((prev) => prev + 1);
                 }}
                 className={cn(
-                    'btn sm:btn-sm rounded-full order-last sm:order-none flex-1 sm:flex-none text-white min-w-max bg-neutral-800 border-none pr-2',
-                    !hasNextPage && 'btn-disabled'
+                    'btn sm:btn-sm rounded-full order-last sm:order-none flex-1 sm:flex-none !text-white min-w-max border-none pr-2',
+                    hasNextPage
+                        ? '!bg-[#333333]'
+                        : '!bg-[#333333]/50 btn-disabled'
                 )}>
                 Next <BiChevronRight className="w-5 h-5" />
             </PageButton>
