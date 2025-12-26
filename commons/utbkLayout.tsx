@@ -11,6 +11,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { XIcon } from 'lucide-react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import { MATERI } from 'landing/constants/UTBK';
 
 interface LayoutProps {
     children?: JSX.Element;
@@ -25,51 +26,6 @@ export default function Layout({ children }: LayoutProps): JSX.Element {
         </div>
     );
 }
-
-const MATERI = [
-    {
-        name: 'Penalaran Kuantitatif',
-        description: 'Hubungan, pola, analisis teks pendek.',
-        href: '#',
-        icon: 'penalaran-kualitatif.svg'
-    },
-    {
-        name: 'Pemahaman Bacaan dan Menulis',
-        description: 'Membaca panjang dan menulis argumentatif.',
-        href: '#',
-        icon: 'pemahaman-bacaan.svg'
-    },
-    {
-        name: 'Penalaran Matematika',
-        description: 'Logika angka, problem solving, matematika dasar.',
-        href: '#',
-        icon: 'penalaran-matematis.svg'
-    },
-    {
-        name: 'Pengetahuan dan Pemahaman Umum',
-        description: 'Membaca, memahami konteks, dan evaluasi.',
-        href: '#',
-        icon: 'pemahaman-penalaran-umum.svg'
-    },
-    {
-        name: 'Penalaran Umum',
-        description: 'Kemampuan analisis fakta dan logika umum.',
-        href: '#',
-        icon: 'penalaran-umum.svg'
-    },
-    {
-        name: 'Literasi Bahasa Indonesia',
-        description: 'Makna konteks, struktur, inferensi dalam teks.',
-        href: '#',
-        icon: 'literasi-bahasa-indonesia.svg'
-    },
-    {
-        name: 'Literasi Bahasa Inggris',
-        description: 'Reading comprehension, grammar, vocabulary.',
-        href: '#',
-        icon: 'literasi-bahasa-inggris.svg'
-    }
-];
 
 function ArrowRight(props: React.ComponentProps<'svg'>): JSX.Element {
     return (
@@ -409,7 +365,7 @@ function Navbar(): JSX.Element {
     const router = useRouter();
 
     return (
-        <header className="flex fixed top-0 z-[9999] w-full justify-center lg:mt-[10px]">
+        <header className="flex fixed top-0 z-50 w-full justify-center lg:mt-[10px]">
             <div
                 className="flex justify-between items-center w-full px-8 bg-white bg-opacity-[3%] md:bg-[#040404] md:bg-opacity-[23%] border-solid border-[1px] border-white border-opacity-[8%] rounded-full h-[60px] m-4 max-w-[1232px]"
                 style={{
@@ -495,7 +451,7 @@ function Navbar(): JSX.Element {
                                     {/* <li className="flex justify-end items-center text-[#B6A6F3]">
                                         <Link
                                             className="font-semibold text-sm flex gap-1 items-center"
-                                            href="/utbk/materi">
+                                            href="/materi">
                                             Lihat Semua
                                             <FaArrowRight size={16} />
                                         </Link>

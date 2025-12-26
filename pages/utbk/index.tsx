@@ -15,25 +15,7 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { FaChevronRight } from 'react-icons/fa';
 import { FaRegCircleCheck } from 'react-icons/fa6';
 import styles from 'styles/utbk.module.css';
-
-const MATERI_UTBK_MODAL = [
-    {
-        title: 'Penalaran Umum',
-        icon: 'penalaran-umum.svg'
-    },
-    {
-        title: 'Pemahaman Bacaan',
-        icon: 'pemahaman-penalaran-umum.svg'
-    },
-    {
-        title: 'Perhitungan',
-        icon: 'penalaran-matematis.svg'
-    },
-    {
-        title: 'Literasi B.Ing dan Indo',
-        icon: 'literasi-bahasa-indonesia.svg'
-    }
-];
+import { MATERI } from 'landing/constants/UTBK';
 
 function UTBKModal({
     open,
@@ -105,18 +87,18 @@ function UTBKModal({
                             Apa saja yang diuji?
                         </h4>
                         <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 list-none p-0">
-                            {MATERI_UTBK_MODAL.map((i) => (
+                            {MATERI.map((i) => (
                                 <li
-                                    key={i.title}
+                                    key={i.name}
                                     className="flex gap-4 p-3 bg-violet-1 items-center rounded-lg">
                                     <div className="h-[48px] w-[48px] flex items-center justify-center rounded-full bg-violet-3 text-white flex-shrink-0">
                                         <img
                                             src={`${CDN_URL}/assets/utbk/${i.icon}`}
-                                            alt={i.title}
+                                            alt={i.name}
                                         />
                                     </div>
-                                    <p className="text-sm leading-[125%] font-semibold">
-                                        {i.title}
+                                    <p className="text-base leading-[140%] font-semibold">
+                                        {i.name}
                                     </p>
                                 </li>
                             ))}
@@ -124,7 +106,7 @@ function UTBKModal({
                     </div>
 
                     <Button
-                        href="/utbk/materi"
+                        href="/materi"
                         variant="primary"
                         className="flex items-center justify-center text-sm leading-[125%] gap-[6px] font-semibold"
                         linkClass="w-max self-center md:self-end">
@@ -389,7 +371,7 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                         </p>
 
                         <Link
-                            href="/utbk/materi"
+                            href="/materi"
                             className="mb-2 text-[#B6A6F3] font-semibold text-sm leading-[125%] flex gap-1 items-center h-[34px]">
                             Lihat Materi
                             <FaChevronRight height={16} width={16} />
