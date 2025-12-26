@@ -15,7 +15,7 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { FaChevronRight } from 'react-icons/fa';
 import { FaRegCircleCheck } from 'react-icons/fa6';
 import styles from 'styles/utbk.module.css';
-import { MATERI } from 'landing/constants/UTBK';
+import { FAQ_DATA, MATERI } from 'landing/constants/UTBK';
 
 function UTBKModal({
     open,
@@ -675,29 +675,7 @@ function FAQ({ className }: { className?: string }): JSX.Element {
                 headerClassName="text-left text-white text-base leading-[140%] gap-2 bg-transparent"
                 iconClassName="text-[#999999]"
                 contentClassName="text-[#DEDEDE] text-sm leading-[160%] bg-transparent"
-                item={[
-                    {
-                        title: 'Apa perbedaan akun Gratis dan Premium?',
-                        content:
-                            'Akun Gratis bisa digunakan untuk mencoba fitur dasar, seperti contoh soal dan try out terbatas. Akun Premium memberikan akses penuh ke try out harian dan mingguan, pembahasan lengkap, analisis hasil, serta fitur pendukung belajar lainnya.'
-                    },
-                    {
-                        title: 'Apakah sistem penilaian Tryout sesuai standar UTBK terbaru?',
-                        content: 'Lorem impsum.'
-                    },
-                    {
-                        title: 'Bagaimana cara kerja Copilot AI Assistant?',
-                        content: 'Lorem impsum.'
-                    },
-                    {
-                        title: 'Apakah materi bisa diakses lewat HP?',
-                        content: 'Lorem impsum.'
-                    },
-                    {
-                        title: 'Bagaimana jika saya ingin berhenti berlangganan?',
-                        content: 'Lorem impsum.'
-                    }
-                ]}
+                item={FAQ_DATA}
             />
         </section>
     );
