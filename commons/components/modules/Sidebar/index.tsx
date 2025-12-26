@@ -38,7 +38,7 @@ const Sidebar = ({
                             );
                         }}>
                         <span
-                            className={`flex gap-4 cursor-pointer ${
+                            className={`flex gap-3 cursor-pointer ${
                                 pathname.includes('/dashboard')
                                     ? 'text-white'
                                     : 'text-[#666666]'
@@ -58,13 +58,16 @@ const Sidebar = ({
                             );
                         }}>
                         <span
-                            className={`flex gap-4 cursor-pointer ${
-                                pathname.includes('/kelas')
+                            className={`flex items-center gap-3 cursor-pointer ${
+                                pathname.includes('/materi')
                                     ? 'text-white'
                                     : 'text-[#666666]'
                             } font-body text-sm hover:text-[#999999]`}>
                             <KelasIcon size={20} />
-                            Materi
+                            Materi{' '}
+                            <div className="font-bold text-[10px] leading-normal py-1 px-2 bg-[#20222E] rounded-lg">
+                                COMING SOON
+                            </div>
                         </span>
                     </Link>
 
@@ -80,7 +83,7 @@ const Sidebar = ({
                             }}>
                             <span
                                 className={cn(
-                                    'flex gap-4 cursor-pointer  font-body text-sm hover:text-[#999999]',
+                                    'flex gap-3 cursor-pointer font-body text-sm hover:text-[#999999]',
                                     pathname.includes('/latihan')
                                         ? 'text-white'
                                         : 'text-[#666666]'
