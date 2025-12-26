@@ -8,6 +8,13 @@ import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import FilterEntrypoint from 'exercises/components/Entrypoint/FilterEntrypoint';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import dynamic from 'next/dynamic';
+import Filter from 'commons/components/elements/Filter';
+
+const tryoutFilterOptions: Option[] = [
+    { value: 'all', label: 'Semua' },
+    { value: 'free', label: 'Gratis' },
+    { value: 'member', label: 'Khusus Member' }
+];
 
 const SetTargetDrawerButton = dynamic(
     () => import('exercises/components/Entrypoint/SetTargetDrawerButton')
@@ -22,6 +29,7 @@ const LatihanEntrypoint = (): JSX.Element => {
         university_name = '',
         sort = 'latest',
         type = '',
+        access_type = profile?.current_role === 'K12' ? 'all' : '',
         page: pageQuery = '1'
     } = router.query;
     const [page, setPage] = useState(Number(pageQuery));
@@ -38,8 +46,17 @@ const LatihanEntrypoint = (): JSX.Element => {
         status: status as string,
         course_id: course_id as string,
         university_name: university_name as string,
-        sort: sort as string
+        sort: sort as string,
+        access_type: access_type as string
     });
+
+    const handleFilterTryout = (type: string): void => {
+        router.push(
+            { query: { ...router.query, access_type: type, page: 1 } },
+            undefined,
+            { shallow: true }
+        );
+    };
 
     return (
         <>
@@ -51,14 +68,20 @@ const LatihanEntrypoint = (): JSX.Element => {
                     </h1>
 
                     {profile?.current_role === 'K12' && (
-                        <div className="flex flex-row items-center gap-4">
-                            <button className="bg-graphite-700 px-5 py-2 rounded-full">
-                                Placeholder
-                            </button>
+                        <div className="flex justify-between items-center gap-4">
+                            <Filter
+                                options={tryoutFilterOptions}
+                                defaultSelected={access_type as string}
+                                onChange={handleFilterTryout}
+                                title="Tipe Akses Tryout"
+                                className="[&>button]:px-4 [&>button]:py-2 [&>button]:text-sm [&>button]:font-bold [&>button]:w-fit"
+                            />
+
                             <SetTargetDrawerButton />
                         </div>
                     )}
                 </div>
+
                 {profile?.current_role === 'COLLEGE_STUDENT' && (
                     <FilterEntrypoint />
                 )}

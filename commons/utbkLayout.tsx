@@ -9,6 +9,8 @@ import { Accordion } from '@base-ui/react/accordion';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { XIcon } from 'lucide-react';
+import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 interface LayoutProps {
     children?: JSX.Element;
@@ -91,7 +93,7 @@ function AccordionItem({
     children,
     href
 }: {
-    label: string;
+    label: string | JSX.Element;
     href?: string;
     children?: JSX.Element;
 }): JSX.Element {
@@ -169,32 +171,68 @@ const MobileSidebar = ({
                     </header>
                     <div className="flex flex-col gap-8 md:gap-12 px-6 pb-6 flex-grow overflow-auto md:max-w-[738px] self-center w-full">
                         <Accordion.Root className="flex flex-col flex-grow md:flex-grow-0">
-                            <AccordionItem label="Materi">
-                                <ul className="flex flex-col gap-8 list-none p-0 md:pl-8">
-                                    {MATERI.map((item) => (
-                                        <li key={item.name}>
-                                            <Link
-                                                href={item.href}
-                                                className="flex gap-4">
-                                                <div className="flex-shrink-0 flex items-center justify-center rounded-full h-[48px] w-[48px] bg-[#333333]">
-                                                    <img
-                                                        src={`${CDN_URL}/assets/utbk/${item.icon}`}
-                                                        alt={item.name}
-                                                        className="flex-shrink-0 object-contain"
-                                                    />
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <h5 className="text-white font-semibold text-base leading-[140%]">
-                                                        {item.name}
-                                                    </h5>
-                                                    <p className="text-[#999999] text-sm leading-[160%]">
-                                                        {item.description}
-                                                    </p>
-                                                </div>
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </ul>
+                            <AccordionItem
+                                label={
+                                    <div className="flex items-center gap-2">
+                                        <span>Materi</span>
+                                        <div className="bg-[#36236A] text-[10px] leading-normal text-white/80 font-bold py-1 px-2 rounded-lg">
+                                            COMING SOON
+                                        </div>
+                                    </div>
+                                }>
+                                <>
+                                    <div className="bg-[#1E1930] border border-[#36236A] flex gap-4 p-4 rounded-2xl mb-8">
+                                        <div className="shrink-0">
+                                            <Image
+                                                src={`${CDN_URL}/assets/utbk/materi_coming_soon.svg`}
+                                                alt=""
+                                                width={24}
+                                                height={24}
+                                            />
+                                        </div>
+
+                                        <div className="space-y-1">
+                                            <h4 className="text-sm font-semibold text-white">
+                                                Semua materi sedang proses
+                                                pengembangan
+                                            </h4>
+                                            <p className="text-sm text-[#DEDEDE]">
+                                                Kami sedang bekerja keras untuk
+                                                mempersiapkan konten materi
+                                                berkualitas tinggi.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <ul className="flex flex-col gap-8 list-none p-0 md:pl-8">
+                                        {MATERI.map((item) => (
+                                            <li key={item.name}>
+                                                <Link
+                                                    href={item.href}
+                                                    onClick={(event) =>
+                                                        event.preventDefault()
+                                                    }
+                                                    className="cursor-not-allowed flex items-center gap-4">
+                                                    <div className="flex-shrink-0 flex items-center justify-center rounded-full h-[48px] w-[48px] bg-[#333333]/60">
+                                                        <img
+                                                            src={`${CDN_URL}/assets/utbk/${item.icon}`}
+                                                            alt={item.name}
+                                                            className="flex-shrink-0 object-contain"
+                                                        />
+                                                    </div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <h5 className="text-[#999999] font-semibold text-base leading-[140%]">
+                                                            {item.name}
+                                                        </h5>
+                                                        <p className="text-[#666666] text-sm leading-[160%]">
+                                                            {item.description}
+                                                        </p>
+                                                    </div>
+                                                </Link>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </>
                             </AccordionItem>
                             <AccordionItem label="Try Out">
                                 <div className="flex flex-col gap-8 md:gap-10">
@@ -203,7 +241,7 @@ const MobileSidebar = ({
                                             Gratis
                                         </h4>
                                         <Link
-                                            href="/utbk/try-out?type=1"
+                                            href="/utbk/try-out?access_type=free"
                                             className="flex flex-col gap-1 p-3">
                                             <h5 className="text-white text-base leading-[140%] font-semibold">
                                                 Try Out Gratis
@@ -228,7 +266,7 @@ const MobileSidebar = ({
                                             Khusus Member
                                         </h4>
                                         <Link
-                                            href="/utbk/try-out?type=2"
+                                            href="/utbk/try-out?access_type=member"
                                             className="flex flex-col gap-1 p-3">
                                             <h5 className="text-white text-base leading-[140%] font-semibold">
                                                 Try Out Harian
@@ -239,7 +277,7 @@ const MobileSidebar = ({
                                             </p>
                                         </Link>
                                         <Link
-                                            href="/utbk/try-out?type=3"
+                                            href="/utbk/try-out?access_type=member"
                                             className="flex flex-col gap-1 p-3">
                                             <h5 className="text-white text-base leading-[140%] font-semibold">
                                                 Try Out Mingguan
@@ -252,10 +290,10 @@ const MobileSidebar = ({
                                     </section>
                                 </div>
                             </AccordionItem>
-                            <AccordionItem
+                            {/* <AccordionItem
                                 label="Prediksi PTN"
                                 href="/utbk/prediksi-ptn"
-                            />
+                            /> */}
                         </Accordion.Root>
                         <section className="flex flex-col md:flex-row md:justify-center md:max-w-[456px] w-full gap-4 md:self-center">
                             <Button
@@ -327,22 +365,29 @@ function ArrowSvg(props: React.ComponentProps<'svg'>) {
 function NavigationMenuItem({
     label,
     children,
-    href
+    href,
+    isActive = false
 }: {
-    label: string;
+    label: string | JSX.Element;
     children?: JSX.Element;
     href?: string;
+    isActive?: boolean;
 }): JSX.Element {
     return (
         <NavigationMenu.Item>
             {href ? (
                 <Link
                     href={href}
-                    className="flex items-center gap-1 text-white text-sm leading-[125%] font-semibold hover:text-[#B6A6F3] hover:bg-black hover:bg-opacity-30 px-3 py-2 rounded-lg">
+                    className={`${
+                        isActive ? 'text-[#B6A6F3]' : 'text-white'
+                    } flex items-center gap-1 text-sm leading-[125%] font-semibold hover:text-[#B6A6F3] hover:bg-black hover:bg-opacity-30 px-3 py-2 rounded-lg`}>
                     {label}
                 </Link>
             ) : (
-                <NavigationMenu.Trigger className="flex items-center gap-1 text-white text-sm leading-[125%] font-semibold data-[popup-open]:text-[#B6A6F3] data-[popup-open]:bg-black data-[popup-open]:bg-opacity-30 px-3 py-2 rounded-lg">
+                <NavigationMenu.Trigger
+                    className={`${
+                        isActive ? 'text-[#B6A6F3]' : 'text-white'
+                    } flex items-center gap-1 text-sm leading-[125%] font-semibold data-[popup-open]:text-[#B6A6F3] data-[popup-open]:bg-black data-[popup-open]:bg-opacity-30 px-3 py-2 rounded-lg`}>
                     {label}
                     <NavigationMenu.Icon className="transition-transform duration-200 ease-in-out data-[popup-open]:rotate-180">
                         <ChevronDownIcon size={16} />
@@ -361,9 +406,10 @@ function NavigationMenuItem({
 
 function Navbar(): JSX.Element {
     const [showMobileMenu, setShowMobileMenu] = useState(false);
+    const router = useRouter();
 
     return (
-        <header className="flex fixed top-0 z-50 w-full justify-center lg:mt-[10px]">
+        <header className="flex fixed top-0 z-[9999] w-full justify-center lg:mt-[10px]">
             <div
                 className="flex justify-between items-center w-full px-8 bg-white bg-opacity-[3%] md:bg-[#040404] md:bg-opacity-[23%] border-solid border-[1px] border-white border-opacity-[8%] rounded-full h-[60px] m-4 max-w-[1232px]"
                 style={{
@@ -377,9 +423,41 @@ function Navbar(): JSX.Element {
                 </Link>
 
                 <NavigationMenu.Root className="hidden lg:block absolute left-1/2 -translate-x-1/2 transform">
-                    <NavigationMenu.List className="relative flex gap-8 list-none p-0">
-                        <NavigationMenuItem label="Materi">
-                            <div className="w-screen max-w-[896px] flex-auto overflow-hidden rounded-2xl bg-black">
+                    <NavigationMenu.List className="relative flex items-center gap-8 list-none p-0">
+                        <NavigationMenuItem
+                            label={
+                                <div className="flex items-center gap-3">
+                                    <div className="bg-[#36236A] text-[10px] text-white/80 font-bold py-1 px-2 rounded-lg">
+                                        COMING SOON
+                                    </div>
+                                    <span>Materi</span>
+                                </div>
+                            }>
+                            <div
+                                className="w-screen max-w-[889px] flex-auto overflow-hidden rounded-2xl bg-black bg-opacity-90"
+                                style={{
+                                    backdropFilter: 'blur(32px)'
+                                }}>
+                                <div className="bg-[#1E1930] border-b border-b-[#36236A] flex items-center gap-4 p-4">
+                                    <Image
+                                        src={`${CDN_URL}/assets/utbk/materi_coming_soon.svg`}
+                                        alt=""
+                                        width={24}
+                                        height={24}
+                                    />
+
+                                    <div className="space-y-1">
+                                        <h4 className="text-sm font-semibold text-white">
+                                            Semua materi sedang proses
+                                            pengembangan
+                                        </h4>
+                                        <p className="text-sm text-[#DEDEDE]">
+                                            Kami sedang bekerja keras untuk
+                                            mempersiapkan konten materi
+                                            berkualitas tinggi.
+                                        </p>
+                                    </div>
+                                </div>
                                 <ul className="p-6 grid grid-cols-2 gap-x-8 gap-y-6 m-0 list-none">
                                     {MATERI.map((item, i) => (
                                         <li
@@ -392,8 +470,11 @@ function Navbar(): JSX.Element {
                                             }}>
                                             <Link
                                                 href={item.href}
-                                                className="flex gap-4 p-3">
-                                                <div className="flex items-center justify-center rounded-full h-[48px] w-[48px] bg-[#333333]">
+                                                onClick={(event) =>
+                                                    event.preventDefault()
+                                                }
+                                                className="cursor-not-allowed flex items-center gap-4">
+                                                <div className="flex items-center justify-center rounded-full h-[48px] w-[48px] bg-[#333333]/60">
                                                     <img
                                                         src={`${CDN_URL}/assets/utbk/${item.icon}`}
                                                         alt={item.name}
@@ -401,37 +482,43 @@ function Navbar(): JSX.Element {
                                                     />
                                                 </div>
                                                 <div className="flex flex-col gap-1">
-                                                    <h5 className="text-white font-semibold text-base leading-[140%]">
+                                                    <h5 className="text-[#999999] font-semibold text-base leading-[140%]">
                                                         {item.name}
                                                     </h5>
-                                                    <p className="text-[#999999] text-sm leading-[160%] whitespace-nowrap">
+                                                    <p className="text-[#666666] text-sm leading-[160%]">
                                                         {item.description}
                                                     </p>
                                                 </div>
                                             </Link>
                                         </li>
                                     ))}
-                                    <li className="flex justify-start items-center text-[#B6A6F3] p-3">
+                                    {/* <li className="flex justify-end items-center text-[#B6A6F3]">
                                         <Link
                                             className="font-semibold text-sm flex gap-1 items-center"
                                             href="/utbk/materi">
                                             Lihat Semua
                                             <FaArrowRight size={16} />
                                         </Link>
-                                    </li>
+                                    </li> */}
                                 </ul>
                             </div>
                         </NavigationMenuItem>
 
-                        <NavigationMenuItem label="Try Out">
-                            <div className="w-screen max-w-[618px] flex-auto overflow-hidden rounded-2xl bg-black">
+                        <NavigationMenuItem
+                            isActive={router.pathname.includes('/utbk/try-out')}
+                            label="Try Out">
+                            <div
+                                className="w-screen max-w-[618px] flex-auto overflow-hidden rounded-2xl bg-black bg-opacity-90"
+                                style={{
+                                    backdropFilter: 'blur(32px)'
+                                }}>
                                 <div className="p-6 gap-10 flex">
                                     <section className="flex flex-col gap-4">
                                         <h4 className="text-xs leading-[125%] uppercase tracking-[2px] font-bold text-white px-3">
                                             Gratis
                                         </h4>
                                         <Link
-                                            href="/utbk/try-out?type=1"
+                                            href="/utbk/try-out?access_type=free"
                                             className="flex flex-col gap-1 p-3">
                                             <h5 className="text-white text-base leading-[140%] font-semibold">
                                                 Try Out Gratis
@@ -464,7 +551,7 @@ function Navbar(): JSX.Element {
                                             Khusus Member
                                         </h4>
                                         <Link
-                                            href="/utbk/try-out?type=2"
+                                            href="/utbk/try-out?access_type=member"
                                             className="flex flex-col gap-1 p-3">
                                             <h5 className="text-white text-base leading-[140%] font-semibold">
                                                 Try Out Harian
@@ -475,7 +562,7 @@ function Navbar(): JSX.Element {
                                             </p>
                                         </Link>
                                         <Link
-                                            href="/utbk/try-out?type=3"
+                                            href="/utbk/try-out?access_type=member"
                                             className="flex flex-col gap-1 p-3">
                                             <h5 className="text-white text-base leading-[140%] font-semibold">
                                                 Try Out Mingguan
@@ -490,10 +577,10 @@ function Navbar(): JSX.Element {
                             </div>
                         </NavigationMenuItem>
 
-                        <NavigationMenuItem
+                        {/* <NavigationMenuItem
                             label="Prediksi PTN"
                             href="/utbk/prediksi-ptn"
-                        />
+                        /> */}
                     </NavigationMenu.List>
 
                     <NavigationMenu.Portal>
@@ -512,7 +599,7 @@ function Navbar(): JSX.Element {
                                 ['--easing' as string]:
                                     'cubic-bezier(0.22, 1, 0.36, 1)'
                             }}>
-                            <NavigationMenu.Popup className="data-[ending-style]:easing-[ease] relative h-[var(--popup-height)] origin-[var(--transform-origin)] transition-[opacity,transform,width,height,scale,translate] duration-[var(--duration)] ease-[var(--easing)] data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[ending-style]:duration-150 data-[starting-style]:scale-90 data-[starting-style]:opacity-0 w-[var(--popup-width)] xs:w-[var(--popup-width)] drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
+                            <NavigationMenu.Popup className="data-[ending-style]:easing-[ease] relative h-[var(--popup-height)] origin-[var(--transform-origin)] transition-[opacity,transform,width,height,scale,translate] duration-[var(--duration)] ease-[var(--easing)] data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[ending-style]:duration-150 data-[starting-style]:scale-90 data-[starting-style]:opacity-0 w-[var(--popup-width)] xs:w-[var(--popup-width)]">
                                 <NavigationMenu.Arrow
                                     className="flex transition-[left] duration-[var(--duration)] ease-[var(--easing)] data-[side=bottom]:top-0 data-[side=left]:right-[-13px] data-[side=left]:rotate-90 data-[side=right]:left-[-13px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-8px] data-[side=top]:rotate-180"
                                     style={{ transform: 'translateY(-100%)' }}>

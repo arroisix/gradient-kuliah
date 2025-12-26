@@ -12,15 +12,13 @@ const SetTargetDrawer = dynamic(
 
 const LatihanPage = (): JSX.Element => {
     const tracker = useTracker();
-    const { profile } = useAuth();
+    const { profile, isLoadingProfile } = useAuth();
 
     useEffect(() => {
         tracker?.genericTrack('Visit Latihan Landing Page');
     }, [tracker]);
 
-    // "profile" might be "undefined" during auth checking
-    // this check is necessary to prevent glitch
-    if (!profile) {
+    if (isLoadingProfile === undefined || isLoadingProfile) {
         return (
             <LearnLayout showSidebar fullHeightSidebar>
                 <></>
@@ -28,7 +26,7 @@ const LatihanPage = (): JSX.Element => {
         );
     }
 
-    if (profile.current_role === 'K12') {
+    if (profile?.current_role === 'K12') {
         return (
             <LearnLayout showSidebar fullHeightSidebar>
                 <SetTargetDrawer>

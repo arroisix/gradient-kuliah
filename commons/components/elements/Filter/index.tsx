@@ -72,7 +72,7 @@ const Filter = ({
             <button
                 onClick={() => setIsBottomSheetOpen(true)}
                 className={cn(
-                    'md:hidden flex justify-between items-center gap-2 text-xs font-bold pl-5 pr-3 py-3 bg-[#20222E] rounded-full',
+                    'md:hidden flex justify-between items-center gap-2 text-xs font-bold pl-5 pr-3 py-3 text-white bg-[#20222E] rounded-full',
                     fullWidth ? 'w-full' : 'w-full'
                 )}>
                 <span className="overflow-hidden whitespace-nowrap text-ellipsis">
@@ -92,7 +92,7 @@ const Filter = ({
                 <button
                     onClick={handleDropdownToggle}
                     className={cn(
-                        'flex justify-between items-center gap-2 text-xs font-bold pl-5 pr-3 py-3 bg-[#20222E] rounded-full',
+                        'flex justify-between items-center gap-2 text-xs font-bold pl-5 pr-3 py-3 text-white bg-[#20222E] rounded-full',
                         fullWidth ? 'w-full' : 'w-full md:w-52'
                     )}>
                     <span className="overflow-hidden whitespace-nowrap text-ellipsis">
@@ -111,7 +111,7 @@ const Filter = ({
                             <li key={value} className="z-10">
                                 <button
                                     id={value}
-                                    className="flex justify-between items-center gap-3 px-[18px] py-[7.5px] border-t-[1px] border-[#373737] first:border-t-0 w-full text-left"
+                                    className="flex justify-between items-center gap-3 px-[18px] py-[7.5px] text-white border-t-[1px] border-[#373737] first:border-t-0 w-full text-left"
                                     onClick={() => handleOptionClick(value)}>
                                     {label}
                                     <BiCheck
