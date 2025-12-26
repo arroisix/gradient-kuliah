@@ -290,10 +290,10 @@ const MobileSidebar = ({
                                     </section>
                                 </div>
                             </AccordionItem>
-                            {/* <AccordionItem
+                            <AccordionItem
                                 label="Prediksi PTN"
                                 href="/utbk/prediksi-ptn"
-                            /> */}
+                            />
                         </Accordion.Root>
                         <section className="flex flex-col md:flex-row md:justify-center md:max-w-[456px] w-full gap-4 md:self-center">
                             <Button
@@ -577,10 +577,10 @@ function Navbar(): JSX.Element {
                             </div>
                         </NavigationMenuItem>
 
-                        {/* <NavigationMenuItem
+                        <NavigationMenuItem
                             label="Prediksi PTN"
                             href="/utbk/prediksi-ptn"
-                        /> */}
+                        />
                     </NavigationMenu.List>
 
                     <NavigationMenu.Portal>
