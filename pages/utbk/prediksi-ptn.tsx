@@ -154,12 +154,12 @@ const PrediksiPTNPage = (): JSX.Element => {
 
     return (
         <Layout>
-            <div className="max-w-screen-lg mx-auto pt-32 px-4 md:px-0">
-                <h1 className="text-white font-bold text-2xl mb-2.5">
+            <div className="max-w-screen-lg mx-auto pt-32 px-4">
+                <h1 className="text-white font-bold text-2xl mb-2.5 text-center md:text-start">
                     Kalkukator Prediksi PTN
                 </h1>
 
-                <p className="text-[#DEDEDE] text-sm mb-6">
+                <p className="text-[#DEDEDE] text-sm mb-6 text-center md:text-start">
                     Masukkan target kampus dan perkiraan nilaimu untuk melihat
                     peluang lolos UTBK. Jika belum pernah try out bisa pakai
                     estimasi dulu.
@@ -178,7 +178,7 @@ const PrediksiPTNPage = (): JSX.Element => {
                             onSubmit={handleSubmit}
                             action=""
                             autoComplete="off"
-                            className="grid grid-cols-6 gap-8">
+                            className="space-y-6 md:space-y-0 md:grid md:grid-cols-6 md:gap-8">
                             <div className="col-span-2 bg-[#101010] rounded-2xl p-6 space-y-8 h-fit">
                                 <h2 className="font-semibold text-white text-xl flex items-center gap-3">
                                     <TargetKampusIcon className="fill-white w-6 h-6" />
@@ -293,7 +293,7 @@ const PrediksiPTNPage = (): JSX.Element => {
                                     </Button>
                                 </div>
 
-                                <div className="grid grid-cols-3 gap-4">
+                                <div className="w-full max-w-[240px] mx-auto space-y-2.5 md:space-y-0 md:max-w-full md:grid md:grid-cols-3 md:gap-4">
                                     <MateriCard
                                         label="Penalaran Kualitatif"
                                         name="penalaran_kualitatif"
@@ -360,7 +360,7 @@ const PrediksiPTNPage = (): JSX.Element => {
                                         !score.penalaran_umum
                                     }
                                     variant="primary"
-                                    className="w-full max-w-[328px] block mx-auto py-2 mt-8"
+                                    className="w-full max-w-[240px] md:max-w-[328px] block mx-auto py-2 mt-8"
                                     type="submit">
                                     Lihat Peluang
                                 </Button>
