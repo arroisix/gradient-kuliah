@@ -11,6 +11,7 @@ import useWindowBreakpoints from './hooks/useWindowBreakpoints';
 import dynamic from 'next/dynamic';
 import K12Paywall from './components/elements/K12Paywall';
 import CountdownBanner from './components/modules/Navbar/components/CountdownBanner';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 const AppInstallBanner = dynamic(
     () => import('./components/modules/Navbar/components/AppInstallBanner')
 );
@@ -41,6 +42,7 @@ const Layout = ({
         'landing-page-revamp'
     );
     const router = useRouter();
+    const { is_subscribed } = useCourseSubscription();
     const { isMobileBreakpoints } = useWindowBreakpoints();
 
     return (
