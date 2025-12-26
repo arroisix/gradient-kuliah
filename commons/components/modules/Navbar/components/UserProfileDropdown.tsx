@@ -6,10 +6,12 @@ import { cn } from 'commons/utils';
 import { useThemeContext } from 'commons/contexts/ThemeProvider';
 import { FaGift } from 'react-icons/fa';
 import useLogout from 'authentication/hooks/useLogout';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 const UserProfileDropdown = (): JSX.Element => {
     const tracker = useTracker();
     const { logout } = useLogout();
+    const { profile } = useAuth();
 
     const { theme } = useThemeContext();
     const lightMode = theme === 'light';
@@ -38,17 +40,19 @@ const UserProfileDropdown = (): JSX.Element => {
                     <span>Riwayat Pembelian</span>
                 </Link>
             </li>
-            <li>
-                <Link
-                    href="/kelas/downloads"
-                    className={cn(lightMode ? 'text-black' : 'text-white')}
-                    onClick={() => {
-                        tracker?.genericTrack('Click Downloads');
-                    }}>
-                    <MdFileDownload size={16} className="mr-2" />
-                    <span>Downloads</span>
-                </Link>
-            </li>
+            {profile?.current_role === 'COLLEGE_STUDENT' && (
+                <li>
+                    <Link
+                        href="/kelas/downloads"
+                        className={cn(lightMode ? 'text-black' : 'text-white')}
+                        onClick={() => {
+                            tracker?.genericTrack('Click Downloads');
+                        }}>
+                        <MdFileDownload size={16} className="mr-2" />
+                        <span>Downloads</span>
+                    </Link>
+                </li>
+            )}
             <li>
                 <Link
                     href="/referral"

@@ -4,11 +4,8 @@ import DashboardQuizIcon from '../components/DashboardQuizIcon';
 import Link from 'next/link';
 import { useTracker } from 'tracker/tracker';
 import { cn } from 'commons/utils';
-import Button from 'commons/components/elements/Button';
-import { CDN_URL } from 'commons/constants';
-import Image from 'next/image';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
-import { useRouter } from 'next/router';
+import RenewSubscriptionBanner from 'courses/components/RenewSubscriptionBanner';
 
 type Feature = {
     id: string;
@@ -19,7 +16,6 @@ type Feature = {
 };
 
 const K12Dashboard = () => {
-    const router = useRouter();
     const { is_subscribed: isSubscribed } = useCourseSubscription();
     const tracker = useTracker();
     const cardBaseClasses =
@@ -54,12 +50,8 @@ const K12Dashboard = () => {
         }
     ];
 
-    const onClickSubscribeBanner = () => {
-        router.push('/langganan');
-    };
-
     return (
-        <section className="flex flex-col w-full gap-12 pb-4 mx-auto sm:overflow-x-clip overflow-x-visible max-w-screen-2xl mt-4 md:mt-8">
+        <section className="flex flex-col w-full gap-12 pb-4 mx-auto sm:overflow-x-clip overflow-x-visible max-w-[520px] lg:max-w-screen-md xl:max-w-[896px] md:h-[calc(100vh-128px)] justify-center">
             <div className="flex flex-col gap-6">
                 <h1 className="text-center font-bold md:font-semibold text-white text-2xl md:text-xl">
                     Mau Belajar apa Hari ini?
@@ -101,35 +93,7 @@ const K12Dashboard = () => {
             </div>
 
             {isSubscribed === false && (
-                <div className="md:hidden px-6 py-4 flex flex-col gap-6 bg-[#5F2BCE] rounded-2xl relative overflow-hidden">
-                    <div className="flex flex-col gap-2 z-10">
-                        <h2 className="text-white font-semibold">
-                            Langganan untuk mendapat akses penuh ke materi
-                        </h2>
-                        <span className="text-sm text-white">
-                            Nikmati ribuan video pembelajaran, bank soal, dan
-                            fitur eksklusif lainnya tanpa batas.
-                        </span>
-                    </div>
-
-                    <Button
-                        variant="custom"
-                        size="normal"
-                        className="bg-white text-[#5F2BCE] font-semibold px-12 w-fit text-sm z-10"
-                        onClick={onClickSubscribeBanner}>
-                        Langganan
-                    </Button>
-
-                    <div className="absolute aspect-square w-[180px] z-0 right-0 top-0">
-                        <Image
-                            src={`${CDN_URL}/assets/k12-subscribe-illustration-mobile.png`}
-                            alt="Subscribe"
-                            layout="fill"
-                            objectPosition="center"
-                            objectFit="fill"
-                        />
-                    </div>
-                </div>
+                <RenewSubscriptionBanner type="K12_MOBILE" />
             )}
         </section>
     );

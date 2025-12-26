@@ -8,6 +8,8 @@ import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import FilterEntrypoint from 'exercises/components/Entrypoint/FilterEntrypoint';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import dynamic from 'next/dynamic';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Filter from 'commons/components/elements/Filter';
 
 const tryoutFilterOptions: Option[] = [
@@ -34,6 +36,7 @@ const LatihanEntrypoint = (): JSX.Element => {
     } = router.query;
     const [page, setPage] = useState(Number(pageQuery));
     const { is_subscribed } = useCourseSubscription();
+    const isAuthenticated = useSelector(getIsAuthenticated);
 
     useEffect(() => {
         setPage(Number(pageQuery));
@@ -95,7 +98,29 @@ const LatihanEntrypoint = (): JSX.Element => {
                     limit={data?.limit || 6}
                 />
             </div>
-            {!is_subscribed && <RenewSubscriptionBanner product="latihan" />}
+            {!is_subscribed && (
+                <>
+                    {profile?.current_role === 'K12' && isAuthenticated ? (
+                        <>
+                            <div className="md:h-9" />
+                            <RenewSubscriptionBanner
+                                product="latihan"
+                                type="K12"
+                            />
+                            <RenewSubscriptionBanner
+                                product="latihan"
+                                type="K12_MOBILE"
+                            />
+                            <div className="h-3 md:h-0" />
+                        </>
+                    ) : (
+                        <>
+                            <RenewSubscriptionBanner product="latihan" />
+                            {isAuthenticated && <div className="h-6 md:h-0" />}
+                        </>
+                    )}
+                </>
+            )}
         </>
     );
 };
