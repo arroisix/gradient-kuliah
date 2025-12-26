@@ -9,6 +9,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useMemo } from 'react';
 import { TiArrowRight } from 'react-icons/ti';
+import { IoClose } from 'react-icons/io5';
+import { IoMdArrowRoundDown } from 'react-icons/io';
 
 function TargetKampusIcon({ className }: PropsWithClassName) {
     return (
@@ -44,6 +46,19 @@ function PencilIcon({ className }: PropsWithClassName) {
                 stroke="#B6A6F3"
                 strokeLinecap="round"
             />
+        </svg>
+    );
+}
+
+function GraduateIcon({ className }: PropsWithClassName) {
+    return (
+        <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            className={className}>
+            <path d="M21.9455 7.21419L12.6694 3.14796C12.2189 2.95068 11.7277 2.95068 11.2771 3.14796L2.02664 7.21419C1.71125 7.35482 1.5 7.72448 1.5 8.14235C1.5 8.56023 1.71125 8.93189 2.02664 9.07011L3.99605 9.93439C3.60591 10.5692 3.33127 11.3069 3.1905 12.1021C2.81414 12.297 2.55 12.755 2.55 13.2854C2.55 13.6853 2.70796 14.0283 2.94178 14.2642L2.12705 20.251C2.07356 20.6424 2.32031 21 2.64483 21H4.55517C4.87959 21 5.12644 20.6432 5.07295 20.2514L4.25822 14.2646C4.49217 14.0287 4.65 13.6511 4.65 13.2854C4.65 12.872 4.48023 12.5208 4.23263 12.2853C4.37214 11.5717 4.65525 10.9264 5.05097 10.3957L11.305 13.1371C11.7555 13.3344 12.2467 13.3344 12.6973 13.1371L21.9734 9.07092C22.29 8.92989 22.5 8.56023 22.5 8.14235C22.5 7.72448 22.29 7.35482 21.9455 7.21419ZM13.0205 14.3462C12.712 14.4948 12.3577 14.5712 12 14.5712C11.6417 14.5712 11.2883 14.4962 10.95 14.348L6.18563 12.2608L5.7 17.9985C5.7 19.658 8.49234 21 12 21C15.4486 21 18.3 19.658 18.3 17.9997L17.815 12.258L13.0205 14.3462Z" />
         </svg>
     );
 }
@@ -107,6 +122,71 @@ function MateriCard({
                 }
                 className="!py-2 !px-4 !bg-[#222222] border border-[#333333] [&>input]:text-white !h-10"
             />
+        </div>
+    );
+}
+
+function PeluangCard() {
+    return (
+        <div className="bg-[#191920] rounded-2xl p-6 w-full max-w-[343px] md:max-w-[400px] mx-auto relative overflow-hidden">
+            <div className="w-[345px] h-[345px] rounded-full absolute -top-14 -left-14 bg-gradient-to-r from-[#741F86] via-[#965084] to-[#A82C56] opacity-30 blur-2xl"></div>
+
+            <button type="button" className="absolute top-4 right-4">
+                <IoClose className="fill-[#999999] w-6 h-6" />
+            </button>
+
+            <div className="relative z-10">
+                <span className="hidden md:block text-white/30 font-bold text-2xl mb-8">
+                    Gradient
+                </span>
+
+                <h2 className="text-white font-semibold text-xl md:text-2xl mb-1 md:mb-2">
+                    Teknik Sipil
+                </h2>
+
+                <p className="text-white text-xs md:text-sm flex items-center gap-1 md:gap-2">
+                    <GraduateIcon className="fill-[#B6A6F3] md:fill-white w-4 h-4 md:w-6 md:h-6" />
+                    Universitas Indonesia
+                </p>
+
+                <div className="bg-[#101010] rounded-lg py-4 px-6 mt-6">
+                    <span className="text-[#03AC5C] font-bold text-[32px] md:text-[40px] mb-1">
+                        82%
+                    </span>
+                    <span className="text-white font-semibold block">
+                        Peluang tinggi
+                    </span>
+
+                    <div className="w-full h-[1px] bg-[#222222] mt-6 mb-4"></div>
+
+                    <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-2">
+                        <div className="flex flex-col gap-1">
+                            <span className="text-[#DEDEDE] text-sm">
+                                Skor kamu
+                            </span>
+                            <span className="text-white font-semibold text-xl">
+                                725
+                            </span>
+                        </div>
+
+                        <div className="flex flex-col gap-1">
+                            <span className="text-[#DEDEDE] text-sm">
+                                Passing Grade 2024
+                            </span>
+                            <span className="text-white font-semibold text-xl">
+                                688
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <Button
+                    variant="secondary"
+                    className="w-full max-w-[215px] mx-auto text-sm font-semibold text-white flex justify-center items-center gap-1.5 mt-6">
+                    <IoMdArrowRoundDown className="fill-white w-4 h-4 shrink-0" />{' '}
+                    <span className="text-nowrap">Simpan sebagai Gambar</span>
+                </Button>
+            </div>
         </div>
     );
 }
