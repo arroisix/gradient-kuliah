@@ -7,7 +7,7 @@ import Layout from 'commons/utbkLayout';
 import { Formik, FormikHelpers } from 'formik';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import { TiArrowRight } from 'react-icons/ti';
 import { IoClose } from 'react-icons/io5';
 import { IoMdArrowRoundDown } from 'react-icons/io';
@@ -80,12 +80,14 @@ function MateriCard({
 
 function PeluangCard() {
     return (
-        <div className="bg-[#191920] rounded-2xl p-6 w-full max-w-[343px] md:max-w-[400px] mx-auto relative overflow-hidden">
+        <div className="modal-box bg-[#191920] rounded-2xl p-6 w-full max-w-[343px] md:max-w-[400px] mx-auto relative overflow-hidden">
             <div className="w-[345px] h-[345px] rounded-full absolute -top-14 -left-14 bg-gradient-to-r from-[#741F86] via-[#965084] to-[#A82C56] opacity-30 blur-2xl"></div>
 
-            <button type="button" className="absolute top-4 right-4">
-                <IoClose className="fill-[#999999] w-6 h-6" />
-            </button>
+            <form method="dialog">
+                <button>
+                    <IoClose className="fill-[#999999] w-6 h-6 absolute top-4 right-4" />
+                </button>
+            </form>
 
             <div className="relative z-10">
                 <span className="hidden md:block text-white/30 font-bold text-2xl mb-8">
@@ -144,6 +146,8 @@ function PeluangCard() {
 }
 
 const PrediksiPTNPage = (): JSX.Element => {
+    const peluangCardModalRef = useRef<HTMLDialogElement | null>(null);
+
     const {
         options: institutionOptions,
         loadTargetOptions: loadInstitutionOption
@@ -181,6 +185,8 @@ const PrediksiPTNPage = (): JSX.Element => {
         values: PrediksiPTNForm,
         formikHelpers: FormikHelpers<PrediksiPTNForm>
     ) => void | Promise<any> = async (values, { setSubmitting }) => {
+        peluangCardModalRef.current?.showModal();
+
         // TODO: each score is a string, hence it needs to be validated as number
     };
 
@@ -400,6 +406,13 @@ const PrediksiPTNPage = (): JSX.Element => {
                         </form>
                     )}
                 </Formik>
+
+                <dialog
+                    ref={peluangCardModalRef}
+                    id="peluang_card_modal"
+                    className="modal">
+                    <PeluangCard />
+                </dialog>
             </div>
         </Layout>
     );
