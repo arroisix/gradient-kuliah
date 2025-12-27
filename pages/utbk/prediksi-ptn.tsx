@@ -97,7 +97,7 @@ function PeluangCard() {
                 </h2>
 
                 <p className="text-white text-xs md:text-sm flex items-center gap-1 md:gap-2">
-                    <GraduateIcon className="fill-[#B6A6F3] md:fill-white w-4 h-4 md:w-6 md:h-6" />
+                    <GraduateIcon className="fill-white w-4 h-4 md:w-6 md:h-6" />
                     Universitas Indonesia
                 </p>
 
