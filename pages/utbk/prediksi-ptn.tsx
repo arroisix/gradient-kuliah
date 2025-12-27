@@ -188,6 +188,7 @@ const PrediksiPTNPage = (): JSX.Element => {
         peluangCardModalRef.current?.showModal();
 
         // TODO: each score is a string, hence it needs to be validated as number
+        console.log(values, setSubmitting);
     };
 
     return (
