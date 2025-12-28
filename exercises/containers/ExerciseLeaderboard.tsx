@@ -1,7 +1,10 @@
 import React from 'react';
 import LatihanLayout from './LatihanLayout';
 import ExerciseCompleteHeader from 'exercises/components/Header/ExerciseCompleteHeader';
-import { useGetExerciseReportSummaryQuery } from 'exercises/redux/api/exercisesApi';
+import {
+    useGetExerciseDetailV2Query,
+    useGetExerciseReportSummaryQuery
+} from 'exercises/redux/api/exercisesApi';
 import { useRouter } from 'next/router';
 import SummaryTab from 'exercises/components/Report/SummaryTab';
 import { LeaderboardReport } from 'exercises/components/ExerciseDetail/Leaderboard';
@@ -11,13 +14,24 @@ const ExerciseLeaderboard: React.FC = () => {
     const router = useRouter();
     const { slug, exerciseProgressId } = router.query;
 
-    const { data: summaryData, isLoading } = useGetExerciseReportSummaryQuery(
-        {
-            exercise_slug: slug as string,
-            exercise_progress_id: exerciseProgressId as string
-        },
-        { skip: !slug || !exerciseProgressId }
-    );
+    const { data: summaryData, isLoading: isSummaryLoading } =
+        useGetExerciseReportSummaryQuery(
+            {
+                exercise_slug: slug as string,
+                exercise_progress_id: exerciseProgressId as string
+            },
+            { skip: !slug || !exerciseProgressId }
+        );
+
+    const { data: exercise, isLoading: isExerciseLoading } =
+        useGetExerciseDetailV2Query(
+            { exercise_slug: slug as string },
+            {
+                skip: !slug
+            }
+        );
+
+    const isLoading = isSummaryLoading || isExerciseLoading;
 
     return (
         <LatihanLayout>
@@ -46,7 +60,7 @@ const ExerciseLeaderboard: React.FC = () => {
                             }
                         />
                     )}
-                    <LeaderboardReport />
+                    {exercise?.tryout_type !== 'UTBK' && <LeaderboardReport />}
                 </div>
             </div>
         </LatihanLayout>

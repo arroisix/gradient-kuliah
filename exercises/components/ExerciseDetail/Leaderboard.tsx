@@ -148,7 +148,11 @@ export const LeaderboardReport = () => {
     };
 
     return (
-        <div className="flex flex-col gap-4 relative lg:w-[700px]">
+        <div
+            className={cn(
+                'flex flex-col gap-4 relative',
+                exercise?.tryout_type === 'UTBK' ? 'w-full' : 'lg:w-[700px]'
+            )}>
             {isFetchingLeaderboard || !leaderboard ? (
                 <Skeleton isCustomSize className="w-full h-80" />
             ) : (

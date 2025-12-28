@@ -6,10 +6,6 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 const ExerciseCompleteHeader = () => {
-    const tabs = ['Nilai', 'Pembahasan', 'Leaderboard'];
-    const [activeTab, setActiveTab] = useState('');
-    const { isMobileBreakpoints } = useWindowBreakpoints();
-
     const router = useRouter();
     const { slug, exerciseProgressId, problemId } = router.query;
     const { data: exercise } = useGetExerciseDetailV2Query(
@@ -25,21 +21,34 @@ const ExerciseCompleteHeader = () => {
         }
     );
 
+    const isUTBK = exercise?.tryout_type === 'UTBK';
+    const thirdTabLabel = isUTBK ? 'Analisa Diri' : 'Leaderboard';
+    const thirdTabRoute = isUTBK ? 'analisa-diri' : 'leaderboard';
+
+    const tabs = ['Nilai', 'Pembahasan', thirdTabLabel];
+    const [activeTab, setActiveTab] = useState('');
+    const { isMobileBreakpoints } = useWindowBreakpoints();
+
     useEffect(() => {
         if (problemId) {
             setActiveTab('Pembahasan');
-        } else if (router.pathname.includes('leaderboard')) {
-            setActiveTab('Leaderboard');
+        } else if (
+            router.pathname.includes('leaderboard') ||
+            router.pathname.includes('analisa-diri')
+        ) {
+            setActiveTab(thirdTabLabel);
         } else {
             setActiveTab('Nilai');
         }
-    }, [problemId, router.pathname]);
+    }, [problemId, router.pathname, thirdTabLabel]);
 
     const onClose = () => {
         router.push(`/latihan/`);
     };
 
-    const onTabClicked = (tab: 'Nilai' | 'Pembahasan' | 'Leaderboard') => {
+    const onTabClicked = (
+        tab: 'Nilai' | 'Pembahasan' | 'Leaderboard' | 'Analisa Diri'
+    ) => {
         switch (tab) {
             case 'Nilai':
                 router.push(
@@ -65,11 +74,12 @@ const ExerciseCompleteHeader = () => {
                 );
                 break;
             case 'Leaderboard':
+            case 'Analisa Diri':
                 router.push(
                     `/latihan/${slug}/report/${
                         exerciseProgressId ??
                         exercise?.latest_exercise_progress?.id
-                    }/leaderboard/`,
+                    }/${thirdTabRoute}/`,
                     undefined,
                     { scroll: false, shallow: true }
                 );
@@ -95,7 +105,11 @@ const ExerciseCompleteHeader = () => {
                             const newTab = tabs[currentIndex - 1];
                             setActiveTab(newTab);
                             onTabClicked(
-                                newTab as 'Nilai' | 'Pembahasan' | 'Leaderboard'
+                                newTab as
+                                    | 'Nilai'
+                                    | 'Pembahasan'
+                                    | 'Leaderboard'
+                                    | 'Analisa Diri'
                             );
                         }
                     }}>
@@ -114,6 +128,7 @@ const ExerciseCompleteHeader = () => {
                                         | 'Nilai'
                                         | 'Pembahasan'
                                         | 'Leaderboard'
+                                        | 'Analisa Diri'
                                 );
                             }}
                             className={cn(
@@ -135,9 +150,12 @@ const ExerciseCompleteHeader = () => {
                         const currentIndex = tabs.indexOf(activeTab);
                         if (currentIndex < tabs.length - 1) {
                             const newTab = tabs[currentIndex + 1];
-                            setActiveTab(newTab);
                             onTabClicked(
-                                newTab as 'Nilai' | 'Pembahasan' | 'Leaderboard'
+                                newTab as
+                                    | 'Nilai'
+                                    | 'Pembahasan'
+                                    | 'Leaderboard'
+                                    | 'Analisa Diri'
                             );
                         }
                     }}>

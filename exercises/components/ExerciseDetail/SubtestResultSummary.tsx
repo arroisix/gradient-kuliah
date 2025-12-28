@@ -1,5 +1,6 @@
 import Button from 'commons/components/elements/Button';
 import Skeleton from 'commons/components/elements/Skeleton';
+import { cn } from 'commons/utils';
 import {
     useGetExerciseDetailV2Query,
     useGetProblemsetDetailInterstitialQuery
@@ -48,7 +49,11 @@ const SubtestResultSummary = () => {
     }
 
     return (
-        <div className="w-full lg:max-w-2xl flex flex-col gap-6 p-6 rounded-2xl bg-[#191920]">
+        <div
+            className={cn(
+                'w-full flex flex-col gap-6 p-6 rounded-2xl bg-[#191920]',
+                exercise?.tryout_type !== 'UTBK' && 'lg:max-w-2xl'
+            )}>
             <h2 className="text-white font-bold">Detail per Subtest</h2>
 
             <div className="flex flex-col gap-4">
@@ -99,9 +104,11 @@ const SubtestResultSummaryCard = ({ subtest }: { subtest: ProblemSetItem }) => {
                         <span className="text-white font-semibold">
                             {subtest.score}
                         </span>
-                        <span className="text-[#999999]">
-                            / {subtest.total_score}
-                        </span>
+                        {exercise?.tryout_type !== 'UTBK' && (
+                            <span className="text-[#999999]">
+                                / {subtest.total_score}
+                            </span>
+                        )}
                     </div>
                 </div>
 
