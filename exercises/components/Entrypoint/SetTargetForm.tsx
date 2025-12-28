@@ -322,7 +322,7 @@ function SetTargetForm({
                                 ]);
                             }}
                             disabled={
-                                values.length === 3 ||
+                                values.length === 4 ||
                                 values[values.length - 1].institution === '' ||
                                 values[values.length - 1].major === ''
                             }
