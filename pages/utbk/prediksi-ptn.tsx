@@ -19,6 +19,7 @@ import domtoimage from 'dom-to-image';
 import { CgInfo } from 'react-icons/cg';
 import ztable from 'ztable';
 import { cn } from 'commons/utils';
+import { useWindowSize } from 'usehooks-ts';
 
 interface PrediksiPTNForm {
     // both types below will have format like this: "major_id:major_name"
@@ -98,15 +99,27 @@ function PeluangCard({
     averageScore?: number;
 }) {
     const [isLoading, setIsLoading] = useState(false);
+    const { width } = useWindowSize();
     const ref = useRef<HTMLDivElement>(null);
 
     const downloadAsImage = async () => {
         if (ref.current) {
             setIsLoading(true);
+
+            const toastId = 'download_peluang_card_toast';
+            toast.info('Sedang memproses menjadi gambar...', {
+                position: 'top-center',
+                theme: 'colored',
+                hideProgressBar: true,
+                toastId
+            });
+
+            const scale = 2;
+            const cardWidth = width < 768 ? 343 : 400;
+
             try {
-                const scale = 2;
                 const dataURL = await domtoimage.toPng(ref.current, {
-                    width: ref.current.clientWidth * scale,
+                    width: cardWidth * scale,
                     height: (ref.current.clientHeight - 60) * scale,
                     style: {
                         transform: 'scale(' + scale + ')',
@@ -121,19 +134,25 @@ function PeluangCard({
                 });
                 const link = document.createElement('a');
                 link.setAttribute('href', dataURL);
-                link.setAttribute('download', 'peluang_utbk.jpg');
+                link.setAttribute('download', 'peluang_utbk.png');
                 link.click();
                 URL.revokeObjectURL(dataURL);
             } catch (error) {
                 toast.error(
-                    'Ups, ada masalah saat mengunduh menjadi gambar. Mohon coba lagi'
+                    'Ups, ada masalah saat mengunduh menjadi gambar. Mohon coba lagi',
+                    {
+                        position: 'top-center',
+                        theme: 'colored',
+                        hideProgressBar: true
+                    }
                 );
                 console.error(
-                    new Error('failed to download peluang card to JPG', {
+                    new Error('failed to download peluang card to PNG', {
                         cause: error
                     })
                 );
             } finally {
+                toast.dismiss(toastId);
                 setIsLoading(false);
             }
         }
@@ -145,9 +164,6 @@ function PeluangCard({
                 className={`${
                     isLoading ? 'rounded-none' : 'rounded-2xl'
                 } modal-box bg-[#191920] p-6 w-full max-w-[343px] md:max-w-[400px] mx-auto relative overflow-hidden`}>
-                {/* high score: gradient_high_score.png */}
-                {/* medium score: gradient_medium_score.png */}
-                {/* low score: gradient_low_score.png */}
                 {probability >= 84 && (
                     <img
                         src={`${CDN_URL}/assets/gradient_high_score.png`}
@@ -320,14 +336,6 @@ const PrediksiPTNPage = (): JSX.Element => {
         const std = 60;
         const z = (averageScore - (values.passing_grade ?? 0)) / std;
         const probability = ztable(z);
-
-        console.log({
-            averageScore,
-            z,
-            probability,
-            pg: values.passing_grade,
-            ztable: ztable(z)
-        });
 
         return {
             probability: probability * 100,
