@@ -15,11 +15,12 @@ import { GraduateIcon } from 'commons/components/elements/Icons/GraduateIcon';
 import { TargetKampusIcon } from 'commons/components/elements/Icons/TargetKampusIcon';
 import { PencilIcon } from 'commons/components/elements/Icons/PencilIcon';
 import { toast } from 'react-toastify';
-import domtoimage from 'dom-to-image';
+// import domtoimage from 'dom-to-image';
 import { CgInfo } from 'react-icons/cg';
 import ztable from 'ztable';
 import { cn } from 'commons/utils';
-import { useWindowSize } from 'usehooks-ts';
+// import { useWindowSize } from 'usehooks-ts';
+import html2canvas from 'html2canvas-pro';
 
 interface PrediksiPTNForm {
     // both types below will have format like this: "major_id:major_name"
@@ -99,39 +100,54 @@ function PeluangCard({
     averageScore?: number;
 }) {
     const [isLoading, setIsLoading] = useState(false);
-    const { width } = useWindowSize();
+    // const { width } = useWindowSize();
     const ref = useRef<HTMLDivElement>(null);
 
     const downloadAsImage = async () => {
         if (ref.current) {
             setIsLoading(true);
 
-            const toastId = 'download_peluang_card_toast';
-            toast.info('Sedang memproses menjadi gambar...', {
-                position: 'top-center',
-                theme: 'colored',
-                hideProgressBar: true,
-                toastId
-            });
+            // const toastId = 'download_peluang_card_toast';
+            // toast.info('Sedang memproses menjadi gambar...', {
+            //     toastId,
+            //     position: 'top-center',
+            //     theme: 'colored',
+            //     hideProgressBar: true,
+            //     autoClose: false
+            // });
 
-            const scale = 2;
-            const cardWidth = width < 768 ? 343 : 400;
+            // const scale = 2;
+            // const cardWidth = width < 768 ? 343 : 400;
 
             try {
-                const dataURL = await domtoimage.toPng(ref.current, {
-                    width: cardWidth * scale,
-                    height: (ref.current.clientHeight - 60) * scale,
-                    style: {
-                        transform: 'scale(' + scale + ')',
-                        transformOrigin: 'top left'
-                    },
-                    filter: (node) => {
-                        if (node instanceof HTMLButtonElement) {
-                            return false;
-                        }
-                        return true;
+                // const dataURL = await domtoimage.toPng(ref.current, {
+                //     width: cardWidth * scale,
+                //     height: (ref.current.clientHeight - 60) * scale,
+                //     style: {
+                //         transform: 'scale(' + scale + ')',
+                //         transformOrigin: 'top left'
+                //     },
+                //     filter: (node) => {
+                //         if (node instanceof HTMLButtonElement) {
+                //             return false;
+                //         }
+                //         return true;
+                //     }
+                // });
+
+                const canvas = await html2canvas(ref.current, {
+                    allowTaint: true,
+                    useCORS: true,
+                    backgroundColor: null,
+                    logging: false,
+                    onclone: (_, el) => {
+                        let classes = el.getAttribute('class');
+                        classes += ' rounded-none';
+                        el.setAttribute('class', classes as string);
                     }
                 });
+
+                const dataURL = canvas.toDataURL('image/png');
                 const link = document.createElement('a');
                 link.setAttribute('href', dataURL);
                 link.setAttribute('download', 'peluang_utbk.png');
@@ -152,129 +168,124 @@ function PeluangCard({
                     })
                 );
             } finally {
-                toast.dismiss(toastId);
+                // toast.dismiss(toastId);
                 setIsLoading(false);
             }
         }
     };
 
     return (
-        <div ref={ref} className="w-fit">
-            <div
-                className={`${
-                    isLoading ? 'rounded-none' : 'rounded-2xl'
-                } modal-box bg-[#191920] p-6 w-full max-w-[343px] md:max-w-[400px] mx-auto relative overflow-hidden`}>
-                {probability >= 84 && (
-                    <img
-                        src={`${CDN_URL}/assets/gradient_high_score.png`}
-                        alt=""
-                        className="absolute inset-0"
-                    />
-                )}
-                {probability < 84 && probability >= 69 && (
-                    <img
-                        src={`${CDN_URL}/assets/gradient_medium_score.png`}
-                        alt=""
-                        className="absolute inset-0"
-                    />
-                )}
-                {probability < 69 && (
-                    <img
-                        src={`${CDN_URL}/assets/gradient_low_score.png`}
-                        alt=""
-                        className="absolute inset-0"
-                    />
-                )}
+        <div
+            ref={ref}
+            className="rounded-2xl modal-box bg-[#191920] p-6 w-full max-w-[343px] md:max-w-[400px] mx-auto relative overflow-hidden">
+            {probability >= 84 && (
+                <img
+                    src={`${CDN_URL}/assets/gradient_high_score.png`}
+                    alt=""
+                    className="absolute inset-0"
+                />
+            )}
+            {probability < 84 && probability >= 69 && (
+                <img
+                    src={`${CDN_URL}/assets/gradient_medium_score.png`}
+                    alt=""
+                    className="absolute inset-0"
+                />
+            )}
+            {probability < 69 && (
+                <img
+                    src={`${CDN_URL}/assets/gradient_low_score.png`}
+                    alt=""
+                    className="absolute inset-0"
+                />
+            )}
 
-                <form method="dialog" className="absolute top-0 right-0 z-20">
-                    <button
-                        disabled={isLoading}
-                        className="w-fit h-fit absolute top-4 right-4">
-                        <IoClose className="fill-[#999999] w-6 h-6" />
-                    </button>
-                </form>
+            <form method="dialog" className="absolute top-0 right-0 z-20">
+                <button
+                    data-html2canvas-ignore
+                    disabled={isLoading}
+                    className="w-fit h-fit absolute top-4 right-4 disabled:cursor-not-allowed">
+                    <IoClose className="fill-[#999999] w-6 h-6" />
+                </button>
+            </form>
 
-                <div className="relative z-10">
-                    <span className="block text-white font-[Urbanist] font-bold text-2xl mb-8">
-                        Gradient
+            <div className="relative z-10">
+                <span className="block text-white font-[Urbanist] font-bold text-2xl mb-8">
+                    Gradient
+                </span>
+
+                <h2 className="text-white font-semibold text-xl md:text-2xl mb-1 md:mb-2">
+                    {major}
+                </h2>
+
+                <p className="text-white text-sm flex items-center gap-1 md:gap-2">
+                    <GraduateIcon className="fill-white w-5 h-5 md:w-6 md:h-6" />
+                    {institution}
+                </p>
+
+                <div className="bg-[#101010] rounded-2xl py-4 px-6 mt-6">
+                    <span
+                        className={cn(
+                            'font-bold text-[32px] md:text-[40px] mb-1',
+                            probability >= 84
+                                ? 'text-[#03AC5C]'
+                                : probability >= 69
+                                ? 'text-[#F2C94C]'
+                                : 'text-[#EB5757]'
+                        )}>
+                        {probability.toFixed(2)}%
+                    </span>
+                    <span className="text-white font-semibold block">
+                        Peluang{' '}
+                        {probability >= 84
+                            ? 'Tinggi'
+                            : probability >= 69
+                            ? 'Sedang'
+                            : 'Rendah'}
                     </span>
 
-                    <h2 className="text-white font-semibold text-xl md:text-2xl mb-1 md:mb-2">
-                        {major}
-                    </h2>
+                    <div className="w-full h-[1px] bg-[#222222] mt-6 mb-4"></div>
 
-                    <p className="text-white text-sm flex items-center gap-1 md:gap-2">
-                        <GraduateIcon className="fill-white w-5 h-5 md:w-6 md:h-6" />
-                        {institution}
-                    </p>
+                    <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-2">
+                        <div className="flex flex-col gap-1">
+                            <span className="text-[#DEDEDE] text-sm">
+                                Skor kamu
+                            </span>
+                            <span className="text-white font-semibold text-xl">
+                                {averageScore?.toFixed(2)}
+                            </span>
+                        </div>
 
-                    <div className="bg-[#101010] rounded-2xl py-4 px-6 mt-6">
-                        <span
-                            className={cn(
-                                'font-bold text-[32px] md:text-[40px] mb-1',
-                                probability >= 84
-                                    ? 'text-[#03AC5C]'
-                                    : probability >= 69
-                                    ? 'text-[#F2C94C]'
-                                    : 'text-[#EB5757]'
-                            )}>
-                            {probability.toFixed(2)}%
-                        </span>
-                        <span className="text-white font-semibold block">
-                            Peluang{' '}
-                            {probability >= 84
-                                ? 'Tinggi'
-                                : probability >= 69
-                                ? 'Sedang'
-                                : 'Rendah'}
-                        </span>
-
-                        <div className="w-full h-[1px] bg-[#222222] mt-6 mb-4"></div>
-
-                        <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-2">
-                            <div className="flex flex-col gap-1">
-                                <span className="text-[#DEDEDE] text-sm">
-                                    Skor kamu
-                                </span>
-                                <span className="text-white font-semibold text-xl">
-                                    {averageScore?.toFixed(2)}
-                                </span>
-                            </div>
-
-                            <div className="flex flex-col gap-1">
-                                <span className="text-[#DEDEDE] text-sm">
-                                    Passing Grade 2024
-                                </span>
-                                <span className="text-white font-semibold text-xl">
-                                    {passing_grade}
-                                </span>
-                            </div>
+                        <div className="flex flex-col gap-1">
+                            <span className="text-[#DEDEDE] text-sm">
+                                Passing Grade 2024
+                            </span>
+                            <span className="text-white font-semibold text-xl">
+                                {passing_grade}
+                            </span>
                         </div>
                     </div>
-
-                    <div className="flex gap-2 mt-3">
-                        <CgInfo className="text-[#999999] w-4 h-4 shrink-0" />
-                        <p className="text-[#999999] text-[10px]">
-                            Bobot penilaian berbeda di tiap jurusan di
-                            masing-masing universitas. Hasil diatas merupakan
-                            estimasi berdasarkan data passing grade dari
-                            internal.
-                        </p>
-                    </div>
-
-                    <Button
-                        onClick={downloadAsImage}
-                        disabled={isLoading}
-                        variant="secondary"
-                        className={`${
-                            isLoading ? '!hidden' : ''
-                        } w-full max-w-[215px] mx-auto text-sm font-semibold text-white flex justify-center items-center gap-1.5 mt-6 !py-2 !px-4`}>
-                        <IoMdArrowRoundDown className="fill-white w-4 h-4 shrink-0" />{' '}
-                        <span className="whitespace-nowrap">
-                            Simpan sebagai Gambar
-                        </span>
-                    </Button>
                 </div>
+
+                <div className="flex gap-2 mt-3">
+                    <CgInfo className="text-[#999999] w-4 h-4 shrink-0" />
+                    <p className="text-[#999999] text-[10px]">
+                        Bobot penilaian berbeda di tiap jurusan di masing-masing
+                        universitas. Hasil diatas merupakan estimasi berdasarkan
+                        data passing grade dari internal.
+                    </p>
+                </div>
+
+                <button
+                    data-html2canvas-ignore
+                    onClick={downloadAsImage}
+                    disabled={isLoading}
+                    className="bg-[#333333] disabled:opacity-50 disabled:cursor-not-allowed rounded-full w-full max-w-[215px] mx-auto text-sm font-semibold text-white flex justify-center items-center gap-1.5 mt-6 py-2 px-4">
+                    <IoMdArrowRoundDown className="fill-white w-4 h-4 shrink-0" />{' '}
+                    <span className="whitespace-nowrap">
+                        {isLoading ? 'Mengunduh...' : 'Simpan sebagai Gambar'}
+                    </span>
+                </button>
             </div>
         </div>
     );
