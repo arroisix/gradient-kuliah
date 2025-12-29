@@ -17,12 +17,14 @@ import { PencilIcon } from 'commons/components/elements/Icons/PencilIcon';
 import { toast } from 'react-toastify';
 import domtoimage from 'dom-to-image';
 import { CgInfo } from 'react-icons/cg';
+import ztable from 'ztable';
+import { cn } from 'commons/utils';
 
 interface PrediksiPTNForm {
     // both types below will have format like this: "major_id:major_name"
     institution: string;
     major: string;
-
+    passing_grade?: number;
     score: {
         penalaran_kualitatif: string;
         pemahaman_dan_penalaran_umum: string;
@@ -82,7 +84,19 @@ function MateriCard({
     );
 }
 
-function PeluangCard() {
+function PeluangCard({
+    institution,
+    major,
+    passing_grade,
+    probability,
+    averageScore
+}: {
+    institution: string;
+    major: string;
+    passing_grade: number;
+    probability: number;
+    averageScore?: number;
+}) {
     const [isLoading, setIsLoading] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
 
@@ -134,11 +148,27 @@ function PeluangCard() {
                 {/* high score: gradient_high_score.png */}
                 {/* medium score: gradient_medium_score.png */}
                 {/* low score: gradient_low_score.png */}
-                <img
-                    src={`${CDN_URL}/assets/gradient_high_score.png`}
-                    alt=""
-                    className="absolute inset-0"
-                />
+                {probability >= 84 && (
+                    <img
+                        src={`${CDN_URL}/assets/gradient_high_score.png`}
+                        alt=""
+                        className="absolute inset-0"
+                    />
+                )}
+                {probability < 84 && probability >= 69 && (
+                    <img
+                        src={`${CDN_URL}/assets/gradient_medium_score.png`}
+                        alt=""
+                        className="absolute inset-0"
+                    />
+                )}
+                {probability < 69 && (
+                    <img
+                        src={`${CDN_URL}/assets/gradient_low_score.png`}
+                        alt=""
+                        className="absolute inset-0"
+                    />
+                )}
 
                 <form method="dialog" className="absolute top-0 right-0 z-20">
                     <button
@@ -154,20 +184,33 @@ function PeluangCard() {
                     </span>
 
                     <h2 className="text-white font-semibold text-xl md:text-2xl mb-1 md:mb-2">
-                        Teknik Sipil
+                        {major}
                     </h2>
 
                     <p className="text-white text-sm flex items-center gap-1 md:gap-2">
                         <GraduateIcon className="fill-white w-5 h-5 md:w-6 md:h-6" />
-                        Universitas Indonesia
+                        {institution}
                     </p>
 
                     <div className="bg-[#101010] rounded-2xl py-4 px-6 mt-6">
-                        <span className="text-[#03AC5C] font-bold text-[32px] md:text-[40px] mb-1">
-                            82%
+                        <span
+                            className={cn(
+                                'font-bold text-[32px] md:text-[40px] mb-1',
+                                probability >= 84
+                                    ? 'text-[#03AC5C]'
+                                    : probability >= 69
+                                    ? 'text-[#F2C94C]'
+                                    : 'text-[#EB5757]'
+                            )}>
+                            {probability.toFixed(2)}%
                         </span>
                         <span className="text-white font-semibold block">
-                            Peluang tinggi
+                            Peluang{' '}
+                            {probability >= 84
+                                ? 'Tinggi'
+                                : probability >= 69
+                                ? 'Sedang'
+                                : 'Rendah'}
                         </span>
 
                         <div className="w-full h-[1px] bg-[#222222] mt-6 mb-4"></div>
@@ -178,7 +221,7 @@ function PeluangCard() {
                                     Skor kamu
                                 </span>
                                 <span className="text-white font-semibold text-xl">
-                                    725
+                                    {averageScore?.toFixed(2)}
                                 </span>
                             </div>
 
@@ -187,7 +230,7 @@ function PeluangCard() {
                                     Passing Grade 2024
                                 </span>
                                 <span className="text-white font-semibold text-xl">
-                                    688
+                                    {passing_grade}
                                 </span>
                             </div>
                         </div>
@@ -223,6 +266,12 @@ function PeluangCard() {
 
 const PrediksiPTNPage = (): JSX.Element => {
     const peluangCardModalRef = useRef<HTMLDialogElement | null>(null);
+    const [predictionResult, setPredictionResult] = useState({
+        institution: '',
+        major: '',
+        passing_grade: 0,
+        probability: 0
+    });
 
     const {
         options: institutionOptions,
@@ -245,6 +294,7 @@ const PrediksiPTNPage = (): JSX.Element => {
         return {
             institution: '',
             major: '',
+            passing_grade: 0,
             score: {
                 literasi_bahasa_indonesia: '',
                 literasi_bahasa_inggris: '',
@@ -257,14 +307,43 @@ const PrediksiPTNPage = (): JSX.Element => {
         };
     }, []);
 
+    const calculatePrediction = (values: PrediksiPTNForm) => {
+        const averageScore =
+            (Number(values.score.literasi_bahasa_indonesia) +
+                Number(values.score.literasi_bahasa_inggris) +
+                Number(values.score.pemahaman_bacaan_dan_menulis) +
+                Number(values.score.pemahaman_dan_penalaran_umum) +
+                Number(values.score.penalaran_kualitatif) +
+                Number(values.score.penalaran_matematis) +
+                Number(values.score.penalaran_umum)) /
+            7;
+        const std = 60;
+        const z = (averageScore - (values.passing_grade ?? 0)) / std;
+        const probability = ztable(z);
+
+        console.log({
+            averageScore,
+            z,
+            probability,
+            pg: values.passing_grade,
+            ztable: ztable(z)
+        });
+
+        return {
+            probability: probability * 100,
+            institution: values.institution.split(':')[1],
+            major: values.major.split(':')[1],
+            averageScore,
+            passing_grade: values.passing_grade ?? 0
+        };
+    };
+
     const handleOnSubmit: (
         values: PrediksiPTNForm,
         formikHelpers: FormikHelpers<PrediksiPTNForm>
-    ) => void | Promise<any> = async (values, { setSubmitting }) => {
+    ) => void | Promise<any> = async (values) => {
+        setPredictionResult(calculatePrediction(values));
         peluangCardModalRef.current?.showModal();
-
-        // TODO: each score is a string, hence it needs to be validated as number
-        console.log(values, setSubmitting);
     };
 
     return (
@@ -323,10 +402,20 @@ const PrediksiPTNPage = (): JSX.Element => {
                                         isSearchTarget
                                         isClearable={false}
                                         noOptionsMessage="Ketik jurusan yang dipilih"
-                                        onChange={handleOnChange(
-                                            'major',
-                                            setFieldValue
-                                        )}
+                                        onChange={(res) => {
+                                            handleOnChange(
+                                                'major',
+                                                setFieldValue
+                                            )(res);
+
+                                            setFieldValue(
+                                                'passing_grade',
+                                                majorOptions.find(
+                                                    (option) =>
+                                                        option.value === res
+                                                )?.passing_grade || 0
+                                            );
+                                        }}
                                         initialValue={major}
                                         option={majorOptions}
                                         loadOption={loadMajorOption(
@@ -373,6 +462,7 @@ const PrediksiPTNPage = (): JSX.Element => {
                                             setValues({
                                                 institution,
                                                 major,
+                                                passing_grade: 0,
                                                 score: {
                                                     literasi_bahasa_indonesia:
                                                         '',
@@ -497,7 +587,7 @@ const PrediksiPTNPage = (): JSX.Element => {
                     ref={peluangCardModalRef}
                     id="peluang_card_modal"
                     className="modal">
-                    <PeluangCard />
+                    <PeluangCard {...predictionResult} />
                 </dialog>
             </div>
         </Layout>
