@@ -29,6 +29,7 @@ import KelasIcon from '../../elements/Icons/Kelas';
 import BookStackIcon from '../../elements/Icons/BookStack';
 import BookStackIconFill from '../../elements/Icons/BookStackFill';
 import KelasIconFill from '../../elements/Icons/KelasFill';
+import AppInstallBanner from './components/AppInstallBanner';
 
 const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
     {
@@ -92,7 +93,8 @@ const Navbar = ({
     const { theme } = useThemeContext();
     const lightMode = theme === 'light';
 
-    const { isDesktopBreakpoints } = useWindowBreakpoints();
+    const { isDesktopBreakpoints, isMobileBreakpoints } =
+        useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { profile } = useContext(AuthContext);
     const [openMobile, setOpenMobile] = useState(false);
@@ -155,11 +157,12 @@ const Navbar = ({
     };
 
     const isShowHamburgerMenu =
-        profile?.current_role === 'COLLEGE_STUDENT' &&
-        (!LEARNING_PAGES.some((page) => router.asPath === page) ||
-            (LEARNING_PAGES.some((page) => router.asPath === page) &&
-                !isAuthenticated &&
-                !isDesktopBreakpoints));
+        !isAuthenticated ||
+        (profile?.current_role === 'COLLEGE_STUDENT' &&
+            (!LEARNING_PAGES.some((page) => router.asPath === page) ||
+                (LEARNING_PAGES.some((page) => router.asPath === page) &&
+                    !isAuthenticated &&
+                    !isDesktopBreakpoints)));
     const isShowSidebar = showSidebar && fullHeightSidebar && isAuthenticated;
 
     const { data: configData } = useGetConfigQuery();
@@ -171,6 +174,12 @@ const Navbar = ({
                 computeBgColor()
             )}
             style={{ zIndex: 100 }}>
+            <AppInstallBanner
+                showSidebar={
+                    showSidebar && isAuthenticated && !isMobileBreakpoints
+                }
+                isOnLandingPage
+            />
             <div
                 className={cn(
                     'flex items-center min-h-14 justify-between w-full px-4 py-3 md:px-8 gap-4',
@@ -248,9 +257,9 @@ const Navbar = ({
                             isShowSidebar && 'lg:ml-[250px] lg:pl-6 lg:absolute'
                         )}>
                         {!isDashboard &&
-                            profile?.current_role === 'COLLEGE_STUDENT' && (
-                                <SearchBar />
-                            )}
+                            (!isAuthenticated ||
+                                profile?.current_role ===
+                                    'COLLEGE_STUDENT') && <SearchBar />}
                     </div>
                 </div>
                 {paymentPage ? (
@@ -324,6 +333,7 @@ const Navbar = ({
                 setOpenSidebar={setOpenSidebar}
                 configData={configData}
             />
+            {/* <CountdownBanner /> */}
         </header>
     );
 };

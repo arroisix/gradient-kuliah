@@ -128,11 +128,19 @@ const ExerciseReportNavigation: React.FC<ExerciseReportNavigationProps> = ({
                         );
                     }
                 } else {
-                    router.replace(
-                        `/latihan/${slug}/report/${exerciseProgressId}/leaderboard/`,
-                        undefined,
-                        { scroll: false, shallow: true }
-                    );
+                    if (exercise?.tryout_type === 'UTBK') {
+                        router.replace(
+                            `/latihan/${slug}/report/${exerciseProgressId}/analisa-diri/`,
+                            undefined,
+                            { scroll: false, shallow: true }
+                        );
+                    } else {
+                        router.replace(
+                            `/latihan/${slug}/report/${exerciseProgressId}/leaderboard/`,
+                            undefined,
+                            { scroll: false, shallow: true }
+                        );
+                    }
                 }
             }
         }

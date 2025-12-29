@@ -104,7 +104,7 @@ const Filter = ({
                     <ul
                         role="menu"
                         className={cn(
-                            'dropdown-content menu overflow-clip mt-1 [&_li>*]:rounded-none p-0 bg-[#20222E] text-xs rounded-lg z-50 divide-y divide-[#373737]',
+                            'absolute menu overflow-clip mt-1 [&_li>*]:rounded-none p-0 bg-[#20222E] text-xs rounded-lg z-50 divide-y divide-[#373737]',
                             fullWidth ? 'w-full' : 'w-full md:w-52'
                         )}>
                         {options.map(({ value, label }) => (

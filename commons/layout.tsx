@@ -6,12 +6,12 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import { cn } from './utils';
 import Appbar from './components/modules/Appbar';
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
-import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useRouter } from 'next/router';
 import useWindowBreakpoints from './hooks/useWindowBreakpoints';
 import dynamic from 'next/dynamic';
 import K12Paywall from './components/elements/K12Paywall';
 import CountdownBanner from './components/modules/Navbar/components/CountdownBanner';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 const AppInstallBanner = dynamic(
     () => import('./components/modules/Navbar/components/AppInstallBanner')
 );
@@ -63,7 +63,7 @@ const Layout = ({
                 courses={courses}
             />
 
-            <div className="h-14 bg-[#222222]"></div>
+            <div className="h-28 bg-[#222222]"></div>
 
             {!isAuthenticated && <CountdownBanner />}
 
