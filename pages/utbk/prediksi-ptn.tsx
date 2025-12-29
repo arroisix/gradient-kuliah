@@ -14,6 +14,9 @@ import { IoMdArrowRoundDown } from 'react-icons/io';
 import { GraduateIcon } from 'commons/components/elements/Icons/GraduateIcon';
 import { TargetKampusIcon } from 'commons/components/elements/Icons/TargetKampusIcon';
 import { PencilIcon } from 'commons/components/elements/Icons/PencilIcon';
+import { toast } from 'react-toastify';
+import domtoimage from 'dom-to-image';
+import { CgInfo } from 'react-icons/cg';
 import ztable from 'ztable';
 import { cn } from 'commons/utils';
 
@@ -64,9 +67,10 @@ function MateriCard({
             <h3 className="text-sm text-center text-[#DEDEDE]">{label}</h3>
 
             <Input
-                type="text"
+                type="number"
                 placeholder="Nilai"
                 name={name}
+                max={1000}
                 value={value}
                 onChange={(event) =>
                     setFieldValue(
@@ -74,123 +78,177 @@ function MateriCard({
                         event.currentTarget.value as any
                     )
                 }
-                className="!py-2 !px-4 !bg-[#222222] border border-[#333333] [&>input]:text-white !h-10"
+                className="hide-input-number-icon !py-2 !px-4 !bg-[#222222] border border-[#333333] [&>input]:text-white !h-10"
             />
         </div>
     );
 }
 
 function PeluangCard({
-    probability,
     institution,
     major,
     passing_grade,
+    probability,
     averageScore
 }: {
-    probability: number;
     institution: string;
     major: string;
     passing_grade: number;
+    probability: number;
     averageScore?: number;
 }) {
+    const [isLoading, setIsLoading] = useState(false);
+    const ref = useRef<HTMLDivElement>(null);
+
+    const downloadAsImage = async () => {
+        if (ref.current) {
+            setIsLoading(true);
+            try {
+                const dataURL = await domtoimage.toPng(ref.current, {
+                    filter: (node) => {
+                        if (node instanceof HTMLButtonElement) {
+                            return false;
+                        }
+                        return true;
+                    }
+                });
+                const link = document.createElement('a');
+                link.setAttribute('href', dataURL);
+                link.setAttribute('download', 'peluang_utbk.jpg');
+                link.click();
+                URL.revokeObjectURL(dataURL);
+            } catch (error) {
+                toast.error(
+                    'Ups, ada masalah saat mengunduh menjadi gambar. Mohon coba lagi'
+                );
+                console.error(
+                    new Error('failed to download peluang card to JPG', {
+                        cause: error
+                    })
+                );
+            } finally {
+                setIsLoading(false);
+            }
+        }
+    };
+
     return (
-        <div className="modal-box bg-[#191920] rounded-2xl p-6 w-full max-w-[343px] md:max-w-[400px] mx-auto relative overflow-hidden">
-            <div className="w-[400px] h-[464px] rounded-full absolute top-0 left-0">
+        <div ref={ref} className="w-fit">
+            <div className="modal-box bg-[#191920] rounded-2xl p-6 w-full max-w-[343px] md:max-w-[400px] mx-auto relative overflow-hidden">
+                {/* high score: gradient_high_score.png */}
+                {/* medium score: gradient_medium_score.png */}
+                {/* low score: gradient_low_score.png */}
                 {probability >= 84 && (
-                    <Image
+                    <img
                         src={`${CDN_URL}/assets/gradient_high_score.png`}
                         alt=""
-                        layout="fill"
+                        className="absolute inset-0"
                     />
                 )}
-                {probability >= 69 && probability < 84 && (
-                    <Image
+                {probability < 84 && probability >= 69 && (
+                    <img
                         src={`${CDN_URL}/assets/gradient_medium_score.png`}
                         alt=""
-                        layout="fill"
+                        className="absolute inset-0"
                     />
                 )}
                 {probability < 69 && (
-                    <Image
+                    <img
                         src={`${CDN_URL}/assets/gradient_low_score.png`}
                         alt=""
-                        layout="fill"
+                        className="absolute inset-0"
                     />
                 )}
-            </div>
 
-            <form method="dialog">
-                <button>
-                    <IoClose className="fill-[#999999] w-6 h-6 absolute top-4 right-4" />
-                </button>
-            </form>
+                <form method="dialog" className="absolute top-0 right-0 z-20">
+                    <button
+                        disabled={isLoading}
+                        className="w-fit h-fit absolute top-4 right-4">
+                        <IoClose className="fill-[#999999] w-6 h-6" />
+                    </button>
+                </form>
 
-            <div className="relative z-10">
-                <span className="block text-white/30 font-bold text-2xl mb-8">
-                    Gradient
-                </span>
+                <div className="relative z-10">
+                    <span className="block text-white font-[Urbanist] font-bold text-2xl mb-8">
+                        Gradient
+                    </span>
 
-                <h2 className="text-white font-semibold text-xl md:text-2xl mb-1 md:mb-2">
-                    {major}
-                </h2>
+                    <h2 className="text-white font-semibold text-xl md:text-2xl mb-1 md:mb-2">
+                        {major}
+                    </h2>
 
-                <p className="text-white text-sm flex items-center gap-1 md:gap-2">
-                    <GraduateIcon className="fill-white w-5 h-5 md:w-6 md:h-6" />
-                    {institution}
-                </p>
+                    <p className="text-white text-sm flex items-center gap-1 md:gap-2">
+                        <GraduateIcon className="fill-white w-5 h-5 md:w-6 md:h-6" />
+                        {institution}
+                    </p>
 
-                <div className="bg-[#101010] rounded-lg py-4 px-6 mt-6">
-                    <span
-                        className={cn(
-                            'font-bold text-[32px] md:text-[40px] mb-1',
-                            probability >= 84
-                                ? 'text-[#03AC5C]'
+                    <div className="bg-[#101010] rounded-2xl py-4 px-6 mt-6">
+                        <span
+                            className={cn(
+                                'font-bold text-[32px] md:text-[40px] mb-1',
+                                probability >= 84
+                                    ? 'text-[#03AC5C]'
+                                    : probability >= 69
+                                    ? 'text-[#F2C94C]'
+                                    : 'text-[#EB5757]'
+                            )}>
+                            {probability.toFixed(2)}%
+                        </span>
+                        <span className="text-white font-semibold block">
+                            Peluang{' '}
+                            {probability >= 84
+                                ? 'Tinggi'
                                 : probability >= 69
-                                ? 'text-[#F2C04C]'
-                                : 'text-[#FF3B30]'
-                        )}>
-                        {probability.toFixed(2)}%
-                    </span>
-                    <span className="text-white font-semibold block">
-                        Peluang{' '}
-                        {probability >= 84
-                            ? 'Tinggi'
-                            : probability >= 69
-                            ? 'Sedang'
-                            : 'Rendah'}
-                    </span>
+                                ? 'Sedang'
+                                : 'Rendah'}
+                        </span>
 
-                    <div className="w-full h-[1px] bg-[#222222] mt-6 mb-4"></div>
+                        <div className="w-full h-[1px] bg-[#222222] mt-6 mb-4"></div>
 
-                    <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-2">
-                        <div className="flex flex-col gap-1">
-                            <span className="text-[#DEDEDE] text-sm">
-                                Skor kamu
-                            </span>
-                            <span className="text-white font-semibold text-xl">
-                                {averageScore ? averageScore.toFixed(2) : '–'}
-                            </span>
-                        </div>
+                        <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-2">
+                            <div className="flex flex-col gap-1">
+                                <span className="text-[#DEDEDE] text-sm">
+                                    Skor kamu
+                                </span>
+                                <span className="text-white font-semibold text-xl">
+                                    {averageScore?.toFixed(2)}
+                                </span>
+                            </div>
 
-                        <div className="flex flex-col gap-1">
-                            <span className="text-[#DEDEDE] text-sm">
-                                Passing Grade 2024
-                            </span>
-                            <span className="text-white font-semibold text-xl">
-                                {passing_grade}
-                            </span>
+                            <div className="flex flex-col gap-1">
+                                <span className="text-[#DEDEDE] text-sm">
+                                    Passing Grade 2024
+                                </span>
+                                <span className="text-white font-semibold text-xl">
+                                    {passing_grade}
+                                </span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <Button
-                    variant="secondary"
-                    className="w-full max-w-[215px] mx-auto text-sm font-semibold text-white flex justify-center items-center gap-1.5 mt-6 !py-2 !px-4">
-                    <IoMdArrowRoundDown className="fill-white w-4 h-4 shrink-0" />{' '}
-                    <span className="whitespace-nowrap">
-                        Simpan sebagai Gambar
-                    </span>
-                </Button>
+                    <div className="flex gap-2 mt-3">
+                        <CgInfo className="text-[#999999] w-4 h-4 shrink-0" />
+                        <p className="text-[#999999] text-[10px]">
+                            Bobot penilaian berbeda di tiap jurusan di
+                            masing-masing universitas. Hasil diatas merupakan
+                            estimasi berdasarkan data passing grade dari
+                            internal.
+                        </p>
+                    </div>
+
+                    <Button
+                        onClick={downloadAsImage}
+                        disabled={isLoading}
+                        variant="secondary"
+                        className={`${
+                            isLoading ? '!hidden' : ''
+                        } w-full max-w-[215px] mx-auto text-sm font-semibold text-white flex justify-center items-center gap-1.5 mt-6 !py-2 !px-4`}>
+                        <IoMdArrowRoundDown className="fill-white w-4 h-4 shrink-0" />{' '}
+                        <span className="whitespace-nowrap">
+                            Simpan sebagai Gambar
+                        </span>
+                    </Button>
+                </div>
             </div>
         </div>
     );
@@ -286,9 +344,8 @@ const PrediksiPTNPage = (): JSX.Element => {
                 </h1>
 
                 <p className="text-[#DEDEDE] text-sm mb-6 text-center md:text-start">
-                    Masukkan target kampus dan perkiraan nilaimu untuk melihat
-                    peluang lolos UTBK. Jika belum pernah try out bisa pakai
-                    estimasi dulu.
+                    Bantu memahami peluang masuk PTN berdasarkan skor dan
+                    pilihan kampusmu.
                 </p>
 
                 <Formik
@@ -428,6 +485,16 @@ const PrediksiPTNPage = (): JSX.Element => {
                                         }>
                                         Reset
                                     </Button>
+                                </div>
+
+                                <div className="bg-[#252246] flex items-center gap-3 p-3 rounded-lg">
+                                    <CgInfo className="text-[#B6A6F3] w-5 h-5 shrink-0" />
+                                    <p className="text-white text-xs leading-[160%]">
+                                        Estimasi hasil prediksi bersifat
+                                        referensi dan tidak mencerminkan bobot
+                                        subtes resmi tiap universitas. Gunakan
+                                        sebagai referensi.
+                                    </p>
                                 </div>
 
                                 <div className="w-full max-w-[240px] mx-auto space-y-2.5 md:space-y-0 md:max-w-full md:grid md:grid-cols-3 md:gap-4">
