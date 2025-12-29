@@ -7,13 +7,15 @@ import Layout from 'commons/utbkLayout';
 import { Formik, FormikHelpers } from 'formik';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { TiArrowRight } from 'react-icons/ti';
 import { IoClose } from 'react-icons/io5';
 import { IoMdArrowRoundDown } from 'react-icons/io';
 import { GraduateIcon } from 'commons/components/elements/Icons/GraduateIcon';
 import { TargetKampusIcon } from 'commons/components/elements/Icons/TargetKampusIcon';
 import { PencilIcon } from 'commons/components/elements/Icons/PencilIcon';
+import { toast } from 'react-toastify';
+import domtoimage from 'dom-to-image';
 
 interface PrediksiPTNForm {
     // both types below will have format like this: "major_id:major_name"
@@ -79,78 +81,117 @@ function MateriCard({
 }
 
 function PeluangCard() {
+    const [isLoading, setIsLoading] = useState(false);
+    const ref = useRef<HTMLDivElement>(null);
+
+    const downloadAsImage = async () => {
+        if (ref.current) {
+            setIsLoading(true);
+            try {
+                const dataURL = await domtoimage.toPng(ref.current, {
+                    filter: (node) => {
+                        if (node instanceof HTMLButtonElement) {
+                            return false;
+                        }
+                        return true;
+                    }
+                });
+                const link = document.createElement('a');
+                link.setAttribute('href', dataURL);
+                link.setAttribute('download', 'peluang_utbk.jpg');
+                link.click();
+                URL.revokeObjectURL(dataURL);
+            } catch (error) {
+                toast.error(
+                    'Ups, ada masalah saat mengunduh menjadi gambar. Mohon coba lagi'
+                );
+                console.error(
+                    new Error('failed to download peluang card to JPG', {
+                        cause: error
+                    })
+                );
+            } finally {
+                setIsLoading(false);
+            }
+        }
+    };
+
     return (
-        <div className="modal-box bg-[#191920] rounded-2xl p-6 w-full max-w-[343px] md:max-w-[400px] mx-auto relative overflow-hidden">
-            <div className="w-[400px] h-[464px] rounded-full absolute top-0 left-0">
+        <div ref={ref} className="w-full">
+            <div className="modal-box bg-[#191920] rounded-2xl p-6 w-full max-w-[343px] md:max-w-[400px] mx-auto relative overflow-hidden">
                 {/* high score: gradient_high_score.png */}
                 {/* medium score: gradient_medium_score.png */}
                 {/* low score: gradient_low_score.png */}
-                <Image
+                <img
                     src={`${CDN_URL}/assets/gradient_high_score.png`}
                     alt=""
-                    layout="fill"
+                    className="absolute inset-0"
                 />
-            </div>
 
-            <form method="dialog">
-                <button>
-                    <IoClose className="fill-[#999999] w-6 h-6 absolute top-4 right-4" />
-                </button>
-            </form>
+                <form method="dialog" className="absolute top-0 right-0">
+                    <button disabled={isLoading}>
+                        <IoClose className="fill-[#999999] w-6 h-6 absolute top-4 right-4" />
+                    </button>
+                </form>
 
-            <div className="relative z-10">
-                <span className="block text-white/30 font-bold text-2xl mb-8">
-                    Gradient
-                </span>
-
-                <h2 className="text-white font-semibold text-xl md:text-2xl mb-1 md:mb-2">
-                    Teknik Sipil
-                </h2>
-
-                <p className="text-white text-sm flex items-center gap-1 md:gap-2">
-                    <GraduateIcon className="fill-white w-5 h-5 md:w-6 md:h-6" />
-                    Universitas Indonesia
-                </p>
-
-                <div className="bg-[#101010] rounded-lg py-4 px-6 mt-6">
-                    <span className="text-[#03AC5C] font-bold text-[32px] md:text-[40px] mb-1">
-                        82%
-                    </span>
-                    <span className="text-white font-semibold block">
-                        Peluang tinggi
+                <div className="relative z-10">
+                    <span className="block text-white font-[Urbanist] font-bold text-2xl mb-8">
+                        Gradient
                     </span>
 
-                    <div className="w-full h-[1px] bg-[#222222] mt-6 mb-4"></div>
+                    <h2 className="text-white font-semibold text-xl md:text-2xl mb-1 md:mb-2">
+                        Teknik Sipil
+                    </h2>
 
-                    <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-2">
-                        <div className="flex flex-col gap-1">
-                            <span className="text-[#DEDEDE] text-sm">
-                                Skor kamu
-                            </span>
-                            <span className="text-white font-semibold text-xl">
-                                725
-                            </span>
-                        </div>
+                    <p className="text-white text-sm flex items-center gap-1 md:gap-2">
+                        <GraduateIcon className="fill-white w-5 h-5 md:w-6 md:h-6" />
+                        Universitas Indonesia
+                    </p>
 
-                        <div className="flex flex-col gap-1">
-                            <span className="text-[#DEDEDE] text-sm">
-                                Passing Grade 2024
-                            </span>
-                            <span className="text-white font-semibold text-xl">
-                                688
-                            </span>
+                    <div className="bg-[#101010] rounded-2xl py-4 px-6 mt-6">
+                        <span className="text-[#03AC5C] font-bold text-[32px] md:text-[40px] mb-1">
+                            82%
+                        </span>
+                        <span className="text-white font-semibold block">
+                            Peluang tinggi
+                        </span>
+
+                        <div className="w-full h-[1px] bg-[#222222] mt-6 mb-4"></div>
+
+                        <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-2">
+                            <div className="flex flex-col gap-1">
+                                <span className="text-[#DEDEDE] text-sm">
+                                    Skor kamu
+                                </span>
+                                <span className="text-white font-semibold text-xl">
+                                    725
+                                </span>
+                            </div>
+
+                            <div className="flex flex-col gap-1">
+                                <span className="text-[#DEDEDE] text-sm">
+                                    Passing Grade 2024
+                                </span>
+                                <span className="text-white font-semibold text-xl">
+                                    688
+                                </span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <Button
-                    variant="secondary"
-                    className="w-full max-w-[215px] mx-auto text-sm font-semibold text-white flex justify-center items-center gap-1.5 mt-6 !py-2 !px-4">
-                    <IoMdArrowRoundDown className="fill-white w-4 h-4 shrink-0" />{' '}
-                    <span className="whitespace-nowrap">
-                        Simpan sebagai Gambar
-                    </span>
-                </Button>
+                    <Button
+                        onClick={downloadAsImage}
+                        disabled={isLoading}
+                        variant="secondary"
+                        className={`${
+                            isLoading ? '!hidden' : ''
+                        } w-full max-w-[215px] mx-auto text-sm font-semibold text-white flex justify-center items-center gap-1.5 mt-6 !py-2 !px-4`}>
+                        <IoMdArrowRoundDown className="fill-white w-4 h-4 shrink-0" />{' '}
+                        <span className="whitespace-nowrap">
+                            Simpan sebagai Gambar
+                        </span>
+                    </Button>
+                </div>
             </div>
         </div>
     );
