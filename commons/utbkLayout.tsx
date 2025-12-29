@@ -534,6 +534,9 @@ function Navbar(): JSX.Element {
                         </NavigationMenuItem>
 
                         <NavigationMenuItem
+                            isActive={router.pathname.includes(
+                                '/utbk/prediksi-ptn'
+                            )}
                             label="Prediksi PTN"
                             href="/utbk/prediksi-ptn"
                         />
@@ -555,7 +558,7 @@ function Navbar(): JSX.Element {
                                 ['--easing' as string]:
                                     'cubic-bezier(0.22, 1, 0.36, 1)'
                             }}>
-                            <NavigationMenu.Popup className="data-[ending-style]:easing-[ease] relative h-[var(--popup-height)] origin-[var(--transform-origin)] transition-[opacity,transform,width,height,scale,translate] duration-[var(--duration)] ease-[var(--easing)] data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[ending-style]:duration-150 data-[starting-style]:scale-90 data-[starting-style]:opacity-0 w-[var(--popup-width)] xs:w-[var(--popup-width)] drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
+                            <NavigationMenu.Popup className="data-[ending-style]:easing-[ease] relative h-[var(--popup-height)] origin-[var(--transform-origin)] transition-[opacity,transform,width,height,scale,translate] duration-[var(--duration)] ease-[var(--easing)] data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[ending-style]:duration-150 data-[starting-style]:scale-90 data-[starting-style]:opacity-0 w-[var(--popup-width)] xs:w-[var(--popup-width)]">
                                 <NavigationMenu.Arrow
                                     className="flex transition-[left] duration-[var(--duration)] ease-[var(--easing)] data-[side=bottom]:top-0 data-[side=left]:right-[-13px] data-[side=left]:rotate-90 data-[side=right]:left-[-13px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-8px] data-[side=top]:rotate-180"
                                     style={{ transform: 'translateY(-100%)' }}>
