@@ -64,9 +64,10 @@ function MateriCard({
             <h3 className="text-sm text-center text-[#DEDEDE]">{label}</h3>
 
             <Input
-                type="text"
+                type="number"
                 placeholder="Nilai"
                 name={name}
+                max={1000}
                 value={value}
                 onChange={(event) =>
                     setFieldValue(
@@ -74,7 +75,7 @@ function MateriCard({
                         event.currentTarget.value as any
                     )
                 }
-                className="!py-2 !px-4 !bg-[#222222] border border-[#333333] [&>input]:text-white !h-10"
+                className="hide-input-number-icon !py-2 !px-4 !bg-[#222222] border border-[#333333] [&>input]:text-white !h-10"
             />
         </div>
     );
