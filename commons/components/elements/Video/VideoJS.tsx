@@ -292,7 +292,9 @@ const VideoJS = ({
             {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
             <video
                 id="my-player"
-                ref={(ref) => (videoRef.current = ref)}
+                ref={(ref) => {
+                    videoRef.current = ref;
+                }}
                 className="video-js vjs-16-9 vjs-big-play-centered"
                 controls
                 preload="auto"

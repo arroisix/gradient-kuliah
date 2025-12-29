@@ -49,8 +49,9 @@ const ResultSummary = ({ isReportMode }: { isReportMode?: boolean }) => {
     return (
         <div
             className={cn(
-                'w-full lg:max-w-2xl pt-6 lg:p-6 space-y-6 bg-violet-1 rounded-l-xl rounded-r-xl',
-                exercise?.tryout_type !== 'UTBK' && 'lg:rounded-r-none'
+                'w-full pt-6 lg:p-6 space-y-6 bg-violet-1 rounded-l-xl rounded-r-xl',
+                exercise?.tryout_type !== 'UTBK' &&
+                    'lg:rounded-r-none lg:max-w-2xl'
             )}>
             {/* Title and History Link */}
             <div className="flex items-center justify-between lg:px-0 px-6">
@@ -69,9 +70,9 @@ const ResultSummary = ({ isReportMode }: { isReportMode?: boolean }) => {
                     <span className="text-[32px] font-bold text-white">
                         {parseFloat(score?.toFixed(2)).toString()}
                     </span>
-                    <span className="text-white/60">
-                        / {exercise?.tryout_type === 'UTBK' ? 1000 : 100}
-                    </span>
+                    {exercise?.tryout_type !== 'UTBK' && (
+                        <span className="text-white/60">/ 100</span>
+                    )}
                 </div>
             </div>
 

@@ -1,9 +1,11 @@
 import { useAuth } from 'authentication/contexts/AuthProvider';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Paywall from 'commons/components/elements/Paywall';
 import { cn } from 'commons/utils';
 import { useRouter } from 'next/router';
 import { useGetPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 const K12_ALLOWED_PREFIXES = [
     '/dashboard',
@@ -15,15 +17,17 @@ const K12_ALLOWED_PREFIXES = [
     '/profil',
     '/aktivasi-email',
     '/copilot',
-    '/kontak-kami'
+    '/kontak-kami',
+    '/transaksi',
+    '/referral'
 ];
 
 const K12Paywall = (): JSX.Element => {
     const router = useRouter();
     const { data } = useGetPacketOfferQuery();
     const { profile } = useAuth();
-
-    const isK12User = profile?.current_role === 'K12';
+    const isAuthenticated = useSelector(getIsAuthenticated);
+    const isK12User = profile?.current_role === 'K12' && isAuthenticated;
     const isAllowedPath = K12_ALLOWED_PREFIXES.some((prefix) =>
         router.pathname.startsWith(prefix)
     );

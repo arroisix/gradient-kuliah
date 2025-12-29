@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import { BiChevronLeft } from 'react-icons/bi';
 import ScoreNotPublished from 'exercises/components/ExerciseDetail/ScoreNotPublished';
 import SubtestResultSummary from 'exercises/components/ExerciseDetail/SubtestResultSummary';
+import { LeaderboardReport } from 'exercises/components/ExerciseDetail/Leaderboard';
 
 const ExerciseReport = () => {
     const router = useRouter();
@@ -61,13 +62,33 @@ const ExerciseReport = () => {
         <LatihanLayout className="h-full">
             <div className="flex flex-col h-full gap-6">
                 <ExerciseCompleteHeader />
-                <div className="flex w-full flex-col lg:flex-row gap-5 lg:gap-0 justify-center flex-shrink-0">
-                    <ResultSummary isReportMode />
-                    <ResultSummaryPerProblem />
-                </div>
-                <div className="flex w-full justify-center">
-                    <SubtestResultSummary />
-                </div>
+                {exercise.tryout_type === 'UTBK' ? (
+                    <div className="flex flex-col flex-col-reverse lg:flex-row gap-6 lg:gap-10 justify-center lg:overflow-hidden">
+                        <div className="w-full lg:w-[64%] flex flex-col h-full gap-6">
+                            <div className="flex w-full flex-col lg:flex-row gap-5 lg:gap-0 justify-center">
+                                <ResultSummary />
+                                <ResultSummaryPerProblem />
+                            </div>
+                            <div className="flex w-full justify-center">
+                                <SubtestResultSummary />
+                            </div>
+                        </div>
+
+                        <div className="w-full lg:w-[36%]">
+                            <LeaderboardReport />
+                        </div>
+                    </div>
+                ) : (
+                    <>
+                        <div className="flex w-full flex-col lg:flex-row gap-5 lg:gap-0 justify-center flex-shrink-0">
+                            <ResultSummary isReportMode />
+                            <ResultSummaryPerProblem />
+                        </div>
+                        <div className="flex w-full justify-center">
+                            <SubtestResultSummary />
+                        </div>
+                    </>
+                )}
             </div>
         </LatihanLayout>
     );

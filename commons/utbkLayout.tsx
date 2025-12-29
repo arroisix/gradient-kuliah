@@ -11,6 +11,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { XIcon } from 'lucide-react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import { MATERI } from 'landing/constants/UTBK';
 
 interface LayoutProps {
     children?: JSX.Element;
@@ -25,51 +26,6 @@ export default function Layout({ children }: LayoutProps): JSX.Element {
         </div>
     );
 }
-
-const MATERI = [
-    {
-        name: 'Penalaran Kuantitatif',
-        description: 'Hubungan, pola, analisis teks pendek.',
-        href: '#',
-        icon: 'penalaran-kualitatif.svg'
-    },
-    {
-        name: 'Pemahaman Bacaan dan Menulis',
-        description: 'Membaca panjang dan menulis argumentatif.',
-        href: '#',
-        icon: 'pemahaman-bacaan.svg'
-    },
-    {
-        name: 'Penalaran Matematika',
-        description: 'Logika angka, problem solving, matematika dasar.',
-        href: '#',
-        icon: 'penalaran-matematis.svg'
-    },
-    {
-        name: 'Pengetahuan dan Pemahaman Umum',
-        description: 'Membaca, memahami konteks, dan evaluasi.',
-        href: '#',
-        icon: 'pemahaman-penalaran-umum.svg'
-    },
-    {
-        name: 'Penalaran Umum',
-        description: 'Kemampuan analisis fakta dan logika umum.',
-        href: '#',
-        icon: 'penalaran-umum.svg'
-    },
-    {
-        name: 'Literasi Bahasa Indonesia',
-        description: 'Makna konteks, struktur, inferensi dalam teks.',
-        href: '#',
-        icon: 'literasi-bahasa-indonesia.svg'
-    },
-    {
-        name: 'Literasi Bahasa Inggris',
-        description: 'Reading comprehension, grammar, vocabulary.',
-        href: '#',
-        icon: 'literasi-bahasa-inggris.svg'
-    }
-];
 
 function ArrowRight(props: React.ComponentProps<'svg'>): JSX.Element {
     return (
@@ -326,7 +282,7 @@ const contentClassName =
     'data-[ending-style]:data-[activation-direction=left]:translate-x-[50%] ' +
     'data-[ending-style]:data-[activation-direction=right]:translate-x-[-50%]';
 
-function ArrowSvg(props: React.ComponentProps<'svg'>) {
+function ArrowSvg(props: React.ComponentProps<'svg'>): JSX.Element {
     return (
         <svg
             width={21}
@@ -409,7 +365,7 @@ function Navbar(): JSX.Element {
     const router = useRouter();
 
     return (
-        <header className="flex fixed top-0 z-[9999] w-full justify-center lg:mt-[10px]">
+        <header className="flex fixed top-0 z-50 w-full justify-center lg:mt-[10px]">
             <div
                 className="flex justify-between items-center w-full px-8 bg-white bg-opacity-[3%] md:bg-[#040404] md:bg-opacity-[23%] border-solid border-[1px] border-white border-opacity-[8%] rounded-full h-[60px] m-4 max-w-[1232px]"
                 style={{
@@ -495,7 +451,7 @@ function Navbar(): JSX.Element {
                                     {/* <li className="flex justify-end items-center text-[#B6A6F3]">
                                         <Link
                                             className="font-semibold text-sm flex gap-1 items-center"
-                                            href="/utbk/materi">
+                                            href="/materi">
                                             Lihat Semua
                                             <FaArrowRight size={16} />
                                         </Link>
@@ -599,7 +555,7 @@ function Navbar(): JSX.Element {
                                 ['--easing' as string]:
                                     'cubic-bezier(0.22, 1, 0.36, 1)'
                             }}>
-                            <NavigationMenu.Popup className="data-[ending-style]:easing-[ease] relative h-[var(--popup-height)] origin-[var(--transform-origin)] transition-[opacity,transform,width,height,scale,translate] duration-[var(--duration)] ease-[var(--easing)] data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[ending-style]:duration-150 data-[starting-style]:scale-90 data-[starting-style]:opacity-0 w-[var(--popup-width)] xs:w-[var(--popup-width)]">
+                            <NavigationMenu.Popup className="data-[ending-style]:easing-[ease] relative h-[var(--popup-height)] origin-[var(--transform-origin)] transition-[opacity,transform,width,height,scale,translate] duration-[var(--duration)] ease-[var(--easing)] data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[ending-style]:duration-150 data-[starting-style]:scale-90 data-[starting-style]:opacity-0 w-[var(--popup-width)] xs:w-[var(--popup-width)] drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
                                 <NavigationMenu.Arrow
                                     className="flex transition-[left] duration-[var(--duration)] ease-[var(--easing)] data-[side=bottom]:top-0 data-[side=left]:right-[-13px] data-[side=left]:rotate-90 data-[side=right]:left-[-13px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-8px] data-[side=top]:rotate-180"
                                     style={{ transform: 'translateY(-100%)' }}>

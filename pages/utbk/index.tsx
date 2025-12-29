@@ -15,25 +15,7 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { FaChevronRight } from 'react-icons/fa';
 import { FaRegCircleCheck } from 'react-icons/fa6';
 import styles from 'styles/utbk.module.css';
-
-const MATERI_UTBK_MODAL = [
-    {
-        title: 'Penalaran Umum',
-        icon: 'penalaran-umum.svg'
-    },
-    {
-        title: 'Pemahaman Bacaan',
-        icon: 'pemahaman-penalaran-umum.svg'
-    },
-    {
-        title: 'Perhitungan',
-        icon: 'penalaran-matematis.svg'
-    },
-    {
-        title: 'Literasi B.Ing dan Indo',
-        icon: 'literasi-bahasa-indonesia.svg'
-    }
-];
+import { FAQ_DATA, MATERI } from 'landing/constants/UTBK';
 
 function UTBKModal({
     open,
@@ -57,7 +39,7 @@ function UTBKModal({
                 <div className="flex flex-col gap-8">
                     <div className="flex flex-col gap-2">
                         <h3 className="text-xl leading-[140%] font-semibold">
-                            Kenalan dengan UTBK yuk! 👋
+                            Kenalan dengan UTBK, yuk! 👋
                         </h3>
                         <p className="text-[#DEDEDE] text-sm leading-[160%]">
                             UTBK adalah tes masuk perguruan tinggi negeri. Tes
@@ -105,18 +87,18 @@ function UTBKModal({
                             Apa saja yang diuji?
                         </h4>
                         <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 list-none p-0">
-                            {MATERI_UTBK_MODAL.map((i) => (
+                            {MATERI.map((i) => (
                                 <li
-                                    key={i.title}
+                                    key={i.name}
                                     className="flex gap-4 p-3 bg-violet-1 items-center rounded-lg">
                                     <div className="h-[48px] w-[48px] flex items-center justify-center rounded-full bg-violet-3 text-white flex-shrink-0">
                                         <img
                                             src={`${CDN_URL}/assets/utbk/${i.icon}`}
-                                            alt={i.title}
+                                            alt={i.name}
                                         />
                                     </div>
-                                    <p className="text-sm leading-[125%] font-semibold">
-                                        {i.title}
+                                    <p className="text-base leading-[140%] font-semibold">
+                                        {i.name}
                                     </p>
                                 </li>
                             ))}
@@ -124,7 +106,7 @@ function UTBKModal({
                     </div>
 
                     <Button
-                        href="/utbk/materi"
+                        href="/materi"
                         variant="primary"
                         className="flex items-center justify-center text-sm leading-[125%] gap-[6px] font-semibold"
                         linkClass="w-max self-center md:self-end">
@@ -356,19 +338,22 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                 Semua yang kamu butuhkan untuk lulus UTBK
             </h2>
             <p className="text-[#9CA3AF] text-sm leading-[20px] text-center mb-16">
-                Platform all-in-one dengan fitur canggih untuk memastikan kamu
-                siap tempur di hari H.
+                Platform <i>all-in-one</i> dengan fitur canggih untuk memastikan
+                kamu siap tempur di hari H!
             </p>
 
             <ul className="list-none gap-6 max-w-[1200px] self-center p-0 grid grid-cols-1 lg:grid-cols-2">
                 <li>
                     <article
-                        className="flex flex-col gap-4 text-center bg-[#181818] rounded-[32px] border-solid border-[1px] border-white border-opacity-5 px-4 pt-8 max-w-[720px] hover:border-[#B6A6F3] hover:shadow-[0px_8px_12px_6px_rgba(0,0,0,0.15),0px_4px_4px_rgba(0,0,0,0.3)] items-center h-full transition"
+                        className="flex flex-col gap-4 text-center bg-[#181818] rounded-[32px] border-solid border-[1px] border-white border-opacity-5 px-4 pt-8 max-w-[720px] hover:border-[#B6A6F3] hover:shadow-[0px_8px_12px_6px_rgba(0,0,0,0.15),0px_4px_4px_rgba(0,0,0,0.3)] items-center h-full transition relative overflow-hidden"
                         style={{
                             backgroundImage: `url(${CDN_URL}/assets/utbk/materi-decor.svg)`,
                             backgroundPosition: 'top right',
                             backgroundRepeat: 'no-repeat'
                         }}>
+                        <div className="absolute top-0 right-0 bg-gradient-to-r from-[#D790DE] via-[#99B8DA] to-[#439CFB] text-white text-sm font-semibold px-6 py-2 rounded-bl-[32px]">
+                            Coming Soon
+                        </div>
                         <h3 className="flex flex-col gap-4 text-white font-bold text-2xl md:text-3xl leading-[125%] max-w-[634px]">
                             <span className="uppercase flex gap-2 items-center justify-center font-bold text-[#B6A6F3] text-sm tracking-[0.7px]">
                                 <img
@@ -378,18 +363,18 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                                 />
                                 Video Learning
                             </span>
-                            Video Materi dari Kakak Mahasiswa Universitas Top
+                            Video Materi dari Mahasiswa Top Universitas
                         </h3>
 
                         <p className="text-white text-lg leading-[29.25px]">
                             Akses ratusan jam konten video yang dibawakan
                             langsung oleh mahasiswa dari UI, ITB, dan lainnya.
                             Penjelasan santai, mudah dimengerti, dan
-                            to-the-point.
+                            <i>to-the-point.</i>
                         </p>
 
                         <Link
-                            href="/utbk/materi"
+                            href="/materi"
                             className="mb-2 text-[#B6A6F3] font-semibold text-sm leading-[125%] flex gap-1 items-center h-[34px]">
                             Lihat Materi
                             <FaChevronRight height={16} width={16} />
@@ -425,14 +410,15 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                         </h3>
                         <p className="text-white text-lg leading-[29.25px]">
                             Simulasi ujian dengan format yang sama persis dengan
-                            UTBK asli. Menggunakan sistem penilaian Item
-                            Response Theory untuk akurasi skor tinggi.
+                            UTBK asli. Menggunakan sistem penilaian{' '}
+                            <i>Item Response Theory (IRT)</i> untuk akurasi skor
+                            tinggi.
                         </p>
                         <button
                             className="mb-2 text-[#B6A6F3] font-semibold text-sm leading-[125%] h-[34px] flex items-center gap-1"
                             type="button"
                             onClick={() => setShowIRTModal(true)}>
-                            Apa itu IRT
+                            Apa itu IRT?
                             <FaChevronRight height={16} width={16} />
                         </button>
                         <div className="flex-grow flex items-end">
@@ -467,7 +453,7 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                         <p className="text-white text-lg leading-[29.25px] mb-6">
                             Asisten belajar pribadi berbasis AI yang siap
                             membantumu. Tanyakan soal sulit atau minta
-                            penjelasan materi yang belum kamu pahami.
+                            penjelasan materi yang belum kamu pahami!
                         </p>
                         <img
                             src={`${CDN_URL}/assets/utbk/copilot3.avif`}
@@ -497,8 +483,9 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                             Personal Analytics
                         </h3>
                         <p className="text-white text-lg leading-[29.25px] mb-2">
-                            Pantau kekuatan dan kelemahanmu secara real-time.
-                            Data driven learning untuk hasil yang maksimal.
+                            Pantau kekuatan dan kelemahanmu secara{' '}
+                            <i>real-time</i>.<i>Data driven learning</i> untuk
+                            hasil yang maksimal.
                         </p>
                         <div className="flex flex-grow items-center">
                             <img
@@ -693,29 +680,7 @@ function FAQ({ className }: { className?: string }): JSX.Element {
                 headerClassName="text-left text-white text-base leading-[140%] gap-2 bg-transparent"
                 iconClassName="text-[#999999]"
                 contentClassName="text-[#DEDEDE] text-sm leading-[160%] bg-transparent"
-                item={[
-                    {
-                        title: 'Apa perbedaan akun Gratis dan Premium?',
-                        content:
-                            'Akun Gratis bisa digunakan untuk mencoba fitur dasar, seperti contoh soal dan try out terbatas. Akun Premium memberikan akses penuh ke try out harian dan mingguan, pembahasan lengkap, analisis hasil, serta fitur pendukung belajar lainnya.'
-                    },
-                    {
-                        title: 'Apakah sistem penilaian Tryout sesuai standar UTBK terbaru?',
-                        content: 'Lorem impsum.'
-                    },
-                    {
-                        title: 'Bagaimana cara kerja Copilot AI Assistant?',
-                        content: 'Lorem impsum.'
-                    },
-                    {
-                        title: 'Apakah materi bisa diakses lewat HP?',
-                        content: 'Lorem impsum.'
-                    },
-                    {
-                        title: 'Bagaimana jika saya ingin berhenti berlangganan?',
-                        content: 'Lorem impsum.'
-                    }
-                ]}
+                item={FAQ_DATA}
             />
         </section>
     );
