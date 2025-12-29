@@ -107,8 +107,8 @@ function PeluangCard() {
                     Teknik Sipil
                 </h2>
 
-                <p className="text-white text-xs md:text-sm flex items-center gap-1 md:gap-2">
-                    <GraduateIcon className="fill-white w-4 h-4 md:w-6 md:h-6" />
+                <p className="text-white text-sm flex items-center gap-1 md:gap-2">
+                    <GraduateIcon className="fill-white w-5 h-5 md:w-6 md:h-6" />
                     Universitas Indonesia
                 </p>
 
