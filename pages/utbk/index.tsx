@@ -39,7 +39,7 @@ function UTBKModal({
                 <div className="flex flex-col gap-8">
                     <div className="flex flex-col gap-2">
                         <h3 className="text-xl leading-[140%] font-semibold">
-                            Kenalan dengan UTBK yuk! 👋
+                            Kenalan dengan UTBK, yuk! 👋
                         </h3>
                         <p className="text-[#DEDEDE] text-sm leading-[160%]">
                             UTBK adalah tes masuk perguruan tinggi negeri. Tes
@@ -338,19 +338,22 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                 Semua yang kamu butuhkan untuk lulus UTBK
             </h2>
             <p className="text-[#9CA3AF] text-sm leading-[20px] text-center mb-16">
-                Platform all-in-one dengan fitur canggih untuk memastikan kamu
-                siap tempur di hari H.
+                Platform <i>all-in-one</i> dengan fitur canggih untuk memastikan
+                kamu siap tempur di hari H!
             </p>
 
             <ul className="list-none gap-6 max-w-[1200px] self-center p-0 grid grid-cols-1 lg:grid-cols-2">
                 <li>
                     <article
-                        className="flex flex-col gap-4 text-center bg-[#181818] rounded-[32px] border-solid border-[1px] border-white border-opacity-5 px-4 pt-8 max-w-[720px] hover:border-[#B6A6F3] hover:shadow-[0px_8px_12px_6px_rgba(0,0,0,0.15),0px_4px_4px_rgba(0,0,0,0.3)] items-center h-full transition"
+                        className="flex flex-col gap-4 text-center bg-[#181818] rounded-[32px] border-solid border-[1px] border-white border-opacity-5 px-4 pt-8 max-w-[720px] hover:border-[#B6A6F3] hover:shadow-[0px_8px_12px_6px_rgba(0,0,0,0.15),0px_4px_4px_rgba(0,0,0,0.3)] items-center h-full transition relative overflow-hidden"
                         style={{
                             backgroundImage: `url(${CDN_URL}/assets/utbk/materi-decor.svg)`,
                             backgroundPosition: 'top right',
                             backgroundRepeat: 'no-repeat'
                         }}>
+                        <div className="absolute top-0 right-0 bg-gradient-to-r from-[#D790DE] via-[#99B8DA] to-[#439CFB] text-white text-sm font-semibold px-6 py-2 rounded-bl-[32px]">
+                            Coming Soon
+                        </div>
                         <h3 className="flex flex-col gap-4 text-white font-bold text-2xl md:text-3xl leading-[125%] max-w-[634px]">
                             <span className="uppercase flex gap-2 items-center justify-center font-bold text-[#B6A6F3] text-sm tracking-[0.7px]">
                                 <img
@@ -360,14 +363,14 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                                 />
                                 Video Learning
                             </span>
-                            Video Materi dari Kakak Mahasiswa Universitas Top
+                            Video Materi dari Mahasiswa Top Universitas
                         </h3>
 
                         <p className="text-white text-lg leading-[29.25px]">
                             Akses ratusan jam konten video yang dibawakan
                             langsung oleh mahasiswa dari UI, ITB, dan lainnya.
                             Penjelasan santai, mudah dimengerti, dan
-                            to-the-point.
+                            <i>to-the-point.</i>
                         </p>
 
                         <Link
@@ -407,14 +410,15 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                         </h3>
                         <p className="text-white text-lg leading-[29.25px]">
                             Simulasi ujian dengan format yang sama persis dengan
-                            UTBK asli. Menggunakan sistem penilaian Item
-                            Response Theory untuk akurasi skor tinggi.
+                            UTBK asli. Menggunakan sistem penilaian{' '}
+                            <i>Item Response Theory (IRT)</i> untuk akurasi skor
+                            tinggi.
                         </p>
                         <button
                             className="mb-2 text-[#B6A6F3] font-semibold text-sm leading-[125%] h-[34px] flex items-center gap-1"
                             type="button"
                             onClick={() => setShowIRTModal(true)}>
-                            Apa itu IRT
+                            Apa itu IRT?
                             <FaChevronRight height={16} width={16} />
                         </button>
                         <div className="flex-grow flex items-end">
@@ -449,7 +453,7 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                         <p className="text-white text-lg leading-[29.25px] mb-6">
                             Asisten belajar pribadi berbasis AI yang siap
                             membantumu. Tanyakan soal sulit atau minta
-                            penjelasan materi yang belum kamu pahami.
+                            penjelasan materi yang belum kamu pahami!
                         </p>
                         <img
                             src={`${CDN_URL}/assets/utbk/copilot3.avif`}
@@ -479,8 +483,9 @@ function Fitur({ className }: { className?: string }): JSX.Element {
                             Personal Analytics
                         </h3>
                         <p className="text-white text-lg leading-[29.25px] mb-2">
-                            Pantau kekuatan dan kelemahanmu secara real-time.
-                            Data driven learning untuk hasil yang maksimal.
+                            Pantau kekuatan dan kelemahanmu secara{' '}
+                            <i>real-time</i>.<i>Data driven learning</i> untuk
+                            hasil yang maksimal.
                         </p>
                         <div className="flex flex-grow items-center">
                             <img

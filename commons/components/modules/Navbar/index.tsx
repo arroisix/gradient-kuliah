@@ -30,7 +30,6 @@ import BookStackIcon from '../../elements/Icons/BookStack';
 import BookStackIconFill from '../../elements/Icons/BookStackFill';
 import KelasIconFill from '../../elements/Icons/KelasFill';
 import AppInstallBanner from './components/AppInstallBanner';
-import CountdownBanner from './components/CountdownBanner';
 
 const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
     {
@@ -334,7 +333,7 @@ const Navbar = ({
                 setOpenSidebar={setOpenSidebar}
                 configData={configData}
             />
-            <CountdownBanner />
+            {/* <CountdownBanner /> */}
         </header>
     );
 };
