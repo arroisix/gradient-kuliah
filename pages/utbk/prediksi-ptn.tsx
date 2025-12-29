@@ -81,7 +81,16 @@ function MateriCard({
 function PeluangCard() {
     return (
         <div className="modal-box bg-[#191920] rounded-2xl p-6 w-full max-w-[343px] md:max-w-[400px] mx-auto relative overflow-hidden">
-            <div className="w-[345px] h-[345px] rounded-full absolute -top-14 -left-14 bg-gradient-to-r from-[#741F86] via-[#965084] to-[#A82C56] opacity-30 blur-2xl"></div>
+            <div className="w-[400px] h-[464px] rounded-full absolute top-0 left-0">
+                {/* high score: gradient_high_score.png */}
+                {/* medium score: gradient_medium_score.png */}
+                {/* low score: gradient_low_score.png */}
+                <Image
+                    src={`${CDN_URL}/assets/gradient_high_score.png`}
+                    alt=""
+                    layout="fill"
+                />
+            </div>
 
             <form method="dialog">
                 <button>
@@ -90,7 +99,7 @@ function PeluangCard() {
             </form>
 
             <div className="relative z-10">
-                <span className="hidden md:block text-white/30 font-bold text-2xl mb-8">
+                <span className="block text-white/30 font-bold text-2xl mb-8">
                     Gradient
                 </span>
 
@@ -136,9 +145,11 @@ function PeluangCard() {
 
                 <Button
                     variant="secondary"
-                    className="w-full max-w-[215px] mx-auto text-sm font-semibold text-white flex justify-center items-center gap-1.5 mt-6">
+                    className="w-full max-w-[215px] mx-auto text-sm font-semibold text-white flex justify-center items-center gap-1.5 mt-6 !py-2 !px-4">
                     <IoMdArrowRoundDown className="fill-white w-4 h-4 shrink-0" />{' '}
-                    <span className="text-nowrap">Simpan sebagai Gambar</span>
+                    <span className="whitespace-nowrap">
+                        Simpan sebagai Gambar
+                    </span>
                 </Button>
             </div>
         </div>
