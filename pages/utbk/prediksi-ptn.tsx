@@ -119,7 +119,7 @@ function PeluangCard() {
     };
 
     return (
-        <div ref={ref} className="w-full">
+        <div ref={ref} className="w-fit">
             <div className="modal-box bg-[#191920] rounded-2xl p-6 w-full max-w-[343px] md:max-w-[400px] mx-auto relative overflow-hidden">
                 {/* high score: gradient_high_score.png */}
                 {/* medium score: gradient_medium_score.png */}
@@ -130,9 +130,11 @@ function PeluangCard() {
                     className="absolute inset-0"
                 />
 
-                <form method="dialog" className="absolute top-0 right-0">
-                    <button disabled={isLoading}>
-                        <IoClose className="fill-[#999999] w-6 h-6 absolute top-4 right-4" />
+                <form method="dialog" className="absolute top-0 right-0 z-20">
+                    <button
+                        disabled={isLoading}
+                        className="w-fit h-fit absolute top-4 right-4">
+                        <IoClose className="fill-[#999999] w-6 h-6" />
                     </button>
                 </form>
 
@@ -182,7 +184,7 @@ function PeluangCard() {
                     </div>
 
                     <div className="flex gap-2 mt-3">
-                        <CgInfo className="fill-[#999999] w-4 h-4 shrink-0" />
+                        <CgInfo className="text-[#999999] w-4 h-4 shrink-0" />
                         <p className="text-[#999999] text-[10px]">
                             Bobot penilaian berbeda di tiap jurusan di
                             masing-masing universitas. Hasil diatas merupakan
@@ -396,7 +398,7 @@ const PrediksiPTNPage = (): JSX.Element => {
                                 </div>
 
                                 <div className="bg-[#252246] flex items-center gap-3 p-3 rounded-lg">
-                                    <CgInfo className="fill-[#B6A6F3] w-5 h-5 shrink-0" />
+                                    <CgInfo className="text-[#B6A6F3] w-5 h-5 shrink-0" />
                                     <p className="text-white text-xs leading-[160%]">
                                         Estimasi hasil prediksi bersifat
                                         referensi dan tidak mencerminkan bobot
