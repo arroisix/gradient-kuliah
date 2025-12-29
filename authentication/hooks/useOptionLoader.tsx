@@ -45,7 +45,8 @@ export const useOptionLoader = (
                 const options: Option[] =
                     query.data?.map((item) => ({
                         value: `${item.id}:${item.name}`,
-                        label: item.name
+                        label: item.name,
+                        passing_grade: item?.passing_grade
                     })) ?? [];
 
                 setOptions(options);
