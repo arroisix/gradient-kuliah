@@ -16,6 +16,7 @@ import { TargetKampusIcon } from 'commons/components/elements/Icons/TargetKampus
 import { PencilIcon } from 'commons/components/elements/Icons/PencilIcon';
 import { toast } from 'react-toastify';
 import domtoimage from 'dom-to-image';
+import { CgInfo } from 'react-icons/cg';
 
 interface PrediksiPTNForm {
     // both types below will have format like this: "major_id:major_name"
@@ -180,6 +181,16 @@ function PeluangCard() {
                         </div>
                     </div>
 
+                    <div className="flex gap-2 mt-3">
+                        <CgInfo className="fill-[#999999] w-4 h-4 shrink-0" />
+                        <p className="text-[#999999] text-[10px]">
+                            Bobot penilaian berbeda di tiap jurusan di
+                            masing-masing universitas. Hasil diatas merupakan
+                            estimasi berdasarkan data passing grade dari
+                            internal.
+                        </p>
+                    </div>
+
                     <Button
                         onClick={downloadAsImage}
                         disabled={isLoading}
@@ -252,9 +263,8 @@ const PrediksiPTNPage = (): JSX.Element => {
                 </h1>
 
                 <p className="text-[#DEDEDE] text-sm mb-6 text-center md:text-start">
-                    Masukkan target kampus dan perkiraan nilaimu untuk melihat
-                    peluang lolos UTBK. Jika belum pernah try out bisa pakai
-                    estimasi dulu.
+                    Bantu memahami peluang masuk PTN berdasarkan skor dan
+                    pilihan kampusmu.
                 </p>
 
                 <Formik
@@ -383,6 +393,16 @@ const PrediksiPTNPage = (): JSX.Element => {
                                         }>
                                         Reset
                                     </Button>
+                                </div>
+
+                                <div className="bg-[#252246] flex items-center gap-3 p-3 rounded-lg">
+                                    <CgInfo className="fill-[#B6A6F3] w-5 h-5 shrink-0" />
+                                    <p className="text-white text-xs leading-[160%]">
+                                        Estimasi hasil prediksi bersifat
+                                        referensi dan tidak mencerminkan bobot
+                                        subtes resmi tiap universitas. Gunakan
+                                        sebagai referensi.
+                                    </p>
                                 </div>
 
                                 <div className="w-full max-w-[240px] mx-auto space-y-2.5 md:space-y-0 md:max-w-full md:grid md:grid-cols-3 md:gap-4">
