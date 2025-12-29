@@ -90,7 +90,14 @@ function PeluangCard() {
         if (ref.current) {
             setIsLoading(true);
             try {
+                const scale = 2;
                 const dataURL = await domtoimage.toPng(ref.current, {
+                    width: ref.current.clientWidth * scale,
+                    height: (ref.current.clientHeight - 60) * scale,
+                    style: {
+                        transform: 'scale(' + scale + ')',
+                        transformOrigin: 'top left'
+                    },
                     filter: (node) => {
                         if (node instanceof HTMLButtonElement) {
                             return false;
@@ -120,7 +127,10 @@ function PeluangCard() {
 
     return (
         <div ref={ref} className="w-fit">
-            <div className="modal-box bg-[#191920] rounded-2xl p-6 w-full max-w-[343px] md:max-w-[400px] mx-auto relative overflow-hidden">
+            <div
+                className={`${
+                    isLoading ? 'rounded-none' : 'rounded-2xl'
+                } modal-box bg-[#191920] p-6 w-full max-w-[343px] md:max-w-[400px] mx-auto relative overflow-hidden`}>
                 {/* high score: gradient_high_score.png */}
                 {/* medium score: gradient_medium_score.png */}
                 {/* low score: gradient_low_score.png */}
