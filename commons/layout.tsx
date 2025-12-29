@@ -63,7 +63,7 @@ const Layout = ({
                 courses={courses}
             />
 
-            <div className="h-28 bg-[#222222]"></div>
+            <div className="h-14 bg-[#222222]"></div>
 
             {!isAuthenticated && <CountdownBanner />}
 
