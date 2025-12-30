@@ -18,7 +18,9 @@ const K12_ALLOWED_PREFIXES = [
     '/copilot',
     '/kontak-kami',
     '/transaksi',
-    '/referral'
+    '/referral',
+    '/syarat-dan-ketentuan',
+    '/kebijakan-privasi'
 ];
 
 const K12Paywall = (): JSX.Element => {
