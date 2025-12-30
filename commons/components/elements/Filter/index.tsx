@@ -72,13 +72,13 @@ const Filter = ({
             <button
                 onClick={() => setIsBottomSheetOpen(true)}
                 className={cn(
-                    'md:hidden flex justify-between items-center gap-2 text-xs font-bold pl-5 pr-3 py-3 text-white bg-[#20222E] rounded-full',
+                    'md:hidden flex justify-between items-center gap-1 text-sm font-bold px-4 py-2 text-white bg-[#20222E] rounded-full',
                     fullWidth ? 'w-full' : 'w-full'
                 )}>
                 <span className="overflow-hidden whitespace-nowrap text-ellipsis">
                     {selected?.label.replace('Semua ', '')}
                 </span>
-                <BiChevronDown size={18} />
+                <BiChevronDown size={20} />
             </button>
 
             {/* Desktop: Dropdown */}
