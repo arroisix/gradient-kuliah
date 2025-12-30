@@ -352,10 +352,10 @@ const ExerciseReportNavigation: React.FC<ExerciseReportNavigationProps> = ({
                         className="w-full bg-violet-2 lg:bg-transparent text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-white/5 transition-colors border border-white/10 min-w-[200px]">
                         <span className="text-sm font-medium truncate">
                             {selectedProblemSet
-                                ? `Section ${
+                                ? `Subtes ${
                                       (selectedProblemSet.order ?? 0) + 1
                                   }: ${selectedProblemSet.title}`
-                                : 'Select Section'}
+                                : 'Pilih Subtes'}
                         </span>
                         <ChevronDown
                             size={16}
@@ -384,7 +384,7 @@ const ExerciseReportNavigation: React.FC<ExerciseReportNavigationProps> = ({
                                                 ? 'bg-[#3A3A3A] text-white'
                                                 : 'text-white/80'
                                         )}>
-                                        Section {(problemSet.order ?? 0) + 1}:{' '}
+                                        Subtes {(problemSet.order ?? 0) + 1}:{' '}
                                         {problemSet.title}
                                     </button>
                                 )

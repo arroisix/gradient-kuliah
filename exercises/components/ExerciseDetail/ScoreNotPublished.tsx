@@ -153,8 +153,8 @@ const PublishScoreInfo = ({
                 <>
                     <IoIosNotifications size={20} color="#B6A6F3" />
                     <span className="text-xs text-white">
-                        Notifikasi akan dikirim ke aplikasi, HP, dan email.
-                        Pastikan notifikasimu nyala.
+                        Notifikasi akan dikirim ke email kamu, pastikan email
+                        kamu aktif ya!
                     </span>
                 </>
             )}

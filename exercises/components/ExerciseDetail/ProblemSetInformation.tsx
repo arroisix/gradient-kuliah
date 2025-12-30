@@ -108,18 +108,18 @@ const ProblemSetInformation = ({
 
     const decideSectionTitle = (): string => {
         if (exercise?.is_completed) {
-            return `Section ${exercise?.first_problemset?.order + 1}: ${
+            return `Subtes ${exercise?.first_problemset?.order + 1}: ${
                 exercise?.first_problemset?.name
             }`;
         }
 
         if (exercise?.latest_problemset_progress) {
-            return `Section ${
+            return `Subtes ${
                 exercise?.latest_problemset_progress?.order + 1
             }: ${exercise?.latest_problemset_progress?.name}`;
         }
 
-        return `Section ${(exercise?.first_problemset?.order as number) + 1}: ${
+        return `Subtes ${(exercise?.first_problemset?.order as number) + 1}: ${
             exercise?.first_problemset?.name
         }`;
     };

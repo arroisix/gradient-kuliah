@@ -161,7 +161,7 @@ const ProblemSetRoadmap = ({
                                         ? 'text-gray-400'
                                         : 'text-gray-600'
                                 )}>
-                                Section {sectionOrder + 1}
+                                Subtes {sectionOrder + 1}
                             </p>
                             <h3
                                 className={cn(
@@ -223,7 +223,7 @@ const ProblemSetRoadmap = ({
                             ? 'text-gray-400'
                             : 'text-gray-600'
                     )}>
-                    Section {sectionOrder + 1}
+                    Subtes {sectionOrder + 1}
                 </p>
                 <h3
                     className={cn(
