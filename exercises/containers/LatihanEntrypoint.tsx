@@ -7,20 +7,8 @@ import RenewSubscriptionBanner from 'courses/components/RenewSubscriptionBanner'
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import FilterEntrypoint from 'exercises/components/Entrypoint/FilterEntrypoint';
 import { useAuth } from 'authentication/contexts/AuthProvider';
-import dynamic from 'next/dynamic';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
-import Filter from 'commons/components/elements/Filter';
-
-const tryoutFilterOptions: Option[] = [
-    { value: 'all', label: 'Semua' },
-    { value: 'free', label: 'Gratis' },
-    { value: 'member', label: 'Khusus Member' }
-];
-
-const SetTargetDrawerButton = dynamic(
-    () => import('exercises/components/Entrypoint/SetTargetDrawerButton')
-);
 
 const LatihanEntrypoint = (): JSX.Element => {
     const { profile } = useAuth();
@@ -53,14 +41,6 @@ const LatihanEntrypoint = (): JSX.Element => {
         access_type: access_type as string
     });
 
-    const handleFilterTryout = (type: string): void => {
-        router.push(
-            { query: { ...router.query, access_type: type, page: 1 } },
-            undefined,
-            { shallow: true }
-        );
-    };
-
     return (
         <>
             <Breadcrumb className="w-full pb-5" />
@@ -69,25 +49,9 @@ const LatihanEntrypoint = (): JSX.Element => {
                     <h1 className="text-xl font-bold md:text-2xl text-balance">
                         Try Out
                     </h1>
-
-                    {profile?.current_role === 'K12' && (
-                        <div className="flex justify-between items-center gap-4">
-                            <Filter
-                                options={tryoutFilterOptions}
-                                defaultSelected={access_type as string}
-                                onChange={handleFilterTryout}
-                                title="Tipe Akses Tryout"
-                                className="[&>button]:px-4 [&>button]:py-2 [&>button]:text-sm [&>button]:font-bold [&>button]:w-fit"
-                            />
-
-                            <SetTargetDrawerButton />
-                        </div>
-                    )}
                 </div>
 
-                {profile?.current_role === 'COLLEGE_STUDENT' && (
-                    <FilterEntrypoint />
-                )}
+                <FilterEntrypoint />
 
                 <LatihanContent
                     isLoading={isLoading || isFetching}
@@ -100,25 +64,8 @@ const LatihanEntrypoint = (): JSX.Element => {
             </div>
             {!is_subscribed && (
                 <>
-                    {profile?.current_role === 'K12' && isAuthenticated ? (
-                        <>
-                            <div className="md:h-9" />
-                            <RenewSubscriptionBanner
-                                product="latihan"
-                                type="K12"
-                            />
-                            <RenewSubscriptionBanner
-                                product="latihan"
-                                type="K12_MOBILE"
-                            />
-                            <div className="h-3 md:h-0" />
-                        </>
-                    ) : (
-                        <>
-                            <RenewSubscriptionBanner product="latihan" />
-                            {isAuthenticated && <div className="h-6 md:h-0" />}
-                        </>
-                    )}
+                    <RenewSubscriptionBanner product="latihan" />
+                    {isAuthenticated && <div className="h-6 md:h-0" />}
                 </>
             )}
         </>

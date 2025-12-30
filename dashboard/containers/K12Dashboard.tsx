@@ -27,14 +27,14 @@ const K12Dashboard = () => {
             title: 'Materi',
             description: 'Belajar materi UTBK secara bertahap',
             Icon: () => <KelasIcon width={64} height={69} />,
-            url: '/materi'
+            url: '/utbk/materi'
         },
         {
             id: 'kuis',
             title: 'Try Out',
             description: 'Uji kesiapan dengan simulasi UTBK',
             Icon: () => <DashboardQuizIcon />,
-            url: '/latihan'
+            url: '/utbk/try-out'
         },
         {
             id: 'copilot',

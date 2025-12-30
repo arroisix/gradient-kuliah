@@ -8,8 +8,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 const K12_ALLOWED_PREFIXES = [
-    '/dashboard',
-    '/materi',
+    '/utbk',
     '/latihan',
     '/pembayaran',
     '/langganan',
@@ -19,7 +18,9 @@ const K12_ALLOWED_PREFIXES = [
     '/copilot',
     '/kontak-kami',
     '/transaksi',
-    '/referral'
+    '/referral',
+    '/syarat-dan-ketentuan',
+    '/kebijakan-privasi'
 ];
 
 const K12Paywall = (): JSX.Element => {
@@ -28,9 +29,12 @@ const K12Paywall = (): JSX.Element => {
     const { profile } = useAuth();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const isK12User = profile?.current_role === 'K12' && isAuthenticated;
-    const isAllowedPath = K12_ALLOWED_PREFIXES.some((prefix) =>
-        router.pathname.startsWith(prefix)
-    );
+    const isAllowedPath = K12_ALLOWED_PREFIXES.some((prefix) => {
+        if (router.pathname === '/latihan') {
+            return false;
+        }
+        return router.pathname.startsWith(prefix);
+    });
 
     const shouldShowPaywall = isK12User && !isAllowedPath;
 
