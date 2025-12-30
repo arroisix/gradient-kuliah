@@ -148,11 +148,11 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
                             height={140}
                         />
                         <h2 className="text-xl font-semibold text-white mb-4 text-center mt-6">
-                            Submit dan pindah ke section berikutnya?
+                            Submit dan pindah ke subtes berikutnya?
                         </h2>
                         <p className="text-[#999999] text-center mb-6">
-                            Kamu sudah di akhir section. Setelah submit, kamu
-                            tidak akan bisa kembali lagi ke section ini
+                            Kamu sudah di akhir subtes. Setelah submit, kamu
+                            tidak akan bisa kembali lagi ke subtes ini
                         </p>
                         <div className="flex flex-col lg:flex-row gap-4">
                             <button
@@ -162,7 +162,7 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
                                 {isSubmitting ? (
                                     <span className="loading loading-spinner loading-sm"></span>
                                 ) : (
-                                    'Submit & Pindah Section'
+                                    'Submit & Pindah Subtes'
                                 )}
                             </button>
                             <button

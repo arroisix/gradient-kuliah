@@ -223,10 +223,10 @@ const ResultSummaryPerProblem: React.FC<ResultSummaryPerProblemProps> = ({
                             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                             className="w-full bg-[#2C2C2C] text-white px-4 py-3 rounded-lg flex items-center justify-between hover:bg-[#3A3A3A] transition-colors">
                             <span className="text-sm font-medium">
-                                {`Section ${
+                                {`Subtes ${
                                     (selectedProblemSet?.order ?? 0) + 1
                                 }: ${selectedProblemSet?.title}` ||
-                                    'Select Problem Set'}
+                                    'Pilih Subtes'}
                             </span>
                             <ChevronDown
                                 size={16}
