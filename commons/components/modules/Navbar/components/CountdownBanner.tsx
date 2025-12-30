@@ -17,8 +17,7 @@ const CountdownBanner = (): JSX.Element => {
     const [isCountdownDone, setIsCountdownDone] = useState(false);
 
     useEffect(() => {
-        // Set target date - adjust this to your actual target date
-        const targetDate = new Date('2026-01-01T20:00:00').getTime();
+        const targetDate = new Date('2026-01-01T15:00:00').getTime();
 
         const updateCountdown = () => {
             const now = new Date().getTime();
