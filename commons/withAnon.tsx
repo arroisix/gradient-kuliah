@@ -129,12 +129,7 @@ const withAnon = <P extends object>(
                             }
                         }
                     } else if (
-                        [
-                            '/',
-                            '/landing-revamp',
-                            '/utbk',
-                            '/utbk/try-out'
-                        ].includes(router.pathname)
+                        ['/', '/landing-revamp'].includes(router.pathname)
                     ) {
                         if (!profile) {
                             return <LoadingBackdrop />;
