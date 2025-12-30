@@ -49,6 +49,7 @@
         "@tiptap/pm": "^2.2.4",
         "@tiptap/react": "^2.2.4",
         "@tiptap/starter-kit": "^2.2.4",
+        "@types/dom-to-image": "^2.6.7",
         "@types/uuid": "^10.0.0",
         "@uiw/codemirror-theme-vscode": "^4.21.21",
         "@uiw/react-codemirror": "^4.21.21",
@@ -66,6 +67,7 @@
         "graphql": "^16.6.0",
         "highlight.run": "^8.4.0",
         "hls.js": "^1.2.4",
+        "html2canvas-pro": "^1.6.2",
         "isomorphic-dompurify": "^2.26.0",
         "katex": "^0.16.4",
         "lodash.groupby": "^4.6.0",
@@ -131,7 +133,8 @@
         "video.js": "^8.3.0",
         "videojs-contrib-quality-levels": "^4.0.0",
         "videojs-http-source-selector": "^1.1.6",
-        "videojs-mux": "^4.15.3"
+        "videojs-mux": "^4.15.3",
+        "ztable": "^1.0.7"
     },
     "devDependencies": {
         "@types/crypto-js": "^4.2.2",

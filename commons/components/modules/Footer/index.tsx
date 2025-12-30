@@ -150,7 +150,7 @@ const UTBK_ITEMS: FooterItemProps[] = [
             },
             {
                 content: 'Prediksi PTN',
-                url: '/rasionalisasi-utbk'
+                url: '/utbk/prediksi-ptn'
             }
         ]
     }
