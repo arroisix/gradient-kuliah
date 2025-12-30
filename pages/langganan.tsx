@@ -2,7 +2,7 @@ import withAuth from 'commons/withAuth';
 import Layout from 'commons/layout';
 import SubscribePacket from 'payment/containers/SubscribePacket';
 import { useAuth } from 'authentication/contexts/AuthProvider';
-import { Langganan } from './utbk';
+import Langganan from 'landing/components/utbk/Langganan';
 
 const Subscribe = (): JSX.Element => {
     const { profile } = useAuth();

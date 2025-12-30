@@ -19,6 +19,7 @@ import { CgInfo } from 'react-icons/cg';
 import ztable from 'ztable';
 import { cn } from 'commons/utils';
 import html2canvas from 'html2canvas-pro';
+import { GetStaticProps } from 'next';
 
 interface PrediksiPTNForm {
     // both types below will have format like this: "major_id:major_name"
@@ -583,3 +584,32 @@ const PrediksiPTNPage = (): JSX.Element => {
 
 PrediksiPTNPage.displayName = 'Prediksi PTN';
 export default PrediksiPTNPage;
+
+export const getStaticProps: GetStaticProps = () => {
+    const META_TITLE = 'Prediksi Peluang Masuk PTN 2026';
+    const META_DESCRIPTION =
+        'Perkirakan peluangmu diterima di PTN impian dengan kalkulator prediksi dari Gradient. Masukkan nilai UTBK-mu dan dapatkan estimasi peluang berdasarkan data passing grade sebelumnya.';
+
+    return {
+        props: {
+            title: META_TITLE,
+            description: META_DESCRIPTION,
+            canonical: `https://gradient.academy/utbk/prediksi-ptn`,
+            openGraph: {
+                type: 'website',
+                title: META_TITLE,
+                description: META_DESCRIPTION,
+                url: `https://gradient.academy/utbk/prediksi-ptn`,
+                images: [
+                    {
+                        url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
+                        width: 48,
+                        height: 48,
+                        alt: 'Gradient UTBK'
+                    }
+                ]
+            }
+        },
+        revalidate: 60
+    };
+};
