@@ -16,7 +16,7 @@ import {
     useEditor,
     EditorConsumer
 } from '@tiptap/react';
-// import StarterKit from '@tiptap/starter-kit';
+import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import { MathDisplay, MathInline } from 'komunitas/mathPlugin';
 import { Markdown } from 'tiptap-markdown';
@@ -71,7 +71,7 @@ const KomunitasForm = ({
 
     const editor = useEditor({
         extensions: [
-            // StarterKit,
+            StarterKit,
             Markdown,
             tiptapPlaceholderPlugin,
 
