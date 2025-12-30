@@ -3,7 +3,7 @@ import { FaStar } from 'react-icons/fa';
 import { BsTrash3Fill } from 'react-icons/bs';
 import Select from 'commons/components/elements/Form/select';
 import { Formik, FormikHelpers } from 'formik';
-import { Dispatch, SetStateAction, useEffect, useMemo } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 import { useOptionLoader } from 'authentication/hooks/useOptionLoader';
 import Button from 'commons/components/elements/Button';
 import Spinner from 'commons/components/elements/Spinner';
@@ -36,25 +36,10 @@ function isTargetsChanged(oldTargets: Target[], newTargets: Target[]) {
         return true;
     }
 
-    for (let i = 0; i < oldTargets.length; i++) {
-        const oldTarget = oldTargets[i];
-        const newTarget = newTargets[i];
+    const oldTargetsStr = JSON.stringify(oldTargets).replace(/\s/g, '');
+    const newTargetsStr = JSON.stringify(newTargets).replace(/\s/g, '');
 
-        const oldTargetInstitutionId = oldTarget.institution.split(':')[0];
-        const newTargetInstitutionId = newTarget.institution.split(':')[0];
-
-        const oldTargetMajorId = oldTarget.major.split(':')[0];
-        const newTargetMajorId = newTarget.major.split(':')[0];
-
-        if (
-            oldTargetInstitutionId !== newTargetInstitutionId ||
-            oldTargetMajorId !== newTargetMajorId
-        ) {
-            return true;
-        }
-    }
-
-    return false;
+    return oldTargetsStr !== newTargetsStr;
 }
 
 function SetTargetForm({
@@ -66,23 +51,14 @@ function SetTargetForm({
     const [submitTargetInstitutions, { isLoading }] =
         useSetStudentTargetInstitutionsMutation();
 
-    const formikInitialValue = useMemo((): Target[] => {
-        if (targets.length > 0) {
-            return targets.map((target) => ({
-                id: uuidv4(),
-                institution: `${target.id}:${target.name}`,
-                major: `${target.major.id}:${target.major.name}`
-            }));
-        }
-
-        return [
-            {
-                id: uuidv4(),
-                institution: '',
-                major: ''
-            }
-        ];
-    }, [targets]);
+    let formikInitialValue = [{ id: uuidv4(), institution: '', major: '' }];
+    if (formikInitialValue.length > 0) {
+        formikInitialValue = targets.map((target) => ({
+            id: `${target.id}:${target.major.id}`,
+            institution: `${target.id}:${target.name}`,
+            major: `${target.major.id}:${target.major.name}`
+        }));
+    }
 
     const {
         options: institutionOptions,
