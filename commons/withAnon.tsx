@@ -42,7 +42,7 @@ const withAnon = <P extends object>(
 
             const redirectToFirstPage = () => {
                 if (profile?.current_role === 'K12') {
-                    router.replace('/latihan');
+                    router.replace('/utbk/dashboard');
                 } else {
                     router.replace('/dashboard');
                 }
@@ -129,7 +129,9 @@ const withAnon = <P extends object>(
                             }
                         }
                     } else if (
-                        ['/', '/landing-revamp'].includes(router.pathname)
+                        ['/', '/landing-revamp', '/utbk'].includes(
+                            router.pathname
+                        )
                     ) {
                         if (!profile) {
                             return <LoadingBackdrop />;
