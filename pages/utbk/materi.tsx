@@ -59,7 +59,7 @@ const MateriPage = (): JSX.Element => {
                     </p>
 
                     <div className="bg-[#282B3C] p-4 rounded-2xl mt-6">
-                        <h2 className="text-white font-semibold mb-4">
+                        <h2 className="text-white font-semibold mb-4 text-center">
                             Yang akan kamu dapatkan
                         </h2>
 
