@@ -1,7 +1,28 @@
+import { useAuth } from 'authentication/contexts/AuthProvider';
 import LearnLayout from 'commons/learnLayout';
+import Layout from 'commons/utbkLayout';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 const MateriPage = (): JSX.Element => {
+    const router = useRouter();
+    const { isLoadingProfile, isAuthenticated } = useAuth();
+
+    // it's necessary to prevent glitch
+    // proper loading state will be addressed later
+    if (isLoadingProfile === undefined || isLoadingProfile) {
+        return <></>;
+    }
+
+    if (!isAuthenticated) {
+        router.replace('/utbk');
+        return (
+            <Layout>
+                <div className="w-screen h-screen"></div>
+            </Layout>
+        );
+    }
+
     return (
         <LearnLayout showSidebar fullHeightSidebar className="relative">
             <div className="relative w-full h-[calc(100vh-128px)]">
