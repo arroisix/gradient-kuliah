@@ -9,4 +9,5 @@ interface PropsWithClassName {
 interface Option {
     value: string;
     label: string;
+    passing_grade?: number;
 }
