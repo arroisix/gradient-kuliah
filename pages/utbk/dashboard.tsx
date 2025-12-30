@@ -1,21 +1,22 @@
 import { useAuth } from 'authentication/contexts/AuthProvider';
-import Button from 'commons/components/elements/Button';
-import { CDN_URL } from 'commons/constants';
+// import Button from 'commons/components/elements/Button';
+// import { CDN_URL } from 'commons/constants';
 import LearnLayout from 'commons/learnLayout';
 import Layout from 'commons/utbkLayout';
 import withAnon from 'commons/withAnon';
-import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+// import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import K12Dashboard from 'dashboard/containers/K12Dashboard';
-import Image from 'next/image';
+import { GetStaticProps } from 'next';
+// import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 const Dashboard = (): JSX.Element => {
     const router = useRouter();
-    const { is_subscribed } = useCourseSubscription();
+    // const { is_subscribed } = useCourseSubscription();
 
-    const onClickSubscribeBanner = () => {
-        router.push('/langganan');
-    };
+    // const onClickSubscribeBanner = () => {
+    //     router.push('/langganan');
+    // };
 
     const { isLoadingProfile, isAuthenticated } = useAuth();
 
@@ -39,7 +40,7 @@ const Dashboard = (): JSX.Element => {
             <>
                 <K12Dashboard />
 
-                {is_subscribed === false && (
+                {/* {is_subscribed === false && (
                     <div className="hidden md:block fixed bottom-0 left-1/2 -translate-x-1/2 w-[60%] lg:w-fit z-40 md:translate-x-[calc(-50%+125px)]">
                         <div className="relative rounded-t-2xl p-6 flex flex-row items-center gap-6 bg-[#5F2BCE] overflow-hidden">
                             <div className="flex flex-col gap-2 z-10">
@@ -74,10 +75,39 @@ const Dashboard = (): JSX.Element => {
                             </div>
                         </div>
                     </div>
-                )}
+                )} */}
             </>
         </LearnLayout>
     );
 };
 
 export default withAnon(Dashboard);
+
+export const getStaticProps: GetStaticProps = () => {
+    const META_TITLE = 'Materi UTBK dan Tryout Gratis UTBK 2026';
+    const META_DESCRIPTION =
+        'Persiapkan dirimu menghadapi UTBK 2026 dengan tryout UTBK gratis dari Gradient. Dapatkan pengalaman ujian sesungguhnya dan analisis hasil untuk meningkatkan performa belajarmu.';
+
+    return {
+        props: {
+            title: META_TITLE,
+            description: META_DESCRIPTION,
+            canonical: `https://gradient.academy/utbk/dashboard`,
+            openGraph: {
+                type: 'website',
+                title: META_TITLE,
+                description: META_DESCRIPTION,
+                url: `https://gradient.academy/utbk/dashboard`,
+                images: [
+                    {
+                        url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
+                        width: 48,
+                        height: 48,
+                        alt: 'Gradient UTBK'
+                    }
+                ]
+            }
+        },
+        revalidate: 60
+    };
+};
