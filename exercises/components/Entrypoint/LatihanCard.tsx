@@ -168,25 +168,26 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
     const renderBadges = (): JSX.Element | null => {
         return (
             <div className="h-full">
-                {exercise.university_name && exercise.tryout_type !== 'UTBK' && (
-                    <div className="flex items-center gap-1 flex-wrap">
-                        <UniversityIcon
-                            color={exercise.university_color}
-                            size={14}
-                        />
-                        <span
-                            className={cn('text-xs font-medium')}
-                            style={
-                                exercise.university_color
-                                    ? {
-                                          color: exercise.university_color
-                                      }
-                                    : undefined
-                            }>
-                            {exercise.university_name}
-                        </span>
-                    </div>
-                )}
+                {exercise.university_name &&
+                    exercise.tryout_type !== 'UTBK' && (
+                        <div className="flex items-center gap-1 flex-wrap">
+                            <UniversityIcon
+                                color={exercise.university_color}
+                                size={14}
+                            />
+                            <span
+                                className={cn('text-xs font-medium')}
+                                style={
+                                    exercise.university_color
+                                        ? {
+                                              color: exercise.university_color
+                                          }
+                                        : undefined
+                                }>
+                                {exercise.university_name}
+                            </span>
+                        </div>
+                    )}
                 <h3 className="text-lg font-semibold text-white line-clamp-2">
                     {exercise.title}
                 </h3>
