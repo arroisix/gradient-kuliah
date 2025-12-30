@@ -2,8 +2,8 @@ import { useGetPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
 import { PacketCard } from './SubscribePacket';
 import { FaChevronLeft } from 'react-icons/fa';
 import { useRouter } from 'next/router';
-import { Langganan } from 'pages/utbk';
 import { useAuth } from 'authentication/contexts/AuthProvider';
+import Langganan from 'landing/components/utbk/Langganan';
 
 const PilihPaket = (): JSX.Element => {
     const router = useRouter();

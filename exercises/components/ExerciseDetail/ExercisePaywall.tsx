@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { useGetPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
 import ExerciseDetailHeader from '../Header/ExerciseDetailHeader';
 import { useAuth } from 'authentication/contexts/AuthProvider';
-import { Langganan } from 'pages/utbk';
+import Langganan from 'landing/components/utbk/Langganan';
 
 const ExercisePaywall = ({ isFree }: { isFree: boolean }) => {
     const router = useRouter();
