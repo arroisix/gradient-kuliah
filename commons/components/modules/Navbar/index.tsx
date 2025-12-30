@@ -29,8 +29,6 @@ import KelasIcon from '../../elements/Icons/Kelas';
 import BookStackIcon from '../../elements/Icons/BookStack';
 import BookStackIconFill from '../../elements/Icons/BookStackFill';
 import KelasIconFill from '../../elements/Icons/KelasFill';
-import { TargetKampusIcon } from 'commons/components/elements/Icons/TargetKampusIcon';
-import GraduationCapIcon from 'commons/components/elements/Icons/GraduationCap';
 
 const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
     {
@@ -60,23 +58,16 @@ const K12_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
     {
         name: 'Class',
         title: 'Materi',
-        url: '/utbk/materi',
+        url: '/materi',
         IconActive: KelasIconFill,
         IconUnactive: KelasIcon
     },
     {
         name: 'Try Out',
         title: 'Try Out',
-        url: '/utbk/try-out',
+        url: '/latihan',
         IconActive: PencilOnLineIconFill,
         IconUnactive: PencilOnLineIcon
-    },
-    {
-        name: 'Prediksi PTN',
-        title: 'Prediksi PTN',
-        url: '/utbk/prediksi-ptn',
-        IconActive: () => <TargetKampusIcon className="fill-white h-5 w-5" />,
-        IconUnactive: () => <GraduationCapIcon size={20} />
     }
 ];
 
@@ -221,20 +212,6 @@ const Navbar = ({
                                     key={K12_NAVBAR_BUTTONS[1].name}
                                     {...K12_NAVBAR_BUTTONS[1]}
                                 />
-                                <NavigationButton
-                                    key={K12_NAVBAR_BUTTONS[2].name}
-                                    {...K12_NAVBAR_BUTTONS[2]}
-                                />
-                                {configData?.configs
-                                    .is_copilot_config_enabled && (
-                                    <NavigationButton
-                                        name="Copilot AI"
-                                        title="Copilot AI"
-                                        url="/copilot"
-                                        IconActive={CopilotIconFill}
-                                        IconUnactive={CopilotIconLine}
-                                    />
-                                )}
                             </>
                         ) : (
                             <>

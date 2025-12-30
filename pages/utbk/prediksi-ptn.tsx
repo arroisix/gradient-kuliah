@@ -20,10 +20,6 @@ import ztable from 'ztable';
 import { cn } from 'commons/utils';
 import html2canvas from 'html2canvas-pro';
 import { GetStaticProps } from 'next';
-import { useAuth } from 'authentication/contexts/AuthProvider';
-import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
-import LearnLayout from 'commons/learnLayout';
-import Breadcrumb from 'commons/components/modules/Breadcrumb';
 
 interface PrediksiPTNForm {
     // both types below will have format like this: "major_id:major_name"
@@ -150,7 +146,7 @@ function PeluangCard({
     return (
         <div
             ref={ref}
-            className="rounded-2xl modal-box bg-[#191920] p-6 w-full max-w-[343px] @3xl:max-w-[400px] mx-auto relative overflow-hidden">
+            className="rounded-2xl modal-box bg-[#191920] p-6 w-full max-w-[343px] md:max-w-[400px] mx-auto relative overflow-hidden">
             {probability >= 84 && (
                 <img
                     src={`${CDN_URL}/assets/gradient_high_score.png`}
@@ -187,19 +183,19 @@ function PeluangCard({
                     Gradient
                 </span>
 
-                <h2 className="text-white font-semibold text-xl @3xl:text-2xl mb-1 @3xl:mb-2">
+                <h2 className="text-white font-semibold text-xl md:text-2xl mb-1 md:mb-2">
                     {major}
                 </h2>
 
-                <p className="text-white text-sm flex items-center gap-1 @3xl:gap-2">
-                    <GraduateIcon className="fill-white w-5 h-5 @3xl:w-6 @3xl:h-6" />
+                <p className="text-white text-sm flex items-center gap-1 md:gap-2">
+                    <GraduateIcon className="fill-white w-5 h-5 md:w-6 md:h-6" />
                     {institution}
                 </p>
 
                 <div className="bg-[#101010] rounded-2xl py-4 px-6 mt-6">
                     <span
                         className={cn(
-                            'font-bold text-[32px] @3xl:text-[40px] mb-1',
+                            'font-bold text-[32px] md:text-[40px] mb-1',
                             probability >= 84
                                 ? 'text-[#03AC5C]'
                                 : probability >= 69
@@ -219,7 +215,7 @@ function PeluangCard({
 
                     <div className="w-full h-[1px] bg-[#222222] mt-6 mb-4"></div>
 
-                    <div className="space-y-3 @3xl:space-y-0 @3xl:grid @3xl:grid-cols-2">
+                    <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-2">
                         <div className="flex flex-col gap-1">
                             <span className="text-[#DEDEDE] text-sm">
                                 Skor kamu
@@ -264,7 +260,7 @@ function PeluangCard({
     );
 }
 
-export const PrediksiPTN = (): JSX.Element => {
+const PrediksiPTNPage = (): JSX.Element => {
     const peluangCardModalRef = useRef<HTMLDialogElement | null>(null);
     const [predictionResult, setPredictionResult] = useState({
         institution: '',
@@ -339,270 +335,251 @@ export const PrediksiPTN = (): JSX.Element => {
     };
 
     return (
-        <>
-            <h1 className="text-white font-bold text-2xl mb-2.5 text-center @3xl:text-start">
-                Kalkukator Prediksi PTN
-            </h1>
+        <Layout>
+            <div className="max-w-screen-lg mx-auto pt-32 px-4">
+                <h1 className="text-white font-bold text-2xl mb-2.5 text-center md:text-start">
+                    Kalkukator Prediksi PTN
+                </h1>
 
-            <p className="text-[#DEDEDE] text-sm mb-6 text-center @3xl:text-start">
-                Bantu memahami peluang masuk PTN berdasarkan skor dan pilihan
-                kampusmu.
-            </p>
+                <p className="text-[#DEDEDE] text-sm mb-6 text-center md:text-start">
+                    Bantu memahami peluang masuk PTN berdasarkan skor dan
+                    pilihan kampusmu.
+                </p>
 
-            <Formik
-                initialValues={formikInitialValue}
-                onSubmit={handleOnSubmit}>
-                {({
-                    values: { institution, major, score },
-                    handleSubmit,
-                    setValues,
-                    setFieldValue
-                }) => (
-                    <form
-                        onSubmit={handleSubmit}
-                        action=""
-                        autoComplete="off"
-                        className="space-y-6 @3xl:space-y-0 @3xl:grid @3xl:grid-cols-6 @3xl:gap-8">
-                        <div className="col-span-2 bg-[#101010] rounded-2xl p-6 space-y-8 h-fit">
-                            <h2 className="font-semibold text-white text-xl flex items-center gap-3">
-                                <TargetKampusIcon className="fill-white w-6 h-6" />
-                                Target Kampus
-                            </h2>
+                <Formik
+                    initialValues={formikInitialValue}
+                    onSubmit={handleOnSubmit}>
+                    {({
+                        values: { institution, major, score },
+                        handleSubmit,
+                        setValues,
+                        setFieldValue
+                    }) => (
+                        <form
+                            onSubmit={handleSubmit}
+                            action=""
+                            autoComplete="off"
+                            className="space-y-6 md:space-y-0 md:grid md:grid-cols-6 md:gap-8">
+                            <div className="col-span-2 bg-[#101010] rounded-2xl p-6 space-y-8 h-fit">
+                                <h2 className="font-semibold text-white text-xl flex items-center gap-3">
+                                    <TargetKampusIcon className="fill-white w-6 h-6" />
+                                    Target Kampus
+                                </h2>
 
-                            <div className="space-y-4">
-                                <Select
-                                    isAsync
-                                    isSearchTarget
-                                    isClearable={false}
-                                    noOptionsMessage="Ketik nama universitas"
-                                    onChange={handleOnChange(
-                                        'institution',
-                                        setFieldValue
-                                    )}
-                                    initialValue={institution}
-                                    option={institutionOptions}
-                                    loadOption={loadInstitutionOption(
-                                        institution.split(':')[0],
-                                        major.split(':')[0]
-                                    )}
-                                    name="institution"
-                                    placeholder="Pilih Kampus"
-                                />
-                                <Select
-                                    isAsync
-                                    isSearchTarget
-                                    isClearable={false}
-                                    noOptionsMessage="Ketik jurusan yang dipilih"
-                                    onChange={(res) => {
-                                        handleOnChange(
-                                            'major',
+                                <div className="space-y-4">
+                                    <Select
+                                        isAsync
+                                        isSearchTarget
+                                        isClearable={false}
+                                        noOptionsMessage="Ketik nama universitas"
+                                        onChange={handleOnChange(
+                                            'institution',
                                             setFieldValue
-                                        )(res);
+                                        )}
+                                        initialValue={institution}
+                                        option={institutionOptions}
+                                        loadOption={loadInstitutionOption(
+                                            institution.split(':')[0],
+                                            major.split(':')[0]
+                                        )}
+                                        name="institution"
+                                        placeholder="Pilih Kampus"
+                                    />
+                                    <Select
+                                        isAsync
+                                        isSearchTarget
+                                        isClearable={false}
+                                        noOptionsMessage="Ketik jurusan yang dipilih"
+                                        onChange={(res) => {
+                                            handleOnChange(
+                                                'major',
+                                                setFieldValue
+                                            )(res);
 
-                                        setFieldValue(
-                                            'passing_grade',
-                                            majorOptions.find(
-                                                (option) => option.value === res
-                                            )?.passing_grade || 0
-                                        );
-                                    }}
-                                    initialValue={major}
-                                    option={majorOptions}
-                                    loadOption={loadMajorOption(
-                                        institution.split(':')[0],
-                                        major.split(':')[0]
-                                    )}
-                                    name="major"
-                                    placeholder="Pilih Jurusan"
-                                />
+                                            setFieldValue(
+                                                'passing_grade',
+                                                majorOptions.find(
+                                                    (option) =>
+                                                        option.value === res
+                                                )?.passing_grade || 0
+                                            );
+                                        }}
+                                        initialValue={major}
+                                        option={majorOptions}
+                                        loadOption={loadMajorOption(
+                                            institution.split(':')[0],
+                                            major.split(':')[0]
+                                        )}
+                                        name="major"
+                                        placeholder="Pilih Jurusan"
+                                    />
+                                </div>
+
+                                <Link
+                                    href="/utbk/try-out"
+                                    className="bg-[#1E1930] border border-[#36236A] flex justify-center items-center gap-6 p-4 rounded-2xl">
+                                    <span className="flex items-center gap-3 text-sm text-white">
+                                        <PencilIcon className="w-6 h-6 shrink-0" />{' '}
+                                        Belum pernah try out? Coba di Gradient
+                                    </span>
+                                    <TiArrowRight className="fill-white w-4 h-4 shrink-0" />
+                                </Link>
                             </div>
 
-                            <Link
-                                href="/utbk/try-out"
-                                className="bg-[#1E1930] border border-[#36236A] flex justify-center items-center gap-6 p-4 rounded-2xl">
-                                <span className="flex items-center gap-3 text-sm text-white">
-                                    <PencilIcon className="w-6 h-6 shrink-0" />{' '}
-                                    Belum pernah try out? Coba di Gradient
-                                </span>
-                                <TiArrowRight className="fill-white w-4 h-4 shrink-0" />
-                            </Link>
-                        </div>
+                            <div
+                                className={`${
+                                    institution === '' || major === ''
+                                        ? 'opacity-50 pointer-events-none'
+                                        : ''
+                                } col-span-4 bg-[#101010] rounded-2xl p-6 space-y-8`}>
+                                <div className="flex justify-between items-center">
+                                    <div className="space-y-1">
+                                        <h2 className="text-white font-semibold text-xl">
+                                            Input Nilai Subtest
+                                        </h2>
 
-                        <div
-                            className={`${
-                                institution === '' || major === ''
-                                    ? 'opacity-50 pointer-events-none'
-                                    : ''
-                            } col-span-4 bg-[#101010] rounded-2xl p-6 space-y-8`}>
-                            <div className="flex justify-between items-center">
-                                <div className="space-y-1">
-                                    <h2 className="text-white font-semibold text-xl">
-                                        Input Nilai Subtest
-                                    </h2>
+                                        <p className="text-[#9CA3AF] text-sm mb-6">
+                                            Gunakan nilai try out terakhirmu
+                                            atau perkiraan kemampuan saat ini.
+                                        </p>
+                                    </div>
 
-                                    <p className="text-[#9CA3AF] text-sm mb-6">
-                                        Gunakan nilai try out terakhirmu atau
-                                        perkiraan kemampuan saat ini.
+                                    <Button
+                                        type="button"
+                                        onClick={() =>
+                                            setValues({
+                                                institution,
+                                                major,
+                                                passing_grade: 0,
+                                                score: {
+                                                    literasi_bahasa_indonesia:
+                                                        '',
+                                                    literasi_bahasa_inggris: '',
+                                                    pemahaman_bacaan_dan_menulis:
+                                                        '',
+                                                    pemahaman_dan_penalaran_umum:
+                                                        '',
+                                                    penalaran_kualitatif: '',
+                                                    penalaran_matematis: '',
+                                                    penalaran_umum: ''
+                                                }
+                                            })
+                                        }
+                                        variant="tertiary"
+                                        className={
+                                            score.literasi_bahasa_indonesia !==
+                                                '' ||
+                                            score.literasi_bahasa_inggris !==
+                                                '' ||
+                                            score.pemahaman_bacaan_dan_menulis !==
+                                                '' ||
+                                            score.pemahaman_dan_penalaran_umum !==
+                                                '' ||
+                                            score.penalaran_kualitatif !== '' ||
+                                            score.penalaran_matematis !== '' ||
+                                            score.penalaran_umum !== ''
+                                                ? ''
+                                                : 'pointer-events-none opacity-50'
+                                        }>
+                                        Reset
+                                    </Button>
+                                </div>
+
+                                <div className="bg-[#252246] flex items-center gap-3 p-3 rounded-lg">
+                                    <CgInfo className="text-[#B6A6F3] w-5 h-5 shrink-0" />
+                                    <p className="text-white text-xs leading-[160%]">
+                                        Estimasi hasil prediksi bersifat
+                                        referensi dan tidak mencerminkan bobot
+                                        subtes resmi tiap universitas. Gunakan
+                                        sebagai referensi.
                                     </p>
                                 </div>
 
+                                <div className="w-full max-w-[240px] mx-auto space-y-2.5 md:space-y-0 md:max-w-full md:grid md:grid-cols-3 md:gap-4">
+                                    <MateriCard
+                                        label="Penalaran Kualitatif"
+                                        name="penalaran_kualitatif"
+                                        icon="penalaran-kualitatif.svg"
+                                        value={score.penalaran_kualitatif}
+                                        setFieldValue={setFieldValue}
+                                    />
+                                    <MateriCard
+                                        label="Pemahaman dan Penalaran Umum"
+                                        name="pemahaman_dan_penalaran_umum"
+                                        icon="pemahaman-penalaran-umum.svg"
+                                        value={
+                                            score.pemahaman_dan_penalaran_umum
+                                        }
+                                        setFieldValue={setFieldValue}
+                                    />
+                                    <MateriCard
+                                        label="Literasi Bahasa Indonesia"
+                                        name="literasi_bahasa_indonesia"
+                                        icon="literasi-bahasa-indonesia.svg"
+                                        value={score.literasi_bahasa_indonesia}
+                                        setFieldValue={setFieldValue}
+                                    />
+                                    <MateriCard
+                                        label="Penalaran Matematis"
+                                        name="penalaran_matematis"
+                                        icon="penalaran-matematis.svg"
+                                        value={score.penalaran_matematis}
+                                        setFieldValue={setFieldValue}
+                                    />
+                                    <MateriCard
+                                        label="Pemahaman Bacaan dan Menulis"
+                                        name="pemahaman_bacaan_dan_menulis"
+                                        icon="pemahaman-bacaan.svg"
+                                        value={
+                                            score.pemahaman_bacaan_dan_menulis
+                                        }
+                                        setFieldValue={setFieldValue}
+                                    />
+                                    <MateriCard
+                                        label="Literasi Bahasa Inggris"
+                                        name="literasi_bahasa_inggris"
+                                        icon="literasi-bahasa-inggris.svg"
+                                        value={score.literasi_bahasa_inggris}
+                                        setFieldValue={setFieldValue}
+                                    />
+                                    <MateriCard
+                                        label="Penalaran Umum"
+                                        name="penalaran_umum"
+                                        icon="penalaran-umum.svg"
+                                        value={score.penalaran_umum}
+                                        setFieldValue={setFieldValue}
+                                    />
+                                </div>
+
                                 <Button
-                                    type="button"
-                                    onClick={() =>
-                                        setValues({
-                                            institution,
-                                            major,
-                                            passing_grade: 0,
-                                            score: {
-                                                literasi_bahasa_indonesia: '',
-                                                literasi_bahasa_inggris: '',
-                                                pemahaman_bacaan_dan_menulis:
-                                                    '',
-                                                pemahaman_dan_penalaran_umum:
-                                                    '',
-                                                penalaran_kualitatif: '',
-                                                penalaran_matematis: '',
-                                                penalaran_umum: ''
-                                            }
-                                        })
+                                    disabled={
+                                        !score.literasi_bahasa_indonesia ||
+                                        !score.literasi_bahasa_inggris ||
+                                        !score.pemahaman_bacaan_dan_menulis ||
+                                        !score.pemahaman_dan_penalaran_umum ||
+                                        !score.penalaran_kualitatif ||
+                                        !score.penalaran_matematis ||
+                                        !score.penalaran_umum
                                     }
-                                    variant="tertiary"
-                                    className={
-                                        score.literasi_bahasa_indonesia !==
-                                            '' ||
-                                        score.literasi_bahasa_inggris !== '' ||
-                                        score.pemahaman_bacaan_dan_menulis !==
-                                            '' ||
-                                        score.pemahaman_dan_penalaran_umum !==
-                                            '' ||
-                                        score.penalaran_kualitatif !== '' ||
-                                        score.penalaran_matematis !== '' ||
-                                        score.penalaran_umum !== ''
-                                            ? ''
-                                            : 'pointer-events-none opacity-50'
-                                    }>
-                                    Reset
+                                    variant="primary"
+                                    className="w-full max-w-[240px] md:max-w-[328px] block mx-auto py-2 mt-8"
+                                    type="submit">
+                                    Lihat Peluang
                                 </Button>
                             </div>
+                        </form>
+                    )}
+                </Formik>
 
-                            <div className="bg-[#252246] flex items-center gap-3 p-3 rounded-lg">
-                                <CgInfo className="text-[#B6A6F3] w-5 h-5 shrink-0" />
-                                <p className="text-white text-xs leading-[160%]">
-                                    Estimasi hasil prediksi bersifat referensi
-                                    dan tidak mencerminkan bobot subtes resmi
-                                    tiap universitas. Gunakan sebagai referensi.
-                                </p>
-                            </div>
-
-                            <div className="w-full max-w-[240px] mx-auto space-y-2.5 @3xl:space-y-0 @3xl:max-w-full @3xl:grid @3xl:grid-cols-3 @3xl:gap-4">
-                                <MateriCard
-                                    label="Penalaran Kualitatif"
-                                    name="penalaran_kualitatif"
-                                    icon="penalaran-kualitatif.svg"
-                                    value={score.penalaran_kualitatif}
-                                    setFieldValue={setFieldValue}
-                                />
-                                <MateriCard
-                                    label="Pemahaman dan Penalaran Umum"
-                                    name="pemahaman_dan_penalaran_umum"
-                                    icon="pemahaman-penalaran-umum.svg"
-                                    value={score.pemahaman_dan_penalaran_umum}
-                                    setFieldValue={setFieldValue}
-                                />
-                                <MateriCard
-                                    label="Literasi Bahasa Indonesia"
-                                    name="literasi_bahasa_indonesia"
-                                    icon="literasi-bahasa-indonesia.svg"
-                                    value={score.literasi_bahasa_indonesia}
-                                    setFieldValue={setFieldValue}
-                                />
-                                <MateriCard
-                                    label="Penalaran Matematis"
-                                    name="penalaran_matematis"
-                                    icon="penalaran-matematis.svg"
-                                    value={score.penalaran_matematis}
-                                    setFieldValue={setFieldValue}
-                                />
-                                <MateriCard
-                                    label="Pemahaman Bacaan dan Menulis"
-                                    name="pemahaman_bacaan_dan_menulis"
-                                    icon="pemahaman-bacaan.svg"
-                                    value={score.pemahaman_bacaan_dan_menulis}
-                                    setFieldValue={setFieldValue}
-                                />
-                                <MateriCard
-                                    label="Literasi Bahasa Inggris"
-                                    name="literasi_bahasa_inggris"
-                                    icon="literasi-bahasa-inggris.svg"
-                                    value={score.literasi_bahasa_inggris}
-                                    setFieldValue={setFieldValue}
-                                />
-                                <MateriCard
-                                    label="Penalaran Umum"
-                                    name="penalaran_umum"
-                                    icon="penalaran-umum.svg"
-                                    value={score.penalaran_umum}
-                                    setFieldValue={setFieldValue}
-                                />
-                            </div>
-
-                            <Button
-                                disabled={
-                                    !score.literasi_bahasa_indonesia ||
-                                    !score.literasi_bahasa_inggris ||
-                                    !score.pemahaman_bacaan_dan_menulis ||
-                                    !score.pemahaman_dan_penalaran_umum ||
-                                    !score.penalaran_kualitatif ||
-                                    !score.penalaran_matematis ||
-                                    !score.penalaran_umum
-                                }
-                                variant="primary"
-                                className="w-full max-w-[240px] @3xl:max-w-[328px] block mx-auto py-2 mt-8"
-                                type="submit">
-                                Lihat Peluang
-                            </Button>
-                        </div>
-                    </form>
-                )}
-            </Formik>
-
-            <dialog
-                ref={peluangCardModalRef}
-                id="peluang_card_modal"
-                className="modal">
-                <PeluangCard {...predictionResult} />
-            </dialog>
-        </>
+                <dialog
+                    ref={peluangCardModalRef}
+                    id="peluang_card_modal"
+                    className="modal">
+                    <PeluangCard {...predictionResult} />
+                </dialog>
+            </div>
+        </Layout>
     );
-};
-
-const PrediksiPTNPage = (): JSX.Element => {
-    const { profile, isAuthenticated, isLoadingProfile } = useAuth();
-
-    if (isLoadingProfile) {
-        return <LoadingBackdrop />;
-    }
-
-    if (isAuthenticated && profile?.current_role === 'K12') {
-        return (
-            <LearnLayout showSidebar fullHeightSidebar>
-                <>
-                    <Breadcrumb className="w-full pb-5" />
-                    <div className="relative @container">
-                        <PrediksiPTN />
-                    </div>
-                </>
-            </LearnLayout>
-        );
-    } else {
-        return (
-            <Layout>
-                <div className="max-w-screen-lg mx-auto pt-32 px-4 @container">
-                    <PrediksiPTN />
-                </div>
-            </Layout>
-        );
-    }
 };
 
 PrediksiPTNPage.displayName = 'Prediksi PTN';
