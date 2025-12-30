@@ -9,6 +9,8 @@ import KelasIcon from '../../elements/Icons/Kelas';
 import PencilOnLineIcon from '../../elements/Icons/PencilLine';
 import HomeIcon from '../../elements/Icons/Home';
 import { useAuth } from 'authentication/contexts/AuthProvider';
+import GraduationCapIcon from 'commons/components/elements/Icons/GraduationCap';
+import { TargetKampusIcon } from 'commons/components/elements/Icons/TargetKampusIcon';
 
 const Sidebar = ({
     fullHeight,
@@ -93,6 +95,30 @@ const Sidebar = ({
                             </span>
                         </Link>
                     )}
+
+                    <Link
+                        href={'/utbk/prediksi-ptn'}
+                        onClick={() => {
+                            tracker?.genericTrack(
+                                `Click Prediksi PTN ${
+                                    !fullHeight ? 'Course ' : ''
+                                }Navigation`
+                            );
+                        }}>
+                        <span
+                            className={`flex items-center gap-3 cursor-pointer ${
+                                pathname.includes('/prediksi-ptn')
+                                    ? 'text-white'
+                                    : 'text-[#666666]'
+                            } font-body text-sm hover:text-[#999999]`}>
+                            {pathname.includes('/prediksi-ptn') ? (
+                                <TargetKampusIcon className="fill-white h-5 w-5" />
+                            ) : (
+                                <GraduationCapIcon size={20} />
+                            )}
+                            Prediksi PTN{' '}
+                        </span>
+                    </Link>
                 </>
             );
         } else {

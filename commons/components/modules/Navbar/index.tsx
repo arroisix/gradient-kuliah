@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FaInstagram } from 'react-icons/fa';
 import { FiMenu } from 'react-icons/fi';
 import useWindowSize from 'commons/hooks/useWindowSize';
@@ -29,6 +29,8 @@ import KelasIcon from '../../elements/Icons/Kelas';
 import BookStackIcon from '../../elements/Icons/BookStack';
 import BookStackIconFill from '../../elements/Icons/BookStackFill';
 import KelasIconFill from '../../elements/Icons/KelasFill';
+import { TargetKampusIcon } from 'commons/components/elements/Icons/TargetKampusIcon';
+import GraduationCapIcon from 'commons/components/elements/Icons/GraduationCap';
 
 const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
     {
@@ -68,6 +70,13 @@ const K12_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
         url: '/utbk/try-out',
         IconActive: PencilOnLineIconFill,
         IconUnactive: PencilOnLineIcon
+    },
+    {
+        name: 'Prediksi PTN',
+        title: 'Prediksi PTN',
+        url: '/utbk/prediksi-ptn',
+        IconActive: () => <TargetKampusIcon className="fill-white h-5 w-5" />,
+        IconUnactive: () => <GraduationCapIcon size={20} />
     }
 ];
 
@@ -106,6 +115,11 @@ const Navbar = ({
     };
     const { is_subscribed: isSubscribed } = useCourseSubscription();
     const isDashboard = router.pathname.startsWith('/dashboard');
+
+    const currentRole = useMemo(
+        () => profile?.current_role,
+        [profile?.current_role]
+    );
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll, { passive: true });
@@ -192,7 +206,7 @@ const Navbar = ({
                     <Link
                         href={
                             isAuthenticated
-                                ? profile?.current_role === 'K12'
+                                ? currentRole === 'K12'
                                     ? '/utbk/dashboard'
                                     : '/dashboard'
                                 : '/'
@@ -219,6 +233,20 @@ const Navbar = ({
                                     key={K12_NAVBAR_BUTTONS[1].name}
                                     {...K12_NAVBAR_BUTTONS[1]}
                                 />
+                                <NavigationButton
+                                    key={K12_NAVBAR_BUTTONS[2].name}
+                                    {...K12_NAVBAR_BUTTONS[2]}
+                                />
+                                {configData?.configs
+                                    .is_copilot_config_enabled && (
+                                    <NavigationButton
+                                        name="Copilot AI"
+                                        title="Copilot AI"
+                                        url="/copilot"
+                                        IconActive={CopilotIconFill}
+                                        IconUnactive={CopilotIconLine}
+                                    />
+                                )}
                             </>
                         ) : (
                             <>

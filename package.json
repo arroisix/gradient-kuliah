@@ -137,6 +137,7 @@
         "ztable": "^1.0.7"
     },
     "devDependencies": {
+        "@tailwindcss/container-queries": "^0.1.1",
         "@types/crypto-js": "^4.2.2",
         "@types/lodash.groupby": "^4.6.9",
         "@types/marked": "^4.0.8",
