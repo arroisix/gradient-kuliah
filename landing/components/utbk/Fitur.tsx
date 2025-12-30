@@ -57,7 +57,7 @@ export default function Fitur({ className }: FiturProps): JSX.Element {
                         </p>
 
                         <Link
-                            href="/materi"
+                            href="/utbk/materi"
                             className="mb-2 text-[#B6A6F3] font-semibold text-sm leading-[125%] flex gap-1 items-center h-[34px]">
                             Lihat Materi
                             <FaChevronRight height={16} width={16} />
