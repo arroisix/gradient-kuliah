@@ -15,7 +15,7 @@ function SetTargetDrawerButton() {
         <Button
             size={width < 768 ? 'extraSmall' : 'small'}
             variant="custom"
-            className="bg-[#333333] flex items-center gap-1.5 text-nowrap !py-2 !px-4"
+            className="bg-[#333333] flex items-center gap-1.5 whitespace-nowrap !py-2 !px-4"
             onClick={handleClickButton}>
             <IoMdSettings className="shrink-0" />
             <span className="font-semibold text-sm">Atur Target</span>
