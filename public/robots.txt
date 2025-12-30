@@ -3,10 +3,10 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://gradient.academy
+Host: https://dev.gradient.academy
 
 # Sitemaps
-Sitemap: https://gradient.academy/sitemap.xml
-Sitemap: https://gradient.academy/sitemaps/courses-sitemap.xml
-Sitemap: https://gradient.academy/sitemaps/astronotes-sitemap.xml
-Sitemap: https://gradient.academy/sitemaps/videos-sitemap.xml
+Sitemap: https://dev.gradient.academy/sitemap.xml
+Sitemap: https://dev.gradient.academy/sitemaps/courses-sitemap.xml
+Sitemap: https://dev.gradient.academy/sitemaps/astronotes-sitemap.xml
+Sitemap: https://dev.gradient.academy/sitemaps/videos-sitemap.xml
