@@ -4,9 +4,11 @@ import { useRouter } from 'next/router';
 import { useTracker } from 'tracker/tracker';
 import { toast } from 'react-toastify';
 import { useGetExerciseDetailV2Query } from 'exercises/redux/api/exercisesApi';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 const ExerciseDetailHeader = () => {
     const router = useRouter();
+    const { profile } = useAuth();
     const tracker = useTracker();
     const { slug } = router.query;
 
@@ -43,7 +45,11 @@ const ExerciseDetailHeader = () => {
     return (
         <header className="w-full flex items-center justify-between pb-6">
             <Button
-                onClick={() => router.back()}
+                onClick={() =>
+                    profile?.current_role === 'K12'
+                        ? router.push(`/utbk/try-out`)
+                        : router.push(`/latihan`)
+                }
                 variant="secondary"
                 className="rounded-full text-center !p-0 !w-8 !h-8 flex items-center justify-center">
                 <ChevronLeft size={14} />

@@ -29,9 +29,12 @@ const K12Paywall = (): JSX.Element => {
     const { profile } = useAuth();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const isK12User = profile?.current_role === 'K12' && isAuthenticated;
-    const isAllowedPath = K12_ALLOWED_PREFIXES.some((prefix) =>
-        router.pathname.startsWith(prefix)
-    );
+    const isAllowedPath = K12_ALLOWED_PREFIXES.some((prefix) => {
+        if (router.pathname === '/latihan') {
+            return false;
+        }
+        return router.pathname.startsWith(prefix);
+    });
 
     const shouldShowPaywall = isK12User && !isAllowedPath;
 
