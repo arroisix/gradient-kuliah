@@ -11,6 +11,7 @@ import DiskusiIcon from '../../elements/Icons/Diskusi';
 import HomeIcon from '../../elements/Icons/Home';
 import CopilotIconLine from '../../../../copilot/assets/CopilotIconLine';
 import { useAuth } from 'authentication/contexts/AuthProvider';
+import GraduationCapIcon from 'commons/components/elements/Icons/GraduationCap';
 
 const DISPLAYED_ROUTES = [
     '/dashboard',
@@ -23,7 +24,8 @@ const DISPLAYED_ROUTES = [
     '/materi',
     '/utbk/dashboard',
     '/utbk/materi',
-    '/utbk/try-out'
+    '/utbk/try-out',
+    '/utbk/prediksi-ptn'
 ];
 
 const APPBAR_NAV_COLLEGE_STUDENT: AppbarNav[] = [
@@ -70,6 +72,11 @@ const APPBAR_NAV_K12: AppbarNav[] = [
         icon: <PencilOnLineIcon size={20} />,
         href: '/utbk/try-out',
         label: 'Try Out'
+    },
+    {
+        icon: <GraduationCapIcon size={20} />,
+        href: '/utbk/prediksi-ptn',
+        label: 'Prediksi PTN'
     }
 ];
 
