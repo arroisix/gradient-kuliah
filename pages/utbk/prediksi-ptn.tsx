@@ -15,11 +15,9 @@ import { GraduateIcon } from 'commons/components/elements/Icons/GraduateIcon';
 import { TargetKampusIcon } from 'commons/components/elements/Icons/TargetKampusIcon';
 import { PencilIcon } from 'commons/components/elements/Icons/PencilIcon';
 import { toast } from 'react-toastify';
-// import domtoimage from 'dom-to-image';
 import { CgInfo } from 'react-icons/cg';
 import ztable from 'ztable';
 import { cn } from 'commons/utils';
-// import { useWindowSize } from 'usehooks-ts';
 import html2canvas from 'html2canvas-pro';
 
 interface PrediksiPTNForm {
@@ -100,41 +98,12 @@ function PeluangCard({
     averageScore?: number;
 }) {
     const [isLoading, setIsLoading] = useState(false);
-    // const { width } = useWindowSize();
     const ref = useRef<HTMLDivElement>(null);
 
     const downloadAsImage = async () => {
         if (ref.current) {
             setIsLoading(true);
-
-            // const toastId = 'download_peluang_card_toast';
-            // toast.info('Sedang memproses menjadi gambar...', {
-            //     toastId,
-            //     position: 'top-center',
-            //     theme: 'colored',
-            //     hideProgressBar: true,
-            //     autoClose: false
-            // });
-
-            // const scale = 2;
-            // const cardWidth = width < 768 ? 343 : 400;
-
             try {
-                // const dataURL = await domtoimage.toPng(ref.current, {
-                //     width: cardWidth * scale,
-                //     height: (ref.current.clientHeight - 60) * scale,
-                //     style: {
-                //         transform: 'scale(' + scale + ')',
-                //         transformOrigin: 'top left'
-                //     },
-                //     filter: (node) => {
-                //         if (node instanceof HTMLButtonElement) {
-                //             return false;
-                //         }
-                //         return true;
-                //     }
-                // });
-
                 const canvas = await html2canvas(ref.current, {
                     allowTaint: true,
                     useCORS: true,
@@ -168,7 +137,6 @@ function PeluangCard({
                     })
                 );
             } finally {
-                // toast.dismiss(toastId);
                 setIsLoading(false);
             }
         }
