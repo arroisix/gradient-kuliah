@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaInstagram } from 'react-icons/fa';
 import { FiMenu } from 'react-icons/fi';
 import useWindowSize from 'commons/hooks/useWindowSize';
@@ -10,7 +10,7 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import Button from 'commons/components/elements/Button';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import MobileSidebar from '../Sidebar/mobile';
-import AuthContext from 'authentication/contexts/AuthProvider';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 import UserAvatar from './components/UserAvatar';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { cn } from 'commons/utils';
@@ -58,14 +58,14 @@ const K12_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
     {
         name: 'Class',
         title: 'Materi',
-        url: '/materi',
+        url: '/utbk/materi',
         IconActive: KelasIconFill,
         IconUnactive: KelasIcon
     },
     {
         name: 'Try Out',
         title: 'Try Out',
-        url: '/latihan',
+        url: '/utbk/try-out',
         IconActive: PencilOnLineIconFill,
         IconUnactive: PencilOnLineIcon
     }
@@ -94,7 +94,7 @@ const Navbar = ({
 
     const { isDesktopBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { profile } = useContext(AuthContext);
+    const { profile } = useAuth();
     const [openMobile, setOpenMobile] = useState(false);
     const [openSidebar, setOpenSidebar] = useState(false);
     const { height } = useWindowSize();
@@ -189,7 +189,14 @@ const Navbar = ({
                             onClick={() => setOpenSidebar(true)}
                         />
                     )}
-                    <Link href={isAuthenticated ? '/dashboard' : '/'}>
+                    <Link
+                        href={
+                            isAuthenticated
+                                ? profile?.current_role === 'K12'
+                                    ? '/utbk/dashboard'
+                                    : '/dashboard'
+                                : '/'
+                        }>
                         <span className="text-2xl font-bold cursor-pointer font-[Urbanist] lg:hidden">
                             G
                         </span>
