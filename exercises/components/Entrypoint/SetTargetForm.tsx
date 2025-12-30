@@ -1,5 +1,5 @@
-import { FaPlus } from 'react-icons/fa6';
 import { FaStar } from 'react-icons/fa';
+import { FaPlus } from 'react-icons/fa6';
 import { BsTrash3Fill } from 'react-icons/bs';
 import Select from 'commons/components/elements/Form/select';
 import { Formik, FormikHelpers } from 'formik';
@@ -299,8 +299,11 @@ function SetTargetForm({
                             }}
                             disabled={
                                 values.length === 4 ||
-                                values[values.length - 1].institution === '' ||
-                                values[values.length - 1].major === ''
+                                (values.length > 0 &&
+                                    values[values.length - 1].institution ===
+                                        '') ||
+                                (values.length > 0 &&
+                                    values[values.length - 1].major === '')
                             }
                             variant="custom"
                             type="button"
@@ -316,8 +319,10 @@ function SetTargetForm({
                         disabled={
                             isLoading ||
                             !isTargetsChanged(formikInitialValue, values) ||
-                            values[values.length - 1].institution === '' ||
-                            values[values.length - 1].major === ''
+                            (values.length > 0 &&
+                                values[values.length - 1].institution === '') ||
+                            (values.length > 0 &&
+                                values[values.length - 1].major === '')
                         }
                         variant="primary"
                         className="w-full max-w-[328px] block mx-auto py-2 mt-8"
