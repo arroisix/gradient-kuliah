@@ -29,7 +29,7 @@ const Sidebar = ({
             return (
                 <>
                     <Link
-                        href={'/dashboard'}
+                        href={'/utbk/dashboard'}
                         onClick={() => {
                             tracker?.genericTrack(
                                 `Click Home ${
@@ -39,7 +39,7 @@ const Sidebar = ({
                         }}>
                         <span
                             className={`flex gap-3 cursor-pointer ${
-                                pathname.includes('/dashboard')
+                                pathname.includes('/utbk/dashboard')
                                     ? 'text-white'
                                     : 'text-[#666666]'
                             } font-body text-sm hover:text-[#999999]`}>
@@ -49,7 +49,7 @@ const Sidebar = ({
                     </Link>
 
                     <Link
-                        href={'/materi'}
+                        href={'/utbk/materi'}
                         onClick={() => {
                             tracker?.genericTrack(
                                 `Click Class ${
@@ -59,7 +59,7 @@ const Sidebar = ({
                         }}>
                         <span
                             className={`flex items-center gap-3 cursor-pointer ${
-                                pathname.includes('/materi')
+                                pathname.includes('/utbk/materi')
                                     ? 'text-white'
                                     : 'text-[#666666]'
                             } font-body text-sm hover:text-[#999999]`}>
@@ -73,7 +73,7 @@ const Sidebar = ({
 
                     {configData?.configs.is_exercise_config_enabled && (
                         <Link
-                            href={'/latihan'}
+                            href={'/utbk/try-out'}
                             onClick={() => {
                                 tracker?.genericTrack(
                                     `Click Exercises ${
@@ -84,7 +84,7 @@ const Sidebar = ({
                             <span
                                 className={cn(
                                     'flex gap-3 cursor-pointer font-body text-sm hover:text-[#999999]',
-                                    pathname.includes('/latihan')
+                                    pathname.includes('/utbk/try-out')
                                         ? 'text-white'
                                         : 'text-[#666666]'
                                 )}>
