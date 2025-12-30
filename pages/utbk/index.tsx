@@ -16,6 +16,7 @@ import { FaChevronRight } from 'react-icons/fa';
 import { FaRegCircleCheck } from 'react-icons/fa6';
 import styles from 'styles/utbk.module.css';
 import { FAQ_DATA, MATERI } from 'landing/constants/UTBK';
+import LearnLayout from 'commons/learnLayout';
 
 function UTBKModal({
     open,
@@ -732,24 +733,40 @@ function FinalCTA({ className }: { className?: string }): JSX.Element {
 }
 
 function UTBK(): JSX.Element {
+    const { isLoadingProfile, isAuthenticated } = useAuth();
+
+    // it's necessary to prevent glitch
+    // proper loading state will be addressed later
+    if (isLoadingProfile === undefined || isLoadingProfile) {
+        return <></>;
+    }
+
+    if (!isAuthenticated) {
+        return (
+            <Layout>
+                <div className="flex flex-col w-full">
+                    <Hero />
+                    <Testimony
+                        className="pt-24 pb-16 gap-[52px]"
+                        headerClassName="text-white text-2xl leading-[125%] md:text-3xl"
+                        itemHeaderClassName="text-white font-[Raleway,sans-serif] leading-[125%]"
+                        itemSubtitleClassName="font-['Open_Sans',sans-serif] leading-[150%]"
+                        itemContentClassName="text-white !text-xs !leading-[160%]"
+                        noBorder
+                    />
+                    <Fitur className="mb-[40px] mx-4" />
+                    <Langganan className="mb-12 mx-4" />
+                    <FAQ className="mb-10 mx-4 sm:mx-8 max-w-[736px] self-center w-[calc(100%-32px)] sm:w-[calc(100%-64px)]" />
+                    <FinalCTA className="sm:mx-8 sm:w-[calc(100%-64px)] mb-12" />
+                </div>
+            </Layout>
+        );
+    }
+
     return (
-        <Layout>
-            <div className="flex flex-col w-full">
-                <Hero />
-                <Testimony
-                    className="pt-24 pb-16 gap-[52px]"
-                    headerClassName="text-white text-2xl leading-[125%] md:text-3xl"
-                    itemHeaderClassName="text-white font-[Raleway,sans-serif] leading-[125%]"
-                    itemSubtitleClassName="font-['Open_Sans',sans-serif] leading-[150%]"
-                    itemContentClassName="text-white !text-xs !leading-[160%]"
-                    noBorder
-                />
-                <Fitur className="mb-[40px] mx-4" />
-                <Langganan className="mb-12 mx-4" />
-                <FAQ className="mb-10 mx-4 sm:mx-8 max-w-[736px] self-center w-[calc(100%-32px)] sm:w-[calc(100%-64px)]" />
-                <FinalCTA className="sm:mx-8 sm:w-[calc(100%-64px)] mb-12" />
-            </div>
-        </Layout>
+        <LearnLayout showSidebar fullHeightSidebar className="relative">
+            <></>
+        </LearnLayout>
     );
 }
 
