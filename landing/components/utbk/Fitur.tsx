@@ -52,7 +52,7 @@ export default function Fitur({ className }: FiturProps): JSX.Element {
                         <p className="text-white text-lg leading-[29.25px]">
                             Akses ratusan jam konten video yang dibawakan
                             langsung oleh mahasiswa dari UI, ITB, dan lainnya.
-                            Penjelasan santai, mudah dimengerti, dan
+                            Penjelasan santai, mudah dimengerti, dan{' '}
                             <i>to-the-point.</i>
                         </p>
 
@@ -167,7 +167,7 @@ export default function Fitur({ className }: FiturProps): JSX.Element {
                         </h3>
                         <p className="text-white text-lg leading-[29.25px] mb-2">
                             Pantau kekuatan dan kelemahanmu secara{' '}
-                            <i>real-time</i>.<i>Data driven learning</i> untuk
+                            <i>real-time</i>. <i>Data driven learning</i> untuk
                             hasil yang maksimal.
                         </p>
                         <div className="flex flex-grow items-center">
