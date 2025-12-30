@@ -25,7 +25,7 @@ const ScoreNotPublished = () => {
     );
 
     const onClose = () => {
-        router.push(`/latihan/`);
+        router.push(`/utbk/try-out`);
     };
 
     if (isLoading || !exercise) {

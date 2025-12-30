@@ -22,10 +22,10 @@ export default function UTBKModal({
             containerClassName="modal modal-open modal-middle min-h-[100px]"
             className="md:max-w-[660px] p-4 md:p-6">
             <div className="-mt-6 gap-4 md:gap-6 flex flex-col text-white">
-                <iframe
+                {/* <iframe
                     title="UTBK Yuk"
                     src="https://www.youtube.com/embed/tgbNymZ7vqY"
-                    className="w-[calc(100%+32px)] md:w-[calc(100%+48px)] aspect-[343/176] md:aspect-[660/370] -mx-4 -mt-4 md:-mx-6 md:-mt-6"></iframe>
+                    className="w-[calc(100%+32px)] md:w-[calc(100%+48px)] aspect-[343/176] md:aspect-[660/370] -mx-4 -mt-4 md:-mx-6 md:-mt-6"></iframe> */}
                 <div className="flex flex-col gap-8">
                     <div className="flex flex-col gap-2">
                         <h3 className="text-xl leading-[140%] font-semibold">

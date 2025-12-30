@@ -5,14 +5,14 @@ import { cn } from './utils';
 import Footer from './components/modules/Footer';
 import SubscriptionReminder from './components/modules/Navbar/components/SubscriptionReminder';
 import { useThemeContext } from './contexts/ThemeProvider';
-import useWindowBreakpoints from './hooks/useWindowBreakpoints';
-import dynamic from 'next/dynamic';
+// import useWindowBreakpoints from './hooks/useWindowBreakpoints';
+// import dynamic from 'next/dynamic';
 import K12Paywall from './components/elements/K12Paywall';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
-const AppInstallBanner = dynamic(
-    () => import('./components/modules/Navbar/components/AppInstallBanner')
-);
+// const AppInstallBanner = dynamic(
+//     () => import('./components/modules/Navbar/components/AppInstallBanner')
+// );
 
 interface LayoutProps {
     children: JSX.Element;
@@ -44,7 +44,7 @@ const LearnLayout = ({
 }: LayoutProps): JSX.Element => {
     const { theme } = useThemeContext();
     const lightMode = theme === 'light';
-    const { isMobileBreakpoints } = useWindowBreakpoints();
+    // const { isMobileBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
 
     return (
@@ -67,24 +67,24 @@ const LearnLayout = ({
                             fullHeightSidebar={fullHeightSidebar}
                             showSubscriptionReminder={showSubscriptionReminder}
                         />
-                        <AppInstallBanner
+                        {/* <AppInstallBanner
                             showSidebar={
                                 showSidebar &&
                                 isAuthenticated &&
                                 !isMobileBreakpoints
                             }
-                        />
+                        /> */}
                         <SubscriptionReminder
                             show={showSubscriptionReminder}
                             showSidebar={showSidebar}
                         />
                     </>
                 )}
-                {hideNavbar && (
+                {/* {hideNavbar && (
                     <AppInstallBanner
                         showSidebar={showSidebar && isAuthenticated}
                     />
-                )}
+                )} */}
                 <div
                     className={cn(
                         'md:pt-16',

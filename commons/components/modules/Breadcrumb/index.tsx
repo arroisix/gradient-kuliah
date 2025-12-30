@@ -5,7 +5,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FaChevronRight } from 'react-icons/fa';
 import { BreadcrumbJsonLd } from 'next-seo';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 type BreadcrumbListElement = {
     name: string;
@@ -24,10 +25,14 @@ const Breadcrumb = ({
     const breadcrumbPath = pathname as BreadcrumbPathnames;
     const breadcrumbsData = BREADCRUMB[breadcrumbPath];
     const { is_subscribed } = useCourseSubscription();
+    const { profile } = useAuth();
     const isBookPage =
         breadcrumbPath === '/perpustakaan/astronotes/[slug]/[page]';
     const [breadcrumbListElement, setBreadcrumbListElement] =
         useState<BreadcrumbListElement>([]);
+    const userRole = useMemo(() => {
+        return profile?.current_role;
+    }, [profile]);
 
     useEffect(() => {
         const tempBreadcrumbListElement: BreadcrumbListElement = [
@@ -81,7 +86,13 @@ const Breadcrumb = ({
                 )}>
                 <Item
                     name="Home"
-                    url={is_subscribed ? '/dashboard' : '/'}
+                    url={
+                        is_subscribed
+                            ? userRole === 'K12'
+                                ? '/utbk/dashboard'
+                                : '/dashboard'
+                            : '/'
+                    }
                     nextItem={breadcrumbsData}
                 />
                 {nextItem && (
