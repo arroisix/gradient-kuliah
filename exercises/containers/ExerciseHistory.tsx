@@ -92,13 +92,15 @@ const ExerciseHistory: React.FC = () => {
                 )}
             </div>
 
-            <Button
-                variant="secondary"
-                className="mt-6 w-full max-w-[350px] md:w-[450px] md:max-w-full flex flex-row gap-2 items-center justify-center"
-                onClick={onRetry}>
-                <RefreshCcw size={16} />
-                Coba Lagi
-            </Button>
+            {exercise?.tryout_type !== 'UTBK' && (
+                <Button
+                    variant="secondary"
+                    className="mt-6 w-full max-w-[350px] md:w-[450px] md:max-w-full flex flex-row gap-2 items-center justify-center"
+                    onClick={onRetry}>
+                    <RefreshCcw size={16} />
+                    Coba Lagi
+                </Button>
+            )}
         </LatihanLayout>
     );
 };

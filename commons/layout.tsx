@@ -6,13 +6,15 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import { cn } from './utils';
 import Appbar from './components/modules/Appbar';
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
-import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useRouter } from 'next/router';
-import useWindowBreakpoints from './hooks/useWindowBreakpoints';
-import dynamic from 'next/dynamic';
-const AppInstallBanner = dynamic(
-    () => import('./components/modules/Navbar/components/AppInstallBanner')
-);
+// import useWindowBreakpoints from './hooks/useWindowBreakpoints';
+// import dynamic from 'next/dynamic';
+import K12Paywall from './components/elements/K12Paywall';
+import CountdownBanner from './components/modules/Navbar/components/CountdownBanner';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+// const AppInstallBanner = dynamic(
+//     () => import('./components/modules/Navbar/components/AppInstallBanner')
+// );
 
 interface LayoutProps {
     children?: JSX.Element;
@@ -22,6 +24,7 @@ interface LayoutProps {
     showSidebar?: boolean;
     fullHeightSidebar?: boolean;
     isFullBlackBackground?: boolean;
+    withoutK12Paywall?: boolean;
 }
 
 const Layout = ({
@@ -31,7 +34,8 @@ const Layout = ({
     courses,
     showSidebar,
     fullHeightSidebar,
-    isFullBlackBackground
+    isFullBlackBackground,
+    withoutK12Paywall = false
 }: LayoutProps): JSX.Element => {
     const isAuthenticated = useSelector(getIsAuthenticated);
     const isLandingPageRevampOn = useFeatureIsOn<GrowthbookFeatures>(
@@ -39,7 +43,7 @@ const Layout = ({
     );
     const router = useRouter();
     const { is_subscribed } = useCourseSubscription();
-    const { isMobileBreakpoints } = useWindowBreakpoints();
+    // const { isMobileBreakpoints } = useWindowBreakpoints();
 
     return (
         <div
@@ -52,6 +56,7 @@ const Layout = ({
                     : 'bg-black',
                 paymentPage && 'flex flex-col'
             )}>
+            {!withoutK12Paywall && <K12Paywall />}
             <Navbar
                 paymentPage={paymentPage ?? false}
                 shouldTransparent={shouldTransparent ?? false}
@@ -60,11 +65,15 @@ const Layout = ({
 
             <div className="h-14 bg-[#222222]"></div>
 
-            <AppInstallBanner
-                showSidebar={
-                    showSidebar && is_subscribed && !isMobileBreakpoints
-                }
-            />
+            {!isAuthenticated && <CountdownBanner />}
+
+            {/* {isAuthenticated && (
+                <AppInstallBanner
+                    showSidebar={
+                        showSidebar && is_subscribed && !isMobileBreakpoints
+                    }
+                />
+            )} */}
 
             <section
                 className={cn(

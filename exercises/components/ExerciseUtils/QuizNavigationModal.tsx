@@ -251,7 +251,7 @@ const QuizNavigationModal: React.FC<QuizNavigationModalProps> = ({
             )}
 
             <div
-                className="grid grid-cols-5 place-self-center gap-3 mb-6"
+                className="grid grid-cols-5 justify-between gap-3 mb-6"
                 style={{ height: containerHeight }}>
                 {isLoading ? (
                     <Skeleton

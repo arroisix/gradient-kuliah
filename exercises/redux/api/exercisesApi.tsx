@@ -301,6 +301,8 @@ export const exerciseApi = baseApi.injectEndpoints({
                 course_id?: string;
                 university_name?: string;
                 type?: string;
+                access_type?: string;
+                tryout_type?: string;
                 sort?: string;
             }
         >({
@@ -470,10 +472,12 @@ export const exerciseApi = baseApi.injectEndpoints({
         }),
         getProblemsetDetailInterstitial: builder.query<
             ResponseData<ProblemSetItem>,
-            { slug: string; problemset_id: string }
+            { slug: string; problemset_id: string; with_score?: boolean }
         >({
-            query: ({ slug, problemset_id }) => ({
-                url: `${EXERCISE_BASE_URL}v2/${slug}/problem-set/${problemset_id}/interstitial/`
+            query: ({ slug, problemset_id, with_score }) => ({
+                url:
+                    `${EXERCISE_BASE_URL}v2/${slug}/problem-set/${problemset_id}/interstitial/?` +
+                    (with_score ? `with_score=${with_score}` : '')
             }),
             providesTags: (result, error, arg) => [
                 {

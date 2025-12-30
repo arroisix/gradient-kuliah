@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from 'commons/utils';
 import Button from 'commons/components/elements/Button';
@@ -19,6 +19,48 @@ interface ExerciseReportNavigationProps {
     className?: string;
 }
 
+const PROBLEMS_PER_PAGE = 20;
+
+// Mock data for testing different row configurations
+const MOCK_DATA_1_ROW = Array.from({ length: 3 }, (_, i) => ({
+    problem_id: `problem-${i + 1}`,
+    order: i + 1,
+    is_answered: i === 0,
+    is_correct: i === 0 ? true : null
+}));
+
+const MOCK_DATA_2_ROWS = Array.from({ length: 10 }, (_, i) => ({
+    problem_id: `problem-${i + 1}`,
+    order: i + 1,
+    is_answered: i < 3,
+    is_correct: i < 3 ? (i % 2 === 0 ? true : false) : null
+}));
+
+const MOCK_DATA_3_ROWS = Array.from({ length: 15 }, (_, i) => ({
+    problem_id: `problem-${i + 1}`,
+    order: i + 1,
+    is_answered: i < 5,
+    is_correct: i < 5 ? (i % 2 === 0 ? true : false) : null
+}));
+
+const MOCK_DATA_4_ROWS = Array.from({ length: 20 }, (_, i) => ({
+    problem_id: `problem-${i + 1}`,
+    order: i + 1,
+    is_answered: i < 10,
+    is_correct: i < 10 ? (i % 2 === 0 ? true : false) : null
+}));
+
+const MOCK_DATA_5_ROWS = Array.from({ length: 25 }, (_, i) => ({
+    problem_id: `problem-${i + 1}`,
+    order: i + 1,
+    is_answered: i < 12,
+    is_correct: i < 12 ? (i % 2 === 0 ? true : false) : null
+}));
+
+// Set which mock data to use (1, 2, 3, 4, or 5 rows)
+const USE_MOCK_DATA = false; // Set to true to use mock data
+const MOCK_TEST_ROWS = 4; // Options: 1, 2, 3, 4, 5
+
 const ExerciseReportNavigation: React.FC<ExerciseReportNavigationProps> = ({
     className
 }) => {
@@ -27,6 +69,7 @@ const ExerciseReportNavigation: React.FC<ExerciseReportNavigationProps> = ({
         useState<string>('');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isNavigationOpen, setIsNavigationOpen] = useState(false);
+    const [currentPage, setCurrentPage] = useState(0);
 
     const { slug, exerciseProgressId, problemId, problemsetId } = router.query;
 
@@ -49,7 +92,8 @@ const ExerciseReportNavigation: React.FC<ExerciseReportNavigationProps> = ({
         }
     }, [exercise, problemsetId, selectedProblemSetId]);
 
-    const { data: allProblems, isLoading } =
+    // Fetch all problems without pagination for navigation display
+    const { data: allProblemsRaw, isLoading: isLoadingRaw } =
         useGetAllProblemInProblemSetViaExerciseProgressQuery(
             {
                 slug: slug as string,
@@ -60,6 +104,93 @@ const ExerciseReportNavigation: React.FC<ExerciseReportNavigationProps> = ({
                 skip: !slug || !exerciseProgressId || !selectedProblemSetId
             }
         );
+
+    // Fetch paginated problems for modal
+    const { data: allProblemsModalRaw, isLoading: isLoadingModalRaw } =
+        useGetAllProblemInProblemSetViaExerciseProgressQuery(
+            {
+                slug: slug as string,
+                exerciseProgress: exerciseProgressId as string,
+                problemsetId: selectedProblemSetId,
+                page: currentPage + 1,
+                limit: PROBLEMS_PER_PAGE
+            },
+            {
+                skip:
+                    !slug ||
+                    !exerciseProgressId ||
+                    !selectedProblemSetId ||
+                    !isNavigationOpen
+            }
+        );
+
+    // Process data with mock support and pagination
+    const { allProblems, isLoading } = useMemo(() => {
+        if (USE_MOCK_DATA) {
+            const mockDataMap = {
+                1: MOCK_DATA_1_ROW,
+                2: MOCK_DATA_2_ROWS,
+                3: MOCK_DATA_3_ROWS,
+                4: MOCK_DATA_4_ROWS,
+                5: MOCK_DATA_5_ROWS
+            };
+            const mockData = mockDataMap[MOCK_TEST_ROWS as 1 | 2 | 3 | 4 | 5];
+            return {
+                allProblems: {
+                    count_items: mockData.length,
+                    data: mockData
+                },
+                isLoading: false
+            };
+        }
+
+        return {
+            allProblems: allProblemsRaw as {
+                count_items: number;
+                data: any[];
+            },
+            isLoading: isLoadingRaw
+        };
+    }, [allProblemsRaw, isLoadingRaw]);
+
+    // Process modal data with pagination
+    const { allProblemsModal, isLoadingModal } = useMemo(() => {
+        if (USE_MOCK_DATA) {
+            const mockDataMap = {
+                1: MOCK_DATA_1_ROW,
+                2: MOCK_DATA_2_ROWS,
+                3: MOCK_DATA_3_ROWS,
+                4: MOCK_DATA_4_ROWS,
+                5: MOCK_DATA_5_ROWS
+            };
+            const mockData = mockDataMap[MOCK_TEST_ROWS as 1 | 2 | 3 | 4 | 5];
+            // Client-side pagination for mock data
+            const startIndex = currentPage * PROBLEMS_PER_PAGE;
+            const paginatedData = mockData.slice(
+                startIndex,
+                startIndex + PROBLEMS_PER_PAGE
+            );
+            return {
+                allProblemsModal: {
+                    count_items: mockData.length,
+                    data: paginatedData
+                },
+                isLoadingModal: false
+            };
+        }
+
+        return {
+            allProblemsModal: allProblemsModalRaw as {
+                count_items: number;
+                data: any[];
+            },
+            isLoadingModal: isLoadingModalRaw
+        };
+    }, [allProblemsModalRaw, isLoadingModalRaw, currentPage]);
+
+    const totalPages = Math.ceil(
+        (allProblemsModal?.count_items || 0) / PROBLEMS_PER_PAGE
+    );
 
     const { data: allProblemset } = useGetProblemsetDetailInterstitialQuery(
         {
@@ -74,6 +205,7 @@ const ExerciseReportNavigation: React.FC<ExerciseReportNavigationProps> = ({
     const handleProblemSetChange = (problemSetId: string) => {
         setSelectedProblemSetId(problemSetId);
         setIsDropdownOpen(false);
+        setCurrentPage(0);
 
         // Navigate to first problem of selected problem set
         const firstProblemInPS = allProblemset?.data?.find(
@@ -128,11 +260,19 @@ const ExerciseReportNavigation: React.FC<ExerciseReportNavigationProps> = ({
                         );
                     }
                 } else {
-                    router.replace(
-                        `/latihan/${slug}/report/${exerciseProgressId}/leaderboard/`,
-                        undefined,
-                        { scroll: false, shallow: true }
-                    );
+                    if (exercise?.tryout_type === 'UTBK') {
+                        router.replace(
+                            `/latihan/${slug}/report/${exerciseProgressId}/analisa-diri/`,
+                            undefined,
+                            { scroll: false, shallow: true }
+                        );
+                    } else {
+                        router.replace(
+                            `/latihan/${slug}/report/${exerciseProgressId}/leaderboard/`,
+                            undefined,
+                            { scroll: false, shallow: true }
+                        );
+                    }
                 }
             }
         }
@@ -212,10 +352,10 @@ const ExerciseReportNavigation: React.FC<ExerciseReportNavigationProps> = ({
                         className="w-full bg-violet-2 lg:bg-transparent text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-white/5 transition-colors border border-white/10 min-w-[200px]">
                         <span className="text-sm font-medium truncate">
                             {selectedProblemSet
-                                ? `Section ${
+                                ? `Subtes ${
                                       (selectedProblemSet.order ?? 0) + 1
                                   }: ${selectedProblemSet.title}`
-                                : 'Select Section'}
+                                : 'Pilih Subtes'}
                         </span>
                         <ChevronDown
                             size={16}
@@ -244,7 +384,7 @@ const ExerciseReportNavigation: React.FC<ExerciseReportNavigationProps> = ({
                                                 ? 'bg-[#3A3A3A] text-white'
                                                 : 'text-white/80'
                                         )}>
-                                        Section {(problemSet.order ?? 0) + 1}:{' '}
+                                        Subtes {(problemSet.order ?? 0) + 1}:{' '}
                                         {problemSet.title}
                                     </button>
                                 )
@@ -322,15 +462,15 @@ const ExerciseReportNavigation: React.FC<ExerciseReportNavigationProps> = ({
                                     Quiz Navigation
                                 </h2>
 
-                                <div className="grid grid-cols-5 gap-3">
-                                    {isLoading ? (
+                                <div className="grid grid-cols-5 gap-3 mb-4">
+                                    {isLoadingModal ? (
                                         <Skeleton
                                             repeat={20}
                                             isCustomSize
                                             className="w-12 h-12 aspect-square rounded-lg"
                                         />
                                     ) : (
-                                        allProblems?.data?.map(
+                                        allProblemsModal?.data?.map(
                                             (
                                                 problem: ProblemNavigationVerboseItem
                                             ) => (
@@ -359,6 +499,49 @@ const ExerciseReportNavigation: React.FC<ExerciseReportNavigationProps> = ({
                                         )
                                     )}
                                 </div>
+
+                                {/* Pagination Controls */}
+                                {totalPages > 1 && (
+                                    <div className="flex justify-end gap-2">
+                                        <Button
+                                            onClick={() =>
+                                                setCurrentPage(
+                                                    Math.max(0, currentPage - 1)
+                                                )
+                                            }
+                                            variant="custom"
+                                            disabled={currentPage === 0}
+                                            className={cn(
+                                                'text-center flex !p-0 !w-8 !h-8 items-center justify-center bg-white/25'
+                                            )}>
+                                            <ChevronLeft
+                                                size={14}
+                                                color="#ffffff"
+                                            />
+                                        </Button>
+                                        <Button
+                                            onClick={() =>
+                                                setCurrentPage(
+                                                    Math.min(
+                                                        totalPages - 1,
+                                                        currentPage + 1
+                                                    )
+                                                )
+                                            }
+                                            variant="custom"
+                                            disabled={
+                                                currentPage === totalPages - 1
+                                            }
+                                            className={cn(
+                                                'text-center flex !p-0 !w-8 !h-8 items-center justify-center bg-white/25'
+                                            )}>
+                                            <ChevronRight
+                                                size={14}
+                                                color="#ffffff"
+                                            />
+                                        </Button>
+                                    </div>
+                                )}
                             </div>
                         </>
                     )}

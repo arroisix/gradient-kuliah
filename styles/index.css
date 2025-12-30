@@ -1810,3 +1810,21 @@ math-field#tanya-mathfield::part(virtual-keyboard-toggle) {
 .bmpui-ui-selectbox {
     color: #5f2bce !important;
 }
+
+.hidden-input-number-icon {
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type='number'] {
+        -moz-appearance: textfield;
+    }
+}
+
+#__next {
+    isolation: isolate;
+}

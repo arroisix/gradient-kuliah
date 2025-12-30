@@ -38,9 +38,6 @@ export const PacketCard = ({
                 pathname: '/pembayaran',
                 query: { ...router.query, packetId: data.id }
             });
-
-            // redirect to WhatsApp
-            // window.open(getCSChatRoom('LINE'));
         }
     }
 

@@ -3,14 +3,41 @@ import { useRouter } from 'next/router';
 import { cn } from 'commons/utils';
 import { useState } from 'react';
 import ExerciseCloseModal from '../Modal/ExerciseCloseModal';
+import { useGetExerciseDetailV2Query } from 'exercises/redux/api/exercisesApi';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
-const ExerciseProblemSetHeader = () => {
+const ExerciseProblemSetHeader = ({
+    isExerciseDetailPage = false
+}: {
+    isExerciseDetailPage?: boolean;
+}) => {
     const router = useRouter();
-    const { slug } = router.query;
+    const { profile } = useAuth();
+    const { slug, exerciseProgressId } = router.query;
     const [isModalOpen, setIsModalOpen] = useState(false);
     const handleConfirmClose = (): void => {
         setIsModalOpen(false);
         router.push(`/latihan/${slug}`);
+    };
+
+    const { data: exercise } = useGetExerciseDetailV2Query(
+        {
+            exercise_slug: slug as string,
+            exercise_progress_id: exerciseProgressId as string
+        },
+        {
+            skip: !slug
+        }
+    );
+
+    const onClose = () => {
+        if (isExerciseDetailPage || router.pathname === '/latihan/[slug]') {
+            profile?.current_role === 'K12'
+                ? router.push('/utbk/try-out')
+                : router.push('/latihan');
+        } else {
+            setIsModalOpen(true);
+        }
     };
 
     return (
@@ -18,12 +45,23 @@ const ExerciseProblemSetHeader = () => {
             <XIcon
                 size={24}
                 className={cn('cursor-pointer text-white')}
-                onClick={() => setIsModalOpen(true)}
+                onClick={onClose}
             />
-            <h2 className="text-white text-lg font-semibold lg:hidden">
-                Quiz Section
-            </h2>
-            <div className="w-6 lg:hidden" />
+            <div className="flex flex-col gap-1 items-center">
+                <h1 className="text-xl lg:text-2xl text-white font-bold text-center">
+                    Try Out - {exercise?.title}
+                </h1>
+                <h2 className="text-white text-lg font-semibold lg:hidden">
+                    {exercise?.tryout_type === 'UTBK' ? 'Daftar' : 'Quiz'}{' '}
+                    Section
+                </h2>
+            </div>
+            <div
+                className={cn(
+                    'w-6',
+                    exercise?.tryout_type !== 'UTBK' && 'lg:hidden'
+                )}
+            />
             <ExerciseCloseModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}

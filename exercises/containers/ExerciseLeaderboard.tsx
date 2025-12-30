@@ -1,7 +1,10 @@
 import React from 'react';
 import LatihanLayout from './LatihanLayout';
 import ExerciseCompleteHeader from 'exercises/components/Header/ExerciseCompleteHeader';
-import { useGetExerciseReportSummaryQuery } from 'exercises/redux/api/exercisesApi';
+import {
+    useGetExerciseDetailV2Query,
+    useGetExerciseReportSummaryQuery
+} from 'exercises/redux/api/exercisesApi';
 import { useRouter } from 'next/router';
 import SummaryTab from 'exercises/components/Report/SummaryTab';
 import { LeaderboardReport } from 'exercises/components/ExerciseDetail/Leaderboard';
@@ -11,19 +14,30 @@ const ExerciseLeaderboard: React.FC = () => {
     const router = useRouter();
     const { slug, exerciseProgressId } = router.query;
 
-    const { data: summaryData, isLoading } = useGetExerciseReportSummaryQuery(
-        {
-            exercise_slug: slug as string,
-            exercise_progress_id: exerciseProgressId as string
-        },
-        { skip: !slug || !exerciseProgressId }
-    );
+    const { data: summaryData, isLoading: isSummaryLoading } =
+        useGetExerciseReportSummaryQuery(
+            {
+                exercise_slug: slug as string,
+                exercise_progress_id: exerciseProgressId as string
+            },
+            { skip: !slug || !exerciseProgressId }
+        );
+
+    const { data: exercise, isLoading: isExerciseLoading } =
+        useGetExerciseDetailV2Query(
+            { exercise_slug: slug as string },
+            {
+                skip: !slug
+            }
+        );
+
+    const isLoading = isSummaryLoading || isExerciseLoading;
 
     return (
         <LatihanLayout>
             {/* Main wrapper: Ensures spacing for the fixed header */}
-            <div className="flex flex-col gap-4 lg:gap-6 overflow-y-auto pb-12 lg:pb-0 pt-16 w-full h-full">
-                <div className="fixed top-0 left-0 w-full z-10 flex items-center justify-center px-4 py-4 bg-black">
+            <div className="flex flex-col gap-4 lg:gap-6 overflow-y-auto pb-12 lg:pb-0 pt-20 w-full h-full">
+                <div className="fixed top-0 left-0 w-full z-10 flex items-center justify-center px-4 pt-6 pb-4 bg-black">
                     <div className="flex flex-col gap-4 lg:gap-6 max-w-screen-xl w-full">
                         <ExerciseCompleteHeader />
                     </div>
@@ -46,7 +60,7 @@ const ExerciseLeaderboard: React.FC = () => {
                             }
                         />
                     )}
-                    <LeaderboardReport />
+                    {exercise?.tryout_type !== 'UTBK' && <LeaderboardReport />}
                 </div>
             </div>
         </LatihanLayout>

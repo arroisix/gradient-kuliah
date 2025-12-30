@@ -20,6 +20,7 @@ import { useTracker } from 'tracker/tracker';
 interface AuthContextType {
     isAuthenticated: boolean;
     profile?: UpdateUserResponseData;
+    isLoadingProfile: boolean;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -31,11 +32,9 @@ export function AuthProvider({
 }): JSX.Element {
     const isProfileComplete = useSelector(getIsProfileComplete);
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { data: profile } = useGetProfileQuery(
+    const { data: profile, isLoading: isLoadingProfile } = useGetProfileQuery(
         {},
-        {
-            skip: !localStorage.getItem('token')
-        }
+        { skip: !localStorage.getItem('token') }
     );
     const user = useSelector(getCurrentUser);
     const router = useRouter();
@@ -107,9 +106,10 @@ export function AuthProvider({
     const memoedValue = useMemo(
         () => ({
             isAuthenticated,
-            profile
+            profile,
+            isLoadingProfile
         }),
-        [isAuthenticated, profile]
+        [isAuthenticated, isLoadingProfile, profile]
     );
 
     return (

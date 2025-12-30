@@ -13,8 +13,10 @@ import {
     MajorRecommendationResponse,
     NewlyReleasedForYouResponse,
     PaginatedResponse,
+    SetStudentTargetInstitution,
     StudentCourseResponse,
     StudentLearningProgressResponse,
+    StudentTargetInstitution,
     UserBooksResponse,
     UserClassesResponse,
     UserFlashcardsResponse,
@@ -278,6 +280,30 @@ export const dashboardApi = baseApi.injectEndpoints({
                 body
             }),
             invalidatesTags: ['ANNOUNCEMENTS']
+        }),
+        getStudentTargetInstitutions: builder.query<
+            StudentTargetInstitution[],
+            void
+        >({
+            query: () => ({
+                url: `${STUDENT_BASE_URL}target-institutions/`
+            }),
+            providesTags: [
+                { type: 'PROFILE', id: 'STUDENT_TARGET_INSTITUTIONS' }
+            ]
+        }),
+        setStudentTargetInstitutions: builder.mutation<
+            void,
+            SetStudentTargetInstitution[]
+        >({
+            query: (body) => ({
+                url: `${STUDENT_BASE_URL}target-institutions/`,
+                method: 'POST',
+                body
+            }),
+            invalidatesTags: [
+                { type: 'PROFILE', id: 'STUDENT_TARGET_INSTITUTIONS' }
+            ]
         })
     })
 });
@@ -307,5 +333,7 @@ export const {
     useGetPublicQuizQuery,
     useGetPublicFlashcardsQuery,
     useGetAnnouncementsQuery,
-    useStoreUserAnnouncementMutation
+    useStoreUserAnnouncementMutation,
+    useGetStudentTargetInstitutionsQuery,
+    useSetStudentTargetInstitutionsMutation
 } = dashboardApi;

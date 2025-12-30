@@ -9,6 +9,7 @@ interface ModalProps extends ModalBaseProps {
     variant?: 'light' | 'dark';
     isPopup?: boolean;
     className?: string;
+    containerClassName?: string;
 }
 
 const Modal = ({
@@ -17,6 +18,7 @@ const Modal = ({
     children,
     isPopup,
     className,
+    containerClassName = 'modal modal-open modal-bottom md:modal-middle min-h-[100px]',
     permanent = false,
     dialog = false,
     variant = 'light'
@@ -26,7 +28,7 @@ const Modal = ({
             <>
                 <div
                     aria-hidden={true}
-                    className="modal modal-open modal-bottom md:modal-middle min-h-[100px]"
+                    className={containerClassName}
                     onClick={(e) => e.stopPropagation()}>
                     <div
                         className={cn(

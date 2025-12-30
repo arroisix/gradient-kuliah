@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { cn } from 'commons/utils';
 import Button from 'commons/components/elements/Button';
@@ -9,10 +9,7 @@ import {
     useGetProblemsetDetailInterstitialQuery
 } from 'exercises/redux/api/exercisesApi';
 import { useRouter } from 'next/router';
-import {
-    ProblemNavigationVerboseItem,
-    ProblemSetItem
-} from 'exercises/types/exercises';
+import { ProblemSetItem } from 'exercises/types/exercises';
 import AnswerLegend from '../ExerciseQuestion/AnswerLegend';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
@@ -22,6 +19,47 @@ interface ResultSummaryPerProblemProps {
 }
 
 const PROBLEMS_PER_PAGE = 20;
+
+// Mock data for testing different row configurations
+// Uncomment one of these to test spacing
+const MOCK_DATA_1_ROW = Array.from({ length: 3 }, (_, i) => ({
+    problem_id: `problem-${i + 1}`,
+    order: i + 1,
+    is_answered: i === 0,
+    is_correct: i === 0 ? true : null
+}));
+
+const MOCK_DATA_2_ROWS = Array.from({ length: 10 }, (_, i) => ({
+    problem_id: `problem-${i + 1}`,
+    order: i + 1,
+    is_answered: i < 3,
+    is_correct: i < 3 ? (i % 2 === 0 ? true : false) : null
+}));
+
+const MOCK_DATA_3_ROWS = Array.from({ length: 15 }, (_, i) => ({
+    problem_id: `problem-${i + 1}`,
+    order: i + 1,
+    is_answered: i < 5,
+    is_correct: i < 5 ? (i % 2 === 0 ? true : false) : null
+}));
+
+const MOCK_DATA_4_ROWS = Array.from({ length: 20 }, (_, i) => ({
+    problem_id: `problem-${i + 1}`,
+    order: i + 1,
+    is_answered: i < 10,
+    is_correct: i < 10 ? (i % 2 === 0 ? true : false) : null
+}));
+
+const MOCK_DATA_5_ROWS = Array.from({ length: 25 }, (_, i) => ({
+    problem_id: `problem-${i + 1}`,
+    order: i + 1,
+    is_answered: i < 12,
+    is_correct: i < 12 ? (i % 2 === 0 ? true : false) : null
+}));
+
+// Set which mock data to use (1, 2, 3, 4, or 5 rows)
+const USE_MOCK_DATA = false; // Set to true to use mock data
+const MOCK_TEST_ROWS = 4; // Options: 1, 2, 3, 4, 5
 
 const ResultSummaryPerProblem: React.FC<ResultSummaryPerProblemProps> = ({
     onProblemSelect,
@@ -51,14 +89,16 @@ const ResultSummaryPerProblem: React.FC<ResultSummaryPerProblemProps> = ({
         }
     }, [exercise, selectedProblemSetId]);
 
-    const { data: allProblems, isLoading } =
+    const { data: allProblemsRaw, isLoading: isLoadingRaw } =
         useGetAllProblemInProblemSetViaExerciseProgressQuery(
             {
                 slug: slug as string,
                 exerciseProgress:
                     (exerciseProgressId as string) ||
                     (exercise?.latest_exercise_progress?.id as string),
-                problemsetId: selectedProblemSetId
+                problemsetId: selectedProblemSetId,
+                page: currentPage + 1,
+                limit: PROBLEMS_PER_PAGE
             },
             {
                 skip:
@@ -78,6 +118,41 @@ const ResultSummaryPerProblem: React.FC<ResultSummaryPerProblemProps> = ({
             skip: !slug || !exercise?.first_problemset?.id
         }
     );
+
+    // Process data with mock support and client-side pagination
+    const { allProblems, isLoading } = useMemo(() => {
+        if (USE_MOCK_DATA) {
+            const mockDataMap = {
+                1: MOCK_DATA_1_ROW,
+                2: MOCK_DATA_2_ROWS,
+                3: MOCK_DATA_3_ROWS,
+                4: MOCK_DATA_4_ROWS,
+                5: MOCK_DATA_5_ROWS
+            };
+            const mockData = mockDataMap[MOCK_TEST_ROWS as 1 | 2 | 3 | 4 | 5];
+            // Paginate mock data client-side
+            const startIndex = currentPage * PROBLEMS_PER_PAGE;
+            const paginatedData = mockData.slice(
+                startIndex,
+                startIndex + PROBLEMS_PER_PAGE
+            );
+            return {
+                allProblems: {
+                    count_items: mockData.length,
+                    data: paginatedData
+                },
+                isLoading: false
+            };
+        }
+
+        return {
+            allProblems: allProblemsRaw as {
+                count_items: number;
+                data: any[];
+            },
+            isLoading: isLoadingRaw
+        };
+    }, [allProblemsRaw, isLoadingRaw, currentPage]);
 
     const totalPages = Math.ceil(
         (allProblems?.count_items as number) / PROBLEMS_PER_PAGE
@@ -122,15 +197,14 @@ const ResultSummaryPerProblem: React.FC<ResultSummaryPerProblemProps> = ({
         (ps: ProblemSetItem) => ps.id === selectedProblemSetId
     );
 
-    // Calculate height based on actual problems displayed on current page
-    const startIndex = currentPage * PROBLEMS_PER_PAGE;
-    const endIndex = startIndex + PROBLEMS_PER_PAGE;
-    const problemsOnCurrentPage =
-        allProblems?.data?.slice(startIndex, endIndex) || [];
-    const rowsOnCurrentPage = Math.ceil(problemsOnCurrentPage.length / 5);
+    // Calculate height based on actual items in current page
+    const itemsInCurrentPage = allProblems?.data?.length || 0;
+    const actualRowsPerPage = Math.ceil(itemsInCurrentPage / 5);
     const containerHeight = `${
-        rowsOnCurrentPage * 60 + Math.max(0, rowsOnCurrentPage - 1) * 12
-    }px`; // 60px per item + 12px gap
+        actualRowsPerPage * 52 + (actualRowsPerPage - 1) * 12
+    }px`; // 52px per item (w-12 h-12) + 12px gap
+
+    if (exercise?.tryout_type === 'UTBK') return null;
 
     return (
         <div
@@ -149,10 +223,10 @@ const ResultSummaryPerProblem: React.FC<ResultSummaryPerProblemProps> = ({
                             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                             className="w-full bg-[#2C2C2C] text-white px-4 py-3 rounded-lg flex items-center justify-between hover:bg-[#3A3A3A] transition-colors">
                             <span className="text-sm font-medium">
-                                {`Section ${
+                                {`Subtes ${
                                     (selectedProblemSet?.order ?? 0) + 1
                                 }: ${selectedProblemSet?.title}` ||
-                                    'Select Problem Set'}
+                                    'Pilih Subtes'}
                             </span>
                             <ChevronDown
                                 size={16}
@@ -201,23 +275,21 @@ const ResultSummaryPerProblem: React.FC<ResultSummaryPerProblemProps> = ({
                         className="w-full aspect-square rounded-xl"
                     />
                 ) : (
-                    allProblems?.data?.map(
-                        (problem: ProblemNavigationVerboseItem) => (
-                            <button
-                                key={problem.problem_id}
-                                onClick={() =>
-                                    handleProblemClick(problem.problem_id)
-                                }
-                                className={cn(
-                                    'aspect-square rounded-xl flex items-center justify-center text-white text-lg font-semibold transition-all hover:opacity-80 w-12 h-12 hover:border-2 hover:border-yellow-500',
-                                    problem.is_correct
-                                        ? 'bg-[#4ADE80]'
-                                        : 'bg-[#EF4444]'
-                                )}>
-                                <span>{problem.order}</span>
-                            </button>
-                        )
-                    )
+                    allProblems?.data?.map((problem) => (
+                        <button
+                            key={problem.problem_id}
+                            onClick={() =>
+                                handleProblemClick(problem.problem_id)
+                            }
+                            className={cn(
+                                'aspect-square rounded-xl flex items-center justify-center text-white text-lg font-semibold transition-all hover:opacity-80 w-12 h-12 hover:border-2 hover:border-yellow-500',
+                                problem.is_correct
+                                    ? 'bg-[#4ADE80]'
+                                    : 'bg-[#EF4444]'
+                            )}>
+                            <span>{problem.order}</span>
+                        </button>
+                    ))
                 )}
             </div>
 

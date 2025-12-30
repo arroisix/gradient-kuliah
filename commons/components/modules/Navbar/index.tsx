@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FaInstagram } from 'react-icons/fa';
 import { FiMenu } from 'react-icons/fi';
 import useWindowSize from 'commons/hooks/useWindowSize';
@@ -10,7 +10,7 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import Button from 'commons/components/elements/Button';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import MobileSidebar from '../Sidebar/mobile';
-import AuthContext from 'authentication/contexts/AuthProvider';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 import UserAvatar from './components/UserAvatar';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { cn } from 'commons/utils';
@@ -29,6 +29,8 @@ import KelasIcon from '../../elements/Icons/Kelas';
 import BookStackIcon from '../../elements/Icons/BookStack';
 import BookStackIconFill from '../../elements/Icons/BookStackFill';
 import KelasIconFill from '../../elements/Icons/KelasFill';
+import { TargetKampusIcon } from 'commons/components/elements/Icons/TargetKampusIcon';
+import GraduationCapIcon from 'commons/components/elements/Icons/GraduationCap';
 
 const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
     {
@@ -51,6 +53,30 @@ const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
         url: '/perpustakaan',
         IconActive: BookStackIconFill,
         IconUnactive: BookStackIcon
+    }
+];
+
+const K12_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
+    {
+        name: 'Class',
+        title: 'Materi',
+        url: '/utbk/materi',
+        IconActive: KelasIconFill,
+        IconUnactive: KelasIcon
+    },
+    {
+        name: 'Try Out',
+        title: 'Try Out',
+        url: '/utbk/try-out',
+        IconActive: PencilOnLineIconFill,
+        IconUnactive: PencilOnLineIcon
+    },
+    {
+        name: 'Prediksi PTN',
+        title: 'Prediksi PTN',
+        url: '/utbk/prediksi-ptn',
+        IconActive: () => <TargetKampusIcon className="fill-white h-5 w-5" />,
+        IconUnactive: () => <GraduationCapIcon size={20} />
     }
 ];
 
@@ -77,7 +103,7 @@ const Navbar = ({
 
     const { isDesktopBreakpoints } = useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { profile } = useContext(AuthContext);
+    const { profile } = useAuth();
     const [openMobile, setOpenMobile] = useState(false);
     const [openSidebar, setOpenSidebar] = useState(false);
     const { height } = useWindowSize();
@@ -89,6 +115,11 @@ const Navbar = ({
     };
     const { is_subscribed: isSubscribed } = useCourseSubscription();
     const isDashboard = router.pathname.startsWith('/dashboard');
+
+    const currentRole = useMemo(
+        () => profile?.current_role,
+        [profile?.current_role]
+    );
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll, { passive: true });
@@ -105,7 +136,7 @@ const Navbar = ({
 
         if (shouldTransparent) {
             if (height && scrollPosition >= height / 2) {
-                return isSubscribed ? 'bg-black' : 'bg-[#222222]';
+                return isAuthenticated ? 'bg-black' : 'bg-[#222222]';
             }
             return 'bg-transparent hover:bg-[#222222]';
         }
@@ -113,37 +144,38 @@ const Navbar = ({
         if (paymentPage) {
             return lightMode
                 ? 'bg-white shadow-md'
-                : isSubscribed
+                : isAuthenticated
                 ? 'bg-black'
                 : 'bg-[#222222]';
         }
 
         if (showSidebar && fullHeightSidebar) {
             if (scrollPosition >= 60) {
-                return isSubscribed ? 'bg-black' : 'bg-[#222222]';
+                return isAuthenticated ? 'bg-black' : 'bg-[#222222]';
             }
 
             return shouldTransparent
                 ? ''
-                : isSubscribed
+                : isAuthenticated
                 ? 'bg-black'
                 : 'bg-[#222222]';
         }
 
         return lightMode
             ? 'bg-white text-black shadow-md'
-            : isSubscribed
+            : isAuthenticated
             ? 'bg-black'
             : 'bg-[#222222]';
     };
 
     const isShowHamburgerMenu =
-        !LEARNING_PAGES.some((page) => router.asPath === page) ||
-        (LEARNING_PAGES.some((page) => router.asPath === page) &&
-            !isSubscribed &&
-            !isDesktopBreakpoints);
-    const isShowSidebar =
-        showSidebar && fullHeightSidebar && isAuthenticated && isSubscribed;
+        !isAuthenticated ||
+        (profile?.current_role === 'COLLEGE_STUDENT' &&
+            (!LEARNING_PAGES.some((page) => router.asPath === page) ||
+                (LEARNING_PAGES.some((page) => router.asPath === page) &&
+                    !isAuthenticated &&
+                    !isDesktopBreakpoints)));
+    const isShowSidebar = showSidebar && fullHeightSidebar && isAuthenticated;
 
     const { data: configData } = useGetConfigQuery();
 
@@ -157,7 +189,7 @@ const Navbar = ({
             <div
                 className={cn(
                     'flex items-center min-h-14 justify-between w-full px-4 py-3 md:px-8 gap-4',
-                    isSubscribed && showSidebar
+                    isAuthenticated && showSidebar
                         ? 'lg:px-6'
                         : noPadding
                         ? 'lg:px-16'
@@ -171,7 +203,14 @@ const Navbar = ({
                             onClick={() => setOpenSidebar(true)}
                         />
                     )}
-                    <Link href={isSubscribed ? '/dashboard' : '/'}>
+                    <Link
+                        href={
+                            isAuthenticated
+                                ? currentRole === 'K12'
+                                    ? '/utbk/dashboard'
+                                    : '/dashboard'
+                                : '/'
+                        }>
                         <span className="text-2xl font-bold cursor-pointer font-[Urbanist] lg:hidden">
                             G
                         </span>
@@ -182,29 +221,59 @@ const Navbar = ({
                     <div
                         className={cn(
                             'items-center gap-6 hidden lg:flex',
-                            isSubscribed && showSidebar && '!hidden'
+                            isAuthenticated && showSidebar && '!hidden'
                         )}>
-                        <NavigationButton
-                            key={UNAUTHENTICATED_NAVBAR_BUTTONS[0].name}
-                            {...UNAUTHENTICATED_NAVBAR_BUTTONS[0]}
-                        />
-                        <NavigationButton
-                            key={UNAUTHENTICATED_NAVBAR_BUTTONS[1].name}
-                            {...UNAUTHENTICATED_NAVBAR_BUTTONS[1]}
-                        />
-                        {configData?.configs.is_copilot_config_enabled && (
-                            <NavigationButton
-                                name="Copilot AI"
-                                title="Copilot AI"
-                                url="/copilot"
-                                IconActive={CopilotIconFill}
-                                IconUnactive={CopilotIconLine}
-                            />
+                        {profile?.current_role === 'K12' && isAuthenticated ? (
+                            <>
+                                <NavigationButton
+                                    key={K12_NAVBAR_BUTTONS[0].name}
+                                    {...K12_NAVBAR_BUTTONS[0]}
+                                />
+                                <NavigationButton
+                                    key={K12_NAVBAR_BUTTONS[1].name}
+                                    {...K12_NAVBAR_BUTTONS[1]}
+                                />
+                                <NavigationButton
+                                    key={K12_NAVBAR_BUTTONS[2].name}
+                                    {...K12_NAVBAR_BUTTONS[2]}
+                                />
+                                {configData?.configs
+                                    .is_copilot_config_enabled && (
+                                    <NavigationButton
+                                        name="Copilot AI"
+                                        title="Copilot AI"
+                                        url="/copilot"
+                                        IconActive={CopilotIconFill}
+                                        IconUnactive={CopilotIconLine}
+                                    />
+                                )}
+                            </>
+                        ) : (
+                            <>
+                                <NavigationButton
+                                    key={UNAUTHENTICATED_NAVBAR_BUTTONS[0].name}
+                                    {...UNAUTHENTICATED_NAVBAR_BUTTONS[0]}
+                                />
+                                <NavigationButton
+                                    key={UNAUTHENTICATED_NAVBAR_BUTTONS[1].name}
+                                    {...UNAUTHENTICATED_NAVBAR_BUTTONS[1]}
+                                />
+                                {configData?.configs
+                                    .is_copilot_config_enabled && (
+                                    <NavigationButton
+                                        name="Copilot AI"
+                                        title="Copilot AI"
+                                        url="/copilot"
+                                        IconActive={CopilotIconFill}
+                                        IconUnactive={CopilotIconLine}
+                                    />
+                                )}
+                                <NavigationButton
+                                    key={UNAUTHENTICATED_NAVBAR_BUTTONS[2].name}
+                                    {...UNAUTHENTICATED_NAVBAR_BUTTONS[2]}
+                                />
+                            </>
                         )}
-                        <NavigationButton
-                            key={UNAUTHENTICATED_NAVBAR_BUTTONS[2].name}
-                            {...UNAUTHENTICATED_NAVBAR_BUTTONS[2]}
-                        />
                     </div>
                     {isShowSidebar && (
                         <div className="hidden md:block w-[250px] h-[64px] fixed top-0 left-0 bg-[#121212] z-[-1]" />
@@ -214,7 +283,10 @@ const Navbar = ({
                             'w-full max-w-lg',
                             isShowSidebar && 'lg:ml-[250px] lg:pl-6 lg:absolute'
                         )}>
-                        {!isDashboard && <SearchBar />}
+                        {!isDashboard &&
+                            (!isAuthenticated ||
+                                profile?.current_role ===
+                                    'COLLEGE_STUDENT') && <SearchBar />}
                     </div>
                 </div>
                 {paymentPage ? (
@@ -233,15 +305,18 @@ const Navbar = ({
                         <div className="hidden font-bold md:flex md:items-center md:gap-3">
                             {isAuthenticated ? (
                                 <>
-                                    {isDashboard && !isSubscribed && (
-                                        <Button
-                                            href="/langganan"
-                                            variant="custom"
-                                            className="bg-[#5F2BCE] hover:bg-[#4A1FA3] text-white rounded-full transition-colors w-[108px] h-[34px] text-sm flex items-center justify-center"
-                                            eventName="Click Langganan Button">
-                                            Langganan
-                                        </Button>
-                                    )}
+                                    {isDashboard &&
+                                        !isSubscribed &&
+                                        profile?.current_role ===
+                                            'COLLEGE_STUDENT' && (
+                                            <Button
+                                                href="/langganan"
+                                                variant="custom"
+                                                className="bg-[#5F2BCE] hover:bg-[#4A1FA3] text-white rounded-full transition-colors w-[108px] h-[34px] text-sm flex items-center justify-center"
+                                                eventName="Click Langganan Button">
+                                                Langganan
+                                            </Button>
+                                        )}
                                     <UserProfile />
                                 </>
                             ) : (
@@ -285,6 +360,7 @@ const Navbar = ({
                 setOpenSidebar={setOpenSidebar}
                 configData={configData}
             />
+            {/* <CountdownBanner /> */}
         </header>
     );
 };

@@ -3,13 +3,19 @@ import { MdClose } from 'react-icons/md';
 import Image from 'next/image';
 import { cn } from 'commons/utils';
 import { CDN_URL } from 'commons/constants';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 interface AppInstallBannerProps {
     showSidebar?: boolean;
+    isOnLandingPage?: boolean;
 }
 
-const AppInstallBanner = ({ showSidebar }: AppInstallBannerProps) => {
+const AppInstallBanner = ({
+    showSidebar,
+    isOnLandingPage
+}: AppInstallBannerProps) => {
     const [isVisible, setIsVisible] = useState(false);
+    const { isAuthenticated } = useAuth();
     const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
     const isIOS = useMemo(() => {
         if (typeof window !== 'undefined') {
@@ -24,7 +30,8 @@ const AppInstallBanner = ({ showSidebar }: AppInstallBannerProps) => {
 
     useEffect(() => {
         const isBannerClosed = localStorage.getItem('appBannerClosed');
-        if (!isBannerClosed) {
+        if (isBannerClosed === 'false' || typeof isBannerClosed === 'object') {
+            console.log('setIsVisible true');
             setIsVisible(true);
         }
 
@@ -61,12 +68,19 @@ const AppInstallBanner = ({ showSidebar }: AppInstallBannerProps) => {
         }
     };
 
-    if (!isVisible || isMobileSidebarOpen) return null;
+    if (
+        !isVisible ||
+        isMobileSidebarOpen ||
+        (isAuthenticated && isOnLandingPage)
+    )
+        return null;
 
     return (
         <div
             className={cn(
-                'sticky top-[54px] md:top-16',
+                isOnLandingPage
+                    ? 'w-full h-14 mb-8 md:mb-6'
+                    : 'sticky top-[64px]',
                 showSidebar
                     ? 'md:left-[250px] md:w-[calc(100%-250px)] md:!top-14'
                     : 'w-full'

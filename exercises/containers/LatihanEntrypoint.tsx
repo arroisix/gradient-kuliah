@@ -6,8 +6,12 @@ import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import RenewSubscriptionBanner from 'courses/components/RenewSubscriptionBanner';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import FilterEntrypoint from 'exercises/components/Entrypoint/FilterEntrypoint';
+import { useAuth } from 'authentication/contexts/AuthProvider';
+import { useSelector } from 'react-redux';
+import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
 const LatihanEntrypoint = (): JSX.Element => {
+    const { profile } = useAuth();
     const router = useRouter();
     const {
         status = '',
@@ -15,10 +19,12 @@ const LatihanEntrypoint = (): JSX.Element => {
         university_name = '',
         sort = 'latest',
         type = '',
+        access_type = profile?.current_role === 'K12' ? 'all' : '',
         page: pageQuery = '1'
     } = router.query;
     const [page, setPage] = useState(Number(pageQuery));
     const { is_subscribed } = useCourseSubscription();
+    const isAuthenticated = useSelector(getIsAuthenticated);
 
     useEffect(() => {
         setPage(Number(pageQuery));
@@ -31,16 +37,20 @@ const LatihanEntrypoint = (): JSX.Element => {
         status: status as string,
         course_id: course_id as string,
         university_name: university_name as string,
-        sort: sort as string
+        sort: sort as string,
+        access_type: access_type as string
     });
 
     return (
         <>
             <Breadcrumb className="w-full pb-5" />
             <div className="relative grid w-full grid-cols-1 mx-auto xl:max-w-screen-2xl">
-                <h1 className="text-xl font-bold md:text-2xl text-balance">
-                    Try Out
-                </h1>
+                <div className="flex flex-row justify-between">
+                    <h1 className="text-xl font-bold md:text-2xl text-balance">
+                        Try Out
+                    </h1>
+                </div>
+
                 <FilterEntrypoint />
 
                 <LatihanContent
@@ -52,7 +62,12 @@ const LatihanEntrypoint = (): JSX.Element => {
                     limit={data?.limit || 6}
                 />
             </div>
-            {!is_subscribed && <RenewSubscriptionBanner product="latihan" />}
+            {!is_subscribed && (
+                <>
+                    <RenewSubscriptionBanner product="latihan" />
+                    {isAuthenticated && <div className="h-6 md:h-0" />}
+                </>
+            )}
         </>
     );
 };

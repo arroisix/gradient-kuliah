@@ -29,7 +29,7 @@ const ProblemsetTitle = () => {
             <>
                 <div className="w-full">
                     <h3 className="lg:font-semibold text-sm lg:text-xl text-graphie-400 lg:text-white">
-                        Section {(problem?.problemset_order ?? 0) + 1}:{' '}
+                        Subtes {(problem?.problemset_order ?? 0) + 1}:{' '}
                         {problem?.problemset_name}
                     </h3>
                 </div>
@@ -44,7 +44,7 @@ const ProblemsetTitle = () => {
     return (
         <div className="w-full">
             <h3 className="lg:font-semibold text-sm lg:text-xl text-graphie-400 lg:text-white">
-                Section {(problem?.problemset_order ?? 0) + 1}:{' '}
+                Subtes {(problem?.problemset_order ?? 0) + 1}:{' '}
                 {problem?.problemset_name}
             </h3>
         </div>

@@ -1,7 +1,22 @@
+import { cn } from 'commons/utils';
 import { TESTIMONY_DATA } from 'landing/constants/Testimony';
 import Image from 'next/image';
 
-const Testimony = (): JSX.Element => {
+const Testimony = ({
+    className,
+    headerClassName,
+    itemHeaderClassName,
+    itemContentClassName,
+    itemSubtitleClassName,
+    noBorder
+}: {
+    className?: string;
+    headerClassName?: string;
+    itemHeaderClassName?: string;
+    itemSubtitleClassName?: string;
+    itemContentClassName?: string;
+    noBorder?: boolean;
+}): JSX.Element => {
     const NUM_OF_TESTIMONY_LAYOUT = 5;
     const temporaryArray = Array.from(
         { length: NUM_OF_TESTIMONY_LAYOUT },
@@ -9,8 +24,14 @@ const Testimony = (): JSX.Element => {
     );
 
     return (
-        <section className="flex flex-col gap-5 py-9 md:py-16" id="testimony">
-            <h2 className="font-sans text-xl font-extrabold text-center">
+        <section
+            className={cn('flex flex-col gap-5 py-9 md:py-16', className)}
+            id="testimony">
+            <h2
+                className={cn(
+                    'font-sans text-xl font-extrabold text-center',
+                    headerClassName
+                )}>
                 Kata mereka yang belajar bersama Gradient
             </h2>
             <div className="overflow-hidden flex group">
@@ -25,6 +46,10 @@ const Testimony = (): JSX.Element => {
                                 name={data.name}
                                 role={data.role}
                                 key={data.name}
+                                contentClassName={itemContentClassName}
+                                subtitleClassName={itemSubtitleClassName}
+                                headerClassName={itemHeaderClassName}
+                                noBorder={noBorder}
                             />
                         ))}
                     </div>
@@ -38,16 +63,28 @@ const TestimonyCard = ({
     testimony,
     name,
     role,
-    photo
+    photo,
+    headerClassName,
+    contentClassName,
+    subtitleClassName,
+    noBorder
 }: {
     testimony: string;
     name: string;
     role: string;
     photo: string;
+    headerClassName?: string;
+    subtitleClassName?: string;
+    contentClassName?: string;
+    noBorder?: boolean;
 }): JSX.Element => {
     return (
         <div className="w-[245px] md:w-[422px] p-6 bg-gradient-to-t from-[#FFFFFF00] to-[#FFFFFF0D] border-[1px] border-[#2D2D2D] rounded-[24px]">
-            <div className="flex gap-4 items-center pb-6 border-b-[1px] border-[#2D2D2D]">
+            <div
+                className={cn(
+                    'flex gap-4 items-center pb-6 border-[#2D2D2D]',
+                    !noBorder && 'border-b-[1px]'
+                )}>
                 <div className="w-10 h-10 overflow-hidden rounded-full">
                     <Image
                         loading="lazy"
@@ -58,17 +95,32 @@ const TestimonyCard = ({
                         alt="testimony"
                     />
                 </div>
-                <div className="flex flex-col md:gap-[6px]">
-                    <span className="inline-block text-xs font-extrabold">
+                <div className="flex flex-col gap-1">
+                    <span
+                        className={cn(
+                            'inline-block text-xs font-extrabold',
+                            headerClassName
+                        )}>
                         {name}
                     </span>
-                    <span className="inline-block font-body text-[10px] text-neutral-400">
+                    <span
+                        className={cn(
+                            'inline-block font-body text-[10px] text-neutral-400',
+                            subtitleClassName
+                        )}>
                         {role}
                     </span>
                 </div>
             </div>
             <article>
-                <p className="pt-6 text-xs font-body md:text-sm">{testimony}</p>
+                <p
+                    className={cn(
+                        'text-xs font-body md:text-sm',
+                        !noBorder && 'pt-6',
+                        contentClassName
+                    )}>
+                    {testimony}
+                </p>
             </article>
         </div>
     );

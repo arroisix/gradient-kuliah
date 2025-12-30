@@ -1,5 +1,6 @@
 import { useUpdateUserMutation } from 'authentication/redux/api/authApi';
-import { createContext, ReactNode, useMemo, useState } from 'react';
+import { createContext, useMemo, useState } from 'react';
+import type { Dispatch, ReactNode, SetStateAction } from 'react';
 import { useTracker } from 'tracker/tracker';
 
 interface RegistrationContextType {
@@ -7,7 +8,7 @@ interface RegistrationContextType {
     formData: UpdateUserInputData;
     setFormData: (data: UpdateUserInputData) => void;
     step: number;
-    setStep: (step: number) => void;
+    setStep: Dispatch<SetStateAction<number>>;
     isUserUpdateLoading: boolean;
     isUserUpdateSuccess: boolean;
 }

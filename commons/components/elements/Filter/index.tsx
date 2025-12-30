@@ -72,13 +72,13 @@ const Filter = ({
             <button
                 onClick={() => setIsBottomSheetOpen(true)}
                 className={cn(
-                    'md:hidden flex justify-between items-center gap-2 text-xs font-bold pl-5 pr-3 py-3 bg-[#20222E] rounded-full',
+                    'md:hidden flex justify-between items-center gap-1 text-sm font-bold px-4 py-2 text-white bg-[#20222E] rounded-full',
                     fullWidth ? 'w-full' : 'w-full'
                 )}>
                 <span className="overflow-hidden whitespace-nowrap text-ellipsis">
                     {selected?.label.replace('Semua ', '')}
                 </span>
-                <BiChevronDown size={18} />
+                <BiChevronDown size={20} />
             </button>
 
             {/* Desktop: Dropdown */}
@@ -92,7 +92,7 @@ const Filter = ({
                 <button
                     onClick={handleDropdownToggle}
                     className={cn(
-                        'flex justify-between items-center gap-2 text-xs font-bold pl-5 pr-3 py-3 bg-[#20222E] rounded-full',
+                        'flex justify-between items-center gap-2 text-xs font-bold pl-5 pr-3 py-3 text-white bg-[#20222E] rounded-full',
                         fullWidth ? 'w-full' : 'w-full md:w-52'
                     )}>
                     <span className="overflow-hidden whitespace-nowrap text-ellipsis">
@@ -104,14 +104,14 @@ const Filter = ({
                     <ul
                         role="menu"
                         className={cn(
-                            'dropdown-content menu overflow-clip mt-1 [&_li>*]:rounded-none p-0 bg-[#20222E] text-xs rounded-lg z-50 divide-y divide-[#373737]',
+                            'absolute menu overflow-clip mt-1 [&_li>*]:rounded-none p-0 bg-[#20222E] text-xs rounded-lg z-50 divide-y divide-[#373737]',
                             fullWidth ? 'w-full' : 'w-full md:w-52'
                         )}>
                         {options.map(({ value, label }) => (
                             <li key={value} className="z-10">
                                 <button
                                     id={value}
-                                    className="flex justify-between items-center gap-3 px-[18px] py-[7.5px] border-t-[1px] border-[#373737] first:border-t-0 w-full text-left"
+                                    className="flex justify-between items-center gap-3 px-[18px] py-[7.5px] text-white border-t-[1px] border-[#373737] first:border-t-0 w-full text-left"
                                     onClick={() => handleOptionClick(value)}>
                                     {label}
                                     <BiCheck

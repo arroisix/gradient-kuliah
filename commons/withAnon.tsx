@@ -11,6 +11,9 @@ import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { getDisplayName, sanitizeUrl } from './utils';
 import { useGetPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
 import { sendGTMEvent } from '@next/third-parties/google';
+import { useLocalStorage } from 'usehooks-ts';
+import { useAuth } from 'authentication/contexts/AuthProvider';
+import LoadingBackdrop from './components/elements/LoadingBackdrop';
 
 const withAnon = <P extends object>(
     WrappedComponent: React.ComponentType<P>
@@ -27,12 +30,37 @@ const withAnon = <P extends object>(
                 everSubscribed,
                 isLoading: isLoadingSubscribed
             } = useCourseSubscription();
+            const { profile } = useAuth();
             const { data: pricingData, isLoading: isLoadingPricing } =
                 useGetPacketOfferQuery();
             const router = useRouter();
 
+            const [showAccountTypePrompt] = useLocalStorage(
+                'showAccountTypePrompt',
+                false
+            );
+
+            const redirectToFirstPage = () => {
+                if (profile?.current_role === 'K12') {
+                    router.replace('/utbk/dashboard');
+                } else {
+                    router.replace('/dashboard');
+                }
+            };
+
             if (!!accessToken) {
                 if (!isLoadingSubscribed && !isLoadingPricing) {
+                    if (
+                        router.pathname !== '/onboarding/jenis-akun' &&
+                        showAccountTypePrompt
+                    ) {
+                        router.push({
+                            pathname: '/onboarding/jenis-akun',
+                            query: router.query
+                        });
+                        return;
+                    }
+
                     if (['/masuk', '/daftar'].includes(router.pathname)) {
                         if (!isProfileComplete) {
                             router.replace(
@@ -52,7 +80,10 @@ const withAnon = <P extends object>(
                             );
                         } else {
                             if (is_subscribed) {
-                                router.replace('/dashboard');
+                                if (!profile) {
+                                    return <LoadingBackdrop />;
+                                }
+                                redirectToFirstPage();
                             } else {
                                 const packetId =
                                     localStorage.getItem('packetId');
@@ -81,7 +112,10 @@ const withAnon = <P extends object>(
                                     );
                                 } else {
                                     if (everSubscribed) {
-                                        router.replace('/dashboard');
+                                        if (!profile) {
+                                            return <LoadingBackdrop />;
+                                        }
+                                        redirectToFirstPage();
                                     } else if (!!router.query.redirect) {
                                         router.replace(
                                             `${sanitizeUrl(
@@ -95,9 +129,14 @@ const withAnon = <P extends object>(
                             }
                         }
                     } else if (
-                        ['/', '/landing-revamp'].includes(router.pathname)
+                        ['/', '/landing-revamp', '/utbk'].includes(
+                            router.pathname
+                        )
                     ) {
-                        router.replace('/dashboard');
+                        if (!profile) {
+                            return <LoadingBackdrop />;
+                        }
+                        redirectToFirstPage();
                     }
 
                     return <WrappedComponent {...(props as P)} />;

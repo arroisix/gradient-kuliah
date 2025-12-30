@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { GroupBase, default as ReactSelect } from 'react-select';
+import { GroupBase, default as ReactSelect, SingleValue } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import AsyncCreatableSelect from 'react-select/async-creatable';
 import AsyncSelect, { AsyncProps } from 'react-select/async';
@@ -16,6 +16,11 @@ export interface SelectProps {
     isCreatable?: boolean;
     // For async select
     isAsync?: boolean;
+    isSearchTarget?: boolean;
+    // whether to show "x" button or not
+    isClearable?: boolean;
+    // custom no option message
+    noOptionsMessage?: string;
     loadOption?: AsyncProps<Option, false, GroupBase<Option>>['loadOptions'];
 }
 
@@ -29,7 +34,10 @@ const Select: React.FC<SelectProps> = ({
     initialValue,
     isCreatable,
     isAsync,
-    loadOption
+    loadOption,
+    isSearchTarget = false,
+    isClearable = true,
+    noOptionsMessage = 'No options'
 }) => {
     const [chosen, setChosen] = useState<Option | null>(null);
 
@@ -43,15 +51,21 @@ const Select: React.FC<SelectProps> = ({
                     setChosen(matchingOption);
                 }
             } else {
+                let label = initialValue;
+                if (isSearchTarget) {
+                    // the format of "initialValue" is "institution_id:institution_name"
+                    label = initialValue.split(':')[1];
+                }
+
                 setChosen({
                     value: initialValue,
-                    label: initialValue
+                    label
                 });
             }
         }
     }, [initialValue, option]);
 
-    const onOptionChange = (val: any) => {
+    const onOptionChange = (val: SingleValue<Option>) => {
         onChange && onChange(val ? val.value : null);
         setChosen(val);
     };
@@ -67,38 +81,40 @@ const Select: React.FC<SelectProps> = ({
 
     return (
         <div className="flex flex-col w-full gap-1 font-body">
-            {label && <span className="text-[#999999] text-sm">{label}</span>}
+            {label && <span className="text-white text-sm">{label}</span>}
             <SelectComponent
-                isClearable
+                isClearable={isClearable}
                 options={option}
                 placeholder={placeholder && placeholder}
                 loadOptions={loadOption}
                 name={name}
                 value={chosen}
                 onChange={onOptionChange}
+                noOptionsMessage={() => noOptionsMessage}
                 styles={{
                     control: (base) => ({
                         ...base,
                         minHeight: '48px',
-                        background: '#121212',
+                        background: '#20222E',
                         borderRadius: '0.5rem',
                         borderWidth: '1px',
-                        borderColor: error ? '#ef4444' : '#242424',
+                        borderColor: error ? '#ef4444' : 'transparent',
                         boxShadow: 'none',
+                        padding: '0px 7px',
                         '&:hover': {
-                            borderColor: error ? '#ef4444' : '#242424'
+                            borderColor: error ? '#ef4444' : 'transparent'
                         }
                     }),
                     menu: (base) => ({
                         ...base,
-                        background: '#121212',
-                        borderRadius: '0.5rem',
-                        marginTop: 0,
+                        background: '#333540',
+                        borderRadius: '0.4rem',
+                        marginTop: '0.5rem',
                         zIndex: 100
                     }),
                     option: (base, { isFocused }) => ({
                         ...base,
-                        background: isFocused ? '#242424' : undefined,
+                        background: isFocused ? '#4a4c5c' : '#333540',
                         color: 'white'
                     }),
                     singleValue: (base) => ({
@@ -115,7 +131,14 @@ const Select: React.FC<SelectProps> = ({
                     }),
                     input: (base) => ({
                         ...base,
-                        color: 'white'
+                        color: 'white',
+                        'input:focus': {
+                            boxShadow: 'none'
+                        }
+                    }),
+                    placeholder: (base) => ({
+                        ...base,
+                        whiteSpace: 'nowrap'
                     })
                 }}
                 components={{ IndicatorSeparator: () => null }}

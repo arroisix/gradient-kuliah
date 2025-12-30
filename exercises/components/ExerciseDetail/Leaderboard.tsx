@@ -148,7 +148,11 @@ export const LeaderboardReport = () => {
     };
 
     return (
-        <div className="flex flex-col gap-4 relative lg:w-[700px]">
+        <div
+            className={cn(
+                'flex flex-col gap-4 relative',
+                exercise?.tryout_type === 'UTBK' ? 'w-full' : 'lg:w-[700px]'
+            )}>
             {isFetchingLeaderboard || !leaderboard ? (
                 <Skeleton isCustomSize className="w-full h-80" />
             ) : (
@@ -240,14 +244,16 @@ export const LeaderboardReport = () => {
                     size="large">
                     Selesai
                 </Button>
-                <Button
-                    variant="secondary"
-                    className="w-full flex items-center justify-center gap-2"
-                    onClick={onRetry}
-                    size="large">
-                    <RefreshCcw size={20} />
-                    <span>Coba Lagi</span>
-                </Button>
+                {exercise?.tryout_type !== 'UTBK' && (
+                    <Button
+                        variant="secondary"
+                        className="w-full flex items-center justify-center gap-2"
+                        onClick={onRetry}
+                        size="large">
+                        <RefreshCcw size={20} />
+                        <span>Coba Lagi</span>
+                    </Button>
+                )}
             </div>
         </div>
     );

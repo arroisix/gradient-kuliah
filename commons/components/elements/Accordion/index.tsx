@@ -11,11 +11,18 @@ interface AccordionItemProps {
     className?: string;
     isOpen?: boolean;
     onClick?: () => void;
+    containerClassName?: string;
+    headerClassName?: string;
+    iconClassName?: string;
 }
 
 interface AccordionProps {
     item: AccordionItemProps[];
     className?: string;
+    containerClassName?: string;
+    contentClassName?: string;
+    headerClassName?: string;
+    iconClassName?: string;
 }
 
 export const AccordionItem = ({
@@ -25,7 +32,10 @@ export const AccordionItem = ({
     onClick,
     className,
     isOpen,
-    isHeading
+    isHeading,
+    containerClassName,
+    headerClassName,
+    iconClassName
 }: AccordionItemProps): JSX.Element => {
     const [open, setOpen] = useState(isOpen ?? false);
     const AccordionTitle = isHeading ? 'h3' : 'span';
@@ -56,11 +66,12 @@ export const AccordionItem = ({
     };
 
     return (
-        <>
+        <div className={cn('rounded-lg', containerClassName)}>
             <button
                 className={cn(
-                    'text-sm w-full md:text-base font-semibold px-4 py-3 flex justify-between items-center cursor-pointer bg-neutral-900 first:mt-0 mt-4',
-                    open ? 'rounded-t-lg' : 'rounded-lg'
+                    'text-sm w-full md:text-base font-semibold px-4 py-3 flex justify-between items-center cursor-pointer bg-neutral-900',
+                    open ? 'rounded-t-lg' : 'rounded-lg',
+                    headerClassName
                 )}
                 onClick={() => {
                     setOpen(!open);
@@ -68,21 +79,39 @@ export const AccordionItem = ({
                 }}>
                 <AccordionTitle>{title}</AccordionTitle>
                 {open ? (
-                    <FaChevronUp className="w-4 h-4" />
+                    <FaChevronUp
+                        className={cn('w-4 h-4 shrink-0', iconClassName)}
+                    />
                 ) : (
-                    <FaChevronDown className="w-4 h-4" />
+                    <FaChevronDown
+                        className={cn('w-4 h-4 shrink-0', iconClassName)}
+                    />
                 )}
             </button>
             {open && renderContent()}
-        </>
+        </div>
     );
 };
 
-const Accordion = ({ item, className }: AccordionProps): JSX.Element => {
+const Accordion = ({
+    item,
+    className,
+    containerClassName,
+    contentClassName,
+    headerClassName,
+    iconClassName
+}: AccordionProps): JSX.Element => {
     return (
-        <div className={cn(className)}>
-            {item.map((props: AccordionItemProps) => (
-                <AccordionItem key={props.title} {...props} />
+        <div className={cn('flex flex-col gap-4', className)}>
+            {item.map(({ className, ...props }: AccordionItemProps) => (
+                <AccordionItem
+                    key={props.title}
+                    className={cn(className, contentClassName)}
+                    headerClassName={headerClassName}
+                    iconClassName={iconClassName}
+                    containerClassName={containerClassName}
+                    {...props}
+                />
             ))}
         </div>
     );

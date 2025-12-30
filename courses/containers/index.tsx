@@ -99,7 +99,10 @@ const ClassContainer = ({
                     />
                 )}
                 {!(activePacket && activePacket.subscription_id) && (
-                    <RenewSubscriptionBanner product="materi" />
+                    <>
+                        <RenewSubscriptionBanner product="materi" />
+                        {isAuthenticated && <div className="h-6 md:h-0" />}
+                    </>
                 )}
             </div>
         </>

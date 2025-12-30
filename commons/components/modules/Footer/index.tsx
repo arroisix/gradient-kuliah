@@ -11,6 +11,7 @@ import { MdMailOutline } from 'react-icons/md';
 import moment from 'moment';
 import Image from 'next/image';
 import { CDN_URL } from 'commons/constants';
+import { cn } from 'commons/utils';
 
 type FooterItemProps = {
     title: string;
@@ -56,6 +57,10 @@ const ITEMS: FooterItemProps[] = [
                 content: 'Kebijakan Privasi',
                 url: '/kebijakan-privasi'
             }
+            // {
+            //     content: 'Gradient UTBK',
+            //     url: '/utbk'
+            // }
         ]
     },
     {
@@ -88,6 +93,64 @@ const ITEMS: FooterItemProps[] = [
             {
                 content: 'Flashcard',
                 url: '/flashcards'
+            }
+        ]
+    }
+];
+
+const UTBK_ITEMS: FooterItemProps[] = [
+    {
+        title: 'Tentang Kami',
+        bodies: [
+            {
+                content: 'Tentang Gradient',
+                url: '/tentang-kami'
+            },
+            {
+                content: 'Karier',
+                url: '/karir'
+            },
+            {
+                content: 'Kontak Kami',
+                url: '/kontak-kami'
+            },
+            {
+                content: 'Testimoni',
+                url: '/testimoni'
+            }
+        ]
+    },
+    {
+        title: 'Panduan',
+        bodies: [
+            {
+                content: 'Syarat & Ketentuan',
+                url: '/syarat-dan-ketentuan'
+            },
+            {
+                content: 'Kebijakan Privasi',
+                url: '/kebijakan-privasi'
+            },
+            {
+                content: 'Gradient untuk Kuliah',
+                url: '/'
+            }
+        ]
+    },
+    {
+        title: 'Produk Gradient UTBK',
+        bodies: [
+            {
+                content: 'Materi',
+                url: '/materi'
+            },
+            {
+                content: 'Try Out',
+                url: '/utbk/try-out'
+            },
+            {
+                content: 'Prediksi PTN',
+                url: '/utbk/prediksi-ptn'
             }
         ]
     }
@@ -140,11 +203,17 @@ const SOCIAL_MEDIAS: FooterSocialMediaProps[] = [
     },
     {
         Icon: TikTok,
-        url: 'https://www.tiktok.com/@gradientacademy'
+        url: 'https://www.tiktok.com/@gradient_idn'
     }
 ];
 
-const Footer = (): JSX.Element => {
+const Footer = ({
+    isUtbk,
+    className
+}: {
+    isUtbk?: boolean;
+    className?: string;
+}): JSX.Element => {
     const TITLE_BODY_GAP = 4;
     const PRODUCT_BODY_GAP = 3;
     const CONTACT_BODY_GAP = 2;
@@ -153,26 +222,47 @@ const Footer = (): JSX.Element => {
     return (
         <footer
             id="footer"
-            className="w-screen flex flex-col bg-[#121212] gap-8 lg:gap-12 px-6 md:px-12 xl:px-24 pt-6 md:pt-8 pb-5 md:pb-6 ">
+            className={cn(
+                'w-screen flex flex-col bg-[#121212] gap-8 lg:gap-12 px-6 md:px-12 xl:px-24 pt-6 md:pt-8 pb-5 md:pb-6',
+                className
+            )}>
             <div className="flex flex-col-reverse w-full gap-8 lg:flex-row lg:gap-0">
                 <div className="flex flex-col w-full lg:flex-row gap-7 xl:gap-12">
-                    {ITEMS.map((item) => (
-                        <div
-                            key={item.title}
-                            className={`flex flex-col gap-${TITLE_BODY_GAP}`}>
-                            <Title title={item.title} />
-                            <div
-                                className={`flex flex-col gap-${PRODUCT_BODY_GAP}`}>
-                                {item.bodies.map((body) => (
-                                    <Body
-                                        key={body.content}
-                                        content={body.content}
-                                        url={body.url}
-                                    />
-                                ))}
-                            </div>
-                        </div>
-                    ))}
+                    {isUtbk
+                        ? UTBK_ITEMS.map((item) => (
+                              <div
+                                  key={item.title}
+                                  className={`flex flex-col gap-${TITLE_BODY_GAP}`}>
+                                  <Title title={item.title} />
+                                  <div
+                                      className={`flex flex-col gap-${PRODUCT_BODY_GAP}`}>
+                                      {item.bodies.map((body) => (
+                                          <Body
+                                              key={body.content}
+                                              content={body.content}
+                                              url={body.url}
+                                          />
+                                      ))}
+                                  </div>
+                              </div>
+                          ))
+                        : ITEMS.map((item) => (
+                              <div
+                                  key={item.title}
+                                  className={`flex flex-col gap-${TITLE_BODY_GAP}`}>
+                                  <Title title={item.title} />
+                                  <div
+                                      className={`flex flex-col gap-${PRODUCT_BODY_GAP}`}>
+                                      {item.bodies.map((body) => (
+                                          <Body
+                                              key={body.content}
+                                              content={body.content}
+                                              url={body.url}
+                                          />
+                                      ))}
+                                  </div>
+                              </div>
+                          ))}
                 </div>
                 <div className="flex flex-col-reverse w-full lg:flex-row gap-7 xl:gap-12 lg:justify-end">
                     <div className={`flex flex-col gap-${TITLE_BODY_GAP}`}>

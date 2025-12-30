@@ -1,39 +1,40 @@
 import { useContext } from 'react';
 import RegistrationContext from 'authentication/contexts/RegistrationProvider';
 import { ONBOARDING_STEP } from 'authentication/constants';
-import { OnboardingStepper } from 'authentication/components/OnboardingStepper';
-import { OnboardingSuccess } from './OnboardingSuccess';
 import { useSelector } from 'react-redux';
 import { getIsProfileComplete } from 'authentication/redux/selectors/userSelector';
+import { useGetProfileQuery } from 'authentication/redux/api/authApi';
+import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
+import { EmailVerificationStep } from './EmailVerificationStep';
+import { useLocalStorage } from 'usehooks-ts';
+import { OnboardingStepper } from 'authentication/components/OnboardingStepper';
 
 export const OnboardingSection = (): JSX.Element => {
     const isProfileComplete = useSelector(getIsProfileComplete);
-    const { step, isUserUpdateLoading, isUserUpdateSuccess } =
-        useContext(RegistrationContext);
+    const { step } = useContext(RegistrationContext);
     const FormStep = ONBOARDING_STEP[step];
-
-    return (
-        <>
-            {(!isUserUpdateLoading && isUserUpdateSuccess) ||
-            isProfileComplete ? (
-                <OnboardingSuccess />
-            ) : (
-                <div className="px-[16px] md:px-0 w-full md:w-[400px] flex flex-col items-center min-h-screen">
-                    <div className="h-[37px] w-full flex-shrink-0"></div>
-                    <div
-                        id="form"
-                        className="w-full flex flex-col gap-8 flex-grow">
-                        <h1 className="w-full text-3xl font-extrabold">
-                            Lengkapi akunmu
-                        </h1>
-                        <FormStep />
-                    </div>
-                    <div className="h-[128px] w-full flex-shrink-0"></div>
-                    <div className="sticky bottom-[24px] px-[16px] md:px-0 w-full">
-                        <OnboardingStepper />
-                    </div>
-                </div>
-            )}
-        </>
+    const [showEmailVerification] = useLocalStorage(
+        'showEmailVerification',
+        false
     );
+    const { data: profile, isLoading } = useGetProfileQuery({});
+
+    if (isLoading) {
+        return <LoadingBackdrop />;
+    }
+
+    if (isProfileComplete && showEmailVerification && profile?.email) {
+        return <EmailVerificationStep />;
+    } else {
+        return (
+            <div className="px-4 w-full flex flex-col items-center max-w-[739px]">
+                <OnboardingStepper className="mb-[56px] mt-[24px]" />
+                <div
+                    id="form"
+                    className="w-full flex flex-col gap-8 flex-grow items-center">
+                    <FormStep />
+                </div>
+            </div>
+        );
+    }
 };

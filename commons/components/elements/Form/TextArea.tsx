@@ -31,14 +31,14 @@ const TextArea: React.FC<InputProps> = ({
     required
 }) => (
     <div className="flex flex-col w-full gap-1 font-body">
-        {label && <span className="text-[#999999] text-sm">{label}</span>}
+        {label && <span className="text-white text-sm">{label}</span>}
         <div
-            className={`flex w-full items-center rounded-lg p-2 border bg-[#242424] ${
-                error ? 'border-red-500' : 'border-[#242424]'
+            className={`flex w-full items-center rounded-lg px-4 py-3 border bg-violet-2 ${
+                error ? 'border-red-500' : 'border-transparent'
             } ${className}`}>
             <div>{startAddorment}</div>
             <textarea
-                className={`form-input bg-transparent border-0 w-full focus:outline-none focus:ring-0 focus:appearance-none placeholder:text-neutral-400`}
+                className={`p-0 form-input bg-transparent border-0 w-full focus:outline-none focus:ring-0 focus:appearance-none placeholder:text-neutral-400`}
                 placeholder={placeholder}
                 onChange={onChange}
                 onWheel={(e) => (e.target as HTMLElement).blur()}

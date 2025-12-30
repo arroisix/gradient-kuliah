@@ -3,10 +3,7 @@ import Button from 'commons/components/elements/Button';
 import { useContext, useEffect } from 'react';
 import RegistrationContext from 'authentication/contexts/RegistrationProvider';
 import Select from 'commons/components/elements/Form/select';
-import {
-    EDUCATION_OPTIONS,
-    PROFESSION_OPTIONS
-} from 'authentication/constants';
+import { EDUCATION_OPTIONS } from 'authentication/constants';
 import { useTracker } from 'tracker/tracker';
 import { useOptionLoader } from 'authentication/hooks/useOptionLoader';
 
@@ -25,10 +22,6 @@ export const EducationStep = (): JSX.Element => {
         setOptions: setMajorOption,
         loadOptions: loadMajorOption
     } = useOptionLoader('major');
-    const {
-        options: professionFieldOption,
-        loadOptions: loadProfessionFieldOption
-    } = useOptionLoader('industry');
 
     const getHandleSelectChange = (
         fieldName: string,
@@ -52,14 +45,15 @@ export const EducationStep = (): JSX.Element => {
     }, []);
 
     return (
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full max-w-[360px]">
+            <h1 className="mb-10 text-2xl font-bold">Isi Detail Pendidikan</h1>
             <Formik
                 initialValues={
                     {
                         education_level: formData.education_level || '',
                         institution: formData.institution || '',
                         major: formData.major || '',
-                        profession: formData.profession || '',
+                        profession: formData.profession || 'student',
                         profession_field: formData.profession_field || ''
                     } as UpdateUserInputData
                 }
@@ -102,13 +96,13 @@ export const EducationStep = (): JSX.Element => {
                 }) => {
                     return (
                         <form onSubmit={handleSubmit}>
-                            <div className="flex flex-col gap-4">
+                            <div className="flex flex-col gap-6">
                                 <Select
                                     onChange={getHandleSelectChange(
                                         'education_level',
                                         setFieldValue
                                     )}
-                                    label="Tingkat Pendidikan"
+                                    label="Tingkat Pendidikan Sekarang"
                                     name="educationLevel"
                                     option={EDUCATION_OPTIONS}
                                     initialValue={values.education_level}
@@ -136,14 +130,14 @@ export const EducationStep = (): JSX.Element => {
                                         values.education_level === 'SMA' ||
                                         values.education_level === 'SMK'
                                             ? 'Asal Sekolah'
-                                            : 'Asal Universitas/Institusi'
+                                            : 'Asal Kampus'
                                     }
                                     placeholder={
                                         values.education_level === 'SMP' ||
                                         values.education_level === 'SMA' ||
                                         values.education_level === 'SMK'
                                             ? 'Tuliskan asal sekolah'
-                                            : 'Tuliskan asal universitas/institusi'
+                                            : 'Tuliskan asal kampus'
                                     }
                                     error={
                                         touched.institution &&
@@ -173,45 +167,8 @@ export const EducationStep = (): JSX.Element => {
                                         }
                                     />
                                 )}
-                                <Select
-                                    onChange={getHandleSelectChange(
-                                        'profession',
-                                        setFieldValue
-                                    )}
-                                    label="Pekerjaan"
-                                    name="profession"
-                                    option={PROFESSION_OPTIONS}
-                                    initialValue={values.profession}
-                                    placeholder="Tuliskan pekerjaan"
-                                    error={
-                                        touched.profession && errors.profession
-                                            ? errors.profession
-                                            : undefined
-                                    }
-                                />
-                                {values.profession === 'employed' && (
-                                    <Select
-                                        onChange={getHandleSelectChange(
-                                            'profession_field',
-                                            setFieldValue
-                                        )}
-                                        isAsync
-                                        loadOption={loadProfessionFieldOption}
-                                        name="institution"
-                                        option={professionFieldOption}
-                                        label="Bidang Pekerjaan"
-                                        initialValue={values.profession_field}
-                                        placeholder="Tuliskan bidang pekerjaan"
-                                        error={
-                                            touched.profession_field &&
-                                            errors.profession_field
-                                                ? errors.profession_field
-                                                : undefined
-                                        }
-                                    />
-                                )}
                             </div>
-                            <div className="fixed left-0 md:left-auto bottom-[52px] px-[16px] md:px-0 w-full md:w-[400px]">
+                            <div>
                                 <Button
                                     disabled={
                                         !values.education_level ||
@@ -224,7 +181,7 @@ export const EducationStep = (): JSX.Element => {
                                         !isFormValid
                                     }
                                     variant="custom"
-                                    className="w-full mt-4 text-white bg-accent-purple"
+                                    className="w-full mt-10 text-white bg-accent-purple h-[46px]"
                                     type="submit">
                                     Selanjutnya
                                 </Button>

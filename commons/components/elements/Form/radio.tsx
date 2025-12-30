@@ -1,3 +1,4 @@
+import { cn } from 'commons/utils';
 import { useState } from 'react';
 
 type RadioOption = {
@@ -41,16 +42,17 @@ const Radio = ({
     };
 
     return (
-        <div className="flex flex-col w-full gap-1 font-body">
-            {label && <span className="text-[#999999] text-sm">{label}</span>}
-            <div className="flex flex-wrap ">
+        <div className="flex flex-col w-full gap-2 font-body">
+            {label && <span className="text-white text-sm">{label}</span>}
+            <div className="flex flex-wrap gap-2">
                 {options.map((option: RadioOption) => (
                     <div
-                        className={`cursor-pointer py-2 px-5 rounded-full border mr-2 mb-2  ${
+                        className={cn(
+                            'cursor-pointer py-2 px-4 rounded-full text-base',
                             radioValue === option.key
-                                ? 'bg-[#7264EB] border-[#5F2BCE] text-white'
-                                : 'bg-[#121212] border-[#242424]'
-                        }`}
+                                ? 'bg-accent-purple text-white font-semibold'
+                                : 'bg-[#333540]'
+                        )}
                         key={option.key}
                         onClick={() => changeValue(option)}
                         aria-hidden={true}>

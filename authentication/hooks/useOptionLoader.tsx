@@ -27,5 +27,33 @@ export const useOptionLoader = (
         });
     };
 
-    return { options, setOptions, loadOptions };
+    const loadTargetOptions: (
+        institution_id?: string,
+        major_id?: string
+    ) => SelectProps['loadOption'] = (institution_id, major_id) => {
+        return function (input, callback) {
+            fetchRecommendation(
+                {
+                    is_search_target: true,
+                    fieldName,
+                    input,
+                    institution_id,
+                    major_id
+                },
+                true
+            ).then((query) => {
+                const options: Option[] =
+                    query.data?.map((item) => ({
+                        value: `${item.id}:${item.name}`,
+                        label: item.name,
+                        passing_grade: item?.passing_grade
+                    })) ?? [];
+
+                setOptions(options);
+                callback?.(options);
+            });
+        };
+    };
+
+    return { options, setOptions, loadOptions, loadTargetOptions };
 };

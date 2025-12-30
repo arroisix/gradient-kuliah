@@ -10,6 +10,8 @@ import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector'
 import AnnouncementModal from 'dashboard/components/Announcement/AnnouncementModal';
 import { useGetAnnouncementsQuery } from 'dashboard/redux/api/dashboardApi';
 import DashboardUpdatesBanner from 'dashboard/components/DashboardBanner';
+import { useAuth } from 'authentication/contexts/AuthProvider';
+import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 
 const DashboardContainer = (): JSX.Element => {
     const router = useRouter();
@@ -23,6 +25,7 @@ const DashboardContainer = (): JSX.Element => {
     const { data: announcements } = useGetAnnouncementsQuery(undefined, {
         skip: !isAuthenticated
     });
+    const { profile } = useAuth();
 
     useEffect(() => {
         if (checkout === 'success') setIsReferralModalOpen(true);
@@ -38,6 +41,10 @@ const DashboardContainer = (): JSX.Element => {
         setIsAnnouncementModalOpen(status);
         setIsAnnouncementAlreadyOpened(true);
     };
+
+    if (isAuthenticated && !profile) {
+        return <LoadingBackdrop />;
+    }
 
     return (
         <section className="flex flex-col w-full gap-6 pb-4 mx-auto sm:overflow-x-clip md:overflow-x-visible max-w-screen-2xl">

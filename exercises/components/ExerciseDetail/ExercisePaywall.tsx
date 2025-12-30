@@ -4,16 +4,35 @@ import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useRouter } from 'next/router';
 import { useGetPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
 import ExerciseDetailHeader from '../Header/ExerciseDetailHeader';
+import { useAuth } from 'authentication/contexts/AuthProvider';
+import Langganan from 'landing/components/utbk/Langganan';
 
 const ExercisePaywall = ({ isFree }: { isFree: boolean }) => {
     const router = useRouter();
     const { slug } = router.query;
+    const { profile } = useAuth();
     const { is_subscribed } = useCourseSubscription();
     const { data } = useGetPacketOfferQuery();
     const { isTabletBreakpoints, isMobileBreakpoints } = useWindowBreakpoints();
 
     if (isFree || is_subscribed) {
         return null;
+    }
+
+    if (profile?.current_role === 'K12') {
+        return (
+            <div
+                className={
+                    'fixed  top-0 left-0 h-screen w-screen -inset-2 backdrop-blur-lg lg:inset-0 z-[15] flex flex-col justify-center items-center'
+                }>
+                <div className="w-full max-w-screen-xl flex items-center absolute top-0 p-4">
+                    <ExerciseDetailHeader />
+                </div>
+                <div className="w-full max-w-screen-xl overflow-y-auto py-16">
+                    <Langganan removeFree packetClassName="flex w-full" />
+                </div>
+            </div>
+        );
     }
 
     return (

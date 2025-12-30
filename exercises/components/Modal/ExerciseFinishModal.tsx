@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import {
     useGetCheckProblemsetCompletenessQuery,
+    useGetExerciseDetailV2Query,
     useGetProblemInProblemSetQuery
 } from '../../redux/api/exercisesApi';
 import { useTracker } from 'tracker/tracker';
@@ -52,6 +53,16 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
                 refetchOnFocus: true
             }
         );
+
+    const { data: exercise } = useGetExerciseDetailV2Query(
+        {
+            exercise_slug: slug as string,
+            exercise_progress_id: exerciseProgressId as string
+        },
+        {
+            skip: !slug
+        }
+    );
 
     const { finishProblemSet } = useSubmitAnswerHandler(problem!);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -137,11 +148,11 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
                             height={140}
                         />
                         <h2 className="text-xl font-semibold text-white mb-4 text-center mt-6">
-                            Submit dan pindah ke section berikutnya?
+                            Submit dan pindah ke subtes berikutnya?
                         </h2>
                         <p className="text-[#999999] text-center mb-6">
-                            Kamu sudah di akhir section. Setelah submit, kamu
-                            tidak akan bisa kembali lagi ke section ini
+                            Kamu sudah di akhir subtes. Setelah submit, kamu
+                            tidak akan bisa kembali lagi ke subtes ini
                         </p>
                         <div className="flex flex-col lg:flex-row gap-4">
                             <button
@@ -151,14 +162,17 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
                                 {isSubmitting ? (
                                     <span className="loading loading-spinner loading-sm"></span>
                                 ) : (
-                                    'Submit & Pindah Section'
+                                    'Submit & Pindah Subtes'
                                 )}
                             </button>
                             <button
                                 onClick={handleCancel}
                                 disabled={isSubmitting}
                                 className="bg-white/10 font-semibold text-white py-2 lg:py-3 px-6 rounded-full hover:bg-opacity-90 transition-colors w-full order-2 lg:order-1">
-                                Kembali ke Latihan
+                                Kembali{' '}
+                                {exercise?.tryout_type === 'UTBK'
+                                    ? 'Try Out'
+                                    : 'ke Latihan'}
                             </button>
                         </div>
                     </>
@@ -193,7 +207,10 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
                                 onClick={handleCancel}
                                 disabled={isSubmitting}
                                 className="bg-white/10 font-semibold text-white py-2 lg:py-3 px-6 rounded-full hover:bg-opacity-90 transition-colors w-full order-2 lg:order-1">
-                                Kembali ke Latihan
+                                Kembali{' '}
+                                {exercise?.tryout_type === 'UTBK'
+                                    ? 'Try Out'
+                                    : 'ke Latihan'}
                             </button>
                         </div>
                     </>
@@ -218,7 +235,10 @@ const ExerciseFinishModal: React.FC<ExerciseFinishModalProps> = ({
                                 onClick={handleCancel}
                                 disabled={isSubmitting}
                                 className="bg-white/10 font-semibold text-white py-2 lg:py-3 px-6 rounded-full hover:bg-opacity-90 transition-colors w-full order-2 lg:order-1">
-                                Kembali Latihan
+                                Kembali{' '}
+                                {exercise?.tryout_type === 'UTBK'
+                                    ? 'Try Out'
+                                    : 'Latihan'}
                             </button>
                             <button
                                 onClick={handleSubmit}

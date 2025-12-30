@@ -9,6 +9,8 @@ import LoadingBackdrop from './components/elements/LoadingBackdrop';
 import { useRouter } from 'next/router';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { getDisplayName, sanitizeUrl } from './utils';
+import { useLocalStorage } from 'usehooks-ts';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 const withAuth = (WrappedComponent: React.ComponentType) => {
     const WithAuth = (
@@ -24,50 +26,38 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
             const { is_subscribed, isDoneFetchingSubcription, isLoading } =
                 useCourseSubscription();
             const isProfileComplete = useSelector(getIsProfileComplete);
-            const isLastOnboardingStep = localStorage.getItem(
-                'isLastOnboardingStep'
+            const [showEmailVerification] = useLocalStorage(
+                'showEmailVerification',
+                false
             );
+            const { profile } = useAuth();
 
             if (!!rawToken && !accessToken) {
                 return <LoadingBackdrop />;
             } else if (isAuthenticated) {
                 if (isLoading) {
                     return <LoadingBackdrop />;
+                } else if (!profile) {
+                    return <LoadingBackdrop />;
                 } else if (isDoneFetchingSubcription) {
                     if (
                         router.pathname === '/onboarding' &&
                         isProfileComplete &&
-                        !(isLastOnboardingStep === 'true') &&
                         is_subscribed
                     ) {
-                        router.push('/dashboard');
-                        return;
-                    }
-
-                    if (
-                        router.pathname === '/onboarding' &&
-                        !isProfileComplete
-                    ) {
-                        return <WrappedComponent {...props} />;
-                    }
-
-                    if (
-                        router.pathname === '/onboarding' &&
-                        isProfileComplete &&
-                        isLastOnboardingStep === 'true' &&
-                        !is_subscribed
-                    ) {
-                        const packetId = localStorage.getItem('packetId');
-                        if (packetId) {
-                            router.push(`/pembayaran?packetId=${packetId}`);
-                        } else if (router.query.redirect) {
-                            router.push(
-                                sanitizeUrl(router.query.redirect as string)
-                            );
+                        if (profile?.current_role === 'K12') {
+                            router.replace('/latihan');
                         } else {
-                            router.push('/');
+                            router.replace('/dashboard');
                         }
                         return;
+                    }
+
+                    if (
+                        router.pathname === '/onboarding' &&
+                        (!isProfileComplete || showEmailVerification)
+                    ) {
+                        return <WrappedComponent {...props} />;
                     }
 
                     if (
@@ -78,7 +68,8 @@ const withAuth = (WrappedComponent: React.ComponentType) => {
                             '/pembayaran',
                             '/checkout',
                             '/referral',
-                            '/latihan'
+                            '/latihan',
+                            '/onboarding/jenis-akun'
                         ].some((value) => router.pathname.includes(value)) &&
                         !is_subscribed
                     ) {
