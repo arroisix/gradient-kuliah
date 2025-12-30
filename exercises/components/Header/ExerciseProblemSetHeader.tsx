@@ -4,6 +4,7 @@ import { cn } from 'commons/utils';
 import { useState } from 'react';
 import ExerciseCloseModal from '../Modal/ExerciseCloseModal';
 import { useGetExerciseDetailV2Query } from 'exercises/redux/api/exercisesApi';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 const ExerciseProblemSetHeader = ({
     isExerciseDetailPage = false
@@ -11,6 +12,7 @@ const ExerciseProblemSetHeader = ({
     isExerciseDetailPage?: boolean;
 }) => {
     const router = useRouter();
+    const { profile } = useAuth();
     const { slug, exerciseProgressId } = router.query;
     const [isModalOpen, setIsModalOpen] = useState(false);
     const handleConfirmClose = (): void => {
@@ -29,8 +31,13 @@ const ExerciseProblemSetHeader = ({
     );
 
     const onClose = () => {
-        if (isExerciseDetailPage) router.push(`/latihan/`);
-        else setIsModalOpen(true);
+        if (isExerciseDetailPage || router.pathname === '/latihan/[slug]') {
+            profile?.current_role === 'K12'
+                ? router.push('/utbk/try-out')
+                : router.push('/latihan');
+        } else {
+            setIsModalOpen(true);
+        }
     };
 
     return (
