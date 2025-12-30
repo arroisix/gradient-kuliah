@@ -128,6 +128,9 @@ export const BREADCRUMB: BreadcrumbProps = {
     '/latihan': {
         name: 'Try Out'
     },
+    '/utbk/try-out': {
+        name: 'Try Out'
+    },
     '/testimonial': {
         name: 'Testimonial'
     },

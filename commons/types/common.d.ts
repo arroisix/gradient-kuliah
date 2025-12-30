@@ -107,6 +107,7 @@ type BreadcrumbPathnames =
     | '/search/results'
     | '/search/results/[keywords]'
     | '/latihan'
+    | '/utbk/try-out'
     | '/testimonial'
     | '/flashcards'
     | '/flashcards/[slug]'
