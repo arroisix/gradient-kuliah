@@ -4,12 +4,12 @@ import useTransition from 'commons/hooks/useTransition';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import DropdownFilter from 'komunitas/components/DropdownFilter';
 import DropdownSort from 'komunitas/components/DropdownSort';
-import KomunitasForm from 'komunitas/components/KomunitasForm';
 import KomunitasInput from 'komunitas/components/KomunitasInput';
 import MobileTabs from 'komunitas/components/MobileTabs';
 import QuestionCard from 'komunitas/components/QuestionCard';
 import { useKomunitas } from 'komunitas/contexts/KomunitasProvider';
 import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
 import React, { useEffect, useRef, useState } from 'react';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { CgSearch } from 'react-icons/cg';
@@ -26,6 +26,11 @@ import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 import Spinner from 'commons/components/elements/Spinner';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
+
+const KomunitasForm = dynamic(
+    () => import('komunitas/components/KomunitasForm'),
+    { ssr: false }
+);
 
 const KomunitasContainer = ({
     initialData

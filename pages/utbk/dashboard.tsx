@@ -1,22 +1,22 @@
 import { useAuth } from 'authentication/contexts/AuthProvider';
-import Button from 'commons/components/elements/Button';
-import { CDN_URL } from 'commons/constants';
+// import Button from 'commons/components/elements/Button';
+// import { CDN_URL } from 'commons/constants';
 import LearnLayout from 'commons/learnLayout';
 import Layout from 'commons/utbkLayout';
 import withAnon from 'commons/withAnon';
-import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+// import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import K12Dashboard from 'dashboard/containers/K12Dashboard';
 import { GetStaticProps } from 'next';
-import Image from 'next/image';
+// import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 const Dashboard = (): JSX.Element => {
     const router = useRouter();
-    const { is_subscribed } = useCourseSubscription();
+    // const { is_subscribed } = useCourseSubscription();
 
-    const onClickSubscribeBanner = () => {
-        router.push('/langganan');
-    };
+    // const onClickSubscribeBanner = () => {
+    //     router.push('/langganan');
+    // };
 
     const { isLoadingProfile, isAuthenticated } = useAuth();
 
@@ -40,7 +40,7 @@ const Dashboard = (): JSX.Element => {
             <>
                 <K12Dashboard />
 
-                {is_subscribed === false && (
+                {/* {is_subscribed === false && (
                     <div className="mx-auto max-w-[520px] md:max-w-[717px] md:fixed md:bottom-0 md:left-1/2 md:w-[60%] z-40 md:translate-x-[calc(-50%+125px)]">
                         <div className="relative rounded-2xl md:rounded-none md:rounded-t-2xl px-6 py-4 md:p-6 flex flex-col md:flex-row md:items-center gap-6 bg-[#5F2BCE] overflow-hidden">
                             <div className="flex flex-col gap-2 z-10">
@@ -75,7 +75,7 @@ const Dashboard = (): JSX.Element => {
                             </div>
                         </div>
                     </div>
-                )}
+                )} */}
             </>
         </LearnLayout>
     );
