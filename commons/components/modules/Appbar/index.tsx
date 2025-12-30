@@ -20,7 +20,10 @@ const DISPLAYED_ROUTES = [
     '/perpustakaan',
     '/latihan',
     '/alat-belajar',
-    '/materi'
+    '/materi',
+    '/utbk/dashboard',
+    '/utbk/materi',
+    '/utbk/try-out'
 ];
 
 const APPBAR_NAV_COLLEGE_STUDENT: AppbarNav[] = [
@@ -55,17 +58,17 @@ const APPBAR_NAV_COLLEGE_STUDENT: AppbarNav[] = [
 const APPBAR_NAV_K12: AppbarNav[] = [
     {
         icon: <HomeIcon className="w-5 h-5" />,
-        href: '/dashboard',
+        href: '/utbk/dashboard',
         label: 'Home'
     },
     {
         icon: <KelasIcon size={20} />,
-        href: '/materi',
+        href: '/utbk/materi',
         label: 'Materi'
     },
     {
         icon: <PencilOnLineIcon size={20} />,
-        href: '/latihan',
+        href: '/utbk/try-out',
         label: 'Try Out'
     }
 ];
