@@ -45,7 +45,7 @@ export default function Hero(): JSX.Element {
                     }}>
                     Platform Belajar No. 1 Untuk UTBK
                 </p>
-                <h1 className="text-[32px] -tracking-[2.4px] text-white font-extrabold max-w-[238px] md:max-w-[703px] text-center mb-4 md:text-[96px] md:leading-[96px]">
+                <h1 className="text-[40px] leading-[48px] -tracking-[2.4px] text-white font-extrabold max-w-[278px] md:max-w-[703px] text-center mb-4 md:text-[96px] md:leading-[96px]">
                     Masuk Kampus{' '}
                     <span
                         className={cn(
@@ -56,12 +56,12 @@ export default function Hero(): JSX.Element {
                     </span>
                     <br /> Mulai dari Sini.
                 </h1>
-                <p className="text-center text-[#DEDEDE] text-base md:text-xl leading-[140%] font-semibold max-w-[327px] md:max-w-[664px] mb-10">
+                <p className="text-center text-[#DEDEDE] text-base md:text-xl leading-[140%] font-semibold max-w-[306px] md:max-w-[664px] mb-6 md:mb-10">
                     Sistem persiapan UTBK cerdas yang menghubungkan materi
                     adaptif, analisis AI, dan tryout berbasis IRT dalam satu
                     ekosistem belajar.
                 </p>
-                <div className="flex flex-col md:flex-row gap-4 self-center mb-16 px-[54px] max-w-[564px] w-full">
+                <div className="flex flex-col md:flex-row gap-4 self-center mb-8 md:mb-16 px-[54px] max-w-[564px] w-full">
                     <Button
                         variant="primary"
                         linkClass="h-[52px] w-full md:basis-1/2"
@@ -78,7 +78,7 @@ export default function Hero(): JSX.Element {
                 </div>
 
                 <div className="flex flex-col items-center md:flex-row gap-6">
-                    <ul className="flex [&>li:not(:first-child)]:-ml-3 *:rounded-full *:h-[50px] *:w-[50px] *:flex list-none p-0">
+                    <ul className="flex [&>li:not(:first-child)]:-ml-3 *:rounded-full *:h-[50px] *:w-[50px] *:flex list-none p-0 h-[50px]">
                         <li>
                             <Image
                                 src={`${CDN_URL}/assets/testimonials/achmad-adil.jpg`}
@@ -109,7 +109,7 @@ export default function Hero(): JSX.Element {
                                 loading="lazy"
                             />
                         </li>
-                        <li className="bg-[#1F2937] flex items-center justify-center border-solid border-2 border-black">
+                        <li className="bg-[#1F2937] flex items-center justify-center border-solid border-2 border-black rounded-full w-[50px]">
                             <p className="text-[#9CA3AF] font-bold">+2k</p>
                         </li>
                     </ul>

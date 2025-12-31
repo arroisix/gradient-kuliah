@@ -107,11 +107,11 @@ const MobileSidebar = ({
         <AnimatePresence>
             {open && (
                 <motion.div
-                    initial={{ x: '-100%' }}
-                    animate={{ x: 0 }}
-                    exit={{ x: '-100%' }}
+                    initial={{ y: '100%' }}
+                    animate={{ y: 0 }}
+                    exit={{ y: '100%' }}
                     transition={{ duration: 0.35 }}
-                    className="fixed z-[110] top-0 left-0 w-screen h-screen bg-black bg-opacity-90 flex flex-col gap-12"
+                    className="fixed z-[110] top-0 left-0 w-screen h-dvh bg-black bg-opacity-90 flex flex-col gap-12"
                     style={{
                         backdropFilter: 'blur(32px)'
                     }}>
