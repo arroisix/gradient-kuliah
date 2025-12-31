@@ -244,8 +244,8 @@ function PeluangCard({
                     <CgInfo className="text-[#999999] w-4 h-4 shrink-0" />
                     <p className="text-[#999999] text-[10px]">
                         Bobot penilaian berbeda di tiap jurusan di masing-masing
-                        universitas. Hasil diatas merupakan estimasi berdasarkan
-                        data passing grade dari internal.
+                        universitas. Hasil di atas merupakan estimasi
+                        berdasarkan data <i>passing grade</i> dari internal.
                     </p>
                 </div>
 
