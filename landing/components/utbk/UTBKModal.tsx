@@ -96,7 +96,7 @@ export default function UTBKModal({
                     </div>
 
                     <Button
-                        href="/materi"
+                        href="/utbk/materi"
                         variant="primary"
                         className="flex items-center justify-center text-sm leading-[125%] gap-[6px] font-semibold"
                         linkClass="w-max self-center md:self-end">
