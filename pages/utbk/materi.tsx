@@ -1,8 +1,8 @@
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import LearnLayout from 'commons/learnLayout';
 import Layout from 'commons/utbkLayout';
-import { MateriComingSoon } from 'landing/components/utbk/MateriComingSoon';
-import { GetStaticProps } from 'next';
+import { MateriEntrypoint } from 'courses/components/utbk/MateriEntrypoint';
+import type { GetStaticProps } from 'next';
 
 const MateriPage = (): JSX.Element => {
     const { isLoadingProfile, isAuthenticated } = useAuth();
@@ -16,8 +16,8 @@ const MateriPage = (): JSX.Element => {
     if (!isAuthenticated) {
         return (
             <Layout>
-                <div className="w-screen h-screen relative">
-                    <MateriComingSoon />
+                <div className="w-full max-w-5xl mx-auto px-6 pt-[calc(92px+32px)]">
+                    <MateriEntrypoint />
                 </div>
             </Layout>
         );
@@ -25,8 +25,8 @@ const MateriPage = (): JSX.Element => {
 
     return (
         <LearnLayout showSidebar fullHeightSidebar className="relative">
-            <div className="relative w-full h-[calc(100vh-128px)]">
-                <MateriComingSoon />
+            <div className="w-full max-w-5xl mx-auto mt-8">
+                <MateriEntrypoint />
             </div>
         </LearnLayout>
     );
