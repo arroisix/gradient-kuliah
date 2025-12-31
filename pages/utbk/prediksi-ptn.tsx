@@ -375,20 +375,25 @@ export const PrediksiPTN = (): JSX.Element => {
                                     isSearchTarget
                                     isClearable={false}
                                     noOptionsMessage="Ketik nama universitas"
-                                    onChange={handleOnChange(
-                                        'institution',
-                                        setFieldValue
-                                    )}
+                                    onChange={(res) => {
+                                        handleOnChange(
+                                            'institution',
+                                            setFieldValue
+                                        )(res);
+
+                                        setFieldValue('major', '');
+                                        setFieldValue('passing_grade', 0);
+                                    }}
                                     initialValue={institution}
                                     option={institutionOptions}
                                     loadOption={loadInstitutionOption(
-                                        institution.split(':')[0],
-                                        major.split(':')[0]
+                                        institution.split(':')[0]
                                     )}
                                     name="institution"
                                     placeholder="Pilih Kampus"
                                 />
                                 <Select
+                                    key={institution}
                                     isAsync
                                     isSearchTarget
                                     isClearable={false}
