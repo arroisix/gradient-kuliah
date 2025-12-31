@@ -10,6 +10,7 @@ import Button from 'commons/components/elements/Button';
 import { ArrowSvg } from './components/utbk/Arrows';
 import MobileSidebar from './components/utbk/MobileSidebar';
 import NavigationMenuItem from './components/utbk/NavigationMenuItem';
+import UTBKLogo from './components/utbk/UTBKLogo';
 
 function UTBKNavbar(): JSX.Element {
     const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -25,8 +26,9 @@ function UTBKNavbar(): JSX.Element {
                 }}>
                 <Link
                     href="/utbk"
-                    className="text-2xl leading-6 tracking-[0.08px] font-bold font-[Urbanist] text-[#E9E9E9]">
+                    className="text-2xl leading-6 tracking-[0.08px] font-bold font-[Urbanist] text-[#E9E9E9] flex items-center gap-2">
                     Gradient
+                    <UTBKLogo />
                 </Link>
 
                 <NavigationMenu.Root className="hidden lg:block absolute left-1/2 -translate-x-1/2 transform">
