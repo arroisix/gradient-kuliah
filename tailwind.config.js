@@ -93,10 +93,18 @@ module.exports = {
                 slideLeft: {
                     '0%': { transform: 'translateX(0)' },
                     '100%': { transform: 'translateX(-100%)' }
+                },
+                slideRight: {
+                    '0%': { transform: 'translateX(0)' },
+                    '100%': { transform: 'translateX(100%)' }
                 }
             },
             animation: {
-                'slide-left': 'slideLeft 40s linear infinite'
+                'slide-left': 'slideLeft 40s linear infinite',
+                'slide-right': 'slideRight 40s linear infinite'
+            },
+            height: {
+                dvh: ['100vh /* fallback for Opera, IE and etc. */', '100dvh']
             }
         },
         daisyui: {

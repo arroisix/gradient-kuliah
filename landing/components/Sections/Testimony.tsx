@@ -1,6 +1,7 @@
 import { cn } from 'commons/utils';
 import { TESTIMONY_DATA } from 'landing/constants/Testimony';
 import Image from 'next/image';
+import { useEffect, useRef } from 'react';
 
 const Testimony = ({
     className,
@@ -17,11 +18,51 @@ const Testimony = ({
     itemContentClassName?: string;
     noBorder?: boolean;
 }): JSX.Element => {
-    const NUM_OF_TESTIMONY_LAYOUT = 5;
+    const NUM_OF_TESTIMONY_LAYOUT = 6;
     const temporaryArray = Array.from(
         { length: NUM_OF_TESTIMONY_LAYOUT },
         () => 0
     );
+
+    const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+    useEffect(() => {
+        if (!scrollContainerRef.current) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (!scrollContainerRef.current) return;
+
+                if (!entry.isIntersecting) {
+                    scrollContainerRef.current.classList.add(
+                        'hover:overflow-auto'
+                    );
+                } else {
+                    scrollContainerRef.current.classList.remove(
+                        'hover:overflow-auto'
+                    );
+                    scrollContainerRef.current.scrollTo({
+                        left: 0,
+                        behavior: 'instant'
+                    });
+                }
+            },
+            {
+                root: scrollContainerRef.current,
+                threshold: 0
+            }
+        );
+
+        const lastEntry = scrollContainerRef.current.querySelector(
+            '#testimony-layout-last-child'
+        );
+        if (lastEntry) {
+            observer.observe(lastEntry);
+        }
+
+        return () => {
+            observer.disconnect();
+        };
+    }, []);
 
     return (
         <section
@@ -34,26 +75,35 @@ const Testimony = ({
                 )}>
                 Kata mereka yang belajar bersama Gradient
             </h2>
-            <div className="overflow-hidden flex group">
-                {temporaryArray.map((_, idx) => (
-                    <div
-                        key={`testimony-layout-${idx + 1}`}
-                        className="flex gap-5 md:gap-6 px-[10px] md:px-3 animate-slide-left group-hover:animate-pause">
-                        {TESTIMONY_DATA.map((data) => (
-                            <TestimonyCard
-                                testimony={data.testimony}
-                                photo={data.photo}
-                                name={data.name}
-                                role={data.role}
-                                key={data.name}
-                                contentClassName={itemContentClassName}
-                                subtitleClassName={itemSubtitleClassName}
-                                headerClassName={itemHeaderClassName}
-                                noBorder={noBorder}
-                            />
-                        ))}
-                    </div>
-                ))}
+            <div
+                className="overflow-hidden flex hover:overflow-auto"
+                ref={scrollContainerRef}>
+                <div className="flex group">
+                    {temporaryArray.map((_, idx) => (
+                        <div
+                            key={`testimony-layout-${idx + 1}`}
+                            className="flex gap-5 md:gap-6 px-[10px] md:px-3 animate-slide-left group-hover:animate-pause"
+                            id={
+                                idx === temporaryArray.length - 1
+                                    ? 'testimony-layout-last-child'
+                                    : undefined
+                            }>
+                            {TESTIMONY_DATA.map((data) => (
+                                <TestimonyCard
+                                    testimony={data.testimony}
+                                    photo={data.photo}
+                                    name={data.name}
+                                    role={data.role}
+                                    key={data.name}
+                                    contentClassName={itemContentClassName}
+                                    subtitleClassName={itemSubtitleClassName}
+                                    headerClassName={itemHeaderClassName}
+                                    noBorder={noBorder}
+                                />
+                            ))}
+                        </div>
+                    ))}
+                </div>
             </div>
         </section>
     );
