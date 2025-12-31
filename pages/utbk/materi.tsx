@@ -65,7 +65,7 @@ function MateriComingSoon() {
                             />
                         </div>
                         <span className="text-white">
-                            Tutor dari kakak mahasiswa dari universitas top.
+                            Tutor dari kakak mahasiswa universitas top.
                         </span>
                     </li>
                     <li className="flex items-center gap-3">
