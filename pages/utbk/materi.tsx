@@ -43,37 +43,43 @@ function MateriComingSoon() {
 
                 <ul className="space-y-2 p-0">
                     <li className="flex items-center gap-3">
-                        <div className="shrink-0">
+                        <div className="shrink-0 flex items-center">
                             <Image
                                 src="https://assets.gradient.academy/assets/materi_coming_soon_video.svg"
                                 alt=""
                                 width={24}
                                 height={24}
                             />
-                        </div>{' '}
-                        Video pembelajaran per subtes.
+                        </div>
+                        <span className="text-white">
+                            Video pembelajaran per subtes.
+                        </span>
                     </li>
                     <li className="flex items-center gap-3">
-                        <div className="shrink-0">
+                        <div className="shrink-0 flex items-center">
                             <Image
                                 src="https://assets.gradient.academy/assets/materi_coming_soon_mentor.svg"
                                 alt=""
                                 width={24}
                                 height={24}
                             />
-                        </div>{' '}
-                        Mentor dari kakak mahasiswa dari universitas top.
+                        </div>
+                        <span className="text-white">
+                            Tutor dari kakak mahasiswa dari universitas top.
+                        </span>
                     </li>
                     <li className="flex items-center gap-3">
-                        <div className="shrink-0">
+                        <div className="shrink-0 flex items-center">
                             <Image
                                 src="https://assets.gradient.academy/assets/materi_coming_soon_bank.svg"
                                 alt=""
                                 width={24}
                                 height={24}
                             />
-                        </div>{' '}
-                        Bank soal dengan pembahasan.
+                        </div>
+                        <span className="text-white">
+                            Bank soal dengan pembahasan.
+                        </span>
                     </li>
                 </ul>
             </div>
