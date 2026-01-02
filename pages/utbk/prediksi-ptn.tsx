@@ -222,7 +222,7 @@ function PeluangCard({
                     <div className="space-y-3 @3xl:space-y-0 @3xl:grid @3xl:grid-cols-2">
                         <div className="flex flex-col gap-1">
                             <span className="text-[#DEDEDE] text-sm">
-                                Skor kamu
+                                Skor Tryout kamu
                             </span>
                             <span className="text-white font-semibold text-xl">
                                 {averageScore?.toFixed(2)}
