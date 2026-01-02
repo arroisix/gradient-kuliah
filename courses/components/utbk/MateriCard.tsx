@@ -1,34 +1,61 @@
+import { useAuth } from 'authentication/contexts/AuthProvider';
+import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienceApi';
 import Image from 'next/image';
 import Link from 'next/link';
 import { IoMdTime } from 'react-icons/io';
 
 type MateriCardProps = Pick<
     Course,
-    | 'id'
     | 'course_name'
     | 'cover'
     | 'tags'
     | 'latest_subchapter_name'
     | 'percentage_progress'
+    | 'slug'
 >;
 
 function MateriCard({
-    id,
     course_name,
     cover,
     tags,
     latest_subchapter_name,
-    percentage_progress
+    percentage_progress,
+    slug
 }: MateriCardProps): JSX.Element {
+    const { isAuthenticated } = useAuth();
     const progress = Math.min(
         Math.max(((percentage_progress ?? 0) / 100) * 100, 0),
         100
     );
 
+    const { data, isLoading } = useGetLearningProgressQuery(slug, {
+        skip: !isAuthenticated || !slug
+    });
+
+    const chapterSlug = isAuthenticated
+        ? data?.latest_watch_video
+            ? data.latest_watch_video.chapter_id
+            : data?.first_video_in_course?.chapter_id
+        : '';
+
+    const subChapterSlug = isAuthenticated
+        ? data?.latest_watch_video
+            ? data.latest_watch_video.subchapter.subchapter_slug
+            : data?.first_video_in_course?.subchapter_slug
+        : '';
+
+    const linkURL = isAuthenticated
+        ? `/utbk/materi/${slug}/${chapterSlug}/${subChapterSlug}`
+        : '/daftar';
+
     return (
         <Link
-            href={`/utbk/materi/${id}`}
-            className="bg-[#222222] w-full rounded-lg p-4 flex gap-4 items-center">
+            href={linkURL}
+            className={`${
+                isAuthenticated && (!data || isLoading)
+                    ? 'pointer-events-none'
+                    : ''
+            } bg-[#222222] w-full rounded-lg p-4 flex gap-4 items-center`}>
             <div className="bg-[#333333] rounded-full p-2 flex">
                 <Image
                     src={cover}

@@ -9,9 +9,7 @@ function MateriEntrypoint() {
 
     const { isLoading: isPublicCoursesLoading, data: publicCourses } =
         useGetPublicListCoursesV2Query(
-            {
-                type: 'UTBK'
-            },
+            { type: 'UTBK' },
             { skip: isAuthenticated }
         );
 
@@ -44,7 +42,7 @@ function MateriEntrypoint() {
                     courses.map((course) => (
                         <MateriCard
                             key={course.id}
-                            id={course.id}
+                            slug={course.slug}
                             course_name={course.course_name}
                             cover={course.cover}
                             tags={course.tags}
