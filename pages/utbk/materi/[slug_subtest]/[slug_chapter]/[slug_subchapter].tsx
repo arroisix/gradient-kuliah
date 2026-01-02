@@ -2,28 +2,23 @@ import axios from 'axios';
 import config from 'redux/api/config';
 import type { GetStaticPaths, GetStaticPropsResult } from 'next';
 import { LearningProvider } from 'courses/contexts/LearningProvider';
-import LearnLayout from 'commons/learnLayout';
+import { MateriLearnContainer } from 'courses/containers/utbk/MateriLearnContainer';
 
 interface BelajarPageProps {
-    subchapter: SubChapter;
-    course: CourseDetail;
+    subchapter: SubChapter | undefined;
+    course: CourseDetail | undefined;
 }
 
 function BelajarPageProps({
     subchapter,
     course
 }: BelajarPageProps): JSX.Element {
-    console.log('subchapter: ', subchapter);
-    console.log('course: ', course);
-
     return (
-        <>
-            <LearningProvider>
-                <LearnLayout noPadding showSubscriptionReminder>
-                    <></>
-                </LearnLayout>
-            </LearningProvider>
-        </>
+        <LearningProvider>
+            <div className="w-screen min-h-screen bg-black px-8">
+                <MateriLearnContainer subchapter={subchapter} course={course} />
+            </div>
+        </LearningProvider>
     );
 }
 
