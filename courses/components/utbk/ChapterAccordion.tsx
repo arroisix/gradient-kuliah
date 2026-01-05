@@ -24,16 +24,15 @@ function ChapterAccordion({
     const { slug_chapter } = router.query as { slug_chapter: string };
 
     return (
-        <div
-            className={`${
-                isOpen ? 'rounded-xl' : 'rounded-lg'
-            } bg-[#222222] p-4`}>
+        <>
             <button
                 className={`${
                     slug_chapter === chapter_slug
                         ? 'text-[#B6A6F3]'
                         : 'text-white'
-                } w-full flex justify-between items-center text-left font-semibold text-sm`}
+                } ${
+                    isOpen ? 'rounded-xl' : 'rounded-lg'
+                } bg-[#222222] w-full flex justify-between items-center text-left font-semibold text-sm p-4`}
                 onClick={() => setIsOpen((prev) => !prev)}>
                 <span>{title}</span>
                 <ChevronDown
@@ -52,7 +51,7 @@ function ChapterAccordion({
             ) : (
                 <></>
             )}
-        </div>
+        </>
     );
 }
 

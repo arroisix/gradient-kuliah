@@ -4,6 +4,7 @@ import { CircleIcon, VideoIcon } from 'lucide-react';
 import Link from 'next/link';
 import { formatDuration } from 'commons/utils';
 import { FaCircleCheck } from 'react-icons/fa6';
+import { FaLock } from 'react-icons/fa';
 
 interface SubchapterListProps {
     chapter_id: string;
@@ -56,8 +57,14 @@ function SubchapterList({
                         slug_subchapter === value.subchapter_slug
                             ? 'bg-[#36236A]'
                             : 'bg-transparent hover:bg-[#333333]'
+                    } ${
+                        !value.is_free ? 'pointer-events-none' : ''
                     } p-3 rounded-lg flex justify-between items-center gap-4 transition-all duration-300`}>
-                    <VideoIcon className="w-4 h-4 text-white shrink-0" />
+                    {value.is_free ? (
+                        <VideoIcon className="w-4 h-4 text-white shrink-0" />
+                    ) : (
+                        <FaLock className="fill-#666666 w-4 h-4" />
+                    )}
 
                     <div className="w-full space-y-1">
                         <p
@@ -68,7 +75,12 @@ function SubchapterList({
                             } text-white text-sm w-full`}>
                             {value.subchapter_name}
                         </p>
-                        <span className="text-[#DEDEDE] font-bold text-sm">
+                        <span
+                            className={`${
+                                slug_subchapter === value.subchapter_slug
+                                    ? 'text-[#DEDEDE] font-semibold'
+                                    : 'text-[#999999] font-normal'
+                            } font-bold text-sm`}>
                             {formatDuration(value.duration)}
                         </span>
                     </div>
@@ -76,7 +88,11 @@ function SubchapterList({
                     {is_finished ? (
                         <FaCircleCheck className="w-4 h-4 text-[#03AC5C] shrink-0" />
                     ) : (
-                        <CircleIcon className="w-4 h-4 text-white shrink-0" />
+                        <CircleIcon
+                            className={`${
+                                value.is_free ? 'text-white' : 'text-[#666666]'
+                            } w-4 h-4 shrink-0`}
+                        />
                     )}
                 </Link>
             ))}

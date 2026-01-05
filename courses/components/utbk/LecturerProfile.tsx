@@ -12,7 +12,7 @@ function LecturerProfile({
     const lecturer = lecturers[0];
 
     return (
-        <div className="flex items-center gap-3 mt-10">
+        <div className="flex items-center gap-3">
             <Image
                 src={lecturer.photo}
                 alt={lecturer.name}

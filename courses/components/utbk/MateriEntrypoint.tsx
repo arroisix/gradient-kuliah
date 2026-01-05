@@ -25,7 +25,7 @@ function MateriEntrypoint() {
     return (
         <>
             <h1 className="text-white font-bold text-2xl leading-tight mb-6">
-                Modul Belajar
+                Materi
             </h1>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">

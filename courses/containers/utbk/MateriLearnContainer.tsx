@@ -5,10 +5,13 @@ import VideoPlayerContainer from 'courses/components/VideoPlayerContainer';
 import { useRouter } from 'next/router';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import { useGetSubchapterDetailV2Query } from 'courses/redux/api/privateCourseV2Api';
-import { useGetPublicSubchapterDetailV2Query } from 'courses/redux/api/publicCourseV2Api';
+import {
+    useGetPublicListCoursesV2Query,
+    useGetPublicSubchapterDetailV2Query
+} from 'courses/redux/api/publicCourseV2Api';
 import { useGetCourseDetailQuery } from 'courses/redux/api/courseApi';
-import RatingButton from 'courses/components/CourseRatingButton';
-import ShareContentButton from 'courses/components/ShareContentButton';
+import { RatingButton } from 'courses/components/utbk/RatingButton';
+import { ShareButton } from 'courses/components/utbk/ShareButton';
 import { useState } from 'react';
 import CopilotIconFill from 'copilot/assets/CopilotIconFill';
 import { TranscriptIcon } from 'commons/components/elements/Icons/TranscriptIcon';
@@ -40,8 +43,20 @@ function MateriLearnContainer({
     const { isAuthenticated } = useAuth();
     const { isDesktopBreakpoints } = useWindowBreakpoints();
 
+    const { isLoading: isPublicCoursesLoading, data: publicCourses } =
+        useGetPublicListCoursesV2Query(
+            { type: 'UTBK' },
+            { skip: isAuthenticated }
+        );
+
     const { isLoading: isPrivateCoursesLoading, data: privateCourses } =
         useGetPrivateListCoursesV2Query({}, { skip: !isAuthenticated });
+
+    const courses = publicCourses
+        ? publicCourses.data
+        : privateCourses
+        ? privateCourses.data
+        : [];
 
     const privateSubchapterDetails = useGetSubchapterDetailV2Query(
         { course_slug: slug_subtest, subchapter_slug: slug_subchapter },
@@ -82,22 +97,25 @@ function MateriLearnContainer({
                 <Button
                     href="/utbk/materi"
                     variant="secondary"
-                    className="rounded-full flex items-center gap-1.5 !py-2 !px-4 w-fit text-sm">
-                    <FaChevronLeft className="text-white w-4 h-4" /> Kembali
+                    className="rounded-full flex items-center gap-1.5 w-fit text-sm !p-2 lg:!py-2 lg:!px-4">
+                    <FaChevronLeft className="text-white w-3.5 h-3.5 lg:w-4 lg:h-4" />{' '}
+                    <span className="hidden lg:block">Kembali</span>
                 </Button>
 
                 <details className="dropdown group">
                     <summary
                         role="button"
                         className={`${
-                            isPrivateCoursesLoading ? 'pointer-events-none' : ''
-                        } hidden-summary text-white font-bold text-2xl flex items-center gap-2.5`}>
+                            isPrivateCoursesLoading || isPublicCoursesLoading
+                                ? 'pointer-events-none'
+                                : ''
+                        } hidden-summary text-white font-bold text-base flex items-center gap-2.5 lg:text-2xl`}>
                         Penalaran Kualitatif
-                        <FaChevronDown className="text-[#999999] w-4 h-4 group-open:-rotate-180 transition-all duration-300" />
+                        <FaChevronDown className="text-white w-3.5 h-3.5 lg:w-4 lg:h-4 group-open:-rotate-180 transition-all duration-300" />
                     </summary>
 
                     <ul className="menu dropdown-content z-50 left-1/2 -translate-x-1/2 bg-black grid grid-cols-2 gap-x-8 gap-y-6 w-screen max-w-[896px] rounded-2xl p-6 mt-10">
-                        {privateCourses?.data.map((course) => (
+                        {courses.map((course) => (
                             <CourseMenuItem key={course.id} course={course} />
                         ))}
                     </ul>
@@ -107,7 +125,7 @@ function MateriLearnContainer({
             </div>
 
             <div className="grid grid-cols-8 gap-6">
-                <div className="col-span-5 w-full max-w-[844px]">
+                <div className="col-span-8 lg:col-span-5 w-full max-w-[844px] mx-auto">
                     <VideoPlayerContainer
                         isLoadingData={isLoading}
                         subchapter_name={subchapter?.subchapter_name}
@@ -116,7 +134,7 @@ function MateriLearnContainer({
                     />
 
                     {course ? (
-                        <p className="mt-10 text-white">
+                        <p className="text-white text-xs mt-4 lg:text-base lg:mt-10">
                             Kelas Persiapan UTBK SNBT - {course.course_name}
                         </p>
                     ) : (
@@ -124,72 +142,88 @@ function MateriLearnContainer({
                     )}
 
                     {subchapter ? (
-                        <h1 className="text-white font-bold text-2xl mt-4">
+                        <h1 className="text-white font-bold text-base mt-3 lg:text-2xl lg:mt-4">
                             {subchapter.subchapter_name}
                         </h1>
                     ) : (
                         <div className="mt-4 animate-pulse bg-[#333333] w-[512px] h-5 rounded-full"></div>
                     )}
 
-                    <div className="flex items-center gap-3 mt-4">
-                        <Button
-                            disabled={!course || !subchapter}
-                            variant="neutral"
-                            className="group flex-shrink-0 !py-2 !px-4 flex items-center gap-1.5 text-sm [&>svg]:w-4 [&>svg]:h-4">
-                            <TranscriptIcon className="fill-white w-4 h-4 group-disabled:fill-neutral-300/30" />
-                            <span>Transcript</span>
-                        </Button>
-
-                        <div className="flex-shrink-0 [&_button]:text-sm [&_svg]:w-4 [&_svg]:h-4">
-                            <RatingButton disabled={!course || !subchapter} />
-                        </div>
-
-                        <div className="flex-shrink-0 [&_button]:text-sm [&_svg]:w-4 [&_svg]:h-4">
-                            <ShareContentButton
+                    <div className="flex flex-col">
+                        <div className="order-2 lg:order-1 flex items-center gap-3 mt-6 lg:mt-4">
+                            <Button
                                 disabled={!course || !subchapter}
-                                typeCopy="COURSE VIDEO"
-                                shareCopy={`Coba deh nonton Video ${subchapter?.subchapter_name} dari Gradient Academy!`}
+                                variant="neutral"
+                                className="group flex-shrink flex items-center gap-1.5 text-sm !p-2 lg:!py-2 lg:!px-4">
+                                <TranscriptIcon className="fill-white w-4 h-4 group-disabled:fill-neutral-300/30" />
+                                <span className="hidden lg:block">
+                                    Transcript
+                                </span>
+                            </Button>
+
+                            {isAuthenticated ? (
+                                <div className="flex-shrink-0">
+                                    <RatingButton
+                                        disabled={!course || !subchapter}
+                                    />
+                                </div>
+                            ) : (
+                                <></>
+                            )}
+
+                            <div className="flex-shrink-0">
+                                <ShareButton
+                                    disabled={!course || !subchapter}
+                                    typeCopy="COURSE VIDEO"
+                                    shareCopy={`Coba deh nonton Video ${subchapter?.subchapter_name} dari Gradient Academy!`}
+                                />
+                            </div>
+
+                            <Button
+                                disabled={!course || !subchapter}
+                                onClick={() => setIsCopilotModalOpen(true)}
+                                variant="primary"
+                                className="flex-grow max-w-[256px] flex-shrink-0 !py-2 !px-4 flex justify-center items-center gap-1.5 text-sm [&>svg]:w-4 [&>svg]:h-4 lg:flex-grow-0">
+                                <CopilotIconFill />
+                                <span>Tanya Copilot AI</span>
+                            </Button>
+
+                            <CopilotModal
+                                key={subchapter?.chapter_id}
+                                isOpen={isCopilotModalOpen}
+                                setOpen={setIsCopilotModalOpen}
+                                xlWidth="xl:w-[29.5rem]"
+                                currentContext={currentVideoContext}
+                                chapterId={subchapter?.chapter_id}
                             />
                         </div>
 
-                        <Button
-                            disabled={!course || !subchapter}
-                            onClick={() => setIsCopilotModalOpen(true)}
-                            variant="primary"
-                            className="flex-shrink-0 !py-2 !px-4 flex items-center gap-1.5 text-sm [&>svg]:w-4 [&>svg]:h-4">
-                            <CopilotIconFill />
-                            <span>Tanya Copilot AI</span>
-                        </Button>
-
-                        <CopilotModal
-                            key={subchapter?.chapter_id}
-                            isOpen={isCopilotModalOpen}
-                            setOpen={setIsCopilotModalOpen}
-                            xlWidth="xl:w-[29.5rem]"
-                            currentContext={currentVideoContext}
-                            chapterId={subchapter?.chapter_id}
-                        />
-                    </div>
-
-                    {subchapter ? (
-                        <LecturerProfile
-                            lecturers={subchapter.video?.lecturers}
-                        />
-                    ) : (
-                        <div className="animate-pulse flex items-center gap-3 mt-10">
-                            <div className="bg-[#333333] rounded-full w-11 h-11"></div>
-                            <div className="space-y-3">
-                                <div className="bg-[#333333] w-32 h-4 rounded-full"></div>
-                                <div className="bg-[#333333] w-64 h-3 rounded-full"></div>
-                            </div>
+                        <div className="order-1 mt-3 lg:order-2 lg:mt-10">
+                            {subchapter ? (
+                                <LecturerProfile
+                                    lecturers={subchapter.video?.lecturers}
+                                />
+                            ) : (
+                                <div className="animate-pulse flex items-center gap-3">
+                                    <div className="bg-[#333333] rounded-full w-11 h-11"></div>
+                                    <div className="space-y-3">
+                                        <div className="bg-[#333333] w-32 h-4 rounded-full"></div>
+                                        <div className="bg-[#333333] w-64 h-3 rounded-full"></div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
-                    )}
+                    </div>
                 </div>
 
-                {course && subchapter && isDesktopBreakpoints ? (
-                    <MateriDetailBox course={course} />
+                {isDesktopBreakpoints ? (
+                    course && subchapter ? (
+                        <MateriDetailBox course={course} />
+                    ) : (
+                        <div className="col-span-3 animate-pulse w-full max-w-[500px] bg-[#333333] h-full rounded-2xl" />
+                    )
                 ) : (
-                    <div className="col-span-3 animate-pulse w-full max-w-[500px] bg-[#333333] h-full rounded-2xl" />
+                    <></>
                 )}
             </div>
         </div>
