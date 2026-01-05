@@ -89,7 +89,8 @@ const LearnLayout = ({
                     className={cn(
                         'md:pt-16',
                         !noTopPadding && 'pt-16',
-                        showSidebar && 'flex gap-[2rem] lg:gap-[6rem] w-full',
+                        showSidebar &&
+                            'flex gap-[2rem] lg:gap-[6rem] w-full !pt-0',
                         {
                             'pb-16': isAuthenticated && !noPadding,
                             'pb-8': !isAuthenticated && !noPadding,

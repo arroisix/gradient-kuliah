@@ -11,6 +11,7 @@ import HomeIcon from '../../elements/Icons/Home';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import GraduationCapIcon from 'commons/components/elements/Icons/GraduationCap';
 import { TargetKampusIcon } from 'commons/components/elements/Icons/TargetKampusIcon';
+import RoleSwitcher from '../Navbar/RoleSwitcher';
 
 const Sidebar = ({
     fullHeight,
@@ -231,10 +232,11 @@ const Sidebar = ({
     return (
         <aside
             className={cn(
-                'hidden md:block top-[64px] bg-[#121212] w-[250px] pl-6 pr-3 py-4 z-10',
+                'hidden md:block bg-[#181818] w-[250px] px-4 py-4 z-[1000] space-y-4',
                 fullHeight ? 'fixed h-full' : 'h-fit sticky',
                 className
             )}>
+            <RoleSwitcher />
             <div className="flex flex-col gap-[18px]">{renderMenuItem()}</div>
         </aside>
     );

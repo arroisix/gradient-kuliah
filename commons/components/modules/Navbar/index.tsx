@@ -31,6 +31,7 @@ import BookStackIconFill from '../../elements/Icons/BookStackFill';
 import KelasIconFill from '../../elements/Icons/KelasFill';
 import { TargetKampusIcon } from 'commons/components/elements/Icons/TargetKampusIcon';
 import GraduationCapIcon from 'commons/components/elements/Icons/GraduationCap';
+import RoleSwitcher from './RoleSwitcher';
 
 const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
     {
@@ -101,7 +102,8 @@ const Navbar = ({
     const { theme } = useThemeContext();
     const lightMode = theme === 'light';
 
-    const { isDesktopBreakpoints } = useWindowBreakpoints();
+    const { isDesktopBreakpoints, isMobileBreakpoints } =
+        useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { profile } = useAuth();
     const [openMobile, setOpenMobile] = useState(false);
@@ -183,7 +185,8 @@ const Navbar = ({
         <header
             className={cn(
                 'fixed top-0 left-0 w-full transition-all ease-in-out duration-200 flex flex-col',
-                computeBgColor()
+                computeBgColor(),
+                showSidebar && isAuthenticated && 'border-b border-[#101010]'
             )}
             style={{ zIndex: 100 }}>
             <div
@@ -211,12 +214,22 @@ const Navbar = ({
                                     : '/dashboard'
                                 : '/'
                         }>
-                        <span className="text-2xl font-bold cursor-pointer font-[Urbanist] lg:hidden">
-                            G
-                        </span>
-                        <span className="text-2xl font-bold cursor-pointer font-[Urbanist] hidden lg:flex">
-                            Gradient
-                        </span>
+                        {!isAuthenticated ? (
+                            <span className="text-2xl font-bold cursor-pointer font-[Urbanist] lg:hidden">
+                                G
+                            </span>
+                        ) : isMobileBreakpoints && isShowSidebar ? (
+                            <RoleSwitcher />
+                        ) : (
+                            <span className="text-2xl font-bold cursor-pointer font-[Urbanist] lg:hidden">
+                                G
+                            </span>
+                        )}
+                        {!isShowSidebar && (
+                            <span className="text-2xl font-bold cursor-pointer font-[Urbanist] hidden lg:flex">
+                                Gradient
+                            </span>
+                        )}
                     </Link>
                     <div
                         className={cn(
@@ -275,9 +288,9 @@ const Navbar = ({
                             </>
                         )}
                     </div>
-                    {isShowSidebar && (
+                    {/* {isShowSidebar && (
                         <div className="hidden md:block w-[250px] h-[64px] fixed top-0 left-0 bg-[#121212] z-[-1]" />
-                    )}
+                    )} */}
                     <div
                         className={cn(
                             'w-full max-w-lg',
