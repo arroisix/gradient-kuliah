@@ -15,7 +15,7 @@ function BelajarPageProps({
 }: BelajarPageProps): JSX.Element {
     return (
         <LearningProvider>
-            <div className="w-screen min-h-screen bg-black px-8">
+            <div className="w-screen min-h-screen bg-black px-8 py-4">
                 <MateriLearnContainer subchapter={subchapter} course={course} />
             </div>
         </LearningProvider>

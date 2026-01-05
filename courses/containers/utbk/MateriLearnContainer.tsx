@@ -14,6 +14,8 @@ import CopilotIconFill from 'copilot/assets/CopilotIconFill';
 import { TranscriptIcon } from 'commons/components/elements/Icons/TranscriptIcon';
 import CopilotModal from 'copilot/components/CopilotModal';
 import { LecturerProfile } from 'courses/components/utbk/LecturerProfile';
+import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
+import { MateriDetailBox } from 'courses/components/utbk/MateriDetailBox';
 
 interface MateriLearnContainerProps {
     subchapter: SubChapter | undefined;
@@ -34,6 +36,7 @@ function MateriLearnContainer({
     };
 
     const { isAuthenticated } = useAuth();
+    const { isDesktopBreakpoints } = useWindowBreakpoints();
 
     const privateSubchapterDetails = useGetSubchapterDetailV2Query(
         { course_slug: slug_subtest, subchapter_slug: slug_subchapter },
@@ -69,7 +72,7 @@ function MateriLearnContainer({
             : undefined;
 
     return (
-        <div className="pt-4 w-full max-w-[1368px] mx-auto">
+        <div className="w-full max-w-[1368px] mx-auto">
             <div className="flex justify-between items-center mb-4">
                 <Button
                     href="/utbk/materi"
@@ -178,7 +181,11 @@ function MateriLearnContainer({
                     )}
                 </div>
 
-                <div className="col-span-3 w-full max-w-[500px] bg-[#333333] h-screen"></div>
+                {course && subchapter && isDesktopBreakpoints ? (
+                    <MateriDetailBox course={course} />
+                ) : (
+                    <div className="col-span-3 animate-pulse w-full max-w-[500px] bg-[#333333] h-full rounded-2xl" />
+                )}
             </div>
         </div>
     );
