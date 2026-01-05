@@ -388,6 +388,7 @@ interface UseSearchSubchapter {
     handleSearch: (params: {
         type?: 'BOOK' | 'CHAPTER' | 'SUBCHAPTER';
         page?: number;
+        slug?: string;
     }) => void;
     setIsSearch: Dispatch<SetStateAction<boolean>>;
     setSearchKeyword: Dispatch<SetStateAction<string>>;

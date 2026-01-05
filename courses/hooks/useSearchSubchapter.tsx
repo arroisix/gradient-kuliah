@@ -1,7 +1,14 @@
 import { useLazyGetSearchCourseContentQuery } from 'courses/redux/api/courseApi';
 import { useRouter } from 'next/router';
-import { PropsWithChildren, createContext, useContext, useState } from 'react';
+import {
+    PropsWithChildren,
+    createContext,
+    useCallback,
+    useContext,
+    useState
+} from 'react';
 import { useTracker } from 'tracker/tracker';
+import { useDebounceValue } from 'usehooks-ts';
 
 const CourseSubchapterSearchContext = createContext<UseSearchSubchapter | null>(
     null
@@ -14,7 +21,7 @@ export const CourseSubchapterSearchProvider = ({
     const router = useRouter();
     const { id } = router.query;
     const [isSearch, setIsSearch] = useState(false);
-    const [searchKeyword, setSearchKeyword] = useState('');
+    const [searchKeyword, setSearchKeyword] = useDebounceValue('', 750);
 
     const [
         triggerSearch,
@@ -25,21 +32,21 @@ export const CourseSubchapterSearchProvider = ({
         }
     ] = useLazyGetSearchCourseContentQuery();
 
-    const handleSearch: UseSearchSubchapter['handleSearch'] = ({
-        type,
-        page = 1
-    }) => {
-        tracker?.genericTrack('Search Class Material', {
-            'Course Slug': id as string,
-            Query: searchKeyword
-        });
-        triggerSearch({
-            slug: id as string,
-            content: searchKeyword,
-            type,
-            page
-        });
-    };
+    const handleSearch: UseSearchSubchapter['handleSearch'] = useCallback(
+        ({ type, page = 1, slug }) => {
+            tracker?.genericTrack('Search Class Material', {
+                'Course Slug': id as string,
+                Query: searchKeyword
+            });
+            triggerSearch({
+                slug: slug ?? (id as string),
+                content: searchKeyword,
+                type,
+                page
+            });
+        },
+        [id, searchKeyword, tracker, triggerSearch]
+    );
 
     return (
         <CourseSubchapterSearchContext.Provider
