@@ -55,8 +55,8 @@ function SubchapterList({
                     className={`${
                         slug_subchapter === value.subchapter_slug
                             ? 'bg-[#36236A]'
-                            : 'bg-transparent'
-                    } p-3 rounded-lg flex justify-between items-center gap-4`}>
+                            : 'bg-transparent hover:bg-[#333333]'
+                    } p-3 rounded-lg flex justify-between items-center gap-4 transition-all duration-300`}>
                     <VideoIcon className="w-4 h-4 text-white shrink-0" />
 
                     <div className="w-full space-y-1">

@@ -59,7 +59,7 @@ function MateriDetailBox({ course }: MateriDetailBoxProps): JSX.Element {
                             Materi Selesai
                         </span>
                         <span className="text-white font-semibold">
-                            {progress.toFixed(2)}%
+                            {(isNaN(progress) ? 0 : progress).toFixed(0)}%
                         </span>
                     </div>
                 ) : (

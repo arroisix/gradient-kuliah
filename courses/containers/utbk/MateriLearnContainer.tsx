@@ -16,6 +16,8 @@ import CopilotModal from 'copilot/components/CopilotModal';
 import { LecturerProfile } from 'courses/components/utbk/LecturerProfile';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { MateriDetailBox } from 'courses/components/utbk/MateriDetailBox';
+import { useGetPrivateListCoursesV2Query } from 'courses/redux/api/privateCourseV2Api';
+import { CourseMenuItem } from 'courses/components/utbk/CourseMenuItem';
 
 interface MateriLearnContainerProps {
     subchapter: SubChapter | undefined;
@@ -37,6 +39,9 @@ function MateriLearnContainer({
 
     const { isAuthenticated } = useAuth();
     const { isDesktopBreakpoints } = useWindowBreakpoints();
+
+    const { isLoading: isPrivateCoursesLoading, data: privateCourses } =
+        useGetPrivateListCoursesV2Query({}, { skip: !isAuthenticated });
 
     const privateSubchapterDetails = useGetSubchapterDetailV2Query(
         { course_slug: slug_subtest, subchapter_slug: slug_subchapter },
@@ -85,15 +90,16 @@ function MateriLearnContainer({
                     <summary
                         role="button"
                         className={`${
-                            !course || !subchapter ? 'pointer-events-none' : ''
+                            isPrivateCoursesLoading ? 'pointer-events-none' : ''
                         } hidden-summary text-white font-bold text-2xl flex items-center gap-2.5`}>
                         Penalaran Kualitatif
                         <FaChevronDown className="text-[#999999] w-4 h-4 group-open:-rotate-180 transition-all duration-300" />
                     </summary>
 
-                    <ul className="menu dropdown-content w-64 bg-slate-600 mt-2">
-                        <li>Item 1</li>
-                        <li>Item 2</li>
+                    <ul className="menu dropdown-content z-50 left-1/2 -translate-x-1/2 bg-black grid grid-cols-2 gap-x-8 gap-y-6 w-screen max-w-[896px] rounded-2xl p-6 mt-10">
+                        {privateCourses?.data.map((course) => (
+                            <CourseMenuItem key={course.id} course={course} />
+                        ))}
                     </ul>
                 </details>
 
@@ -128,7 +134,6 @@ function MateriLearnContainer({
                     <div className="flex items-center gap-3 mt-4">
                         <Button
                             disabled={!course || !subchapter}
-                            onClick={() => setIsCopilotModalOpen(true)}
                             variant="neutral"
                             className="group flex-shrink-0 !py-2 !px-4 flex items-center gap-1.5 text-sm [&>svg]:w-4 [&>svg]:h-4">
                             <TranscriptIcon className="fill-white w-4 h-4 group-disabled:fill-neutral-300/30" />
