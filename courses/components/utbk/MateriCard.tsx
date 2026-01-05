@@ -28,7 +28,7 @@ function MateriCard({
     return (
         <Link
             href={`/utbk/materi/${id}`}
-            className="bg-[#222222] w-full rounded-lg p-4 flex gap-4 items-center">
+            className="bg-[#222222] w-full rounded-lg p-4 flex gap-4 items-start md:items-center">
             <div className="bg-[#333333] rounded-full p-2 flex">
                 <Image
                     src={cover}

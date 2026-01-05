@@ -9,9 +9,7 @@ function MateriEntrypoint() {
 
     const { isLoading: isPublicCoursesLoading, data: publicCourses } =
         useGetPublicListCoursesV2Query(
-            {
-                type: 'UTBK'
-            },
+            { type: 'UTBK' },
             { skip: isAuthenticated }
         );
 
@@ -30,7 +28,7 @@ function MateriEntrypoint() {
                 Modul Belajar
             </h1>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
                 {isPublicCoursesLoading || isPrivateCoursesLoading ? (
                     <>
                         <MateriCardSkeleton />
