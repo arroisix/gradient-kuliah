@@ -12,6 +12,7 @@ import { useGetAnnouncementsQuery } from 'dashboard/redux/api/dashboardApi';
 import DashboardUpdatesBanner from 'dashboard/components/DashboardBanner';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
+import ProfileCompletionBanner from 'dashboard/components/ProfileCompletionBanner';
 
 const DashboardContainer = (): JSX.Element => {
     const router = useRouter();
@@ -47,7 +48,8 @@ const DashboardContainer = (): JSX.Element => {
     }
 
     return (
-        <section className="flex flex-col w-full gap-6 pb-4 mx-auto sm:overflow-x-clip md:overflow-x-visible max-w-screen-2xl">
+        <section className="flex flex-col w-full gap-6 pb-4 pt-16 mx-auto sm:overflow-x-clip md:overflow-x-visible max-w-screen-2xl">
+            <ProfileCompletionBanner />
             <DashboardUpdatesBanner bannerType="campaign" />
             <SearchSection />
             <DashboardFeatures />

@@ -25,7 +25,11 @@ const ExerciseReport = () => {
     );
 
     const onClose = () => {
-        router.push(`/latihan/`);
+        if (exercise?.tryout_type === 'UTBK') {
+            router.push('/utbk/try-out');
+        } else {
+            router.push(`/latihan/`);
+        }
     };
 
     if (isLoading) {
