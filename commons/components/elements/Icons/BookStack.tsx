@@ -3,18 +3,20 @@ import React from 'react';
 interface BookStackIconProps {
     size?: number;
     className?: string;
+    fill?: string;
 }
 
 const BookStackIcon: React.FC<BookStackIconProps> = ({
     size = 20,
-    className
+    className,
+    fill = 'none'
 }) => {
     return (
         <svg
             width={size}
             height={size}
             viewBox="0 0 20 20"
-            fill="none"
+            fill={fill}
             xmlns="http://www.w3.org/2000/svg"
             className={className}>
             <path

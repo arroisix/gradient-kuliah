@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 
 const K12_ALLOWED_PREFIXES = [
     '/utbk',
+    '/dashboard',
     '/latihan',
     '/pembayaran',
     '/langganan',

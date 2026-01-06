@@ -31,6 +31,7 @@ import BookStackIconFill from '../../elements/Icons/BookStackFill';
 import KelasIconFill from '../../elements/Icons/KelasFill';
 import { TargetKampusIcon } from 'commons/components/elements/Icons/TargetKampusIcon';
 import GraduationCapIcon from 'commons/components/elements/Icons/GraduationCap';
+import RoleSwitcher from './RoleSwitcher';
 
 const UNAUTHENTICATED_NAVBAR_BUTTONS: NavigationButtonInterface[] = [
     {
@@ -101,7 +102,8 @@ const Navbar = ({
     const { theme } = useThemeContext();
     const lightMode = theme === 'light';
 
-    const { isDesktopBreakpoints } = useWindowBreakpoints();
+    const { isDesktopBreakpoints, isMobileBreakpoints } =
+        useWindowBreakpoints();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const { profile } = useAuth();
     const [openMobile, setOpenMobile] = useState(false);
@@ -171,8 +173,8 @@ const Navbar = ({
     const isShowHamburgerMenu =
         !isAuthenticated ||
         (profile?.current_role === 'COLLEGE_STUDENT' &&
-            (!LEARNING_PAGES.some((page) => router.asPath === page) ||
-                (LEARNING_PAGES.some((page) => router.asPath === page) &&
+            (!LEARNING_PAGES.some((page) => router.pathname === page) ||
+                (LEARNING_PAGES.some((page) => router.pathname === page) &&
                     !isAuthenticated &&
                     !isDesktopBreakpoints)));
     const isShowSidebar = showSidebar && fullHeightSidebar && isAuthenticated;
@@ -183,7 +185,8 @@ const Navbar = ({
         <header
             className={cn(
                 'fixed top-0 left-0 w-full transition-all ease-in-out duration-200 flex flex-col',
-                computeBgColor()
+                computeBgColor(),
+                showSidebar && isAuthenticated && 'border-b border-[#101010]'
             )}
             style={{ zIndex: 100 }}>
             <div
@@ -203,21 +206,51 @@ const Navbar = ({
                             onClick={() => setOpenSidebar(true)}
                         />
                     )}
-                    <Link
-                        href={
-                            isAuthenticated
-                                ? currentRole === 'K12'
-                                    ? '/utbk/dashboard'
-                                    : '/dashboard'
-                                : '/'
-                        }>
-                        <span className="text-2xl font-bold cursor-pointer font-[Urbanist] lg:hidden">
-                            G
-                        </span>
-                        <span className="text-2xl font-bold cursor-pointer font-[Urbanist] hidden lg:flex">
-                            Gradient
-                        </span>
-                    </Link>
+                    {!isAuthenticated ? (
+                        <Link
+                            href={
+                                isAuthenticated
+                                    ? currentRole === 'K12'
+                                        ? '/utbk/dashboard'
+                                        : '/dashboard'
+                                    : '/'
+                            }>
+                            <span className="text-2xl font-bold cursor-pointer font-[Urbanist] lg:hidden">
+                                G
+                            </span>
+                        </Link>
+                    ) : isMobileBreakpoints && isShowSidebar ? (
+                        <div>
+                            <RoleSwitcher />
+                        </div>
+                    ) : (
+                        <Link
+                            href={
+                                isAuthenticated
+                                    ? currentRole === 'K12'
+                                        ? '/utbk/dashboard'
+                                        : '/dashboard'
+                                    : '/'
+                            }>
+                            <span className="text-2xl font-bold cursor-pointer font-[Urbanist] lg:hidden">
+                                G
+                            </span>
+                        </Link>
+                    )}
+                    {!isShowSidebar && (
+                        <Link
+                            href={
+                                isAuthenticated
+                                    ? currentRole === 'K12'
+                                        ? '/utbk/dashboard'
+                                        : '/dashboard'
+                                    : '/'
+                            }>
+                            <span className="text-2xl font-bold cursor-pointer font-[Urbanist] hidden lg:flex">
+                                Gradient
+                            </span>
+                        </Link>
+                    )}
                     <div
                         className={cn(
                             'items-center gap-6 hidden lg:flex',
@@ -275,9 +308,9 @@ const Navbar = ({
                             </>
                         )}
                     </div>
-                    {isShowSidebar && (
+                    {/* {isShowSidebar && (
                         <div className="hidden md:block w-[250px] h-[64px] fixed top-0 left-0 bg-[#121212] z-[-1]" />
-                    )}
+                    )} */}
                     <div
                         className={cn(
                             'w-full max-w-lg',

@@ -3,15 +3,20 @@ import React from 'react';
 interface KelasIconProps {
     size?: number;
     className?: string;
+    fill?: string;
 }
 
-const KelasIcon: React.FC<KelasIconProps> = ({ size = 20, className }) => {
+const KelasIcon: React.FC<KelasIconProps> = ({
+    size = 20,
+    className,
+    fill = 'none'
+}) => {
     return (
         <svg
             width={size}
             height={size}
             viewBox="0 0 20 20"
-            fill="none"
+            fill={fill || 'none'}
             xmlns="http://www.w3.org/2000/svg"
             className={className}>
             <path

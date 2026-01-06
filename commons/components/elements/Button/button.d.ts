@@ -5,6 +5,7 @@ type ButtonVariant =
     | 'secondary'
     | 'tertiary'
     | 'neutral'
+    | 'outline'
     | 'custom';
 
 type ButtonSize = 'large' | 'normal' | 'small' | 'extraSmall';
