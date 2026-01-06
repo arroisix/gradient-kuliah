@@ -65,7 +65,7 @@ const SwitcherCard = () => {
                     <div className="-bottom-28 -right-48 lg:-bottom-16 lg:-right-12 absolute rounded-tl-full bg-[#5935a8]  h-80 w-80 z-[1] blur-xl"></div>
                     <div className="-bottom-28 -right-48 lg:-bottom-16 lg:-right-24 absolute rounded-tl-full bg-blue-700/70 h-96 w-96 z-[0] blur-3xl"></div>
 
-                    <div className="relative z-10 w-full">
+                    <div className="relative z-10 w-full flex flex-col gap-4">
                         <div className="flex flex-row gap-2 items-center">
                             <h2 className="text-white text-2xl font-bold font-[Urbanist]">
                                 Gradient
@@ -73,7 +73,7 @@ const SwitcherCard = () => {
                             <CollegeLogo />
                         </div>
 
-                        <p className="text-[#DEDEDE] text-[14px] leading-relaxed mb-1">
+                        <p className="text-[#DEDEDE] text-[14px] leading-relaxed">
                             Pahami materi kuliah dan skill karir dari dosen top
                             universitas. Penjelasan visual yang bikin konsep
                             susah{' '}
