@@ -11,7 +11,6 @@ import { useAuth } from 'authentication/contexts/AuthProvider';
 import { useRouter } from 'next/router';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { Dialog, Transition } from '@headlessui/react';
-import { toast } from 'react-toastify';
 import CollegeLogo from './components/CollegeLogo';
 
 interface Role {
@@ -95,21 +94,8 @@ const RoleSwitcher = () => {
                 // Navigate to appropriate dashboard and wait for completion
                 if (role.id === 'K12') {
                     await router.replace('/utbk/dashboard');
-                    toast.success('Selamat datang di Gradient UTBK!', {
-                        theme: 'colored',
-                        position: 'top-center',
-                        hideProgressBar: true
-                    });
                 } else {
                     await router.replace('/dashboard');
-                    toast.success(
-                        'Selamat datang di Gradient untuk Mahasiswa!',
-                        {
-                            theme: 'colored',
-                            position: 'top-center',
-                            hideProgressBar: true
-                        }
-                    );
                 }
 
                 setIsNavigating(false);

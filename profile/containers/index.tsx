@@ -14,7 +14,6 @@ import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import UTBKLogo from 'commons/components/modules/Navbar/components/utbk/UTBKLogo';
 import Image from 'next/image';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import CollegeLogo from 'commons/components/modules/Navbar/components/CollegeLogo';
 
@@ -41,22 +40,9 @@ const SwitcherCard = () => {
                 }).unwrap();
 
                 if (profile.current_role === 'K12') {
-                    router.replace('/dashboard');
-                    toast.success(
-                        'Selamat datang di Gradient untuk Mahasiswa!',
-                        {
-                            theme: 'colored',
-                            position: 'top-center',
-                            hideProgressBar: true
-                        }
-                    );
+                    await router.replace('/dashboard');
                 } else {
-                    router.replace('/utbk/dashboard');
-                    toast.success('Selamat datang di Gradient UTBK!', {
-                        theme: 'colored',
-                        position: 'top-center',
-                        hideProgressBar: true
-                    });
+                    await router.replace('/utbk/dashboard');
                 }
                 setIsNavigating(false);
             } catch (error) {
@@ -87,13 +73,11 @@ const SwitcherCard = () => {
                             <CollegeLogo />
                         </div>
 
-                        <p className="text-white font-[100] text-[14px] leading-relaxed mb-1">
+                        <p className="text-[#DEDEDE] text-[14px] leading-relaxed mb-1">
                             Pahami materi kuliah dan skill karir dari dosen top
-                            universitas.
-                        </p>
-                        <p className="text-white font-[100] text-[14px] leading-relaxed mb-8">
-                            Penjelasan visual yang bikin konsep susah{' '}
-                            <strong className="font-bold">
+                            universitas. Penjelasan visual yang bikin konsep
+                            susah{' '}
+                            <strong className="font-bold text-white">
                                 jadi lebih mudah dimengerti.
                             </strong>
                         </p>
@@ -142,7 +126,7 @@ const SwitcherCard = () => {
                         <UTBKLogo />
                     </div>
 
-                    <p className="text-white font-[100] text-[14px] leading-relaxed mb-1">
+                    <p className="text-[#DEDEDE] text-[14px] leading-relaxed mb-1">
                         Materi terstruktur, latihan soal, dan prediksi peluang
                         masuk PTN untuk persiapan UTBK.
                     </p>
