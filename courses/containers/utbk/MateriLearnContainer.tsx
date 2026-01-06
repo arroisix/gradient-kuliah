@@ -21,6 +21,7 @@ import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { MateriDetailBox } from 'courses/components/utbk/MateriDetailBox';
 import { useGetPrivateListCoursesV2Query } from 'courses/redux/api/privateCourseV2Api';
 import { CourseMenuItem } from 'courses/components/utbk/CourseMenuItem';
+import { MateriDetailSheet } from 'courses/components/utbk/MateriDetailSheet';
 
 interface MateriLearnContainerProps {
     subchapter: SubChapter | undefined;
@@ -221,6 +222,21 @@ function MateriLearnContainer({
                         <MateriDetailBox course={course} />
                     ) : (
                         <div className="col-span-3 animate-pulse w-full max-w-[500px] bg-[#333333] h-full rounded-2xl" />
+                    )
+                ) : (
+                    <></>
+                )}
+
+                {!isDesktopBreakpoints ? (
+                    course && subchapter ? (
+                        <MateriDetailSheet
+                            course={course}
+                            next_subchapter_slug={
+                                subchapter.next_subchapter_slug as string
+                            }
+                        />
+                    ) : (
+                        <div className="fixed bottom-0 left-0 right-0 h-[72px] bg-[#333333] rounded-tl-2xl rounded-tr-2xl" />
                     )
                 ) : (
                     <></>

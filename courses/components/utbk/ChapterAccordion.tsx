@@ -32,9 +32,9 @@ function ChapterAccordion({
                         : 'text-white'
                 } ${
                     isOpen ? 'rounded-xl' : 'rounded-lg'
-                } bg-[#222222] w-full flex justify-between items-center text-left font-semibold text-sm p-4`}
+                } bg-[#222222] w-full flex justify-between items-center gap-2 text-left font-semibold text-sm p-4`}
                 onClick={() => setIsOpen((prev) => !prev)}>
-                <span>{title}</span>
+                <span className={isOpen ? '' : 'line-clamp-1'}>{title}</span>
                 <ChevronDown
                     className={`${
                         isOpen ? '-rotate-180' : ''
