@@ -64,8 +64,8 @@ const ProblemSetRoadmap = ({
                 slug: slug as string,
                 problemset_id:
                     exercise?.tryout_type === 'UTBK' && !sectionId
-                        ? (exercise?.latest_problemset_progress
-                              ?.problemset_id as string)
+                        ? exercise?.latest_problemset_progress?.problemset_id ??
+                          exercise?.first_problemset?.id
                         : (sectionId as string),
                 with_score: exercise?.tryout_type === 'UTBK'
             },
