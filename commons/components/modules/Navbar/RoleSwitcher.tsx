@@ -11,8 +11,8 @@ import { useAuth } from 'authentication/contexts/AuthProvider';
 import { useRouter } from 'next/router';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { Dialog, Transition } from '@headlessui/react';
-import { IoClose } from 'react-icons/io5';
 import { toast } from 'react-toastify';
+import CollegeLogo from './components/CollegeLogo';
 
 interface Role {
     id: 'K12' | 'COLLEGE_STUDENT';
@@ -31,7 +31,7 @@ const roles: Role[] = [
     {
         id: 'COLLEGE_STUDENT',
         label: 'Gradient',
-        badge: undefined,
+        badge: <CollegeLogo variant="small" />,
         description: 'Untuk Mahasiswa'
     }
 ];
@@ -43,6 +43,7 @@ const RoleSwitcher = () => {
     const [selectedRole, setSelectedRole] = useState<Role>();
     const router = useRouter();
     const { isMobileBreakpoints } = useWindowBreakpoints();
+    const [isNavigating, setIsNavigating] = useState(false);
 
     const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -88,16 +89,19 @@ const RoleSwitcher = () => {
                 // Update local state
                 setSelectedRole(role);
 
-                // Then navigate to appropriate dashboard
+                // Set navigating state and wait for navigation to complete
+                setIsNavigating(true);
+
+                // Navigate to appropriate dashboard and wait for completion
                 if (role.id === 'K12') {
-                    router.replace('/utbk/dashboard');
+                    await router.replace('/utbk/dashboard');
                     toast.success('Selamat datang di Gradient UTBK!', {
                         theme: 'colored',
                         position: 'top-center',
                         hideProgressBar: true
                     });
                 } else {
-                    router.replace('/dashboard');
+                    await router.replace('/dashboard');
                     toast.success(
                         'Selamat datang di Gradient untuk Mahasiswa!',
                         {
@@ -107,13 +111,16 @@ const RoleSwitcher = () => {
                         }
                     );
                 }
+
+                setIsNavigating(false);
             } catch (error) {
                 console.error('Failed to update role:', error);
+                setIsNavigating(false);
             }
         }
     };
 
-    if (isUpdating) {
+    if (isUpdating || isNavigating) {
         return <LoadingBackdrop />;
     }
 
@@ -206,58 +213,62 @@ const RoleSwitcher = () => {
                     </Transition.Child>
 
                     <div className="fixed inset-0">
-                        <div className="flex min-h-full items-end md:items-center justify-center">
+                        <div className="flex min-h-full items-start md:items-center justify-center">
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-out duration-300"
-                                enterFrom="translate-y-full md:translate-y-0 md:scale-95 md:opacity-0"
+                                enterFrom="-translate-y-full md:translate-y-0 md:scale-95 md:opacity-0"
                                 enterTo="translate-y-0 md:scale-100 md:opacity-100"
                                 leave="ease-in duration-200"
                                 leaveFrom="translate-y-0 md:scale-100 md:opacity-100"
-                                leaveTo="translate-y-full md:translate-y-0 md:scale-95 md:opacity-0">
-                                <Dialog.Panel className="w-full transform bg-[#0a0a0a] shadow-xl rounded-t-3xl px-6 py-6 pb-8">
-                                    <div className="flex items-center justify-between mb-6">
-                                        <Dialog.Title className="text-white text-lg font-semibold font-[Urbanist]">
+                                leaveTo="-translate-y-full md:translate-y-0 md:scale-95 md:opacity-0">
+                                <Dialog.Panel className="w-full transform bg-[#0a0a0a] shadow-xl rounded-b-3xl px-6 py-6 pb-8">
+                                    <div className="flex items-center justify-center mb-6">
+                                        <Dialog.Title className="text-white text-lg font-semibold text-center">
                                             Ganti Mode
                                         </Dialog.Title>
-                                        <button
-                                            onClick={() => setIsOpen(false)}
-                                            className="text-gray-400 hover:text-white transition-colors">
-                                            <IoClose size={24} />
-                                        </button>
                                     </div>
 
                                     {/* Role Cards */}
-                                    <div className="flex gap-3 overflow-x-auto pb-2">
+                                    <div className="flex flex-col gap-3 pb-2">
                                         {roles.map((role) => (
                                             <button
                                                 key={role.id}
                                                 onClick={() =>
                                                     handleRoleSelect(role)
                                                 }
-                                                className={`flex-1 min-w-[160px] rounded-2xl p-4 transition-all ${
+                                                className={`w-full flex items-center justify-between px-4 py-3 transition-colors rounded-2xl ${
                                                     selectedRole?.id === role.id
-                                                        ? 'bg-[#5b4cdb]'
-                                                        : 'bg-[#1a1a1a] border border-[#2a2a2a]'
+                                                        ? 'bg-[#5b4cdb] hover:bg-[#6d5ee5]'
+                                                        : 'hover:bg-[#252525] border border-[#2C2C2C]'
                                                 }`}>
-                                                <div className="flex flex-col items-start gap-2">
-                                                    <div className="flex items-center gap-2">
-                                                        <span className="text-white font-bold text-lg font-[Urbanist]">
-                                                            {role.label}
+                                                <div className="flex items-center gap-2">
+                                                    <div className="flex flex-col items-start gap-1">
+                                                        <div className="flex items-center gap-1">
+                                                            <span className="text-white font-semibold font-[Urbanist]">
+                                                                {role.label}
+                                                            </span>
+                                                            {role.badge &&
+                                                                role.badge}
+                                                        </div>
+                                                        <span
+                                                            className={`text-sm ${
+                                                                selectedRole?.id ===
+                                                                role.id
+                                                                    ? 'text-white'
+                                                                    : 'text-gray-400'
+                                                            }`}>
+                                                            {role.description}
                                                         </span>
-                                                        {role.badge &&
-                                                            role.badge}
                                                     </div>
-                                                    <span
-                                                        className={`text-sm text-left ${
-                                                            selectedRole?.id ===
-                                                            role.id
-                                                                ? 'text-white'
-                                                                : 'text-gray-400'
-                                                        }`}>
-                                                        {role.description}
-                                                    </span>
                                                 </div>
+                                                {selectedRole?.id ===
+                                                    role.id && (
+                                                    <FaCheckCircle
+                                                        className="text-white"
+                                                        size={14}
+                                                    />
+                                                )}
                                             </button>
                                         ))}
                                     </div>

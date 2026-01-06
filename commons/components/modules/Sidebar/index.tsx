@@ -46,7 +46,14 @@ const Sidebar = ({
                                     ? 'text-white'
                                     : 'text-[#666666]'
                             } font-body text-sm hover:text-[#999999]`}>
-                            <HomeIcon className="w-5 h-5" />
+                            <HomeIcon
+                                className="w-5 h-5"
+                                fill={
+                                    pathname.includes('/utbk/dashboard')
+                                        ? 'white'
+                                        : 'none'
+                                }
+                            />
                             Home
                         </span>
                     </Link>
@@ -66,7 +73,14 @@ const Sidebar = ({
                                     ? 'text-white'
                                     : 'text-[#666666]'
                             } font-body text-sm hover:text-[#999999]`}>
-                            <KelasIcon size={20} />
+                            <KelasIcon
+                                size={20}
+                                fill={
+                                    pathname.includes('/utbk/materi')
+                                        ? 'white'
+                                        : 'none'
+                                }
+                            />
                             Materi{' '}
                             <div className="font-bold text-[10px] leading-normal py-1 px-2 bg-[#20222E] rounded-lg">
                                 COMING SOON
@@ -91,7 +105,14 @@ const Sidebar = ({
                                         ? 'text-white'
                                         : 'text-[#666666]'
                                 )}>
-                                <PencilOnLineIcon size={20} />
+                                <PencilOnLineIcon
+                                    size={20}
+                                    fill={
+                                        pathname.includes('/utbk/try-out')
+                                            ? 'white'
+                                            : 'none'
+                                    }
+                                />
                                 Try Out
                             </span>
                         </Link>
@@ -140,7 +161,14 @@ const Sidebar = ({
                                     ? 'text-white'
                                     : 'text-[#666666]'
                             } font-body text-sm hover:text-[#999999]`}>
-                            <HomeIcon className="w-5 h-5" />
+                            <HomeIcon
+                                className="w-5 h-5"
+                                fill={
+                                    pathname.includes('/dashboard')
+                                        ? 'white'
+                                        : 'none'
+                                }
+                            />
                             Home
                         </span>
                     </Link>
@@ -159,7 +187,14 @@ const Sidebar = ({
                                     ? 'text-white'
                                     : 'text-[#666666]'
                             } font-body text-sm hover:text-[#999999]`}>
-                            <KelasIcon size={20} />
+                            <KelasIcon
+                                size={20}
+                                fill={
+                                    pathname.includes('/kelas')
+                                        ? 'white'
+                                        : 'none'
+                                }
+                            />
                             Kelas
                         </span>
                     </Link>
@@ -180,7 +215,14 @@ const Sidebar = ({
                                         ? 'text-white'
                                         : 'text-[#666666]'
                                 )}>
-                                <PencilOnLineIcon size={20} />
+                                <PencilOnLineIcon
+                                    size={20}
+                                    fill={
+                                        pathname.includes('/latihan')
+                                            ? 'white'
+                                            : 'none'
+                                    }
+                                />
                                 Try Out
                             </span>
                         </Link>
@@ -199,7 +241,13 @@ const Sidebar = ({
                                         ? 'text-white'
                                         : 'text-[#666666]'
                                 } font-body text-sm hover:text-[#999999]`}>
-                                <CopilotIconLine />
+                                <CopilotIconLine
+                                    fill={
+                                        pathname.includes('/copilot')
+                                            ? 'white'
+                                            : 'none'
+                                    }
+                                />
                                 Copilot AI
                             </span>
                         </Link>
@@ -220,7 +268,14 @@ const Sidebar = ({
                                     ? 'text-white'
                                     : 'text-[#666666]'
                             )}>
-                            <BookStackIcon size={20} />
+                            <BookStackIcon
+                                size={20}
+                                fill={
+                                    pathname.includes('/perpustakaan')
+                                        ? 'white'
+                                        : 'none'
+                                }
+                            />
                             Perpustakaan
                         </span>
                     </Link>

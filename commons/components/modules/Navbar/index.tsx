@@ -173,8 +173,8 @@ const Navbar = ({
     const isShowHamburgerMenu =
         !isAuthenticated ||
         (profile?.current_role === 'COLLEGE_STUDENT' &&
-            (!LEARNING_PAGES.some((page) => router.asPath === page) ||
-                (LEARNING_PAGES.some((page) => router.asPath === page) &&
+            (!LEARNING_PAGES.some((page) => router.pathname === page) ||
+                (LEARNING_PAGES.some((page) => router.pathname === page) &&
                     !isAuthenticated &&
                     !isDesktopBreakpoints)));
     const isShowSidebar = showSidebar && fullHeightSidebar && isAuthenticated;
@@ -206,31 +206,51 @@ const Navbar = ({
                             onClick={() => setOpenSidebar(true)}
                         />
                     )}
-                    <Link
-                        href={
-                            isAuthenticated
-                                ? currentRole === 'K12'
-                                    ? '/utbk/dashboard'
-                                    : '/dashboard'
-                                : '/'
-                        }>
-                        {!isAuthenticated ? (
+                    {!isAuthenticated ? (
+                        <Link
+                            href={
+                                isAuthenticated
+                                    ? currentRole === 'K12'
+                                        ? '/utbk/dashboard'
+                                        : '/dashboard'
+                                    : '/'
+                            }>
                             <span className="text-2xl font-bold cursor-pointer font-[Urbanist] lg:hidden">
                                 G
                             </span>
-                        ) : isMobileBreakpoints && isShowSidebar ? (
+                        </Link>
+                    ) : isMobileBreakpoints && isShowSidebar ? (
+                        <div>
                             <RoleSwitcher />
-                        ) : (
+                        </div>
+                    ) : (
+                        <Link
+                            href={
+                                isAuthenticated
+                                    ? currentRole === 'K12'
+                                        ? '/utbk/dashboard'
+                                        : '/dashboard'
+                                    : '/'
+                            }>
                             <span className="text-2xl font-bold cursor-pointer font-[Urbanist] lg:hidden">
                                 G
                             </span>
-                        )}
-                        {!isShowSidebar && (
+                        </Link>
+                    )}
+                    {!isShowSidebar && (
+                        <Link
+                            href={
+                                isAuthenticated
+                                    ? currentRole === 'K12'
+                                        ? '/utbk/dashboard'
+                                        : '/dashboard'
+                                    : '/'
+                            }>
                             <span className="text-2xl font-bold cursor-pointer font-[Urbanist] hidden lg:flex">
                                 Gradient
                             </span>
-                        )}
-                    </Link>
+                        </Link>
+                    )}
                     <div
                         className={cn(
                             'items-center gap-6 hidden lg:flex',

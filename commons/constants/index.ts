@@ -10,5 +10,6 @@ export const LEARNING_PAGES = [
     '/perpustakaan/astronotes',
     '/perpustakaan/textbook',
     '/perpustakaan/bank-soal',
-    '/kelas'
+    '/kelas',
+    '/latihan'
 ];

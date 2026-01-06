@@ -67,24 +67,12 @@ const LearnLayout = ({
                             fullHeightSidebar={fullHeightSidebar}
                             showSubscriptionReminder={showSubscriptionReminder}
                         />
-                        {/* <AppInstallBanner
-                            showSidebar={
-                                showSidebar &&
-                                isAuthenticated &&
-                                !isMobileBreakpoints
-                            }
-                        /> */}
                         <SubscriptionReminder
                             show={showSubscriptionReminder}
                             showSidebar={showSidebar}
                         />
                     </>
                 )}
-                {/* {hideNavbar && (
-                    <AppInstallBanner
-                        showSidebar={showSidebar && isAuthenticated}
-                    />
-                )} */}
                 <div
                     className={cn(
                         'md:pt-16',
