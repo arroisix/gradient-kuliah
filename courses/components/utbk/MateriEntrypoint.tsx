@@ -25,7 +25,7 @@ function MateriEntrypoint() {
     return (
         <>
             <h1 className="text-white font-bold text-2xl leading-tight mb-6">
-                Modul Belajar
+                Materi
             </h1>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
@@ -42,7 +42,7 @@ function MateriEntrypoint() {
                     courses.map((course) => (
                         <MateriCard
                             key={course.id}
-                            id={course.id}
+                            slug={course.slug}
                             course_name={course.course_name}
                             cover={course.cover}
                             tags={course.tags}

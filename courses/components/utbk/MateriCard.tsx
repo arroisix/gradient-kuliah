@@ -1,34 +1,85 @@
+import { useAuth } from 'authentication/contexts/AuthProvider';
+import {
+    useGetCourseContentQuery,
+    useGetSubchapterQuery
+} from 'courses/redux/api/courseApi';
+import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienceApi';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useMemo } from 'react';
 import { IoMdTime } from 'react-icons/io';
 
 type MateriCardProps = Pick<
     Course,
-    | 'id'
     | 'course_name'
     | 'cover'
     | 'tags'
     | 'latest_subchapter_name'
     | 'percentage_progress'
+    | 'slug'
 >;
 
 function MateriCard({
-    id,
     course_name,
     cover,
     tags,
     latest_subchapter_name,
-    percentage_progress
+    percentage_progress,
+    slug
 }: MateriCardProps): JSX.Element {
+    const { isAuthenticated } = useAuth();
     const progress = Math.min(
         Math.max(((percentage_progress ?? 0) / 100) * 100, 0),
         100
     );
 
+    const { data: learningProgress, isLoading: isLoadingProgress } =
+        useGetLearningProgressQuery(slug, {
+            skip: !isAuthenticated || !slug
+        });
+
+    const { data: courseContent, isLoading: isLoadingCourse } =
+        useGetCourseContentQuery({ slug }, { skip: isAuthenticated || !slug });
+
+    const firstChapter = useMemo((): CourseChapter | undefined => {
+        return (courseContent?.chapters.length ?? 0) > 0
+            ? courseContent?.chapters[0]
+            : undefined;
+    }, [courseContent]);
+
+    const { data: subchapter, isLoading: isLoadingSubchapter } =
+        useGetSubchapterQuery(
+            { chapterId: firstChapter?.chapter_id ?? '' },
+            { skip: isAuthenticated || !firstChapter }
+        );
+
+    const firstSubchapter = useMemo((): SubChapter | undefined => {
+        return (subchapter?.subchapters.length ?? 0) > 0
+            ? subchapter?.subchapters[0]
+            : undefined;
+    }, [subchapter?.subchapters]);
+
+    const isLoading =
+        isLoadingProgress || isLoadingCourse || isLoadingSubchapter;
+
+    const chapterSlug = isAuthenticated
+        ? learningProgress?.latest_watch_video
+            ? learningProgress.latest_watch_video.chapter_id
+            : learningProgress?.first_video_in_course?.chapter_id
+        : firstChapter?.chapter_id;
+
+    const subChapterSlug = isAuthenticated
+        ? learningProgress?.latest_watch_video
+            ? learningProgress.latest_watch_video.subchapter.subchapter_slug
+            : learningProgress?.first_video_in_course?.subchapter_slug
+        : firstSubchapter?.subchapter_slug;
+
     return (
         <Link
-            href={`/utbk/materi/${id}`}
-            className="bg-[#222222] w-full rounded-lg p-4 flex gap-4 items-start md:items-center">
+            href={`/utbk/materi/${slug}/${chapterSlug}/${subChapterSlug}`}
+            className={`${
+                isLoading ? 'pointer-events-none' : ''
+            } bg-[#222222] w-full rounded-lg p-4 flex gap-4 items-center`}>
             <div className="bg-[#333333] rounded-full p-2 flex">
                 <Image
                     src={cover}
