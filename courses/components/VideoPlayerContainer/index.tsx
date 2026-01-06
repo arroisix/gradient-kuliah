@@ -32,13 +32,15 @@ interface VideoPlayerContainerProps
         'video' | 'next_subchapter_slug' | 'subchapter_name'
     > {
     isLoadingData: boolean;
+    slug?: string;
 }
 
 const VideoPlayerContainer = ({
     isLoadingData = true,
     subchapter_name: title,
     video,
-    next_subchapter_slug
+    next_subchapter_slug,
+    slug
 }: VideoPlayerContainerProps): JSX.Element => {
     const router = useRouter();
     const { id } = router.query;
@@ -47,7 +49,7 @@ const VideoPlayerContainer = ({
         learning_progress_id,
         isLoading: isLoadingSubscription,
         is_subscribed
-    } = useCourseSubscription(id as string);
+    } = useCourseSubscription(slug ?? (id as string));
     const [track] = useTrackSubchapterProgressMutation();
     const [showRegisterwall, setIsShowRegisterwall] = useState(false);
     const isLoading = !video || isLoadingData || isLoadingSubscription;

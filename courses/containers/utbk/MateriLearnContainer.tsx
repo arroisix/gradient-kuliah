@@ -132,6 +132,7 @@ function MateriLearnContainer({
                         subchapter_name={subchapter?.subchapter_name}
                         video={subchapter?.video}
                         next_subchapter_slug={subchapter?.next_subchapter_slug}
+                        slug={slug_subtest}
                     />
 
                     {course ? (
