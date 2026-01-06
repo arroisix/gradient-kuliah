@@ -39,17 +39,11 @@ function MateriDetailContent(): JSX.Element {
     return (
         <div className="space-y-4 mt-6">
             {courseContent?.chapters?.map(
-                ({
-                    chapter_id,
-                    chapter_name,
-                    subchapter_counts,
-                    is_finished
-                }) => (
+                ({ chapter_id, chapter_name, subchapter_counts }) => (
                     <ChapterAccordion
                         key={chapter_id}
                         title={`${chapter_name} (${subchapter_counts})`}
                         chapter_id={chapter_id}
-                        is_finished={is_finished ?? false}
                         chapter_slug={chapter_id} // TODO: change with chapter_slug
                         initialOpen={slug_chapter === chapter_id} // TODO: change with chapter_slug
                     />

@@ -1,21 +1,16 @@
 import { useRouter } from 'next/router';
 import { useGetSubchapterQuery } from 'courses/redux/api/courseApi';
-import { CircleIcon, VideoIcon } from 'lucide-react';
-import Link from 'next/link';
-import { formatDuration } from 'commons/utils';
-import { FaCircleCheck } from 'react-icons/fa6';
-import { FaLock } from 'react-icons/fa';
+import { SubchapterMenuItem } from '../SubchapterMenuItem';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 interface SubchapterListProps {
     chapter_id: string;
     chapter_slug: string;
-    is_finished: boolean;
 }
 
 function SubchapterList({
     chapter_id,
-    chapter_slug,
-    is_finished
+    chapter_slug
 }: SubchapterListProps): JSX.Element {
     const router = useRouter();
     const { slug_subtest, slug_subchapter } = router.query as {
@@ -23,6 +18,7 @@ function SubchapterList({
         slug_subchapter: string;
     };
 
+    const { is_subscribed } = useCourseSubscription();
     const { data, isLoading } = useGetSubchapterQuery({
         chapterId: chapter_id
     });
@@ -50,51 +46,16 @@ function SubchapterList({
     return (
         <div className="space-y-2 mt-6">
             {data?.subchapters?.map((value) => (
-                <Link
+                <SubchapterMenuItem
+                    key={value.id}
                     href={`/utbk/materi/${slug_subtest}/${chapter_slug}/${value.subchapter_slug}`}
-                    key={value.subchapter_slug}
-                    className={`${
-                        slug_subchapter === value.subchapter_slug
-                            ? 'bg-[#36236A]'
-                            : 'bg-transparent hover:bg-[#333333]'
-                    } ${
-                        !value.is_free ? 'pointer-events-none' : ''
-                    } p-3 rounded-lg flex justify-between items-center gap-4 transition-all duration-300`}>
-                    {value.is_free ? (
-                        <VideoIcon className="w-4 h-4 text-white shrink-0" />
-                    ) : (
-                        <FaLock className="fill-#666666 w-4 h-4" />
-                    )}
-
-                    <div className="w-full space-y-1">
-                        <p
-                            className={`${
-                                slug_subchapter === value.subchapter_slug
-                                    ? 'font-semibold'
-                                    : 'font-normal'
-                            } text-white text-sm w-full`}>
-                            {value.subchapter_name}
-                        </p>
-                        <span
-                            className={`${
-                                slug_subchapter === value.subchapter_slug
-                                    ? 'text-[#DEDEDE] font-semibold'
-                                    : 'text-[#999999] font-normal'
-                            } font-bold text-sm`}>
-                            {formatDuration(value.duration)}
-                        </span>
-                    </div>
-
-                    {is_finished ? (
-                        <FaCircleCheck className="w-4 h-4 text-[#03AC5C] shrink-0" />
-                    ) : (
-                        <CircleIcon
-                            className={`${
-                                value.is_free ? 'text-white' : 'text-[#666666]'
-                            } w-4 h-4 shrink-0`}
-                        />
-                    )}
-                </Link>
+                    name={value.subchapter_name}
+                    duration={value.duration}
+                    type={value.type}
+                    isActive={slug_subchapter === value.subchapter_slug}
+                    isFinished={value.is_finished}
+                    isDisabled={!is_subscribed && !value.is_free}
+                />
             ))}
         </div>
     );

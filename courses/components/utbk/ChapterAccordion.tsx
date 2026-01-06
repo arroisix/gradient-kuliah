@@ -7,7 +7,6 @@ interface ChapterAccordionProps {
     title: string;
     chapter_id: string;
     chapter_slug: string;
-    is_finished: boolean;
     initialOpen?: boolean;
 }
 
@@ -15,7 +14,6 @@ function ChapterAccordion({
     title,
     chapter_id,
     chapter_slug,
-    is_finished,
     initialOpen
 }: ChapterAccordionProps): JSX.Element {
     const [isOpen, setIsOpen] = useState(initialOpen);
@@ -46,7 +44,6 @@ function ChapterAccordion({
                 <SubchapterList
                     chapter_id={chapter_id}
                     chapter_slug={chapter_slug}
-                    is_finished={is_finished}
                 />
             ) : (
                 <></>
