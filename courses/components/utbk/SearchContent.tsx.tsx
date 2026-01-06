@@ -101,4 +101,4 @@ function SearchContent() {
     );
 }
 
-export { SearchContent };
+export default SearchContent;

@@ -1,16 +1,11 @@
 import Button from 'commons/components/elements/Button';
 import { FaChevronLeft } from 'react-icons/fa';
-import { FaChevronDown } from 'react-icons/fa';
 import VideoPlayerContainer from 'courses/components/VideoPlayerContainer';
 import { useRouter } from 'next/router';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import { useGetSubchapterDetailV2Query } from 'courses/redux/api/privateCourseV2Api';
-import {
-    useGetPublicListCoursesV2Query,
-    useGetPublicSubchapterDetailV2Query
-} from 'courses/redux/api/publicCourseV2Api';
+import { useGetPublicSubchapterDetailV2Query } from 'courses/redux/api/publicCourseV2Api';
 import { useGetCourseDetailQuery } from 'courses/redux/api/courseApi';
-import { RatingButton } from 'courses/components/utbk/RatingButton';
 import { ShareButton } from 'courses/components/utbk/ShareButton';
 import { useState } from 'react';
 import CopilotIconFill from 'copilot/assets/CopilotIconFill';
@@ -18,10 +13,20 @@ import { TranscriptIcon } from 'commons/components/elements/Icons/TranscriptIcon
 import CopilotModal from 'copilot/components/CopilotModal';
 import { LecturerProfile } from 'courses/components/utbk/LecturerProfile';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
-import { MateriDetailBox } from 'courses/components/utbk/MateriDetailBox';
-import { useGetPrivateListCoursesV2Query } from 'courses/redux/api/privateCourseV2Api';
-import { CourseMenuItem } from 'courses/components/utbk/CourseMenuItem';
-import { MateriDetailSheet } from 'courses/components/utbk/MateriDetailSheet';
+import { MateriLearnNavigation } from 'courses/components/utbk/MateriLearnNavigation';
+import dynamic from 'next/dynamic';
+
+const RatingButton = dynamic(
+    () => import('courses/components/utbk/RatingButton')
+);
+
+const MateriDetailBox = dynamic(
+    () => import('courses/components/utbk/MateriDetailBox')
+);
+
+const MateriDetailSheet = dynamic(
+    () => import('courses/components/utbk/MateriDetailSheet')
+);
 
 interface MateriLearnContainerProps {
     subchapter: SubChapter | undefined;
@@ -43,21 +48,6 @@ function MateriLearnContainer({
 
     const { isAuthenticated } = useAuth();
     const { isDesktopBreakpoints } = useWindowBreakpoints();
-
-    const { isLoading: isPublicCoursesLoading, data: publicCourses } =
-        useGetPublicListCoursesV2Query(
-            { type: 'UTBK' },
-            { skip: isAuthenticated }
-        );
-
-    const { isLoading: isPrivateCoursesLoading, data: privateCourses } =
-        useGetPrivateListCoursesV2Query({}, { skip: !isAuthenticated });
-
-    const courses = publicCourses
-        ? publicCourses.data
-        : privateCourses
-        ? privateCourses.data
-        : [];
 
     const privateSubchapterDetails = useGetSubchapterDetailV2Query(
         { course_slug: slug_subtest, subchapter_slug: slug_subchapter },
@@ -103,24 +93,7 @@ function MateriLearnContainer({
                     <span className="hidden lg:block">Kembali</span>
                 </Button>
 
-                <details className="dropdown group">
-                    <summary
-                        role="button"
-                        className={`${
-                            isPrivateCoursesLoading || isPublicCoursesLoading
-                                ? 'pointer-events-none'
-                                : ''
-                        } hidden-summary text-white font-bold text-base flex items-center gap-2.5 lg:text-2xl`}>
-                        Penalaran Kualitatif
-                        <FaChevronDown className="text-white w-3.5 h-3.5 lg:w-4 lg:h-4 group-open:-rotate-180 transition-all duration-300" />
-                    </summary>
-
-                    <ul className="menu dropdown-content z-50 left-1/2 -translate-x-1/2 bg-black grid grid-cols-2 gap-x-8 gap-y-6 w-screen max-w-[896px] rounded-2xl p-6 mt-10">
-                        {courses.map((course) => (
-                            <CourseMenuItem key={course.id} course={course} />
-                        ))}
-                    </ul>
-                </details>
+                <MateriLearnNavigation />
 
                 <div></div>
             </div>

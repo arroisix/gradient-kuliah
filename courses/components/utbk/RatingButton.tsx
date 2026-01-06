@@ -41,4 +41,4 @@ function RatingButton({ disabled }: RatingButtonProps): JSX.Element {
     );
 }
 
-export { RatingButton };
+export default RatingButton;

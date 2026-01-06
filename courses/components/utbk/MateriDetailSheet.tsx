@@ -179,4 +179,4 @@ function MateriDetailSheet({
     );
 }
 
-export { MateriDetailSheet };
+export default MateriDetailSheet;

@@ -1825,14 +1825,6 @@ math-field#tanya-mathfield::part(virtual-keyboard-toggle) {
     }
 }
 
-.hidden-summary {
-    list-style: none;
-}
-
-.hidden-summary::-webkit-details-marker {
-    display: none;
-}
-
 #__next {
     isolation: isolate;
 }

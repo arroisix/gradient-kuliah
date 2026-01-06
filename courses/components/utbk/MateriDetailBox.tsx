@@ -88,4 +88,4 @@ function MateriDetailBox({ course }: MateriDetailBoxProps): JSX.Element {
     );
 }
 
-export { MateriDetailBox };
+export default MateriDetailBox;

@@ -1,8 +1,10 @@
 import { useSearchSubchapter } from 'courses/hooks/useSearchSubchapter';
-import { SearchContent } from './SearchContent.tsx';
 import { useRouter } from 'next/router.js';
 import { useGetCourseContentQuery } from 'courses/redux/api/courseApi';
 import { ChapterAccordion } from './ChapterAccordion';
+import dynamic from 'next/dynamic';
+
+const SearchContent = dynamic(() => import('./SearchContent.tsx'));
 
 function MateriDetailContent(): JSX.Element {
     const router = useRouter();
