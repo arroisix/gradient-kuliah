@@ -17,6 +17,7 @@ function CourseMenuItem({ course }: CourseMenuItemProps): JSX.Element {
         skip: !isAuthenticated || !course.slug
     });
 
+    // TODO: change with chapter_slug
     const chapterSlug = isAuthenticated
         ? data?.latest_watch_video
             ? data.latest_watch_video.chapter_id

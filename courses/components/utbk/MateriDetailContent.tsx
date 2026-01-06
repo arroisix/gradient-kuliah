@@ -50,8 +50,8 @@ function MateriDetailContent(): JSX.Element {
                         title={`${chapter_name} (${subchapter_counts})`}
                         chapter_id={chapter_id}
                         is_finished={is_finished ?? false}
-                        chapter_slug={''} // TODO
-                        initialOpen={slug_chapter === ''} // TODO
+                        chapter_slug={chapter_id} // TODO: change with chapter_slug
+                        initialOpen={slug_chapter === chapter_id} // TODO: change with chapter_slug
                     />
                 )
             )}

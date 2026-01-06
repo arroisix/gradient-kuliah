@@ -81,9 +81,7 @@ function MateriDetailSheet({
                 </Button>
 
                 <Link
-                    href={`/utbk/materi/${slug_subtest}/${'TODO'}/${
-                        subchapter?.subchapter_slug
-                    }`}
+                    href={`/utbk/materi/${slug_subtest}/${subchapter?.chapter_id}/${subchapter?.subchapter_slug}`} // TODO: change chapter_id with chapter_name
                     className={`${
                         isLoading
                             ? 'pointer-events-none bg-neutral-700/80 text-neutral-300/30'
