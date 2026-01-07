@@ -1,5 +1,12 @@
 import { cn, formatDuration } from 'commons/utils';
-import { CircleIcon, InfoIcon, LucideProps, VideoIcon } from 'lucide-react';
+import {
+    BookOpenIcon,
+    CircleIcon,
+    LucideProps,
+    VideoIcon,
+    ChartNoAxesColumnIcon,
+    BadgeQuestionMarkIcon
+} from 'lucide-react';
 import Link from 'next/link';
 import {
     ComponentPropsWithoutRef,
@@ -14,7 +21,7 @@ import { FaCircleCheck } from 'react-icons/fa6';
 interface SubchapterMenuItemProps extends ComponentPropsWithoutRef<'a'> {
     name: string | undefined;
     duration: string | undefined;
-    type: 'video' | 'article' | 'quiz' | 'exercise' | undefined;
+    type: SubChapter['type_name'];
     isActive?: boolean;
     isFinished?: boolean | null | undefined;
     isDisabled?: boolean;
@@ -47,17 +54,17 @@ function SubchapterMenuItem({
     > => {
         let Icon = VideoIcon;
         switch (type) {
-            case 'article':
-                break;
-            case 'quiz':
-                break;
             case 'exercise':
+                Icon = BadgeQuestionMarkIcon;
+                break;
+            case 'notebook':
+                Icon = BookOpenIcon;
                 break;
             default:
                 if (isActive) {
-                    Icon = VideoIcon;
+                    Icon = ChartNoAxesColumnIcon;
                 } else {
-                    Icon = InfoIcon;
+                    Icon = VideoIcon;
                 }
                 break;
         }
@@ -79,7 +86,7 @@ function SubchapterMenuItem({
             ) : (
                 <LeftIcon
                     className={`${
-                        isActive && type === 'video'
+                        isActive && type === 'lecture'
                             ? 'text-[#B6A6F3]'
                             : 'text-white'
                     } w-4 h-4 shrink-0`}
@@ -94,7 +101,7 @@ function SubchapterMenuItem({
                     {name}
                 </p>
 
-                {type === 'video' ? (
+                {type === 'lecture' ? (
                     <span
                         className={`${
                             (isActive || isFinished) && !isDisabled

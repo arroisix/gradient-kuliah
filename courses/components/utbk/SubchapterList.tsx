@@ -1,5 +1,5 @@
-import { useRouter } from 'next/router';
 import { useGetSubchapterQuery } from 'courses/redux/api/courseApi';
+import { useRouter } from 'next/router';
 import { SubchapterMenuItem } from '../SubchapterMenuItem';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
@@ -20,7 +20,9 @@ function SubchapterList({
         slug_subchapter: string;
     };
 
-    const { is_subscribed } = useCourseSubscription();
+    const { is_subscribed, subscribedFeatures } =
+        useCourseSubscription(slug_subtest);
+
     const { data, isLoading } = useGetSubchapterQuery(
         { chapterId: chapter_id ?? '' },
         { skip: !chapter_id }
@@ -58,10 +60,15 @@ function SubchapterList({
                     href={`/utbk/materi/${slug_subtest}/${chapter_slug}/${value.subchapter_slug}`}
                     name={value.subchapter_name}
                     duration={value.duration}
-                    type={value.type}
+                    type={value.type_name}
                     isActive={slug_subchapter === value.subchapter_slug}
                     isFinished={value.is_finished}
-                    isDisabled={!is_subscribed && !value.is_free}
+                    isDisabled={
+                        (!is_subscribed && !value.is_free) ||
+                        (is_subscribed &&
+                            !value.is_free &&
+                            !subscribedFeatures?.includes('material'))
+                    }
                 />
             ))}
         </div>
