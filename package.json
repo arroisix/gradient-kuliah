@@ -72,7 +72,7 @@
         "katex": "^0.16.4",
         "lodash.groupby": "^4.6.0",
         "lottie-react": "^2.4.1",
-        "lucide-react": "^0.439.0",
+        "lucide-react": "^0.518.0",
         "marked": "^4.2.5",
         "marked-katex-extension": "^1.0.2",
         "mathlive": "^0.98.4",
