@@ -55,7 +55,10 @@ type Course = {
     is_only_notebook?: boolean;
     is_free?: boolean;
     tags?: string[];
+    latest_chapter_name?: string;
+    latest_chapter_slug?: string;
     latest_subchapter_name?: string;
+    latest_subchapter_slug?: string;
     percentage_progress?: number;
 };
 

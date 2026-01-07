@@ -42,7 +42,7 @@ function MateriEntrypoint() {
                     courses.map((course) => (
                         <MateriCard
                             key={course.id}
-                            slug={course.slug}
+                            href={`/utbk/materi/${course.slug}/${course.latest_chapter_slug}/${course.latest_subchapter_slug}`}
                             course_name={course.course_name}
                             cover={course.cover}
                             tags={course.tags}
