@@ -45,16 +45,17 @@ const VideoPlayerContainer = ({
     const router = useRouter();
     const { id } = router.query;
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const {
-        learning_progress_id,
-        isLoading: isLoadingSubscription,
-        is_subscribed
-    } = useCourseSubscription(slug ?? (id as string));
+    const { learning_progress_id, isLoading: isLoadingSubscription } =
+        useCourseSubscription(slug ?? (id as string));
     const [track] = useTrackSubchapterProgressMutation();
     const [showRegisterwall, setIsShowRegisterwall] = useState(false);
     const isLoading = !video || isLoadingData || isLoadingSubscription;
 
-    const isShowPaywall = !is_subscribed && !video?.is_free;
+    const isShowPaywall =
+        !video?.drm_token &&
+        !video?.drm_video_url &&
+        !video?.token &&
+        !video?.video_url;
 
     const shouldUseBitmovinPlayer = video?.is_drm_protected;
 
