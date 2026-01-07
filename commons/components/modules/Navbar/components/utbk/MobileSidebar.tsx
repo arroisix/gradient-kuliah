@@ -41,15 +41,7 @@ const MobileSidebar = ({
                     </header>
                     <div className="flex flex-col gap-8 md:gap-12 px-6 pb-6 flex-grow overflow-auto md:max-w-[738px] self-center w-full">
                         <Accordion.Root className="flex flex-col flex-grow md:flex-grow-0">
-                            <AccordionItem
-                                label={
-                                    <div className="flex items-center gap-2">
-                                        <span>Materi</span>
-                                        <div className="bg-[#36236A] text-[10px] leading-normal text-white/80 font-bold py-1 px-2 rounded-lg">
-                                            COMING SOON
-                                        </div>
-                                    </div>
-                                }>
+                            <AccordionItem label="Materi">
                                 <>
                                     <div className="bg-[#1E1930] border border-[#36236A] flex gap-4 p-4 rounded-2xl mb-8">
                                         <div className="shrink-0">

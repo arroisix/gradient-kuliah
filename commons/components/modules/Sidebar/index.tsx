@@ -81,10 +81,7 @@ const Sidebar = ({
                                         : 'none'
                                 }
                             />
-                            Materi{' '}
-                            <div className="font-bold text-[10px] leading-normal py-1 px-2 bg-[#20222E] rounded-lg">
-                                COMING SOON
-                            </div>
+                            Materi
                         </span>
                     </Link>
 
