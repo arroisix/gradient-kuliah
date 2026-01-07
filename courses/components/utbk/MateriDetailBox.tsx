@@ -22,16 +22,15 @@ function MateriDetailBox({ course }: MateriDetailBoxProps): JSX.Element {
 
     const completedMateriCount =
         learningProgress?.completion_percentage?.total_finished_video;
+
     const totalMateriCount =
         learningProgress?.completion_percentage?.total_video_count;
 
-    const progress = Math.min(
-        Math.max((completedMateriCount / totalMateriCount) * 100, 0),
-        100
-    );
+    const percentageProgress =
+        learningProgress?.completion_percentage?.percentage_progress;
 
     return (
-        <div className="col-span-3 bg-[#181818] w-full max-w-[500px] h-full rounded-2xl overflow-hidden">
+        <div className="relative z-10 col-span-3 bg-[#181818] w-full max-w-[500px] h-full rounded-2xl overflow-hidden">
             <div className="bg-[#101010] p-6">
                 <h3 className="text-white font-semibold">
                     {course?.course_name}
@@ -42,7 +41,7 @@ function MateriDetailBox({ course }: MateriDetailBoxProps): JSX.Element {
                         <div className="bg-[#4B4E5F] rounded-full overflow-hidden w-full h-2 my-4">
                             <div
                                 className="bg-[#B6A6F3] rounded-full transition-all duration-500 ease-out h-full"
-                                style={{ width: `${progress}%` }}
+                                style={{ width: `${percentageProgress}%` }}
                                 role="progressbar"
                                 aria-valuenow={completedMateriCount}
                                 aria-valuemin={0}
@@ -64,7 +63,7 @@ function MateriDetailBox({ course }: MateriDetailBoxProps): JSX.Element {
                                 Materi Selesai
                             </span>
                             <span className="text-white font-semibold">
-                                {(isNaN(progress) ? 0 : progress).toFixed(0)}%
+                                {percentageProgress?.toFixed(0)}%
                             </span>
                         </div>
                     ) : (

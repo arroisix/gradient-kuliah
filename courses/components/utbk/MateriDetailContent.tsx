@@ -38,17 +38,15 @@ function MateriDetailContent(): JSX.Element {
 
     return (
         <div className="space-y-4 mt-6">
-            {courseContent?.chapters?.map(
-                ({ chapter_id, chapter_name, subchapter_counts }) => (
-                    <ChapterAccordion
-                        key={chapter_id}
-                        title={`${chapter_name} (${subchapter_counts})`}
-                        chapter_id={chapter_id}
-                        chapter_slug={chapter_id} // TODO: change with chapter_slug
-                        initialOpen={slug_chapter === chapter_id} // TODO: change with chapter_slug
-                    />
-                )
-            )}
+            {courseContent?.chapters?.map((chapter) => (
+                <ChapterAccordion
+                    key={chapter.chapter_id}
+                    title={`${chapter.chapter_name} (${chapter.subchapter_counts})`}
+                    chapter_id={chapter.chapter_id}
+                    chapter_slug={chapter.chapter_slug}
+                    initialOpen={slug_chapter === chapter.chapter_slug}
+                />
+            ))}
         </div>
     );
 }

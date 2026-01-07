@@ -232,6 +232,7 @@ interface FirstVideoInCourse {
 type CompletionPercentage = {
     total_finished_video: int;
     total_video_count: int;
+    percentage_progress: number;
 };
 
 type LearningProgress = {
@@ -285,6 +286,7 @@ interface CoursesResponse {
 
 type CourseChapter = {
     chapter_id: string;
+    chapter_slug: string;
     chapter_name: string;
     order: number;
     subchapter_counts?: number;

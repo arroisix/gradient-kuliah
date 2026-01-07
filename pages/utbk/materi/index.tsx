@@ -17,7 +17,9 @@ const MateriPage = (): JSX.Element => {
         return (
             <Layout>
                 <div className="w-full max-w-5xl mx-auto px-6 pt-[calc(92px+32px)]">
-                    <MateriEntrypoint />
+                    <div className="min-h-[calc(100vh-92px-32px-32px-28px)]">
+                        <MateriEntrypoint />
+                    </div>
                 </div>
             </Layout>
         );
