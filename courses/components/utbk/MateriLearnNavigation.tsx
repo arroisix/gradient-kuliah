@@ -70,6 +70,7 @@ function MateriLearnNavigation(): JSX.Element {
                                     <CourseMenuItem
                                         key={course.id}
                                         course={course}
+                                        href={`/utbk/materi/${course.slug}/${course.latest_chapter_slug}/${course.latest_subchapter_slug}`}
                                     />
                                 ))}
                             </ul>
@@ -150,6 +151,7 @@ function MateriLearnNavigation(): JSX.Element {
                                 <CourseMenuItem
                                     key={course.id}
                                     course={course}
+                                    href={`/utbk/materi/${course.slug}/${course.latest_chapter_slug}/${course.latest_subchapter_slug}`}
                                 />
                             ))}
                         </ul>

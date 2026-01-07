@@ -6,9 +6,10 @@ import { useRouter } from 'next/router';
 
 interface CourseMenuItemProps {
     course: Course;
+    href: string;
 }
 
-function CourseMenuItem({ course }: CourseMenuItemProps): JSX.Element {
+function CourseMenuItem({ course, href }: CourseMenuItemProps): JSX.Element {
     const router = useRouter();
     const { slug_subtest } = router.query as { slug_subtest: string };
 
@@ -17,22 +18,9 @@ function CourseMenuItem({ course }: CourseMenuItemProps): JSX.Element {
         skip: !isAuthenticated || !course.slug
     });
 
-    // TODO: change with chapter_slug
-    const chapterSlug = isAuthenticated
-        ? data?.latest_watch_video
-            ? data.latest_watch_video.chapter_id
-            : data?.first_video_in_course?.chapter_id
-        : '';
-
-    const subChapterSlug = isAuthenticated
-        ? data?.latest_watch_video
-            ? data.latest_watch_video.subchapter.subchapter_slug
-            : data?.first_video_in_course?.subchapter_slug
-        : '';
-
     return (
         <Link
-            href={`/utbk/materi/${course.slug}/${chapterSlug}/${subChapterSlug}`}
+            href={href}
             className={`${
                 isAuthenticated && (!data || isLoading)
                     ? 'pointer-events-none'
