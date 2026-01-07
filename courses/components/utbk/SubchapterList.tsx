@@ -4,13 +4,15 @@ import { SubchapterMenuItem } from '../SubchapterMenuItem';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 interface SubchapterListProps {
-    chapter_id: string;
     chapter_slug: string;
+    chapter_id?: string;
+    subchapterSearch?: SubchapterSearch['items'];
 }
 
 function SubchapterList({
+    chapter_slug,
     chapter_id,
-    chapter_slug
+    subchapterSearch
 }: SubchapterListProps): JSX.Element {
     const router = useRouter();
     const { slug_subtest, slug_subchapter } = router.query as {
@@ -19,9 +21,12 @@ function SubchapterList({
     };
 
     const { is_subscribed } = useCourseSubscription();
-    const { data, isLoading } = useGetSubchapterQuery({
-        chapterId: chapter_id
-    });
+    const { data, isLoading } = useGetSubchapterQuery(
+        { chapterId: chapter_id ?? '' },
+        { skip: !chapter_id }
+    );
+
+    const subchapters = subchapterSearch ?? data?.subchapters;
 
     if (isLoading) {
         return (
@@ -33,7 +38,7 @@ function SubchapterList({
         );
     }
 
-    if ((data?.subchapters.length ?? 0) === 0) {
+    if ((subchapters?.length ?? 0) === 0) {
         return (
             <div className="mt-6">
                 <p className="text-graphite-600 text-sm text-center">
@@ -45,7 +50,7 @@ function SubchapterList({
 
     return (
         <div className="space-y-2 mt-6">
-            {data?.subchapters?.map((value) => (
+            {subchapters?.map((value) => (
                 <SubchapterMenuItem
                     key={value.id}
                     href={`/utbk/materi/${slug_subtest}/${chapter_slug}/${value.subchapter_slug}`}

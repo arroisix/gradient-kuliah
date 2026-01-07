@@ -1,27 +1,29 @@
 import { useSearchSubchapter } from 'courses/hooks/useSearchSubchapter';
-import ListSubchapter from '../CourseDetailBox/SearchList/ListSubchapter';
 import Button from 'commons/components/elements/Button';
-import { useTracker } from 'tracker/tracker';
 import { useRouter } from 'next/router';
-
-function SearchSkeleton() {
-    return (
-        <div className="animate-pulse mt-2">
-            <div className="bg-[#333333] h-3 w-32 rounded-full mb-4"></div>
-            <div className="space-y-3">
-                <div className="bg-[#333333] h-9 w-full rounded-md"></div>
-                <div className="bg-[#333333] h-9 w-full rounded-md"></div>
-                <div className="bg-[#333333] h-9 w-full rounded-md"></div>
-            </div>
-        </div>
-    );
-}
+import Image from 'next/image';
+import { CDN_URL } from 'commons/constants';
+import { ChapterAccordion } from './ChapterAccordion';
 
 function SearchEmpty() {
     return (
-        <p className="text-xs font-body w-full text-center mt-2">
-            Video tidak ditemukan
-        </p>
+        <div className="w-full max-w-xs mx-auto">
+            <div className="mb-6 w-fit h-fit mx-auto">
+                <Image
+                    src={`${CDN_URL}/assets/utbk/materi_not_found.png`}
+                    alt="Materi Not Found"
+                    width={160}
+                    height={160}
+                />
+            </div>
+
+            <h2 className="text-white text-center font-semibold mb-2">
+                Materi Tidak Ditemukan
+            </h2>
+            <p className="text-[#999999] text-center text-sm">
+                Coba gunakan kata kunci lain atau cari topik yang lebih umum.
+            </p>
+        </div>
     );
 }
 
@@ -29,11 +31,8 @@ function SearchContent() {
     const router = useRouter();
     const { slug_subtest } = router.query as { slug_subtest: string };
 
-    const tracker = useTracker();
-
     const {
         searchResult,
-        searchKeyword,
         isSearchingLoading,
         isSearchingFetching,
         handleSearch
@@ -41,39 +40,23 @@ function SearchContent() {
 
     return (
         <div className="mt-6">
-            <h3 className="text-neutral-400 font-extrabold text-sm mb-2">
-                Video
-            </h3>
-
             <div className="space-y-4">
                 {isSearchingLoading || isSearchingFetching ? (
-                    <SearchSkeleton />
+                    <div className="animate-pulse space-y-2 mt-6">
+                        <div className="bg-[#333333] h-[72px] w-full rounded-lg"></div>
+                        <div className="bg-[#333333] h-[72px] w-full rounded-lg"></div>
+                        <div className="bg-[#333333] h-[72px] w-full rounded-lg"></div>
+                    </div>
                 ) : (searchResult?.subchapters.contents.length ?? 0) > 0 ? (
                     searchResult?.subchapters?.contents?.map((value) => (
-                        <div key={value.chapter}>
-                            <span className="inline-block text-xs font-extrabold text-neutral-400 mb-4">
-                                {value.chapter}
-                            </span>
-                            <div className="flex flex-col gap-3">
-                                {value.items.map((item) => (
-                                    <ListSubchapter
-                                        key={item.id}
-                                        item={item}
-                                        onClick={() => {
-                                            tracker?.genericTrack(
-                                                'Click Video Section Search Result',
-                                                {
-                                                    Query: searchKeyword,
-                                                    'Course Slug': slug_subtest,
-                                                    'Video Title':
-                                                        item.subchapter_name
-                                                }
-                                            );
-                                        }}
-                                    />
-                                ))}
-                            </div>
-                        </div>
+                        <ChapterAccordion
+                            key={value.chapter}
+                            title={`${value.chapter} (${searchResult.subchapters.contents.length})`}
+                            chapter_slug={value.chapter} // TODO: change with chapter_slug
+                            toggleable={false}
+                            initialOpen={true}
+                            subchapterSearch={value.items as any}
+                        />
                     ))
                 ) : (
                     <SearchEmpty />
