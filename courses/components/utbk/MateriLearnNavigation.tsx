@@ -6,7 +6,7 @@ import { useMemo, useState } from 'react';
 import { NavigationMenu } from '@base-ui/react/navigation-menu';
 import { useRouter } from 'next/router';
 import { FaChevronDown } from 'react-icons/fa';
-import { ArrowSvg } from 'commons/utbkLayout';
+import { ArrowSvg } from 'commons/components/modules/Navbar/components/utbk/Arrows';
 import Modal from 'commons/components/modules/Modal';
 import { XIcon } from 'lucide-react';
 

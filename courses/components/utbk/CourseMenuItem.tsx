@@ -28,7 +28,7 @@ function CourseMenuItem({ course, href }: CourseMenuItemProps): JSX.Element {
             } ${
                 course.slug === slug_subtest
                     ? 'bg-[#7D89CC]'
-                    : 'bg-transparent hover:bg-[#333333]'
+                    : 'bg-transparent hover:bg-[#2C2C2C]'
             } w-full rounded-lg p-3 flex gap-4 items-center transition-all duration-300`}>
             <div className="bg-[#333333] rounded-full p-2 flex">
                 <Image
@@ -45,14 +45,18 @@ function CourseMenuItem({ course, href }: CourseMenuItemProps): JSX.Element {
                     {course.course_name}
                 </h5>
 
-                <p
-                    className={`${
-                        course.slug === slug_subtest
-                            ? 'text-white'
-                            : 'text-[#999999]'
-                    } text-sm leading-[160%]`}>
-                    {course.tags?.join(', ')}.
-                </p>
+                {course.tags && course.tags.length > 0 ? (
+                    <p
+                        className={`${
+                            course.slug === slug_subtest
+                                ? 'text-white'
+                                : 'text-[#999999]'
+                        } text-sm leading-[160%]`}>
+                        {course.tags?.join(', ')}.
+                    </p>
+                ) : (
+                    <></>
+                )}
             </div>
         </Link>
     );
