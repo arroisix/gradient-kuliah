@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { FaArrowRight } from 'react-icons/fa';
 import { NavigationMenu } from '@base-ui/react/navigation-menu';
-import { useState } from 'react';
+import { MouseEvent, useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { MATERI } from 'landing/constants/UTBK';
@@ -33,15 +33,7 @@ function UTBKNavbar(): JSX.Element {
 
                 <NavigationMenu.Root className="hidden lg:block absolute left-1/2 -translate-x-1/2 transform">
                     <NavigationMenu.List className="relative flex items-center gap-8 list-none p-0">
-                        <NavigationMenuItem
-                            label={
-                                <div className="flex items-center gap-3">
-                                    <div className="bg-[#36236A] text-[10px] text-white/80 font-bold py-1 px-2 rounded-lg">
-                                        COMING SOON
-                                    </div>
-                                    <span>Materi</span>
-                                </div>
-                            }>
+                        <NavigationMenuItem label="Materi">
                             <div
                                 className="w-screen max-w-[889px] flex-auto overflow-hidden rounded-2xl bg-black bg-opacity-90"
                                 style={{
@@ -79,9 +71,9 @@ function UTBKNavbar(): JSX.Element {
                                             }}>
                                             <Link
                                                 href={item.href}
-                                                onClick={(event) =>
-                                                    event.preventDefault()
-                                                }
+                                                onClick={(
+                                                    event: MouseEvent<HTMLAnchorElement>
+                                                ) => event.preventDefault()}
                                                 className="cursor-not-allowed flex items-center gap-4">
                                                 <div className="flex items-center justify-center rounded-full h-[48px] w-[48px] bg-[#333333]/60">
                                                     <img

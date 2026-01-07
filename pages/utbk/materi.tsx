@@ -1,91 +1,8 @@
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import LearnLayout from 'commons/learnLayout';
 import Layout from 'commons/utbkLayout';
-import { GetStaticProps } from 'next';
-import Image from 'next/image';
-
-function MateriComingSoon() {
-    return (
-        <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-full max-w-[361px]">
-            <div className="relative w-full max-w-[340px] h-[232px]">
-                <div className="absolute z-10 top-0 left-0">
-                    <Image
-                        src="https://assets.gradient.academy/assets/materi_coming_soon_2.png"
-                        alt=""
-                        quality={100}
-                        width={236}
-                        height={188}
-                    />
-                </div>
-                <div className="absolute z-20 bottom-0 right-0">
-                    <Image
-                        src="https://assets.gradient.academy/assets/materi_coming_soon_1.png"
-                        alt=""
-                        quality={100}
-                        width={236}
-                        height={188}
-                    />
-                </div>
-            </div>
-
-            <h1 className="text-center font-bold text-2xl text-white mb-3 mt-6">
-                Materi UTBK Segera Hadir
-            </h1>
-
-            <p className="text-center text-[#999999] text-sm">
-                Materi UTBK terstruktur untuk bantu kamu belajar lebih fokus.
-            </p>
-
-            <div className="bg-[#282B3C] p-4 rounded-2xl mt-6">
-                <h2 className="text-white font-semibold mb-4 text-center">
-                    Yang akan kamu dapatkan
-                </h2>
-
-                <ul className="space-y-2 p-0">
-                    <li className="flex items-center gap-3">
-                        <div className="shrink-0 flex items-center">
-                            <Image
-                                src="https://assets.gradient.academy/assets/materi_coming_soon_video.svg"
-                                alt=""
-                                width={24}
-                                height={24}
-                            />
-                        </div>
-                        <span className="text-white">
-                            Video pembelajaran per subtes.
-                        </span>
-                    </li>
-                    <li className="flex items-center gap-3">
-                        <div className="shrink-0 flex items-center">
-                            <Image
-                                src="https://assets.gradient.academy/assets/materi_coming_soon_mentor.svg"
-                                alt=""
-                                width={24}
-                                height={24}
-                            />
-                        </div>
-                        <span className="text-white">
-                            Tutor dari kakak mahasiswa universitas top.
-                        </span>
-                    </li>
-                    <li className="flex items-center gap-3">
-                        <div className="shrink-0 flex items-center">
-                            <Image
-                                src="https://assets.gradient.academy/assets/materi_coming_soon_bank.svg"
-                                alt=""
-                                width={24}
-                                height={24}
-                            />
-                        </div>
-                        <span className="text-white">
-                            Bank soal dengan pembahasan.
-                        </span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    );
-}
+import { MateriEntrypoint } from 'courses/components/utbk/MateriEntrypoint';
+import type { GetStaticProps } from 'next';
 
 const MateriPage = (): JSX.Element => {
     const { isLoadingProfile, isAuthenticated } = useAuth();
@@ -99,8 +16,8 @@ const MateriPage = (): JSX.Element => {
     if (!isAuthenticated) {
         return (
             <Layout>
-                <div className="w-screen h-screen relative">
-                    <MateriComingSoon />
+                <div className="w-full max-w-5xl mx-auto px-6 pt-[calc(92px+32px)]">
+                    <MateriEntrypoint />
                 </div>
             </Layout>
         );
@@ -108,8 +25,8 @@ const MateriPage = (): JSX.Element => {
 
     return (
         <LearnLayout showSidebar fullHeightSidebar className="relative">
-            <div className="relative w-full h-[calc(100vh-128px)]">
-                <MateriComingSoon />
+            <div className="w-full max-w-5xl mx-auto mt-[calc(48px+32px)]">
+                <MateriEntrypoint />
             </div>
         </LearnLayout>
     );

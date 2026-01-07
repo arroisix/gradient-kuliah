@@ -34,9 +34,6 @@ export default function Fitur({ className }: FiturProps): JSX.Element {
                             backgroundPosition: 'top right',
                             backgroundRepeat: 'no-repeat'
                         }}>
-                        <div className="absolute top-0 right-0 bg-gradient-to-r from-[#D790DE] via-[#99B8DA] to-[#439CFB] text-white text-sm font-semibold px-6 py-2 rounded-bl-[32px]">
-                            Coming Soon
-                        </div>
                         <h3 className="flex flex-col gap-4 text-white font-bold text-2xl md:text-3xl leading-[125%] max-w-[634px]">
                             <span className="uppercase flex gap-2 items-center justify-center font-bold text-[#B6A6F3] text-sm tracking-[0.7px]">
                                 <img
