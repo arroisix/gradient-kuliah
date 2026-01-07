@@ -85,46 +85,47 @@ const withAnon = <P extends object>(
                                 }
                                 redirectToFirstPage();
                             } else {
-                                const packetId =
-                                    localStorage.getItem('packetId');
-                                if (packetId) {
-                                    const pricing = pricingData?.data.find(
-                                        (p) => p.id == packetId
-                                    );
-                                    if (pricing) {
-                                        sendGTMEvent({
-                                            event: 'add_package',
-                                            ecommerce: {
-                                                currency: 'IDR',
-                                                value: pricing.price,
-                                                items: [
-                                                    {
-                                                        item_id:
-                                                            pricing.packet_name,
-                                                        price: pricing.price
-                                                    }
-                                                ]
-                                            }
-                                        });
+                                // const packetId =
+                                //     localStorage.getItem('packetId');
+                                // if (packetId) {
+                                //     const pricing = pricingData?.data.find(
+                                //         (p) => p.id == packetId
+                                //     );
+                                //     if (pricing) {
+                                //         sendGTMEvent({
+                                //             event: 'add_package',
+                                //             ecommerce: {
+                                //                 currency: 'IDR',
+                                //                 value: pricing.price,
+                                //                 items: [
+                                //                     {
+                                //                         item_id:
+                                //                             pricing.packet_name,
+                                //                         price: pricing.price
+                                //                     }
+                                //                 ]
+                                //             }
+                                //         });
+                                //     }
+                                //     router.replace(
+                                //         `/pembayaran?packetId=${packetId}`
+                                //     );
+                                // } else {
+                                // }
+
+                                if (everSubscribed) {
+                                    if (!profile) {
+                                        return <LoadingBackdrop />;
                                     }
+                                    redirectToFirstPage();
+                                } else if (!!router.query.redirect) {
                                     router.replace(
-                                        `/pembayaran?packetId=${packetId}`
+                                        `${sanitizeUrl(
+                                            router.query.redirect as string
+                                        )}`
                                     );
                                 } else {
-                                    if (everSubscribed) {
-                                        if (!profile) {
-                                            return <LoadingBackdrop />;
-                                        }
-                                        redirectToFirstPage();
-                                    } else if (!!router.query.redirect) {
-                                        router.replace(
-                                            `${sanitizeUrl(
-                                                router.query.redirect as string
-                                            )}`
-                                        );
-                                    } else {
-                                        router.replace('/');
-                                    }
+                                    router.replace('/');
                                 }
                             }
                         }
