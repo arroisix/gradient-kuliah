@@ -591,12 +591,12 @@ const PrediksiPTNPage = (): JSX.Element => {
     if (isAuthenticated && profile?.current_role === 'K12') {
         return (
             <LearnLayout showSidebar fullHeightSidebar>
-                <>
+                <div className="pt-16">
                     <Breadcrumb className="w-full pb-5" />
                     <div className="relative @container">
                         <PrediksiPTN />
                     </div>
-                </>
+                </div>
             </LearnLayout>
         );
     } else {
