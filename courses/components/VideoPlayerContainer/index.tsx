@@ -1,7 +1,7 @@
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useTrackSubchapterProgressMutation } from 'courses/redux/api/learningExperienceApi';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import VideoPaywall from './VideoPaywall';
 import VideoJS from 'commons/components/elements/Video/VideoJS';
 import Image from 'next/image';
@@ -13,6 +13,7 @@ import YoutubeVideo from 'commons/components/elements/Video/YoutubeVideo';
 import VideoRegisterwall from './VideoRegisterWall';
 import { FaPlay } from 'react-icons/fa';
 import dynamic from 'next/dynamic';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 const BitmovinPlayer = dynamic(
     () => import('commons/components/elements/Video/BitmovinPlayer'),
@@ -44,18 +45,35 @@ const VideoPlayerContainer = ({
 }: VideoPlayerContainerProps): JSX.Element => {
     const router = useRouter();
     const { id } = router.query;
+    const { profile } = useAuth();
     const isAuthenticated = useSelector(getIsAuthenticated);
-    const { learning_progress_id, isLoading: isLoadingSubscription } =
-        useCourseSubscription(slug ?? (id as string));
+    const {
+        learning_progress_id,
+        isLoading: isLoadingSubscription,
+        is_subscribed,
+        subscribedFeatures
+    } = useCourseSubscription(slug ?? (id as string));
     const [track] = useTrackSubchapterProgressMutation();
     const [showRegisterwall, setIsShowRegisterwall] = useState(false);
     const isLoading = !video || isLoadingData || isLoadingSubscription;
 
-    const isShowPaywall =
-        !video?.drm_token &&
-        !video?.drm_video_url &&
-        !video?.token &&
-        !video?.video_url;
+    const isShowPaywall = useMemo((): boolean => {
+        if (profile?.current_role === 'COLLEGE_STUDENT') {
+            return !is_subscribed && !video?.is_free;
+        }
+
+        return (
+            (!is_subscribed && !video?.is_free) ||
+            (is_subscribed &&
+                !video?.is_free &&
+                !subscribedFeatures?.includes('material'))
+        );
+    }, [
+        is_subscribed,
+        profile?.current_role,
+        subscribedFeatures,
+        video?.is_free
+    ]);
 
     const shouldUseBitmovinPlayer = video?.is_drm_protected;
 

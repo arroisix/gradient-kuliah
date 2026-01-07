@@ -71,6 +71,7 @@ const useCourseSubscription = (slug?: string) => {
         learning_progress_id: learningProgress?.id,
         coursePreview,
         lastPacketId,
+        subscribedFeatures: data?.features,
         ...learningProgress
     };
 };
