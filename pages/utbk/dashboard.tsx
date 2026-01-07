@@ -1,4 +1,6 @@
 import { useAuth } from 'authentication/contexts/AuthProvider';
+import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
+// import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 // import Button from 'commons/components/elements/Button';
 // import { CDN_URL } from 'commons/constants';
 import LearnLayout from 'commons/learnLayout';
@@ -18,6 +20,8 @@ const Dashboard = (): JSX.Element => {
     //     router.push('/langganan');
     // };
 
+    // return <LoadingBackdrop />;
+
     const { isLoadingProfile, isAuthenticated } = useAuth();
 
     // it's necessary to prevent glitch
@@ -30,7 +34,7 @@ const Dashboard = (): JSX.Element => {
         router.replace('/utbk');
         return (
             <Layout>
-                <div className="w-screen h-screen"></div>
+                <LoadingBackdrop />
             </Layout>
         );
     }

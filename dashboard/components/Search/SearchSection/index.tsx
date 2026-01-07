@@ -48,7 +48,7 @@ const SearchSection = (): JSX.Element => {
     };
 
     return (
-        <div className="mt-4 mb-4">
+        <div className="mb-4">
             <h1 className="text-2xl font-bold text-center mb-6">
                 Mau Belajar apa Hari ini?
             </h1>
