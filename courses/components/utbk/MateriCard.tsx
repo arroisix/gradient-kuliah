@@ -30,7 +30,7 @@ function MateriCard({
     return (
         <Link
             href={href}
-            className="bg-[#222222] w-full rounded-lg p-4 flex gap-4 items-center">
+            className="bg-[#222222] hover:bg-[#2C2C2C] transition-all duration-300 w-full rounded-lg p-4 flex gap-4 items-center">
             <div className="bg-[#333333] rounded-full p-2 flex">
                 <Image
                     src={cover}
@@ -61,7 +61,7 @@ function MateriCard({
                     )}
                 </div>
 
-                {tags ? (
+                {tags && tags.length > 0 ? (
                     <p className="text-[#999999] text-sm mb-2">
                         {tags.join(', ')}.
                     </p>
@@ -69,7 +69,7 @@ function MateriCard({
                     <></>
                 )}
 
-                <div className="bg-[#4B4E5F] rounded-full overflow-hidden w-full h-2 mb-4">
+                <div className="bg-[#4B4E5F] rounded-full overflow-hidden w-full h-2 mt-2 mb-4">
                     <div
                         className="bg-[#B6A6F3] rounded-full transition-all duration-500 ease-out h-full"
                         style={{ width: `${progress}%` }}
