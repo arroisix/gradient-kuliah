@@ -222,7 +222,7 @@ function PeluangCard({
                     <div className="space-y-3 @3xl:space-y-0 @3xl:grid @3xl:grid-cols-2">
                         <div className="flex flex-col gap-1">
                             <span className="text-[#DEDEDE] text-sm">
-                                Skor kamu
+                                Skor Tryout kamu
                             </span>
                             <span className="text-white font-semibold text-xl">
                                 {averageScore?.toFixed(2)}
@@ -244,8 +244,8 @@ function PeluangCard({
                     <CgInfo className="text-[#999999] w-4 h-4 shrink-0" />
                     <p className="text-[#999999] text-[10px]">
                         Bobot penilaian berbeda di tiap jurusan di masing-masing
-                        universitas. Hasil diatas merupakan estimasi berdasarkan
-                        data passing grade dari internal.
+                        universitas. Hasil di atas merupakan estimasi
+                        berdasarkan data <i>passing grade</i> dari internal.
                     </p>
                 </div>
 
@@ -375,20 +375,25 @@ export const PrediksiPTN = (): JSX.Element => {
                                     isSearchTarget
                                     isClearable={false}
                                     noOptionsMessage="Ketik nama universitas"
-                                    onChange={handleOnChange(
-                                        'institution',
-                                        setFieldValue
-                                    )}
+                                    onChange={(res) => {
+                                        handleOnChange(
+                                            'institution',
+                                            setFieldValue
+                                        )(res);
+
+                                        setFieldValue('major', '');
+                                        setFieldValue('passing_grade', 0);
+                                    }}
                                     initialValue={institution}
                                     option={institutionOptions}
                                     loadOption={loadInstitutionOption(
-                                        institution.split(':')[0],
-                                        major.split(':')[0]
+                                        institution.split(':')[0]
                                     )}
                                     name="institution"
                                     placeholder="Pilih Kampus"
                                 />
                                 <Select
+                                    key={institution}
                                     isAsync
                                     isSearchTarget
                                     isClearable={false}

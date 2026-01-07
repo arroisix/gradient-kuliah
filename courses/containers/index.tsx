@@ -53,7 +53,7 @@ const ClassContainer = ({
     });
 
     return (
-        <>
+        <div className="pt-16">
             <Breadcrumb className="w-full pb-5" />
             <div className="relative grid w-full grid-cols-1 mx-auto xl:max-w-screen-2xl">
                 <DownloadBanner />
@@ -105,7 +105,7 @@ const ClassContainer = ({
                     </>
                 )}
             </div>
-        </>
+        </div>
     );
 };
 

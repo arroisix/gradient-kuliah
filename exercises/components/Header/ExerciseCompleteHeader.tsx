@@ -43,7 +43,11 @@ const ExerciseCompleteHeader = () => {
     }, [problemId, router.pathname, thirdTabLabel]);
 
     const onClose = () => {
-        router.push(`/latihan/`);
+        if (isUTBK) {
+            router.push('/utbk/try-out');
+        } else {
+            router.push(`/latihan/`);
+        }
     };
 
     const onTabClicked = (

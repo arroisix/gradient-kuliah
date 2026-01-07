@@ -89,6 +89,7 @@ function SetTargetForm({
 
                     if (fieldName === 'institution') {
                         value.institution = newValue ?? '';
+                        value.major = ''; // Reset major when institution changes
                     }
 
                     if (fieldName === 'major') {
@@ -257,13 +258,14 @@ function SetTargetForm({
                                         initialValue={institution}
                                         option={institutionOptions}
                                         loadOption={loadInstitutionOption(
-                                            institution.split(':')[0],
-                                            major.split(':')[0]
+                                            institution.split(':')[0]
+                                            // major.split(':')[0]
                                         )}
                                         name="institution"
                                         placeholder="Pilih Kampus"
                                     />
                                     <Select
+                                        key={institution}
                                         isAsync
                                         isSearchTarget
                                         isClearable={false}
