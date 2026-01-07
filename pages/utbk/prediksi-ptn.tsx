@@ -23,7 +23,6 @@ import { GetStaticProps } from 'next';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import LearnLayout from 'commons/learnLayout';
-import Breadcrumb from 'commons/components/modules/Breadcrumb';
 import axios from 'axios';
 import config from 'redux/api/config';
 
@@ -594,8 +593,7 @@ const PrediksiPTNPage = ({ courses }: { courses: Course[] }): JSX.Element => {
         return (
             <LearnLayout showSidebar fullHeightSidebar>
                 <>
-                    <Breadcrumb className="w-full pb-5" />
-                    <div className="relative @container">
+                    <div className="relative mt-[calc(48px+32px)] @container">
                         <PrediksiPTN />
                     </div>
                 </>
