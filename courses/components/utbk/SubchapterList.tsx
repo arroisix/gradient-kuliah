@@ -28,9 +28,7 @@ function SubchapterList({
         { skip: !chapter_id }
     );
 
-    const subchapters =
-        subchapterSearch ??
-        data?.subchapters.filter((value) => value.type !== 'exercise');
+    const subchapters = subchapterSearch ?? data?.subchapters;
 
     if (isLoading) {
         return (

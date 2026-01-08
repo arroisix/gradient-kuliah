@@ -29,7 +29,10 @@ function SearchEmpty() {
 
 function SearchContent() {
     const router = useRouter();
-    const { slug_subtest } = router.query as { slug_subtest: string };
+    const { slug_subtest, slug_chapter } = router.query as {
+        slug_subtest: string;
+        slug_chapter: string;
+    };
 
     const {
         searchResult,
@@ -51,8 +54,8 @@ function SearchContent() {
                     searchResult?.subchapters?.contents?.map((value) => (
                         <ChapterAccordion
                             key={value.chapter}
-                            title={`${value.chapter} (${searchResult.subchapters.contents.length})`}
-                            chapter_slug={value.chapter} // TODO: change with chapter_slug
+                            title={`${value.chapter} (${value.items.length})`}
+                            chapter_slug={slug_chapter}
                             toggleable={false}
                             initialOpen={true}
                             subchapterSearch={value.items as any}

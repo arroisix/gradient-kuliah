@@ -335,6 +335,10 @@ interface SubchapterSearch {
         order: string;
         duration: string;
         last_duration: string;
+        chapter_slug: string;
+        type_name: 'lecture' | 'notebook' | 'exercise';
+        is_finished: boolean;
+        is_free: boolean;
     }[];
 }
 

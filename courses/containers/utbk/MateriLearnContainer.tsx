@@ -56,7 +56,7 @@ function MateriLearnContainer({
 
     const publicSubchapterDetails = useGetPublicSubchapterDetailV2Query(
         { course_slug: slug_subtest, subchapter_slug: slug_subchapter },
-        { skip: !slug_subtest || !slug_subchapter }
+        { skip: !slug_subtest || !slug_subchapter || isAuthenticated }
     );
 
     const { data: csrSubchapter, isLoading } = isAuthenticated
