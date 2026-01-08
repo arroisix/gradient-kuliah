@@ -3,7 +3,6 @@ import { FaArrowRight } from 'react-icons/fa';
 import { NavigationMenu } from '@base-ui/react/navigation-menu';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
 import { CDN_URL } from 'commons/constants';
 import Button from 'commons/components/elements/Button';
 import { ArrowSvg } from './components/utbk/Arrows';
@@ -39,7 +38,7 @@ function UTBKNavbar({ courses }: { courses: Course[] }): JSX.Element {
                                 style={{
                                     backdropFilter: 'blur(32px)'
                                 }}>
-                                <div className="bg-[#1E1930] border-b border-b-[#36236A] flex items-center gap-4 p-4">
+                                {/* <div className="bg-[#1E1930] border-b border-b-[#36236A] flex items-center gap-4 p-4">
                                     <Image
                                         src={`${CDN_URL}/assets/utbk/materi_coming_soon.svg`}
                                         alt=""
@@ -58,7 +57,7 @@ function UTBKNavbar({ courses }: { courses: Course[] }): JSX.Element {
                                             berkualitas tinggi.
                                         </p>
                                     </div>
-                                </div>
+                                </div> */}
                                 <ul className="p-6 grid grid-cols-2 gap-x-8 gap-y-6 m-0 list-none">
                                     {courses.map((course) => (
                                         <CourseMenuItem
@@ -67,14 +66,14 @@ function UTBKNavbar({ courses }: { courses: Course[] }): JSX.Element {
                                             href={`/utbk/materi/${course.slug}/${course.latest_chapter_slug}/${course.latest_subchapter_slug}`}
                                         />
                                     ))}
-                                    {/* <li className="flex justify-end items-center text-[#B6A6F3]">
+                                    <li className="flex items-center text-[#B6A6F3]">
                                         <Link
                                             className="font-semibold text-sm flex gap-1 items-center"
-                                            href="/materi">
+                                            href="/utbk/materi">
                                             Lihat Semua
                                             <FaArrowRight size={16} />
                                         </Link>
-                                    </li> */}
+                                    </li>
                                 </ul>
                             </div>
                         </NavigationMenuItem>

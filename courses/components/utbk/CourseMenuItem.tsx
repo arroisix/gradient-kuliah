@@ -14,23 +14,24 @@ function CourseMenuItem({ course, href }: CourseMenuItemProps): JSX.Element {
     const { slug_subtest } = router.query as { slug_subtest: string };
 
     const { isAuthenticated } = useAuth();
-    const { data, isLoading } = useGetLearningProgressQuery(course.slug, {
-        skip: !isAuthenticated || !course.slug
-    });
+    const { isLoading: isLoadingProgress } = useGetLearningProgressQuery(
+        course.slug,
+        { skip: !isAuthenticated || !course.slug }
+    );
 
     return (
         <Link
             href={href}
             className={`${
-                isAuthenticated && (!data || isLoading)
+                (isAuthenticated && isLoadingProgress) || course.is_coming_soon
                     ? 'pointer-events-none'
                     : ''
             } ${
                 course.slug === slug_subtest
                     ? 'bg-[#7D89CC]'
                     : 'bg-transparent hover:bg-[#2C2C2C]'
-            } w-full rounded-lg p-3 flex gap-4 items-center transition-all duration-300`}>
-            <div className="bg-[#333333] rounded-full p-2 flex">
+            } w-full rounded-lg p-3 flex justify-between items-center gap-4 transition-all duration-300`}>
+            <div className="bg-[#333333] shrink-0 rounded-full p-2 flex">
                 <Image
                     src={course.cover}
                     alt={course.course_name}
@@ -40,8 +41,11 @@ function CourseMenuItem({ course, href }: CourseMenuItemProps): JSX.Element {
                 />
             </div>
 
-            <div className="space-y-1">
-                <h5 className="text-white font-semibold text-base leading-[140%]">
+            <div className="w-full space-y-1">
+                <h5
+                    className={`${
+                        course.is_coming_soon ? 'text-[#999999]' : 'text-white'
+                    } font-semibold text-base leading-[140%]`}>
                     {course.course_name}
                 </h5>
 
@@ -50,6 +54,8 @@ function CourseMenuItem({ course, href }: CourseMenuItemProps): JSX.Element {
                         className={`${
                             course.slug === slug_subtest
                                 ? 'text-white'
+                                : course.is_coming_soon
+                                ? 'text-[#666666]'
                                 : 'text-[#999999]'
                         } text-sm leading-[160%]`}>
                         {course.tags?.join(', ')}.
@@ -58,6 +64,17 @@ function CourseMenuItem({ course, href }: CourseMenuItemProps): JSX.Element {
                     <></>
                 )}
             </div>
+
+            {course.is_coming_soon ? (
+                <div
+                    className={`${
+                        course.is_coming_soon ? 'text-[#999999]' : 'text-white'
+                    } bg-[#36236A] shrink-0 self-start font-bold text-[10px] px-2 py-1 rounded-lg`}>
+                    COMING SOON
+                </div>
+            ) : (
+                <></>
+            )}
         </Link>
     );
 }
