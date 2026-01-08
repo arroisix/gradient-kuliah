@@ -14,6 +14,8 @@ import VideoRegisterwall from './VideoRegisterWall';
 import { FaPlay } from 'react-icons/fa';
 import dynamic from 'next/dynamic';
 import { useAuth } from 'authentication/contexts/AuthProvider';
+import { useGetSubchapterDetailV2Query } from 'courses/redux/api/privateCourseV2Api';
+import { useGetPublicSubchapterDetailV2Query } from 'courses/redux/api/publicCourseV2Api';
 
 const BitmovinPlayer = dynamic(
     () => import('commons/components/elements/Video/BitmovinPlayer'),
@@ -91,9 +93,47 @@ const VideoPlayerContainer = ({
           })}`
         : (video?.video_url as string);
 
-    const nextSubchapter = next_subchapter_slug
-        ? `/kelas/${slug}/${next_subchapter_slug}`
-        : '';
+    const privateSubchapterDetails = useGetSubchapterDetailV2Query(
+        { course_slug: slug, subchapter_slug: next_subchapter_slug ?? '' },
+        {
+            skip:
+                !slug ||
+                !next_subchapter_slug ||
+                !isAuthenticated ||
+                !Object.hasOwn(router.query, 'slug_subtest')
+        }
+    );
+
+    const publicSubchapterDetails = useGetPublicSubchapterDetailV2Query(
+        { course_slug: slug, subchapter_slug: next_subchapter_slug ?? '' },
+        {
+            skip:
+                !slug ||
+                !next_subchapter_slug ||
+                isAuthenticated ||
+                !Object.hasOwn(router.query, 'slug_subtest')
+        }
+    );
+
+    const { data: nextSubchapter } = isAuthenticated
+        ? privateSubchapterDetails
+        : publicSubchapterDetails;
+
+    const nextSubchapterLink = useMemo(() => {
+        if (nextSubchapter) {
+            return next_subchapter_slug
+                ? `/utbk/materi/${slug}/${nextSubchapter.chapter_name
+                      ?.toLowerCase()
+                      .split(' ')
+                      .join('-')
+                      .trim()}/${next_subchapter_slug}`
+                : '';
+        }
+
+        return next_subchapter_slug
+            ? `/kelas/${slug}/${next_subchapter_slug}`
+            : '';
+    }, [nextSubchapter, next_subchapter_slug, slug]);
 
     const trackProgress = async (
         last_duration: string,
@@ -175,8 +215,14 @@ const VideoPlayerContainer = ({
                             src={videoSrc || ''}
                             drmToken={video?.drm_token as string}
                             trackProgress={trackProgress}
-                            next_subchapter_link={nextSubchapter}
+                            next_subchapter_link={nextSubchapterLink}
                             autoPlay={isAuthenticated}
+                            next_subchapter_name={
+                                nextSubchapter?.subchapter_name
+                            }
+                            next_subchapter_thumbnail={
+                                nextSubchapter?.thumbnail
+                            }
                         />
                     ) : (
                         <VideoJS
@@ -186,7 +232,7 @@ const VideoPlayerContainer = ({
                                 video?.mux_playback_id
                             )}
                             trackProgress={trackProgress}
-                            next_subchapter_link={nextSubchapter}
+                            next_subchapter_link={nextSubchapterLink}
                             autoPlay={isAuthenticated}
                         />
                     )}
