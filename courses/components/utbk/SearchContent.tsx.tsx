@@ -1,6 +1,5 @@
 import { useSearchSubchapter } from 'courses/hooks/useSearchSubchapter';
 import Button from 'commons/components/elements/Button';
-import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { CDN_URL } from 'commons/constants';
 import { ChapterAccordion } from './ChapterAccordion';
@@ -28,9 +27,6 @@ function SearchEmpty() {
 }
 
 function SearchContent() {
-    const router = useRouter();
-    const { slug_chapter } = router.query as { slug_chapter: string };
-
     const {
         searchResult,
         isSearchingLoading,
@@ -52,7 +48,11 @@ function SearchContent() {
                         <ChapterAccordion
                             key={value.chapter}
                             title={`${value.chapter} (${value.items.length})`}
-                            chapter_slug={slug_chapter}
+                            chapter_slug={
+                                value.items.length > 0
+                                    ? value.items[0].chapter_slug
+                                    : ''
+                            }
                             toggleable={false}
                             initialOpen={true}
                             subchapterSearch={value.items as any}
