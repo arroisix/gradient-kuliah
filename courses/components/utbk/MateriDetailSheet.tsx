@@ -33,7 +33,7 @@ function MateriDetailSheet({
 
     const publicSubchapterDetails = useGetPublicSubchapterDetailV2Query(
         { course_slug: slug_subtest, subchapter_slug: next_subchapter_slug },
-        { skip: !slug_subtest || !next_subchapter_slug }
+        { skip: !slug_subtest || !next_subchapter_slug || isAuthenticated }
     );
 
     const { data: subchapter, isLoading } = isAuthenticated

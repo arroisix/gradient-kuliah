@@ -5,6 +5,7 @@ import {
     createContext,
     useCallback,
     useContext,
+    useMemo,
     useState
 } from 'react';
 import { useTracker } from 'tracker/tracker';
@@ -19,7 +20,15 @@ export const CourseSubchapterSearchProvider = ({
 }: PropsWithChildren): JSX.Element => {
     const tracker = useTracker();
     const router = useRouter();
-    const { id } = router.query;
+    const slug = useMemo(() => {
+        if (Object.hasOwn(router.query, 'id')) {
+            return router.query.id as string;
+        }
+        if (Object.hasOwn(router.query, 'slug_subtest')) {
+            return router.query.slug_subtest as string;
+        }
+        return '';
+    }, [router.query]);
     const [isSearch, setIsSearch] = useState(false);
     const [searchKeyword, setSearchKeyword] = useDebounceValue('', 750);
 
@@ -33,19 +42,19 @@ export const CourseSubchapterSearchProvider = ({
     ] = useLazyGetSearchCourseContentQuery();
 
     const handleSearch: UseSearchSubchapter['handleSearch'] = useCallback(
-        ({ type, page = 1, slug }) => {
+        ({ type, page = 1 }) => {
             tracker?.genericTrack('Search Class Material', {
-                'Course Slug': id as string,
+                'Course Slug': slug,
                 Query: searchKeyword
             });
             triggerSearch({
-                slug: slug ?? (id as string),
+                slug,
                 content: searchKeyword,
                 type,
                 page
             });
         },
-        [id, searchKeyword, tracker, triggerSearch]
+        [searchKeyword, slug, tracker, triggerSearch]
     );
 
     return (

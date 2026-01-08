@@ -12,7 +12,7 @@ function SearchMateri(): JSX.Element {
 
     useEffect(() => {
         if (searchKeyword) {
-            handleSearch({ slug: slug_subtest });
+            handleSearch({});
         }
     }, [handleSearch, searchKeyword, slug_subtest]);
 

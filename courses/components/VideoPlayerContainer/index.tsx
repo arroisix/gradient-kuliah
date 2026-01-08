@@ -33,18 +33,24 @@ interface VideoPlayerContainerProps
         'video' | 'next_subchapter_slug' | 'subchapter_name'
     > {
     isLoadingData: boolean;
-    slug?: string;
 }
 
 const VideoPlayerContainer = ({
     isLoadingData = true,
     subchapter_name: title,
     video,
-    next_subchapter_slug,
-    slug
+    next_subchapter_slug
 }: VideoPlayerContainerProps): JSX.Element => {
     const router = useRouter();
-    const { id } = router.query;
+    const slug = useMemo(() => {
+        if (Object.hasOwn(router.query, 'id')) {
+            return router.query.id as string;
+        }
+        if (Object.hasOwn(router.query, 'slug_subtest')) {
+            return router.query.slug_subtest as string;
+        }
+        return '';
+    }, [router.query]);
     const { profile } = useAuth();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const {
@@ -52,7 +58,7 @@ const VideoPlayerContainer = ({
         isLoading: isLoadingSubscription,
         is_subscribed,
         subscribedFeatures
-    } = useCourseSubscription(slug ?? (id as string));
+    } = useCourseSubscription(slug);
     const [track] = useTrackSubchapterProgressMutation();
     const [showRegisterwall, setIsShowRegisterwall] = useState(false);
     const isLoading = !video || isLoadingData || isLoadingSubscription;
@@ -86,7 +92,7 @@ const VideoPlayerContainer = ({
         : (video?.video_url as string);
 
     const nextSubchapter = next_subchapter_slug
-        ? `/kelas/${id}/${next_subchapter_slug}`
+        ? `/kelas/${slug}/${next_subchapter_slug}`
         : '';
 
     const trackProgress = async (

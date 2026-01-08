@@ -29,10 +29,7 @@ function SearchEmpty() {
 
 function SearchContent() {
     const router = useRouter();
-    const { slug_subtest, slug_chapter } = router.query as {
-        slug_subtest: string;
-        slug_chapter: string;
-    };
+    const { slug_chapter } = router.query as { slug_chapter: string };
 
     const {
         searchResult,
@@ -73,8 +70,7 @@ function SearchContent() {
                             handleSearch({
                                 type: 'SUBCHAPTER',
                                 page: searchResult?.subchapters
-                                    .next_page as number,
-                                slug: slug_subtest
+                                    .next_page as number
                             })
                         }
                         variant="custom"
