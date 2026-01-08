@@ -21,7 +21,7 @@ import { FaCircleCheck } from 'react-icons/fa6';
 interface SubchapterMenuItemProps extends ComponentPropsWithoutRef<'a'> {
     name: string | undefined;
     duration: string | undefined;
-    type: SubChapter['type_name'];
+    type: SubChapter['type_name'] | 'video';
     isActive?: boolean;
     isFinished?: boolean | null | undefined;
     isDisabled?: boolean;

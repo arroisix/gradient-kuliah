@@ -58,7 +58,7 @@ function SubchapterList({
                     href={`/utbk/materi/${slug_subtest}/${chapter_slug}/${value.subchapter_slug}`}
                     name={value.subchapter_name}
                     duration={value.duration}
-                    type={value.type_name}
+                    type={value.type_name ?? value.type}
                     isActive={slug_subchapter === value.subchapter_slug}
                     isFinished={value.is_finished}
                     isDisabled={

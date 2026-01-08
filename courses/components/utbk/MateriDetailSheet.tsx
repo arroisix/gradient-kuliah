@@ -47,13 +47,12 @@ function MateriDetailSheet({
 
     const completedMateriCount =
         learningProgress?.completion_percentage?.total_finished_video;
+
     const totalMateriCount =
         learningProgress?.completion_percentage?.total_video_count;
 
-    const progress = Math.min(
-        Math.max((completedMateriCount / totalMateriCount) * 100, 0),
-        100
-    );
+    const percentageProgress =
+        learningProgress?.completion_percentage?.percentage_progress;
 
     return (
         <div className="bg-[#101010] rounded-tl-2xl rounded-tr-2xl fixed bottom-0 left-0 right-0 flex justify-between items-center gap-4 p-4">
@@ -122,7 +121,9 @@ function MateriDetailSheet({
                                     <div className="bg-[#4B4E5F] rounded-full overflow-hidden w-full h-2 my-4">
                                         <div
                                             className="bg-[#B6A6F3] rounded-full transition-all duration-500 ease-out h-full"
-                                            style={{ width: `${progress}%` }}
+                                            style={{
+                                                width: `${percentageProgress}%`
+                                            }}
                                             role="progressbar"
                                             aria-valuenow={completedMateriCount}
                                             aria-valuemin={0}
@@ -144,11 +145,7 @@ function MateriDetailSheet({
                                             {totalMateriCount} Materi Selesai
                                         </span>
                                         <span className="text-white font-semibold">
-                                            {(isNaN(progress)
-                                                ? 0
-                                                : progress
-                                            ).toFixed(0)}
-                                            %
+                                            {percentageProgress?.toFixed(0)}%
                                         </span>
                                     </div>
                                 ) : (

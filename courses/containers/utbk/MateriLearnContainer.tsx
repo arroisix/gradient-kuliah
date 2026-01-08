@@ -179,7 +179,7 @@ function MateriLearnContainer({
                                 />
                             ) : (
                                 <div className="animate-pulse flex items-center gap-3">
-                                    <div className="bg-[#333333] rounded-full w-11 h-11"></div>
+                                    <div className="bg-[#333333] shrink-0 rounded-full w-11 h-11"></div>
                                     <div className="space-y-3">
                                         <div className="bg-[#333333] w-32 h-4 rounded-full"></div>
                                         <div className="bg-[#333333] w-64 h-3 rounded-full"></div>
