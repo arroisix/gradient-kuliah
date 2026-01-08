@@ -78,6 +78,7 @@ type WatchProgress = {
 };
 
 type Lecturer = {
+    id: string;
     name: string;
     photo: string;
     role: string;
@@ -104,6 +105,7 @@ type SubChapter = {
     is_on_progress?: boolean | null;
     type?: 'video' | 'exercise';
     packet_id?: string;
+    prev_subchapter_slug?: string;
     next_subchapter_slug?: string;
     video_id?: string;
     created_at: Date;
@@ -142,10 +144,18 @@ type Notebook = {
     authors: Lecturer[];
     created_at: string | Date;
     notebook_url: string;
-    subsection: {
-        sections: NotebookSubSection[];
-    };
+    subsection: { sections: NotebookSubSection[] };
+    progress?: null;
+    thumbnail?: string;
+    book_slug?: string;
+    page?: number;
 };
+
+interface VideoTranscript {
+    order: number;
+    content: string;
+    duration: string;
+}
 
 type Video = {
     id: string;
@@ -167,6 +177,7 @@ type Video = {
     is_drm_protected?: boolean;
     drm_video_url?: string;
     drm_token?: string;
+    transcript?: VideoTranscript[];
 };
 
 type CodeEditorTemplate = {
@@ -181,6 +192,9 @@ type CourseExercise = {
     exercise_name: string;
     is_on_progress: boolean;
     is_finish: boolean;
+    progress?: null;
+    thumbnail?: string;
+    slug?: string;
 };
 
 type PopupQuestion = {
