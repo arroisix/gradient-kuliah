@@ -226,9 +226,6 @@ const VideoJS = ({
                             env_key: 'ENV_KEY',
                             video_title: 'Example Title'
                         }
-                    },
-                    httpSourceSelector: {
-                        default: 'auto'
                     }
                 }
             });
@@ -270,8 +267,6 @@ const VideoJS = ({
             // buildSettingComponent(element);
             // buttonSetting.el_.appendChild(element);
         }
-
-        player?.httpSourceSelector();
 
         player?.src({
             src: src,

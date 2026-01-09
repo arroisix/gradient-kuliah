@@ -48,15 +48,9 @@ const VideoPlayerContainer = ({
     next_subchapter_slug
 }: VideoPlayerContainerProps): JSX.Element => {
     const router = useRouter();
-    const slug = useMemo(() => {
-        if (Object.hasOwn(router.query, 'id')) {
-            return router.query.id as string;
-        }
-        if (Object.hasOwn(router.query, 'slug_subtest')) {
-            return router.query.slug_subtest as string;
-        }
-        return '';
-    }, [router.query]);
+    const slug = Object.hasOwn(router.query, 'id')
+        ? router.query.id
+        : router.query.slug_subtest;
     const { profile } = useAuth();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const {
@@ -64,7 +58,7 @@ const VideoPlayerContainer = ({
         isLoading: isLoadingSubscription,
         is_subscribed,
         subscribedFeatures
-    } = useCourseSubscription(slug);
+    } = useCourseSubscription(slug as string);
     const [track] = useTrackSubchapterProgressMutation();
     const [showRegisterwall, setIsShowRegisterwall] = useState(false);
     const isLoading = !video || isLoadingData || isLoadingSubscription;
@@ -98,12 +92,18 @@ const VideoPlayerContainer = ({
         : (video?.video_url as string);
 
     const privateSubchapterDetails = useGetSubchapterDetailV2Query(
-        { course_slug: slug, subchapter_slug: next_subchapter_slug ?? '' },
+        {
+            course_slug: slug as string,
+            subchapter_slug: next_subchapter_slug ?? ''
+        },
         { skip: !slug || !next_subchapter_slug || !isAuthenticated }
     );
 
     const publicSubchapterDetails = useGetPublicSubchapterDetailV2Query(
-        { course_slug: slug, subchapter_slug: next_subchapter_slug ?? '' },
+        {
+            course_slug: slug as string,
+            subchapter_slug: next_subchapter_slug ?? ''
+        },
         { skip: !slug || !next_subchapter_slug || isAuthenticated }
     );
 
