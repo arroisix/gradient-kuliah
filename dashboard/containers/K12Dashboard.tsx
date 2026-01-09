@@ -99,6 +99,8 @@ const K12Dashboard = (): JSX.Element => {
                 </div>
             </div>
 
+            {isSubscribed === false && <RenewSubscriptionBanner type="K12" />}
+
             {isSubscribed === false && (
                 <RenewSubscriptionBanner type="K12_MOBILE" />
             )}

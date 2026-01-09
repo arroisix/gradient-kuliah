@@ -11,9 +11,11 @@ import { useDispatch } from 'react-redux';
 import { subscriptionApi } from 'payment/redux/api/subscriptionApi';
 import { useCallback, useEffect, useRef } from 'react';
 import withAuth from 'commons/withAuth';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 const SuccessCheckoutId = (): JSX.Element => {
     const router = useRouter();
+    const { profile } = useAuth();
     const { id } = router.query;
     const {
         data: transaction,
@@ -45,14 +47,19 @@ const SuccessCheckoutId = (): JSX.Element => {
             localStorage.removeItem('redirect');
             router.push(url.toString());
         } else {
-            router.push('/dashboard?checkout=success');
+            const url =
+                profile?.current_role === 'K12'
+                    ? '/utbk/dashboard?checkout=success'
+                    : '/dashboard?checkout=success';
+
+            router.push(url);
         }
 
         const getActiveSubscription = dispatch(
             subscriptionApi.endpoints.getActiveSubscription.initiate()
         );
         getActiveSubscription.refetch();
-    }, [router, dispatch]);
+    }, [router, dispatch, profile?.current_role]);
 
     useEffect(() => {
         if (!isError) {

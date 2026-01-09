@@ -10,6 +10,7 @@ interface MateriCardProps
         | 'tags'
         | 'latest_subchapter_name'
         | 'percentage_progress'
+        | 'is_coming_soon'
     > {
     href: string;
 }
@@ -20,7 +21,8 @@ function MateriCard({
     tags,
     latest_subchapter_name,
     percentage_progress,
-    href
+    href,
+    is_coming_soon
 }: MateriCardProps): JSX.Element {
     const progress = Math.min(
         Math.max(((percentage_progress ?? 0) / 100) * 100, 0),
@@ -30,7 +32,9 @@ function MateriCard({
     return (
         <Link
             href={href}
-            className="bg-[#222222] hover:bg-[#2C2C2C] transition-all duration-300 w-full rounded-lg p-4 flex gap-4 items-center">
+            className={`${
+                is_coming_soon ? 'pointer-events-none' : ''
+            } bg-[#222222] hover:bg-[#2C2C2C] transition-all duration-300 w-full rounded-lg p-4 flex gap-4 items-center`}>
             <div className="bg-[#333333] rounded-full p-2 flex">
                 <Image
                     src={cover}
@@ -43,7 +47,10 @@ function MateriCard({
 
             <div className="flex-grow">
                 <div className="flex justify-between items-center mb-1">
-                    <h2 className="text-white font-semibold text-sm">
+                    <h2
+                        className={`${
+                            is_coming_soon ? 'text-[#999999]' : 'text-white'
+                        } font-semibold text-sm`}>
                         {course_name}
                     </h2>
 
@@ -56,29 +63,43 @@ function MateriCard({
                             } font-semibold`}>
                             {percentage_progress}%
                         </span>
+                    ) : is_coming_soon ? (
+                        <></>
                     ) : (
                         <span className="text-[#999999] font-semibold">0%</span>
                     )}
                 </div>
 
                 {tags && tags.length > 0 ? (
-                    <p className="text-[#999999] text-sm mb-2">
+                    <p
+                        className={`${
+                            is_coming_soon ? 'text-[#666666]' : 'text-[#999999]'
+                        } text-sm mb-2`}>
                         {tags.join(', ')}.
                     </p>
                 ) : (
                     <></>
                 )}
 
-                <div className="bg-[#4B4E5F] rounded-full overflow-hidden w-full h-2 mt-2 mb-4">
+                {is_coming_soon ? (
                     <div
-                        className="bg-[#B6A6F3] rounded-full transition-all duration-500 ease-out h-full"
-                        style={{ width: `${progress}%` }}
-                        role="progressbar"
-                        aria-valuenow={percentage_progress ?? 0}
-                        aria-valuemin={0}
-                        aria-valuemax={100}
-                    />
-                </div>
+                        className={`${
+                            is_coming_soon ? 'text-[#999999]' : 'text-white'
+                        } bg-[#36236A] w-fit font-bold text-[10px] px-2 py-1 rounded-lg`}>
+                        COMING SOON
+                    </div>
+                ) : (
+                    <div className="bg-[#4B4E5F] rounded-full overflow-hidden w-full h-2 mt-2 mb-4">
+                        <div
+                            className="bg-[#B6A6F3] rounded-full transition-all duration-500 ease-out h-full"
+                            style={{ width: `${progress}%` }}
+                            role="progressbar"
+                            aria-valuenow={percentage_progress ?? 0}
+                            aria-valuemin={0}
+                            aria-valuemax={100}
+                        />
+                    </div>
+                )}
 
                 {latest_subchapter_name ? (
                     <p

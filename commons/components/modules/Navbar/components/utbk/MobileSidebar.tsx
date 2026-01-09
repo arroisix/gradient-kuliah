@@ -4,19 +4,23 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { XIcon } from 'lucide-react';
 import Image from 'next/image';
-import { MATERI } from 'landing/constants/UTBK';
 import { CDN_URL } from 'commons/constants';
 import Button from 'commons/components/elements/Button';
 import AccordionItem from './AccordionItem';
+import { CourseMenuItem } from 'courses/components/utbk/CourseMenuItem';
 
-const MobileSidebar = ({
-    open,
-    setOpen
-}: {
+interface MobileSidebarProps {
     open: boolean;
     setOpen: Dispatch<SetStateAction<boolean>>;
     configData?: ConfigResponse;
-}): JSX.Element => {
+    courses: Course[];
+}
+
+const MobileSidebar = ({
+    courses,
+    open,
+    setOpen
+}: MobileSidebarProps): JSX.Element => {
     return (
         <AnimatePresence>
             {open && (
@@ -66,32 +70,13 @@ const MobileSidebar = ({
                                         </div>
                                     </div>
 
-                                    <ul className="flex flex-col gap-8 list-none p-0 md:pl-8">
-                                        {MATERI.map((item) => (
-                                            <li key={item.name}>
-                                                <Link
-                                                    href={item.href}
-                                                    onClick={(event) =>
-                                                        event.preventDefault()
-                                                    }
-                                                    className="cursor-not-allowed flex items-center gap-4">
-                                                    <div className="flex-shrink-0 flex items-center justify-center rounded-full h-[48px] w-[48px] bg-[#333333]/60">
-                                                        <img
-                                                            src={`${CDN_URL}/assets/utbk/${item.icon}`}
-                                                            alt={item.name}
-                                                            className="flex-shrink-0 object-contain"
-                                                        />
-                                                    </div>
-                                                    <div className="flex flex-col gap-1">
-                                                        <h5 className="text-[#999999] font-semibold text-base leading-[140%]">
-                                                            {item.name}
-                                                        </h5>
-                                                        <p className="text-[#666666] text-sm leading-[160%]">
-                                                            {item.description}
-                                                        </p>
-                                                    </div>
-                                                </Link>
-                                            </li>
+                                    <ul className="p-0 space-y-2">
+                                        {courses.map((course) => (
+                                            <CourseMenuItem
+                                                key={course.id}
+                                                course={course}
+                                                href={`/utbk/materi/${course.slug}/${course.latest_chapter_slug}/${course.latest_subchapter_slug}`}
+                                            />
                                         ))}
                                     </ul>
                                 </>

@@ -1,7 +1,7 @@
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useTrackSubchapterProgressMutation } from 'courses/redux/api/learningExperienceApi';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import VideoPaywall from './VideoPaywall';
 import VideoJS from 'commons/components/elements/Video/VideoJS';
 import Image from 'next/image';
@@ -13,6 +13,9 @@ import YoutubeVideo from 'commons/components/elements/Video/YoutubeVideo';
 import VideoRegisterwall from './VideoRegisterWall';
 import { FaPlay } from 'react-icons/fa';
 import dynamic from 'next/dynamic';
+import { useAuth } from 'authentication/contexts/AuthProvider';
+import { useGetSubchapterDetailV2Query } from 'courses/redux/api/privateCourseV2Api';
+import { useGetPublicSubchapterDetailV2Query } from 'courses/redux/api/publicCourseV2Api';
 
 const BitmovinPlayer = dynamic(
     () => import('commons/components/elements/Video/BitmovinPlayer'),
@@ -29,7 +32,10 @@ const BitmovinPlayer = dynamic(
 interface VideoPlayerContainerProps
     extends Pick<
         SubChapter,
-        'video' | 'next_subchapter_slug' | 'subchapter_name'
+        | 'video'
+        | 'next_subchapter_slug'
+        | 'subchapter_name'
+        | 'next_chapter_slug'
     > {
     isLoadingData: boolean;
 }
@@ -38,21 +44,42 @@ const VideoPlayerContainer = ({
     isLoadingData = true,
     subchapter_name: title,
     video,
+    next_chapter_slug,
     next_subchapter_slug
 }: VideoPlayerContainerProps): JSX.Element => {
     const router = useRouter();
-    const { id } = router.query;
+    const slug = Object.hasOwn(router.query, 'id')
+        ? router.query.id
+        : router.query.slug_subtest;
+    const { profile } = useAuth();
     const isAuthenticated = useSelector(getIsAuthenticated);
     const {
         learning_progress_id,
         isLoading: isLoadingSubscription,
-        is_subscribed
-    } = useCourseSubscription(id as string);
+        is_subscribed,
+        subscribedFeatures
+    } = useCourseSubscription(slug as string);
     const [track] = useTrackSubchapterProgressMutation();
     const [showRegisterwall, setIsShowRegisterwall] = useState(false);
     const isLoading = !video || isLoadingData || isLoadingSubscription;
 
-    const isShowPaywall = !is_subscribed && !video?.is_free;
+    const isShowPaywall = useMemo((): boolean => {
+        if (profile?.current_role === 'COLLEGE_STUDENT') {
+            return !is_subscribed && !video?.is_free;
+        }
+
+        return (
+            (!is_subscribed && !video?.is_free) ||
+            (is_subscribed &&
+                !video?.is_free &&
+                !subscribedFeatures?.includes('material'))
+        );
+    }, [
+        is_subscribed,
+        profile?.current_role,
+        subscribedFeatures,
+        video?.is_free
+    ]);
 
     const shouldUseBitmovinPlayer = video?.is_drm_protected;
 
@@ -64,9 +91,37 @@ const VideoPlayerContainer = ({
           })}`
         : (video?.video_url as string);
 
-    const nextSubchapter = next_subchapter_slug
-        ? `/kelas/${id}/${next_subchapter_slug}`
-        : '';
+    const privateSubchapterDetails = useGetSubchapterDetailV2Query(
+        {
+            course_slug: slug as string,
+            subchapter_slug: next_subchapter_slug ?? ''
+        },
+        { skip: !slug || !next_subchapter_slug || !isAuthenticated }
+    );
+
+    const publicSubchapterDetails = useGetPublicSubchapterDetailV2Query(
+        {
+            course_slug: slug as string,
+            subchapter_slug: next_subchapter_slug ?? ''
+        },
+        { skip: !slug || !next_subchapter_slug || isAuthenticated }
+    );
+
+    const { data: nextSubchapter } = isAuthenticated
+        ? privateSubchapterDetails
+        : publicSubchapterDetails;
+
+    const nextSubchapterLink = useMemo(() => {
+        if (Object.hasOwn(router.query, 'slug_subtest')) {
+            return next_subchapter_slug
+                ? `/utbk/materi/${slug}/${next_chapter_slug}/${next_subchapter_slug}`
+                : '';
+        }
+
+        return next_subchapter_slug
+            ? `/kelas/${slug}/${next_subchapter_slug}`
+            : '';
+    }, [next_chapter_slug, next_subchapter_slug, router.query, slug]);
 
     const trackProgress = async (
         last_duration: string,
@@ -102,7 +157,7 @@ const VideoPlayerContainer = ({
                     width={1920}
                     height={1080}
                 />
-                <div className="absolute inset-0 z-10 grid place-items-center">
+                <div className="absolute inset-0 grid place-items-center">
                     <Spinner size="medium" />
                 </div>
             </div>
@@ -148,8 +203,14 @@ const VideoPlayerContainer = ({
                             src={videoSrc || ''}
                             drmToken={video?.drm_token as string}
                             trackProgress={trackProgress}
-                            next_subchapter_link={nextSubchapter}
+                            next_subchapter_link={nextSubchapterLink}
                             autoPlay={isAuthenticated}
+                            next_subchapter_name={
+                                nextSubchapter?.subchapter_name
+                            }
+                            next_subchapter_thumbnail={
+                                nextSubchapter?.thumbnail
+                            }
                         />
                     ) : (
                         <VideoJS
@@ -159,7 +220,7 @@ const VideoPlayerContainer = ({
                                 video?.mux_playback_id
                             )}
                             trackProgress={trackProgress}
-                            next_subchapter_link={nextSubchapter}
+                            next_subchapter_link={nextSubchapterLink}
                             autoPlay={isAuthenticated}
                         />
                     )}

@@ -50,6 +50,7 @@ function MateriEntrypoint() {
                                 course.latest_subchapter_name
                             }
                             percentage_progress={course.percentage_progress}
+                            is_coming_soon={course.is_coming_soon}
                         />
                     ))
                 )}

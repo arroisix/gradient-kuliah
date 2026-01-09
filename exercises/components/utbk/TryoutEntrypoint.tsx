@@ -53,7 +53,7 @@ function TryoutEntrypoint() {
 
     return (
         <>
-            <Breadcrumb className="w-full pb-5" />
+            <Breadcrumb className="w-full pb-5 mt-[calc(48px+32px)]" />
 
             <div className="relative grid w-full grid-cols-1 mx-auto xl:max-w-screen-2xl">
                 <div className="flex flex-row justify-between">

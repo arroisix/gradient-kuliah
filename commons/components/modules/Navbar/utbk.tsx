@@ -1,18 +1,17 @@
 import Link from 'next/link';
 import { FaArrowRight } from 'react-icons/fa';
 import { NavigationMenu } from '@base-ui/react/navigation-menu';
-import { MouseEvent, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
-import { MATERI } from 'landing/constants/UTBK';
 import { CDN_URL } from 'commons/constants';
 import Button from 'commons/components/elements/Button';
 import { ArrowSvg } from './components/utbk/Arrows';
 import MobileSidebar from './components/utbk/MobileSidebar';
 import NavigationMenuItem from './components/utbk/NavigationMenuItem';
 import UTBKLogo from './components/utbk/UTBKLogo';
+import { CourseMenuItem } from 'courses/components/utbk/CourseMenuItem';
 
-function UTBKNavbar(): JSX.Element {
+function UTBKNavbar({ courses }: { courses: Course[] }): JSX.Element {
     const [showMobileMenu, setShowMobileMenu] = useState(false);
     const router = useRouter();
 
@@ -39,7 +38,7 @@ function UTBKNavbar(): JSX.Element {
                                 style={{
                                     backdropFilter: 'blur(32px)'
                                 }}>
-                                <div className="bg-[#1E1930] border-b border-b-[#36236A] flex items-center gap-4 p-4">
+                                {/* <div className="bg-[#1E1930] border-b border-b-[#36236A] flex items-center gap-4 p-4">
                                     <Image
                                         src={`${CDN_URL}/assets/utbk/materi_coming_soon.svg`}
                                         alt=""
@@ -58,49 +57,23 @@ function UTBKNavbar(): JSX.Element {
                                             berkualitas tinggi.
                                         </p>
                                     </div>
-                                </div>
+                                </div> */}
                                 <ul className="p-6 grid grid-cols-2 gap-x-8 gap-y-6 m-0 list-none">
-                                    {MATERI.map((item, i) => (
-                                        <li
-                                            key={item.name}
-                                            style={{
-                                                order:
-                                                    i === MATERI.length - 1
-                                                        ? 8
-                                                        : undefined
-                                            }}>
-                                            <Link
-                                                href={item.href}
-                                                onClick={(
-                                                    event: MouseEvent<HTMLAnchorElement>
-                                                ) => event.preventDefault()}
-                                                className="cursor-not-allowed flex items-center gap-4">
-                                                <div className="flex items-center justify-center rounded-full h-[48px] w-[48px] bg-[#333333]/60">
-                                                    <img
-                                                        src={`${CDN_URL}/assets/utbk/${item.icon}`}
-                                                        alt={item.name}
-                                                        className="flex-shrink-0 object-contain"
-                                                    />
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <h5 className="text-[#999999] font-semibold text-base leading-[140%]">
-                                                        {item.name}
-                                                    </h5>
-                                                    <p className="text-[#666666] text-sm leading-[160%]">
-                                                        {item.description}
-                                                    </p>
-                                                </div>
-                                            </Link>
-                                        </li>
+                                    {courses.map((course) => (
+                                        <CourseMenuItem
+                                            key={course.id}
+                                            course={course}
+                                            href={`/utbk/materi/${course.slug}/${course.latest_chapter_slug}/${course.latest_subchapter_slug}`}
+                                        />
                                     ))}
-                                    {/* <li className="flex justify-end items-center text-[#B6A6F3]">
+                                    <li className="flex items-center text-[#B6A6F3]">
                                         <Link
                                             className="font-semibold text-sm flex gap-1 items-center"
-                                            href="/materi">
+                                            href="/utbk/materi">
                                             Lihat Semua
                                             <FaArrowRight size={16} />
                                         </Link>
-                                    </li> */}
+                                    </li>
                                 </ul>
                             </div>
                         </NavigationMenuItem>
@@ -243,7 +216,11 @@ function UTBKNavbar(): JSX.Element {
                 </section>
             </div>
 
-            <MobileSidebar open={showMobileMenu} setOpen={setShowMobileMenu} />
+            <MobileSidebar
+                courses={courses}
+                open={showMobileMenu}
+                setOpen={setShowMobileMenu}
+            />
         </header>
     );
 }

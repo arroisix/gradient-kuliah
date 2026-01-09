@@ -7,7 +7,11 @@ import { Star } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticated } from 'authentication/redux/selectors/userSelector';
 
-const RatingButton = (): JSX.Element => {
+interface RatingButtonProps {
+    disabled?: boolean;
+}
+
+const RatingButton = ({ disabled }: RatingButtonProps): JSX.Element => {
     const router = useRouter();
     const { id } = router.query as { id: string };
     const tracker = useTracker();
@@ -22,6 +26,7 @@ const RatingButton = (): JSX.Element => {
                     setOpen={setIsModalFeedbackOpen}
                 />
                 <Button
+                    disabled={disabled}
                     variant="neutral"
                     size="small"
                     onClick={() => {
@@ -30,8 +35,11 @@ const RatingButton = (): JSX.Element => {
                         });
                         setIsModalFeedbackOpen(true);
                     }}
-                    className="text-xs w-full flex gap-2 items-center justify-center">
-                    <Star size={14} fill="white" />
+                    className="group text-xs w-full flex gap-2 items-center justify-center">
+                    <Star
+                        size={14}
+                        className="fill-white group-disabled:fill-neutral-300/30"
+                    />
                     Rating
                 </Button>
             </>
