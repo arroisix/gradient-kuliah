@@ -25,7 +25,7 @@ interface BitmovinPlayerProps {
         last_duration: string,
         isFinished?: boolean
     ) => Promise<any>;
-    next_subchapter_link?: string;
+    next_subchapter_link: string;
     next_subchapter_name?: string;
     next_subchapter_thumbnail?: string;
 }

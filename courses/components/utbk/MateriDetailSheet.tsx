@@ -3,8 +3,6 @@ import Button from 'commons/components/elements/Button';
 import Modal from 'commons/components/modules/Modal';
 import { CourseSubchapterSearchProvider } from 'courses/hooks/useSearchSubchapter';
 import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienceApi';
-import { useGetSubchapterDetailV2Query } from 'courses/redux/api/privateCourseV2Api';
-import { useGetPublicSubchapterDetailV2Query } from 'courses/redux/api/publicCourseV2Api';
 import { ListIcon, XIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -14,31 +12,21 @@ import { MateriDetailContent } from './MateriDetailContent';
 
 interface MateriDetailSheetProps {
     course: CourseDetail;
+    next_chapter_slug: string;
     next_subchapter_slug: string;
+    next_subchapter_name: string;
 }
 
 function MateriDetailSheet({
     course,
-    next_subchapter_slug
+    next_chapter_slug,
+    next_subchapter_slug,
+    next_subchapter_name
 }: MateriDetailSheetProps): JSX.Element {
     const [isOpen, setIsOpen] = useState(false);
     const { isAuthenticated } = useAuth();
     const router = useRouter();
     const { slug_subtest } = router.query as { slug_subtest: string };
-
-    const privateSubchapterDetails = useGetSubchapterDetailV2Query(
-        { course_slug: slug_subtest, subchapter_slug: next_subchapter_slug },
-        { skip: !slug_subtest || !next_subchapter_slug || !isAuthenticated }
-    );
-
-    const publicSubchapterDetails = useGetPublicSubchapterDetailV2Query(
-        { course_slug: slug_subtest, subchapter_slug: next_subchapter_slug },
-        { skip: !slug_subtest || !next_subchapter_slug || isAuthenticated }
-    );
-
-    const { data: subchapter, isLoading } = isAuthenticated
-        ? privateSubchapterDetails
-        : publicSubchapterDetails;
 
     const { data: learningProgress, isLoading: isLoadingLearning } =
         useGetLearningProgressQuery(slug_subtest, {
@@ -56,23 +44,25 @@ function MateriDetailSheet({
 
     return (
         <div className="bg-[#101010] rounded-tl-2xl rounded-tr-2xl fixed bottom-0 left-0 right-0 flex justify-between items-center gap-4 p-4">
-            <div className="space-y-1">
-                <span className="text-[#999999] text-xs">
-                    Materi Selanjutnya
-                </span>
+            {next_subchapter_name ? (
+                <div className="space-y-1">
+                    <span className="text-[#999999] text-xs">
+                        Materi Selanjutnya
+                    </span>
 
-                {!isLoading ? (
                     <h3 className="text-white font-semibold text-sm line-clamp-1">
-                        {subchapter?.subchapter_name}
+                        {next_subchapter_name}
                     </h3>
-                ) : (
-                    <div className="animate-pulse bg-[#333333] h-3 w-48 rounded-md"></div>
-                )}
-            </div>
+                </div>
+            ) : (
+                <></>
+            )}
 
-            <div className="flex justify-between items-center gap-2">
+            <div
+                className={`${
+                    next_subchapter_slug ? '' : 'w-full'
+                } flex justify-between items-center gap-2`}>
                 <Button
-                    disabled={isLoading}
                     onClick={() => setIsOpen(true)}
                     variant="neutral"
                     className="flex items-center gap-1.5 text-sm !p-2">
@@ -80,13 +70,15 @@ function MateriDetailSheet({
                 </Button>
 
                 <Link
-                    href={`/utbk/materi/${slug_subtest}/${subchapter?.chapter_id}/${subchapter?.subchapter_slug}`} // TODO: change chapter_id with chapter_name
+                    href={
+                        next_subchapter_slug
+                            ? `/utbk/materi/${slug_subtest}/${next_chapter_slug}/${next_subchapter_slug}`
+                            : '/utbk/materi'
+                    }
                     className={`${
-                        isLoading
-                            ? 'pointer-events-none bg-neutral-700/80 text-neutral-300/30'
-                            : 'bg-[#333333] text-white'
-                    } rounded-full text-sm leading-tight font-semibold !p-2 !px-4`}>
-                    Lanjut
+                        next_subchapter_slug ? '' : 'w-full'
+                    } bg-[#333333] text-white text-center rounded-full text-sm leading-tight font-semibold !p-2 !px-4`}>
+                    {next_subchapter_slug ? 'Lanjut' : 'Selesai'}
                 </Link>
             </div>
 

@@ -32,7 +32,7 @@ function SubchapterList({
 
     if (isLoading) {
         return (
-            <div className="animate-pulse space-y-2 mt-6">
+            <div className="animate-pulse space-y-2 mt-2 px-4 pb-4">
                 <div className="bg-[#333333] h-[72px] w-full rounded-lg"></div>
                 <div className="bg-[#333333] h-[72px] w-full rounded-lg"></div>
                 <div className="bg-[#333333] h-[72px] w-full rounded-lg"></div>
@@ -42,7 +42,7 @@ function SubchapterList({
 
     if ((subchapters?.length ?? 0) === 0) {
         return (
-            <div className="mt-6">
+            <div className="mt-2 px-4 pb-4">
                 <p className="text-graphite-600 text-sm text-center">
                     Sabar ya, materi ini akan segera hadir untukmu.
                 </p>
@@ -51,7 +51,7 @@ function SubchapterList({
     }
 
     return (
-        <div className="space-y-2 mt-6">
+        <div className="space-y-2 mt-2 px-4 pb-4">
             {subchapters?.map((value) => (
                 <SubchapterMenuItem
                     key={value.id}

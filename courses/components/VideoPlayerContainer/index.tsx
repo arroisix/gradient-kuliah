@@ -32,7 +32,10 @@ const BitmovinPlayer = dynamic(
 interface VideoPlayerContainerProps
     extends Pick<
         SubChapter,
-        'video' | 'next_subchapter_slug' | 'subchapter_name'
+        | 'video'
+        | 'next_subchapter_slug'
+        | 'subchapter_name'
+        | 'next_chapter_slug'
     > {
     isLoadingData: boolean;
 }
@@ -41,6 +44,7 @@ const VideoPlayerContainer = ({
     isLoadingData = true,
     subchapter_name: title,
     video,
+    next_chapter_slug,
     next_subchapter_slug
 }: VideoPlayerContainerProps): JSX.Element => {
     const router = useRouter();
@@ -122,18 +126,14 @@ const VideoPlayerContainer = ({
     const nextSubchapterLink = useMemo(() => {
         if (nextSubchapter) {
             return next_subchapter_slug
-                ? `/utbk/materi/${slug}/${nextSubchapter.chapter_name
-                      ?.toLowerCase()
-                      .split(' ')
-                      .join('-')
-                      .trim()}/${next_subchapter_slug}`
+                ? `/utbk/materi/${slug}/${next_chapter_slug}/${next_subchapter_slug}`
                 : '';
         }
 
         return next_subchapter_slug
             ? `/kelas/${slug}/${next_subchapter_slug}`
             : '';
-    }, [nextSubchapter, next_subchapter_slug, slug]);
+    }, [nextSubchapter, next_chapter_slug, next_subchapter_slug, slug]);
 
     const trackProgress = async (
         last_duration: string,
@@ -169,7 +169,7 @@ const VideoPlayerContainer = ({
                     width={1920}
                     height={1080}
                 />
-                <div className="absolute inset-0 z-10 grid place-items-center">
+                <div className="absolute inset-0 grid place-items-center">
                     <Spinner size="medium" />
                 </div>
             </div>

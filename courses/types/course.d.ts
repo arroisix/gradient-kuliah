@@ -106,7 +106,9 @@ type SubChapter = {
     type?: 'video' | 'exercise';
     packet_id?: string;
     prev_subchapter_slug?: string;
+    next_chapter_slug?: string;
     next_subchapter_slug?: string;
+    next_subchapter_name?: string;
     video_id?: string;
     created_at: Date;
     exercise_id?: string;

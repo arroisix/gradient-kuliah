@@ -35,7 +35,7 @@ function ChapterAccordion({
     const { slug_chapter } = router.query as { slug_chapter: string };
 
     return (
-        <div className="bg-[#222222] rounded-xl p-4">
+        <div className="bg-[#222222] rounded-xl">
             <button
                 disabled={!toggleable}
                 className={`${
@@ -44,7 +44,7 @@ function ChapterAccordion({
                         : 'text-white'
                 } ${
                     isOpen ? 'rounded-xl' : 'rounded-lg'
-                } bg-[#222222] w-full flex justify-between items-center gap-2 text-left font-semibold text-sm`}
+                } w-full flex justify-between items-center gap-2 text-left font-semibold text-sm p-4`}
                 onClick={() => setIsOpen((prev) => !prev)}>
                 <span className={isOpen ? '' : 'line-clamp-1'}>{title}</span>
                 {toggleable ? (

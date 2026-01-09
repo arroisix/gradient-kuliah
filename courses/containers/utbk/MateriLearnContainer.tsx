@@ -104,6 +104,7 @@ function MateriLearnContainer({
                         isLoadingData={isLoading}
                         subchapter_name={subchapter?.subchapter_name}
                         video={subchapter?.video}
+                        next_chapter_slug={subchapter?.next_chapter_slug}
                         next_subchapter_slug={subchapter?.next_subchapter_slug}
                     />
 
@@ -204,8 +205,14 @@ function MateriLearnContainer({
                     course && subchapter ? (
                         <MateriDetailSheet
                             course={course}
+                            next_chapter_slug={
+                                subchapter.next_chapter_slug as string
+                            }
                             next_subchapter_slug={
                                 subchapter.next_subchapter_slug as string
+                            }
+                            next_subchapter_name={
+                                subchapter.next_subchapter_name as string
                             }
                         />
                     ) : (
