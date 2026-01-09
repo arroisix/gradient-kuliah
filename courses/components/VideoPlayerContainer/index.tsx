@@ -99,24 +99,12 @@ const VideoPlayerContainer = ({
 
     const privateSubchapterDetails = useGetSubchapterDetailV2Query(
         { course_slug: slug, subchapter_slug: next_subchapter_slug ?? '' },
-        {
-            skip:
-                !slug ||
-                !next_subchapter_slug ||
-                !isAuthenticated ||
-                !Object.hasOwn(router.query, 'slug_subtest')
-        }
+        { skip: !slug || !next_subchapter_slug || !isAuthenticated }
     );
 
     const publicSubchapterDetails = useGetPublicSubchapterDetailV2Query(
         { course_slug: slug, subchapter_slug: next_subchapter_slug ?? '' },
-        {
-            skip:
-                !slug ||
-                !next_subchapter_slug ||
-                isAuthenticated ||
-                !Object.hasOwn(router.query, 'slug_subtest')
-        }
+        { skip: !slug || !next_subchapter_slug || isAuthenticated }
     );
 
     const { data: nextSubchapter } = isAuthenticated
@@ -124,7 +112,7 @@ const VideoPlayerContainer = ({
         : publicSubchapterDetails;
 
     const nextSubchapterLink = useMemo(() => {
-        if (nextSubchapter) {
+        if (Object.hasOwn(router.query, 'slug_subtest')) {
             return next_subchapter_slug
                 ? `/utbk/materi/${slug}/${next_chapter_slug}/${next_subchapter_slug}`
                 : '';
@@ -133,7 +121,7 @@ const VideoPlayerContainer = ({
         return next_subchapter_slug
             ? `/kelas/${slug}/${next_subchapter_slug}`
             : '';
-    }, [nextSubchapter, next_chapter_slug, next_subchapter_slug, slug]);
+    }, [next_chapter_slug, next_subchapter_slug, router.query, slug]);
 
     const trackProgress = async (
         last_duration: string,
