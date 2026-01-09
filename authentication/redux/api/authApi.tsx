@@ -48,7 +48,10 @@ export const authApi = baseApi.injectEndpoints({
                 method: 'PUT',
                 body: data
             }),
-            invalidatesTags: ['PROFILE']
+            invalidatesTags: [
+                'PROFILE',
+                { type: 'ASTRONOTES', id: `EXERCISE_ENTRYPOINT` }
+            ]
         }),
         getRegisterReference: builder.query<
             { data: RegisterReference[] },
