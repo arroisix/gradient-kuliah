@@ -74,7 +74,7 @@ function SearchContent() {
                             })
                         }
                         variant="custom"
-                        className="mt-6 mx-auto font-bold text-xs bg-[#272727] rounded-[70px]">
+                        className="bg-[#272727] text-white mt-6 mx-auto font-bold text-xs rounded-[70px]">
                         Muat lebih
                     </Button>
                 </div>

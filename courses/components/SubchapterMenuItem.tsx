@@ -82,7 +82,7 @@ function SubchapterMenuItem({
             } p-3 min-h-[72px] rounded-lg flex justify-between items-center gap-4 transition-all duration-300`}
             {...props}>
             {isDisabled ? (
-                <FaLock className="fill-#666666 w-4 h-4" />
+                <FaLock className="fill-[#666666] w-4 h-4" />
             ) : (
                 <LeftIcon
                     className={`${
