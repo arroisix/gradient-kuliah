@@ -73,7 +73,14 @@ const ProblemSetRoadmap = ({
                 skip:
                     !slug ||
                     !exercise ||
-                    (!sectionId && exercise?.tryout_type !== 'UTBK')
+                    (!sectionId && exercise?.tryout_type !== 'UTBK') ||
+                    (exercise &&
+                        exercise.tryout_type === 'UTBK' &&
+                        exercise?.latest_exercise_progress?.status !==
+                            'PENDING_SCORING' &&
+                        exercise?.latest_exercise_progress?.status !==
+                            'COMPLETED' &&
+                        new Date() > new Date(exercise.closes_at as string))
             }
         );
 
