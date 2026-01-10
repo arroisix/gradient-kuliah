@@ -9,7 +9,7 @@ import { useGetCourseDetailQuery } from 'courses/redux/api/courseApi';
 import { ShareButton } from 'courses/components/utbk/ShareButton';
 import { useState } from 'react';
 import CopilotIconFill from 'copilot/assets/CopilotIconFill';
-import { TranscriptIcon } from 'commons/components/elements/Icons/TranscriptIcon';
+// import { TranscriptIcon } from 'commons/components/elements/Icons/TranscriptIcon';
 import CopilotModal from 'copilot/components/CopilotModal';
 import { LecturerProfile } from 'courses/components/utbk/LecturerProfile';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
@@ -126,7 +126,7 @@ function MateriLearnContainer({
 
                     <div className="flex flex-col">
                         <div className="order-2 lg:order-1 flex items-center gap-3 mt-6 lg:mt-4">
-                            <Button
+                            {/* <Button
                                 disabled={!course || !subchapter}
                                 variant="neutral"
                                 className="group flex-shrink flex items-center gap-1.5 text-sm !p-2 lg:!py-2 lg:!px-4">
@@ -134,7 +134,7 @@ function MateriLearnContainer({
                                 <span className="hidden lg:block">
                                     Transcript
                                 </span>
-                            </Button>
+                            </Button> */}
 
                             {isAuthenticated ? (
                                 <div className="flex-shrink-0">
