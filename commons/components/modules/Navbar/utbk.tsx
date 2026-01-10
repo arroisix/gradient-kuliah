@@ -38,26 +38,6 @@ function UTBKNavbar({ courses }: { courses: Course[] }): JSX.Element {
                                 style={{
                                     backdropFilter: 'blur(32px)'
                                 }}>
-                                {/* <div className="bg-[#1E1930] border-b border-b-[#36236A] flex items-center gap-4 p-4">
-                                    <Image
-                                        src={`${CDN_URL}/assets/utbk/materi_coming_soon.svg`}
-                                        alt=""
-                                        width={24}
-                                        height={24}
-                                    />
-
-                                    <div className="space-y-1">
-                                        <h4 className="text-sm font-semibold text-white">
-                                            Semua materi sedang proses
-                                            pengembangan
-                                        </h4>
-                                        <p className="text-sm text-[#DEDEDE]">
-                                            Kami sedang bekerja keras untuk
-                                            mempersiapkan konten materi
-                                            berkualitas tinggi.
-                                        </p>
-                                    </div>
-                                </div> */}
                                 <ul className="p-6 grid grid-cols-2 gap-x-8 gap-y-6 m-0 list-none">
                                     {courses.map((course) => (
                                         <CourseMenuItem
@@ -68,7 +48,7 @@ function UTBKNavbar({ courses }: { courses: Course[] }): JSX.Element {
                                     ))}
                                     <li className="flex items-center text-[#B6A6F3]">
                                         <Link
-                                            className="font-semibold text-sm flex gap-1 items-center"
+                                            className="font-semibold text-sm flex gap-1 items-center ml-auto"
                                             href="/utbk/materi">
                                             Lihat Semua
                                             <FaArrowRight size={16} />

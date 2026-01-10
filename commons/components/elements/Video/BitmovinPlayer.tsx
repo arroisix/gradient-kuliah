@@ -9,7 +9,7 @@ import {
 import { UIFactory } from 'bitmovin-player-ui';
 import 'bitmovin-player-ui/dist/css/bitmovinplayer-ui.css';
 import { useLearning } from 'courses/contexts/LearningProvider';
-import { router } from 'next/client';
+import { useRouter } from 'next/router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTracker } from 'tracker/tracker';
 import { useDebounceCallback } from 'usehooks-ts';
@@ -28,6 +28,7 @@ interface BitmovinPlayerProps {
     next_subchapter_link: string;
     next_subchapter_name?: string;
     next_subchapter_thumbnail?: string;
+    next_subchapter_duration?: string;
 }
 
 interface PlayerEventData extends PlayerEventBase {
@@ -41,8 +42,10 @@ export default function BitmovinPlayer({
     trackProgress,
     next_subchapter_link,
     next_subchapter_name,
-    next_subchapter_thumbnail
+    next_subchapter_thumbnail,
+    next_subchapter_duration
 }: BitmovinPlayerProps): JSX.Element {
+    const router = useRouter();
     const tracker = useTracker();
     const { subchapter } = useLearning();
     const [player, setPlayer] = useState<PlayerAPI | null>(null);
@@ -284,6 +287,7 @@ export default function BitmovinPlayer({
                     next_subchapter_link={next_subchapter_link}
                     next_subchapter_name={next_subchapter_name}
                     next_subchapter_thumbnail={next_subchapter_thumbnail}
+                    next_subchapter_duration={next_subchapter_duration}
                     setIsNextVideoOpen={setIsNextVideoOpen}
                 />
             ) : (

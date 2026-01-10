@@ -3,10 +3,17 @@ import { useRouter } from 'next/router.js';
 import { useGetCourseContentQuery } from 'courses/redux/api/courseApi';
 import { ChapterAccordion } from './ChapterAccordion';
 import dynamic from 'next/dynamic';
+import { Dispatch, SetStateAction } from 'react';
 
 const SearchContent = dynamic(() => import('./SearchContent.tsx'));
 
-function MateriDetailContent(): JSX.Element {
+interface MateriDetailContentProps {
+    setIsModalSheetOpen?: Dispatch<SetStateAction<boolean>>;
+}
+
+function MateriDetailContent({
+    setIsModalSheetOpen
+}: MateriDetailContentProps): JSX.Element {
     const router = useRouter();
     const { slug_subtest, slug_chapter } = router.query as {
         slug_subtest: string;
@@ -45,6 +52,7 @@ function MateriDetailContent(): JSX.Element {
                     chapter_id={chapter.chapter_id}
                     chapter_slug={chapter.chapter_slug}
                     initialOpen={slug_chapter === chapter.chapter_slug}
+                    setIsModalSheetOpen={setIsModalSheetOpen}
                 />
             ))}
         </div>

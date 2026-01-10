@@ -154,7 +154,9 @@ function MateriDetailSheet({
                         <CourseSubchapterSearchProvider>
                             <div className="mx-6 mb-6">
                                 <SearchMateri />
-                                <MateriDetailContent />
+                                <MateriDetailContent
+                                    setIsModalSheetOpen={setIsOpen}
+                                />
                             </div>
                         </CourseSubchapterSearchProvider>
                     </>
