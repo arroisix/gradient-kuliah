@@ -17,6 +17,8 @@ import { BiChevronLeft } from 'react-icons/bi';
 import SubtestResultSummary from 'exercises/components/ExerciseDetail/SubtestResultSummary';
 import ProblemSetRoadmap from 'exercises/components/ExerciseDetail/ProblemSetRoadmap';
 import ExerciseProblemSetHeader from 'exercises/components/Header/ExerciseProblemSetHeader';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 const ExerciseDetail = () => {
     const router = useRouter();
@@ -36,6 +38,23 @@ const ExerciseDetail = () => {
             router.push(`/latihan/`);
         }
     };
+
+    useEffect(() => {
+        if (
+            exercise &&
+            exercise.tryout_type === 'UTBK' &&
+            exercise?.latest_exercise_progress?.status !== 'PENDING_SCORING' &&
+            exercise?.latest_exercise_progress?.status !== 'COMPLETED' &&
+            new Date() > new Date(exercise.closes_at as string)
+        ) {
+            toast.error('Waktu pengerjaan try out telah berakhir!', {
+                position: 'top-center',
+                theme: 'colored',
+                hideProgressBar: true
+            });
+            router.replace('/utbk/try-out');
+        }
+    }, [exercise]);
 
     if (isLoading) {
         return (
@@ -102,6 +121,17 @@ const ExerciseDetail = () => {
     }
 
     if (exercise?.tryout_type === 'UTBK') {
+        if (
+            exercise?.latest_exercise_progress?.status !== 'PENDING_SCORING' &&
+            exercise?.latest_exercise_progress?.status !== 'COMPLETED' &&
+            new Date() > new Date(exercise.closes_at as string)
+        )
+            return (
+                <LatihanLayout>
+                    <Skeleton className="w-full h-[90vh] xl:h-[92vh]" />
+                </LatihanLayout>
+            );
+
         return (
             <LatihanLayout>
                 <ExercisePaywall isFree={exercise.is_free} />

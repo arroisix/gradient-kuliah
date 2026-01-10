@@ -8,6 +8,7 @@ import { ProblemInProblemSet } from 'exercises/types/exercises';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useExercise } from 'exercises/contexts/ExerciseProvider';
+import { toast } from 'react-toastify';
 
 interface SaveAnswerOptions {
     onFinishModalOpen?: () => void;
@@ -90,6 +91,22 @@ const useSubmitAnswerHandler = (problem: ProblemInProblemSet) => {
     };
 
     const finishProblemSet = async (): Promise<void> => {
+        if (
+            exercise &&
+            exercise.tryout_type === 'UTBK' &&
+            exercise?.latest_exercise_progress?.status !== 'PENDING_SCORING' &&
+            exercise?.latest_exercise_progress?.status !== 'COMPLETED' &&
+            new Date() > new Date(exercise.closes_at as string)
+        ) {
+            toast.error('Waktu pengerjaan try out telah berakhir!', {
+                position: 'top-center',
+                theme: 'colored',
+                hideProgressBar: true
+            });
+            router.replace('/utbk/try-out');
+            return;
+        }
+
         // Logic to finish the problem set can be added here
         const responsePs = await submitProblemset({
             slug: slug as string,
