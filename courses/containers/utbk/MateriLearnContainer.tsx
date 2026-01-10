@@ -99,7 +99,7 @@ function MateriLearnContainer({
             </div>
 
             <div className="grid grid-cols-8 gap-6">
-                <div className="col-span-8 lg:col-span-5 w-full max-w-[844px] mx-auto">
+                <div className="w-full max-w-[844px] mx-auto col-span-8 pb-[calc(80px+24px)] lg:col-span-5 lg:pb-0">
                     <VideoPlayerContainer
                         isLoadingData={isLoading}
                         subchapter_name={subchapter?.subchapter_name}
