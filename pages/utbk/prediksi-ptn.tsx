@@ -25,6 +25,7 @@ import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import LearnLayout from 'commons/learnLayout';
 import axios from 'axios';
 import config from 'redux/api/config';
+import Breadcrumb from 'commons/components/modules/Breadcrumb';
 
 interface PrediksiPTNForm {
     // both types below will have format like this: "major_id:major_name"
@@ -592,11 +593,12 @@ const PrediksiPTNPage = ({ courses }: { courses: Course[] }): JSX.Element => {
     if (isAuthenticated && profile?.current_role === 'K12') {
         return (
             <LearnLayout showSidebar fullHeightSidebar>
-                <>
-                    <div className="relative mt-[calc(48px+32px)] @container">
+                <div className="pt-16">
+                    <Breadcrumb className="w-full pb-5" />
+                    <div className="relative @container">
                         <PrediksiPTN />
                     </div>
-                </>
+                </div>
             </LearnLayout>
         );
     } else {
