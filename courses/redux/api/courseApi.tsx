@@ -85,29 +85,19 @@ export const courseApi = baseApi.injectEndpoints({
                         newItems.subchapters.next_page &&
                     otherArgs.arg.page !== 1
                 ) {
-                    const currentLength =
-                        currentCache.subchapters.contents.length;
-                    const newLength = newItems.subchapters.contents.length;
-                    let indexNotAdded = 0;
-                    for (let i = 0; i < currentLength; i++) {
-                        for (let j = indexNotAdded; j < newLength; j++) {
-                            if (
-                                currentCache.subchapters.contents[i]
-                                    ?.chapter ===
-                                newItems.subchapters.contents[i]?.chapter
-                            ) {
-                                currentCache.subchapters.contents[i].items.push(
-                                    ...newItems.subchapters.contents[i].items
-                                );
-                                indexNotAdded++;
-                            }
+                    newItems.subchapters.contents.forEach((newItem) => {
+                        const existingChapter =
+                            currentCache.subchapters.contents.find(
+                                (currentItem) =>
+                                    currentItem.chapter === newItem.chapter
+                            );
+                        if (existingChapter) {
+                            existingChapter.items.push(...newItem.items);
+                        } else {
+                            currentCache.subchapters.contents.push(newItem);
                         }
-                    }
-                    for (let k = indexNotAdded; k < newLength; k++) {
-                        currentCache?.subchapters?.contents.push(
-                            newItems.subchapters.contents[k]
-                        );
-                    }
+                    });
+
                     currentCache.subchapters.next_page =
                         newItems.subchapters.next_page;
                 }

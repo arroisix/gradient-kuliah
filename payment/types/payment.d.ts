@@ -32,6 +32,15 @@ type Subscription = {
     deactivate_after: string | Date;
 };
 
+type SubscriptionFeature =
+    | 'material'
+    | 'tryout'
+    | 'copilot'
+    | 'video'
+    | 'astronotes'
+    | 'bank_soal'
+    | 'textbook';
+
 type ActivePacket = {
     packet_id: string;
     subscription_id: string;
@@ -40,7 +49,7 @@ type ActivePacket = {
     is_all_courses: boolean;
     courses: string[];
     is_all_features: boolean;
-    features: string[];
+    features: SubscriptionFeature[];
 };
 
 type PacketFeature = {

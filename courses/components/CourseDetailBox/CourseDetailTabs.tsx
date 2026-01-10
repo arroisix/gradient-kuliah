@@ -22,13 +22,8 @@ const CourseDetailTabs = ({
     const tracker = useTracker();
     const router = useRouter();
     const { id } = router.query;
-    const {
-        isSearch,
-        searchKeyword,
-        setIsSearch,
-        setSearchKeyword,
-        handleSearch
-    } = useSearchSubchapter();
+    const { isSearch, setIsSearch, setSearchKeyword, handleSearch } =
+        useSearchSubchapter();
     const { data: courseContent } = useGetCourseContentQuery(
         { slug: id as string },
         { skip: !id }
@@ -113,7 +108,6 @@ const CourseDetailTabs = ({
                 <input
                     className="w-full text-xs bg-transparent border-none font-body focus:outline-none focus:ring-0 focus:appearance-none"
                     type="text"
-                    value={searchKeyword}
                     name="search"
                     onChange={(event) => setSearchKeyword(event.target.value)}
                     onKeyDown={(event) => {

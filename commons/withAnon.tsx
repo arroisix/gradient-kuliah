@@ -9,8 +9,6 @@ import { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { getDisplayName, sanitizeUrl } from './utils';
-import { useGetPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
-import { sendGTMEvent } from '@next/third-parties/google';
 import { useLocalStorage } from 'usehooks-ts';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import LoadingBackdrop from './components/elements/LoadingBackdrop';
@@ -31,8 +29,6 @@ const withAnon = <P extends object>(
                 isLoading: isLoadingSubscribed
             } = useCourseSubscription();
             const { profile } = useAuth();
-            const { data: pricingData, isLoading: isLoadingPricing } =
-                useGetPacketOfferQuery();
             const router = useRouter();
 
             const [showAccountTypePrompt] = useLocalStorage(
@@ -49,7 +45,7 @@ const withAnon = <P extends object>(
             };
 
             if (!!accessToken) {
-                if (!isLoadingSubscribed && !isLoadingPricing) {
+                if (!isLoadingSubscribed) {
                     if (
                         router.pathname !== '/onboarding/jenis-akun' &&
                         showAccountTypePrompt
@@ -85,46 +81,47 @@ const withAnon = <P extends object>(
                                 }
                                 redirectToFirstPage();
                             } else {
-                                const packetId =
-                                    localStorage.getItem('packetId');
-                                if (packetId) {
-                                    const pricing = pricingData?.data.find(
-                                        (p) => p.id == packetId
-                                    );
-                                    if (pricing) {
-                                        sendGTMEvent({
-                                            event: 'add_package',
-                                            ecommerce: {
-                                                currency: 'IDR',
-                                                value: pricing.price,
-                                                items: [
-                                                    {
-                                                        item_id:
-                                                            pricing.packet_name,
-                                                        price: pricing.price
-                                                    }
-                                                ]
-                                            }
-                                        });
+                                // const packetId =
+                                //     localStorage.getItem('packetId');
+                                // if (packetId) {
+                                //     const pricing = pricingData?.data.find(
+                                //         (p) => p.id == packetId
+                                //     );
+                                //     if (pricing) {
+                                //         sendGTMEvent({
+                                //             event: 'add_package',
+                                //             ecommerce: {
+                                //                 currency: 'IDR',
+                                //                 value: pricing.price,
+                                //                 items: [
+                                //                     {
+                                //                         item_id:
+                                //                             pricing.packet_name,
+                                //                         price: pricing.price
+                                //                     }
+                                //                 ]
+                                //             }
+                                //         });
+                                //     }
+                                //     router.replace(
+                                //         `/pembayaran?packetId=${packetId}`
+                                //     );
+                                // } else {
+                                // }
+
+                                if (everSubscribed) {
+                                    if (!profile) {
+                                        return <LoadingBackdrop />;
                                     }
+                                    redirectToFirstPage();
+                                } else if (!!router.query.redirect) {
                                     router.replace(
-                                        `/pembayaran?packetId=${packetId}`
+                                        `${sanitizeUrl(
+                                            router.query.redirect as string
+                                        )}`
                                     );
                                 } else {
-                                    if (everSubscribed) {
-                                        if (!profile) {
-                                            return <LoadingBackdrop />;
-                                        }
-                                        redirectToFirstPage();
-                                    } else if (!!router.query.redirect) {
-                                        router.replace(
-                                            `${sanitizeUrl(
-                                                router.query.redirect as string
-                                            )}`
-                                        );
-                                    } else {
-                                        router.replace('/');
-                                    }
+                                    router.replace('/');
                                 }
                             }
                         }

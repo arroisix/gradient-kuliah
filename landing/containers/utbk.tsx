@@ -6,9 +6,9 @@ import Hero from 'landing/components/utbk/Hero';
 import Langganan from 'landing/components/utbk/Langganan';
 import Testimony from 'landing/components/Sections/Testimony';
 
-export default function UTBK(): JSX.Element {
+export default function UTBK({ courses }: { courses: Course[] }): JSX.Element {
     return (
-        <Layout>
+        <Layout courses={courses}>
             <div className="flex flex-col w-full">
                 <Hero />
                 <Testimony

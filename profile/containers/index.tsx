@@ -73,7 +73,7 @@ const SwitcherCard = () => {
                             <CollegeLogo />
                         </div>
 
-                        <p className="text-[#DEDEDE] text-[14px] leading-relaxed mb-1">
+                        <p className="text-[#DEDEDE] text-[14px] leading-relaxed">
                             Pahami materi kuliah dan skill karir dari dosen top
                             universitas. Penjelasan visual yang bikin konsep
                             susah{' '}

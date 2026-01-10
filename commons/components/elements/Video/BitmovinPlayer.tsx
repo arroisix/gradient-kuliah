@@ -13,6 +13,9 @@ import { router } from 'next/client';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTracker } from 'tracker/tracker';
 import { useDebounceCallback } from 'usehooks-ts';
+import dynamic from 'next/dynamic';
+
+const NextVideoAutoplay = dynamic(() => import('./NextVideoAutoplay'));
 
 interface BitmovinPlayerProps {
     src?: string;
@@ -22,7 +25,9 @@ interface BitmovinPlayerProps {
         last_duration: string,
         isFinished?: boolean
     ) => Promise<any>;
-    next_subchapter_link?: string;
+    next_subchapter_link: string;
+    next_subchapter_name?: string;
+    next_subchapter_thumbnail?: string;
 }
 
 interface PlayerEventData extends PlayerEventBase {
@@ -34,12 +39,15 @@ export default function BitmovinPlayer({
     drmToken,
     autoPlay = false,
     trackProgress,
-    next_subchapter_link
+    next_subchapter_link,
+    next_subchapter_name,
+    next_subchapter_thumbnail
 }: BitmovinPlayerProps): JSX.Element {
     const tracker = useTracker();
     const { subchapter } = useLearning();
     const [player, setPlayer] = useState<PlayerAPI | null>(null);
     const playerDiv = useRef<HTMLDivElement>(null);
+    const [isNextVideoOpen, setIsNextVideoOpen] = useState(false);
 
     async function handleTrackProgress(
         currentTime: number,
@@ -141,15 +149,7 @@ export default function BitmovinPlayer({
                     });
 
                     if (next_subchapter_link) {
-                        // delay 10 seconds before navigating
-                        await new Promise((resolve) =>
-                            setTimeout(resolve, 10000)
-                        );
-                        tracker?.genericTrack('Navigate to Next Subchapter', {
-                            'Course Slug': router.query.id,
-                            'Next Subchapter Link': next_subchapter_link
-                        });
-                        router.push(next_subchapter_link);
+                        setIsNextVideoOpen(true);
                     }
                 },
                 [PlayerEvent.Seeked]: (data: PlayerEventData) => {
@@ -277,6 +277,18 @@ export default function BitmovinPlayer({
                 className="rounded-lg overflow-clip"
                 ref={playerDiv}
             />
+
+            {isNextVideoOpen ? (
+                <NextVideoAutoplay
+                    timeout={5}
+                    next_subchapter_link={next_subchapter_link}
+                    next_subchapter_name={next_subchapter_name}
+                    next_subchapter_thumbnail={next_subchapter_thumbnail}
+                    setIsNextVideoOpen={setIsNextVideoOpen}
+                />
+            ) : (
+                <></>
+            )}
         </div>
     );
 }

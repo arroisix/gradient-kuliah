@@ -27,7 +27,8 @@ const ProblemSetInformation = ({
         useGetExerciseDetailV2Query(
             { exercise_slug: slug as string },
             {
-                skip: !slug
+                skip: !slug,
+                refetchOnMountOrArgChange: true
             }
         );
     const { data: problemsets, isLoading: isLoadingProblemsets } =
@@ -51,7 +52,10 @@ const ProblemSetInformation = ({
             100,
             Math.floor((submitted_answers / total_questions) * 100)
         );
-    }, [exercise]);
+    }, [
+        exercise?.latest_exercise_progress?.submitted_answers,
+        exercise?.latest_exercise_progress?.total_questions
+    ]);
 
     const decideCTAAction = (): string => {
         if (!isAuthenticated) {

@@ -13,7 +13,6 @@ type Feature = {
     icon: string;
     iconDesktop?: string;
     url: string;
-    comingSoon?: boolean;
 };
 
 const K12Dashboard = (): JSX.Element => {
@@ -29,8 +28,7 @@ const K12Dashboard = (): JSX.Element => {
             description: 'Belajar materi UTBK secara bertahap.',
             url: '/utbk/materi',
             icon: 'utbk/dashboard/materi.svg',
-            iconDesktop: 'utbk/dashboard/materi-desktop.svg',
-            comingSoon: true
+            iconDesktop: 'utbk/dashboard/materi-desktop.svg'
         },
         {
             id: 'kuis',
@@ -87,11 +85,6 @@ const K12Dashboard = (): JSX.Element => {
                                 backgroundRepeat: 'no-repeat',
                                 backgroundPosition: 'center right'
                             }}>
-                            {feature.comingSoon ? (
-                                <p className="uppercase absolute top-[8px] transform -translate-y-full left-[7px] bg-[#36236A] text-white text-opacity-80 font-bold tracking-[0.12em] text-[10px] leading-[150%] px-2 py-1 rounded-lg">
-                                    Coming Soon
-                                </p>
-                            ) : null}
                             <div className="flex flex-col items-start w-full gap-1">
                                 <h3 className="font-semibold text-white text-sm md:text-xs leading-[125%]">
                                     {feature.title}
@@ -105,6 +98,8 @@ const K12Dashboard = (): JSX.Element => {
                     ))}
                 </div>
             </div>
+
+            {isSubscribed === false && <RenewSubscriptionBanner type="K12" />}
 
             {isSubscribed === false && (
                 <RenewSubscriptionBanner type="K12_MOBILE" />

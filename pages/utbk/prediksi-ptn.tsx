@@ -23,6 +23,8 @@ import { GetStaticProps } from 'next';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import LoadingBackdrop from 'commons/components/elements/LoadingBackdrop';
 import LearnLayout from 'commons/learnLayout';
+import axios from 'axios';
+import config from 'redux/api/config';
 import Breadcrumb from 'commons/components/modules/Breadcrumb';
 
 interface PrediksiPTNForm {
@@ -581,7 +583,7 @@ export const PrediksiPTN = (): JSX.Element => {
     );
 };
 
-const PrediksiPTNPage = (): JSX.Element => {
+const PrediksiPTNPage = ({ courses }: { courses: Course[] }): JSX.Element => {
     const { profile, isAuthenticated, isLoadingProfile } = useAuth();
 
     if (isLoadingProfile) {
@@ -601,7 +603,7 @@ const PrediksiPTNPage = (): JSX.Element => {
         );
     } else {
         return (
-            <Layout>
+            <Layout courses={courses}>
                 <div className="max-w-screen-lg mx-auto pt-32 px-4 @container">
                     <PrediksiPTN />
                 </div>
@@ -613,31 +615,51 @@ const PrediksiPTNPage = (): JSX.Element => {
 PrediksiPTNPage.displayName = 'Prediksi PTN';
 export default PrediksiPTNPage;
 
-export const getStaticProps: GetStaticProps = () => {
+export const getStaticProps: GetStaticProps = async () => {
     const META_TITLE = 'Prediksi Peluang Masuk PTN 2026';
     const META_DESCRIPTION =
         'Perkirakan peluangmu diterima di PTN impian dengan kalkulator prediksi dari Gradient. Masukkan nilai UTBK-mu dan dapatkan estimasi peluang berdasarkan data passing grade sebelumnya.';
 
-    return {
-        props: {
-            title: META_TITLE,
-            description: META_DESCRIPTION,
-            canonical: `https://gradient.academy/utbk/prediksi-ptn`,
-            openGraph: {
-                type: 'website',
+    try {
+        const { data: coursesResponse } = await axios.get<
+            ListResponseData<Course>
+        >(`${config.API_BASE_URL}courses/v2/public?type=UTBK`);
+
+        return {
+            props: {
+                courses: coursesResponse.data,
                 title: META_TITLE,
                 description: META_DESCRIPTION,
-                url: `https://gradient.academy/utbk/prediksi-ptn`,
-                images: [
-                    {
-                        url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
-                        width: 48,
-                        height: 48,
-                        alt: 'Gradient UTBK'
-                    }
-                ]
-            }
-        },
-        revalidate: 60
-    };
+                canonical: `https://gradient.academy/utbk/prediksi-ptn`,
+                openGraph: {
+                    type: 'website',
+                    title: META_TITLE,
+                    description: META_DESCRIPTION,
+                    url: `https://gradient.academy/utbk/prediksi-ptn`,
+                    images: [
+                        {
+                            url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
+                            width: 48,
+                            height: 48,
+                            alt: 'Gradient UTBK'
+                        }
+                    ]
+                }
+            },
+            revalidate: 60
+        };
+    } catch (error) {
+        console.error('getStaticProps error for', error);
+
+        // Transient error (network, 5xx, timeouts) -> return a safe fallback props
+        // and a short revalidate so ISR retries soon
+        return {
+            props: {
+                courses: [],
+                // you can pass an error flag/message to the page
+                __errorMessage: 'Could not load data, please try again later'
+            } as any,
+            revalidate: 30 // retry in 30s
+        };
+    }
 };

@@ -1,7 +1,3 @@
-import { useAuth } from 'authentication/contexts/AuthProvider';
-import LearnLayout from 'commons/learnLayout';
-import Layout from 'commons/utbkLayout';
-import { GetStaticProps } from 'next';
 import Image from 'next/image';
 
 function MateriComingSoon() {
@@ -43,43 +39,37 @@ function MateriComingSoon() {
 
                 <ul className="space-y-2 p-0">
                     <li className="flex items-center gap-3">
-                        <div className="shrink-0 flex items-center">
+                        <div className="shrink-0">
                             <Image
                                 src="https://assets.gradient.academy/assets/materi_coming_soon_video.svg"
                                 alt=""
                                 width={24}
                                 height={24}
                             />
-                        </div>
-                        <span className="text-white">
-                            Video pembelajaran per subtes.
-                        </span>
+                        </div>{' '}
+                        Video pembelajaran per subtes.
                     </li>
                     <li className="flex items-center gap-3">
-                        <div className="shrink-0 flex items-center">
+                        <div className="shrink-0">
                             <Image
                                 src="https://assets.gradient.academy/assets/materi_coming_soon_mentor.svg"
                                 alt=""
                                 width={24}
                                 height={24}
                             />
-                        </div>
-                        <span className="text-white">
-                            Tutor dari kakak mahasiswa universitas top.
-                        </span>
+                        </div>{' '}
+                        Mentor dari kakak mahasiswa dari universitas top.
                     </li>
                     <li className="flex items-center gap-3">
-                        <div className="shrink-0 flex items-center">
+                        <div className="shrink-0">
                             <Image
                                 src="https://assets.gradient.academy/assets/materi_coming_soon_bank.svg"
                                 alt=""
                                 width={24}
                                 height={24}
                             />
-                        </div>
-                        <span className="text-white">
-                            Bank soal dengan pembahasan.
-                        </span>
+                        </div>{' '}
+                        Bank soal dengan pembahasan.
                     </li>
                 </ul>
             </div>
@@ -87,62 +77,4 @@ function MateriComingSoon() {
     );
 }
 
-const MateriPage = (): JSX.Element => {
-    const { isLoadingProfile, isAuthenticated } = useAuth();
-
-    // it's necessary to prevent glitch
-    // proper loading state will be addressed later
-    if (isLoadingProfile === undefined || isLoadingProfile) {
-        return <></>;
-    }
-
-    if (!isAuthenticated) {
-        return (
-            <Layout>
-                <div className="w-screen h-screen relative">
-                    <MateriComingSoon />
-                </div>
-            </Layout>
-        );
-    }
-
-    return (
-        <LearnLayout showSidebar fullHeightSidebar className="relative">
-            <div className="relative w-full h-[calc(100vh-128px)]">
-                <MateriComingSoon />
-            </div>
-        </LearnLayout>
-    );
-};
-
-MateriPage.displayName = 'Materi';
-export default MateriPage;
-
-export const getStaticProps: GetStaticProps = () => {
-    const META_TITLE = 'Materi Persiapan UTBK 2026';
-    const META_DESCRIPTION =
-        'Akses ratusan jam konten video yang dibawakan langsung oleh mahasiswa dari UI, ITB, dan lainnya. Penjelasan santai, mudah dimengerti, dan to-the-point.';
-
-    return {
-        props: {
-            title: META_TITLE,
-            description: META_DESCRIPTION,
-            canonical: `https://gradient.academy/utbk/materi`,
-            openGraph: {
-                type: 'website',
-                title: META_TITLE,
-                description: META_DESCRIPTION,
-                url: `https://gradient.academy/utbk`,
-                images: [
-                    {
-                        url: 'https://assets.gradient.academy/assets/gradient-G-icon.png',
-                        width: 48,
-                        height: 48,
-                        alt: 'Gradient UTBK'
-                    }
-                ]
-            }
-        },
-        revalidate: 60
-    };
-};
+export { MateriComingSoon };

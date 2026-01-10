@@ -9,6 +9,7 @@ interface FilterCourseQueryParams {
     section?: string;
     sort?: string;
     search?: string;
+    type?: 'COLLEGE' | 'UTBK';
 }
 
 interface TrackSubchapterProgressInputData {
@@ -41,6 +42,7 @@ type Course = {
     description: string;
     chapters: Chapter[];
     banner: string;
+    cover: string;
     thumbnail: string;
     lecturers: Lecturer[];
     learning_progress?: LearningProgress;
@@ -52,6 +54,12 @@ type Course = {
     is_new?: boolean;
     is_only_notebook?: boolean;
     is_free?: boolean;
+    tags?: string[];
+    latest_chapter_name?: string;
+    latest_chapter_slug?: string;
+    latest_subchapter_name?: string;
+    latest_subchapter_slug?: string;
+    percentage_progress?: number;
 };
 
 // type SubChapter = {
@@ -70,6 +78,7 @@ type WatchProgress = {
 };
 
 type Lecturer = {
+    id: string;
     name: string;
     photo: string;
     role: string;
@@ -96,7 +105,10 @@ type SubChapter = {
     is_on_progress?: boolean | null;
     type?: 'video' | 'exercise';
     packet_id?: string;
+    prev_subchapter_slug?: string;
+    next_chapter_slug?: string;
     next_subchapter_slug?: string;
+    next_subchapter_name?: string;
     video_id?: string;
     created_at: Date;
     exercise_id?: string;
@@ -134,10 +146,18 @@ type Notebook = {
     authors: Lecturer[];
     created_at: string | Date;
     notebook_url: string;
-    subsection: {
-        sections: NotebookSubSection[];
-    };
+    subsection: { sections: NotebookSubSection[] };
+    progress?: null;
+    thumbnail?: string;
+    book_slug?: string;
+    page?: number;
 };
+
+interface VideoTranscript {
+    order: number;
+    content: string;
+    duration: string;
+}
 
 type Video = {
     id: string;
@@ -159,6 +179,7 @@ type Video = {
     is_drm_protected?: boolean;
     drm_video_url?: string;
     drm_token?: string;
+    transcript?: VideoTranscript[];
 };
 
 type CodeEditorTemplate = {
@@ -173,6 +194,9 @@ type CourseExercise = {
     exercise_name: string;
     is_on_progress: boolean;
     is_finish: boolean;
+    progress?: null;
+    thumbnail?: string;
+    slug?: string;
 };
 
 type PopupQuestion = {
@@ -224,6 +248,7 @@ interface FirstVideoInCourse {
 type CompletionPercentage = {
     total_finished_video: int;
     total_video_count: int;
+    percentage_progress: number;
 };
 
 type LearningProgress = {
@@ -277,6 +302,7 @@ interface CoursesResponse {
 
 type CourseChapter = {
     chapter_id: string;
+    chapter_slug: string;
     chapter_name: string;
     order: number;
     subchapter_counts?: number;
@@ -311,6 +337,10 @@ interface SubchapterSearch {
         order: string;
         duration: string;
         last_duration: string;
+        chapter_slug: string;
+        type_name: 'lecture' | 'notebook' | 'exercise';
+        is_finished: boolean;
+        is_free: boolean;
     }[];
 }
 
