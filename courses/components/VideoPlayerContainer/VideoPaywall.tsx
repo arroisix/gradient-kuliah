@@ -29,7 +29,11 @@ const VideoPaywall = ({
 
             {profile?.current_role === 'K12' ||
             router.pathname.includes('/utbk') ? (
-                <Langganan className="w-full" isVideoPaywall removeFree />
+                <Langganan
+                    className="w-full overflow-auto"
+                    isVideoPaywall
+                    removeFree
+                />
             ) : (
                 <Paywall
                     pricingData={data?.data}

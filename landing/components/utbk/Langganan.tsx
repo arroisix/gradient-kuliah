@@ -1,6 +1,7 @@
 import { cn } from 'commons/utils';
 import LanggananItem from 'landing/components/utbk/LanggananItem';
 import { useGetPacketOfferUTBKQuery } from 'payment/redux/api/subscriptionApi';
+import { useEffect, useRef } from 'react';
 
 interface LanggananProps {
     className?: string;
@@ -16,6 +17,17 @@ export default function Langganan({
     isVideoPaywall = false
 }: LanggananProps): JSX.Element {
     const { data } = useGetPacketOfferUTBKQuery();
+    const carouselRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        if (isVideoPaywall && carouselRef.current) {
+            const carousel = carouselRef.current;
+            const scrollWidth = carousel.scrollWidth;
+            const clientWidth = carousel.clientWidth;
+            carousel.scrollLeft = (scrollWidth - clientWidth) / 2;
+        }
+    }, [isVideoPaywall, data?.data]);
+
     return (
         <section className={cn('flex flex-col', className)}>
             {!isVideoPaywall ? (
@@ -33,7 +45,9 @@ export default function Langganan({
             )}
 
             {isVideoPaywall ? (
-                <div className="carousel carousel-center w-full space-x-8">
+                <div
+                    ref={carouselRef}
+                    className="carousel carousel-center w-full space-x-8">
                     {data?.data.map((packet) => (
                         <li
                             key={packet.id}
