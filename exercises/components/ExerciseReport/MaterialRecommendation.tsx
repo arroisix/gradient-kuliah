@@ -15,8 +15,8 @@ const MaterialRecommendation = () => {
         { skip: !slug || !problemId }
     );
 
-    if (!materials || materials.data.length === 0) {
-        return null;
+    if (!materials || materials.data.length <= 1) {
+        return <div className="h-16" />;
     }
 
     return (
