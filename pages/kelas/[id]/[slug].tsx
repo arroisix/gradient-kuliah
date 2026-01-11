@@ -2,11 +2,12 @@ import { LearningProvider } from 'courses/contexts/LearningProvider';
 import VideoLearnContainer from 'courses/containers/learn/video';
 import LearnLayout from 'commons/learnLayout';
 import withAnon from 'commons/withAnon';
-import { GetStaticPaths, GetStaticPropsResult } from 'next';
+import type { GetStaticPaths, GetStaticPropsResult } from 'next';
 import axios from 'axios';
 import config from 'redux/api/config';
 import { VideoJsonLd } from 'next-seo';
 import moment from 'moment';
+import { VideoTranscriptProvider } from 'courses/contexts/VideoTranscriptProvider';
 
 interface BelajarPageProps {
     subchapter: SubChapter;
@@ -24,13 +25,15 @@ const Belajar = ({
     return (
         <>
             <LearningProvider>
-                <LearnLayout noPadding showSubscriptionReminder>
-                    <VideoLearnContainer
-                        subchapter={subchapter}
-                        course={course}
-                        recommendations={recommendations}
-                    />
-                </LearnLayout>
+                <VideoTranscriptProvider>
+                    <LearnLayout noPadding showSubscriptionReminder>
+                        <VideoLearnContainer
+                            subchapter={subchapter}
+                            course={course}
+                            recommendations={recommendations}
+                        />
+                    </LearnLayout>
+                </VideoTranscriptProvider>
             </LearningProvider>
 
             <VideoJsonLd

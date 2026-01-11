@@ -14,6 +14,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTracker } from 'tracker/tracker';
 import { useDebounceCallback } from 'usehooks-ts';
 import dynamic from 'next/dynamic';
+import { useVideoTranscriptContext } from 'courses/contexts/VideoTranscriptProvider';
 
 const NextVideoAutoplay = dynamic(() => import('./NextVideoAutoplay'));
 
@@ -51,6 +52,7 @@ export default function BitmovinPlayer({
     const [player, setPlayer] = useState<PlayerAPI | null>(null);
     const playerDiv = useRef<HTMLDivElement>(null);
     const [isNextVideoOpen, setIsNextVideoOpen] = useState(false);
+    const { setVideoTimestamp } = useVideoTranscriptContext();
 
     async function handleTrackProgress(
         currentTime: number,
@@ -124,6 +126,7 @@ export default function BitmovinPlayer({
             events: {
                 [PlayerEvent.Playing]: (data: PlayerEventData) => {
                     if (data.time) {
+                        setVideoTimestamp(data.time);
                         debouncedHandleTrackProgress(data.time, false);
                     }
                     tracker?.genericTrack('Play Video', {
@@ -250,6 +253,10 @@ export default function BitmovinPlayer({
                 );
             }
 
+            if (router.query.time && Number(router.query.time)) {
+                playerInstance.seek(Number(router.query.time));
+            }
+
             UIFactory.buildModernUI(playerInstance);
 
             playerInstance.load(sourceConfig).then(() => {
@@ -272,6 +279,23 @@ export default function BitmovinPlayer({
             destroyPlayer();
         };
     }, [setupPlayer]);
+
+    useEffect(() => {
+        if (!player) {
+            return;
+        }
+
+        if (!router.query.time) {
+            return;
+        }
+
+        const time = Number(router.query.time);
+        if (!time) {
+            return;
+        }
+
+        player.seek(time);
+    }, [player, router]);
 
     return (
         <div className="relative rounded-md">
