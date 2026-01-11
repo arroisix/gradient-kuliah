@@ -2,17 +2,20 @@ import { useGetSubchapterQuery } from 'courses/redux/api/courseApi';
 import { useRouter } from 'next/router';
 import { SubchapterMenuItem } from '../SubchapterMenuItem';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { Dispatch, SetStateAction } from 'react';
 
 interface SubchapterListProps {
     chapter_slug: string;
     chapter_id?: string;
     subchapterSearch?: SubchapterSearch['items'];
+    setIsModalSheetOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
 function SubchapterList({
     chapter_slug,
     chapter_id,
-    subchapterSearch
+    subchapterSearch,
+    setIsModalSheetOpen
 }: SubchapterListProps): JSX.Element {
     const router = useRouter();
     const { slug_subtest, slug_subchapter } = router.query as {
@@ -61,6 +64,7 @@ function SubchapterList({
                     type={value.type_name ?? value.type}
                     isActive={slug_subchapter === value.subchapter_slug}
                     isFinished={value.is_finished}
+                    setIsModalSheetOpen={setIsModalSheetOpen}
                     isDisabled={
                         (!is_subscribed && !value.is_free) ||
                         (is_subscribed &&

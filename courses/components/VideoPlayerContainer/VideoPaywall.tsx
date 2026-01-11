@@ -23,13 +23,17 @@ const VideoPaywall = ({
             className={cn(
                 'py-4 flex flex-col items-center justify-center w-full'
             )}>
-            <h2 className="mb-4 text-xl font-extrabold leading-relaxed text-center">
+            <h2 className="text-[#999999] mb-4 text-xl font-extrabold leading-relaxed text-center">
                 {header}
             </h2>
 
             {profile?.current_role === 'K12' ||
             router.pathname.includes('/utbk') ? (
-                <Langganan className="w-full" isVideoPaywall />
+                <Langganan
+                    className="w-full overflow-auto"
+                    isVideoPaywall
+                    removeFree
+                />
             ) : (
                 <Paywall
                     pricingData={data?.data}

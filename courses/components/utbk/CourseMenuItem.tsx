@@ -3,13 +3,19 @@ import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienc
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { Dispatch, SetStateAction } from 'react';
 
 interface CourseMenuItemProps {
     course: Course;
     href: string;
+    setIsOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
-function CourseMenuItem({ course, href }: CourseMenuItemProps): JSX.Element {
+function CourseMenuItem({
+    course,
+    href,
+    setIsOpen
+}: CourseMenuItemProps): JSX.Element {
     const router = useRouter();
     const { slug_subtest } = router.query as { slug_subtest: string };
 
@@ -22,6 +28,7 @@ function CourseMenuItem({ course, href }: CourseMenuItemProps): JSX.Element {
     return (
         <Link
             href={href}
+            onClick={() => setIsOpen && setIsOpen(false)}
             className={`${
                 (isAuthenticated && isLoadingProgress) || course.is_coming_soon
                     ? 'pointer-events-none'

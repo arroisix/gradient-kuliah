@@ -42,7 +42,10 @@ function MateriLearnNavigation(): JSX.Element {
     return (
         <>
             {/* desktop navigation */}
-            <NavigationMenu.Root className="hidden lg:block">
+            <NavigationMenu.Root
+                value={isOpen}
+                onValueChange={setIsOpen}
+                className="hidden lg:block">
                 <NavigationMenu.List className="list-none">
                     <NavigationMenu.Item>
                         <NavigationMenu.Trigger
@@ -71,6 +74,7 @@ function MateriLearnNavigation(): JSX.Element {
                                         key={course.id}
                                         course={course}
                                         href={`/utbk/materi/${course.slug}/${course.latest_chapter_slug}/${course.latest_subchapter_slug}`}
+                                        setIsOpen={setIsOpen}
                                     />
                                 ))}
                             </ul>
@@ -98,7 +102,11 @@ function MateriLearnNavigation(): JSX.Element {
                             <NavigationMenu.Arrow
                                 className="flex transition-[left] duration-[var(--duration)] ease-[var(--easing)] data-[side=bottom]:top-0 data-[side=left]:right-[-13px] data-[side=left]:rotate-90 data-[side=right]:left-[-13px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-8px] data-[side=top]:rotate-180"
                                 style={{ transform: 'translateY(-100%)' }}>
-                                <ArrowSvg />
+                                {isOpen ? (
+                                    <ArrowSvg className="hidden lg:block" />
+                                ) : (
+                                    <></>
+                                )}
                             </NavigationMenu.Arrow>
                             <NavigationMenu.Viewport className="relative h-full w-full overflow-hidden" />
                         </NavigationMenu.Popup>
@@ -131,7 +139,7 @@ function MateriLearnNavigation(): JSX.Element {
                     setOpen={(value) => setIsOpen(value)}
                     permanent={true}
                     variant="dark"
-                    containerClassName="modal modal-open modal-bottom lg:modal-middle min-h-[100px]"
+                    containerClassName="lg:hidden modal modal-open modal-bottom lg:modal-middle min-h-[100px]"
                     className="bg-[#101010] h-screen p-0">
                     <div className="bg-[#101010] py-6 px-4">
                         <div className="flex justify-between items-center mb-6">
@@ -152,6 +160,7 @@ function MateriLearnNavigation(): JSX.Element {
                                     key={course.id}
                                     course={course}
                                     href={`/utbk/materi/${course.slug}/${course.latest_chapter_slug}/${course.latest_subchapter_slug}`}
+                                    setIsOpen={setIsOpen}
                                 />
                             ))}
                         </ul>

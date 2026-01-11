@@ -10,9 +10,11 @@ import {
 import Link from 'next/link';
 import {
     ComponentPropsWithoutRef,
+    Dispatch,
     ForwardRefExoticComponent,
     MouseEvent,
     RefAttributes,
+    SetStateAction,
     useMemo
 } from 'react';
 import { FaLock } from 'react-icons/fa';
@@ -25,6 +27,7 @@ interface SubchapterMenuItemProps extends ComponentPropsWithoutRef<'a'> {
     isActive?: boolean;
     isFinished?: boolean | null | undefined;
     isDisabled?: boolean;
+    setIsModalSheetOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
 function SubchapterMenuItem({
@@ -35,6 +38,7 @@ function SubchapterMenuItem({
     isActive = false,
     isFinished = false,
     isDisabled = false,
+    setIsModalSheetOpen,
     ...props
 }: SubchapterMenuItemProps): JSX.Element {
     const bgColor = useMemo(() => {
@@ -73,16 +77,17 @@ function SubchapterMenuItem({
 
     return (
         <Link
-            onClick={(event: MouseEvent<HTMLAnchorElement>) =>
-                isDisabled && event.preventDefault()
-            }
+            onClick={(event: MouseEvent<HTMLAnchorElement>) => {
+                isDisabled && event.preventDefault();
+                setIsModalSheetOpen && setIsModalSheetOpen(false);
+            }}
             href={href}
             className={`${bgColor} ${
                 isDisabled ? 'cursor-not-allowed' : ''
             } p-3 min-h-[72px] rounded-lg flex justify-between items-center gap-4 transition-all duration-300`}
             {...props}>
             {isDisabled ? (
-                <FaLock className="fill-#666666 w-4 h-4" />
+                <FaLock className="fill-[#666666] w-4 h-4" />
             ) : (
                 <LeftIcon
                     className={`${

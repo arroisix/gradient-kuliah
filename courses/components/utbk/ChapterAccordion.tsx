@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { SubchapterList } from './SubchapterList';
 
@@ -19,6 +19,7 @@ interface ChapterAccordionProps {
     chapter_slug: string;
     toggleable?: boolean;
     initialOpen?: boolean;
+    setIsModalSheetOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
 function ChapterAccordion({
@@ -27,7 +28,8 @@ function ChapterAccordion({
     toggleable = true,
     initialOpen,
     chapter_id,
-    subchapterSearch
+    subchapterSearch,
+    setIsModalSheetOpen
 }: ChapterAccordionProps & SubchapterUnion): JSX.Element {
     const [isOpen, setIsOpen] = useState(initialOpen);
 
@@ -63,6 +65,7 @@ function ChapterAccordion({
                     chapter_id={chapter_id}
                     chapter_slug={chapter_slug}
                     subchapterSearch={subchapterSearch}
+                    setIsModalSheetOpen={setIsModalSheetOpen}
                 />
             ) : (
                 <></>

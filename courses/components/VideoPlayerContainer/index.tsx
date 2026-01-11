@@ -211,6 +211,7 @@ const VideoPlayerContainer = ({
                             next_subchapter_thumbnail={
                                 nextSubchapter?.thumbnail
                             }
+                            next_subchapter_duration={nextSubchapter?.duration}
                         />
                     ) : (
                         <VideoJS

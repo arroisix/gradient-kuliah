@@ -101,7 +101,7 @@ function MateriCard({
                     </div>
                 )}
 
-                {latest_subchapter_name ? (
+                {!is_coming_soon && latest_subchapter_name ? (
                     <p
                         className={`${
                             percentage_progress
