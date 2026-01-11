@@ -47,7 +47,7 @@ export default function Langganan({
             {isVideoPaywall ? (
                 <div
                     ref={carouselRef}
-                    className="carousel carousel-center w-full space-x-8">
+                    className="carousel carousel-center w-full space-x-8 [&::-webkit-scrollbar]:block [scrollbar-width:auto]">
                     {data?.data.map((packet) => (
                         <li
                             key={packet.id}
