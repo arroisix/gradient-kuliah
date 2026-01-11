@@ -524,7 +524,7 @@ export const PrediksiPTN = (): JSX.Element => {
                                     setFieldValue={setFieldValue}
                                 />
                                 <MateriCard
-                                    label="Penalaran Matematis"
+                                    label="Penalaran Matematika"
                                     name="penalaran_matematis"
                                     icon="penalaran-matematis.svg"
                                     value={score.penalaran_matematis}
