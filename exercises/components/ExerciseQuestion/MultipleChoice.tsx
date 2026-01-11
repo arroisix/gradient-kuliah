@@ -64,10 +64,10 @@ const MultipleChoiceContainer = ({
             solutionData?.correct_answer_ids.includes(optionId) &&
             !solutionData?.user_answer_ids.includes(optionId)
         ) {
-            if (problem?.problem.type === 'MULTIPLE_ANSWER') {
-                return 3;
-            }
-            return 1;
+            // if (problem?.problem.type === 'MULTIPLE_ANSWER') {
+            return 3;
+            // }
+            // return 1;
         }
         return 4;
     };

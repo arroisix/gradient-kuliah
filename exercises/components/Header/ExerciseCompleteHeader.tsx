@@ -25,7 +25,10 @@ const ExerciseCompleteHeader = () => {
     const thirdTabLabel = isUTBK ? 'Analisa Diri' : 'Leaderboard';
     const thirdTabRoute = isUTBK ? 'analisa-diri' : 'leaderboard';
 
-    const tabs = ['Nilai', 'Pembahasan', thirdTabLabel];
+    // temporary until we enable the analysis feature for UTBK
+    const tabs = isUTBK
+        ? ['Nilai', 'Pembahasan']
+        : ['Nilai', 'Pembahasan', thirdTabLabel];
     const [activeTab, setActiveTab] = useState('');
     const { isMobileBreakpoints } = useWindowBreakpoints();
 
