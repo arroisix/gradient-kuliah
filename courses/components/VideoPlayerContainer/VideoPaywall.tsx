@@ -1,10 +1,12 @@
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import Paywall from 'commons/components/elements/Paywall';
 import { cn } from 'commons/utils';
-import Langganan from 'landing/components/utbk/Langganan';
 import { useRouter } from 'next/router';
 import { useGetPacketOfferQuery } from 'payment/redux/api/subscriptionApi';
 import React from 'react';
+import dynamic from 'next/dynamic';
+
+const VideoPricingList = dynamic(() => import('../utbk/VideoPricingList'));
 
 const VideoPaywall = ({
     header = 'Beli untuk melihat video ini'
@@ -29,7 +31,7 @@ const VideoPaywall = ({
 
             {profile?.current_role === 'K12' ||
             router.pathname.includes('/utbk') ? (
-                <Langganan className="w-full" isVideoPaywall removeFree />
+                <VideoPricingList />
             ) : (
                 <Paywall
                     pricingData={data?.data}

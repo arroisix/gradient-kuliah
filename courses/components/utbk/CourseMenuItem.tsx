@@ -73,10 +73,7 @@ function CourseMenuItem({
             </div>
 
             {course.is_coming_soon ? (
-                <div
-                    className={`${
-                        course.is_coming_soon ? 'text-[#999999]' : 'text-white'
-                    } bg-[#36236A] shrink-0 self-start font-bold text-[10px] px-2 py-1 rounded-lg`}>
+                <div className="bg-[#36236A] text-[#999999] shrink-0 self-start font-bold text-[10px] px-2 py-1 rounded-lg">
                     COMING SOON
                 </div>
             ) : (
