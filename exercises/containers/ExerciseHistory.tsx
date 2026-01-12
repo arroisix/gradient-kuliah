@@ -13,6 +13,7 @@ import {
 import { ExerciseHistoryItem } from 'exercises/types/exercises';
 import { cn } from 'commons/utils';
 import { useDispatch } from 'react-redux';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 const ExerciseHistory: React.FC = () => {
     const router = useRouter();
@@ -112,6 +113,7 @@ const ExerciseHistoryCard = ({
     isLastestAttempt: boolean;
     historyItem: ExerciseHistoryItem;
 }) => {
+    const { profile } = useAuth();
     const router = useRouter();
     const { slug } = router.query;
 
@@ -166,7 +168,12 @@ const ExerciseHistoryCard = ({
                                 ? historyItem.score
                                 : historyItem.score.toFixed(2)}
                         </p>
-                        <p className="font-bold">/100</p>
+
+                        {profile?.current_role === 'COLLEGE_STUDENT' ? (
+                            <p className="font-bold">/100</p>
+                        ) : (
+                            <></>
+                        )}
                     </div>
 
                     {historyItem.score_change !== null &&

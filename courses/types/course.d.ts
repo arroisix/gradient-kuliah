@@ -153,7 +153,7 @@ type Notebook = {
     page?: number;
 };
 
-interface VideoTranscript {
+interface Transcript {
     order: number;
     content: string;
     duration: string;
@@ -179,7 +179,7 @@ type Video = {
     is_drm_protected?: boolean;
     drm_video_url?: string;
     drm_token?: string;
-    transcript?: VideoTranscript[];
+    transcript?: Transcript[];
 };
 
 type CodeEditorTemplate = {
