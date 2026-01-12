@@ -3,37 +3,56 @@ import { useVideoTranscriptContext } from 'courses/contexts/VideoTranscriptProvi
 import { XIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo, useRef } from 'react';
 import { useWindowSize } from 'usehooks-ts';
 
 interface TranscriptTimestampProps {
     currentTranscript: Transcript;
+    nextTranscript: Transcript | null;
     setIsOpen: Dispatch<SetStateAction<boolean>> | null;
 }
 
 function TranscriptTimestamp({
     currentTranscript,
+    nextTranscript,
     setIsOpen
 }: TranscriptTimestampProps): JSX.Element {
-    const { videoTimestamp } = useVideoTranscriptContext();
     const router = useRouter();
+    const itemRef = useRef<HTMLAnchorElement>(null);
 
-    const currentTranscriptTime = transcriptTimeToSeconds(
+    const { videoTimestamp } = useVideoTranscriptContext();
+    const currentTimestamp = transcriptTimeToSeconds(
         currentTranscript.duration.split('-')[0]
     );
 
-    const [startTimestamp, endTimestamp] = currentTranscript.duration
-        .split('-')
-        .map((v) => transcriptTimeToSeconds(v));
+    const isCurrentTranscript = useMemo(() => {
+        if (!nextTranscript) {
+            return videoTimestamp >= currentTimestamp;
+        }
 
-    const isCurrentTranscript =
-        videoTimestamp >= startTimestamp && videoTimestamp < endTimestamp;
+        const nextTimestamp = transcriptTimeToSeconds(
+            nextTranscript.duration.split('-')[0]
+        );
 
-    const url = `${router.asPath.split('?')[0]}?time=${currentTranscriptTime}`;
+        return (
+            videoTimestamp >= currentTimestamp && videoTimestamp < nextTimestamp
+        );
+    }, [currentTimestamp, nextTranscript, videoTimestamp]);
+
+    useEffect(() => {
+        if (isCurrentTranscript && itemRef.current) {
+            itemRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'nearest'
+            });
+        }
+    }, [isCurrentTranscript]);
 
     return (
         <Link
-            href={url}
+            ref={itemRef}
+            href={`${router.asPath.split('?')[0]}?time=${currentTimestamp}`}
             onClick={() => setIsOpen && setIsOpen(false)}
             className={`${
                 isCurrentTranscript ? 'bg-[#36236A]' : ''
@@ -79,11 +98,16 @@ function VideoTranscript({
             </div>
 
             <div className="flex flex-col gap-2 mt-6 lg:h-[calc(100vh-32px-36px-16px-56px-24px-24px)] lg:overflow-scroll">
-                {transcript?.map((value) => (
+                {transcript?.map((value, index) => (
                     <TranscriptTimestamp
                         key={value.duration}
-                        setIsOpen={width < 1024 ? setIsOpen : null}
                         currentTranscript={value}
+                        nextTranscript={
+                            index < transcript.length - 1
+                                ? transcript[index + 1]
+                                : null
+                        }
+                        setIsOpen={width < 1024 ? setIsOpen : null}
                     />
                 ))}
             </div>
