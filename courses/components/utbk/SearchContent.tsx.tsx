@@ -35,7 +35,7 @@ function SearchContent() {
     } = useSearchSubchapter();
 
     return (
-        <div className="mt-6">
+        <div className="mt-6 h-[calc(100vh-32px-36px-16px-136px-36px-16px-24px-24px)] overflow-scroll rounded-xl">
             <div className="space-y-4">
                 {isSearchingLoading || isSearchingFetching ? (
                     <div className="animate-pulse space-y-2 mt-6">

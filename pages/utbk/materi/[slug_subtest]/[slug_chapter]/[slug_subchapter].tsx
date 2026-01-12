@@ -3,6 +3,7 @@ import config from 'redux/api/config';
 import type { GetStaticPaths, GetStaticPropsResult } from 'next';
 import { LearningProvider } from 'courses/contexts/LearningProvider';
 import { MateriLearnContainer } from 'courses/containers/utbk/MateriLearnContainer';
+import { VideoTranscriptProvider } from 'courses/contexts/VideoTranscriptProvider';
 
 interface BelajarPageProps {
     subchapter: SubChapter | undefined;
@@ -15,9 +16,14 @@ function BelajarPageProps({
 }: BelajarPageProps): JSX.Element {
     return (
         <LearningProvider>
-            <div className="w-screen min-h-screen bg-black px-8 py-4">
-                <MateriLearnContainer subchapter={subchapter} course={course} />
-            </div>
+            <VideoTranscriptProvider>
+                <div className="w-screen min-h-screen bg-black px-8 py-4">
+                    <MateriLearnContainer
+                        subchapter={subchapter}
+                        course={course}
+                    />
+                </div>
+            </VideoTranscriptProvider>
         </LearningProvider>
     );
 }

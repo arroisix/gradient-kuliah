@@ -4,12 +4,24 @@ import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienc
 import { useRouter } from 'next/router';
 import { SearchMateri } from './SearchMateri';
 import { MateriDetailContent } from './MateriDetailContent';
+import dynamic from 'next/dynamic';
+import { Dispatch, SetStateAction } from 'react';
+
+const VideoTranscript = dynamic(() => import('./VideoTranscript'));
 
 interface MateriDetailBoxProps {
     course: CourseDetail | undefined;
+    transcript?: Transcript[];
+    isTranscriptOpen: boolean;
+    setIsTranscriptOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-function MateriDetailBox({ course }: MateriDetailBoxProps): JSX.Element {
+function MateriDetailBox({
+    course,
+    isTranscriptOpen,
+    transcript,
+    setIsTranscriptOpen
+}: MateriDetailBoxProps): JSX.Element {
     const router = useRouter();
     const { slug_subtest } = router.query as { slug_subtest: string };
 
@@ -29,8 +41,19 @@ function MateriDetailBox({ course }: MateriDetailBoxProps): JSX.Element {
     const percentageProgress =
         learningProgress?.completion_percentage?.percentage_progress;
 
+    if (isTranscriptOpen) {
+        return (
+            <div className="relative z-10 col-span-3 bg-[#181818] w-full h-full rounded-2xl overflow-hidden">
+                <VideoTranscript
+                    transcript={transcript}
+                    setIsOpen={setIsTranscriptOpen}
+                />
+            </div>
+        );
+    }
+
     return (
-        <div className="relative z-10 col-span-3 bg-[#181818] w-full max-w-[500px] h-full rounded-2xl overflow-hidden">
+        <div className="relative z-10 col-span-3 bg-[#181818] w-full rounded-2xl overflow-hidden">
             <div className="bg-[#101010] p-6">
                 <h3 className="text-white font-semibold">
                     {course?.course_name}

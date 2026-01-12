@@ -9,7 +9,7 @@ import { useGetCourseDetailQuery } from 'courses/redux/api/courseApi';
 import { ShareButton } from 'courses/components/utbk/ShareButton';
 import { useState } from 'react';
 import CopilotIconFill from 'copilot/assets/CopilotIconFill';
-// import { TranscriptIcon } from 'commons/components/elements/Icons/TranscriptIcon';
+import { TranscriptIcon } from 'commons/components/elements/Icons/TranscriptIcon';
 import CopilotModal from 'copilot/components/CopilotModal';
 import { LecturerProfile } from 'courses/components/utbk/LecturerProfile';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
@@ -37,6 +37,7 @@ function MateriLearnContainer({
     subchapter: ssrSubchapter,
     course: ssrCourse
 }: MateriLearnContainerProps): JSX.Element {
+    const [isTranscriptOpen, setIsTranscriptOpen] = useState(false);
     const [isCopilotModalOpen, setIsCopilotModalOpen] =
         useState<boolean>(false);
 
@@ -83,7 +84,7 @@ function MateriLearnContainer({
             : undefined;
 
     return (
-        <div className="w-full max-w-[1368px] mx-auto">
+        <div className="w-full max-w-[1368px] mx-auto h-[calc(100vh-32px)] overflow-hidden">
             <div className="flex justify-between items-center mb-4">
                 <Button
                     href="/utbk/materi"
@@ -126,15 +127,20 @@ function MateriLearnContainer({
 
                     <div className="flex flex-col">
                         <div className="order-2 lg:order-1 flex items-center gap-3 mt-6 lg:mt-4">
-                            {/* <Button
-                                disabled={!course || !subchapter}
-                                variant="neutral"
-                                className="group flex-shrink flex items-center gap-1.5 text-sm !p-2 lg:!py-2 lg:!px-4">
-                                <TranscriptIcon className="fill-white w-4 h-4 group-disabled:fill-neutral-300/30" />
-                                <span className="hidden lg:block">
-                                    Transcript
-                                </span>
-                            </Button> */}
+                            {subchapter?.video?.transcript ? (
+                                <Button
+                                    disabled={!course || !subchapter}
+                                    onClick={() => setIsTranscriptOpen(true)}
+                                    variant="neutral"
+                                    className="group flex-shrink flex items-center gap-1.5 text-sm !p-2 lg:!py-2 lg:!px-4">
+                                    <TranscriptIcon className="fill-white w-4 h-4 group-disabled:fill-neutral-300/30" />
+                                    <span className="hidden lg:block">
+                                        Transcript
+                                    </span>
+                                </Button>
+                            ) : (
+                                <></>
+                            )}
 
                             {isAuthenticated ? (
                                 <div className="flex-shrink-0">
@@ -193,9 +199,14 @@ function MateriLearnContainer({
 
                 {isDesktopBreakpoints ? (
                     course && subchapter ? (
-                        <MateriDetailBox course={course} />
+                        <MateriDetailBox
+                            course={course}
+                            transcript={subchapter.video?.transcript}
+                            isTranscriptOpen={isTranscriptOpen}
+                            setIsTranscriptOpen={setIsTranscriptOpen}
+                        />
                     ) : (
-                        <div className="col-span-3 animate-pulse w-full max-w-[500px] bg-[#333333] h-full rounded-2xl" />
+                        <div className="col-span-3 animate-pulse w-full bg-[#333333] h-[calc(100vh-32px-36px-16px)] rounded-2xl" />
                     )
                 ) : (
                     <></>
@@ -205,6 +216,9 @@ function MateriLearnContainer({
                     course && subchapter ? (
                         <MateriDetailSheet
                             course={course}
+                            transcript={subchapter.video?.transcript}
+                            isTranscriptOpen={isTranscriptOpen}
+                            setIsTranscriptOpen={setIsTranscriptOpen}
                             next_chapter_slug={
                                 subchapter.next_chapter_slug as string
                             }

@@ -196,6 +196,18 @@ export const formatDuration = (durationString?: string | null): string => {
     return `${displayHours}${formattedMinutes}:${formattedSeconds}`;
 };
 
+export function transcriptTimeToSeconds(time: string): number {
+    if (!time) {
+        return 0;
+    }
+
+    const duration = moment.duration(time);
+    const hours = duration.get('hour');
+    const minutes = duration.get('minute');
+    const seconds = duration.get('second');
+    return hours * 60 * 60 + minutes * 60 + seconds;
+}
+
 export const isAlphaNumeric = (str: string, includeSpace: boolean): boolean => {
     for (let i = 0; i < str.length; i++) {
         const code = str.charCodeAt(i);
