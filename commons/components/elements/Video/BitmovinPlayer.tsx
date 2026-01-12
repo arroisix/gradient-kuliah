@@ -126,7 +126,6 @@ export default function BitmovinPlayer({
             events: {
                 [PlayerEvent.Playing]: (data: PlayerEventData) => {
                     if (data.time) {
-                        setVideoTimestamp(data.time);
                         debouncedHandleTrackProgress(data.time, false);
                     }
                     tracker?.genericTrack('Play Video', {
@@ -160,6 +159,7 @@ export default function BitmovinPlayer({
                 },
                 [PlayerEvent.Seeked]: (data: PlayerEventData) => {
                     if (data.time) {
+                        setVideoTimestamp(data.time);
                         debouncedHandleTrackProgress(data.time, false);
                     }
                     tracker?.genericTrack('Seek Video', {
@@ -169,6 +169,7 @@ export default function BitmovinPlayer({
                 },
                 [PlayerEvent.TimeChanged]: (data: PlayerEventData) => {
                     if (data.time && Math.round(data.time) % 5 === 0) {
+                        setVideoTimestamp(data.time);
                         debouncedHandleTrackProgress(data.time, false);
                     }
                 },

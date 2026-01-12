@@ -3,17 +3,16 @@ import { useVideoTranscriptContext } from 'courses/contexts/VideoTranscriptProvi
 import { XIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Dispatch, SetStateAction, useMemo } from 'react';
+import { Dispatch, SetStateAction } from 'react';
+import { useWindowSize } from 'usehooks-ts';
 
 interface TranscriptTimestampProps {
     currentTranscript: Transcript;
-    nextTranscript: Transcript | null;
-    setIsOpen: Dispatch<SetStateAction<boolean>>;
+    setIsOpen: Dispatch<SetStateAction<boolean>> | null;
 }
 
 function TranscriptTimestamp({
     currentTranscript,
-    nextTranscript,
     setIsOpen
 }: TranscriptTimestampProps): JSX.Element {
     const { videoTimestamp } = useVideoTranscriptContext();
@@ -23,32 +22,19 @@ function TranscriptTimestamp({
         currentTranscript.duration.split('-')[0]
     );
 
-    const nextTranscriptTime = transcriptTimeToSeconds(
-        currentTranscript.duration.split('-')[0]
-    );
+    const [startTimestamp, endTimestamp] = currentTranscript.duration
+        .split('-')
+        .map((v) => transcriptTimeToSeconds(v));
 
-    const isCurrentTranscript = useMemo(() => {
-        if (!nextTranscript) {
-            return videoTimestamp >= currentTranscriptTime;
-        }
-
-        return (
-            videoTimestamp >= currentTranscriptTime &&
-            videoTimestamp < nextTranscriptTime
-        );
-    }, [
-        currentTranscriptTime,
-        nextTranscript,
-        nextTranscriptTime,
-        videoTimestamp
-    ]);
+    const isCurrentTranscript =
+        videoTimestamp >= startTimestamp && videoTimestamp < endTimestamp;
 
     const url = `${router.asPath.split('?')[0]}?time=${currentTranscriptTime}`;
 
     return (
         <Link
             href={url}
-            onClick={() => setIsOpen(false)}
+            onClick={() => setIsOpen && setIsOpen(false)}
             className={`${
                 isCurrentTranscript ? 'bg-[#36236A]' : ''
             } hover:bg-[#2C2C2C] transition-all duration-300 flex gap-3 p-3 rounded-lg h-full lg:items-center`}>
@@ -78,6 +64,7 @@ function VideoTranscript({
     transcript,
     setIsOpen
 }: VideoTranscriptProps): JSX.Element {
+    const { width } = useWindowSize();
     return (
         <div className="bg-[#101010] pb-6">
             <div className="bg-[#2C2C2C] flex justify-between items-center p-4">
@@ -92,16 +79,11 @@ function VideoTranscript({
             </div>
 
             <div className="flex flex-col gap-2 mt-6 lg:h-full lg:max-h-screen lg:overflow-scroll">
-                {transcript?.map((value, index) => (
+                {transcript?.map((value) => (
                     <TranscriptTimestamp
                         key={value.duration}
-                        setIsOpen={setIsOpen}
+                        setIsOpen={width < 1024 ? setIsOpen : null}
                         currentTranscript={value}
-                        nextTranscript={
-                            transcript.length - 1 < index
-                                ? transcript[index + 1]
-                                : null
-                        }
                     />
                 ))}
             </div>
