@@ -8,11 +8,13 @@ import { Dispatch, SetStateAction, useMemo } from 'react';
 interface TranscriptTimestampProps {
     currentTranscript: Transcript;
     nextTranscript: Transcript | null;
+    setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 function TranscriptTimestamp({
     currentTranscript,
-    nextTranscript
+    nextTranscript,
+    setIsOpen
 }: TranscriptTimestampProps): JSX.Element {
     const { videoTimestamp } = useVideoTranscriptContext();
     const router = useRouter();
@@ -46,6 +48,7 @@ function TranscriptTimestamp({
     return (
         <Link
             href={url}
+            onClick={() => setIsOpen(false)}
             className={`${
                 isCurrentTranscript ? 'bg-[#36236A]' : ''
             } hover:bg-[#2C2C2C] transition-all duration-300 flex gap-3 p-3 rounded-lg h-full lg:items-center`}>
@@ -92,6 +95,7 @@ function VideoTranscript({
                 {transcript?.map((value, index) => (
                     <TranscriptTimestamp
                         key={value.duration}
+                        setIsOpen={setIsOpen}
                         currentTranscript={value}
                         nextTranscript={
                             transcript.length - 1 < index
