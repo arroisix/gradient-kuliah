@@ -126,6 +126,7 @@ export default function BitmovinPlayer({
             events: {
                 [PlayerEvent.Playing]: (data: PlayerEventData) => {
                     if (data.time) {
+                        setVideoTimestamp(Math.floor(data.time));
                         debouncedHandleTrackProgress(data.time, false);
                     }
                     tracker?.genericTrack('Play Video', {
@@ -159,7 +160,7 @@ export default function BitmovinPlayer({
                 },
                 [PlayerEvent.Seeked]: (data: PlayerEventData) => {
                     if (data.time) {
-                        setVideoTimestamp(data.time);
+                        setVideoTimestamp(Math.floor(data.time));
                         debouncedHandleTrackProgress(data.time, false);
                     }
                     tracker?.genericTrack('Seek Video', {
@@ -168,8 +169,11 @@ export default function BitmovinPlayer({
                     });
                 },
                 [PlayerEvent.TimeChanged]: (data: PlayerEventData) => {
+                    if (data.time && Math.floor(data.time) % 1 === 0) {
+                        setVideoTimestamp(Math.floor(data.time));
+                    }
+
                     if (data.time && Math.round(data.time) % 5 === 0) {
-                        setVideoTimestamp(data.time);
                         debouncedHandleTrackProgress(data.time, false);
                     }
                 },
@@ -254,8 +258,10 @@ export default function BitmovinPlayer({
                 );
             }
 
-            if (router.query.time && Number(router.query.time)) {
-                playerInstance.seek(Number(router.query.time));
+            if (router.query.time && !isNaN(Number(router.query.time))) {
+                const time = Number(router.query.time);
+                playerInstance.seek(time);
+                setVideoTimestamp(time);
             }
 
             UIFactory.buildModernUI(playerInstance);
@@ -291,12 +297,13 @@ export default function BitmovinPlayer({
         }
 
         const time = Number(router.query.time);
-        if (!time) {
+        if (isNaN(time)) {
             return;
         }
 
         player.seek(time);
-    }, [player, router]);
+        setVideoTimestamp(time);
+    }, [player, router, setVideoTimestamp]);
 
     return (
         <div className="relative rounded-md">
