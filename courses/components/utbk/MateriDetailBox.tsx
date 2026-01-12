@@ -43,7 +43,7 @@ function MateriDetailBox({
 
     if (isTranscriptOpen) {
         return (
-            <div className="relative z-10 col-span-3 bg-[#181818] w-full max-w-[500px] h-full rounded-2xl overflow-hidden">
+            <div className="relative z-10 col-span-3 bg-[#181818] w-full h-full rounded-2xl overflow-hidden">
                 <VideoTranscript
                     transcript={transcript}
                     setIsOpen={setIsTranscriptOpen}
@@ -53,7 +53,7 @@ function MateriDetailBox({
     }
 
     return (
-        <div className="relative z-10 col-span-3 bg-[#181818] w-full max-w-[500px] h-full rounded-2xl overflow-hidden">
+        <div className="relative z-10 col-span-3 bg-[#181818] w-full rounded-2xl overflow-hidden">
             <div className="bg-[#101010] p-6">
                 <h3 className="text-white font-semibold">
                     {course?.course_name}

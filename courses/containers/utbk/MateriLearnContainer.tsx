@@ -84,7 +84,7 @@ function MateriLearnContainer({
             : undefined;
 
     return (
-        <div className="w-full max-w-[1368px] mx-auto">
+        <div className="w-full max-w-[1368px] mx-auto h-[calc(100vh-32px)] overflow-hidden">
             <div className="flex justify-between items-center mb-4">
                 <Button
                     href="/utbk/materi"
@@ -206,7 +206,7 @@ function MateriLearnContainer({
                             setIsTranscriptOpen={setIsTranscriptOpen}
                         />
                     ) : (
-                        <div className="col-span-3 animate-pulse w-full max-w-[500px] bg-[#333333] h-full rounded-2xl" />
+                        <div className="col-span-3 animate-pulse w-full bg-[#333333] h-[calc(100vh-32px-36px-16px)] rounded-2xl" />
                     )
                 ) : (
                     <></>
