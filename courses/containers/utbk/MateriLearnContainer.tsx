@@ -7,7 +7,7 @@ import { useGetSubchapterDetailV2Query } from 'courses/redux/api/privateCourseV2
 import { useGetPublicSubchapterDetailV2Query } from 'courses/redux/api/publicCourseV2Api';
 import { useGetCourseDetailQuery } from 'courses/redux/api/courseApi';
 import { ShareButton } from 'courses/components/utbk/ShareButton';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import CopilotIconFill from 'copilot/assets/CopilotIconFill';
 import { TranscriptIcon } from 'commons/components/elements/Icons/TranscriptIcon';
 import CopilotModal from 'copilot/components/CopilotModal';
@@ -15,6 +15,7 @@ import { LecturerProfile } from 'courses/components/utbk/LecturerProfile';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { MateriLearnNavigation } from 'courses/components/utbk/MateriLearnNavigation';
 import dynamic from 'next/dynamic';
+import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 
 const RatingButton = dynamic(
     () => import('courses/components/utbk/RatingButton')
@@ -83,6 +84,19 @@ function MateriLearnContainer({
               }
             : undefined;
 
+    const { is_subscribed, subscribedFeatures } = useCourseSubscription(
+        slug_subtest as string
+    );
+
+    const isShowPaywall = useMemo((): boolean => {
+        return (
+            (!is_subscribed && !subchapter?.video?.is_free) ||
+            (is_subscribed &&
+                !subchapter?.video?.is_free &&
+                !subscribedFeatures?.includes('material'))
+        );
+    }, [is_subscribed, subchapter?.video?.is_free, subscribedFeatures]);
+
     return (
         <div className="w-full max-w-[1368px] mx-auto lg:h-[calc(100vh-32px)] lg:overflow-hidden">
             <div className="flex justify-between items-center mb-4">
@@ -109,92 +123,105 @@ function MateriLearnContainer({
                         next_subchapter_slug={subchapter?.next_subchapter_slug}
                     />
 
-                    {course ? (
-                        <p className="text-white text-xs mt-4 lg:text-base lg:mt-10">
-                            Kelas Persiapan UTBK SNBT - {course.course_name}
-                        </p>
-                    ) : (
-                        <div className="mt-10 animate-pulse bg-[#333333] w-64 h-4 rounded-full"></div>
-                    )}
-
-                    {subchapter ? (
-                        <h1 className="text-white font-bold text-base mt-3 lg:text-2xl lg:mt-4">
-                            {subchapter.subchapter_name}
-                        </h1>
-                    ) : (
-                        <div className="mt-4 animate-pulse bg-[#333333] w-[512px] h-5 rounded-full"></div>
-                    )}
-
-                    <div className="flex flex-col">
-                        <div className="order-2 lg:order-1 flex items-center gap-3 mt-6 lg:mt-4">
-                            {subchapter?.video?.transcript ? (
-                                <Button
-                                    disabled={!course || !subchapter}
-                                    onClick={() => setIsTranscriptOpen(true)}
-                                    variant="neutral"
-                                    className="group flex-shrink flex items-center gap-1.5 text-sm !p-2 lg:!py-2 lg:!px-4">
-                                    <TranscriptIcon className="fill-white w-4 h-4 group-disabled:fill-neutral-300/30" />
-                                    <span className="hidden lg:block">
-                                        Transcript
-                                    </span>
-                                </Button>
+                    {subchapter?.type_name === 'lecture' && !isShowPaywall ? (
+                        <>
+                            {course ? (
+                                <p className="text-white text-xs mt-4 lg:text-base lg:mt-10">
+                                    Kelas Persiapan UTBK SNBT -{' '}
+                                    {course.course_name}
+                                </p>
                             ) : (
-                                <></>
+                                <div className="mt-10 animate-pulse bg-[#333333] w-64 h-4 rounded-full"></div>
                             )}
 
-                            {isAuthenticated ? (
-                                <div className="flex-shrink-0">
-                                    <RatingButton
+                            {subchapter ? (
+                                <h1 className="text-white font-bold text-base mt-3 lg:text-2xl lg:mt-4">
+                                    {subchapter.subchapter_name}
+                                </h1>
+                            ) : (
+                                <div className="mt-4 animate-pulse bg-[#333333] w-[512px] h-5 rounded-full"></div>
+                            )}
+                        </>
+                    ) : (
+                        <></>
+                    )}
+
+                    {subchapter?.type_name === 'lecture' && !isShowPaywall ? (
+                        <div className="flex flex-col">
+                            <div className="order-2 lg:order-1 flex items-center gap-3 mt-6 lg:mt-4">
+                                {subchapter?.video?.transcript ? (
+                                    <Button
                                         disabled={!course || !subchapter}
+                                        onClick={() =>
+                                            setIsTranscriptOpen(true)
+                                        }
+                                        variant="neutral"
+                                        className="group flex-shrink flex items-center gap-1.5 text-sm !p-2 lg:!py-2 lg:!px-4">
+                                        <TranscriptIcon className="fill-white w-4 h-4 group-disabled:fill-neutral-300/30" />
+                                        <span className="hidden lg:block">
+                                            Transcript
+                                        </span>
+                                    </Button>
+                                ) : (
+                                    <></>
+                                )}
+
+                                {isAuthenticated ? (
+                                    <div className="flex-shrink-0">
+                                        <RatingButton
+                                            disabled={!course || !subchapter}
+                                        />
+                                    </div>
+                                ) : (
+                                    <></>
+                                )}
+
+                                <div className="flex-shrink-0">
+                                    <ShareButton
+                                        disabled={!course || !subchapter}
+                                        typeCopy="COURSE VIDEO"
+                                        shareCopy={`Coba deh nonton Video ${subchapter?.subchapter_name} dari Gradient Academy!`}
                                     />
                                 </div>
-                            ) : (
-                                <></>
-                            )}
 
-                            <div className="flex-shrink-0">
-                                <ShareButton
+                                <Button
                                     disabled={!course || !subchapter}
-                                    typeCopy="COURSE VIDEO"
-                                    shareCopy={`Coba deh nonton Video ${subchapter?.subchapter_name} dari Gradient Academy!`}
+                                    onClick={() => setIsCopilotModalOpen(true)}
+                                    variant="primary"
+                                    className="flex-grow max-w-[256px] flex-shrink-0 !py-2 !px-4 flex justify-center items-center gap-1.5 text-sm [&>svg]:w-4 [&>svg]:h-4 lg:flex-grow-0">
+                                    <CopilotIconFill />
+                                    <span>Tanya Copilot AI</span>
+                                </Button>
+
+                                <CopilotModal
+                                    key={subchapter?.chapter_id}
+                                    isOpen={isCopilotModalOpen}
+                                    setOpen={setIsCopilotModalOpen}
+                                    xlWidth="xl:w-[29.5rem]"
+                                    currentContext={currentVideoContext}
+                                    chapterId={subchapter?.chapter_id}
                                 />
                             </div>
 
-                            <Button
-                                disabled={!course || !subchapter}
-                                onClick={() => setIsCopilotModalOpen(true)}
-                                variant="primary"
-                                className="flex-grow max-w-[256px] flex-shrink-0 !py-2 !px-4 flex justify-center items-center gap-1.5 text-sm [&>svg]:w-4 [&>svg]:h-4 lg:flex-grow-0">
-                                <CopilotIconFill />
-                                <span>Tanya Copilot AI</span>
-                            </Button>
-
-                            <CopilotModal
-                                key={subchapter?.chapter_id}
-                                isOpen={isCopilotModalOpen}
-                                setOpen={setIsCopilotModalOpen}
-                                xlWidth="xl:w-[29.5rem]"
-                                currentContext={currentVideoContext}
-                                chapterId={subchapter?.chapter_id}
-                            />
-                        </div>
-
-                        <div className="order-1 mt-3 lg:order-2 lg:mt-10">
-                            {subchapter ? (
-                                <LecturerProfile
-                                    lecturers={subchapter.video?.lecturers}
-                                />
-                            ) : (
-                                <div className="animate-pulse flex items-center gap-3">
-                                    <div className="bg-[#333333] shrink-0 rounded-full w-11 h-11"></div>
-                                    <div className="space-y-3">
-                                        <div className="bg-[#333333] w-32 h-4 rounded-full"></div>
-                                        <div className="bg-[#333333] w-64 h-3 rounded-full"></div>
+                            <div className="order-1 mt-3 lg:order-2 lg:mt-10">
+                                {subchapter ? (
+                                    <LecturerProfile
+                                        lecturers={subchapter.video?.lecturers}
+                                    />
+                                ) : (
+                                    <div className="animate-pulse flex items-center gap-3">
+                                        <div className="bg-[#333333] shrink-0 rounded-full w-11 h-11"></div>
+                                        <div className="space-y-3">
+                                            <div className="bg-[#333333] w-32 h-4 rounded-full"></div>
+                                            <div className="bg-[#333333] w-64 h-3 rounded-full"></div>
+                                        </div>
                                     </div>
-                                </div>
-                            )}
+                                )}
+                            </div>
                         </div>
-                    </div>
+                    ) : (
+                        <></>
+                    )}
                 </div>
 
                 {isDesktopBreakpoints ? (
