@@ -1,6 +1,5 @@
 import Button from 'commons/components/elements/Button';
 import { FaChevronLeft } from 'react-icons/fa';
-import VideoPlayerContainer from 'courses/components/VideoPlayerContainer';
 import { useRouter } from 'next/router';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import { useGetSubchapterDetailV2Query } from 'courses/redux/api/privateCourseV2Api';
@@ -28,6 +27,12 @@ const MateriDetailBox = dynamic(
 const MateriDetailSheet = dynamic(
     () => import('courses/components/utbk/MateriDetailSheet')
 );
+
+const VideoPlayerContainer = dynamic(
+    () => import('courses/components/VideoPlayerContainer')
+);
+
+const MateriArticle = dynamic(() => import('courses/components/MateriArticle'));
 
 interface MateriLearnContainerProps {
     subchapter: SubChapter | undefined;
@@ -115,13 +120,27 @@ function MateriLearnContainer({
 
             <div className="grid grid-cols-8 gap-6">
                 <div className="w-full max-w-[844px] mx-auto col-span-8 pb-[calc(80px+24px)] lg:col-span-5 lg:pb-0">
-                    <VideoPlayerContainer
-                        isLoadingData={isLoading}
-                        subchapter_name={subchapter?.subchapter_name}
-                        video={subchapter?.video}
-                        next_chapter_slug={subchapter?.next_chapter_slug}
-                        next_subchapter_slug={subchapter?.next_subchapter_slug}
-                    />
+                    {subchapter?.type_name === 'lecture' ? (
+                        <VideoPlayerContainer
+                            isLoadingData={isLoading}
+                            subchapter_name={subchapter?.subchapter_name}
+                            video={subchapter?.video}
+                            next_chapter_slug={subchapter?.next_chapter_slug}
+                            next_subchapter_slug={
+                                subchapter?.next_subchapter_slug
+                            }
+                        />
+                    ) : subchapter?.type_name === 'notebook' ? (
+                        <MateriArticle
+                            article={subchapter.notebook}
+                            course_name={course?.course_name}
+                            chapter_id={subchapter.chapter_id}
+                            chapter_name={subchapter.chapter_name}
+                            subchapter_name={subchapter.subchapter_name}
+                        />
+                    ) : (
+                        <div className="animate-pulse aspect-video bg-[#333333] rounded-lg"></div>
+                    )}
 
                     {subchapter?.type_name === 'lecture' && !isShowPaywall ? (
                         <>
