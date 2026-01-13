@@ -94,14 +94,14 @@ const SubtestResultSummaryCard = ({ subtest }: { subtest: ProblemSetItem }) => {
     };
 
     return (
-        <div className="flex flex-col gap-6 rounded-2xl px-4 py-3 bg-[#20222E]">
-            <div className="flex flex-col gap-2">
+        <div className="rounded-2xl px-4 py-3 bg-[#20222E]">
+            <div className="flex flex-col gap-2 mb-2 lg:mb-6">
                 <div className="flex flex-row justify-between">
                     <h3 className="text-white font-semibold">
                         {subtest.title}
                     </h3>
                     <div className="flex flex-row items-center gap-1">
-                        <span className="text-white font-semibold">
+                        <span className="hidden text-white font-semibold lg:block">
                             {subtest.score}
                         </span>
                         {exercise?.tryout_type !== 'UTBK' && (
@@ -126,17 +126,24 @@ const SubtestResultSummaryCard = ({ subtest }: { subtest: ProblemSetItem }) => {
                 </div>
             </div>
 
-            <div className="flex flex-row items-center justify-between">
-                <div className="flex flex-row items-center gap-1">
-                    <span className="text-white text-sm">
-                        {subtest.correct_answers} benar
-                    </span>
-                    <span className="text-[#999999] text-sm">
+            <div className="lg:flex lg:items-center lg:justify-between">
+                <div className="flex justify-between items-center mb-4 lg:mb-0">
+                    <p className="text-[#999999] text-sm">
+                        <span className="text-white">
+                            {subtest.correct_answers} benar
+                        </span>{' '}
                         dari {subtest.total_questions} soal
+                    </p>
+
+                    <span className="text-white font-semibold text-sm lg:hidden">
+                        {subtest.score}
                     </span>
                 </div>
 
-                <Button variant="primary" onClick={onClickDiscussion}>
+                <Button
+                    variant="primary"
+                    onClick={onClickDiscussion}
+                    className="shrink-0 text-xs !py-1.5 block ml-auto lg:text-sm lg:!py-2">
                     Lihat Pembahasan
                 </Button>
             </div>

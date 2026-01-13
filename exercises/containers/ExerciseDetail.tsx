@@ -89,7 +89,7 @@ const ExerciseDetail = () => {
                 <div className="flex flex-col h-full gap-6">
                     <ExerciseCompleteHeader />
                     {exercise.tryout_type === 'UTBK' ? (
-                        <div className="flex flex-col-reverse lg:flex-row gap-6 lg:gap-10 justify-center lg:overflow-hidden">
+                        <div className="flex flex-col lg:flex-row gap-6 lg:gap-10 justify-center lg:overflow-hidden">
                             <div className="w-full lg:w-[64%] flex flex-col h-full gap-6 overflow-auto">
                                 <div className="flex w-full flex-col lg:flex-row gap-5 lg:gap-0 justify-center">
                                     <ResultSummary />
