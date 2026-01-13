@@ -239,7 +239,7 @@ export const LeaderboardReport = () => {
                 )}>
                 <Button
                     variant="primary"
-                    className="w-full text-center"
+                    className="w-full text-center !py-3"
                     href={`/latihan/`}
                     size="large">
                     Selesai
