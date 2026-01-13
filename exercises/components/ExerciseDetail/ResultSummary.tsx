@@ -65,9 +65,9 @@ const ResultSummary = ({ isReportMode }: { isReportMode?: boolean }) => {
             </div>
 
             {/* Score Display */}
-            <div className="space-y-2 lg:px-0 px-6">
+            <div className="!mt-1 lg:!mt-2 lg:px-0 px-6">
                 <div className="flex items-baseline gap-2">
-                    <span className="text-[32px] font-bold text-white">
+                    <span className="text-[32px] leading-[120%] font-bold text-white">
                         {parseFloat(score?.toFixed(2)).toString()}
                     </span>
                     {exercise?.tryout_type !== 'UTBK' && (
