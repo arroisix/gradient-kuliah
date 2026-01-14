@@ -12,6 +12,7 @@ import rehypeKatex from 'rehype-katex';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
+import Button from 'commons/components/elements/Button';
 
 interface ArticleMarkdownProps {
     page: number | undefined;
@@ -88,6 +89,13 @@ function ArticleMarkdown({
                     {(article?.page_content || content?.page_content) ?? ''}
                 </ReactMarkdown>
             )}
+
+            <Button
+                variant="primary"
+                type="button"
+                className="text-base w-full !py-3 mt-4 lg:w-full lg:max-w-[328px] lg:mt-8">
+                Selesai
+            </Button>
         </div>
     );
 }
