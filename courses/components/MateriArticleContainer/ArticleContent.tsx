@@ -74,8 +74,8 @@ function ArticleContent({
             : undefined;
 
     return (
-        <div className="bg-[#101010] py-4 px-6 rounded-2xl overflow-hidden lg:h-[calc(100vh-32px-36px-16px)]">
-            <div className="mb-4 flex justify-between flex-col gap-4 lg:flex-row lg:items-center lg:gap-0">
+        <div className="bg-black rounded-2xl overflow-hidden lg:bg-[#101010] lg:h-[calc(100vh-32px-36px-16px)] lg:pb-4">
+            <div className="mb-4 flex justify-between flex-col gap-4 lg:mb-0 lg:flex-row lg:items-center lg:gap-0 lg:border-b lg:border-b-[#222222] lg:py-4 lg:px-6">
                 <h1 className="text-white font-semibold text-xl lg:font-bold lg:text-2xl">
                     {subchapter.subchapter_name}
                 </h1>
@@ -107,7 +107,7 @@ function ArticleContent({
                     page={page}
                 />
             ) : (
-                <div className="animate-pulse bg-[#333333] rounded-lg h-[calc(100vh-32px-36px-16px-32px-36px-16px)] mt-4"></div>
+                <div className="animate-pulse bg-[#333333] rounded-2xl mt-4 h-[calc(100vh-32px-30px-16px-80px-24px-80px-16px)] lg:h-[calc(100vh-32px-36px-16px-32px-36px-16px-16px)] lg:mx-6"></div>
             )}
         </div>
     );

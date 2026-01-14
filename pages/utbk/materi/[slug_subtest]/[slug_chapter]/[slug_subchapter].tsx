@@ -22,7 +22,7 @@ function BelajarPageProps({
     return (
         <LearningProvider>
             <VideoTranscriptProvider>
-                <div className="w-screen min-h-screen bg-black px-8 py-4">
+                <div className="w-screen min-h-screen bg-black py-4">
                     <MateriLearnContainer
                         subchapter={subchapter}
                         course={course}

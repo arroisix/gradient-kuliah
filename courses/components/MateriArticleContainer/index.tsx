@@ -3,10 +3,10 @@ import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { useRouter } from 'next/router';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import dynamic from 'next/dynamic';
+import ArticleContent from './ArticleContent';
 
 const AuthWall = dynamic(() => import('./AuthWall'));
 const VideoPricingList = dynamic(() => import('../utbk/VideoPricingList'));
-const ArticleContent = dynamic(() => import('./ArticleContent'));
 
 interface MateriArticleProps {
     subchapter: SubChapter;
@@ -43,7 +43,7 @@ function MateriArticleContainer({
 
     if (isLoading) {
         return (
-            <div className="animate-pulse bg-[#333333] rounded-lg h-[calc(100vh-32px-36px-16px)]"></div>
+            <div className="animate-pulse bg-[#333333] rounded-2xl h-[calc(100vh-32px-30px-16px-80px-24px)] lg:h-[calc(100vh-32px-36px-16px)]"></div>
         );
     }
 

@@ -6,29 +6,22 @@ import { useGetLearningProgressQuery } from 'courses/redux/api/learningExperienc
 import { ListIcon, XIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import { SearchMateri } from './SearchMateri';
 import { MateriDetailContent } from './MateriDetailContent';
-import VideoTranscript from './VideoTranscript';
 
 interface MateriDetailSheetProps {
     course: CourseDetail;
     next_chapter_slug: string;
     next_subchapter_slug: string;
     next_subchapter_name: string;
-    transcript?: Transcript[];
-    isTranscriptOpen: boolean;
-    setIsTranscriptOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 function MateriDetailSheet({
     course,
     next_chapter_slug,
     next_subchapter_slug,
-    next_subchapter_name,
-    transcript,
-    isTranscriptOpen,
-    setIsTranscriptOpen
+    next_subchapter_name
 }: MateriDetailSheetProps): JSX.Element {
     const [isOpen, setIsOpen] = useState(false);
     const { isAuthenticated } = useAuth();
@@ -88,23 +81,6 @@ function MateriDetailSheet({
                     {next_subchapter_slug ? 'Lanjut' : 'Selesai'}
                 </Link>
             </div>
-
-            {isTranscriptOpen ? (
-                <Modal
-                    isOpen={isTranscriptOpen}
-                    setOpen={(value) => setIsTranscriptOpen(value)}
-                    permanent={true}
-                    variant="dark"
-                    containerClassName="modal modal-open modal-bottom lg:modal-middle min-h-[100px]"
-                    className="bg-[#181818] h-screen p-0">
-                    <VideoTranscript
-                        transcript={transcript}
-                        setIsOpen={setIsTranscriptOpen}
-                    />
-                </Modal>
-            ) : (
-                <></>
-            )}
 
             {isOpen ? (
                 <Modal

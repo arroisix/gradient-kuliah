@@ -67,7 +67,7 @@ function ArticleMarkdown({
     }, [initialContent, isPreview]);
 
     return (
-        <div className="lg:h-[calc(100vh-32px-36px-16px-32px-36px-16px)] lg:overflow-scroll">
+        <div className="lg:mx-6 lg:h-[calc(100vh-32px-36px-16px-32px-36px-16px)] lg:overflow-scroll">
             {article?.is_tiptap || content?.is_tiptap ? (
                 <AstroNotesContentJSON
                     content={
