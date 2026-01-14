@@ -15,6 +15,7 @@ import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { MateriLearnNavigation } from 'courses/components/utbk/MateriLearnNavigation';
 import dynamic from 'next/dynamic';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
+import { BelajarPageProps } from 'pages/utbk/materi/[slug_subtest]/[slug_chapter]/[slug_subchapter]';
 
 const RatingButton = dynamic(
     () => import('courses/components/utbk/RatingButton')
@@ -32,17 +33,16 @@ const VideoPlayerContainer = dynamic(
     () => import('courses/components/VideoPlayerContainer')
 );
 
-const MateriArticle = dynamic(() => import('courses/components/MateriArticle'));
-
-interface MateriLearnContainerProps {
-    subchapter: SubChapter | undefined;
-    course: CourseDetail | undefined;
-}
+const MateriArticleContainer = dynamic(
+    () => import('courses/components/MateriArticleContainer')
+);
 
 function MateriLearnContainer({
     subchapter: ssrSubchapter,
-    course: ssrCourse
-}: MateriLearnContainerProps): JSX.Element {
+    course: ssrCourse,
+    book,
+    content
+}: BelajarPageProps): JSX.Element {
     const [isTranscriptOpen, setIsTranscriptOpen] = useState(false);
     const [isCopilotModalOpen, setIsCopilotModalOpen] =
         useState<boolean>(false);
@@ -131,12 +131,11 @@ function MateriLearnContainer({
                             }
                         />
                     ) : subchapter?.type_name === 'notebook' ? (
-                        <MateriArticle
-                            article={subchapter.notebook}
-                            course_name={course?.course_name}
-                            chapter_id={subchapter.chapter_id}
-                            chapter_name={subchapter.chapter_name}
-                            subchapter_name={subchapter.subchapter_name}
+                        <MateriArticleContainer
+                            course={course as CourseDetail}
+                            subchapter={subchapter as SubChapter}
+                            book={book}
+                            content={content}
                         />
                     ) : (
                         <div className="animate-pulse aspect-video bg-[#333333] rounded-lg"></div>

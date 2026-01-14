@@ -4,15 +4,20 @@ import type { GetStaticPaths, GetStaticPropsResult } from 'next';
 import { LearningProvider } from 'courses/contexts/LearningProvider';
 import { MateriLearnContainer } from 'courses/containers/utbk/MateriLearnContainer';
 import { VideoTranscriptProvider } from 'courses/contexts/VideoTranscriptProvider';
+import CryptoJS from 'crypto-js';
 
-interface BelajarPageProps {
-    subchapter: SubChapter | undefined;
-    course: CourseDetail | undefined;
+export interface BelajarPageProps {
+    subchapter: SubChapter | null;
+    course: CourseDetail | null;
+    book: BookDetailInterface | null;
+    content: string | null;
 }
 
 function BelajarPageProps({
     subchapter,
-    course
+    course,
+    book,
+    content
 }: BelajarPageProps): JSX.Element {
     return (
         <LearningProvider>
@@ -21,6 +26,8 @@ function BelajarPageProps({
                     <MateriLearnContainer
                         subchapter={subchapter}
                         course={course}
+                        book={book}
+                        content={content}
                     />
                 </div>
             </VideoTranscriptProvider>
@@ -53,14 +60,51 @@ export const getStaticProps = async ({
 
         const subchapter = subchapterResponse.data;
         const course = courseResponse.data.course_detail;
+        let book: BookDetailInterface | null = null;
+        let content: string | null = null;
 
         if (!subchapter) {
             // resource not found -> show 404
             return { notFound: true };
         }
 
+        if (subchapter.type_name === 'notebook') {
+            const page = subchapter.notebook?.page;
+            const slug = subchapter.notebook?.book_slug;
+            const FRONTEND_ACCESS_TOKEN = process.env.FRONTEND_ACCESS_TOKEN;
+
+            const [getBookContent, getBookDetail] = await Promise.all([
+                page === 1
+                    ? axios.get<GetAstronotesContentResponse>(
+                          `${config.API_BASE_URL}books/public/${slug}/preview/`
+                      )
+                    : axios.get<GetAstronotesContentResponse>(
+                          `${config.API_BASE_URL}books/${slug}?page=${page}`,
+                          {
+                              headers: {
+                                  'X-Special-Request': FRONTEND_ACCESS_TOKEN
+                              }
+                          }
+                      ),
+                axios.get<GetBookDetailResponse>(
+                    `${config.API_BASE_URL}books/${slug}/detail/`
+                )
+            ]);
+
+            const encryptedContent = CryptoJS.AES.encrypt(
+                JSON.stringify(getBookContent.data),
+                FRONTEND_ACCESS_TOKEN as string
+            );
+
+            book = getBookDetail.data.book;
+            content =
+                page === 1
+                    ? JSON.stringify(getBookContent.data)
+                    : encryptedContent.toString();
+        }
+
         return {
-            props: { subchapter, course },
+            props: { subchapter, course, book, content },
             // normal ISR interval
             revalidate: 60 * 60
         };
@@ -89,6 +133,8 @@ export const getStaticProps = async ({
                 // minimal props the page expects — be explicit in the page component
                 subchapter: null as any,
                 course: null as any,
+                book: null,
+                content: null,
                 // you can pass an error flag/message to the page
                 __errorMessage: 'Could not load data, please try again later'
             } as any,
