@@ -13,19 +13,17 @@ import {
 } from 'courses/redux/api/astronotesApi';
 import { ArticleMarkdown } from './ArticleMarkdown';
 
-interface MateriArticleContentProps {
-    course: CourseDetail;
+interface ArticleContentProps {
     subchapter: SubChapter;
     book: BookDetailInterface;
     content: string | null;
 }
 
-function MateriArticleContent({
-    course,
+function ArticleContent({
     subchapter,
     book,
     content
-}: MateriArticleContentProps): JSX.Element {
+}: ArticleContentProps): JSX.Element {
     const [isCopilotOpen, setIsCopilotOpen] = useState<boolean>(false);
     const [crawlerBot, setCrawlerBot] = useState('');
 
@@ -69,10 +67,9 @@ function MateriArticleContent({
         article && subchapter.subchapter_name
             ? {
                   id: article.page_id,
-                  title: course?.course_name ?? '',
-                  subtitle: subchapter.chapter_name,
-                  header: subchapter.subchapter_name,
-                  contentType: 'course' as const
+                  title: book.title,
+                  header: `Halaman ${page}`,
+                  contentType: 'astronotes_content' as const
               }
             : undefined;
 
@@ -116,4 +113,4 @@ function MateriArticleContent({
     );
 }
 
-export default MateriArticleContent;
+export default ArticleContent;

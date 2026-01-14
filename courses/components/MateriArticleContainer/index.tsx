@@ -6,17 +6,15 @@ import dynamic from 'next/dynamic';
 
 const AuthWall = dynamic(() => import('./AuthWall'));
 const VideoPricingList = dynamic(() => import('../utbk/VideoPricingList'));
-const MateriArticleContent = dynamic(() => import('./MateriArticleContent'));
+const ArticleContent = dynamic(() => import('./ArticleContent'));
 
 interface MateriArticleProps {
-    course: CourseDetail;
     subchapter: SubChapter;
     book: BookDetailInterface | null;
     content: string | null;
 }
 
 function MateriArticleContainer({
-    course,
     subchapter,
     content,
     book: ssrBook
@@ -58,8 +56,7 @@ function MateriArticleContainer({
     }
 
     return (
-        <MateriArticleContent
-            course={course}
+        <ArticleContent
             subchapter={subchapter}
             book={book as BookDetailInterface}
             content={content}

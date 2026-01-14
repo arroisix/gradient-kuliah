@@ -132,7 +132,6 @@ function MateriLearnContainer({
                         />
                     ) : subchapter?.type_name === 'notebook' ? (
                         <MateriArticleContainer
-                            course={course as CourseDetail}
                             subchapter={subchapter as SubChapter}
                             book={book}
                             content={content}
