@@ -8,7 +8,7 @@ import ArticleContent from './ArticleContent';
 const AuthWall = dynamic(() => import('./AuthWall'));
 const VideoPricingList = dynamic(() => import('../utbk/VideoPricingList'));
 
-interface MateriArticleProps {
+interface MateriArticleContainerProps {
     subchapter: SubChapter;
     book: BookDetailInterface | null;
     content: string | null;
@@ -18,7 +18,7 @@ function MateriArticleContainer({
     subchapter,
     content,
     book: ssrBook
-}: MateriArticleProps): JSX.Element {
+}: MateriArticleContainerProps): JSX.Element {
     const router = useRouter();
     const { slug_subtest } = router.query as { slug_subtest: string };
 
