@@ -13,8 +13,11 @@ import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import Button from 'commons/components/elements/Button';
+import { usePostFinishArticleMutation } from 'courses/redux/api/astronotesApi';
 
 interface ArticleMarkdownProps {
+    subchapter_slug: string | undefined;
+    book_slug: string | undefined;
     page: number | undefined;
     initialContent: string | null;
     book: BookDetailInterface;
@@ -22,11 +25,14 @@ interface ArticleMarkdownProps {
 }
 
 function ArticleMarkdown({
+    subchapter_slug,
+    book_slug,
     page,
     initialContent,
     book,
     article
 }: ArticleMarkdownProps): JSX.Element {
+    const [finishArticle, { isLoading }] = usePostFinishArticleMutation();
     const [content, setContent] = useState<GetAstronotesContentResponse | null>(
         null
     );
@@ -50,6 +56,14 @@ function ArticleMarkdown({
         ) && 'hidden md:block',
         smallText ? 'text-xs sm:text-sm' : 'text-sm sm:text-base'
     );
+
+    const handleFinishArticle = () => {
+        finishArticle({
+            subchapter_slug: subchapter_slug as string,
+            book_slug: book_slug as string,
+            page: article.current_page
+        });
+    };
 
     useEffect(() => {
         const key = getCookieValue(IS_BOT);
@@ -91,6 +105,8 @@ function ArticleMarkdown({
             )}
 
             <Button
+                onClick={handleFinishArticle}
+                disabled={isLoading}
                 variant="primary"
                 type="button"
                 className="text-base w-full !py-3 mt-4 lg:w-full lg:max-w-[328px] lg:mt-8">

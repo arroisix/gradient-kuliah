@@ -105,6 +105,8 @@ function ArticleContent({
                     article={article as GetAstronotesContentResponse}
                     initialContent={content}
                     page={page}
+                    subchapter_slug={subchapter.subchapter_slug}
+                    book_slug={subchapter.notebook?.book_slug}
                 />
             ) : (
                 <div className="animate-pulse bg-[#333333] rounded-2xl mt-4 h-[calc(100vh-32px-30px-16px-80px-24px-80px-16px)] lg:h-[calc(100vh-32px-36px-16px-32px-36px-16px-16px)] lg:mx-6"></div>
