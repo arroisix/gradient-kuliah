@@ -4,7 +4,7 @@ import { ShareButton } from './ShareButton';
 import CopilotIconFill from 'copilot/assets/CopilotIconFill';
 import dynamic from 'next/dynamic';
 import { LecturerProfile } from './LecturerProfile';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { useAuth } from 'authentication/contexts/AuthProvider';
 import { useWindowSize } from 'usehooks-ts';
 
@@ -18,13 +18,16 @@ const RatingButton = dynamic(
 interface MateriVideoProfileProps {
     course: CourseDetail;
     subchapter: SubChapter;
+    isTranscriptOpen: boolean;
+    setIsTranscriptOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 function MateriVideoProfile({
     course,
-    subchapter
+    subchapter,
+    isTranscriptOpen,
+    setIsTranscriptOpen
 }: MateriVideoProfileProps): JSX.Element {
-    const [isTranscriptOpen, setIsTranscriptOpen] = useState(false);
     const [isCopilotModalOpen, setIsCopilotModalOpen] =
         useState<boolean>(false);
 
@@ -107,7 +110,7 @@ function MateriVideoProfile({
                 </div>
             </div>
 
-            {isTranscriptOpen && width < 1024 ? (
+            {width < 1024 ? (
                 <Modal
                     isOpen={isTranscriptOpen}
                     setOpen={(value) => setIsTranscriptOpen(value)}

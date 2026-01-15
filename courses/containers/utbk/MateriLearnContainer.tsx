@@ -117,6 +117,8 @@ function MateriLearnContainer({
                                 <MateriVideoProfile
                                     course={course as CourseDetail}
                                     subchapter={subchapter}
+                                    isTranscriptOpen={isTranscriptOpen}
+                                    setIsTranscriptOpen={setIsTranscriptOpen}
                                 />
                             ) : (
                                 <></>
