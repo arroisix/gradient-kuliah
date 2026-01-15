@@ -89,7 +89,7 @@ function MateriDetailSheet({
                     permanent={true}
                     variant="dark"
                     containerClassName="modal modal-open modal-bottom lg:modal-middle min-h-[100px]"
-                    className="bg-[#181818] h-screen p-0">
+                    className="bg-[#181818] overflow-hidden h-screen p-0">
                     <>
                         <div className="bg-[#101010] p-6">
                             <div className="flex justify-between items-center mb-4">

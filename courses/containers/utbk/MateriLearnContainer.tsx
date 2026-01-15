@@ -100,7 +100,7 @@ function MateriLearnContainer({
             <div className="grid grid-cols-8 gap-6">
                 <div className="w-full max-w-[844px] mx-auto col-span-8 pb-[calc(80px+24px)] lg:col-span-5 lg:pb-0">
                     {subchapter?.type_name === 'lecture' ? (
-                        <div className="lg:h-[calc(100vh-32px-36px-16px)] lg:overflow-scroll">
+                        <div className="lg:h-[calc(100vh-32px-36px-16px)] lg:overflow-scroll lg:no-scrollbar">
                             <VideoPlayerContainer
                                 isLoadingData={isLoading}
                                 subchapter_name={subchapter?.subchapter_name}

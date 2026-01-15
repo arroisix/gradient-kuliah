@@ -97,7 +97,7 @@ function VideoTranscript({
                 </button>
             </div>
 
-            <div className="flex flex-col gap-2 mt-6 lg:h-[calc(100vh-32px-36px-16px-56px-24px-24px)] lg:overflow-scroll">
+            <div className="flex flex-col gap-2 my-6 overflow-scroll no-scrollbar h-[calc(100vh-5em-56px-48px)] lg:h-[calc(100vh-32px-36px-16px-56px-24px-24px)]">
                 {transcript?.map((value, index) => (
                     <TranscriptTimestamp
                         key={value.duration}

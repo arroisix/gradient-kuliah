@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 import { LecturerProfile } from './LecturerProfile';
 import { useState } from 'react';
 import { useAuth } from 'authentication/contexts/AuthProvider';
+import { useWindowSize } from 'usehooks-ts';
 
 const Modal = dynamic(() => import('commons/components/modules/Modal'));
 const CopilotModal = dynamic(() => import('copilot/components/CopilotModal'));
@@ -28,6 +29,7 @@ function MateriVideoProfile({
         useState<boolean>(false);
 
     const { isAuthenticated } = useAuth();
+    const { width } = useWindowSize();
 
     const currentVideoContext =
         subchapter?.video && subchapter?.subchapter_name
@@ -105,14 +107,14 @@ function MateriVideoProfile({
                 </div>
             </div>
 
-            {isTranscriptOpen ? (
+            {isTranscriptOpen && width < 1024 ? (
                 <Modal
                     isOpen={isTranscriptOpen}
                     setOpen={(value) => setIsTranscriptOpen(value)}
                     permanent={true}
                     variant="dark"
                     containerClassName="modal modal-open modal-bottom lg:modal-middle min-h-[100px]"
-                    className="bg-[#181818] h-screen p-0">
+                    className="bg-[#181818] overflow-hidden h-screen p-0">
                     <VideoTranscript
                         transcript={subchapter.video?.transcript}
                         setIsOpen={setIsTranscriptOpen}
