@@ -288,33 +288,36 @@ function SetTargetForm({
                             </div>
                         ))}
 
-                        <Button
-                            onClick={() => {
-                                setValues([
-                                    ...values,
-                                    {
-                                        id: uuidv4(),
-                                        institution: '',
-                                        major: ''
-                                    }
-                                ]);
-                            }}
-                            disabled={
-                                values.length === 4 ||
-                                (values.length > 0 &&
-                                    values[values.length - 1].institution ===
-                                        '') ||
-                                (values.length > 0 &&
-                                    values[values.length - 1].major === '')
-                            }
-                            variant="custom"
-                            type="button"
-                            className="!bg-transparent flex justify-center items-center gap-2 border border-dashed border-[#4B4E5F] !rounded-lg">
-                            <FaPlus className="fill-[#666666] w-5 h-5" />
-                            <span className="text-[#666666] text-sm">
-                                Tambah Pilihan
-                            </span>
-                        </Button>
+                        {values.length < 4 ? (
+                            <Button
+                                onClick={() => {
+                                    setValues([
+                                        ...values,
+                                        {
+                                            id: uuidv4(),
+                                            institution: '',
+                                            major: ''
+                                        }
+                                    ]);
+                                }}
+                                disabled={
+                                    (values.length > 0 &&
+                                        values[values.length - 1]
+                                            .institution === '') ||
+                                    (values.length > 0 &&
+                                        values[values.length - 1].major === '')
+                                }
+                                variant="custom"
+                                type="button"
+                                className="!bg-transparent flex justify-center items-center gap-2 border border-dashed border-[#4B4E5F] !rounded-lg">
+                                <FaPlus className="fill-[#666666] w-5 h-5" />
+                                <span className="text-[#666666] text-sm">
+                                    Tambah Pilihan
+                                </span>
+                            </Button>
+                        ) : (
+                            <></>
+                        )}
                     </div>
 
                     <Button

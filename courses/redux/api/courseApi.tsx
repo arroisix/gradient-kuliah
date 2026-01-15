@@ -29,7 +29,13 @@ export const courseApi = baseApi.injectEndpoints({
                               ...result.subchapters.map(({ video_id }) => ({
                                   type: 'WATCH_PROGRESS' as const,
                                   id: video_id
-                              }))
+                              })),
+                              ...result.subchapters.map(
+                                  ({ subchapter_slug }) => ({
+                                      type: 'COURSE_SUBCHAPTERS' as const,
+                                      id: subchapter_slug
+                                  })
+                              )
                           ]
                         : [{ type: 'WATCH_PROGRESS', id: 'LIST' }]
             }

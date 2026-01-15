@@ -44,7 +44,7 @@ function MateriDetailContent({
     }
 
     return (
-        <div className="space-y-4 mt-6 h-[calc(100vh-32px-36px-16px-136px-36px-16px-24px-24px)] overflow-scroll rounded-xl">
+        <div className="space-y-4 mt-6 overflow-scroll no-scrollbar rounded-xl h-[calc(100vh-5em-176px-36px-16px-24px-16px)] lg:h-[calc(100vh-32px-36px-16px-136px-36px-16px-24px-24px)]">
             {courseContent?.chapters?.map((chapter) => (
                 <ChapterAccordion
                     key={chapter.chapter_id}
