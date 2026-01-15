@@ -82,7 +82,10 @@ function MateriLearnContainer({
     }, [is_subscribed, subchapter?.video?.is_free, subscribedFeatures]);
 
     return (
-        <div className="w-full max-w-[1368px] mx-auto px-4 lg:h-[calc(100vh-32px)] lg:overflow-hidden">
+        <div
+            className={`${
+                subchapter?.type_name === 'exercise' ? 'px-0' : 'px-4'
+            } w-full max-w-[1368px] mx-auto lg:h-[calc(100vh-32px)] lg:overflow-hidden`}>
             <div className="flex justify-between items-center mb-4">
                 <Button
                     href="/utbk/materi"
@@ -98,7 +101,7 @@ function MateriLearnContainer({
             </div>
 
             <div className="grid grid-cols-8 gap-6">
-                <div className="w-full max-w-[844px] mx-auto col-span-8 pb-[calc(80px+24px)] lg:col-span-5 lg:pb-0">
+                <div className="w-full max-w-[844px] mx-auto col-span-8 lg:col-span-5 lg:pb-0">
                     {subchapter?.type_name === 'lecture' ? (
                         <div className="lg:h-[calc(100vh-32px-36px-16px)] lg:overflow-scroll lg:no-scrollbar">
                             <VideoPlayerContainer
@@ -130,6 +133,8 @@ function MateriLearnContainer({
                             book={book}
                             content={content}
                         />
+                    ) : subchapter?.type_name === 'exercise' ? (
+                        <></>
                     ) : (
                         <div className="animate-pulse aspect-video bg-[#333333] rounded-2xl"></div>
                     )}

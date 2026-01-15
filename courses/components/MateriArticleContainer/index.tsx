@@ -5,7 +5,7 @@ import { useAuth } from 'authentication/contexts/AuthProvider';
 import dynamic from 'next/dynamic';
 import ArticleContent from './ArticleContent';
 
-const AuthWall = dynamic(() => import('./AuthWall'));
+const AuthWall = dynamic(() => import('../utbk/AuthWall'));
 const VideoPricingList = dynamic(() => import('../utbk/VideoPricingList'));
 
 interface MateriArticleContainerProps {
@@ -43,7 +43,7 @@ function MateriArticleContainer({
 
     if (isLoading) {
         return (
-            <div className="animate-pulse bg-[#333333] rounded-2xl h-[calc(100vh-32px-30px-16px-80px-24px)] lg:h-[calc(100vh-32px-36px-16px)]"></div>
+            <div className="animate-pulse bg-[#333333] rounded-2xl h-[calc(100vh-32px-30px-16px-80px)] lg:h-[calc(100vh-32px-36px-16px)]"></div>
         );
     }
 
