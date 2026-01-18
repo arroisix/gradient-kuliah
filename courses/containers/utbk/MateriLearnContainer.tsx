@@ -12,6 +12,7 @@ import dynamic from 'next/dynamic';
 import useCourseSubscription from 'courses/hooks/useCourseSubscription';
 import { BelajarPageProps } from 'pages/utbk/materi/[slug_subtest]/[slug_chapter]/[slug_subchapter]';
 import MateriArticleContainer from 'courses/components/MateriArticleContainer';
+import MateriQuizContainer from 'courses/components/MateriQuizContainer';
 
 const MateriDetailBox = dynamic(
     () => import('courses/components/utbk/MateriDetailBox')
@@ -72,6 +73,7 @@ function MateriLearnContainer({
         slug_subtest as string
     );
 
+    const isExercise = subchapter?.type_name === 'exercise';
     const isShowPaywall = useMemo((): boolean => {
         return (
             (!is_subscribed && !subchapter?.video?.is_free) ||
@@ -84,9 +86,12 @@ function MateriLearnContainer({
     return (
         <div
             className={`${
-                subchapter?.type_name === 'exercise' ? 'px-0' : 'px-4'
+                isExercise ? 'px-0' : 'px-4'
             } w-full max-w-[1368px] mx-auto lg:h-[calc(100vh-32px)] lg:overflow-hidden`}>
-            <div className="flex justify-between items-center mb-4">
+            <div
+                className={`${
+                    isExercise ? 'mx-4' : 'mx-0'
+                } flex justify-between items-center mb-4`}>
                 <Button
                     href="/utbk/materi"
                     variant="secondary"
@@ -100,8 +105,14 @@ function MateriLearnContainer({
                 <div></div>
             </div>
 
-            <div className="grid grid-cols-8 gap-6">
-                <div className="w-full max-w-[844px] mx-auto col-span-8 lg:col-span-5 lg:pb-0">
+            <div
+                className={`${
+                    isExercise ? 'lg:mx-4' : ''
+                } grid grid-cols-8 gap-6`}>
+                <div
+                    className={`${
+                        isExercise ? '' : 'max-w-[844px]'
+                    } w-full mx-auto col-span-8 lg:col-span-5 lg:pb-0`}>
                     {subchapter?.type_name === 'lecture' ? (
                         <div className="lg:h-[calc(100vh-32px-36px-16px)] lg:overflow-scroll lg:no-scrollbar">
                             <VideoPlayerContainer
@@ -134,7 +145,9 @@ function MateriLearnContainer({
                             content={content}
                         />
                     ) : subchapter?.type_name === 'exercise' ? (
-                        <></>
+                        <MateriQuizContainer
+                            subchapter={subchapter as SubChapter}
+                        />
                     ) : (
                         <div className="animate-pulse aspect-video bg-[#333333] rounded-2xl"></div>
                     )}
@@ -170,7 +183,7 @@ function MateriLearnContainer({
                             }
                         />
                     ) : (
-                        <div className="fixed bottom-0 left-0 right-0 h-[72px] bg-[#333333] rounded-tl-2xl rounded-tr-2xl" />
+                        <div className="animate-pulse fixed bottom-0 left-0 right-0 h-[72px] bg-[#333333] rounded-tl-2xl rounded-tr-2xl lg:hidden" />
                     )
                 ) : (
                     <></>
