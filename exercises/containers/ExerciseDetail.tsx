@@ -45,7 +45,8 @@ const ExerciseDetail = () => {
             exercise.tryout_type === 'UTBK' &&
             exercise?.latest_exercise_progress?.status !== 'PENDING_SCORING' &&
             exercise?.latest_exercise_progress?.status !== 'COMPLETED' &&
-            new Date() > new Date(exercise.closes_at as string)
+            new Date() > new Date(exercise.closes_at as string) &&
+            !exercise.is_auto_irt_scoring_enabled
         ) {
             toast.error('Waktu pengerjaan try out telah berakhir!', {
                 position: 'top-center',
@@ -124,7 +125,8 @@ const ExerciseDetail = () => {
         if (
             exercise?.latest_exercise_progress?.status !== 'PENDING_SCORING' &&
             exercise?.latest_exercise_progress?.status !== 'COMPLETED' &&
-            new Date() > new Date(exercise.closes_at as string)
+            new Date() > new Date(exercise.closes_at as string) &&
+            !exercise.is_auto_irt_scoring_enabled
         )
             return (
                 <LatihanLayout>

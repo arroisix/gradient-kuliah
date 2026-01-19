@@ -125,7 +125,8 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
             exercise.status !== 'COMPLETED' &&
             (new Date() < new Date(exercise.opens_at as string) ||
                 new Date() > new Date(exercise.closes_at as string) ||
-                exercise.is_time_expired)
+                exercise.is_time_expired) &&
+            !exercise.is_auto_irt_scoring_enabled
         ) {
             return '';
         }
@@ -196,6 +197,10 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
 
     const renderWorkingDate = (): JSX.Element | null => {
         if (exercise.tryout_type !== 'UTBK') return null;
+
+        if (exercise.is_auto_irt_scoring_enabled) {
+            return null;
+        }
 
         return (
             <div className="flex flex-row gap-1 items-center">
@@ -407,7 +412,9 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
                 exercise.status !== 'COMPLETED' &&
                 new Date() < new Date(exercise.opens_at as string)
             ) {
-                return renderWorkingDateNotStarted();
+                if (!exercise.is_auto_irt_scoring_enabled) {
+                    return renderWorkingDateNotStarted();
+                }
             }
 
             if (
@@ -415,7 +422,9 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
                     new Date() > new Date(exercise.closes_at as string)) ||
                 exercise.is_time_expired
             ) {
-                return renderWorkingDateHasEnded();
+                if (!exercise.is_auto_irt_scoring_enabled) {
+                    return renderWorkingDateHasEnded();
+                }
             }
         }
 
@@ -444,7 +453,8 @@ const LatihanCard: React.FC<LatihanCardProps> = ({
                     exercise.status !== 'COMPLETED' &&
                     (new Date() < new Date(exercise.opens_at as string) ||
                         new Date() > new Date(exercise.closes_at as string) ||
-                        exercise.is_time_expired)
+                        exercise.is_time_expired) &&
+                    !exercise.is_auto_irt_scoring_enabled
                     ? 'cursor-not-allowed'
                     : 'cursor-pointer',
                 className
