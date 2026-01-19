@@ -80,7 +80,8 @@ const ProblemSetRoadmap = ({
                             'PENDING_SCORING' &&
                         exercise?.latest_exercise_progress?.status !==
                             'COMPLETED' &&
-                        new Date() > new Date(exercise.closes_at as string))
+                        new Date() > new Date(exercise.closes_at as string) &&
+                        !exercise.is_auto_irt_scoring_enabled)
             }
         );
 
@@ -260,14 +261,16 @@ const ProblemSetRoadmap = ({
             {exercise?.tryout_type === 'UTBK' && (
                 <div className="flex flex-col gap-6">
                     <div className="flex flex-row gap-3">
-                        <div className="flex flex-row items-center gap-2 px-3 py-1 rounded-lg bg-[#282B3C]">
-                            <FaRegCalendar size={14} color="#ffffff" />
-                            <span className="text-xs text-white font-bold">
-                                {formatDateRange(
-                                    `${exercise.opens_at} ~ ${exercise.closes_at}`
-                                )}
-                            </span>
-                        </div>
+                        {!exercise.is_auto_irt_scoring_enabled && (
+                            <div className="flex flex-row items-center gap-2 px-3 py-1 rounded-lg bg-[#282B3C]">
+                                <FaRegCalendar size={14} color="#ffffff" />
+                                <span className="text-xs text-white font-bold">
+                                    {formatDateRange(
+                                        `${exercise.opens_at} ~ ${exercise.closes_at}`
+                                    )}
+                                </span>
+                            </div>
+                        )}
 
                         {!!exercise.exercise_code && (
                             <div className="py-1 px-3 rounded-lg border-2 border-[#333540]">

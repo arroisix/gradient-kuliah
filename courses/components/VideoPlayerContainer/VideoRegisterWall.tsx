@@ -13,7 +13,7 @@ const VideoRegisterwall = ({
     return showRegisterwall ? (
         <div
             className={cn(
-                'fixed backdrop-blur-lg w-screen h-screen z-[10000] top-0 left-0'
+                'fixed backdrop-blur-lg w-screen h-screen z-[100] top-0 left-0'
             )}>
             <div
                 className={cn(

@@ -50,6 +50,7 @@ export interface ExerciseDetail {
     opens_at?: string;
     closes_at?: string;
     score_published_at?: string;
+    is_auto_irt_scoring_enabled?: boolean;
     // TODO make it better type
     first_problemset: {
         id: string;
@@ -104,6 +105,7 @@ interface ExerciseItem {
     closes_at?: string;
     score_published_at?: string;
     is_time_expired?: boolean;
+    is_auto_irt_scoring_enabled?: boolean;
 }
 
 interface CourseFilter {

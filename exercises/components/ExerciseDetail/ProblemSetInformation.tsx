@@ -154,7 +154,7 @@ const ProblemSetInformation = ({
 
     return (
         <div className="flex flex-col">
-            {isExerciseDetailPage && (
+            {isExerciseDetailPage && !exercise?.is_auto_irt_scoring_enabled && (
                 <div className="flex flex-row gap-3 px-3 pt-3 pb-8 bg-[#252246] rounded-t-lg">
                     <IoIosInformationCircleOutline size={20} color="#B6A6F3" />
 
