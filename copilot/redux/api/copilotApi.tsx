@@ -20,6 +20,7 @@ import {
 } from '../../types/copilot';
 import config from 'redux/api/config';
 import { baseApi } from 'redux/api/baseApi';
+import { toast } from 'react-toastify';
 
 const BASE_URL = config.API_BASE_URL;
 const COPILOT_BASE_URL = `${BASE_URL}copilots/`;
@@ -95,6 +96,16 @@ export const chatApi = {
             });
 
             if (!response.ok) {
+                if (response.status === 403) {
+                    toast.error(
+                        'Kamu tidak memilik akses Copilot AI. Langganan untuk mendapatkan akses ke fitur ini.',
+                        {
+                            position: 'top-center',
+                            theme: 'colored',
+                            hideProgressBar: true
+                        }
+                    );
+                }
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
