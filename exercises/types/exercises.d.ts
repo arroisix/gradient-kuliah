@@ -49,6 +49,7 @@ export interface ExerciseDetail {
     is_free: boolean;
     opens_at?: string;
     closes_at?: string;
+    minimum_score: number | null;
     score_published_at?: string;
     // TODO make it better type
     first_problemset: {

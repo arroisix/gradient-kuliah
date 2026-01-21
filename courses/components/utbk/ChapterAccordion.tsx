@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { SubchapterList } from './SubchapterList';
 
@@ -35,6 +35,14 @@ function ChapterAccordion({
 
     const router = useRouter();
     const { slug_chapter } = router.query as { slug_chapter: string };
+
+    useEffect(() => {
+        if (slug_chapter === chapter_slug) {
+            setIsOpen(true);
+        } else {
+            setIsOpen(false);
+        }
+    }, [chapter_slug, slug_chapter]);
 
     return (
         <div className="bg-[#222222] rounded-xl">

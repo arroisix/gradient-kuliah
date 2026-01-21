@@ -49,7 +49,10 @@ function MateriQuizContainer({
 
     return (
         <div className="lg:bg-[#101010] lg:p-6 lg:rounded-2xl">
-            <QuizContent exerciseDetail={exerciseDetail} />
+            <QuizContent
+                exerciseDetail={exerciseDetail}
+                subchapter={subchapter}
+            />
         </div>
     );
 }

@@ -77,7 +77,7 @@ function MateriDetailSheet({
                     }
                     className={`${
                         next_subchapter_slug ? '' : 'w-full'
-                    } bg-[#333333] text-white text-center rounded-full text-sm leading-tight font-semibold !p-2 !px-4`}>
+                    } bg-[#5F2BCE] hover:bg-[#5F2BCE]/60 transition-all duration-300 text-white text-center rounded-full text-sm leading-tight font-semibold p-2 px-4`}>
                     {next_subchapter_slug ? 'Lanjut' : 'Selesai'}
                 </Link>
             </div>
