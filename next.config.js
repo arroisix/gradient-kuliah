@@ -41,6 +41,12 @@ module.exports = {
                 basePath: false
             },
             {
+                source: '/utbk/free-liveclass-pk-28-jan',
+                destination: 'https://forms.gle/6d98JRCpWWsAwqpo6',
+                permanent: true,
+                basePath: false
+            },
+            {
                 source: '/sitemaps/:file(.+-sitemap(?:-\\d{1,3})?\\.xml)',
                 destination: `https://gradient-sitemap.s3.ap-southeast-1.amazonaws.com/${env}/:file`,
                 permanent: false,
