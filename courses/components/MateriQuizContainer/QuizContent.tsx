@@ -22,7 +22,7 @@ function QuizContent({
     const { slug_subtest } = router.query as { slug_subtest: string };
 
     const isEverCompleted =
-        exerciseDetail?.latest_exercise_progress.status === 'COMPLETED';
+        exerciseDetail?.latest_exercise_progress?.status === 'COMPLETED';
 
     const userScore =
         ((exerciseDetail?.latest_exercise_progress?.correct_answers ?? 0) /
@@ -91,7 +91,12 @@ function QuizContent({
                         </h3>
 
                         <div className="flex justify-center items-center gap-2 mb-4">
-                            <span className="text-[#03AC5C] font-bold text-[32px] leading-[120%]">
+                            <span
+                                className={`${
+                                    userScore === 100
+                                        ? 'text-[#03AC5C]'
+                                        : 'text-white'
+                                } font-bold text-[32px] leading-[120%]`}>
                                 {userScore}
                             </span>
                             <span className="text-[#999999] leading-[120%]">
@@ -124,16 +129,14 @@ function QuizContent({
                         )}
                     </Button>
 
-                    {isEverCompleted ? (
+                    {isEverCompleted && subchapter.next_subchapter_slug ? (
                         <Link
                             href={
                                 subchapter.next_subchapter_slug
                                     ? `/utbk/materi/${slug_subtest}/${subchapter.next_chapter_slug}/${subchapter.next_subchapter_slug}`
                                     : '/utbk/materi'
                             }
-                            className={`${
-                                subchapter.next_subchapter_slug ? '' : 'w-full'
-                            } bg-[#5F2BCE] hover:bg-[#5F2BCE]/60 transition-all duration-300 text-white text-center rounded-full leading-tight font-semibold p-3 px-4 w-[180px] hidden lg:block`}>
+                            className="bg-[#5F2BCE] hover:bg-[#5F2BCE]/60 transition-all duration-300 text-white text-center rounded-full leading-tight font-semibold p-3 px-4 w-[180px] hidden lg:block">
                             Selanjutnya
                         </Link>
                     ) : (

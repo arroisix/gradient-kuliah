@@ -1,13 +1,19 @@
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { cn } from 'commons/utils';
+import MateriDetailSheet from 'courses/components/utbk/MateriDetailSheet';
+import { useGetSubchapterDetailV2Query } from 'courses/redux/api/privateCourseV2Api';
 import { useGetExerciseDetailV2Query } from 'exercises/redux/api/exercisesApi';
 import { ChevronLeft, ChevronRight, XIcon } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { FaCircleCheck } from 'react-icons/fa6';
 
 const ExerciseCompleteHeader = () => {
+    const { isDesktopBreakpoints } = useWindowBreakpoints();
     const router = useRouter();
     const { slug, exerciseProgressId, problemId } = router.query;
+
     const { data: exercise } = useGetExerciseDetailV2Query(
         {
             exercise_slug: slug as string,
@@ -16,19 +22,38 @@ const ExerciseCompleteHeader = () => {
                 ? { exercise_progress_id: exerciseProgressId as string }
                 : {})
         },
+        { skip: !slug }
+    );
+
+    const { data: subchapter } = useGetSubchapterDetailV2Query(
         {
-            skip: !slug
-        }
+            course_slug: exercise?.course.slug as string,
+            subchapter_slug: exercise?.course.subchapter_slug as string
+        },
+        { skip: !exercise?.course.slug || !exercise?.course.subchapter_slug }
     );
 
     const isUTBK = exercise?.tryout_type === 'UTBK';
-    const thirdTabLabel = isUTBK ? 'Analisa Diri' : 'Leaderboard';
-    const thirdTabRoute = isUTBK ? 'analisa-diri' : 'leaderboard';
+    const isMateri = exercise?.tryout_type === 'MATERI';
+    const thirdTabLabel = isUTBK
+        ? 'Analisa Diri'
+        : isMateri
+        ? ''
+        : 'Leaderboard';
+
+    const thirdTabRoute = isUTBK
+        ? 'analisa-diri'
+        : isMateri
+        ? ''
+        : 'leaderboard';
 
     // temporary until we enable the analysis feature for UTBK
     const tabs = isUTBK
         ? ['Nilai', 'Pembahasan']
+        : isMateri
+        ? ['Nilai', 'Pembahasan']
         : ['Nilai', 'Pembahasan', thirdTabLabel];
+
     const [activeTab, setActiveTab] = useState('');
     const { isMobileBreakpoints } = useWindowBreakpoints();
 
@@ -96,16 +121,48 @@ const ExerciseCompleteHeader = () => {
 
     return (
         <header className="w-full flex items-center justify-center gap-4 relative">
-            <button
-                onClick={onClose}
-                className="absolute top-auto bottom-auto left-0 cursor-pointer">
-                <XIcon size={24} />
-            </button>
+            {isMateri ? (
+                <Link
+                    href={`/utbk/materi/${exercise.course.slug}/${exercise.course.chapter_slug}/${exercise.course.subchapter_slug}`}
+                    className="bg-[#5F2BCE] hover:bg-[#5F2BCE]/60 transition-all duration-300 text-white text-center rounded-full font-semibold justify-center items-center gap-3 absolute top-auto bottom-auto right-0 p-3 px-4 hidden lg:flex">
+                    Selesai{' '}
+                    <FaCircleCheck className="text-white w-4 h-4 shrink-0" />
+                </Link>
+            ) : (
+                <button
+                    onClick={onClose}
+                    className="absolute top-auto bottom-auto left-0 cursor-pointer">
+                    <XIcon size={24} />
+                </button>
+            )}
+
+            {!isDesktopBreakpoints && isMateri ? (
+                subchapter ? (
+                    <MateriDetailSheet
+                        isReportMode
+                        href={`/utbk/materi/${exercise.course.slug}/${exercise.course.chapter_slug}/${exercise.course.subchapter_slug}`}
+                        course_name={exercise.course.name}
+                        next_subchapter_slug={
+                            subchapter.next_subchapter_slug as string
+                        }
+                        next_subchapter_name={
+                            subchapter.next_subchapter_name as string
+                        }
+                    />
+                ) : (
+                    <div className="animate-pulse fixed bottom-0 left-0 right-0 h-[72px] bg-[#333333] rounded-tl-2xl rounded-tr-2xl lg:hidden" />
+                )
+            ) : (
+                <></>
+            )}
+
             <div className="border border-violet-4 rounded-full flex items-center justify-between px-3 py-2 relative gap-4">
                 {/* Left Arrow Button */}
                 <button
                     disabled={activeTab === tabs[0]}
-                    className="w-8 h-8 border md:border-none border-violet-4 rounded-full bg-transparent hover:bg-white/10 flex items-center justify-center transition-colors text-white disabled:text-white/30 disabled:cursor-not-allowed"
+                    className={`${
+                        isMateri ? 'md:hidden' : ''
+                    } w-8 h-8 border md:border-none border-violet-4 rounded-full bg-transparent hover:bg-white/10 flex items-center justify-center transition-colors text-white disabled:text-white/30 disabled:cursor-not-allowed`}
                     onClick={() => {
                         const currentIndex = tabs.indexOf(activeTab);
                         if (currentIndex > 0) {
@@ -152,7 +209,9 @@ const ExerciseCompleteHeader = () => {
                 {/* Right Arrow Button */}
                 <button
                     disabled={activeTab === tabs[tabs.length - 1]}
-                    className="w-8 h-8 border md:border-none border-violet-4  rounded-full bg-transparent hover:bg-white/10 flex items-center justify-center transition-colors text-white disabled:text-white/30 disabled:cursor-not-allowed"
+                    className={`${
+                        isMateri ? 'md:hidden' : ''
+                    } w-8 h-8 border md:border-none border-violet-4  rounded-full bg-transparent hover:bg-white/10 flex items-center justify-center transition-colors text-white disabled:text-white/30 disabled:cursor-not-allowed`}
                     onClick={() => {
                         const currentIndex = tabs.indexOf(activeTab);
                         if (currentIndex < tabs.length - 1) {

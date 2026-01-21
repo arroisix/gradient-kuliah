@@ -38,6 +38,8 @@ export interface ExerciseDetail {
         id: string;
         name: string;
         slug: string;
+        chapter_slug: string | null;
+        subchapter_slug: string | null;
     };
     total_problems: number;
     total_duration: number;
