@@ -11,6 +11,7 @@ import Skeleton from 'commons/components/elements/Skeleton';
 import { useWindowSize } from 'usehooks-ts';
 import { cn } from 'commons/utils';
 import { useDispatch } from 'react-redux';
+import { useAuth } from 'authentication/contexts/AuthProvider';
 
 const Leaderboard = () => {
     const router = useRouter();
@@ -116,6 +117,7 @@ const Leaderboard = () => {
 export const LeaderboardReport = () => {
     const router = useRouter();
     const { slug, exerciseProgressId } = router.query;
+    const { profile } = useAuth();
     const { width } = useWindowSize();
     const dispatch = useDispatch();
 
@@ -145,6 +147,14 @@ export const LeaderboardReport = () => {
                 `/latihan/${slug}/${exercise.first_problemset?.id}/${firstProblemId}`
             );
         }
+    };
+
+    const onFinish = () => {
+        if (profile?.current_role === 'COLLEGE_STUDENT') {
+            return '/latihan/';
+        }
+
+        return '/utbk/try-out';
     };
 
     return (
@@ -240,7 +250,7 @@ export const LeaderboardReport = () => {
                 <Button
                     variant="primary"
                     className="w-full text-center !py-3"
-                    href={`/latihan/`}
+                    href={onFinish()}
                     size="large">
                     Selesai
                 </Button>

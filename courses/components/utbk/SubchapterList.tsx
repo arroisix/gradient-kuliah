@@ -63,7 +63,9 @@ function SubchapterList({
                     duration={value.duration}
                     type={value.type_name ?? value.type}
                     isActive={slug_subchapter === value.subchapter_slug}
-                    isFinished={value.is_finished}
+                    isFinished={
+                        value.is_finished ?? value.status === 'COMPLETED'
+                    }
                     setIsModalSheetOpen={setIsModalSheetOpen}
                     isDisabled={
                         (!is_subscribed && !value.is_free) ||

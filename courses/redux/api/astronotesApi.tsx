@@ -245,6 +245,19 @@ export const astronotesApi = baseApi.injectEndpoints({
                 url: `${BOOK_BASE_URL}search/popular/`,
                 params
             })
+        }),
+        postFinishArticle: builder.mutation<
+            void,
+            { subchapter_slug: string; book_slug: string; page: number }
+        >({
+            query: ({ book_slug, page }) => ({
+                url: `${BOOK_BASE_URL}astronotes/complete-read`,
+                method: 'POST',
+                body: { slug: book_slug, page }
+            }),
+            invalidatesTags: (_result, _error, arg) => [
+                { type: 'COURSE_SUBCHAPTERS', id: arg.subchapter_slug }
+            ]
         })
     })
 });
@@ -272,7 +285,8 @@ export const {
     useGetTextbookSolutionQuery,
     useGetLandingPopularBooksQuery,
     useGetBankSoalQuery,
-    useGetPopularBooksQuery
+    useGetPopularBooksQuery,
+    usePostFinishArticleMutation
 } = astronotesApi;
 
 export const {
