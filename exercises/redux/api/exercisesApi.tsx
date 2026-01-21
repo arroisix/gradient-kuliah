@@ -448,7 +448,8 @@ export const exerciseApi = baseApi.injectEndpoints({
                 {
                     type: 'EXERCISES',
                     id: `PROBLEM_SET_PROGRESS_${arg.problemset_progress_id}_NAVIGATION`
-                }
+                },
+                { type: 'ASTRONOTES', id: `EXERCISE_ENTRYPOINT` }
             ]
         }),
         finishUserProblemSet: builder.mutation<
