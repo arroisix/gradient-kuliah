@@ -111,7 +111,8 @@ const useSubmitAnswerHandler = (problem: ProblemInProblemSet) => {
         // Logic to finish the problem set can be added here
         const responsePs = await submitProblemset({
             slug: slug as string,
-            problemset_progress_id: problem.id
+            problemset_progress_id: problem.id,
+            subchapter_slug: exercise?.course.subchapter_slug ?? undefined
         }).unwrap();
 
         if (!responsePs.is_show_solution) {

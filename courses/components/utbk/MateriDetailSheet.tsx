@@ -11,16 +11,20 @@ import { SearchMateri } from './SearchMateri';
 import { MateriDetailContent } from './MateriDetailContent';
 
 interface MateriDetailSheetProps {
-    course: CourseDetail;
-    next_chapter_slug: string;
-    next_subchapter_slug: string;
+    isLastSubchapter: boolean;
+    isFinished: boolean;
+    isReportMode?: boolean;
+    href: string;
+    course_name: string;
     next_subchapter_name: string;
 }
 
 function MateriDetailSheet({
-    course,
-    next_chapter_slug,
-    next_subchapter_slug,
+    isLastSubchapter,
+    isFinished,
+    isReportMode = false,
+    href,
+    course_name,
     next_subchapter_name
 }: MateriDetailSheetProps): JSX.Element {
     const [isOpen, setIsOpen] = useState(false);
@@ -60,25 +64,27 @@ function MateriDetailSheet({
 
             <div
                 className={`${
-                    next_subchapter_slug ? '' : 'w-full'
+                    isLastSubchapter ? 'w-full' : ''
                 } flex justify-between items-center gap-2`}>
-                <Button
-                    onClick={() => setIsOpen(true)}
-                    variant="neutral"
-                    className="flex items-center gap-1.5 text-sm !p-2">
-                    <ListIcon className="fill-white w-4 h-4 group-disabled:fill-neutral-300/30" />
-                </Button>
+                {isReportMode ? (
+                    <></>
+                ) : (
+                    <Button
+                        onClick={() => setIsOpen(true)}
+                        variant="neutral"
+                        className="flex items-center gap-1.5 text-sm !p-2">
+                        <ListIcon className="fill-white w-4 h-4 group-disabled:fill-neutral-300/30" />
+                    </Button>
+                )}
 
                 <Link
-                    href={
-                        next_subchapter_slug
-                            ? `/utbk/materi/${slug_subtest}/${next_chapter_slug}/${next_subchapter_slug}`
-                            : '/utbk/materi'
-                    }
-                    className={`${
-                        next_subchapter_slug ? '' : 'w-full'
-                    } bg-[#333333] text-white text-center rounded-full text-sm leading-tight font-semibold !p-2 !px-4`}>
-                    {next_subchapter_slug ? 'Lanjut' : 'Selesai'}
+                    href={href}
+                    className={`${isLastSubchapter ? 'w-full' : ''} ${
+                        isLastSubchapter && !isFinished
+                            ? 'pointer-events-none'
+                            : ''
+                    } bg-[#333333] hover:bg-[#333333]/60 transition-all duration-300 text-white text-center rounded-full text-sm leading-tight font-semibold p-2 px-4`}>
+                    {!isLastSubchapter && !isReportMode ? 'Lanjut' : 'Selesai'}
                 </Link>
             </div>
 
@@ -105,7 +111,7 @@ function MateriDetailSheet({
                             </div>
 
                             <h3 className="text-white font-semibold">
-                                {course?.course_name}
+                                {course_name}
                             </h3>
 
                             {isAuthenticated ? (

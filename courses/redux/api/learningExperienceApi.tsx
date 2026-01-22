@@ -85,7 +85,8 @@ export const learningExperienceApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: (result, error, arg) => [
                 { type: 'WATCH_PROGRESS', id: arg.video_progress?.video_id },
-                { type: 'WATCH_PROGRESS', id: 'LIST' }
+                { type: 'WATCH_PROGRESS', id: 'LIST' },
+                { type: 'COURSE_SUBCHAPTERS', id: arg.subchapter_slug }
             ]
         }),
         getExamExerciseWorksheet: builder.query<

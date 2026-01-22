@@ -454,7 +454,11 @@ export const exerciseApi = baseApi.injectEndpoints({
         }),
         finishUserProblemSet: builder.mutation<
             { is_show_solution: boolean; next_problemset_id: string | null },
-            { slug: string; problemset_progress_id: string }
+            {
+                slug: string;
+                problemset_progress_id: string;
+                subchapter_slug?: string;
+            }
         >({
             query: ({ slug, problemset_progress_id }) => ({
                 url: `${EXERCISE_BASE_URL}v2/${slug}/problem-set-progress/${problemset_progress_id}/submit/`,
@@ -468,6 +472,10 @@ export const exerciseApi = baseApi.injectEndpoints({
                 {
                     type: 'EXERCISES',
                     id: `PROBLEM_SET_INTERSTITIAL_${arg.slug}`
+                },
+                {
+                    type: 'COURSE_SUBCHAPTERS',
+                    id: arg.subchapter_slug
                 }
             ]
         }),

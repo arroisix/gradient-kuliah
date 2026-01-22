@@ -125,7 +125,8 @@ const VideoPlayerContainer = ({
 
     const trackProgress = async (
         last_duration: string,
-        isFinished?: boolean
+        isFinished?: boolean,
+        subchapter_slug?: string
     ): Promise<void> => {
         if (!isAuthenticated) return;
 
@@ -135,7 +136,8 @@ const VideoPlayerContainer = ({
                 video_id: video?.id as string,
                 last_duration: last_duration as unknown as string,
                 is_finished: isFinished ?? false
-            }
+            },
+            subchapter_slug
         });
     };
 

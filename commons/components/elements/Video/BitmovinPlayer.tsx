@@ -24,7 +24,8 @@ interface BitmovinPlayerProps {
     autoPlay?: boolean;
     trackProgress?: (
         last_duration: string,
-        isFinished?: boolean
+        isFinished?: boolean,
+        subchapter_slug?: string
     ) => Promise<any>;
     next_subchapter_link: string;
     next_subchapter_name?: string;
@@ -56,12 +57,14 @@ export default function BitmovinPlayer({
 
     async function handleTrackProgress(
         currentTime: number,
-        isFinished?: boolean
+        isFinished?: boolean,
+        subchapter_slug?: string
     ): Promise<void> {
         if (trackProgress) {
             console.log('Tracking progress:', {
                 currentTime: currentTime,
-                isFinished: isFinished ?? false
+                isFinished: isFinished ?? false,
+                subchapter_slug
             });
             await trackProgress(currentTime.toString(), isFinished ?? false);
         }
@@ -147,7 +150,11 @@ export default function BitmovinPlayer({
                     data: PlayerEventData
                 ) => {
                     if (data.time) {
-                        debouncedHandleTrackProgress(data.time, false);
+                        debouncedHandleTrackProgress(
+                            data.time,
+                            false,
+                            subchapter?.subchapter_slug
+                        );
                     }
                     tracker?.genericTrack('Finished Video', {
                         'Course Slug': router.query.id,

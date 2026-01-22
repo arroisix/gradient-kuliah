@@ -7,6 +7,8 @@ import { useRouter } from 'next/router';
 import Button from 'commons/components/elements/Button';
 import { cn } from 'commons/utils';
 import { useDispatch } from 'react-redux';
+import Image from 'next/image';
+import { CDN_URL } from 'commons/constants';
 
 const ResultSummary = ({ isReportMode }: { isReportMode?: boolean }) => {
     const router = useRouter();
@@ -115,9 +117,24 @@ const ResultSummary = ({ isReportMode }: { isReportMode?: boolean }) => {
                 </div>
             )}
 
-            {isReportMode || exercise?.tryout_type === 'UTBK' ? (
-                <div className="space-y-3 bg-violet-3 py-4 px-6 rounded-b-lg lg:rounded-lg flex flex-col gap-4 lg:gap-8">
-                    <div className="flex flex-col gap-2 text-white">
+            {isReportMode ||
+            exercise?.tryout_type === 'UTBK' ||
+            exercise?.tryout_type === 'MATERI' ? (
+                <div className="relative bg-violet-3 py-4 px-6 rounded-b-lg lg:rounded-lg">
+                    {exercise?.tryout_type === 'MATERI' &&
+                    incorrect_answers === 0 ? (
+                        <div className="w-[116px] h-[116px] object-cover object-center absolute top-0 right-0">
+                            <Image
+                                src={`${CDN_URL}/assets/utbk/quiz_perfect_score.png`}
+                                alt=""
+                                layout="fill"
+                            />
+                        </div>
+                    ) : (
+                        <></>
+                    )}
+
+                    <div className="text-white relative z-0 space-y-2 mb-4 lg:mb-8">
                         {incorrect_answers > 0 ? (
                             <h3 className="font-semibold">
                                 Kamu salah di{' '}
@@ -143,10 +160,11 @@ const ResultSummary = ({ isReportMode }: { isReportMode?: boolean }) => {
                             </span>
                         )}
                     </div>
+
                     {exercise?.tryout_type !== 'UTBK' && (
                         <Button
                             variant="primary"
-                            className="w-full text-center"
+                            className="w-full text-center relative z-0"
                             href={`/latihan/${exercise?.slug}/report/${exercise?.latest_exercise_progress?.id}/${exercise?.first_problemset?.id}/${exercise?.first_problemset?.first_problem_id}/`}>
                             Lihat Pembahasan
                         </Button>

@@ -19,6 +19,7 @@ interface TrackSubchapterProgressInputData {
         last_duration: string;
         is_finished: boolean;
     };
+    subchapter_slug?: string;
 }
 
 interface PopupQuestionAnswerInputData {

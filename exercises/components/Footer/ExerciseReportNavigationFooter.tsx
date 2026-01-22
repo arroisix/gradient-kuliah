@@ -6,11 +6,12 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import QuizNavigationBottomSheet from '../ExerciseUtils/QuizNavigationBottomSheet';
+import { ExerciseDetail } from 'exercises/types/exercises';
+import Link from 'next/link';
 
 const ExerciseReportNavigationFooter: React.FC<{
-    saveAnswer: () => Promise<void>;
-    isDisabled: boolean;
-}> = () => {
+    exercise: ExerciseDetail | undefined;
+}> = ({ exercise }) => {
     const router = useRouter();
     const { slug, exerciseProgressId, problemsetId, problemId } = router.query;
 
@@ -21,9 +22,7 @@ const ExerciseReportNavigationFooter: React.FC<{
                 exerciseProgress: exerciseProgressId as string,
                 problemsetId: problemsetId as string
             },
-            {
-                skip: !slug || !exerciseProgressId || !problemsetId
-            }
+            { skip: !slug || !exerciseProgressId || !problemsetId }
         );
     const allProblems = allProblemsData?.data || [];
     const isLoading = isLoadingProblems;
@@ -75,8 +74,14 @@ const ExerciseReportNavigationFooter: React.FC<{
     return (
         <>
             {/* Mobile Navigation Bar */}
-            <div className="flex flex-col gap-2 items-center fixed bottom-0 left-0 w-full bg-black p-4 lg:hidden z-10">
-                <div className="flex flex-row gap-2 items-center justify-center w-full">
+            <div
+                className={`${
+                    exercise?.tryout_type === 'MATERI' ? 'flex-row' : 'flex-col'
+                } flex gap-2 items-center fixed bottom-0 left-0 w-full bg-black p-4 lg:hidden z-10`}>
+                <div
+                    className={`${
+                        exercise?.tryout_type === 'MATERI' ? '' : 'w-full'
+                    } flex flex-row gap-2 items-center justify-center`}>
                     <Button
                         variant="secondary"
                         onClick={handlePreviousProblem}
@@ -84,44 +89,57 @@ const ExerciseReportNavigationFooter: React.FC<{
                         className="text-center !p-0 !w-8 !h-8 items-center justify-center flex rounded-md">
                         <ChevronLeft size={16} />
                     </Button>
+
                     {/* Problem Number Buttons */}
-                    {isLoading ? (
-                        <div className="flex gap-2">
-                            {[...Array(5)].map((_, i) => (
-                                <div
-                                    key={i}
-                                    className="w-8 h-8 rounded-md bg-gray-700 animate-pulse"
-                                />
-                            ))}
-                        </div>
+                    {exercise?.tryout_type !== 'MATERI' ? (
+                        isLoading ? (
+                            <div className="flex gap-2">
+                                {[...Array(5)].map((_, i) => (
+                                    <div
+                                        key={i}
+                                        className="w-8 h-8 rounded-md bg-gray-700 animate-pulse"
+                                    />
+                                ))}
+                            </div>
+                        ) : (
+                            visibleProblems.map((problem) => {
+                                return (
+                                    <button
+                                        key={problem.problem_id}
+                                        onClick={() =>
+                                            handleProblemSelect(
+                                                problem.problem_id
+                                            )
+                                        }
+                                        className={cn(
+                                            'w-8 h-8 rounded-lg flex items-center justify-center text-sm font-semibold transition-all',
+                                            problem.problem_id === problemId &&
+                                                'ring-2 ring-yellow-500',
+                                            problem.is_correct
+                                                ? 'bg-[#4ADE80] text-white hover:opacity-80'
+                                                : 'bg-[#EF4444] text-white hover:opacity-80'
+                                        )}>
+                                        {problem.order}
+                                    </button>
+                                );
+                            })
+                        )
                     ) : (
-                        visibleProblems.map((problem) => {
-                            return (
-                                <button
-                                    key={problem.problem_id}
-                                    onClick={() =>
-                                        handleProblemSelect(problem.problem_id)
-                                    }
-                                    className={cn(
-                                        'w-8 h-8 rounded-lg flex items-center justify-center text-sm font-semibold transition-all',
-                                        problem.problem_id === problemId &&
-                                            'ring-2 ring-yellow-500',
-                                        problem.is_correct
-                                            ? 'bg-[#4ADE80] text-white hover:opacity-80'
-                                            : 'bg-[#EF4444] text-white hover:opacity-80'
-                                    )}>
-                                    {problem.order}
-                                </button>
-                            );
-                        })
+                        <></>
                     )}
+
                     {/* Grid/Settings Button */}
-                    <Button
-                        variant="secondary"
-                        onClick={() => setIsNavigationOpen(true)}
-                        className="!rounded-md text-center !p-0 !w-8 !h-8 items-center justify-center flex">
-                        <SquareSettings size={16} />
-                    </Button>
+                    {exercise?.tryout_type !== 'MATERI' ? (
+                        <Button
+                            variant="secondary"
+                            onClick={() => setIsNavigationOpen(true)}
+                            className="!rounded-md text-center !p-0 !w-8 !h-8 items-center justify-center flex">
+                            <SquareSettings size={16} />
+                        </Button>
+                    ) : (
+                        <></>
+                    )}
+
                     <Button
                         variant="secondary"
                         onClick={handleNextProblem}
@@ -130,6 +148,16 @@ const ExerciseReportNavigationFooter: React.FC<{
                         <ChevronRight size={16} />
                     </Button>
                 </div>
+
+                {exercise?.tryout_type === 'MATERI' ? (
+                    <Link
+                        href={`/utbk/materi/${exercise?.course.slug}/${exercise?.course.chapter_slug}/${exercise?.course.subchapter_slug}`}
+                        className="bg-[#333333] hover:bg-[#333333]/60 transition-all duration-300 text-white text-center rounded-full text-sm leading-tight font-semibold p-2 px-4 w-full">
+                        Selesai
+                    </Link>
+                ) : (
+                    <></>
+                )}
             </div>
 
             {/* Bottom Sheet Navigation */}

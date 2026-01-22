@@ -38,6 +38,8 @@ export interface ExerciseDetail {
         id: string;
         name: string;
         slug: string;
+        chapter_slug: string | null;
+        subchapter_slug: string | null;
     };
     total_problems: number;
     total_duration: number;
@@ -49,6 +51,7 @@ export interface ExerciseDetail {
     is_free: boolean;
     opens_at?: string;
     closes_at?: string;
+    minimum_score: number | null;
     score_published_at?: string;
     is_auto_irt_scoring_enabled?: boolean;
     // TODO make it better type
