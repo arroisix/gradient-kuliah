@@ -140,11 +140,13 @@ const ExerciseCompleteHeader = () => {
                 subchapter ? (
                     <MateriDetailSheet
                         isReportMode
+                        isLastSubchapter={!subchapter.next_subchapter_slug}
+                        isFinished={
+                            subchapter.is_finished ??
+                            subchapter.status === 'COMPLETED'
+                        }
                         href={`/utbk/materi/${exercise.course.slug}/${exercise.course.chapter_slug}/${exercise.course.subchapter_slug}`}
                         course_name={exercise.course.name}
-                        next_subchapter_slug={
-                            subchapter.next_subchapter_slug as string
-                        }
                         next_subchapter_name={
                             subchapter.next_subchapter_name as string
                         }

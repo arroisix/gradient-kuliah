@@ -11,18 +11,20 @@ import { SearchMateri } from './SearchMateri';
 import { MateriDetailContent } from './MateriDetailContent';
 
 interface MateriDetailSheetProps {
+    isLastSubchapter: boolean;
+    isFinished: boolean;
     isReportMode?: boolean;
     href: string;
     course_name: string;
-    next_subchapter_slug: string;
     next_subchapter_name: string;
 }
 
 function MateriDetailSheet({
+    isLastSubchapter,
+    isFinished,
     isReportMode = false,
     href,
     course_name,
-    next_subchapter_slug,
     next_subchapter_name
 }: MateriDetailSheetProps): JSX.Element {
     const [isOpen, setIsOpen] = useState(false);
@@ -62,7 +64,7 @@ function MateriDetailSheet({
 
             <div
                 className={`${
-                    next_subchapter_slug ? '' : 'w-full'
+                    isLastSubchapter ? 'w-full' : ''
                 } flex justify-between items-center gap-2`}>
                 {isReportMode ? (
                     <></>
@@ -77,12 +79,12 @@ function MateriDetailSheet({
 
                 <Link
                     href={href}
-                    className={`${
-                        next_subchapter_slug ? '' : 'w-full'
-                    } bg-[#5F2BCE] hover:bg-[#5F2BCE]/60 transition-all duration-300 text-white text-center rounded-full text-sm leading-tight font-semibold p-2 px-4`}>
-                    {next_subchapter_slug && !isReportMode
-                        ? 'Lanjut'
-                        : 'Selesai'}
+                    className={`${isLastSubchapter ? 'w-full' : ''} ${
+                        isLastSubchapter && !isFinished
+                            ? 'pointer-events-none'
+                            : ''
+                    } bg-[#333333] hover:bg-[#333333]/60 transition-all duration-300 text-white text-center rounded-full text-sm leading-tight font-semibold p-2 px-4`}>
+                    {!isLastSubchapter && !isReportMode ? 'Lanjut' : 'Selesai'}
                 </Link>
             </div>
 

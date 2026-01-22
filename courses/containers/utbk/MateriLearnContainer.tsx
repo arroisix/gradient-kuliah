@@ -171,14 +171,16 @@ function MateriLearnContainer({
                 {!isDesktopBreakpoints ? (
                     course && subchapter ? (
                         <MateriDetailSheet
+                            isLastSubchapter={!subchapter.next_subchapter_slug}
+                            isFinished={
+                                subchapter.is_finished ??
+                                subchapter.status === 'COMPLETED'
+                            }
                             course_name={course.course_name}
                             href={
                                 subchapter.next_subchapter_slug
                                     ? `/utbk/materi/${slug_subtest}/${subchapter.next_chapter_slug}/${subchapter.next_subchapter_slug}`
                                     : '/utbk/materi'
-                            }
-                            next_subchapter_slug={
-                                subchapter.next_subchapter_slug as string
                             }
                             next_subchapter_name={
                                 subchapter.next_subchapter_name as string
