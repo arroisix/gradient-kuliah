@@ -39,10 +39,21 @@ function MateriLearnContainer({
     const [isTranscriptOpen, setIsTranscriptOpen] = useState(false);
 
     const router = useRouter();
-    const { slug_subtest, slug_subchapter } = router.query as {
-        slug_subtest: string;
-        slug_subchapter: string;
-    };
+    const { slug_subtest, slug_subchapter } = useMemo(() => {
+        if (!router.isReady) {
+            return { slug_subtest: '', slug_subchapter: '' };
+        }
+
+        const parts = router.asPath
+            .split('?')[0]
+            .split('/')
+            .filter((v) => v !== '');
+
+        return {
+            slug_subtest: parts[2] ?? '',
+            slug_subchapter: parts[4] ?? ''
+        };
+    }, [router.asPath, router.isReady]);
 
     const { isAuthenticated } = useAuth();
     const { isDesktopBreakpoints } = useWindowBreakpoints();
