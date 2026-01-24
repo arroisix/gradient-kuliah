@@ -9,31 +9,35 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 interface QuizContentProps {
-    exerciseDetail: ExerciseDetail | undefined;
+    exercise: ExerciseDetail | undefined;
     subchapter: SubChapter;
 }
 
-function QuizContent({
-    exerciseDetail,
-    subchapter
-}: QuizContentProps): JSX.Element {
+function QuizContent({ exercise, subchapter }: QuizContentProps): JSX.Element {
     const dispatch = useDispatch();
     const router = useRouter();
     const { slug_subtest } = router.query as { slug_subtest: string };
 
     const isEverCompleted =
-        exerciseDetail?.latest_exercise_progress?.status === 'COMPLETED';
+        exercise?.latest_exercise_progress?.status === 'COMPLETED';
 
     const userScore =
-        ((exerciseDetail?.latest_exercise_progress?.correct_answers ?? 0) /
-            (exerciseDetail?.latest_exercise_progress?.total_questions ?? 0)) *
+        ((exercise?.latest_exercise_progress?.correct_answers ?? 0) /
+            (exercise?.latest_exercise_progress?.total_questions ?? 0)) *
         100;
 
     const handleClick = () => {
         dispatch(exerciseApi.util.invalidateTags(['EXERCISES']));
-        router.push(
-            `/latihan/${exerciseDetail?.slug}/${exerciseDetail?.first_problemset.id}/${exerciseDetail?.first_problemset.first_problem_id}`
-        );
+
+        let url = `/latihan/${exercise?.slug}/${exercise?.first_problemset.id}/${exercise?.first_problemset.first_problem_id}`;
+        if (exercise?.latest_exercise_progress.status === 'IN_PROGRESS') {
+            const last_problem_id =
+                exercise?.latest_problemset_progress.last_problem_id;
+
+            url = `/latihan/${exercise?.slug}/${exercise?.latest_problemset_progress.problemset_id}/${last_problem_id}`;
+        }
+
+        router.push(url);
     };
 
     return (
@@ -53,33 +57,34 @@ function QuizContent({
                     </div>
 
                     <h2 className="text-white font-bold text-center mb-3 lg:text-xl">
-                        Quiz: {exerciseDetail?.title}
+                        Quiz: {exercise?.title}
                     </h2>
 
                     <p className="text-[#DEDEDE] text-center text-sm mb-8 lg:text-base">
-                        Uji pemahaman kamu tentang materi{' '}
-                        {exerciseDetail?.title}.
+                        Uji pemahaman kamu tentang materi {exercise?.title}.
                     </p>
 
                     <div className="grid grid-cols-3 gap-3 lg:max-w-[444px] lg:mx-auto">
                         <div className="bg-[#282B3C] rounded-xl w-[101px] h-[70px] flex flex-col justify-center items-center gap-2 lg:w-[140px]">
-                            <ListIcon className="text-[#B6A6F3] w-5 h-5" />
+                            <ListIcon className="shrink-0 text-[#B6A6F3] w-5 h-5" />
                             <span className="text-white font-semibold">
-                                {exerciseDetail?.total_problems} Soal
+                                {exercise?.total_problems} Soal
                             </span>
                         </div>
 
                         <div className="bg-[#282B3C] rounded-xl w-[101px] h-[70px] flex flex-col justify-center items-center gap-2 lg:w-[140px]">
-                            <TimerIcon className="text-[#B6A6F3] w-5 h-5" />
+                            <TimerIcon className="shrink-0 text-[#B6A6F3] w-5 h-5" />
                             <span className="text-white font-semibold">
-                                {(exerciseDetail?.total_duration ?? 0) / 60}{' '}
+                                {((exercise?.total_duration ?? 0) / 60).toFixed(
+                                    0
+                                )}{' '}
                                 Menit
                             </span>
                         </div>
 
                         <div className="bg-[#282B3C] rounded-xl w-[101px] h-[70px] flex flex-col justify-center items-center gap-2 lg:w-[140px]">
                             <span className="text-[#B6A6F3] font-semibold">
-                                {exerciseDetail?.minimum_score} poin
+                                {exercise?.minimum_score} poin
                             </span>
                             <span className="text-white font-semibold">
                                 Min. Skor
@@ -108,7 +113,7 @@ function QuizContent({
                             </div>
 
                             <Link
-                                href={`/latihan/${exerciseDetail.slug}/report/${exerciseDetail.latest_exercise_progress.id}`}
+                                href={`/latihan/${exercise.slug}/report/${exercise.latest_exercise_progress.id}`}
                                 className="text-[#B6A6F3] font-semibold text-sm block w-fit mx-auto">
                                 Lihat Hasil
                             </Link>
