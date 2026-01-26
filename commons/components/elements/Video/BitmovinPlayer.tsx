@@ -53,7 +53,7 @@ export default function BitmovinPlayer({
     const [player, setPlayer] = useState<PlayerAPI | null>(null);
     const playerDiv = useRef<HTMLDivElement>(null);
     const [isNextVideoOpen, setIsNextVideoOpen] = useState(false);
-    const { setVideoTimestamp } = useVideoTranscriptContext();
+    const { setVideoTimestamp, setIsPlaying } = useVideoTranscriptContext();
 
     async function handleTrackProgress(
         currentTime: number,
@@ -128,6 +128,7 @@ export default function BitmovinPlayer({
             },
             events: {
                 [PlayerEvent.Playing]: (data: PlayerEventData) => {
+                    setIsPlaying(true);
                     if (data.time) {
                         setVideoTimestamp(Math.floor(data.time));
                         debouncedHandleTrackProgress(data.time, false);
@@ -138,6 +139,7 @@ export default function BitmovinPlayer({
                     });
                 },
                 [PlayerEvent.Paused]: (data: PlayerEventData) => {
+                    setIsPlaying(false);
                     if (data.time) {
                         debouncedHandleTrackProgress(data.time, false);
                     }

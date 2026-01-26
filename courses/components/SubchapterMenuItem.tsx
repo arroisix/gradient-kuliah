@@ -1,10 +1,10 @@
 import { cn, formatDuration } from 'commons/utils';
+import { useVideoTranscriptContext } from 'courses/contexts/VideoTranscriptProvider';
 import {
     BookOpenIcon,
     CircleIcon,
     LucideProps,
     VideoIcon,
-    ChartNoAxesColumnIcon,
     BadgeQuestionMarkIcon
 } from 'lucide-react';
 import Link from 'next/link';
@@ -54,8 +54,8 @@ function SubchapterMenuItem({
 
     const LeftIcon = useMemo((): ForwardRefExoticComponent<
         Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>
-    > => {
-        let Icon = VideoIcon;
+    > | null => {
+        let Icon = null;
         switch (type) {
             case 'exercise':
                 Icon = BadgeQuestionMarkIcon;
@@ -64,9 +64,7 @@ function SubchapterMenuItem({
                 Icon = BookOpenIcon;
                 break;
             default:
-                if (isActive) {
-                    Icon = ChartNoAxesColumnIcon;
-                } else {
+                if (!isActive) {
                     Icon = VideoIcon;
                 }
                 break;
@@ -82,14 +80,10 @@ function SubchapterMenuItem({
             {...props}>
             {isDisabled ? (
                 <FaLock className="fill-[#666666] w-4 h-4" />
+            ) : LeftIcon ? (
+                <LeftIcon className="text-white w-4 h-4 shrink-0" />
             ) : (
-                <LeftIcon
-                    className={`${
-                        isActive && type === 'lecture'
-                            ? 'text-[#B6A6F3]'
-                            : 'text-white'
-                    } w-4 h-4 shrink-0`}
-                />
+                <VideoIndicator />
             )}
 
             <div className="w-full space-y-1">
@@ -128,6 +122,39 @@ function SubchapterMenuItem({
                 />
             )}
         </Link>
+    );
+}
+
+function VideoIndicator(): JSX.Element {
+    const { isPlaying } = useVideoTranscriptContext();
+
+    return (
+        <div
+            className={`${
+                isPlaying ? 'items-center' : 'items-end'
+            } flex justify-center gap-0.5`}>
+            <div
+                className={`${
+                    isPlaying
+                        ? 'animate-wave [animation-delay:0s] h-[7.5px]'
+                        : 'h-[9px]'
+                } w-1 bg-[#B6A6F3] rounded-sm`}
+            />
+            <div
+                className={`${
+                    isPlaying
+                        ? 'animate-wave [animation-delay:0.1s] h-[12.5px]'
+                        : 'h-[15px]'
+                } w-1 bg-[#B6A6F3] rounded-sm`}
+            />
+            <div
+                className={`${
+                    isPlaying
+                        ? 'animate-wave [animation-delay:0.2s] h-[10px]'
+                        : 'h-[11px]'
+                } w-1 bg-[#B6A6F3] rounded-sm`}
+            />
+        </div>
     );
 }
 

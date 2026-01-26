@@ -101,12 +101,17 @@ module.exports = {
                 slideUp: {
                     '0%': { transform: 'translateY(100%)', opacity: '0' },
                     '100%': { transform: 'translateY(0)', opacity: '1' }
+                },
+                wave: {
+                    '0%, 100%': { height: '5px' },
+                    '50%': { height: '15px' }
                 }
             },
             animation: {
                 'slide-left': 'slideLeft 40s linear infinite',
                 'slide-right': 'slideRight 40s linear infinite',
-                'slide-up': 'slideUp 0.3s ease-out'
+                'slide-up': 'slideUp 0.3s ease-out',
+                wave: 'wave 0.8s ease-in-out infinite'
             },
             height: {
                 dvh: ['100vh /* fallback for Opera, IE and etc. */', '100dvh']
