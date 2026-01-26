@@ -147,7 +147,7 @@ function TimeoutAlert({
     }
 
     return (
-        <div className="absolute z-10 w-screen h-[calc(100vh-48px)] bg-black/80">
+        <div className="absolute z-10 inset-0 h-[calc(100vh-48px)] bg-black/80">
             <div className="bg-[#1D1D1D] absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-full max-w-lg rounded-2xl p-8">
                 <div className="w-fit mx-auto mb-6">
                     <Image

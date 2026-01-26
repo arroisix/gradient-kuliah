@@ -18,19 +18,21 @@ function QuizContent({ exercise, subchapter }: QuizContentProps): JSX.Element {
     const router = useRouter();
     const { slug_subtest } = router.query as { slug_subtest: string };
 
-    const isEverCompleted =
-        exercise?.latest_exercise_progress?.status === 'COMPLETED';
+    const isEverCompleted = exercise?.latest_completed_exercise_progress;
+    const isInProgress =
+        exercise?.latest_exercise_progress?.status === 'IN_PROGRESS';
 
     const userScore =
-        ((exercise?.latest_exercise_progress?.correct_answers ?? 0) /
-            (exercise?.latest_exercise_progress?.total_questions ?? 0)) *
+        ((exercise?.latest_completed_exercise_progress?.correct_answers ?? 0) /
+            (exercise?.latest_completed_exercise_progress?.total_questions ??
+                0)) *
         100;
 
     const handleClick = () => {
         dispatch(exerciseApi.util.invalidateTags(['EXERCISES']));
 
         let url = `/latihan/${exercise?.slug}/${exercise?.first_problemset.id}/${exercise?.first_problemset.first_problem_id}`;
-        if (exercise?.latest_exercise_progress.status === 'IN_PROGRESS') {
+        if (isInProgress && exercise.latest_problemset_progress) {
             const last_problem_id =
                 exercise?.latest_problemset_progress.last_problem_id;
 
@@ -113,7 +115,7 @@ function QuizContent({ exercise, subchapter }: QuizContentProps): JSX.Element {
                             </div>
 
                             <Link
-                                href={`/latihan/${exercise.slug}/report/${exercise.latest_exercise_progress.id}`}
+                                href={`/latihan/${exercise.slug}/report/${exercise.latest_completed_exercise_progress.id}`}
                                 className="text-[#B6A6F3] font-semibold text-sm block w-fit mx-auto">
                                 Lihat Hasil
                             </Link>
@@ -126,14 +128,25 @@ function QuizContent({ exercise, subchapter }: QuizContentProps): JSX.Element {
                         <Button
                             onClick={handleClick}
                             className={`${
-                                isEverCompleted ? 'flex-row-reverse' : ''
+                                isInProgress || !isEverCompleted
+                                    ? ''
+                                    : 'flex-row-reverse'
                             } text-white !py-3 w-[180px] flex justify-center items-center gap-3`}
-                            variant={isEverCompleted ? 'secondary' : 'primary'}>
-                            {isEverCompleted ? 'Coba lagi' : 'Mulai Kuis'}
-                            {isEverCompleted ? (
-                                <FaArrowRotateRight className="shrink-0 text-white w-4 h-4" />
-                            ) : (
+                            variant={
+                                isInProgress || !isEverCompleted
+                                    ? 'primary'
+                                    : 'secondary'
+                            }>
+                            {isInProgress
+                                ? 'Lanjutkan'
+                                : isEverCompleted
+                                ? 'Coba lagi'
+                                : 'Mulai Kuis'}
+
+                            {isInProgress || !isEverCompleted ? (
                                 <FaPlay className="shrink-0 text-white w-4 h-4" />
+                            ) : (
+                                <FaArrowRotateRight className="shrink-0 text-white w-4 h-4" />
                             )}
                         </Button>
 
