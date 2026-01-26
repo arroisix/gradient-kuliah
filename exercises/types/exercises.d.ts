@@ -84,6 +84,16 @@ export interface ExerciseDetail {
         submitted_answers: number;
         total_questions: number;
     };
+    latest_completed_exercise_progress: {
+        id: string;
+        status: string;
+        completed_at: string | null;
+        score: number;
+        correct_answers: number;
+        incorrect_answers: number;
+        submitted_answers: number;
+        total_questions: number;
+    };
 }
 
 interface ExerciseItem {

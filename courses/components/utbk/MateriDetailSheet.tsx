@@ -80,7 +80,7 @@ function MateriDetailSheet({
                 <Link
                     href={href}
                     className={`${isLastSubchapter ? 'w-full' : ''} ${
-                        isLastSubchapter && !isFinished
+                        isLastSubchapter && !isFinished && !isReportMode
                             ? 'pointer-events-none'
                             : ''
                     } bg-[#333333] hover:bg-[#333333]/60 transition-all duration-300 text-white text-center rounded-full text-sm leading-tight font-semibold p-2 px-4`}>

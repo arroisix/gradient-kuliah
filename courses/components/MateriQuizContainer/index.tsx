@@ -22,7 +22,7 @@ function MateriQuizContainer({
     const { is_subscribed, subscribedFeatures } =
         useCourseSubscription(slug_subtest);
 
-    const { data: exerciseDetail, isLoading } = useGetExerciseDetailV2Query(
+    const { data: exercise, isLoading } = useGetExerciseDetailV2Query(
         { exercise_slug: subchapter.exercise?.slug as string },
         { skip: !subchapter.exercise?.slug || !isAuthenticated }
     );
@@ -49,10 +49,7 @@ function MateriQuizContainer({
 
     return (
         <div className="lg:bg-[#101010] lg:p-6 lg:rounded-2xl">
-            <QuizContent
-                exerciseDetail={exerciseDetail}
-                subchapter={subchapter}
-            />
+            <QuizContent exercise={exercise} subchapter={subchapter} />
         </div>
     );
 }

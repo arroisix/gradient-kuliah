@@ -16,8 +16,16 @@ import ExerciseFinishModal from '../Modal/ExerciseFinishModal';
 import { useExercise } from 'exercises/contexts/ExerciseProvider';
 import useWindowBreakpoints from 'commons/hooks/useWindowBreakpoints';
 import { BsArrowLeft } from 'react-icons/bs';
+import TimeoutAlert from '../TimeoutAlert';
+import { ExerciseDetail } from 'exercises/types/exercises';
 
-const ExerciseWorksheetHeader = () => {
+interface ExerciseWorksheetHeaderProps {
+    exercise: ExerciseDetail | undefined;
+}
+
+const ExerciseWorksheetHeader = ({
+    exercise
+}: ExerciseWorksheetHeaderProps): JSX.Element => {
     const router = useRouter();
     const { slug, exerciseProgressId, sectionId, problemId, solution } =
         router.query;
@@ -50,6 +58,7 @@ const ExerciseWorksheetHeader = () => {
     } = useExercise();
     const { isMobileBreakpoints } = useWindowBreakpoints();
 
+    const [isTimeoutAlert, setIsTimeoutAlert] = useState(false);
     const [isNavigationOpen, setIsNavigationOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const settingsButtonRef = useRef<HTMLButtonElement>(null);
@@ -140,7 +149,12 @@ const ExerciseWorksheetHeader = () => {
 
     const handleConfirmClose = (): void => {
         setIsModalOpen(false);
-        router.push(`/latihan/${slug}`);
+        const url =
+            exercise?.tryout_type === 'MATERI'
+                ? `/utbk/materi/${exercise.course.slug}/${exercise.course.chapter_slug}/${exercise.course.subchapter_slug}`
+                : `/latihan/${slug}`;
+
+        router.push(url);
     };
 
     const onTimeExpired = async () => {
@@ -149,9 +163,7 @@ const ExerciseWorksheetHeader = () => {
             while (!firstProblem) {
                 await new Promise((resolve) => setTimeout(resolve, 100));
             }
-
-            alert('Waktu kamu habis!');
-            await finishProblemSet();
+            setIsTimeoutAlert(true);
         }
     };
 
@@ -161,106 +173,121 @@ const ExerciseWorksheetHeader = () => {
     };
 
     return (
-        <header className="w-full flex items-center justify-between gap-4 relative min-h-[16px]">
-            {isMobileBreakpoints && showSolution ? (
-                <button
-                    className="flex items-center gap-2 text-white cursor-pointer"
-                    onClick={() => setShowSolution && setShowSolution(false)}>
-                    <BsArrowLeft size={20} />
-                    <span className="font-semibold">Pembahasan</span>
-                </button>
-            ) : (
-                <XIcon
-                    role="button"
-                    tabIndex={0}
-                    size={24}
-                    className={cn(
-                        'absolute lg:relative top-0 left-0 cursor-pointer'
-                    )}
-                    onClick={() => setIsModalOpen(true)}
-                />
-            )}
-            {problem &&
-                problem.time_constraint &&
-                !solution &&
-                firstProblem && (
-                    <Timer
-                        timeConstraint={problem.time_constraint ?? 'NONE'}
-                        timeLimit={problem?.time_limit ?? 0}
-                        currentProblemId={problem?.problem.id ?? ''}
-                        firstProblemProgress={problem}
-                        problemProgress={problem?.problem_progress}
-                        onTimeExpired={onTimeExpired}
-                        isCurrentProblemSubmitted={!!solution}
+        <>
+            <header className="w-full flex items-center justify-between gap-4 relative min-h-[16px]">
+                {isMobileBreakpoints && showSolution ? (
+                    <button
+                        className="flex items-center gap-2 text-white cursor-pointer"
+                        onClick={() =>
+                            setShowSolution && setShowSolution(false)
+                        }>
+                        <BsArrowLeft size={20} />
+                        <span className="font-semibold">Pembahasan</span>
+                    </button>
+                ) : (
+                    <XIcon
+                        role="button"
+                        tabIndex={0}
+                        size={24}
+                        className={cn(
+                            'absolute lg:relative top-0 left-0 cursor-pointer'
+                        )}
+                        onClick={() => setIsModalOpen(true)}
                     />
                 )}
-            <div
-                className={cn(
-                    'flex flex-row gap-2 items-center relative',
-                    !(problem && problem.time_constraint) && 'mt-4 lg:mt-0'
-                )}>
-                <Button
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    ref={settingsButtonRef}
-                    variant="secondary"
-                    onClick={() => setIsNavigationOpen(!isNavigationOpen)}
+                {problem &&
+                    problem.time_constraint &&
+                    !solution &&
+                    firstProblem && (
+                        <Timer
+                            timeConstraint={problem.time_constraint ?? 'NONE'}
+                            timeLimit={problem?.time_limit ?? 0}
+                            currentProblemId={problem?.problem.id ?? ''}
+                            firstProblemProgress={problem}
+                            problemProgress={problem?.problem_progress}
+                            onTimeExpired={onTimeExpired}
+                            isCurrentProblemSubmitted={!!solution}
+                        />
+                    )}
+                <div
                     className={cn(
-                        '!rounded-[4px] text-center !p-0 !w-8 !h-8 items-center justify-center',
-                        isNoNeedNavigation ? 'hidden' : 'hidden lg:flex',
-                        isNavigationOpen && '!bg-purple-6'
+                        'flex flex-row gap-2 items-center relative',
+                        !(problem && problem.time_constraint) && 'mt-4 lg:mt-0'
                     )}>
-                    <SquareSettings size={14} />
-                </Button>
+                    <Button
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        ref={settingsButtonRef}
+                        variant="secondary"
+                        onClick={() => setIsNavigationOpen(!isNavigationOpen)}
+                        className={cn(
+                            '!rounded-[4px] text-center !p-0 !w-8 !h-8 items-center justify-center',
+                            isNoNeedNavigation ? 'hidden' : 'hidden lg:flex',
+                            isNavigationOpen && '!bg-purple-6'
+                        )}>
+                        <SquareSettings size={14} />
+                    </Button>
 
-                <QuizNavigationDropdown
-                    onProblemSelect={handleProblemSelect}
-                    isOpen={isNavigationOpen}
-                    onClose={() => setIsNavigationOpen(false)}
-                    anchorEl={settingsButtonRef.current}
-                    saveAnswer={saveAnswer}
+                    <QuizNavigationDropdown
+                        onProblemSelect={handleProblemSelect}
+                        isOpen={isNavigationOpen}
+                        onClose={() => setIsNavigationOpen(false)}
+                        anchorEl={settingsButtonRef.current}
+                        saveAnswer={saveAnswer}
+                    />
+
+                    <Button
+                        variant="secondary"
+                        disabled={!problem?.previous_problem_id || isLoading}
+                        onClick={handlePreviousProblem}
+                        className={cn(
+                            'text-center !p-0 !w-8 !h-8 items-center justify-center',
+                            isNoNeedNavigation ? 'hidden' : 'hidden lg:flex'
+                        )}>
+                        {isLoading ? (
+                            <span className="loading loading-spinner loading-sm"></span>
+                        ) : (
+                            <ChevronLeft size={14} />
+                        )}
+                    </Button>
+                    <Button
+                        variant="secondary"
+                        onClick={handleNextProblem}
+                        disabled={!problem?.next_problem_id || isLoading}
+                        className={cn(
+                            'text-center !p-0 !w-8 !h-8 items-center justify-center',
+                            isNoNeedNavigation ? 'hidden' : 'hidden lg:flex'
+                        )}>
+                        {isLoading ? (
+                            <span className="loading loading-spinner loading-sm"></span>
+                        ) : (
+                            <ChevronRight size={14} />
+                        )}
+                    </Button>
+                </div>
+                <ExerciseCloseModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    onConfirm={handleConfirmClose}
                 />
+                <ExerciseFinishModal
+                    isOpen={isFinishModalOpen}
+                    onClose={() => setIsFinishModalOpen(false)}
+                    onConfirm={onFinishProblemset}
+                />
+            </header>
 
-                <Button
-                    variant="secondary"
-                    disabled={!problem?.previous_problem_id || isLoading}
-                    onClick={handlePreviousProblem}
-                    className={cn(
-                        'text-center !p-0 !w-8 !h-8 items-center justify-center',
-                        isNoNeedNavigation ? 'hidden' : 'hidden lg:flex'
-                    )}>
-                    {isLoading ? (
-                        <span className="loading loading-spinner loading-sm"></span>
-                    ) : (
-                        <ChevronLeft size={14} />
-                    )}
-                </Button>
-                <Button
-                    variant="secondary"
-                    onClick={handleNextProblem}
-                    disabled={!problem?.next_problem_id || isLoading}
-                    className={cn(
-                        'text-center !p-0 !w-8 !h-8 items-center justify-center',
-                        isNoNeedNavigation ? 'hidden' : 'hidden lg:flex'
-                    )}>
-                    {isLoading ? (
-                        <span className="loading loading-spinner loading-sm"></span>
-                    ) : (
-                        <ChevronRight size={14} />
-                    )}
-                </Button>
-            </div>
-            <ExerciseCloseModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onConfirm={handleConfirmClose}
-            />
-            <ExerciseFinishModal
-                isOpen={isFinishModalOpen}
-                onClose={() => setIsFinishModalOpen(false)}
-                onConfirm={onFinishProblemset}
-            />
-        </header>
+            {isTimeoutAlert ? (
+                <TimeoutAlert
+                    exercise={exercise}
+                    problem={problem}
+                    firstProblem={firstProblem}
+                    setIsTimeoutAlert={setIsTimeoutAlert}
+                />
+            ) : (
+                <></>
+            )}
+        </>
     );
 };
 
